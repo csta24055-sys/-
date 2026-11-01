@@ -9,15 +9,16 @@
 | `research/01_総合研究報告書/` | 中心文書（要旨・主要発見・因果モデル・利害・見通し） |
 | `research/02_歴史・政策研究/` | 明治〜2026年の制度形成、国家の政策決定構造、目標と実現可能性 |
 | `research/03_産業構造・技術・経済研究/` | 物理システム、需要構造、市場・資本の層構造、中東危機の波及 |
-| `research/04_主要企業個別分析/` | 比較の枠組み（5変数）と各社の2026年の重要事象（第1版） |
+| `research/04_主要企業個別分析/` | 第2版：10社の有報による比較研究（`04_主要企業比較研究_第2版.md`）。第1版は枠組みとして保存 |
 | `research/05_東京電力グループ詳細研究/` | 統治・財務・事業別・アライアンス・組織・人事・外注構造 |
 | `research/06_将来シナリオ分析/` | 7シナリオ、職種別の需要比較、先行指標 |
-| `research/07_建築設備の戦略的位置づけ/` | 全体構造から逆算した建築設備の役割、10の問いへの回答、レッドチーム |
-| `research/08_因果関係図・企業関係図/` | Mermaid図10点（関係の種類と根拠を区別） |
+| `research/07_建築設備の戦略的位置づけ/` | 第2版：一次資料による再検証（`..._第2版_再検証.md`）。第1版は判断の過程として保存 |
+| `research/08_因果関係図・企業関係図/` | Mermaid図13点（第2版で図11〜13を追加。関係の種類と根拠を区別） |
 | `research/09_資料台帳・証拠管理/` | 出典台帳（`SOURCES.md`、`source_registry.csv`）、資料間の矛盾の処理 |
 | `research/10_未解決論点・追加調査/` | 未解決の論点、弱い仮説、資料欠落の影響 |
+| `research/11_組織・職種研究/` | 第2版で新設。採用サイトの一次資料による職能・権限の追跡と、設備投資の事例（再稼働・廃炉・変電所・水力・DC・他社） |
 | `research/*.md` | 管理ファイル（RESEARCH_PROGRESS / SOURCES / OPEN_QUESTIONS / FINDINGS / HYPOTHESES / NEXT_STEPS） |
-| `data/` | 抽出データ（`occto_demand_2026.csv`、`tepco_financials.csv`）。`raw/`・`text/` は再取得できるため管理対象外 |
+| `data/` | 抽出データ（`occto_demand_2026.csv`、`tepco_financials.csv`、`company_comparison_fy2025.csv`）。`raw/`・`text/` は再取得できるため管理対象外 |
 | `tools/` | 資料の取得・台帳登録（`fetch_source.py`）、データ抽出、docx・pdfの生成（`build_docs.sh`） |
 | `dist/` | 閲覧用PDFと編集用Word（`bash tools/build_docs.sh` で再生成できる） |
 
