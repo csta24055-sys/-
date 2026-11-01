@@ -1,0 +1,12 @@
+# 入力資料（著作権・個人情報を含むためコミットしない）
+inputs/**
+!inputs/**/.gitkeep
+# 元PDFを埋め込んだ完成答案・解析画像は権利確認まで公開しない
+output/**/01_完成演習課題.pdf
+output/analysis/
+output/**/verify/
+output/demo/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
