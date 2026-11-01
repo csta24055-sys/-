@@ -21,7 +21,7 @@ def calc_lines(site, zones, res, segs, watermark=None):
         L += [f"  深さ区分 {k:8s}: {v['depth']:.2f} m  ({v['source']})"]
     L += [f"  作業のゆとり幅 500 mm（区画の外形に含む）、法幅 = 0.3h、余幅 = ゆとり幅 + 法幅/2"]
     for d, half in sorted(res.yohaba.items()):
-        L += [f"    深さ {d:.2f} m の区画: 開放3面に 法幅/2 = 0.3×{d:.2f}/2 = {half/1000:.4f} m を加算（東面は親杭のため加算なし）"]
+        L += [f"    深さ {d:.2f} m の区画: 外周（根切り底全体の外形の外側）だけに 法幅/2 = 0.3×{d:.2f}/2 = {half/1000:.4f} m を加算（内部の段差は鉛直、東面は親杭のため加算なし）"]
     L += ["", "2. 区画（根切り底＝法尻の外形・入力）"]
     for name, cls, d, p in zones:
         x0, y0, x1, y1 = p.bounds

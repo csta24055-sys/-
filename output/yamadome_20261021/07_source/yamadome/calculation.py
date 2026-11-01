@@ -54,18 +54,35 @@ def widen(poly, dist_mm, east_x):
     return _clip_east(poly.buffer(dist_mm, join_style=2), east_x)
 
 
+def scope(site):
+    """余幅（法幅/2）を付ける面の範囲。
+    perimeter: 根切り底全体の外形 P の外側だけに付ける（授業: 外周法面・余幅。内部の段差は鉛直）
+    all_faces: 各区画の全周に付ける（v1, 441.225 m³ の算定方法。比較用）"""
+    return site.raw["retaining"].get("yohaba_scope", "perimeter")
+
+
+def extend(p, dist_mm, east_x, outline, mode):
+    """区画 p を dist_mm 広げる。mode=perimeter では外形 outline の外側の部分だけ加える。"""
+    w = widen(p, dist_mm, east_x)
+    if mode == "all_faces":
+        return w
+    return unary_union([p, w.difference(outline)])
+
+
 def yohaba_zones(site, zones):
-    """各区画を 法幅/2 = 0.3h/2 だけ広げた区画リスト。"""
+    """各区画を 法幅/2 = 0.3h/2 だけ（外周側へ）広げた区画リスト。"""
     ret = site.raw["retaining"]
     n = ret.get("slope_ratio")
     if ret.get("include_slope_volume") != "yohaba" or not n:
         return zones, {}
     east = ret.get("soldier_pile_x_mm")
+    outline = unary_union([z[3] for z in zones])
+    mode = scope(site)
     out, info = [], {}
     for name, cls, d, p in zones:
         half = n * d * 1000 / 2
         info[round(d, 2)] = half
-        out.append((name, cls, d, widen(p, half, east)))
+        out.append((name, cls, d, extend(p, half, east, outline, mode)))
     return out, info
 
 
@@ -113,12 +130,14 @@ def exact_slope_volume(site, zones, n_slices=400):
     if not n:
         return None
     east = ret.get("soldier_pile_x_mm")
+    outline = unary_union([z[3] for z in zones])
+    mode = scope(site)
     dmax = max(z[2] for z in zones)
     dz = dmax / n_slices
     vol = 0.0
     for i in range(n_slices):
         z = (i + 0.5) * dz                       # GL からの深さ [m]
-        parts = [widen(p, n * (d - z) * 1000, east) for _, _, d, p in zones if d > z]
+        parts = [extend(p, n * (d - z) * 1000, east, outline, mode) for _, _, d, p in zones if d > z]
         if parts:
             vol += unary_union(parts).area / MM2_PER_M2 * dz
     return vol

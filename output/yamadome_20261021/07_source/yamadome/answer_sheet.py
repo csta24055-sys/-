@@ -14,9 +14,11 @@ from .pdf_tools import _font, JP_FONT
 
 _JP = pymupdf.Font(fontfile=JP_FONT)
 
-RED = (0.80, 0.05, 0.05)
-BROWN = (0.55, 0.35, 0.10)
-FILL = {1.65: (0.55, 0.75, 0.95), 1.85: (0.35, 0.80, 0.35), 2.10: (0.98, 0.70, 0.25), 2.20: (0.95, 0.45, 0.35)}
+RED = (0.75, 0.05, 0.05)          # 答案の文字・寸法
+BROWN = (0.55, 0.27, 0.05)        # 法肩・法尻・稜線（授業図の茶色の色鉛筆）
+ORANGE = (0.90, 0.48, 0.08)       # 断面の根切り線（授業 X2断面の橙色の帯）
+# 授業の着色根切図: FS1=黄、基礎掘削 GL-1850=緑、F4A=橙。F3A は授業写真に写っていないため橙を濃くして区別（未確認）
+FILL = {1.65: (1.00, 0.93, 0.25), 1.85: (0.30, 0.78, 0.25), 2.10: (0.98, 0.62, 0.15), 2.20: (0.90, 0.40, 0.10)}
 
 
 class Mapper:
@@ -78,96 +80,148 @@ def _dim(page, fn, a, b, label, off=(0, 0), size=5.6):
         _text(page, fn, pymupdf.Point(mid.x, mid.y - size * 0.7), label, size)
 
 
+def _boxlabel(page, fn, pt, text, size=5.6):
+    """授業図と同じ枠付きの深さ表示（例: GL-1850）。"""
+    w = _JP.text_length(text, fontsize=size) + 5
+    r = pymupdf.Rect(pt.x - w / 2, pt.y - size * 0.95, pt.x + w / 2, pt.y + size * 0.75)
+    sh = page.new_shape()
+    sh.draw_rect(r)
+    sh.finish(color=RED, fill=(1, 1, 1), fill_opacity=0.85, width=0.45)
+    sh.commit()
+    page.insert_text(pymupdf.Point(r.x0 + 2.5, r.y1 - size * 0.3), text, fontsize=size, fontname=fn, color=RED)
+    return r
+
+
+def _leader(page, a, b):
+    sh = page.new_shape()
+    sh.draw_line(a, b)
+    sh.draw_circle(a, 0.8)
+    sh.finish(color=RED, fill=RED, width=0.4)
+    sh.commit()
+
+
+def _chain(page, fn, pts, fixed, axis, off, size=5.2):
+    """寸法の連続（pts は可変軸の座標列 mm、fixed は固定軸 mm）。axis='x' で水平、'y' で鉛直。"""
+    for u, v in zip(pts, pts[1:]):
+        if axis == "x":
+            a, b = (u, fixed), (v, fixed)
+        else:
+            a, b = (fixed, u), (fixed, v)
+        yield a, b, f"{abs(v-u):,.0f}"
+
+
+def ridge_lines(bottom, top, east, max_mm=1000.0):
+    """法尻の角から法肩の角へ引く稜線（出隅・入隅とも）。東面（親杭側）は除く。"""
+    out = []
+    tv = [c for g in getattr(top, "geoms", [top]) for c in list(g.exterior.coords)[:-1]]
+    for g in getattr(bottom, "geoms", [bottom]):
+        for vx, vy in list(g.exterior.coords)[:-1]:
+            if vx >= east - 1:
+                continue
+            best = None
+            for tx, ty in tv:
+                dx, dy = tx - vx, ty - vy
+                if abs(dx) < 1 or abs(dy) < 1 or tx >= east - 1:
+                    continue
+                r = abs(dx) / abs(dy)
+                d = (dx * dx + dy * dy) ** 0.5
+                if 0.6 < r < 1.7 and d < max_mm and (best is None or d < best[0]):
+                    best = (d, (tx, ty))
+            if best:
+                out.append(((vx, vy), best[1]))
+    return out
+
+
 def draw_plan(page, fn, site, zones, m: Mapper):
     ret = site.raw["retaining"]
     n = ret["slope_ratio"]; east = ret["soldier_pile_x_mm"]
     bottom = unary_union([z[3] for z in zones])
     top = unary_union([widen(z[3], n * z[2] * 1000, east) for z in zones])
 
-    sh = page.new_shape()                       # 法面
-    _poly(sh, top.difference(bottom), m.plan)
-    sh.finish(color=None, fill=(0.85, 0.70, 0.45), fill_opacity=0.45, width=0)
-    sh.commit()
-    sh = page.new_shape()
-    _poly(sh, top, m.plan)
-    sh.finish(color=BROWN, width=0.6, dashes="[3 1.5] 0")
-    sh.commit()
-    for depth, g in final_depth_pieces(zones):   # 根切り底（深さ別）
+    for depth, g in final_depth_pieces(zones):   # 根切り底（深さ別、授業図の配色）
         sh = page.new_shape()
         _poly(sh, g, m.plan)
-        sh.finish(color=None, fill=FILL[round(depth, 2)], fill_opacity=0.35, width=0)
+        sh.finish(color=None, fill=FILL[round(depth, 2)], fill_opacity=0.40, width=0)
         sh.commit()
+        sh = page.new_shape()                   # 深さの境界（内部の段差は鉛直＝1本線）
+        _poly(sh, g, m.plan)
+        sh.finish(color=BROWN, width=0.45)
+        sh.commit()
+    sh = page.new_shape()                       # 法肩
+    _poly(sh, top, m.plan)
+    sh.finish(color=BROWN, width=0.85)
+    sh.commit()
     sh = page.new_shape()                       # 法尻（根切り底の外形）
     _poly(sh, bottom, m.plan)
-    sh.finish(color=RED, width=1.1)
+    sh.finish(color=BROWN, width=1.2)
     sh.commit()
-    # 法面のケバ（法肩→法尻の短線）
-    sh = page.new_shape()
-    b = bottom.boundary
-    step = 600.0
-    L = b.length; s = 0.0
-    while s < L:
-        p = b.interpolate(s)
-        if p.x < east - 1:
-            q = top.boundary.interpolate(top.boundary.project(p))
-            if 50 < p.distance(q) < 2000:
-                sh.draw_line(m.plan(q.x, q.y), m.plan(p.x, p.y))
-        s += step
-    sh.finish(color=BROWN, width=0.3)
+    sh = page.new_shape()                       # 稜線（角部の取り合い）
+    for a_, b_ in ridge_lines(bottom, top, east):
+        sh.draw_line(m.plan(*a_), m.plan(*b_))
+    sh.finish(color=BROWN, width=0.55)
     sh.commit()
-    # 東面 親杭横矢板
+    # 東面 親杭横矢板（親杭の位置は概略表示）
     y0, y1 = bottom.bounds[1], bottom.bounds[3]
     sh = page.new_shape()
     sh.draw_line(m.plan(east, y0), m.plan(east, y1))
-    sh.finish(color=RED, width=2.0)
+    sh.finish(color=RED, width=1.8)
     yy = y0
     while yy <= y1 + 1:
         c = m.plan(east, yy)
-        sh.draw_rect(pymupdf.Rect(c.x - 2.2, c.y - 0.9, c.x + 2.2, c.y + 0.9))
+        sh.draw_line(pymupdf.Point(c.x - 2.0, c.y - 1.0), pymupdf.Point(c.x - 2.0, c.y + 1.0))
+        sh.draw_line(pymupdf.Point(c.x + 2.0, c.y - 1.0), pymupdf.Point(c.x + 2.0, c.y + 1.0))
+        sh.draw_line(pymupdf.Point(c.x - 2.0, c.y), pymupdf.Point(c.x + 2.0, c.y))
         yy += 1000
-    sh.finish(color=RED, fill=RED, width=0.3)
+    sh.finish(color=RED, width=0.6)
     sh.commit()
 
-    # 深さラベル（柱・基礎の記号と重ならないよう FS1 側へ引出線で表示）
+    # 深さ表示（授業図の枠付き表示 + 引出線）
     for name, cls, d, p in zones[1:]:
         bx = p.bounds
         if "F5" in name:
-            anchor, at = (15600, 9200), (13300, 7300)
-        elif bx[3] > 10800 + 500:                      # Y3 側の基礎掘削
+            anchor, at = (15600, 9300), (12400, 6300)
+        elif bx[3] > 10800 + 500:
             anchor = ((bx[0] + bx[2]) / 2 + 900, bx[1] + 150); at = (anchor[0] + 300, bx[1] - 1100)
-        else:                                           # Y2 側
+        else:
             anchor = ((bx[0] + bx[2]) / 2 + 900, bx[3] - 150)
             if anchor[0] > 15000:
-                anchor = ((bx[0] + bx[2]) / 2 - 200, bx[3] - 150)
-                at = (anchor[0] - 1500, bx[3] + 1100)
+                anchor = ((bx[0] + bx[2]) / 2 - 200, bx[3] - 150); at = (anchor[0] - 1500, bx[3] + 1100)
             else:
                 at = (anchor[0] + 300, bx[3] + 1100)
-        sh = page.new_shape()
-        sh.draw_line(m.plan(*anchor), m.plan(*at))
-        sh.draw_circle(m.plan(*anchor), 0.8)
-        sh.finish(color=RED, fill=RED, width=0.4)
-        sh.commit()
-        _text(page, fn, m.plan(at[0], at[1] + (-250 if at[1] < anchor[1] else 250)), f"根切り底 GL-{d*1000:,.0f}", 5.6)
-    _text(page, fn, m.plan(8625, 6900), "FS1 根切り底 GL-1,650", 6.0)
-    _text(page, fn, m.plan(8625, 6300), "床付け（捨てコン50・砕石50 下端）", 4.6)
+        r = _boxlabel(page, fn, m.plan(*at), f"GL-{d*1000:.0f}")
+        tip = m.plan(*anchor)
+        _leader(page, tip, pymupdf.Point((r.x0 + r.x1) / 2, r.y0 if tip.y < r.y0 else r.y1))
+    r = _boxlabel(page, fn, m.plan(8625, 6900), "GL-1650", 6.2)
+    _leader(page, m.plan(7600, 7900), pymupdf.Point(r.x0, (r.y0 + r.y1) / 2))
+    _text(page, fn, m.plan(8625, 6250), "FS1 根切り底（床付け）", 5.6)
     bx0, by0, bx1, by1 = zones[0][3].bounds
     _text(page, fn, m.plan(-3300, 7800), f"西面 オープンカット 法1:{n}", 5.6, rotate=90)
-    _text(page, fn, m.plan(east + 650, 8300), "東面 親杭横矢板（H形鋼）", 5.6, rotate=90)
+    _text(page, fn, m.plan(east + 650, 8300), "東面 親杭横矢板（山留H鋼）", 5.6, rotate=90)
     _text(page, fn, m.plan(8625, by1 + 1800), f"北面 オープンカット 法1:{n}", 5.6)
     _text(page, fn, m.plan(14520, -2150), f"南面 オープンカット 法1:{n}", 5.6)
 
-    # 主要寸法（根切り底＝法尻）
-    _dim(page, fn, m.plan(bx0, by1), m.plan(0, by1), f"{-bx0:,.0f}", off=(0, -6))
-    _dim(page, fn, m.plan(17250, by1), m.plan(bx1, by1), f"{bx1-17250:,.0f}", off=(0, -6))
-    _dim(page, fn, m.plan(bx1, 0), m.plan(bx1, by0), f"{-by0:,.0f}", off=(8, 0))
-    _dim(page, fn, m.plan(bx1, 10800), m.plan(bx1, by1), f"{by1-10800:,.0f}", off=(8, 0))
-    _dim(page, fn, m.plan(-590, 0), m.plan(-590, -1610), "1,610", off=(-15, 0))
-    _dim(page, fn, m.plan(-590, 10800), m.plan(-590, 12300), "1,500", off=(-15, 0))
-    _dim(page, fn, m.plan(4050, 12110), m.plan(7450, 12110), "3,400", off=(0, -5))
-    _dim(page, fn, m.plan(5750, 10800), m.plan(5750, 12110), "1,310", off=(0, 0))
-    _dim(page, fn, m.plan(9800, -1310), m.plan(13200, -1310), "3,400", off=(0, 9))
-    sw = n * 1.65 * 1000
-    _dim(page, fn, m.plan(bx0 - sw, 5000), m.plan(bx0, 5000), f"{sw:,.0f}", off=(0, 0), size=4.6)
+    # 寸法（授業図の記入方法: 法幅｜作業ゆとり、基礎掘削の振分け）
+    W, S165 = 500, n * 1.65 * 1000
+    bf = site.raw["beams_outer_face_mm"]
+    for (a_, b_, lab) in _chain(page, fn, [bf["west"] - W - S165, bf["west"] - W, bf["west"]], 3400, "x", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, size=4.8)
+    for (a_, b_, lab) in _chain(page, fn, [bf["south"] - W - S165, bf["south"] - W, bf["south"]], 9100, "y", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, size=4.8)
+    for (a_, b_, lab) in _chain(page, fn, [bf["north"], bf["north"] + W, bf["north"] + W + S165], 3550, "y", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, size=4.8)
+    for (a_, b_, lab) in _chain(page, fn, [-1610, 0, 1390], -590, "y", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, off=(-26, 0))
+    for (a_, b_, lab) in _chain(page, fn, [9300, 10800, 12300], -590, "y", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, off=(-26, 0))
+    for (a_, b_, lab) in _chain(page, fn, [9710, 10800, 12110, 12110 + n * 2.10 * 1000], 4050, "y", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, off=(-6, 0), size=4.8)
+    for (a_, b_, lab) in _chain(page, fn, [9800, 11500, 13200], -1310, "x", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, off=(0, 9))
+    for (a_, b_, lab) in _chain(page, fn, [4050, 5750, 7450], 12110, "x", 0):
+        _dim(page, fn, m.plan(*a_), m.plan(*b_), lab, off=(0, -5))
+    _dim(page, fn, m.plan(13200, 8700), m.plan(14440, 8700), "1,240", size=5.2)
+    _dim(page, fn, m.plan(17250, by1), m.plan(bx1, by1), f"{bx1-17250:,.0f}", off=(0, -14), size=4.8)
+    _text(page, fn, m.plan(bx1 + 200, by1 + 900), "余幅100", 4.8, align="l")
     return top
 
 
@@ -186,9 +240,13 @@ def draw_section(page, fn, site, zones, m: Mapper):
     sh.draw_polyline([m.sec(*p) for p in prof] + [m.sec(x0 - sw, 0)])
     sh.finish(color=None, fill=(0.85, 0.70, 0.45), fill_opacity=0.18, width=0)
     sh.commit()
+    sh = page.new_shape()                      # 授業 X2断面と同じ橙色の帯で根切り線を表示
+    sh.draw_polyline([m.sec(*p) for p in prof])
+    sh.finish(color=ORANGE, width=2.6, stroke_opacity=0.75, lineJoin=1)
+    sh.commit()
     sh = page.new_shape()
     sh.draw_polyline([m.sec(*p) for p in prof])
-    sh.finish(color=RED, width=1.1)
+    sh.finish(color=BROWN, width=0.5)
     sh.commit()
     # 親杭
     dmax = max(s[2] for s in segs) * 1000
@@ -196,9 +254,10 @@ def draw_section(page, fn, site, zones, m: Mapper):
     sh.draw_rect(pymupdf.Rect(m.sec(east, 200), m.sec(east + 200, -dmax - 1300)))
     sh.finish(color=RED, fill=RED, fill_opacity=0.15, width=0.5)
     sh.commit()
-    _text(page, fn, m.sec(east + 1500, -600), "親杭横矢板", 4.6)
-    _text(page, fn, m.sec(east + 1500, -1000), "（H形鋼）", 4.4)
-    _text(page, fn, m.sec(east + 1500, -1450), "余幅100", 4.4)
+    _text(page, fn, m.sec(east + 1600, -600), "親杭横矢板", 5.0)
+    _text(page, fn, m.sec(east + 1600, -1050), "（山留H鋼）", 5.0)
+    _dim(page, fn, m.sec(17340, -1500), m.sec(east, -1500), "100", size=4.4)
+    _text(page, fn, m.sec(east + 1600, -1500), "余幅100", 5.0)
     _text(page, fn, m.sec(x0 - sw - 1300, -350), f"法1:{n}", 5.6)
     # 深さ寸法・床付けレベル
     seen = set()
@@ -228,14 +287,22 @@ def draw_section(page, fn, site, zones, m: Mapper):
 
 def legend(page, fn, m: Mapper, origin=(560.0, 694.0)):
     x, y = origin
-    items = [((0.55, 0.75, 0.95), "根切り底 GL-1,650（FS1）"), ((0.35, 0.80, 0.35), "根切り底 GL-1,850（F3・F4・F5）"),
-             ((0.98, 0.70, 0.25), "根切り底 GL-2,100（F4A）"), ((0.95, 0.45, 0.35), "根切り底 GL-2,200（F3A）"),
-             ((0.85, 0.70, 0.45), "法面（法幅 0.3h）、破線＝法肩")]
+    items = [(FILL[1.65], "根切り底 GL-1650（FS1）"), (FILL[1.85], "根切り底 GL-1850（F3・F4・F5）"),
+             (FILL[2.10], "根切り底 GL-2100（F4A）"), (FILL[2.20], "根切り底 GL-2200（F3A）"),
+             (None, "法面（白抜き）：太線＝法尻、細線＝法肩、斜線＝稜線")]
     for i, (col, lab) in enumerate(items):
         yy = y + i * 11
         sh = page.new_shape()
-        sh.draw_rect(pymupdf.Rect(x, yy, x + 14, yy + 7))
-        sh.finish(color=RED, fill=col, fill_opacity=0.5, width=0.4)
+        if col is None:
+            sh.draw_line(pymupdf.Point(x, yy + 7), pymupdf.Point(x + 14, yy + 7))
+            sh.finish(color=BROWN, width=1.2)
+            sh.draw_line(pymupdf.Point(x, yy + 1), pymupdf.Point(x + 14, yy + 1))
+            sh.finish(color=BROWN, width=0.85)
+            sh.draw_line(pymupdf.Point(x, yy + 7), pymupdf.Point(x + 6, yy + 1))
+            sh.finish(color=BROWN, width=0.55)
+        else:
+            sh.draw_rect(pymupdf.Rect(x, yy, x + 14, yy + 7))
+            sh.finish(color=BROWN, fill=col, fill_opacity=0.5, width=0.4)
         sh.commit()
         page.insert_text(pymupdf.Point(x + 18, yy + 6.5), lab, fontsize=6.0, fontname=fn, color=RED)
 
@@ -252,7 +319,7 @@ def write(src_pdf, out_pdf, site, zones, res):
     page.insert_textbox(r, f"{res.total:,.2f}", fontsize=12, fontname=fn, color=RED, align=pymupdf.TEXT_ALIGN_CENTER)
     page.insert_textbox(pymupdf.Rect(60, 1098, 372, 1124),
                         f"方法A ΣAi·hi = {res.method_a:.3f}m3 ／ 方法B A0×1.65+ΣAj·Δhj = {res.a0_area:.3f}×1.65+… = {res.method_b:.3f}m3"
-                        f"\n余幅 = 作業ゆとり0.5m + 法幅0.3h/2（東面は親杭・法なし）",
+                        f"\n余幅 = 作業ゆとり0.5m + 法幅0.3h/2（外周のみ。内部の段差は鉛直。東面は親杭・余幅0.1m・法なし）",
                         fontsize=5.2, fontname=fn, color=RED)
     doc.save(out_pdf, garbage=3, deflate=True)
     doc.close()

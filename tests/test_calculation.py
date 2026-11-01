@@ -99,7 +99,7 @@ def test_real_methods_agree_and_close_to_exact_solid():
     site, z = real()
     res = calculation.compute(site, z)
     assert res.agree
-    assert abs(res.method_a - res.exact_volume) / res.exact_volume < 0.02
+    assert abs(res.method_a - res.exact_volume) / res.exact_volume < 0.001   # 外周のみ余幅で実斜面と 0.03% 一致
     # 方法Bの増掘り深さは授業の 0.20 / 0.45 / 0.55
     assert sorted(round(r[2], 2) for r in res.method_b_rows[1:]) == [0.2, 0.45, 0.55]
 
@@ -146,10 +146,11 @@ PDF = ROOT / "inputs/assignment/20261021_ 第4回_山留土工事演習問題及
 def test_answer_sheet_written_without_damaging_original(tmp_path):
     import pymupdf
     assert run.main(["--out", str(tmp_path)]) == 0
-    out = tmp_path / "01_完成演習課題.pdf"
+    out = tmp_path / "02_先生スライド準拠_完成演習課題.pdf"
     with pymupdf.open(out) as d:
-        assert len(d) == 7
-        assert "441.23" in d[0].get_text()
+        assert len(d) == 7                         # 元PDFの 2〜7 ページを保持
+        t = d[0].get_text().replace("\xad", "-")
+        assert "436.49" in t and "GL-1850" in t and "余幅100" in t
 
 
 @pytest.mark.skipif(not PDF.exists(), reason="課題PDFが必要")
@@ -171,7 +172,7 @@ def test_sheet_grid_matches_config():
 def test_real_volume_regression():
     site, z = real()
     res = calculation.compute(site, z)
-    assert res.method_a == pytest.approx(441.225, abs=0.001)
+    assert res.method_a == pytest.approx(436.490, abs=0.001)
     assert res.a0_area == pytest.approx(251.374, abs=0.001)
 
 
@@ -179,5 +180,62 @@ def test_independent_yohaba_rule_check():
     # scripts/verify_yohaba.py: 外面 + 余幅(0.5+0.3h/2) を Shapely なしで格子集計 → 本体と一致
     import runpy
     g = runpy.run_path(str(ROOT / "scripts/verify_yohaba.py"))
-    assert abs(g["V"] - 441.225) < 0.01
+    assert abs(g["V"] - 436.490) < 0.01            # 外周のみ余幅（授業準拠）
     assert abs(g["A0"] - 251.374) < 0.01
+    assert abs(g["V_all"] - 441.225) < 0.01        # v1 方式（全周余幅）も独立に再現
+
+
+
+def test_v1_all_faces_reproduces_441():
+    site, z = real()
+    site.raw["retaining"]["yohaba_scope"] = "all_faces"
+    assert calculation.compute(site, z).method_a == pytest.approx(441.225, abs=0.001)
+
+
+def test_interior_steps_are_vertical_and_perimeter_gets_yohaba():
+    from shapely.geometry import Point
+    site, z = real()
+    yz, _ = calculation.yohaba_zones(site, z)
+    def depth(x, y):
+        return max([d for *_, d, p in yz if p.contains(Point(x, y))], default=0)
+    assert depth(5750, 1090 + 100) == 1.65          # F4 北側（内部の段差）: 余幅なし
+    assert depth(5750, -1310 - 200) == 1.85         # F4 南側（外周）: 余幅 0.2775 内
+    assert depth(5750, -1310 - 300) == 0            # 余幅の外
+    assert depth(-590 - 200, 5000) == 1.65          # 西面 FS1: 法尻から余幅 0.2475 の内側
+    assert depth(-590 - 300, 5000) == 0             # 余幅の外
+    assert depth(17440 + 10, 5000) == 0             # 東面: 親杭面で打切り
+
+
+def test_corner_overlap_counted_once():
+    site, z = real()
+    yz, _ = calculation.yohaba_zones(site, z)
+    from shapely.ops import unary_union
+    f5 = [p for n_, *_, p in yz if n_.startswith("F5")][0]
+    f4a = [p for n_, *_, p in yz if n_.startswith("F4A (X3")][0]
+    assert f5.intersection(f4a).area > 0               # 角部で重なる
+    pieces = geometry.final_depth_pieces(yz)
+    assert sum(g.area for _, g in pieces) == pytest.approx(unary_union([p for *_, p in yz]).area)
+
+
+def test_teacher_slide_dimensions():
+    # 授業着色図の寸法: F4 1700|1700、F3 1390/1610、X4側 1410|190、F4A北 1310、1700+1240+2900
+    site, z = real()
+    b = {n_: p.bounds for n_, c, d, p in z}
+    assert b["F4 (X3・Y2)"][2] - 11500 == 1700 and 11500 - b["F4 (X3・Y2)"][0] == 1700
+    assert (b["F3 (X1・Y2)"][1], b["F3 (X1・Y2)"][3]) == (-1610, 1390)
+    assert (17250 - b["F3 (X4・Y2)"][0], b["F3 (X4・Y2)"][2] - 17250) == (1410, 190)
+    assert b["F4A (X2・Y3)"][3] - 10800 == 1310
+    f5 = [f for f in site.raw["footings"] if f["name"] == "F5"][0]["plan_mm"]["polygon"]
+    assert 11500 + 1700 + 1240 == f5[0][0]
+
+
+def test_ridge_lines_at_corners():
+    from yamadome import answer_sheet
+    from shapely.ops import unary_union
+    site, z = real()
+    n = site.raw["retaining"]["slope_ratio"]; east = site.raw["retaining"]["soldier_pile_x_mm"]
+    bottom = unary_union([p for *_, p in z])
+    top = unary_union([calculation.widen(p, n * d * 1000, east) for *_, d, p in z])
+    lines = answer_sheet.ridge_lines(bottom, top, east)
+    assert ((-590, -1610), (-1145, -2165)) in [(tuple(map(round, a)), tuple(map(round, b))) for a, b in lines]
+    assert len(lines) >= 20

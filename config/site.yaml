@@ -272,6 +272,9 @@ retaining:
   include_slope_note: '積算方法: 余幅 a = 作業のゆとり幅 + 法幅/2（スライド）。作業ゆとりは区画に含済みのため、開放3面に 0.3h/2 を加えて垂直掘りとみなす'
   soldier_pile_status: confirmed
   soldier_pile_note: F3/F5 外面 X4+90（PDF実測）+ 余幅100（授業 Y3断面 東側山留部分）= X4+190（授業図の『190』と一致）
+  yohaba_scope: perimeter
+  yohaba_scope_status: derived
+  yohaba_scope_source: '授業着色根切図: 基礎掘削（緑・橙）と FS1（黄）の境界は1本線で法面を描かない（内部の段差は鉛直）。10:04 スライド下帯『外周法面・余幅と重複範囲をそろえ…』。→ 余幅（法幅/2）は根切り底全体の外形の外側（外周）だけに付ける。v1（2026-11-01, 441.225 m³）は内部の段差にも 0.3h/2 を付けていた（all_faces）'
 answer_sheet:
   pdf: inputs/assignment/20261021_ 第4回_山留土工事演習問題及びサンプル設計図(演習課題)(1).pdf
   page_index: 0
