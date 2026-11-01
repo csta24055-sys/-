@@ -9,7 +9,7 @@ import argparse, shutil, sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
-from yamadome import config, geometry, calculation, drawing, report, pdf_tools  # noqa: E402
+from yamadome import config, geometry, calculation, drawing, report, pdf_tools, answer_sheet  # noqa: E402
 
 GEOMETRY_KEYS = ("excavation", "retaining.slope_ratio", "retaining.include_slope_volume")
 
@@ -67,15 +67,13 @@ def main(argv=None):
     shutil.copytree(ROOT / "src", src_dir); shutil.copy(ROOT / a.config, src_dir / "site.yaml")
 
     sheet = site.raw["answer_sheet"]
-    if pdf.exists() and sheet["plan_box"] and sheet["section_box"] and not a.demo:
-        items = [("pdf", sheet["plan_box"], out / "02_根切り図.pdf"),
-                 ("pdf", sheet["section_box"], out / "03_Y3根切り断面図.pdf")]
-        if sheet["volume_text_at"]:
-            items.append(("text", sheet["volume_text_at"], f"掘削土量 V = {res.total:.2f} m³"))
+    if pdf.exists() and sheet.get("plan_grid_pt") and not a.demo:
         final = out / "01_完成演習課題.pdf"
-        pdf_tools.fill_answer_sheet(pdf, final, sheet["page_index"], items)
-        ratio = pdf_tools.compare_outside_boxes(pdf, final, sheet["page_index"], [i[1] for i in items])
-        print(f"解答欄外の変化画素率: {ratio:.5f}")
+        boxes = answer_sheet.write(pdf, final, site, zones, res)
+        ratio = pdf_tools.compare_outside_boxes(pdf, final, sheet["page_index"], boxes)
+        print(f"解答欄外の変化画素率: {ratio:.6f}")
+        if ratio > 0.001:
+            print("[エラー] 解答欄外が変化している"); return 6
         pdf_tools.render_pages(final, out / "verify", dpi=300)
     else:
         print("[注意] 01_完成演習課題.pdf（元PDFへの書込み）は未生成: 課題PDFまたは解答欄座標が未設定")

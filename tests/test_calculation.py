@@ -137,3 +137,39 @@ def test_pipeline_reproducible(tmp_path):
     wa = openpyxl.load_workbook(tmp_path / "a/05_計算明細.xlsx").active
     wb = openpyxl.load_workbook(tmp_path / "b/05_計算明細.xlsx").active
     assert [[c.value for c in r] for r in wa.iter_rows()] == [[c.value for c in r] for r in wb.iter_rows()]
+
+
+PDF = ROOT / "inputs/assignment/20261021_ 第4回_山留土工事演習問題及びサンプル設計図(演習課題)(1).pdf"
+
+
+@pytest.mark.skipif(not PDF.exists(), reason="課題PDFは著作権上コミットしない（ローカルにある場合のみ検証）")
+def test_answer_sheet_written_without_damaging_original(tmp_path):
+    import pymupdf
+    assert run.main(["--out", str(tmp_path)]) == 0
+    out = tmp_path / "01_完成演習課題.pdf"
+    with pymupdf.open(out) as d:
+        assert len(d) == 7
+        assert "441.23" in d[0].get_text()
+
+
+@pytest.mark.skipif(not PDF.exists(), reason="課題PDFが必要")
+def test_sheet_grid_matches_config():
+    # PDF の通り芯（一点鎖線）位置が config の plan_grid_pt と一致すること
+    import pymupdf, collections
+    site = config.load(ROOT / "config/site.yaml")
+    g = site.raw["answer_sheet"]["plan_grid_pt"]
+    V = collections.Counter()
+    with pymupdf.open(PDF) as d:
+        for dr in d[0].get_drawings():
+            for it in dr["items"]:
+                if it[0] == "l" and abs(it[1].x - it[2].x) < 0.05 and it[1].y < 620:
+                    V[round(it[1].x, 2)] += 1
+    for k in ("X1", "X4"):
+        assert V[g[k]] >= 8
+
+
+def test_real_volume_regression():
+    site, z = real()
+    res = calculation.compute(site, z)
+    assert res.method_a == pytest.approx(441.225, abs=0.001)
+    assert res.a0_area == pytest.approx(251.374, abs=0.001)
