@@ -6,7 +6,13 @@
 3. 有報の要所は `python3 tools/extract_yuho.py S0xx` → `python3 tools/compact_extract.py S0xx` で抽出する。
 4. 新しい資料のIDは S054 以降。文書の改訂時は版番号と改訂の内容を冒頭に記す。`bash tools/build_docs.sh` で `dist/` を再生成する。
 
-## 優先順（第4セッション）
+## 研究書の再生成
+`python3 tools/build_books.py`（全冊）または `python3 tools/build_books.py strategy` などで1冊ずつ。章ごとのPDFは `bash tools/build_docs.sh`。
+
+## 優先順（第5セッション）
+0. Q-R1・Q-R2：2028年卒の東電の募集要項と推薦制度の確認（最終章の日程の仮定を確定させる）。
+
+## 優先順（第4セッション時点）
 1. Q-M2：固定予測（15章）と指標（`data/scenario_indicators.csv`）の更新。東電の通期決算（2027年4月）、JERAの決算、OCCTOの需要想定（2027年1月）。
 2. Q-J1：東電EPとJERAの取引関係（グループ内の利益移転）。
 3. Q-W1〜W3：海外の原典の取得（IEAは403のため、PDFのミラーや各国の統計機関を探す）。

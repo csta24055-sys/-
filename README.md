@@ -22,10 +22,14 @@
 | `research/14_海外比較/` | 第3段階：米国・欧州・中国の制度・企業・投資と、日本への波及 |
 | `research/15_検証可能な予測/` | 第3段階：シナリオの指標・しきい値、第四次総特のバックテスト、固定予測（FP-1〜7） |
 | `research/16_反証と品質管理/` | 第3段階：第2版の結論の再検証（求人推定の限界、相関と因果、会計基準） |
+| `research/17_東電の人材需要/`〜`research/22_最終章/` | 最終統合版：東電の人材需要、日本大学・井口研究室、新卒採用構造、適合性、行動・選考モデル、最適行動戦略（最終章） |
+| `research/00_前付・後付/` | Executive Summary（5種）、用語集 |
 | `research/*.md` | 管理ファイル（RESEARCH_PROGRESS / SOURCES / OPEN_QUESTIONS / FINDINGS / HYPOTHESES / NEXT_STEPS） |
 | `data/` | 抽出データ（`occto_demand_2026.csv`、`tepco_financials.csv`、`company_comparison_fy2025.csv`、`jera_tepco_reconciliation_2026h1.csv`、`backtest_4th_plan.csv`、`scenario_indicators.csv`）。`raw/`・`text/` は再取得できるため管理対象外 |
 | `tools/` | 資料の取得・台帳登録（`fetch_source.py`）、データ抽出、docx・pdfの生成（`build_docs.sh`） |
-| `dist/` | 閲覧用PDFと編集用Word（`bash tools/build_docs.sh` で再生成できる） |
+| `dist/books/` | **研究書6冊（PDF・Word）**：完全版、日本電力産業総合戦略研究書、東京電力グループ特別研究報告書、建築・建築設備技術者研究報告書、井口研究室と東電採用の適合性研究、最適行動戦略報告書（`python3 tools/build_books.py`） |
+| `dist/chapters/` | 章ごとのPDF・Word（`bash tools/build_docs.sh`） |
+| `dist/research_data/` | 研究データCSV、一次資料台帳、用語集、図（PNG） |
 
 ## 事実と推論の区別
 各文書では【確認事実】【当事者の主張】【分析】【仮説】【予測】【不明】を明記し、資料番号（S001など）で台帳と対応させている。
