@@ -173,3 +173,11 @@ def test_real_volume_regression():
     res = calculation.compute(site, z)
     assert res.method_a == pytest.approx(441.225, abs=0.001)
     assert res.a0_area == pytest.approx(251.374, abs=0.001)
+
+
+def test_independent_yohaba_rule_check():
+    # scripts/verify_yohaba.py: 外面 + 余幅(0.5+0.3h/2) を Shapely なしで格子集計 → 本体と一致
+    import runpy
+    g = runpy.run_path(str(ROOT / "scripts/verify_yohaba.py"))
+    assert abs(g["V"] - 441.225) < 0.01
+    assert abs(g["A0"] - 251.374) < 0.01

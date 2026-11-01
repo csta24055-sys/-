@@ -10,7 +10,9 @@ from shapely.ops import unary_union
 from shapely.geometry import LineString
 from .geometry import final_depth_pieces, section_profile
 from .calculation import widen
-from .pdf_tools import _font
+from .pdf_tools import _font, JP_FONT
+
+_JP = pymupdf.Font(fontfile=JP_FONT)
 
 RED = (0.80, 0.05, 0.05)
 BROWN = (0.55, 0.35, 0.10)
@@ -45,18 +47,20 @@ def _poly(shape, geom, conv):
 
 
 def _text(page, fn, pt, s, size=5.0, color=RED, align="c", rotate=0):
-    w = pymupdf.get_text_length(s, fontname="helv", fontsize=size) * 1.6 + 4
+    w = _JP.text_length(s, fontsize=size) * 1.15 + 6
     if rotate:
         r = pymupdf.Rect(pt.x - size, pt.y - w / 2, pt.x + size, pt.y + w / 2)
     elif align == "c":
-        r = pymupdf.Rect(pt.x - w / 2, pt.y - size, pt.x + w / 2, pt.y + size * 1.2)
+        r = pymupdf.Rect(pt.x - w / 2, pt.y - size, pt.x + w / 2, pt.y + size * 1.6)
     else:
-        r = pymupdf.Rect(pt.x, pt.y - size, pt.x + w, pt.y + size * 1.2)
-    page.insert_textbox(r, s, fontsize=size, fontname=fn, color=color,
-                        align=pymupdf.TEXT_ALIGN_CENTER if align == "c" else 0, rotate=rotate)
+        r = pymupdf.Rect(pt.x, pt.y - size, pt.x + w, pt.y + size * 1.6)
+    rc = page.insert_textbox(r, s, fontsize=size, fontname=fn, color=color,
+                             align=pymupdf.TEXT_ALIGN_CENTER if align == "c" else 0, rotate=rotate)
+    if rc < 0:
+        raise RuntimeError(f"文字が枠に収まらず描画されない: {s!r}")
 
 
-def _dim(page, fn, a, b, label, off=(0, 0), size=4.2):
+def _dim(page, fn, a, b, label, off=(0, 0), size=5.6):
     """a, b: pymupdf.Point（同じ x または同じ y）。off だけずらした寸法線と数値。"""
     a2 = pymupdf.Point(a.x + off[0], a.y + off[1]); b2 = pymupdf.Point(b.x + off[0], b.y + off[1])
     sh = page.new_shape()
@@ -69,9 +73,9 @@ def _dim(page, fn, a, b, label, off=(0, 0), size=4.2):
     sh.commit()
     mid = pymupdf.Point((a2.x + b2.x) / 2, (a2.y + b2.y) / 2)
     if abs(a2.x - b2.x) < 0.01:          # 縦寸法
-        _text(page, fn, pymupdf.Point(mid.x - 3.2, mid.y), label, size, rotate=90)
+        _text(page, fn, pymupdf.Point(mid.x - size * 0.75, mid.y), label, size, rotate=90)
     else:
-        _text(page, fn, pymupdf.Point(mid.x, mid.y - 3.0), label, size)
+        _text(page, fn, pymupdf.Point(mid.x, mid.y - size * 0.7), label, size)
 
 
 def draw_plan(page, fn, site, zones, m: Mapper):
@@ -124,30 +128,46 @@ def draw_plan(page, fn, site, zones, m: Mapper):
     sh.finish(color=RED, fill=RED, width=0.3)
     sh.commit()
 
-    # 深さラベル
+    # 深さラベル（柱・基礎の記号と重ならないよう FS1 側へ引出線で表示）
     for name, cls, d, p in zones[1:]:
-        c = p.representative_point() if "F5" not in name else p.centroid
-        _text(page, fn, m.plan(c.x, c.y - 350), f"GL-{d*1000:,.0f}", 4.6)
+        bx = p.bounds
+        if "F5" in name:
+            anchor, at = (15600, 9200), (13300, 7300)
+        elif bx[3] > 10800 + 500:                      # Y3 側の基礎掘削
+            anchor = ((bx[0] + bx[2]) / 2 + 900, bx[1] + 150); at = (anchor[0] + 300, bx[1] - 1100)
+        else:                                           # Y2 側
+            anchor = ((bx[0] + bx[2]) / 2 + 900, bx[3] - 150)
+            if anchor[0] > 15000:
+                anchor = ((bx[0] + bx[2]) / 2 - 200, bx[3] - 150)
+                at = (anchor[0] - 1500, bx[3] + 1100)
+            else:
+                at = (anchor[0] + 300, bx[3] + 1100)
+        sh = page.new_shape()
+        sh.draw_line(m.plan(*anchor), m.plan(*at))
+        sh.draw_circle(m.plan(*anchor), 0.8)
+        sh.finish(color=RED, fill=RED, width=0.4)
+        sh.commit()
+        _text(page, fn, m.plan(at[0], at[1] + (-250 if at[1] < anchor[1] else 250)), f"根切り底 GL-{d*1000:,.0f}", 5.6)
     _text(page, fn, m.plan(8625, 6900), "FS1 根切り底 GL-1,650", 6.0)
     _text(page, fn, m.plan(8625, 6300), "床付け（捨てコン50・砕石50 下端）", 4.6)
     bx0, by0, bx1, by1 = zones[0][3].bounds
-    _text(page, fn, m.plan(-1700, 5400), f"西面 オープンカット 法1:{n}", 4.8, rotate=90)
-    _text(page, fn, m.plan(east + 650, 5400), "東面 親杭横矢板（H形鋼）", 4.8, rotate=90)
-    _text(page, fn, m.plan(8625, by1 + 1800), f"北面 オープンカット 法1:{n}", 4.8)
-    _text(page, fn, m.plan(8625, by0 - 950), f"南面 オープンカット 法1:{n}", 4.8)
+    _text(page, fn, m.plan(-3300, 7800), f"西面 オープンカット 法1:{n}", 5.6, rotate=90)
+    _text(page, fn, m.plan(east + 650, 8300), "東面 親杭横矢板（H形鋼）", 5.6, rotate=90)
+    _text(page, fn, m.plan(8625, by1 + 1800), f"北面 オープンカット 法1:{n}", 5.6)
+    _text(page, fn, m.plan(14520, -2150), f"南面 オープンカット 法1:{n}", 5.6)
 
     # 主要寸法（根切り底＝法尻）
     _dim(page, fn, m.plan(bx0, by1), m.plan(0, by1), f"{-bx0:,.0f}", off=(0, -6))
     _dim(page, fn, m.plan(17250, by1), m.plan(bx1, by1), f"{bx1-17250:,.0f}", off=(0, -6))
     _dim(page, fn, m.plan(bx1, 0), m.plan(bx1, by0), f"{-by0:,.0f}", off=(8, 0))
     _dim(page, fn, m.plan(bx1, 10800), m.plan(bx1, by1), f"{by1-10800:,.0f}", off=(8, 0))
-    _dim(page, fn, m.plan(-590, 0), m.plan(-590, -1610), "1,610", off=(-9, 0))
-    _dim(page, fn, m.plan(-590, 10800), m.plan(-590, 12300), "1,500", off=(-9, 0))
+    _dim(page, fn, m.plan(-590, 0), m.plan(-590, -1610), "1,610", off=(-15, 0))
+    _dim(page, fn, m.plan(-590, 10800), m.plan(-590, 12300), "1,500", off=(-15, 0))
     _dim(page, fn, m.plan(4050, 12110), m.plan(7450, 12110), "3,400", off=(0, -5))
     _dim(page, fn, m.plan(5750, 10800), m.plan(5750, 12110), "1,310", off=(0, 0))
-    _dim(page, fn, m.plan(9800, -1310), m.plan(13200, -1310), "3,400", off=(0, 5))
+    _dim(page, fn, m.plan(9800, -1310), m.plan(13200, -1310), "3,400", off=(0, 9))
     sw = n * 1.65 * 1000
-    _dim(page, fn, m.plan(bx0 - sw, 5000), m.plan(bx0, 5000), f"{sw:,.0f}", off=(0, 0), size=3.8)
+    _dim(page, fn, m.plan(bx0 - sw, 5000), m.plan(bx0, 5000), f"{sw:,.0f}", off=(0, 0), size=4.6)
     return top
 
 
@@ -174,12 +194,12 @@ def draw_section(page, fn, site, zones, m: Mapper):
     dmax = max(s[2] for s in segs) * 1000
     sh = page.new_shape()
     sh.draw_rect(pymupdf.Rect(m.sec(east, 200), m.sec(east + 200, -dmax - 1300)))
-    sh.finish(color=RED, fill=(1, 0.85, 0.85), width=0.5)
+    sh.finish(color=RED, fill=RED, fill_opacity=0.15, width=0.5)
     sh.commit()
     _text(page, fn, m.sec(east + 1500, -600), "親杭横矢板", 4.6)
     _text(page, fn, m.sec(east + 1500, -1000), "（H形鋼）", 4.4)
     _text(page, fn, m.sec(east + 1500, -1450), "余幅100", 4.4)
-    _text(page, fn, m.sec(x0 - sw - 200, -1150), f"法1:{n}", 4.6)
+    _text(page, fn, m.sec(x0 - sw - 1300, -350), f"法1:{n}", 5.6)
     # 深さ寸法・床付けレベル
     seen = set()
     for a, b, d in segs:
@@ -189,23 +209,24 @@ def draw_section(page, fn, site, zones, m: Mapper):
         if (d, round(a)) in seen:
             continue
         seen.add((d, round(a)))
-        xm = a + 260 if d != 1.65 else (a + b) / 2
+        xm = (b - 260 if d != 1.85 else a + 330) if d != 1.65 else (a + b) / 2
         if d == 1.65 and (a, b, d) != max((s for s in segs if s[2] == 1.65), key=lambda s: s[1] - s[0]):
             continue
-        _dim(page, fn, m.sec(xm, 0), m.sec(xm, -d * 1000), lab, size=3.8)
+        _dim(page, fn, m.sec(xm, 0), m.sec(xm, -d * 1000), lab, size=5.0)
     for a, b, d in segs:
         if b - a > 1500:
-            _text(page, fn, m.sec((a + b) / 2 + (600 if d == 1.65 else 0), -d * 1000 - 260), f"床付 GL-{d*1000:,.0f}", 3.8)
+            z = -d * 1000 + 330 if d == 1.65 else -d * 1000 - 300
+            _text(page, fn, m.sec((a + b) / 2, z), f"床付 GL-{d*1000:,.0f}", 4.8)
     # 区間寸法（根切り底）
     edges = sorted({round(v) for a, b, _ in segs for v in (a, b)} | {round(x0 - sw)})
     for a, b in zip(edges, edges[1:]):
         if b - a < 300:
             continue
-        _dim(page, fn, m.sec(a, -2950), m.sec(b, -2950), f"{b-a:,.0f}", size=3.4)
+        _dim(page, fn, m.sec(a, -2950), m.sec(b, -2950), f"{b-a:,.0f}", size=4.6)
     return segs
 
 
-def legend(page, fn, m: Mapper, origin=(560.0, 700.0)):
+def legend(page, fn, m: Mapper, origin=(560.0, 694.0)):
     x, y = origin
     items = [((0.55, 0.75, 0.95), "根切り底 GL-1,650（FS1）"), ((0.35, 0.80, 0.35), "根切り底 GL-1,850（F3・F4・F5）"),
              ((0.98, 0.70, 0.25), "根切り底 GL-2,100（F4A）"), ((0.95, 0.45, 0.35), "根切り底 GL-2,200（F3A）"),
@@ -216,7 +237,7 @@ def legend(page, fn, m: Mapper, origin=(560.0, 700.0)):
         sh.draw_rect(pymupdf.Rect(x, yy, x + 14, yy + 7))
         sh.finish(color=RED, fill=col, fill_opacity=0.5, width=0.4)
         sh.commit()
-        page.insert_text(pymupdf.Point(x + 18, yy + 6.5), lab, fontsize=5.5, fontname=fn, color=RED)
+        page.insert_text(pymupdf.Point(x + 18, yy + 6.5), lab, fontsize=6.0, fontname=fn, color=RED)
 
 
 def write(src_pdf, out_pdf, site, zones, res):
@@ -240,4 +261,4 @@ def write(src_pdf, out_pdf, site, zones, res):
     plan_box = [min(p0.x, p1.x), min(p0.y, p1.y), max(p0.x, p1.x), max(p0.y, p1.y)]
     s0, s1 = m.sec(tb[0] - 1500, 400), m.sec(tb[2] + 3000, -3300)
     sec_box = [s0.x, s0.y, s1.x, s1.y]
-    return [plan_box, sec_box, list(r), [55, 1093, 377, 1128], [555, 695, 760, 760]]
+    return [plan_box, sec_box, list(r), [55, 1093, 377, 1128], [555, 690, 770, 750]]
