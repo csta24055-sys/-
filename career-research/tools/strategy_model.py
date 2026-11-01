@@ -30,6 +30,9 @@ VALUE_SYSTEMS = {
     "V11_時間・費用の効率": {"reach_now": 3, "reach_prep": 1, "downside": 2, "pay": 1},
     "V12_失敗時の損失最小": {"downside": 5, "reach_now": 2, "stability": 2},
     "V13_到達可能な上限": {"pay": 2, "scale": 2, "prestige": 2, "reach_prep": 2, "fit": 1},
+    # 損失回避と入口の確実性を最も重く見る型（個人軸中心のため公開モードでは除外される）
+    "V15_損失回避・入口重視型": {"downside": 5, "reach_now": 4, "prestige": 2, "stability": 2,
+                                  "worklife": 2, "fit": 1},
     "V14_総合（均衡）": {"pay": 2, "stability": 2, "worklife": 2, "scale": 2, "expertise": 1, "autonomy": 1,
                        "prestige": 1, "mobility": 1, "freedom": 1, "fit": 3, "reach_prep": 2, "downside": 1},
 }
