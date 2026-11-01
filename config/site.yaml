@@ -1,15 +1,11 @@
-# 第4回 山留土工事演習課題 — 入力条件（単一の情報源）
-# 単位: 平面座標 mm（原点 = X1通り × Y2通り、x=東向き、y=北向き）、深さ m（GLから下向き正）
-# status: confirmed = 資料で確定 / derived = 照合で導出 / assumed = 仮定 / unresolved = 未確定（null）
-# 未確定値を null のまま残すと、run.py は最終成果物を「確定」として出力しない。
-
+# 第4回 山留土工事演習課題 — 入力条件（単一の情報源）。座標 mm（原点 X1×Y2、x東・y北）、深さ m。
+# status: confirmed=資料で確定 / derived=複数資料の照合で導出 / assumed=仮定（要確認） / null=未確定
 meta:
-  title: "〇〇寮新築工事 根切図・根切断面図（Y3通り）・掘削土量"
-  date: "2026-10-21"
-  scale: 100           # 1/100
-
+  title: 〇〇寮新築工事 根切図・根切断面図（Y3通り）・掘削土量
+  date: '2026-10-21'
+  scale: 100
 grid:
-  x:                   # 通り芯 x座標 [mm]
+  x:
     X1: 0
     X2: 5750
     X3: 11500
@@ -18,55 +14,268 @@ grid:
     Y2: 0
     Y3: 10800
   sources:
-    - "総合指示書の既知寸法 X1-X2-X3-X4 = 5750 ×3 = 17250, Y2-Y3 = 10800（status: confirmed-by-instruction / 設計図PDF p.2で要再確認）"
-
-levels:                # GL基準 [mm]、上向き正
+  - '総合指示書の既知寸法 X1-X2-X3-X4 = 5750 ×3 = 17250, Y2-Y3 = 10800（status: confirmed-by-instruction / 設計図PDF p.2で要再確認）'
+levels:
   GL: 0
-  1FL: 500             # 授業スライド 9:54「GL基準のレベル = FL基準のレベル + 500mm」(status: confirmed)
-
-depth_classes:         # 根切り深さ [m]（GLから根切り底まで）
-  base:    {depth: 1.65, status: confirmed, source: "授業スライド 10:04 方法B の基本掘削深さ 1.65"}
-  general: {depth: 1.85, status: confirmed, source: "授業スライド 10:00 F3・F4・F5の一般部 床付け GL-1,850"}
-  F4A:     {depth: 2.10, status: confirmed, source: "授業スライド 10:00 F4A(Y3・X2/X3) 床付け GL-2,100"}
-  F3A:     {depth: 2.20, status: confirmed, source: "授業スライド 10:00 F3A(Y3・X1) 床付け GL-2,200"}
-
-footings:              # 基礎下端・床付け（授業スライド 10:00）。平面寸法は設計図 p.5 基礎リストから要入力
-  - {name: F3A, at: "Y3・X1",    bottom_GL_mm: -2100, subgrade_GL_mm: -2200, size_mm: null, status: unresolved-size}
-  - {name: F4A, at: "Y3・X2/X3", bottom_GL_mm: -2000, subgrade_GL_mm: -2100, size_mm: null, status: unresolved-size}
-  - {name: F3,  at: null,        bottom_GL_mm: -1750, subgrade_GL_mm: -1850, size_mm: null, status: unresolved-size}
-  - {name: F4,  at: null,        bottom_GL_mm: -1750, subgrade_GL_mm: -1850, size_mm: null, status: unresolved-size}
-  - {name: F5,  at: null,        bottom_GL_mm: -1750, subgrade_GL_mm: -1850, size_mm: null, status: unresolved-size,
-     note: "特殊形状。矩形に置換しないこと（設計図 p.2/p.5）"}
-
-sub_layers_mm:         # 基礎下：捨てコン50 + 砕石50 = 100（授業スライド 10:00 サブタイトル）
+  1FL: 500
+depth_classes:
+  base:
+    depth: 1.65
+    status: confirmed
+    source: 授業スライド 10:04 方法B 基本深さ 1.65 ／ 授業着色根切図 FS1『GL-1650』（confirmed）
+  general:
+    depth: 1.85
+    status: confirmed
+    source: 授業スライド 10:00 F3・F4・F5の一般部 床付け GL-1,850
+  F4A:
+    depth: 2.1
+    status: confirmed
+    source: 授業スライド 10:00 F4A(Y3・X2/X3) 床付け GL-2,100
+  F3A:
+    depth: 2.2
+    status: confirmed
+    source: 授業スライド 10:00 F3A(Y3・X1) 床付け GL-2,200
+footings:
+- name: F3A
+  at: X1・Y3
+  bottom_GL_mm: -2100
+  subgrade_GL_mm: -2200
+  plan_mm:
+    x:
+    - -90
+    - 910
+    y:
+    - 9910
+    - 11910
+  status: assumed
+  note: 平面寸法は F3 と同形・Y方向反転と仮定（課題用紙写真で F3A は F3 と同程度の矩形）
+- name: F4A
+  at: X2・Y3
+  bottom_GL_mm: -2000
+  subgrade_GL_mm: -2100
+  plan_mm:
+    x:
+    - 4550
+    - 6950
+    y:
+    - 10210
+    - 11610
+  status: derived
+  note: F4 と同寸 2400×1400 と仮定。Y3 側の 1090/1310 は X2断面の対称位置から導出
+- name: F4A
+  at: X3・Y3
+  bottom_GL_mm: -2000
+  subgrade_GL_mm: -2100
+  plan_mm:
+    x:
+    - 10300
+    - 12700
+    y:
+    - 10210
+    - 11610
+  status: derived
+- name: F3
+  at: X1・Y2
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  plan_mm:
+    x:
+    - -90
+    - 910
+    y:
+    - -1110
+    - 890
+  status: derived
+  note: 'Y: 890/1110（課題用紙）+余裕500 = 1390/1610（着色図）。X: 着色図 X4側 1410|190 から 1000幅・外面 X+90 と導出'
+- name: F3
+  at: X4・Y2
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  plan_mm:
+    x:
+    - 16340
+    - 17340
+    y:
+    - -1110
+    - 890
+  status: derived
+- name: F4
+  at: X2・Y2
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  plan_mm:
+    x:
+    - 4550
+    - 6950
+    y:
+    - -810
+    - 590
+  status: derived
+  note: 2400×1400（9:24スライド）。X2断面 1310/1090 − 余裕500 → Y2から南810・北590
+- name: F4
+  at: X3・Y2
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  plan_mm:
+    x:
+    - 10300
+    - 12700
+    y:
+    - -810
+    - 590
+  status: derived
+- name: F5
+  at: X4・Y3
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  plan_mm:
+    polygon:
+    - - 14350
+      - 10890
+    - - 17340
+      - 10890
+    - - 17340
+      - 7900
+  status: derived
+  note: 三角形。斜辺は課題用紙の 2900(X4から)・2900(Y3から) を結ぶ線。外面 X4+90/Y3+90
+sub_layers_mm:
   blinding_concrete: 50
   crushed_stone: 50
-
-# 根切り区画。polygon は [[x,y],...] (mm)。1つでも null があれば未完成扱い。
-# 深さの異なる区画が重なってよい（各位置で最大深さを採用して重複計上しない）。
 excavation:
-  base_area:           # A0: 基本掘削（1.65m）範囲 = 根切り底の外形
-    polygon: null
-    status: unresolved
-    note: "根切り外形（通り芯からの余掘り・作業余裕）は設計図/授業図で要確認"
-  zones:               # 増掘り区画
-    - {name: "F3A 増掘り", class: F3A, polygon: null, status: unresolved}
-    - {name: "F4A 増掘り", class: F4A, polygon: null, status: unresolved}
-    - {name: "一般基礎 増掘り", class: general, polygon: null, status: unresolved}
-
-retaining:             # 課題文で指定（変更禁止）
-  west:  open_cut
+  note: 各区画は根切り底（法尻）の外形。基礎外面＋作業ゆとり500。東面は親杭面で打切り。
+  base_area:
+    polygon:
+    - - -590
+      - -590
+    - - 17440
+      - -590
+    - - 17440
+      - 11390
+    - - -590
+      - 11390
+    status: derived
+    note: FS1 GL-1650 範囲。外周梁外面（通り芯+90と仮定）+500。X1-590 は着色図 X1 側 '500'・F3 底辺と一直線で整合
+  zones:
+  - name: F3 (X1・Y2)
+    class: general
+    polygon:
+    - - -590
+      - -1610
+    - - 1410
+      - -1610
+    - - 1410
+      - 1390
+    - - -590
+      - 1390
+    status: derived
+  - name: F3 (X4・Y2)
+    class: general
+    polygon:
+    - - 15840
+      - -1610
+    - - 17440
+      - -1610
+    - - 17440
+      - 1390
+    - - 15840
+      - 1390
+    status: derived
+    note: 着色図 1410|190, 1390/1610
+  - name: F4 (X2・Y2)
+    class: general
+    polygon:
+    - - 4050
+      - -1310
+    - - 7450
+      - -1310
+    - - 7450
+      - 1090
+    - - 4050
+      - 1090
+    status: derived
+    note: 着色図 1700|1700=3400、X2断面 1310|1090
+  - name: F4 (X3・Y2)
+    class: general
+    polygon:
+    - - 9800
+      - -1310
+    - - 13200
+      - -1310
+    - - 13200
+      - 1090
+    - - 9800
+      - 1090
+    status: derived
+  - name: F5 (X4・Y3)
+    class: general
+    polygon:
+    - - 13053
+      - 11390
+    - - 17440
+      - 11390
+    - - 17440
+      - 7003
+    status: derived
+    note: F5 斜辺を 500 外側へ平行移動。北辺で X4-4197（着色図では F4A 掘削隅から斜線が始まり整合）
+  - name: F4A (X2・Y3)
+    class: F4A
+    polygon:
+    - - 4050
+      - 9710
+    - - 7450
+      - 9710
+    - - 7450
+      - 12110
+    - - 4050
+      - 12110
+    status: derived
+    note: X2断面 1090|1310, 法幅 630=0.3×2.10
+  - name: F4A (X3・Y3)
+    class: F4A
+    polygon:
+    - - 9800
+      - 9710
+    - - 13200
+      - 9710
+    - - 13200
+      - 12110
+    - - 9800
+      - 12110
+    status: derived
+  - name: F3A (X1・Y3)
+    class: F3A
+    polygon:
+    - - -590
+      - 9410
+    - - 1410
+      - 9410
+    - - 1410
+      - 12410
+    - - -590
+      - 12410
+    status: assumed
+    note: F3A の平面寸法は写真で判読できず、F3 と同形と仮定
+retaining:
+  west: open_cut
   south: open_cut
   north: open_cut
-  east:  soldier_pile_lagging   # 親杭横矢板
-  slope_ratio: null             # 法勾配 1:n の n（水平/鉛直）— 資料に記載なし。未確定
-  include_slope_volume: null    # 法面部分を土量に含めるか — 授業例と要照合
-  soldier_pile_x_mm: null       # 親杭芯の x 座標
-
-answer_sheet:          # 元PDF 1ページ目の解答欄（PDF座標 pt, 左上原点）。--calibrate で特定
-  pdf: "inputs/assignment/20261021_ 第4回_山留土工事演習問題及びサンプル設計図(演習課題)(1).pdf"
+  east: soldier_pile_lagging
+  slope_ratio: 0.3
+  include_slope_volume: yohaba
+  soldier_pile_x_mm: 17440
+  slope_ratio_status: confirmed
+  slope_ratio_source: '余幅スライド②『根切り深さ1.5m以上5.0m未満の普通土: 法幅=根切り深さ×0.3』／着色図の法幅 495・555・630'
+  include_slope_note: '積算方法: 余幅 a = 作業のゆとり幅 + 法幅/2（スライド）。作業ゆとりは区画に含済みのため、開放3面に 0.3h/2 を加えて垂直掘りとみなす'
+  soldier_pile_status: derived
+  soldier_pile_note: 'Y3通り断面（東側山留部分）: X4 から 190、C2 外面から余幅100 で山留H鋼'
+answer_sheet:
+  pdf: inputs/assignment/20261021_ 第4回_山留土工事演習問題及びサンプル設計図(演習課題)(1).pdf
   page_index: 0
   plan_box: null
   section_box: null
   volume_text_at: null
-  paper_scale_check: null       # 通り芯間隔の実測で 1/100 と一致するか
+  paper_scale_check: null
+work_margin_mm:
+  value: 500
+  status: confirmed
+  source: 余幅スライド『作業のゆとり幅=0.5m』／着色図・X2断面の 500

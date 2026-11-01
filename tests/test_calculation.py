@@ -56,16 +56,75 @@ def test_demo_methods_agree_and_contained():
     assert res.agree
 
 
-def test_slope_prism_matches_hand_calc():
-    # 10×10 底面, H=2, n=0.5, 西面のみ法: 断面三角形 0.5×2×1 × 長さ10 = 10 m³
-    a0 = geometry.poly([(0, 0), (10000, 0), (10000, 10000), (0, 10000)])
-    v = calculation.slope_volume(a0, 2.0, 0.5, ["west"])
-    assert v == pytest.approx(10.0, rel=1e-6)
+def test_exact_slope_volume_hand_calc():
+    # 10×10m・深さ2m、法1:0.3、東面のみ鉛直。手計算:
+    # 本体 200 + 3面の法 0.5×2×0.6×30 = 18 + 隅2か所の角錐 2×(0.3²×2³/3) = 0.48 → 218.48
+    class S:
+        raw = {"retaining": {"slope_ratio": 0.3, "soldier_pile_x_mm": 10000}}
+    z = [("A0", "base", 2.0, geometry.poly([(0, 0), (10000, 0), (10000, 10000), (0, 10000)]))]
+    assert calculation.exact_slope_volume(S, z, n_slices=2000) == pytest.approx(218.48, rel=1e-4)
 
 
-def test_real_config_refuses_to_finalize(tmp_path):
-    assert run.main(["--out", str(tmp_path)]) == 2
-    assert (tmp_path / "08_未解決事項.md").exists()
+def test_refuses_to_finalize_when_geometry_missing(tmp_path):
+    import yaml
+    c = yaml.safe_load((ROOT / "config/site.yaml").read_text(encoding="utf-8"))
+    c["excavation"]["zones"][0]["polygon"] = None
+    cfg = tmp_path / "missing.yaml"; cfg.write_text(yaml.safe_dump(c, allow_unicode=True), encoding="utf-8")
+    assert run.main(["--config", str(cfg), "--out", str(tmp_path / "o")]) == 2
+    assert (tmp_path / "o/08_未解決事項.md").exists()
+
+
+def real():
+    site = config.load(ROOT / "config/site.yaml")
+    return site, geometry.zone_polygons(site)
+
+
+def test_real_slope_widths_match_lecture_drawing():
+    # 着色図の法幅 495・555・630 = 0.3 × 1.65・1.85・2.10
+    site, _ = real()
+    n = site.raw["retaining"]["slope_ratio"]
+    assert [round(n * site.depth(k) * 1000) for k in ("base", "general", "F4A")] == [495, 555, 630]
+
+
+def test_real_x2_section_offsets():
+    # X2断面: Y2 から南 1310・北 1090、Y3 から南 1090・北 1310、F4 = 2400×1400 + ゆとり 500
+    site, z = real()
+    f4 = [p for n_, c, d, p in z if n_.startswith("F4 (X2")][0].bounds
+    f4a = [p for n_, c, d, p in z if n_.startswith("F4A (X2")][0].bounds
+    assert (f4[1], f4[3]) == (-1310, 1090) and (f4a[1], f4a[3]) == (10800 - 1090, 10800 + 1310)
+    assert f4[2] - f4[0] == 3400                     # 着色図 1700|1700
+
+
+def test_real_methods_agree_and_close_to_exact_solid():
+    site, z = real()
+    res = calculation.compute(site, z)
+    assert res.agree
+    assert abs(res.method_a - res.exact_volume) / res.exact_volume < 0.02
+    # 方法Bの増掘り深さは授業の 0.20 / 0.45 / 0.55
+    assert sorted(round(r[2], 2) for r in res.method_b_rows[1:]) == [0.2, 0.45, 0.55]
+
+
+def test_east_face_not_widened():
+    site, z = real()
+    yz, _ = calculation.yohaba_zones(site, z)
+    from shapely.ops import unary_union
+    assert unary_union([p for *_, p in yz]).bounds[2] == site.raw["retaining"]["soldier_pile_x_mm"]
+
+
+def test_y3_section_depths():
+    site, z = real()
+    segs = geometry.section_profile(z, 10800)
+    assert segs[0][2] == 2.20 and max(s[2] for s in segs) == 2.20
+    assert [s[2] for s in segs if 4050 <= s[0] < 13200 and s[1] - s[0] == 3400] == [2.10, 2.10]
+
+
+def test_drawings_are_true_1_100(tmp_path):
+    from yamadome import pdf_tools
+    assert run.main(["--out", str(tmp_path)]) == 0
+    for f in ("02_根切り図.pdf", "03_Y3根切り断面図.pdf"):
+        xs = pdf_tools.measure_grid_spacing_mm(tmp_path / f)
+        gaps = [round(b - a, 2) for a, b in zip(xs, xs[1:])]
+        assert gaps.count(57.5) >= 3, (f, xs)          # 5750 mm → 57.5 mm
 
 
 def test_pipeline_reproducible(tmp_path):

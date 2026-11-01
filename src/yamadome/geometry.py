@@ -27,14 +27,10 @@ def zone_polygons(site):
 
 
 def check_containment(zones, tol_mm2=1.0):
-    """全区画が A0 に包含されているか。違反リストを返す。"""
-    a0 = zones[0][3]
-    bad = []
-    for name, _, _, p in zones[1:]:
-        outside = p.difference(a0).area
-        if outside > tol_mm2:
-            bad.append((name, outside / MM2_PER_M2))
-    return bad
+    """各増掘り区画が基本掘削範囲（FS1）と接続しているか（孤立した区画は入力誤りの疑い）。
+    基礎掘削は外周で基本範囲から張り出してよい（A0 は全区画の和集合として扱う）。"""
+    base = zones[0][3]
+    return [(name, 0.0) for name, _, _, p in zones[1:] if p.intersection(base).area <= tol_mm2]
 
 
 def final_depth_pieces(zones):
