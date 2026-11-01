@@ -109,3 +109,27 @@
 | 東電の決算の最新値 | 第1版：第1四半期（S013） | 中間期（S031・S032） | 中間期を最新値とし、05章§11.2に矛盾表を作成した |
 | 原子力PMの要件 | 検索要約C19 | 求人詳細S053 | S053を採用 |
 | 中部の経常利益 | 有報の「2,840億円程度」（概数表現） | — | 概数のまま記載し、要確認とする |
+
+---
+
+# 第3版で追加した資料（確認日 2026-11-01）
+| ID | 資料 | URL | 発行 | ランク | 使用箇所 |
+|---|---|---|---|---|---|
+| S060 | JERA「2026年度第2四半期連結決算について」（別紙） | https://www.jera.co.jp/system/files/private/別紙：2026年度第2四半期連結決算について.pdf | 2026-10-30 | A | 05章§12、12章、15章 |
+| S061 | JERA プレスリリース（IRニュース） | https://www.jera.co.jp/ir/ir_news/20261030_2570 | 2026-10-30 | A | 同 |
+| S070・S071 | IEA Electricity 2026 / Mid-Year Update（要旨） | iea.org | 2026 | **取得失敗（403）** | C21で代替 |
+| S072 | PJM Auction Procures 134,479 MW（2027/28 BRA） | https://www.pjm.com/-/media/DotCom/about-pjm/newsroom/2025-releases/20251217-pjm-auction-procures-134479-mw-of-generation-resources.pdf | 2025-12-17 | A | 14章 |
+| S073 | 中国国務院：2025年の風力・太陽光の新設 | english.www.gov.cn | 2026-02-12 | 取得したが本文は空（JS） | C26で代替 |
+| S074 | Ember「Latest energy shock reminds Europe of its risky gas reliance」 | https://ember-energy.org/latest-insights/latest-energy-shock-reminds-europe-of-its-risky-gas-reliance/ | 2026 | A（分析機関） | 14章 |
+
+| ID | 内容（検索要約経由・確度C） | 情報源 |
+|---|---|---|
+| C21 | IEA：世界の需要は2026〜2030年に年3.6%増、中国は年4.9%、米国は年約2%（半分がDC）、世界のDCは2025年485TWh→2030年950TWh | iea.org（Electricity 2026・中間報告） |
+| C22 | PJMの容量コストの約40%（約65億ドル）がDC起因（市場監視機関） | 二次（avanzaenergy など） |
+| C23 | 2026年上期のEU卸電力の平均95ユーロ/MWh（前年比+10%） | IEAを引用する二次 |
+| C24 | TTFは2026年10月下旬に約97.5ユーロ/MWh、EUのガス貯蔵は同時期として2009年以来の低水準 | 二次（discoveryalert ほか） |
+| C25 | EU電力市場設計の改革（規則2024/1747・指令2024/1711）、双方向CfD | freshfields、Bocconi WP |
+| C26 | 中国2025年：太陽光約315GW・風力約119GW、風力と太陽光が設備容量の47.3% | pv magazine、gov.cn |
+| C27 | 中国国務院が2026年7月31日に原子炉8基を承認 | Caixin |
+
+**期間・基準の注記**：JERAはIFRS、東電は日本基準、INPEXは12月決算。比較上の扱いは16章 §1.3。

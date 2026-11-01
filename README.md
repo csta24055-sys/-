@@ -13,12 +13,17 @@
 | `research/05_東京電力グループ詳細研究/` | 統治・財務・事業別・アライアンス・組織・人事・外注構造 |
 | `research/06_将来シナリオ分析/` | 7シナリオ、職種別の需要比較、先行指標 |
 | `research/07_建築設備の戦略的位置づけ/` | 第2版：一次資料による再検証（`..._第2版_再検証.md`）。第1版は判断の過程として保存 |
-| `research/08_因果関係図・企業関係図/` | Mermaid図13点（第2版で図11〜13を追加。関係の種類と根拠を区別） |
+| `research/08_因果関係図・企業関係図/` | Mermaid図14点（第2版で図11〜13、第3版で図14を追加。関係の種類と根拠を区別） |
 | `research/09_資料台帳・証拠管理/` | 出典台帳（`SOURCES.md`、`source_registry.csv`）、資料間の矛盾の処理 |
 | `research/10_未解決論点・追加調査/` | 未解決の論点、弱い仮説、資料欠落の影響 |
 | `research/11_組織・職種研究/` | 第2版で新設。採用サイトの一次資料による職能・権限の追跡と、設備投資の事例（再稼働・廃炉・変電所・水力・DC・他社） |
+| `research/12_産業因果モデル/` | 第3段階：変数・経路（15）・フィードバック・ループ・感応度 |
+| `research/13_意思決定の逆算/` | 第3段階：JERA統合、持株会社化、柏崎刈羽、関西、浜岡、大間、関電工株、袖ケ浦、イクシス、東北の10事例 |
+| `research/14_海外比較/` | 第3段階：米国・欧州・中国の制度・企業・投資と、日本への波及 |
+| `research/15_検証可能な予測/` | 第3段階：シナリオの指標・しきい値、第四次総特のバックテスト、固定予測（FP-1〜7） |
+| `research/16_反証と品質管理/` | 第3段階：第2版の結論の再検証（求人推定の限界、相関と因果、会計基準） |
 | `research/*.md` | 管理ファイル（RESEARCH_PROGRESS / SOURCES / OPEN_QUESTIONS / FINDINGS / HYPOTHESES / NEXT_STEPS） |
-| `data/` | 抽出データ（`occto_demand_2026.csv`、`tepco_financials.csv`、`company_comparison_fy2025.csv`）。`raw/`・`text/` は再取得できるため管理対象外 |
+| `data/` | 抽出データ（`occto_demand_2026.csv`、`tepco_financials.csv`、`company_comparison_fy2025.csv`、`jera_tepco_reconciliation_2026h1.csv`、`backtest_4th_plan.csv`、`scenario_indicators.csv`）。`raw/`・`text/` は再取得できるため管理対象外 |
 | `tools/` | 資料の取得・台帳登録（`fetch_source.py`）、データ抽出、docx・pdfの生成（`build_docs.sh`） |
 | `dist/` | 閲覧用PDFと編集用Word（`bash tools/build_docs.sh` で再生成できる） |
 
