@@ -1,0 +1,136 @@
+# DEMO 用設定: 根切り形状は架空。パイプライン動作確認専用で、課題の解答ではない。
+meta:
+  title: '〇〇寮新築工事 根切図・根切断面図（Y3通り）・掘削土量（DEMO: 架空形状・解答ではない）'
+  date: '2026-10-21'
+  scale: 100
+grid:
+  x:
+    X1: 0
+    X2: 5750
+    X3: 11500
+    X4: 17250
+  y:
+    Y2: 0
+    Y3: 10800
+  sources:
+  - '総合指示書の既知寸法 X1-X2-X3-X4 = 5750 ×3 = 17250, Y2-Y3 = 10800（status: confirmed-by-instruction
+    / 設計図PDF p.2で要再確認）'
+levels:
+  GL: 0
+  1FL: 500
+depth_classes:
+  base:
+    depth: 1.65
+    status: confirmed
+    source: 授業スライド 10:04 方法B の基本掘削深さ 1.65
+  general:
+    depth: 1.85
+    status: confirmed
+    source: 授業スライド 10:00 F3・F4・F5の一般部 床付け GL-1,850
+  F4A:
+    depth: 2.1
+    status: confirmed
+    source: 授業スライド 10:00 F4A(Y3・X2/X3) 床付け GL-2,100
+  F3A:
+    depth: 2.2
+    status: confirmed
+    source: 授業スライド 10:00 F3A(Y3・X1) 床付け GL-2,200
+footings:
+- name: F3A
+  at: Y3・X1
+  bottom_GL_mm: -2100
+  subgrade_GL_mm: -2200
+  size_mm: null
+  status: unresolved-size
+- name: F4A
+  at: Y3・X2/X3
+  bottom_GL_mm: -2000
+  subgrade_GL_mm: -2100
+  size_mm: null
+  status: unresolved-size
+- name: F3
+  at: null
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  size_mm: null
+  status: unresolved-size
+- name: F4
+  at: null
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  size_mm: null
+  status: unresolved-size
+- name: F5
+  at: null
+  bottom_GL_mm: -1750
+  subgrade_GL_mm: -1850
+  size_mm: null
+  status: unresolved-size
+  note: 特殊形状。矩形に置換しないこと（設計図 p.2/p.5）
+sub_layers_mm:
+  blinding_concrete: 50
+  crushed_stone: 50
+excavation:
+  base_area:
+    polygon:
+    - - -1000
+      - -1000
+    - - 18250
+      - -1000
+    - - 18250
+      - 11800
+    - - -1000
+      - 11800
+    status: assumed-demo
+  zones:
+  - name: 一般基礎 増掘り
+    class: general
+    polygon:
+    - - -1000
+      - 9300
+    - - 18250
+      - 9300
+    - - 18250
+      - 11800
+    - - -1000
+      - 11800
+    status: assumed-demo
+  - name: F4A 増掘り
+    class: F4A
+    polygon:
+    - - 4250
+      - 9600
+    - - 13000
+      - 9600
+    - - 13000
+      - 11800
+    - - 4250
+      - 11800
+    status: assumed-demo
+  - name: F3A 増掘り
+    class: F3A
+    polygon:
+    - - -1000
+      - 9600
+    - - 1500
+      - 9600
+    - - 1500
+      - 11800
+    - - -1000
+      - 11800
+    status: assumed-demo
+retaining:
+  west: open_cut
+  south: open_cut
+  north: open_cut
+  east: soldier_pile_lagging
+  slope_ratio: 0.5
+  include_slope_volume: false
+  soldier_pile_x_mm: 18250
+answer_sheet:
+  pdf: inputs/assignment/20261021_ 第4回_山留土工事演習問題及びサンプル設計図(演習課題)(1).pdf
+  page_index: 0
+  plan_box: null
+  section_box: null
+  volume_text_at: null
+  paper_scale_check: null
