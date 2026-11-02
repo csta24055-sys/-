@@ -68,7 +68,7 @@ def main(argv=None):
 
     sheet = site.raw["answer_sheet"]
     if pdf.exists() and sheet.get("plan_grid_pt") and not a.demo:
-        final = out / "02_先生スライド準拠_完成演習課題.pdf"
+        final = out / site.raw["answer_sheet"].get("output_name", "02_先生スライド準拠_完成演習課題.pdf")
         boxes = answer_sheet.write(pdf, final, site, zones, res)
         ratio = pdf_tools.compare_outside_boxes(pdf, final, sheet["page_index"], boxes)
         print(f"解答欄外の変化画素率: {ratio:.6f}")

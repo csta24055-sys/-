@@ -146,7 +146,7 @@ PDF = ROOT / "inputs/assignment/20261021_ 第4回_山留土工事演習問題及
 def test_answer_sheet_written_without_damaging_original(tmp_path):
     import pymupdf
     assert run.main(["--out", str(tmp_path)]) == 0
-    out = tmp_path / "02_先生スライド準拠_完成演習課題.pdf"
+    out = tmp_path / config.load(ROOT / "config/site.yaml").raw["answer_sheet"]["output_name"]
     with pymupdf.open(out) as d:
         assert len(d) == 7                         # 元PDFの 2〜7 ページを保持
         t = d[0].get_text().replace("\xad", "-")
@@ -239,3 +239,22 @@ def test_ridge_lines_at_corners():
     lines = answer_sheet.ridge_lines(bottom, top, east)
     assert ((-590, -1610), (-1145, -2165)) in [(tuple(map(round, a)), tuple(map(round, b))) for a, b in lines]
     assert len(lines) >= 20
+
+
+def test_section_band_colors_follow_teacher_and_plan():
+    # 断面の着色帯: 法面・GL際＝茶、根切り底＝平面図と同じ深さ別の色、段差は深い側の色。形状（prof）は変えない
+    from yamadome import answer_sheet as A
+    site, z = real()
+    segs = geometry.section_profile(z, 10800)
+    sw = 0.3 * segs[0][2] * 1000
+    prof = [(segs[0][0] - sw, 0), (segs[0][0], -segs[0][2] * 1000)]
+    for a, b, d in segs:
+        prof += [(a, -d * 1000), (b, -d * 1000)]
+    prof += [(segs[-1][1], 0)]
+    pieces = A.band_pieces(prof, segs)
+    cols = {c for c, _ in pieces}
+    assert A.SLOPE_TAN in cols and {A.FILL[d] for d in (1.65, 1.85, 2.10, 2.20)} <= cols
+    from shapely.geometry import Polygon
+    cut = Polygon(prof + [prof[0]])
+    for c, q in pieces:                       # 帯は土側（掘削部の内側をほとんど塗らない）
+        assert q.difference(cut).area > 0.5 * q.area

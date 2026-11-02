@@ -225,6 +225,53 @@ def draw_plan(page, fn, site, zones, m: Mapper):
     return top
 
 
+SLOPE_TAN = (0.80, 0.58, 0.28)   # 授業 X2断面の法面・GL際の茶（黄土）色
+BAND_MM = 150.0                   # 着色帯の幅（実寸 mm、1/100 で約1.5mm）
+
+
+def band_pieces(prof, segs, lip_mm=1000.0, w=BAND_MM):
+    """断面の根切り線 prof（西の法肩→法尻→…→東の壁上端）の土側に沿う着色帯を、
+    区間ごとの色付き多角形 [(color, Polygon)] として返す（描画専用。形状・数値は変更しない）。
+
+    授業 X2断面の塗り方: 法面と法肩外の GL 際＝茶、根切り底＝その深さの平面図と同じ色
+    （FS1 黄・GL-1850 緑・F4A 橙・F3A 濃橙）、段差の立上りは深い側の色、掘削部の内側は塗らない。
+    """
+    from shapely.geometry import LineString, Polygon
+    pts = [(prof[0][0] - lip_mm, 0.0)] + list(prof)          # 西側 GL 際の帯（オープンカット）
+    out = []
+    for (xa, ya), (xb, yb) in zip(pts, pts[1:]):
+        L = ((xb - xa) ** 2 + (yb - ya) ** 2) ** 0.5
+        if L < 1e-6:
+            continue
+        nx, ny = (yb - ya) / L, -(xb - xa) / L                # 進行方向の右手＝土側
+        # 角部の隙間が出ないよう、帯を進行方向の前後へ w だけ延ばす
+        ex, ey = (xb - xa) / L * w, (yb - ya) / L * w
+        q = Polygon([(xa - ex, ya - ey), (xb + ex, yb + ey), (xb + ex + nx * w, yb + ey + ny * w), (xa - ex + nx * w, ya - ey + ny * w)])
+        if abs(ya - yb) < 1e-6 and ya < -1:                    # 根切り底
+            d = round(-ya / 1000, 2)
+            col, order = FILL.get(d, SLOPE_TAN), 2
+        elif abs(xa - xb) < 1e-6 and min(ya, yb) < -1 and max(ya, yb) < -1:   # 段差の立上り
+            d = round(-min(ya, yb) / 1000, 2)
+            col, order = FILL.get(d, SLOPE_TAN), 1
+        else:                                                  # 法面・GL際・東側の壁
+            col, order = SLOPE_TAN, 0
+        out.append((order, col, q))
+    out.sort(key=lambda t: t[0])                               # 底の色を最後に重ねる（角は底の色）
+    return [(col, q) for _, col, q in out]
+
+
+def section_band(page, prof, segs, m, lip_mm=1000.0):
+    from shapely.geometry import Polygon
+    # 掘削部の内側には帯をはみ出させない（帯は土側だけ）
+    cut = Polygon(list(prof) + [prof[0]])
+    for col, q in band_pieces(prof, segs, lip_mm):
+        g = q.difference(cut) if cut.is_valid else q
+        sh = page.new_shape()
+        _poly(sh, g, m.sec)
+        sh.finish(color=None, fill=col, fill_opacity=0.55, width=0)   # 下の印刷文字（FG2A 等）が読める濃さ
+        sh.commit()
+
+
 def draw_section(page, fn, site, zones, m: Mapper):
     ret = site.raw["retaining"]
     n = ret["slope_ratio"]; east = ret["soldier_pile_x_mm"]
@@ -236,15 +283,8 @@ def draw_section(page, fn, site, zones, m: Mapper):
     for a, b, d in segs:
         prof += [(a, -d * 1000), (b, -d * 1000)]
     prof += [(x1, 0)]
-    sh = page.new_shape()
-    sh.draw_polyline([m.sec(*p) for p in prof] + [m.sec(x0 - sw, 0)])
-    sh.finish(color=None, fill=(0.85, 0.70, 0.45), fill_opacity=0.18, width=0)
-    sh.commit()
-    sh = page.new_shape()                      # 授業 X2断面と同じ橙色の帯で根切り線を表示
-    sh.draw_polyline([m.sec(*p) for p in prof])
-    sh.finish(color=ORANGE, width=2.6, stroke_opacity=0.75, lineJoin=1)
-    sh.commit()
-    sh = page.new_shape()
+    section_band(page, prof, segs, m, lip_mm=1000.0)   # 授業 X2断面と同じ着色（形状は prof のまま）
+    sh = page.new_shape()                      # 根切り線（掘削輪郭、v2 と同じ線）
     sh.draw_polyline([m.sec(*p) for p in prof])
     sh.finish(color=BROWN, width=0.5)
     sh.commit()
