@@ -90,7 +90,8 @@ def dashboard():
         "key_findings": [f for f in findings if f["id"] in key_ids],
         "open_questions": sorted([q for q in questions if q["priority"] == "高"], key=lambda q: q["id"]),
         "next_actions": [
-            "2025年度本論PDF（S-2025-05）を読了し住宅Cの条件区分（Q-04）を確定",
+            "2025年度原データを本論の運転記録（表6）で再区分し、条件②の回帰係数を再計算（Q-04, F-2025-10）",
+            "センサー説明書（画像PDF）で換算式を確認し『仮の正規化』の影響を評価（Q-11, F-2025-12）",
             "パーティクルカウンタとWatty.xlsx（S-2025-18）をCSV化して本アプリで校正係数を算出（T-02）",
             "EP 750 m³/h超の差圧・効率試験計画を2026年度班と協議（T-01）",
             "清浄度-計算式_by井口.pdf を Box 上で目視確認し式を台帳へ転記（Q-08）",
