@@ -124,5 +124,53 @@ def main():
     print(json.dumps(out, ensure_ascii=False, indent=1, default=float)[:6000])
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and len(sys.argv) == 1:
     main()
+
+
+def fit_dynamic(df: pd.DataFrame, start=None, end=None, indoor="リビング", step="10min") -> dict:
+    """単室動的モデル C(t+Δ)=C(t)e^{-λΔ}+(a/λ)C_out(t)(1-e^{-λΔ}) を最小二乗で同定（室内発生は無視）。
+    λ[1/h]: 総除去率、a/λ: 定常I/O。グリッド探索で λ を決め、a は線形最小二乗。"""
+    d = df.loc[start:end] if (start or end) else df
+    oc = outdoor_col(d)
+    s = d[[indoor, oc]].resample(step).mean().dropna()
+    if len(s) < 20:
+        return {}
+    dt = pd.to_timedelta(step).total_seconds() / 3600
+    ci, co = s[indoor].to_numpy(), s[oc].to_numpy()
+    best = None
+    for lam in np.concatenate([np.linspace(0.05, 2, 40), np.linspace(2.1, 12, 50)]):
+        e = math.exp(-lam * dt)
+        x = co[:-1] * (1 - e)
+        y = ci[1:] - ci[:-1] * e
+        k = float(np.dot(x, y) / np.dot(x, x))  # = a/λ
+        pred = ci[:-1] * e + k * x
+        sse = float(np.sum((ci[1:] - pred) ** 2))
+        if best is None or sse < best[0]:
+            best = (sse, lam, k, pred)
+    sse, lam, k, pred = best
+    r2 = 1 - sse / float(np.sum((ci[1:] - ci[1:].mean()) ** 2))
+    return {"lambda_per_h": float(lam), "steady_io_k": float(k), "r2_one_step": float(r2), "n": int(len(s))}
+
+
+def dynamic_main():
+    out = json.loads((ROOT / "knowledge" / "verification_2025.json").read_text(encoding="utf-8"))
+    a = parse_minute_block(RAW / "S-2025-19_iwakuni.txt")
+    c = parse_minute_block(RAW / "S-2025-21_nogata.txt")
+    T = pd.Timestamp
+    dyn = {
+        "A_cond1_EP_on": fit_dynamic(a, None, T("2025-09-20 16:59")),
+        "A_cond2_EP_off": fit_dynamic(a, T("2025-09-20 17:00"), None),
+        "C_EP_on_1": fit_dynamic(c, T("2025-09-25"), T("2025-09-29 17:59")),
+        "C_EP_off": fit_dynamic(c, T("2025-09-29 18:00"), T("2025-10-06 06:29")),
+        "C_EP_on_2": fit_dynamic(c, T("2025-10-06 06:30"), T("2025-10-12 09:59")),
+        "C_cond3_ac_off": fit_dynamic(c, T("2025-10-12 10:00"), T("2025-10-20 08:59")),
+    }
+    out["single_zone_dynamic_fit"] = {"note": "単室動的モデルの同定（10分値, 室内発生を無視）。λ=総除去率[1/h]、k=定常I/O。【計算結果】", **dyn}
+    (ROOT / "knowledge" / "verification_2025.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+    for k_, v in dyn.items():
+        print(k_, {kk: round(vv, 3) if isinstance(vv, float) else vv for kk, vv in v.items()})
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "dynamic":
+    dynamic_main()
