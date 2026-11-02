@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CartesianGrid, Legend, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartBox from '../components/ChartBox'
+import MultiZone from '../components/MultiZone'
 import { Card, Field, fmt, Slider, SourceRef } from '../components/ui'
 import { download, toCsv } from '../core/api'
 import { SEASONAL_OUTDOOR } from '../core/literature'
@@ -137,6 +138,8 @@ export default function Simulator() {
         </ChartBox>
         <button className="ghost" onClick={() => download('zone_simulation.csv', toCsv(['t_h', 'C_in', 'C_out'], series.map((s) => [s.t, s.c, s.cout])))}>時系列CSV</button>
       </Card>
+
+      <MultiZone />
 
       <Card title="モデルの前提・仮定（必読）">
         <ul className="small">

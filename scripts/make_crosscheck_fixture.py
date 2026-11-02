@@ -21,6 +21,10 @@ zp = M.ZoneParams(volume=240, q_oa=120, eta_oa_filter=0.3, q_inf=20, penetration
 ts = M.zone_time_series(zp, 6, 0.05)
 out["zone"].append({"params": asdict(zp), "steady": M.zone_steady_state(zp), "io": M.zone_io_ratio(zp), "t12": M.time_to_fraction(zp, 0.12),
                     "series_last": ts[-1][1], "series_10": ts[10][1]})
+v, f = M.shase2021_network("強")
+mz = M.multizone_simulate(v, f, hours=0.5, c_out=0.007, c0=0.01, sources={"LDK": 0.0144 * 3600}, source_hours=(0, 1020 / 3600),
+                          beta=M.decay_rate_to_beta(0.0003), ep_edge=M.SHASE2021_EP_EDGE, eta_ep=0.9, record_every_s=300)
+out["multizone"] = {"t_h": mz["t_h"], "series": mz["series"]}
 out["deposition"] = [[d, M.deposition_coefficient(d)] for d in (0.3, 1, 5, 10, 30)]
 rng = np.random.default_rng(1)
 x = rng.uniform(1, 30, 200); y = 0.55 * x + rng.normal(0, 1, 200)

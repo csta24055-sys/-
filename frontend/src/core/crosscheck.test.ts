@@ -35,3 +35,14 @@ describe('stats', () => {
     expect(q.missing).toBe(1); expect(q.outliers).toBe(1)
   })
 })
+
+describe('multizone (SHASE2021 network)', () => {
+  it('matches Python time series', () => {
+    const { volumes, flows } = M.shase2021Network('強')
+    const r = M.multizoneSimulate(volumes, flows, { hours: 0.5, c_out: 0.007, c0: 0.01, sources: { LDK: 0.0144 * 3600 }, source_hours: [0, 1020 / 3600],
+      beta: M.decayRateToBeta(0.0003), ep_edge: M.SHASE2021_EP_EDGE, eta_ep: 0.9, record_every_s: 300 })
+    const py = (ref as any).multizone
+    expect(r.t_h.length).toBe(py.t_h.length)
+    for (const z of Object.keys(py.series)) py.series[z].forEach((v: number, i: number) => close(r.series[z][i], v, 1e-9))
+  })
+})

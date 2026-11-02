@@ -158,3 +158,46 @@ def test_quality_report_flags_outlier_and_missing():
     q = A.quality_report(df, ["v"])[0]
     assert q["missing"] == 1
     assert q["outliers"] == 1
+
+
+# --- 多室モデル（SHASE 2021 その40 の回路網） ---
+
+def test_shase2021_network_is_balanced():
+    for s in ("弱", "強"):
+        v, f = M.shase2021_network(s)
+        bal = M.network_imbalance(v, f)
+        assert max(abs(x) for x in bal.values()) < 1.0  # m³/h（表の丸め誤差のみ）
+
+
+def test_shase2021_box_decay_58pct():
+    # 論文: 減衰率 D=0.00015 /s は「1時間後に初期濃度の58.3%」
+    assert (1 - 0.00015) ** 3600 == pytest.approx(0.583, abs=0.001)
+    assert M.decay_rate_to_beta(0.00015) == pytest.approx(0.540, abs=0.001)
+
+
+def test_multizone_uniform_steady_equals_outdoor_without_losses():
+    v, f = M.shase2021_network("弱")
+    r = M.multizone_simulate(v, f, hours=48, c_out=7.0, c0=0.0, record_every_s=3600)  # 時定数≈5.2 h
+    for z, s in r["series"].items():
+        assert s[-1] == pytest.approx(7.0, rel=0.02), z
+
+
+def test_multizone_mass_conservation_closed_box():
+    # 換気・沈着ゼロ・内部循環のみ → 総質量保存
+    v = {"A": 10.0, "B": 30.0}
+    f = [("A", "B", 100.0), ("B", "A", 100.0)]
+    r = M.multizone_simulate(v, f, hours=2, c0={"A": 10.0, "B": 0.0}, record_every_s=600)
+    m0 = 10 * 10.0
+    m1 = sum(v[z] * r["series"][z][-1] for z in v)
+    assert m1 == pytest.approx(m0, rel=1e-9)
+    assert r["series"]["A"][-1] == pytest.approx(2.5, rel=1e-3)
+
+
+def test_multizone_ep_lowers_all_rooms():
+    v, f = M.shase2021_network("弱")
+    kw = dict(hours=1.0, c_out=0.0, c0=0.0, sources={"LDK": 0.0144 * 3600}, source_hours=(0, 1020 / 3600),
+              beta=M.decay_rate_to_beta(0.0003), record_every_s=60)
+    off = M.multizone_simulate(v, f, **kw)
+    on = M.multizone_simulate(v, f, ep_edge=M.SHASE2021_EP_EDGE, eta_ep=0.9, **kw)
+    for z in ("洋室(大)", "2階廊下・レターン", "洗面所"):
+        assert on["series"][z][-1] < 0.5 * off["series"][z][-1]

@@ -382,6 +382,15 @@ MODEL_REGISTRY = [
         "validity": "球形・粒径帯代表径・密度仮定（コットンリンター）に強く依存。粒径帯幅の扱いで1桁程度変わり得る。",
     },
     {
+        "id": "multizone",
+        "name": "多室（換気回路網）モデル",
+        "equation": "V_i·dC_i/dt = Σ_j Q_ji·C_j·(1−η_ji) − (Σ_k Q_ik)·C_i − β·V_i·C_i + G_i",
+        "units": "V[m³], Q[m³/h], C[mg/m³], G[mg/h], β[1/h]（β = −ln(1−D)·3600, D[1/s]）",
+        "basis": "空気調和・衛生工学会大会 2021 G-31（その40）の式(4)・表-2・表-3 を一般化【当事者の数値】、実装は本プロジェクト【計算結果】",
+        "sources": ["S-REF-15", "S-2020-01", "S-2018-01"],
+        "validity": "各室は瞬時一様拡散。回路網の風量は設計値で、扉開閉・気流変動（2020年度で報告）は表現しない。",
+    },
+    {
         "id": "annual_regression",
         "name": "回帰係数による年間室内濃度予測",
         "equation": "C_in(t) = k·C_out(t)  （1時間平均, 原点通過回帰）",
@@ -391,3 +400,113 @@ MODEL_REGISTRY = [
         "validity": "室内発塵を無視。測定期間（秋季・数日〜2か月）の k を通年に適用する仮定。",
     },
 ]
+
+
+# ---------------------------------------------------------------------------
+# 7. 多室（換気回路網）モデル — 2018・2020年度の簡易シミュレーションの一般化
+#    出典: 空気調和・衛生工学会大会 2021 G-31（床チャンバー空調 その40）表-2・表-3
+# ---------------------------------------------------------------------------
+
+OUTDOOR = "外部"
+
+# 実験住宅（床吹出型全館空調）の換気回路網。風量は m³/s（弱, 強）。表-3 の行列を辺リストに展開【当事者の数値】
+SHASE2021_VOLUMES = {
+    "空調室": 3.97, "建築ダクト": 2.76, "階間": 25.51, "床下": 30.61, "吹抜": 23.85, "洋室(中)": 23.85,
+    "クローゼット": 15.9, "洋室(大)": 39.75, "2階廊下・レターン": 40.35, "洗面所": 12.17, "LDK": 91.3,
+    "1階廊下・玄関": 20.87, "小屋裏": 75.05,
+}
+SHASE2021_FLOWS = [  # (from, to, 弱 m³/s, 強 m³/s)
+    (OUTDOOR, "空調室", 0.0216, 0.042), ("空調室", OUTDOOR, 0.0216, 0.042),
+    ("空調室", "建築ダクト", 0.3348, 0.6655),
+    ("建築ダクト", "階間", 0.1643, 0.3265), ("建築ダクト", "床下", 0.1705, 0.339),
+    ("階間", "洋室(中)", 0.0327, 0.0649), ("階間", "クローゼット", 0.0218, 0.0434),
+    ("階間", "洋室(大)", 0.0545, 0.1083), ("階間", "2階廊下・レターン", 0.0553, 0.1099),
+    ("床下", "洗面所", 0.0167, 0.0332), ("床下", "LDK", 0.1252, 0.2489), ("床下", "1階廊下・玄関", 0.0286, 0.0569),
+    ("LDK", "吹抜", 0.1247, 0.2479), ("LDK", "1階廊下・玄関", 0.0005, 0.001),
+    ("吹抜", "2階廊下・レターン", 0.1247, 0.2479), ("洋室(中)", "2階廊下・レターン", 0.0327, 0.0649),
+    ("クローゼット", "洋室(大)", 0.0218, 0.0434), ("洋室(大)", "2階廊下・レターン", 0.0763, 0.1517),
+    ("洗面所", "1階廊下・玄関", 0.0167, 0.0332), ("1階廊下・玄関", "2階廊下・レターン", 0.0458, 0.0911),
+    ("2階廊下・レターン", "小屋裏", 0.1042, 0.2084), ("小屋裏", "2階廊下・レターン", 0.1042, 0.2084),
+    ("2階廊下・レターン", "空調室", 0.3348, 0.6655),
+]
+SHASE2021_EP_EDGE = ("空調室", "建築ダクト")  # 電気集塵機の設置位置（空調室→建築ダクト）
+
+
+def shase2021_network(setting: str = "弱") -> tuple[dict[str, float], list[tuple[str, str, float]]]:
+    """(容積 m³, [(from, to, Q m³/h)]) を返す"""
+    k = 2 if setting == "弱" else 3
+    return dict(SHASE2021_VOLUMES), [(f, t, row[k] * 3600.0) for row in SHASE2021_FLOWS for f, t in [row[:2]]]
+
+
+def network_imbalance(volumes: dict[str, float], flows: list[tuple[str, str, float]]) -> dict[str, float]:
+    """各室の（流入−流出）風量 [m³/h]。定常流れの整合性チェック用"""
+    bal = {z: 0.0 for z in volumes}
+    for f, t, q in flows:
+        if t in bal:
+            bal[t] += q
+        if f in bal:
+            bal[f] -= q
+    return bal
+
+
+def decay_rate_to_beta(d_per_s: float) -> float:
+    """SHASE2021 の減衰率 D（C(t)=C0(1−D)^t, 1/s）→ 沈着係数 β [1/h]"""
+    return -math.log(1.0 - d_per_s) * 3600.0
+
+
+def multizone_simulate(
+    volumes: dict[str, float],
+    flows: list[tuple[str, str, float]],
+    hours: float,
+    c_out: float = 0.0,
+    c0: dict[str, float] | float = 0.0,
+    sources: dict[str, float] | None = None,
+    source_hours: tuple[float, float] = (0.0, 1e9),
+    beta: dict[str, float] | float = 0.0,
+    ep_edge: tuple[str, str] | None = None,
+    eta_ep: float = 0.0,
+    dt_s: float = 1.0,
+    record_every_s: float = 30.0,
+) -> dict[str, list]:
+    """多室の瞬時一様拡散モデル（各室完全混合, 室間は回路網の風量で移流）。
+
+    V_i dC_i/dt = Σ_j Q_ji·C_j·(1−η_ji) − (Σ_k Q_ik)·C_i − β_i·V_i·C_i + G_i
+    単位: V m³, Q m³/h, C 任意（mg/m³ 等）, G は C·m³/h, β 1/h。時間積分は前進オイラー（dt は安定条件で自動短縮）。
+    """
+    zones = list(volumes)
+    idx = {z: i for i, z in enumerate(zones)}
+    n = len(zones)
+    c = [c0.get(z, 0.0) if isinstance(c0, dict) else float(c0) for z in zones]
+    b = [beta.get(z, 0.0) if isinstance(beta, dict) else float(beta) for z in zones]
+    g = [(sources or {}).get(z, 0.0) for z in zones]
+    out_rate = [0.0] * n
+    edges = []
+    for f, t, q in flows:
+        eta = eta_ep if ep_edge and (f, t) == tuple(ep_edge) else 0.0
+        if f in idx:
+            out_rate[idx[f]] += q
+        edges.append((idx.get(f, -1), idx.get(t, -1), q, eta))
+    max_rate = max((out_rate[i] / volumes[z] + b[i]) for i, z in enumerate(zones)) / 3600.0  # 1/s
+    dt = min(dt_s, 0.5 / max_rate) if max_rate > 0 else dt_s
+    steps = int(round(hours * 3600 / dt))
+    rec = max(1, int(round(record_every_s / dt)))
+    t_out, series = [0.0], {z: [c[i]] for i, z in enumerate(zones)}
+    h = dt / 3600.0
+    for s in range(steps):
+        t_h = s * h
+        src_on = source_hours[0] <= t_h < source_hours[1]
+        dc = [0.0] * n
+        for fi, ti, q, eta in edges:
+            if ti < 0:
+                continue
+            cin = c_out if fi < 0 else c[fi]
+            dc[ti] += q * cin * (1 - eta)
+        for i, z in enumerate(zones):
+            gi = g[i] if src_on else 0.0
+            dc[i] = (dc[i] - out_rate[i] * c[i] + gi) / volumes[z] - b[i] * c[i]
+        c = [c[i] + h * dc[i] for i in range(n)]
+        if (s + 1) % rec == 0:
+            t_out.append((s + 1) * h)
+            for i, z in enumerate(zones):
+                series[z].append(c[i])
+    return {"t_h": t_out, "series": series, "dt_s": dt}

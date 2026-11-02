@@ -148,3 +148,78 @@ export function zoneWarnings(p: ZoneParams): string[] {
   if (p.eta_ep > 0.96) w.push('EP効率96%超は2026年度実測（100 m³/hで95%以上）の上端を超えます')
   return w
 }
+
+// ---------------------------------------------------------------------------
+// 多室（換気回路網）モデル — backend/aqros/models.py の移植
+// 出典: 空気調和・衛生工学会大会 2021 G-31（床チャンバー空調 その40）表-2・表-3
+// ---------------------------------------------------------------------------
+export const OUTDOOR = '外部'
+export const SHASE2021_VOLUMES: Record<string, number> = {
+  空調室: 3.97, 建築ダクト: 2.76, 階間: 25.51, 床下: 30.61, 吹抜: 23.85, '洋室(中)': 23.85,
+  クローゼット: 15.9, '洋室(大)': 39.75, '2階廊下・レターン': 40.35, 洗面所: 12.17, LDK: 91.3,
+  '1階廊下・玄関': 20.87, 小屋裏: 75.05,
+}
+export const SHASE2021_FLOWS: [string, string, number, number][] = [
+  [OUTDOOR, '空調室', 0.0216, 0.042], ['空調室', OUTDOOR, 0.0216, 0.042],
+  ['空調室', '建築ダクト', 0.3348, 0.6655],
+  ['建築ダクト', '階間', 0.1643, 0.3265], ['建築ダクト', '床下', 0.1705, 0.339],
+  ['階間', '洋室(中)', 0.0327, 0.0649], ['階間', 'クローゼット', 0.0218, 0.0434],
+  ['階間', '洋室(大)', 0.0545, 0.1083], ['階間', '2階廊下・レターン', 0.0553, 0.1099],
+  ['床下', '洗面所', 0.0167, 0.0332], ['床下', 'LDK', 0.1252, 0.2489], ['床下', '1階廊下・玄関', 0.0286, 0.0569],
+  ['LDK', '吹抜', 0.1247, 0.2479], ['LDK', '1階廊下・玄関', 0.0005, 0.001],
+  ['吹抜', '2階廊下・レターン', 0.1247, 0.2479], ['洋室(中)', '2階廊下・レターン', 0.0327, 0.0649],
+  ['クローゼット', '洋室(大)', 0.0218, 0.0434], ['洋室(大)', '2階廊下・レターン', 0.0763, 0.1517],
+  ['洗面所', '1階廊下・玄関', 0.0167, 0.0332], ['1階廊下・玄関', '2階廊下・レターン', 0.0458, 0.0911],
+  ['2階廊下・レターン', '小屋裏', 0.1042, 0.2084], ['小屋裏', '2階廊下・レターン', 0.1042, 0.2084],
+  ['2階廊下・レターン', '空調室', 0.3348, 0.6655],
+]
+export const SHASE2021_EP_EDGE: [string, string] = ['空調室', '建築ダクト']
+export type Flow = [string, string, number]
+
+export function shase2021Network(setting: '弱' | '強' = '弱'): { volumes: Record<string, number>; flows: Flow[] } {
+  const k = setting === '弱' ? 2 : 3
+  return { volumes: { ...SHASE2021_VOLUMES }, flows: SHASE2021_FLOWS.map((r) => [r[0], r[1], (r[k] as number) * 3600]) }
+}
+export const decayRateToBeta = (d: number) => -Math.log(1 - d) * 3600
+
+export interface MultizoneOpts {
+  hours: number; c_out?: number; c0?: number | Record<string, number>; sources?: Record<string, number>
+  source_hours?: [number, number]; beta?: number | Record<string, number>; ep_edge?: [string, string] | null
+  eta_ep?: number; dt_s?: number; record_every_s?: number
+}
+
+export function multizoneSimulate(volumes: Record<string, number>, flows: Flow[], o: MultizoneOpts) {
+  const zones = Object.keys(volumes)
+  const idx = new Map(zones.map((z, i) => [z, i]))
+  const n = zones.length
+  const cOut = o.c_out ?? 0
+  let c = zones.map((z) => (typeof o.c0 === 'object' ? o.c0[z] ?? 0 : o.c0 ?? 0))
+  const b = zones.map((z) => (typeof o.beta === 'object' ? o.beta[z] ?? 0 : o.beta ?? 0))
+  const g = zones.map((z) => o.sources?.[z] ?? 0)
+  const outRate = new Array(n).fill(0)
+  const edges = flows.map(([f, t, q]) => {
+    const eta = o.ep_edge && f === o.ep_edge[0] && t === o.ep_edge[1] ? o.eta_ep ?? 0 : 0
+    const fi = idx.has(f) ? idx.get(f)! : -1
+    if (fi >= 0) outRate[fi] += q
+    return [fi, idx.has(t) ? idx.get(t)! : -1, q, eta] as const
+  })
+  const maxRate = Math.max(...zones.map((z, i) => outRate[i] / volumes[z] + b[i])) / 3600
+  const dtS = o.dt_s ?? 1
+  const dt = maxRate > 0 ? Math.min(dtS, 0.5 / maxRate) : dtS
+  const steps = Math.round((o.hours * 3600) / dt)
+  const rec = Math.max(1, Math.round((o.record_every_s ?? 30) / dt))
+  const [s0, s1] = o.source_hours ?? [0, 1e9]
+  const h = dt / 3600
+  const t_h = [0]
+  const series: Record<string, number[]> = Object.fromEntries(zones.map((z, i) => [z, [c[i]]]))
+  for (let s = 0; s < steps; s++) {
+    const th = s * h
+    const on = th >= s0 && th < s1
+    const dc = new Array(n).fill(0)
+    for (const [fi, ti, q, eta] of edges) { if (ti < 0) continue; dc[ti] += q * (fi < 0 ? cOut : c[fi]) * (1 - eta) }
+    for (let i = 0; i < n; i++) dc[i] = (dc[i] - outRate[i] * c[i] + (on ? g[i] : 0)) / volumes[zones[i]] - b[i] * c[i]
+    c = c.map((v, i) => v + h * dc[i])
+    if ((s + 1) % rec === 0) { t_h.push((s + 1) * h); zones.forEach((z, i) => series[z].push(c[i])) }
+  }
+  return { t_h, series, dt_s: dt }
+}
