@@ -18,6 +18,9 @@ RED = (0.75, 0.05, 0.05)          # 答案の文字・寸法
 BROWN = (0.55, 0.27, 0.05)        # 法肩・法尻・稜線（授業図の茶色の色鉛筆）
 ORANGE = (0.90, 0.48, 0.08)       # 断面の根切り線（授業 X2断面の橙色の帯）
 # 授業の着色根切図: FS1=黄、基礎掘削 GL-1850=緑、F4A=橙。F3A は授業写真に写っていないため橙を濃くして区別（未確認）
+# 線の太さ [pt]。完成答案の値が既定値。手書き見本ではペン幅（0.5/0.3/0.2mm）に置き換える（handwriting.py）
+STYLE = {"dim": 0.35, "labelbox": 0.45, "leader": 0.4, "border": 0.45, "top": 0.85, "bottom": 1.2, "ridge": 0.55,
+         "pile": 1.8, "hmark": 0.6, "sec_outline": 0.5, "sec_pile": 0.5, "plan_fill_opacity": 0.40, "sec_fill_opacity": 0.55}
 FILL = {1.65: (1.00, 0.93, 0.25), 1.85: (0.30, 0.78, 0.25), 2.10: (0.98, 0.62, 0.15), 2.20: (0.90, 0.40, 0.10)}
 
 
@@ -71,7 +74,7 @@ def _dim(page, fn, a, b, label, off=(0, 0), size=5.6):
         if off != (0, 0):
             sh.draw_line(p, q)
         sh.draw_line(pymupdf.Point(q.x - 1.2, q.y + 1.2), pymupdf.Point(q.x + 1.2, q.y - 1.2))
-    sh.finish(color=RED, width=0.35)
+    sh.finish(color=RED, width=STYLE['dim'])
     sh.commit()
     mid = pymupdf.Point((a2.x + b2.x) / 2, (a2.y + b2.y) / 2)
     if abs(a2.x - b2.x) < 0.01:          # 縦寸法
@@ -86,7 +89,7 @@ def _boxlabel(page, fn, pt, text, size=5.6):
     r = pymupdf.Rect(pt.x - w / 2, pt.y - size * 0.95, pt.x + w / 2, pt.y + size * 0.75)
     sh = page.new_shape()
     sh.draw_rect(r)
-    sh.finish(color=RED, fill=(1, 1, 1), fill_opacity=0.85, width=0.45)
+    sh.finish(color=RED, fill=(1, 1, 1), fill_opacity=0.85, width=STYLE['labelbox'])
     sh.commit()
     page.insert_text(pymupdf.Point(r.x0 + 2.5, r.y1 - size * 0.3), text, fontsize=size, fontname=fn, color=RED)
     return r
@@ -96,7 +99,7 @@ def _leader(page, a, b):
     sh = page.new_shape()
     sh.draw_line(a, b)
     sh.draw_circle(a, 0.8)
-    sh.finish(color=RED, fill=RED, width=0.4)
+    sh.finish(color=RED, fill=RED, width=STYLE['leader'])
     sh.commit()
 
 
@@ -141,30 +144,30 @@ def draw_plan(page, fn, site, zones, m: Mapper):
     for depth, g in final_depth_pieces(zones):   # 根切り底（深さ別、授業図の配色）
         sh = page.new_shape()
         _poly(sh, g, m.plan)
-        sh.finish(color=None, fill=FILL[round(depth, 2)], fill_opacity=0.40, width=0)
+        sh.finish(color=None, fill=FILL[round(depth, 2)], fill_opacity=STYLE['plan_fill_opacity'], width=0)
         sh.commit()
         sh = page.new_shape()                   # 深さの境界（内部の段差は鉛直＝1本線）
         _poly(sh, g, m.plan)
-        sh.finish(color=BROWN, width=0.45)
+        sh.finish(color=BROWN, width=STYLE['border'])
         sh.commit()
     sh = page.new_shape()                       # 法肩
     _poly(sh, top, m.plan)
-    sh.finish(color=BROWN, width=0.85)
+    sh.finish(color=BROWN, width=STYLE['top'])
     sh.commit()
     sh = page.new_shape()                       # 法尻（根切り底の外形）
     _poly(sh, bottom, m.plan)
-    sh.finish(color=BROWN, width=1.2)
+    sh.finish(color=BROWN, width=STYLE['bottom'])
     sh.commit()
     sh = page.new_shape()                       # 稜線（角部の取り合い）
     for a_, b_ in ridge_lines(bottom, top, east):
         sh.draw_line(m.plan(*a_), m.plan(*b_))
-    sh.finish(color=BROWN, width=0.55)
+    sh.finish(color=BROWN, width=STYLE['ridge'])
     sh.commit()
     # 東面 親杭横矢板（親杭の位置は概略表示）
     y0, y1 = bottom.bounds[1], bottom.bounds[3]
     sh = page.new_shape()
     sh.draw_line(m.plan(east, y0), m.plan(east, y1))
-    sh.finish(color=RED, width=1.8)
+    sh.finish(color=RED, width=STYLE['pile'])
     yy = y0
     while yy <= y1 + 1:
         c = m.plan(east, yy)
@@ -172,7 +175,7 @@ def draw_plan(page, fn, site, zones, m: Mapper):
         sh.draw_line(pymupdf.Point(c.x + 2.0, c.y - 1.0), pymupdf.Point(c.x + 2.0, c.y + 1.0))
         sh.draw_line(pymupdf.Point(c.x - 2.0, c.y), pymupdf.Point(c.x + 2.0, c.y))
         yy += 1000
-    sh.finish(color=RED, width=0.6)
+    sh.finish(color=RED, width=STYLE['hmark'])
     sh.commit()
 
     # 深さ表示（授業図の枠付き表示 + 引出線）
@@ -268,7 +271,7 @@ def section_band(page, prof, segs, m, lip_mm=1000.0):
         g = q.difference(cut) if cut.is_valid else q
         sh = page.new_shape()
         _poly(sh, g, m.sec)
-        sh.finish(color=None, fill=col, fill_opacity=0.55, width=0)   # 下の印刷文字（FG2A 等）が読める濃さ
+        sh.finish(color=None, fill=col, fill_opacity=STYLE['sec_fill_opacity'], width=0)   # 下の印刷文字（FG2A 等）が読める濃さ
         sh.commit()
 
 
@@ -286,13 +289,13 @@ def draw_section(page, fn, site, zones, m: Mapper):
     section_band(page, prof, segs, m, lip_mm=1000.0)   # 授業 X2断面と同じ着色（形状は prof のまま）
     sh = page.new_shape()                      # 根切り線（掘削輪郭、v2 と同じ線）
     sh.draw_polyline([m.sec(*p) for p in prof])
-    sh.finish(color=BROWN, width=0.5)
+    sh.finish(color=BROWN, width=STYLE['sec_outline'])
     sh.commit()
     # 親杭
     dmax = max(s[2] for s in segs) * 1000
     sh = page.new_shape()
     sh.draw_rect(pymupdf.Rect(m.sec(east, 200), m.sec(east + 200, -dmax - 1300)))
-    sh.finish(color=RED, fill=RED, fill_opacity=0.15, width=0.5)
+    sh.finish(color=RED, fill=RED, fill_opacity=0.15, width=STYLE['sec_pile'])
     sh.commit()
     _text(page, fn, m.sec(east + 1600, -600), "親杭横矢板", 5.0)
     _text(page, fn, m.sec(east + 1600, -1050), "（山留H鋼）", 5.0)
@@ -335,11 +338,11 @@ def legend(page, fn, m: Mapper, origin=(560.0, 694.0)):
         sh = page.new_shape()
         if col is None:
             sh.draw_line(pymupdf.Point(x, yy + 7), pymupdf.Point(x + 14, yy + 7))
-            sh.finish(color=BROWN, width=1.2)
+            sh.finish(color=BROWN, width=STYLE['bottom'])
             sh.draw_line(pymupdf.Point(x, yy + 1), pymupdf.Point(x + 14, yy + 1))
-            sh.finish(color=BROWN, width=0.85)
+            sh.finish(color=BROWN, width=STYLE['top'])
             sh.draw_line(pymupdf.Point(x, yy + 7), pymupdf.Point(x + 6, yy + 1))
-            sh.finish(color=BROWN, width=0.55)
+            sh.finish(color=BROWN, width=STYLE['ridge'])
         else:
             sh.draw_rect(pymupdf.Rect(x, yy, x + 14, yy + 7))
             sh.finish(color=BROWN, fill=col, fill_opacity=0.5, width=0.4)
@@ -357,12 +360,20 @@ def write(src_pdf, out_pdf, site, zones, res):
     legend(page, fn, m)
     r = pymupdf.Rect(*site.raw["answer_sheet"]["volume_text_at"])
     page.insert_textbox(r, f"{res.total:,.2f}", fontsize=12, fontname=fn, color=RED, align=pymupdf.TEXT_ALIGN_CENTER)
+    formula_note(page, fn, res)
+    doc.save(out_pdf, garbage=3, deflate=True)
+    doc.close()
+    return _boxes(site, m, top, r)
+
+
+def formula_note(page, fn, res):
     page.insert_textbox(pymupdf.Rect(60, 1098, 372, 1124),
                         f"方法A ΣAi·hi = {res.method_a:.3f}m3 ／ 方法B A0×1.65+ΣAj·Δhj = {res.a0_area:.3f}×1.65+… = {res.method_b:.3f}m3"
                         f"\n余幅 = 作業ゆとり0.5m + 法幅0.3h/2（外周のみ。内部の段差は鉛直。東面は親杭・余幅0.1m・法なし）",
                         fontsize=5.2, fontname=fn, color=RED)
-    doc.save(out_pdf, garbage=3, deflate=True)
-    doc.close()
+
+
+def _boxes(site, m, top, r):
     tb = top.bounds
     p0, p1 = m.plan(tb[0] - 2500, tb[3] + 2500), m.plan(tb[2] + 3000, tb[1] - 2500)
     plan_box = [min(p0.x, p1.x), min(p0.y, p1.y), max(p0.x, p1.x), max(p0.y, p1.y)]

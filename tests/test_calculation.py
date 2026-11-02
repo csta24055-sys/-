@@ -258,3 +258,24 @@ def test_section_band_colors_follow_teacher_and_plan():
     cut = Polygon(prof + [prof[0]])
     for c, q in pieces:                       # 帯は土側（掘削部の内側をほとんど塗らない）
         assert q.difference(cut).area > 0.5 * q.area
+
+
+@pytest.mark.skipif(not PDF.exists(), reason="課題PDFが必要")
+def test_handwriting_samples_and_guide(tmp_path):
+    # ①②: 完成答案と同じ図形（位置・色）・文字。③: 全線が手順に含まれ、表の数値から作り直した点のずれ < 0.1mm
+    import runpy, subprocess
+    assert run.main(["--out", str(tmp_path / "ans")]) == 0
+    g = runpy.run_path(str(ROOT / "scripts/make_handwriting_guides.py"))
+    info = g["info"]
+    assert info["max_err_mm"] < 0.1
+    for k in ("plan", "sec"):
+        c = info["coverage"][k]
+        assert c["lines_missing"] == 0 and c["texts_missing"] == 0
+    r = subprocess.run([sys.executable, str(ROOT / "scripts/verify_handwriting.py")], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout
+
+
+def test_hand_style_does_not_change_answer_style():
+    from yamadome import answer_sheet as A, handwriting as H
+    assert A.STYLE["bottom"] == 1.2 and A.STYLE["sec_fill_opacity"] == 0.55      # 完成答案の値のまま
+    assert set(H.HAND_STYLE) == set(A.STYLE)

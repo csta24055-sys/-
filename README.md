@@ -49,12 +49,30 @@ python -m pytest -q
 
 根拠記録は `docs/06_根拠・照合記録.md` を参照。
 
+## 手書き用の見本とガイド
+
+```bash
+python scripts/make_handwriting_guides.py   # ①②③ を output/yamadome_20261021/handwriting/ に出力
+python scripts/verify_handwriting.py        # ①② が完成答案と同じ図形・文字か検証
+```
+
+| ファイル | 内容 |
+|---|---|
+| 02_手書き見本_根切り平面図.pdf | 課題用紙（A3）1ページ目に根切り図だけを完成答案と同じ位置で描いた見本。線の太さはペン幅（0.5/0.3/0.2/0.1mm） |
+| 03_手書き見本_Y3通り断面図.pdf | 同じく Y3 通り断面図だけの見本 |
+| 04_手書き作図完全ガイド_実寸寸法と手順.pdf | 印刷倍率の確認、基準点（通り芯の交点）からの紙上 mm、線ごとの始点・方向・長さ・終点、拡大図、一覧表、照合 |
+
+数値は見本PDFのベクター座標から計算（推測なし）。表の数値だけで作り直した点と元の点のずれは最大 0.07mm。
+課題用紙を下地に含むため、いずれもリポジトリにはコミットしない。
+
 ## 構成
 
 ```
 config/      site.yaml（本番条件） demo.yaml（架空・動作確認用）
 src/yamadome/
   answer_sheet.py 元PDF p.1 へ通り芯座標で位置合わせして書込み
+  handwriting.py  手書き見本（ペン幅に置き換え）と図形の抽出
+  guide.py        手書き作図ガイド（紙上 mm の手順・拡大図・一覧・照合）
   config.py       設定読込・未確定項目の抽出
   geometry.py     Shapely による区画・重複処理・断面切断
   calculation.py  方法A・方法B・法面体積
