@@ -15,6 +15,7 @@ export interface Theme {
   why_now: string; known: string; unsolved: string; hypotheses: string[]; equipment: string; measurements: string; procedure: string
   analysis: string; data_needed: string; branches: string; difficulty: string; duration_cost: string; significance: string; risks: string
   decision?: string; decision_reason?: string
+  evaluation?: { feasibility: string; novelty: string; equipment: string; months: number[]; failure_risk: string; failure_mode: string; evidence: string; score_change: string }
 }
 export interface GraphNode { id: string; type: string; label: string; detail: string; sources: string[] }
 export interface Knowledge {
@@ -24,7 +25,7 @@ export interface Knowledge {
   graph: { nodes: GraphNode[]; edges: { from: string; to: string; rel: string }[] }
   external: { id: string; title: string; url: string; note: string }[]
   meta: { accessed: string }
-  validation?: { multizone?: { cases: { fan: string; D_per_s: number; beta_per_h: number; mean_nrmse: number; mean_peak_ratio: number; rooms: Record<string, { peak_meas: number; peak_sim: number; t_peak_meas: number; t_peak_sim: number; nrmse: number }> }[]; grid_best: Record<string, { best_D: number; best_nrmse: number }> } | null }
+  validation?: { multizone?: { cases: { fan: string; D_per_s: number; beta_per_h: number; mean_nrmse: number; mean_peak_ratio: number; rooms: Record<string, { peak_meas: number; peak_sim: number; t_peak_meas: number; t_peak_sim: number; nrmse: number }> }[]; grid_best: Record<string, { best_D: number; best_nrmse: number }> } | null; fate2022?: { rows: { size_um: string; cond: string; fan: string; ep: boolean; model: Record<string, number>; reported: Record<string, number>; diff_pt: Record<string, number> }[]; max_abs_diff_pt_excl_residual: number } | null }
 }
 export interface DatasetMeta { id: number; name: string; filename: string | null; sheet: string | null; study: string | null; description: string | null; provenance: string; columns: string[]; n_rows: number; created_at: string }
 export interface Dataset extends DatasetMeta { rows: unknown[][] }

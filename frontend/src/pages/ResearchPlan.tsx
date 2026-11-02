@@ -45,6 +45,14 @@ export default function ResearchPlan() {
               <td>{t.decision ? <span className={`pill ${t.decision === '採択' ? 'st-3' : t.decision === '不採択' ? 'st-0' : 'st-1'}`}>{t.decision}</span> : '—'}</td>
             </tr>))}</tbody></table>
       </div>
+      <Card title="実現可能性・新規性・設備・期間・失敗リスクの比較（2026-11 資料読解・数値検証を反映）【分析】">
+        <div className="tablewrap"><table><thead><tr><th>ID</th><th>実現可能性</th><th>新規性</th><th>必要設備</th><th>期間[月]</th><th>失敗リスク</th><th>失敗時の代替</th></tr></thead>
+          <tbody>{ranked.filter((t) => t.evaluation).map((t) => { const e = t.evaluation!; return (
+            <tr key={t.id} onClick={() => setOpen(t.id)}><td>{t.id}</td><td>{e.feasibility}</td><td>{e.novelty}</td><td>{e.equipment}</td>
+              <td>{e.months[0] === e.months[1] ? e.months[0] : `${e.months[0]}〜${e.months[1]}`}</td>
+              <td><span className={`pill ${e.failure_risk === '低' ? 'st-3' : e.failure_risk === '高' ? 'st-0' : 'st-1'}`}>{e.failure_risk}</span></td><td>{e.failure_mode}</td></tr>) })}</tbody></table></div>
+        <p className="small muted">スコアの変更: {ranked.filter((t) => t.evaluation?.score_change).map((t) => `${t.id} ${t.evaluation!.score_change}`).join('／') || 'なし'}</p>
+      </Card>
       {ranked.filter((t) => t.id === open).map((t) => (
         <Card key={t.id} title={`${t.id} ${t.name}`} actions={<>{['採択', '保留', '不採択'].map((d) => <button key={d} className={t.decision === d ? '' : 'ghost'} onClick={() => decide(t, d)}>{d}</button>)}</>}>
           {t.decision && <p className="note">採否: <b>{t.decision}</b> — 理由: {t.decision_reason}</p>}
@@ -52,6 +60,7 @@ export default function ResearchPlan() {
             <div>
               <p><b>期間</b>: {t.horizon}　<b>検証すべき仮説</b>: {t.hypotheses.join(', ') || '—'}</p>
               {FIELDS.map(([f, l]) => <div key={f} className="kv"><b>{l}</b><p>{String(t[f])}</p></div>)}
+              {t.evaluation && <div className="kv"><b>評価の根拠（今回の資料読解・検証）</b><p>{t.evaluation.evidence}</p></div>}
             </div>
             <div className="chart" style={{ height: 260 }}>
               <ResponsiveContainer><RadarChart data={(Object.keys(LABEL) as (keyof typeof LABEL)[]).map((kk) => ({ k: LABEL[kk], v: t.scores[kk] }))}>

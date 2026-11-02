@@ -76,8 +76,10 @@ export default function MultiZone() {
 function Validation() {
   const { data } = useAsync(api.knowledge)
   const v = data?.validation?.multizone
+  const f = data?.validation?.fate2022
   if (!v) return null
   return (
+    <>
     <details open className="validation">
       <summary><b>実測による検証</b>（2020年度 実験住宅・線香2本LDK発生・粉塵計3回平均, Box 1516270811625）【計算結果】</summary>
       <div className="tablewrap"><table><thead><tr><th>ファン</th><th>D [1/s]</th><th>β [1/h]</th><th>平均NRMSE</th><th>ピーク比（計算/実測）</th><th>レターン ピーク時刻 実測/計算 [s]</th></tr></thead>
@@ -85,5 +87,17 @@ function Validation() {
       <p className="small muted">最適D（0〜0.0008 を探索）: 弱 {v.grid_best['弱']?.best_D}（NRMSE {fmt(v.grid_best['弱']?.best_nrmse, 2)}）、強 {v.grid_best['強']?.best_D}（NRMSE {fmt(v.grid_best['強']?.best_nrmse, 2)}）。
         Dは運転条件に依存する較正係数で、還気口の応答時刻と室間差は再現できない（F-SIM-01〜04）。</p>
     </details>
+    {f && (
+      <details className="validation">
+        <summary><b>2022年度シミュレーションの再計算</b>（粉塵の行方・30分, 同年度の入力値, Box 1516298663163）【計算結果】</summary>
+        <div className="tablewrap"><table><thead><tr><th>粒径 μm</th><th>条件</th><th>LDK+吹抜 本アプリ/当時</th><th>非居室</th><th>集塵機</th><th>未沈着</th></tr></thead>
+          <tbody>{f.rows.map((r) => <tr key={r.size_um + r.cond}><td>{r.size_um}</td><td>{r.fan}{r.ep ? '・EP' : ''}</td>
+            <td className={Math.abs(r.diff_pt['LDK']) > 3 ? 'warn' : ''}>{fmt(r.model['LDK+吹抜'], 1)} / {fmt(r.reported['LDK'], 1)}</td>
+            <td>{fmt(r.model['非居室'], 1)} / {fmt(r.reported['非居室'], 1)}</td><td>{fmt(r.model['集塵機'], 1)} / {fmt(r.reported['集塵機'], 1)}</td>
+            <td>{fmt(r.model['残留'], 1)} / {fmt(r.reported['残留'], 1)}</td></tr>)}</tbody></table></div>
+        <p className="small muted">EP・非居室の割合は全粒径で約1ポイント以内で再現。10 μm以上で当時の表にある「未沈着」（0.9〜5.6%）は物理的には残らず（β≥3.7×10⁻³ 1/s）、その分LDKの割合がずれる（F-SIM-08〜10）。</p>
+      </details>
+    )}
+    </>
   )
 }

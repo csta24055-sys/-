@@ -134,3 +134,17 @@ def test_knowledge_includes_validation(client):
     raw = k["validation"]["raw2025"]
     assert abs(raw["A_iwakuni"]["cond1"]["io_リビング"] - 0.28) < 0.01
     assert abs(raw["C_nogata"]["cond2_final_table5"]["io_リビング"] - 0.68) < 0.01
+
+
+def test_knowledge_includes_fate_and_annual_validation(client):
+    k = client.get("/api/knowledge").json()
+    f = k["validation"]["fate2022"]
+    row = [r for r in f["rows"] if r["size_um"] == "5-10" and r["cond"] == "条件5"][0]
+    assert abs(row["diff_pt"]["集塵機"]) < 1.0  # F-SIM-08: EP の割合を再現
+    a = k["validation"]["annual2025"]["sites"]
+    for s in a.values():  # F-2025-21: 条件②の超過時間割合は約40%（33〜38%）
+        assert 30 < s["条件②_gt5_pct"] < 42
+        assert s["条件①_gt5_pct"] < 1
+    themes = {t["id"]: t for t in k["themes"]}
+    assert all("evaluation" in t for t in themes.values())
+    assert themes["T-03"]["scores"]["importance"] == 5

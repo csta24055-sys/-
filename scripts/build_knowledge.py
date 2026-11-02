@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -74,6 +75,8 @@ def build_graph() -> dict:
         node(t["id"], "研究テーマ", t["name"], t["why_now"])
         for h in t["hypotheses"]:
             edges.append({"from": h, "to": t["id"], "rel": "検証"})
+        for ref in sorted(set(re.findall(r"F-[A-Z0-9]+-\d+", t.get("evaluation", {}).get("evidence", "")))):
+            edges.append({"from": ref, "to": t["id"], "rel": "評価根拠"})
     ids = {n["id"] for n in nodes}
     edges = [e for e in edges if e["from"] in ids and e["to"] in ids]
     return {"nodes": nodes, "edges": edges}
@@ -94,6 +97,8 @@ def write_json():
         "graph": build_graph(),
         "validation": {
             "multizone": json.loads((OUT / "validation_multizone.json").read_text(encoding="utf-8")) if (OUT / "validation_multizone.json").exists() else None,
+            "fate2022": json.loads((OUT / "validation_fate_2022.json").read_text(encoding="utf-8")) if (OUT / "validation_fate_2022.json").exists() else None,
+            "annual2025": json.loads((OUT / "verification_annual_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_annual_2025.json").exists() else None,
             "raw2025": json.loads((OUT / "verification_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_2025.json").exists() else None,
         },
         "meta": {"accessed": K.ACCESSED, "generator": "scripts/build_knowledge.py"},
@@ -181,6 +186,12 @@ def write_docs(d):
                            for t in sorted(d["themes"], key=total, reverse=True)],
                           ["ID", "テーマ", "期間", "重要度", "新規性", "実行可能性", "設備適合", "総合"]))
     lines.append("")
+    lines += ["## 実現可能性・新規性・必要設備・実験期間・失敗リスクの比較（2026-11-02 更新）【分析】", ""]
+    ev = [t for t in sorted(d["themes"], key=total, reverse=True) if t.get("evaluation")]
+    lines.append(md_table([[t["id"], t["evaluation"]["feasibility"], t["evaluation"]["novelty"], t["evaluation"]["equipment"],
+                            "〜".join(str(m) for m in sorted(set(t["evaluation"]["months"]))), t["evaluation"]["failure_risk"], t["evaluation"]["failure_mode"]] for t in ev],
+                          ["ID", "実現可能性", "新規性", "必要設備", "期間[月]", "失敗リスク", "失敗時の代替"]))
+    lines += ["", "スコア変更: " + ("／".join(f"{t['id']} {t['evaluation']['score_change']}" for t in ev if t["evaluation"]["score_change"]) or "なし"), ""]
     labels = [("why_now", "なぜ今研究するべきか"), ("known", "既往研究から判明していること"), ("unsolved", "未解決の科学的問題"),
               ("equipment", "必要な実験装置"), ("measurements", "測定項目と実験条件"), ("procedure", "実験手順"), ("analysis", "解析方法"),
               ("data_needed", "必要なデータ"), ("branches", "予想される結果の分岐"), ("difficulty", "実施難易度"),
@@ -188,6 +199,8 @@ def write_docs(d):
     for t in d["themes"]:
         lines += [f"## {t['id']} {t['name']}（{t['horizon']}）", "", f"- **検証すべき仮説**: {', '.join(t['hypotheses']) or '-'}"]
         lines += [f"- **{lab}**: {t[k]}" for k, lab in labels]
+        if t.get("evaluation"):
+            lines.append(f"- **評価の根拠（2026-11 資料読解・検証）**: {t['evaluation']['evidence']}")
         lines.append("")
     lines += ["## ロードマップ", ""] + [f"- **{r['phase']}**: " + " / ".join(r["items"]) for r in d["roadmap"]]
     (DOCS / "研究テーマ候補一覧.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

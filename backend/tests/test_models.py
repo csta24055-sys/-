@@ -206,3 +206,23 @@ def test_multizone_ep_lowers_all_rooms():
 def test_lycopodium_settling_matches_shase2020():
     # SHASE 2020（その36）: 石松子（約35 μm）の沈降速度 約3.6 cm/s
     assert M.settling_velocity(35.0) * 100 == pytest.approx(3.6, abs=0.15)
+
+
+def test_fate_2022_reproduction_without_private_data():
+    """2022年度の入力値（スクリプト内に数値パラメータとして保持）で粉塵の行方を再計算（F-SIM-08）"""
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+    import validate_fate_2022 as V
+    f = V.fate("弱", True, 0)
+    assert abs(f["収支"] - 100) < 0.5
+    assert abs(f["集塵機"] - 32.0) < 3.0
+    assert abs(f["非居室"] - 2.5) < 1.0
+    assert abs(f["LDK"] - 42.8) < 1.0  # まとめ左表（吹抜を含まないLDK）
+
+
+def test_settling_matches_2021_and_2023_sheets():
+    # 2021年度落下班 計算式シート: Dp=12 μm, H=2 m, ρ=1380 → β=2.99×10⁻³ 1/s（F-2021-05）
+    assert abs(M.deposition_coefficient(12, 2.0, 1380) - 0.0029868) / 0.0029868 < 0.03
+    # 2023年度β理論式シート 重力項: 砂(2640) 10 μm, H=2.677 m → 0.002992 1/s（F-2023-07）
+    assert abs(M.deposition_coefficient(10, 2.67696, 2640) - 0.002992) / 0.002992 < 0.02
