@@ -226,3 +226,19 @@ def test_settling_matches_2021_and_2023_sheets():
     assert abs(M.deposition_coefficient(12, 2.0, 1380) - 0.0029868) / 0.0029868 < 0.03
     # 2023年度β理論式シート 重力項: 砂(2640) 10 μm, H=2.677 m → 0.002992 1/s（F-2023-07）
     assert abs(M.deposition_coefficient(10, 2.67696, 2640) - 0.002992) / 0.002992 < 0.02
+
+
+def test_jem1467_cleaning_time_matches_standard_formula():
+    """JEM1467(2015) C.7: t'=−V'ln0.12/(P+Q'f)。23畳・P=5.1 m³/min → 約29.2分（F-X-19, F-X-10）。
+    単室モデル（換気1回/h＝隙間侵入、清浄機を循環・η=1 で表現）で同じ値になること。"""
+    v = 23 * 1.65 * 2.4
+    t_std = -v * math.log(0.12) / (5.1 + v / 60)  # min
+    assert t_std == pytest.approx(29.2, abs=0.1)
+    p = M.ZoneParams(volume=v, q_oa=0.0, q_inf=v, penetration_inf=1.0, q_recirc=5.1 * 60,
+                     bypass_ratio=0.0, eta_ep=1.0, deposition=0.0, c_out=0.0)
+    assert M.time_to_fraction(p, 0.12) * 60 == pytest.approx(t_std, rel=1e-6)
+    # 適用床面積 A≒7.7P/1.65 は t'=30 min を満たす P と整合する
+    a = 23
+    vv = a * 1.65 * 2.4
+    p_needed = -vv * math.log(0.12) / 30 - vv / 60
+    assert 7.7 * p_needed / 1.65 == pytest.approx(a, rel=0.01)
