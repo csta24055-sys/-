@@ -108,3 +108,17 @@ def test_add_question_and_theme_decision(client):
     assert q["id"].startswith("Q-")
     t = client.patch("/api/items/theme/T-01", json={"data": {"decision": "採択", "decision_reason": "外挿依存の解消が最優先"}}).json()
     assert t["decision"] == "採択"
+
+
+def test_concurrent_reads_and_writes(client):
+    """回帰テスト: 共有接続の競合で 500 (sqlite3.InterfaceError) が出ていた不具合"""
+    from concurrent.futures import ThreadPoolExecutor
+
+    def work(i):
+        if i % 3 == 0:
+            return client.patch("/api/sources/S-2025-05", json={"notes": f"n{i}"}).status_code
+        return client.get("/api/sources").status_code
+
+    with ThreadPoolExecutor(8) as ex:
+        codes = list(ex.map(work, range(60)))
+    assert set(codes) == {200}

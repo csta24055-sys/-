@@ -13,7 +13,7 @@ DEFAULT_DB = ROOT / "private_data" / "aqros.sqlite3"
 KNOWLEDGE = ROOT / "knowledge" / "knowledge.json"
 REPORT_DIR = ROOT / "report"
 
-_lock = threading.Lock()
+_lock = threading.RLock()
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS items (
@@ -72,11 +72,21 @@ class DB:
     def __init__(self, path: str | os.PathLike | None = None):
         self.path = Path(path or os.environ.get("AQROS_DB", DEFAULT_DB))
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.conn = sqlite3.connect(self.path, check_same_thread=False)
-        self.conn.row_factory = sqlite3.Row
+        self._local = threading.local()
         self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.executescript(SCHEMA)
         self.seed()
+
+    @property
+    def conn(self) -> sqlite3.Connection:
+        """スレッドごとの接続（FastAPI の同期エンドポイントはスレッドプールで並行実行されるため）"""
+        c = getattr(self._local, "conn", None)
+        if c is None:
+            c = sqlite3.connect(self.path, timeout=30)
+            c.row_factory = sqlite3.Row
+            c.execute("PRAGMA busy_timeout=30000")
+            self._local.conn = c
+        return c
 
     # ------------------------------------------------------------------ seed
     def seed(self) -> None:
