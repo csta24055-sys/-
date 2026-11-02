@@ -32,5 +32,5 @@ Q m³/h, C μg/m³, G μg/h, V m³, β 1/h（研究室資料の 1/s は ×3600�
 - F-X-07 / H-01: EP効率 96%（2018仕様）vs 82〜92%（2026実測）。
 - F-2025-19/20, Q-12: 2025年度住宅D（周南）の運転期間と外気中央値（4.6 vs 7.0〜7.4）が資料間で矛盾。原データ（27 MB）は Box 連携で取得不可。
 - F-SIM-08〜10: 2022年度シミュレーションは本アプリで再現。10 μm以上の『その他』は物理的に再現しない。
-- 検証スクリプト: `scripts/raw_2025.py`（+`dynamic`）、`scripts/annual_2024.py`、`scripts/validate_multizone.py`、`scripts/validate_fate_2022.py`。入力は `private_data/raw/`（非コミット）、出力は `knowledge/*.json`（集計値のみ）。
+- 検証スクリプト: `scripts/raw_2025.py`（+`dynamic`, `night`）、`scripts/annual_2024.py`、`scripts/validate_multizone.py`、`scripts/validate_fate_2022.py`。入力は `private_data/raw/`（非コミット）、出力は `knowledge/*.json`（集計値のみ）。
 - Excel のシート名・ラベルに居住者の姓が入っているものがある（2021ダストサンプラー、2024 EP停止試験など）。住宅は記号でのみ記載する。

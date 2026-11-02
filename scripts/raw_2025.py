@@ -174,3 +174,60 @@ def dynamic_main():
 
 if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "dynamic":
     dynamic_main()
+
+
+def k_with_block_bootstrap(df, start=None, end=None, indoor="リビング", hours=None, block_h=24, n_boot=2000, seed=0) -> dict:
+    """1時間平均の原点通過回帰 k と、24時間ブロックの移動ブロック・ブートストラップ95%CI。
+    hours を与えるとその時刻（例: 0〜5時）のみを使う（H-02b: 室内発生の影響を除く）。"""
+    d = df.loc[start:end] if (start or end) else df
+    oc = outdoor_col(d)
+    h = d[[indoor, oc]].resample("1h").mean().dropna()
+    if hours is not None:
+        h = h[h.index.hour.isin(hours)]
+    x, y = h[oc].to_numpy(), h[indoor].to_numpy()
+    if len(x) < 10:
+        return {}
+    k = float(np.dot(x, y) / np.dot(x, x))
+    # 日単位のブロック（夜間抽出時は日付でまとめる）
+    days = h.index.normalize()
+    uniq = np.unique(days)
+    idx_by_day = [np.where(days == u)[0] for u in uniq]
+    rng = np.random.default_rng(seed)
+    nb = max(1, len(uniq))
+    ks = []
+    for _ in range(n_boot):
+        pick = rng.integers(0, nb, nb)
+        ii = np.concatenate([idx_by_day[p] for p in pick])
+        if np.dot(x[ii], x[ii]) > 0:
+            ks.append(np.dot(x[ii], y[ii]) / np.dot(x[ii], x[ii]))
+    io = float(y.mean() / x.mean())
+    return {"k": k, "ci_block": [float(np.percentile(ks, 2.5)), float(np.percentile(ks, 97.5))], "io": io,
+            "n_hours": int(len(x)), "n_days": int(nb), "outdoor_mean": float(x.mean())}
+
+
+def night_main():
+    """H-02b（夜間0〜5時のみ）と住宅別kの日ブロック・ブートストラップCI（F-2025-07）"""
+    out = json.loads((ROOT / "knowledge" / "verification_2025.json").read_text(encoding="utf-8"))
+    a = parse_minute_block(RAW / "S-2025-19_iwakuni.txt")
+    b = parse_minute_block(RAW / "S-2025-20_shimonoseki.txt")
+    c = parse_minute_block(RAW / "S-2025-21_nogata.txt")
+    T = pd.Timestamp
+    night = list(range(0, 6))
+    cases = {
+        "A_cond1_EP": (a, None, T("2025-09-20 16:59"), "リビング"),
+        "A_cond2": (a, T("2025-09-20 17:00"), None, "リビング"),
+        "B_cond2_RA": (b, None, None, "全熱交換器RA"),
+        "C_cond2_final": (c, T("2025-09-25"), T("2025-10-12 09:59"), "リビング"),
+        "C_cond2_EPoff_log": (c, T("2025-09-29 18:00"), T("2025-10-06 06:29"), "リビング"),
+        "C_cond3": (c, T("2025-10-12 10:00"), None, "リビング"),
+    }
+    res = {}
+    for name, (df, s, e, ind) in cases.items():
+        res[name] = {"all_hours": k_with_block_bootstrap(df, s, e, ind), "night_0_5": k_with_block_bootstrap(df, s, e, ind, hours=night)}
+        print(name, {kk: {q: (round(v, 3) if isinstance(v, float) else v) for q, v in vv.items()} for kk, vv in res[name].items()})
+    out["night_and_block_ci"] = {"note": "1時間平均の原点通過回帰k。全時間と夜間0〜5時のみ。CIは日単位ブロックのブートストラップ（2000回）【計算結果】", **res}
+    (ROOT / "knowledge" / "verification_2025.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "night":
+    night_main()

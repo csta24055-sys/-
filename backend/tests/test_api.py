@@ -148,3 +148,11 @@ def test_knowledge_includes_fate_and_annual_validation(client):
     themes = {t["id"]: t for t in k["themes"]}
     assert all("evaluation" in t for t in themes.values())
     assert themes["T-03"]["scores"]["importance"] == 5
+
+
+def test_night_and_block_ci(client):
+    k = client.get("/api/knowledge").json()
+    n = k["validation"]["raw2025"]["night_and_block_ci"]
+    lo, hi = n["C_cond2_final"]["all_hours"]["ci_block"]
+    assert hi - lo > 0.1  # F-V-11: プールCI（±0.01）より大幅に広い
+    assert n["C_cond3"]["night_0_5"]["io"] < n["C_cond3"]["all_hours"]["io"]  # F-V-12
