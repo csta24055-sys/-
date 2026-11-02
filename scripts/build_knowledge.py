@@ -92,6 +92,10 @@ def write_json():
         "roadmap": K.ROADMAP,
         "models": MODEL_REGISTRY,
         "graph": build_graph(),
+        "validation": {
+            "multizone": json.loads((OUT / "validation_multizone.json").read_text(encoding="utf-8")) if (OUT / "validation_multizone.json").exists() else None,
+            "raw2025": json.loads((OUT / "verification_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_2025.json").exists() else None,
+        },
         "meta": {"accessed": K.ACCESSED, "generator": "scripts/build_knowledge.py"},
     }
     (OUT / "knowledge.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")

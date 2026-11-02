@@ -194,6 +194,7 @@ def knowledge():
         "graph": d.meta("graph"),
         "external": d.meta("external"),
         "meta": d.meta("meta"),
+        "validation": d.meta("validation"),
     }
 
 

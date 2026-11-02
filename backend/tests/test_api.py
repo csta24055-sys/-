@@ -122,3 +122,15 @@ def test_concurrent_reads_and_writes(client):
     with ThreadPoolExecutor(8) as ex:
         codes = list(ex.map(work, range(60)))
     assert set(codes) == {200}
+
+
+def test_knowledge_includes_validation(client):
+    k = client.get("/api/knowledge").json()
+    v = k["validation"]["multizone"]
+    weak = [c for c in v["cases"] if c["fan"] == "弱" and c["D_per_s"] == 0.0003][0]
+    assert weak["mean_nrmse"] < 0.3  # F-SIM-01: 弱・D=0.0003 で実測を概ね再現
+    strong = [c for c in v["cases"] if c["fan"] == "強" and c["D_per_s"] == 0.0003][0]
+    assert strong["mean_peak_ratio"] > 1.3  # 強運転では過大評価
+    raw = k["validation"]["raw2025"]
+    assert abs(raw["A_iwakuni"]["cond1"]["io_リビング"] - 0.28) < 0.01
+    assert abs(raw["C_nogata"]["cond2_final_table5"]["io_リビング"] - 0.68) < 0.01

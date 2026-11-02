@@ -100,8 +100,8 @@ class DB:
                         self.conn.execute("INSERT INTO items VALUES (?,?,?,0,?)", (kind, item["id"], json.dumps(item, ensure_ascii=False), now()))
                     elif not row["user_modified"]:
                         self.conn.execute("UPDATE items SET data=? WHERE kind=? AND id=?", (json.dumps(item, ensure_ascii=False), kind, item["id"]))
-            for key in ("roadmap", "models", "graph", "external", "meta"):
-                self.conn.execute("INSERT OR REPLACE INTO meta VALUES (?,?)", (key, json.dumps(k[key], ensure_ascii=False)))
+            for key in ("roadmap", "models", "graph", "external", "meta", "validation"):
+                self.conn.execute("INSERT OR REPLACE INTO meta VALUES (?,?)", (key, json.dumps(k.get(key), ensure_ascii=False)))
             for i, f in enumerate(sorted(REPORT_DIR.glob("*.md"))):
                 sid = f.stem
                 body = f.read_text(encoding="utf-8")

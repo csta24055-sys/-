@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartBox from './ChartBox'
-import { Card, Field, fmt, Slider } from './ui'
-import { download, toCsv } from '../core/api'
+import { Card, Field, fmt, Slider, useAsync } from './ui'
+import { api, download, toCsv } from '../core/api'
 import * as M from '../core/models'
 
 const COLORS = ['#0f5b5c', '#c8553d', '#3a6ea5', '#8a6d1e', '#6b4c9a', '#2f8f83', '#b5446e', '#555']
@@ -39,7 +39,7 @@ export default function MultiZone() {
         <Field label="発生室"><select value={srcRoom} onChange={(e) => setSrcRoom(e.target.value)}>{zones.map((z) => <option key={z}>{z}</option>)}</select></Field>
         <Field label="電気集塵機（空調室→建築ダクト）"><label className="check"><input type="checkbox" checked={ep} onChange={(e) => setEp(e.target.checked)} /> 稼働</label></Field>
         <Field label="減衰率 D [1/s]"><select value={d} onChange={(e) => setD(Number(e.target.value))}>
-          <option value={0}>0（沈着なし）</option><option value={0.00015}>0.00015（密閉BOX）</option><option value={0.0003}>0.0003（実住宅に合う値）</option></select></Field>
+          <option value={0}>0（沈着なし）</option><option value={0.00015}>0.00015（密閉BOX）</option><option value={0.0003}>0.0003（論文の合わせ込み値）</option><option value={0.000475}>0.000475（本アプリ検証: ファン弱の最適）</option><option value={0.00075}>0.00075（本アプリ検証: ファン強の最適）</option></select></Field>
       </div>
       <div className="grid2">
         <div>
@@ -66,7 +66,24 @@ export default function MultiZone() {
           const s = res.series[z]; const mx = Math.max(...s); const at = res.t_h[s.indexOf(mx)] * 60
           return <tr key={z}><td>{z}</td><td>{net.volumes[z]}</td><td>{fmt(mx, 4)}</td><td>{fmt(at, 1)}</td><td>{fmt(s[s.length - 1], 4)}</td></tr>
         })}</tbody></table></div>
+      <Validation />
       <button className="ghost" onClick={() => download('multizone.csv', toCsv(['t_h', ...zones], res.t_h.map((t, i) => [t, ...zones.map((z) => res.series[z][i])])))}>時系列CSV</button>
     </Card>
+  )
+}
+
+/** 2020年度実測との検証結果（scripts/validate_multizone.py の指標のみ） */
+function Validation() {
+  const { data } = useAsync(api.knowledge)
+  const v = data?.validation?.multizone
+  if (!v) return null
+  return (
+    <details open className="validation">
+      <summary><b>実測による検証</b>（2020年度 実験住宅・線香2本LDK発生・粉塵計3回平均, Box 1516270811625）【計算結果】</summary>
+      <div className="tablewrap"><table><thead><tr><th>ファン</th><th>D [1/s]</th><th>β [1/h]</th><th>平均NRMSE</th><th>ピーク比（計算/実測）</th><th>レターン ピーク時刻 実測/計算 [s]</th></tr></thead>
+        <tbody>{v.cases.map((c) => <tr key={c.fan + c.D_per_s}><td>{c.fan}</td><td>{c.D_per_s}</td><td>{fmt(c.beta_per_h, 2)}</td><td className={c.mean_nrmse > 0.4 ? 'warn' : ''}>{fmt(c.mean_nrmse, 2)}</td><td>{fmt(c.mean_peak_ratio, 2)}</td><td>{fmt(c.rooms['レターン']?.t_peak_meas, 0)} / {fmt(c.rooms['レターン']?.t_peak_sim, 0)}</td></tr>)}</tbody></table></div>
+      <p className="small muted">最適D（0〜0.0008 を探索）: 弱 {v.grid_best['弱']?.best_D}（NRMSE {fmt(v.grid_best['弱']?.best_nrmse, 2)}）、強 {v.grid_best['強']?.best_D}（NRMSE {fmt(v.grid_best['強']?.best_nrmse, 2)}）。
+        Dは運転条件に依存する較正係数で、還気口の応答時刻と室間差は再現できない（F-SIM-01〜04）。</p>
+    </details>
   )
 }

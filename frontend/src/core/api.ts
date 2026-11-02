@@ -24,6 +24,7 @@ export interface Knowledge {
   graph: { nodes: GraphNode[]; edges: { from: string; to: string; rel: string }[] }
   external: { id: string; title: string; url: string; note: string }[]
   meta: { accessed: string }
+  validation?: { multizone?: { cases: { fan: string; D_per_s: number; beta_per_h: number; mean_nrmse: number; mean_peak_ratio: number; rooms: Record<string, { peak_meas: number; peak_sim: number; t_peak_meas: number; t_peak_sim: number; nrmse: number }> }[]; grid_best: Record<string, { best_D: number; best_nrmse: number }> } | null }
 }
 export interface DatasetMeta { id: number; name: string; filename: string | null; sheet: string | null; study: string | null; description: string | null; provenance: string; columns: string[]; n_rows: number; created_at: string }
 export interface Dataset extends DatasetMeta { rows: unknown[][] }
