@@ -201,3 +201,8 @@ def test_multizone_ep_lowers_all_rooms():
     on = M.multizone_simulate(v, f, ep_edge=M.SHASE2021_EP_EDGE, eta_ep=0.9, **kw)
     for z in ("洋室(大)", "2階廊下・レターン", "洗面所"):
         assert on["series"][z][-1] < 0.5 * off["series"][z][-1]
+
+
+def test_lycopodium_settling_matches_shase2020():
+    # SHASE 2020（その36）: 石松子（約35 μm）の沈降速度 約3.6 cm/s
+    assert M.settling_velocity(35.0) * 100 == pytest.approx(3.6, abs=0.15)
