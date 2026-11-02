@@ -1,0 +1,4312 @@
+{
+ "studies": [
+  {
+   "id": "Y2018",
+   "fiscal_year": 2018,
+   "label": "2018年度 集塵方法",
+   "title": "住宅向け床吹出型全館空調方式における集塵方法に関する研究",
+   "question": "空調室（空気循環経路）に電気集塵機を置けば住宅全体を除塵できるか",
+   "method": "線香2本で発塵、粉塵計(KANOMAX 3442, cpm)とパーティクルカウンタ(RION KC-52)で70分測定。実住宅(オープン型)と企業実験棟(個室型)。集塵機位置(空調室/寝室)と市販清浄機3台を比較。換気回路網の一様拡散シミュレーション。",
+   "outcome": "空調室設置で全室が背景濃度以下に低下。寝室設置・各室の市販清浄機では他室に効果が及びにくい。シミュレーションは発生量を20〜25%に調整して実測に合致。",
+   "handover": "より大きな粒子での確認、線香煙の天井滞留・付着の調査",
+   "sources": [
+    "S-2018-01"
+   ]
+  },
+  {
+   "id": "Y2019",
+   "fiscal_year": 2019,
+   "label": "2019年度 臭気と粉塵",
+   "title": "全館空調方式における臭気と粉塵の拡散および消臭・集塵に関する研究（後続論文の引用による）",
+   "question": "臭気と粉塵の拡散および消臭・集塵（本論未読のため詳細不明）",
+   "method": "【不明】本論 docx は目録確認のみ",
+   "outcome": "【当事者の主張】2020年度梗概は「線香の測定ごとに濃度差があり再現性確認が必要」と要約",
+   "handover": "発生量・濃度の再現性確認",
+   "sources": [
+    "S-2019-01"
+   ]
+  },
+  {
+   "id": "Y2020",
+   "fiscal_year": 2020,
+   "label": "2020年度 拡散再現性",
+   "title": "床吹出型全館空調方式における粉塵拡散実験及びシミュレーションに関する研究",
+   "question": "粉塵拡散の再現性と簡易シミュレーションでの予測可能性",
+   "method": "6.48 m³ 実験BOXで線香1本の発生量を13回同定。実験住宅で線香2本・ファン弱5回/強3回。換気回路網シミュレーション(C値1.77から漏気を按分)。",
+   "outcome": "発生量 平均0.00695 mg/s（ばらつき最大14.4%）。同条件でも気流で拡散パターンが変わる回がある。床下・階間で25%の濃度減衰を見込むと実測と合う。",
+   "handover": "沈着・付着の物理的同定（→2021）",
+   "sources": [
+    "S-2020-01"
+   ]
+  },
+  {
+   "id": "Y2021",
+   "fiscal_year": 2021,
+   "label": "2021年度 浮遊・落下",
+   "title": "全館空調住宅を対象とした粉塵の挙動に関する基礎的実験と分析（浮遊）／落下粉塵班",
+   "question": "沈着係数βと発生量Mの同定、布団由来粉塵の拡散",
+   "method": "C=C0e^(−βt)+M/(βV)(1−e^(−βt)) による同定。8 m³ BOX（帯電防止フィルム）で布団叩き。実住宅で洋室・階間・床下のβ測定。落下班はダストサンプラー（本論未読）。",
+   "outcome": "βは理論値に近い（BOX）。実住宅βはBOX比 洋室1.3倍、階間10.7倍、床下2.3〜2.9倍。一様拡散計算は線香で実測の約0.6倍。",
+   "handover": "実生活に近い発塵での実験（→2022 中間粒径・2023 生活行動）",
+   "sources": [
+    "S-2021-01",
+    "S-2021-02"
+   ]
+  },
+  {
+   "id": "Y2022",
+   "fiscal_year": 2022,
+   "label": "2022年度 中間粒径",
+   "title": "全館空調方式の空気循環による粉塵の他居室への拡散に関する実験（中間粒径5〜45μm）",
+   "question": "5〜45μmの粉塵は循環で拡散するか、すぐ沈着するか",
+   "method": "実住宅4件で24h実測、BOXでコットンリンター0.25g（45μm篩）×7回、実験住宅で風量弱/強×集塵機ON/OFFの5条件。粒径別沈着率をシミュレーション。",
+   "outcome": "実住宅では10〜20μmが最多。5〜10μmは住宅全体へ、10〜45μmはレターン〜ダクトまで。30〜45μmは約98%が発生室に沈着。EP稼働で5〜10μmの32〜47%を集塵。",
+   "handover": "全館空調の実住宅での実態調査",
+   "sources": [
+    "S-2022-01"
+   ]
+  },
+  {
+   "id": "Y2023",
+   "fiscal_year": 2023,
+   "label": "2023年度 生活行動",
+   "title": "実住宅における生活行動と粉塵に関する研究",
+   "question": "発生場所・要因・粒径・量・頻度の実態と基準比較",
+   "method": "KC-52 を LDK に設置、4住宅で24h〜1週間。外気はそらまめくん参照。個数→質量換算（コットンリンター密度）。",
+   "outcome": "0.3〜1.0μmは外気PM2.5に追随、1μm超は生活行動（線香・夕食・入浴）で3〜5倍に上昇し数時間で低下。換算質量は0.003〜0.005 mg/m³が最頻で基準未満。",
+   "handover": "1住宅あたり測定点を増やす（→2024 多点無線センサ）",
+   "sources": [
+    "S-2023-01"
+   ]
+  },
+  {
+   "id": "Y2024",
+   "fiscal_year": 2024,
+   "label": "2024年度 空調方式比較",
+   "title": "全館空調住宅と個別空調住宅における生活行動による粉塵濃度の実態調査",
+   "question": "空調方式（個別/全館/全館+セントラル清浄）と粉塵実態の関係",
+   "method": "8住宅（個別4・全館4、うち2件セントラル型EP）、各4〜10点のワイヤレスPMセンサ（0.3〜1.0μm, μg/m³）、生活行動アンケート。",
+   "outcome": "全館空調は室間濃度が均一、浮遊時間が短く(3〜40分)、5μg/m³超過時間が短い。セントラルEP付きはI/O最小。EP停止で<1→2〜6μg/m³。",
+   "handover": "外気濃度の高い地域での検証（→2025 西日本）",
+   "sources": [
+    "S-2024-01",
+    "S-2024-02"
+   ]
+  },
+  {
+   "id": "Y2025",
+   "fiscal_year": 2025,
+   "label": "2025年度 外気・年間予測",
+   "title": "全館空調住宅における空気清浄装置が室内粉塵濃度に及ぼす影響と年間予測",
+   "question": "外気濃度の高い西日本で、外気フィルタ・EPの効果と年間室内濃度はどうなるか",
+   "method": "そらまめくん2024年度データで地点選定。岩国・下関・直方・周南の4モデルハウス（C値0.28〜0.38）で1分間隔多点測定（9/17〜12/9）。条件①EP+外気フィルタ ②外気フィルタのみ ③なし。1時間平均の原点通過回帰係数を年間外気データに乗じて予測。",
+   "outcome": "I/O: 条件①0.11〜0.28、②0.54〜1.10、③1.22。回帰係数 ①0.14 ②0.55 ③1.00。年間で5μg/m³超過は①ほぼ無し、②約40%、③約70%。黄砂時も外気由来粒子が流入。",
+   "handover": "EPの設置方法（バイパス）と送風動力（→2026）",
+   "sources": [
+    "S-2025-01",
+    "S-2025-02",
+    "S-2025-03",
+    "S-2025-04"
+   ]
+  },
+  {
+   "id": "Y2026",
+   "fiscal_year": 2026,
+   "label": "2026年度 バイパス(中間)",
+   "title": "バイパス開口率および循環風量の変化が電気集塵式空気清浄システムの特性に及ぼす影響（中間発表）",
+   "question": "バイパス開口率と循環風量が CADR と送風動力に与える影響",
+   "method": "JIS B 9908-5 準拠の装置でEP単体（100〜750 m³/h, 8段階）、JIS B 8330 準拠で送風機P-Q・電力。並列流路モデル（二分法）。",
+   "outcome": "η: 100 m³/hで≥95%、750 m³/hで82〜92%。Q=78.611ΔP^0.828。送風機は70〜90Paまで定風量、電力は3〜5倍に増加。多台数ではバイパス25〜50%でCADR最大（約730〜770 m³/h）。",
+   "handover": "（中間段階）高風量域の検証、室内濃度・年間エネルギーへの接続",
+   "sources": [
+    "S-2026-01"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "S-2026-01",
+   "box_id": "2525808527679",
+   "title": "06_バイパス開口率および循環風量の変化が電気集塵式空気清浄システムの特性に及ぼす影響.pdf",
+   "fiscal_year": 2026,
+   "kind": "中間梗概PDF",
+   "folder": "261016_建築環境・設備研究室_中間発表会/梗概",
+   "folder_id": "418511461609",
+   "status": "数値検証済み",
+   "topic": "電気集塵・バイパス・送風動力",
+   "link": "https://app.box.com/file/2525808527679",
+   "accessed": "2026-11-02",
+   "purpose": "全館空調の循環経路に設置するEPのバイパス開口率・循環風量がCADRと送風動力に及ぼす影響の解明",
+   "conditions": "EP単体: 通過風量100〜750 m³/h 8段階×各1分、EP ON/OFF。送風機: 弱・中・強、ダンパーで静圧調整。試算: 中×5〜20台、開口率0〜100%",
+   "instruments": "パーティクルカウンター(KC-52), 住宅用気密測定器, ピトー管, デジタル微差圧計(GC32), 小型風量計(TAB master mini 6750), クランプオンパワーロガー",
+   "measurements": "粒径別個数濃度[個/L], 風量Q[m³/h], 差圧ΔP[Pa], 静圧[Pa], 消費電力[W]",
+   "raw_data": "Box上では未確認（梗概のみ）",
+   "methods": "式(1) η=(1−下流/上流)×100、式(2) 累乗近似、式(3)(4) 並列流路（α=0.65, A=0.25 m², ρ=1.2）を二分法で収束",
+   "results": "η@100=≥95%, η@750=82〜92%。Q=78.611ΔP^0.828 (R²=0.9909)。定風量限界 強70/中80/弱90 Pa。電力 2.5〜5W→12〜15W。100%開口で約4W/台。5台:0%でCADR約740。多台数:25〜50%で最大約730〜770",
+   "conclusions": "風量規模に応じた最適バイパス開口率が存在し、送風動力削減と清浄性能を両立させるバイパス制御が重要",
+   "limitations": "EP単体試験の上限750 m³/hに対し試算は最大3800 m³/h（外挿）。式(2)の再計算では本文の差圧(95〜350Pa)が再現されない（F-2026-03）。バイパス空気は未清浄で室内濃度への影響は未評価",
+   "related": "Y2018(EP効率96〜98%の仕様値), Y2025(条件①の高除塵), 05_室間相互換気",
+   "pages": "p.1(目的・方法・表1), p.2(図3〜6, 式(3)(4), 図7・8, まとめ)",
+   "version": "2026-10-14 作成",
+   "notes": ""
+  },
+  {
+   "id": "S-2026-02",
+   "box_id": "2525905748973",
+   "title": "05_全館空調住宅における建具開口を介した室間相互換気に関する研究.pdf",
+   "fiscal_year": 2026,
+   "kind": "中間梗概PDF",
+   "folder": "261016_中間発表会/梗概",
+   "folder_id": "418511461609",
+   "status": "目録確認",
+   "topic": "室間換気（関連）",
+   "link": "https://app.box.com/file/2525905748973",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "多室モデルの室間流量の根拠になり得る",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2026-03",
+   "box_id": "2523687759801",
+   "title": "03_全館空調システムの評価に関する研究.pdf",
+   "fiscal_year": 2026,
+   "kind": "中間梗概PDF",
+   "folder": "261016_中間発表会/梗概",
+   "folder_id": "418511461609",
+   "status": "目録確認",
+   "topic": "全館空調評価（関連）",
+   "link": "https://app.box.com/file/2523687759801",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-01",
+   "box_id": "2166150611661",
+   "title": "清浄度 最終梗概.pdf",
+   "fiscal_year": 2025,
+   "kind": "梗概PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/卒論",
+   "folder_id": "371277772243",
+   "status": "読了",
+   "topic": "外気粉塵・空気清浄装置・年間予測",
+   "link": "https://app.box.com/file/2166150611661",
+   "accessed": "2026-11-02",
+   "purpose": "外気濃度の高い地域で外気フィルタ・EPが室内粉塵濃度に及ぼす効果を見積もり、年間予測する",
+   "conditions": "住宅A岩国(9/17〜24) B下関(9/24〜10/2) C直方(9/25〜10/16) D周南(9/17〜12/9)。C値0.28〜0.38、全て中性能外気フィルタ。条件①EP稼働+外気フィルタ ②外気フィルタのみ ③どちらもなし",
+   "instruments": "ワイヤレス粒子状物質センサー（0.3〜10μm, 1分間隔, μg/m³）、外気はセンサー＋環境省そらまめくん",
+   "measurements": "PM質量濃度[μg/m³]（各住宅5〜7点）",
+   "raw_data": "あり（測定データフォルダ 371276966151: 岩国・下関・周南・直方の xlsx）",
+   "methods": "I/O比、1時間平均の原点通過回帰（係数・R²・95%CI）、2024年度そらまめくんPM2.5×係数で年間予測（累積度数・ヒストグラム）",
+   "results": "I/O ①A0.28 D0.11 ②0.54〜1.10 ③C1.22。係数 ①0.14(0.13〜0.15,R²0.78) ②0.55(0.54〜0.56,R²0.81) ③1.00(0.93〜1.07,R²0.88)。5μg/m³超過 ①ほぼ無 ②約40% ③約70%。黄砂時(11/25〜27)外気25で室内13〜20",
+   "conclusions": "空気清浄装置でWHO年平均5μg/m³以下を保てる",
+   "limitations": "秋〜初冬のみ・各住宅1〜2か月未満。条件が住宅で交絡（住宅=条件）。センサー校正記載なし。回帰は室内発塵を誤差扱い。1時間値の自己相関によりCIが過小の可能性",
+   "related": "S-2025-02（中間版と住宅Cの条件・I/Oが不一致）, Y2024",
+   "pages": "p.1(背景・図1・表1), p.2(測定方法・表2・結果4.1〜4.3), p.3(4.4・黄砂・I/O・回帰), p.4(年間予測)",
+   "version": "2026-03-16 Box登録",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-02",
+   "box_id": "2166167881254",
+   "title": "06_外気粉塵濃度の異なる地域における住宅性能が室内粉塵濃度に及ぼす影響.pdf",
+   "fiscal_year": 2025,
+   "kind": "中間梗概PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/中間",
+   "folder_id": "371274388490",
+   "status": "読了",
+   "topic": "外気粉塵・住宅性能(C値)",
+   "link": "https://app.box.com/file/2166167881254",
+   "accessed": "2026-11-02",
+   "purpose": "外気フィルタ・外皮性能と屋内粉塵濃度の関係",
+   "conditions": "住宅A〜C（周南は未収録）。住宅C: ①9/25〜29,10/6〜11 EP+フィルタ ②9/30〜10/5 フィルタのみ ③10/12〜 全停止",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "I/O A①0.28 A②1.10 B0.90 C①0.64 C②0.71 C③1.49。C値0.3〜0.4でI/Oとの相関なし",
+   "conclusions": "",
+   "limitations": "最終版とは住宅Cの条件区分・I/Oが異なる（F-2025-06）",
+   "related": "",
+   "pages": "p.1〜2",
+   "version": "2026-03-16 Box登録",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-03",
+   "box_id": "2166168399687",
+   "title": "季節別 粉塵濃度.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/外気分析",
+   "folder_id": "371277416539",
+   "status": "読了",
+   "topic": "外気PM2.5 季節平均",
+   "link": "https://app.box.com/file/2166168399687",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "そらまめくん由来の季節平均（地点別, μg/m³）",
+   "methods": "",
+   "results": "春が最大: 直方10.7 宇部11.3 周南10.8 岩国11.4 下関13.5 奥州6.9。冬: 8.8/8.0/8.0/7.5/8.8/4.3",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "シミュレーターの外気濃度プリセットに利用（集計値のみ・原データではない）"
+  },
+  {
+   "id": "S-2025-04",
+   "box_id": "2166153157320",
+   "title": "測定地点 表.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "読了",
+   "topic": "測定条件表",
+   "link": "https://app.box.com/file/2166153157320",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "住宅Dの周辺環境が『工業地帯地域』『コンビナート地域』の2表記。住宅Cの条件区分に旧版（EP稼働期間あり）の記述が残存",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "最終版と中間版の条件差の根拠資料"
+  },
+  {
+   "id": "S-2025-05",
+   "box_id": "2166177263550",
+   "title": "本論 .pdf（2025年度）",
+   "fiscal_year": 2025,
+   "kind": "本論PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/卒論",
+   "folder_id": "371277772243",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/2166177263550",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "16.9MB。次回優先読了対象"
+  },
+  {
+   "id": "S-2025-06",
+   "box_id": "2166177333481",
+   "title": "本論 清浄度.docx",
+   "fiscal_year": 2025,
+   "kind": "本論docx",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/卒論",
+   "folder_id": "371277772243",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/2166177333481",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "99.6MB（図表埋込）"
+  },
+  {
+   "id": "S-2025-07",
+   "box_id": "2166152512367",
+   "title": "清浄度 最終パワポ.pdf",
+   "fiscal_year": 2025,
+   "kind": "発表PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/卒論",
+   "folder_id": "371277772243",
+   "status": "目録確認",
+   "topic": "発表",
+   "link": "https://app.box.com/file/2166152512367",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-08",
+   "box_id": "2166171049446",
+   "title": "清浄度 発表用.pptx",
+   "fiscal_year": 2025,
+   "kind": "発表pptx",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/卒論",
+   "folder_id": "371277772243",
+   "status": "目録確認",
+   "topic": "発表",
+   "link": "https://app.box.com/file/2166171049446",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-09",
+   "box_id": "2166176065557",
+   "title": "清浄度 最終梗概.docx",
+   "fiscal_year": 2025,
+   "kind": "梗概docx",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/卒論",
+   "folder_id": "371277772243",
+   "status": "目録確認",
+   "topic": "梗概（PDF版を読了）",
+   "link": "https://app.box.com/file/2166176065557",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-10",
+   "box_id": "2166172400435",
+   "title": "中間パワポなど.pdf",
+   "fiscal_year": 2025,
+   "kind": "発表PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/中間",
+   "folder_id": "371274388490",
+   "status": "目録確認",
+   "topic": "中間発表",
+   "link": "https://app.box.com/file/2166172400435",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-11",
+   "box_id": "2166170725713",
+   "title": "CFDの使い方.txt",
+   "fiscal_year": 2025,
+   "kind": "テキスト",
+   "folder": "住宅班/2025年度(11期)/02_清浄度",
+   "folder_id": "371274234287",
+   "status": "目録確認",
+   "topic": "CFD手順",
+   "link": "https://app.box.com/file/2166170725713",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "T-07（多室/CFD）の着手資料"
+  },
+  {
+   "id": "S-2025-12",
+   "box_id": "2166175947739",
+   "title": "Watty プログラム.docx",
+   "fiscal_year": 2025,
+   "kind": "docx",
+   "folder": "住宅班/2025年度(11期)/02_清浄度",
+   "folder_id": "371274234287",
+   "status": "目録確認",
+   "topic": "センサー（Watty）データ処理",
+   "link": "https://app.box.com/file/2166175947739",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-13",
+   "box_id": "2166150604213",
+   "title": "watty_説明書.pdf",
+   "fiscal_year": 2025,
+   "kind": "PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度",
+   "folder_id": "371274234287",
+   "status": "目録確認",
+   "topic": "センサー仕様",
+   "link": "https://app.box.com/file/2166150604213",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-14",
+   "box_id": "2166151257591",
+   "title": "wattyチャンネル表 (1).pdf",
+   "fiscal_year": 2025,
+   "kind": "PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度",
+   "folder_id": "371274234287",
+   "status": "目録確認",
+   "topic": "センサーチャンネル",
+   "link": "https://app.box.com/file/2166151257591",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-15",
+   "box_id": "2166150081033",
+   "title": "yucako ８月２７日.pdf",
+   "fiscal_year": 2025,
+   "kind": "PDF",
+   "folder": "住宅班/2025年度(11期)/02_清浄度",
+   "folder_id": "371274234287",
+   "status": "目録確認",
+   "topic": "YUCACOシステム",
+   "link": "https://app.box.com/file/2166150081033",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-16",
+   "box_id": "2166153419510",
+   "title": "累積度数曲線 都道府県別.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/外気分析",
+   "folder_id": "371277416539",
+   "status": "目録確認",
+   "topic": "外気PM2.5累積度数",
+   "link": "https://app.box.com/file/2166153419510",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-17",
+   "box_id": "2166172057752",
+   "title": "2024そらまめくん.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "外気PM2.5時系列（公開データ）",
+   "link": "https://app.box.com/file/2166172057752",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-18",
+   "box_id": "2166178300072",
+   "title": "パーティクルカウンタとWatty.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "センサー比較校正",
+   "link": "https://app.box.com/file/2166178300072",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "T-03 の基礎データ。最優先で数値検証すべき"
+  },
+  {
+   "id": "S-2025-19",
+   "box_id": "2166176643996",
+   "title": "岩国測定データ.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "実測原データ",
+   "link": "https://app.box.com/file/2166176643996",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-20",
+   "box_id": "2166151881207",
+   "title": "下関測定データ.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "実測原データ",
+   "link": "https://app.box.com/file/2166151881207",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-21",
+   "box_id": "2166152072907",
+   "title": "直方測定データ.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "実測原データ",
+   "link": "https://app.box.com/file/2166152072907",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-22",
+   "box_id": "2166168267751",
+   "title": "周南測定データ.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "実測原データ",
+   "link": "https://app.box.com/file/2166168267751",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "27MB"
+  },
+  {
+   "id": "S-2025-23",
+   "box_id": "2166173235926",
+   "title": "周南 黄砂時.xlsb",
+   "fiscal_year": 2025,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "黄砂時データ",
+   "link": "https://app.box.com/file/2166173235926",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2025-24",
+   "box_id": "2166176092224",
+   "title": "測定データ等.xlsx",
+   "fiscal_year": 2025,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2025年度(11期)/02_清浄度/測定データ",
+   "folder_id": "371276966151",
+   "status": "目録確認",
+   "topic": "実測原データ",
+   "link": "https://app.box.com/file/2166176092224",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-01",
+   "box_id": "1781130075721",
+   "title": "梗概.docx（2024年度 清浄度班）",
+   "fiscal_year": 2024,
+   "kind": "梗概docx",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "読了",
+   "topic": "空調方式と生活行動",
+   "link": "https://app.box.com/file/1781130075721",
+   "accessed": "2026-11-02",
+   "purpose": "個別空調・全館空調の実住宅で生活行動に伴う粉塵の回数・継続時間と空調方式の関係",
+   "conditions": "8住宅（千葉・東京・岩手）、各2〜5日、9〜1月。個別4（第1種/第3種換気）、全館4（第1種）、うち2件セントラル型EP",
+   "instruments": "ワイヤレス粒子状物質センサー（KC系PCと線形性確認、そらまめくんと比較と記載）",
+   "measurements": "0.3〜1.0μm 粉塵濃度[μg/m³], 1分間隔→10分平均",
+   "raw_data": "あり（実測結果フォルダ 307445872013）",
+   "methods": "",
+   "results": "I/O 個別: B0.82 A0.72 C0.35、全館: F0.43 E0.11、EP付G・Hが最小。5μg/m³超過: 個別23.9〜77.2%、全館8.5〜11%。浮遊時間 個別5分〜2h50m、全館3〜40分。住宅GでEP停止 <1→2〜6μg/m³",
+   "conclusions": "全館空調は濃度が均一で浮遊時間が短い。セントラル清浄で住宅全体を低減。個別空調は外気フィルタ＋空気清浄機の併用が有効",
+   "limitations": "各住宅1日分を抜粋して提示。季節・地域・居住者がバラバラで空調方式と交絡。0.3〜1.0μmのみ。センサー校正係数の記載なし",
+   "related": "Y2023, Y2025",
+   "pages": "本文1〜4章, 表1・表2, 図11・12",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-02",
+   "box_id": "1777484728013",
+   "title": "測定概要.xlsx（2024年度）",
+   "fiscal_year": 2024,
+   "kind": "Excel",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "読了",
+   "topic": "測定概要表",
+   "link": "https://app.box.com/file/1777484728013",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "住宅Eの築年数が『6年』（梗概表1は14年）。Sheet2では住宅記号の割当が梗概と異なる（作業途中版）",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "資料間不整合の根拠 F-X-04"
+  },
+  {
+   "id": "S-2024-03",
+   "box_id": "1781134074613",
+   "title": "本論 .pdf（2024年度）",
+   "fiscal_year": 2024,
+   "kind": "本論PDF",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/1781134074613",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-04",
+   "box_id": "1777583824332",
+   "title": "清浄度発表スライド.pptx",
+   "fiscal_year": 2024,
+   "kind": "発表pptx",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "目録確認",
+   "topic": "発表",
+   "link": "https://app.box.com/file/1777583824332",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-05",
+   "box_id": "307445247825",
+   "title": "wattyについて（フォルダ）",
+   "fiscal_year": 2024,
+   "kind": "フォルダ",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "目録確認",
+   "topic": "センサー",
+   "link": "https://app.box.com/folder/307445247825",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-06",
+   "box_id": "307445915213",
+   "title": "外気フィルタについて（フォルダ）",
+   "fiscal_year": 2024,
+   "kind": "フォルダ",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "目録確認",
+   "topic": "外気フィルタ",
+   "link": "https://app.box.com/folder/307445915213",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-07",
+   "box_id": "307445852813",
+   "title": "分析（IO比/グラフ/全測定/外気について）",
+   "fiscal_year": 2024,
+   "kind": "フォルダ",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "目録確認",
+   "topic": "解析",
+   "link": "https://app.box.com/folder/307445852813",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2024-08",
+   "box_id": "307446160013",
+   "title": "生活行動アンケート（フォルダ）",
+   "fiscal_year": 2024,
+   "kind": "フォルダ",
+   "folder": "住宅班/2024年度(10期)/清浄度班",
+   "folder_id": "305880402557",
+   "status": "目録確認",
+   "topic": "個人情報を含む可能性",
+   "link": "https://app.box.com/folder/307446160013",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "個人情報の可能性があるため本アプリでは内容を取り込まない"
+  },
+  {
+   "id": "S-2023-01",
+   "box_id": "1516369441999",
+   "title": "梗概.pdf（2023年度 清浄度班）",
+   "fiscal_year": 2023,
+   "kind": "梗概PDF",
+   "folder": "住宅班/2023年度(09期)/清浄度班/梗概・パワポ・本論",
+   "folder_id": "261229942995",
+   "status": "読了",
+   "topic": "生活行動と粉塵",
+   "link": "https://app.box.com/file/1516369441999",
+   "accessed": "2026-11-02",
+   "purpose": "粉塵の発生場所・要因・粒径・量・頻度の調査と基準比較",
+   "conditions": "4住宅（全館2・個別2）LDK、24時間〜1週間、5月〜11月",
+   "instruments": "パーティクルカウンター KC-52（0.3〜5.0μm）",
+   "measurements": "粒径別個数濃度[個/m³]、外気はSPM・PM2.5[mg/m³]（公開データ）",
+   "raw_data": "",
+   "methods": "式(1) Cm=4/3πr³Nρ（コットンリンター密度）で質量換算、頻度分布",
+   "results": "0.3〜0.5(1.0)μmは外気に追随、それ以上は生活行動依存。夕食で3.5倍、入浴で5倍。換算質量0.003〜0.005 mg/m³が最頻、0.03超は稀",
+   "conclusions": "",
+   "limitations": "測定点は1住宅1点。換算は代表径・密度に強く依存。外気と室内の単位が異なり定量比較不可",
+   "related": "",
+   "pages": "p.1〜4",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2023-02",
+   "box_id": "1516373042317",
+   "title": "本論.pdf（2023年度）",
+   "fiscal_year": 2023,
+   "kind": "本論PDF",
+   "folder": "住宅班/2023年度(09期)/清浄度班/梗概・パワポ・本論",
+   "folder_id": "261229942995",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/1516373042317",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2023-03",
+   "box_id": "261231920606",
+   "title": "発塵量の同定（フォルダ）",
+   "fiscal_year": 2023,
+   "kind": "フォルダ",
+   "folder": "住宅班/2023年度(09期)/清浄度班",
+   "folder_id": "261230569741",
+   "status": "目録確認",
+   "topic": "発塵量同定",
+   "link": "https://app.box.com/folder/261231920606",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2022-01",
+   "box_id": "1516296138205",
+   "title": "03-住宅班-清浄度-梗概.pdf",
+   "fiscal_year": 2022,
+   "kind": "梗概PDF",
+   "folder": "住宅班/2022年度(08期)/清浄度班/梗概・パワポ・本論",
+   "folder_id": "261219186094",
+   "status": "読了",
+   "topic": "中間粒径の拡散と沈着",
+   "link": "https://app.box.com/file/1516296138205",
+   "accessed": "2026-11-02",
+   "purpose": "5〜45μm粉塵の挙動（循環拡散か即沈着か）",
+   "conditions": "実住宅4件 24h（床上90cm）、BOX: コットンリンター0.25g ×7回 30分、実験住宅: 風量弱/強×EP ON/OFF 5条件",
+   "instruments": "パーティクルカウンター KC-52(改) 1.0/5/10/20/30μm以上",
+   "measurements": "粒径別個数濃度[個/m³]",
+   "raw_data": "",
+   "methods": "",
+   "results": "実住宅で10〜20μmが最多（最大約6万個/m³）。10〜20μmのβ実測は理論の0.20〜0.45倍。5〜10μmは全体へ拡散。沈着率: 5〜10μmでLDK41〜54%、EP集塵32〜47%、30〜45μmは約98%がLDK",
+   "conclusions": "",
+   "limitations": "発生量Mのばらつき大（静電気）。一様拡散仮定。実測値が計算上限を上回る粒径帯あり",
+   "related": "",
+   "pages": "p.1〜4",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2022-02",
+   "box_id": "1516304517209",
+   "title": "本論 清浄度班.pdf（2022年度）",
+   "fiscal_year": 2022,
+   "kind": "本論PDF",
+   "folder": "住宅班/2022年度(08期)/清浄度班/梗概・パワポ・本論",
+   "folder_id": "261219186094",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/1516304517209",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2022-03",
+   "box_id": "261218776786",
+   "title": "05 沈着計算（フォルダ）",
+   "fiscal_year": 2022,
+   "kind": "フォルダ",
+   "folder": "住宅班/2022年度(08期)/清浄度班",
+   "folder_id": "261219834288",
+   "status": "目録確認",
+   "topic": "沈着計算",
+   "link": "https://app.box.com/folder/261218776786",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2021-01",
+   "box_id": "1516299546149",
+   "title": "清浄度班(浮遊) 梗概.pdf",
+   "fiscal_year": 2021,
+   "kind": "梗概PDF",
+   "folder": "住宅班/2021年度(07期)/清浄度班(浮遊)/梗概 本論",
+   "folder_id": "261219001435",
+   "status": "読了",
+   "topic": "浮遊粉塵の減衰・拡散",
+   "link": "https://app.box.com/file/1516299546149",
+   "accessed": "2026-11-02",
+   "purpose": "線香・布団を発塵源としたβとMの同定、濃度減衰を見込んだシミュレーション",
+   "conditions": "BOX 4×2×2m（布団叩き1分×4・10分×3）、実住宅で洋室・階間・床下の線香β、布団拡散7条件×2回",
+   "instruments": "パーティクルカウンター KC-52、粉塵計 KANOMAX 3442",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "線香β(BOX)平均1.3×10⁻⁴ 1/s。実住宅β: 洋室1.3倍、階間10.7倍、床下2.3〜2.9倍。線香計算値は実測の約0.6倍。布団: EP ONで拡散抑制、ファン停止で拡散経路が変化",
+   "conclusions": "",
+   "limitations": "布団の発塵の再現性が低い。各条件2回のみ。0.3〜0.5μmは外気影響で除外",
+   "related": "",
+   "pages": "p.1〜4（式(1)〜(4), 表1・8, 図6）",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2021-02",
+   "box_id": "261214208781",
+   "title": "清浄度班(落下)（フォルダ）",
+   "fiscal_year": 2021,
+   "kind": "フォルダ",
+   "folder": "住宅班/2021年度(07期)/清浄度班(落下)",
+   "folder_id": "261214208781",
+   "status": "目録確認",
+   "topic": "落下粉塵（ダストサンプラー）",
+   "link": "https://app.box.com/folder/261214208781",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "Excel: ダストサンプラー.xlsx(1516273847941), 全館空調住宅・梗概作成用データ.xlsx(1516266529365), 計算式.xlsx(1516271610584)、PPT2点。梗概は未発見"
+  },
+  {
+   "id": "S-2021-03",
+   "box_id": "1516293510736",
+   "title": "清浄度班(浮遊) 本論.pdf",
+   "fiscal_year": 2021,
+   "kind": "本論PDF",
+   "folder": "住宅班/2021年度(07期)/清浄度班(浮遊)/梗概 本論",
+   "folder_id": "261219001435",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/1516293510736",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2020-01",
+   "box_id": "1516272435953",
+   "title": "2020年度 清浄度班 梗概.pdf",
+   "fiscal_year": 2020,
+   "kind": "梗概PDF",
+   "folder": "住宅班/2020年度(06期)/2020年度_清浄度班/梗概・本論・発表用PowerPoint",
+   "folder_id": "261214756451",
+   "status": "読了",
+   "topic": "拡散再現性とシミュレーション",
+   "link": "https://app.box.com/file/1516272435953",
+   "accessed": "2026-11-02",
+   "purpose": "粉塵拡散の再現性確認とシミュレーション検証",
+   "conditions": "BOX 6.48 m³ 線香1本×13回、実験住宅（C値1.77）線香2本 ファン弱×5・強×3",
+   "instruments": "粉塵計（cpm, K=1.3）、BOX",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "発生量平均0.00695 mg/s（同一条件±6.4%、条件変化±14.4%）。床下・階間25%減衰で一致",
+   "conclusions": "",
+   "limitations": "1回の測定では信頼性不足（拡散パターン変動）。K値の単位表記が2018年度と不一致",
+   "related": "",
+   "pages": "p.1〜4（式(1)(2), 表2〜5）",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2020-02",
+   "box_id": "1516269470338",
+   "title": "20210226清浄度本論.pdf",
+   "fiscal_year": 2020,
+   "kind": "本論PDF",
+   "folder": "住宅班/2020年度(06期)/2020年度_清浄度班/梗概・本論・発表用PowerPoint",
+   "folder_id": "261214756451",
+   "status": "目録確認",
+   "topic": "本論",
+   "link": "https://app.box.com/file/1516269470338",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2020-03",
+   "box_id": "1516266736330",
+   "title": "シミュレーション-iguchi.xlsx",
+   "fiscal_year": 2020,
+   "kind": "Excel(計算)",
+   "folder": "住宅班/2020年度(06期)/2020年度_清浄度班/実験データ",
+   "folder_id": "261213904406",
+   "status": "目録確認",
+   "topic": "換気回路網シミュレーション",
+   "link": "https://app.box.com/file/1516266736330",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "研究室シミュレーションの原型。T-07で読了すべき"
+  },
+  {
+   "id": "S-2020-04",
+   "box_id": "1516268756981",
+   "title": "6.48㎥ BOX実験.xlsx",
+   "fiscal_year": 2020,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2020年度(06期)/2020年度_清浄度班/実験データ",
+   "folder_id": "261213904406",
+   "status": "目録確認",
+   "topic": "BOX原データ",
+   "link": "https://app.box.com/file/1516268756981",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2020-05",
+   "box_id": "1516267763405",
+   "title": "20201210浦和実測パーティクルカウンター+風量.xlsx",
+   "fiscal_year": 2020,
+   "kind": "Excel(原データ)",
+   "folder": "住宅班/2020年度(06期)/2020年度_清浄度班/実験データ",
+   "folder_id": "261213904406",
+   "status": "目録確認",
+   "topic": "実験住宅原データ",
+   "link": "https://app.box.com/file/1516267763405",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2019-01",
+   "box_id": "1516268636726",
+   "title": "20200217本論清浄度.docx",
+   "fiscal_year": 2019,
+   "kind": "本論docx",
+   "folder": "住宅班/2019年度(05期)/個別",
+   "folder_id": "261214828548",
+   "status": "目録確認",
+   "topic": "臭気と粉塵（推定）",
+   "link": "https://app.box.com/file/1516268636726",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-2018-01",
+   "box_id": "1516271027930",
+   "title": "住宅向け床吹出型全館空調方式における集塵方法に関する研究.pdf",
+   "fiscal_year": 2018,
+   "kind": "梗概PDF",
+   "folder": "住宅班/2018年度(04期)",
+   "folder_id": "261214239843",
+   "status": "読了",
+   "topic": "集塵方法（研究の起点）",
+   "link": "https://app.box.com/file/1516271027930",
+   "accessed": "2026-11-02",
+   "purpose": "空気循環経路のEPで住宅全体の除塵が可能かの検証",
+   "conditions": "オープン型実住宅・個室型実験棟、線香2本、70分（背景10分→発塵→拡散10分→集塵）",
+   "instruments": "粉塵計 KANOMAX 3442（K=1.3×10⁻³ mg/m³/CPM）、PC RION KC-52、EP（メーカー仕様 集塵効率約98%、26W）、市販清浄機（強5.1 m³/min）",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "空調室EPで全室低下。寝室EP・市販清浄機（計918 m³/h）では他室に効果小。EP効率（仕様図から）96%@1560〜1600 m³/h。計算は発生量を20〜25%に調整で一致",
+   "conclusions": "",
+   "limitations": "各条件1回。EP効率は実測でなくメーカー図。発生量調整で沈着・成層・付着が区別されない",
+   "related": "",
+   "pages": "p.1〜4（表1〜4, 式(1), 図13〜17）",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-01",
+   "box_id": "1516903355645",
+   "title": "清浄度-計算式_by井口.pdf",
+   "fiscal_year": null,
+   "kind": "計算式PDF",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "未確認",
+   "topic": "計算式",
+   "link": "https://app.box.com/file/1516903355645",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "get_file_content でテキスト抽出できず（画像PDFと推定）、プレビュー画像も0バイト。読了扱いにしない"
+  },
+  {
+   "id": "S-REF-02",
+   "box_id": "1516901159788",
+   "title": "9789240034228-eng.pdf（WHO global air quality guidelines 2021）",
+   "fiscal_year": 2021,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "WHO AQG",
+   "link": "https://app.box.com/file/1516901159788",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "ISBNよりWHO AQG 2021と同定。PM2.5 年5・24h 15 μg/m³（各梗概の引用値と一致）"
+  },
+  {
+   "id": "S-REF-03",
+   "box_id": "1516907056770",
+   "title": "9789241550376-eng.pdf（WHO, ISBN 978-92-4-155037-6）",
+   "fiscal_year": null,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "WHO 文献（題名未確認）",
+   "link": "https://app.box.com/file/1516907056770",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-04",
+   "box_id": "1516897067114",
+   "title": "JEM1467(2015)家庭用空気清浄機.pdf",
+   "fiscal_year": 2015,
+   "kind": "規格",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "空気清浄機試験規格",
+   "link": "https://app.box.com/file/1516897067114",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "適用床面積: 換気1回/h条件で1.25→0.15 mg/m³を30分で清浄できる広さ（メーカー注記より確認）"
+  },
+  {
+   "id": "S-REF-05",
+   "box_id": "1516904600959",
+   "title": "許容濃度等の勧告2023.pdf",
+   "fiscal_year": 2023,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "産業衛生の許容濃度",
+   "link": "https://app.box.com/file/1516904600959",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-06",
+   "box_id": "1516897779805",
+   "title": "住宅環境における室内粉塵濃度の実態調査.pdf",
+   "fiscal_year": null,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "既往研究",
+   "link": "https://app.box.com/file/1516897779805",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-07",
+   "box_id": "1516896407872",
+   "title": "室内環境と空気汚染物質の挙動.pdf",
+   "fiscal_year": null,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "既往研究",
+   "link": "https://app.box.com/file/1516896407872",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-08",
+   "box_id": "1516906947719",
+   "title": "寝具からの発塵による空中浮遊菌およびダニアレルゲンの実態調査.pdf",
+   "fiscal_year": null,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "寝具発塵",
+   "link": "https://app.box.com/file/1516906947719",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-09",
+   "box_id": "1747034311186",
+   "title": "20240831_Airsympo.pdf",
+   "fiscal_year": 2024,
+   "kind": "学会資料",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "空気シンポジウム資料",
+   "link": "https://app.box.com/file/1747034311186",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-10",
+   "box_id": "261328225269",
+   "title": "240221_受領資料（ICP・SEM・XRF・イオンクロマト・空気清浄機調査）",
+   "fiscal_year": 2024,
+   "kind": "フォルダ",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "粒子組成分析",
+   "link": "https://app.box.com/folder/261328225269",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": "T-09（組成による発生源判別）の基礎"
+  },
+  {
+   "id": "S-REF-11",
+   "box_id": "1673367546115",
+   "title": "浮遊粒子状物質の粒径別個数濃度分布の実測.pdf",
+   "fiscal_year": 2024,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）/241015_受領",
+   "folder_id": "289203347006",
+   "status": "目録確認",
+   "topic": "粒径分布",
+   "link": "https://app.box.com/file/1673367546115",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-12",
+   "box_id": "300053898493",
+   "title": "shase（2019〜2024 空気調和・衛生工学会大会資料）",
+   "fiscal_year": null,
+   "kind": "フォルダ",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "学会発表",
+   "link": "https://app.box.com/folder/300053898493",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-13",
+   "box_id": "1516901111962",
+   "title": "WHOと諸外国の取り組み.pdf",
+   "fiscal_year": null,
+   "kind": "外部文献",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "政策動向",
+   "link": "https://app.box.com/file/1516901111962",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  },
+  {
+   "id": "S-REF-14",
+   "box_id": "1516904867156",
+   "title": "米EPA 粒子状物質の大気質基準を強化（EICネット）.pdf",
+   "fiscal_year": 2024,
+   "kind": "外部記事",
+   "folder": "清浄度（参考文献フォルダ）",
+   "folder_id": "261328282915",
+   "status": "目録確認",
+   "topic": "政策動向",
+   "link": "https://app.box.com/file/1516904867156",
+   "accessed": "2026-11-02",
+   "purpose": "",
+   "conditions": "",
+   "instruments": "",
+   "measurements": "",
+   "raw_data": "",
+   "methods": "",
+   "results": "",
+   "conclusions": "",
+   "limitations": "",
+   "related": "",
+   "pages": "",
+   "version": "",
+   "notes": ""
+  }
+ ],
+ "external": [
+  {
+   "id": "E-01",
+   "title": "WHO global air quality guidelines (2021)",
+   "url": "https://iris.who.int/handle/10665/345329",
+   "note": "PM2.5: 年平均5 μg/m³, 24時間15 μg/m³（研究室資料の引用値と一致）"
+  },
+  {
+   "id": "E-02",
+   "title": "ASHRAE Standard 241-2023 Control of Infectious Aerosols",
+   "url": "https://www.ashrae.org/about/news/2023/ashrae-publishes-standard-241-control-of-infectious-aerosols",
+   "note": "Equivalent Clean Airflow（ECA）: 外気・ろ過・空気清浄の効果を清浄空気量に換算する概念。空気清浄機ECA=通過風量×1パス効率（本研究のCADR定義と同型）"
+  },
+  {
+   "id": "E-03",
+   "title": "JIS B 9908-5:2019 換気用電気集じん器の性能試験方法",
+   "url": "https://www.jisc.go.jp/",
+   "note": "2026年度実験の準拠規格（梗概記載）"
+  },
+  {
+   "id": "E-04",
+   "title": "JIS B 8330:2000 送風機の試験及び検査方法",
+   "url": "https://www.jisc.go.jp/",
+   "note": "2026年度送風機試験の準拠規格"
+  },
+  {
+   "id": "E-05",
+   "title": "建築物環境衛生管理基準（浮遊粉じん 0.15 mg/m³）",
+   "url": "https://www.mhlw.go.jp/",
+   "note": "10μm以下の浮遊粉じん。たばこ煙を想定した基準で、PM2.5基準は室内に無い（2024年度梗概の整理）"
+  },
+  {
+   "id": "E-06",
+   "title": "環境省 大気汚染物質広域監視システム（そらまめくん）",
+   "url": "https://soramame.env.go.jp/",
+   "note": "2023〜2025年度の外気データ源"
+  },
+  {
+   "id": "E-07",
+   "title": "JEM1467 家庭用空気清浄機（適用床面積の考え方）",
+   "url": "https://jp.sharp/kuusei/products/fug51-spec.html",
+   "note": "換気1回/hで1.25→0.15 mg/m³（12%）まで30分（メーカー仕様注記で確認）"
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-2018-01",
+   "class": "当事者の主張",
+   "text": "空調室（循環経路）に電気集塵機を設置すると、一室で発生させた線香粉塵が住宅全体で背景濃度以下まで低下した。寝室設置や各室の市販清浄機では他室への効果が小さかった。",
+   "sources": [
+    "S-2018-01"
+   ],
+   "study": "Y2018",
+   "tags": [
+    "電気集塵",
+    "設置位置"
+   ]
+  },
+  {
+   "id": "F-2018-02",
+   "class": "分析",
+   "text": "2018年度の『発生量を20〜25%に調整』は、天井滞留・表面付着・不完全混合を一括して発生量に押し込んでおり、各要因を識別できない。2020年度の25%減衰、2021年度の実住宅βの同定はこの問題を順次分解する試みと位置づけられる。",
+   "sources": [
+    "S-2018-01",
+    "S-2020-01",
+    "S-2021-01"
+   ],
+   "study": null,
+   "tags": [
+    "シミュレーション",
+    "系譜"
+   ]
+  },
+  {
+   "id": "F-2020-01",
+   "class": "確認事実",
+   "text": "線香1本の発生量は平均0.00695 mg/s、同一条件で最大±6.4%、測定位置を変えると最大14.4%のばらつき。燃焼量の差は最大2.8%。",
+   "sources": [
+    "S-2020-01"
+   ],
+   "study": "Y2020",
+   "tags": [
+    "発生量"
+   ]
+  },
+  {
+   "id": "F-2020-02",
+   "class": "当事者の主張",
+   "text": "同一条件（ファン弱）5回のうち1回で洋室中の濃度が低く他室が高い、異なる拡散パターンが生じた。単回測定では信頼性が得られない。",
+   "sources": [
+    "S-2020-01"
+   ],
+   "study": "Y2020",
+   "tags": [
+    "再現性"
+   ]
+  },
+  {
+   "id": "F-2021-01",
+   "class": "確認事実",
+   "text": "実住宅で同定した線香の沈着係数は実験BOX比で洋室1.3倍、階間10.7倍、床下（ダクト無）2.3倍、床下（ダクト有）2.9倍。",
+   "sources": [
+    "S-2021-01"
+   ],
+   "study": "Y2021",
+   "tags": [
+    "沈着"
+   ]
+  },
+  {
+   "id": "F-2021-02",
+   "class": "当事者の主張",
+   "text": "沈着係数を反映した一様拡散シミュレーションでも線香の計算値は実測の約0.6倍で、住宅全体に一様拡散していないことが原因と推定。",
+   "sources": [
+    "S-2021-01"
+   ],
+   "study": "Y2021",
+   "tags": [
+    "シミュレーション"
+   ]
+  },
+  {
+   "id": "F-2022-01",
+   "class": "確認事実",
+   "text": "実住宅4件の24時間測定で、5〜45μm帯では10〜20μmの個数濃度が最も高かった（最大約6万個/m³）。",
+   "sources": [
+    "S-2022-01"
+   ],
+   "study": "Y2022",
+   "tags": [
+    "粒径"
+   ]
+  },
+  {
+   "id": "F-2022-02",
+   "class": "計算結果（当事者）",
+   "text": "シミュレーション上、30分で30〜45μmは約98%が発生室に沈着、5〜10μmは電気集塵機ON時に32〜47%が集塵され非居室沈着が22〜32%→0.1〜3%に減少。",
+   "sources": [
+    "S-2022-01"
+   ],
+   "study": "Y2022",
+   "tags": [
+    "沈着",
+    "電気集塵"
+   ]
+  },
+  {
+   "id": "F-2023-01",
+   "class": "当事者の主張",
+   "text": "0.3〜1.0μmの室内個数濃度は外気PM2.5と同様の時間変動を示し、1μm以上は生活行動（線香・夕食・入浴）で3〜5倍に上昇して数時間で低下した。",
+   "sources": [
+    "S-2023-01"
+   ],
+   "study": "Y2023",
+   "tags": [
+    "外気",
+    "生活行動"
+   ]
+  },
+  {
+   "id": "F-2023-02",
+   "class": "分析",
+   "text": "個数→質量換算の『0.003〜0.005 mg/m³が最頻』は、粒径帯の代表径と密度（コットンリンター）の仮定に依存する。代表径を帯の下限と上限で取ると質量は帯ごとに数倍〜数十倍変わり、基準との比較結論の頑健性は限定的。",
+   "sources": [
+    "S-2023-01"
+   ],
+   "study": "Y2023",
+   "tags": [
+    "単位換算",
+    "批判的検証"
+   ]
+  },
+  {
+   "id": "F-2024-01",
+   "class": "当事者の主張",
+   "text": "I/O比は個別空調で0.35〜0.82、全館空調で0.11〜0.43、セントラル型EP付き全館空調で最小。図中の数値列（0.82,0.72,0.43,0.35,0.11,0.11,0.06,0.43）と本文の住宅対応には曖昧さが残る。",
+   "sources": [
+    "S-2024-01"
+   ],
+   "study": "Y2024",
+   "tags": [
+    "I/O比"
+   ]
+  },
+  {
+   "id": "F-2024-02",
+   "class": "確認事実",
+   "text": "WHO年平均値5μg/m³を超えた時間割合は個別空調住宅で23.9〜77.2%、全館空調住宅で8.5〜11.0%。粉塵の浮遊時間は個別で概ね5分〜2時間50分、全館で3〜40分。",
+   "sources": [
+    "S-2024-01"
+   ],
+   "study": "Y2024",
+   "tags": [
+    "基準超過"
+   ]
+  },
+  {
+   "id": "F-2024-03",
+   "class": "確認事実",
+   "text": "セントラル型EP付き住宅GでEPを停止すると、各室濃度が約1μg/m³未満から約2〜6μg/m³へ上昇した。",
+   "sources": [
+    "S-2024-01"
+   ],
+   "study": "Y2024",
+   "tags": [
+    "電気集塵"
+   ]
+  },
+  {
+   "id": "F-2025-01",
+   "class": "確認事実",
+   "text": "I/O比は条件①（EP稼働）で住宅A0.28・D0.11、条件②（外気フィルタのみ）で0.54〜1.10、条件③（なし）で住宅C1.22。",
+   "sources": [
+    "S-2025-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "I/O比"
+   ]
+  },
+  {
+   "id": "F-2025-02",
+   "class": "確認事実",
+   "text": "1時間平均の原点通過回帰係数は条件①0.14（95%CI 0.13〜0.15, R²0.78）、②0.55（0.54〜0.56, R²0.81）、③1.00（0.93〜1.07, R²0.88）。",
+   "sources": [
+    "S-2025-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "回帰"
+   ]
+  },
+  {
+   "id": "F-2025-03",
+   "class": "予測（当事者）",
+   "text": "回帰係数×2024年度外気PM2.5による年間予測で、5μg/m³超過時間は条件①でほぼ無し、②で約40%、③で約70%。",
+   "sources": [
+    "S-2025-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "年間予測"
+   ]
+  },
+  {
+   "id": "F-2025-04",
+   "class": "確認事実",
+   "text": "黄砂飛来時（住宅D, 条件②）外気約25μg/m³で室内13〜20μg/m³となり、WHO日平均15μg/m³を超える時間帯があった。",
+   "sources": [
+    "S-2025-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "黄砂"
+   ]
+  },
+  {
+   "id": "F-2025-05",
+   "class": "当事者の主張",
+   "text": "C値0.3〜0.4の高気密住宅3件ではC値とI/O比に明確な相関は見られず、空気清浄装置による集塵が重要と示唆。",
+   "sources": [
+    "S-2025-02"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "気密"
+   ]
+  },
+  {
+   "id": "F-2025-06",
+   "class": "分析",
+   "text": "中間版と最終版で住宅Cの条件区分と数値が異なる：中間版はEP稼働期間（条件①I/O0.64）を含み②0.71・③1.49、最終版は条件①が無く②0.68・③1.22。測定地点表.xlsxにも旧区分が残る。期間の再区分または再計算が行われたと推測されるが根拠は未記載。",
+   "sources": [
+    "S-2025-01",
+    "S-2025-02",
+    "S-2025-04"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "批判的検証",
+    "不整合"
+   ]
+  },
+  {
+   "id": "F-2025-07",
+   "class": "分析",
+   "text": "回帰係数の95%CIが極めて狭い（±0.01）のは、自己相関のある1時間値を独立標本として扱い、さらに複数住宅をプールしているためと考えられる。住宅別係数のばらつき（I/O 0.54〜1.10）の方が実質的な不確かさを表す。",
+   "sources": [
+    "S-2025-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "統計",
+    "批判的検証"
+   ]
+  },
+  {
+   "id": "F-2025-08",
+   "class": "確認事実",
+   "text": "西日本測定地点の外気PM2.5季節平均は春が最大（10.7〜13.5μg/m³）、岩手県奥州市は通年で低い（4.3〜6.9）。",
+   "sources": [
+    "S-2025-03"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "外気"
+   ]
+  },
+  {
+   "id": "F-2025-09",
+   "class": "分析",
+   "text": "条件と住宅が一対一で交絡している（条件③は住宅Cのみ、条件①は住宅AとD）。回帰係数1.00は『フィルタなし』と『住宅Cの特性』を分離できない。",
+   "sources": [
+    "S-2025-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "交絡",
+    "批判的検証"
+   ]
+  },
+  {
+   "id": "F-2026-01",
+   "class": "確認事実",
+   "text": "EP単体の集塵効率は通過風量100 m³/hで全粒径95%以上、750 m³/hで82〜92%と風量増加で低下。前後差圧はQ=78.611ΔP^0.828（R²=0.9909）。",
+   "sources": [
+    "S-2026-01"
+   ],
+   "study": "Y2026",
+   "tags": [
+    "電気集塵"
+   ]
+  },
+  {
+   "id": "F-2026-02",
+   "class": "確認事実",
+   "text": "風量一定制御送風機は静圧が強70・中80・弱90 Pa程度まで風量を維持し、電力は0 Pa付近2.5〜5 Wから限界付近12〜15 Wへ約3〜5倍に増加。",
+   "sources": [
+    "S-2026-01"
+   ],
+   "study": "Y2026",
+   "tags": [
+    "送風動力"
+   ]
+  },
+  {
+   "id": "F-2026-03",
+   "class": "分析",
+   "text": "式(2)を逆算すると10台（1900 m³/h）で46.8 Pa、20台（3800 m³/h）で108 Paにしかならず、本文の『0%で95〜350 Pa程度』を再現しない。実測上限750 m³/hより上をΔP∝Q²で外挿すると97 Pa・390 Paとなり本文と整合する。試算で用いた抵抗則の明記が必要。",
+   "sources": [
+    "S-2026-01"
+   ],
+   "study": "Y2026",
+   "tags": [
+    "数値検証",
+    "批判的検証"
+   ]
+  },
+  {
+   "id": "F-2026-04",
+   "class": "計算結果",
+   "text": "本アプリの再実装で、中×5台・開口0%のCADR 741 m³/h（本文約740）、開口100%の電力約4.2 W/台（本文約4 W）を再現。最適開口率の存在と値はηの750 m³/h超での外挿方法に強く依存（線形外挿ではCADR上限が約1100 m³/hとなり本文の730〜770と一致しない）。",
+   "sources": [
+    "S-2026-01"
+   ],
+   "study": "Y2026",
+   "tags": [
+    "数値検証"
+   ]
+  },
+  {
+   "id": "F-2026-05",
+   "class": "分析",
+   "text": "並列流路モデルのCADRは装置出口の指標であり、バイパス空気が未清浄で循環する効果、外気負荷、室内発塵を含まない。室内濃度で評価するには単室/多室マスバランスとの結合が必要（本アプリのシミュレーターで結合）。",
+   "sources": [
+    "S-2026-01"
+   ],
+   "study": "Y2026",
+   "tags": [
+    "モデル"
+   ]
+  },
+  {
+   "id": "F-X-01",
+   "class": "分析",
+   "text": "研究系譜：①EP設置の可否（2018）→②再現性（2019〜2020）→③沈着の同定（2021）→④粒径拡張（2022）→⑤生活行動実態（2023〜2024）→⑥外気・地域・年間（2025）→⑦システム水力・エネルギー（2026）。実験室型→実住宅実態調査型→装置工学型と重心が移動。",
+   "sources": [
+    "S-2018-01",
+    "S-2020-01",
+    "S-2021-01",
+    "S-2022-01",
+    "S-2023-01",
+    "S-2024-01",
+    "S-2025-01",
+    "S-2026-01"
+   ],
+   "study": null,
+   "tags": [
+    "系譜"
+   ]
+  },
+  {
+   "id": "F-X-02",
+   "class": "分析",
+   "text": "測定器の変遷：粉塵計（cpm×K値）＋KC-52（2018〜2023, 1〜4台）→ワイヤレスPMセンサ多点（2024〜2025, μg/m³）→ダクト内KC-52＋気密測定器・電力ロガー（2026）。2024〜2025の多点化で空間分解能は上がったが、簡易センサの校正記録が梗概に無く、年度間の絶対値比較は困難。",
+   "sources": [
+    "S-2018-01",
+    "S-2023-01",
+    "S-2024-01",
+    "S-2025-01",
+    "S-2026-01"
+   ],
+   "study": null,
+   "tags": [
+    "測定器",
+    "批判的検証"
+   ]
+  },
+  {
+   "id": "F-X-03",
+   "class": "分析",
+   "text": "引用年月の不整合：2023年度研究が『2023.3』と引用され、2020年度研究が『2020年3月』と引用、2025年度中間版は2024年度研究を『2024.3』、最終版は『2025.9』と引用。資料台帳では年度フォルダを正とした。",
+   "sources": [
+    "S-2024-01",
+    "S-2021-01",
+    "S-2025-01",
+    "S-2025-02"
+   ],
+   "study": null,
+   "tags": [
+    "不整合"
+   ]
+  },
+  {
+   "id": "F-X-04",
+   "class": "分析",
+   "text": "2024年度 測定概要.xlsx では住宅Eの築年数6年、梗概表1では14年。",
+   "sources": [
+    "S-2024-01",
+    "S-2024-02"
+   ],
+   "study": "Y2024",
+   "tags": [
+    "不整合"
+   ]
+  },
+  {
+   "id": "F-X-05",
+   "class": "分析",
+   "text": "粉塵計の質量濃度変換係数Kが2018年度梗概では1.3×10⁻³ mg/m³/CPM、2020年度梗概では1.3（単位なし）と記載。式(1)の数値整合（平均約841 cpmで0.00695 mg/s）から前者が正しいと判断。",
+   "sources": [
+    "S-2018-01",
+    "S-2020-01"
+   ],
+   "study": null,
+   "tags": [
+    "単位",
+    "数値検証"
+   ]
+  },
+  {
+   "id": "F-X-06",
+   "class": "仮説",
+   "text": "2018年度の線香発生量『約0.0141 mg/s』は2020年度の2本分（0.0139 mg/s）とほぼ一致し、2本値を1本値と誤記した可能性がある。",
+   "sources": [
+    "S-2018-01",
+    "S-2020-01"
+   ],
+   "study": null,
+   "tags": [
+    "発生量"
+   ]
+  },
+  {
+   "id": "F-X-07",
+   "class": "分析",
+   "text": "EP効率の年度間矛盾：2018年度はメーカー性能図から1560〜1600 m³/hで96%、2021年度シミュレーションは90%、2026年度実測は750 m³/hで82〜92%。機種差・測定法差（仕様 vs 実測）・経年劣化・試験装置の漏れの競合仮説がある（H-01）。",
+   "sources": [
+    "S-2018-01",
+    "S-2021-01",
+    "S-2026-01"
+   ],
+   "study": null,
+   "tags": [
+    "電気集塵",
+    "競合仮説"
+   ]
+  },
+  {
+   "id": "F-X-09",
+   "class": "計算結果",
+   "text": "重力沈降のみの理論沈着係数（H=2 m）は1 μmで約1.8×10⁻⁵ 1/s、0.3 μmで約2×10⁻⁶ 1/s。2021年度BOXの線香β 1.3×10⁻⁴ 1/sはこれより1〜2桁大きく、サブミクロン粒子の減衰は重力沈降ではなく拡散・乱流沈着・壁面付着・BOX漏気で説明される必要がある（『理論値に近い』は粗大粒径帯に限られる）。",
+   "sources": [
+    "S-2021-01"
+   ],
+   "study": "Y2021",
+   "tags": [
+    "沈着",
+    "数値検証"
+   ]
+  },
+  {
+   "id": "F-X-10",
+   "class": "計算結果",
+   "text": "2018年度に用いた市販清浄機（強5.1 m³/min, 適用〜23畳=38 m²）は、天井高2.4 m・換気1回/h・1パス効率100%の単室モデルで12%到達時間29分となり、JEM1467の30分基準と整合する。単室モデルの実装妥当性の外部検算となる。",
+   "sources": [
+    "S-2018-01",
+    "S-REF-04"
+   ],
+   "study": null,
+   "tags": [
+    "数値検証",
+    "規格"
+   ]
+  },
+  {
+   "id": "F-X-11",
+   "class": "分析",
+   "text": "2025年度の回帰係数を単室定常モデルで逆算すると（気積240 m³・換気0.5回/h・沈着0〜0.2 /hを仮定）、外気フィルタ透過率0.55〜0.77、条件①の実効CADR 350〜490 m³/hとなる。沈着0.5 /h以上では透過率が1を超え矛盾するため、室内沈着は小さいか換気量が仮定より大きい。中×5台相当（CADR約740）なら係数は約0.10と予測され、実測0.14はやや大きい。",
+   "sources": [
+    "S-2025-01",
+    "S-2026-01"
+   ],
+   "study": "Y2025",
+   "tags": [
+    "逆解析",
+    "モデル"
+   ]
+  },
+  {
+   "id": "F-X-08",
+   "class": "分析",
+   "text": "共同研究先（空調・集塵・住宅メーカー）の協力が全年度に記載されており、対象システム（床吹出型全館空調・セントラル型EP）が一貫している。成果の一般化範囲は同方式に限定されることに留意。",
+   "sources": [
+    "S-2018-01",
+    "S-2025-01",
+    "S-2026-01"
+   ],
+   "study": null,
+   "tags": [
+    "外的妥当性"
+   ]
+  }
+ ],
+ "hypotheses": [
+  {
+   "id": "H-01",
+   "title": "EP効率の年度間差（96% vs 82〜92%）の原因",
+   "status": "未検証",
+   "related_findings": [
+    "F-X-07",
+    "F-2026-01"
+   ],
+   "competing": [
+    {
+     "label": "H-01a 機種差",
+     "text": "2018年度の仕様値は別型式（EPBAH32系）で、2026年度の全館空気清浄ユニットとは性能が異なる",
+     "test": "型式・製造年の確認、同一機での比較試験"
+    },
+    {
+     "label": "H-01b 仕様値と実測の差",
+     "text": "メーカー図は新品・規格粉体条件で、0.3μm帯の実測は低く出る",
+     "test": "JIS B 9908-5に従い規格粉体と大気塵で比較"
+    },
+    {
+     "label": "H-01c 経年劣化・汚れ",
+     "text": "電極汚れ・放電性能低下で効率が低下",
+     "test": "洗浄前後の効率測定、運転時間記録"
+    },
+    {
+     "label": "H-01d 試験装置要因",
+     "text": "ビニール接続部の漏れ・サンプリング損失で下流濃度が過大",
+     "test": "EP OFF時の上下流比（=1になるか）を確認"
+    }
+   ],
+   "expected": "H-01dはEP OFF時の上下流比で即判別可能。H-01cは洗浄で効率回復すれば支持。"
+  },
+  {
+   "id": "H-02",
+   "title": "条件②（外気フィルタのみ）でI/O比が0.54〜1.10とばらつく原因",
+   "status": "未検証",
+   "related_findings": [
+    "F-2025-01",
+    "F-2025-09"
+   ],
+   "competing": [
+    {
+     "label": "H-02a フィルタ保守状態",
+     "text": "フィルタの目詰まり・破損・施工隙間（バイパス漏れ）",
+     "test": "フィルタ前後の同時測定、差圧"
+    },
+    {
+     "label": "H-02b 室内発塵",
+     "text": "居住・生活行動による室内発生がI/Oを押し上げる",
+     "test": "夜間・不在時のみでI/Oを再計算"
+    },
+    {
+     "label": "H-02c センサー個体差",
+     "text": "簡易センサーの個体差・湿度影響",
+     "test": "測定前後の並置校正（S-2025-18）"
+    },
+    {
+     "label": "H-02d 換気経路",
+     "text": "全熱交換器の漏れや非フィルタ経路の外気侵入",
+     "test": "全熱交換器RA/SA同時測定、CO₂トレーサー"
+    }
+   ],
+   "expected": "H-02bは夜間抽出で I/O が低下すれば支持。H-02cは並置データで数値検証可能。"
+  },
+  {
+   "id": "H-03",
+   "title": "最適バイパス開口率の存在",
+   "status": "部分検証（計算）",
+   "related_findings": [
+    "F-2026-03",
+    "F-2026-04"
+   ],
+   "competing": [
+    {
+     "label": "H-03a 送風機限界仮説（著者）",
+     "text": "高風量で0%開口は送風機の定風量限界を超えるため、25〜50%で CADR 最大",
+     "test": "750 m³/h超でのEP差圧・効率の実測"
+    },
+    {
+     "label": "H-03b 外挿依存仮説",
+     "text": "最適値は750 m³/h超の抵抗則・η外挿に依存し、実測次第で0%（バイパス不要）または別の値になる",
+     "test": "同上＋本アプリでの感度分析"
+    }
+   ],
+   "expected": "抵抗則が式(2)のままなら10台でも0%開口で定風量維持（最適値は0%側）、二乗則なら25〜50%。"
+  },
+  {
+   "id": "H-04",
+   "title": "回帰係数kの通年一定性",
+   "status": "未検証",
+   "related_findings": [
+    "F-2025-03",
+    "F-2025-04"
+   ],
+   "competing": [
+    {
+     "label": "H-04a 一定",
+     "text": "kは住宅・装置で決まり季節に依らない（著者の年間予測の前提）",
+     "test": "春（黄砂・越境PM2.5期）・夏の再測定"
+    },
+    {
+     "label": "H-04b 粒径分布依存",
+     "text": "黄砂（粗大）と燃焼由来（微小）でフィルタ透過率が異なりkが変動",
+     "test": "粒径別（PC）I/O"
+    },
+    {
+     "label": "H-04c 湿度依存",
+     "text": "簡易センサーの吸湿成長と換気量の季節変化でkが変動",
+     "test": "相対湿度別の層別回帰"
+    }
+   ],
+   "expected": "春季のkが秋より有意に異なればH-04b/cを支持し、年間予測の超過率を修正。"
+  },
+  {
+   "id": "H-05",
+   "title": "一様拡散シミュレーションの過小/過大評価の原因",
+   "status": "部分検証",
+   "related_findings": [
+    "F-2018-02",
+    "F-2021-02"
+   ],
+   "competing": [
+    {
+     "label": "H-05a 不完全混合",
+     "text": "煙塊の移動・成層で測定点濃度が平均と乖離",
+     "test": "トレーサーガスでの局所空気齢測定、CFD"
+    },
+    {
+     "label": "H-05b 沈着過小評価",
+     "text": "ダクト・床下・階間の表面沈着がBOX値より大",
+     "test": "区間別β（2021年度手法）の追加測定"
+    },
+    {
+     "label": "H-05c 発生量の不確かさ",
+     "text": "線香煙の上昇・天井滞留で実効発生量が小",
+     "test": "高さ別測定"
+    }
+   ],
+   "expected": "トレーサーガス（沈着しない）で一様拡散が成立すればH-05aは棄却。"
+  },
+  {
+   "id": "H-06",
+   "title": "高気密域でC値とI/Oが無相関である理由",
+   "status": "未検証",
+   "related_findings": [
+    "F-2025-05"
+   ],
+   "competing": [
+    {
+     "label": "H-06a ろ過支配",
+     "text": "C値<0.4では隙間侵入が小さく、機械換気経路のろ過がI/Oを支配",
+     "test": "C値1〜5の住宅を含めた比較"
+    },
+    {
+     "label": "H-06b 範囲制約・標本不足",
+     "text": "C値の範囲が狭くn=3〜4では相関を検出できない",
+     "test": "検出力計算と標本追加"
+    }
+   ],
+   "expected": "C値の幅を広げても無相関ならH-06aを支持。"
+  },
+  {
+   "id": "H-07",
+   "title": "簡易PMセンサーの質量濃度の系統誤差",
+   "status": "未検証",
+   "related_findings": [
+    "F-X-02"
+   ],
+   "competing": [
+    {
+     "label": "H-07a 線形・小誤差",
+     "text": "PCと線形で係数補正のみで十分（2024年度の主張）",
+     "test": "S-2025-18 の数値検証"
+    },
+    {
+     "label": "H-07b 粒子種・湿度依存",
+     "text": "黄砂・調理煙・高湿時に感度が変化",
+     "test": "イベント別・湿度別の校正係数"
+    }
+   ],
+   "expected": "係数がイベント間で±20%以上変わればH-07bを支持。"
+  },
+  {
+   "id": "H-08",
+   "title": "バイパス制御の年間省エネ効果",
+   "status": "予測",
+   "related_findings": [
+    "F-2026-04"
+   ],
+   "competing": [
+    {
+     "label": "H-08a 有意な削減",
+     "text": "多台数系で送風電力を数十〜100 W削減でき、年間数百kWh規模",
+     "test": "電力ロガーによる実住宅年間計測"
+    },
+    {
+     "label": "H-08b 室内濃度悪化で相殺",
+     "text": "CADR低下で室内濃度が上がり、運転延長や他対策が必要",
+     "test": "ゾーンモデル＋実測"
+    }
+   ],
+   "expected": "本アプリ試算: 中×20台で0%→100%開口の電力差は約94 W（≈820 kWh/年, 連続運転・式(2)全域適用の仮定）。二乗則外挿では0%開口が定風量限界を超え比較不能【計算結果】"
+  }
+ ],
+ "questions": [
+  {
+   "id": "Q-01",
+   "priority": "高",
+   "text": "EPの750〜2000 m³/h域での差圧・粒径別効率（試算の外挿域の実測）",
+   "related": [
+    "H-03",
+    "F-2026-03"
+   ],
+   "status": "未着手"
+  },
+  {
+   "id": "Q-02",
+   "priority": "高",
+   "text": "簡易PMセンサー（Watty）とKC-52・公定法の並置校正、湿度補正",
+   "related": [
+    "H-07",
+    "S-2025-18"
+   ],
+   "status": "資料あり・未検証"
+  },
+  {
+   "id": "Q-03",
+   "priority": "高",
+   "text": "春季（黄砂・越境PM2.5）・夏季の回帰係数kとI/O",
+   "related": [
+    "H-04"
+   ],
+   "status": "未着手"
+  },
+  {
+   "id": "Q-04",
+   "priority": "中",
+   "text": "2025年度住宅Cの条件区分変更の経緯（中間→最終）",
+   "related": [
+    "F-2025-06"
+   ],
+   "status": "要確認（本論読了で解決可能性）"
+  },
+  {
+   "id": "Q-05",
+   "priority": "中",
+   "text": "外気フィルタの経年劣化と交換周期（圧力損失・捕集率）",
+   "related": [
+    "H-02"
+   ],
+   "status": "未着手"
+  },
+  {
+   "id": "Q-06",
+   "priority": "中",
+   "text": "バイパス空気を含めた室内濃度・年間エネルギーの統合評価",
+   "related": [
+    "F-2026-05",
+    "H-08"
+   ],
+   "status": "本アプリでモデル化済・実測未"
+  },
+  {
+   "id": "Q-07",
+   "priority": "中",
+   "text": "生活行動別の発塵率G（μg/h）の定量化（調理・布団・入浴・線香）",
+   "related": [
+    "F-2023-01",
+    "F-2024-02"
+   ],
+   "status": "定性的知見のみ"
+  },
+  {
+   "id": "Q-08",
+   "priority": "低",
+   "text": "清浄度-計算式_by井口.pdf の内容（テキスト抽出不可）",
+   "related": [
+    "S-REF-01"
+   ],
+   "status": "未確認"
+  },
+  {
+   "id": "Q-09",
+   "priority": "低",
+   "text": "2019年度・2021年度落下班の本論内容",
+   "related": [
+    "S-2019-01",
+    "S-2021-02"
+   ],
+   "status": "未読"
+  },
+  {
+   "id": "Q-10",
+   "priority": "中",
+   "text": "粒子組成（ICP/SEM/XRF）による外気由来・室内由来の判別",
+   "related": [
+    "S-REF-10"
+   ],
+   "status": "資料あり・未読"
+  }
+ ],
+ "themes": [
+  {
+   "id": "T-01",
+   "name": "電気集塵機の高風量域特性と抵抗則の同定",
+   "horizon": "短期",
+   "scores": {
+    "importance": 5,
+    "novelty": 3,
+    "feasibility": 5,
+    "fit": 5
+   },
+   "why_now": "2026年度の最適バイパス結論が実測範囲外（750 m³/h超）の外挿に依存しており（F-2026-03/04）、最終論文前に検証しないと結論が反転し得る。",
+   "known": "100〜750 m³/hの η と ΔP（式(2)）、送風機P-Q・電力。",
+   "unsolved": "750 m³/h超の ΔP–Q 関係（累乗則か二乗則か）と η(Q)。",
+   "hypotheses": [
+    "H-03",
+    "H-01"
+   ],
+   "equipment": "既存のJIS B 9908-5準拠装置、ポータブルファン増設または大型送風機、KC-52×2、微差圧計、気密測定器",
+   "measurements": "Q（100〜2000 m³/h, 12段階以上）、ΔP、粒径別上下流個数濃度、EP OFF時の上下流比（装置健全性）",
+   "procedure": "①EP OFFで上下流比=1を確認 ②各風量で5分安定→3分×3反復 ③電極洗浄前後で繰返し",
+   "analysis": "累乗・二乗則のAIC比較、ηの風量依存回帰、本アプリ並列流路モデルの再計算",
+   "data_needed": "Q, ΔP, 粒径別 N_up/N_down（各風量×反復）",
+   "branches": "二乗則→2026年度結論を支持（25〜50%最適）／式(2)延長→バイパス不要域が拡大／η急落→CADR上限が低く台数増の意味が小",
+   "difficulty": "低",
+   "duration_cost": "1〜2か月。既存装置流用で追加費用は送風機レンタル程度（根拠: 既存装置構成）",
+   "significance": "設計式の適用範囲確定。メーカーの選定資料に直結。",
+   "risks": "大風量の確保が困難→ダクト断面縮小で風速相似の試験に切替"
+  },
+  {
+   "id": "T-02",
+   "name": "簡易PMセンサー校正プロトコルの確立",
+   "horizon": "短期",
+   "scores": {
+    "importance": 5,
+    "novelty": 3,
+    "feasibility": 5,
+    "fit": 5
+   },
+   "why_now": "2024〜2025年度の主要結論が多点ワイヤレスセンサーに依存するが、校正係数・湿度補正の記録が梗概に無い（F-X-02）。並置データ（S-2025-18）が既に存在する。",
+   "known": "PCとの線形性を確認したとの記述（2024）。",
+   "unsolved": "個体差、湿度・粒子種（黄砂、調理）依存性、長期ドリフト。",
+   "hypotheses": [
+    "H-07",
+    "H-02"
+   ],
+   "equipment": "Watty×全台、KC-52、温湿度計、可能なら公定法相当（β線・光散乱標準機）の貸借",
+   "measurements": "並置24h×季節、イベント（線香・調理・加湿）",
+   "procedure": "①全台並置で個体差 ②湿度ステップ ③粒子種別 ④現地測定前後の再並置",
+   "analysis": "個体別一次補正、湿度補正式（κ-Köhler型）、補正前後の I/O・回帰係数再計算（本アプリのCSV解析で実施可）",
+   "data_needed": "S-2025-18 の数値、追加並置データ",
+   "branches": "補正後もI/O結論不変→2025年度結論の頑健性確認／係数変化大→年間予測の再計算",
+   "difficulty": "低",
+   "duration_cost": "1か月（既存機器のみ）",
+   "significance": "研究室の全実測研究の品質基盤。",
+   "risks": "基準器が無い→KC-52を二次標準とし不確かさを明示"
+  },
+  {
+   "id": "T-03",
+   "name": "季節・イベント別の外気侵入係数と年間予測の検証",
+   "horizon": "中期",
+   "scores": {
+    "importance": 4,
+    "novelty": 4,
+    "feasibility": 4,
+    "fit": 5
+   },
+   "why_now": "2025年度年間予測は秋季の係数を通年に適用（H-04）。春の黄砂・越境PM2.5期に係数が変わるかで超過率が変わる。",
+   "known": "条件別回帰係数（秋〜初冬）、季節平均外気濃度。",
+   "unsolved": "係数の季節変動、粒径依存、湿度依存。",
+   "hypotheses": [
+    "H-04",
+    "H-06"
+   ],
+   "equipment": "既存モデルハウス、校正済みセンサー（T-02）、PC（粒径別）",
+   "measurements": "3〜5月・7〜8月の各2週間以上、条件①②を同一住宅内で交互（ABAB）",
+   "procedure": "同一住宅内で条件を数日単位で交互に切替え、住宅と条件の交絡を除去",
+   "analysis": "住宅を変量効果とする混合モデル、自己相関考慮（ブロックブートストラップCI）",
+   "data_needed": "1分値・1時間値、そらまめくん同時刻データ",
+   "branches": "kが一定→年間予測を支持／春に増大→超過率を上方修正",
+   "difficulty": "中",
+   "duration_cost": "6か月（測定期間が律速）",
+   "significance": "地域別の空気清浄装置要否判断（西日本・九州）。",
+   "risks": "居住者の協力・測定期間確保→無人モデルハウス限定"
+  },
+  {
+   "id": "T-04",
+   "name": "バイパス制御を含む全館空調の室内濃度・エネルギー統合評価",
+   "horizon": "中期",
+   "scores": {
+    "importance": 5,
+    "novelty": 5,
+    "feasibility": 3,
+    "fit": 4
+   },
+   "why_now": "CADR最大化と送風動力削減は室内濃度で評価して初めて設計判断になる（F-2026-05）。",
+   "known": "並列流路モデル（2026）、条件別I/O（2025）、多室拡散モデル（2018〜2022）。",
+   "unsolved": "バイパス率と室内濃度・年間電力量の関係、粒径別の影響。",
+   "hypotheses": [
+    "H-08",
+    "H-03"
+   ],
+   "equipment": "実験住宅（企業実験棟）または協力モデルハウス、電力ロガー、多点センサー",
+   "measurements": "バイパス開口0/25/50/100%×風量設定、室内外濃度・電力",
+   "procedure": "開口率ステップ（各48h）を繰返し、夜間不在時の定常I/Oを評価",
+   "analysis": "本アプリの単室モデルにT-01の特性を結合し実測と比較、年間外気データで電力量・超過率を算出",
+   "data_needed": "T-01の装置特性、そらまめくん年間データ",
+   "branches": "室内濃度悪化が小→バイパス制御推奨／悪化大→風量可変制御（インバータ）案へ",
+   "difficulty": "中〜高",
+   "duration_cost": "6〜9か月",
+   "significance": "設計ガイドライン化（台数・開口率・運転モード）。",
+   "risks": "実住宅で開口率変更が困難→実験住宅で実施"
+  },
+  {
+   "id": "T-05",
+   "name": "生活行動別発塵率の同定とCADR要求量",
+   "horizon": "中期",
+   "scores": {
+    "importance": 4,
+    "novelty": 4,
+    "feasibility": 4,
+    "fit": 4
+   },
+   "why_now": "2023〜2024年度で発塵イベントの頻度・継続時間は得られたが、発塵率G[μg/h]が未定量（Q-07）。CADR設計にはGが必要。",
+   "known": "イベント頻度4〜7回/日、浮遊時間、ピーク値。",
+   "unsolved": "行動別G、粒径分布、室間移流。",
+   "hypotheses": [
+    "H-05"
+   ],
+   "equipment": "BOX（2021年度手法）、PC、センサー",
+   "measurements": "調理・布団・掃除・入浴の再現発塵、BOX内減衰",
+   "procedure": "2021年度のβ・M同定式を行動別に適用（本アプリ解析機能で同定）",
+   "analysis": "C=C0e^(−βt)+M/(βV)(1−e^(−βt)) による同定、既存実測ピークとの整合",
+   "data_needed": "1分値の立上り・減衰区間",
+   "branches": "Gが小→外気対策優先／Gが大→室内清浄（循環CADR）優先",
+   "difficulty": "中",
+   "duration_cost": "3〜4か月",
+   "significance": "居住者行動を含む設計用発塵スケジュール（JIS/JEM試験との接続）。",
+   "risks": "再現性（布団）→機械式発塵装置の自作"
+  },
+  {
+   "id": "T-06",
+   "name": "多室換気回路網モデルとCFDによる不完全混合の定量化",
+   "horizon": "中期",
+   "scores": {
+    "importance": 3,
+    "novelty": 3,
+    "feasibility": 3,
+    "fit": 4
+   },
+   "why_now": "一様拡散の過小評価（0.6倍）・調整係数（20〜25%）が繰り返し報告され、CFD手順資料（S-2025-11）が既にある。",
+   "known": "換気回路網と風量表（2018・2020）、沈着係数（2021）。",
+   "unsolved": "測定点代表性、局所濃度と平均濃度の差。",
+   "hypotheses": [
+    "H-05"
+   ],
+   "equipment": "CFDソフト（既存）、CO₂またはSF₆代替トレーサー",
+   "measurements": "トレーサー濃度多点、粉塵多点",
+   "procedure": "トレーサーで空気齢→回路網の室間流量を校正→粉塵で沈着のみを同定",
+   "analysis": "回路網とCFDの比較、換気効率指標",
+   "data_needed": "風量表（S-2020-03）",
+   "branches": "トレーサーで一様→沈着が主因／非一様→ゾーン分割の細分化",
+   "difficulty": "中",
+   "duration_cost": "4〜6か月",
+   "significance": "研究室シミュレーション資産の妥当性確立。",
+   "risks": "CFD計算資源→2次元・粗格子から開始"
+  },
+  {
+   "id": "T-07",
+   "name": "外気フィルタ・EPの長期性能劣化と維持管理費",
+   "horizon": "長期",
+   "scores": {
+    "importance": 4,
+    "novelty": 4,
+    "feasibility": 3,
+    "fit": 3
+   },
+   "why_now": "条件②のI/Oばらつきの一因として保守状態が挙げられる（H-02a）。全館空調普及に伴い維持管理費の評価需要がある。",
+   "known": "中性能フィルタ使用、保守状況は未記録。",
+   "unsolved": "運転時間と捕集率・圧損・電力の関係、交換/洗浄周期。",
+   "hypotheses": [
+    "H-02",
+    "H-01"
+   ],
+   "equipment": "差圧ロガー、定期性能試験（T-01装置）",
+   "measurements": "月次の差圧・捕集率、電力",
+   "procedure": "協力住宅で1年以上モニタリング",
+   "analysis": "劣化曲線、ライフサイクルコスト",
+   "data_needed": "運転記録",
+   "branches": "劣化が速い→保守周期提言／遅い→初期性能で設計可",
+   "difficulty": "中",
+   "duration_cost": "12か月以上",
+   "significance": "建築物の長期信頼性・維持管理計画。",
+   "risks": "長期協力の確保→研究室内実験機で加速試験"
+  },
+  {
+   "id": "T-08",
+   "name": "粒子組成分析による発生源判別",
+   "horizon": "長期",
+   "scores": {
+    "importance": 3,
+    "novelty": 5,
+    "feasibility": 2,
+    "fit": 3
+   },
+   "why_now": "外部受領資料にICP・SEM・XRF等の分析例がある（S-REF-10）。個数・質量だけでは外気由来と室内由来を分離できない。",
+   "known": "粒径による外気追随性の違い（2023）。",
+   "unsolved": "成分による由来判別、黄砂・工業由来の識別。",
+   "hypotheses": [
+    "H-04"
+   ],
+   "equipment": "ダストサンプラー（2021年度落下班）、外部分析機関",
+   "measurements": "フィルタ捕集粉の元素組成",
+   "procedure": "室内外・季節別にフィルタ捕集→外部分析",
+   "analysis": "元素比・PMF（正値行列因子分解）",
+   "data_needed": "捕集フィルタ試料",
+   "branches": "外気由来比が高い→外気対策／室内由来→循環清浄",
+   "difficulty": "高",
+   "duration_cost": "12か月、外部分析費が発生（金額は見積要）",
+   "significance": "工業地帯（周南等）立地住宅の評価。",
+   "risks": "分析費・試料量不足→捕集時間延長"
+  },
+  {
+   "id": "T-09",
+   "name": "非住宅（学校・高齢者施設）への展開可能性評価",
+   "horizon": "長期",
+   "scores": {
+    "importance": 3,
+    "novelty": 3,
+    "feasibility": 2,
+    "fit": 2
+   },
+   "why_now": "ASHRAE 241のECA概念など、清浄空気量で換気と空気清浄を統合評価する国際動向がある（E-02）。",
+   "known": "住宅（床吹出型全館空調）での知見のみ。",
+   "unsolved": "人員密度・発塵率・換気量が異なる用途での適用性。",
+   "hypotheses": [],
+   "equipment": "多点センサー、CO₂計",
+   "measurements": "教室等でのPM・CO₂・在室人数",
+   "procedure": "住宅で得たモデルを用途別パラメータで適用し実測と比較",
+   "analysis": "ECA・CADR換算、外挿の妥当性検証",
+   "data_needed": "用途別換気量・在室スケジュール",
+   "branches": "モデルが適合→設計支援に展開／不適合→用途別モデル構築",
+   "difficulty": "高",
+   "duration_cost": "12か月以上",
+   "significance": "研究の社会的展開。住宅結果の無条件外挿は不可（本アプリで警告）。",
+   "risks": "対象施設の確保"
+  }
+ ],
+ "roadmap": [
+  {
+   "phase": "短期（〜2027年3月）",
+   "items": [
+    "T-01 EP高風量域",
+    "T-02 センサー校正",
+    "2025年度本論・原データの数値検証（Q-04）"
+   ]
+  },
+  {
+   "phase": "中期（2027年度）",
+   "items": [
+    "T-03 季節別係数",
+    "T-04 統合評価",
+    "T-05 発塵率",
+    "T-06 多室/CFD"
+   ]
+  },
+  {
+   "phase": "長期（2028年度〜）",
+   "items": [
+    "T-07 長期劣化",
+    "T-08 組成分析",
+    "T-09 非住宅展開"
+   ]
+  }
+ ],
+ "models": [
+  {
+   "id": "zone_mass_balance",
+   "name": "単室完全混合マスバランス",
+   "equation": "V·dC/dt = Q_OA(1−η_OA)C_out + Q_inf·P·C_out + G − (Q_OA + Q_inf + η_EP·Q_EP)C − β·V·C",
+   "units": "V[m³], Q[m³/h], C[μg/m³], G[μg/h], β[1/h]",
+   "basis": "2018・2020年度梗概の換気式 V·dp=Q(p0−p)dt+k·dt を外気・集塵・沈着項で拡張【分析】",
+   "sources": [
+    "1516271027930",
+    "1516272435953"
+   ],
+   "validity": "住宅全体を1室とみなす瞬時一様拡散。室間濃度差・気流分布は表現しない（2020/2021年度に一様拡散仮定の誤差が報告）。"
+  },
+  {
+   "id": "bypass_parallel",
+   "name": "電気集塵機∥バイパス 並列流路モデル",
+   "equation": "N·q_fan(ΔP) = 78.611·ΔP^0.828 + 3600·α·A·√(2ΔP/ρ),  CADR = η(Q_EP)·Q_EP",
+   "units": "Q[m³/h], ΔP[Pa], A[m²], ρ[kg/m³]",
+   "basis": "2026年度中間梗概 式(2)〜(4)【当事者の主張】を再実装【計算結果】",
+   "sources": [
+    "2525808527679"
+   ],
+   "validity": "式(2)は Q=100〜750 m³/h・ΔP≈0〜17 Pa の単体実測。送風機の限界超過後特性と η の中間値は読み取り・仮定。"
+  },
+  {
+   "id": "deposition",
+   "name": "重力沈降による沈着係数",
+   "equation": "β = U/H,  U = 2·Cc·(ρp−ρ)·g·r²/(9μ)",
+   "units": "β[1/s], U[m/s], H[m], r[m]",
+   "basis": "2021年度(浮遊)梗概 式(2)(4)",
+   "sources": [
+    "1516299546149"
+   ],
+   "validity": "球形粒子・静穏空気。実住宅の階間・床下では BOX 比 2〜11 倍の β が報告（ダクト・表面積効果）。"
+  },
+  {
+   "id": "decay_fit",
+   "name": "発生・減衰の同定式",
+   "equation": "C(t) = C0·e^(−βt) + M/(βV)·(1 − e^(−βt))",
+   "units": "C[個/m³ or mg/m³], M[個/s or mg/s], V[m³]",
+   "basis": "2021年度(浮遊)梗概 式(3)",
+   "sources": [
+    "1516299546149"
+   ],
+   "validity": "閉鎖空間・一様濃度。換気がある場合 β は換気率を含む見かけ値。"
+  },
+  {
+   "id": "count_to_mass",
+   "name": "個数→質量濃度換算",
+   "equation": "Cm = (4/3)·π·r³·N·ρ",
+   "units": "Cm[mg/m³], N[個/m³], r[m], ρ[mg/m³]",
+   "basis": "2023年度梗概 式(1)",
+   "sources": [
+    "1516369441999"
+   ],
+   "validity": "球形・粒径帯代表径・密度仮定（コットンリンター）に強く依存。粒径帯幅の扱いで1桁程度変わり得る。"
+  },
+  {
+   "id": "annual_regression",
+   "name": "回帰係数による年間室内濃度予測",
+   "equation": "C_in(t) = k·C_out(t)  （1時間平均, 原点通過回帰）",
+   "units": "C[μg/m³]",
+   "basis": "2025年度最終梗概 7・8章",
+   "sources": [
+    "2166150611661"
+   ],
+   "validity": "室内発塵を無視。測定期間（秋季・数日〜2か月）の k を通年に適用する仮定。"
+  }
+ ],
+ "graph": {
+  "nodes": [
+   {
+    "id": "Y2018",
+    "type": "研究",
+    "label": "2018年度 集塵方法",
+    "detail": "空調室設置で全室が背景濃度以下に低下。寝室設置・各室の市販清浄機では他室に効果が及びにくい。シミュレーションは発生量を20〜25%に調整して実測に合致。",
+    "sources": [
+     "S-2018-01"
+    ]
+   },
+   {
+    "id": "Y2019",
+    "type": "研究",
+    "label": "2019年度 臭気と粉塵",
+    "detail": "【当事者の主張】2020年度梗概は「線香の測定ごとに濃度差があり再現性確認が必要」と要約",
+    "sources": [
+     "S-2019-01"
+    ]
+   },
+   {
+    "id": "Y2020",
+    "type": "研究",
+    "label": "2020年度 拡散再現性",
+    "detail": "発生量 平均0.00695 mg/s（ばらつき最大14.4%）。同条件でも気流で拡散パターンが変わる回がある。床下・階間で25%の濃度減衰を見込むと実測と合う。",
+    "sources": [
+     "S-2020-01"
+    ]
+   },
+   {
+    "id": "Y2021",
+    "type": "研究",
+    "label": "2021年度 浮遊・落下",
+    "detail": "βは理論値に近い（BOX）。実住宅βはBOX比 洋室1.3倍、階間10.7倍、床下2.3〜2.9倍。一様拡散計算は線香で実測の約0.6倍。",
+    "sources": [
+     "S-2021-01",
+     "S-2021-02"
+    ]
+   },
+   {
+    "id": "Y2022",
+    "type": "研究",
+    "label": "2022年度 中間粒径",
+    "detail": "実住宅では10〜20μmが最多。5〜10μmは住宅全体へ、10〜45μmはレターン〜ダクトまで。30〜45μmは約98%が発生室に沈着。EP稼働で5〜10μmの32〜47%を集塵。",
+    "sources": [
+     "S-2022-01"
+    ]
+   },
+   {
+    "id": "Y2023",
+    "type": "研究",
+    "label": "2023年度 生活行動",
+    "detail": "0.3〜1.0μmは外気PM2.5に追随、1μm超は生活行動（線香・夕食・入浴）で3〜5倍に上昇し数時間で低下。換算質量は0.003〜0.005 mg/m³が最頻で基準未満。",
+    "sources": [
+     "S-2023-01"
+    ]
+   },
+   {
+    "id": "Y2024",
+    "type": "研究",
+    "label": "2024年度 空調方式比較",
+    "detail": "全館空調は室間濃度が均一、浮遊時間が短く(3〜40分)、5μg/m³超過時間が短い。セントラルEP付きはI/O最小。EP停止で<1→2〜6μg/m³。",
+    "sources": [
+     "S-2024-01",
+     "S-2024-02"
+    ]
+   },
+   {
+    "id": "Y2025",
+    "type": "研究",
+    "label": "2025年度 外気・年間予測",
+    "detail": "I/O: 条件①0.11〜0.28、②0.54〜1.10、③1.22。回帰係数 ①0.14 ②0.55 ③1.00。年間で5μg/m³超過は①ほぼ無し、②約40%、③約70%。黄砂時も外気由来粒子が流入。",
+    "sources": [
+     "S-2025-01",
+     "S-2025-02",
+     "S-2025-03",
+     "S-2025-04"
+    ]
+   },
+   {
+    "id": "Y2026",
+    "type": "研究",
+    "label": "2026年度 バイパス(中間)",
+    "detail": "η: 100 m³/hで≥95%、750 m³/hで82〜92%。Q=78.611ΔP^0.828。送風機は70〜90Paまで定風量、電力は3〜5倍に増加。多台数ではバイパス25〜50%でCADR最大（約730〜770 m³/h）。",
+    "sources": [
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-2018-01",
+    "type": "成果",
+    "label": "F-2018-01 空調室（循環経路）に電気集塵機を設置すると、一室…",
+    "detail": "【当事者の主張】空調室（循環経路）に電気集塵機を設置すると、一室で発生させた線香粉塵が住宅全体で背景濃度以下まで低下した。寝室設置や各室の市販清浄機では他室への効果が小さかった。",
+    "sources": [
+     "S-2018-01"
+    ]
+   },
+   {
+    "id": "F-2018-02",
+    "type": "成果",
+    "label": "F-2018-02 2018年度の『発生量を20〜25%に調整』は、…",
+    "detail": "【分析】2018年度の『発生量を20〜25%に調整』は、天井滞留・表面付着・不完全混合を一括して発生量に押し込んでおり、各要因を識別できない。2020年度の25%減衰、2021年度の実住宅βの同定はこの問題を順次分解する試みと位置づけられる。",
+    "sources": [
+     "S-2018-01",
+     "S-2020-01",
+     "S-2021-01"
+    ]
+   },
+   {
+    "id": "F-2020-01",
+    "type": "成果",
+    "label": "F-2020-01 線香1本の発生量は平均0.00695 mg/s、…",
+    "detail": "【確認事実】線香1本の発生量は平均0.00695 mg/s、同一条件で最大±6.4%、測定位置を変えると最大14.4%のばらつき。燃焼量の差は最大2.8%。",
+    "sources": [
+     "S-2020-01"
+    ]
+   },
+   {
+    "id": "F-2020-02",
+    "type": "成果",
+    "label": "F-2020-02 同一条件（ファン弱）5回のうち1回で洋室中の濃度…",
+    "detail": "【当事者の主張】同一条件（ファン弱）5回のうち1回で洋室中の濃度が低く他室が高い、異なる拡散パターンが生じた。単回測定では信頼性が得られない。",
+    "sources": [
+     "S-2020-01"
+    ]
+   },
+   {
+    "id": "F-2021-01",
+    "type": "成果",
+    "label": "F-2021-01 実住宅で同定した線香の沈着係数は実験BOX比で洋…",
+    "detail": "【確認事実】実住宅で同定した線香の沈着係数は実験BOX比で洋室1.3倍、階間10.7倍、床下（ダクト無）2.3倍、床下（ダクト有）2.9倍。",
+    "sources": [
+     "S-2021-01"
+    ]
+   },
+   {
+    "id": "F-2021-02",
+    "type": "成果",
+    "label": "F-2021-02 沈着係数を反映した一様拡散シミュレーションでも線…",
+    "detail": "【当事者の主張】沈着係数を反映した一様拡散シミュレーションでも線香の計算値は実測の約0.6倍で、住宅全体に一様拡散していないことが原因と推定。",
+    "sources": [
+     "S-2021-01"
+    ]
+   },
+   {
+    "id": "F-2022-01",
+    "type": "成果",
+    "label": "F-2022-01 実住宅4件の24時間測定で、5〜45μm帯では1…",
+    "detail": "【確認事実】実住宅4件の24時間測定で、5〜45μm帯では10〜20μmの個数濃度が最も高かった（最大約6万個/m³）。",
+    "sources": [
+     "S-2022-01"
+    ]
+   },
+   {
+    "id": "F-2022-02",
+    "type": "成果",
+    "label": "F-2022-02 シミュレーション上、30分で30〜45μmは約9…",
+    "detail": "【計算結果（当事者）】シミュレーション上、30分で30〜45μmは約98%が発生室に沈着、5〜10μmは電気集塵機ON時に32〜47%が集塵され非居室沈着が22〜32%→0.1〜3%に減少。",
+    "sources": [
+     "S-2022-01"
+    ]
+   },
+   {
+    "id": "F-2023-01",
+    "type": "成果",
+    "label": "F-2023-01 0.3〜1.0μmの室内個数濃度は外気PM2.5…",
+    "detail": "【当事者の主張】0.3〜1.0μmの室内個数濃度は外気PM2.5と同様の時間変動を示し、1μm以上は生活行動（線香・夕食・入浴）で3〜5倍に上昇して数時間で低下した。",
+    "sources": [
+     "S-2023-01"
+    ]
+   },
+   {
+    "id": "F-2023-02",
+    "type": "成果",
+    "label": "F-2023-02 個数→質量換算の『0.003〜0.005 mg/…",
+    "detail": "【分析】個数→質量換算の『0.003〜0.005 mg/m³が最頻』は、粒径帯の代表径と密度（コットンリンター）の仮定に依存する。代表径を帯の下限と上限で取ると質量は帯ごとに数倍〜数十倍変わり、基準との比較結論の頑健性は限定的。",
+    "sources": [
+     "S-2023-01"
+    ]
+   },
+   {
+    "id": "F-2024-01",
+    "type": "成果",
+    "label": "F-2024-01 I/O比は個別空調で0.35〜0.82、全館空調…",
+    "detail": "【当事者の主張】I/O比は個別空調で0.35〜0.82、全館空調で0.11〜0.43、セントラル型EP付き全館空調で最小。図中の数値列（0.82,0.72,0.43,0.35,0.11,0.11,0.06,0.43）と本文の住宅対応には曖昧さが残る。",
+    "sources": [
+     "S-2024-01"
+    ]
+   },
+   {
+    "id": "F-2024-02",
+    "type": "成果",
+    "label": "F-2024-02 WHO年平均値5μg/m³を超えた時間割合は個別…",
+    "detail": "【確認事実】WHO年平均値5μg/m³を超えた時間割合は個別空調住宅で23.9〜77.2%、全館空調住宅で8.5〜11.0%。粉塵の浮遊時間は個別で概ね5分〜2時間50分、全館で3〜40分。",
+    "sources": [
+     "S-2024-01"
+    ]
+   },
+   {
+    "id": "F-2024-03",
+    "type": "成果",
+    "label": "F-2024-03 セントラル型EP付き住宅GでEPを停止すると、各…",
+    "detail": "【確認事実】セントラル型EP付き住宅GでEPを停止すると、各室濃度が約1μg/m³未満から約2〜6μg/m³へ上昇した。",
+    "sources": [
+     "S-2024-01"
+    ]
+   },
+   {
+    "id": "F-2025-01",
+    "type": "成果",
+    "label": "F-2025-01 I/O比は条件①（EP稼働）で住宅A0.28・D…",
+    "detail": "【確認事実】I/O比は条件①（EP稼働）で住宅A0.28・D0.11、条件②（外気フィルタのみ）で0.54〜1.10、条件③（なし）で住宅C1.22。",
+    "sources": [
+     "S-2025-01"
+    ]
+   },
+   {
+    "id": "F-2025-02",
+    "type": "成果",
+    "label": "F-2025-02 1時間平均の原点通過回帰係数は条件①0.14（9…",
+    "detail": "【確認事実】1時間平均の原点通過回帰係数は条件①0.14（95%CI 0.13〜0.15, R²0.78）、②0.55（0.54〜0.56, R²0.81）、③1.00（0.93〜1.07, R²0.88）。",
+    "sources": [
+     "S-2025-01"
+    ]
+   },
+   {
+    "id": "F-2025-03",
+    "type": "成果",
+    "label": "F-2025-03 回帰係数×2024年度外気PM2.5による年間予…",
+    "detail": "【予測（当事者）】回帰係数×2024年度外気PM2.5による年間予測で、5μg/m³超過時間は条件①でほぼ無し、②で約40%、③で約70%。",
+    "sources": [
+     "S-2025-01"
+    ]
+   },
+   {
+    "id": "F-2025-04",
+    "type": "成果",
+    "label": "F-2025-04 黄砂飛来時（住宅D, 条件②）外気約25μg/m…",
+    "detail": "【確認事実】黄砂飛来時（住宅D, 条件②）外気約25μg/m³で室内13〜20μg/m³となり、WHO日平均15μg/m³を超える時間帯があった。",
+    "sources": [
+     "S-2025-01"
+    ]
+   },
+   {
+    "id": "F-2025-05",
+    "type": "成果",
+    "label": "F-2025-05 C値0.3〜0.4の高気密住宅3件ではC値とI/…",
+    "detail": "【当事者の主張】C値0.3〜0.4の高気密住宅3件ではC値とI/O比に明確な相関は見られず、空気清浄装置による集塵が重要と示唆。",
+    "sources": [
+     "S-2025-02"
+    ]
+   },
+   {
+    "id": "F-2025-06",
+    "type": "成果",
+    "label": "F-2025-06 中間版と最終版で住宅Cの条件区分と数値が異なる：…",
+    "detail": "【分析】中間版と最終版で住宅Cの条件区分と数値が異なる：中間版はEP稼働期間（条件①I/O0.64）を含み②0.71・③1.49、最終版は条件①が無く②0.68・③1.22。測定地点表.xlsxにも旧区分が残る。期間の再区分または再計算が行われたと推測されるが根拠は未記載。",
+    "sources": [
+     "S-2025-01",
+     "S-2025-02",
+     "S-2025-04"
+    ]
+   },
+   {
+    "id": "F-2025-07",
+    "type": "成果",
+    "label": "F-2025-07 回帰係数の95%CIが極めて狭い（±0.01）の…",
+    "detail": "【分析】回帰係数の95%CIが極めて狭い（±0.01）のは、自己相関のある1時間値を独立標本として扱い、さらに複数住宅をプールしているためと考えられる。住宅別係数のばらつき（I/O 0.54〜1.10）の方が実質的な不確かさを表す。",
+    "sources": [
+     "S-2025-01"
+    ]
+   },
+   {
+    "id": "F-2025-08",
+    "type": "成果",
+    "label": "F-2025-08 西日本測定地点の外気PM2.5季節平均は春が最大…",
+    "detail": "【確認事実】西日本測定地点の外気PM2.5季節平均は春が最大（10.7〜13.5μg/m³）、岩手県奥州市は通年で低い（4.3〜6.9）。",
+    "sources": [
+     "S-2025-03"
+    ]
+   },
+   {
+    "id": "F-2025-09",
+    "type": "成果",
+    "label": "F-2025-09 条件と住宅が一対一で交絡している（条件③は住宅C…",
+    "detail": "【分析】条件と住宅が一対一で交絡している（条件③は住宅Cのみ、条件①は住宅AとD）。回帰係数1.00は『フィルタなし』と『住宅Cの特性』を分離できない。",
+    "sources": [
+     "S-2025-01"
+    ]
+   },
+   {
+    "id": "F-2026-01",
+    "type": "成果",
+    "label": "F-2026-01 EP単体の集塵効率は通過風量100 m³/hで全…",
+    "detail": "【確認事実】EP単体の集塵効率は通過風量100 m³/hで全粒径95%以上、750 m³/hで82〜92%と風量増加で低下。前後差圧はQ=78.611ΔP^0.828（R²=0.9909）。",
+    "sources": [
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-2026-02",
+    "type": "成果",
+    "label": "F-2026-02 風量一定制御送風機は静圧が強70・中80・弱90…",
+    "detail": "【確認事実】風量一定制御送風機は静圧が強70・中80・弱90 Pa程度まで風量を維持し、電力は0 Pa付近2.5〜5 Wから限界付近12〜15 Wへ約3〜5倍に増加。",
+    "sources": [
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-2026-03",
+    "type": "成果",
+    "label": "F-2026-03 式(2)を逆算すると10台（1900 m³/h）…",
+    "detail": "【分析】式(2)を逆算すると10台（1900 m³/h）で46.8 Pa、20台（3800 m³/h）で108 Paにしかならず、本文の『0%で95〜350 Pa程度』を再現しない。実測上限750 m³/hより上をΔP∝Q²で外挿すると97 Pa・390 Paとなり本文と整合する。試算で用いた抵抗則の明記が必要。",
+    "sources": [
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-2026-04",
+    "type": "成果",
+    "label": "F-2026-04 本アプリの再実装で、中×5台・開口0%のCADR…",
+    "detail": "【計算結果】本アプリの再実装で、中×5台・開口0%のCADR 741 m³/h（本文約740）、開口100%の電力約4.2 W/台（本文約4 W）を再現。最適開口率の存在と値はηの750 m³/h超での外挿方法に強く依存（線形外挿ではCADR上限が約1100 m³/hとなり本文の730〜770と一致しない）。",
+    "sources": [
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-2026-05",
+    "type": "成果",
+    "label": "F-2026-05 並列流路モデルのCADRは装置出口の指標であり、…",
+    "detail": "【分析】並列流路モデルのCADRは装置出口の指標であり、バイパス空気が未清浄で循環する効果、外気負荷、室内発塵を含まない。室内濃度で評価するには単室/多室マスバランスとの結合が必要（本アプリのシミュレーターで結合）。",
+    "sources": [
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-X-01",
+    "type": "成果",
+    "label": "F-X-01 研究系譜：①EP設置の可否（2018）→②再現性…",
+    "detail": "【分析】研究系譜：①EP設置の可否（2018）→②再現性（2019〜2020）→③沈着の同定（2021）→④粒径拡張（2022）→⑤生活行動実態（2023〜2024）→⑥外気・地域・年間（2025）→⑦システム水力・エネルギー（2026）。実験室型→実住宅実態調査型→装置工学型と重心が移動。",
+    "sources": [
+     "S-2018-01",
+     "S-2020-01",
+     "S-2021-01",
+     "S-2022-01",
+     "S-2023-01",
+     "S-2024-01",
+     "S-2025-01",
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-X-02",
+    "type": "成果",
+    "label": "F-X-02 測定器の変遷：粉塵計（cpm×K値）＋KC-52…",
+    "detail": "【分析】測定器の変遷：粉塵計（cpm×K値）＋KC-52（2018〜2023, 1〜4台）→ワイヤレスPMセンサ多点（2024〜2025, μg/m³）→ダクト内KC-52＋気密測定器・電力ロガー（2026）。2024〜2025の多点化で空間分解能は上がったが、簡易センサの校正記録が梗概に無く、年度間の絶対値比較は困難。",
+    "sources": [
+     "S-2018-01",
+     "S-2023-01",
+     "S-2024-01",
+     "S-2025-01",
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-X-03",
+    "type": "成果",
+    "label": "F-X-03 引用年月の不整合：2023年度研究が『2023.…",
+    "detail": "【分析】引用年月の不整合：2023年度研究が『2023.3』と引用され、2020年度研究が『2020年3月』と引用、2025年度中間版は2024年度研究を『2024.3』、最終版は『2025.9』と引用。資料台帳では年度フォルダを正とした。",
+    "sources": [
+     "S-2024-01",
+     "S-2021-01",
+     "S-2025-01",
+     "S-2025-02"
+    ]
+   },
+   {
+    "id": "F-X-04",
+    "type": "成果",
+    "label": "F-X-04 2024年度 測定概要.xlsx では住宅Eの築…",
+    "detail": "【分析】2024年度 測定概要.xlsx では住宅Eの築年数6年、梗概表1では14年。",
+    "sources": [
+     "S-2024-01",
+     "S-2024-02"
+    ]
+   },
+   {
+    "id": "F-X-05",
+    "type": "成果",
+    "label": "F-X-05 粉塵計の質量濃度変換係数Kが2018年度梗概では…",
+    "detail": "【分析】粉塵計の質量濃度変換係数Kが2018年度梗概では1.3×10⁻³ mg/m³/CPM、2020年度梗概では1.3（単位なし）と記載。式(1)の数値整合（平均約841 cpmで0.00695 mg/s）から前者が正しいと判断。",
+    "sources": [
+     "S-2018-01",
+     "S-2020-01"
+    ]
+   },
+   {
+    "id": "F-X-06",
+    "type": "成果",
+    "label": "F-X-06 2018年度の線香発生量『約0.0141 mg/…",
+    "detail": "【仮説】2018年度の線香発生量『約0.0141 mg/s』は2020年度の2本分（0.0139 mg/s）とほぼ一致し、2本値を1本値と誤記した可能性がある。",
+    "sources": [
+     "S-2018-01",
+     "S-2020-01"
+    ]
+   },
+   {
+    "id": "F-X-07",
+    "type": "成果",
+    "label": "F-X-07 EP効率の年度間矛盾：2018年度はメーカー性能…",
+    "detail": "【分析】EP効率の年度間矛盾：2018年度はメーカー性能図から1560〜1600 m³/hで96%、2021年度シミュレーションは90%、2026年度実測は750 m³/hで82〜92%。機種差・測定法差（仕様 vs 実測）・経年劣化・試験装置の漏れの競合仮説がある（H-01）。",
+    "sources": [
+     "S-2018-01",
+     "S-2021-01",
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-X-09",
+    "type": "成果",
+    "label": "F-X-09 重力沈降のみの理論沈着係数（H=2 m）は1 μ…",
+    "detail": "【計算結果】重力沈降のみの理論沈着係数（H=2 m）は1 μmで約1.8×10⁻⁵ 1/s、0.3 μmで約2×10⁻⁶ 1/s。2021年度BOXの線香β 1.3×10⁻⁴ 1/sはこれより1〜2桁大きく、サブミクロン粒子の減衰は重力沈降ではなく拡散・乱流沈着・壁面付着・BOX漏気で説明される必要がある（『理論値に近い』は粗大粒径帯に限られる）。",
+    "sources": [
+     "S-2021-01"
+    ]
+   },
+   {
+    "id": "F-X-10",
+    "type": "成果",
+    "label": "F-X-10 2018年度に用いた市販清浄機（強5.1 m³/…",
+    "detail": "【計算結果】2018年度に用いた市販清浄機（強5.1 m³/min, 適用〜23畳=38 m²）は、天井高2.4 m・換気1回/h・1パス効率100%の単室モデルで12%到達時間29分となり、JEM1467の30分基準と整合する。単室モデルの実装妥当性の外部検算となる。",
+    "sources": [
+     "S-2018-01",
+     "S-REF-04"
+    ]
+   },
+   {
+    "id": "F-X-11",
+    "type": "成果",
+    "label": "F-X-11 2025年度の回帰係数を単室定常モデルで逆算する…",
+    "detail": "【分析】2025年度の回帰係数を単室定常モデルで逆算すると（気積240 m³・換気0.5回/h・沈着0〜0.2 /hを仮定）、外気フィルタ透過率0.55〜0.77、条件①の実効CADR 350〜490 m³/hとなる。沈着0.5 /h以上では透過率が1を超え矛盾するため、室内沈着は小さいか換気量が仮定より大きい。中×5台相当（CADR約740）なら係数は約0.10と予測され、実測0.14はやや大きい。",
+    "sources": [
+     "S-2025-01",
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "F-X-08",
+    "type": "成果",
+    "label": "F-X-08 共同研究先（空調・集塵・住宅メーカー）の協力が全…",
+    "detail": "【分析】共同研究先（空調・集塵・住宅メーカー）の協力が全年度に記載されており、対象システム（床吹出型全館空調・セントラル型EP）が一貫している。成果の一般化範囲は同方式に限定されることに留意。",
+    "sources": [
+     "S-2018-01",
+     "S-2025-01",
+     "S-2026-01"
+    ]
+   },
+   {
+    "id": "D-EP",
+    "type": "装置",
+    "label": "電気集塵機（セントラル型）",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-PC",
+    "type": "装置",
+    "label": "パーティクルカウンター KC-52",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-DM",
+    "type": "装置",
+    "label": "粉塵計 KANOMAX 3442",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-WS",
+    "type": "装置",
+    "label": "ワイヤレスPMセンサー（Watty）",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-BOX",
+    "type": "装置",
+    "label": "実験BOX（1〜8 m³）",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-HOUSE",
+    "type": "装置",
+    "label": "実験住宅（床吹出型全館空調）",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-FAN",
+    "type": "装置",
+    "label": "風量一定制御送風機",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "D-AIRTIGHT",
+    "type": "装置",
+    "label": "住宅用気密測定器・微差圧計",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-COUNT",
+    "type": "測定項目",
+    "label": "粒径別個数濃度 [個/m³]",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-MASS",
+    "type": "測定項目",
+    "label": "質量濃度 [μg/m³]",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-IO",
+    "type": "測定項目",
+    "label": "I/O比",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-BETA",
+    "type": "測定項目",
+    "label": "沈着係数 β [1/s]",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-DP",
+    "type": "測定項目",
+    "label": "差圧 ΔP [Pa]・風量 Q [m³/h]",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-W",
+    "type": "測定項目",
+    "label": "消費電力 [W]",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "M-CADR",
+    "type": "測定項目",
+    "label": "CADR [m³/h]",
+    "detail": "",
+    "sources": []
+   },
+   {
+    "id": "H-01",
+    "type": "仮説",
+    "label": "EP効率の年度間差（96% vs 82〜92%）の原因",
+    "detail": "H-01dはEP OFF時の上下流比で即判別可能。H-01cは洗浄で効率回復すれば支持。",
+    "sources": []
+   },
+   {
+    "id": "H-02",
+    "type": "仮説",
+    "label": "条件②（外気フィルタのみ）でI/O比が0.54〜1.10とばらつく原因",
+    "detail": "H-02bは夜間抽出で I/O が低下すれば支持。H-02cは並置データで数値検証可能。",
+    "sources": []
+   },
+   {
+    "id": "H-03",
+    "type": "仮説",
+    "label": "最適バイパス開口率の存在",
+    "detail": "抵抗則が式(2)のままなら10台でも0%開口で定風量維持（最適値は0%側）、二乗則なら25〜50%。",
+    "sources": []
+   },
+   {
+    "id": "H-04",
+    "type": "仮説",
+    "label": "回帰係数kの通年一定性",
+    "detail": "春季のkが秋より有意に異なればH-04b/cを支持し、年間予測の超過率を修正。",
+    "sources": []
+   },
+   {
+    "id": "H-05",
+    "type": "仮説",
+    "label": "一様拡散シミュレーションの過小/過大評価の原因",
+    "detail": "トレーサーガス（沈着しない）で一様拡散が成立すればH-05aは棄却。",
+    "sources": []
+   },
+   {
+    "id": "H-06",
+    "type": "仮説",
+    "label": "高気密域でC値とI/Oが無相関である理由",
+    "detail": "C値の幅を広げても無相関ならH-06aを支持。",
+    "sources": []
+   },
+   {
+    "id": "H-07",
+    "type": "仮説",
+    "label": "簡易PMセンサーの質量濃度の系統誤差",
+    "detail": "係数がイベント間で±20%以上変わればH-07bを支持。",
+    "sources": []
+   },
+   {
+    "id": "H-08",
+    "type": "仮説",
+    "label": "バイパス制御の年間省エネ効果",
+    "detail": "本アプリ試算: 中×20台で0%→100%開口の電力差は約94 W（≈820 kWh/年, 連続運転・式(2)全域適用の仮定）。二乗則外挿では0%開口が定風量限界を超え比較不能【計算結果】",
+    "sources": []
+   },
+   {
+    "id": "Q-01",
+    "type": "未解決問題",
+    "label": "EPの750〜2000 m³/h域での差圧・粒径別効率（",
+    "detail": "EPの750〜2000 m³/h域での差圧・粒径別効率（試算の外挿域の実測）",
+    "sources": []
+   },
+   {
+    "id": "Q-02",
+    "type": "未解決問題",
+    "label": "簡易PMセンサー（Watty）とKC-52・公定法の並置",
+    "detail": "簡易PMセンサー（Watty）とKC-52・公定法の並置校正、湿度補正",
+    "sources": []
+   },
+   {
+    "id": "Q-03",
+    "type": "未解決問題",
+    "label": "春季（黄砂・越境PM2.5）・夏季の回帰係数kとI/O",
+    "detail": "春季（黄砂・越境PM2.5）・夏季の回帰係数kとI/O",
+    "sources": []
+   },
+   {
+    "id": "Q-04",
+    "type": "未解決問題",
+    "label": "2025年度住宅Cの条件区分変更の経緯（中間→最終）",
+    "detail": "2025年度住宅Cの条件区分変更の経緯（中間→最終）",
+    "sources": []
+   },
+   {
+    "id": "Q-05",
+    "type": "未解決問題",
+    "label": "外気フィルタの経年劣化と交換周期（圧力損失・捕集率）",
+    "detail": "外気フィルタの経年劣化と交換周期（圧力損失・捕集率）",
+    "sources": []
+   },
+   {
+    "id": "Q-06",
+    "type": "未解決問題",
+    "label": "バイパス空気を含めた室内濃度・年間エネルギーの統合評価",
+    "detail": "バイパス空気を含めた室内濃度・年間エネルギーの統合評価",
+    "sources": []
+   },
+   {
+    "id": "Q-07",
+    "type": "未解決問題",
+    "label": "生活行動別の発塵率G（μg/h）の定量化（調理・布団・入",
+    "detail": "生活行動別の発塵率G（μg/h）の定量化（調理・布団・入浴・線香）",
+    "sources": []
+   },
+   {
+    "id": "Q-08",
+    "type": "未解決問題",
+    "label": "清浄度-計算式_by井口.pdf の内容（テキスト抽出不",
+    "detail": "清浄度-計算式_by井口.pdf の内容（テキスト抽出不可）",
+    "sources": []
+   },
+   {
+    "id": "Q-09",
+    "type": "未解決問題",
+    "label": "2019年度・2021年度落下班の本論内容",
+    "detail": "2019年度・2021年度落下班の本論内容",
+    "sources": []
+   },
+   {
+    "id": "Q-10",
+    "type": "未解決問題",
+    "label": "粒子組成（ICP/SEM/XRF）による外気由来・室内由",
+    "detail": "粒子組成（ICP/SEM/XRF）による外気由来・室内由来の判別",
+    "sources": []
+   },
+   {
+    "id": "T-01",
+    "type": "研究テーマ",
+    "label": "電気集塵機の高風量域特性と抵抗則の同定",
+    "detail": "2026年度の最適バイパス結論が実測範囲外（750 m³/h超）の外挿に依存しており（F-2026-03/04）、最終論文前に検証しないと結論が反転し得る。",
+    "sources": []
+   },
+   {
+    "id": "T-02",
+    "type": "研究テーマ",
+    "label": "簡易PMセンサー校正プロトコルの確立",
+    "detail": "2024〜2025年度の主要結論が多点ワイヤレスセンサーに依存するが、校正係数・湿度補正の記録が梗概に無い（F-X-02）。並置データ（S-2025-18）が既に存在する。",
+    "sources": []
+   },
+   {
+    "id": "T-03",
+    "type": "研究テーマ",
+    "label": "季節・イベント別の外気侵入係数と年間予測の検証",
+    "detail": "2025年度年間予測は秋季の係数を通年に適用（H-04）。春の黄砂・越境PM2.5期に係数が変わるかで超過率が変わる。",
+    "sources": []
+   },
+   {
+    "id": "T-04",
+    "type": "研究テーマ",
+    "label": "バイパス制御を含む全館空調の室内濃度・エネルギー統合評価",
+    "detail": "CADR最大化と送風動力削減は室内濃度で評価して初めて設計判断になる（F-2026-05）。",
+    "sources": []
+   },
+   {
+    "id": "T-05",
+    "type": "研究テーマ",
+    "label": "生活行動別発塵率の同定とCADR要求量",
+    "detail": "2023〜2024年度で発塵イベントの頻度・継続時間は得られたが、発塵率G[μg/h]が未定量（Q-07）。CADR設計にはGが必要。",
+    "sources": []
+   },
+   {
+    "id": "T-06",
+    "type": "研究テーマ",
+    "label": "多室換気回路網モデルとCFDによる不完全混合の定量化",
+    "detail": "一様拡散の過小評価（0.6倍）・調整係数（20〜25%）が繰り返し報告され、CFD手順資料（S-2025-11）が既にある。",
+    "sources": []
+   },
+   {
+    "id": "T-07",
+    "type": "研究テーマ",
+    "label": "外気フィルタ・EPの長期性能劣化と維持管理費",
+    "detail": "条件②のI/Oばらつきの一因として保守状態が挙げられる（H-02a）。全館空調普及に伴い維持管理費の評価需要がある。",
+    "sources": []
+   },
+   {
+    "id": "T-08",
+    "type": "研究テーマ",
+    "label": "粒子組成分析による発生源判別",
+    "detail": "外部受領資料にICP・SEM・XRF等の分析例がある（S-REF-10）。個数・質量だけでは外気由来と室内由来を分離できない。",
+    "sources": []
+   },
+   {
+    "id": "T-09",
+    "type": "研究テーマ",
+    "label": "非住宅（学校・高齢者施設）への展開可能性評価",
+    "detail": "ASHRAE 241のECA概念など、清浄空気量で換気と空気清浄を統合評価する国際動向がある（E-02）。",
+    "sources": []
+   }
+  ],
+  "edges": [
+   {
+    "from": "Y2018",
+    "to": "Y2019",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2019",
+    "to": "Y2020",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2020",
+    "to": "Y2021",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2021",
+    "to": "Y2022",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2022",
+    "to": "Y2023",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2023",
+    "to": "Y2024",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2024",
+    "to": "Y2025",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2025",
+    "to": "Y2026",
+    "rel": "継承"
+   },
+   {
+    "from": "Y2018",
+    "to": "F-2018-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2020",
+    "to": "F-2020-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2020",
+    "to": "F-2020-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2021",
+    "to": "F-2021-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2021",
+    "to": "F-2021-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2022",
+    "to": "F-2022-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2022",
+    "to": "F-2022-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2023",
+    "to": "F-2023-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2023",
+    "to": "F-2023-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2024",
+    "to": "F-2024-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2024",
+    "to": "F-2024-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2024",
+    "to": "F-2024-03",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-03",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-04",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-05",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-06",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-07",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-08",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-2025-09",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2026",
+    "to": "F-2026-01",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2026",
+    "to": "F-2026-02",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2026",
+    "to": "F-2026-03",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2026",
+    "to": "F-2026-04",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2026",
+    "to": "F-2026-05",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2024",
+    "to": "F-X-04",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2021",
+    "to": "F-X-09",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2025",
+    "to": "F-X-11",
+    "rel": "成果"
+   },
+   {
+    "from": "Y2018",
+    "to": "D-EP",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2021",
+    "to": "D-EP",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2022",
+    "to": "D-EP",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2024",
+    "to": "D-EP",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2025",
+    "to": "D-EP",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2026",
+    "to": "D-EP",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2018",
+    "to": "D-PC",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2021",
+    "to": "D-PC",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2022",
+    "to": "D-PC",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2023",
+    "to": "D-PC",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2026",
+    "to": "D-PC",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2018",
+    "to": "D-DM",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2020",
+    "to": "D-DM",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2021",
+    "to": "D-DM",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2024",
+    "to": "D-WS",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2025",
+    "to": "D-WS",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2018",
+    "to": "D-BOX",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2020",
+    "to": "D-BOX",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2021",
+    "to": "D-BOX",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2022",
+    "to": "D-BOX",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2018",
+    "to": "D-HOUSE",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2020",
+    "to": "D-HOUSE",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2021",
+    "to": "D-HOUSE",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2022",
+    "to": "D-HOUSE",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2026",
+    "to": "D-FAN",
+    "rel": "使用"
+   },
+   {
+    "from": "Y2026",
+    "to": "D-AIRTIGHT",
+    "rel": "使用"
+   },
+   {
+    "from": "D-PC",
+    "to": "M-COUNT",
+    "rel": "測定"
+   },
+   {
+    "from": "D-WS",
+    "to": "M-MASS",
+    "rel": "測定"
+   },
+   {
+    "from": "D-DM",
+    "to": "M-MASS",
+    "rel": "測定"
+   },
+   {
+    "from": "Y2024",
+    "to": "M-IO",
+    "rel": "測定"
+   },
+   {
+    "from": "Y2025",
+    "to": "M-IO",
+    "rel": "測定"
+   },
+   {
+    "from": "Y2021",
+    "to": "M-BETA",
+    "rel": "測定"
+   },
+   {
+    "from": "Y2022",
+    "to": "M-BETA",
+    "rel": "測定"
+   },
+   {
+    "from": "D-AIRTIGHT",
+    "to": "M-DP",
+    "rel": "測定"
+   },
+   {
+    "from": "D-FAN",
+    "to": "M-W",
+    "rel": "測定"
+   },
+   {
+    "from": "Y2026",
+    "to": "M-CADR",
+    "rel": "測定"
+   },
+   {
+    "from": "F-X-07",
+    "to": "H-01",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2026-01",
+    "to": "H-01",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2025-01",
+    "to": "H-02",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2025-09",
+    "to": "H-02",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2026-03",
+    "to": "H-03",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2026-04",
+    "to": "H-03",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2025-03",
+    "to": "H-04",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2025-04",
+    "to": "H-04",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2018-02",
+    "to": "H-05",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2021-02",
+    "to": "H-05",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2025-05",
+    "to": "H-06",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-X-02",
+    "to": "H-07",
+    "rel": "根拠"
+   },
+   {
+    "from": "F-2026-04",
+    "to": "H-08",
+    "rel": "根拠"
+   },
+   {
+    "from": "H-03",
+    "to": "Q-01",
+    "rel": "未解決"
+   },
+   {
+    "from": "F-2026-03",
+    "to": "Q-01",
+    "rel": "未解決"
+   },
+   {
+    "from": "H-07",
+    "to": "Q-02",
+    "rel": "未解決"
+   },
+   {
+    "from": "H-04",
+    "to": "Q-03",
+    "rel": "未解決"
+   },
+   {
+    "from": "F-2025-06",
+    "to": "Q-04",
+    "rel": "未解決"
+   },
+   {
+    "from": "H-02",
+    "to": "Q-05",
+    "rel": "未解決"
+   },
+   {
+    "from": "F-2026-05",
+    "to": "Q-06",
+    "rel": "未解決"
+   },
+   {
+    "from": "H-08",
+    "to": "Q-06",
+    "rel": "未解決"
+   },
+   {
+    "from": "F-2023-01",
+    "to": "Q-07",
+    "rel": "未解決"
+   },
+   {
+    "from": "F-2024-02",
+    "to": "Q-07",
+    "rel": "未解決"
+   },
+   {
+    "from": "H-03",
+    "to": "T-01",
+    "rel": "検証"
+   },
+   {
+    "from": "H-01",
+    "to": "T-01",
+    "rel": "検証"
+   },
+   {
+    "from": "H-07",
+    "to": "T-02",
+    "rel": "検証"
+   },
+   {
+    "from": "H-02",
+    "to": "T-02",
+    "rel": "検証"
+   },
+   {
+    "from": "H-04",
+    "to": "T-03",
+    "rel": "検証"
+   },
+   {
+    "from": "H-06",
+    "to": "T-03",
+    "rel": "検証"
+   },
+   {
+    "from": "H-08",
+    "to": "T-04",
+    "rel": "検証"
+   },
+   {
+    "from": "H-03",
+    "to": "T-04",
+    "rel": "検証"
+   },
+   {
+    "from": "H-05",
+    "to": "T-05",
+    "rel": "検証"
+   },
+   {
+    "from": "H-05",
+    "to": "T-06",
+    "rel": "検証"
+   },
+   {
+    "from": "H-02",
+    "to": "T-07",
+    "rel": "検証"
+   },
+   {
+    "from": "H-01",
+    "to": "T-07",
+    "rel": "検証"
+   },
+   {
+    "from": "H-04",
+    "to": "T-08",
+    "rel": "検証"
+   }
+  ]
+ },
+ "meta": {
+  "accessed": "2026-11-02",
+  "generator": "scripts/build_knowledge.py"
+ }
+}
