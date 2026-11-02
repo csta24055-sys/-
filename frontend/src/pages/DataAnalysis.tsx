@@ -7,6 +7,7 @@ import { api, Dataset, download, toCsv } from '../core/api'
 import { IO_LITERATURE, REGRESSION_LITERATURE } from '../core/literature'
 import { defaultZone, zoneTimeSeries } from '../core/models'
 import * as S from '../core/stats'
+import { readXlsx } from '../core/xlsx'
 
 const COLORS = ['#0f5b5c', '#c8553d', '#3a6ea5', '#8a6d1e', '#6b4c9a', '#2f8f83', '#b5446e']
 type Mode = 'io' | 'eff' | 'dpq' | 'power' | 'decay'
@@ -32,7 +33,15 @@ export default function DataAnalysis() {
           setLocal({ id: -1, name: f.name + '（一時・未保存）', filename: f.name, sheet: null, study: null, description: 'オフライン一時解析', provenance: '利用者インポート', columns: head, rows, n_rows: rows.length, created_at: '' })
           setMsg('サーバー未接続のため一時的にブラウザ内で解析します（保存されません）: ' + e.message)
         } })
-      } else setMsg('アップロード失敗: ' + e.message + '（Excel はサーバー接続時のみ対応）')
+      } else if (/\.(xlsx|xlsm)$/i.test(f.name)) {
+        try {
+          const sheets = await readXlsx(await f.arrayBuffer())
+          if (!sheets.length) throw new Error('データのあるシートがありません')
+          const sh = sheets[0]
+          setLocal({ id: -1, name: `${f.name} [${sh.name}]（一時・未保存）`, filename: f.name, sheet: sh.name, study: null, description: `オフライン一時解析（全${sheets.length}シート中の先頭）`, provenance: '利用者インポート', columns: sh.columns, rows: sh.rows, n_rows: sh.rows.length, created_at: '' })
+          setMsg('サーバー未接続のためブラウザ内で Excel を解析します（保存されません）: ' + e.message)
+        } catch (x: any) { setMsg('Excel 読込失敗: ' + x.message) }
+      } else setMsg('アップロード失敗: ' + e.message)
     }
   }
 

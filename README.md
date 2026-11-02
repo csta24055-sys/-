@@ -16,7 +16,7 @@
 | 6 今後の研究計画 | テーマ9件の多基準評価（重み可変）、15項目の実験設計、採否と理由の記録、競合仮説、ロードマップ、未解決問題の更新 |
 | 7 総合研究レポート | 8章の報告書（Markdown管理・画面内編集）、Markdown出力、印刷→PDF |
 
-PC・iPhone 両対応（下部タブバー）。Service Worker と localStorage スナップショットにより、一度開いた画面は**オフラインでも閲覧**でき、シミュレーターと CSV 解析はオフラインで動作します。
+PC・iPhone 両対応（下部タブバー）。Service Worker と localStorage スナップショットにより、一度開いた画面は**オフラインでも閲覧**でき、シミュレーターと CSV / Excel(.xlsx) 解析はオフラインで動作します（Excel は依存ライブラリなしの自前リーダー）。
 
 ## 起動方法
 
@@ -35,7 +35,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
 
 ```bash
 .venv/bin/python -m pytest              # Python: 計算式の検算・API・永続化・並行アクセス・多室モデル（40件）
-(cd frontend && npm test)               # TypeScript: Python 実装との数値一致（24件）
+(cd frontend && npm test)               # TypeScript: Python 実装との数値一致・xlsx リーダー（26件）
 NODE_PATH=$(npm root -g) node frontend/e2e/e2e.cjs   # ブラウザE2E（起動中のサーバーに対して, 29項目）
 python scripts/make_crosscheck_fixture.py   # モデル変更時に参照値を再生成
 ```
