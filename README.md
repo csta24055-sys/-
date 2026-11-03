@@ -4,17 +4,18 @@
 
 > ⚠ **このリポジトリは公開設定です。** Box 資料の原文・原データ・個人名はコミットしていません（要旨は言い換え、出典は Box ID とページ）。研究室外への公開が不適切な場合は、GitHub の Settings → Danger Zone → Change visibility で **Private** に変更してください。
 
-## 7つの画面
+## 8つの画面
 
 | 画面 | 機能 |
 |---|---|
 | 1 研究ダッシュボード | 資料数・読了/未読・年度別状況・主要成果・未解決問題・進捗・次の作業 |
-| 2 研究資料ライブラリ | 81件の Box 資料台帳、全文検索（AND）、年度・状態・テーマ絞込、要点抽出、Box リンク、該当ページ、相互関連、調査状態とメモの編集、ローカル資料登録 |
+| 2 研究資料ライブラリ | 95件の Box 資料台帳と国内外文献23件（DOI・確認水準・支持/反証の立場）、全文検索（AND）、年度・状態・テーマ絞込、要点抽出、Box リンク、該当ページ、相互関連、調査状態とメモの編集、ローカル資料登録 |
 | 3 実験データ解析 | CSV/Excel 取込（UTF-8/Shift_JIS、複数シート）、プレビュー、欠損・異常値検出（ロバストZ）、時系列（1時間平均）、I/O比・原点通過回帰（95%CI）、粒径別除去効率、差圧–風量の累乗近似、電力–CADR、減衰からβ同定、文献値による複数研究比較、CSV/PNG出力 |
 | 4 空気清浄シミュレーター | 2026年度の並列流路モデル（EP∥バイパス, 送風機P-Q）＋単室マスバランス＋**多室（換気回路網）モデル**（SHASE2021 その40 の実験住宅13室回路網をプリセット）。換気量・循環風量・集塵効率・バイパス・室容積・外気濃度（季節プリセット）・発塵率・運転時間。式・単位・根拠・外挿警告を表示 |
 | 5 研究ナレッジグラフ | 研究→装置/測定項目→成果→仮説/未解決問題→研究テーマ（99ノード）。クリックで詳細と資料根拠 |
-| 6 今後の研究計画 | テーマ9件の多基準評価（重み可変）、実現可能性・新規性・設備・期間・失敗リスクの比較表、15項目の実験設計、採否と理由の記録、競合仮説、ロードマップ、未解決問題の更新 |
-| 7 総合研究レポート | 8章の報告書（Markdown管理・画面内編集）、Markdown出力、印刷→PDF |
+| 6 今後の研究計画 | テーマ9件の多基準評価（重み可変）、実現可能性・新規性・設備・期間・失敗リスクの比較表、15項目の実験設計、採否と理由の記録、競合仮説、ロードマップ、未解決問題の更新、**自分の研究計画の作成・編集・保存**（サーバーDB、Markdown出力） |
+| 7 総合研究レポート | 12章の報告書（Markdown管理・画面内編集）、Markdown出力、印刷→PDF、**2027年度の2冊の資料（md/docx/pdf）のダウンロード** |
+| 8 研究学習モード（/learn） | 新しい学生向けの13段階の学習順序、確認問題、メモ、進捗の保存（サーバー＋端末内） |
 
 PC・iPhone 両対応（下部タブバー）。Service Worker と localStorage スナップショットにより、一度開いた画面は**オフラインでも閲覧**でき、シミュレーターと CSV / Excel(.xlsx) 解析はオフラインで動作します（Excel は依存ライブラリなしの自前リーダー）。
 
@@ -34,13 +35,13 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
 ## テスト
 
 ```bash
-.venv/bin/python -m pytest              # Python: 計算式の検算・API・永続化・並行アクセス・多室モデル（45件）
+.venv/bin/python -m pytest              # Python: 計算式の検算・API・永続化・並行アクセス・多室モデル・原データ検証結果（56件）
 (cd frontend && npm test)               # TypeScript: Python 実装との数値一致・xlsx リーダー（26件）
-NODE_PATH=$(npm root -g) node frontend/e2e/e2e.cjs   # ブラウザE2E（起動中のサーバーに対して, 29項目）
+NODE_PATH=$(npm root -g) node frontend/e2e/e2e.cjs   # ブラウザE2E（起動中のサーバーに対して, 37項目）
 python scripts/make_crosscheck_fixture.py   # モデル変更時に参照値を再生成
 ```
 
-ブラウザ E2E（デスクトップ＋iPhone 13 表示, 29項目）の結果とスクリーンショットは `docs/screenshots/` にあります。
+ブラウザ E2E（デスクトップ＋iPhone 13 表示, 37項目）の結果とスクリーンショットは `docs/screenshots/` にあります。
 
 ## データと構成
 
@@ -51,7 +52,11 @@ frontend/src/         React + TypeScript（core/models.ts は Python の移植�
 scripts/knowledge_data.py   研究ナレッジの単一ソース（資料台帳・知見・仮説・テーマ）
 scripts/build_knowledge.py  → knowledge/knowledge.json と SOURCES/FINDINGS/HYPOTHESES/OPEN_QUESTIONS.md を生成
 scripts/make_figures.py     → docs/figures/（出典付き SVG 図表）
-report/*.md           総合研究報告書（8章）
+report/*.md           総合研究報告書（12章）
+verification/         研究単位ごとの検証監査（AUDIT.md）と再計算スクリプト・結果（集計値のみ）
+deliverables/         2027年度 研究継承総合資料・研究方針提案書（md/docx/pdf, scripts/build_books.py）
+QUALITY_AUDIT.md      完成度監査（scripts/build_audit.py が自動生成）
+EXECUTION_STATE.json / RESTART_GUIDE.md / RUN_HISTORY.md  作業の再開状態と履歴
 docs/                 年度別研究分析・研究テーマ候補一覧・図表・スクリーンショット
 private_data/         SQLite DB・取込データ（Git 管理外）
 ```
