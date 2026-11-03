@@ -46,6 +46,17 @@ def events_in(series: pd.Series):
     return out
 
 
+VOL = json.loads((ROOT / "private_data" / "raw" / "2024_volumes.json").read_text(encoding="utf-8")) if (ROOT / "private_data" / "raw" / "2024_volumes.json").exists() else {}
+
+
+def room_volume(h, room):
+    v = VOL.get(h, {})
+    if room in v:
+        return v[room]
+    rooms = [k for k in v if not k.startswith("_")]
+    return float(np.mean([v[k] for k in rooms])) if rooms else float("nan")
+
+
 def main():
     res = {"note": "2024年度1分値の室内上昇イベント（ΔC≥3 μg/m³）の減衰。τ: 1/eまでの時間、t20: 20%までの時間【計算結果】。外気変動による上昇も含み得る。", "houses": {}}
     for h, bid in R.HOUSES.items():
@@ -54,7 +65,10 @@ def main():
         for c in df.columns:
             if c == "外気":
                 continue
-            ev += events_in(df[c].dropna())
+            for e in events_in(df[c].dropna()):
+                e["room_m_ug"] = e["peak"] * room_volume(h, c)  # 瞬時放出・室内完全混合の下限推定 [μg]
+                e["house_m_ug"] = e["peak"] * VOL.get(h, {}).get("_total", float("nan"))  # 全館に均一化した場合
+                ev.append(e)
         days = (df.index.max() - df.index.min()).total_seconds() / 86400
         rooms = len(df.columns) - 1
         tau = np.array([e["tau_min"] for e in ev]); t20 = np.array([e["t20_min"] for e in ev if e["t20_min"]])
@@ -64,6 +78,9 @@ def main():
                             "t20_median_min": float(np.median(t20)) if len(t20) else None,
                             "t20_p10_p90": [float(np.percentile(t20, 10)), float(np.percentile(t20, 90))] if len(t20) > 4 else None,
                             "peak_median": float(np.median([e["peak"] for e in ev])) if ev else None,
+                            "room_mass_median_mg": float(np.median([e["room_m_ug"] for e in ev]) / 1000) if ev else None,
+                            "room_mass_p90_mg": float(np.percentile([e["room_m_ug"] for e in ev], 90) / 1000) if ev else None,
+                            "house_mass_median_mg": float(np.median([e["house_m_ug"] for e in ev]) / 1000) if ev else None,
                             "hours_top": pd.Series([e["hour"] for e in ev]).value_counts().head(3).to_dict() if ev else {}}
         r = res["houses"][h]
         print(h, TYPE[h], {k: (round(v, 2) if isinstance(v, float) else v) for k, v in r.items()})
