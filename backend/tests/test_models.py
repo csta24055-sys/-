@@ -258,3 +258,19 @@ def test_2022_sheet_verification_results_close_balance():
             assert abs(r["residual_pct"] - r["first_step_loss_pct"]) < 0.4
         if "reported" in r and r["size_um"] != "30-45":
             assert abs(r["LDK+吹抜"] - r["reported"]["LDK"]) < 0.15
+
+
+def test_2026_bypass_claims_verification():
+    """2026年度梗概の数値記述の照合（verification/R-2026/verify_2026.py）: Q²外挿が最も多く一致し、多台数のCADR最大値は除外条件なしでは再現しない。"""
+    import importlib.util, json
+    from pathlib import Path
+    p = Path(__file__).resolve().parents[2] / "verification" / "R-2026" / "verify_2026.py"
+    spec = importlib.util.spec_from_file_location("v2026", p); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    m.main()
+    res = json.loads((p.parent / "results.json").read_text(encoding="utf-8"))
+    ok = {(c["claim"], c["law"]): c["match"] for c in res["claims"]}
+    assert ok[("C1", "quad")] and not ok[("C1", "fit")]
+    assert ok[("C3", "fit")] and ok[("C3", "quad")]
+    assert not any(ok[("C4", l)] for l in ("fit", "quad", "linear"))
+    assert ok[("C4b", "quad")]
+    assert len(res["cases"]) == 60
