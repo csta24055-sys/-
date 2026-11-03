@@ -103,6 +103,8 @@ def write_json():
             "annual2025": json.loads((OUT / "verification_annual_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_annual_2025.json").exists() else None,
             "raw2025": json.loads((OUT / "verification_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_2025.json").exists() else None,
         },
+        "literature": json.loads((OUT / "literature.json").read_text(encoding="utf-8")) if (OUT / "literature.json").exists() else [],
+        "completeness": json.loads((OUT.parent / "RESEARCH_COMPLETENESS.json").read_text(encoding="utf-8")) if (OUT.parent / "RESEARCH_COMPLETENESS.json").exists() else None,
         "meta": {"accessed": K.ACCESSED, "generator": "scripts/build_knowledge.py"},
     }
     (OUT / "knowledge.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
