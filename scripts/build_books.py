@@ -89,7 +89,9 @@ def book1():
     L += ["# 第5章 過去研究の再検証で分かった注意点（よくある誤り）", T.MISTAKES, ""]
     # 第6章 文献
     lit = (ROOT / "docs" / "文献レビュー.md").read_text(encoding="utf-8")
-    lit = re.sub(r"^# .*\n", "", lit).replace("\n## ", "\n## 6. ").replace("\n### ", "\n#### ")
+    lit = re.sub(r"^# .*\n", "", lit).replace("\n### ", "\n#### ")
+    _n = iter(range(1, 100))
+    lit = re.sub(r"\n## ", lambda m: f"\n## 6.{next(_n)} ", lit)
     L += ["# 第6章 国内外の先行研究との比較", lit, ""]
     # 第7章 未解決問題
     L += ["# 第7章 研究室の未解決問題", "", "| ID | 優先 | 問題 | 状態 |", "|---|---|---|---|"]

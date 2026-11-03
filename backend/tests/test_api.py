@@ -158,6 +158,16 @@ def test_night_and_block_ci(client):
     assert n["C_cond3"]["night_0_5"]["io"] < n["C_cond3"]["all_hours"]["io"]  # F-V-12
 
 
+def test_2025_confounding_checks(client):
+    c = client.get("/api/knowledge").json()["validation"]["raw2025"]["confounding"]
+    for st in c["A"]["outdoor_strata"]:  # F-2025-27: どの外気濃度帯でも EP 稼働時の I/O が大幅に低い
+        assert st["io_ep_on"] < 0.5 * st["io_ep_off"]
+    lo, hi = c["C"]["regression"]["ratio_ci_block"]  # F-2025-28: 住宅Cの効果は区間が1を含む
+    assert lo < 1 < hi
+    aba = list(c["C_ABA"].values())
+    assert aba[1]["k"] < aba[2]["k"]  # 停止期間の k は2回目の稼働期間より低い
+
+
 def test_raw2024_io_reproduces_sheet(client):
     k = client.get("/api/knowledge").json()
     h = k["validation"]["raw2024"]["houses"]

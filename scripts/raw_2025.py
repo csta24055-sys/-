@@ -231,3 +231,92 @@ def night_main():
 
 if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "night":
     night_main()
+
+
+def _hourly(df, start, end, indoor):
+    d = df.loc[start:end] if (start or end) else df
+    oc = outdoor_col(d)
+    h = d[[indoor, oc]].resample("1h").mean().dropna()
+    h.columns = ["cin", "cout"]
+    return h
+
+
+def confound_main():
+    """2025年度の条件比較の交絡チェック（P2-OTHERS）。
+    (1) 住宅C の運転記録による ON→OFF→ON（ABA）各期間の k（日ブロックCI）: 時間傾向・季節の交絡を見る
+    (2) 外気濃度を揃えた比較: 両条件で重なる外気濃度の三分位ごとの I/O
+    (3) 1時間値の回帰 Cin = Σ_hour a_h + k·Cout + k1·Cout(t-1) + d·EP·Cout（時刻別の室内発生と外気の遅れを調整）
+    出力: knowledge/verification_2025.json の "confounding"【計算結果】
+    """
+    out = json.loads((ROOT / "knowledge" / "verification_2025.json").read_text(encoding="utf-8"))
+    a = parse_minute_block(RAW / "S-2025-19_iwakuni.txt")
+    c = parse_minute_block(RAW / "S-2025-21_nogata.txt")
+    T = pd.Timestamp
+    res: dict = {"note": "2025年度の条件比較の交絡チェック【計算結果】。k=1時間平均の原点通過回帰、CI=日ブロック・ブートストラップ"}
+    # (1) ABA
+    aba = {
+        "C_A1_EP_on (9/25〜9/29 18時)": (T("2025-09-25"), T("2025-09-29 17:59")),
+        "C_B_EP_off (9/29 18時〜10/6 6:30)": (T("2025-09-29 18:00"), T("2025-10-06 06:29")),
+        "C_A2_EP_on (10/6 6:30〜10/12 10時)": (T("2025-10-06 06:30"), T("2025-10-12 09:59")),
+    }
+    res["C_ABA"] = {k: k_with_block_bootstrap(c, s, e, "リビング") for k, (s, e) in aba.items()}
+    # (2)(3) 住宅A（条件①EP / 条件②）と 住宅C（運転記録の EP on 2期間 / off）
+    sets = {
+        "A": (a, [(None, T("2025-09-20 16:59"), 1), (T("2025-09-20 17:00"), None, 0)]),
+        "C": (c, [(s, e, 0 if "off" in k else 1) for k, (s, e) in aba.items()]),
+    }
+    for name, (df, parts) in sets.items():
+        hs = []
+        for s, e, ep in parts:
+            h = _hourly(df, s, e, "リビング")
+            h["cout_lag1"] = h["cout"].shift(1)
+            h["ep"] = ep
+            hs.append(h.dropna())
+        H = pd.concat(hs)
+        # (2) 外気三分位（両条件で共通の区切り）
+        q = np.quantile(H["cout"], [0, 1 / 3, 2 / 3, 1])
+        strata = []
+        for i in range(3):
+            m = (H["cout"] >= q[i]) & (H["cout"] <= q[i + 1])
+            row = {"cout_range": [round(float(q[i]), 2), round(float(q[i + 1]), 2)]}
+            for ep in (1, 0):
+                g = H[m & (H["ep"] == ep)]
+                row["io_ep_on" if ep else "io_ep_off"] = float(g["cin"].mean() / g["cout"].mean()) if len(g) >= 5 else None
+                row["n_on" if ep else "n_off"] = int(len(g))
+            strata.append(row)
+        # (3) 回帰
+        X = [H["cout"], H["cout_lag1"], H["ep"] * H["cout"], H["ep"] * H["cout_lag1"]]
+        hours = sorted(H.index.hour.unique())
+        X += [(H.index.hour == hh).astype(float) for hh in hours]
+        Xm = np.column_stack(X)
+        y = H["cin"].to_numpy()
+        beta, *_ = np.linalg.lstsq(Xm, y, rcond=None)
+        resid = y - Xm @ beta
+        r2 = 1 - resid.var() / y.var()
+        k_off = beta[0] + beta[1]
+        k_on = k_off + beta[2] + beta[3]
+        # 日ブロック・ブートストラップで k_on/k_off 比の CI
+        days = H.index.normalize(); uniq = np.unique(days); idx = [np.where(days == u)[0] for u in uniq]
+        rng = np.random.default_rng(1); ratios = []
+        for _ in range(1000):
+            ii = np.concatenate([idx[p] for p in rng.integers(0, len(uniq), len(uniq))])
+            if H["ep"].iloc[ii].nunique() < 2:
+                continue
+            bb, *_ = np.linalg.lstsq(Xm[ii], y[ii], rcond=None)
+            ko = bb[0] + bb[1]
+            if ko > 0:
+                ratios.append((ko + bb[2] + bb[3]) / ko)
+        res[name] = {
+            "outdoor_strata": strata,
+            "regression": {"k_ep_off": float(k_off), "k_ep_on": float(k_on), "ratio_on_off": float(k_on / k_off) if k_off > 0 else None,
+                            "ratio_ci_block": [float(np.percentile(ratios, 2.5)), float(np.percentile(ratios, 97.5))] if ratios else None,
+                            "r2": float(r2), "n_hours": int(len(y)), "n_days": int(len(uniq)),
+                            "hour_intercept_range": [float(min(beta[4:])), float(max(beta[4:]))]},
+        }
+    out["confounding"] = res
+    (ROOT / "knowledge" / "verification_2025.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+    print(json.dumps(res, ensure_ascii=False, indent=1, default=float))
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "confound":
+    confound_main()
