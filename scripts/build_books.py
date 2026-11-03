@@ -63,6 +63,9 @@ def book1():
     hist = (ROOT / "report" / "01_研究史.md").read_text(encoding="utf-8")
     hist = re.sub(r"^# .*\n", "", hist).replace("\n## ", "\n### ")
     L += ["# 第1章 研究室の研究史と研究テーマの変遷", "", hist, ""]
+    syn = (ROOT / "report" / "12_統合分析.md").read_text(encoding="utf-8")
+    syn = re.sub(r"^# .*\n", "", syn).replace("\n## ", "\n#### 問")
+    L += ["### 1.6 研究全体の統合分析（系統図と12の問い）", "", syn, ""]
     # 第2章 理論
     L += ["# 第2章 空気環境・粒子・電気集塵の基礎理論", T.THEORY, ""]
     # モデル一覧
@@ -209,12 +212,13 @@ table{border-collapse:collapse;width:100%;font-size:8.6pt;margin:8px 0;page-brea
 th,td{border:1px solid #999;padding:3px 5px;vertical-align:top}th{background:#e8f0f0}
 code{font-size:9pt}nav#TOC{page-break-after:always}nav#TOC ul{list-style:none;padding-left:14px}
 p.subtitle{font-size:13pt;color:#333}p.date{color:#555}
+img{max-width:100%;height:auto}figure{margin:8px 0}figcaption{font-size:9pt;color:#444;text-align:center}
 """
 
 
 def convert(md_path: Path):
     stem = md_path.with_suffix("")
-    subprocess.run(["pandoc", str(md_path), "-o", str(stem) + ".docx", "--toc", "--toc-depth=2"], check=True)
+    subprocess.run(["pandoc", str(md_path), "-o", str(stem) + ".docx", "--resource-path", str(md_path.parent), "--toc", "--toc-depth=2"], check=True)
     css = OUT / "book.css"
     css.write_text(CSS, encoding="utf-8")
     html = str(stem) + ".html"
