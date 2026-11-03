@@ -1,0 +1,34 @@
+{
+ "project": "Air Quality Research OS",
+ "remote": "origin",
+ "branch": "claude/air-quality-research-os-19gu2g",
+ "state_file": "AUTORESUME_STATE.json",
+ "log_file": "AUTORESUME_LOG.md",
+ "private_dir": ".claude/autoresume/run",
+ "timezone_offset_hours": 9,
+ "thresholds": {
+  "prepare": 85,
+  "stop": 90
+ },
+ "window_hours": 5,
+ "weekly_fallback_hours": 169,
+ "wake_margin_min": 5,
+ "statusline_max_age_min": 15,
+ "lock_stale_hours": 3,
+ "progress_files": [
+  "RESTART_GUIDE.md",
+  "EXECUTION_STATE.json",
+  "RUN_HISTORY.md",
+  "NEXT_STEPS.md"
+ ],
+ "test_command": ".venv/bin/python -m pytest -q && cd frontend && npm test",
+ "resume_task": "Air Quality Research OS: follow RESTART_GUIDE.md and EXECUTION_STATE.json next_task; obey CLAUDE.md absolute rules (public repo: no original text/raw data/names).",
+ "commit_trailer": "",
+ "schedule": {
+  "backend": "claude-remote",
+  "primary_trigger_id": "",
+  "backup_trigger_id": "",
+  "weekly_trigger_id": ""
+ },
+ "install_scope": "user"
+}
