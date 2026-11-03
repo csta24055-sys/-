@@ -95,7 +95,7 @@ function Validation() {
             <td className={Math.abs(r.diff_pt['LDK']) > 3 ? 'warn' : ''}>{fmt(r.model['LDK+吹抜'], 1)} / {fmt(r.reported['LDK'], 1)}</td>
             <td>{fmt(r.model['非居室'], 1)} / {fmt(r.reported['非居室'], 1)}</td><td>{fmt(r.model['集塵機'], 1)} / {fmt(r.reported['集塵機'], 1)}</td>
             <td>{fmt(r.model['残留'], 1)} / {fmt(r.reported['残留'], 1)}</td></tr>)}</tbody></table></div>
-        <p className="small muted">EP・非居室の割合は全粒径で約1ポイント以内で再現。10 μm以上で当時の表にある「未沈着」（0.9〜5.6%）は物理的には残らず（β≥3.7×10⁻³ 1/s）、その分LDKの割合がずれる。1秒刻みの当時の再計算でも約1%残り、発生量の入力と集計の不一致による残差と判断（F-SIM-08〜12）。</p>
+        <p className="small muted">EP・非居室の割合は全粒径で約1ポイント以内で再現。10 μm以上で当時の表にある「未沈着」（0.9〜5.6%）は物理的には残らず（β≥3.7×10⁻³ 1/s）、その分LDKの割合がずれる。当時の『その他』は30分後の浮遊残存と、初回ステップの損失による時間刻み依存の数値残差の和（全20シートで確認, F-SIM-13）。</p>
       </details>
     )}
     </>

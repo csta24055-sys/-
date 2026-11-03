@@ -242,3 +242,19 @@ def test_jem1467_cleaning_time_matches_standard_formula():
     vv = a * 1.65 * 2.4
     p_needed = -vv * math.log(0.12) / 30 - vv / 60
     assert 7.7 * p_needed / 1.65 == pytest.approx(a, rel=0.01)
+
+
+def test_2022_sheet_verification_results_close_balance():
+    """verification/Y2022_simulation/results.json: 全20シートで収支が閉じ、残差は初回ステップ損失と整合（F-SIM-13）"""
+    import json
+    from pathlib import Path
+    p = Path(__file__).resolve().parents[2] / "verification" / "Y2022_simulation" / "results.json"
+    rs = json.loads(p.read_text(encoding="utf-8"))
+    assert len(rs) == 20
+    for r in rs:
+        total = sum(r[k] for k in ("LDK", "吹抜", "レターン", "洋室中", "他居室", "非居室", "集塵機", "換気")) + r["airborne_end_pct"] + r["residual_pct"]
+        assert abs(total - 100) < 0.5
+        if r["size_um"] in ("20-30", "30-45") and not r["ep_on"]:
+            assert abs(r["residual_pct"] - r["first_step_loss_pct"]) < 0.4
+        if "reported" in r and r["size_um"] != "30-45":
+            assert abs(r["LDK+吹抜"] - r["reported"]["LDK"]) < 0.15
