@@ -156,3 +156,13 @@ def test_night_and_block_ci(client):
     lo, hi = n["C_cond2_final"]["all_hours"]["ci_block"]
     assert hi - lo > 0.1  # F-V-11: プールCI（±0.01）より大幅に広い
     assert n["C_cond3"]["night_0_5"]["io"] < n["C_cond3"]["all_hours"]["io"]  # F-V-12
+
+
+def test_raw2024_io_reproduces_sheet(client):
+    k = client.get("/api/knowledge").json()
+    h = k["validation"]["raw2024"]["houses"]
+    for code in ("A", "E", "F", "H"):  # F-V-14: 全期間の単純平均I/Oが算出シートと±0.03で一致
+        assert abs(h[code]["io_simple"] - h[code]["reported_io_sheet"][2]) < 0.03
+    assert h["G"]["gt5_pct_house_mean"] < 5  # F-V-16: EP付き住宅の超過は小さい
+    themes = {t["id"]: t for t in k["themes"]}
+    assert themes["T-05"]["scores"]["importance"] == 4  # 根拠訂正で変更取り消し
