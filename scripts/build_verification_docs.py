@@ -13,7 +13,7 @@ SCRIPTS = {
     "R-2020": ["scripts/validate_multizone.py"], "R-2022-SIM": ["verification/Y2022_simulation/verify_2022_sim.py", "scripts/validate_fate_2022.py"],
     "R-2024": ["scripts/raw_2024.py", "scripts/events_2024.py"], "R-2025": ["scripts/raw_2025.py（+dynamic, night, confound）", "scripts/annual_2024.py"],
     "R-2026": ["verification/R-2026/verify_2026.py（60ケース照合 → results.md）", "backend/aqros/models.py（ep_* / solve_bypass）", "backend/tests/test_models.py"], "R-2018": ["backend/tests/test_models.py（JEM1467 清浄時間）"],
-    "R-2021-FALL": ["backend/tests/test_models.py（落下計算の沈着係数）"], "R-2023": ["backend/tests/test_models.py（β理論式）"],
+    "R-2021-FALL": ["backend/tests/test_models.py（落下計算の沈着係数）"], "R-2023": ["backend/tests/test_models.py（β理論式）"], "R-2022-MEAS": ["verification/R-2022-MEAS/verify_2022_meas.py（→ results.md）"],
 }
 F = {f["id"]: f for f in K.FINDINGS}
 S = {s["id"]: s for s in K.SOURCES}
