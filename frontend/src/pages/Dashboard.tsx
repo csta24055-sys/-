@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Bar as RBar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { api } from '../core/api'
@@ -60,9 +61,25 @@ export default function Dashboard() {
           <ul className="flist">{d.open_questions.map((q: any) => <li key={q.id}><b>{q.id}</b> {q.text} <span className="muted small">（{q.status}）</span></li>)}</ul>
         </Card>
       </div>
+      <Completeness />
       <Card title="最近の操作履歴">
         {d.activity.length ? <ul className="small">{d.activity.map((a: any) => <li key={a.id}>{a.at.replace('T', ' ').slice(0, 19)} — {a.action} {a.target}</li>)}</ul> : <p className="muted">まだ操作履歴はありません</p>}
       </Card>
     </div>
+  )
+}
+
+/** 研究単位ごとの完成度（RESEARCH_COMPLETENESS.json, 13項目の監査） */
+function Completeness() {
+  const { data } = useAsync(api.knowledge)
+  const c = data?.completeness
+  if (!c) return null
+  const cell = (v: string) => <td className={`cp cp-${v === '済' ? 'ok' : v === '一部' ? 'part' : v === '不能' ? 'ng' : v === '対象外' ? 'na' : 'no'}`} title={v}>{v === '済' ? '●' : v === '一部' ? '◐' : v === '不能' ? '×' : v === '対象外' ? '—' : '○'}</td>
+  return (
+    <Card title="研究ごとの検証完成度（●済 ◐一部 ○未 ×取得不能 —対象外）" actions={<Link to="/learn">学習モードへ →</Link>}>
+      <div className="tablewrap"><table className="cptable"><thead><tr><th>研究</th><th>分類</th>{c.items.map((i) => <th key={i} className="vert">{i}</th>)}<th>済</th></tr></thead>
+        <tbody>{c.units.map((u) => <tr key={u.id}><td><b>{u.year}</b> {u.title}<div className="small muted">{u.notes}</div></td><td className="small">{u.cls}</td>{c.items.map((i) => <Fragment key={i}>{cell(u.items[i])}</Fragment>)}<td>{u.score}</td></tr>)}</tbody></table></div>
+      <p className="small muted">『完全検証済み』の研究はない。各研究の根拠は verification/ の AUDIT.md と知見IDに記録。</p>
+    </Card>
   )
 }

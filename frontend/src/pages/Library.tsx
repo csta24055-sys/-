@@ -61,7 +61,34 @@ export default function Library() {
         </div>
         {id && <Detail id={id} onChanged={reload} />}
       </div>
+      <LiteraturePanel q={q} />
     </div>
+  )
+}
+
+/** 国内外文献（Crossref で DOI を確認、要旨は OpenAlex から取得。全文精読はしていない） */
+function LiteraturePanel({ q }: { q: string }) {
+  const { data } = useAsync(api.knowledge)
+  const [stance, setStance] = useState('')
+  const lit = data?.literature || []
+  const terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  const rows = lit.filter((l) => (!stance || l.stance === stance) && terms.every((t) => [l.title, l.topic, l.key, l.comparison, l.venue, l.doi, ...l.related].join(' ').toLowerCase().includes(t)))
+  if (!lit.length) return null
+  return (
+    <Card title={`国内外文献（${rows.length}/${lit.length}件）— 研究室の結論との比較`}>
+      <div className="filters">
+        <select value={stance} onChange={(e) => setStance(e.target.value)} aria-label="立場"><option value="">全ての立場</option>{['支持', '反証・制約', '方法', '文脈'].map((s) => <option key={s}>{s}</option>)}</select>
+        <span className="small muted">確認水準: 要旨確認＝要旨を読んだ／書誌のみ＝DOI・題名のみ。上の検索語でも絞り込まれる。</span>
+      </div>
+      <ul className="litlist">{rows.map((l) => (
+        <li key={l.doi}>
+          <div><span className={`pill ${l.level === '要旨確認' ? 'st-2' : 'st-1'}`}>{l.level}</span> <span className="pill">{l.stance}</span> <span className="small muted">{l.topic}</span></div>
+          <div className="t">{l.title}（{l.year}）</div>
+          <div className="small muted">{l.authors.slice(0, 3).join(', ')}{l.authors.length > 3 ? ' ほか' : ''}. {l.venue}. <a href={l.url} target="_blank" rel="noreferrer">DOI: {l.doi}</a></div>
+          {l.key && <p className="small"><b>要旨の要点</b>【確認事実】: {l.key}</p>}
+          <p className="small"><b>研究室との比較</b>【分析】: {l.comparison} <span className="muted">（関連: {l.related.join(', ')}）</span></p>
+        </li>))}</ul>
+    </Card>
   )
 }
 

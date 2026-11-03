@@ -195,6 +195,8 @@ def knowledge():
         "external": d.meta("external"),
         "meta": d.meta("meta"),
         "validation": d.meta("validation"),
+        "literature": d.meta("literature") or [],
+        "completeness": d.meta("completeness"),
     }
 
 
@@ -414,6 +416,97 @@ def reset_section(sid: str):
 def export_md():
     secs = db().report_sections()
     return "\n\n".join(s["body"] for s in secs)
+
+
+# ------------------------------------------------------------- research plans
+class PlanIn(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    theme_id: str | None = Field(default=None, max_length=20)
+    background: str = Field(default="", max_length=20000)
+    purpose: str = Field(default="", max_length=20000)
+    hypotheses: str = Field(default="", max_length=20000)
+    methods: str = Field(default="", max_length=20000)
+    equipment: str = Field(default="", max_length=20000)
+    measurements: str = Field(default="", max_length=20000)
+    analysis: str = Field(default="", max_length=20000)
+    schedule: str = Field(default="", max_length=20000)
+    risks: str = Field(default="", max_length=20000)
+    alternatives: str = Field(default="", max_length=20000)
+    references: str = Field(default="", max_length=20000)
+
+
+@app.get("/api/plans")
+def list_plans():
+    return db().list_plans()
+
+
+@app.post("/api/plans")
+def create_plan(body: PlanIn):
+    return db().save_plan(body.model_dump())
+
+
+@app.put("/api/plans/{pid}")
+def update_plan(pid: int, body: PlanIn):
+    try:
+        return db().save_plan(body.model_dump(), pid)
+    except KeyError:
+        raise HTTPException(404, "plan not found")
+
+
+@app.delete("/api/plans/{pid}")
+def delete_plan(pid: int):
+    if not db().delete_plan(pid):
+        raise HTTPException(404, "plan not found")
+    return {"ok": True}
+
+
+# ------------------------------------------------------------- user state (学習進捗など)
+STATE_KEYS = {"learning"}
+
+
+@app.get("/api/state/{key}")
+def get_state(key: str):
+    if key not in STATE_KEYS:
+        raise HTTPException(404, "unknown key")
+    return {"key": key, "value": db().get_state(key)}
+
+
+class StateIn(BaseModel):
+    value: Any
+
+
+@app.put("/api/state/{key}")
+def put_state(key: str, body: StateIn):
+    if key not in STATE_KEYS:
+        raise HTTPException(404, "unknown key")
+    if len(str(body.value)) > 100_000:
+        raise HTTPException(413, "too large")
+    db().set_state(key, body.value)
+    return {"ok": True}
+
+
+# ------------------------------------------------------------- deliverables（2027年度向け資料）
+DELIV = ROOT / "deliverables"
+DELIV_EXT = {".md": "text/markdown; charset=utf-8", ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".pdf": "application/pdf"}
+
+
+@app.get("/api/deliverables")
+def list_deliverables():
+    if not DELIV.exists():
+        return []
+    return [{"name": f.name, "size": f.stat().st_size, "ext": f.suffix} for f in sorted(DELIV.iterdir()) if f.suffix in DELIV_EXT]
+
+
+@app.get("/api/deliverables/{name}")
+def get_deliverable(name: str):
+    f = (DELIV / name).resolve()
+    if f.parent != DELIV.resolve() or f.suffix not in DELIV_EXT or not f.is_file():
+        raise HTTPException(404, "not found")
+    from urllib.parse import quote
+    ascii_name = {"研究継承総合資料": "AQROS_2027_inheritance", "研究方針": "AQROS_2027_strategy"}
+    fb = next((v for k, v in ascii_name.items() if k in f.name), "AQROS_2027") + f.suffix
+    return FileResponse(f, media_type=DELIV_EXT[f.suffix],
+                        headers={"Content-Disposition": f"attachment; filename=\"{fb}\"; filename*=utf-8''{quote(f.name)}"})
 
 
 # ------------------------------------------------------------- static (SPA)

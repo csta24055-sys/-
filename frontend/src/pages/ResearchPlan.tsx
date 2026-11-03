@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { api, Theme } from '../core/api'
 import { Card, Field, Loading, useAsync } from '../components/ui'
+import PlanEditor from '../components/PlanEditor'
 
 const W = { importance: 0.35, novelty: 0.2, feasibility: 0.25, fit: 0.2 }
 const LABEL = { importance: '重要度', novelty: '新規性', feasibility: '実行可能性', fit: '設備適合' }
@@ -70,6 +71,7 @@ export default function ResearchPlan() {
           </div>
         </Card>
       ))}
+      <PlanEditor themes={k.themes} />
       <Card title="研究仮説の比較（競合仮説）">
         {k.hypotheses.map((h) => (
           <details key={h.id}>

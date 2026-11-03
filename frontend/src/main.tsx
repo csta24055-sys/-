@@ -9,6 +9,7 @@ import Simulator from './pages/Simulator'
 import KnowledgeGraph from './pages/KnowledgeGraph'
 import ResearchPlan from './pages/ResearchPlan'
 import Report from './pages/Report'
+import Learning from './pages/Learning'
 
 const NAV = [
   ['/', '研究ダッシュボード', 'ホーム', '◎'],
@@ -18,6 +19,7 @@ const NAV = [
   ['/graph', '研究ナレッジグラフ', 'グラフ', '⋔'],
   ['/plan', '今後の研究計画', '計画', '➚'],
   ['/report', '総合研究レポート', 'レポート', '¶'],
+  ['/learn', '研究学習モード', '学習', '✎'],
 ] as const
 
 function App() {
@@ -46,6 +48,7 @@ function App() {
             <Route path="/graph" element={<KnowledgeGraph />} />
             <Route path="/plan" element={<ResearchPlan />} />
             <Route path="/report" element={<Report />} />
+            <Route path="/learn" element={<Learning />} />
           </Routes>
         </main>
         <nav className="tabbar">{NAV.map(([to, , short, icon]) => <NavLink key={to} to={to} end={to === '/'}><i aria-hidden>{icon}</i><span>{short}</span></NavLink>)}</nav>

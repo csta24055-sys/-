@@ -174,3 +174,29 @@ def test_events_2024(client):
     central = [ev[h]["events_per_room_day"] for h in "EFGH"]
     import statistics
     assert statistics.median(indiv) > 2 * statistics.median(central)  # F-V-17: 個別空調の方が上昇イベントが多い（範囲は一部重なる）
+
+
+def test_plans_crud_and_validation(client):
+    r = client.post("/api/plans", json={"title": "T-01 予備計画", "theme_id": "T-01", "hypotheses": "二乗則"})
+    assert r.status_code == 200
+    pid = r.json()["id"]
+    r = client.put(f"/api/plans/{pid}", json={"title": "T-01 本計画", "theme_id": "T-01", "schedule": "6月本試験"})
+    assert r.json()["title"] == "T-01 本計画" and r.json()["schedule"] == "6月本試験"
+    assert any(p["id"] == pid for p in client.get("/api/plans").json())
+    assert client.post("/api/plans", json={"title": ""}).status_code == 422  # 空タイトルは拒否
+    assert client.put("/api/plans/999999", json={"title": "x"}).status_code == 404
+    assert client.delete(f"/api/plans/{pid}").json()["ok"]
+
+
+def test_learning_state_and_deliverables(client):
+    assert client.put("/api/state/learning", json={"value": {"done": [1, 2]}}).json()["ok"]
+    assert client.get("/api/state/learning").json()["value"] == {"done": [1, 2]}
+    assert client.get("/api/state/other").status_code == 404
+    names = [d["name"] for d in client.get("/api/deliverables").json()]
+    assert any(n.endswith(".pdf") for n in names) and any(n.endswith(".docx") for n in names)
+    for bad in ("/api/deliverables/..%2FCLAUDE.md", "/api/deliverables/CLAUDE.md", "/api/deliverables/x.py"):
+        r = client.get(bad)
+        assert "絶対ルール" not in r.text  # リポジトリ内の他ファイルを返さない
+    pdf = [n for n in names if n.endswith(".pdf")][0]
+    r = client.get(f"/api/deliverables/{pdf}")
+    assert r.status_code == 200 and r.content[:4] == b"%PDF"

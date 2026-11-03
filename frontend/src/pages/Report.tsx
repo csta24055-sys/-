@@ -8,6 +8,7 @@ const render = (md: string) => DOMPurify.sanitize(marked.parse(md, { async: fals
 
 export default function Report() {
   const { data, error, reload } = useAsync(api.report)
+  const { data: deliv } = useAsync(api.deliverables)
   const [edit, setEdit] = useState<string | null>(null)
   const [draft, setDraft] = useState('')
   const [msg, setMsg] = useState('')
@@ -21,6 +22,12 @@ export default function Report() {
         <button className="ghost" onClick={() => window.print()}>PDF出力（印刷→PDFに保存）</button>
         <span className="small muted">{msg}</span>
       </div>
+      {deliv && deliv.length > 0 && (
+        <Card className="noprint" title="2027年度向け資料（Word・PDF・Markdown）">
+          <ul className="deliv">{deliv.map((d) => <li key={d.name}><a href={`/api/deliverables/${encodeURIComponent(d.name)}`} download={d.name}>{d.name}</a> <span className="small muted">{(d.size / 1024).toFixed(0)} KB</span></li>)}</ul>
+          <p className="small muted">いずれも knowledge.json・検証記録・本報告書から scripts/build_books.py で生成。数値はアプリの表示と同じ出典から作られる。</p>
+        </Card>
+      )}
       <nav className="toc noprint">{data.map((s) => <a key={s.id} href={`#${s.id}`}>{s.title}</a>)}</nav>
       <div className="print-title">Air Quality Research OS — 井口研究室 空気清浄度研究 総合研究報告書</div>
       {data.map((s) => (

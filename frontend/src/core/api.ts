@@ -25,6 +25,8 @@ export interface Knowledge {
   graph: { nodes: GraphNode[]; edges: { from: string; to: string; rel: string }[] }
   external: { id: string; title: string; url: string; note: string }[]
   meta: { accessed: string }
+  literature?: Literature[]
+  completeness?: { items: string[]; units: CompletenessUnit[] } | null
   validation?: { multizone?: { cases: { fan: string; D_per_s: number; beta_per_h: number; mean_nrmse: number; mean_peak_ratio: number; rooms: Record<string, { peak_meas: number; peak_sim: number; t_peak_meas: number; t_peak_sim: number; nrmse: number }> }[]; grid_best: Record<string, { best_D: number; best_nrmse: number }> } | null; fate2022?: { rows: { size_um: string; cond: string; fan: string; ep: boolean; model: Record<string, number>; reported: Record<string, number>; diff_pt: Record<string, number> }[]; max_abs_diff_pt_excl_residual: number } | null }
 }
 export interface DatasetMeta { id: number; name: string; filename: string | null; sheet: string | null; study: string | null; description: string | null; provenance: string; columns: string[]; n_rows: number; created_at: string }
@@ -56,6 +58,11 @@ export async function get<T>(path: string): Promise<T> {
   }
 }
 
+export interface Literature { doi: string; title: string; authors: string[]; year: number; venue: string; level: string; topic: string; stance: string; related: string[]; key: string; comparison: string; url: string }
+export interface CompletenessUnit { id: string; year: number; title: string; sources: string[]; cls: string; evidence: string[]; notes: string; items: Record<string, string>; score: string }
+export interface Plan { id?: number; title: string; theme_id?: string | null; background?: string; purpose?: string; hypotheses?: string; methods?: string; equipment?: string; measurements?: string; analysis?: string; schedule?: string; risks?: string; alternatives?: string; references?: string; created_at?: string; updated_at?: string }
+export interface Deliverable { name: string; size: number; ext: string }
+
 export const api = {
   dashboard: () => get<any>('/api/dashboard'),
   knowledge: () => get<Knowledge>('/api/knowledge'),
@@ -74,6 +81,13 @@ export const api = {
   report: () => get<ReportSection[]>('/api/report'),
   saveSection: (id: string, body: string) => req<ReportSection>(`/api/report/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify({ body }) }),
   resetSection: (id: string) => req<{ ok: boolean }>(`/api/report/${encodeURIComponent(id)}/reset`, { method: 'POST' }),
+  plans: () => get<Plan[]>('/api/plans'),
+  createPlan: (p: Plan) => req<Plan>('/api/plans', { method: 'POST', body: JSON.stringify(p) }),
+  updatePlan: (id: number, p: Plan) => req<Plan>(`/api/plans/${id}`, { method: 'PUT', body: JSON.stringify(p) }),
+  deletePlan: (id: number) => req<{ ok: boolean }>(`/api/plans/${id}`, { method: 'DELETE' }),
+  getState: (key: string) => get<{ key: string; value: any }>(`/api/state/${key}`),
+  putState: (key: string, value: unknown) => req<{ ok: boolean }>(`/api/state/${key}`, { method: 'PUT', body: JSON.stringify({ value }) }),
+  deliverables: () => get<Deliverable[]>('/api/deliverables'),
 }
 
 export const STATUS_ORDER = ['未確認', '目録確認', '読了', '数値検証済み']

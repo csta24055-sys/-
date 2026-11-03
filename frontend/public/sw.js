@@ -1,7 +1,7 @@
 // Air Quality Research OS — Service Worker（オフライン閲覧）
 // アプリシェル: cache-first / API GET: network-first（失敗時キャッシュ）
-const SHELL = 'aqros-shell-v1';
-const API = 'aqros-api-v1';
+const SHELL = 'aqros-shell-v2';
+const API = 'aqros-api-v2';
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(SHELL).then((c) => c.addAll(['/', '/index.html', '/manifest.webmanifest', '/icon.svg'])));
   self.skipWaiting();
@@ -15,6 +15,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
+  if (url.pathname.startsWith('/api/deliverables/')) return; // 大容量の配布ファイルはキャッシュせず、ダウンロード名を保つ
   if (url.pathname.startsWith('/api/')) {
     e.respondWith(
       fetch(req).then((res) => {

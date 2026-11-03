@@ -173,3 +173,13 @@ details { border-bottom: 1px solid var(--line); padding: .5rem 0; } summary { cu
   .md h1 { break-before: page; } .sec:first-of-type .md h1 { break-before: auto; }
   a { color: #000; }
 }
+
+/* 完成度表・学習モード・文献・計画 */
+.cptable td.cp{text-align:center;font-size:13px;padding:2px}
+.cp-ok{color:#0f5b5c}.cp-part{color:#b07a12}.cp-no{color:#9aa3a1}.cp-ng{color:#b23a3a;font-weight:700}.cp-na{color:#c3c8c7}
+.cptable th.vert{writing-mode:vertical-rl;font-size:11px;font-weight:500;padding:4px 2px;white-space:nowrap}
+.learn.done{opacity:.75;border-left:4px solid #2f8f83}
+.learn textarea,.plan-edit textarea{width:100%;box-sizing:border-box;font:inherit}
+.chip{display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border:1px solid var(--line,#ccd);border-radius:12px;font-size:12px;text-decoration:none}
+.litlist{list-style:none;padding:0}.litlist li{border-bottom:1px solid var(--line,#e2e6e5);padding:8px 0}.litlist .t{font-weight:600;margin:2px 0}
+.deliv{padding-left:18px}.deliv li{margin:4px 0}

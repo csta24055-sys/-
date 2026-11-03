@@ -52,6 +52,15 @@ CREATE TABLE IF NOT EXISTS activity (
   target TEXT
 );
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
+CREATE TABLE IF NOT EXISTS plans (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  theme_id TEXT,
+  data TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS user_state (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at TEXT NOT NULL);
 """
 
 KIND_KEYS = {
@@ -100,7 +109,7 @@ class DB:
                         self.conn.execute("INSERT INTO items VALUES (?,?,?,0,?)", (kind, item["id"], json.dumps(item, ensure_ascii=False), now()))
                     elif not row["user_modified"]:
                         self.conn.execute("UPDATE items SET data=? WHERE kind=? AND id=?", (json.dumps(item, ensure_ascii=False), kind, item["id"]))
-            for key in ("roadmap", "models", "graph", "external", "meta", "validation"):
+            for key in ("roadmap", "models", "graph", "external", "meta", "validation", "literature", "completeness"):
                 self.conn.execute("INSERT OR REPLACE INTO meta VALUES (?,?)", (key, json.dumps(k.get(key), ensure_ascii=False)))
             for i, f in enumerate(sorted(REPORT_DIR.glob("*.md"))):
                 sid = f.stem
@@ -200,6 +209,40 @@ class DB:
         self.seed()
 
     # -------------------------------------------------------------- activity
+    # ----------------------------------------------------------------- plans
+    def list_plans(self) -> list[dict]:
+        rows = self.conn.execute("SELECT * FROM plans ORDER BY updated_at DESC").fetchall()
+        return [{"id": r["id"], "title": r["title"], "theme_id": r["theme_id"], **json.loads(r["data"]), "created_at": r["created_at"], "updated_at": r["updated_at"]} for r in rows]
+
+    def save_plan(self, plan: dict, pid: int | None = None) -> dict:
+        data = {k: v for k, v in plan.items() if k not in ("id", "title", "theme_id", "created_at", "updated_at")}
+        with _lock, self.conn:
+            if pid is None:
+                cur = self.conn.execute("INSERT INTO plans (title, theme_id, data, created_at, updated_at) VALUES (?,?,?,?,?)",
+                                        (plan["title"], plan.get("theme_id"), json.dumps(data, ensure_ascii=False), now(), now()))
+                pid = cur.lastrowid
+            else:
+                if not self.conn.execute("SELECT 1 FROM plans WHERE id=?", (pid,)).fetchone():
+                    raise KeyError(pid)
+                self.conn.execute("UPDATE plans SET title=?, theme_id=?, data=?, updated_at=? WHERE id=?",
+                                  (plan["title"], plan.get("theme_id"), json.dumps(data, ensure_ascii=False), now(), pid))
+            self.log("研究計画を保存", plan["title"])
+        return next(p for p in self.list_plans() if p["id"] == pid)
+
+    def delete_plan(self, pid: int) -> bool:
+        with _lock, self.conn:
+            n = self.conn.execute("DELETE FROM plans WHERE id=?", (pid,)).rowcount
+        return n > 0
+
+    # ------------------------------------------------------------ user state
+    def get_state(self, key: str):
+        r = self.conn.execute("SELECT value FROM user_state WHERE key=?", (key,)).fetchone()
+        return json.loads(r["value"]) if r else None
+
+    def set_state(self, key: str, value) -> None:
+        with _lock, self.conn:
+            self.conn.execute("INSERT OR REPLACE INTO user_state VALUES (?,?,?)", (key, json.dumps(value, ensure_ascii=False), now()))
+
     def log(self, action: str, target: str | None = None) -> None:
         self.conn.execute("INSERT INTO activity (at, action, target) VALUES (?,?,?)", (now(), action, target))
 

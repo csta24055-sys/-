@@ -115,6 +115,35 @@ const log = (...a) => console.log(...a);
   await page.screenshot({ path: OUT + '/07_report.png' });
   const pdf = await page.pdf({ path: path.join(TMP, 'aqros_report.pdf'), format: 'A4' }).catch(e => null);
   ok('report print to PDF', !!pdf, pdf ? `${pdf.length} bytes` : '');
+  // deliverables (Word/PDF) download
+  const dlLinks = await page.locator('ul.deliv a').count();
+  ok('deliverables listed (md/docx/pdf)', dlLinks >= 6, String(dlLinks));
+  const [dl4] = await Promise.all([page.waitForEvent('download'), page.locator('ul.deliv a', { hasText: '.docx' }).first().click()]);
+  // 注: このヘッドレス Chromium は UTF-8 の filename* を解釈せず名前が "download" になるため、中身（ZIP=docx）とヘッダで確認する
+  const docxPath = await dl4.path(); const head = require('fs').readFileSync(docxPath).subarray(0, 2).toString();
+  const hdr = (await ctx.request.get(BASE + '/api/deliverables/' + encodeURIComponent('2027_研究継承総合資料.docx'))).headers()['content-disposition'] || '';
+  ok('deliverable docx download (ZIP signature + filename header)', head === 'PK' && /filename\*=utf-8''2027_/.test(hdr));
+  // research plan editor: create → save → reload → edit
+  await page.goto(BASE + '/plan'); await page.waitForSelector('table.rank');
+  await page.selectOption('.card select >> nth=0', 'T-01').catch(async () => { await page.locator('select', { hasText: 'テーマから新規作成' }).selectOption('T-01') });
+  await page.waitForSelector('#plan-edit');
+  await page.fill('#plan-edit input', 'E2E 研究計画 T-01');
+  await page.click('#plan-edit button:has-text("保存")'); await page.waitForTimeout(600);
+  await page.reload(); await page.waitForSelector('table.rank');
+  ok('research plan persisted', /E2E 研究計画 T-01/.test(await page.content()));
+  // learning mode: toggle progress → reload → persisted
+  await page.goto(BASE + '/learn'); await page.waitForSelector('.learn');
+  await page.locator('.learn input[type=checkbox]').nth(0).check(); await page.waitForTimeout(500);
+  await page.reload(); await page.waitForSelector('.learn');
+  ok('learning progress persisted', await page.locator('.learn input[type=checkbox]').nth(0).isChecked());
+  await page.screenshot({ path: OUT + '/08_learning.png', fullPage: false });
+  // dashboard completeness + library literature
+  await page.goto(BASE + '/'); await page.waitForSelector('table.cptable');
+  ok('dashboard completeness table', (await page.locator('table.cptable tbody tr').count()) >= 10);
+  await page.goto(BASE + '/library'); await page.waitForSelector('.litlist li');
+  ok('library literature panel', (await page.locator('.litlist li').count()) >= 10);
+  await page.fill('input[type=search]', 'Indoor Air'); await page.waitForTimeout(300);
+  ok('literature search filters', (await page.locator('.litlist li').count()) >= 1);
   // offline: service worker cached → go offline and reload
   await page.goto(BASE + '/'); await page.waitForTimeout(1500);
   await page.goto(BASE + '/library'); await page.waitForSelector('.srclist li'); await page.waitForTimeout(800);
@@ -129,7 +158,7 @@ const log = (...a) => console.log(...a);
   const ip = await browser.newContext({ ...devices['iPhone 13'], locale: 'ja-JP' });
   const mp = await ip.newPage();
   mp.on('pageerror', e => errors.push('mobile pageerror: ' + e.message));
-  for (const [path, name] of [['/', 'm01_dashboard'], ['/library/S-2026-01', 'm02_library'], ['/data', 'm03_data'], ['/simulator', 'm04_simulator'], ['/graph', 'm05_graph'], ['/plan', 'm06_plan'], ['/report', 'm07_report']]) {
+  for (const [path, name] of [['/', 'm01_dashboard'], ['/library/S-2026-01', 'm02_library'], ['/data', 'm03_data'], ['/simulator', 'm04_simulator'], ['/graph', 'm05_graph'], ['/plan', 'm06_plan'], ['/report', 'm07_report'], ['/learn', 'm08_learn']]) {
     await mp.goto(BASE + path); await mp.waitForTimeout(900);
     const sw = await mp.evaluate(() => document.documentElement.scrollWidth); const vw = await mp.evaluate(() => window.innerWidth);
     ok(`mobile ${path} no horizontal page scroll`, sw <= vw + 1, `${sw}/${vw}`);
