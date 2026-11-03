@@ -31,6 +31,24 @@ python3 /path/to/cc-autoresume/install.py <project_dir> \
 
 その後 Claude に「`python3 .claude/autoresume/ccar.py plan-wake` の `triggers` で一回限りの scheduled task を作り、ID を autoresume.json の schedule に書いて、`ccar prompt <role>` のプロンプトに更新して」と頼む（3件：primary / backup / weekly）。
 
+## 配布物（ZIP）
+`python3 make_zip.py <出力先>` → `claude-code-autoresume-<版>.zip`（最新版は `tools/claude-code-autoresume-1.0.0.zip` に保存）。
+展開した `claude-code-autoresume/` から `install.py` を実行すればよく、元のリポジトリは不要。
+```
+claude-code-autoresume/
+  README.md  install.py  uninstall.py  ccar.py  config.example.json  make_zip.py
+  ccar/        core.py（判定・予約・ロック・再開・チェックポイント・フック・status line） cli.py
+  templates/   autoresume.example.json
+  examples/    generic-project/autoresume.json  research-project/autoresume.json
+  tests/       test_ccar.py（機能）  test_dist.py（ZIP→別ディレクトリ→導入→使用→削除）
+```
+設定例から始める：`python3 install.py <project> --config-from examples/research-project/autoresume.json`
+
+## アンインストール
+`python3 <project>/.claude/autoresume/uninstall.py <project> [--scope user]`
+settings.json（元の status line を含む）を元に戻し `.claude/autoresume/` を削除。設定・状態ファイル・ログは残す。
+一回限りの scheduled task は残るので、Claude に `update_trigger enabled=false` を頼む。
+
 ## 設定（.claude/autoresume.json）
 `templates/autoresume.example.json` 参照。リポジトリ固有の値（パス・ブランチ・タスク ID・作業内容・しきい値・タイムゾーン）はすべてここ。コードには固定値なし。
 

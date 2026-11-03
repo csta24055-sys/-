@@ -70,6 +70,7 @@ def main(argv=None) -> int:
     ap.add_argument("--resume-task", default="")
     ap.add_argument("--no-statusline", action="store_true")
     ap.add_argument("--uninstall", action="store_true")
+    ap.add_argument("--config-from", help="start the project config from this JSON (e.g. examples/*/autoresume.json)")
     a = ap.parse_args(argv)
     project, home = Path(a.project).resolve(), Path(a.home)
     dest = project / ".claude" / "autoresume"
@@ -84,8 +85,7 @@ def main(argv=None) -> int:
 
     if a.uninstall:
         sp.write_text(json.dumps(s, ensure_ascii=False, indent=2) + "\n")
-        if HERE != dest:
-            shutil.rmtree(dest, ignore_errors=True)
+        shutil.rmtree(dest, ignore_errors=True)    # safe even when running from dest (code already loaded)
         print(json.dumps({"uninstalled": str(dest), "settings": str(sp), "config_kept": str(cfg_path)}))
         return 0
 
@@ -97,16 +97,23 @@ def main(argv=None) -> int:
     if HERE != dest:
         shutil.copy2(HERE / "ccar.py", dest / "ccar.py")
         shutil.copy2(HERE / "install.py", dest / "install.py")
+        shutil.copy2(HERE / "uninstall.py", dest / "uninstall.py")
         shutil.copytree(HERE / "templates", dest / "templates", dirs_exist_ok=True)
     if original_sl:
         prev_file.write_text(json.dumps(original_sl))
     # 2. config (never overwrite)
     created = False
     if not cfg_path.exists():
-        cfg = json.loads((HERE / "templates" / "autoresume.example.json").read_text(encoding="utf-8"))
-        cfg.update({k: v for k, v in {"project": a.project_name or project.name, "branch": a.branch,
-                                       "progress_files": a.progress, "test_command": a.test_command,
-                                       "resume_task": a.resume_task, "install_scope": a.scope}.items() if v or k == "project"})
+        src = Path(a.config_from) if a.config_from else HERE / "templates" / "autoresume.example.json"
+        cfg = json.loads(src.read_text(encoding="utf-8"))
+        overrides = {"project": a.project_name, "branch": a.branch, "progress_files": a.progress,
+                     "test_command": a.test_command, "resume_task": a.resume_task}
+        cfg.update({k: v for k, v in overrides.items() if v})
+        if not a.config_from:
+            cfg.setdefault("project", project.name) if cfg.get("project") else cfg.update(project=project.name)
+            if not a.project_name and cfg["project"] == "my-project":
+                cfg["project"] = project.name
+            cfg["install_scope"] = a.scope
         cfg_path.write_text(json.dumps(cfg, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         created = True
     # 3. settings
