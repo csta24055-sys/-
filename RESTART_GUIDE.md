@@ -22,3 +22,7 @@
 | P7-BOOK1 / P7-BOOK2 | 2027年度向け2冊（deliverables/ に md・docx・pdf） |
 | P8-APP | アプリ（学習モード・研究計画編集・資料出力） |
 | P9-TEST / P11-AUDIT | 全体テスト、完成度監査（QUALITY_AUDIT.md） |
+
+
+## 状態の保存（2026-11-03 追記）
+`.venv/bin/python scripts/build_state.py --done <完了ID,...> --current <ID> --blocked "<ID>=<理由>"`。P2-OTHERS は取得可能な資料の検証を終え、残りがユーザー操作待ちのため blocked。次は P11-AUDIT（QUALITY_AUDIT.md・IMPLEMENTATION_PROGRESS.md・README 更新・全テスト・最終報告）。blocked の再試行は、ユーザーが分割CSV等を用意したときのみ行う。

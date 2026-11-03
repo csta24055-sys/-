@@ -51,5 +51,6 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--done", default="")
     ap.add_argument("--current", default=None)
+    ap.add_argument("--blocked", action="append", default=[], help="ID=理由（複数可）")
     a = ap.parse_args()
-    main([x for x in a.done.split(",") if x], a.current, {})
+    main([x for x in a.done.split(",") if x], a.current, dict(x.split("=", 1) for x in a.blocked))

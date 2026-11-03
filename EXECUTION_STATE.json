@@ -1,6 +1,6 @@
 {
- "updated_at": "2026-11-03T12:28:00+00:00",
- "last_commit": "0b891bd",
+ "updated_at": "2026-11-03T12:28:37+00:00",
+ "last_commit": "c418e91",
  "tasks": [
   {
    "id": "P1",
@@ -15,7 +15,8 @@
   {
    "id": "P2-OTHERS",
    "title": "他年度研究の検証記録（verification/ 以下）",
-   "status": "in_progress"
+   "status": "blocked",
+   "blocked_reason": "取得可能な資料の検証は実施済み（R-2021-FALL/2022-MEAS/2023/2025/2026）。残りはユーザー操作が必要: 住宅D・2023実態調査まとめ・発塵量同定ブックの分割CSV化、XRF/SEM報告書の分割、2018・2019年度の原データの所在確認"
   },
   {
    "id": "P5-LIT",
@@ -50,9 +51,9 @@
   {
    "id": "P11-AUDIT",
    "title": "完成度監査・QUALITY_AUDIT.md",
-   "status": "todo"
+   "status": "in_progress"
   }
  ],
- "next_task": "P2-OTHERS",
+ "next_task": "P11-AUDIT",
  "resume": "RESTART_GUIDE.md を読み、next_task から再開。完了済みタスクはやり直さない"
 }
