@@ -98,6 +98,7 @@ def write_json():
         "validation": {
             "multizone": json.loads((OUT / "validation_multizone.json").read_text(encoding="utf-8")) if (OUT / "validation_multizone.json").exists() else None,
             "fate2022": json.loads((OUT / "validation_fate_2022.json").read_text(encoding="utf-8")) if (OUT / "validation_fate_2022.json").exists() else None,
+            "events2024": json.loads((OUT / "events_2024.json").read_text(encoding="utf-8")) if (OUT / "events_2024.json").exists() else None,
             "raw2024": json.loads((OUT / "verification_2024.json").read_text(encoding="utf-8")) if (OUT / "verification_2024.json").exists() else None,
             "annual2025": json.loads((OUT / "verification_annual_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_annual_2025.json").exists() else None,
             "raw2025": json.loads((OUT / "verification_2025.json").read_text(encoding="utf-8")) if (OUT / "verification_2025.json").exists() else None,

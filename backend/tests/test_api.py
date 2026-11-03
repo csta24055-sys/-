@@ -166,3 +166,11 @@ def test_raw2024_io_reproduces_sheet(client):
     assert h["G"]["gt5_pct_house_mean"] < 5  # F-V-16: EP付き住宅の超過は小さい
     themes = {t["id"]: t for t in k["themes"]}
     assert themes["T-05"]["scores"]["importance"] == 4  # 根拠訂正で変更取り消し
+
+
+def test_events_2024(client):
+    ev = client.get("/api/knowledge").json()["validation"]["events2024"]["houses"]
+    indiv = [ev[h]["events_per_room_day"] for h in "ABCD"]
+    central = [ev[h]["events_per_room_day"] for h in "EFGH"]
+    import statistics
+    assert statistics.median(indiv) > 2 * statistics.median(central)  # F-V-17: 個別空調の方が上昇イベントが多い（範囲は一部重なる）
