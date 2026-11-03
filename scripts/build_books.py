@@ -238,6 +238,7 @@ const {{ chromium }} = require('playwright');
     import os
     subprocess.run(["node", str(jsf)], check=True, env={**os.environ, "NODE_PATH": npm_root})
     jsf.unlink()
+    Path(html).unlink()
 
 
 def main():
