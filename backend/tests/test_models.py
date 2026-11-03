@@ -285,3 +285,15 @@ def test_2022_measured_vs_sim_results_committed():
     rooms = [x for c in r.values() for x in c["rooms"].values()]
     assert len(rooms) == 24 and all(x["integer_count_check"] for x in rooms)
     assert max(x["frac_in_band"] for x in rooms) < 0.35  # 帯内率は低い（F-2022-08）
+
+
+def test_2022_field_survey_results_committed():
+    """verification/R-2022-MEAS/results_field.json: F-2022-09（最大約6万個/m³の再現、中央値の最多区分は5〜10 μm）"""
+    import json
+    from pathlib import Path
+    r = json.loads((Path(__file__).resolve().parents[2] / "verification" / "R-2022-MEAS" / "results_field.json").read_text(encoding="utf-8"))
+    assert len(r) == 4
+    assert max(h["max"]["10.0-20.0"] for h in r.values()) == 59364
+    assert all(h["n_sheet_bins"] == h["n_sheet_bins_agree"] for h in r.values())
+    for h in r.values():
+        assert h["median"]["5.0-10.0"] >= h["median"]["10.0-20.0"]
