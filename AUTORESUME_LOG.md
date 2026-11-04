@@ -6,3 +6,9 @@
 - next: RESTART_GUIDE.md の next_task
 - usage: {"basis": "estimated", "official": false, "estimated_reset": "2026-11-04T14:06+09:00", "action": "continue"}
 - test: exit 0 —       Tests  26 passed (26) /    Start at  00:07:38 /    Duration  814ms (transform 433ms, setup 0ms, collect 476ms, tests 126ms, environment 1ms, prepare 257ms)
+
+## 2026-11-04T14:12+09:00 — run-20261104-1412
+- done: 自動再開（primary）: resume-check=proceed。実施可能な next_task なし
+- todo: P2-OTHERS（分割CSV等のユーザー提供待ち）
+- next: ユーザーの push 許可・追加資料を待つ
+- usage: {"basis": "estimated", "official": false, "estimated_reset": "2026-11-04T19:12+09:00", "action": "continue"}

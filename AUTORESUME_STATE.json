@@ -1,18 +1,22 @@
 {
  "window": {
-  "start_ts": 1793750796.6219218,
+  "start_ts": 1793769168.528436,
   "basis": "estimated: start of this run",
-  "start": "2026-11-04T09:06+09:00"
+  "start": "2026-11-04T14:12+09:00"
  },
  "last_run": {
-  "id": "run-20261104-install",
-  "started_ts": 1793750796.6219218,
-  "started": "2026-11-04T09:06+09:00"
+  "id": "run-20261104-1412",
+  "started_ts": 1793769168.528436,
+  "started": "2026-11-04T14:12+09:00"
  },
  "runs": [
   {
    "id": "run-20261104-install",
    "started": "2026-11-04T09:06+09:00"
+  },
+  {
+   "id": "run-20261104-1412",
+   "started": "2026-11-04T14:12+09:00"
   }
  ],
  "tool": "cc-autoresume 1.0.0",
@@ -25,31 +29,23 @@
   "planned_at": "2026-11-04T09:06+09:00"
  },
  "checkpoint": {
-  "at": "2026-11-04T09:07+09:00",
-  "run": "run-20261104-install",
+  "at": "2026-11-04T14:12+09:00",
+  "run": "run-20261104-1412",
   "done": [
-   "cc-autoresume 1.0.0 を導入（user scope、85/90%、推定方式、一回限り予約3件）"
+   "自動再開（primary）: resume-check=proceed。実施可能な next_task なし"
   ],
   "todo": [
-   "P2-OTHERS はユーザー操作待ち（blocked）"
+   "P2-OTHERS（分割CSV等のユーザー提供待ち）"
   ],
   "next": [
-   "RESTART_GUIDE.md の next_task"
+   "ユーザーの push 許可・追加資料を待つ"
   ],
   "usage": {
    "basis": "estimated",
    "official": false,
-   "estimated_reset": "2026-11-04T14:06+09:00",
+   "estimated_reset": "2026-11-04T19:12+09:00",
    "action": "continue"
   },
-  "test": {
-   "command": ".venv/bin/python -m pytest -q && (cd frontend && npm test --silent)",
-   "exit": 0,
-   "tail": [
-    "      Tests  26 passed (26)",
-    "   Start at  00:07:38",
-    "   Duration  814ms (transform 433ms, setup 0ms, collect 476ms, tests 126ms, environment 1ms, prepare 257ms)"
-   ]
-  }
+  "test": null
  }
 }
