@@ -32,3 +32,9 @@
 - 新しいコンテナでは最初に `python3 .claude/autoresume/install.py . --scope user`（冪等）。
 - 区切りごとに `python3 .claude/autoresume/ccar.py checkpoint --done … --todo … --next … --test --push`。終了前に `plan-wake` → 一回限りの予約3件（primary/backup/weekly）を同じIDのまま run_once_at 更新 → `lock release`。
 - クラウドセッションでは公式の使用率が取得できないため、85%準備・90%停止の判定は発動しない。リセット時刻は推定（実行開始＋5時間, official:false）。
+
+## 2026-11-04 中間統合技術調査報告書（P12-REPORT）
+- 成果物: `deliverables/technical_report_2026-11/`（docx・pdf・SOURCE_INVENTORY.csv・EVIDENCE_LEDGER.csv・NUMERICAL_AUDIT.csv・UNRESOLVED_ISSUES.md・REFERENCES.md・REPORT_QA.md・REPORT_README.md）。再生成は `.venv/bin/python scripts/build_tech_report.py`（libreoffice と libreoffice-math が必要。新しいコンテナでは `apt-get install -y libreoffice-math`）。
+- **ユーザー指示（2026-11-04）: 許可のない GitHub push を行わない。** 自動再開の checkpoint では `--push` を付けず、コミットのみ行う。push はユーザーの明示的な許可後。
+- 2018・2019年度の原データは「未取得資料」（付録H, M-01/M-02）として扱い、所在確認をユーザーに繰り返し求めない。
+- 報告書の完成後は、アプリ開発・解析作業（RESTART_GUIDE の next_task）に戻る。
