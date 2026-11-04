@@ -26,3 +26,9 @@
 
 ## 状態の保存（2026-11-03 追記）
 `.venv/bin/python scripts/build_state.py --done <完了ID,...> --current <ID> --blocked "<ID>=<理由>"`。P2-OTHERS は取得可能な資料の検証を終え、残りがユーザー操作待ちのため blocked。次は P11-AUDIT（QUALITY_AUDIT.md・IMPLEMENTATION_PROGRESS.md・README 更新・全テスト・最終報告）。blocked の再試行は、ユーザーが分割CSV等を用意したときのみ行う。
+
+## 自動停止・自動再開（cc-autoresume, 2026-11-04 導入）
+- 共通モジュール: `.claude/autoresume/`（移植元 csta24055-sys/-1 `tools/cc-autoresume/` v1.0.0）、設定 `.claude/autoresume.json`、状態 `AUTORESUME_STATE.json`、記録 `AUTORESUME_LOG.md`、非公開ログ `private_data/autoresume/`。
+- 新しいコンテナでは最初に `python3 .claude/autoresume/install.py . --scope user`（冪等）。
+- 区切りごとに `python3 .claude/autoresume/ccar.py checkpoint --done … --todo … --next … --test --push`。終了前に `plan-wake` → 一回限りの予約3件（primary/backup/weekly）を同じIDのまま run_once_at 更新 → `lock release`。
+- クラウドセッションでは公式の使用率が取得できないため、85%準備・90%停止の判定は発動しない。リセット時刻は推定（実行開始＋5時間, official:false）。

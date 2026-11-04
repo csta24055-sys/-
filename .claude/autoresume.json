@@ -1,0 +1,34 @@
+{
+ "project": "Air Quality Research OS",
+ "remote": "origin",
+ "branch": "claude/air-quality-research-os-19gu2g",
+ "state_file": "AUTORESUME_STATE.json",
+ "log_file": "AUTORESUME_LOG.md",
+ "private_dir": "private_data/autoresume",
+ "timezone_offset_hours": 9,
+ "thresholds": {
+  "prepare": 85,
+  "stop": 90
+ },
+ "window_hours": 5,
+ "weekly_fallback_hours": 169,
+ "wake_margin_min": 5,
+ "statusline_max_age_min": 15,
+ "lock_stale_hours": 3,
+ "progress_files": [
+  "RESTART_GUIDE.md",
+  "EXECUTION_STATE.json",
+  "RUN_HISTORY.md",
+  "QUALITY_AUDIT.md"
+ ],
+ "test_command": ".venv/bin/python -m pytest -q && (cd frontend && npm test --silent)",
+ "resume_task": "Follow RESTART_GUIDE.md and EXECUTION_STATE.json next_task; retry blocked items only if the user supplied what they need. Obey CLAUDE.md absolute rules: never commit Box text, raw data (Excel/CSV) or personal/resident names (keep them in private_data/), Box is read-only, never mark unread sources as read.",
+ "commit_trailer": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01GV7Ln7DpMtjNBtRybVP55v",
+ "schedule": {
+  "backend": "claude-remote",
+  "primary_trigger_id": "trig_01Sit4pnANCyvPjTfdWECWpU",
+  "backup_trigger_id": "trig_01Y88khPrBjWWBUHQHmzqv8H",
+  "weekly_trigger_id": "trig_01Bj6SwWdJ6RnQMpFDmw8dZS"
+ },
+ "install_scope": "user"
+}
