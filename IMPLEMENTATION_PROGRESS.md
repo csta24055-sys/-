@@ -1,6 +1,6 @@
 # 実装進捗（アプリ）
 
-最終確認: 2026-11-03。テスト: pytest 56件、vitest 26件、ブラウザE2E 37/37（デスクトップ＋iPhone 13 表示）すべて通過。
+最終確認: 2026-11-03。テスト: pytest 57件、vitest 26件、ブラウザE2E 37/37（デスクトップ＋iPhone 13 表示）すべて通過。
 
 | 機能（指令の区分） | 状態 | 実装場所 | 確認方法 |
 |---|---|---|---|
@@ -10,7 +10,7 @@
 | D シミュレーション（単室・多室・EPバイパス、プリセット、外挿警告、非住宅への外挿注意） | 完了 | Simulator.tsx, core/models.ts | vitest（Python と数値一致）, E2E |
 | E ナレッジグラフ | 完了 | KnowledgeGraph.tsx | E2E |
 | F テーマ比較（重み可変）・研究計画の作成/編集/保存 | 完了 | ResearchPlan.tsx, components/PlanEditor.tsx, /api/plans | pytest（CRUD・検証）, E2E（保存の永続化） |
-| G レポート（Markdown編集・出力、2冊の資料の md/docx/pdf ダウンロード） | 完了 | Report.tsx, /api/deliverables | pytest, E2E（docx の ZIP 署名とヘッダー） |
+| G レポート（Markdown編集・出力、2冊の資料と中間統合技術調査報告書 2026-11 の md/docx/pdf/csv ダウンロード） | 完了 | Report.tsx, /api/deliverables（許可したサブフォルダのみ） | pytest（報告書PDF・パス走査拒否）, E2E（docx の ZIP 署名とヘッダー） |
 | H 学習モード（13段階・進捗保存） | 完了 | pages/Learning.tsx, /api/state/learning | pytest, E2E（再読込後の保持） |
 | オフライン閲覧（Service Worker・スナップショット） | 完了 | public/sw.js | E2E |
 

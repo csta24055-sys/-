@@ -487,24 +487,35 @@ def put_state(key: str, body: StateIn):
 
 # ------------------------------------------------------------- deliverables（2027年度向け資料）
 DELIV = ROOT / "deliverables"
-DELIV_EXT = {".md": "text/markdown; charset=utf-8", ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".pdf": "application/pdf"}
+DELIV_EXT = {".md": "text/markdown; charset=utf-8", ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".pdf": "application/pdf",
+             ".csv": "text/csv; charset=utf-8"}
+DELIV_SUBDIRS = ("technical_report_2026-11",)   # 公開してよい成果物のサブフォルダ（原データは置かない）
+
+
+def _deliv_files():
+    out = [f for f in sorted(DELIV.iterdir()) if f.is_file() and f.suffix in DELIV_EXT and f.suffix != ".csv"] if DELIV.exists() else []
+    for sd in DELIV_SUBDIRS:
+        d = DELIV / sd
+        if d.is_dir():
+            out += [f for f in sorted(d.iterdir()) if f.is_file() and f.suffix in DELIV_EXT]
+    return out
 
 
 @app.get("/api/deliverables")
 def list_deliverables():
-    if not DELIV.exists():
-        return []
-    return [{"name": f.name, "size": f.stat().st_size, "ext": f.suffix} for f in sorted(DELIV.iterdir()) if f.suffix in DELIV_EXT]
+    return [{"name": f.relative_to(DELIV).as_posix(), "size": f.stat().st_size, "ext": f.suffix,
+             "group": f.parent.name if f.parent != DELIV else "2027"} for f in _deliv_files()]
 
 
-@app.get("/api/deliverables/{name}")
+@app.get("/api/deliverables/{name:path}")
 def get_deliverable(name: str):
     f = (DELIV / name).resolve()
-    if f.parent != DELIV.resolve() or f.suffix not in DELIV_EXT or not f.is_file():
+    allowed = {DELIV.resolve(), *((DELIV / sd).resolve() for sd in DELIV_SUBDIRS)}
+    if f.parent not in allowed or f.suffix not in DELIV_EXT or not f.is_file() or (f.suffix == ".csv" and f.parent == DELIV.resolve()):
         raise HTTPException(404, "not found")
     from urllib.parse import quote
     ascii_name = {"研究継承総合資料": "AQROS_2027_inheritance", "研究方針": "AQROS_2027_strategy"}
-    fb = next((v for k, v in ascii_name.items() if k in f.name), "AQROS_2027") + f.suffix
+    fb = f.name if f.name.isascii() else next((v for k, v in ascii_name.items() if k in f.name), "AQROS_2027") + f.suffix
     return FileResponse(f, media_type=DELIV_EXT[f.suffix],
                         headers={"Content-Disposition": f"attachment; filename=\"{fb}\"; filename*=utf-8''{quote(f.name)}"})
 

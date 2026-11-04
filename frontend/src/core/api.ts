@@ -61,7 +61,7 @@ export async function get<T>(path: string): Promise<T> {
 export interface Literature { doi: string; title: string; authors: string[]; year: number; venue: string; level: string; topic: string; stance: string; related: string[]; key: string; comparison: string; url: string }
 export interface CompletenessUnit { id: string; year: number; title: string; sources: string[]; cls: string; evidence: string[]; notes: string; items: Record<string, string>; score: string }
 export interface Plan { id?: number; title: string; theme_id?: string | null; background?: string; purpose?: string; hypotheses?: string; methods?: string; equipment?: string; measurements?: string; analysis?: string; schedule?: string; risks?: string; alternatives?: string; references?: string; created_at?: string; updated_at?: string }
-export interface Deliverable { name: string; size: number; ext: string }
+export interface Deliverable { name: string; size: number; ext: string; group?: string }
 
 export const api = {
   dashboard: () => get<any>('/api/dashboard'),

@@ -22,12 +22,22 @@ export default function Report() {
         <button className="ghost" onClick={() => window.print()}>PDF出力（印刷→PDFに保存）</button>
         <span className="small muted">{msg}</span>
       </div>
-      {deliv && deliv.length > 0 && (
-        <Card className="noprint" title="2027年度向け資料（Word・PDF・Markdown）">
-          <ul className="deliv">{deliv.map((d) => <li key={d.name}><a href={`/api/deliverables/${encodeURIComponent(d.name)}`} download={d.name}>{d.name}</a> <span className="small muted">{(d.size / 1024).toFixed(0)} KB</span></li>)}</ul>
-          <p className="small muted">いずれも knowledge.json・検証記録・本報告書から scripts/build_books.py で生成。数値はアプリの表示と同じ出典から作られる。</p>
-        </Card>
-      )}
+      {deliv && deliv.length > 0 && [
+        ['2027', '2027年度向け資料（Word・PDF・Markdown）', 'いずれも knowledge.json・検証記録・本報告書から scripts/build_books.py で生成。数値はアプリの表示と同じ出典から作られる。'],
+        ['technical_report_2026-11', '中間統合技術調査報告書 2026-11（Word・PDF・台帳・数値監査）', 'scripts/build_tech_report.py で生成。根拠は Claim ID で EVIDENCE_LEDGER.csv、計算は NUMERICAL_AUDIT.csv をたどれる。研究室の公式見解ではなく、第三者査読は未実施。'],
+      ].map(([g, title, note]) => {
+        const items = deliv.filter((d) => (d.group || '2027') === g)
+        if (!items.length) return null
+        return (
+          <Card key={g} className="noprint" title={title}>
+            <ul className="deliv">{items.map((d) => {
+              const base = d.name.split('/').pop() || d.name
+              return <li key={d.name}><a href={`/api/deliverables/${d.name.split('/').map(encodeURIComponent).join('/')}`} download={base}>{base}</a> <span className="small muted">{(d.size / 1024).toFixed(0)} KB</span></li>
+            })}</ul>
+            <p className="small muted">{note}</p>
+          </Card>
+        )
+      })}
       <nav className="toc noprint">{data.map((s) => <a key={s.id} href={`#${s.id}`}>{s.title}</a>)}</nav>
       <div className="print-title">Air Quality Research OS — 井口研究室 空気清浄度研究 総合研究報告書</div>
       {data.map((s) => (

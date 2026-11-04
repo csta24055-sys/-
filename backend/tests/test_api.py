@@ -210,3 +210,16 @@ def test_learning_state_and_deliverables(client):
     pdf = [n for n in names if n.endswith(".pdf")][0]
     r = client.get(f"/api/deliverables/{pdf}")
     assert r.status_code == 200 and r.content[:4] == b"%PDF"
+
+
+def test_technical_report_deliverables(client):
+    items = client.get("/api/deliverables").json()
+    names = [d["name"] for d in items]
+    rep = "technical_report_2026-11/AQ_Research_Integrated_Technical_Report_2026-11.pdf"
+    assert rep in names and "technical_report_2026-11/NUMERICAL_AUDIT.csv" in names
+    r = client.get(f"/api/deliverables/{rep}")
+    assert r.status_code == 200 and r.content[:4] == b"%PDF"
+    assert 'filename="AQ_Research_Integrated_Technical_Report_2026-11.pdf"' in r.headers["content-disposition"]
+    for bad in ("/api/deliverables/technical_report_2026-11/../../CLAUDE.md", "/api/deliverables/technical_report_2026-11/figures/fig_2026_dp.png",
+                "/api/deliverables/..%2F..%2Fprivate_data%2Fx.csv"):
+        assert client.get(bad).status_code != 200 or b"CLAUDE" not in client.get(bad).content
