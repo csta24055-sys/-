@@ -1,0 +1,46 @@
+{
+  "id": "diag1",
+  "title": "SPI英語 初回診断（24問）",
+  "categories": {
+    "VOC": "基本語彙（英→和）",
+    "SYN": "同意語",
+    "ANT": "反意語",
+    "DEF": "英英定義",
+    "GRM": "空欄補充（文法・語法）",
+    "ERR": "誤文訂正",
+    "RDG": "長文読解"
+  },
+  "items": [
+    {"id": "A1", "cat": "VOC", "level": 1, "q": "borrow", "choices": {"1": "貸す", "2": "借りる", "3": "返す", "4": "買う"}},
+    {"id": "A2", "cat": "VOC", "level": 2, "q": "decide", "choices": {"1": "決める", "2": "断る", "3": "説明する", "4": "減らす"}},
+    {"id": "A3", "cat": "VOC", "level": 3, "q": "increase", "choices": {"1": "減少する", "2": "維持する", "3": "増加する", "4": "比較する"}},
+    {"id": "A4", "cat": "VOC", "level": 4, "q": "require", "choices": {"1": "必要とする", "2": "拒否する", "3": "回復する", "4": "予約する"}},
+    {"id": "A5", "cat": "VOC", "level": 5, "q": "reluctant", "choices": {"1": "熱心な", "2": "気が進まない", "3": "正直な", "4": "慎重な"}},
+    {"id": "A6", "cat": "VOC", "level": 6, "q": "meticulous", "choices": {"1": "大胆な", "2": "細心の・几帳面な", "3": "無関心な", "4": "気前のよい"}},
+
+    {"id": "B1", "cat": "SYN", "level": 1, "q": "big", "choices": {"A": "huge", "B": "tiny", "C": "thin", "D": "quick", "E": "weak"}},
+    {"id": "B2", "cat": "SYN", "level": 3, "q": "begin", "choices": {"A": "finish", "B": "continue", "C": "commence", "D": "delay", "E": "repeat"}},
+    {"id": "B3", "cat": "SYN", "level": 4, "q": "abundant", "choices": {"A": "scarce", "B": "narrow", "C": "ancient", "D": "plentiful", "E": "fragile"}},
+    {"id": "B4", "cat": "SYN", "level": 5, "q": "diminish", "choices": {"A": "expand", "B": "distribute", "C": "defend", "D": "describe", "E": "decrease"}},
+
+    {"id": "C1", "cat": "ANT", "level": 1, "q": "expensive", "choices": {"A": "costly", "B": "cheap", "C": "rich", "D": "heavy", "E": "famous"}},
+    {"id": "C2", "cat": "ANT", "level": 3, "q": "accept", "choices": {"A": "receive", "B": "admit", "C": "allow", "D": "adopt", "E": "reject"}},
+    {"id": "C3", "cat": "ANT", "level": 4, "q": "temporary", "choices": {"A": "brief", "B": "sudden", "C": "permanent", "D": "modern", "E": "partial"}},
+
+    {"id": "D1", "cat": "DEF", "level": 1, "q": "a person who travels to a place for pleasure", "choices": {"A": "tourist", "B": "pilot", "C": "resident", "D": "employee", "E": "guard"}},
+    {"id": "D2", "cat": "DEF", "level": 5, "q": "to make pain or a problem less severe", "choices": {"A": "aggravate", "B": "abandon", "C": "accumulate", "D": "alleviate", "E": "allocate"}},
+    {"id": "D3", "cat": "DEF", "level": 4, "q": "a formal written agreement between two or more countries", "choices": {"A": "census", "B": "treaty", "C": "tariff", "D": "budget", "E": "statue"}},
+
+    {"id": "E1", "cat": "GRM", "level": 2, "q": "She has lived in Tokyo (   ) 2020.", "choices": {"A": "for", "B": "since", "C": "from", "D": "at", "E": "during"}},
+    {"id": "E2", "cat": "GRM", "level": 3, "q": "If I (   ) you, I would accept the offer.", "choices": {"A": "am", "B": "will be", "C": "had", "D": "were", "E": "have been"}},
+    {"id": "E3", "cat": "GRM", "level": 4, "q": "The report must be submitted (   ) Friday.", "choices": {"A": "until", "B": "till", "C": "by", "D": "within", "E": "during"}},
+    {"id": "E4", "cat": "GRM", "level": 4, "q": "The number of students (   ) increasing every year.", "choices": {"A": "are", "B": "is", "C": "have", "D": "were", "E": "be"}},
+
+    {"id": "F1", "cat": "ERR", "level": 3, "q": "Each of the employees (A)have (B)to submit (C)a report (D)by (E)the end of the month.", "choices": {"A": "have", "B": "to submit", "C": "a report", "D": "by", "E": "the end of"}},
+    {"id": "F2", "cat": "ERR", "level": 4, "q": "I look forward (A)to see you (B)at the meeting (C)next week, (D)where we (E)will discuss the budget.", "choices": {"A": "to see", "B": "at the meeting", "C": "next week", "D": "where we", "E": "will discuss"}},
+
+    {"id": "G1", "cat": "RDG", "level": 3, "q": "Why is natural gas turned into a liquid?", "choices": {"A": "To make it cleaner", "B": "To reduce its volume for transport", "C": "To raise its temperature", "D": "To build more pipelines", "E": "To reduce investment costs"}},
+    {"id": "G2", "cat": "RDG", "level": 4, "q": "Which statement is true according to the passage?", "choices": {"A": "LNG is warmer than ordinary natural gas.", "B": "Japan exports large amounts of LNG.", "C": "Liquefaction projects are usually completed quickly.", "D": "Ships can carry LNG to countries without pipeline connections.", "E": "LNG takes up 600 times more space than gas."}}
+  ],
+  "passage_G": "Liquefied natural gas (LNG) is natural gas that has been cooled to about minus 162 degrees Celsius. At this temperature, the gas becomes a liquid and takes up only about 1/600 of its original volume. This makes it possible to transport large amounts of gas by ship to countries that are far from gas fields and cannot be connected to them by pipelines. Japan, which has few domestic energy resources, is one of the largest importers of LNG in the world. However, building liquefaction plants requires huge investment, so such projects usually take many years to complete."
+}
