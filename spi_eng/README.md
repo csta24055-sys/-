@@ -31,3 +31,12 @@
 4. 11/9〜10 模試・弱点の反復 → 11/10 17:30 本番
 
 記録：`data/results.csv`（1問ごと）, `data/sessions.csv`（1回ごと）
+
+## 4. 初回診断の結果（11/6）
+- 正答 13/24（54%）、勘を除いた実力正答 10/24（42%）。時間は未記録。
+- 中学レベルの語（borrow, decide, increase, big, expensive）は取れている。高校レベル（require, reluctant, abundant, diminish, temporary, treaty）から先はほぼ全滅。
+- 自信を持って間違えた5問：accept の反意語に allow を選択／by と until の区別／Each of → has／look forward to ～ing／長文で import と export を取り違え。
+- **結論：失点の大部分は語彙。** 長文の誤答も単語（importer）が原因。→ 4日間の時間の約7割を、SPIによく出る語の同意語・反意語ペアの暗記に使う。約2割を文法の頻出パターン（ルール暗記で即効性あり）、約1割を長文の解き方に使う。
+
+## 5. ツール
+- `drill.py make v1 --n 25` / `drill.py grade <id> "..."` / `drill.py status v1`：単語ごとの習熟度（box）を記録し、苦手な語を優先して出題する。
