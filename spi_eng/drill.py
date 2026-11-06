@@ -52,7 +52,7 @@ def make(a):
             trap = first(w["ant" if k == "syn" else "syn"]) if w["ant" if k == "syn" else "syn"] else None
             cand = [first(x["syn"]) for x in ws if x is not w and x["syn"]] + \
                    [first(x["ant"]) for x in ws if x is not w and x["ant"]]
-            cand = [c for c in cand if c not in (ans, trap)]
+            cand = sorted({c for c in cand if c not in (ans, trap) and c[:5] != ans[:5] and c[:5] != w["w"][:5]})
             others = ([trap] if trap else []) + rng.sample(cand, 4 - (1 if trap else 0))
             opts = others + [ans]
             prompt = f"{w['w']} の{'同意語' if k == 'syn' else '反意語'}"
