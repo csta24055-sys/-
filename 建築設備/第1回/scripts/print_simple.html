@@ -36,6 +36,9 @@ b{font-weight:700}
 .hchain .st{border:2px solid #999;border-radius:2.5mm;padding:2mm 3mm;font-size:13pt;font-weight:700;line-height:1.45;text-align:center;display:flex;align-items:center;justify-content:center}
 .hchain .st.warn{border-color:#D55E00;border-style:dashed;color:#9a3d00}
 .hchain .ar{align-self:center;font-size:16pt;color:#555}
+.bridge{margin-top:auto;font-size:13pt;font-weight:700;color:#444;text-align:right}
+.chain{margin-top:0}
+.chain .ar{line-height:1.6}
 .foot{position:absolute;bottom:6mm;left:20mm;right:20mm;font-size:8pt;color:#777;display:flex;justify-content:space-between}
 </style>
 </head>
@@ -44,21 +47,23 @@ b{font-weight:700}
 <div class="page" id="p1">
   <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>超シンプル版</span></div>
 
-  <div class="ask"><span class="lb">今回知りたいこと</span><span class="q">建物の水は、どこから来て、どこへ行くのか？</span></div>
+  <div class="ask"><span class="lb">今回知りたいこと</span><span class="q">建物で水を使うとき、いちばん大切なことは何か？</span></div>
 
-  <h1>建物の水は<br>「入る → 使う → 出る」</h1>
+  <h1>飲む水と汚れた水を、<br>分けて流す</h1>
 
-  <p>建物で水を使うための設備を、<b>給排水衛生設備</b>という。水道から<b>きれいな水</b>を入れ、蛇口やトイレで使い、<b>使った水</b>を下水道へ流す。</p>
+  <div class="chain">
+    <div class="st">建物では、蛇口の水を飲み、トイレで汚れた水を流す。<br><small>1つの建物の中で、飲む水と汚れた水の両方を使っている。</small></div>
+    <div class="ar">▼</div>
+    <div class="st warn">汚れた水が飲む水に混ざったり、建物の中にたまったりしたら、<br>病気の原因になる。</div>
+    <div class="ar">▼</div>
+    <div class="st fin">だから、きれいな水は汚さずに届け、<br>使った水はすぐ外へ出す。</div>
+  </div>
+
+  <p style="margin-top:6mm">そのための設備を、<b>給排水衛生設備</b>という。</p>
 
   <!--INCLUDE:figs_simple/flow.svg-->
 
-  <div class="chain">
-    <div class="st">建物の中では、<br>人が飲む水と、汚れた水の両方を扱う</div>
-    <div class="ar">▼</div>
-    <div class="st warn">2つが混ざると、不衛生になり、<br>人の健康をそこなうおそれがある</div>
-    <div class="ar">▼</div>
-    <div class="st fin">だから、給排水衛生設備では<br>「安全・衛生」がいちばん大切</div>
-  </div>
+  <p class="bridge">でも、下水道へつながる管には、もう1つ問題がある。→ 次のページ</p>
 
   <div class="foot"><span>第1回授業（2026/9/29）の動画・スライドをもとに作成</span><span>1 / 2</span></div>
 </div>
@@ -66,23 +71,18 @@ b{font-weight:700}
 <div class="page" id="p2">
   <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>超シンプル版</span></div>
 
-  <h1 style="margin-top:9mm">汚れた空気やにおいを<br>部屋に戻さないために、水の「ふた」が必要</h1>
+  <h1 style="margin-top:9mm">下水のにおいや虫を、<br>部屋に戻さない</h1>
 
-  <p>排水管は下水管とつながっている。そのままだと、下水の<b>におい・汚れた空気・虫</b>が部屋に入ってきて、<b>不衛生</b>になる。</p>
-  <p>そこで、排水管のS字の部分に水をためて、<b>下水と部屋を水で仕切る</b>。この水のふたを<b>封水</b>（ふうすい）という。</p>
+  <p>使った水は、排水管を通って下水道へ流れる。つまり排水管は、<b>いつも下水道とつながっている</b>。</p>
+  <p>そのままだと、この管を通って下水の<b>においや虫</b>が部屋に上がってくる。汚れた水を外に出しても、これでは意味がない。</p>
+  <p>そこで、排水管をS字に曲げて<b>水をためる</b>。たまった水がふたになり、においや虫を止める。この水を<b>封水</b>（ふうすい）という。</p>
 
   <!--INCLUDE:figs_simple/trap.svg-->
 
-  <div class="hchain">
-    <div class="st warn">下水はそのままだと<br>部屋に悪い影響</div><div class="ar">▶</div>
-    <div class="st">封水が<br>水のふたになる</div><div class="ar">▶</div>
-    <div class="st">におい・汚れた空気・<br>虫を防ぐ</div>
-  </div>
-
   <div class="concl">
     <span class="lb">結局、何が重要なのか</span>
-    <span class="big">だから、人の健康を守れる。<br>これが「安全・衛生」</span>
-    <p>飲む水と汚れた水を分けること（1ページ目）、下水を部屋に戻さないこと（このページ）。この2つが、建物で水を使う人の健康を守っている。</p>
+    <span class="big">汚れた水を外に出すだけでなく、<br>下水のにおいや虫も部屋に戻さない</span>
+    <p>水を分けて流すことも、下水を部屋に戻さないことも、人の健康を守るため。だから給排水衛生設備では、<b>「安全・衛生」がいちばん大切</b>になる。</p>
     <span class="src">「安全・衛生」は授業で強調された観点 [0:14:09]。文章は作成者のまとめ</span>
   </div>
 
