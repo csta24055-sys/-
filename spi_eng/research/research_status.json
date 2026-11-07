@@ -1,0 +1,103 @@
+{
+ "evaluated_at": "2026-11-07T21:25:05",
+ "RESEARCH_STATUS": "BLOCKED",
+ "steps": {
+  "STEP0": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {}
+  },
+  "STEP1": {
+   "status": "BLOCKED",
+   "issues": [
+    "件数5件が目標300件に届かない(網羅性監査に合格した場合のみ例外)",
+    "原文確認率0%が基準50%に届かない",
+    "主要媒体の原文取得が遮断されている: ['chiebukuro', 'x', 'reddit', 'note', 'minshu', 'onecareer', 'syukatsu_kaigi', 'gaishishukatsu', 'spi_sites', 'blogs']"
+   ],
+   "stats": {
+    "records": 5,
+    "original_verified": 0,
+    "original_ratio": 0.0,
+    "distinct_queries": 40,
+    "media_attempted": [
+     "blogs",
+     "chiebukuro",
+     "gaishishukatsu",
+     "inpex_official",
+     "minshu",
+     "note",
+     "onecareer",
+     "reddit",
+     "spi_official",
+     "spi_sites",
+     "syukatsu_kaigi",
+     "x"
+    ],
+    "blocked_primary_media": [
+     "chiebukuro",
+     "x",
+     "reddit",
+     "note",
+     "minshu",
+     "onecareer",
+     "syukatsu_kaigi",
+     "gaishishukatsu",
+     "spi_sites",
+     "blogs"
+    ]
+   }
+  },
+  "STEP2": {
+   "status": "NOT_STARTED",
+   "issues": [
+    "ファイルがない: step2/verified_records.csv",
+    "ファイルがない: step2/dependency_graph.csv"
+   ],
+   "stats": {}
+  },
+  "STEP3": {
+   "status": "NOT_STARTED",
+   "issues": [
+    "ファイルがない: step3/reliability.csv",
+    "ファイルがない: step3/evidence_fusion.py",
+    "ファイルがない: step3/test_fusion.py"
+   ],
+   "stats": {}
+  },
+  "STEP4": {
+   "status": "NOT_STARTED",
+   "issues": [
+    "ファイルがない: step4/model.py",
+    "ファイルがない: step4/results.json",
+    "ファイルがない: step4/sensitivity.json",
+    "ファイルがない: step4/trace.csv"
+   ],
+   "stats": {}
+  },
+  "STEP5": {
+   "status": "NOT_STARTED",
+   "issues": [
+    "ファイルがない: step5/inpex_records.csv",
+    "ファイルがない: step5/inpex_search_log.csv",
+    "ファイルがない: step5/hypotheses.json"
+   ],
+   "stats": {}
+  },
+  "STEP6": {
+   "status": "NOT_STARTED",
+   "issues": [
+    "ファイルがない: step6/decision.py",
+    "ファイルがない: step6/results.json",
+    "ファイルがない: step6/trace.csv"
+   ],
+   "stats": {}
+  },
+  "STEP7": {
+   "status": "NOT_STARTED",
+   "issues": [
+    "ファイルがない: FINAL_REPORT.md"
+   ],
+   "stats": {}
+  }
+ }
+}

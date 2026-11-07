@@ -1,0 +1,24 @@
+{
+ "version": 1,
+ "created": "2026-11-07",
+ "statuses": ["NOT_STARTED", "IN_PROGRESS", "PASS", "BLOCKED"],
+ "legacy_policy": "spi_eng/analysis/ の数値（REPORT*.md, results*.json, inpex_*）は仮定にもとづく旧研究。新研究の結論に流用することを禁止する。旧データ（data/*.csv）は初期資料としてだけ使い、原文と重複を再確認する。",
+ "steps": {
+  "STEP0": {"name": "監査と検証システム", "requires": [],
+            "files": ["research_manifest.json", "research_plan.md", "research_log.csv", "research_gates.py", "legacy_audit.md"]},
+  "STEP1": {"name": "SPI英語の口コミの大量収集（シミュレーション禁止）", "requires": ["STEP0"],
+            "files": ["step1/search_log.csv", "step1/eng_records.csv", "step1/fetch_attempts.csv", "step1/coverage_audit.md"],
+            "target_records": 300,
+            "min_distinct_queries": 40,
+            "min_media_attempted": 10,
+            "min_original_verified_ratio": 0.5,
+            "primary_media": ["chiebukuro", "x", "reddit", "note", "minshu", "onecareer", "syukatsu_kaigi", "gaishishukatsu", "spi_sites", "blogs"],
+            "blocked_rule": "主要媒体の半数以上で原文の取得が遮断され、原文確認率が基準未満なら BLOCKED"},
+  "STEP2": {"name": "原文検証・重複排除", "requires": ["STEP1"], "files": ["step2/verified_records.csv", "step2/dependency_graph.csv"]},
+  "STEP3": {"name": "信頼性・独立性の評価と証拠統合", "requires": ["STEP2"], "files": ["step3/reliability.csv", "step3/evidence_fusion.py", "step3/test_fusion.py"]},
+  "STEP4": {"name": "口コミから得点帯を推定", "requires": ["STEP3"], "files": ["step4/model.py", "step4/results.json", "step4/sensitivity.json", "step4/trace.csv"]},
+  "STEP5": {"name": "INPEXの採用実態", "requires": ["STEP4"], "files": ["step5/inpex_records.csv", "step5/inpex_search_log.csv", "step5/hypotheses.json"]},
+  "STEP6": {"name": "統合意思決定モデル", "requires": ["STEP5"], "files": ["step6/decision.py", "step6/results.json", "step6/trace.csv"]},
+  "STEP7": {"name": "最終報告", "requires": ["STEP6"], "files": ["FINAL_REPORT.md"]}
+ }
+}
