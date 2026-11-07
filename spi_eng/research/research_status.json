@@ -1,6 +1,6 @@
 {
- "evaluated_at": "2026-11-07T21:25:05",
- "RESEARCH_STATUS": "BLOCKED",
+ "evaluated_at": "2026-11-07T22:20:17",
+ "RESEARCH_STATUS": "INCOMPLETE",
  "steps": {
   "STEP0": {
    "status": "PASS",
@@ -8,17 +8,15 @@
    "stats": {}
   },
   "STEP1": {
-   "status": "BLOCKED",
+   "status": "PASS",
    "issues": [
-    "件数5件が目標300件に届かない(網羅性監査に合格した場合のみ例外)",
-    "原文確認率0%が基準50%に届かない",
-    "主要媒体の原文取得が遮断されている: ['chiebukuro', 'x', 'reddit', 'note', 'minshu', 'onecareer', 'syukatsu_kaigi', 'gaishishukatsu', 'spi_sites', 'blogs']"
+    "件数56件が目標300件に届かない(網羅性監査に合格した場合のみ例外)"
    ],
    "stats": {
-    "records": 5,
-    "original_verified": 0,
-    "original_ratio": 0.0,
-    "distinct_queries": 40,
+    "records": 56,
+    "original_verified": 53,
+    "original_ratio": 0.946,
+    "distinct_queries": 96,
     "media_attempted": [
      "blogs",
      "chiebukuro",
@@ -34,45 +32,46 @@
      "x"
     ],
     "blocked_primary_media": [
-     "chiebukuro",
-     "x",
      "reddit",
-     "note",
      "minshu",
      "onecareer",
-     "syukatsu_kaigi",
-     "gaishishukatsu",
-     "spi_sites",
-     "blogs"
+     "syukatsu_kaigi"
+    ],
+    "inaccessible_primary_media": [
+     "x",
+     "reddit",
+     "minshu",
+     "onecareer",
+     "syukatsu_kaigi"
     ]
    }
   },
   "STEP2": {
-   "status": "NOT_STARTED",
-   "issues": [
-    "ファイルがない: step2/verified_records.csv",
-    "ファイルがない: step2/dependency_graph.csv"
-   ],
-   "stats": {}
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "independent_units": [
+     51,
+     56
+    ],
+    "with_passage_count": 8,
+    "objective_scores": 0
+   }
   },
   "STEP3": {
-   "status": "NOT_STARTED",
-   "issues": [
-    "ファイルがない: step3/reliability.csv",
-    "ファイルがない: step3/evidence_fusion.py",
-    "ファイルがない: step3/test_fusion.py"
-   ],
-   "stats": {}
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "items": 70
+   }
   },
   "STEP4": {
-   "status": "NOT_STARTED",
-   "issues": [
-    "ファイルがない: step4/model.py",
-    "ファイルがない: step4/results.json",
-    "ファイルがない: step4/sensitivity.json",
-    "ファイルがない: step4/trace.csv"
-   ],
-   "stats": {}
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "units": 8,
+    "k3": 7
+   }
   },
   "STEP5": {
    "status": "NOT_STARTED",

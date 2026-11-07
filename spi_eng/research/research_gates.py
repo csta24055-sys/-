@@ -45,6 +45,13 @@ def gate_step1():
            or not r["verification_method"].strip() or not r["eng_evidence"].strip()]
     if bad:
         issues.append(f"必須項目が欠けたレコード: {bad[:10]}")
+    # 原文確認済み(yes)のレコードは、取得記録(archive_index.csv)に HTTP 200 で存在しなければならない
+    arc = rows("step1/archive_index.csv") or []
+    ok_urls = {a["url"] for a in arc if a["http"] == "200" and int(a["text_len"] or 0) > 50}
+    fake = [r["report_id"] for r in recs if r["original_verified"] == "yes" and r["url"] not in ok_urls]
+    if fake:
+        issues.append(f"原文確認済みとしているが取得記録と照合できないレコード: {fake[:10]}")
+        bad = bad + fake
     ids = [r["report_id"] for r in recs]
     if len(ids) != len(set(ids)):
         issues.append("report_id が重複している")
@@ -71,11 +78,103 @@ def gate_step1():
         issues.append(f"件数{n}件が目標{s['target_records']}件に届かない(網羅性監査に合格した場合のみ例外)")
     if not verified_ok:
         issues.append(f"原文確認率{ratio:.0%}が基準{s['min_original_verified_ratio']:.0%}に届かない")
+    # 媒体ごとのアクセス状況の記録が必須。取得できる媒体は、探索(sweep)が完了していなければならない
+    ms = rows("step1/media_status.csv")
+    if ms is None:
+        issues.append("media_status.csv がない")
+        coverage_ok = False
+    else:
+        st_by = {m["medium"]: m for m in ms}
+        missing = [m for m in s["primary_media"] if m not in st_by]
+        unswept = [m["medium"] for m in ms if m["status"].startswith("accessible") and m["sweep_done"] != "yes"]
+        if missing: issues.append(f"アクセス状況が未記録の主要媒体: {missing}"); coverage_ok = False
+        if unswept: issues.append(f"取得できるのに探索が終わっていない媒体: {unswept}"); coverage_ok = False
+        stats["inaccessible_primary_media"] = [m for m in s["primary_media"] if m in st_by and not st_by[m]["status"].startswith("accessible")]
+    audit = open(os.path.join(HERE, "step1/coverage_audit.md"), encoding="utf-8").read() if exists("step1/coverage_audit.md") else ""
+    shortfall_ack = "SHORTFALL_ACKNOWLEDGED" in audit
+    if not count_ok and not shortfall_ack:
+        issues.append("件数の不足が coverage_audit.md で認定(SHORTFALL_ACKNOWLEDGED)されていない")
     if len(blocked_primary) * 2 >= len(s["primary_media"]) and not verified_ok:
         return "BLOCKED", issues + [f"主要媒体の原文取得が遮断されている: {blocked_primary}"], stats
-    if bad or not verified_ok or not coverage_ok or not (count_ok or coverage_ok):
+    if bad or not verified_ok or not coverage_ok or not (count_ok or shortfall_ack):
         return "IN_PROGRESS", issues, stats
     return "PASS", issues, stats
+
+
+def gate_step2():
+    r = gate_files("STEP2")
+    if r[0] != "PASS":
+        return r
+    issues = []
+    recs = rows("step1/eng_records.csv") or []
+    ver = rows("step2/verified_records.csv") or []
+    dep = rows("step2/dependency_graph.csv") or []
+    ids1 = {x["report_id"] for x in recs}; ids2 = {x["report_id"] for x in ver}
+    if ids1 != ids2:
+        issues.append(f"STEP1とSTEP2のレコードが一致しない: 不足{sorted(ids1-ids2)[:5]} 余分{sorted(ids2-ids1)[:5]}")
+    need = ["eng_confirmed", "original_status", "objective_score", "independence_unit"]
+    bad = [x["report_id"] for x in ver if any(not x[k] for k in need)]
+    if bad: issues.append(f"検証項目が空のレコード: {bad[:5]}")
+    try:
+        sm = json.load(open(os.path.join(HERE, "step2/summary.json"), encoding="utf-8"))
+    except Exception:
+        return "IN_PROGRESS", issues + ["summary.json が読めない"]
+    units = {x["independence_unit"] for x in ver}
+    if sm.get("independent_units_lower_bound") != len(units) or sm.get("records") != len(ver):
+        issues.append("summary.json の独立件数が実データの再集計と一致しない")
+    claim_ids = {c["claim_id"] for c in (rows("step1/eng_claims_verified.csv") or [])}
+    known = ids1 | claim_ids | {"RUMOR"}
+    badep = [d for d in dep if d["from"] not in known or d["to"] not in known]
+    if badep: issues.append(f"依存関係に存在しないIDがある: {badep[:3]}")
+    stats = {"independent_units": [sm.get("independent_units_lower_bound"), sm.get("independent_units_upper_bound")],
+             "with_passage_count": sm.get("independent_units_with_passage_count"), "objective_scores": sm.get("records_with_objective_score")}
+    return ("PASS" if not issues else "IN_PROGRESS"), issues, stats
+
+
+def gate_step3():
+    r = gate_files("STEP3")
+    if r[0] != "PASS":
+        return r
+    import subprocess
+    issues = []
+    t = subprocess.run([sys.executable, os.path.join(HERE, "step3/test_fusion.py")], capture_output=True, text=True)
+    if t.returncode != 0 or "ALL TESTS PASSED" not in t.stdout:
+        issues.append("test_fusion.py が失敗: " + (t.stderr or t.stdout)[-300:])
+    rel = rows("step3/reliability.csv") or []
+    need = {x["report_id"] for x in (rows("step2/verified_records.csv") or [])} | {c["claim_id"] for c in (rows("step1/eng_claims_verified.csv") or [])}
+    miss = need - {x["id"] for x in rel}
+    if miss: issues.append(f"信頼性の評価がない項目: {sorted(miss)[:5]}")
+    dims = ["accuracy", "memory", "score_reliability", "direct_experience", "selection_bias"]
+    if any(not x[d] for x in rel for d in dims if d in x):
+        issues.append("信頼性の観点に空欄がある")
+    try:
+        fr = json.load(open(os.path.join(HERE, "step3/fusion_results.json"), encoding="utf-8"))
+        if not fr.get("limitations"): issues.append("識別できないパラメータの限界が記録されていない")
+    except Exception:
+        issues.append("fusion_results.json がない")
+    if not exists("step3/limitations.md"): issues.append("limitations.md がない")
+    return ("PASS" if not issues else "IN_PROGRESS"), issues, {"items": len(rel)}
+
+
+def gate_step4():
+    r = gate_files("STEP4")
+    if r[0] != "PASS":
+        return r
+    import subprocess
+    issues = []
+    for script, token in [("step4/check_independent.py", "OK"), ("step4/test_data_sensitivity.py", "DATA SENSITIVITY OK")]:
+        t = subprocess.run([sys.executable, os.path.join(HERE, script)], capture_output=True, text=True)
+        if t.returncode != 0 or token not in t.stdout:
+            issues.append(f"{script} が失敗: " + (t.stderr or t.stdout)[-200:])
+    res = json.load(open(os.path.join(HERE, "step4/results.json"), encoding="utf-8"))
+    ver = rows("step2/verified_records.csv") or []
+    units = {x["independence_unit"] for x in ver if x["passages"]}
+    if res["data"]["n_units"] != len(units):
+        issues.append("results.json のデータ件数が STEP2 の実データと一致しない(再実行が必要)")
+    tr = rows("step4/trace.csv") or []
+    if not any(t["type"] == "実データ" for t in tr) or not any("仮定" in t["type"] for t in tr):
+        issues.append("trace.csv に実データと仮定の区別がない")
+    return ("PASS" if not issues else "IN_PROGRESS"), issues, {"units": res["data"]["n_units"], "k3": res["data"]["k3"]}
 
 
 def gate_files(step):
@@ -92,6 +191,12 @@ def evaluate():
             r = gate_step0()
         elif step == "STEP1":
             r = gate_step1()
+        elif step == "STEP2":
+            r = gate_step2()
+        elif step == "STEP3":
+            r = gate_step3()
+        elif step == "STEP4":
+            r = gate_step4()
         else:
             r = gate_files(step)
             # STEP2以降は、各STEP専用の検証（独立件数・テストの実行・データの反映確認など）を
