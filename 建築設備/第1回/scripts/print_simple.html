@@ -18,7 +18,7 @@ body{font-family:"Noto Sans JP","IPAGothic",sans-serif;font-size:14pt;line-heigh
 h1{font-size:23pt;line-height:1.35;margin:10mm 0 4mm}
 p{margin:0 0 3mm}
 b{font-weight:700}
-.fig{display:block;width:100%;height:auto;margin:5mm 0 6mm}
+.fig{display:block;width:100%;height:auto;margin:4mm 0 5mm}
 .term{font-size:11pt;color:#444;display:block;margin-top:-1mm}
 .point{font-size:15pt;font-weight:700;line-height:1.55;border-top:2px solid #1a1a1a;padding-top:4mm;margin-top:auto}
 .concl{margin-top:auto;border:3px solid #1a1a1a;border-radius:3mm;padding:5mm 6mm}
@@ -26,6 +26,16 @@ b{font-weight:700}
 .concl .big{font-size:19pt;font-weight:700;line-height:1.45;display:block;margin-bottom:2mm}
 .concl p{font-size:13pt;margin:0}
 .concl .src{display:block;text-align:right;font-size:8pt;color:#666;margin-top:1mm}
+.chain{display:flex;flex-direction:column;align-items:stretch;gap:0;margin-top:auto}
+.chain .st{border:2px solid #999;border-radius:2.5mm;padding:2mm 4mm;font-size:14.5pt;font-weight:700;line-height:1.45;text-align:center}
+.chain .ar{text-align:center;font-size:16pt;line-height:1.2;color:#555}
+.chain .st.warn{border-color:#D55E00;border-style:dashed;color:#9a3d00}
+.chain .st.fin{border:3px solid #1a1a1a;background:#fff8e1;font-size:17pt}
+.chain .st small{display:block;font-size:11pt;font-weight:400;color:#333}
+.hchain{display:grid;grid-template-columns:1fr auto 0.85fr auto 1.15fr;align-items:stretch;gap:2mm;margin:0 0 5mm}
+.hchain .st{border:2px solid #999;border-radius:2.5mm;padding:2mm 3mm;font-size:13pt;font-weight:700;line-height:1.45;text-align:center;display:flex;align-items:center;justify-content:center}
+.hchain .st.warn{border-color:#D55E00;border-style:dashed;color:#9a3d00}
+.hchain .ar{align-self:center;font-size:16pt;color:#555}
 .foot{position:absolute;bottom:6mm;left:20mm;right:20mm;font-size:8pt;color:#777;display:flex;justify-content:space-between}
 </style>
 </head>
@@ -42,7 +52,13 @@ b{font-weight:700}
 
   <!--INCLUDE:figs_simple/flow.svg-->
 
-  <div class="point">入ってくる水は、人が飲む水。<br>出ていく水は、汚れた水。<br>この2つを、建物の中で混ぜてはいけない。</div>
+  <div class="chain">
+    <div class="st">建物の中では、<br>人が飲む水と、汚れた水の両方を扱う</div>
+    <div class="ar">▼</div>
+    <div class="st warn">2つが混ざると、不衛生になり、<br>人の健康をそこなうおそれがある</div>
+    <div class="ar">▼</div>
+    <div class="st fin">だから、給排水衛生設備では<br>「安全・衛生」がいちばん大切</div>
+  </div>
 
   <div class="foot"><span>第1回授業（2026/9/29）の動画・スライドをもとに作成</span><span>1 / 2</span></div>
 </div>
@@ -50,17 +66,23 @@ b{font-weight:700}
 <div class="page" id="p2">
   <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>超シンプル版</span></div>
 
-  <h1 style="margin-top:9mm">排水管の中の水が「ふた」になり、<br>下水のにおいを止める</h1>
+  <h1 style="margin-top:9mm">汚れた空気やにおいを<br>部屋に戻さないために、水の「ふた」が必要</h1>
 
-  <p>排水管は下水管とつながっている。そのままだと、下水の<b>においや虫</b>が部屋に上がってくる。</p>
-  <p>そこで、排水管のS字の部分に、いつも水がたまるようにしている。この水がふたになる。この水を<b>封水</b>（ふうすい）という。</p>
+  <p>排水管は下水管とつながっている。そのままだと、下水の<b>におい・汚れた空気・虫</b>が部屋に入ってきて、<b>不衛生</b>になる。</p>
+  <p>そこで、排水管のS字の部分に水をためて、<b>下水と部屋を水で仕切る</b>。この水のふたを<b>封水</b>（ふうすい）という。</p>
 
   <!--INCLUDE:figs_simple/trap.svg-->
 
+  <div class="hchain">
+    <div class="st warn">下水はそのままだと<br>部屋に悪い影響</div><div class="ar">▶</div>
+    <div class="st">封水が<br>水のふたになる</div><div class="ar">▶</div>
+    <div class="st">におい・汚れた空気・<br>虫を防ぐ</div>
+  </div>
+
   <div class="concl">
     <span class="lb">結局、何が重要なのか</span>
-    <span class="big">水の設備でいちばん大切なのは<br>「安全・衛生」</span>
-    <p>人が飲む水と汚れた水を、同じ建物の中で扱うからである。きれいな水を汚さずに届け、汚れた水やにおいを部屋に戻さないことが、人の健康を守る。</p>
+    <span class="big">だから、人の健康を守れる。<br>これが「安全・衛生」</span>
+    <p>飲む水と汚れた水を分けること（1ページ目）、下水を部屋に戻さないこと（このページ）。この2つが、建物で水を使う人の健康を守っている。</p>
     <span class="src">「安全・衛生」は授業で強調された観点 [0:14:09]。文章は作成者のまとめ</span>
   </div>
 
