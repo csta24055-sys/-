@@ -17,4 +17,7 @@ mkdir -p "$WORK"; cd "$WORK"
 [ -f asr/verify_largev3.txt ] || python3 "$HERE/verify_segments.py" audio.wav asr/verify_largev3.txt
 # 5) フォント取得と PDF 生成
 if [ ! -d fonts/package/files ]; then mkdir -p fonts && (cd fonts && npm pack @fontsource/noto-sans-jp@5.0.19 --silent && tar xzf fontsource-noto-sans-jp-5.0.19.tgz); fi
-NODE_PATH=$(npm root -g) node "$HERE/build_pdf.js" "$WORK/fonts/package/files" "$HERE/../建築設備_第1回_要点整理_A4_2枚.pdf"
+F="$WORK/fonts/package/files"
+NODE_PATH=$(npm root -g) node "$HERE/build_pdf.js" "$F" "$HERE/../建築設備_第1回_要点整理_A4_2枚.pdf" print.html
+NODE_PATH=$(npm root -g) node "$HERE/build_pdf.js" "$F" "$HERE/../建築設備Ⅲ_第1回_試験対策版_A4_2枚.pdf" print_exam.html
+NODE_PATH=$(npm root -g) node "$HERE/build_pdf.js" "$F" "$HERE/../建築設備Ⅲ_第1回_授業内容版_A4_2枚.pdf" print_lecture.html
