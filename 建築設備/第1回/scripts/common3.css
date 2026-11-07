@@ -1,0 +1,65 @@
+/* 建築設備Ⅲ 第1回 第3版 共通スタイル（ユニバーサルデザイン版）
+   - 本文 9pt・行間 1.55、白背景＋濃い文字
+   - 配色は色覚の違いに配慮した Okabe-Ito 系。色だけに頼らず、記号（○✕◎）・線種・ラベルを併用 */
+:root{
+  --ink:#1a1a1a; --sub:#444; --line:#b9c0c8;
+  --blue:#0072B2; --sky:#56B4E9; --green:#007a5a; --orange:#E69F00; --verm:#D55E00; --brown:#6B4423;
+  --bg-blue:#eef5fb; --bg-verm:#fdf1ea; --bg-yel:#fff8e1; --bg-gray:#f4f5f6;
+}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink)}
+body{font-family:"Noto Sans JP","IPAGothic",sans-serif;font-size:9pt;line-height:1.55}
+.page{width:210mm;height:297mm;padding:6.5mm 7mm 6.5mm;overflow:hidden;position:relative;break-after:page;display:flex;flex-direction:column;gap:2.4mm}
+.page:last-child{break-after:auto}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.6px solid var(--ink);padding-bottom:1.2mm}
+.hdr h1{font-size:15pt;margin:0;line-height:1.2}
+.hdr h1 small{font-size:10pt;font-weight:700;margin-left:2mm}
+.badge{display:inline-block;border:2px solid var(--ink);font-size:9.5pt;font-weight:700;padding:0 2mm;border-radius:1mm;margin-left:2mm;vertical-align:2px}
+.hdr .meta{font-size:7.6pt;color:var(--sub);text-align:right;line-height:1.4}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:3mm;align-items:start}
+.col{display:flex;flex-direction:column;gap:2.4mm;min-width:0}
+.sec{border:1.2px solid var(--line);border-radius:2mm;padding:1.6mm 2.4mm 2mm}
+.sec>h2{font-size:11pt;margin:0 0 1mm;line-height:1.35;display:flex;align-items:center;gap:1.6mm}
+.sec>h2 .no{display:inline-flex;align-items:center;justify-content:center;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--ink);color:#fff;font-size:9pt;flex:0 0 auto}
+.sec>h2 .sub{font-size:8pt;font-weight:400;color:var(--sub)}
+h3{font-size:9.6pt;margin:1.4mm 0 .5mm;line-height:1.35}
+p{margin:.5mm 0}
+ul{margin:.4mm 0;padding-left:4.2mm}
+li{margin:.45mm 0}
+b{font-weight:700}
+.em{font-weight:700;text-decoration:underline;text-decoration-thickness:1.4px;text-underline-offset:2px}
+.def{background:var(--bg-yel);border-left:4px solid #b88a00;padding:1.2mm 2mm;margin:.8mm 0;border-radius:1mm}
+.term{font-weight:700}
+.yomi{font-size:7.6pt;color:var(--sub);font-weight:400}
+.note{font-size:7.8pt;color:var(--sub)}
+.ts{font-size:7pt;color:#666;white-space:nowrap;font-weight:400}
+.fig{display:block;width:100%;height:auto;margin:.6mm 0}
+.figt{font-size:9.4pt;font-weight:700;margin:.4mm 0 0}
+.figt::before{content:"図";display:inline-block;background:var(--ink);color:#fff;font-size:7.6pt;padding:0 1.2mm;border-radius:.8mm;margin-right:1.4mm;vertical-align:1px}
+/* 目的→仕組み→実例→ポイント の4段 */
+.steps{display:grid;gap:1.2mm;margin:.8mm 0}
+.steps.c4{grid-template-columns:repeat(4,1fr)}
+.steps.c2{grid-template-columns:1fr 1fr}
+.step{border:1px solid var(--line);border-radius:1.4mm;padding:1mm 1.6mm;background:#fff}
+.step .lab{display:block;font-size:8pt;font-weight:700;margin-bottom:.3mm}
+.lab.why::before{content:"① なぜ必要？";}
+.lab.how::before{content:"② しくみ";}
+.lab.real::before{content:"③ 実際の建物では";}
+.lab.key::before{content:"④ ここが重要";}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:.6mm 2mm;align-items:baseline}
+.kv>dt{font-weight:700;white-space:nowrap}
+.kv>dd{margin:0}
+.card{border:1px solid var(--line);border-radius:1.6mm;padding:1.1mm 1.8mm;margin:.9mm 0}
+.card .ttl{font-weight:700;font-size:9.4pt}
+.mk-t{font-weight:700}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:.8mm;margin:.6mm 0}
+.chain span{border:1px solid var(--line);border-radius:1mm;padding:0 1.4mm;background:var(--bg-gray)}
+.chain i{font-style:normal;font-weight:700}
+.foot{position:absolute;bottom:2.2mm;left:7mm;right:7mm;font-size:7pt;color:#666;display:flex;justify-content:space-between}
+.qa{display:grid;grid-template-columns:1fr;gap:.9mm}
+.qa .q{font-weight:700}
+.qa .q::before{content:"Q"attr(data-n)"　";color:var(--ink)}
+.qa .a{margin:0 0 0 4mm}
+.qa .a::before{content:"答 ";font-weight:700}
+.qa>div{border-bottom:1px dotted var(--line);padding-bottom:.6mm}
