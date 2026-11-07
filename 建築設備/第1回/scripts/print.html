@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>建築設備Ⅲ 第1回 要点整理</title>
+<style>
+/*FONTFACE*/
+:root{
+  --ink:#1b1f24; --sub:#4a5561; --line:#c9d1da;
+  --blue:#1f5fa8; --blue-bg:#eaf2fb; --red:#c0392b; --red-bg:#fdecea;
+  --green:#2e7d32; --green-bg:#edf6ee; --org:#b35c00; --org-bg:#fff4e5;
+  --gray-bg:#f3f5f7;
+}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink)}
+body{font-family:"Noto Sans JP","IPAGothic",sans-serif;font-size:7.55pt;line-height:1.36}
+.page{width:210mm;height:297mm;padding:6.5mm 7mm 5.5mm;overflow:hidden;position:relative;page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.2px solid var(--blue);padding-bottom:1.2mm;margin-bottom:2mm}
+.hdr h1{font-size:13.2pt;margin:0;color:var(--blue);letter-spacing:.02em}
+.hdr h1 small{font-size:8.6pt;color:var(--ink);font-weight:700;margin-left:2mm}
+.hdr .meta{font-size:6.6pt;color:var(--sub);text-align:right;line-height:1.3}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:2.6mm}
+.col{display:flex;flex-direction:column;gap:1.9mm;min-width:0}
+.sec{border:1px solid var(--line);border-radius:1.6mm;padding:1.3mm 1.8mm 1.5mm;background:#fff}
+.sec h2{font-size:8.7pt;margin:0 0 .9mm;color:#fff;background:var(--blue);display:inline-block;padding:.2mm 2mm;border-radius:1mm}
+.sec h3{font-size:7.9pt;margin:1mm 0 .4mm;color:var(--blue);border-left:2.4px solid var(--blue);padding-left:1.2mm}
+.sec.exam{border:1.6px solid var(--red);background:var(--red-bg)}
+.sec.exam h2{background:var(--red)}
+.sec.col-g h2{background:var(--green)}
+.sec.col-o h2{background:var(--org)}
+ul{margin:.2mm 0 .3mm;padding-left:3.4mm}
+li{margin:.15mm 0}
+p{margin:.3mm 0}
+table{border-collapse:collapse;width:100%;margin:.6mm 0}
+th,td{border:1px solid var(--line);padding:.35mm .9mm;vertical-align:top;text-align:left}
+th{background:var(--gray-bg);font-weight:700;white-space:nowrap}
+td.c,th.c{text-align:center}
+.t-s{font-size:6.7pt;line-height:1.27}
+.k{color:var(--red);font-weight:700}
+.b{font-weight:700}
+.bl{color:var(--blue);font-weight:700}
+.star::before{content:"★";color:var(--red);margin-right:.3mm}
+.warn::before{content:"⚠";color:var(--org);margin-right:.4mm}
+.def{background:#fffbe6;border:1px solid #e8d58a;border-radius:1mm;padding:.8mm 1.4mm;margin:.6mm 0}
+.note{color:var(--sub);font-size:6.4pt}
+.ts{color:#8a96a3;font-size:5.9pt;font-weight:400}
+.mini{display:flex;gap:1.6mm;align-items:flex-start}
+.mini svg{flex:0 0 auto}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.6mm;margin:.4mm 0}
+.flow span{background:var(--blue-bg);border:1px solid #b9d0ea;border-radius:.8mm;padding:.1mm 1mm;white-space:nowrap}
+.flow i{font-style:normal;color:var(--blue);font-weight:700}
+.sched td,.sched th{padding:.15mm .7mm}
+.sched .ex td{background:var(--org-bg)}
+.sched .ts2 td{background:var(--red-bg);font-weight:700}
+.foot{position:absolute;bottom:2.2mm;left:7mm;right:7mm;font-size:5.8pt;color:#8a96a3;display:flex;justify-content:space-between}
+#p1{font-size:7.7pt}
+#p2 .col:last-child .t-s{font-size:7.2pt;line-height:1.32}
+.legend{font-size:6.3pt;color:var(--sub)}
+</style>
+</head>
+<body>
+
+<!-- ======================= PAGE 1 ======================= -->
+<div class="page" id="p1">
+  <div class="hdr">
+    <h1>建築設備Ⅲ 第1回<small>給排水衛生設備の役割 ― 要点整理</small></h1>
+    <div class="meta">2026年9月29日（火）1限／准教授 井口雅登（タワースコラS916）<br>
+      授業動画 1:27:05 全編を音声＋スライドで解析　<span class="legend">★試験・教員強調　⚠間違えやすい　[h:mm]動画時刻</span></div>
+  </div>
+
+  <div class="cols">
+  <div class="col">
+
+    <div class="sec exam">
+      <h2>授業の進め方・評価・試験（最重要の事務連絡）</h2>
+      <ul>
+        <li><b>毎回</b>：朝配布の<b>プリント</b>に記入 → <b>スマホで撮影</b> → 授業後<b>Canvasの課題に提出</b>（＝毎回のレポート）。全13回の出席が前提。<span class="ts">[0:01–0:02]</span></li>
+        <li><b>演習問題3回</b>（第4・8・12回）：計算問題等で理解を深める → 演習課題提出。各回の中盤に<b>建築設備コラム</b>。<span class="ts">[0:04]</span></li>
+        <li><b>OD50</b>（授業まとめ動画）はCanvasで準備でき次第配信（<b>シラバスから変更</b>）。<span class="ts">[0:02:35]</span></li>
+        <li class="star"><span class="k">理解度確認試験：12月22日（火）</span>（年内最後の週）。<b>教科書・参考書・プリント類 持込可</b>。<b>毎回の授業と演習問題から出題</b>（建築設備Ⅱと同じ形式）。<span class="ts">[0:04:52–0:05:23]</span></li>
+        <li>空調以外の給排水衛生・消防・電気も<b>一級建築士試験の範囲</b>。現地で見る機会が少ないので授業で一度聞いておくこと。<span class="ts">[0:05:38]</span></li>
+        <li>第1回プリント：設問1＝給排水衛生設備とは／2＝原則／3＝上下水道について気づいた点・感想／4＝興味を持てた点・理解しにくかった点。<span class="ts">[0:37:37, 1:25:06]</span></li>
+      </ul>
+      <table class="sched t-s">
+        <tr><th class="c">回</th><th>日付</th><th>前半｜コラム｜後半</th><th class="c">回</th><th>日付</th><th>前半｜コラム｜後半</th></tr>
+        <tr><td class="c">①</td><td>9/29</td><td><b>給排水衛生設備の役割｜上下水道</b></td><td class="c">⑦</td><td>11/10</td><td>消防設備｜自動火災報知設備</td></tr>
+        <tr><td class="c">②</td><td>10/6</td><td>給水設備①｜給水設備②</td><td class="c">⑧</td><td>11/17</td><td style="background:var(--org-bg)">演習問題②＋演習課題②</td></tr>
+        <tr><td class="c">③</td><td>10/13</td><td>給湯設備①｜給湯設備②</td><td class="c">⑨</td><td>11/24</td><td>電気設備の役割｜電気の基本</td></tr>
+        <tr><td class="c">④</td><td>10/20</td><td style="background:var(--org-bg)">演習問題①＋演習課題①</td><td class="c">⑩</td><td>12/1</td><td>受変電設備｜動力・電灯設備</td></tr>
+        <tr><td class="c">⑤</td><td>10/27</td><td>衛生設備①｜衛生設備②</td><td class="c">⑪</td><td>12/8</td><td>情報通信設備｜搬送設備</td></tr>
+        <tr><td class="c">⑥</td><td>11/3</td><td>排水通気設備｜雨水排水設備</td><td class="c">⑫</td><td>12/15</td><td style="background:var(--org-bg)">演習問題③＋演習課題③</td></tr>
+        <tr><td colspan="3" class="note">各回レポート提出。ガイダンス動画OD50。次回は10/6（火）1限。</td><td class="c">⑬</td><td>12/22</td><td style="background:var(--red-bg);font-weight:700">理解度確認試験</td></tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <h2>1 建築設備Ⅲの位置づけ</h2>
+      <h3>建築の3つの分野（人体に例えると）<span class="ts"> [0:06]</span></h3>
+      <table class="t-s">
+        <tr><th>分野</th><th>決めること</th><th>人体なら</th></tr>
+        <tr><td>設計・計画</td><td>実用的・美的要求を満たすため、建物の基本構成や形態を決定</td><td>体の構成・体型・容姿</td></tr>
+        <tr><td>構造・材料</td><td>安全に利用できるよう、力学的な面から構造形式・材料を決定</td><td>骨格</td></tr>
+        <tr><td><b>環境・設備</b></td><td>建物内の<b>快適性・利便性向上</b>のため各種設備の形式や配置を決定</td><td><b>内臓や血管・神経</b></td></tr>
+      </table>
+      <h3>建築設備の種類と授業の分担 <span class="ts">[0:08–0:12]</span></h3>
+      <table class="t-s">
+        <tr><th>設備</th><th>内容・例</th><th>授業</th></tr>
+        <tr><td>空調設備</td><td>空気調和・暖冷房・換気（エアコン・天井扇・ダクト）。建物のエネルギーの3〜4割を使う「花形」</td><td>設備Ⅱ</td></tr>
+        <tr><td><b>給排水衛生設備</b></td><td>給水・排水・給湯・衛生（ユニットバス・給排水配管）</td><td rowspan="3"><b>設備Ⅲ</b></td></tr>
+        <tr><td><b>消防（防災）設備</b></td><td>消火栓・スプリンクラー・火災報知器 等（その他設備に昇降機）</td></tr>
+        <tr><td><b>電気設備</b></td><td>電気・通信・放送（照明・情報コンセント・分電盤、Wi-Fi・カメラ）</td></tr>
+      </table>
+      <p class="t-s">環境工学との関係：空調は<b>温熱環境・空気環境</b>（伝熱・湿気・換気）に直結＝環境分野との結びつきが強い。給排水衛生・電気（屋内配線・照明・コンセント）は部屋の水回りや電気の使用箇所に直接関わる。</p>
+      <h3 class="star">考えるべき観点：空調 vs 給排水衛生・電気 <span class="ts">[0:12:54–0:16:50]</span></h3>
+      <table class="t-s">
+        <tr><th>観点</th><th>空調設備（設備Ⅱ）</th><th>給排水衛生・電気（設備Ⅲ）</th></tr>
+        <tr><td>物理を知る</td><td colspan="2" class="c">空気・水（共通）</td></tr>
+        <tr><td>テクノロジー</td><td colspan="2" class="c">機械・工学（共通）</td></tr>
+        <tr><td>エネルギー</td><td colspan="2" class="c">エネルギー・コスト（共通）</td></tr>
+        <tr><td>実装</td><td colspan="2" class="c">設備を建築に実装するには（共通）</td></tr>
+        <tr><td><b>5つ目</b></td><td>環境工学・<b>快適性</b>（暑い／寒い）</td><td class="k">安全・衛生（人命に直結）</td></tr>
+      </table>
+      <ul class="t-s">
+        <li>給水途中で異物が混入 → 人が<b>飲んでしまう</b>。排水が滞留 → すぐ衛生問題（建物内で人が亡くなる事故も実際に起きている）。</li>
+        <li>火災報知器が作動しない → 火災に気づかず<b>逃げ遅れる</b>。⇒ 空調以上に安全・衛生を重視。</li>
+      </ul>
+    </div>
+
+    <div class="sec">
+      <h2>授業の流れと動画時刻（見返し用）</h2>
+      <table class="t-s">
+        <tr><td><b>0:00</b> ガイダンス（進め方・試験）</td><td><b>0:37</b> 原則①〜④ →6</td></tr>
+        <tr><td><b>0:06</b> 3分野・設備の種類・観点・消防・電気 →1・2</td><td><b>0:54</b> コラム：東京の上水道の歴史 →8</td></tr>
+        <tr><td><b>0:20</b> 設備計画で考慮すべきこと →3</td><td><b>1:09</b> 上下水道・敷地・責任分界点 →7</td></tr>
+        <tr><td><b>0:25</b> 給排水衛生設備とは・構成 →4・5</td><td><b>1:25</b> 設問3・4説明 → レポート時間</td></tr>
+      </table>
+    </div>
+
+  </div>
+  <div class="col">
+
+    <div class="sec">
+      <h2>2 消防設備・電気設備の全体像（後半回の予告）</h2>
+      <h3>消火設備等の種類 <span class="ts">[0:17:12]</span></h3>
+      <table class="t-s">
+        <tr><th rowspan="5" style="white-space:normal;width:12mm">通常用いられる消防用設備等</th><th rowspan="3" style="white-space:normal">消防の用に供する設備</th><td>消火設備</td><td>消火器・屋内消火栓・スプリンクラー設備など</td></tr>
+        <tr><td>警報設備</td><td>自動火災報知設備など</td></tr>
+        <tr><td>避難設備</td><td>避難はしご・救助袋など</td></tr>
+        <tr><th>消防用水</th><td colspan="2">防火水槽など</td></tr>
+        <tr><th style="white-space:normal">消火活動上必要な施設</th><td colspan="2">排煙設備・連結送水設備など</td></tr>
+        <tr><th colspan="2" style="white-space:normal">必要とされる防火安全性能を有する消防の用に供する設備等</th><td colspan="2">上記に代えて用いることができる設備</td></tr>
+      </table>
+      <ul class="t-s">
+        <li><b>自動火災報知設備</b>：火災による<b>煙や熱を感知器が自動的に感知</b>し、建物内の人達に火災を知らせる設備。煙感知器・熱感知器・発信機 → <b>受信機</b> → 警報ベル／防火防煙シャッター・防火戸を閉鎖、火災通報装置で消防署へ。<span class="ts">[0:18:39]</span></li>
+        <li><b>排煙設備</b>：たまった煙を外へ出す。<b>連結送水設備</b>：消防用配管を予め建物に設置し、到着した消防車がポンプで送水して上階で放水できる。</li>
+      </ul>
+      <h3>電気設備の構成 <span class="ts">[0:17:03, 0:18:54–0:20:20]</span></h3>
+      <div class="flow t-s"><span>電力会社</span><i>→受電→</i><span>受変電設備（変圧）</span><i>→幹線→</i><span>分電盤</span><i>→</i><span>電灯・コンセント／動力</span></div>
+      <ul class="t-s">
+        <li>区分：<b>受変電・幹線／自家発電・蓄電池／電灯・コンセント／動力／情報・通信</b>設備。</li>
+        <li>住宅は100V・200V（エアコンは200V）。大きなビル（タワースコラ）は<b class="k">6600V</b>で受電（電柱の一番上の線と同じ）→ 変圧器で100V・200Vにして各所へ配る。</li>
+        <li><b>非常用エレベーター・非常用消火ポンプ</b>は電力会社の電力が途絶えても動く必要 → <b>非常用発電設備</b>を設置。</li>
+      </ul>
+    </div>
+
+    <div class="sec exam">
+      <h2>3 設備計画で考慮すべきこと（4項目）</h2>
+      <table class="t-s">
+        <tr><th>項目</th><th>内容（スライド）</th><th>授業での補足</th></tr>
+        <tr><td><b>①地球環境問題と建築設備</b></td><td>地球温暖化問題（CO₂排出、<b>エネルギーセキュリティ</b>も重要）、環境破壊（オゾン層破壊・<b>水資源枯渇</b>）<br><span class="k">※建築物（建築設備）で消費されるエネルギーは少なくない！</span></td><td>カーボンニュートラル。<b>給湯</b>は水を加熱するため多くのエネルギーを使う→効率を強く考える。水資源を大切に使う。</td></tr>
+        <tr><td><b>②都市インフラ・環境との関わり</b></td><td>電力・上下水道・ガスなどのインフラとの接続、ヒートアイランド<br><span class="k">※建築設備は周辺環境と密接に関係！</span></td><td>建築設備は<b>上下水道の末端</b>。建物を建てる際、上水道・下水道が来ているかは大きな関心事。</td></tr>
+        <tr><td><b>③建築のライフサイクル</b></td><td>ライフサイクルアセスメント（<b>LCA</b>）、ライフサイクルコスト（<b>LCC</b>）<br><span class="k">※建築物の寿命は60年、建築設備の寿命は15年！</span></td><td>設備は建物より寿命が短い → <b>定期的なメンテナンス・更新</b>を考える（空調と同じ）。</td></tr>
+        <tr><td><b>④事業継続性（BCP）・レジリエンス</b></td><td>平常時だけでなく<b>非常時も建物機能の継続</b>が求められる。断水・停電時も必要な機能を維持<br><span class="k">※建築設備が使えないと困ります！</span></td><td>最重要は<b>電気</b>。同じくらい重要なのが<b>給排水、特にトイレ</b>。飲み水は備蓄で賄えるが、<b>排出できない</b>と大問題（避難所の例、全トイレ故障で授業不能）。</td></tr>
+      </table>
+      <p class="t-s note">BCP＝Business Continuity Plan。少し前は「BCP」、最近は「レジリエンス」と言う。<span class="ts">[0:20:57–0:25:06]</span></p>
+    </div>
+
+    <div class="sec">
+      <h2>4 給排水衛生設備とは（定義）</h2>
+      <div class="def star"><b>建物内・敷地内の水に関連する諸設備。</b>飲用・調理・洗浄など<b>健康で衛生的な生活を維持し、災害から守るための基幹となる設備</b>。<span class="ts">[0:25:08]</span></div>
+      <ul class="t-s">
+        <li>日本では水道から出る水は<b>いつでも飲める</b>前提 → 設計・運用では途中で異物が入らないようにする。</li>
+        <li>用途：飲用・調理（スープ等）・洗浄（食器・手洗い・便器洗浄）。空調よりも健康・衛生に直結。</li>
+      </ul>
+      <div class="mini">
+        <svg width="128" height="120" viewBox="0 0 104 98" aria-label="給排水衛生設備の系統（概念図）">
+          <rect x="1" y="1" width="102" height="96" fill="#fff" stroke="#c9d1da"/>
+          <rect x="16" y="8" width="56" height="78" fill="none" stroke="#7a8794" stroke-width="1"/>
+          <line x1="16" y1="34" x2="72" y2="34" stroke="#c9d1da"/><line x1="16" y1="60" x2="72" y2="60" stroke="#c9d1da"/>
+          <rect x="44" y="2" width="14" height="7" fill="#d6e6f7" stroke="#1f5fa8" stroke-width=".8"/>
+          <text x="51" y="7.5" font-size="4.3" text-anchor="middle">高置水槽</text>
+          <rect x="20" y="76" width="14" height="8" fill="#d6e6f7" stroke="#1f5fa8" stroke-width=".8"/>
+          <text x="27" y="81.5" font-size="4.3" text-anchor="middle">受水槽</text>
+          <polyline points="2,90 12,90 12,80 20,80" fill="none" stroke="#1f5fa8" stroke-width="1.4"/>
+          <text x="2" y="96" font-size="4.2" fill="#1f5fa8">給水本管→量水器</text>
+          <polyline points="34,80 40,80 40,9 44,9" fill="none" stroke="#1f5fa8" stroke-width="1.4"/>
+          <text x="37" y="72" font-size="4" fill="#1f5fa8" transform="rotate(-90 37 72)">揚水管(ポンプ)</text>
+          <polyline points="51,9 51,12 49,12 49,70" fill="none" stroke="#3a86d6" stroke-width="1.1" stroke-dasharray="0"/>
+          <text x="47" y="50" font-size="4" fill="#3a86d6" transform="rotate(-90 47 50)">給水管(各階)</text>
+          <polyline points="62,20 62,88 84,88" fill="none" stroke="#6d4c2f" stroke-width="1.6"/>
+          <text x="59" y="58" font-size="4" fill="#6d4c2f" transform="rotate(-90 59 58)">排水立て管</text>
+          <polyline points="68,6 68,84" fill="none" stroke="#6d4c2f" stroke-width=".8" stroke-dasharray="1.6 1.2"/>
+          <text x="70" y="22" font-size="4" fill="#6d4c2f">通気管</text>
+          <circle cx="90" cy="88" r="5" fill="none" stroke="#6d4c2f"/><text x="90" y="82" font-size="4" text-anchor="middle">下水道</text>
+          <text x="90" y="78" font-size="3.8" text-anchor="middle" fill="#7a8794">(最終桝→)</text>
+        </svg>
+        <div class="t-s">
+          <b>流れ</b>：給水本管 → 量水器 → <b>受水槽</b> → 給水（揚水）ポンプ → 高置水槽 → 各階の水栓 → 排水管（＋通気管）→ 排水ます → 下水道本管。地下の排水は排水槽 → <b>排水ポンプ</b>でくみ上げ。屋根の雨水はルーフドレン → 雨水貯留槽 → ろ過 → <b>雑用水</b>（トイレ洗浄・屋上緑化散水）。<span class="ts">[0:26:27–]</span><br>
+          <span class="note">※概念図（スライドの系統図を簡略化して作成）</span>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  </div>
+  <div class="foot"><span>建築設備Ⅲ 第1回 要点整理（1/2）</span><span>出典：第1回授業動画（音声・スライド）。動画にない情報は追加していません。</span></div>
+</div>
+
+<!-- ======================= PAGE 2 ======================= -->
+<div class="page" id="p2">
+  <div class="cols">
+  <div class="col">
+    <div class="sec exam">
+      <h2>5 給排水衛生設備の構成（5分類）<span style="font-weight:400;font-size:6.8pt"> プリント設問1</span></h2>
+      <table class="t-s">
+        <tr><th>設備</th><th>役割（スライド）</th><th>ポイント（授業の説明）</th></tr>
+        <tr><td><b>給水設備</b></td><td>水道水（<b>上水</b>）を供給する設備。<span class="k">常に飲用可の水質であること</span></td><td>人が飲む水を運ぶ＝<b>責任が非常に重い</b>設備。<span class="ts">[0:26:36]</span></td></tr>
+        <tr><td><b>給湯設備</b></td><td>上水を加熱して供給する設備。<span class="k">加熱にエネルギーを使う／レジオネラ属菌に注意</span></td><td>浴槽約200L、冬の水道水は10℃以下 → 40数℃まで加熱。<b>40℃前後は細菌が繁殖しやすい</b> → <b>貯湯</b>タンクは<b class="k">65℃以上</b>（「60度とか65度」に上げて貯める）。40℃のまま貯めると菌だらけ。何年かに1回集団感染で高齢者が亡くなる事例が今もある → 正しく設計・運用。<span class="ts">[0:27:50–0:30:30]</span></td></tr>
+        <tr><td><b>排水通気設備</b></td><td>建物内の排水を排除する設備。<span class="k">トラップの封水を保護</span></td><td>下記「トラップ・封水・通気」参照。<span class="ts">[0:30:40–0:34:05]</span></td></tr>
+        <tr><td><b>衛生器具設備</b></td><td>衛生器具や水栓などの設備</td><td>水栓・シャワーヘッド・便器・洗濯機など最も身近な設備。</td></tr>
+        <tr><td><b>排水処理・雨水利用・浄化槽設備</b></td><td>雑用水、中水設備</td><td>屋上の雨水を貯留・ろ過して<b>雑用水</b>（トイレ洗浄水・屋上緑化の散水）に再利用。飲み水には使えない。上水の節約＋下水道へ一度に流さず<b>洪水を起きにくく</b>する。タワースコラも雨水利用。<span class="ts">[0:34:45–0:37:28]</span></td></tr>
+      </table>
+      <div class="mini">
+        <svg width="118" height="108" viewBox="0 0 92 84" aria-label="トラップと通気管の仕組み">
+          <rect x="1" y="1" width="90" height="82" fill="#fff" stroke="#c9d1da"/>
+          <path d="M10 10 h18 v6 a6 6 0 0 1 -6 6 h-6 a6 6 0 0 1 -6 -6z" fill="none" stroke="#7a8794"/>
+          <text x="19" y="8" font-size="4.3" text-anchor="middle">洗面器</text>
+          <path d="M19 22 v12 a6 6 0 0 0 12 0 v-4 a6 6 0 0 1 12 0 v4 h12" fill="none" stroke="#6d4c2f" stroke-width="2.2"/>
+          <path d="M19.8 30 v4 a5.2 5.2 0 0 0 10.4 0 v-4z" fill="#7fb3e6"/>
+          <text x="22" y="48" font-size="4.3" text-anchor="middle" fill="#1f5fa8" font-weight="bold">封水</text>
+          <text x="33" y="52" font-size="4" fill="#6d4c2f">トラップ(S字)</text>
+          <line x1="60" y1="6" x2="60" y2="78" stroke="#6d4c2f" stroke-width="3"/>
+          <text x="63" y="70" font-size="4" fill="#6d4c2f">排水立て管</text>
+          <line x1="75" y1="4" x2="75" y2="60" stroke="#6d4c2f" stroke-width="1" stroke-dasharray="2 1.4"/>
+          <line x1="60" y1="60" x2="75" y2="52" stroke="#6d4c2f" stroke-width="1" stroke-dasharray="2 1.4"/>
+          <text x="77" y="14" font-size="4" fill="#6d4c2f">通気管</text>
+          <path d="M57 14 v14" stroke="#1f5fa8" stroke-width=".9" marker-end="url(#a)"/>
+          <path d="M75 40 v-16" stroke="#c0392b" stroke-width=".9" marker-end="url(#a2)"/>
+          <text x="77" y="34" font-size="3.8" fill="#c0392b">空気↑</text>
+          <text x="46" y="18" font-size="3.8" fill="#1f5fa8">水↓</text>
+          <text x="4" y="62" font-size="3.8" fill="#4a5561">封水が無いと下水管と</text>
+          <text x="4" y="67" font-size="3.8" fill="#4a5561">室内が直結→ガス・臭気・</text>
+          <text x="4" y="72" font-size="3.8" fill="#4a5561">衛生害虫が上がってくる</text>
+          <defs><marker id="a" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><path d="M0,0 L4,2 L0,4z" fill="#1f5fa8"/></marker>
+          <marker id="a2" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><path d="M0,0 L4,2 L0,4z" fill="#c0392b"/></marker></defs>
+        </svg>
+        <div class="t-s">
+          <b class="bl">トラップ・封水・通気（★頻出の仕組み）</b>
+          <ul>
+            <li><b>トラップ</b>：排水管をS字等にクランクさせ、常に水をためる部分（洋式便器の中の水も同じ）。</li>
+            <li><b>封水</b>：トラップにたまった水。<b>水で「ふた」</b>をして、下水管内の<b>有毒ガス・臭気・衛生害虫</b>の室内侵入を防ぐ。</li>
+            <li>排水管内は通常空気だけ。水と固形物が落下すると、空気が抜けないと<b>下部の圧力が上がり</b>流れが悪化 → 圧力変動で封水が<b>飛び出す／吸い込まれる</b>（封水が破れる）。</li>
+            <li><b>通気管</b>を排水管と<b>必ずセット</b>で設置 → 空気を上へ逃がし、排水を円滑にし<b>トラップ（封水）を保護</b>。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec exam">
+      <h2>6 給排水衛生設備の原則（4つ）<span style="font-weight:400;font-size:6.8pt"> プリント設問2</span></h2>
+      <table class="t-s">
+        <tr><th>原則</th><th>内容</th></tr>
+        <tr><td><b>①衛生性</b><br><span class="note">失われると人命にかかわる</span></td><td><b>上水</b>：<span class="k">いかなるときも飲料に適した水質</span>であること。<b>水道法第4条の水質基準</b>（51項目：No.1–31<b>人の健康の保護</b>＝病原生物・重金属・一般有機物・消毒副生成物、No.32–51<b>生活利用上の障害防止</b>＝着色・味・発泡・カビ臭・臭気・基礎的性状）。敷地内は建築設備の範囲 → <b>蛇口に届くまで水質を担保</b>するのは設備技術者。項目の暗記は不要だが厳格に守られている。<br><b>排水</b>：腐敗・臭気・病原菌の発生原因 → <span class="k">迅速に排除</span>。<span class="k">トラップの封水保護</span>。<br><b>雑用水</b>：消毒されていない → <b>飛沫の飛散・レジオネラ属菌・誤飲の防止</b>。雑用水が上水に混ざり飲まれた事故例あり → 絶対に上水と混ざらないように。<span class="ts">[0:37:57–0:42:20]</span></td></tr>
+        <tr><td><b>②機能性・耐久性・更新性</b><br><span class="note">直ちに機能を発揮</span></td><td>開栓時に湯水が<b>直ちに</b>出る。使用後は<b>滞りなく排水</b>。<br><b>シンプルな構成</b>：水回りは縦にそろえる（排水管が途中で曲がると詰まりやすい）。<br>給水ポンプ等は<span class="k">2重化</span>（2台セットで交互運転、1台故障でも機能維持）。下水道より低い階の排水は排水槽→排水ポンプでくみ上げ（止まると地下のトイレが使えない）。<br><b>メンテナンススペース</b>と機器の<b>搬出入ルート</b>を確保。<span class="ts">[0:42:33–0:46:40]</span></td></tr>
+        <tr><td><b>③環境への配慮</b><br><span class="note">水資源の有効活用</span></td><td><span class="k">上水使用量削減</span>・雨水利用・排水再利用・地下浸透・洪水の抑制。<br>節水型便器：1回の洗浄水量 約<b>13L</b>（1980年頃）→ <b>4.8L・3.8L</b>（約71%・75%節水、TOTO資料）。<br>雨水や洗面排水を処理してトイレ洗浄水に。<b>東京23区は合流式</b>（雨水と汚水が同じ下水道）→ ゲリラ豪雨で雨水を全部流すとパンク → 敷地内で貯留・浸透。例：汚水まで処理して再利用し、余剰はビオトープへ浸透（北九州学園都市の水循環システム）。<span class="ts">[0:46:44–0:51:03]</span></td></tr>
+        <tr><td><b>④耐震性</b><br><span class="note">BCP・レジリエンスにも関係</span></td><td>機器や配管が地震で破損・倒壊しないように。<span class="k">被災時の下水利用は重要</span>（東日本大震災・阪神淡路大震災では水の流れないトイレが使えない状態に）。設備を強靭にする・貯める場所を作る＋<b>携帯・簡易・マンホール・仮設トイレ</b>の備え（建物管理者も）。<span class="ts">[0:51:06–0:52:31]</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sec col-o">
+      <h2>一問一答（セルフチェック）</h2>
+      <ul class="t-s">
+        <li><b>Q</b> 給排水衛生設備の5分類は？ <b class="bl">→</b> 給水／給湯／排水通気／衛生器具／排水処理・雨水利用・浄化槽</li>
+        <li><b>Q</b> 給排水衛生設備の4原則は？ <b class="bl">→</b> ①衛生性 ②機能性・耐久性・更新性 ③環境への配慮 ④耐震性</li>
+        <li><b>Q</b> 封水の役割は？ <b class="bl">→</b> 下水管内のガス・臭気・衛生害虫の室内侵入を防ぐ「水のふた」</li>
+        <li><b>Q</b> 通気管を設ける理由は？ <b class="bl">→</b> 排水時の空気を逃がし圧力変動を抑え、排水を円滑にし封水を保護</li>
+        <li><b>Q</b> 給湯で注意する細菌と対策は？ <b class="bl">→</b> レジオネラ属菌。貯湯を65℃以上（60〜65℃）に保つ</li>
+        <li><b>Q</b> BCP上、電気と並び重要な設備は？ <b class="bl">→</b> 給排水（特にトイレ）</li>
+        <li><b>Q</b> 上水の水質基準の根拠は？ <b class="bl">→</b> 水道法第4条（51項目）</li>
+        <li><b>Q</b> ポンプを2台設置する理由は？ <b class="bl">→</b> 1台故障しても機能維持（2重化・交互運転）</li>
+        <li><b>Q</b> コレラが「衛生の母」と呼ばれる理由は？ <b class="bl">→</b> 日本に衛生概念を植え付けたため（鉄管化・上下水道普及へ）</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="col">
+
+    <div class="sec">
+      <h2>7 上下水道と敷地・建物の接点（実務）</h2>
+      <ul class="t-s">
+        <li>上水は水道局の<b>給水区域・配水系統</b>、下水は<b>処理区</b>で管理。タワースコラは<b>芝浦処理区</b>（芝浦の水再生センターで処理し東京湾へ放流）。自分の地域の水源は水道局HPで確認できる。<span class="ts">[1:09:57–1:12:10]</span></li>
+        <li><b>下水道台帳</b>（ネットで閲覧可）で管の位置・<b>深さ</b>・大きさを確認して排水設計。<span class="warn"></span><b>下水道より低い位置に排水箇所</b>があればポンプでくみ上げが必要。上水道の詳細図はセキュリティ上公開されにくく、役所で確認。<span class="ts">[1:12:14–1:13:51]</span></li>
+      </ul>
+      <table class="t-s">
+        <tr><th>敷地で見るもの</th><th>意味・チェック点 <span class="ts">[1:13:54–1:18:10]</span></th></tr>
+        <tr><td>止水栓・量水器</td><td>上水の引込み（メーターボックス）。引込み管が計画建物に対して小さい場合は<b>引込み工事</b>が必要</td></tr>
+        <tr><td>最終桝</td><td>敷地内排水の最後の桝 → ここに排水すれば下水道へ流れる</td></tr>
+        <tr><td>公設桝</td><td>下水道局の桝（公共桝）</td></tr>
+        <tr><td>集水桝</td><td>道路の雨水排水用（敷地の排水先ではない）</td></tr>
+        <tr><td>ガス引込み</td><td>ここからガス管を引けば建物にガスが来る。配管の径も確認</td></tr>
+        <tr><td>電柱の電線</td><td>上段3本＝<b>高圧6600V</b>（規模によっては必要、スコラも6600V）／中段＝<b>低圧100V・200V</b>（住宅・アパートはこれでOK）／下＝電話線・光ファイバー</td></tr>
+      </table>
+      <div class="def t-s"><b class="k">★責任分界点</b>　<b>上水：水道メーター</b>まで水道局の責任、メーターから建物側は「お客様」＝<b>建築設備</b>。<b>下水：公共桝</b>は下水道局、<b>最終桝から宅地側</b>が建物側。ここが上下水道と建築設備の境目。<span class="ts">[1:23:00–1:24:38]</span></div>
+      <ul class="t-s">
+        <li>敷地に降った雨は<b>地盤に浸透させるよう指導</b>されることが多い → <b>雨水浸透桝</b>（穴があり、たまった雨水がゆっくり地盤に浸透。全部下水に流すと洪水・パンクの原因）。<b>汚水桝</b>は底に溝（流れ道）があり、固形物が詰まらず流れる。<span class="ts">[1:21:33–1:22:56]</span></li>
+        <li>施工：<b>基礎のコンクリート打設前に</b>配管の貫通位置を決める（基礎完成時には仮配管が通る）。配管色は<b>青＝給水、赤＝給湯、緑＝追い焚き</b>（フルオート浴槽で浴槽の湯を給湯器に戻して再加熱）、太いグレー管＝<b>排水</b>。給水・給湯は<b>ヘッダー</b>から各所（トイレ・キッチン・洗面・浴室・洗濯機）へ分岐。<span class="ts">[1:18:15–1:21:25]</span></li>
+      </ul>
+    </div>
+
+    <div class="sec col-g">
+      <h2>8 コラム：東京の上下水道の歴史</h2>
+      <div class="flow t-s"><span>雨</span><i>→</i><span>河川</span><i>→取水→</i><span>浄水場</span><i>→</i><span>建物（建築設備）</span><i>→下水管→</i><span>水処理センター</span><i>→放流→</i><span>川・海</span></div>
+      <p class="t-s">建築設備・上下水道は<b>自然の水循環の一部</b>を借りて使っている。東京の水系：<b>利根川</b>（群馬）・<b>荒川</b>（秩父）・<b>多摩川</b>（奥多摩）・<b>相模川</b>（山中湖方面）。<span class="ts">[0:55:45–0:58:35]</span></p>
+      <table class="t-s">
+        <tr><th>時期</th><th>できごと</th></tr>
+        <tr><td>江戸</td><td><b>神田上水</b>（1590、井の頭池・善福寺池方面）→<b>玉川上水</b>（1654、多摩川）。道の下の<b>木樋</b>（配水管・給水管）で<b>上水井戸</b>へ送り汲み上げて使用。トイレは汲取り、雑排水は少なく雨水はドブへ。</td></tr>
+        <tr><td>1892年</td><td>三多摩が神奈川県→東京府へ（都心の水源＝玉川上水の流域を一体で管理するため）。</td></tr>
+        <tr><td>明治</td><td><b>コレラ流行</b>（明治12年死者10万6千人、明治19年10万8千人）。木の水道管の汚染・手洗い不徹底が原因とされる → <b>鉄管</b>へ。<span class="k">「コレラは日本に衛生概念を植え付けた＝衛生の母」</span>。上下水道の普及で収束。</td></tr>
+        <tr><td>近代化</td><td><b>淀橋浄水場</b>（1898〜1965、跡地が現在の新宿副都心・都庁）、村山下貯水池（多摩湖、1924・27年）、小河内ダム（奥多摩湖、1938〜1957年）。</td></tr>
+        <tr><td>1964年</td><td><b>東京大渇水</b>（オリンピック直前、小河内貯水池は2%、最大給水制限50%、24時間断水の地域も、自衛隊等の応援給水＝「東京サバク」）→ <b>利根川からの導水</b>（武蔵水路1967）、東村山1960・朝霞1966・三郷1985浄水場。</td></tr>
+        <tr><td>現在</td><td><b>東京都の水源はほとんど河川水</b>。昭和30年頃までは多摩川水系が主 → <b class="k">現在は利根川・荒川水系78%、多摩川水系19%</b>。</td></tr>
+      </table>
+    </div>
+
+    <div class="sec exam">
+      <h2>9 試験直前チェック（間違えやすい点）</h2>
+      <ul class="t-s">
+        <li class="warn">設備Ⅲで新たに重視する観点は「快適性」ではなく<b>「安全・衛生」</b>。</li>
+        <li class="warn">貯湯は40℃で貯めない → <b>65℃以上</b>（60〜65℃）。原因菌は<b>レジオネラ属菌</b>。</li>
+        <li class="warn"><b>封水</b>＝トラップの水（ふた）。<b>通気管</b>＝排水時の空気の逃げ道で封水を守る。排水管と<b>セット</b>。</li>
+        <li class="warn"><b>雑用水</b>は飲用不可・上水と混ぜない・飛沫に注意（「上水」と混同しない）。</li>
+        <li class="warn">寿命：<b>建築物60年／建築設備15年</b>。ポンプは<b>2重化</b>。</li>
+        <li class="warn">責任分界点：上水＝<b>水道メーター</b>、下水＝<b>最終桝</b>（公共桝は下水道局）。</li>
+        <li class="warn">東京23区は<b>合流式</b>。水質基準は<b>水道法第4条・51項目</b>。</li>
+      </ul>
+            <div class="def t-s"><b>最重要まとめ</b>：給排水衛生設備＝建物内・敷地内の水に関する設備で、<b>上下水道の末端</b>。<b>衛生性（人命）・機能性/耐久性/更新性・環境配慮・耐震性（BCP）</b>の4原則で計画し、給水・給湯・排水通気・衛生器具・排水処理/雨水利用の5設備で構成される。</div>
+    </div>
+
+  </div>
+  </div>
+  <div class="foot"><span>建築設備Ⅲ 第1回 要点整理（2/2）</span><span>確認不能事項（配布プリントの記載内容など）は解析メモに記載</span></div>
+</div>
+</body>
+</html>
