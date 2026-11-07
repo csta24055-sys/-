@@ -177,6 +177,69 @@ def gate_step4():
     return ("PASS" if not issues else "IN_PROGRESS"), issues, {"units": res["data"]["n_units"], "k3": res["data"]["k3"]}
 
 
+def gate_step5():
+    r = gate_files("STEP5")
+    if r[0] != "PASS":
+        return r
+    import subprocess
+    issues = []
+    recs = rows("step5/inpex_records.csv") or []
+    bad = [x["id"] for x in recs if not x["url"].strip() or x["original_verified"] not in ("yes", "no") or not x["verification"].strip()]
+    if bad: issues.append(f"出典・確認状態が欠けたINPEXレコード: {bad[:5]}")
+    reports = [x for x in recs if x["kind"] == "report" and x["original_verified"] == "yes"]
+    if len(reports) < 5: issues.append(f"原文確認済みの選考体験談が少なすぎる: {len(reports)}")
+    ql = rows("step5/inpex_search_log.csv") or []
+    if len(ql) < 10: issues.append(f"INPEXの検索ログが不足: {len(ql)}")
+    try:
+        hj = json.load(open(os.path.join(HERE, "step5/hypotheses.json"), encoding="utf-8"))
+        if not hj.get("identifiability") or not hj.get("sensitivity"): issues.append("仮説比較に識別可能性・感度分析がない")
+    except Exception:
+        issues.append("hypotheses.json が読めない")
+    t = subprocess.run([sys.executable, os.path.join(HERE, "step5/test_inpex.py")], capture_output=True, text=True)
+    if "INPEX TESTS PASSED" not in t.stdout: issues.append("test_inpex.py が失敗: " + (t.stderr or t.stdout)[-200:])
+    return ("PASS" if not issues else "IN_PROGRESS"), issues, {"records": len(recs), "verified_reports": len(reports), "queries": len(ql)}
+
+
+def gate_step6():
+    r = gate_files("STEP6")
+    if r[0] != "PASS":
+        return r
+    import subprocess
+    issues = []
+    res = json.load(open(os.path.join(HERE, "step6/results.json"), encoding="utf-8"))
+    hj = json.load(open(os.path.join(HERE, "step5/hypotheses.json"), encoding="utf-8"))
+    if res.get("hyp_weights_used") != hj["sensitivity"]["r_scale=1.0|rho=0.9"]:
+        issues.append("STEP6 が STEP5 の最新の仮説確率を使っていない(再実行が必要)")
+    t = subprocess.run([sys.executable, os.path.join(HERE, "step6/test_decision.py")], capture_output=True, text=True, cwd=os.path.join(HERE, "step6"))
+    if "DECISION TESTS PASSED" not in t.stdout: issues.append("test_decision.py が失敗: " + (t.stderr or t.stdout)[-200:])
+    tr = rows("step6/trace.csv") or []
+    if not any("仮定" in x["type"] for x in tr) or not any("実データ" in x["type"] for x in tr):
+        issues.append("trace.csv で実データと仮定(条件付きシミュレーション)が区別されていない")
+    return ("PASS" if not issues else "IN_PROGRESS"), issues, {"scenarios": res.get("n_scenarios")}
+
+
+REQUIRED_SECTIONS = ["口コミ収集件数", "原文確認済み件数", "独立した証拠件数", "長文3題に関する証拠の強さ", "推定得点順位",
+                     "INPEXの英語評価実態", "基礎能力上位25", "受検戦略比較", "最適戦略", "仮定に依存する部分"]
+
+
+def gate_step7(prev_all_pass):
+    if not exists("FINAL_REPORT.md"):
+        return "NOT_STARTED", ["FINAL_REPORT.md がない"]
+    txt = open(os.path.join(HERE, "FINAL_REPORT.md"), encoding="utf-8").read()
+    first = txt.splitlines()[0].strip() if txt else ""
+    expected = "RESEARCH_STATUS = COMPLETE" if prev_all_pass else None
+    issues = []
+    if not first.startswith("RESEARCH_STATUS = "):
+        issues.append("先頭行に RESEARCH_STATUS がない")
+    elif prev_all_pass and first != expected:
+        issues.append(f"先頭行の状態が判定と一致しない: {first}")
+    elif not prev_all_pass and first == "RESEARCH_STATUS = COMPLETE":
+        issues.append("前のSTEPが未合格なのに COMPLETE と表示している")
+    miss = [s for s in REQUIRED_SECTIONS if s not in txt]
+    if miss: issues.append(f"必須項目が欠けている: {miss}")
+    return ("PASS" if not issues else "IN_PROGRESS"), issues
+
+
 def gate_files(step):
     miss = [f for f in M["steps"][step]["files"] if not exists(f)]
     return ("NOT_STARTED" if len(miss) == len(M["steps"][step]["files"]) else "IN_PROGRESS",
@@ -197,6 +260,12 @@ def evaluate():
             r = gate_step3()
         elif step == "STEP4":
             r = gate_step4()
+        elif step == "STEP5":
+            r = gate_step5()
+        elif step == "STEP6":
+            r = gate_step6()
+        elif step == "STEP7":
+            r = gate_step7(all(st.get(k) == "PASS" for k in st))
         else:
             r = gate_files(step)
             # STEP2以降は、各STEP専用の検証（独立件数・テストの実行・データの反映確認など）を

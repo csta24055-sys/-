@@ -1,6 +1,6 @@
 {
- "evaluated_at": "2026-11-07T22:20:17",
- "RESEARCH_STATUS": "INCOMPLETE",
+ "evaluated_at": "2026-11-07T22:40:33",
+ "RESEARCH_STATUS": "COMPLETE",
  "steps": {
   "STEP0": {
    "status": "PASS",
@@ -74,28 +74,24 @@
    }
   },
   "STEP5": {
-   "status": "NOT_STARTED",
-   "issues": [
-    "ファイルがない: step5/inpex_records.csv",
-    "ファイルがない: step5/inpex_search_log.csv",
-    "ファイルがない: step5/hypotheses.json"
-   ],
-   "stats": {}
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "records": 35,
+    "verified_reports": 23,
+    "queries": 25
+   }
   },
   "STEP6": {
-   "status": "NOT_STARTED",
-   "issues": [
-    "ファイルがない: step6/decision.py",
-    "ファイルがない: step6/results.json",
-    "ファイルがない: step6/trace.csv"
-   ],
-   "stats": {}
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "scenarios": 192
+   }
   },
   "STEP7": {
-   "status": "NOT_STARTED",
-   "issues": [
-    "ファイルがない: FINAL_REPORT.md"
-   ],
+   "status": "PASS",
+   "issues": [],
    "stats": {}
   }
  }
