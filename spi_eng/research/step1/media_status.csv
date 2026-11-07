@@ -1,0 +1,13 @@
+medium,status,evidence,sweep_done,note
+chiebukuro,accessible,curl 200(検索ページ・質問ページ),yes,40クエリ×最大10ページで1101件の質問を取得対象にした
+note,accessible,curl 200(記事ページ)。検索API(api/v3/searches)は403,yes,記事のURLはWebSearch(note.comに限定)で収集
+blogs,accessible,curl 200(はてな・アメブロ),yes,WebSearch(ブログのドメインに限定)で収集
+gaishishukatsu,accessible_partial,curl 200。本文の多くは会員限定(公開部分のみ確認可),yes,SPI英語を課す企業ごとにドメイン限定の検索で列挙し、49件の公開部分を全件確認
+spi_sites,accessible,curl 200,yes,主張(claims)として別ファイルに記録
+x,login_required,個別の投稿はcurl 200で本文取得可。検索はログインが必要,partial,WebSearch(x.comに限定)で見つかった投稿だけ確認
+syukatsu_kaigi,member_only,一覧ページは200だが、体験談の本文は「【テストの内容】SP...」で切れて会員限定,no,内容は確認できない
+onecareer,site_refused,体験談ページはHTTP 403(サイト側の拒否),no,ボット対策を回避する取得は行わない
+minshu,site_refused,www.nikki.ne.jp はHTTP 403,no,同上
+reddit,site_refused,www.reddit.com はHTTP 403,no,同上。英語圏の検索でもSPI英語の受検報告は見つからない
+academic,searched,WebSearch。SPI英語の再受検効果や題数を扱う論文は見つからない,yes,
+official,searched,WebSearch。リクルートのENG技術資料は公開されていない,yes,

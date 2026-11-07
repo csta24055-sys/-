@@ -1,0 +1,98 @@
+{
+ "evaluated_at": "2026-11-07T22:40:33",
+ "RESEARCH_STATUS": "COMPLETE",
+ "steps": {
+  "STEP0": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {}
+  },
+  "STEP1": {
+   "status": "PASS",
+   "issues": [
+    "件数56件が目標300件に届かない(網羅性監査に合格した場合のみ例外)"
+   ],
+   "stats": {
+    "records": 56,
+    "original_verified": 53,
+    "original_ratio": 0.946,
+    "distinct_queries": 96,
+    "media_attempted": [
+     "blogs",
+     "chiebukuro",
+     "gaishishukatsu",
+     "inpex_official",
+     "minshu",
+     "note",
+     "onecareer",
+     "reddit",
+     "spi_official",
+     "spi_sites",
+     "syukatsu_kaigi",
+     "x"
+    ],
+    "blocked_primary_media": [
+     "reddit",
+     "minshu",
+     "onecareer",
+     "syukatsu_kaigi"
+    ],
+    "inaccessible_primary_media": [
+     "x",
+     "reddit",
+     "minshu",
+     "onecareer",
+     "syukatsu_kaigi"
+    ]
+   }
+  },
+  "STEP2": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "independent_units": [
+     51,
+     56
+    ],
+    "with_passage_count": 8,
+    "objective_scores": 0
+   }
+  },
+  "STEP3": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "items": 70
+   }
+  },
+  "STEP4": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "units": 8,
+    "k3": 7
+   }
+  },
+  "STEP5": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "records": 35,
+    "verified_reports": 23,
+    "queries": 25
+   }
+  },
+  "STEP6": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {
+    "scenarios": 192
+   }
+  },
+  "STEP7": {
+   "status": "PASS",
+   "issues": [],
+   "stats": {}
+  }
+ }
+}
