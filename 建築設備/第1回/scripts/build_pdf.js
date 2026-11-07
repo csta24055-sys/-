@@ -27,7 +27,7 @@ const { execFileSync } = require('child_process');
   await pg.evaluate(() => document.fonts.ready);
   const rep = await pg.evaluate(() => [...document.querySelectorAll('.page')].map(p => {
     const foot = p.querySelector('.foot').getBoundingClientRect();
-    const cols = [...p.querySelectorAll('.col')].filter(c => c.lastElementChild).map(c => c.lastElementChild.getBoundingClientRect().bottom).concat([Math.max(...[...p.querySelectorAll('.sec')].map(e => e.getBoundingClientRect().bottom))]);
+    const cols = [...p.querySelectorAll('.col')].filter(c => c.lastElementChild).map(c => c.lastElementChild.getBoundingClientRect().bottom).concat([Math.max(...[...p.querySelectorAll('.sec,.concl')].map(e => e.getBoundingClientRect().bottom))]);
     const fonts = [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family + f.weight);
     const minFs = Math.min(...[...p.querySelectorAll('td,li,p,span,b,div')].filter(e => e.childNodes.length && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())).map(e => parseFloat(getComputedStyle(e).fontSize)));
     return { id: p.id, minPt: +(minFs * 0.75).toFixed(2), slack: cols.map(c => +(foot.top - c).toFixed(1)), overflow: cols.some(c => c > foot.top), fonts };

@@ -5,130 +5,228 @@
 <title>建築設備Ⅲ 第1回 重要事項 詳しい解説版</title>
 <style>
 /*FONTFACE*/
-/*COMMONCSS3*/
-body{font-size:8.7pt;line-height:1.5}
-.legend{font-size:7.8pt;color:var(--sub);display:flex;justify-content:space-between;margin-top:-1mm}
-.figw{width:70%;margin:0 auto}
-.figc{width:74%;margin:0 auto}
-.pc.il .big{display:inline;margin-right:1.6mm}
-.pc.il .tm{display:inline}
-.pc.il .tm::after{content:"";display:block}
-.qa{gap:.4mm;line-height:1.44}
-.qa>div{display:grid;grid-template-columns:42% 1fr;gap:1.4mm;padding-bottom:.4mm}
-.qa .a{margin:0}
-#p1{gap:2mm}
-#p2{gap:4.5mm}
-#p2 .row{align-items:stretch}
-#p2 .row .col>.sec{flex:1}
+:root{--ink:#1a1a1a;--sub:#444;--line:#bfc5cc;--bg:#f4f5f6;--yel:#fff8e1}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink)}
+body{font-family:"Noto Sans JP","IPAGothic",sans-serif;font-size:11pt;line-height:1.7}
+.page{width:210mm;height:297mm;padding:12mm 15mm 12mm;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;gap:4mm}
+.page:last-child{break-after:auto}
+.top{font-size:8.5pt;color:#666;display:flex;justify-content:space-between;border-bottom:1px solid #ccc;padding-bottom:1mm}
+h1{font-size:19pt;margin:0;line-height:1.35}
+h1 small{font-size:11pt;font-weight:700;margin-left:2mm}
+.theme{border:2.4px solid var(--ink);border-radius:2mm;padding:3mm 5mm}
+.theme .lb{font-size:9.5pt;font-weight:700;color:#555;display:block}
+.theme .q{font-size:14.5pt;font-weight:700;line-height:1.5;display:block}
+.theme p{margin:1mm 0 0}
+.legend{font-size:9pt;color:var(--sub);line-height:1.6}
+.item{padding-left:0}
+.rank{display:inline-flex;align-items:center;justify-content:center;font-weight:700;border-radius:1.4mm;margin-right:2.4mm;vertical-align:2px;flex:0 0 auto}
+.A .rank{background:var(--ink);color:#fff;font-size:12pt;width:9mm;height:7mm}
+.B .rank{background:#555;color:#fff;font-size:11pt;width:8mm;height:6.4mm}
+.C .rank{border:1.6px solid var(--ink);color:var(--ink);font-size:10pt;width:7.4mm;height:6mm}
+h2{margin:0 0 1.5mm;line-height:1.4;display:flex;align-items:flex-start}
+.A h2{font-size:15.5pt;border-bottom:2.4px solid var(--ink);padding-bottom:1mm}
+.B h2{font-size:13.5pt;border-bottom:1.4px solid #555;padding-bottom:.8mm}
+.C h2{font-size:12.5pt;border-bottom:1px dashed #777;padding-bottom:.6mm}
+h3{font-size:11.5pt;margin:2mm 0 .6mm}
+p{margin:0 0 1.6mm}
+ul{margin:.5mm 0 1.6mm;padding-left:5mm}
+li{margin:.6mm 0}
+b{font-weight:700}
+.em{font-weight:700;text-decoration:underline;text-decoration-thickness:1.6px;text-underline-offset:3px}
+.ts{font-size:8pt;color:#666;white-space:nowrap;font-weight:400}
+.ex{background:var(--bg);border-radius:1.4mm;padding:1.6mm 3mm;margin:1mm 0 1.6mm}
+.ex::before{content:"実際の建物では　";font-weight:700}
+.key{background:var(--yel);border-left:5px solid #b88a00;padding:1.6mm 3mm;margin:1mm 0 1.6mm;font-weight:700}
+.fig{display:block;width:100%;height:auto}
+.figt{font-size:10.5pt;font-weight:700;margin:1mm 0 .6mm}
+.figt::before{content:"図";display:inline-block;background:var(--ink);color:#fff;font-size:8.5pt;padding:0 1.4mm;border-radius:.8mm;margin-right:1.6mm;vertical-align:1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:5mm;align-items:start}
+.two.fl{grid-template-columns:42% 1fr}
+.two.nf{grid-template-columns:60% 1fr}
+.concl{margin-bottom:6mm;border:3px solid var(--ink);border-radius:2.4mm;padding:3.5mm 5mm;background:var(--yel);margin-top:auto}
+.concl .lb{font-size:10pt;font-weight:700;display:block}
+.concl .big{font-size:15pt;font-weight:700;line-height:1.5;display:block;margin:.5mm 0 1.5mm}
+.concl p{margin:0}
+.concl .src{display:block;text-align:right;font-size:8pt;color:#666;margin-top:1mm}
+.foot{position:absolute;bottom:5mm;left:15mm;right:15mm;font-size:8pt;color:#777;display:flex;justify-content:space-between}
+.w80{width:80%;margin:0 auto}.w70{width:70%;margin:0 auto}
 </style>
 </head>
 <body>
 
-<!-- ======================= PAGE 1 ======================= -->
+<!-- ============ PAGE 1 ============ -->
 <div class="page" id="p1">
-  <div class="hdr">
-    <h1>建築設備Ⅲ 第1回<small>給排水衛生設備の役割</small><span class="badge">詳しい解説版</span></h1>
-    <div class="meta">第1回授業（2026/9/29）の動画・スライドだけを根拠に作成<br>[時刻]＝授業動画で説明している位置</div>
-  </div>
-  <div class="legend"><span><b>◎</b> 教員が授業中に強調したこと　<b>○</b> 作成者が「重要」と判断したこと</span><span>※第1回で「これを試験に出す」と言われた項目はありません</span></div>
-  <div class="askq"><span class="lb">今回の問い</span><span><span class="qt">なぜ水の設備は「安全・衛生」を最優先に考えるのか？ それを実現する仕組みは何か？</span><span class="why">答えられれば、5つの設備・4原則・封水と通気管・数値（65℃、60年／15年）を理由ごと覚えられる。</span></span></div>
+  <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割（2026/9/29）</span><span>重要事項・詳しい解説版</span></div>
+  <h1>建築設備Ⅲ 第1回<small>給排水衛生設備の役割 ─ 重要なことから順に、詳しく</small></h1>
 
-  <div class="sec">
-    <h2><span class="no">1</span>水の設備で一番大切なのは「安全・衛生」</h2>
-    <div class="row" style="gap:4mm">
-      <div>
-        <p>建物では、蛇口の水を飲み、トイレで汚れた水を流す。これらの設備をまとめて<b>給排水衛生設備</b>という。定義は<b>「建物内・敷地内の水に関連する諸設備」</b>。健康で清潔な生活を支え、災害時も人を守る。○<span class="ts">[0:25:08]</span></p>
-        <p>建物の水は道路下の水道管・下水道管につながり、建物の設備はその<b>末端</b>にあたる（第6節）。</p>
-      </div>
-      <div>
-        <p class="kicker">なぜ「安全・衛生」なのか ◎</p>
-        <p>空調（設備Ⅱ）で大切だったのは「暑い・寒い」という<b>快適さ</b>。水の設備は、<b>人が飲む水</b>と<b>汚れた水</b>を同じ建物で扱う。失敗すれば病気や事故に直結する。だから一番大切な観点は<span class="em">安全・衛生</span>になる。<span class="ts">[0:14:09]</span></p>
-        <div class="ex">配管に異物が混ざれば、その水を飲んでしまう。排水がたまれば、すぐ不衛生になる。</div>
-      </div>
-    </div>
+  <div class="theme">
+    <span class="lb">この授業のいちばん大きなテーマ</span>
+    <span class="q">建物で水を使うとき、なぜ「安全・衛生」が最も大切なのか。<br>そして、それをどんな仕組みで守っているのか。</span>
   </div>
 
-  <div class="sec">
-    <h2><span class="no">2</span>水は「入る→ためる→上げる→使う→出る」と流れ、5つの設備が分担する</h2>
-    <p class="figt">建物の中の水の流れ（線の種類で水の種類を区別）</p>
-    <div class="figw"><!--INCLUDE:figs3/flow.svg--></div>
-    <p class="kicker">この流れを、5つの設備が分担する（スライド18）○</p>
-    <div class="pl c3">
-      <div class="pc il"><span class="big">飲める水を届ける</span><span class="tm">給水設備</span>水道水（<b>上水</b>＝飲める水）を蛇口へ。人が飲むので◎<b>いつでも飲める水質</b>に。<span class="ts">[0:27:27]</span></div>
-      <div class="pc il"><span class="big">お湯をつくる</span><span class="tm">給湯設備</span>上水を温めて送る。エネルギーを多く使い、◎<b>レジオネラ属菌</b>に注意（第5節）。</div>
-      <div class="pc il"><span class="big">使った水を出す</span><span class="tm">排水通気設備</span>使った水を下水道へ。管がつながるので<b>封水</b>でにおいを止める（第3節）。</div>
-      <div class="pc il"><span class="big">人がさわる器具</span><span class="tm">衛生器具設備</span>蛇口・シャワー・便器など。</div>
-      <div class="pc il" style="grid-column:span 2"><span class="big">雨水などを使い直す</span><span class="tm">排水処理・雨水利用・浄化槽設備</span>雨水などをろ過して、トイレの洗浄水などに使い直す（＝<b>雑用水</b>）。<b>飲めない水</b>なので、上水とは別の管で送る。</div>
-    </div>
+  <div class="legend"><b>A</b>＝最重要（最初に理解したいこと）　<b>B</b>＝重要（Aの次に必要な知識）　<b>C</b>＝補足（実際の建物や数値で理解を深める）<br>※A・B・Cは、授業内容をもとに作成者が判断した学習上の重要度です。教員が指定した試験の出題順位ではありません。<b>◎</b>は教員が授業中に強調した点です。</div>
+
+  <div class="sec item A">
+    <h2><span class="rank">A1</span>水の設備は健康と命に直結する。だから「安全・衛生」が最優先</h2>
+    <p>建物では、蛇口から出る水を飲み、料理に使い、手や食器を洗い、トイレで汚れた水を流す。こうした水を使うための設備をまとめて<b>給排水衛生設備</b>という。授業での定義は<b>「建物内・敷地内の水に関連する諸設備」</b>で、健康で清潔な生活を支え、災害のときにも人を守る、基本となる設備である。<span class="ts">[0:25:08]</span></p>
+    <p>建築設備Ⅱで学んだ空調（冷暖房）は、「暑い・寒い」という<b>快適さ</b>を整える設備だった。空調が多少うまく働かなくても、極端な場合を除けば命に関わることは少ない。ところが水の設備は、<b>人が飲む水</b>と<b>汚れた水</b>の両方を同じ建物の中で扱う。ここで失敗すると、すぐに病気や事故につながる。だから◎<span class="em">安全・衛生</span>（清潔に保ち、病気を防ぐこと）が最も大切な観点になる。<span class="ts">[0:12:54–0:16:50]</span></p>
+    <ul>
+      <li>水を運ぶ途中で異物が混ざると、人がその水を<b>飲んでしまう</b>。</li>
+      <li>使った水がすぐに流れず建物の中にたまると、すぐに<b>不衛生</b>になる。排水設備の不具合で、建物の中で人が亡くなる事故も起きている。</li>
+    </ul>
+    <div class="key">以下のA2〜C2は、すべて「飲む水をきれいなまま届け、汚れた水や下水を人から遠ざける」ための仕組みとして読むと、つながって理解できる。</div>
   </div>
 
-  <div class="sec">
-    <h2><span class="no">3</span>トラップの「封水」が下水のにおいを止め、「通気管」が封水を守る ◎</h2>
-    <p class="figt">通気管があるときと、ないときの違い</p>
-    <div class="figw"><!--INCLUDE:figs3/trap.svg--></div>
-    <div class="steps c4">
-      <div class="step"><span class="kicker">① 何が困るのか</span>排水管は下水管とつながったまま。下水の<b>におい・有毒ガス・虫</b>が部屋に上がってくる。</div>
-      <div class="step"><span class="kicker">② どう防ぐのか</span>S字の部分（<b>トラップ</b>）に水をためる。この水＝<b>封水</b>が<b>ふた</b>になり、下水と部屋を仕切る。</div>
-      <div class="step"><span class="kicker">③ それでも起きる問題</span>水が勢いよく落ちると管内の空気が押され<b>圧力が変わる</b>。封水が飛び出す・吸い込まれる。</div>
-      <div class="step"><span class="kicker">④ 解決：通気管</span>空気の通り道＝<b>通気管</b>を<b>必ずセット</b>で付ける。空気が逃げ、排水も封水も守られる。<span class="ts">[0:33:34]</span></div>
-    </div>
-    <div class="ex">洗面台の下のS字の管や、洋式便器にいつもたまっている水。あれが封水。</div>
+  <div class="sec item A">
+    <h2><span class="rank">A2</span>建物の水は「入る → ためる → 上げる → 使う → 出る」。飲む水と汚れた水は別の道を通る</h2>
+    <p class="figt">建物の中の水の流れ（スライド18の系統図を簡略化）</p>
+    <div class="w80"><!--INCLUDE:figs3/flow.svg--></div>
   </div>
-  <div class="foot"><span>建築設備Ⅲ 第1回 重要事項・詳しい解説版（1/2）</span><span>授業で説明された内容だけで作成</span></div>
+  <div class="foot"><span>第1回授業の動画・スライドだけを根拠に作成　[時刻]＝動画の位置</span><span>1 / 5</span></div>
 </div>
 
-<!-- ======================= PAGE 2 ======================= -->
+<!-- ============ PAGE 2 ============ -->
 <div class="page" id="p2">
-  <div class="sec">
-    <h2><span class="no">4</span>ここまでの仕組みを、「4つの原則」で計画する<span class="sub">○ スライド19〜22</span></h2>
-    <div class="pl c2">
-      <div class="pc"><span class="big">① 飲んでも安全な水を保つ</span><span class="tm">衛生性</span>
-        <ul>
-          <li><b>上水</b>：◎どんなときも飲める水質に（基準：<b>水道法第4条の水質基準・51項目</b>）。敷地に入った後の水質は、建物の設備が守る。</li>
-          <li><b>排水</b>：たまると腐り、においや病原菌が出る → だから<b>すぐに流す</b>。</li>
-          <li><b>雑用水</b>：消毒されていないので、上水に混ざると危険（飲まれた事故もある）→ ◎<b>上水と絶対に混ぜない</b>。<span class="ts">[0:42:12]</span></li>
-        </ul></div>
-      <div class="pc"><span class="big">② すぐ使えて、止まらず、直せる</span><span class="tm">機能性・耐久性・更新性</span>
-        <ul>
-          <li>すぐ出て、すぐ流れるように、配管は<b>シンプル</b>に（水回りを縦にそろえる。曲がると詰まりやすい）。</li>
-          <li>ポンプは機械なので、いつか壊れる。1台だけだと、壊れた瞬間に水が止まる → <b>2台を交互に動かす</b>（<b>2重化</b>）。</li>
-          <li>◎機器はいずれ交換するので、運び出す<b>通路と点検スペース</b>を確保する。<span class="ts">[0:45:50]</span></li>
-        </ul></div>
-      <div class="pc"><span class="big">③ 水を大切に使い、洪水も防ぐ</span><span class="tm">環境への配慮</span>
-        <ul>
-          <li>便器の工夫で、1回に流す水は約<b>13L</b>（1980年頃）→ <b>4.8L・3.8L</b>（節水型便器）。</li>
-          <li>雨水や洗面所の排水をトイレの洗浄水に使えば、水道水を節約できる。</li>
-          <li>東京23区の下水道は、雨水と汚水を同じ管で流す<b>合流式</b>。大雨を一度に流すとあふれるので、敷地で<b>貯める・しみこませる</b>。</li>
-        </ul></div>
-      <div class="pc"><span class="big">④ 地震のあともトイレを使える</span><span class="tm">耐震性</span>
-        <ul>
-          <li>地震で下水管が壊れると、水が流れずトイレが使えない（東日本大震災・阪神淡路大震災）。</li>
-          <li>だから機器や配管を壊れにくくし、携帯・簡易・マンホール・仮設トイレも備える。</li>
-          <li>こうした備えの考え方が<b>BCP・レジリエンス</b>＝停電や断水が起きても、建物の機能を保ち、早く回復させること。</li>
-        </ul></div>
+  <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>重要事項・詳しい解説版</span></div>
+  <div class="sec item A">
+    <h3 style="margin-top:0">A2（続き）図の読み方と、5つの設備</h3>
+    <ul>
+      <li><b>入る・ためる</b>：飲める水（<b>上水</b>＝水道水）は、道路の下の水道管から水道メーターを通って建物に入り、いったん<b>受水槽</b>（水をためるタンク）にためる。</li>
+      <li><b>上げる・使う</b>：<b>ポンプ</b>で屋上の<b>高置水槽</b>まで押し上げ、そこから重さで各階の蛇口へ流れ落ちる。</li>
+      <li><b>出る</b>：使った水は排水管を通り、敷地の<b>最終ます</b>から道路の下水道管へ流れる。</li>
+      <li><b>使い直す</b>：屋根に降った雨は雨水貯留槽にため、ろ過してトイレの洗浄水などに使う。この水を<b>雑用水</b>という。雑用水は<b>飲めない水</b>なので、上水とは別の管で送る。</li>
+    </ul>
+    <p>この流れを、授業では次の<b>5つの設備</b>に分けて説明した（スライド18）。</p>
+    <ul>
+      <li><b>給水設備</b>：上水を蛇口まで届ける。◎<b>常に飲める水質</b>を保つ責任がある。<span class="ts">[0:27:27]</span></li>
+      <li><b>給湯設備</b>：上水を温めてお湯として届ける（→B2）。</li>
+      <li><b>排水通気設備</b>：使った水を外へ出す。同時に、下水のにおいが部屋に入らないようにする（→A3・A4）。</li>
+      <li><b>衛生器具設備</b>：蛇口・シャワー・便器・洗濯機など、人が直接使う器具。</li>
+      <li><b>排水処理・雨水利用・浄化槽設備</b>：雨水などを処理して雑用水として使い直す（→C1）。</li>
+    </ul>
+  </div>
+
+  <div class="sec item A">
+    <h2><span class="rank">A3</span>排水管にたまった水が「ふた」になり、下水のにおいや虫を部屋に入れない（封水）</h2>
+    <div class="two fl">
+      <div>
+        <p>使った水を外へ出す排水管は、建物の外で下水道とつながっている。管の中は空っぽなので、そのままでは下水管の中で発生した<b>有毒なガス</b>や<b>におい</b>、<b>虫</b>が、管をさかのぼって排水口から部屋に上がってくる。せっかく汚れた水を外に出しても、下水が部屋とつながっていては意味がない。</p>
+        <p>そこで、排水管をS字に曲げて、曲がった部分にいつも水がたまるようにする。この曲げた部分を<b>トラップ</b>、たまっている水を<b>封水</b>（ふうすい）という。◎封水が「水のふた」になって、下水と部屋を仕切る。<span class="ts">[0:31:05–0:32:20]</span></p>
+        <div class="ex">洗面台の下にあるS字の管や、洋式便器の中にいつもたまっている水が封水。</div>
+      </div>
+      <div>
+        <p class="figt">水のふたがあるとき・ないとき</p>
+        <!--INCLUDE:figs_simple/trap.svg-->
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>第1回授業の動画・スライドだけを根拠に作成</span><span>2 / 5</span></div>
+</div>
+
+<!-- ============ PAGE 3 ============ -->
+<div class="page" id="p3">
+  <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>重要事項・詳しい解説版</span></div>
+  <div class="sec item A">
+    <h2><span class="rank">A4</span>封水は消えることがある。だから「通気管」で空気を逃がして守る</h2>
+    <p class="figt">通気管があるとき・ないとき</p>
+    <div class="w80"><!--INCLUDE:figs3/trap.svg--></div>
+    <p>排水管の中には、ふだんは空気が入っている。そこへ上の階から水や固形物が勢いよく落ちてくると、管の中の空気が押されて行き場を失い、<b>圧力が上がったり下がったり</b>する。すると、その力に負けて封水が洗面台側に<b>飛び出したり</b>、管の奥へ<b>吸い込まれたり</b>して、なくなってしまう。ふたがなくなれば、A3で見たように下水のにおいや虫が部屋に入ってくる。</p>
+    <p>これを防ぐのが<b>通気管</b>である。排水管とは別に空気の通り道をつくり、もとからあった空気を上へ逃がす。空気が逃げられるので、水はスムーズに流れ、封水も残る。◎通気管は排水管と<b>必ずセット</b>で設置する。<span class="ts">[0:33:15–0:33:54]</span></p>
+    <div class="key">封水は「水」、トラップは水をためる「管の形」、通気管は封水を守る「空気の通り道」。3つがそろって、排水を流しながら下水を部屋から切り離している。</div>
+  </div>
+
+  <div class="sec item B">
+    <h2><span class="rank">B1</span>水の種類ごとに守ることが違う（原則①：衛生性）</h2>
+    <p>授業では、給排水衛生設備を計画するときの<b>4つの原則</b>（衛生性／機能性・耐久性・更新性／環境への配慮／耐震性）が示された（スライド19〜22）。B1〜B4とC1はこの原則にあたる。最初の衛生性は、A1の「安全・衛生」をそのまま設計のルールにしたものである。</p>
+    <ul>
+      <li><b>上水</b>：◎<b>どんなときも飲める水質</b>であること。基準は<b>水道法第4条の水質基準（51項目）</b>で、細菌、カドミウム・水銀などの重金属、色・におい・濁りまで細かく決められている。水道局が確認して送った水でも、<b>敷地に入った後の水質を守るのは建築設備の役目</b>になる。項目を一つずつ覚える必要はないが、それだけ厳しく守られている。<span class="ts">[0:38:42–0:40:14]</span></li>
+      <li><b>排水</b>：たまると腐り、においや病原菌が出る。だから<b>すぐに流し</b>、途中でたまらないようにする。トラップの封水も守る。</li>
+      <li><b>雑用水</b>：上水のように消毒されていない。シャワーのように飛び散ると、空気中に細菌（レジオネラ属菌）が広がる。また、雑用水が上水の管に混ざって飲まれてしまった事故も実際に起きている。だから◎<b>上水とは絶対に混ぜない</b>。<span class="ts">[0:41:08–0:42:17]</span></li>
+    </ul>
+  </div>
+  <div class="foot"><span>第1回授業の動画・スライドだけを根拠に作成</span><span>3 / 5</span></div>
+</div>
+
+<!-- ============ PAGE 4 ============ -->
+<div class="page" id="p4">
+  <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>重要事項・詳しい解説版</span></div>
+  <div class="sec item B">
+    <h2><span class="rank">B2</span>お湯は65℃以上でためる。40℃のままだと細菌が増える</h2>
+    <div class="two nf">
+      <div>
+        <p>給湯設備は、上水を温めてお湯として届ける。浴槽1杯は約<b>200L</b>。冬の水道水は<b>10℃</b>より冷たく、それを<b>40数℃</b>まで温めるので、たくさんのエネルギーを使う。</p>
+        <p>もう一つの注意が細菌である。40℃前後は人には気持ちよい温度だが、<b>細菌にとってもちょうどよい温度</b>。お湯をためるタンク（<b>貯湯</b>タンク）を40℃のままにしておくと、中で<b>レジオネラ属菌</b>が増える。だから◎<b>貯湯タンクは65℃以上</b>（授業では「60度とか65度」）に温度を上げてためる。今でも集団感染で高齢者が亡くなる例がある。<span class="ts">[0:27:50–0:30:30]</span></p>
+      </div>
+      <div><p class="figt">貯湯タンクの温度と細菌</p><!--INCLUDE:figs3/hot.svg--></div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col">
-      <div class="sec">
-        <h2><span class="no">5</span>お湯は65℃以上でためる（細菌対策）◎</h2>
-        <div class="figc"><!--INCLUDE:figs3/hot.svg--></div>
-        <p>お湯をためておくとき、40℃前後は人に快適だが、<b>細菌にもちょうどよい温度</b>。そのままでは<b>レジオネラ属菌</b>が増える → だから<b>貯湯タンク</b>は<b>65℃以上</b>（授業では「60度とか65度」）にする。<span class="ts">[0:29:34]</span></p>
+  <div class="sec item B">
+    <h2><span class="rank">B3</span>すぐ使え、止まらず、直せる（原則②：機能性・耐久性・更新性）</h2>
+    <div class="two nf">
+      <div>
+        <p>蛇口をひねればすぐに水やお湯が出て、使った水はすぐに下水道まで流れる。これが当たり前に続くように、次のような工夫をする。<span class="ts">[0:42:33–0:46:40]</span></p>
+        <ul>
+          <li><b>配管はシンプルに</b>：トイレや洗面所などの水回りは、各階で同じ位置に縦にそろえる。排水管が途中で何度も曲がると、そこで詰まりやすくなるからである。</li>
+          <li><b>ポンプの2重化</b>：水を送るポンプが1台しかないと、それが壊れた瞬間に建物で水が使えなくなる。ポンプは機械なので、いつかは必ず壊れる。そこで2台を設置して交互に動かし、1台が故障しても、もう1台で水を送れるようにする。下水道より低い地下の排水をくみ上げる<b>排水ポンプ</b>も同じで、止まると地下のトイレが使えなくなる。</li>
+        </ul>
       </div>
-    </div>
-    <div class="col">
-      <div class="sec">
-        <h2><span class="no">6</span>建物側は「メーター」「最終ます」から ◎</h2>
-        <div class="figc"><!--INCLUDE:figs3/boundary.svg--></div>
-        <p>建物の水は都市の水道・下水道につながる（第1節）。では、どこから先を建物側が守るのか。その境目＝<b>責任分界点</b>。上水は<b>水道メーター</b>、下水は<b>最終ます</b>から建物側。<span class="ts">[1:23:00]</span></p>
+      <div>
+        <p class="figt">ポンプの2重化</p><!--INCLUDE:figs3/pump.svg-->
+        <ul>
+          <li><b>直せる場所をつくる</b>：設備はいつか壊れ、取り替える。◎<b>点検のスペース</b>と、壊れた機器を<b>運び出す通路</b>を最初から確保しておく。<span class="ts">[0:45:50]</span></li>
+          <li><b>設備は建物より先に古くなる</b>：建物の寿命は約<b>60年</b>だが、設備は約<b>15年</b>（スライド16）。建物を使っている間に、設備は何度も取り替える必要がある。</li>
+        </ul>
       </div>
     </div>
   </div>
-  <div class="concl"><span class="lb">結論：水の設備は人の健康と命に直結する。だから「安全・衛生」が最優先</span>
-        <p>人が飲む水と汚れた水を同じ建物で扱うため、小さな失敗が病気や事故につながる。だから封水と通気管で下水から部屋を守り、上水と雑用水を混ぜず、お湯は65℃以上でためる。ポンプの2重化や耐震性は、その安全を止めないための工夫と覚えればよい。</p>
-        <span class="src">※授業内容をもとにした作成者のまとめ</span></div>
-  <div class="foot"><span>建築設備Ⅲ 第1回 重要事項・詳しい解説版（2/2）</span><span>◎教員が強調／○作成者の判断</span></div>
+  <div class="sec item B">
+    <h2><span class="rank">B4</span>地震のあとも、トイレを使えるようにする（原則④：耐震性）</h2>
+    <p>災害で停電や断水が起きても、建物に必要な機能を保ち、早く回復させようという考え方を<b>BCP・レジリエンス</b>という。授業では、最も大切なのは電気だが、◎<b>同じくらい大切なのがトイレ</b>だと説明された。飲み水はペットボトルなどで備蓄できるが、トイレが流せなくなると、避難所などですぐに大きな問題になる。<span class="ts">[0:23:51–0:25:06]</span></p>
+    <p>地震で下水道や建物の中の下水管が壊れると、水が流れないので、トイレは使えなくなる（東日本大震災・阪神淡路大震災）。そこで、機器や配管を地震で壊れにくくするとともに、<b>携帯トイレ・簡易トイレ・マンホールトイレ・仮設トイレ</b>も備えておく。建物を管理する人にも、この備えが求められる。<span class="ts">[0:51:06–0:52:31]</span></p>
+  </div>
+
+  <div class="foot"><span>第1回授業の動画・スライドだけを根拠に作成</span><span>4 / 5</span></div>
+</div>
+
+<!-- ============ PAGE 5 ============ -->
+<div class="page" id="p5">
+  <div class="top"><span>建築設備Ⅲ 第1回　給排水衛生設備の役割</span><span>重要事項・詳しい解説版</span></div>
+
+  <div class="sec item C">
+    <h2><span class="rank">C1</span>水を大切に使い、大雨のときの洪水も防ぐ（原則③：環境への配慮）</h2>
+    <div class="two nf">
+      <div>
+        <ul>
+          <li><b>節水型便器</b>：1回に流す水は、1980年頃は約<b>13L</b>だったが、便器の形の工夫で<b>4.8L・3.8L</b>まで減った。</li>
+          <li><b>雨水・排水の再利用</b>：屋根の雨水や洗面所の排水をきれいにしてトイレの洗浄水に使えば、その分の水道水を使わずにすむ。</li>
+          <li><b>洪水を防ぐ</b>：東京23区の下水道は、雨水と汚水を同じ管で流す<b>合流式</b>。ゲリラ豪雨などで雨水を一度に全部流すと、下水道があふれてしまう。そこで敷地の中で雨水を<b>貯めたり、地面にしみこませたり</b>する。<span class="ts">[0:46:44–0:51:03]</span></li>
+        </ul>
+      </div>
+      <div><p class="figt">雨水を敷地で使う・しみこませる</p><!--INCLUDE:figs3/rain.svg--></div>
+    </div>
+  </div>
+
+  <div class="sec item C">
+    <h2><span class="rank">C2</span>どこから先が建物の担当か（責任分界点）</h2>
+    <div class="two nf">
+      <div>
+        <p>建物の水は、都市の水道・下水道の「末端」にある。では、どこまでを水道局・下水道局が担当し、どこからを建物側が守るのか。その境目を<b>責任分界点</b>という。◎<b>上水は水道メーター</b>、<b>下水は最終ます</b>から建物側で、そこから先の管や機器は建築設備として建物側が守る。<span class="ts">[1:23:00–1:24:38]</span></p>
+        <p>建物を計画するときは、<b>下水道台帳</b>（インターネットで見られる下水道管の地図）で、前の道の下水道管の位置と<b>深さ</b>を調べる。下水道より低い場所の排水は、ポンプでくみ上げなければ流せないからである。</p>
+      </div>
+      <div><p class="figt">上下水道と建物の境目</p><!--INCLUDE:figs3/boundary.svg--></div>
+    </div>
+  </div>
+
+  <div class="concl">
+    <span class="lb">結局、この授業で最も重要なこと</span>
+    <span class="big">水の設備は、人の健康と命を守るためにある。<br>だから、いちばん大切なのは「安全・衛生」である。</span>
+    <p>建物では、人が飲む水と汚れた水を同じ建物の中で扱う。だから、飲む水はきれいなまま届け（B1・B2）、汚れた水はすぐ外へ出し（A2）、下水のにおいや虫は封水と通気管で部屋に戻さない（A3・A4）。ポンプの2重化や耐震性、点検スペースは、その安全をいつでも止めないための工夫（B3・B4）である。</p>
+    <span class="src">※「安全・衛生」は教員が強調した観点 [0:14:09]。この結論は授業内容をもとにした作成者のまとめ</span>
+  </div>
+  <div class="foot"><span>第1回授業の動画・スライドだけを根拠に作成</span><span>5 / 5</span></div>
 </div>
 </body>
 </html>
