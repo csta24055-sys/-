@@ -1,0 +1,84 @@
+<svg class="fig" viewBox="0 0 330 236" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans JP, IPAGothic, sans-serif" aria-label="建物内の給排水衛生設備の系統（概念図）">
+  <defs>
+    <marker id="sy-ab" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5z" fill="#1f5fa8"/></marker>
+    <marker id="sy-ag" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5z" fill="#2e7d32"/></marker>
+    <marker id="sy-ac" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5z" fill="#0b8fa3"/></marker>
+    <marker id="sy-ar" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5z" fill="#6d4c2f"/></marker>
+  </defs>
+  <!-- 建物 -->
+  <rect x="62" y="38" width="196" height="186" fill="#fbfcfd" stroke="#8a96a3" stroke-width="1"/>
+  <line x1="62" y1="80" x2="258" y2="80" stroke="#d3d9e0"/><line x1="62" y1="120" x2="258" y2="120" stroke="#d3d9e0"/>
+  <line x1="0" y1="164" x2="330" y2="164" stroke="#8b6b3e" stroke-width="1.6"/>
+  <text x="4" y="160" font-size="6.6" fill="#8b6b3e">地盤面</text>
+  <text x="66" y="231" font-size="6.6" fill="#4a5561">地下（機械室）</text>
+  <!-- 屋上 -->
+  <rect x="96" y="18" width="34" height="16" fill="#d6e6f7" stroke="#1f5fa8"/><text x="113" y="13" font-size="6.6" text-anchor="middle" fill="#1f5fa8">上水高置水槽</text>
+  <rect x="170" y="18" width="34" height="16" fill="#dcefdc" stroke="#2e7d32"/><text x="187" y="13" font-size="6.6" text-anchor="middle" fill="#2e7d32">雑用水高置水槽</text>
+  <path d="M214 34 h16" stroke="#2e7d32" stroke-width="1.6"/><path d="M231 34 q4 -10 8 0 q4 -9 8 0" fill="#9ccc65" stroke="#2e7d32" stroke-width=".8"/>
+  <text x="238" y="44" font-size="6.2" text-anchor="middle" fill="#2e7d32">屋上緑化へ散水</text>
+  <rect x="268" y="36" width="10" height="4" fill="#0b8fa3"/><text x="292" y="32" font-size="6.6" text-anchor="middle" fill="#0b8fa3">ルーフドレン</text>
+  <!-- 上水系（青） -->
+  <path d="M2 196 H38" stroke="#1f5fa8" stroke-width="2"/>
+  <rect x="38" y="191" width="10" height="10" fill="#fff" stroke="#1f5fa8"/><text x="43" y="210" font-size="6.2" text-anchor="middle" fill="#1f5fa8">量水器</text>
+  <text x="3" y="190" font-size="6.2" fill="#1f5fa8">給水本管</text>
+  <path d="M48 196 H70" stroke="#1f5fa8" stroke-width="2"/>
+  <rect x="70" y="182" width="30" height="22" fill="#d6e6f7" stroke="#1f5fa8"/><text x="85" y="196" font-size="6.6" text-anchor="middle">受水槽</text>
+  <circle cx="106" cy="212" r="3.6" fill="#fff" stroke="#1f5fa8"/><circle cx="114" cy="212" r="3.6" fill="#fff" stroke="#1f5fa8"/>
+  <text x="110" y="222" font-size="6" text-anchor="middle" fill="#1f5fa8">給水ポンプ×2</text>
+  <path d="M100 200 H106 V208 M114 208 V200 H118 V26 H130" fill="none" stroke="#1f5fa8" stroke-width="1.6"/>
+  <text x="127" y="150" font-size="6.2" fill="#1f5fa8" transform="rotate(-90 127 150)">揚水管</text>
+  <path d="M104 34 V152" stroke="#1f5fa8" stroke-width="1.6" marker-end="url(#sy-ab)"/>
+  <text x="112" y="112" font-size="6" fill="#1f5fa8" transform="rotate(-90 112 112)">上水給水管</text>
+  <!-- 各階の洗面器 -->
+  <g fill="none" stroke="#4a5561" stroke-width=".9">
+    <path d="M74 70 h16 v4 a4 4 0 0 1 -4 4 h-8 a4 4 0 0 1 -4 -4z"/><path d="M74 110 h16 v4 a4 4 0 0 1 -4 4 h-8 a4 4 0 0 1 -4 -4z"/><path d="M74 152 h16 v4 a4 4 0 0 1 -4 4 h-8 a4 4 0 0 1 -4 -4z"/>
+  </g>
+  <path d="M104 64 H82 V70 M104 104 H82 V110 M104 146 H82 V152" fill="none" stroke="#1f5fa8" stroke-width="1"/>
+  <text x="76" y="62" font-size="6" fill="#4a5561">洗面器</text>
+  <!-- 排水系（茶） -->
+  <path d="M82 78 V86 H150 M82 118 V126 H150 M82 160 V166 H150" fill="none" stroke="#6d4c2f" stroke-width="1.2"/>
+  <path d="M150 50 V176 H300" fill="none" stroke="#6d4c2f" stroke-width="2.4"/>
+  <text x="144" y="120" font-size="6.2" fill="#6d4c2f" transform="rotate(-90 144 120)">排水立て管</text>
+  <path d="M158 58 V24" fill="none" stroke="#6d4c2f" stroke-width="1.1" stroke-dasharray="2.4 1.6"/>
+  <path d="M150 150 L158 144 V58 L150 52" fill="none" stroke="#6d4c2f" stroke-width="1.1" stroke-dasharray="2.4 1.6"/>
+  <text x="135" y="23" font-size="6.2" fill="#6d4c2f">通気管</text>
+  <rect x="293" y="168" width="14" height="14" fill="#efe6dc" stroke="#6d4c2f"/><text x="300" y="161" font-size="6.2" text-anchor="middle" fill="#6d4c2f">排水ます</text>
+  <path d="M300 182 V198" stroke="#6d4c2f" stroke-width="2.4"/>
+  <circle cx="300" cy="206" r="8" fill="#fff" stroke="#6d4c2f" stroke-width="1.4"/><text x="300" y="224" font-size="6.2" text-anchor="middle" fill="#6d4c2f">下水道本管</text>
+  <!-- 地下排水 -->
+  <rect x="128" y="190" width="26" height="18" fill="#efe6dc" stroke="#6d4c2f"/><text x="141" y="202" font-size="6.2" text-anchor="middle">排水槽</text>
+  <circle cx="160" cy="200" r="3.4" fill="#fff" stroke="#6d4c2f"/><circle cx="160" cy="210" r="3.4" fill="#fff" stroke="#6d4c2f"/>
+  <path d="M154 200 H156.6 M163.4 200 H166 V176" fill="none" stroke="#6d4c2f" stroke-width="1.4" marker-end="url(#sy-ar)"/>
+  <text x="141" y="186" font-size="6" text-anchor="middle" fill="#6d4c2f">排水ポンプ×2</text>
+  <!-- 雑用水系（緑） / 雨水系（水色） -->
+  <rect x="186" y="186" width="30" height="22" fill="#dcefdc" stroke="#2e7d32"/><text x="201" y="200" font-size="6.6" text-anchor="middle">雑用水槽</text>
+  <circle cx="178" cy="212" r="3.4" fill="#fff" stroke="#2e7d32"/>
+  <path d="M186 204 H181.4 M178 208.6 V214 M178 208 V0" fill="none" stroke="none"/>
+  <path d="M186 205 H178 V208.6 M178 215.4 V218 H174 V28 H170" fill="none" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="182" y="231" font-size="6" text-anchor="middle" fill="#2e7d32">雑用水ポンプ</text>
+  <path d="M196 34 V152" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#sy-ag)"/>
+  <text x="206" y="108" font-size="6" fill="#2e7d32" transform="rotate(90 206 108)">雑用水給水管</text>
+  <!-- 便器 -->
+  <g fill="#fff" stroke="#4a5561" stroke-width=".9">
+    <path d="M214 66 h10 v8 h-3 q0 6 -6 6 h-1z"/><path d="M214 106 h10 v8 h-3 q0 6 -6 6 h-1z"/><path d="M214 148 h10 v8 h-3 q0 6 -6 6 h-1z"/>
+  </g>
+  <path d="M196 64 H219 V66 M196 104 H219 V106 M196 146 H219 V148" fill="none" stroke="#2e7d32" stroke-width="1"/>
+  <text x="228" y="74" font-size="6" fill="#4a5561">便器（洗浄水）</text>
+  <path d="M215 80 V90 H150 M215 120 V130 H150" fill="none" stroke="#6d4c2f" stroke-width="1.2"/>
+  <path d="M215 162 V170 H150" fill="none" stroke="#6d4c2f" stroke-width="1.2"/>
+  <!-- 雨水 -->
+  <path d="M273 40 V196 H252" fill="none" stroke="#0b8fa3" stroke-width="1.6" marker-end="url(#sy-ac)"/>
+  <text x="270" y="110" font-size="6.2" fill="#0b8fa3" transform="rotate(-90 270 110)">雨水排水管</text>
+  <rect x="226" y="186" width="26" height="22" fill="#d9f1f4" stroke="#0b8fa3"/><text x="239" y="196" font-size="6" text-anchor="middle">雨水</text><text x="239" y="204" font-size="6" text-anchor="middle">貯留槽</text>
+  <path d="M226 197 H222" stroke="#0b8fa3" stroke-width="1.4"/>
+  <rect x="216" y="192" width="6" height="10" fill="#fff" stroke="#0b8fa3"/>
+  <text x="219" y="218" font-size="6" text-anchor="middle" fill="#0b8fa3">ろ過</text>
+  <!-- 凡例 -->
+  <g font-size="6.2">
+    <line x1="4" y1="60" x2="16" y2="60" stroke="#1f5fa8" stroke-width="2"/><text x="19" y="62.2">上水</text>
+    <line x1="4" y1="72" x2="16" y2="72" stroke="#2e7d32" stroke-width="2"/><text x="19" y="74.2">雑用水</text>
+    <line x1="4" y1="84" x2="16" y2="84" stroke="#0b8fa3" stroke-width="2"/><text x="19" y="86.2">雨水</text>
+    <line x1="4" y1="96" x2="16" y2="96" stroke="#6d4c2f" stroke-width="2.4"/><text x="19" y="98.2">排水</text>
+    <line x1="4" y1="108" x2="16" y2="108" stroke="#6d4c2f" stroke-width="1.1" stroke-dasharray="2.4 1.6"/><text x="19" y="110.2">通気</text>
+  </g>
+</svg>

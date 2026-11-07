@@ -1,0 +1,36 @@
+<svg class="fig" viewBox="0 0 340 176" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans JP, IPAGothic, sans-serif" aria-label="建物の水は入る・使う・出る">
+  <defs>
+    <marker id="s-b" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="7" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14z" fill="#0072B2"/></marker>
+    <marker id="s-r" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="7" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14z" fill="#6B4423"/></marker>
+  </defs>
+  <!-- 地面 -->
+  <line x1="0" y1="132" x2="340" y2="132" stroke="#8a6d3b" stroke-width="2"/>
+  <!-- 建物 -->
+  <path d="M110 132 V58 L170 22 L230 58 V132z" fill="#f6f6f6" stroke="#555" stroke-width="2"/>
+  <text x="170" y="15" font-size="11" text-anchor="middle" font-weight="bold">② 建物の中で使う</text>
+  <!-- 蛇口 -->
+  <path d="M128 80 h14 v6 h-6 v6" fill="none" stroke="#0072B2" stroke-width="3"/>
+  <g fill="#56B4E9"><circle cx="136" cy="98" r="2"/><circle cx="136" cy="105" r="2"/></g>
+  <path d="M124 110 h28 v4 a8 8 0 0 1 -8 8 h-12 a8 8 0 0 1 -8 -8z" fill="#fff" stroke="#333" stroke-width="1.6"/>
+  <text x="138" y="70" font-size="9" text-anchor="middle">蛇口</text>
+  <!-- トイレ -->
+  <path d="M188 92 h18 v14 h-5 q0 12 -12 12 h-1z" fill="#fff" stroke="#333" stroke-width="1.6"/>
+  <text x="200" y="84" font-size="9" text-anchor="middle">トイレ</text>
+  <!-- 給水 -->
+  <circle cx="22" cy="152" r="14" fill="#e3f0fa" stroke="#0072B2" stroke-width="2.4"/>
+  <text x="22" y="174" font-size="9.5" text-anchor="middle" fill="#0072B2" font-weight="bold">水道管</text>
+  <path d="M36 152 H90 V100 H120" fill="none" stroke="#0072B2" stroke-width="5"/>
+  <path d="M90 128 v-14" stroke="#0072B2" stroke-width="5" marker-end="url(#s-b)"/>
+  <text x="58" y="70" font-size="11" text-anchor="middle" fill="#0072B2" font-weight="bold">① 入る</text>
+  <text x="58" y="85" font-size="9.5" text-anchor="middle" fill="#0072B2">きれいな水</text>
+  <text x="58" y="98" font-size="9" text-anchor="middle" fill="#0072B2">（給水）</text>
+  <!-- 排水 -->
+  <path d="M138 122 V142 H250 V152 H304" fill="none" stroke="#6B4423" stroke-width="6" stroke-dasharray="10 4"/>
+  <path d="M197 118 V142" fill="none" stroke="#6B4423" stroke-width="6" stroke-dasharray="10 4"/>
+  <path d="M272 152 h14" stroke="#6B4423" stroke-width="6" marker-end="url(#s-r)"/>
+  <circle cx="318" cy="152" r="14" fill="#fff" stroke="#6B4423" stroke-width="2.4"/>
+  <text x="318" y="174" font-size="9.5" text-anchor="middle" fill="#6B4423" font-weight="bold">下水道管</text>
+  <text x="285" y="70" font-size="11" text-anchor="middle" fill="#6B4423" font-weight="bold">③ 出る</text>
+  <text x="285" y="85" font-size="9.5" text-anchor="middle" fill="#6B4423">使った水</text>
+  <text x="285" y="98" font-size="9" text-anchor="middle" fill="#6B4423">（排水）</text>
+</svg>

@@ -1,0 +1,56 @@
+/* 建築設備Ⅲ 第1回 要点整理 共通スタイル（試験対策版・授業内容版） */
+:root{
+  --ink:#1b1f24; --sub:#4a5561; --line:#c4ccd6;
+  --blue:#1f5fa8; --blue-bg:#eaf2fb; --red:#c0392b; --red-bg:#fdecea;
+  --green:#2e7d32; --green-bg:#edf6ee; --org:#b35c00; --org-bg:#fff4e5;
+  --brown:#6d4c2f; --gray-bg:#f2f4f6; --yel-bg:#fffbe6; --yel-line:#e3cf7d;
+}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink)}
+body{font-family:"Noto Sans JP","IPAGothic",sans-serif;font-size:8.1pt;line-height:1.4}
+.page{width:210mm;height:297mm;padding:6mm 6.5mm 6mm;overflow:hidden;position:relative;break-after:page}
+.page:last-child{break-after:auto}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.4px solid var(--theme,var(--blue));padding-bottom:1.1mm;margin-bottom:2mm}
+.hdr h1{font-size:13.5pt;margin:0;color:var(--theme,var(--blue));line-height:1.2}
+.hdr h1 small{font-size:9pt;color:var(--ink);font-weight:700;margin-left:2mm}
+.hdr .meta{font-size:6.9pt;color:var(--sub);text-align:right;line-height:1.35}
+.badge{display:inline-block;background:var(--theme,var(--blue));color:#fff;font-size:8.4pt;font-weight:700;padding:.3mm 2mm;border-radius:1mm;margin-left:2mm;vertical-align:2px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:2.6mm}
+.col{display:flex;flex-direction:column;gap:1.8mm;min-width:0}
+.full{margin-bottom:1.8mm}
+.sec{border:1px solid var(--line);border-radius:1.6mm;padding:1.3mm 1.9mm 1.5mm;background:#fff}
+.sec h2{font-size:9.2pt;margin:0 0 .9mm;color:#fff;background:var(--theme,var(--blue));display:inline-block;padding:.25mm 2mm;border-radius:1mm;line-height:1.35}
+.sec h2 .tag{font-weight:400;font-size:7.2pt;margin-left:1.5mm}
+.sec h3{font-size:8.5pt;margin:1.1mm 0 .45mm;color:var(--theme,var(--blue));border-left:2.6px solid var(--theme,var(--blue));padding-left:1.3mm;line-height:1.3}
+.sec.hl{border:1.5px solid var(--red);background:#fffafa}
+.sec.hl h2{background:var(--red)}
+.sec.g h2{background:var(--green)} .sec.g h3{color:var(--green);border-color:var(--green)}
+.sec.o h2{background:var(--org)} .sec.o h3{color:var(--org);border-color:var(--org)}
+ul{margin:.3mm 0 .3mm;padding-left:3.6mm}
+li{margin:.2mm 0}
+p{margin:.35mm 0}
+table{border-collapse:collapse;width:100%;margin:.6mm 0}
+th,td{border:1px solid var(--line);padding:.4mm 1mm;vertical-align:top;text-align:left}
+th{background:var(--gray-bg);font-weight:700}
+th.nw,td.nw{white-space:nowrap}
+td.c,th.c{text-align:center}
+.s{font-size:7.55pt;line-height:1.36}
+.k{color:var(--red);font-weight:700}
+.b{font-weight:700}
+.bl{color:var(--blue);font-weight:700}
+.def{background:var(--yel-bg);border:1px solid var(--yel-line);border-radius:1mm;padding:.9mm 1.5mm;margin:.6mm 0}
+.note{color:var(--sub);font-size:6.9pt}
+.ts{color:#7d8996;font-size:6.4pt;font-weight:400;white-space:nowrap}
+.fig{display:block;margin:.6mm auto .2mm;width:100%;height:auto}
+.figcap{font-size:6.6pt;color:var(--sub);text-align:right;margin-top:-.3mm}
+.row2{display:grid;grid-template-columns:auto 1fr;gap:1.8mm;align-items:start}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.6mm;margin:.5mm 0}
+.flow span{background:var(--blue-bg);border:1px solid #b9d0ea;border-radius:.8mm;padding:.15mm 1.1mm;white-space:nowrap}
+.flow i{font-style:normal;color:var(--blue);font-weight:700}
+.foot{position:absolute;bottom:2mm;left:6.5mm;right:6.5mm;font-size:6.3pt;color:#7d8996;display:flex;justify-content:space-between}
+.mk-t{color:var(--red);font-weight:700}   /* ◎ 教員が強調 */
+.mk-j{color:var(--blue);font-weight:700}  /* ○ 作成者判断 */
+.qa td:first-child{width:52%}
+.qa td{padding:.35mm 1mm}
+.qn{color:var(--org);font-weight:700;margin-right:.6mm}
