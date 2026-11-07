@@ -1,0 +1,43 @@
+<svg class="fig" viewBox="0 0 250 118" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans JP, IPAGothic, sans-serif" aria-label="トラップ・封水・通気管の仕組み">
+  <defs>
+    <marker id="tr-b" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5z" fill="#1f5fa8"/></marker>
+    <marker id="tr-r" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5z" fill="#c0392b"/></marker>
+  </defs>
+  <!-- 左：正常（通気管あり） -->
+  <rect x="1" y="1" width="128" height="116" rx="3" fill="#fff" stroke="#c4ccd6"/>
+  <text x="65" y="11" font-size="7.2" text-anchor="middle" font-weight="bold" fill="#2e7d32">① 通気管あり（正常）</text>
+  <path d="M8 22 h26 v6 a8 8 0 0 1 -8 8 h-10 a8 8 0 0 1 -8 -8z" fill="#fff" stroke="#4a5561"/>
+  <text x="21" y="19" font-size="6.2" text-anchor="middle" fill="#4a5561">洗面器</text>
+  <path d="M21 36 v14 a8 8 0 0 0 16 0 v-4 a8 8 0 0 1 16 0 v6 h26" fill="none" stroke="#6d4c2f" stroke-width="3"/>
+  <path d="M22.4 44 v6 a6.6 6.6 0 0 0 13.2 0 v-6z" fill="#6fa8e0"/>
+  <path d="M22.4 44 h13.2" stroke="#1f5fa8" stroke-width=".8"/>
+  <text x="29" y="70" font-size="7" text-anchor="middle" fill="#1f5fa8" font-weight="bold">封水</text>
+  <text x="29" y="78" font-size="5.8" text-anchor="middle" fill="#1f5fa8">＝水のふた</text>
+  <text x="40" y="64" font-size="5.8" fill="#6d4c2f">トラップ</text>
+  <line x1="80" y1="20" x2="80" y2="112" stroke="#6d4c2f" stroke-width="4"/>
+  <text x="84" y="108" font-size="5.8" fill="#6d4c2f">排水立て管</text>
+  <path d="M100 14 V86 L80 96" fill="none" stroke="#6d4c2f" stroke-width="1.3" stroke-dasharray="3 2"/>
+  <text x="103" y="22" font-size="6" fill="#6d4c2f">通気管</text>
+  <path d="M76 24 v18" stroke="#1f5fa8" stroke-width="1" marker-end="url(#tr-b)"/><text x="66" y="30" font-size="5.8" fill="#1f5fa8">水↓</text>
+  <path d="M100 74 v-34" stroke="#c0392b" stroke-width="1.1" marker-end="url(#tr-r)"/><text x="103" y="62" font-size="5.8" fill="#c0392b">空気↑</text>
+  <text x="5" y="92" font-size="5.8" fill="#4a5561">下水管内の有毒ガス・臭気・</text>
+  <text x="5" y="99" font-size="5.8" fill="#4a5561">衛生害虫を室内に入れない</text>
+  <text x="5" y="108" font-size="5.8" fill="#2e7d32">空気が逃げ、排水も円滑</text>
+  <!-- 右：通気管なし -->
+  <rect x="133" y="1" width="116" height="116" rx="3" fill="#fff" stroke="#c4ccd6"/>
+  <text x="191" y="11" font-size="7.2" text-anchor="middle" font-weight="bold" fill="#c0392b">② 通気管なし</text>
+  <path d="M141 36 v14 a8 8 0 0 0 16 0 v-4 a8 8 0 0 1 16 0 v6 h26" fill="none" stroke="#6d4c2f" stroke-width="3"/>
+  <path d="M142.4 49 v1 a6.6 6.6 0 0 0 13.2 0 v-1z" fill="#6fa8e0"/>
+  <g fill="#6fa8e0"><circle cx="146" cy="30" r="1.6"/><circle cx="151" cy="25" r="1.6"/><circle cx="154" cy="31" r="1.4"/><circle cx="148" cy="22" r="1.2"/></g>
+  <text x="139" y="18" font-size="5.8" fill="#1f5fa8">飛び出す</text>
+  <path d="M149 56 v8" stroke="#1f5fa8" stroke-width=".9" marker-end="url(#tr-b)"/><text x="138" y="74" font-size="5.8" fill="#1f5fa8">吸い込まれる</text>
+  <line x1="200" y1="20" x2="200" y2="112" stroke="#6d4c2f" stroke-width="4"/>
+  <path d="M196 24 v18" stroke="#1f5fa8" stroke-width="1" marker-end="url(#tr-b)"/><text x="204" y="32" font-size="5.8" fill="#1f5fa8">水・固形物↓</text>
+  <text x="204" y="80" font-size="5.8" fill="#c0392b">空気が</text>
+  <text x="204" y="87" font-size="5.8" fill="#c0392b">抜けず</text>
+  <text x="204" y="94" font-size="5.8" fill="#c0392b">下部の</text>
+  <text x="204" y="101" font-size="5.8" fill="#c0392b">圧力↑</text>
+  <text x="137" y="92" font-size="5.8" fill="#4a5561">圧力変動に耐えられず</text>
+  <text x="137" y="99" font-size="5.8" fill="#4a5561">封水が破れる</text>
+  <text x="137" y="108" font-size="5.8" fill="#c0392b">→ 流れも悪くなる</text>
+</svg>
