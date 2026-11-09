@@ -91,9 +91,12 @@ class TestBaseline(Base):
         by = {r["company_id"]: r for r in res["companies"]}
         t03 = [t for t in by["COMPANY_01"]["topics"] if t["topic_id"] == "AXIS_13_T03"][0]
         self.assertEqual(t03["state"], "PASS")
-        for cid in ("COMPANY_02", "COMPANY_03", "COMPANY_08"):
+        for cid in ("COMPANY_02", "COMPANY_03", "COMPANY_04", "COMPANY_05", "COMPANY_06", "COMPANY_07", "COMPANY_08"):
             t = [t for t in by[cid]["topics"] if t["topic_id"] == "AXIS_13_T03"][0]
-            self.assertEqual(t["state"], "NOT_STARTED")
+            # another company's PASS never carries over; each company's state comes from its own evidence only
+            self.assertNotEqual(t["state"], "PASS", cid)
+            if t["state"] != "NOT_STARTED":
+                self.assertTrue(all(s.startswith("SRC-C" + cid[-2:]) for s in t["direct_sources"]), cid)
 
     def test_company_is_independent_of_other_companies(self):
         before = research_gates.run("COMPANY_01")["companies"][0]
