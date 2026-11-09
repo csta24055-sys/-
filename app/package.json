@@ -27,7 +27,6 @@
   "build": {
     "appId": "org.unofficial.tajima.researchnavigator",
     "productName": "Tajima Lab Research Navigator",
-    "executableName": "tajima-lab-research-navigator",
     "copyright": "Unofficial academic prototype — not an official Nihon University application",
     "artifactName": "Tajima-Lab-Research-Navigator-${version}-${os}-${arch}.${ext}",
     "directories": {
@@ -60,7 +59,8 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "executableName": "tajima-lab-research-navigator"
     },
     "nsis": {
       "oneClick": false,
@@ -105,7 +105,8 @@
         }
       ],
       "category": "Education",
-      "synopsis": "Unofficial research navigator prototype"
+      "synopsis": "Unofficial research navigator prototype",
+      "executableName": "tajima-lab-research-navigator"
     },
     "publish": null
   },
