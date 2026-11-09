@@ -8,8 +8,10 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DB = ROOT / "private_data" / "aqros.sqlite3"
+from .paths import default_db_path, resource_root
+
+ROOT = resource_root()
+DEFAULT_DB = default_db_path()
 KNOWLEDGE = ROOT / "knowledge" / "knowledge.json"
 REPORT_DIR = ROOT / "report"
 

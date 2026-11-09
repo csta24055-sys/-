@@ -23,12 +23,38 @@ from aqros import analysis as A
 from aqros import models as M
 
 from .db import DB, ROOT
+from .paths import frozen
+
+__version__ = "1.1.0"
+DESKTOP = frozen() or os.environ.get("AQROS_DESKTOP") == "1"
 
 MAX_ROWS = 200_000
 MAX_UPLOAD = 50 * 1024 * 1024
 
-app = FastAPI(title="Air Quality Research OS", version="1.0.0")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app = FastAPI(title="Air Quality Research OS", version=__version__)
+if not DESKTOP:   # 開発・研究室サーバー用。配布版（localhost 専用）では他サイトからの呼び出しを許さない
+    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+else:
+    from starlette.middleware.base import BaseHTTPMiddleware
+    from starlette.responses import JSONResponse
+
+    _LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+
+    class _LocalOnly(BaseHTTPMiddleware):
+        """配布版: Host が localhost 以外（DNS リバインディング）と、別オリジンからの書き込み（CSRF）を拒否する。"""
+
+        async def dispatch(self, request, call_next):
+            from urllib.parse import urlsplit
+            host = urlsplit("//" + (request.headers.get("host") or "")).hostname or ""
+            if host not in _LOCAL_HOSTS:
+                return JSONResponse({"detail": "forbidden host"}, status_code=403)
+            origin = request.headers.get("origin")
+            if request.method not in ("GET", "HEAD", "OPTIONS") and origin:
+                if (urlsplit(origin).hostname or "") not in _LOCAL_HOSTS:
+                    return JSONResponse({"detail": "cross-origin write rejected"}, status_code=403)
+            return await call_next(request)
+
+    app.add_middleware(_LocalOnly)
 _db: DB | None = None
 
 
@@ -61,7 +87,7 @@ def _clean(v: Any) -> Any:
 # ----------------------------------------------------------------- dashboard
 @app.get("/api/health")
 def health():
-    return {"ok": True, "db": str(db().path.name)}
+    return {"ok": True, "app": "aqros", "version": __version__, "desktop": DESKTOP, "db": str(db().path.name)}
 
 
 @app.get("/api/dashboard")

@@ -1,6 +1,6 @@
 {
- "updated_at": "2026-11-04T00:32:26+00:00",
- "last_commit": "9ce7452",
+ "updated_at": "2026-11-09T01:42:07+00:00",
+ "last_commit": "8c901da",
  "tasks": [
   {
    "id": "P1",
@@ -57,6 +57,17 @@
    "id": "P12-REPORT",
    "title": "中間統合技術調査報告書 2026-11（docx/pdf＋台帳・根拠台帳・数値監査）",
    "status": "done"
+  },
+  {
+   "id": "P13-DESKTOP",
+   "title": "デスクトップ配布版（ランチャー・PyInstaller・Linux版ビルドと起動確認・インストール手順）",
+   "status": "done"
+  },
+  {
+   "id": "P13-DESKTOP-CI",
+   "title": "Windows / macOS 版のビルド（GitHub Actions desktop.yml の実行）",
+   "status": "blocked",
+   "blocked_reason": "Windows/macOS 版はこのLinuxコンテナでは作れない。ブランチの push（ユーザー許可待ち）後に Actions の desktop ワークフローを実行する必要がある"
   }
  ],
  "next_task": null,

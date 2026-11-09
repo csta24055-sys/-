@@ -1,0 +1,84 @@
+# Air Quality Research OS デスクトップ版のビルド（Windows / macOS / Linux）
+# - 手動実行（Actions タブ → Run workflow）または v* タグの push で動く
+# - 各 OS でビルド → 起動スモークテスト → 成果物（Artifacts）としてアップロード
+# - v* タグのときは「下書き（draft）」のリリースを作る。公開するかどうかは人が GitHub 上で判断する
+name: desktop
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            exe: build_desktop/dist/AQROS/AQROS.exe
+          - os: macos-latest          # Apple シリコン（arm64）
+            exe: build_desktop/dist/AQROS.app/Contents/MacOS/AQROS
+          - os: macos-15-intel        # Intel Mac（x64）
+            exe: build_desktop/dist/AQROS.app/Contents/MacOS/AQROS
+          - os: ubuntu-22.04          # 古めの glibc でビルドして多くのディストリで動くようにする
+            exe: build_desktop/dist/AQROS/AQROS
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt -r desktop/requirements-build.txt
+          cd frontend && npm ci
+      - name: Tests
+        if: runner.os == 'Linux'
+        run: |
+          python -m pytest -q
+          cd frontend && npm test --silent
+      - name: Build
+        run: python desktop/build.py
+      - name: Smoke test (packaged app)
+        run: python desktop/smoke_test.py ${{ matrix.exe }}
+      - name: Windows installer (Inno Setup)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ver = python -c "import re;print(re.search(r'__version__ = \"([^\"]+)\"', open('backend/app/main.py', encoding='utf-8').read()).group(1))"
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe" "/DAppVersion=$ver" desktop\aqros.iss
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AQROS-${{ matrix.os }}
+          path: dist_desktop/*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -la out
+          gh release create "${GITHUB_REF_NAME}" out/* --repo "${GITHUB_REPOSITORY}" --draft \
+            --title "Air Quality Research OS ${GITHUB_REF_NAME}" \
+            --notes "デスクトップ版（Windows / macOS / Linux）。インストール方法は docs/DESKTOP_INSTALL.md を参照。"

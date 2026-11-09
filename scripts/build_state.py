@@ -23,6 +23,8 @@ TASKS = [
     ("P9-TEST", "全体テスト・E2E"),
     ("P11-AUDIT", "完成度監査・QUALITY_AUDIT.md"),
     ("P12-REPORT", "中間統合技術調査報告書 2026-11（docx/pdf＋台帳・根拠台帳・数値監査）"),
+    ("P13-DESKTOP", "デスクトップ配布版（ランチャー・PyInstaller・Linux版ビルドと起動確認・インストール手順）"),
+    ("P13-DESKTOP-CI", "Windows / macOS 版のビルド（GitHub Actions desktop.yml の実行）"),
 ]
 
 

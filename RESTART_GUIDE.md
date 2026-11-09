@@ -38,3 +38,9 @@
 - **ユーザー指示（2026-11-04）: 許可のない GitHub push を行わない。** 自動再開の checkpoint では `--push` を付けず、コミットのみ行う。push はユーザーの明示的な許可後。
 - 2018・2019年度の原データは「未取得資料」（付録H, M-01/M-02）として扱い、所在確認をユーザーに繰り返し求めない。
 - 報告書の完成後は、アプリ開発・解析作業（RESTART_GUIDE の next_task）に戻る。
+
+## 2026-11-09 デスクトップ配布版（P13-DESKTOP）
+- 入口: `desktop/aqros_desktop.py`（ランチャー）、`desktop/aqros.spec`（PyInstaller）、`desktop/build.py`（ビルド＋アーカイブ）、`desktop/smoke_test.py`、`desktop/aqros.iss`（Windows インストーラー）、`.github/workflows/desktop.yml`（3 OS ビルド、v* タグで下書きリリース）。利用者向け手順は `docs/DESKTOP_INSTALL.md`。
+- 保存先の決定は `backend/app/paths.py`。開発時（リポジトリから起動）は従来どおり `private_data/aqros.sqlite3`。
+- 手元ビルド: `.venv/bin/pip install -r desktop/requirements-build.txt && .venv/bin/python desktop/build.py`（このコンテナでは Linux 版のみ）。
+- 残り（P13-DESKTOP-CI）: Windows/macOS 版は push 後に Actions の desktop ワークフローを実行して作る。push・リリース公開はユーザー許可が必要。

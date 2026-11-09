@@ -19,7 +19,13 @@
 
 PC・iPhone 両対応（下部タブバー）。Service Worker と localStorage スナップショットにより、一度開いた画面は**オフラインでも閲覧**でき、シミュレーターと CSV / Excel(.xlsx) 解析はオフラインで動作します（Excel は依存ライブラリなしの自前リーダー）。
 
-## 起動方法
+## デスクトップ版（ダウンロードしてすぐ使う）
+
+Windows / macOS / Linux 用の配布版があります。Python や Node.js は不要で、ダブルクリックで起動するとブラウザに画面が開きます。
+サーバーはこのパソコン内（127.0.0.1）だけで動き、データは OS 標準の利用者データフォルダに保存されます。
+インストール方法・保存先・ビルド方法は **[docs/DESKTOP_INSTALL.md](docs/DESKTOP_INSTALL.md)**（ランチャーは `desktop/`、3 OS のビルドは `.github/workflows/desktop.yml`）。
+
+## 起動方法（開発・研究室サーバー）
 
 ```bash
 # 初回のみ
