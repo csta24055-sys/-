@@ -1,5 +1,5 @@
 # Air Quality Research OS デスクトップ版のビルド（Windows / macOS / Linux）
-# - 手動実行（Actions タブ → Run workflow）または v* タグの push で動く
+# - 手動実行（Actions タブ → Run workflow）、v* タグの push、または開発ブランチで desktop/・backend/app/ を変更したときに動く（リリースはタグのときだけ）
 # - 各 OS でビルド → 起動スモークテスト → 成果物（Artifacts）としてアップロード
 # - v* タグのときは「下書き（draft）」のリリースを作る。公開するかどうかは人が GitHub 上で判断する
 name: desktop
@@ -8,6 +8,8 @@ on:
   workflow_dispatch:
   push:
     tags: ["v*"]
+    branches: ["claude/air-quality-research-os-19gu2g"]
+    paths: ["desktop/**", "backend/app/**", ".github/workflows/desktop.yml"]
 
 permissions:
   contents: read
