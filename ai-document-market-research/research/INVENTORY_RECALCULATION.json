@@ -1,0 +1,54 @@
+{
+  "original": {
+    "axis_count": 28,
+    "topic_count": 224,
+    "all_axes_exactly_eight": true,
+    "seed_queries": 896,
+    "all_topics_exactly_four": true,
+    "competitors": 64,
+    "verified_competitors": 0
+  },
+  "revised": {
+    "axis_count": 32,
+    "topic_count": 325,
+    "topics_added": 101,
+    "preserved_original_topic_count": 224,
+    "min_topics_per_axis": 9,
+    "max_topics_per_axis": 12,
+    "initial_search_plans": 325,
+    "preserved_legacy_search_suggestions": 896,
+    "competitor_candidates": 80,
+    "competitor_added": 16,
+    "verified_competitors": 0,
+    "all_research_is_initially_incomplete": true
+  },
+  "roles_before": {
+    "ACADEMIC_RESEARCH_AI": 8,
+    "BUSINESS_KNOWLEDGE_WRITING": 5,
+    "DIRECT_PRESENTATION": 19,
+    "GENERAL_AI_ASSISTANT": 6,
+    "NON_AI_WORKFLOW_SUBSTITUTE": 5,
+    "OFFICE_DESIGN_SUITE": 8,
+    "PDF_DOCUMENT_AI": 9,
+    "STUDENT_LEARNING": 4
+  },
+  "roles_after": {
+    "ACADEMIC_RESEARCH_AI": 8,
+    "BUSINESS_KNOWLEDGE_WRITING": 7,
+    "DIRECT_PRESENTATION": 23,
+    "GENERAL_AI_ASSISTANT": 6,
+    "NON_AI_WORKFLOW_SUBSTITUTE": 8,
+    "OFFICE_DESIGN_SUITE": 10,
+    "PDF_DOCUMENT_AI": 10,
+    "STUDENT_LEARNING": 4,
+    "TEACHER_CREATION": 4
+  },
+  "methodology": [
+    "scope counts from enumeration, deduplication and defined research gaps",
+    "NOT statistical proof of globally best number",
+    "retention of all original topics and user requirements",
+    "adaptive real searches, not fixed number of template queries",
+    "competitor additions close direct-vs-academic-vs-business-vs-education-vs-OSS coverage gaps",
+    "research scripts allowed; product implementation forbidden"
+  ]
+}

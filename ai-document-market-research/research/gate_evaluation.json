@@ -1,0 +1,224 @@
+{
+  "research_status": "INCOMPLETE",
+  "checked_at": "2026-11-09T21:33:48.815108+00:00",
+  "source_rows": 0,
+  "accepted_rows": 0,
+  "independent_origins": 0,
+  "verified_competitors": 0,
+  "admissible_quant_results": 0,
+  "steps": {
+    "S0": {
+      "label": "repo_and_registry_audit",
+      "state": "PASS",
+      "checks": [
+        {
+          "pass": true,
+          "detail": "current manifest registry: 325 topics"
+        },
+        {
+          "pass": true,
+          "detail": "eight supplied user reference images available"
+        },
+        {
+          "pass": true,
+          "detail": "explicit app implementation ban and report stop in manifest"
+        },
+        {
+          "pass": true,
+          "detail": "ten research step statuses in state"
+        },
+        {
+          "pass": true,
+          "detail": "real repo/tools audit recorded (not prefilled)"
+        }
+      ],
+      "pass_count": 5,
+      "total_checks": 5
+    },
+    "S1": {
+      "label": "collection",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "logged search queries: 2"
+        },
+        {
+          "pass": false,
+          "detail": "at least five search platforms represented"
+        },
+        {
+          "pass": false,
+          "detail": "accepted=0, direct=0, independent origins=0"
+        },
+        {
+          "pass": false,
+          "detail": "multiple research axes and publication categories"
+        },
+        {
+          "pass": false,
+          "detail": "every registered topic has an actual logged source-search/access attempt; planned queries alone do not count"
+        },
+        {
+          "pass": false,
+          "detail": "audited gaps, search failures and actual source acquisition"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 6
+    },
+    "S2": {
+      "label": "verification",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "source provenance errors: 1: no accepted sources"
+        },
+        {
+          "pass": false,
+          "detail": "independent-origin, sponsorship and repost review recorded"
+        },
+        {
+          "pass": false,
+          "detail": "competing evidence and corrections described"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 3
+    },
+    "S3": {
+      "label": "user_segments",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "substantive, evidence-based jobs-to-be-done segmentation"
+        },
+        {
+          "pass": false,
+          "detail": "at least five real evidence IDs cited in segmentation"
+        },
+        {
+          "pass": false,
+          "detail": "job, academic, payer, privacy, counterexamples addressed"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 3
+    },
+    "S4": {
+      "label": "competitors",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "verified competitors=0, invalid sources=0"
+        },
+        {
+          "pass": false,
+          "detail": "all 21 highest-priority candidate companies have evidence-backed official verification"
+        },
+        {
+          "pass": false,
+          "detail": "substantial comparisons with sources, limits and pricing checks"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 3
+    },
+    "S5": {
+      "label": "quantitative_research",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "quant results with traceable real-world evidence=0"
+        },
+        {
+          "pass": false,
+          "detail": "model assumptions, identification, bias and sensitivity documented"
+        },
+        {
+          "pass": false,
+          "detail": "recomputation and independent checking documented"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 3
+    },
+    "S6": {
+      "label": "alternative_assessment",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "A-G product alternatives analyzed and counterarguments included"
+        },
+        {
+          "pass": false,
+          "detail": "product tradeoffs cite at least five accepted sources"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 2
+    },
+    "S7": {
+      "label": "decision_analysis",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "conditional statistical decision and sensitivity analysis documented"
+        },
+        {
+          "pass": false,
+          "detail": "downside, regret, conditions, unidentifiable issues explicitly covered"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 2
+    },
+    "S8": {
+      "label": "final_outputs",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "all five substantive and non-placeholder final artifacts exist"
+        },
+        {
+          "pass": false,
+          "detail": "main report cites at least eight distinct accepted source IDs"
+        },
+        {
+          "pass": false,
+          "detail": "critical user requirements covered"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 3
+    },
+    "S9": {
+      "label": "final_audit_no_implementation",
+      "state": "NOT_STARTED",
+      "checks": [
+        {
+          "pass": false,
+          "detail": "final review / implementation-stop proof exists"
+        },
+        {
+          "pass": false,
+          "detail": "manual app-change audit and research quality check attested"
+        },
+        {
+          "pass": false,
+          "detail": "product conclusions linked to accepted sources"
+        }
+      ],
+      "pass_count": 0,
+      "total_checks": 3
+    }
+  },
+  "warning": "Mechanical checks do not establish source truth, sample representativeness or statistical validity; independent review required."
+}
