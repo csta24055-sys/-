@@ -24,6 +24,7 @@ PC・iPhone 両対応（下部タブバー）。Service Worker と localStorage 
 ホーム画面に「空気清浄度研究」として追加する PWA です。資料・文献検索、CSV/Excel 解析、シミュレーター、研究計画、報告書の編集はスマホの中だけで動き、データは端末内（IndexedDB）に保存されます。
 重い処理（大規模計算・Python 解析・Word/PDF 生成・OCR）は GitHub Actions のジョブとして実行します。
 使い方・公開手順・データ保護は **[docs/MOBILE.md](docs/MOBILE.md)**。ビルドは `python scripts/build_mobile.py`（漏えい検査込み）で行います。
+**公開 URL: https://aqros-mobile.pages.dev**（iPhone・Android 共通）
 
 ## デスクトップ版（ダウンロードしてすぐ使う）
 

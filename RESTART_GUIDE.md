@@ -55,3 +55,10 @@
 - 確認方法: `python scripts/build_mobile.py && python scripts/serve_static.py frontend/dist-mobile 47801 & (cd frontend && node e2e/mobile.cjs)`
 - 漏えい検査の氏名リストは `private_data/privacy_patterns.txt`（非コミット）。新しいコンテナでは消えているので、検査語を入れ直すこと（無い場合、氏名検査は「確認不能」と表示される）。
 - 残り（P14-MOBILE-PUBLISH）: push の許可、公開用リポジトリと Secret、ジョブ用の非公開リポジトリとトークン、実機確認。
+
+## 2026-11-09 公開状況
+- スマホ版: https://aqros-mobile.pages.dev（Cloudflare Pages、プロジェクト aqros-mobile）。
+  - 更新は `python scripts/deploy_cloudflare.py` で行う（ビルド → 漏えい検査 → 公開）。
+  - トークンはクラウド環境のネットワーク設定に保存済み。値をコマンドやファイルに書かない。
+- デスクトップ版: Actions「desktop」の Artifacts（4 OS）。リリースは v* タグで下書きを作る。
+- 残り（P14-DEVICE-CHECK）: 実機確認と、研究データ用の非公開ジョブリポジトリ。いずれもユーザー側の作業。

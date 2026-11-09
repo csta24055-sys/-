@@ -16,7 +16,7 @@ const { execFileSync } = require('child_process');
 const BASE = (process.env.BASE || 'http://127.0.0.1:47801').replace(/\/$/, '');
 const ROOT = path.resolve(__dirname, '../..');
 const PY = process.env.PYTHON || (fs.existsSync(path.join(ROOT, '.venv/bin/python')) ? path.join(ROOT, '.venv/bin/python') : 'python3');
-const SHOTS = path.join(ROOT, 'docs/screenshots/mobile');
+const SHOTS = process.env.SHOTS || path.join(ROOT, 'docs/screenshots/mobile');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'aqros-mobile-'));
 fs.mkdirSync(SHOTS, { recursive: true });
 
@@ -207,6 +207,8 @@ async function run(dev, devName, ghPrivate) {
   await ctx2.close();
 
   // 13. クラウド解析（GitHub API 模擬・run_job.py は実行）
+  // 公開サイトは CSP で通信先を自サイトと api.github.com に限っているため、ローカルの模擬サーバーには繋がらない（SKIP_CLOUD=1）
+  if (process.env.SKIP_CLOUD) { ok(dev, 'ページエラーなし', errors.length === 0, errors.slice(0, 3).join(' | ')); await browser.close(); return }
   const gh = await mockGitHub({ isPrivate: ghPrivate });
   await page.goto(BASE + '/settings'); await page.waitForSelector('text=クラウド解析の接続先');
   await page.evaluate(async (api) => {

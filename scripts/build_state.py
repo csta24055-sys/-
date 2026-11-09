@@ -26,7 +26,8 @@ TASKS = [
     ("P13-DESKTOP", "デスクトップ配布版（ランチャー・PyInstaller・Linux版ビルドと起動確認・インストール手順）"),
     ("P13-DESKTOP-CI", "Windows / macOS 版のビルド（GitHub Actions desktop.yml の実行）"),
     ("P14-MOBILE", "スマホ単体版 PWA（端末内バックエンド・IndexedDB・バックアップ・オフライン・クラウド解析ジョブ・漏えい検査）"),
-    ("P14-MOBILE-PUBLISH", "スマホ版の HTTPS 公開と実機確認・実際の GitHub Actions でのクラウドジョブ実行"),
+    ("P14-MOBILE-PUBLISH", "スマホ版の HTTPS 公開（Cloudflare Pages）・公開 URL での E2E・実際の GitHub Actions でのクラウドジョブ実行"),
+    ("P14-DEVICE-CHECK", "iPhone / Android 実機での確認、研究データ用の非公開ジョブリポジトリ"),
 ]
 
 

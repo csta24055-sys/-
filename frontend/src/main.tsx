@@ -64,7 +64,7 @@ function Shell() {
         <div className="side-foot">日本大学 理工学部 井口研究室<br />空気清浄度研究アーカイブ</div>
       </aside>
       <main className="main">
-        {update && <div className="note update" role="status">新しい版があります。<button className="small" onClick={() => { update.postMessage('skipWaiting') }}>更新する</button> <span className="small muted">端末内のデータはそのまま残ります。</span></div>}
+        {update && <div className="note update" role="status">新しい版があります。<button className="small" onClick={() => { (window as any).__aqrosUpdating = true; update.postMessage('skipWaiting') }}>更新する</button> <span className="small muted">端末内のデータはそのまま残ります。</span></div>}
         {!online && <div className="offline">{STANDALONE ? 'オフラインです — 端末内のデータで動作しています（クラウド解析は接続後に利用できます）。' : 'オフライン表示中 — 最後に取得したデータを表示しています。編集・アップロードは接続後に行ってください。'}</div>}
         {needBackup && loc.pathname !== '/settings' && <div className="note">{needBackup === 'never' ? '端末内に保存したデータのバックアップがまだありません。' : '最後のバックアップから7日以上たっています。'}<Link to="/settings">設定・バックアップ</Link>から書き出してください。</div>}
         <Routes>
@@ -101,8 +101,9 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       const notify = (w: ServiceWorker | null) => { if (w && navigator.serviceWorker.controller) window.dispatchEvent(new CustomEvent('aqros-update', { detail: w })) }
       notify(reg.waiting)
       reg.addEventListener('updatefound', () => { const w = reg.installing; w?.addEventListener('statechange', () => { if (w.state === 'installed') notify(w) }) })
+      // 利用者が「更新する」を押したときだけ再読み込みする（初回の制御開始では再読み込みしない＝入力中の内容を失わない）
       let reloaded = false
-      navigator.serviceWorker.addEventListener('controllerchange', () => { if (!reloaded) { reloaded = true; location.reload() } })
+      navigator.serviceWorker.addEventListener('controllerchange', () => { if ((window as any).__aqrosUpdating && !reloaded) { reloaded = true; location.reload() } })
       setInterval(() => reg.update().catch(() => undefined), 60 * 60 * 1000)
     }).catch(() => undefined)
   })

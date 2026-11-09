@@ -5,7 +5,14 @@ Python や Node.js を入れなくても、ダウンロードしてそのまま�
 
 ## 1. ダウンロード
 
-GitHub の Releases（または Actions の「desktop」ワークフローの Artifacts）から、自分の OS 用のファイルを取ります。
+GitHub の Releases から、自分の OS 用のファイルを取ります。リリースを作る前は、Actions の「desktop」ワークフローの実行結果にある Artifacts からも取れます（GitHub へのログインが必要）。
+2026-11-09 の実行（https://github.com/csta24055-sys/-/actions/runs/42563515279）で、4 種類がビルドと起動確認に合格しました。
+- Windows（インストーラー＋zip）
+- macOS（Apple シリコン）
+- macOS（Intel）
+- Linux
+
+実機での動作確認はまだです。
 
 | OS | ファイル | 中身 |
 |---|---|---|

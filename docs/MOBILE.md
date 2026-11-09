@@ -19,12 +19,18 @@ App Store / Google Play への登録はしません。
 - ビルドのたびに漏えい検査（`scripts/build_mobile.py`）を行い、不合格なら公開しません。氏名などの検査語はリポジトリに書かず、`private_data/privacy_patterns.txt` または Secrets `AQROS_PRIVACY_PATTERNS` から読みます。
 - GitHub のトークンはアプリに埋め込みません。利用者が設定画面で入力し、その端末の IndexedDB にだけ保存します（バックアップにも含めません）。
 
-## 2. URL（公開後に記入）
+## 2. URL
 
 | 端末 | URL |
 |---|---|
-| iPhone（Safari） | 未公開 — §5 の公開手順の完了後に `https://<owner>.github.io/<公開用リポジトリ名>/` |
-| Android（Chrome） | 同上（同じ URL） |
+| iPhone（Safari） | **https://aqros-mobile.pages.dev** |
+| Android（Chrome） | **https://aqros-mobile.pages.dev**（同じ URL） |
+
+公開先は Cloudflare Pages のプロジェクト `aqros-mobile` で、2026-11-09 に公開しました。公開物は漏えい検査（氏名リストを含む）に合格したものだけです。
+- 安全のため、次のヘッダーを付けています。
+  - Content-Security-Policy: 通信先を自サイトと api.github.com だけに限る（端末内のトークンを他所へ送れない）
+  - X-Frame-Options: DENY、nosniff
+- 技術報告書の Word/PDF は容量が大きいので公開サイトには入れず、公開リポジトリ上の同じファイルへリンクしています。
 
 ## 3. ホーム画面への追加
 
@@ -80,15 +86,22 @@ App Store / Google Play への登録はしません。
 
 公開リポジトリ（このリポジトリ）に接続した場合は、パラメータ計算と公開版報告書の生成だけが使えます。
 
-## 6. 公開（HTTPS）の方式
+## 6. 公開（HTTPS）の方式（採用: Cloudflare Pages）
 
 | 方式 | 長所 | 短所 |
 |---|---|---|
-| **GitHub Pages（公開専用の別リポジトリ）← 推奨** | 同じ GitHub アカウントで完結し、無料で HTTPS。秘密情報は検査語の Secret だけ。このリポジトリの Pages や他アプリの設定に触れない | 公開専用リポジトリを 1 つ作る必要がある |
+| **Cloudflare Pages ← 採用（利用者からトークンの提供あり）** | 速い。アクセス制限（Cloudflare Access）も後から付けられる。GitHub 側の Pages 設定に触れない | トークンの管理が必要（Claude Code のクラウド環境に安全に保存済み。チャットに書かれたトークンは無効化を推奨） |
+| GitHub Pages（公開専用の別リポジトリ） | 同じ GitHub アカウントで完結し、無料で HTTPS。秘密情報は検査語の Secret だけ。このリポジトリの Pages や他アプリの設定に触れない | 公開専用リポジトリを 1 つ作る必要がある |
 | GitHub Pages（このリポジトリ） | 追加のリポジトリが不要 | Pages はリポジトリごとに 1 サイト。同じリポジトリの他アプリ（田嶋研究室アプリ等）と衝突する |
-| Cloudflare Pages | 速く、アクセス制限（Cloudflare Access）を付けられる | 新しいアカウントと API トークンの管理が増える |
 
-### 公開手順（推奨方式。実行前に研究室の確認が必要）
+### 更新の公開（Cloudflare）
+- Claude Code のセッションから: `python scripts/deploy_cloudflare.py`
+  - ビルド → 漏えい検査（不合格なら中止）→ 公開 → 応答確認 の順に進みます。
+  - トークンは環境のネットワーク設定から自動で付くので、値は不要です。
+- GitHub から自動で公開する場合（任意）: このリポジトリの Secrets に `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`、`AQROS_PRIVACY_PATTERNS` を登録します。`.github/workflows/cloudflare-pages.yml` が push のたびに公開し、未登録なら何もしません。
+- 仕組み: Pages のファイルアップロード API は短期の別トークンを使い、クラウド環境のプロキシと両立しません。そのため、静的ファイルを `_worker.js` に埋め込み、デプロイ API 1 回で公開しています（`scripts/build_mobile.py --target cloudflare`）。
+
+### 別方式: GitHub Pages で公開する手順
 1. 公開用のリポジトリを作る（例 `csta24055-sys/aqros-mobile`、Public、中身は空でよい）。
 2. `deploy/pages-repo/.github/workflows/deploy.yml` をそのリポジトリの `.github/workflows/deploy.yml` に置く。
 3. そのリポジトリの Settings で次を設定する。
@@ -106,7 +119,11 @@ App Store / Google Play への登録はしません。
 | 数値一致（Python ⇔ TypeScript） | `frontend/src/core/crosscheck.test.ts`: バイパス、単室（CADR・損失率・定常・I/O・時系列）、沈着、多室、回帰、I/O比、除去効率、減衰 |
 | API 一致（FastAPI ⇔ 端末内バックエンド） | `frontend/src/core/local.test.ts`（参照値は `scripts/make_api_parity_fixture.py`） |
 | クラウドジョブ | `cloud/run_job.py` を手元で実行。4 種類とも結果を確認し、公開リポジトリでの研究データ拒否も確認。スマホ⇔GitHub API の流れは E2E 内の GitHub API 模擬サーバーで確認 |
-| **未実施** | iPhone 実機（Safari / WebKit）、Android 実機、実際の GitHub Actions 上でのジョブ実行、実際の HTTPS 公開 |
+| 公開サイト（https://aqros-mobile.pages.dev） | 同じ E2E を公開 URL に対して実行し、46/46 合格（iPhone 13 相当・Pixel 7 相当、各 23 項目）。クラウド解析の項目だけは除外（公開サイトの CSP がローカルの模擬サーバーへの通信を止めるため。ローカルで確認済み） |
+| アプリ更新時のデータ保護 | `frontend/e2e/update.cjs`: 旧版で保存 → 新版を配信 →「更新する」→ データが残る。初回訪問では自動で再読み込みしない。4/4 合格 |
+| 実際の GitHub Actions | 公開リポジトリで 2 件のジョブを実行して成功: バイパス計算 504 ケース（0.1 秒）、報告書 Word＋PDF（32 ページ、日本語フォント埋め込み、住宅記号の置換を確認）。スマホ画面から実リポジトリへの送信は、利用者のトークン未設定のため未実施 |
+| CI（GitHub Actions） | mobile-pwa: 単体テスト・ビルド・漏えい検査・E2E が合格。desktop: Windows（インストーラー含む）、macOS（arm64・Intel）、Linux のビルドと起動確認が合格 |
+| **未実施** | iPhone 実機（Safari / WebKit）、Android 実機。非公開リポジトリでの研究データのクラウド処理（リポジトリ未作成） |
 
 E2E の iPhone は Chromium での再現で、WebKit ではありません。Safari 固有の挙動は、公開後に実機で確認する必要があります。確認するのは次の点です。
 - ホーム画面追加後の保存の持続
