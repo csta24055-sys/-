@@ -1,0 +1,17 @@
+'use strict';
+const test=require('node:test'); const assert=require('node:assert/strict');
+const d=require('../src/domain.js');const papers=require('../data/papers.json');
+test('正式分類5種類＋横断分野を定義',()=>assert.equal(d.CATEGORIES.length,6));
+test('シード書誌52件: id, year, category valid',()=>assert.deepEqual(d.validatePapers(papers),[]));
+test('最新6件と教授業績を混同しない',()=>{assert.equal(papers.filter(p=>p.collectionScope==='lab').length,6);assert.equal(papers.filter(p=>p.collectionScope==='faculty').length,46)});
+test('全件が一次ソースリンクを持つ',()=>assert.ok(papers.every(p=>p.sourceUrl.startsWith('https://'))));
+test('研究結果や本文確認済みを捏造しない',()=>assert.ok(papers.every(p=>!p.fullTextVerified && !p.summary.results)));
+test('全年度の件数は論文総数に等しい',()=>assert.equal(d.countByYear(papers).reduce((s,x)=>s+x.value,0),papers.length));
+test('複数分類を重複計上するため分類計は総数以上でもよい',()=>assert.ok(d.countByCategory(papers).reduce((s,x)=>s+x.value,0)>=papers.length));
+test('タイトル一致検索',()=>assert.ok(d.paperSearch(papers,'ピロティ').length>=2));
+test('教授掲載論文の絞り込み',()=>assert.equal(d.paperSearch(papers,'','all','all','lab').length,6));
+test('正規化した日本語カテゴリ分類',()=>assert.ok(d.classify('鉄筋コンクリート柱の非線形FEM解析').includes('materials')));
+test('関連研究の順位とスコアが有限である',()=>{const results=d.recommend(papers,'RC造ピロティ建物の柱の軸破壊',5);assert.ok(results.length>0);assert.ok(results.some(x=>x.paper.title.includes('ピロティ')));assert.ok(results.every(x=>x.score>=0 && x.score<=99));});
+test('空の研究テーマから架空の推薦を出さない',()=>assert.equal(d.recommend(papers,'').length,0));
+test('仮スケジュール9工程の日付が昇順',()=>{const out=d.planTemplate('2026-11-09');assert.equal(out.length,9);assert.ok(out.every((v,i)=>i===0||v.due>=out[i-1].due));});
+test('重複IDを検出',()=>assert.ok(d.validatePapers([papers[0],papers[0]]).some(s=>s.includes('重複ID'))));

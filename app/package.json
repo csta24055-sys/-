@@ -1,0 +1,116 @@
+{
+  "name": "tajima-lab-research-navigator",
+  "version": "0.2.0",
+  "private": true,
+  "description": "田嶋研究室向け論文閲覧・先行研究探索デスクトップ試作アプリ（非公式）",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "test": "node --test \"tests/*.test.cjs\"",
+    "test:e2e": "node --test --test-concurrency=1 \"tests/e2e/*.e2e.cjs\"",
+    "test:e2e:electron": "node --test --test-concurrency=1 tests/e2e/electron.e2e.cjs",
+    "validate": "node tools/validate_seed.cjs",
+    "check": "npm run validate && npm test",
+    "vendor:pdfjs": "node tools/vendor_pdfjs.cjs",
+    "check:dist": "node tools/check_dist.cjs",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:linux": "electron-builder --linux --publish never"
+  },
+  "devDependencies": {
+    "electron": "^36.0.0",
+    "electron-builder": "^26.0.0",
+    "pdfjs-dist": "^4.10.38",
+    "playwright-core": "^1.63.0"
+  },
+  "build": {
+    "appId": "org.unofficial.tajima.researchnavigator",
+    "productName": "Tajima Lab Research Navigator",
+    "executableName": "tajima-lab-research-navigator",
+    "copyright": "Unofficial academic prototype — not an official Nihon University application",
+    "artifactName": "Tajima-Lab-Research-Navigator-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "buildres"
+    },
+    "files": [
+      "index.html",
+      "styles.css",
+      "src/**/*",
+      "data/**/*",
+      "vendor/**/*",
+      "electron/**/*",
+      "package.json",
+      "!**/*.pdf",
+      "!**/*.map"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Tajima-Lab-Research-Navigator-${version}-Setup-${arch}.${ext}"
+    },
+    "portable": {
+      "artifactName": "Tajima-Lab-Research-Navigator-${version}-Portable-${arch}.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.education",
+      "identity": "-",
+      "hardenedRuntime": false
+    },
+    "dmg": {
+      "title": "Tajima Lab Research Navigator ${version}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Education",
+      "synopsis": "Unofficial research navigator prototype"
+    },
+    "publish": null
+  },
+  "author": {
+    "name": "Tajima Lab Research Navigator contributors (unofficial)"
+  },
+  "license": "UNLICENSED"
+}

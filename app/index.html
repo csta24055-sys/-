@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self' blob:; connect-src 'self' data: blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Tajima Lab Research Navigator · Unofficial Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">T<span>·</span></div><div><div class="brand-name">TAJIMA LAB</div><div class="brand-small">RESEARCH NAVIGATOR</div></div></div>
+    <div class="sidebar-subtitle">研究を見つけ、つないでいく。</div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="navigation" aria-label="メインメニュー">
+      <button class="nav-item active" data-tab="dashboard"><span class="nav-icon">▦</span> ダッシュボード</button>
+      <button class="nav-item" data-tab="library"><span class="nav-icon">▤</span> 論文ライブラリ</button>
+      <button class="nav-item" data-tab="summary"><span class="nav-icon">≡</span> 論文要約・ノート</button>
+      <button class="nav-item" data-tab="analysis"><span class="nav-icon">◫</span> 研究分布・分析</button>
+      <button class="nav-item" data-tab="ideas"><span class="nav-icon">◇</span> 新規研究テーマ</button>
+      <button class="nav-item" data-tab="plan"><span class="nav-icon">▥</span> 研究スケジュール</button>
+    </nav>
+    <div class="nav-label">DATA MANAGEMENT</div>
+    <nav class="navigation">
+      <button class="nav-item" data-action="import-pdf"><span class="nav-icon">＋</span> PDFを取り込む</button>
+      <button class="nav-item" data-action="export"><span class="nav-icon">⇩</span> データを書き出す</button>
+      <button class="nav-item" data-action="import-json"><span class="nav-icon">⇧</span> データを復元する</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="lab-stat"><span class="pulse"></span> LOCAL FIRST · 試作版</div>
+      <p>日本大学理工学部建築学科<br>RC構造・構造解析研究室に関する非公式プロトタイプ</p>
+      <div class="version">VER 0.2 · 2026.11</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div class="breadcrumb">NIHON UNIVERSITY <span>／</span> ARCHITECTURE <span>／</span> <b id="crumb">OVERVIEW</b></div>
+      <div class="topbar-right"><span id="modePill" class="mode-pill">BROWSER PREVIEW</span><span class="avatar">RC</span></div>
+    </header>
+    <div id="content" class="content" aria-live="polite"></div>
+    <footer class="main-footer">Bibliographic information from official publicly available sources. Research summaries require full-text verification. · 非公式試作品</footer>
+  </main>
+</div>
+<input id="jsonInput" type="file" accept=".json,application/json" hidden>
+<input id="pdfInput" type="file" accept="application/pdf,.pdf" multiple hidden>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="論文の詳細"></div>
+<div id="viewer" class="modal-backdrop viewer-backdrop hidden" role="dialog" aria-modal="true" aria-label="PDFビューア"></div>
+<script src="data/seed.js"></script>
+<script src="src/domain.js"></script>
+<script src="src/pdf.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
