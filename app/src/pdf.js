@@ -2,8 +2,8 @@
 (function(){
   'use strict';
   const here = document.currentScript ? document.currentScript.src : location.href;
-  const libUrl = new URL('../vendor/pdfjs/pdf.min.mjs', here).href;
-  const workerUrl = new URL('../vendor/pdfjs/pdf.worker.min.mjs', here).href;
+  const libUrl = new URL('../vendor/pdfjs/pdf.min.js', here).href;
+  const workerUrl = new URL('../vendor/pdfjs/pdf.worker.min.js', here).href;
   const cMapUrl = new URL('../vendor/pdfjs/cmaps/', here).href;
   const standardFontDataUrl = new URL('../vendor/pdfjs/standard_fonts/', here).href;
   let libPromise = null;

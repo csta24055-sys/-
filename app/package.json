@@ -1,6 +1,6 @@
 {
   "name": "tajima-lab-research-navigator",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "田嶋研究室向け論文閲覧・先行研究探索デスクトップ試作アプリ（非公式）",
   "main": "electron/main.cjs",
@@ -16,7 +16,10 @@
     "check:dist": "node tools/check_dist.cjs",
     "dist:win": "electron-builder --win --publish never",
     "dist:mac": "electron-builder --mac --publish never",
-    "dist:linux": "electron-builder --linux --publish never"
+    "dist:linux": "electron-builder --linux --publish never",
+    "build:web": "node tools/build_web.cjs",
+    "icons": "node tools/make_icons.cjs",
+    "test:e2e:mobile": "node --test --test-concurrency=1 tests/e2e/mobile.e2e.cjs"
   },
   "devDependencies": {
     "electron": "^36.0.0",
@@ -40,6 +43,9 @@
       "data/**/*",
       "vendor/**/*",
       "electron/**/*",
+      "manifest.webmanifest",
+      "sw.js",
+      "icons/**/*",
       "package.json",
       "!**/*.pdf",
       "!**/*.map"

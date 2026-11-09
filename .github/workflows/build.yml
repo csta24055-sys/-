@@ -1,4 +1,4 @@
-name: Test and build desktop installers (unsigned)
+name: Test and build desktop installers (unsigned) + web app tests
 on:
   workflow_dispatch:
   push:
@@ -24,9 +24,9 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
       - run: npm run check
-      - name: Install Chromium for the browser-preview E2E test
-        run: npx playwright-core install --with-deps chromium
-      - name: GUI end-to-end tests (Electron + browser preview)
+      - name: Install Chromium and WebKit (browser and phone-emulation E2E)
+        run: npx playwright-core install --with-deps chromium webkit
+      - name: GUI end-to-end tests (Electron, browser, iPhone/Android web app)
         run: xvfb-run -a npm run test:e2e
         env:
           TAJIMA_SCREENSHOTS: ${{ github.workspace }}/screenshots

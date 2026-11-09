@@ -1,78 +1,96 @@
-# Tajima Lab Research Navigator（非公式試作版）v0.2
+# 田嶋研究室 Research Navigator（非公式試作版）v0.3
 
-日本大学理工学部建築学科「RC構造・構造解析研究室（田嶋和樹教授）」の公開書誌情報をもとにした、論文閲覧・先行研究探索のデスクトップ試作アプリです。**大学・研究室の公式アプリではありません。**
+日本大学理工学部建築学科「RC構造・構造解析研究室（田嶋和樹教授）」の公開書誌情報をもとにした、論文閲覧・先行研究探索アプリです。**大学・研究室の公式アプリではありません。**
 
-![ダッシュボード](docs/screenshots/01-dashboard.png)
+- **スマートフォン（iPhone / Android）**：URLを開いて「ホーム画面に追加」するだけ。App Store・Google Play・Apple Developer Programは不要です。
+- **パソコン（Windows / Mac / Linux）**：デスクトップアプリ（インストーラー）またはブラウザで利用できます。
 
-## できること
+<p>
+<img src="docs/screenshots/mobile/ios-01-first-visit.png" width="230" alt="iPhone（WebKit）でのホーム画面">
+<img src="docs/screenshots/mobile/ios-02-library.png" width="230" alt="論文ライブラリ">
+<img src="docs/screenshots/mobile/android-10-installed-standalone.png" width="230" alt="インストール後に独立画面で起動">
+</p>
+
+## スマートフォンで使う（インストール方法）
+
+**URL：https://tajima-lab.pages.dev**
+
+### iPhone（Safari）
+
+1. **Safari** で https://tajima-lab.pages.dev を開く（LINE・Instagram・Googleアプリ内のブラウザでは追加できません）
+2. 画面下（iPadは右上）の **共有ボタン（□に↑）** を押す
+3. メニューを下にスクロールして **「ホーム画面に追加」** を選ぶ
+4. 名前が **「田嶋研究室」** になっていることを確認して **「追加」**
+5. ホーム画面の「田嶋研究室」アイコンを押すと、独立したアプリ画面で起動します
+
+### Android（Chrome）
+
+1. **Chrome** で https://tajima-lab.pages.dev を開く
+2. 右上の **︙（メニュー）** を押す
+3. **「アプリをインストール」**（表示されない場合は「ホーム画面に追加」→「インストール」）を選ぶ
+4. **「インストール」** を押すと、ホーム画面とアプリ一覧に「田嶋研究室」が追加されます
+5. アイコンから起動すると、独立したアプリ画面で開きます
+
+> 一度開いたあとは**オフラインでも起動**できます（検索・メモ・PDF閲覧・研究計画）。
+> データ（取り込んだPDF・要約メモ・研究計画）は**その端末の中だけ**（IndexedDB）に保存され、外部へ送信されません。アクセス解析・広告もありません。
+> iPhoneでは、Safariで開いたページとホーム画面のアプリで保存場所が別です。ホーム画面のアプリで使い続けてください。機種変更に備えて「その他 → バックアップを作成」で定期的に保存してください（PDF本体はバックアップに含まれません）。
+
+## できること（スマートフォン・パソコン共通）
 
 | 機能 | 内容 |
 |---|---|
-| 論文ライブラリ | 公開書誌52件（研究室公式掲載6件＋田嶋教授の共著を含む業績46件を区別）の検索・分野/年度/出典フィルタ。スペース区切りAND検索、同義語辞書（RC＝鉄筋コンクリート、FEM＝有限要素 など） |
-| PDF取り込み | 手元のPDFをPC内（`userData/pdfs/`）にコピーして論文に紐づけ、新規資料として登録 |
-| 内蔵PDFビューア | PDF.js（同梱・オフライン）でアプリ内表示。ページ移動・拡大縮小・「根拠ページに追加」。日本語PDF（CMap）対応 |
-| 本文全文検索 | 取り込んだPDFの本文テキストを端末内で索引化し、一致ページ（p.N）から直接ビューアを開く |
-| 書誌候補の抽出 | PDFのメタデータ・1ページ目の最大文字の行・本文の西暦から、タイトル/著者/年の**候補**を根拠付きで提示（自動確定はしない） |
-| 要約・ノート | 目的・方法・結果・結論・限界・根拠ページを本文確認しながら記入。AIによる自動生成はしない |
-| 分布分析 | 年度別（合計＝登録件数）・分野別（複数分類の重複計数を明示） |
-| 先行研究の候補 | 研究テーマを入力すると、分野一致・題名の文字列一致・同義語・取り込んだ本文の一致を理由付きで提示（スコアは検索用の相対値） |
-| 研究スケジュール | 開始日から作る**仮の**9工程（研究室の公式日程ではない）。日付・完了状態を自動保存 |
-| バックアップ | JSON書き出し・復元（PDF本体は含まない旨を明示）。保存時に1世代前を自動退避し、破損時は自動復旧 |
+| 論文の閲覧・検索 | 公開書誌52件（研究室公式掲載6件＋田嶋教授の共著を含む業績46件を区別）。スペース区切りAND検索、同義語（RC＝鉄筋コンクリート、FEM＝有限要素など） |
+| 絞り込み | 年度・研究分野（暫定分類）・出典 |
+| PDFの取り込み・閲覧 | スマートフォンのファイル選択（iCloud Drive・Googleドライブ・ダウンロード等）からPDFを追加。アプリ内ビューア（PDF.js、日本語PDF対応）でページ移動・拡大・「根拠ページに追加」 |
+| PDF本文の検索 | 取り込んだPDFの本文を端末内で索引化し、一致したページから直接開く |
+| 要約・研究メモ | 目的・方法・結果・結論・限界・根拠ページ＋自由メモ。AIによる自動生成はしない |
+| 分布グラフ | 年度別（出典別・読書状況別）と研究分野別。年度別合計＝登録件数、分野別は重複計数を明示 |
+| 先行研究の検索 | 新しい研究テーマから、関連しそうな登録論文を理由付きで表示（スコアは検索用の相対値） |
+| 研究スケジュール | 開始日から作る**仮の**9工程（研究室の公式日程ではない）。日付・完了を保存 |
+| バックアップ・復元 | JSONで保存（スマートフォンは共有シート→「ファイルに保存」）・復元 |
 
-スクリーンショット：[`docs/screenshots/`](docs/screenshots/)（E2Eテスト実行中に自動撮影）
+## パソコンで使う
 
-## すぐに使う
+- **インストーラー**：GitHub Actions の Artifacts（`installer-windows-latest` / `installer-macos-latest` / `installer-ubuntu-latest`）。未署名のため、Windowsは SmartScreen の「詳細情報 → 実行」、macOSは「右クリック → 開く」が必要です。
+- **ブラウザ**：https://tajima-lab.pages.dev をChrome/Edge/Safariで開く（Chrome/Edgeはアドレスバーのインストールボタンでアプリとして追加可能）。
 
-### デスクトップアプリ（開発実行）
-
-Node.js 22以上が必要です。
+開発者向け：
 
 ```bash
 cd app
 npm ci
-npm run check      # 書誌検証＋ユニットテスト
-npm start          # アプリ起動
+npm run check       # 書誌検証＋ユニットテスト30件
+npm start           # デスクトップアプリを起動
+npm run dist:win    # / dist:mac / dist:linux  インストーラー作成
 ```
 
-### インストーラーを作る
+## Webアプリ（PWA）の公開
 
 ```bash
 cd app
-npm run dist:win     # Windows: NSISインストーラー + ポータブルexe（Windows上で実行）
-npm run dist:mac     # macOS: dmg + zip（arm64/x64, ad-hoc署名）（Mac上で実行）
-npm run dist:linux   # Linux: AppImage
-npm run check:dist   # 配布物にPDF・個人データが入っていないか検査
+npm run build:web   # app/dist-web/ に公開用ファイルだけを出力（PDF・個人データ・テストは含まない）
+# Cloudflare Pages へ配置（トークンはコードに書かず、環境変数かGitHub Secretsで渡す）
+CLOUDFLARE_API_TOKEN=… CLOUDFLARE_ACCOUNT_ID=… npx wrangler@4.151.3 pages deploy dist-web --project-name=tajima-lab --branch=main
 ```
 
-GitHub Actions（`.github/workflows/build.yml`）が Windows / macOS / Linux それぞれでビルドし、**ビルドした実アプリに対してE2Eテストを実行**してからインストーラーをArtifactとして保存します。2026-11-09 の実行では3OSとも合格（Actions → 該当run → Artifacts の `installer-windows-latest` 等からダウンロード）。
-
-> 未署名のため、Windowsでは SmartScreen の「詳細情報 → 実行」、macOSでは「右クリック → 開く」（またはシステム設定 → プライバシーとセキュリティ → このまま開く）が必要です。正式配布にはコード署名・公証が別途必要です。
-
-### ブラウザだけで試す（依存なし）
-
-```bash
-cd app
-python -m http.server 8765   # → http://localhost:8765
-```
-
-ブラウザ版はデータを `localStorage` に保存します。取り込んだPDF本体は再読み込みで消えます（メモ・本文索引は残ります）。
+`main` への push で自動公開したい場合は、リポジトリの Settings → Secrets and variables → Actions に `CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` を登録してください（`.github/workflows/pages.yml`）。
 
 ## テスト
 
 ```bash
 cd app
-npm run check                 # ユニット 30件
-xvfb-run -a npm run test:e2e  # 実GUI E2E：Electron 13件 + ブラウザ 5件（Mac/Windowsは xvfb-run 不要）
-TAJIMA_ELECTRON_BIN=dist/linux-unpacked/tajima-lab-research-navigator xvfb-run -a npm run test:e2e:electron  # 配布物に対するE2E
+npm run check                                   # ユニット 30件
+xvfb-run -a npm run test:e2e                    # 実GUI E2E：デスクトップ(Electron)13件 + ブラウザ5件 + スマホ26件
+TAJIMA_URL=https://tajima-lab.pages.dev xvfb-run -a npm run test:e2e:mobile   # 公開中のサイトに対してスマホE2E
 ```
 
-受け入れテスト（A01〜A14）の対応表：[`research/ACCEPTANCE_TESTS.md`](research/ACCEPTANCE_TESTS.md)
+スマホE2Eは、**Android Chrome相当**（Chromium＋Pixel 7エミュレーション）と**iPhone Safari相当**（WebKit＋iPhone 15エミュレーション）で、初回アクセス・インストール条件・検索・PDF取り込み/閲覧・保存/再起動・オフライン・バックアップ/復元を確認し、さらにChromiumで実際にPWAとしてインストール→独立画面で起動することを確認します。iOSシミュレーターの実際のMobile Safariで「ホーム画面に追加→アイコンから起動」を行う確認は `.github/workflows/ios-safari.yml` です。いずれも**自動テスト・シミュレーターであり、実機確認ではありません**。結果の対応表：[`research/ACCEPTANCE_TESTS.md`](research/ACCEPTANCE_TESTS.md)
 
 ## データと権利についての重要事項
 
 - 研究室の「最近の研究論文」6件 ≠ 研究室の全論文。教授業績46件には共著が含まれます。
 - 書誌の存在 ≠ PDFの所持・全文の確認。研究結果・結論は本文を読んだ利用者だけが記入します。
-- 分野タグは題名ベースの暫定分類。推薦スコアは学術的な正しさの確率ではありません。
-- 論文PDFはアプリに同梱していません（`check:dist` で検査）。PDFは利用者がローカルで取り込みます。外部サーバーへの送信は一切ありません。
+- 公開サイト・配布物に含まれるのは公開書誌情報だけです（論文PDF・個人情報・研究室内部資料は含みません。`npm run check:dist` / `build:web` で検査）。
+- 公開サイトは検索エンジンに表示されないよう `noindex` を設定しています（共有したURLから利用する前提）。
 
 詳細：[`START_HERE.md`](START_HERE.md) / [`research/`](research/) / 開発者向け指示 [`CLAUDE.md`](CLAUDE.md)

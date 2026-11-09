@@ -26,3 +26,7 @@ PDF.js は `vendor/pdfjs/` に同梱（`npm run vendor:pdfjs` で node_modules �
 初期データ：`data/papers.json` 52件。`data/seed.js` は同じ初期データのブラウザ版。初期資料にPDF本文は含まない。
 
 UIはあえてビルドツール不要の素のHTML/CSS/JavaScript。Claude Codeで起動しやすくするため。React/TypeScriptやSQLiteへの移行は後続で判断すること（現状はユーザーデータをOSの `userData` 内のJSONにアトミック保存）。
+
+## Webアプリ（スマートフォン）
+
+`index.html` はそのままPWAとして動く（`manifest.webmanifest`・`sw.js`・`icons/`・`src/storage.js`）。公開用ファイルは `npm run build:web` で `dist-web/` に出力（Service Workerのバージョンとキャッシュ一覧を自動生成）。アイコンは `npm run icons` で再生成。スマホE2Eは `npm run test:e2e:mobile`（Linuxは `xvfb-run -a` を前に付ける）。

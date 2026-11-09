@@ -1,0 +1,36 @@
+name: Deploy web app (Cloudflare Pages)
+# Publishes app/dist-web (public files only) to https://tajima-lab.pages.dev.
+# Runs only when the repository has the secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID
+# (Settings → Secrets and variables → Actions). Never put the token in the code.
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+    paths: ['app/**', '.github/workflows/pages.yml']
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build:web
+      - name: Deploy
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        run: npx --yes wrangler@4.151.3 pages deploy dist-web --project-name=tajima-lab --branch=main --commit-dirty=true
+      - name: Secrets missing
+        if: env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == ''
+        run: echo "::notice::Cloudflare secrets are not set; build checked but not deployed."

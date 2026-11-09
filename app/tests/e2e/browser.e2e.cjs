@@ -42,13 +42,13 @@ test.after(async () => { await browser?.close(); server?.close(); try { fs.rmSyn
 
 test('ブラウザプレビュー：52件・プレビュー表示', async () => {
   assert.equal(await page.textContent('#statTotal'), '52');
-  assert.equal(await page.textContent('#modePill'), 'BROWSER · PREVIEW');
+  assert.equal(await page.textContent('#modePill'), 'BROWSER · LOCAL');
 });
 
 test('ブラウザプレビュー：同義語検索（FEM → 有限要素/FEMの題名）', async () => {
   await page.click('.nav-item[data-tab="library"]');
   await page.fill('#paperSearch', 'FEM');
-  const n = await page.locator('#paperRows tr[data-paper-id]').count();
+  const n = await page.locator('#paperRows [data-paper-id]').count();
   assert.ok(n >= 1);
   await page.fill('#paperSearch', '');
 });
@@ -56,7 +56,7 @@ test('ブラウザプレビュー：同義語検索（FEM → 有限要素/FEM�
 test('ブラウザプレビュー：PDF取り込み → ビューア表示・本文検索', async () => {
   await page.click('.sidebar [data-action="import-pdf"]');
   await page.setInputFiles('#pdfInput', pdfFile);
-  await page.waitForSelector('#paperRows tr[data-paper-id^="user-"]');
+  await page.waitForSelector('#paperRows [data-paper-id^="user-"]');
   await page.fill('#paperSearch', 'finite element');
   await page.waitForSelector('.fulltext-hits [data-page="2"]');
   await page.click('.fulltext-hits [data-page="2"]');
@@ -68,11 +68,13 @@ test('ブラウザプレビュー：PDF取り込み → ビューア表示・本
   await page.fill('#paperSearch', '');
 });
 
-test('ブラウザプレビュー：メモは再読み込み後も残る（PDF本体は残らない旨を表示）', async () => {
+test('ブラウザ：メモとPDFは再読み込み後も端末内（IndexedDB）に残る', async () => {
   await page.click('.nav-item[data-tab="summary"]');
   await page.selectOption('#summaryPaper', 'tajima-001');
   await page.fill('#paperMemo', 'ブラウザメモ');
-  await page.click('.panel-head [data-action="save-summary"]');
+  await page.click('#saveSummary');
+  // IndexedDB writes are asynchronous: wait for the confirmation before reloading.
+  await page.waitForFunction(() => document.getElementById('toast').textContent.includes('要約・研究メモを保存しました'));
   await page.reload();
   await page.waitForSelector('body[data-ready="true"]');
   assert.equal(await page.textContent('#statTotal'), '53');
@@ -80,9 +82,12 @@ test('ブラウザプレビュー：メモは再読み込み後も残る（PDF�
   await page.selectOption('#summaryPaper', 'tajima-001');
   assert.equal(await page.inputValue('#paperMemo'), 'ブラウザメモ');
   await page.click('.nav-item[data-tab="library"]');
-  const userId = await page.locator('#paperRows tr[data-paper-id^="user-"]').getAttribute('data-paper-id');
+  const userId = await page.locator('#paperRows [data-paper-id^="user-"]').getAttribute('data-paper-id');
   await page.click(`#paperRows [data-action="paper"][data-id="${userId}"]`);
-  assert.match(await page.textContent('#modal'), /全文未登録/);
+  assert.match(await page.textContent('#modal'), /PDF登録済み/);
+  await page.click('#modal [data-action="view-pdf"]');
+  await page.waitForFunction(() => document.getElementById('viewer')?.dataset.page === '1');
+  await page.click('[data-action="close-viewer"]');
 });
 
 test('ブラウザプレビュー：コンソールエラーなし', () => assert.deepEqual(problems, []));

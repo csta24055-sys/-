@@ -16,6 +16,17 @@
 - [x] Windows `.exe` / Mac `.dmg` のビルドと起動確認（GitHub Actionsで生成し、各OSの配布版でE2E 13件合格。Mac x64版の起動、コード署名・公証は未）
 - [x] GUIのスクリーンショット撮影
 
+## v0.3：スマートフォン対応（完了）
+
+- [x] PWA化（manifest・Service Worker・オフライン起動・standalone表示）
+- [x] iOS/Android専用アイコン、ホーム画面名「田嶋研究室」
+- [x] IndexedDBでPDF・要約メモ・研究計画を端末内に永続保存
+- [x] スマホのファイル選択からPDF取り込み、共有シートでバックアップ
+- [x] 縦画面・タッチ向けのデザイン（下部タブ・カードUI）
+- [x] HTTPS公開（Cloudflare Pages：https://tajima-lab.pages.dev）
+- [x] Chromium/WebKitのスマホエミュレーションE2E、Chromiumでの実インストール確認
+- [ ] 物理的なiPhone・Android実機での確認（利用者による確認が必要）
+
 ## P1：研究室の学生が日常利用できるアプリに
 
 - [x] PDFからタイトル・著者・年の候補を根拠付きで提示（利用者が確認して保存）

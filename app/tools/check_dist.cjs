@@ -11,7 +11,7 @@ for(const a of archives){
   const files=asar.listPackage(a).map(f=>f.replace(/\\/g,'/'));
   const bad=files.filter(f=>/\.pdf$/i.test(f)||/tajima-state/.test(f)||/node_modules\//.test(f)||/\/tests?\//.test(f));
   const papers=JSON.parse(asar.extractFile(a,'data/papers.json').toString('utf8'));
-  const required=['/index.html','/src/app.js','/src/pdf.js','/vendor/pdfjs/pdf.min.mjs','/vendor/pdfjs/pdf.worker.min.mjs','/vendor/pdfjs/cmaps/UniJIS-UCS2-H.bcmap'];
+  const required=['/index.html','/src/app.js','/src/pdf.js','/vendor/pdfjs/pdf.min.js','/vendor/pdfjs/pdf.worker.min.js','/vendor/pdfjs/cmaps/UniJIS-UCS2-H.bcmap'];
   const missing=required.filter(r=>!files.includes(r));
   console.log(`${path.relative(dist,a)}: ${files.length} entries, papers=${papers.length}, forbidden=${bad.length}, missing=${missing.length}`);
   if(bad.length||missing.length||papers.length!==52||papers.some(p=>p.pdfPath||p.fullTextVerified)){failed=true;console.error({bad,missing});}

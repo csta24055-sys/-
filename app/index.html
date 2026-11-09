@@ -2,54 +2,76 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f3f5f4">
+  <meta name="description" content="田嶋研究室（RC構造・構造解析）の公開書誌をもとにした論文閲覧・先行研究探索の非公式試作アプリ。データは端末内にだけ保存されます。">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="田嶋研究室">
+  <meta name="application-name" content="田嶋研究室">
+  <meta name="format-detection" content="telephone=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self' blob:; connect-src 'self' data: blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>Tajima Lab Research Navigator · Unofficial Prototype</title>
+  <title>田嶋研究室 Research Navigator（非公式）</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="brand"><div class="brand-mark">T<span>·</span></div><div><div class="brand-name">TAJIMA LAB</div><div class="brand-small">RESEARCH NAVIGATOR</div></div></div>
-    <div class="sidebar-subtitle">研究を見つけ、つないでいく。</div>
-    <div class="nav-label">WORKSPACE</div>
-    <nav class="navigation" aria-label="メインメニュー">
-      <button class="nav-item active" data-tab="dashboard"><span class="nav-icon">▦</span> ダッシュボード</button>
-      <button class="nav-item" data-tab="library"><span class="nav-icon">▤</span> 論文ライブラリ</button>
-      <button class="nav-item" data-tab="summary"><span class="nav-icon">≡</span> 論文要約・ノート</button>
-      <button class="nav-item" data-tab="analysis"><span class="nav-icon">◫</span> 研究分布・分析</button>
-      <button class="nav-item" data-tab="ideas"><span class="nav-icon">◇</span> 新規研究テーマ</button>
-      <button class="nav-item" data-tab="plan"><span class="nav-icon">▥</span> 研究スケジュール</button>
+<div class="app">
+  <aside class="sidebar" aria-label="メインメニュー">
+    <div class="brand"><img class="brand-icon" src="icons/icon-192.png" alt="" width="40" height="40"><div><div class="brand-name">田嶋研究室</div><div class="brand-sub">Research Navigator · 非公式</div></div></div>
+    <nav class="side-nav" aria-label="画面">
+      <button class="nav-item active" data-tab="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9v11h13V9"/><path d="M10 20v-6h4v6"/></svg>ホーム</button>
+      <button class="nav-item" data-tab="library"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>論文ライブラリ</button>
+      <button class="nav-item" data-tab="summary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>要約・研究メモ</button>
+      <button class="nav-item" data-tab="analysis"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12 16V7M16 16v-8"/></svg>研究分布・分析</button>
+      <button class="nav-item" data-tab="ideas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.2-4.2"/></svg>先行研究を探す</button>
+      <button class="nav-item" data-tab="plan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>研究スケジュール</button>
+      <button class="nav-item" data-tab="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>設定・使い方</button>
     </nav>
-    <div class="nav-label">DATA MANAGEMENT</div>
-    <nav class="navigation">
-      <button class="nav-item" data-action="import-pdf"><span class="nav-icon">＋</span> PDFを取り込む</button>
-      <button class="nav-item" data-action="export"><span class="nav-icon">⇩</span> データを書き出す</button>
-      <button class="nav-item" data-action="import-json"><span class="nav-icon">⇧</span> データを復元する</button>
+    <div class="side-label">データ</div>
+    <nav class="side-nav" aria-label="データ">
+      <button class="nav-item" data-action="import-pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>PDFを取り込む</button>
+      <button class="nav-item" data-action="export"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>バックアップ</button>
+      <button class="nav-item" data-action="import-json"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>バックアップから復元</button>
     </nav>
-    <div class="sidebar-footer">
-      <div class="lab-stat"><span class="pulse"></span> LOCAL FIRST · 試作版</div>
-      <p>日本大学理工学部建築学科<br>RC構造・構造解析研究室に関する非公式プロトタイプ</p>
-      <div class="version">VER 0.2 · 2026.11</div>
-    </div>
+    <div class="side-foot"><span id="modePill" class="mode-pill">LOCAL</span><p>大学・研究室の公式アプリではありません。データはこの端末内にだけ保存されます。</p><div class="version">VER 0.3 · 2026.11</div></div>
   </aside>
   <main class="main">
-    <header class="topbar">
-      <div class="breadcrumb">NIHON UNIVERSITY <span>／</span> ARCHITECTURE <span>／</span> <b id="crumb">OVERVIEW</b></div>
-      <div class="topbar-right"><span id="modePill" class="mode-pill">BROWSER PREVIEW</span><span class="avatar">RC</span></div>
-    </header>
     <div id="content" class="content" aria-live="polite"></div>
-    <footer class="main-footer">Bibliographic information from official publicly available sources. Research summaries require full-text verification. · 非公式試作品</footer>
+    <footer class="main-footer">公開書誌情報に基づく非公式試作版。研究結果・結論は本文を確認した利用者が記入します。</footer>
   </main>
 </div>
-<input id="jsonInput" type="file" accept=".json,application/json" hidden>
+<nav class="tabbar" aria-label="メインメニュー">
+  <button class="tab-item active" data-tab="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9v11h13V9"/><path d="M10 20v-6h4v6"/></svg><span>ホーム</span></button>
+  <button class="tab-item" data-tab="library"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>論文</span></button>
+  <button class="tab-item" data-tab="summary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>メモ</span></button>
+  <button class="tab-item" data-tab="analysis"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12 16V7M16 16v-8"/></svg><span>分析</span></button>
+  <button class="tab-item" data-action="open-sheet" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>その他</span></button>
+</nav>
+<div id="sheet" class="sheet-backdrop hidden" role="dialog" aria-modal="true" aria-label="その他のメニュー">
+  <div class="sheet">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <button class="sheet-item" data-tab="ideas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.2-4.2"/></svg>新規テーマから先行研究を探す</button>
+    <button class="sheet-item" data-tab="plan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>研究スケジュール</button>
+    <button class="sheet-item" data-action="import-pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>PDFを取り込む</button>
+    <button class="sheet-item" data-action="export"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>バックアップを作成</button>
+    <button class="sheet-item" data-action="import-json"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>バックアップから復元</button>
+    <button class="sheet-item" data-tab="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>設定・ホーム画面への追加方法</button>
+    <button class="btn-outline wide" data-action="close-sheet">閉じる</button>
+  </div>
+</div>
+<input id="jsonInput" type="file" accept=".json,application/json,text/plain" hidden>
 <input id="pdfInput" type="file" accept="application/pdf,.pdf" multiple hidden>
 <div id="toast" role="status" aria-live="polite"></div>
-<div id="modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="論文の詳細"></div>
+<div id="modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="詳細"></div>
 <div id="viewer" class="modal-backdrop viewer-backdrop hidden" role="dialog" aria-modal="true" aria-label="PDFビューア"></div>
 <script src="data/seed.js"></script>
 <script src="src/domain.js"></script>
+<script src="src/storage.js"></script>
 <script src="src/pdf.js"></script>
 <script src="src/app.js"></script>
 </body>

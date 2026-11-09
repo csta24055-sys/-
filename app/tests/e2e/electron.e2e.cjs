@@ -41,7 +41,7 @@ async function tab(name) { await win.click(`.nav-item[data-tab="${name}"]`); }
 async function mockOpenDialog(file) {
   await app.evaluate(({dialog}, f) => { dialog.showOpenDialog = async () => ({canceled: false, filePaths: [f]}); }, file);
 }
-const rows = () => win.locator('#paperRows tr[data-paper-id]');
+const rows = () => win.locator('#paperRows [data-paper-id]');
 
 test.before(launch);
 test.after(async () => { if (app) await app.close(); try { fs.rmSync(work, {recursive: true, force: true}); } catch (_) { /* Windows may keep files locked briefly */ } });
@@ -62,7 +62,7 @@ test('A02 研究室公式掲載の絞り込みで6件', async () => {
 
 test('A03 「ピロティ」検索で2023・2024の論文', async () => {
   await win.fill('#paperSearch', 'ピロティ');
-  const years = await win.locator('#paperRows tr td:nth-child(2)').allTextContents();
+  const years = await win.locator('#paperRows .paper-year').allTextContents();
   assert.ok(years.includes('2023') && years.includes('2024'), years.join(','));
   await shot('02-library-search');
 });
@@ -81,7 +81,7 @@ test('A05 要約・メモを保存', async () => {
   await win.selectOption('#summaryPaper', 'tajima-002');
   await win.fill('#s-objective', 'E2E: 本文確認前のテスト入力');
   await win.fill('#paperMemo', 'E2Eメモ 再起動後も残ること');
-  await win.click('.panel-head [data-action="save-summary"]');
+  await win.click('#saveSummary');
   await win.waitForSelector('#toast.show');
   await shot('04-summary');
 });
@@ -121,12 +121,12 @@ test('A08 新規研究テーマ → 実在する候補と理由', async () => {
 test('A10 PDF取り込み → userData/pdfs に保存・本文索引・内蔵ビューア・根拠ページ', async () => {
   await mockOpenDialog(pdfFile);
   await win.click('.sidebar [data-action="import-pdf"]');
-  await win.waitForSelector('#paperRows tr[data-paper-id^="user-"]');
+  await win.waitForSelector('#paperRows [data-paper-id^="user-"]');
   const saved = fs.readdirSync(path.join(userData, 'pdfs'));
   assert.equal(saved.length, 1);
   assert.match(saved[0], /^[0-9a-f]{64}\.pdf$/);
   // Title candidate comes from the PDF metadata, not invented.
-  const userRow = win.locator('#paperRows tr[data-paper-id^="user-"]');
+  const userRow = win.locator('#paperRows [data-paper-id^="user-"]');
   assert.match(await userRow.textContent(), /Seismic Damage Evaluation of RC Piloti Columns/);
   // Full-text search over the imported PDF (synonym: クラック not used; English word on page 3)
   await win.fill('#paperSearch', 'crack');
@@ -178,7 +178,7 @@ test('A11 JSONバックアップの書き出しと復元（PDF本体は含まな
   await tab('summary');
   await win.selectOption('#summaryPaper', 'tajima-002');
   await win.fill('#paperMemo', '上書きされるべき一時メモ');
-  await win.click('.panel-head [data-action="save-summary"]');
+  await win.click('#saveSummary');
   await win.setInputFiles('#jsonInput', backupFile);
   await win.waitForFunction(() => document.getElementById('toast').textContent.includes('復元しました'));
   await tab('summary');
