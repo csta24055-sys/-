@@ -1,0 +1,112 @@
+{
+ "status": "ok",
+ "id": "20261109-042920-ci01",
+ "type": "sweep",
+ "elapsed_s": 0.1,
+ "summary": {
+  "kind": "bypass",
+  "cases": 504,
+  "best_cadr_by_combination": {
+   "5台/弱/0.3-0.5/fit": {
+    "cadr": 545.9999999999998,
+    "opening_ratio": 0.0
+   },
+   "5台/弱/0.3-0.5/quadratic_ext": {
+    "cadr": 545.9999999999998,
+    "opening_ratio": 0.0
+   },
+   "5台/中/0.3-0.5/fit": {
+    "cadr": 740.9999999999999,
+    "opening_ratio": 0.0
+   },
+   "5台/中/0.3-0.5/quadratic_ext": {
+    "cadr": 740.9999999999999,
+    "opening_ratio": 0.0
+   },
+   "5台/強/0.3-0.5/fit": {
+    "cadr": 851.0,
+    "opening_ratio": 0.0
+   },
+   "5台/強/0.3-0.5/quadratic_ext": {
+    "cadr": 851.0,
+    "opening_ratio": 0.0
+   },
+   "10台/弱/0.3-0.5/fit": {
+    "cadr": 923.0,
+    "opening_ratio": 0.0
+   },
+   "10台/弱/0.3-0.5/quadratic_ext": {
+    "cadr": 923.0,
+    "opening_ratio": 0.0
+   },
+   "10台/中/0.3-0.5/fit": {
+    "cadr": 1120.9999999999998,
+    "opening_ratio": 0.0
+   },
+   "10台/中/0.3-0.5/quadratic_ext": {
+    "cadr": 1086.7886704940586,
+    "opening_ratio": 0.0
+   },
+   "10台/強/0.3-0.5/fit": {
+    "cadr": 1172.9999999999998,
+    "opening_ratio": 0.0
+   },
+   "10台/強/0.3-0.5/quadratic_ext": {
+    "cadr": 1077.7876459161257,
+    "opening_ratio": 0.0
+   },
+   "15台/弱/0.3-0.5/fit": {
+    "cadr": 1130.9999999999998,
+    "opening_ratio": 0.0
+   },
+   "15台/弱/0.3-0.5/quadratic_ext": {
+    "cadr": 1110.0452445305507,
+    "opening_ratio": 0.0
+   },
+   "15台/中/0.3-0.5/fit": {
+    "cadr": 1173.3918200222956,
+    "opening_ratio": 0.05
+   },
+   "15台/中/0.3-0.5/quadratic_ext": {
+    "cadr": 1117.7435341039463,
+    "opening_ratio": 0.0
+   },
+   "15台/強/0.3-0.5/fit": {
+    "cadr": 1173.9774759831685,
+    "opening_ratio": 0.15
+   },
+   "15台/強/0.3-0.5/quadratic_ext": {
+    "cadr": 1103.101009052087,
+    "opening_ratio": 0.0
+   },
+   "20台/弱/0.3-0.5/fit": {
+    "cadr": 1173.4454888170562,
+    "opening_ratio": 0.05
+   },
+   "20台/弱/0.3-0.5/quadratic_ext": {
+    "cadr": 1131.6858697176278,
+    "opening_ratio": 0.0
+   },
+   "20台/中/0.3-0.5/fit": {
+    "cadr": 1174.5437936892667,
+    "opening_ratio": 0.25
+   },
+   "20台/中/0.3-0.5/quadratic_ext": {
+    "cadr": 1131.5232637643446,
+    "opening_ratio": 0.0
+   },
+   "20台/強/0.3-0.5/fit": {
+    "cadr": 1175.5878778607034,
+    "opening_ratio": 0.35
+   },
+   "20台/強/0.3-0.5/quadratic_ext": {
+    "cadr": 1114.8528263641635,
+    "opening_ratio": 0.0
+   }
+  }
+ },
+ "note": "Python 版モデル（backend/aqros/models.py）による計算結果。研究室の実測値ではない。",
+ "files": [
+  "sweep.csv"
+ ]
+}
