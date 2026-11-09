@@ -19,6 +19,7 @@ describe('bypass parallel-flow model', () => {
 describe('zone model', () => {
   const z = ref.zone[0]
   const p = z.params as M.ZoneParams
+  it('CADR / loss rate', () => { close(M.zoneCadr(p), z.cadr); close(M.zoneLossRate(p), z.loss) })
   it('steady / io / t12', () => { close(M.zoneSteadyState(p), z.steady); close(M.zoneIoRatio(p), z.io); close(M.timeToFraction(p, 0.12), z.t12) })
   it('time series', () => { const ts = M.zoneTimeSeries(p, 6, 0.05); close(ts[ts.length - 1].c, z.series_last, 1e-9); close(ts[10].c, z.series_10, 1e-9) })
 })
@@ -45,4 +46,11 @@ describe('multizone (SHASE2021 network)', () => {
     expect(r.t_h.length).toBe(py.t_h.length)
     for (const z of Object.keys(py.series)) py.series[z].forEach((v: number, i: number) => close(r.series[z][i], v, 1e-9))
   })
+})
+
+describe('I/O比・除去効率・減衰（Python analysis.py と一致）', () => {
+  const st = (ref as any).stats
+  it('io ratio', () => { const r = S.ioRatio(st.io.in.map((v: any) => (v === null ? NaN : v)), st.io.out); for (const k of ['io_ratio_of_means', 'io_median_of_ratios', 'n']) close((r as any)[k], st.io.res[k], 1e-9) })
+  it('removal efficiency', () => { const r: any = S.removalEfficiency(st.eff.up, st.eff.dn); for (const k of Object.keys(st.eff.res)) if (typeof st.eff.res[k] === 'number' && k in r) close(r[k], st.eff.res[k], 1e-9) })
+  it('decay', () => { const r = S.fitDecay(st.decay.t, st.decay.c, st.decay.bg); close(r.beta_per_s, st.decay.res.beta_per_s, 1e-9); close(r.c0, st.decay.res.c0, 1e-6); close(r.r2, st.decay.res.r2, 1e-9) })
 })

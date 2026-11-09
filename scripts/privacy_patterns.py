@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PRIVATE_FILE = ROOT / "private_data" / "privacy_patterns.txt"
 
 GENERIC = [
-    r"amazonaws\.com", r"\bec2-\d", r"(?i:passw(?:or)?d)\s*[=:]\s*\S+", r"(?i:ftp)://\S+",
+    r"amazonaws\.com", r"\bec2-\d", r"(?i:passw(?:or)?d)\s*[=:]\s*['\"]?[A-Za-z0-9#$%&*+./@^_\-]{6,}", r"(?i:ftp)://\S+",
     r"(?<![A-Za-z])[IWKST]邸",                       # 2023年度住宅の記号（姓の頭文字の可能性）→ 住宅23-n に置換して公開
     r"[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.(?:ac\.jp|co\.jp|com|net|org|jp)\b",
 ]
@@ -38,3 +38,14 @@ def regex(include_generic: bool = True) -> str:
 
 def has_private_list() -> bool:
     return bool(private_patterns())
+
+
+# 公開物では 2023 年度の住宅記号を「住宅23-n」に置き換える（技術報告書と同じ対応）
+ANON = [(re.compile(r"I・W・K・S邸"), "住宅23-1〜23-4"), (re.compile(r"(?<![A-Za-z])I邸"), "住宅23-1"), (re.compile(r"(?<![A-Za-z])W邸"), "住宅23-2"),
+        (re.compile(r"(?<![A-Za-z])K邸"), "住宅23-3"), (re.compile(r"(?<![A-Za-z])S邸"), "住宅23-4")]
+
+
+def anonymize(text: str) -> str:
+    for pat, rep in ANON:
+        text = pat.sub(rep, text)
+    return text

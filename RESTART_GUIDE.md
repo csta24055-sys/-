@@ -44,3 +44,14 @@
 - 保存先の決定は `backend/app/paths.py`。開発時（リポジトリから起動）は従来どおり `private_data/aqros.sqlite3`。
 - 手元ビルド: `.venv/bin/pip install -r desktop/requirements-build.txt && .venv/bin/python desktop/build.py`（このコンテナでは Linux 版のみ）。
 - 残り（P13-DESKTOP-CI）: Windows/macOS 版は push 後に Actions の desktop ワークフローを実行して作る。push・リリース公開はユーザー許可が必要。
+
+## 2026-11-09 スマホ単体版（P14-MOBILE）
+- 入口:
+  - `frontend/src/core/local.ts`（端末内バックエンド）、`idb.ts`（IndexedDB）、`cloud.ts`（クラウド解析クライアント）
+  - `pages/Settings.tsx`、`pages/Cloud.tsx`
+  - `cloud/run_job.py`、`.github/workflows/cloud-jobs.yml`、`.github/workflows/mobile-pwa.yml`
+  - `scripts/build_mobile.py`（ビルドと漏えい検査）、`deploy/pages-repo/`（公開用リポジトリのワークフロー）
+  - 説明は `docs/MOBILE.md`
+- 確認方法: `python scripts/build_mobile.py && python scripts/serve_static.py frontend/dist-mobile 47801 & (cd frontend && node e2e/mobile.cjs)`
+- 漏えい検査の氏名リストは `private_data/privacy_patterns.txt`（非コミット）。新しいコンテナでは消えているので、検査語を入れ直すこと（無い場合、氏名検査は「確認不能」と表示される）。
+- 残り（P14-MOBILE-PUBLISH）: push の許可、公開用リポジトリと Secret、ジョブ用の非公開リポジトリとトークン、実機確認。

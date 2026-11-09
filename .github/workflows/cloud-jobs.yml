@@ -1,0 +1,62 @@
+# クラウド解析ジョブ（スマホ版から起動される、処理ごとに動くジョブ方式）
+#
+# スマホのアプリが GitHub API で aqros-job/<id> ブランチを作り、cloud_jobs/inbox/<id>/ にジョブ定義（と入力）を置く。
+# その push でこのワークフローが動き、cloud/run_job.py の結果を cloud_jobs/outbox/<id>/ にコミットする。
+# スマホは結果を取得したあとブランチを削除する。
+#
+# 情報管理:
+# - 公開リポジトリでは研究データを処理しない（run_job.py が実際のリポジトリ設定 AQROS_REPO_PRIVATE で判定）
+# - ログには件数・所要時間だけを出す。Artifacts は使わない
+# - 入力ファイルは結果コミットで削除する（ブランチ削除まではそのブランチの履歴に残る）
+name: cloud-jobs
+
+on:
+  push:
+    branches: ["aqros-job/**"]
+    paths: ["cloud_jobs/inbox/**"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 1
+      - name: Job type
+        id: meta
+        run: |
+          id="${GITHUB_REF_NAME#aqros-job/}"
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+          echo "type=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['type'])" "cloud_jobs/inbox/$id/job.json")" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r backend/requirements.txt
+      - name: Tools for report
+        if: steps.meta.outputs.type == 'report'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq pandoc libreoffice-writer fonts-ipafont-gothic fonts-ipafont-mincho > /dev/null
+      - name: Tools for OCR
+        if: steps.meta.outputs.type == 'ocr'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-jpn poppler-utils > /dev/null
+      - name: Run job
+        env:
+          AQROS_REPO_PRIVATE: ${{ github.event.repository.private }}
+        run: python cloud/run_job.py --id "${{ steps.meta.outputs.id }}"
+      - name: Commit result
+        run: |
+          git config user.name "aqros-cloud-job"
+          git config user.email "aqros-cloud-job@users.noreply.github.com"
+          git add -A cloud_jobs
+          git commit -q -m "[aqros-job] result ${{ steps.meta.outputs.id }}"
+          git push -q origin "HEAD:${GITHUB_REF_NAME}"

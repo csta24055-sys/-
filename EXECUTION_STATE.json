@@ -1,6 +1,6 @@
 {
- "updated_at": "2026-11-09T01:42:07+00:00",
- "last_commit": "8c901da",
+ "updated_at": "2026-11-09T04:27:30+00:00",
+ "last_commit": "075833a",
  "tasks": [
   {
    "id": "P1",
@@ -68,6 +68,17 @@
    "title": "Windows / macOS 版のビルド（GitHub Actions desktop.yml の実行）",
    "status": "blocked",
    "blocked_reason": "Windows/macOS 版はこのLinuxコンテナでは作れない。ブランチの push（ユーザー許可待ち）後に Actions の desktop ワークフローを実行する必要がある"
+  },
+  {
+   "id": "P14-MOBILE",
+   "title": "スマホ単体版 PWA（端末内バックエンド・IndexedDB・バックアップ・オフライン・クラウド解析ジョブ・漏えい検査）",
+   "status": "done"
+  },
+  {
+   "id": "P14-MOBILE-PUBLISH",
+   "title": "スマホ版の HTTPS 公開と実機確認・実際の GitHub Actions でのクラウドジョブ実行",
+   "status": "blocked",
+   "blocked_reason": "ユーザー確認待ち: (1) ブランチの push 許可、(2) 公開用リポジトリ（GitHub Pages）の作成と Secret AQROS_PRIVACY_PATTERNS の登録、(3) クラウド解析用の非公開リポジトリとトークンの作成。公開後に iPhone/Android 実機で確認する"
   }
  ],
  "next_task": null,

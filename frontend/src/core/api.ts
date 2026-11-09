@@ -1,4 +1,9 @@
-// API クライアント。オフライン時は localStorage のスナップショットにフォールバックする。
+// API クライアント。
+// - サーバー版（./run.sh・デスクトップ版）: FastAPI に問い合わせ、オフライン時は localStorage のスナップショットにフォールバック
+// - スマホ単体版（VITE_STANDALONE=1 でビルド）: 端末内バックエンド（core/local.ts, IndexedDB）で同じ API を処理する
+import { handle, HttpError } from './local'
+
+export const STANDALONE = import.meta.env.VITE_STANDALONE === '1'
 
 export interface Source {
   id: string; box_id: string; title: string; fiscal_year: number | null; kind: string; folder: string; folder_id: string
@@ -36,6 +41,15 @@ export interface ReportSection { id: string; ord: number; title: string; body: s
 const SNAP = 'aqros-snapshot:'
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
+  if (STANDALONE) {
+    try {
+      const body = init?.body instanceof FormData ? init.body : init?.body ? JSON.parse(String(init.body)) : undefined
+      return (await handle(init?.method || 'GET', path, body)) as T
+    } catch (e) {
+      if (e instanceof HttpError) throw new Error(e.message)
+      throw e
+    }
+  }
   const res = await fetch(path, { ...init, headers: init?.body instanceof FormData ? init.headers : { 'Content-Type': 'application/json', ...(init?.headers || {}) } })
   if (!res.ok) {
     let msg = `${res.status}`
@@ -47,6 +61,7 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
 
 /** GET（成功時は localStorage にスナップショット保存、失敗時はスナップショットを返す） */
 export async function get<T>(path: string): Promise<T> {
+  if (STANDALONE) return req<T>(path)
   try {
     const d = await req<T>(path)
     try { localStorage.setItem(SNAP + path, JSON.stringify(d)) } catch { /* 容量超過は無視 */ }
@@ -61,7 +76,7 @@ export async function get<T>(path: string): Promise<T> {
 export interface Literature { doi: string; title: string; authors: string[]; year: number; venue: string; level: string; topic: string; stance: string; related: string[]; key: string; comparison: string; url: string }
 export interface CompletenessUnit { id: string; year: number; title: string; sources: string[]; cls: string; evidence: string[]; notes: string; items: Record<string, string>; score: string }
 export interface Plan { id?: number; title: string; theme_id?: string | null; background?: string; purpose?: string; hypotheses?: string; methods?: string; equipment?: string; measurements?: string; analysis?: string; schedule?: string; risks?: string; alternatives?: string; references?: string; created_at?: string; updated_at?: string }
-export interface Deliverable { name: string; size: number; ext: string; group?: string }
+export interface Deliverable { name: string; size: number; ext: string; group?: string; href?: string }
 
 export const api = {
   dashboard: () => get<any>('/api/dashboard'),

@@ -19,6 +19,12 @@
 
 PC・iPhone 両対応（下部タブバー）。Service Worker と localStorage スナップショットにより、一度開いた画面は**オフラインでも閲覧**でき、シミュレーターと CSV / Excel(.xlsx) 解析はオフラインで動作します（Excel は依存ライブラリなしの自前リーダー）。
 
+## スマホ版（iPhone・Android、PC 不要）
+
+ホーム画面に「空気清浄度研究」として追加する PWA です。資料・文献検索、CSV/Excel 解析、シミュレーター、研究計画、報告書の編集はスマホの中だけで動き、データは端末内（IndexedDB）に保存されます。
+重い処理（大規模計算・Python 解析・Word/PDF 生成・OCR）は GitHub Actions のジョブとして実行します。
+使い方・公開手順・データ保護は **[docs/MOBILE.md](docs/MOBILE.md)**。ビルドは `python scripts/build_mobile.py`（漏えい検査込み）で行います。
+
 ## デスクトップ版（ダウンロードしてすぐ使う）
 
 Windows / macOS / Linux 用の配布版があります。Python や Node.js は不要で、ダブルクリックで起動するとブラウザに画面が開きます。

@@ -1,0 +1,49 @@
+# 【公開用リポジトリ（例: aqros-mobile）に置くワークフロー】
+# Air Quality Research OS 本体（公開リポジトリ）のブランチを取得してスマホ版をビルドし、
+# 漏えい検査に合格した場合だけ、このリポジトリの GitHub Pages に公開する。
+# 必要な設定（公開用リポジトリ側）:
+#   - Settings → Pages → Source: GitHub Actions
+#   - Secrets: AQROS_PRIVACY_PATTERNS（氏名等の検査語。改行区切り。無いと公開しない）
+#   - Variables（任意）: AQROS_SOURCE_REPO（既定 csta24055-sys/-）, AQROS_SOURCE_REF（既定 claude/air-quality-research-os-19gu2g）
+name: deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 18 * * *"   # 毎日 1 回、本体の更新を取り込む（JST 03:17）
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.AQROS_SOURCE_REPO || 'csta24055-sys/-' }}
+          ref: ${{ vars.AQROS_SOURCE_REF || 'claude/air-quality-research-os-19gu2g' }}
+      - uses: actions/setup-node@v4
+        with: { node-version: "20", cache: npm, cache-dependency-path: frontend/package-lock.json }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install -r backend/requirements.txt && (cd frontend && npm ci)
+      - name: Build + leak scan (fails → no deploy)
+        env:
+          AQROS_PRIVACY_PATTERNS: ${{ secrets.AQROS_PRIVACY_PATTERNS }}
+        run: python scripts/build_mobile.py --base "/${{ github.event.repository.name }}/" --require-private-list
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: frontend/dist-mobile }
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment: { name: github-pages, url: "${{ steps.d.outputs.page_url }}" }
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4

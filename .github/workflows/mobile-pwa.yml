@@ -1,0 +1,42 @@
+# スマホ単体版（PWA）のビルド・テスト・公開前の漏えい検査
+# このリポジトリでは公開（デプロイ）しない。公開は別リポジトリ（deploy/pages-repo/ の手順）で行う。
+name: mobile-pwa
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/air-quality-research-os-19gu2g"]
+    paths: ["frontend/**", "knowledge/**", "report/**", "backend/**", "cloud/**", "scripts/build_mobile.py", "scripts/privacy_patterns.py", ".github/workflows/mobile-pwa.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20", cache: npm, cache-dependency-path: frontend/package-lock.json }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13", cache: pip, cache-dependency-path: backend/requirements.txt }
+      - name: Install
+        run: |
+          pip install -r backend/requirements.txt
+          cd frontend && npm ci
+      - name: Unit tests (Python / TypeScript 数値一致・端末内バックエンド)
+        run: |
+          python -m pytest -q
+          cd frontend && npx tsc -b && npx vitest run
+      - name: Build mobile PWA + leak scan
+        env:
+          AQROS_PRIVACY_PATTERNS: ${{ secrets.AQROS_PRIVACY_PATTERNS }}
+        run: python scripts/build_mobile.py --base /
+      - name: Mobile E2E (Chromium, iPhone/Android emulation)
+        run: |
+          python scripts/serve_static.py frontend/dist-mobile 47801 &
+          sleep 1
+          cd frontend && node e2e/mobile.cjs
+      - name: Scan summary
+        if: always()
+        run: cat frontend/dist-mobile-scan.json || true

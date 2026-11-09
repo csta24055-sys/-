@@ -32,7 +32,7 @@ export default function Report() {
           <Card key={g} className="noprint" title={title}>
             <ul className="deliv">{items.map((d) => {
               const base = d.name.split('/').pop() || d.name
-              return <li key={d.name}><a href={`/api/deliverables/${d.name.split('/').map(encodeURIComponent).join('/')}`} download={base}>{base}</a> <span className="small muted">{(d.size / 1024).toFixed(0)} KB</span></li>
+              return <li key={d.name}><a href={d.href || `/api/deliverables/${d.name.split('/').map(encodeURIComponent).join('/')}`} download={base}>{base}</a> <span className="small muted">{(d.size / 1024).toFixed(0)} KB</span></li>
             })}</ul>
             <p className="small muted">{note}</p>
           </Card>

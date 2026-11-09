@@ -3,7 +3,7 @@ import { useMemo, useState } from "react"
 import { Bar, BarChart, CartesianGrid, ErrorBar, Legend, Line, LineChart, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis } from 'recharts'
 import ChartBox from '../components/ChartBox'
 import { Card, Field, fmt, Loading, SourceRef, useAsync } from '../components/ui'
-import { api, Dataset, download, toCsv } from '../core/api'
+import { api, Dataset, download, STANDALONE, toCsv } from '../core/api'
 import { IO_LITERATURE, REGRESSION_LITERATURE } from '../core/literature'
 import { defaultZone, zoneTimeSeries } from '../core/models'
 import * as S from '../core/stats'
@@ -66,14 +66,14 @@ export default function DataAnalysis() {
   return (
     <div className="page">
       <h1>実験データ解析</h1>
-      <p className="lead">CSV / Excel を取り込み、品質確認・時系列・I/O比・除去効率・差圧–風量・電力–CADR・減衰同定を行います。解析はブラウザ内で実行（オフライン可）し、データは SQLite に保存されます。</p>
+      <p className="lead">CSV / Excel を取り込み、品質確認・時系列・I/O比・除去効率・差圧–風量・電力–CADR・減衰同定を行います。解析はブラウザ内で実行（オフライン可）し、データは{STANDALONE ? 'この端末の中（IndexedDB）だけ' : ' SQLite '}に保存されます。数十万行を超える場合や Python の詳細解析は「クラウド解析」を使えます。</p>
       <Card title="データの取り込み">
         <div className="filters">
           <input type="file" accept=".csv,.tsv,.txt,.xlsx,.xlsm,.xls" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} aria-label="ファイル選択" />
           <button className="ghost" onClick={makeDemo}>合成デモデータを作成</button>
           <span className="small muted">{msg}</span>
         </div>
-        <p className="small muted">Box の原データ（例: S-2025-19 岩国測定データ.xlsx）はダウンロード後にここで取り込んでください。取り込んだデータは private_data/ の DB に保存され、Git にはコミットされません。</p>
+        <p className="small muted">Box の原データ（例: S-2025-19 岩国測定データ.xlsx）はダウンロード後にここで取り込んでください。{STANDALONE ? '取り込んだデータはこの端末の中にだけ保存され、サーバーには送られません（バックアップは設定画面から）。' : '取り込んだデータは private_data/ の DB に保存され、Git にはコミットされません。'}</p>
         {list.data ? (
           <ul className="dslist">
             {list.data.map((d) => (

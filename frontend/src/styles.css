@@ -183,3 +183,28 @@ details { border-bottom: 1px solid var(--line); padding: .5rem 0; } summary { cu
 .chip{display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border:1px solid var(--line,#ccd);border-radius:12px;font-size:12px;text-decoration:none}
 .litlist{list-style:none;padding:0}.litlist li{border-bottom:1px solid var(--line,#e2e6e5);padding:8px 0}.litlist .t{font-weight:600;margin:2px 0}
 .deliv{padding-left:18px}.deliv li{margin:4px 0}
+
+/* スマホ版: その他メニュー・通知・クラウド */
+.note { background: var(--chip); border: 1px solid var(--line); border-radius: 8px; padding: .45rem .7rem; margin-bottom: 1rem; font-size: .88rem; }
+.note.update { border-color: var(--accent); }
+.sheet-bg { position: fixed; inset: 0 0 calc(56px + env(safe-area-inset-bottom)) 0; background: rgba(0,0,0,.35); z-index: 20; display: flex; align-items: flex-end; }
+.sheet { background: var(--card); width: 100%; border-radius: 16px 16px 0 0; padding: .6rem .8rem calc(.8rem + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: .2rem; }
+.sheet a { display: flex; gap: .7rem; align-items: center; padding: .75rem .5rem; color: var(--fg); text-decoration: none; border-radius: 10px; min-height: 44px; }
+.sheet a:active { background: var(--sel); }
+.sheet a i { font-style: normal; width: 1.4em; text-align: center; color: var(--accent); }
+.chk { display: flex; gap: .45rem; align-items: flex-start; padding: .25rem 0; min-height: 32px; }
+.chk input { margin-top: .3rem; }
+.chk.consent { background: var(--warn-bg); border: 1px solid var(--warn); border-radius: 8px; padding: .5rem; margin: .5rem 0; }
+.checklist { display: flex; flex-direction: column; max-height: 14rem; overflow: auto; }
+.joblist { list-style: none; padding: 0; margin: 0; }
+.joblist li { border-bottom: 1px solid var(--line); padding: .6rem 0; }
+.joblist pre { white-space: pre-wrap; word-break: break-all; font-size: .75rem; max-height: 16rem; overflow: auto; background: var(--chip); padding: .4rem; border-radius: 6px; }
+.pill.job-done { background: var(--sel); color: var(--accent); } .pill.job-failed { color: var(--err); }
+@media (max-width: 720px) {
+  input, select, textarea { font-size: 16px; } /* iOS の自動ズームを防ぐ */
+  button { min-height: 40px; }
+  .main { padding-top: max(.8rem, env(safe-area-inset-top)); }
+  .tabbar a { font-size: .7rem; } .tabbar a i { font-size: 1.2rem; }
+  .filters { flex-wrap: wrap; }
+}
+@media (display-mode: standalone) { .side-foot { display: none; } }

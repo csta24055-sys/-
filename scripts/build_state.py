@@ -25,6 +25,8 @@ TASKS = [
     ("P12-REPORT", "中間統合技術調査報告書 2026-11（docx/pdf＋台帳・根拠台帳・数値監査）"),
     ("P13-DESKTOP", "デスクトップ配布版（ランチャー・PyInstaller・Linux版ビルドと起動確認・インストール手順）"),
     ("P13-DESKTOP-CI", "Windows / macOS 版のビルド（GitHub Actions desktop.yml の実行）"),
+    ("P14-MOBILE", "スマホ単体版 PWA（端末内バックエンド・IndexedDB・バックアップ・オフライン・クラウド解析ジョブ・漏えい検査）"),
+    ("P14-MOBILE-PUBLISH", "スマホ版の HTTPS 公開と実機確認・実際の GitHub Actions でのクラウドジョブ実行"),
 ]
 
 

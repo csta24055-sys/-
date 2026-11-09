@@ -32,6 +32,15 @@ out["stats"]["xy"] = [x.tolist(), y.tolist()]
 out["stats"]["origin"] = A.regression_through_origin(x, y)
 out["stats"]["power"] = A.power_law_fit(x, np.abs(y) + 0.1)
 out["stats"]["linear"] = A.linear_regression(x, y)
+# I/O比・除去効率・減衰・CADR（スマホ単体版でも同じ値になることを確認する）
+ind = 4 + rng.uniform(0, 3, 120); outd = 10 + rng.uniform(0, 8, 120); outd[5] = 0; ind[7] = np.nan
+out["stats"]["io"] = {"in": [None if np.isnan(v) else v for v in ind.tolist()], "out": outd.tolist(), "res": A.io_ratio(ind, outd)}
+up = 1000 + rng.uniform(0, 200, 50); dn = up * (0.1 + rng.uniform(0, 0.05, 50))
+out["stats"]["eff"] = {"up": up.tolist(), "dn": dn.tolist(), "res": A.removal_efficiency(up, dn)}
+t = np.arange(0, 3600, 60.0); c = 5 + 80 * np.exp(-0.0012 * t) * (1 + rng.normal(0, 0.02, len(t)))
+out["stats"]["decay"] = {"t": t.tolist(), "c": c.tolist(), "bg": 5.0, "res": A.fit_decay(t, c, 5.0)}
+out["zone"][0]["cadr"] = M.zone_cadr(zp)
+out["zone"][0]["loss"] = M.zone_loss_rate(zp)
 dst = ROOT / "frontend" / "src" / "core" / "python_reference.json"
 dst.write_text(json.dumps(out, ensure_ascii=False))
 print("wrote", dst)
