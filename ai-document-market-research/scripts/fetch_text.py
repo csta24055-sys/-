@@ -2,13 +2,14 @@
 """Fetch ONE public page for original-source review and print its readable text.
 
 Research tooling only (no app code). It makes a single polite request per call,
-never crawls, never logs in, and never bypasses paywalls. The extracted text is
+never crawls, never logs in, and never bypasses paywalls or bot blocks: a page
+that refuses the request (403/503) is recorded as blocked. The extracted text is
 cached OUTSIDE the repository (directory given by --cache or $RESEARCH_CACHE) so
 that third-party page contents are not committed to Git.
 
 Usage:
     python3 scripts/fetch_text.py URL [--grep REGEX] [--context N] [--max CHARS]
-                                      [--browser] [--cache DIR]
+                                      [--cache DIR]
 """
 from __future__ import annotations
 import argparse
@@ -78,34 +79,21 @@ def curl(url: str) -> tuple[int, bytes, str]:
     return code, body, (parts[1] if len(parts) > 1 else '')
 
 
-BROWSER_JS = r"""
-const { chromium } = require('playwright');
-(async () => {
-  const browser = await chromium.launch();
-  const page = await browser.newPage({ locale: 'ja-JP' });
-  let status = 0;
-  try {
-    const resp = await page.goto(process.argv[2], { waitUntil: 'domcontentloaded', timeout: 45000 });
-    status = resp ? resp.status() : 0;
-    await page.waitForTimeout(3500);
-    const title = await page.title();
-    const text = await page.evaluate(() => document.body ? document.body.innerText : '');
-    console.log(JSON.stringify({ status, title, text }));
-  } catch (e) {
-    console.log(JSON.stringify({ status, title: '', text: '', error: String(e) }));
-  }
-  await browser.close();
-})();
-"""
-
-
-def browser(url: str) -> tuple[int, str, str]:
-    r = subprocess.run(['node', '-e', BROWSER_JS, url], capture_output=True, text=True, timeout=120)
-    try:
-        d = json.loads(r.stdout.strip().splitlines()[-1])
-    except (ValueError, IndexError):
-        return 0, '', r.stderr[-400:]
-    return d.get('status', 0), d.get('title', ''), d.get('text', '') or d.get('error', '')
+def decode(body: bytes, ctype: str) -> str:
+    """Decode HTML using the declared charset (header, then <meta>), e.g. Shift_JIS government pages."""
+    m = re.search(r'charset=([\w-]+)', ctype or '', re.I)
+    enc = m.group(1) if m else None
+    if not enc:
+        m2 = re.search(rb'<meta[^>]+charset=["\']?([\w-]+)', body[:4000], re.I)
+        enc = m2.group(1).decode('ascii', 'replace') if m2 else None
+    for candidate in (enc, 'utf-8', 'cp932', 'euc_jp'):
+        if not candidate:
+            continue
+        try:
+            return body.decode(candidate)
+        except (LookupError, UnicodeDecodeError):
+            continue
+    return body.decode('utf-8', 'replace')
 
 
 def main() -> None:
@@ -114,7 +102,6 @@ def main() -> None:
     ap.add_argument('--grep')
     ap.add_argument('--context', type=int, default=1)
     ap.add_argument('--max', type=int, default=6000)
-    ap.add_argument('--browser', action='store_true')
     ap.add_argument('--cache', default=os.environ.get('RESEARCH_CACHE', ''))
     a = ap.parse_args()
     if not a.cache:
@@ -129,19 +116,15 @@ def main() -> None:
         title, text, status = meta['title'], tf.read_text(encoding='utf-8'), meta['status']
         fetched_at = meta['fetched_at']
     else:
-        if a.browser:
-            status, title, text = browser(a.url)
-            method = 'headless_browser'
+        status, body, ctype = curl(a.url)
+        method = 'http_get'
+        if 'pdf' in ctype or a.url.lower().split('?')[0].endswith('.pdf'):
+            pf = cache / f'{key}.pdf'
+            pf.write_bytes(body)
+            r = subprocess.run(['pdftotext', '-layout', str(pf), '-'], capture_output=True, text=True)
+            title, text = 'PDF', r.stdout
         else:
-            status, body, ctype = curl(a.url)
-            method = 'http_get'
-            if 'pdf' in ctype or a.url.lower().split('?')[0].endswith('.pdf'):
-                pf = cache / f'{key}.pdf'
-                pf.write_bytes(body)
-                r = subprocess.run(['pdftotext', '-layout', str(pf), '-'], capture_output=True, text=True)
-                title, text = 'PDF', r.stdout
-            else:
-                title, text = html_to_text(body.decode('utf-8', 'replace'))
+            title, text = html_to_text(decode(body, ctype))
         tf.write_text(text, encoding='utf-8')
         meta = {'url': a.url, 'status': status, 'title': title, 'chars': len(text),
                 'fetched_at': fetched_at, 'method': method}
