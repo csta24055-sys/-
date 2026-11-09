@@ -139,6 +139,15 @@ def main(argv: list[str]) -> int:
     for x in spec.get("claims", []):
         ev = []
         for item in x["ev"]:
+            if isinstance(item, str) or (isinstance(item, list) and len(item) <= 2 and str(item[0]).startswith(f"PSG-{sc}-")):
+                # reuse an already verified passage of THIS company's ledger
+                pid0 = item if isinstance(item, str) else item[0]
+                direction = "SUPPORT" if isinstance(item, str) or len(item) == 1 else item[1]
+                if pid0 not in {p["passage_id"] for p in passages}:
+                    errors.append(f"unknown passage {pid0} (must exist in this company's ledger)")
+                    continue
+                ev.append({"passage_id": pid0, "direction": direction, "relation": "PRIMARY_DIRECT"})
+                continue
             key, page, excerpt = item[0], item[1], item[2]
             direction = item[3] if len(item) > 3 else "SUPPORT"
             pid = passage(key, page, excerpt, x.get("section", ""))
