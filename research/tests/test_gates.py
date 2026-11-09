@@ -94,8 +94,9 @@ class TestBaseline(Base):
         for cid in ("COMPANY_02", "COMPANY_03", "COMPANY_04", "COMPANY_05", "COMPANY_06", "COMPANY_07", "COMPANY_08"):
             t = [t for t in by[cid]["topics"] if t["topic_id"] == "AXIS_13_T03"][0]
             # another company's PASS never carries over; each company's state comes from its own evidence only
-            self.assertNotEqual(t["state"], "PASS", cid)
             if t["state"] != "NOT_STARTED":
+                # any progress (including PASS) must rest only on that company's own sources
+                self.assertTrue(t["direct_sources"], cid)
                 self.assertTrue(all(s.startswith("SRC-C" + cid[-2:]) for s in t["direct_sources"]), cid)
 
     def test_company_is_independent_of_other_companies(self):
@@ -105,6 +106,7 @@ class TestBaseline(Base):
         p = self.root / "registry" / "company_registry.csv"
         lines = open(p, encoding="utf-8").read().splitlines()
         p.write_text("\n".join(lines[:2]) + "\n", encoding="utf-8")
+        (self.root / "cross_company" / "relations.jsonl").write_text("", encoding="utf-8")  # derived layer, rebuilt later
         after = research_gates.run("COMPANY_01")
         self.assertEqual(after["errors"], [])
         a = after["companies"][0]
@@ -233,7 +235,9 @@ class TestMonthlyUpdate(Base):
         self.assertNotIn("CLM-C01-0013", c["claims_needs_recheck"])
         self.assertEqual(before, (self.c(C01) / "axes" / "AXIS_13" / "CLAIMS.jsonl").read_text(encoding="utf-8"))
         ev = jl_read(self.c(C01) / "ledger" / "claim_status_events.jsonl")
-        self.assertTrue(all(e["cause"] == ["DATA_CHANGED"] for e in ev))
+        data_ev = [e for e in ev if "SCHEDULED_RECHECK" not in e["cause"]]
+        self.assertTrue(data_ev and all(e["cause"] == ["DATA_CHANGED"] for e in data_ev))
+        self.assertTrue(all("policy" in e for e in ev if "SCHEDULED_RECHECK" in e["cause"]))
         self.assertTrue((self.c(C01) / "snapshots" / "monthly_2026-12" / "UPDATE_RECORD.json").exists())
         self.assertEqual(research_gates.run()["errors"], [])
 
@@ -260,11 +264,77 @@ class TestMonthlyUpdate(Base):
         jl_append(self.root / "cross_company" / "relations.jsonl", {
             "relation_id": "XREL-TEST-0001", "company_a": "COMPANY_01", "company_b": "COMPANY_02", "type": "CO_INVESTS",
             "evidence_a": ["PSG-C01-0025"], "evidence_b": []})
+        m = {}
+        for d in (self.root / "companies").iterdir():
+            for x in jl_read(d / "ledger" / "sources.jsonl"):
+                m[x["url"]] = {"status": 200, "sha256": x["sha256"], "error": None}
         s = self.sources()
-        m = {x["url"]: {"status": 200, "sha256": x["sha256"], "error": None} for x in s}
         m[s[1]["url"]] = {"status": 200, "sha256": "changed", "error": None}
-        r = monthly_update.run("2026-12", None, fetch=self.fake(m))
-        self.assertEqual(r["cross_company"]["flagged"][0]["flag"], "ONE_SIDED_REVISION")
+        r = monthly_update.run("2026-12", None, fetch=self.fake(m), run_date="2026-11-09")
+        flagged = {f["relation_id"]: f for f in r["cross_company"]["flagged"]}
+        self.assertEqual(flagged["XREL-TEST-0001"]["flag"], "ONE_SIDED_REVISION")
+        self.assertTrue(all(f["changed_companies"] == ["COMPANY_01"] for f in flagged.values()))
+
+
+class TestReevaluation(Base):
+    def test_scheduled_recheck_by_information_type_not_by_age(self):
+        # 2027-06: ratings/plans (183/366 days) are due; audited financial history is never scheduled
+        r = monthly_update.run("2027-06", "COMPANY_04", fetch=lambda u: {"status": 200, "sha256": next(
+            s["sha256"] for s in jl_read(self.c(C02.replace("三菱商事", "住友商事")) / "ledger" / "sources.jsonl") if s["url"] == u), "error": None},
+            run_date="2027-06-15")
+        c = r["companies"][0]
+        sched = set(c.get("claims_scheduled_recheck", []))
+        self.assertIn("CLM-C04-0018", sched)          # rating (RATING, 183 days)
+        claims = {x["claim_id"]: x for a in (self.c("住友商事") / "axes").glob("AXIS_*") for x in jl_read(a / "CLAIMS.jsonl")}
+        for cid in sched:
+            self.assertNotIn(claims[cid].get("info_class"), (None, "AUDITED_FINANCIAL"))
+        self.assertIn("axes/AXIS_30/SYNTHESIS.md", c["reports_needs_recheck"])
+        ev = jl_read(self.c("住友商事") / "ledger" / "claim_status_events.jsonl")
+        self.assertTrue(all(e["cause"] == ["SCHEDULED_RECHECK"] and "policy" in e for e in ev))
+
+    def test_not_due_yet_means_no_scheduled_recheck(self):
+        r = monthly_update.run("2026-11", "COMPANY_04", fetch=lambda u: {"status": 0, "sha256": None, "error": "offline"},
+                               dry=True, run_date="2026-11-09")
+        self.assertEqual(r["companies"][0].get("claims_scheduled_recheck", []), [])
+
+    def test_pass_is_suspended_not_failed_when_evidence_needs_recheck(self):
+        # a source behind a PASS topic changes -> topic becomes NEEDS_RECHECK (no integrity error)
+        jl_append(self.c("住友商事") / "ledger" / "claim_status_events.jsonl", {
+            "event_id": "EV-TEST", "company_id": "COMPANY_04", "claim_id": "CLM-C04-0013", "at": "2027-01-01T00:00:00+00:00",
+            "new_validity": "NEEDS_RECHECK", "cause": ["DATA_CHANGED"], "sources": ["SRC-C04-0004"], "update_id": "UPD-TEST"})
+        res = research_gates.run("COMPANY_04")
+        self.assertEqual(res["errors"], [])
+        t = [t for t in res["companies"][0]["topics"] if t["topic_id"] == "AXIS_30_T06"][0]
+        self.assertEqual(t["state"], "NEEDS_RECHECK")
+        self.assertEqual(res["companies"][0]["axes"]["AXIS_30"]["state"], "NEEDS_RECHECK")
+
+
+class TestCrossCompany(Base):
+    def rel_path(self):
+        return self.root / "cross_company" / "relations.jsonl"
+
+    def test_real_relations_valid(self):
+        self.assertEqual([e for e in research_gates.run()["errors"] if e["company_id"] == "CROSS"], [])
+
+    def test_edge_must_cite_each_companys_own_ledger(self):
+        jl_append(self.rel_path(), {"relation_id": "XREL-9001", "type": "JOINT_VENTURE", "company_a": "COMPANY_01", "company_b": "COMPANY_03",
+                                    "evidence_a": ["PSG-C03-0001"], "evidence_b": ["PSG-C01-0001"], "status": "VERIFIED_BOTH_SIDES", "causal": False})
+        self.assertIn("E_FOREIGN_EVIDENCE", self.codes())
+
+    def test_both_sides_requires_both_evidence(self):
+        jl_append(self.rel_path(), {"relation_id": "XREL-9002", "type": "JOINT_VENTURE", "company_a": "COMPANY_01", "company_b": "COMPANY_03",
+                                    "evidence_a": ["PSG-C01-0076"], "evidence_b": [], "status": "VERIFIED_BOTH_SIDES", "causal": False})
+        self.assertIn("E_UNSUPPORTED_PASS", self.codes())
+
+    def test_existence_edge_cannot_assert_causality(self):
+        jl_append(self.rel_path(), {"relation_id": "XREL-9003", "type": "COMMON_MAJOR_SHAREHOLDER", "company_a": "COMPANY_01", "company_b": "COMPANY_03",
+                                    "evidence_a": ["PSG-C01-0015"], "evidence_b": ["PSG-C03-0098"], "status": "VERIFIED_BOTH_SIDES", "causal": True})
+        self.assertIn("E_CAUSAL_ON_EXISTENCE", self.codes())
+
+    def test_auto_digest_never_counts_as_written_synthesis(self):
+        p = self.c("豊田通商") / "axes" / "AXIS_13" / "SYNTHESIS.md"
+        p.write_text("<!-- AUTO_DIGEST -->\nAXIS_13_T03 の主張一覧\n", encoding="utf-8")
+        self.assertIn("E_UNSUPPORTED_PASS", self.codes())
 
 
 if __name__ == "__main__":

@@ -15,28 +15,53 @@
   "status": {
     "company_id": "COMPANY_02",
     "company_name": "三菱商事",
-    "company_research_status": "NOT_STARTED",
-    "report_status": "NOT_STARTED",
+    "company_research_status": "PARTIAL",
+    "report_status": "WRITTEN_PARTIAL",
     "report_missing_sections": [],
     "axes_registered": 30,
     "axes_pass": 0,
-    "axes_in_progress": 0,
+    "axes_in_progress": 5,
     "topics_registered": 240,
     "topics_by_state": {
-      "NOT_STARTED": 240
+      "NOT_STARTED": 234,
+      "IN_PROGRESS": 6
     },
-    "questions_registered": 240,
-    "sources_direct": 0,
-    "independent_origin_groups": 0,
-    "passages": 0,
-    "observations": 0,
-    "claims_by_type": {},
-    "hypotheses": 0,
+    "questions_registered": 247,
+    "sources_direct": 2,
+    "independent_origin_groups": 2,
+    "passages": 14,
+    "observations": 2,
+    "claims_by_type": {
+      "PARTY_CLAIM": 2,
+      "FACT": 4
+    },
+    "hypotheses": 2,
     "counterevidence_items": 0,
-    "relations": 0,
+    "relations": 2,
     "models": [],
     "errors": 0,
-    "source_ablation_claims_losing_all_support": {},
+    "source_ablation_claims_losing_all_support": {
+      "OG-JBIC-2026-00005": [
+        "CLM-C02-0002",
+        "CLM-C02-0006",
+        "CLM-C02-0003",
+        "CLM-C02-0001"
+      ],
+      "OG-NEXI-202604141136": [
+        "CLM-C02-0004",
+        "CLM-C02-0005"
+      ],
+      "PUBLISHER:株式会社国際協力銀行（JBIC）": [
+        "CLM-C02-0002",
+        "CLM-C02-0006",
+        "CLM-C02-0003",
+        "CLM-C02-0001"
+      ],
+      "PUBLISHER:株式会社日本貿易保険（NEXI）": [
+        "CLM-C02-0004",
+        "CLM-C02-0005"
+      ]
+    },
     "axes": {
       "AXIS_01": {
         "state": "NOT_STARTED",
@@ -63,9 +88,10 @@
         }
       },
       "AXIS_05": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "IN_PROGRESS": 1,
+          "NOT_STARTED": 7
         }
       },
       "AXIS_06": {
@@ -111,9 +137,10 @@
         }
       },
       "AXIS_13": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "IN_PROGRESS": 2,
+          "NOT_STARTED": 6
         }
       },
       "AXIS_14": {
@@ -129,15 +156,17 @@
         }
       },
       "AXIS_16": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       },
       "AXIS_17": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       },
       "AXIS_18": {
@@ -213,9 +242,10 @@
         }
       },
       "AXIS_30": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       }
     },
@@ -236,13 +266,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -250,7 +282,7 @@
       "topic_id": "AXIS_01_T02",
       "axis_id": "AXIS_01",
       "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -260,13 +292,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
-      "questions": 0,
+      "questions": 1,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -284,13 +318,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -308,13 +344,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -332,13 +370,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -356,13 +396,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -380,13 +422,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -404,13 +448,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -428,13 +474,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -452,13 +500,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -476,13 +526,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -500,13 +552,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -524,13 +578,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -548,13 +604,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -572,13 +630,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -596,13 +656,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -620,13 +682,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -644,13 +708,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -668,13 +734,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -692,13 +760,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -716,13 +786,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -740,13 +812,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -764,13 +838,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -788,13 +864,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -812,13 +890,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -836,13 +916,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -860,13 +942,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -884,13 +968,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -908,13 +994,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -932,13 +1020,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -956,13 +1046,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -980,39 +1072,45 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_05_T01",
       "axis_id": "AXIS_05",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
+        "atomic_questions_resolved_or_backlogged": true,
+        "unknowns_recorded": true,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "questions": 1,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0001"
+      ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_05_T02",
@@ -1028,13 +1126,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1052,13 +1152,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1076,13 +1178,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1100,13 +1204,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1124,13 +1230,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1148,13 +1256,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1172,13 +1282,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1196,13 +1308,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1220,13 +1334,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1244,13 +1360,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1268,13 +1386,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1292,13 +1412,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1316,13 +1438,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1340,13 +1464,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1364,13 +1490,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1388,13 +1516,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1412,13 +1542,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1436,13 +1568,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1460,13 +1594,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1484,13 +1620,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1508,13 +1646,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1532,13 +1672,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1556,13 +1698,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1580,13 +1724,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1604,13 +1750,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1628,13 +1776,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1652,13 +1802,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1676,13 +1828,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1700,13 +1854,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1724,13 +1880,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1748,13 +1906,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1772,13 +1932,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1796,13 +1958,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1820,13 +1984,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1844,13 +2010,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1868,13 +2036,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1892,13 +2062,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1916,13 +2088,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1940,13 +2114,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1964,13 +2140,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1988,13 +2166,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2012,13 +2192,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2036,13 +2218,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2060,13 +2244,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2084,13 +2270,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2108,13 +2296,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2132,13 +2322,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2156,13 +2348,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2180,13 +2374,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2204,13 +2400,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2228,13 +2426,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2252,13 +2452,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2276,13 +2478,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2300,13 +2504,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2324,13 +2530,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2348,13 +2556,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2372,13 +2582,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2396,13 +2608,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2420,13 +2634,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2444,13 +2660,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2468,13 +2686,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2492,13 +2712,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2516,39 +2738,45 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_13_T01",
       "axis_id": "AXIS_13",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0001"
+      ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_13_T02",
@@ -2564,39 +2792,45 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_13_T03",
       "axis_id": "AXIS_13",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
-        "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
+        "hypotheses_have_counterevidence_notes": true,
+        "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 0,
-      "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "claims": 1,
+      "hypotheses": 1,
+      "questions": 1,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0002"
+      ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_13_T04",
@@ -2612,13 +2846,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2636,13 +2872,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2660,13 +2898,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2684,13 +2924,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2708,13 +2950,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2722,7 +2966,7 @@
       "topic_id": "AXIS_14_T01",
       "axis_id": "AXIS_14",
       "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -2732,13 +2976,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
-      "questions": 0,
+      "questions": 1,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2756,13 +3002,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2780,13 +3028,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2804,13 +3054,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2828,13 +3080,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2852,13 +3106,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2876,13 +3132,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2900,13 +3158,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2924,13 +3184,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2948,13 +3210,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2972,13 +3236,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2996,13 +3262,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3020,13 +3288,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3044,13 +3314,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3068,13 +3340,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3092,13 +3366,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3116,13 +3392,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3140,13 +3418,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3164,13 +3444,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3188,13 +3470,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3212,39 +3496,45 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_16_T06",
       "axis_id": "AXIS_16",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
-        "hypotheses_have_counterevidence_notes": false,
+        "hypotheses_have_counterevidence_notes": true,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 0,
-      "hypotheses": 0,
+      "claims": 1,
+      "hypotheses": 1,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0001"
+      ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_16_T07",
@@ -3260,13 +3550,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3284,13 +3576,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3308,13 +3602,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3332,13 +3628,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3356,39 +3654,45 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_17_T04",
       "axis_id": "AXIS_17",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0002"
+      ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_17_T05",
@@ -3404,13 +3708,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3428,13 +3734,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3452,13 +3760,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3476,13 +3786,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3500,13 +3812,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3524,13 +3838,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3548,13 +3864,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3572,13 +3890,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3596,13 +3916,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3620,13 +3942,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3644,13 +3968,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3668,13 +3994,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3692,13 +4020,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3716,13 +4046,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3740,13 +4072,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3764,13 +4098,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3788,13 +4124,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3812,13 +4150,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3836,13 +4176,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3860,13 +4202,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3884,13 +4228,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3908,13 +4254,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3932,13 +4280,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3956,13 +4306,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3980,13 +4332,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4004,13 +4358,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4028,13 +4384,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4052,13 +4410,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4076,13 +4436,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4100,13 +4462,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4124,13 +4488,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4148,13 +4514,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4172,13 +4540,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4196,13 +4566,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4220,13 +4592,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4244,13 +4618,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4268,13 +4644,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4292,13 +4670,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4316,13 +4696,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4340,13 +4722,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4354,7 +4738,7 @@
       "topic_id": "AXIS_22_T05",
       "axis_id": "AXIS_22",
       "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -4364,13 +4748,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
-      "questions": 0,
+      "questions": 1,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4388,13 +4774,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4412,13 +4800,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4436,13 +4826,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4460,13 +4852,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4484,13 +4878,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4508,13 +4904,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4532,13 +4930,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4556,13 +4956,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4580,13 +4982,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4604,13 +5008,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4628,13 +5034,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4642,7 +5050,7 @@
       "topic_id": "AXIS_24_T01",
       "axis_id": "AXIS_24",
       "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -4652,13 +5060,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
-      "questions": 0,
+      "questions": 1,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4676,13 +5086,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4700,13 +5112,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4724,13 +5138,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4748,13 +5164,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4772,13 +5190,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4796,13 +5216,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4820,13 +5242,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4844,13 +5268,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4868,13 +5294,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4892,13 +5320,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4916,13 +5346,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4940,13 +5372,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4964,13 +5398,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4988,13 +5424,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5012,13 +5450,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5036,13 +5476,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5060,13 +5502,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5084,13 +5528,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5108,13 +5554,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5132,13 +5580,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5156,13 +5606,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5180,13 +5632,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5204,13 +5658,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5228,13 +5684,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5252,13 +5710,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5276,13 +5736,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5300,13 +5762,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5324,13 +5788,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5348,13 +5814,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5372,13 +5840,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5396,13 +5866,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5420,13 +5892,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5444,13 +5918,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5468,13 +5944,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5492,13 +5970,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5516,13 +5996,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5540,13 +6022,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5564,13 +6048,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5588,13 +6074,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5612,13 +6100,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5636,13 +6126,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5660,13 +6152,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5684,13 +6178,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5708,13 +6204,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5732,13 +6230,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5756,13 +6256,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5780,13 +6282,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5804,13 +6308,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5828,13 +6334,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5852,13 +6360,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5876,13 +6386,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5900,39 +6412,45 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_30_T06",
       "axis_id": "AXIS_30",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
-        "competing_hypotheses>=2": false,
-        "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
+        "competing_hypotheses>=2": true,
+        "hypotheses_have_counterevidence_notes": true,
+        "atomic_questions_resolved_or_backlogged": true,
+        "unknowns_recorded": true,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 0,
-      "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "claims": 1,
+      "hypotheses": 2,
+      "questions": 1,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0001"
+      ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_30_T07",
@@ -5948,13 +6466,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5972,24 +6492,26 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": false
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     }
   ],
-  "report_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事：独立総合インテリジェンス研究書\n\n> COMPANY_ID: `COMPANY_02` / REPORT_STATUS: `NOT_STARTED` / 調査基準日: 2026-11-01\n\n**これは研究成果ではない。** 原資料の調査・検証が行われるまで各章は空欄であり、他社の報告書から転記してはならない。\n\n## 1. 会社の成立・歴史・経路依存\n（未調査）\n## 2. 全事業・商流・所有資産・グループ会社\n（未調査）\n## 3. 事業別の資本配分・収益構造・投資実行・撤退\n（未調査）\n## 4. 銀行融資・政策金融・金利・為替・財務\n（未調査）\n## 5. 政府・国家・規制・外交・国際金融\n（未調査）\n## 6. 世界情勢・市場・資源・物流・リスク\n（未調査）\n## 7. 経営者・ガバナンス・部門・人事・採用・意思決定\n（未調査）\n## 8. AI・技術革新・不動産・産業設備・環境\n（未調査）\n## 9. 個別案件の資金・製品・サービス・権限の流れ\n（未調査）\n## 10. 統計分析・数理モデル・競合仮説・反証\n（未調査）\n## 11. 2030・2035・2040・2050年の複数シナリオ\n（未調査）\n## 12. 社内30軸の分析をつなぐ会社固有の因果モデル\n（未調査）\n## 13. 他社・銀行・政府との立証済み関係リンク\n（未調査）\n## 14. 確認できない内容と追加調査\n（未調査）\n## 15. 2026-11-01版と月次版の差分／会社別研究ゲート\n（未調査）\n",
+  "report_md": "<!-- generated by tools/build_reports.py from this company's ledgers; hand-written part: REPORT_SUMMARY.md -->\n# 三菱商事：独立総合インテリジェンス研究書\n\n> COMPANY_ID: `COMPANY_02`（Mitsubishi Corporation）／ 基準日: 2026-11-01 ／ 研究ゲート: **PARTIAL**\n> 30軸: PASS 0・進行中 5 ／ 240テーマ: {'NOT_STARTED': 234, 'IN_PROGRESS': 6} ／ 主張 6（{'PARTY_CLAIM': 2, 'FACT': 4}）\n> 本書はこの会社の資料だけで成立し、他社の研究書・出典IDを参照しない。各文末のIDから原文位置（台帳）へ遡れる。未調査の章は未調査と明記する。\n\n## 総括（研究者による統合・手書き）\n\n**研究の制約を先に記す**：三菱商事の会社サイトは本環境から全ページ403で、有価証券報告書・統合報告書を取得できなかった。EDINET APIもキーがなくBLOCKEDである。そのため本書は、三菱商事を当事者とするJBIC・NEXIの公表文だけに基づく、極めて限定的な初期調査にとどまる。財務・沿革・株主・人事の章は未調査で、他社の資料からの推定で埋めることはしない。\n\n**確認できたこと**：JBICは2026年3月31日、三菱商事本体と約1,560百万米ドル、米国法人と約815百万米ドルの貸付契約を締結した（JBIC分）。資金使途は、米国の天然ガス開発事業者Aethonの買収資金の一部である（CLM-C02-0001）。JBICの説明では、三菱商事はガス・LNGを中核事業とし、米国の上流ガスを起点に複合的なバリューチェーンを目指している（CLM-C02-0002、融資者による記述）。NEXIとは、三菱商事が出資するトルコのCalik Enerjiを介した三者の協力覚書があり、クレジットライン枠を通じて再エネ案件が支援されている（CLM-C02-0004）。\n\n**仮説（いずれも未決）**：エネルギー安全保障政策が大型の政策融資を呼んだとする説明（HYP-C02-0001）と、大型買収の資金規模・条件の要請による説明（HYP-C02-0002）がある。買収総額と三菱商事の財務数値がないため、どちらとも検証できない。\n\n**次の作業**：会社開示の取得経路を確保する（EDINET APIキー、または会社サイトへの別経路）。それまで三菱商事の会社ゲートは事実上BLOCKEDである。\n\n## 1. 会社の成立・歴史・経路依存\n（未調査：AXIS_01）\n\n## 2. 全事業・商流・所有資産・グループ会社\n- 【当事者の主張】JBICの説明では、三菱商事は天然ガス・LNG事業を中核事業の一つとし、近年は米国を戦略地域として中下流を含むガス事業を強化しており、本買収を通じ米国の上流ガスを起点とした複合的なバリューチェーン構築を目指す。（CLM-C02-0002／AXIS_05_T01）\n\n## 3. 事業別の資本配分・収益構造・投資実行・撤退\n（未調査：AXIS_15, AXIS_14）\n\n## 4. 銀行融資・政策金融・金利・為替・財務\n- 【確認事実】NEXIは2026年4月、Calik Enerji（トルコ、三菱商事が出資）によるポーランドの太陽光発電ポートフォリオ（255MW、うち243MW運転中）買収資金へのドイツ銀行東京支店の融資に融資保険を付けた。融資は、NEXI・Calik Enerji・三菱商事間の協力覚書に基づき2024年5月に設定したクレジットライン枠の下で行われる。（CLM-C02-0004／AXIS_13_T03）\n- 【確認事実】公表資料で確認できる三菱商事関連の協調融資では、三菱UFJ銀行が民間金融機関の筆頭として記載されている（JBICのAethon案件）。（CLM-C02-0006／AXIS_13_T01）\n\n## 5. 政府・国家・規制・外交・国際金融\n- 【当事者の主張】JBICはこの融資を、第7次エネルギー基本計画（2025年2月閣議決定）で天然ガスが重要なエネルギー源と位置づけられていることを踏まえ、LNGの長期安定確保・調達先多角化に資するエネルギー安全保障上重要な取組と位置づけている。（CLM-C02-0003／AXIS_16_T06）\n\n## 6. 世界情勢・市場・資源・物流・リスク\n- 【確認事実】三菱商事が出資するCalik Enerjiは、トルコ・中央アジア・中東・アフリカ・欧州等でエネルギー・インフラ案件のEPC、配電・小売、再エネ発電投資を行い、NEXIのクレジットライン枠でコソボのZatriq風力（73MW）等も支援されている。（CLM-C02-0005／AXIS_17_T04）\n\n## 7. 経営者・ガバナンス・部門・人事・採用・意思決定\n（未調査：AXIS_21, AXIS_22, AXIS_28）\n\n## 8. AI・技術革新・不動産・産業設備・環境\n（未調査：AXIS_09, AXIS_10, AXIS_23）\n\n## 9. 個別案件の資金・製品・サービス・権限の流れ\n- 【確認事実】JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。（CLM-C02-0001／AXIS_30_T06）\n\n## 10. 統計分析・数理モデル・競合仮説・反証\n| 仮説 | 説明 | 評価 | 反証の記録 |\n|---|---|---|---|\n| HYP-C02-0001 | H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。 | UNRESOLVED | 0件 |\n| HYP-C02-0002 | H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。 | UNRESOLVED | 0件 |\n（未調査：AXIS_26）\n\n## 11. 2030・2035・2040・2050年の複数シナリオ\n（未調査：AXIS_27）\n\n## 12. 社内30軸の分析をつなぐ会社固有の因果モデル\n総括の因果説明（上記）が現時点の会社固有モデル。30軸を結ぶ定量モデルは未構築。\n\n## 13. 他社・銀行・政府との立証済み関係リンク\n- REL-C02-0001：ENT-JBIC → ENT-COMPANY_02（LENDS_TO、1560 百万米ドル、CONFIRMED_ONE_SIDE）\n- REL-C02-0002：ENT-COMPANY_02 → ENT-CALIK-ENERJI（INVESTS_IN、CONFIRMED_ONE_SIDE）\n- 他の総合商社との関係は、会社別研究の後に `cross_company/` で双方の原文IDを突き合わせて扱う（本書には転記しない）。\n\n## 14. 確認できない内容と追加調査\n- Q-C02-A01-T02-01（BLOCKED）三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。\n- Q-C02-A14-T01-01（BLOCKED）三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。\n- Q-C02-A22-T05-01（BLOCKED）三菱商事本体の従業員数・平均給与等は？\n- Q-C02-A24-T01-01（BLOCKED）三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。\n- 未着手のROOT研究カード：233件\n\n## 15. 2026-11-01版と月次版の差分／会社別研究ゲート\n- スナップショット：asof_2026-11-01, monthly_2026-11\n- 再確認イベント：0件（ledger/claim_status_events.jsonl）\n- ゲートの正本は `COMPANY_RESEARCH_STATUS.json`、更新履歴は `UPDATE_HISTORY.md`。\n",
   "axes": [
     {
       "axis_id": "AXIS_01",
       "axis_name": "商社産業史・制度形成",
       "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_01 商社産業史・制度形成：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_01` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_01_T01 | 明治期の貿易商社と開国・殖産興業 | NOT_STARTED |\n| AXIS_01_T02 | 財閥と総合商社の成立・戦前商流 | NOT_STARTED |\n| AXIS_01_T03 | 戦時経済と戦後解体・再編 | NOT_STARTED |\n| AXIS_01_T04 | 高度成長と輸出入・金融・重化学工業 | NOT_STARTED |\n| AXIS_01_T05 | 石油危機と資源権益形成 | NOT_STARTED |\n| AXIS_01_T06 | 1980〜2000年代の為替・金融危機・不良債権 | NOT_STARTED |\n| AXIS_01_T07 | 2000年代以降の事業投資への転換 | NOT_STARTED |\n| AXIS_01_T08 | 各社の経路依存性と歴史的失敗事例 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_01 商社産業史・制度形成：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n## 問い\n- Q-C02-A01-T02-01（BLOCKED）三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。\n",
       "topics": [
         {
           "topic_id": "AXIS_01_T01",
@@ -6244,15 +6766,15 @@
     {
       "axis_id": "AXIS_05",
       "axis_name": "エネルギー・電力・脱炭素",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_05 エネルギー・電力・脱炭素：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_05` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_05_T01 | 原油・LNG・石炭・石油製品 | NOT_STARTED |\n| AXIS_05_T02 | 発電・送配電・電力小売・系統制約 | NOT_STARTED |\n| AXIS_05_T03 | 再エネ・蓄電池・水素・アンモニア | NOT_STARTED |\n| AXIS_05_T04 | 原子力・ウラン供給と規制 | NOT_STARTED |\n| AXIS_05_T05 | 長期LNG契約・燃料トレード・輸送 | NOT_STARTED |\n| AXIS_05_T06 | エネルギー安全保障・政策支援 | NOT_STARTED |\n| AXIS_05_T07 | CCUS・炭素取引・排出規制 | NOT_STARTED |\n| AXIS_05_T08 | 事業投資と電力・建築設備・データセンターの接点 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_05 エネルギー・電力・脱炭素：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_05_T01\n- 【当事者の主張】JBICの説明では、三菱商事は天然ガス・LNG事業を中核事業の一つとし、近年は米国を戦略地域として中下流を含むガス事業を強化しており、本買収を通じ米国の上流ガスを起点とした複合的なバリューチェーン構築を目指す。（CLM-C02-0002／AXIS_05_T01）\n\n## 問い\n- Q-C02-A05-T01-01（PARTIAL）三菱商事のガス・LNG戦略は何を目指しているか？\n",
       "topics": [
         {
           "topic_id": "AXIS_05_T01",
           "name": "原油・LNG・石炭・石油製品",
           "priority": "P2",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_05_T02",
@@ -6756,15 +7278,15 @@
     {
       "axis_id": "AXIS_13",
       "axis_name": "銀行融資・政策金融・保険",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_13 銀行融資・政策金融・保険：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_13` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_13_T01 | 邦銀メガバンク・海外銀行との取引 | NOT_STARTED |\n| AXIS_13_T02 | シンジケートローン・コミットメントライン | NOT_STARTED |\n| AXIS_13_T03 | JBIC・NEXI等の公的金融・保険 | NOT_STARTED |\n| AXIS_13_T04 | プロジェクトファイナンスとSPV | NOT_STARTED |\n| AXIS_13_T05 | 融資保証・担保・コベナンツ | NOT_STARTED |\n| AXIS_13_T06 | 輸出信用・貿易金融・信用状 | NOT_STARTED |\n| AXIS_13_T07 | 格付け・信用リスク・貸倒れ | NOT_STARTED |\n| AXIS_13_T08 | 公開融資案件と非公開審査の識別 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_13 銀行融資・政策金融・保険：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_13_T01\n- 【確認事実】公表資料で確認できる三菱商事関連の協調融資では、三菱UFJ銀行が民間金融機関の筆頭として記載されている（JBICのAethon案件）。（CLM-C02-0006／AXIS_13_T01）\n\n### AXIS_13_T03\n- 【確認事実】NEXIは2026年4月、Calik Enerji（トルコ、三菱商事が出資）によるポーランドの太陽光発電ポートフォリオ（255MW、うち243MW運転中）買収資金へのドイツ銀行東京支店の融資に融資保険を付けた。融資は、NEXI・Calik Enerji・三菱商事間の協力覚書に基づき2024年5月に設定したクレジットライン枠の下で行われる。（CLM-C02-0004／AXIS_13_T03）\n\n## 問い\n- Q-C02-A13-T03-01（ANSWERED）三菱商事は政策保険（NEXI）とどう関わっているか？\n",
       "topics": [
         {
           "topic_id": "AXIS_13_T01",
           "name": "邦銀メガバンク・海外銀行との取引",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_13_T02",
@@ -6777,8 +7299,8 @@
           "topic_id": "AXIS_13_T03",
           "name": "JBIC・NEXI等の公的金融・保険",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_13_T04",
@@ -6821,7 +7343,7 @@
       "axis_id": "AXIS_14",
       "axis_name": "企業財務・会計・資本配分",
       "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_14 企業財務・会計・資本配分：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_14` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_14_T01 | 連結財務・IFRS/J-GAAP差異 | NOT_STARTED |\n| AXIS_14_T02 | 事業セグメント利益とキャッシュフロー | NOT_STARTED |\n| AXIS_14_T03 | CAPEX・OPEX・減損・のれん | NOT_STARTED |\n| AXIS_14_T04 | 株主還元・配当・自己株式取得 | NOT_STARTED |\n| AXIS_14_T05 | 投資有価証券・持分法利益 | NOT_STARTED |\n| AXIS_14_T06 | 事業売却・資産入替・投下資本 | NOT_STARTED |\n| AXIS_14_T07 | 負債構成・流動性・金融制約 | NOT_STARTED |\n| AXIS_14_T08 | 財務指標の定義・単体と連結の区別 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_14 企業財務・会計・資本配分：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n## 問い\n- Q-C02-A14-T01-01（BLOCKED）三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。\n",
       "topics": [
         {
           "topic_id": "AXIS_14_T01",
@@ -6948,8 +7470,8 @@
     {
       "axis_id": "AXIS_16",
       "axis_name": "各国政府・産業政策",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_16 各国政府・産業政策：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_16` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_16_T01 | 日本の産業政策・経済安全保障 | NOT_STARTED |\n| AXIS_16_T02 | 米国の産業・エネルギー・対外政策 | NOT_STARTED |\n| AXIS_16_T03 | 中国の国家資本・産業補助・規制 | NOT_STARTED |\n| AXIS_16_T04 | EUの競争政策・脱炭素政策 | NOT_STARTED |\n| AXIS_16_T05 | 資源国の国有化・投資規制・税制 | NOT_STARTED |\n| AXIS_16_T06 | 外交協定・FTA/EPA・投資協定 | NOT_STARTED |\n| AXIS_16_T07 | 政府系企業・公的投資家 | NOT_STARTED |\n| AXIS_16_T08 | 各国の政策形成過程と商社の対応 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_16 各国政府・産業政策：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_16_T06\n- 【当事者の主張】JBICはこの融資を、第7次エネルギー基本計画（2025年2月閣議決定）で天然ガスが重要なエネルギー源と位置づけられていることを踏まえ、LNGの長期安定確保・調達先多角化に資するエネルギー安全保障上重要な取組と位置づけている。（CLM-C02-0003／AXIS_16_T06）\n",
       "topics": [
         {
           "topic_id": "AXIS_16_T01",
@@ -6990,8 +7512,8 @@
           "topic_id": "AXIS_16_T06",
           "name": "外交協定・FTA/EPA・投資協定",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_16_T07",
@@ -7012,8 +7534,8 @@
     {
       "axis_id": "AXIS_17",
       "axis_name": "国際政治・地政学・安全保障",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_17 国際政治・地政学・安全保障：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_17` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_17_T01 | 国際紛争と軍事的緊張 | NOT_STARTED |\n| AXIS_17_T02 | 経済制裁・輸出規制・投資審査 | NOT_STARTED |\n| AXIS_17_T03 | 海上交通路・海峡・港湾リスク | NOT_STARTED |\n| AXIS_17_T04 | 中東・欧州・アフリカ・アジアの情勢 | NOT_STARTED |\n| AXIS_17_T05 | 米中競争とサプライチェーン再配置 | NOT_STARTED |\n| AXIS_17_T06 | 資源外交と企業間競争 | NOT_STARTED |\n| AXIS_17_T07 | 政権交代・選挙・政策不確実性 | NOT_STARTED |\n| AXIS_17_T08 | 地政学事象から案件への影響経路 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_17 国際政治・地政学・安全保障：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_17_T04\n- 【確認事実】三菱商事が出資するCalik Enerjiは、トルコ・中央アジア・中東・アフリカ・欧州等でエネルギー・インフラ案件のEPC、配電・小売、再エネ発電投資を行い、NEXIのクレジットライン枠でコソボのZatriq風力（73MW）等も支援されている。（CLM-C02-0005／AXIS_17_T04）\n",
       "topics": [
         {
           "topic_id": "AXIS_17_T01",
@@ -7040,8 +7562,8 @@
           "topic_id": "AXIS_17_T04",
           "name": "中東・欧州・アフリカ・アジアの情勢",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_17_T05",
@@ -7333,7 +7855,7 @@
       "axis_id": "AXIS_22",
       "axis_name": "組織・人事・働き方",
       "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_22 組織・人事・働き方：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_22` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_22_T01 | 事業部門・職務グループ・部門権限 | NOT_STARTED |\n| AXIS_22_T02 | 事業開発・投資・トレード職務 | NOT_STARTED |\n| AXIS_22_T03 | 技術・デジタル・インフラ人材 | NOT_STARTED |\n| AXIS_22_T04 | 国内外配属・出向・現地法人 | NOT_STARTED |\n| AXIS_22_T05 | 採用・教育・評価・昇進 | NOT_STARTED |\n| AXIS_22_T06 | 職種間協働・稟議・意思決定 | NOT_STARTED |\n| AXIS_22_T07 | 組織文化と歴史的な慣行 | NOT_STARTED |\n| AXIS_22_T08 | AI自動化・人口減少に伴う雇用変化 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_22 組織・人事・働き方：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n## 問い\n- Q-C02-A22-T05-01（BLOCKED）三菱商事本体の従業員数・平均給与等は？\n",
       "topics": [
         {
           "topic_id": "AXIS_22_T01",
@@ -7461,7 +7983,7 @@
       "axis_id": "AXIS_24",
       "axis_name": "株主・投資家・企業価値",
       "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_24 株主・投資家・企業価値：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_24` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_24_T01 | 大株主・機関投資家・持合い | NOT_STARTED |\n| AXIS_24_T02 | PER/PBR/EV/EBITDAと企業価値 | NOT_STARTED |\n| AXIS_24_T03 | 株価と資源価格・為替・金利の関係 | NOT_STARTED |\n| AXIS_24_T04 | IRコミュニケーションと市場の認識 | NOT_STARTED |\n| AXIS_24_T05 | 配当・自社株買い・資本政策 | NOT_STARTED |\n| AXIS_24_T06 | 格付けと株主リスク許容度 | NOT_STARTED |\n| AXIS_24_T07 | 事業評価と純資産・含み価値 | NOT_STARTED |\n| AXIS_24_T08 | 公表データと市場予測の識別 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_24 株主・投資家・企業価値：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n## 問い\n- Q-C02-A24-T01-01（BLOCKED）三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。\n",
       "topics": [
         {
           "topic_id": "AXIS_24_T01",
@@ -7844,8 +8366,8 @@
     {
       "axis_id": "AXIS_30",
       "axis_name": "事業別ケーススタディと因果検証",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_30 事業別ケーススタディと因果検証：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_30` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_30_T01 | 大型資源権益投資案件 | NOT_STARTED |\n| AXIS_30_T02 | 海外LNG/発電/再エネ案件 | NOT_STARTED |\n| AXIS_30_T03 | 物流・港湾・PPPインフラ案件 | NOT_STARTED |\n| AXIS_30_T04 | データセンター・不動産案件 | NOT_STARTED |\n| AXIS_30_T05 | 食品・消費財・ヘルスケア案件 | NOT_STARTED |\n| AXIS_30_T06 | M&A成功・失敗・撤退案件 | NOT_STARTED |\n| AXIS_30_T07 | 政策金融・銀行協調融資案件 | NOT_STARTED |\n| AXIS_30_T08 | 複数会社の競合・共同投資案件 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_30 事業別ケーススタディと因果検証：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_30_T06\n- 【確認事実】JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。（CLM-C02-0001／AXIS_30_T06）\n\n## 競合仮説\n- HYP-C02-0001（UNRESOLVED）H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。\n- HYP-C02-0002（UNRESOLVED）H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。\n\n## 問い\n- Q-C02-A30-T06-01（PARTIAL）三菱商事の米国天然ガス事業買収はどう資金手当てされたか？\n",
       "topics": [
         {
           "topic_id": "AXIS_30_T01",
@@ -7886,8 +8408,8 @@
           "topic_id": "AXIS_30_T06",
           "name": "M&A成功・失敗・撤退案件",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_30_T07",
@@ -7906,20 +8428,884 @@
       ]
     }
   ],
-  "sources": [],
-  "passages": [],
-  "observations": [],
-  "claims": [],
-  "hypotheses": [],
-  "questions": [],
-  "root_questions_not_started": 240,
-  "relations": [],
-  "search_log": [],
+  "sources": [
+    {
+      "source_id": "SRC-C02-0001",
+      "company_id": "COMPANY_02",
+      "url": "https://www.jbic.go.jp/ja/information/press/press-2026/press_00005.html",
+      "publisher": "株式会社国際協力銀行（JBIC）",
+      "title": "三菱商事株式会社による米国天然ガス開発事業者の買収資金を融資",
+      "doc_type": "プレスリリース",
+      "source_type": "BANK",
+      "access": "DIRECT",
+      "published_at": "2026-04-13",
+      "retrieved_at": "2026-11-10T01:04:20+09:00",
+      "sha256": "c5411d880c7dff925d46d4922d3a742a1c940be3aa1a2c48dc25b40429f50f39",
+      "etag": null,
+      "last_modified": null,
+      "origin_group_id": "OG-JBIC-2026-00005",
+      "shared_source_id": "SHS-JBIC-2026-00005",
+      "snapshot": "asof_2026-11-01",
+      "license": "公開資料。原文は再配布せず位置参照と最小限の抜粋のみ保存",
+      "notes": "政府全額出資の政策金融機関による自らの融資公表。金額は限度額で実行額・条件は非開示。三菱商事本体と米国法人が借入人。"
+    },
+    {
+      "source_id": "SRC-C02-0002",
+      "company_id": "COMPANY_02",
+      "url": "https://www.nexi.go.jp/topics/newsrelease/202604141136.html",
+      "publisher": "株式会社日本貿易保険（NEXI）",
+      "title": "ポーランド／西ポメラニア県・ポメラニア県243MW太陽光発電事業案件（Çalık Enerji向けクレジットライン利用・融資保険の引受）",
+      "doc_type": "ニュースリリース",
+      "source_type": "OTHER",
+      "access": "DIRECT",
+      "published_at": "2026-04-27",
+      "retrieved_at": "2026-11-10T01:04:20+09:00",
+      "sha256": "c0b761a1d06caaabdaf7204fa8acd8765f6ca9c472261155ebcc5376eef3f9e6",
+      "etag": null,
+      "last_modified": null,
+      "origin_group_id": "OG-NEXI-202604141136",
+      "shared_source_id": "SHS-NEXI-202604141136",
+      "snapshot": "asof_2026-11-01",
+      "license": "公開資料。原文は再配布せず位置参照と最小限の抜粋のみ保存",
+      "notes": "政府100%出資の貿易保険会社（ECA）。三菱商事はCalik Enerjiへの出資者・協力覚書の当事者。"
+    }
+  ],
+  "passages": [
+    {
+      "passage_id": "PSG-C02-0001",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "三菱商事株式会社（以下「三菱商事」）との間で融資金額約1,560百万米ドル（JBIC分）",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0002",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "Mitsubishi Corporation (Americas) との間で融資金額約815百万米ドル（JBIC分）",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0003",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "Aethon III LLC社、Aethon United LP社および関連する会社等を買収するために必要な資金の一部を融資",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0004",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "株式会社三菱UFJ銀行をはじめとする民間金融機関との協調融資",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0005",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "三菱商事は、天然ガス・LNG事業を中核事業の一つとして",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0006",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "近年は米国を戦略地域として、中下流事業を含むガス事業を強化しています",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0007",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "米国での上流ガスを起点とした複合的なバリューチェーンの構築を目指しています",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0008",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "第7次エネルギー基本計画（2025年2月閣議決定）において",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0009",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "LNGの長期安定確保・調達先の多角化に貢献する、我が国のエネルギー安全保障上重要な取り組み",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0010",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0002",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "NEXI・Calik Enerji・三菱商事株式会社（以下「三菱商事」）間の協力覚書に基づき、2024年5月に設定したCalik Enerji向けクレジットライン枠",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0011",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0002",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "三菱商事が出資するCalik Enerjiは",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0012",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0002",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "総発電容量255MWの太陽光発電所ポートフォリオ（うち243MWが融資実行時点で運転中）",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0013",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0002",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "トルコ、中央アジア、中東、アフリカ、欧州等において、エネルギー及びインフラプロジェクトのエンジニアリング、調達、建設、配電及び小売並びに再生可能エネルギー発電投資事業を幅広く展開",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0014",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0002",
+      "locator": {
+        "paragraph": "本文"
+      },
+      "section": "",
+      "excerpt": "コソボ共和国のZatriq風力発電案件（総発電容量73MW）",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "OBS-C02-0001",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "passage_id": "PSG-C02-0001",
+      "variable": "jbic_loan_limit_parent",
+      "value": 1560,
+      "unit": "百万米ドル",
+      "period": "2026-03-31契約",
+      "scope": "JBIC分（限度額・約）",
+      "accounting": null,
+      "measurement": "REPORTED",
+      "validity": "HISTORICAL_IMMUTABLE",
+      "notes": ""
+    },
+    {
+      "observation_id": "OBS-C02-0002",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0001",
+      "passage_id": "PSG-C02-0002",
+      "variable": "jbic_loan_limit_us_subsidiary",
+      "value": 815,
+      "unit": "百万米ドル",
+      "period": "2026-03-31契約",
+      "scope": "JBIC分（限度額・約）",
+      "accounting": null,
+      "measurement": "REPORTED",
+      "validity": "HISTORICAL_IMMUTABLE",
+      "notes": ""
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-C02-0002",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_05",
+      "topic_id": "AXIS_05_T01",
+      "question_id": "Q-C02-A05-T01-01",
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JBICの説明では、三菱商事は天然ガス・LNG事業を中核事業の一つとし、近年は米国を戦略地域として中下流を含むガス事業を強化しており、本買収を通じ米国の上流ガスを起点とした複合的なバリューチェーン構築を目指す。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0005",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0006",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0007",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "CURRENT",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "第三者（融資者）による三菱商事の戦略記述。三菱商事自身の開示とは未照合（会社サイト取得不能）。",
+      "recorded_at": "2026-11-10T01:04:20+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0004",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_13",
+      "topic_id": "AXIS_13_T03",
+      "question_id": "Q-C02-A13-T03-01",
+      "claim_type": "FACT",
+      "statement": "NEXIは2026年4月、Calik Enerji（トルコ、三菱商事が出資）によるポーランドの太陽光発電ポートフォリオ（255MW、うち243MW運転中）買収資金へのドイツ銀行東京支店の融資に融資保険を付けた。融資は、NEXI・Calik Enerji・三菱商事間の協力覚書に基づき2024年5月に設定したクレジットライン枠の下で行われる。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0010",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0011",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0012",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T01:04:20+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0006",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_13",
+      "topic_id": "AXIS_13_T01",
+      "question_id": null,
+      "claim_type": "FACT",
+      "statement": "公表資料で確認できる三菱商事関連の協調融資では、三菱UFJ銀行が民間金融機関の筆頭として記載されている（JBICのAethon案件）。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0004",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "n=1。三菱商事の取引銀行構成は会社開示（未取得）で要確認。",
+      "recorded_at": "2026-11-10T01:04:20+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0003",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_16",
+      "topic_id": "AXIS_16_T06",
+      "question_id": null,
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JBICはこの融資を、第7次エネルギー基本計画（2025年2月閣議決定）で天然ガスが重要なエネルギー源と位置づけられていることを踏まえ、LNGの長期安定確保・調達先多角化に資するエネルギー安全保障上重要な取組と位置づけている。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0008",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0009",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T01:04:20+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0005",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_17",
+      "topic_id": "AXIS_17_T04",
+      "question_id": null,
+      "claim_type": "FACT",
+      "statement": "三菱商事が出資するCalik Enerjiは、トルコ・中央アジア・中東・アフリカ・欧州等でエネルギー・インフラ案件のEPC、配電・小売、再エネ発電投資を行い、NEXIのクレジットライン枠でコソボのZatriq風力（73MW）等も支援されている。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0013",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0014",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T01:04:20+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0001",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_30",
+      "topic_id": "AXIS_30_T06",
+      "question_id": "Q-C02-A30-T06-01",
+      "claim_type": "FACT",
+      "statement": "JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0001",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0002",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0003",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0004",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "買収総額・持分比率・協調融資総額は本資料に記載なし。",
+      "recorded_at": "2026-11-10T01:04:20+09:00"
+    }
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "HYP-C02-0001",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_30",
+      "topic_ids": [
+        "AXIS_30_T06",
+        "AXIS_16_T06"
+      ],
+      "question_id": null,
+      "observed_phenomenon": "三菱商事による米国天然ガス開発事業者（Aethon）の買収資金の一部を、JBICが本体と米国法人に計約2,375百万米ドル（JBIC分）融資した。",
+      "explanation": "H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。",
+      "expected_observations": [
+        "融資の説明が政策文書（エネルギー基本計画）を引用",
+        "取得資産の生産ガスが日本・アジア向けLNGに結びつく"
+      ],
+      "disconfirming_observations": [
+        "生産ガスが米国内販売のみで日本向けLNGとの連関がない",
+        "政策と無関係な案件にも同規模の政策融資がある"
+      ],
+      "evidence_for": [
+        "CLM-C02-0002",
+        "CLM-C02-0003"
+      ],
+      "evidence_against": [],
+      "counterevidence_notes": "JBICの説明は融資者自身の正当化。生産ガスの販売先は本資料で不明。",
+      "status": "UNRESOLVED",
+      "discriminating_data_needed": "三菱商事の買収発表資料（対価・生産量・販売先）"
+    },
+    {
+      "hypothesis_id": "HYP-C02-0002",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_30",
+      "topic_ids": [
+        "AXIS_30_T06",
+        "AXIS_13_T03"
+      ],
+      "question_id": null,
+      "observed_phenomenon": "同上",
+      "explanation": "H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。",
+      "expected_observations": [
+        "買収総額に対しJBIC融資が一定割合を占める",
+        "民間銀行（MUFG等）との協調"
+      ],
+      "disconfirming_observations": [
+        "三菱商事が手元資金で十分賄える規模で、政策融資は条件面の利点のみ"
+      ],
+      "evidence_for": [
+        "CLM-C02-0001",
+        "CLM-C02-0006"
+      ],
+      "evidence_against": [],
+      "counterevidence_notes": "買収総額・三菱商事の手元流動性が未取得のため比率を計算できない。",
+      "status": "UNRESOLVED",
+      "discriminating_data_needed": "買収総額、三菱商事の現預金・有利子負債"
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q-C02-A01-T02-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_01",
+      "topic_id": "AXIS_01_T02",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「財閥と総合商社の成立・戦前商流」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 財閥と総合商社の成立・戦前商流",
+        "Mitsubishi Corporation 財閥と総合商社の成立・戦前商流",
+        "site:www.mitsubishicorp.com 財閥と総合商社の成立・戦前商流"
+      ],
+      "source_route": [
+        "有価証券報告書「沿革」",
+        "会社公式の社史・沿革ページ",
+        "国立国会図書館デジタルコレクション（社史）",
+        "学術論文（経営史学会等）"
+      ],
+      "priority": "P1",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A01-T02-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_01",
+      "topic_id": "AXIS_01_T02",
+      "parent_question_id": "Q-C02-A01-T02-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "BLOCKED",
+      "discovery_reason": "会社サイト取得不能",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A05-T01-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_05",
+      "topic_id": "AXIS_05_T01",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「原油・LNG・石炭・石油製品」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 原油・LNG・石炭・石油製品",
+        "Mitsubishi Corporation 原油・LNG・石炭・石油製品",
+        "site:www.mitsubishicorp.com 原油・LNG・石炭・石油製品"
+      ],
+      "source_route": [
+        "有価証券報告書（エネルギーセグメント）",
+        "IEA",
+        "資源エネルギー庁",
+        "JBIC/NEXIプレスリリース",
+        "プロジェクトパートナー開示"
+      ],
+      "priority": "P2",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A05-T01-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_05",
+      "topic_id": "AXIS_05_T01",
+      "parent_question_id": "Q-C02-A05-T01-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事のガス・LNG戦略は何を目指しているか？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "PARTIAL",
+      "discovery_reason": "初期全軸調査（一次資料）",
+      "claim_ids": [
+        "CLM-C02-0002"
+      ]
+    },
+    {
+      "question_id": "Q-C02-A13-T03-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_13",
+      "topic_id": "AXIS_13_T03",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「JBIC・NEXI等の公的金融・保険」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 JBIC・NEXI等の公的金融・保険",
+        "Mitsubishi Corporation JBIC・NEXI等の公的金融・保険",
+        "site:www.mitsubishicorp.com JBIC・NEXI等の公的金融・保険"
+      ],
+      "source_route": [
+        "有価証券報告書「流動性と資金調達の源泉」「金融債務注記」",
+        "JBICプレスリリース",
+        "NEXIニュースリリース",
+        "社債発行登録書・発行条件",
+        "格付会社公表"
+      ],
+      "priority": "P1",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A13-T03-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_13",
+      "topic_id": "AXIS_13_T03",
+      "parent_question_id": "Q-C02-A13-T03-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事は政策保険（NEXI）とどう関わっているか？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "ANSWERED",
+      "discovery_reason": "初期全軸調査（一次資料）",
+      "claim_ids": [
+        "CLM-C02-0004"
+      ]
+    },
+    {
+      "question_id": "Q-C02-A14-T01-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T01",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「連結財務・IFRS/J-GAAP差異」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 連結財務・IFRS/J-GAAP差異",
+        "Mitsubishi Corporation 連結財務・IFRS/J-GAAP差異",
+        "site:www.mitsubishicorp.com 連結財務・IFRS/J-GAAP差異"
+      ],
+      "source_route": [
+        "有価証券報告書（連結財務諸表・注記）",
+        "決算短信",
+        "決算説明資料"
+      ],
+      "priority": "P1",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A14-T01-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T01",
+      "parent_question_id": "Q-C02-A14-T01-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "BLOCKED",
+      "discovery_reason": "mitsubishicorp.comが全ページ403、EDINET APIはキー無しで401",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A22-T05-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_22",
+      "topic_id": "AXIS_22_T05",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「採用・教育・評価・昇進」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 採用・教育・評価・昇進",
+        "Mitsubishi Corporation 採用・教育・評価・昇進",
+        "site:www.mitsubishicorp.com 採用・教育・評価・昇進"
+      ],
+      "source_route": [
+        "有価証券報告書「従業員の状況」",
+        "統合報告書（人的資本）",
+        "会社採用ページ"
+      ],
+      "priority": "P2",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A22-T05-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_22",
+      "topic_id": "AXIS_22_T05",
+      "parent_question_id": "Q-C02-A22-T05-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事本体の従業員数・平均給与等は？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "BLOCKED",
+      "discovery_reason": "会社サイト取得不能",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A24-T01-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_24",
+      "topic_id": "AXIS_24_T01",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「大株主・機関投資家・持合い」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 大株主・機関投資家・持合い",
+        "Mitsubishi Corporation 大株主・機関投資家・持合い",
+        "site:www.mitsubishicorp.com 大株主・機関投資家・持合い"
+      ],
+      "source_route": [
+        "有価証券報告書「大株主の状況」",
+        "大量保有報告書",
+        "株価・配当データ"
+      ],
+      "priority": "P2",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A24-T01-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_24",
+      "topic_id": "AXIS_24_T01",
+      "parent_question_id": "Q-C02-A24-T01-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "BLOCKED",
+      "discovery_reason": "会社サイト取得不能",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A30-T06-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_30",
+      "topic_id": "AXIS_30_T06",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「M&A成功・失敗・撤退案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 M&A成功・失敗・撤退案件",
+        "Mitsubishi Corporation M&A成功・失敗・撤退案件",
+        "site:www.mitsubishicorp.com M&A成功・失敗・撤退案件"
+      ],
+      "source_route": [
+        "個別案件の会社リリース",
+        "JBIC/NEXI/相手先/当局の案件資料",
+        "有価証券報告書の案件記述"
+      ],
+      "priority": "P1",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A30-T06-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_30",
+      "topic_id": "AXIS_30_T06",
+      "parent_question_id": "Q-C02-A30-T06-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事の米国天然ガス事業買収はどう資金手当てされたか？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "PARTIAL",
+      "discovery_reason": "初期全軸調査（一次資料）",
+      "claim_ids": [
+        "CLM-C02-0001"
+      ]
+    }
+  ],
+  "root_questions_not_started": 233,
+  "relations": [
+    {
+      "relation_id": "REL-C02-0001",
+      "company_id": "COMPANY_02",
+      "type": "LENDS_TO",
+      "from_entity": "ENT-JBIC",
+      "to_entity": "ENT-COMPANY_02",
+      "via_entity": "ENT-AETHON",
+      "valid_from": "2026-03-31",
+      "valid_to": null,
+      "amount": {
+        "value": 1560,
+        "unit": "百万米ドル",
+        "basis": "JBIC分（約・限度額）"
+      },
+      "evidence": [
+        "PSG-C02-0001"
+      ],
+      "status": "CONFIRMED_ONE_SIDE",
+      "notes": ""
+    },
+    {
+      "relation_id": "REL-C02-0002",
+      "company_id": "COMPANY_02",
+      "type": "INVESTS_IN",
+      "from_entity": "ENT-COMPANY_02",
+      "to_entity": "ENT-CALIK-ENERJI",
+      "via_entity": null,
+      "valid_from": null,
+      "valid_to": null,
+      "amount": null,
+      "evidence": [
+        "PSG-C02-0011"
+      ],
+      "status": "CONFIRMED_ONE_SIDE",
+      "notes": "出資比率は未確認"
+    }
+  ],
+  "search_log": [
+    {
+      "log_id": "SL-C02-0001",
+      "company_id": "COMPANY_02",
+      "at": "2026-11-10T01:04:20+09:00",
+      "query": "GET https://www.mitsubishicorp.com/jp/ja/ir/ （curl・Chromium双方）",
+      "language": "ja",
+      "results": 0,
+      "adopted": [],
+      "excluded": [],
+      "status": "FETCH_FAILED",
+      "notes": "HTTP 403（全ページ）。英語版 /jp/en/ir/ も403。会社一次資料は本セッションでは取得不能（BLOCKED）。",
+      "axis_ids": [
+        "AXIS_01",
+        "AXIS_02",
+        "AXIS_03",
+        "AXIS_04",
+        "AXIS_05",
+        "AXIS_06",
+        "AXIS_07",
+        "AXIS_08",
+        "AXIS_09",
+        "AXIS_10",
+        "AXIS_11",
+        "AXIS_12",
+        "AXIS_13",
+        "AXIS_14",
+        "AXIS_15",
+        "AXIS_16",
+        "AXIS_17",
+        "AXIS_18",
+        "AXIS_19",
+        "AXIS_20",
+        "AXIS_21",
+        "AXIS_22",
+        "AXIS_23",
+        "AXIS_24",
+        "AXIS_25",
+        "AXIS_26",
+        "AXIS_27",
+        "AXIS_28",
+        "AXIS_29",
+        "AXIS_30"
+      ]
+    },
+    {
+      "log_id": "SL-C02-0002",
+      "company_id": "COMPANY_02",
+      "at": "2026-11-10T01:04:20+09:00",
+      "query": "TDnet 適時開示一覧（2026年5月の決算短信）",
+      "language": "ja",
+      "results": 0,
+      "adopted": [],
+      "excluded": [],
+      "status": "FETCH_FAILED",
+      "notes": "TDnetの公開一覧は直近約1か月分のみで、2026年5月分は404。",
+      "axis_ids": [
+        "AXIS_14"
+      ]
+    },
+    {
+      "log_id": "SL-C02-0003",
+      "company_id": "COMPANY_02",
+      "at": "2026-11-10T01:04:20+09:00",
+      "query": "JBIC 2025・2026年度本文（263件）／NEXI（30件）に「三菱商事」",
+      "language": "ja",
+      "results": 2,
+      "adopted": [
+        "SRC-C02-0001",
+        "SRC-C02-0002"
+      ],
+      "excluded": [],
+      "status": null,
+      "notes": "",
+      "axis_ids": [
+        "AXIS_13",
+        "AXIS_16",
+        "AXIS_30",
+        "AXIS_05"
+      ]
+    }
+  ],
   "models": [],
   "snapshots": [
-    "asof_2026-11-01"
+    "asof_2026-11-01",
+    "monthly_2026-11"
   ],
   "claim_status_events": [],
-  "update_history_md": "# 三菱商事：月次更新履歴\n\n| UPDATE_ID | 実行日 | 結果 | 詳細 |\n|---|---|---|---|\n",
-  "next_steps_md": "# 三菱商事：次回再開手順（NEXT_STEPS）\n\n1. `python3 research/research_gates.py --company COMPANY_02` で現状のゲートを確認する。\n2. 優先順位：P1テーマのうち AXIS_13（銀行・政策金融）/AXIS_14（財務）/AXIS_20（所有ネットワーク）から着手し、\n   `axes/AXIS_XX/QUESTIONS.jsonl` のROOT問い `Q-C02-AXX-TYY-00` を原子的な問いに分割する。\n3. 一次資料（有価証券報告書・統合報告書・決算短信・JBIC/NEXI等）を取得し、`ledger/sources.jsonl` に\n   sha256・取得日時・公開日を記録、`ledger/passages.jsonl` にページ位置を記録する。\n4. `ledger/search_log.jsonl` に検索クエリ・結果件数・採否理由を必ず追記する。\n5. 基準日 2026-11-01 より後に公開された資料は `snapshot` を `monthly_YYYY-MM` として別扱いにする。\n6. 他社フォルダの主張・出典IDを引用しない（ゲートがFAILになる）。\n"
+  "update_history_md": "# 三菱商事：月次更新履歴\n\n| UPDATE_ID | 実行日 | 結果 | 詳細 |\n|---|---|---|---|\n| UPD-2026-11-C02 | 2026-11-09 | OK | checked 2 sources {'UNCHANGED': 2}; source-driven NEEDS_RECHECK 0, scheduled re-check 0; reports to re-verify: none |\n",
+  "next_steps_md": "<!-- generated by tools/build_reports.py from open questions; edit the questions, not this file -->\n# 三菱商事：次回再開手順（NEXT_STEPS）\n\n## 1. 未解決の問い（優先順：OPEN → BACKLOG → BLOCKED）\n\n- [BLOCKED] Q-C02-A01-T02-01：三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。（会社サイト取得不能）\n- [BLOCKED] Q-C02-A14-T01-01：三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。（mitsubishicorp.comが全ページ403、EDINET APIはキー無しで401）\n- [BLOCKED] Q-C02-A22-T05-01：三菱商事本体の従業員数・平均給与等は？（会社サイト取得不能）\n- [BLOCKED] Q-C02-A24-T01-01：三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。（会社サイト取得不能）\n\n## 2. まだ一次資料の主張がない軸\n\n- AXIS_02, AXIS_03, AXIS_04, AXIS_06, AXIS_07, AXIS_08, AXIS_09, AXIS_10, AXIS_11, AXIS_12, AXIS_15, AXIS_18, AXIS_19, AXIS_20, AXIS_21, AXIS_23, AXIS_25, AXIS_26, AXIS_27, AXIS_28, AXIS_29\n\n## 3. 手順\n\n1. `python3 research/research_gates.py --company COMPANY_02` で現状を確認する。\n2. 一次資料を取得し、`research/tools/evidence_builder.py` 用のspecを書く（抜粋は原文頁と機械照合される）。\n3. 主張・仮説・問いを追加したら、該当軸の SYNTHESIS.md を手書きで更新する（自動ダイジェストのままではPASSにならない）。\n4. `research/run_all.sh` が全て通ってからコミットする。\n"
 }

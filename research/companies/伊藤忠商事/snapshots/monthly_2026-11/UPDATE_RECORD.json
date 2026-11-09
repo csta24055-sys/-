@@ -1,0 +1,40 @@
+{
+  "update_id": "UPD-2026-11-C03",
+  "company_id": "COMPANY_03",
+  "month": "2026-11",
+  "executed_at": "2026-11-09T16:18:14+00:00",
+  "sources_checked": 2,
+  "by_class": {
+    "UNCHANGED": 2
+  },
+  "sources": [
+    {
+      "source_id": "SRC-C03-0001",
+      "class": "UNCHANGED",
+      "old_sha256": "87b589ab9110df8d8b079cab4740c19da427438d2d0005f08475c80fe6ce3f76",
+      "new_sha256": "87b589ab9110df8d8b079cab4740c19da427438d2d0005f08475c80fe6ce3f76",
+      "http_status": 200,
+      "error": null
+    },
+    {
+      "source_id": "SRC-C03-0002",
+      "class": "UNCHANGED",
+      "old_sha256": "c03e8e88cce90cc90808ab279be8a67457b22233805c996f2b87274485a3de71",
+      "new_sha256": "c03e8e88cce90cc90808ab279be8a67457b22233805c996f2b87274485a3de71",
+      "http_status": 200,
+      "error": null
+    }
+  ],
+  "claims_needs_recheck": [],
+  "errors": [],
+  "claims_scheduled_recheck": [
+    "CLM-C03-0018",
+    "CLM-C03-0019"
+  ],
+  "reports_needs_recheck": [
+    "INTEGRATED_COMPANY_REPORT.md",
+    "axes/AXIS_11/SYNTHESIS.md",
+    "axes/AXIS_27/SYNTHESIS.md"
+  ],
+  "status": "OK"
+}

@@ -82,7 +82,8 @@ def main() -> int:
         "relations": read_jsonl(root / "cross_company" / "relations.jsonl"),
         "entities": read_jsonl(root / "registry" / "entities.jsonl"),
         "layers": rs.get("layers", {}),
-        "note": "会社間エッジは双方の会社台帳の原文IDが揃ったものだけを載せる。",
+        "note": "会社間エッジは双方の会社台帳の原文IDが揃ったものだけを VERIFIED_BOTH_SIDES とし、片側のみは ONE_SIDED と表示する。",
+        "report_md": (root / "cross_company" / "COMPARATIVE_REPORT.md").read_text(encoding="utf-8") if (root / "cross_company" / "COMPARATIVE_REPORT.md").exists() else "",
     })
     world = root / "world_context" / "WORLD_INTEGRATED_REPORT.md"
     write_json(out / "world.json", {"report_md": world.read_text(encoding="utf-8") if world.exists() else "", "layers": rs.get("layers", {})})

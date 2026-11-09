@@ -4,6 +4,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 python3 research/tools/scaffold.py            # 非破壊：不足分だけ作成
 python3 research/research_gates.py --write    # ゲート判定・状態ファイル・1,920スロット台帳を更新
+python3 research/tools/build_reports.py        # 会社別総合報告・軸ダイジェスト・NEXT_STEPS（手書き部は保持）
+python3 research/tools/build_cross_company.py  # 会社間比較レイヤー（各社台帳から派生）
+python3 research/research_gates.py --write
 python3 research/tools/render_views.py         # 台帳→Markdownビュー
 python3 research/tools/build_app.py            # 台帳→アプリ用JSON
 python3 -m unittest discover -s research/tests

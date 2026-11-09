@@ -1,19 +1,21 @@
 {
   "report_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 世界統合レポート\n\n**未着手。** 世界モデルは、8社の会社別研究と会社間エッジを接続して構築する派生レイヤーである。どの会社のゲートもPASSしていないため、まだ構築していない。共通の外部資料（マクロ・地政学・商品市場）は `world_context/` の各サブフォルダに置き、各社への含意は会社別フォルダで個別に分析する。\n",
   "layers": {
-    "cross_company": "NOT_STARTED",
+    "cross_company": "PARTIAL",
     "world_model": "NOT_STARTED",
     "app": "PASS",
     "monthly_update": "MANUAL_RUN_ONLY",
     "monthly_update_runs": [
-      "UPD-2026-11-COMPANY_01.json"
+      "UPD-2026-11-COMPANY_01.json",
+      "UPD-2026-11.json"
     ],
     "scheduler": {
       "verified_running": false,
       "scheduler": "GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)",
       "evidence": "ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。",
       "manual_runs": [
-        "UPD-2026-11-COMPANY_01.json（2026-11-09、手動実行、三井物産のみ、6出典すべてUNCHANGED）"
+        "UPD-2026-11-COMPANY_01.json（2026-11-09、手動、三井物産のみ、6出典すべてUNCHANGED）",
+        "UPD-2026-11.json（2026-11-09、手動、全8社、23出典すべてUNCHANGED、情報種別の再確認期限到来で4主張をNEEDS_RECHECK）"
       ],
       "rule": "Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。"
     }

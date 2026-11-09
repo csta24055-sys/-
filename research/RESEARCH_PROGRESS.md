@@ -5,13 +5,13 @@ RESEARCH_STATUS = **INCOMPLETE**（基準日 2026-11-01）
 
 | 会社 | COMPANY_RESEARCH_STATUS | 報告書 | 軸PASS | 軸進行中 | テーマ状態 | 主張 | 出典 |
 |---|---|---|---|---|---|---|---|
-| 三井物産 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 1 | {'NOT_STARTED': 234, 'IN_PROGRESS': 5, 'PASS': 1} | 16 | 6 |
-| 三菱商事 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
-| 伊藤忠商事 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
-| 住友商事 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
-| 丸紅 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
-| 双日 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
-| 豊田通商 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
-| 兼松 | NOT_STARTED | NOT_STARTED | 0/30 | 0 | {'NOT_STARTED': 240} | 0 | 0 |
+| 三井物産 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 15 | {'NOT_STARTED': 216, 'IN_PROGRESS': 23, 'PASS': 1} | 35 | 6 |
+| 三菱商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 5 | {'NOT_STARTED': 234, 'IN_PROGRESS': 6} | 6 | 2 |
+| 伊藤忠商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 29 | {'NOT_STARTED': 197, 'IN_PROGRESS': 43} | 45 | 2 |
+| 住友商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 24 | {'NOT_STARTED': 202, 'IN_PROGRESS': 37, 'PASS': 1} | 44 | 4 |
+| 丸紅 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 15 | {'IN_PROGRESS': 21, 'NOT_STARTED': 219} | 21 | 4 |
+| 双日 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 18 | {'IN_PROGRESS': 25, 'NOT_STARTED': 215} | 25 | 1 |
+| 豊田通商 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 17 | {'NOT_STARTED': 215, 'IN_PROGRESS': 24, 'PASS': 1} | 29 | 3 |
+| 兼松 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 18 | {'IN_PROGRESS': 25, 'NOT_STARTED': 215} | 26 | 1 |
 
-横断レイヤー: {'cross_company': 'NOT_STARTED', 'world_model': 'NOT_STARTED', 'app': 'PASS', 'monthly_update': 'MANUAL_RUN_ONLY', 'monthly_update_runs': ['UPD-2026-11-COMPANY_01.json'], 'scheduler': {'verified_running': False, 'scheduler': 'GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)', 'evidence': 'ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。', 'manual_runs': ['UPD-2026-11-COMPANY_01.json（2026-11-09、手動実行、三井物産のみ、6出典すべてUNCHANGED）'], 'rule': 'Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。'}}
+横断レイヤー: {'cross_company': 'PARTIAL', 'world_model': 'NOT_STARTED', 'app': 'PASS', 'monthly_update': 'MANUAL_RUN_ONLY', 'monthly_update_runs': ['UPD-2026-11-COMPANY_01.json', 'UPD-2026-11.json'], 'scheduler': {'verified_running': False, 'scheduler': 'GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)', 'evidence': 'ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。', 'manual_runs': ['UPD-2026-11-COMPANY_01.json（2026-11-09、手動、三井物産のみ、6出典すべてUNCHANGED）', 'UPD-2026-11.json（2026-11-09、手動、全8社、23出典すべてUNCHANGED、情報種別の再確認期限到来で4主張をNEEDS_RECHECK）'], 'rule': 'Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。'}}

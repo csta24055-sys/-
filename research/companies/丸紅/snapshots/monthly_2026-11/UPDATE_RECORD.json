@@ -1,0 +1,54 @@
+{
+  "update_id": "UPD-2026-11-C05",
+  "company_id": "COMPANY_05",
+  "month": "2026-11",
+  "executed_at": "2026-11-09T16:18:14+00:00",
+  "sources_checked": 4,
+  "by_class": {
+    "UNCHANGED": 4
+  },
+  "sources": [
+    {
+      "source_id": "SRC-C05-0001",
+      "class": "UNCHANGED",
+      "old_sha256": "f33f44fc09aa6f633594d46016997c1b875afbcbc62d158fd98cb2143523c3bf",
+      "new_sha256": "f33f44fc09aa6f633594d46016997c1b875afbcbc62d158fd98cb2143523c3bf",
+      "http_status": 200,
+      "error": null
+    },
+    {
+      "source_id": "SRC-C05-0002",
+      "class": "UNCHANGED",
+      "old_sha256": "4c3a029e569bb919137eb43ea07507c78d52395ae530d78c8b53136746b28ee1",
+      "new_sha256": "4c3a029e569bb919137eb43ea07507c78d52395ae530d78c8b53136746b28ee1",
+      "http_status": 200,
+      "error": null
+    },
+    {
+      "source_id": "SRC-C05-0003",
+      "class": "UNCHANGED",
+      "old_sha256": "5f9516f06e4331912653f65d9d3512fe6651c7b4315cf6a83961204515712092",
+      "new_sha256": "5f9516f06e4331912653f65d9d3512fe6651c7b4315cf6a83961204515712092",
+      "http_status": 200,
+      "error": null
+    },
+    {
+      "source_id": "SRC-C05-0004",
+      "class": "UNCHANGED",
+      "old_sha256": "c03f2e801d3ef069d753105856e74761c50577f6345484b9ef82e72ab4152a89",
+      "new_sha256": "c03f2e801d3ef069d753105856e74761c50577f6345484b9ef82e72ab4152a89",
+      "http_status": 200,
+      "error": null
+    }
+  ],
+  "claims_needs_recheck": [],
+  "errors": [],
+  "claims_scheduled_recheck": [
+    "CLM-C05-0007"
+  ],
+  "reports_needs_recheck": [
+    "INTEGRATED_COMPANY_REPORT.md",
+    "axes/AXIS_24/SYNTHESIS.md"
+  ],
+  "status": "OK"
+}

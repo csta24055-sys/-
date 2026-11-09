@@ -2,19 +2,21 @@
   "RESEARCH_STATUS": "INCOMPLETE",
   "as_of": "2026-11-01",
   "layers": {
-    "cross_company": "NOT_STARTED",
+    "cross_company": "PARTIAL",
     "world_model": "NOT_STARTED",
     "app": "PASS",
     "monthly_update": "MANUAL_RUN_ONLY",
     "monthly_update_runs": [
-      "UPD-2026-11-COMPANY_01.json"
+      "UPD-2026-11-COMPANY_01.json",
+      "UPD-2026-11.json"
     ],
     "scheduler": {
       "verified_running": false,
       "scheduler": "GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)",
       "evidence": "ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。",
       "manual_runs": [
-        "UPD-2026-11-COMPANY_01.json（2026-11-09、手動実行、三井物産のみ、6出典すべてUNCHANGED）"
+        "UPD-2026-11-COMPANY_01.json（2026-11-09、手動、三井物産のみ、6出典すべてUNCHANGED）",
+        "UPD-2026-11.json（2026-11-09、手動、全8社、23出典すべてUNCHANGED、情報種別の再確認期限到来で4主張をNEEDS_RECHECK）"
       ],
       "rule": "Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。"
     }
@@ -30,32 +32,41 @@
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
-      "axes_in_progress": 1,
+      "axes_in_progress": 15,
       "topics_registered": 240,
       "topics_by_state": {
-        "NOT_STARTED": 234,
-        "IN_PROGRESS": 5,
+        "NOT_STARTED": 216,
+        "IN_PROGRESS": 23,
         "PASS": 1
       },
-      "questions_registered": 257,
+      "questions_registered": 270,
       "sources_direct": 6,
       "independent_origin_groups": 6,
-      "passages": 36,
-      "observations": 47,
+      "passages": 89,
+      "observations": 57,
       "claims_by_type": {
-        "FACT": 9,
-        "ANALYSIS": 4,
-        "PARTY_CLAIM": 3
+        "FACT": 23,
+        "ANALYSIS": 8,
+        "PARTY_CLAIM": 3,
+        "FORECAST": 1
       },
-      "hypotheses": 4,
+      "hypotheses": 6,
       "counterevidence_items": 1,
-      "relations": 14,
+      "relations": 16,
       "models": [
         "MDL-C01-0001"
       ],
       "errors": 0,
       "source_ablation_claims_losing_all_support": {
         "OG-C01-YUHO-107": [
+          "CLM-C01-0017",
+          "CLM-C01-0018",
+          "CLM-C01-0019",
+          "CLM-C01-0021",
+          "CLM-C01-0022",
+          "CLM-C01-0032",
+          "CLM-C01-0028",
+          "CLM-C01-0024",
           "CLM-C01-0003",
           "CLM-C01-0005",
           "CLM-C01-0007",
@@ -64,7 +75,18 @@
           "CLM-C01-0011",
           "CLM-C01-0012",
           "CLM-C01-0013",
-          "CLM-C01-0016"
+          "CLM-C01-0016",
+          "CLM-C01-0025",
+          "CLM-C01-0026",
+          "CLM-C01-0027",
+          "CLM-C01-0029",
+          "CLM-C01-0020",
+          "CLM-C01-0030",
+          "CLM-C01-0031",
+          "CLM-C01-0034",
+          "CLM-C01-0035",
+          "CLM-C01-0023",
+          "CLM-C01-0033"
         ],
         "OG-JBIC-2025-00043": [
           "CLM-C01-0006",
@@ -77,6 +99,14 @@
           "CLM-C01-0004"
         ],
         "PUBLISHER:三井物産株式会社（EDINET提出書類の会社サイト掲載PDF）": [
+          "CLM-C01-0017",
+          "CLM-C01-0018",
+          "CLM-C01-0019",
+          "CLM-C01-0021",
+          "CLM-C01-0022",
+          "CLM-C01-0032",
+          "CLM-C01-0028",
+          "CLM-C01-0024",
           "CLM-C01-0003",
           "CLM-C01-0005",
           "CLM-C01-0007",
@@ -85,7 +115,18 @@
           "CLM-C01-0011",
           "CLM-C01-0012",
           "CLM-C01-0013",
-          "CLM-C01-0016"
+          "CLM-C01-0016",
+          "CLM-C01-0025",
+          "CLM-C01-0026",
+          "CLM-C01-0027",
+          "CLM-C01-0029",
+          "CLM-C01-0020",
+          "CLM-C01-0030",
+          "CLM-C01-0031",
+          "CLM-C01-0034",
+          "CLM-C01-0035",
+          "CLM-C01-0023",
+          "CLM-C01-0033"
         ],
         "PUBLISHER:株式会社国際協力銀行（JBIC）": [
           "CLM-C01-0001",
@@ -102,58 +143,83 @@
     {
       "company_id": "COMPANY_02",
       "company_name": "三菱商事",
-      "company_research_status": "NOT_STARTED",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
-      "axes_in_progress": 0,
+      "axes_in_progress": 5,
       "topics_registered": 240,
       "topics_by_state": {
-        "NOT_STARTED": 240
+        "NOT_STARTED": 234,
+        "IN_PROGRESS": 6
       },
-      "questions_registered": 240,
-      "sources_direct": 0,
-      "independent_origin_groups": 0,
-      "passages": 0,
-      "observations": 0,
-      "claims_by_type": {},
-      "hypotheses": 0,
+      "questions_registered": 247,
+      "sources_direct": 2,
+      "independent_origin_groups": 2,
+      "passages": 14,
+      "observations": 2,
+      "claims_by_type": {
+        "PARTY_CLAIM": 2,
+        "FACT": 4
+      },
+      "hypotheses": 2,
       "counterevidence_items": 0,
-      "relations": 0,
+      "relations": 2,
       "models": [],
       "errors": 0,
-      "source_ablation_claims_losing_all_support": {},
+      "source_ablation_claims_losing_all_support": {
+        "OG-JBIC-2026-00005": [
+          "CLM-C02-0002",
+          "CLM-C02-0006",
+          "CLM-C02-0003",
+          "CLM-C02-0001"
+        ],
+        "OG-NEXI-202604141136": [
+          "CLM-C02-0004",
+          "CLM-C02-0005"
+        ],
+        "PUBLISHER:株式会社国際協力銀行（JBIC）": [
+          "CLM-C02-0002",
+          "CLM-C02-0006",
+          "CLM-C02-0003",
+          "CLM-C02-0001"
+        ],
+        "PUBLISHER:株式会社日本貿易保険（NEXI）": [
+          "CLM-C02-0004",
+          "CLM-C02-0005"
+        ]
+      },
       "as_of": "2026-11-01"
     },
     {
       "company_id": "COMPANY_03",
       "company_name": "伊藤忠商事",
-      "company_research_status": "IN_PROGRESS",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
       "axes_in_progress": 29,
       "topics_registered": 240,
       "topics_by_state": {
-        "NOT_STARTED": 198,
-        "IN_PROGRESS": 42
+        "NOT_STARTED": 197,
+        "IN_PROGRESS": 43
       },
-      "questions_registered": 262,
+      "questions_registered": 263,
       "sources_direct": 2,
       "independent_origin_groups": 2,
-      "passages": 105,
+      "passages": 106,
       "observations": 13,
       "claims_by_type": {
-        "FACT": 29,
+        "FACT": 30,
         "ANALYSIS": 4,
         "PARTY_CLAIM": 9,
         "FORECAST": 2
       },
       "hypotheses": 3,
       "counterevidence_items": 1,
-      "relations": 3,
+      "relations": 4,
       "models": [],
       "errors": 0,
       "source_ablation_claims_losing_all_support": {
@@ -185,6 +251,7 @@
           "CLM-C03-0031",
           "CLM-C03-0017",
           "CLM-C03-0034",
+          "CLM-C03-0045",
           "CLM-C03-0035",
           "CLM-C03-0036",
           "CLM-C03-0011",
@@ -233,6 +300,7 @@
           "CLM-C03-0031",
           "CLM-C03-0017",
           "CLM-C03-0034",
+          "CLM-C03-0045",
           "CLM-C03-0035",
           "CLM-C03-0036",
           "CLM-C03-0011",
@@ -259,31 +327,32 @@
     {
       "company_id": "COMPANY_04",
       "company_name": "住友商事",
-      "company_research_status": "IN_PROGRESS",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
       "axes_in_progress": 24,
       "topics_registered": 240,
       "topics_by_state": {
-        "NOT_STARTED": 203,
-        "IN_PROGRESS": 37
+        "NOT_STARTED": 202,
+        "IN_PROGRESS": 37,
+        "PASS": 1
       },
-      "questions_registered": 257,
+      "questions_registered": 261,
       "sources_direct": 4,
       "independent_origin_groups": 4,
-      "passages": 100,
+      "passages": 111,
       "observations": 11,
       "claims_by_type": {
-        "FACT": 27,
-        "ANALYSIS": 4,
-        "PARTY_CLAIM": 7,
+        "FACT": 29,
+        "ANALYSIS": 5,
+        "PARTY_CLAIM": 9,
         "FORECAST": 1
       },
-      "hypotheses": 3,
-      "counterevidence_items": 0,
-      "relations": 3,
+      "hypotheses": 6,
+      "counterevidence_items": 1,
+      "relations": 4,
       "models": [],
       "errors": 0,
       "source_ablation_claims_losing_all_support": {
@@ -314,6 +383,7 @@
           "CLM-C04-0029",
           "CLM-C04-0030",
           "CLM-C04-0025",
+          "CLM-C04-0044",
           "CLM-C04-0027",
           "CLM-C04-0034",
           "CLM-C04-0035",
@@ -322,7 +392,9 @@
           "CLM-C04-0010",
           "CLM-C04-0039",
           "CLM-C04-0028",
-          "CLM-C04-0036"
+          "CLM-C04-0036",
+          "CLM-C04-0041",
+          "CLM-C04-0042"
         ],
         "OG-JBIC-2025-00100": [
           "CLM-C04-0031",
@@ -331,7 +403,10 @@
         "OG-JBIC-2025-00146": [
           "CLM-C04-0032"
         ],
-        "OG-JBIC-2026-00008": [],
+        "OG-JBIC-2026-00008": [
+          "CLM-C04-0040",
+          "CLM-C04-0043"
+        ],
         "PUBLISHER:住友商事株式会社": [
           "CLM-C04-0001",
           "CLM-C04-0002",
@@ -359,6 +434,7 @@
           "CLM-C04-0029",
           "CLM-C04-0030",
           "CLM-C04-0025",
+          "CLM-C04-0044",
           "CLM-C04-0027",
           "CLM-C04-0034",
           "CLM-C04-0035",
@@ -367,12 +443,16 @@
           "CLM-C04-0010",
           "CLM-C04-0039",
           "CLM-C04-0028",
-          "CLM-C04-0036"
+          "CLM-C04-0036",
+          "CLM-C04-0041",
+          "CLM-C04-0042"
         ],
         "PUBLISHER:株式会社国際協力銀行（JBIC）": [
           "CLM-C04-0031",
           "CLM-C04-0032",
-          "CLM-C04-0033"
+          "CLM-C04-0033",
+          "CLM-C04-0040",
+          "CLM-C04-0043"
         ]
       },
       "as_of": "2026-11-01"
@@ -380,35 +460,93 @@
     {
       "company_id": "COMPANY_05",
       "company_name": "丸紅",
-      "company_research_status": "NOT_STARTED",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
-      "axes_in_progress": 0,
+      "axes_in_progress": 15,
       "topics_registered": 240,
       "topics_by_state": {
-        "NOT_STARTED": 240
+        "IN_PROGRESS": 21,
+        "NOT_STARTED": 219
       },
-      "questions_registered": 240,
-      "sources_direct": 0,
-      "independent_origin_groups": 0,
-      "passages": 0,
-      "observations": 0,
-      "claims_by_type": {},
-      "hypotheses": 0,
-      "counterevidence_items": 0,
-      "relations": 0,
+      "questions_registered": 252,
+      "sources_direct": 4,
+      "independent_origin_groups": 3,
+      "passages": 52,
+      "observations": 8,
+      "claims_by_type": {
+        "FACT": 11,
+        "PARTY_CLAIM": 7,
+        "ANALYSIS": 3
+      },
+      "hypotheses": 2,
+      "counterevidence_items": 1,
+      "relations": 2,
       "models": [],
       "errors": 0,
-      "source_ablation_claims_losing_all_support": {},
+      "source_ablation_claims_losing_all_support": {
+        "OG-C05-COMPANY-DISCLOSURE": [
+          "CLM-C05-0001",
+          "CLM-C05-0012",
+          "CLM-C05-0014",
+          "CLM-C05-0013",
+          "CLM-C05-0009",
+          "CLM-C05-0002",
+          "CLM-C05-0004",
+          "CLM-C05-0005",
+          "CLM-C05-0020",
+          "CLM-C05-0010",
+          "CLM-C05-0011",
+          "CLM-C05-0015",
+          "CLM-C05-0006",
+          "CLM-C05-0007",
+          "CLM-C05-0008",
+          "CLM-C05-0003",
+          "CLM-C05-0021",
+          "CLM-C05-0016"
+        ],
+        "OG-JBIC-2025-00151": [
+          "CLM-C05-0017",
+          "CLM-C05-0019"
+        ],
+        "OG-JBIC-2026-00077": [
+          "CLM-C05-0018"
+        ],
+        "PUBLISHER:丸紅株式会社": [
+          "CLM-C05-0001",
+          "CLM-C05-0012",
+          "CLM-C05-0014",
+          "CLM-C05-0013",
+          "CLM-C05-0009",
+          "CLM-C05-0002",
+          "CLM-C05-0004",
+          "CLM-C05-0005",
+          "CLM-C05-0020",
+          "CLM-C05-0010",
+          "CLM-C05-0011",
+          "CLM-C05-0015",
+          "CLM-C05-0006",
+          "CLM-C05-0007",
+          "CLM-C05-0008",
+          "CLM-C05-0003",
+          "CLM-C05-0021",
+          "CLM-C05-0016"
+        ],
+        "PUBLISHER:株式会社国際協力銀行（JBIC）": [
+          "CLM-C05-0018",
+          "CLM-C05-0017",
+          "CLM-C05-0019"
+        ]
+      },
       "as_of": "2026-11-01"
     },
     {
       "company_id": "COMPANY_06",
       "company_name": "双日",
-      "company_research_status": "IN_PROGRESS",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
@@ -495,8 +633,8 @@
     {
       "company_id": "COMPANY_07",
       "company_name": "豊田通商",
-      "company_research_status": "IN_PROGRESS",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,
@@ -504,20 +642,21 @@
       "topics_registered": 240,
       "topics_by_state": {
         "NOT_STARTED": 215,
-        "IN_PROGRESS": 25
+        "IN_PROGRESS": 24,
+        "PASS": 1
       },
-      "questions_registered": 253,
+      "questions_registered": 255,
       "sources_direct": 3,
       "independent_origin_groups": 2,
-      "passages": 64,
+      "passages": 70,
       "observations": 10,
       "claims_by_type": {
-        "FACT": 16,
+        "FACT": 17,
         "ANALYSIS": 3,
-        "PARTY_CLAIM": 6,
+        "PARTY_CLAIM": 8,
         "FORECAST": 1
       },
-      "hypotheses": 2,
+      "hypotheses": 4,
       "counterevidence_items": 1,
       "relations": 2,
       "models": [],
@@ -534,6 +673,7 @@
           "CLM-C07-0007",
           "CLM-C07-0019",
           "CLM-C07-0020",
+          "CLM-C07-0027",
           "CLM-C07-0016",
           "CLM-C07-0017",
           "CLM-C07-0018",
@@ -551,10 +691,14 @@
           "CLM-C07-0025"
         ],
         "OG-NEXI-202607141235": [
-          "CLM-C07-0010"
+          "CLM-C07-0010",
+          "CLM-C07-0028",
+          "CLM-C07-0029"
         ],
         "PUBLISHER:株式会社日本貿易保険（NEXI）": [
-          "CLM-C07-0010"
+          "CLM-C07-0010",
+          "CLM-C07-0028",
+          "CLM-C07-0029"
         ],
         "PUBLISHER:豊田通商株式会社": [
           "CLM-C07-0001",
@@ -567,6 +711,7 @@
           "CLM-C07-0007",
           "CLM-C07-0019",
           "CLM-C07-0020",
+          "CLM-C07-0027",
           "CLM-C07-0016",
           "CLM-C07-0017",
           "CLM-C07-0018",
@@ -589,8 +734,8 @@
     {
       "company_id": "COMPANY_08",
       "company_name": "兼松",
-      "company_research_status": "IN_PROGRESS",
-      "report_status": "NOT_STARTED",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
       "report_missing_sections": [],
       "axes_registered": 30,
       "axes_pass": 0,

@@ -28,7 +28,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "tools"))
 from common import (  # noqa: E402
-    ACCESS, AS_OF, ASOF_SNAPSHOT, CLAIM_TYPES, DIRECTIONS, RELATIONS, SOURCE_TYPES, TEMPLATE_MARKER, VALIDITY,
+    ACCESS, AS_OF, ASOF_SNAPSHOT, AUTO_DIGEST_MARKER, CLAIM_TYPES, DIRECTIONS, RELATIONS, SOURCE_TYPES, TEMPLATE_MARKER, VALIDITY,
     axes, companies, company_dir, read_csv, read_json, read_jsonl, research_root, short_code, write_csv, write_json,
 )
 
@@ -269,6 +269,16 @@ def check_model(d: dict, m: dict, ctx: Ctx) -> None:
 
 # --------------------------------------------------------------------------------------------- gates
 
+def effective_validity(d: dict) -> dict:
+    """Latest validity per claim: the ledger value overlaid by append-only claim_status_events (monthly updates)."""
+    if "_eff" not in d:
+        eff = {}
+        for e in sorted(d["status_events"], key=lambda e: e.get("at", "")):
+            eff[e["claim_id"]] = e.get("new_validity")
+        d["_eff"] = eff
+    return d["_eff"]
+
+
 def topic_gate(d: dict, t: dict) -> dict:
     tid = t["topic_id"]
     cl = [x for x in d["claims"] if x.get("topic_id") == tid]
@@ -280,6 +290,8 @@ def topic_gate(d: dict, t: dict) -> dict:
     direct_sources = {psg[e["passage_id"]]["source_id"] for x in cl for e in x.get("evidence", [])
                       if e.get("passage_id") in psg and src.get(psg[e["passage_id"]]["source_id"], {}).get("access") == "DIRECT"}
     syn = d["synthesis"].get(t["axis_id"]) or ""
+    eff = effective_validity(d)
+    pending = [x["claim_id"] for x in cl if eff.get(x["claim_id"], x.get("validity")) == "NEEDS_RECHECK"]
     axis_logged = any(t["axis_id"] in s.get("axis_ids", []) for s in d["search_log"])
     checks = {
         "has_claims>=2": len(cl) >= 2,
@@ -289,8 +301,9 @@ def topic_gate(d: dict, t: dict) -> dict:
         "hypotheses_have_counterevidence_notes": bool(hy) and all(h.get("counterevidence_notes") for h in hy),
         "atomic_questions_resolved_or_backlogged": bool(qs) and all(q.get("status") in OK_QUESTION_STATES for q in qs),
         "unknowns_recorded": any(q.get("status") in ("PARTIAL", "BACKLOG", "EVALUATED_UNRESOLVED", "OPEN") for q in qs) or any(x.get("claim_type") == "UNKNOWN" for x in cl),
-        "synthesis_written": TEMPLATE_MARKER not in syn and tid in syn,
+        "synthesis_written": TEMPLATE_MARKER not in syn and AUTO_DIGEST_MARKER not in syn and tid in syn,
         "search_logged": axis_logged,
+        "no_claims_pending_recheck": not pending,
     }
     if t.get("applicability") == "NOT_APPLICABLE":
         computed = "NOT_APPLICABLE" if t.get("na_reason") and t.get("na_source_ids") else "INVALID_NA"
@@ -302,7 +315,7 @@ def topic_gate(d: dict, t: dict) -> dict:
         computed = "NOT_STARTED"
     return {"topic_id": tid, "axis_id": t["axis_id"], "declared": t.get("declared_state"), "computed": computed,
             "checks": checks, "claims": len(cl), "hypotheses": len(hy), "questions": len(qs),
-            "independent_origin_groups": len(groups), "direct_sources": sorted(direct_sources),
+            "independent_origin_groups": len(groups), "direct_sources": sorted(direct_sources), "claims_pending_recheck": pending,
             "contradicting_evidence": sum(1 for x in cl for e in x.get("evidence", []) if e.get("direction") == "CONTRADICT")
             + sum(1 for h in hy if h.get("evidence_against"))}
 
@@ -317,6 +330,9 @@ def company_gate(d: dict, ctx: Ctx) -> dict:
         if t.get("applicability") == "NOT_APPLICABLE" and g["computed"] == "INVALID_NA":
             ctx.err("E_NA_WITHOUT_REASON", cid, f"{t['topic_id']} NOT_APPLICABLE without reason/source", t["topic_id"])
             g["state"] = "BLOCKED"
+        elif dec == "PASS" and g["computed"] != "PASS" and [k for k, v in g["checks"].items() if not v] == ["no_claims_pending_recheck"]:
+            # evidence still exists but a monthly update flagged it: the PASS is suspended, not an integrity error
+            g["state"] = "NEEDS_RECHECK"
         elif dec == "PASS" and g["computed"] != "PASS":
             failed = [k for k, v in g["checks"].items() if not v]
             ctx.err("E_UNSUPPORTED_PASS", cid, f"{t['topic_id']} declared PASS but gate fails: {failed}", t["topic_id"])
@@ -336,7 +352,9 @@ def company_gate(d: dict, ctx: Ctx) -> dict:
     for a in sorted({t["axis_id"] for t in topics}):
         ts = [t for t in topics if t["axis_id"] == a]
         states = Counter(t["state"] for t in ts)
-        if all(t["state"] in ("PASS", "NOT_APPLICABLE") for t in ts):
+        if any(t["state"] == "NEEDS_RECHECK" for t in ts):
+            st = "NEEDS_RECHECK"
+        elif all(t["state"] in ("PASS", "NOT_APPLICABLE") for t in ts):
             st = "PASS"
         elif states.get("BLOCKED"):
             st = "BLOCKED"
@@ -346,7 +364,7 @@ def company_gate(d: dict, ctx: Ctx) -> dict:
             st = "IN_PROGRESS"
         axes_out[a] = {"state": st, "topics": dict(states)}
 
-    report_written = TEMPLATE_MARKER not in d["report"] and bool(d["report"].strip())
+    report_written = TEMPLATE_MARKER not in d["report"] and AUTO_DIGEST_MARKER not in d["report"] and bool(d["report"].strip())
     report_sections = [h for h in REPORT_HEADINGS if h not in d["report"]]
     company_errors = [e for e in ctx.errors if e["company_id"] == cid]
     axis_pass = sum(1 for v in axes_out.values() if v["state"] == "PASS")
@@ -398,10 +416,43 @@ def company_gate(d: dict, ctx: Ctx) -> dict:
     }
 
 
+XREL_STATUS = ("VERIFIED_BOTH_SIDES", "ONE_SIDED")
+
+
+def check_cross_relations(rel: list[dict], ctx: Ctx) -> None:
+    """Every cross-company edge must point back to passages in each company's OWN ledger (directive STEP 7)."""
+    ledgers = {}
+    for c in companies():
+        ledgers[c["company_id"]] = {p["passage_id"] for p in read_jsonl(company_dir(c) / "ledger" / "passages.jsonl")}
+    seen = set()
+    for r in rel:
+        rid = r.get("relation_id", "?")
+        if rid in seen:
+            ctx.err("E_DUP_ID", "CROSS", f"{rid} duplicated", rid)
+        seen.add(rid)
+        if r.get("status") not in XREL_STATUS:
+            ctx.err("E_ENUM", "CROSS", f"{rid}.status={r.get('status')}", rid)
+        if r.get("causal") not in (False, None):
+            ctx.err("E_CAUSAL_ON_EXISTENCE", "CROSS", f"{rid}: relation records existence only; causal claims belong in hypotheses", rid)
+        for side in ("a", "b"):
+            cid = r.get(f"company_{side}")
+            ev = r.get(f"evidence_{side}", [])
+            if cid not in ledgers:
+                ctx.err("E_MISSING_REF", "CROSS", f"{rid}: unknown company_{side} {cid}", rid)
+                continue
+            for pid in ev:
+                if pid not in ledgers[cid]:
+                    ctx.err("E_FOREIGN_EVIDENCE", "CROSS", f"{rid}: {pid} is not in {cid}'s ledger", rid)
+        both = bool(r.get("evidence_a")) and bool(r.get("evidence_b"))
+        if r.get("status") == "VERIFIED_BOTH_SIDES" and not both:
+            ctx.err("E_UNSUPPORTED_PASS", "CROSS", f"{rid}: VERIFIED_BOTH_SIDES without evidence from both companies", rid)
+
+
 def layer_gates(company_results: list[dict], ctx: Ctx) -> dict:
     root = research_root()
     passed = {r["company_id"] for r in company_results if r["company_research_status"] == "PASS"}
     rel = read_jsonl(root / "cross_company" / "relations.jsonl")
+    check_cross_relations(rel, ctx)
     if not rel:
         cross = "NOT_STARTED"
     else:

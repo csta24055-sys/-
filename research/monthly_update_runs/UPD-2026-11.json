@@ -1,0 +1,346 @@
+{
+  "run_id": "UPD-2026-11",
+  "month": "2026-11",
+  "executed_at": "2026-11-09T16:18:14+00:00",
+  "mode": "write",
+  "companies": [
+    {
+      "update_id": "UPD-2026-11-C01",
+      "company_id": "COMPANY_01",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 6,
+      "by_class": {
+        "UNCHANGED": 6
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C01-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "3a95df323cc528f19fdf525d11c77eb93435b8124f06a801aa148fb9e3ab0b51",
+          "new_sha256": "3a95df323cc528f19fdf525d11c77eb93435b8124f06a801aa148fb9e3ab0b51",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C01-0002",
+          "class": "UNCHANGED",
+          "old_sha256": "a1b869977b235bc4151a3eb5f3857646a33553fc0131ecd2c72a23ea250ea030",
+          "new_sha256": "a1b869977b235bc4151a3eb5f3857646a33553fc0131ecd2c72a23ea250ea030",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C01-0003",
+          "class": "UNCHANGED",
+          "old_sha256": "b3209f2b4708aba28c9267e095c5ef299750d4761398c23da6d7b4551a2fdaf6",
+          "new_sha256": "b3209f2b4708aba28c9267e095c5ef299750d4761398c23da6d7b4551a2fdaf6",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C01-0004",
+          "class": "UNCHANGED",
+          "old_sha256": "ca79a71d1e2b97bdbc0a56ea73a176273cd463365ce3f84f857acfd2df16cbad",
+          "new_sha256": "ca79a71d1e2b97bdbc0a56ea73a176273cd463365ce3f84f857acfd2df16cbad",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C01-0005",
+          "class": "UNCHANGED",
+          "old_sha256": "6a6e5840a656a346f925d5622ffa5c146225558de34e00e70bc62b5eef6742db",
+          "new_sha256": "6a6e5840a656a346f925d5622ffa5c146225558de34e00e70bc62b5eef6742db",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C01-0006",
+          "class": "UNCHANGED",
+          "old_sha256": "627971fe3e0f981193abbb205e64b48b513d164db1ce05c36525036ef9ade67d",
+          "new_sha256": "627971fe3e0f981193abbb205e64b48b513d164db1ce05c36525036ef9ade67d",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "claims_scheduled_recheck": [
+        "CLM-C01-0024"
+      ],
+      "reports_needs_recheck": [
+        "INTEGRATED_COMPANY_REPORT.md",
+        "axes/AXIS_12/SYNTHESIS.md"
+      ],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C02",
+      "company_id": "COMPANY_02",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 2,
+      "by_class": {
+        "UNCHANGED": 2
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C02-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "c5411d880c7dff925d46d4922d3a742a1c940be3aa1a2c48dc25b40429f50f39",
+          "new_sha256": "c5411d880c7dff925d46d4922d3a742a1c940be3aa1a2c48dc25b40429f50f39",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C02-0002",
+          "class": "UNCHANGED",
+          "old_sha256": "c0b761a1d06caaabdaf7204fa8acd8765f6ca9c472261155ebcc5376eef3f9e6",
+          "new_sha256": "c0b761a1d06caaabdaf7204fa8acd8765f6ca9c472261155ebcc5376eef3f9e6",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "reports_needs_recheck": [],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C03",
+      "company_id": "COMPANY_03",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 2,
+      "by_class": {
+        "UNCHANGED": 2
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C03-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "87b589ab9110df8d8b079cab4740c19da427438d2d0005f08475c80fe6ce3f76",
+          "new_sha256": "87b589ab9110df8d8b079cab4740c19da427438d2d0005f08475c80fe6ce3f76",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C03-0002",
+          "class": "UNCHANGED",
+          "old_sha256": "c03e8e88cce90cc90808ab279be8a67457b22233805c996f2b87274485a3de71",
+          "new_sha256": "c03e8e88cce90cc90808ab279be8a67457b22233805c996f2b87274485a3de71",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "claims_scheduled_recheck": [
+        "CLM-C03-0018",
+        "CLM-C03-0019"
+      ],
+      "reports_needs_recheck": [
+        "INTEGRATED_COMPANY_REPORT.md",
+        "axes/AXIS_11/SYNTHESIS.md",
+        "axes/AXIS_27/SYNTHESIS.md"
+      ],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C04",
+      "company_id": "COMPANY_04",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 4,
+      "by_class": {
+        "UNCHANGED": 4
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C04-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "9ff4cb78ea56864ec64d3ce9c53fe764b95e1476437ea65793a8cdc59ae77c24",
+          "new_sha256": "9ff4cb78ea56864ec64d3ce9c53fe764b95e1476437ea65793a8cdc59ae77c24",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C04-0002",
+          "class": "UNCHANGED",
+          "old_sha256": "61c454b5d9bd7638503076a53a852c50a123f36bd0283d87164b14dfc2ba37d0",
+          "new_sha256": "61c454b5d9bd7638503076a53a852c50a123f36bd0283d87164b14dfc2ba37d0",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C04-0003",
+          "class": "UNCHANGED",
+          "old_sha256": "574e386544714933e7b2826a26bd3780a370869d58465c8c9b1d728cf5ea2f33",
+          "new_sha256": "574e386544714933e7b2826a26bd3780a370869d58465c8c9b1d728cf5ea2f33",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C04-0004",
+          "class": "UNCHANGED",
+          "old_sha256": "bec3953ee14cc9d09c40633f7d9274edcb71715c430cb835e9f97c7fa3cd1f8e",
+          "new_sha256": "bec3953ee14cc9d09c40633f7d9274edcb71715c430cb835e9f97c7fa3cd1f8e",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "reports_needs_recheck": [],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C05",
+      "company_id": "COMPANY_05",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 4,
+      "by_class": {
+        "UNCHANGED": 4
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C05-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "f33f44fc09aa6f633594d46016997c1b875afbcbc62d158fd98cb2143523c3bf",
+          "new_sha256": "f33f44fc09aa6f633594d46016997c1b875afbcbc62d158fd98cb2143523c3bf",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C05-0002",
+          "class": "UNCHANGED",
+          "old_sha256": "4c3a029e569bb919137eb43ea07507c78d52395ae530d78c8b53136746b28ee1",
+          "new_sha256": "4c3a029e569bb919137eb43ea07507c78d52395ae530d78c8b53136746b28ee1",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C05-0003",
+          "class": "UNCHANGED",
+          "old_sha256": "5f9516f06e4331912653f65d9d3512fe6651c7b4315cf6a83961204515712092",
+          "new_sha256": "5f9516f06e4331912653f65d9d3512fe6651c7b4315cf6a83961204515712092",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C05-0004",
+          "class": "UNCHANGED",
+          "old_sha256": "c03f2e801d3ef069d753105856e74761c50577f6345484b9ef82e72ab4152a89",
+          "new_sha256": "c03f2e801d3ef069d753105856e74761c50577f6345484b9ef82e72ab4152a89",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "claims_scheduled_recheck": [
+        "CLM-C05-0007"
+      ],
+      "reports_needs_recheck": [
+        "INTEGRATED_COMPANY_REPORT.md",
+        "axes/AXIS_24/SYNTHESIS.md"
+      ],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C06",
+      "company_id": "COMPANY_06",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 1,
+      "by_class": {
+        "UNCHANGED": 1
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C06-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "692bac59eb3c4eecab5cfc91d29cfb2007001c5683abb79cd6df4925fae2e4c9",
+          "new_sha256": "692bac59eb3c4eecab5cfc91d29cfb2007001c5683abb79cd6df4925fae2e4c9",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "reports_needs_recheck": [],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C07",
+      "company_id": "COMPANY_07",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 3,
+      "by_class": {
+        "UNCHANGED": 3
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C07-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "7674e7908cc125afe4f30209a3f529948206534e3ebedefed4c2125e2c181e86",
+          "new_sha256": "7674e7908cc125afe4f30209a3f529948206534e3ebedefed4c2125e2c181e86",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C07-0002",
+          "class": "UNCHANGED",
+          "old_sha256": "19a3374e7d40829d6c5559d1cbbe25e90658a5b3e31c824d1f933f8ec814a350",
+          "new_sha256": "19a3374e7d40829d6c5559d1cbbe25e90658a5b3e31c824d1f933f8ec814a350",
+          "http_status": 200,
+          "error": null
+        },
+        {
+          "source_id": "SRC-C07-0003",
+          "class": "UNCHANGED",
+          "old_sha256": "be86375b3ea49724a892e265d2510346ef9c88844bff5696de15905166fb5b30",
+          "new_sha256": "be86375b3ea49724a892e265d2510346ef9c88844bff5696de15905166fb5b30",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "reports_needs_recheck": [],
+      "status": "OK"
+    },
+    {
+      "update_id": "UPD-2026-11-C08",
+      "company_id": "COMPANY_08",
+      "month": "2026-11",
+      "executed_at": "2026-11-09T16:18:14+00:00",
+      "sources_checked": 1,
+      "by_class": {
+        "UNCHANGED": 1
+      },
+      "sources": [
+        {
+          "source_id": "SRC-C08-0001",
+          "class": "UNCHANGED",
+          "old_sha256": "17a0ac3c27c0ae170714613e736cacc36b470e7d66ff77f053a961ca47f7e435",
+          "new_sha256": "17a0ac3c27c0ae170714613e736cacc36b470e7d66ff77f053a961ca47f7e435",
+          "http_status": 200,
+          "error": null
+        }
+      ],
+      "claims_needs_recheck": [],
+      "errors": [],
+      "reports_needs_recheck": [],
+      "status": "OK"
+    }
+  ],
+  "cross_company": {
+    "cross_company_relations": 7,
+    "flagged": [],
+    "world_model": "NOT_RECOMPUTED (world model not yet built)"
+  },
+  "status": "COMPLETED"
+}

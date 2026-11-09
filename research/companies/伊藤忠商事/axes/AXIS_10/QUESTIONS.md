@@ -3,7 +3,7 @@
 
 | QUESTION_ID | 親 | 種別 | 状態 | 問い | 一次情報源ルート |
 |---|---|---|---|---|---|
-| Q-C03-A10-T01-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「AI基盤モデル・クラウド・データセンター」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
+| Q-C03-A10-T01-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 伊藤忠商事において「AI基盤モデル・クラウド・データセンター」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C03-A10-T02-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「DX投資と事業生産性」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C03-A10-T03-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「企業間データ連携と情報セキュリティ」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C03-A10-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「半導体・通信・サイバーリスク」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
@@ -11,3 +11,4 @@
 | Q-C03-A10-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「SaaS・プラットフォーム事業化」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C03-A10-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「自動化による職種・商流の変化」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C03-A10-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 伊藤忠商事において「AI活用の信頼性・監査・競争優位」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
+| Q-C03-A10-T01-01 | Q-C03-A10-T01-00 | ATOMIC | OPEN | 伊藤忠のAI・データセンター関連投資は？ |  |

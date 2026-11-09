@@ -45,8 +45,8 @@ h3 { font-size: 1rem; margin: 20px 0 8px; }
 .lede { color: var(--muted); max-width: 68ch; margin: 0 0 20px; }
 
 .pill { display: inline-block; font: 500 .72rem/1.6 var(--f-mono); letter-spacing: .04em; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
-.s-PASS, .s-COMPLETE { color: var(--pass); background: var(--pass-bg); }
-.s-IN_PROGRESS, .s-PARTIAL, .s-WRITTEN_PARTIAL, .s-INCOMPLETE, .s-DATA_ONLY, .s-MANUAL_RUN_ONLY { color: var(--prog); background: var(--prog-bg); }
+.s-PASS, .s-COMPLETE, .s-VERIFIED_BOTH_SIDES { color: var(--pass); background: var(--pass-bg); }
+.s-IN_PROGRESS, .s-PARTIAL, .s-NEEDS_RECHECK, .s-ONE_SIDED, .s-SUPPORTED_WEAKLY, .s-UNRESOLVED, .s-WEAKENED, .s-WRITTEN_PARTIAL, .s-INCOMPLETE, .s-DATA_ONLY, .s-MANUAL_RUN_ONLY { color: var(--prog); background: var(--prog-bg); }
 .s-NOT_STARTED, .s-NOT_APPLICABLE, .s-UNKNOWN { color: var(--none); background: var(--none-bg); }
 .s-FAIL, .s-BLOCKED { color: var(--fail); background: var(--fail-bg); }
 

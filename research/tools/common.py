@@ -35,6 +35,7 @@ DIRECTIONS = ("SUPPORT", "CONTRADICT", "CONTEXT", "NONE")
 VALIDITY = ("CURRENT", "SUPERSEDED", "EXPIRED", "NEEDS_RECHECK", "HISTORICAL_IMMUTABLE", "DISPUTED")
 
 TEMPLATE_MARKER = "<!-- TEMPLATE:NOT_STARTED -->"
+AUTO_DIGEST_MARKER = "<!-- AUTO_DIGEST -->"  # machine-assembled view; never counts as a written synthesis
 
 
 def research_root() -> Path:

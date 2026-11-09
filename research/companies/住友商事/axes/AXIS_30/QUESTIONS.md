@@ -8,6 +8,10 @@
 | Q-C04-A30-T03-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「物流・港湾・PPPインフラ案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C04-A30-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「データセンター・不動産案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C04-A30-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「食品・消費財・ヘルスケア案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
-| Q-C04-A30-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「M&A成功・失敗・撤退案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
+| Q-C04-A30-T06-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 住友商事において「M&A成功・失敗・撤退案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C04-A30-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「政策金融・銀行協調融資案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C04-A30-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「複数会社の競合・共同投資案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
+| Q-C04-A30-T06-01 | Q-C04-A30-T06-00 | ATOMIC | PARTIAL | Air Lease買収はどう資金手当てされたか？ |  |
+| Q-C04-A30-T06-02 | Q-C04-A30-T06-00 | ATOMIC | PARTIAL | Air Lease買収は住友商事の航空機リース事業の位置づけをどう変えるか？ |  |
+| Q-C04-A30-T06-03 | Q-C04-A30-T06-00 | ATOMIC | BACKLOG | Air Leaseの買収対価と、住友商事・SMFLの持分割合は？ |  |
+| Q-C04-A30-T06-04 | Q-C04-A30-T06-00 | ATOMIC | BACKLOG | 買収完了後（2026年4月以降）の業績寄与は？ |  |

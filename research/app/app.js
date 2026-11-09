@@ -258,8 +258,9 @@ async function viewNetwork() {
   setNav("network");
   const [d, x] = await Promise.all([loadCompanies(), getJSON("data/cross_company.json")]);
   $view.innerHTML = `<h1>会社間ネットワーク</h1><p class="lede">8社それぞれの独立研究が終わった後に、出資・JV・協調融資・競合などを双方の原資料IDで接続する層です。片方の会社の資料だけで確認した関係はここに載せず、各社ページの「関係」に置いています。</p>
-    <div class="row">状態 ${pill(x.layers.cross_company || "NOT_STARTED")}<span class="muted">検証済みの会社間エッジ: ${x.relations.length}件</span></div>
-    ${x.relations.length ? "" : '<div class="warn">会社間エッジはまだ0件です。接続の対象になる会社別研究が、まだPASSしていないためです。推測でエッジは作りません。</div>'}
+    <div class="row">状態 ${pill(x.layers.cross_company || "NOT_STARTED")}<span class="muted">会社間エッジ: 両側確認 ${x.relations.filter((r) => r.status === "VERIFIED_BOTH_SIDES").length}件・片側のみ ${x.relations.filter((r) => r.status === "ONE_SIDED").length}件（存在の記録で、因果は主張しない）</span></div>
+    ${x.relations.length ? "" : '<div class="warn">会社間エッジはまだ0件です。推測でエッジは作りません。</div>'}
+    ${x.report_md ? md(x.report_md) : ""}
     <h2>各社が自社の台帳で確認した外部関係</h2><div class="tbl"><table><thead><tr><th>会社</th><th>会社ゲート</th><th>主張</th><th>開く</th></tr></thead><tbody>${d.companies.map((c) => `<tr><td>${esc(c.name_ja)}</td><td>${pill(c.status)}</td><td>${c.claims}</td><td><a href="#/c/${c.short_code}/relations">関係を見る</a></td></tr>`).join("")}</tbody></table></div>`;
 }
 async function viewWorld() {

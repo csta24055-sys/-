@@ -1,8 +1,8 @@
 {
   "company_id": "COMPANY_07",
   "company_name": "豊田通商",
-  "company_research_status": "IN_PROGRESS",
-  "report_status": "NOT_STARTED",
+  "company_research_status": "PARTIAL",
+  "report_status": "WRITTEN_PARTIAL",
   "report_missing_sections": [],
   "axes_registered": 30,
   "axes_pass": 0,
@@ -10,20 +10,21 @@
   "topics_registered": 240,
   "topics_by_state": {
     "NOT_STARTED": 215,
-    "IN_PROGRESS": 25
+    "IN_PROGRESS": 24,
+    "PASS": 1
   },
-  "questions_registered": 253,
+  "questions_registered": 255,
   "sources_direct": 3,
   "independent_origin_groups": 2,
-  "passages": 64,
+  "passages": 70,
   "observations": 10,
   "claims_by_type": {
-    "FACT": 16,
+    "FACT": 17,
     "ANALYSIS": 3,
-    "PARTY_CLAIM": 6,
+    "PARTY_CLAIM": 8,
     "FORECAST": 1
   },
-  "hypotheses": 2,
+  "hypotheses": 4,
   "counterevidence_items": 1,
   "relations": 2,
   "models": [],
@@ -40,6 +41,7 @@
       "CLM-C07-0007",
       "CLM-C07-0019",
       "CLM-C07-0020",
+      "CLM-C07-0027",
       "CLM-C07-0016",
       "CLM-C07-0017",
       "CLM-C07-0018",
@@ -57,10 +59,14 @@
       "CLM-C07-0025"
     ],
     "OG-NEXI-202607141235": [
-      "CLM-C07-0010"
+      "CLM-C07-0010",
+      "CLM-C07-0028",
+      "CLM-C07-0029"
     ],
     "PUBLISHER:株式会社日本貿易保険（NEXI）": [
-      "CLM-C07-0010"
+      "CLM-C07-0010",
+      "CLM-C07-0028",
+      "CLM-C07-0029"
     ],
     "PUBLISHER:豊田通商株式会社": [
       "CLM-C07-0001",
@@ -73,6 +79,7 @@
       "CLM-C07-0007",
       "CLM-C07-0019",
       "CLM-C07-0020",
+      "CLM-C07-0027",
       "CLM-C07-0016",
       "CLM-C07-0017",
       "CLM-C07-0018",
@@ -171,8 +178,9 @@
     "AXIS_13": {
       "state": "IN_PROGRESS",
       "topics": {
-        "IN_PROGRESS": 3,
-        "NOT_STARTED": 5
+        "IN_PROGRESS": 2,
+        "NOT_STARTED": 5,
+        "PASS": 1
       }
     },
     "AXIS_14": {
@@ -304,13 +312,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -328,13 +338,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -352,7 +364,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 1,
@@ -361,6 +374,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 1,
       "state": "IN_PROGRESS"
     },
@@ -378,13 +392,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -402,13 +418,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -426,13 +444,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -450,7 +470,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": true,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -459,6 +480,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -476,13 +498,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -500,13 +524,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -524,7 +550,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 2,
       "hypotheses": 2,
@@ -533,6 +560,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 1,
       "state": "IN_PROGRESS"
     },
@@ -550,13 +578,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -574,13 +604,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -598,13 +630,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -622,13 +656,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -646,13 +682,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -670,13 +708,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -694,13 +734,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -718,13 +760,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -742,13 +786,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -766,13 +812,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -790,13 +838,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -814,13 +864,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -838,13 +890,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -862,13 +916,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -886,7 +942,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": true,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -895,6 +952,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -912,7 +970,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -921,6 +980,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -938,13 +998,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -962,13 +1024,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -986,13 +1050,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1010,13 +1076,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1034,13 +1102,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1058,13 +1128,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1082,13 +1154,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1106,13 +1180,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1130,7 +1206,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -1139,6 +1216,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -1156,13 +1234,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1180,13 +1260,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1204,13 +1286,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1228,13 +1312,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1252,13 +1338,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1276,13 +1364,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1300,13 +1390,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1324,13 +1416,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1348,13 +1442,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1372,13 +1468,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1396,13 +1494,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1420,13 +1520,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1444,13 +1546,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1468,13 +1572,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1492,13 +1598,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1516,13 +1624,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1540,13 +1650,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1564,13 +1676,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1588,13 +1702,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1612,13 +1728,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1636,13 +1754,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1660,7 +1780,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -1669,6 +1790,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -1686,13 +1808,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1710,13 +1834,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1734,13 +1860,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1758,13 +1886,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1782,13 +1912,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1806,13 +1938,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1830,13 +1964,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1854,13 +1990,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1878,13 +2016,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1902,13 +2042,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1926,13 +2068,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1950,13 +2094,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1974,13 +2120,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -1998,13 +2146,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2022,13 +2172,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2046,13 +2198,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2070,13 +2224,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2094,13 +2250,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2118,13 +2276,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2142,13 +2302,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2166,13 +2328,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2190,13 +2354,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2214,13 +2380,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2238,13 +2406,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2262,13 +2432,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2286,13 +2458,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2310,13 +2484,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2334,13 +2510,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2358,13 +2536,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2382,13 +2562,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2406,13 +2588,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2430,13 +2614,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2454,13 +2640,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2478,13 +2666,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2502,13 +2692,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2526,13 +2718,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2550,13 +2744,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2574,13 +2770,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2598,13 +2796,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2621,8 +2821,9 @@
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
-        "synthesis_written": false,
-        "search_logged": true
+        "synthesis_written": true,
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -2631,6 +2832,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -2648,41 +2850,46 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
     {
       "topic_id": "AXIS_13_T03",
       "axis_id": "AXIS_13",
-      "declared": "IN_PROGRESS",
-      "computed": "IN_PROGRESS",
+      "declared": "PASS",
+      "computed": "PASS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
-        "independent_origin_groups>=2": false,
-        "competing_hypotheses>=2": false,
-        "hypotheses_have_counterevidence_notes": false,
+        "independent_origin_groups>=2": true,
+        "competing_hypotheses>=2": true,
+        "hypotheses_have_counterevidence_notes": true,
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": true,
-        "synthesis_written": false,
-        "search_logged": true
+        "synthesis_written": true,
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
-      "claims": 1,
-      "hypotheses": 0,
-      "questions": 2,
-      "independent_origin_groups": 1,
+      "claims": 4,
+      "hypotheses": 2,
+      "questions": 4,
+      "independent_origin_groups": 2,
       "direct_sources": [
+        "SRC-C07-0001",
         "SRC-C07-0003"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "IN_PROGRESS"
+      "state": "PASS"
     },
     {
       "topic_id": "AXIS_13_T04",
@@ -2698,13 +2905,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2722,13 +2931,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2746,13 +2957,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2769,8 +2982,9 @@
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
-        "synthesis_written": false,
-        "search_logged": true
+        "synthesis_written": true,
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -2779,6 +2993,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -2796,13 +3011,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2820,7 +3037,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -2829,6 +3047,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -2846,7 +3065,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -2855,6 +3075,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -2872,13 +3093,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2896,13 +3119,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2920,13 +3145,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2944,13 +3171,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -2968,7 +3197,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -2977,6 +3207,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -2994,13 +3225,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3018,13 +3251,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3042,13 +3277,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3066,13 +3303,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3090,13 +3329,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3114,13 +3355,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3138,13 +3381,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3162,13 +3407,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3186,13 +3433,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3210,13 +3459,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3234,13 +3485,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3258,13 +3511,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3282,13 +3537,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3306,13 +3563,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3330,13 +3589,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3354,13 +3615,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3374,17 +3637,19 @@
         "has_direct_fact": false,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
-        "hypotheses_have_counterevidence_notes": false,
+        "hypotheses_have_counterevidence_notes": true,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
-      "hypotheses": 0,
+      "hypotheses": 1,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3402,13 +3667,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3426,13 +3693,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3450,7 +3719,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -3459,6 +3729,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -3471,20 +3742,22 @@
         "has_claims>=2": false,
         "has_direct_fact": false,
         "independent_origin_groups>=2": false,
-        "competing_hypotheses>=2": false,
+        "competing_hypotheses>=2": true,
         "hypotheses_have_counterevidence_notes": true,
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
-      "hypotheses": 1,
+      "hypotheses": 2,
       "questions": 0,
       "independent_origin_groups": 1,
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -3502,13 +3775,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3526,13 +3801,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3550,13 +3827,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3574,13 +3853,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3598,13 +3879,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3622,13 +3905,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3646,13 +3931,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3670,13 +3957,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3694,13 +3983,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3718,13 +4009,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3742,13 +4035,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3766,13 +4061,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3790,13 +4087,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3814,13 +4113,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3838,13 +4139,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3862,13 +4165,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3886,13 +4191,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3910,13 +4217,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3934,13 +4243,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3958,13 +4269,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -3982,13 +4295,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4006,7 +4321,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -4015,6 +4331,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -4032,13 +4349,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4056,13 +4375,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4080,13 +4401,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": true,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 1,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4104,13 +4427,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4128,13 +4453,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4152,13 +4479,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4176,13 +4505,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4200,7 +4531,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -4209,6 +4541,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -4226,13 +4559,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4250,13 +4585,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4274,13 +4611,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4298,13 +4637,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4322,13 +4663,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4346,13 +4689,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4370,7 +4715,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -4379,6 +4725,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -4396,13 +4743,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4420,13 +4769,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4444,13 +4795,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4468,7 +4821,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -4477,6 +4831,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -4494,13 +4849,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4518,13 +4875,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4542,13 +4901,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4566,13 +4927,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4590,13 +4953,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4614,7 +4979,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -4623,6 +4989,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -4640,13 +5007,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4664,13 +5033,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4688,13 +5059,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4712,13 +5085,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4736,13 +5111,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4760,7 +5137,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 1,
@@ -4769,6 +5147,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 1,
       "state": "IN_PROGRESS"
     },
@@ -4786,13 +5165,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4810,13 +5191,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4834,13 +5217,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4858,13 +5243,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4882,13 +5269,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4906,13 +5295,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4930,13 +5321,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4954,13 +5347,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -4978,13 +5373,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5002,13 +5399,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5026,13 +5425,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5050,13 +5451,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5074,13 +5477,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5098,13 +5503,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5122,13 +5529,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5146,13 +5555,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5170,13 +5581,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5194,13 +5607,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5218,13 +5633,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5242,7 +5659,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -5251,6 +5669,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -5268,13 +5687,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5292,13 +5713,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5316,13 +5739,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5340,7 +5765,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -5349,6 +5775,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -5366,13 +5793,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5390,13 +5819,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5414,13 +5845,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5438,13 +5871,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5462,13 +5897,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5486,13 +5923,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5510,13 +5949,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5534,7 +5975,8 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -5543,6 +5985,7 @@
       "direct_sources": [
         "SRC-C07-0001"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -5560,13 +6003,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5584,13 +6029,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5608,13 +6055,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5632,13 +6081,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5656,13 +6107,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5680,13 +6133,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5704,13 +6159,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5728,13 +6185,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5752,13 +6211,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5776,13 +6237,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5800,13 +6263,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5824,13 +6289,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5848,13 +6315,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5872,13 +6341,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5896,7 +6367,8 @@
         "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 1,
       "hypotheses": 0,
@@ -5905,6 +6377,7 @@
       "direct_sources": [
         "SRC-C07-0002"
       ],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "IN_PROGRESS"
     },
@@ -5922,13 +6395,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5946,13 +6421,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5970,13 +6447,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -5994,13 +6473,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -6018,13 +6499,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -6042,13 +6525,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -6066,13 +6551,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     },
@@ -6090,13 +6577,15 @@
         "atomic_questions_resolved_or_backlogged": false,
         "unknowns_recorded": false,
         "synthesis_written": false,
-        "search_logged": true
+        "search_logged": true,
+        "no_claims_pending_recheck": true
       },
       "claims": 0,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
       "direct_sources": [],
+      "claims_pending_recheck": [],
       "contradicting_evidence": 0,
       "state": "NOT_STARTED"
     }
