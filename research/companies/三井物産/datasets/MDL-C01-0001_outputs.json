@@ -1,0 +1,143 @@
+{
+  "model_id": "MDL-C01-0001",
+  "version": "1.0.0",
+  "unit_note": "億円=1e8円, 百万円=1e6円",
+  "results": {
+    "debt_reconciliation:FY2025(2026-03-31)": {
+      "reconstructed_oku": 51228.76,
+      "formula": "(short_term_bank_borrowings + long_term_debt_total_incl_current - lease_liabilities)/100",
+      "inputs": [
+        "OBS-C01-0014",
+        "OBS-C01-0016",
+        "OBS-C01-0018"
+      ]
+    },
+    "debt_reconciliation:FY2024(2025-03-31)": {
+      "reconstructed_oku": 43098.77,
+      "formula": "(short_term_bank_borrowings + long_term_debt_total_incl_current - lease_liabilities)/100",
+      "inputs": [
+        "OBS-C01-0015",
+        "OBS-C01-0017",
+        "OBS-C01-0019"
+      ]
+    },
+    "debt_reconciliation": {
+      "reconstructed_oku": 51228.76,
+      "reported_oku": 51229,
+      "diff_oku": -0.24,
+      "change_reconstructed_oku": 8129.99,
+      "change_reported_oku": 8130,
+      "passes": true,
+      "inputs": [
+        "OBS-C01-0001",
+        "OBS-C01-0002"
+      ]
+    },
+    "maturity_profile": {
+      "sum_oku": 51229,
+      "reported_total_oku": 51229,
+      "passes": true,
+      "le1y_share_pct": 10.88,
+      "reported_le1y_share_pct": 10.9,
+      "gt5y_share_pct": 33.93,
+      "inputs": [
+        "OBS-C01-0005",
+        "OBS-C01-0006",
+        "OBS-C01-0007",
+        "OBS-C01-0008",
+        "OBS-C01-0009",
+        "OBS-C01-0010",
+        "OBS-C01-0011",
+        "OBS-C01-0012"
+      ]
+    },
+    "hybrid": {
+      "note_sum_oku": 4200.0,
+      "reported_oku": 4200,
+      "passes": true,
+      "equity_credit_oku": 2100,
+      "share_of_interest_bearing_debt_pct": 8.2,
+      "inputs": [
+        "OBS-C01-0024",
+        "OBS-C01-0025",
+        "OBS-C01-0003",
+        "OBS-C01-0004"
+      ]
+    },
+    "govt_secured_share": {
+      "govt_secured_oku": 578.33,
+      "share_of_interest_bearing_debt_pct": 1.13,
+      "change_oku": 143.54,
+      "caveat": "無担保のJBIC貸付は『銀行及びその他』に混在し識別不能。政策金融総額の下限でも上限でもない。",
+      "inputs": [
+        "OBS-C01-0020",
+        "OBS-C01-0021",
+        "OBS-C01-0001"
+      ]
+    },
+    "jbic_fy2025": {
+      "contracts": 5,
+      "press_releases": 4,
+      "jbic_limit_musd": 1353,
+      "cofinance_total_musd": 2187,
+      "jbic_share_pct": 61.9,
+      "private_cofinance_musd": 834,
+      "jbic_limit_parent_borrower_musd": 1039,
+      "co_lender_count": {
+        "三井住友銀行": 3,
+        "みずほ銀行": 1
+      },
+      "inputs": [
+        "OBS-C01-0038",
+        "OBS-C01-0040",
+        "OBS-C01-0042",
+        "OBS-C01-0044",
+        "OBS-C01-0046",
+        "OBS-C01-0039",
+        "OBS-C01-0041",
+        "OBS-C01-0043",
+        "OBS-C01-0045",
+        "OBS-C01-0047"
+      ]
+    },
+    "rhodes_policy_share": {
+      "loan_musd": 430,
+      "fx_jpy_per_usd": 151.09,
+      "loan_oku": 649.7,
+      "capex_oku": 7238,
+      "share_pct": {
+        "fx_-10pct": 8.08,
+        "base": 8.98,
+        "fx_+10pct": 9.87
+      },
+      "caveat": "限度額・平均レート換算。分子は子会社MIODの借入、分母は連結の設備投資支出。",
+      "inputs": [
+        "OBS-C01-0037",
+        "OBS-C01-0036",
+        "OBS-C01-0047"
+      ]
+    },
+    "cash_gap": {
+      "computed_post_return_cf_oku": -5880,
+      "reported_oku": -5880,
+      "diff_oku": 0,
+      "net_debt_change_oku": 8089,
+      "net_der": [
+        0.44,
+        0.47
+      ],
+      "note": "会社概数（10億円単位）のため数十億円の差は丸め誤差の範囲",
+      "inputs": [
+        "OBS-C01-0027",
+        "OBS-C01-0028",
+        "OBS-C01-0029",
+        "OBS-C01-0030",
+        "OBS-C01-0031",
+        "OBS-C01-0032",
+        "OBS-C01-0033",
+        "OBS-C01-0034",
+        "OBS-C01-0035"
+      ]
+    }
+  }
+}

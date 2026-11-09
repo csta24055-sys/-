@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>総合商社研究台帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#/">総合商社研究台帳</a>
+    <nav class="mainnav" aria-label="主要画面">
+      <a href="#/" data-nav="home">8社ポータル</a>
+      <a href="#/network" data-nav="network">会社間ネットワーク</a>
+      <a href="#/world" data-nav="world">世界統合</a>
+      <a href="#/gates" data-nav="gates">研究ゲート</a>
+    </nav>
+    <span class="asof" id="asof">基準日 —</span>
+  </div>
+</header>
+<main id="view" class="wrap" tabindex="-1"><p class="muted">読み込み中…</p></main>
+<footer class="wrap foot">
+  データは <code>research/</code> の台帳（JSONL）から <code>tools/build_app.py</code> で生成。未検証・未着手の項目は表示上も未着手のまま扱う。
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

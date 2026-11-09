@@ -1,0 +1,141 @@
+{
+  "relations": [],
+  "entities": [
+    {
+      "entity_id": "ENT-COMPANY_01",
+      "name": "三井物産株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_01"
+    },
+    {
+      "entity_id": "ENT-COMPANY_02",
+      "name": "三菱商事株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_02"
+    },
+    {
+      "entity_id": "ENT-COMPANY_03",
+      "name": "伊藤忠商事株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_03"
+    },
+    {
+      "entity_id": "ENT-COMPANY_04",
+      "name": "住友商事株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_04"
+    },
+    {
+      "entity_id": "ENT-COMPANY_05",
+      "name": "丸紅株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_05"
+    },
+    {
+      "entity_id": "ENT-COMPANY_06",
+      "name": "双日株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_06"
+    },
+    {
+      "entity_id": "ENT-COMPANY_07",
+      "name": "豊田通商株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_07"
+    },
+    {
+      "entity_id": "ENT-COMPANY_08",
+      "name": "兼松株式会社",
+      "type": "SHOSHA",
+      "country": "JP",
+      "company_id": "COMPANY_08"
+    },
+    {
+      "entity_id": "ENT-JBIC",
+      "name": "株式会社国際協力銀行",
+      "type": "GOVT_FINANCIAL_INSTITUTION",
+      "country": "JP"
+    },
+    {
+      "entity_id": "ENT-NEXI",
+      "name": "株式会社日本貿易保険",
+      "type": "GOVT_EXPORT_CREDIT_AGENCY",
+      "country": "JP"
+    },
+    {
+      "entity_id": "ENT-SMBC",
+      "name": "株式会社三井住友銀行",
+      "type": "BANK",
+      "country": "JP"
+    },
+    {
+      "entity_id": "ENT-MIZUHO-BANK",
+      "name": "株式会社みずほ銀行",
+      "type": "BANK",
+      "country": "JP"
+    },
+    {
+      "entity_id": "ENT-MIOD",
+      "name": "Mitsui Iron Ore Development Pty. Ltd.",
+      "type": "SUBSIDIARY",
+      "country": "AU",
+      "parent": "ENT-COMPANY_01"
+    },
+    {
+      "entity_id": "ENT-BLUE-POINT",
+      "name": "Blue Point Number One, LLC",
+      "type": "PROJECT_COMPANY",
+      "country": "US"
+    },
+    {
+      "entity_id": "ENT-ETG",
+      "name": "ETC Group",
+      "type": "INVESTEE",
+      "country": "MU"
+    },
+    {
+      "entity_id": "ENT-RUWAIS-LNG",
+      "name": "Ruwais LNGプロジェクト",
+      "type": "PROJECT",
+      "country": "AE"
+    },
+    {
+      "entity_id": "ENT-ACI-LOGISTICS",
+      "name": "ACI Logistics Limited",
+      "type": "COUNTERPARTY",
+      "country": "BD"
+    },
+    {
+      "entity_id": "ENT-NATIONAL-INDEMNITY",
+      "name": "National Indemnity Company（Berkshire Hathaway Inc.の完全子会社）",
+      "type": "SHAREHOLDER",
+      "country": "US"
+    }
+  ],
+  "layers": {
+    "cross_company": "NOT_STARTED",
+    "world_model": "NOT_STARTED",
+    "app": "PASS",
+    "monthly_update": "MANUAL_RUN_ONLY",
+    "monthly_update_runs": [
+      "UPD-2026-11-COMPANY_01.json"
+    ],
+    "scheduler": {
+      "verified_running": false,
+      "scheduler": "GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)",
+      "evidence": "ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。",
+      "manual_runs": [
+        "UPD-2026-11-COMPANY_01.json（2026-11-09、手動実行、三井物産のみ、6出典すべてUNCHANGED）"
+      ],
+      "rule": "Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。"
+    }
+  },
+  "note": "会社間エッジは双方の会社台帳の原文IDが揃ったものだけを載せる。"
+}

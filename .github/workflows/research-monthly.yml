@@ -1,0 +1,37 @@
+name: research-monthly-update
+# 会社別の月次再収集 → ゲート → ビュー・アプリデータ再生成。
+# 結果はArtifactとしてアップロードするだけで、リポジトリへ自動コミットはしない（人が差分を確認してから取り込む）。
+on:
+  schedule:
+    - cron: "17 3 2 * *"   # 毎月2日 03:17 UTC
+  workflow_dispatch:
+  push:
+    paths: ["research/**"]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python3 research/research_gates.py
+      - run: python3 -m unittest discover -s research/tests -v
+  monthly:
+    if: github.event_name != 'push'
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python3 research/tools/monthly_update.py --month "$(date -u +%Y-%m)"
+      - run: python3 research/research_gates.py --write
+      - run: python3 research/tools/render_views.py && python3 research/tools/build_app.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: research-monthly-${{ github.run_id }}
+          path: |
+            research/monthly_update_runs/
+            research/companies/*/snapshots/
+            research/companies/*/ledger/claim_status_events.jsonl
+            research/research_status.json

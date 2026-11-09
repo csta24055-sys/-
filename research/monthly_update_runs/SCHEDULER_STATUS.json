@@ -1,0 +1,7 @@
+{
+  "verified_running": false,
+  "scheduler": "GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)",
+  "evidence": "ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。",
+  "manual_runs": ["UPD-2026-11-COMPANY_01.json（2026-11-09、手動実行、三井物産のみ、6出典すべてUNCHANGED）"],
+  "rule": "Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。"
+}

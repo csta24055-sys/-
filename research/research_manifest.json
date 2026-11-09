@@ -1,0 +1,31 @@
+{
+  "project": "総合商社インテリジェンス研究（会社最上位）",
+  "directive": "directive/CLAUDE_CODE_MASTER_DIRECTIVE.md",
+  "directive_revision": "2026-11-09",
+  "as_of": "2026-11-01",
+  "hierarchy": [
+    "companies(8)",
+    "axes(30 per company)",
+    "topics(240 per company = 1,920 slots)",
+    "questions",
+    "evidence(source/passage/observation/claim/hypothesis)",
+    "INTEGRATED_COMPANY_REPORT",
+    "cross_company",
+    "world_context"
+  ],
+  "companies": "registry/company_registry.csv",
+  "company_topic_slots": "registry/company_axis_registry.csv",
+  "gates": "research_gates.py",
+  "status": "research_status.json",
+  "tools": {
+    "scaffold": "tools/scaffold.py",
+    "render": "tools/render_views.py",
+    "app_build": "tools/build_app.py",
+    "monthly_update": "tools/monthly_update.py"
+  },
+  "tests": [
+    "tests/test_gates.py",
+    "tests/app_smoke.js"
+  ],
+  "app": "app/index.html"
+}

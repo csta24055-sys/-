@@ -1,0 +1,292 @@
+{
+  "RESEARCH_STATUS": "INCOMPLETE",
+  "as_of": "2026-11-01",
+  "layers": {
+    "cross_company": "NOT_STARTED",
+    "world_model": "NOT_STARTED",
+    "app": "PASS",
+    "monthly_update": "MANUAL_RUN_ONLY",
+    "monthly_update_runs": [
+      "UPD-2026-11-COMPANY_01.json"
+    ],
+    "scheduler": {
+      "verified_running": false,
+      "scheduler": "GitHub Actions cron (.github/workflows/research-monthly.yml, 毎月2日 03:17 UTC)",
+      "evidence": "ワークフロー定義をコミットしただけ。GitHub上での起動・完了はまだ一度も確認していない。",
+      "manual_runs": [
+        "UPD-2026-11-COMPANY_01.json（2026-11-09、手動実行、三井物産のみ、6出典すべてUNCHANGED）"
+      ],
+      "rule": "Actionsの実行履歴で成功を確認するまで verified_running=false のままにし、アプリにも『自動稼働中』と表示しない。"
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "companies": [
+    {
+      "company_id": "COMPANY_01",
+      "company_name": "三井物産",
+      "company_research_status": "PARTIAL",
+      "report_status": "WRITTEN_PARTIAL",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 1,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 234,
+        "IN_PROGRESS": 5,
+        "PASS": 1
+      },
+      "questions_registered": 257,
+      "sources_direct": 6,
+      "independent_origin_groups": 6,
+      "passages": 36,
+      "observations": 47,
+      "claims_by_type": {
+        "FACT": 9,
+        "ANALYSIS": 4,
+        "PARTY_CLAIM": 3
+      },
+      "hypotheses": 4,
+      "counterevidence_items": 1,
+      "relations": 14,
+      "models": [
+        "MDL-C01-0001"
+      ],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {
+        "OG-C01-YUHO-107": [
+          "CLM-C01-0003",
+          "CLM-C01-0005",
+          "CLM-C01-0007",
+          "CLM-C01-0008",
+          "CLM-C01-0009",
+          "CLM-C01-0011",
+          "CLM-C01-0012",
+          "CLM-C01-0013",
+          "CLM-C01-0016"
+        ],
+        "OG-JBIC-2025-00043": [
+          "CLM-C01-0006",
+          "CLM-C01-0015"
+        ],
+        "OG-JBIC-2025-00067": [],
+        "OG-JBIC-2025-00165": [],
+        "OG-JBIC-2025-00179": [],
+        "OG-NEXI-202603161085": [
+          "CLM-C01-0004"
+        ],
+        "PUBLISHER:三井物産株式会社（EDINET提出書類の会社サイト掲載PDF）": [
+          "CLM-C01-0003",
+          "CLM-C01-0005",
+          "CLM-C01-0007",
+          "CLM-C01-0008",
+          "CLM-C01-0009",
+          "CLM-C01-0011",
+          "CLM-C01-0012",
+          "CLM-C01-0013",
+          "CLM-C01-0016"
+        ],
+        "PUBLISHER:株式会社国際協力銀行（JBIC）": [
+          "CLM-C01-0001",
+          "CLM-C01-0006",
+          "CLM-C01-0010",
+          "CLM-C01-0015"
+        ],
+        "PUBLISHER:株式会社日本貿易保険（NEXI）": [
+          "CLM-C01-0004"
+        ]
+      },
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_02",
+      "company_name": "三菱商事",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_03",
+      "company_name": "伊藤忠商事",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_04",
+      "company_name": "住友商事",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_05",
+      "company_name": "丸紅",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_06",
+      "company_name": "双日",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_07",
+      "company_name": "豊田通商",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    },
+    {
+      "company_id": "COMPANY_08",
+      "company_name": "兼松",
+      "company_research_status": "NOT_STARTED",
+      "report_status": "NOT_STARTED",
+      "report_missing_sections": [],
+      "axes_registered": 30,
+      "axes_pass": 0,
+      "axes_in_progress": 0,
+      "topics_registered": 240,
+      "topics_by_state": {
+        "NOT_STARTED": 240
+      },
+      "questions_registered": 240,
+      "sources_direct": 0,
+      "independent_origin_groups": 0,
+      "passages": 0,
+      "observations": 0,
+      "claims_by_type": {},
+      "hypotheses": 0,
+      "counterevidence_items": 0,
+      "relations": 0,
+      "models": [],
+      "errors": 0,
+      "source_ablation_claims_losing_all_support": {},
+      "as_of": "2026-11-01"
+    }
+  ]
+}
