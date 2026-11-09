@@ -1,0 +1,43 @@
+# XcodeGen spec for a tiny UI-test harness that drives Mobile Safari in the iOS Simulator:
+# open the deployed PWA → Share → Add to Home Screen → tap the "田嶋研究室" icon → check standalone mode.
+# The host app is only required by Xcode to run UI tests; it does nothing.
+name: PWACheck
+options:
+  bundleIdPrefix: org.unofficial.tajima.pwacheck
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    SWIFT_VERSION: "5.0"
+targets:
+  PWACheckHost:
+    type: application
+    platform: iOS
+    sources: [Host]
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        PRODUCT_BUNDLE_IDENTIFIER: org.unofficial.tajima.pwacheck.host
+  PWACheckUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    dependencies:
+      - target: PWACheckHost
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: org.unofficial.tajima.pwacheck.uitests
+        TEST_TARGET_NAME: PWACheckHost
+schemes:
+  PWACheck:
+    build:
+      targets:
+        PWACheckHost: all
+        PWACheckUITests: [test]
+    test:
+      targets: [PWACheckUITests]

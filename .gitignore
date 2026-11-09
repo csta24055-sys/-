@@ -218,3 +218,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+node_modules/
+app/node_modules/
+app/dist/
+app/*.log
+.DS_Store
+*.tmp
+*.pdf
+!.github/
+
+# Built public web app (deploy output)
+app/dist-web/

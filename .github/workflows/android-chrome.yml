@@ -1,0 +1,47 @@
+name: Android Chrome check (emulator, real Chrome)
+# Opens the deployed web app in Chrome on an Android emulator, installs it to the home screen and launches it
+# from the 「田嶋研究室」 icon. This is an emulator check, not a test on a physical phone.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Web app URL
+        default: https://tajima-lab.pages.dev/
+  push:
+    branches: ['main', 'claude/**']
+    paths: ['.github/android-pwa-check/**', '.github/workflows/android-chrome.yml']
+permissions:
+  contents: read
+jobs:
+  android-chrome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      PWA_URL: ${{ github.event.inputs.url || 'https://tajima-lab.pages.dev/' }}
+      OUT: out
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install, launch from the icon, check standalone
+        id: check
+        continue-on-error: true
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: python3 .github/android-pwa-check/ui.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-chrome-check
+          path: out/
+      - name: Result
+        run: test "${{ steps.check.outcome }}" = "success"

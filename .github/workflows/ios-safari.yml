@@ -1,0 +1,73 @@
+name: iPhone Safari check (iOS Simulator, real Mobile Safari)
+# Opens the deployed web app in the iOS Simulator's Mobile Safari, adds it to the Home Screen and launches it
+# from the 「田嶋研究室」 icon. This is a simulator check, not a test on a physical iPhone.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Web app URL
+        default: https://tajima-lab.pages.dev/
+  push:
+    branches: ['main', 'claude/**']
+    paths: ['.github/ios-pwa-check/**', '.github/workflows/ios-safari.yml']
+permissions:
+  contents: read
+jobs:
+  ios-safari:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    env:
+      PWA_URL: ${{ github.event.inputs.url || 'https://tajima-lab.pages.dev/' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Boot an iPhone simulator
+        id: sim
+        run: |
+          xcodebuild -version
+          UDID=$(xcrun simctl list devices available -j | python3 -c "
+          import json,sys
+          d=json.load(sys.stdin)['devices']
+          c=[(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone') and 'Pro' not in x['name'] and 'Plus' not in x['name']]
+          c=c or [(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone')]
+          c.sort(key=lambda t:[int(n) for n in t[0].split('iOS-')[-1].split('-')])
+          print(c[-1][1]['udid']); print(c[-1][1]['name'], c[-1][0], file=sys.stderr)")
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+      - name: First access in Mobile Safari
+        run: |
+          mkdir -p out
+          xcrun simctl openurl "${{ steps.sim.outputs.udid }}" "$PWA_URL"
+          sleep 25
+          xcrun simctl io "${{ steps.sim.outputs.udid }}" screenshot out/00-simctl-safari-first-visit.png
+      - name: Generate the UI-test project
+        run: |
+          brew install xcodegen
+          cd .github/ios-pwa-check && xcodegen generate
+      - name: Add to Home Screen → launch from the icon (XCUITest)
+        id: uitest
+        continue-on-error: true
+        run: |
+          cd .github/ios-pwa-check
+          set -o pipefail
+          TEST_RUNNER_PWA_URL="$PWA_URL" xcodebuild test -project PWACheck.xcodeproj -scheme PWACheck \
+            -destination "id=${{ steps.sim.outputs.udid }}" -resultBundlePath ../../out/result.xcresult \
+            CODE_SIGNING_ALLOWED=NO 2>&1 | tee ../../out/xcodebuild.log | grep -E "error|failed|passed|Test Case|XCTAssert" | tail -60
+      - name: Screenshot after the test
+        if: always()
+        run: xcrun simctl io "${{ steps.sim.outputs.udid }}" screenshot out/99-simctl-after-test.png || true
+      - name: Export test screenshots
+        if: always()
+        run: |
+          xcrun xcresulttool export attachments --path out/result.xcresult --output-path out/attachments 2>/dev/null || true
+          ls -la out out/attachments 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-safari-check
+          path: |
+            out/*.png
+            out/attachments/
+            out/xcodebuild.log
+      - name: Result
+        run: test "${{ steps.uitest.outcome }}" = "success"
