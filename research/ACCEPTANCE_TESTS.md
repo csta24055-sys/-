@@ -15,7 +15,7 @@
 | A09 | 研究計画の日付と完了状態を編集/再起動 | 入力が保持され、仮予定表示が残る | ✅ Electron E2E（再起動後に確認） |
 | A10 | PDFを取り込む（Electron） | `userData/pdfs/` に保存され、対象論文に紐づく／PDFを開ける | ✅ Electron E2E（SHA-256名で保存・内蔵ビューア描画・本文検索・根拠ページ） |
 | A11 | JSONバックアップと復元 | データを復元できる（PDF実体は含まないと明示） | ✅ Electron E2E（書出→変更→復元） |
-| A12 | Windows/Macで配布ビルド | 生成ファイルの実在、起動・データ書込確認。ビルドできないOSは未検証と記録 | 🟡 Linux AppImage：生成・E2E合格。Windows/macOS：CIで生成＋E2E（実行結果はActionsを参照） |
+| A12 | Windows/Macで配布ビルド | 生成ファイルの実在、起動・データ書込確認。ビルドできないOSは未検証と記録 | ✅ GitHub Actions run 42551033367（2026-11-09）：Windows（NSIS+portable）・macOS（dmg+zip, arm64/x64）・Linux（AppImage）を生成し、各OSで**配布版バイナリに対しE2E 13件合格**（macOSはarm64版で実行。x64版は起動未検証）。未署名のため初回起動時のOS警告は残る |
 | A13 | 非公開資料を含まないか確認 | 配布ZIPやインストーラーに無許可PDF・個人データが混ざらない | ✅ `npm run check:dist`（Linux配布物で合格、CIでは全OS） |
 | A14 | UIのコンソールを確認 | uncaught error/資源取得失敗がない | ✅ Electron/ブラウザE2Eでエラー0件 |
 

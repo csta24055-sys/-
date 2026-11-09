@@ -13,7 +13,7 @@
 - [x] JSON形式のデータバックアップ・復元
 - [x] 自動テスト（ユニット30件 + GUI E2E 18件）
 - [x] 実際のブラウザ/Electron画面のE2Eテスト
-- [ ] Windows `.exe` / Mac `.dmg` のビルドと起動確認（CIで生成＋配布版E2Eを実行する構成済み。Linux AppImageは生成・E2E合格）
+- [x] Windows `.exe` / Mac `.dmg` のビルドと起動確認（GitHub Actionsで生成し、各OSの配布版でE2E 13件合格。Mac x64版の起動、コード署名・公証は未）
 - [x] GUIのスクリーンショット撮影
 
 ## P1：研究室の学生が日常利用できるアプリに

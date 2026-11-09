@@ -68,7 +68,7 @@ npm run dist:linux
 
 **未完成・要改良**：OCR（画像だけのPDFは本文検索不可）、学術的に正確なAI要約、論文本文に基づく関連研究スコア、正式な研究室スケジュール、研究室の卒論・修論全件収録、実OS向け配布ビルドの実行・署名、GUIの実機検証。書誌情報の収集は網羅調査ではない。
 
-**検証済み（v0.2）**：`npm run check`（書誌検証＋ユニット30件）合格。Playwrightで実際のElectronアプリを操作するE2E 13件・ブラウザ版E2E 5件が合格（コンソールエラー0件）。Linux AppImage を生成し、**配布版バイナリに対してもE2E 13件が合格**、`check:dist` でPDF・個人データ非同梱を確認。Windows（NSIS/portable）・macOS（dmg/zip）はLinux上では生成できない（Windowsは要Wine、macOSは要macOS）ため、GitHub Actionsの各OSランナーで生成＋配布版E2Eを行う構成にした。
+**検証済み（v0.2）**：`npm run check`（書誌検証＋ユニット30件）合格。Playwrightで実際のElectronアプリを操作するE2E 13件・ブラウザ版E2E 5件が合格（コンソールエラー0件）。Linux AppImage を生成し、**配布版バイナリに対してもE2E 13件が合格**、`check:dist` でPDF・個人データ非同梱を確認。Windows（NSIS/portable）・macOS（dmg/zip）はGitHub Actionsの各OSランナーで生成し、**Windows・macOS（arm64）の配布版でもE2E 13件が合格**（run 42551033367）。インストーラーはActionsのArtifact（`installer-windows-latest` / `installer-macos-latest` / `installer-ubuntu-latest`、保存期限2027-02-07）から入手できる。未署名のため初回起動時にOSの警告が出る。macOS x64版の実機起動は未検証。
 
 ## 絶対に混同してはいけない点
 

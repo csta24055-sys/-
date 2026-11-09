@@ -44,7 +44,7 @@ npm run dist:linux   # Linux: AppImage
 npm run check:dist   # 配布物にPDF・個人データが入っていないか検査
 ```
 
-GitHub Actions（`.github/workflows/build.yml`）が Windows / macOS / Linux それぞれでビルドし、**ビルドした実アプリに対してE2Eテストを実行**してからインストーラーをArtifactとして保存します。
+GitHub Actions（`.github/workflows/build.yml`）が Windows / macOS / Linux それぞれでビルドし、**ビルドした実アプリに対してE2Eテストを実行**してからインストーラーをArtifactとして保存します。2026-11-09 の実行では3OSとも合格（Actions → 該当run → Artifacts の `installer-windows-latest` 等からダウンロード）。
 
 > 未署名のため、Windowsでは SmartScreen の「詳細情報 → 実行」、macOSでは「右クリック → 開く」（またはシステム設定 → プライバシーとセキュリティ → このまま開く）が必要です。正式配布にはコード署名・公証が別途必要です。
 
