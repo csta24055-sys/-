@@ -35,6 +35,7 @@ jobs:
         run: python scripts/build_mobile.py --base /
       - name: Mobile E2E (Chromium, iPhone/Android emulation)
         run: |
+          (cd frontend && npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium)
           python scripts/serve_static.py frontend/dist-mobile 47801 &
           sleep 1
           cd frontend && node e2e/mobile.cjs
