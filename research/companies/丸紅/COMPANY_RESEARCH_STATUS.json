@@ -6,19 +6,19 @@
   "report_missing_sections": [],
   "axes_registered": 30,
   "axes_pass": 0,
-  "axes_in_progress": 27,
+  "axes_in_progress": 30,
   "topics_registered": 240,
   "topics_by_state": {
-    "IN_PROGRESS": 46,
-    "NOT_STARTED": 194
+    "IN_PROGRESS": 50,
+    "NOT_STARTED": 190
   },
-  "questions_registered": 265,
+  "questions_registered": 266,
   "sources_direct": 5,
   "independent_origin_groups": 3,
-  "passages": 144,
+  "passages": 151,
   "observations": 15,
   "claims_by_type": {
-    "FACT": 33,
+    "FACT": 37,
     "PARTY_CLAIM": 16,
     "ANALYSIS": 6,
     "FORECAST": 1
@@ -39,9 +39,12 @@
       "CLM-C05-0042",
       "CLM-C05-0014",
       "CLM-C05-0043",
+      "CLM-C05-0057",
       "CLM-C05-0013",
       "CLM-C05-0032",
       "CLM-C05-0033",
+      "CLM-C05-0059",
+      "CLM-C05-0060",
       "CLM-C05-0041",
       "CLM-C05-0039",
       "CLM-C05-0040",
@@ -85,6 +88,7 @@
       "CLM-C05-0056"
     ],
     "OG-JBIC-2025-00151": [
+      "CLM-C05-0058",
       "CLM-C05-0017",
       "CLM-C05-0019"
     ],
@@ -101,9 +105,12 @@
       "CLM-C05-0042",
       "CLM-C05-0014",
       "CLM-C05-0043",
+      "CLM-C05-0057",
       "CLM-C05-0013",
       "CLM-C05-0032",
       "CLM-C05-0033",
+      "CLM-C05-0059",
+      "CLM-C05-0060",
       "CLM-C05-0041",
       "CLM-C05-0039",
       "CLM-C05-0040",
@@ -156,9 +163,12 @@
       "CLM-C05-0042",
       "CLM-C05-0014",
       "CLM-C05-0043",
+      "CLM-C05-0057",
       "CLM-C05-0013",
       "CLM-C05-0032",
       "CLM-C05-0033",
+      "CLM-C05-0059",
+      "CLM-C05-0060",
       "CLM-C05-0041",
       "CLM-C05-0039",
       "CLM-C05-0040",
@@ -202,6 +212,7 @@
       "CLM-C05-0056"
     ],
     "PUBLISHER:株式会社国際協力銀行（JBIC）": [
+      "CLM-C05-0058",
       "CLM-C05-0018",
       "CLM-C05-0017",
       "CLM-C05-0019"
@@ -237,9 +248,10 @@
       }
     },
     "AXIS_05": {
-      "state": "NOT_STARTED",
+      "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 8
+        "NOT_STARTED": 6,
+        "IN_PROGRESS": 2
       }
     },
     "AXIS_06": {
@@ -264,15 +276,17 @@
       }
     },
     "AXIS_09": {
-      "state": "NOT_STARTED",
+      "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 8
+        "NOT_STARTED": 7,
+        "IN_PROGRESS": 1
       }
     },
     "AXIS_10": {
-      "state": "NOT_STARTED",
+      "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 8
+        "NOT_STARTED": 7,
+        "IN_PROGRESS": 1
       }
     },
     "AXIS_11": {
@@ -1293,37 +1307,39 @@
     {
       "topic_id": "AXIS_05_T02",
       "axis_id": "AXIS_05",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
+        "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "questions": 1,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C05-0005"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_05_T03",
       "axis_id": "AXIS_05",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
@@ -1333,14 +1349,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C05-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_05_T04",
@@ -2158,11 +2176,11 @@
     {
       "topic_id": "AXIS_09_T03",
       "axis_id": "AXIS_09",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
@@ -2172,14 +2190,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C05-0005"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_09_T04",
@@ -2444,11 +2464,11 @@
     {
       "topic_id": "AXIS_10_T06",
       "axis_id": "AXIS_10",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
@@ -2458,14 +2478,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C05-0005"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_10_T07",

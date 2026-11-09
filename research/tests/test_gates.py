@@ -293,9 +293,25 @@ class TestReevaluation(Base):
         self.assertTrue(all(e["cause"] == ["SCHEDULED_RECHECK"] and "policy" in e for e in ev))
 
     def test_not_due_yet_means_no_scheduled_recheck(self):
+        # one week after the filing date nothing can be due (shortest interval is 31 days)
+        r = monthly_update.run("2026-06", "COMPANY_04", fetch=lambda u: {"status": 0, "sha256": None, "error": "offline"},
+                               dry=True, run_date="2026-06-19")
+        self.assertEqual(r["companies"][0].get("claims_scheduled_recheck", []), [])
+
+    def test_every_scheduled_recheck_is_past_its_type_deadline(self):
+        import datetime as dt
         r = monthly_update.run("2026-11", "COMPANY_04", fetch=lambda u: {"status": 0, "sha256": None, "error": "offline"},
                                dry=True, run_date="2026-11-09")
-        self.assertEqual(r["companies"][0].get("claims_scheduled_recheck", []), [])
+        due = set(r["companies"][0].get("claims_scheduled_recheck", []))
+        claims = {x["claim_id"]: x for a in (self.c("住友商事") / "axes").glob("AXIS_*") for x in jl_read(a / "CLAIMS.jsonl")}
+        for cid in due:
+            ic = claims[cid]["info_class"]
+            self.assertIn(ic, monthly_update.RECHECK_DAYS)
+            # observed no later than the filing date (2026-06-12) + interval <= run date
+            self.assertLessEqual(dt.date(2026, 6, 12) + dt.timedelta(days=monthly_update.RECHECK_DAYS[ic]), dt.date(2026, 11, 9))
+        for cid, x in claims.items():
+            if x.get("info_class") in (None, "AUDITED_FINANCIAL"):
+                self.assertNotIn(cid, due)
 
     def test_pass_is_suspended_not_failed_when_evidence_needs_recheck(self):
         # a source behind a PASS topic changes -> topic becomes NEEDS_RECHECK (no integrity error)
