@@ -18,7 +18,9 @@ import audit_data as A  # noqa: E402
 K = json.loads((ROOT / "knowledge" / "knowledge.json").read_text(encoding="utf-8"))
 STATE = json.loads((ROOT / "EXECUTION_STATE.json").read_text(encoding="utf-8"))
 CLASSES = {"確認事実", "当事者の主張", "分析", "仮説", "予測", "不明", "計算結果", "予測（当事者）", "計算結果（当事者）"}
-PRIVACY = r"577a|amazonaws|ec2-|ftpuser|小倉|小嶋|呉若菲|鈴木優|村木|新野|セイ|田中邸|宍戸|佐々木|及川|井口邸|加藤|矢藤|吉田|平井|リベスト|野田市|勝木|菊田|坂本|蜂巣|浦田|井口柊|池田正義|寺西|三木|清水|石川"
+from privacy_patterns import has_private_list, private_patterns  # noqa: E402  （個人名リストは非公開ファイルから読む）
+
+PRIVACY = "|".join(private_patterns() + ["amazonaws", "ec2-"])
 
 
 def grade(u):
@@ -38,7 +40,7 @@ def grade(u):
 
 def git_grep(pat):
     try:
-        out = subprocess.run(["git", "-C", str(ROOT), "grep", "-nE", pat, "--", ".", ":!CLAUDE.md", ":!scripts/build_audit.py"], capture_output=True, text=True).stdout
+        out = subprocess.run(["git", "-C", str(ROOT), "grep", "-nE", pat, "--", ".", ":!CLAUDE.md", ":!scripts/build_audit.py", ":!scripts/privacy_patterns.py"], capture_output=True, text=True).stdout
     except Exception:  # noqa: BLE001
         return None
     return [l for l in out.splitlines() if l]
@@ -94,7 +96,7 @@ def main():
     add(7, "未解決問題を一覧化している", len(K["questions"]) > 0, f"未解決問題 {len(K['questions'])} 件: " + ", ".join(f"{k} {v}" for k, v in Counter(q['status'] for q in K['questions']).items()))
     add(8, "文献にDOIが付き、全文確認か要旨確認かを区別している", lit_doi == len(lit) and None not in lit_level, f"文献 {len(lit)} 件、DOI {lit_doi} 件、確認水準 {dict(lit_level)}")
     add(9, "支持だけでなく反証・制約となる文献を含む", lit_stance.get("反証・制約", 0) > 0, f"立場 {dict(lit_stance)}")
-    add(10, "公開リポジトリに氏名・接続情報が含まれない（既知語のgrep）", priv == [], f"一致 {len(priv) if priv is not None else '確認不能'} 件" + (f": {priv[:3]}" if priv else ""))
+    add(10, "公開リポジトリに氏名・接続情報が含まれない（既知語のgrep）", (priv == []) if has_private_list() else None, ("" if has_private_list() else "非公開の検査語リスト（private_data/privacy_patterns.txt）が無いため確認不能。") + f"一致 {len(priv) if priv is not None else '確認不能'} 件" + (f": {priv[:3]}" if priv else ""))
     add(11, "原データ（Excel/CSV・private_data）をコミットしていない", not raw_tracked, f"原データの可能性がある追跡ファイル {len(raw_tracked)} 件 {raw_tracked[:3]}。許可リスト（生成物・合成）: " + "; ".join(f"{k}（{v}）" for k, v in allow.items()))
     add(12, "2冊の資料が md/docx/pdf でそろっている", len(deliv) >= 6, ", ".join(deliv))
     add(13, "研究単位ごとの検証記録がある", len(ver_dirs) >= len(A.UNITS), f"{len(ver_dirs)}/{len(A.UNITS)}")

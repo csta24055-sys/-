@@ -910,7 +910,10 @@ if __name__ == "__main__" and "--qa" not in sys.argv:
 
 
 # ----------------------------------------------------------------------------- 品質監査（生成後に実行）
-PRIV = r"577a|amazonaws|ec2-|ftpuser|小倉|小嶋|呉若菲|鈴木優|村木|新野|セイ|田中邸|宍戸|佐々木|及川|井口邸|加藤|矢藤|吉田|平井|リベスト|野田市|勝木|菊田|坂本|蜂巣|浦田|井口柊|池田正義|寺西|三木|清水|石川|(?<![A-Za-z])[IWKST]邸"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from privacy_patterns import regex as _priv_regex  # noqa: E402  （個人名リストは private_data/ または Secrets から）
+
+PRIV = _priv_regex()
 
 
 def qa():

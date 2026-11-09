@@ -1,11 +1,11 @@
 # 品質・完成度監査（QUALITY_AUDIT）
 
 > `scripts/build_audit.py` が knowledge.json・audit_data.py・EXECUTION_STATE.json・リポジトリの実体から自動生成。直接編集しない。
-> 生成時のコミット: 9ce7452（状態更新 2026-11-04T00:32:26+00:00）
+> 生成時のコミット: 8c901da（状態更新 2026-11-09T01:42:07+00:00）
 
 ## 1. 総合判定
 
-- 実行タスク: 10/11 完了。未完了: P2-OTHERS（blocked）
+- 実行タスク: 11/13 完了。未完了: P2-OTHERS（blocked）, P13-DESKTOP-CI（blocked）
 - **判定: 『利用可能な完成版』**（研究・アプリ・2冊の資料は利用できる状態）。ただし下記 §5 の終了条件を満たしていないため **『完全完成』ではない**。
 
 ## 2. 研究単位ごとの完成度（A/B/C）
@@ -45,7 +45,7 @@
 | 8 | 文献にDOIが付き、全文確認か要旨確認かを区別している | ○ | 文献 23 件、DOI 23 件、確認水準 {'要旨確認': 14, '書誌のみ': 9} |
 | 9 | 支持だけでなく反証・制約となる文献を含む | ○ | 立場 {'支持': 2, '文脈': 10, '反証・制約': 5, '方法': 6} |
 | 10 | 公開リポジトリに氏名・接続情報が含まれない（既知語のgrep） | ○ | 一致 0 件 |
-| 11 | 原データ（Excel/CSV・private_data）をコミットしていない | ○ | 原データの可能性がある追跡ファイル 0 件 []。許可リスト（生成物・合成）: docs/figures/bypass_sweep.csv（scripts/make_figures.py のモデル計算出力）; frontend/src/core/testdata/synthetic.xlsx（Excel取込テスト用の合成データ） |
+| 11 | 原データ（Excel/CSV・private_data）をコミットしていない | × | 原データの可能性がある追跡ファイル 3 件 ['deliverables/technical_report_2026-11/EVIDENCE_LEDGER.csv', 'deliverables/technical_report_2026-11/NUMERICAL_AUDIT.csv', 'deliverables/technical_report_2026-11/SOURCE_INVENTORY.csv']。許可リスト（生成物・合成）: docs/figures/bypass_sweep.csv（scripts/make_figures.py のモデル計算出力）; frontend/src/core/testdata/synthetic.xlsx（Excel取込テスト用の合成データ） |
 | 12 | 2冊の資料が md/docx/pdf でそろっている | ○ | 2027_研究方針・研究テーマ戦略提案書.docx, 2027_研究方針・研究テーマ戦略提案書.md, 2027_研究方針・研究テーマ戦略提案書.pdf, 2027_研究継承総合資料.docx, 2027_研究継承総合資料.md, 2027_研究継承総合資料.pdf |
 | 13 | 研究単位ごとの検証記録がある | ○ | 14/14 |
 | 14 | 機械可読な再開状態がある | ○ | next_task = None |
@@ -56,11 +56,12 @@
 | 19 | 研究・アプリ・資料の整合（同じ所見IDを参照） | 要確認 | 要人手確認（資料とアプリは knowledge.json を共通の単一ソースとして生成） |
 | 20 | GitHub リポジトリの公開範囲 | × | 公開（Public）のまま。所有者による非公開化が必要（Settings → Danger Zone → Change visibility） |
 
-○ 17 / × 1 / 要確認 2
+○ 16 / × 2 / 要確認 2
 
 ## 4. ユーザー操作が必要な事項
 
 - **P2-OTHERS**: 取得可能な資料の検証は実施済み。残りは分割CSV化（住宅D・2023年度ブック）とXRF/SEMの分割が必要。2018・2019年度の原データは未取得資料として扱う（2026-11-04 方針）
+- **P13-DESKTOP-CI**: Windows/macOS 版はこのLinuxコンテナでは作れない。ブランチの push（ユーザー許可待ち）後に Actions の desktop ワークフローを実行する必要がある
 - リポジトリの非公開化（No.20）
 
 ## 5. 自動再開タスクの終了条件
