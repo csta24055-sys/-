@@ -57,7 +57,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $ver = python -c "import re;print(re.search(r'__version__ = \"([^\"]+)\"', open('backend/app/main.py', encoding='utf-8').read()).group(1))"
+          $ver = python desktop/build.py --print-version
           & "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe" "/DAppVersion=$ver" desktop\aqros.iss
       - uses: actions/upload-artifact@v4
         with:

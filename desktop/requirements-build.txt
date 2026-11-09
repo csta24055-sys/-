@@ -2,3 +2,4 @@
 pyinstaller==6.22.3
 pyinstaller-hooks-contrib==2026.9
 numpy==2.5.4
+pillow==13.0.0   # macOS で PNG アイコンを .icns に変換するため（PyInstaller が自動変換に使う）

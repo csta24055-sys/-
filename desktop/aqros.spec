@@ -54,5 +54,6 @@ if sys.platform == "darwin":
         icon=icon,
         bundle_identifier="local.aqros.desktop",
         info_plist={"CFBundleDisplayName": "Air Quality Research OS", "CFBundleShortVersionString": VERSION, "CFBundleVersion": VERSION,
-                    "NSHighResolutionCapable": True, "LSApplicationCategoryType": "public.app-category.education"},
+                    "NSHighResolutionCapable": True, "LSApplicationCategoryType": "public.app-category.education",
+                    "LSMinimumSystemVersion": "14.0"},
     )

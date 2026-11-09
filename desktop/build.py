@@ -36,7 +36,11 @@ def run(cmd, cwd=ROOT):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip-frontend", action="store_true")
+    ap.add_argument("--print-version", action="store_true", help="版番号だけを表示（CI のインストーラー作成用）")
     a = ap.parse_args()
+    if a.print_version:
+        print(version())
+        return 0
     if not a.skip_frontend:
         if not (ROOT / "frontend" / "node_modules").exists():
             run(["npm", "ci"], cwd=ROOT / "frontend")

@@ -11,8 +11,8 @@ GitHub の Releases（または Actions の「desktop」ワークフローの Ar
 |---|---|---|
 | Windows 10/11（64bit） | `AQROS-<版>-windows-x64-setup.exe` | インストーラー（推奨） |
 | 〃 | `AQROS-<版>-windows-x64.zip` | 展開してそのまま使う版 |
-| macOS（Apple シリコン M1〜） | `AQROS-<版>-macos-arm64.zip` | `AQROS.app` |
-| macOS（Intel） | `AQROS-<版>-macos-x64.zip` | `AQROS.app` |
+| macOS 14 以降（Apple シリコン M1〜） | `AQROS-<版>-macos-arm64.zip` | `AQROS.app` |
+| macOS 14 以降（Intel） | `AQROS-<版>-macos-x64.zip` | `AQROS.app` |
 | Linux（x64, glibc 2.35 以降） | `AQROS-<版>-linux-x64.tar.gz` | `AQROS/AQROS` と `install-linux.sh` |
 
 ## 2. インストール
