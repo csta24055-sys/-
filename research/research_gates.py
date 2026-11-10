@@ -162,6 +162,8 @@ def check_integrity(d: dict, owner: dict, ctx: Ctx) -> None:
             ctx.err(code, cid, f"{p['passage_id']} -> unknown source {p.get('source_id')}", p["passage_id"])
         if not p.get("locator"):
             ctx.err("E_PASSAGE_LOCATOR", cid, f"{p['passage_id']} has no locator (page/table/paragraph)", p["passage_id"])
+        if not p.get("verified"):
+            ctx.err("E_PASSAGE_UNVERIFIED", cid, f"{p['passage_id']} carries no verification state (machine-match the excerpt or mark it MANUAL explicitly)", p["passage_id"])
 
     obs_key = {}
     for o in d["observations"]:

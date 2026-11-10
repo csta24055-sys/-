@@ -199,6 +199,13 @@ class TestGateFailures(Base):
         p.write_text("<!-- TEMPLATE:NOT_STARTED -->\n", encoding="utf-8")
         self.assertIn("E_UNSUPPORTED_PASS", self.codes())
 
+    def test_passage_without_verification_state(self):
+        p = self.c(C01) / "ledger" / "passages.jsonl"
+        rows = jl_read(p)
+        rows[0].pop("verified", None)
+        jl_write(p, rows)
+        self.assertIn("E_PASSAGE_UNVERIFIED", self.codes())
+
     def test_wrong_id_prefix(self):
         p = self.c(C01) / "ledger" / "sources.jsonl"
         rows = jl_read(p)
