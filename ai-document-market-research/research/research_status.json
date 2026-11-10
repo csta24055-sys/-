@@ -17,91 +17,63 @@
   "steps": {
     "S0": {
       "state": "PASS",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
       "failure_reasons": []
     },
     "S1": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
       "failure_reasons": [
-        "logged search queries: 2",
-        "at least five search platforms represented",
-        "accepted=0, direct=0, independent origins=0",
-        "multiple research axes and publication categories",
-        "every registered topic has an actual logged source-search/access attempt; planned queries alone do not count",
-        "audited gaps, search failures and actual source acquisition"
+        "every registered topic has an actual logged source-search/access attempt; planned queries alone do not count"
       ]
     },
     "S2": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "source provenance errors: 1: no accepted sources",
-        "independent-origin, sponsorship and repost review recorded",
-        "competing evidence and corrections described"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     },
     "S3": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "substantive, evidence-based jobs-to-be-done segmentation",
-        "at least five real evidence IDs cited in segmentation",
-        "job, academic, payer, privacy, counterexamples addressed"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     },
     "S4": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
       "failure_reasons": [
-        "verified competitors=0, invalid sources=0",
-        "all 21 highest-priority candidate companies have evidence-backed official verification",
-        "substantial comparisons with sources, limits and pricing checks"
+        "all 21 highest-priority candidate companies have evidence-backed official verification"
       ]
     },
     "S5": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "quant results with traceable real-world evidence=0",
-        "model assumptions, identification, bias and sensitivity documented",
-        "recomputation and independent checking documented"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     },
     "S6": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "A-G product alternatives analyzed and counterarguments included",
-        "product tradeoffs cite at least five accepted sources"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     },
     "S7": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "conditional statistical decision and sensitivity analysis documented",
-        "downside, regret, conditions, unidentifiable issues explicitly covered"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     },
     "S8": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "all five substantive and non-placeholder final artifacts exist",
-        "main report cites at least eight distinct accepted source IDs",
-        "critical user requirements covered"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     },
     "S9": {
-      "state": "NOT_STARTED",
-      "evaluated_at": "2026-11-09T21:33:48.815108+00:00",
-      "failure_reasons": [
-        "final review / implementation-stop proof exists",
-        "manual app-change audit and research quality check attested",
-        "product conclusions linked to accepted sources"
-      ]
+      "state": "BLOCKED",
+      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "failure_reasons": []
     }
   },
-  "last_evaluated": "2026-11-09T21:33:48.815108+00:00"
+  "last_evaluated": "2026-11-10T03:27:49.808246+00:00",
+  "notes": [
+    "S1は325テーマ中162が未着手のため未通過。",
+    "S2〜S9は文書を作成済みだが、S1（およびS4のP0競合2件）が通るまで機械判定はBLOCKEDのまま。成果物は暫定版。",
+    "BLOCKEDは「着手済みだが前段または自身の条件が未達」を意味する。"
+  ]
 }

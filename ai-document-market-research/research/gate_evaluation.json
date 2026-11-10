@@ -1,11 +1,11 @@
 {
   "research_status": "INCOMPLETE",
-  "checked_at": "2026-11-09T21:33:48.815108+00:00",
-  "source_rows": 0,
-  "accepted_rows": 0,
-  "independent_origins": 0,
-  "verified_competitors": 0,
-  "admissible_quant_results": 0,
+  "checked_at": "2026-11-10T03:27:49.808246+00:00",
+  "source_rows": 53,
+  "accepted_rows": 53,
+  "independent_origins": 45,
+  "verified_competitors": 19,
+  "admissible_quant_results": 12,
   "steps": {
     "S0": {
       "label": "repo_and_registry_audit",
@@ -37,22 +37,22 @@
     },
     "S1": {
       "label": "collection",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
-          "detail": "logged search queries: 2"
+          "pass": true,
+          "detail": "logged search queries: 310"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "at least five search platforms represented"
         },
         {
-          "pass": false,
-          "detail": "accepted=0, direct=0, independent origins=0"
+          "pass": true,
+          "detail": "accepted=53, direct=53, independent origins=45"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "multiple research axes and publication categories"
         },
         {
@@ -60,163 +60,163 @@
           "detail": "every registered topic has an actual logged source-search/access attempt; planned queries alone do not count"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "audited gaps, search failures and actual source acquisition"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 5,
       "total_checks": 6
     },
     "S2": {
       "label": "verification",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
-          "detail": "source provenance errors: 1: no accepted sources"
+          "pass": true,
+          "detail": "source provenance errors: 0"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "independent-origin, sponsorship and repost review recorded"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "competing evidence and corrections described"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 3,
       "total_checks": 3
     },
     "S3": {
       "label": "user_segments",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
+          "pass": true,
           "detail": "substantive, evidence-based jobs-to-be-done segmentation"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "at least five real evidence IDs cited in segmentation"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "job, academic, payer, privacy, counterexamples addressed"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 3,
       "total_checks": 3
     },
     "S4": {
       "label": "competitors",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
-          "detail": "verified competitors=0, invalid sources=0"
+          "pass": true,
+          "detail": "verified competitors=19, invalid sources=0"
         },
         {
           "pass": false,
           "detail": "all 21 highest-priority candidate companies have evidence-backed official verification"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "substantial comparisons with sources, limits and pricing checks"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 2,
       "total_checks": 3
     },
     "S5": {
       "label": "quantitative_research",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
-          "detail": "quant results with traceable real-world evidence=0"
+          "pass": true,
+          "detail": "quant results with traceable real-world evidence=12"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "model assumptions, identification, bias and sensitivity documented"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "recomputation and independent checking documented"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 3,
       "total_checks": 3
     },
     "S6": {
       "label": "alternative_assessment",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
+          "pass": true,
           "detail": "A-G product alternatives analyzed and counterarguments included"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "product tradeoffs cite at least five accepted sources"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 2,
       "total_checks": 2
     },
     "S7": {
       "label": "decision_analysis",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
+          "pass": true,
           "detail": "conditional statistical decision and sensitivity analysis documented"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "downside, regret, conditions, unidentifiable issues explicitly covered"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 2,
       "total_checks": 2
     },
     "S8": {
       "label": "final_outputs",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
+          "pass": true,
           "detail": "all five substantive and non-placeholder final artifacts exist"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "main report cites at least eight distinct accepted source IDs"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "critical user requirements covered"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 3,
       "total_checks": 3
     },
     "S9": {
       "label": "final_audit_no_implementation",
-      "state": "NOT_STARTED",
+      "state": "BLOCKED",
       "checks": [
         {
-          "pass": false,
+          "pass": true,
           "detail": "final review / implementation-stop proof exists"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "manual app-change audit and research quality check attested"
         },
         {
-          "pass": false,
+          "pass": true,
           "detail": "product conclusions linked to accepted sources"
         }
       ],
-      "pass_count": 0,
+      "pass_count": 3,
       "total_checks": 3
     }
   },

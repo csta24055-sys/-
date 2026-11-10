@@ -1,0 +1,150 @@
+{
+ "wilson_intervals": [
+  {
+   "result_id": "QR01",
+   "estimate_pct": 68.2,
+   "n": 11590,
+   "wilson95_low_pct": 67.3,
+   "wilson95_high_pct": 69.0,
+   "recorded_low": "67.3",
+   "recorded_high": "69.0"
+  },
+  {
+   "result_id": "QR02",
+   "estimate_pct": 84.5,
+   "n": 2607,
+   "wilson95_low_pct": 83.1,
+   "wilson95_high_pct": 85.8,
+   "recorded_low": "83.1",
+   "recorded_high": "85.8"
+  },
+  {
+   "result_id": "QR03",
+   "estimate_pct": 44.8,
+   "n": 2607,
+   "wilson95_low_pct": 42.9,
+   "wilson95_high_pct": 46.7,
+   "recorded_low": "42.9",
+   "recorded_high": "46.7"
+  },
+  {
+   "result_id": "QR04",
+   "estimate_pct": 95.0,
+   "n": 1054,
+   "wilson95_low_pct": 93.5,
+   "wilson95_high_pct": 96.2,
+   "recorded_low": "93.5",
+   "recorded_high": "96.2"
+  },
+  {
+   "result_id": "QR05",
+   "estimate_pct": 15.0,
+   "n": 1054,
+   "wilson95_low_pct": 13.0,
+   "wilson95_high_pct": 17.3,
+   "recorded_low": "13.0",
+   "recorded_high": "17.3"
+  },
+  {
+   "result_id": "QR06",
+   "estimate_pct": 37.8,
+   "n": 360,
+   "wilson95_low_pct": 32.9,
+   "wilson95_high_pct": 42.9,
+   "recorded_low": "32.9",
+   "recorded_high": "42.9"
+  },
+  {
+   "result_id": "QR07",
+   "estimate_pct": 18.9,
+   "n": 360,
+   "wilson95_low_pct": 15.2,
+   "wilson95_high_pct": 23.3,
+   "recorded_low": "15.2",
+   "recorded_high": "23.3"
+  },
+  {
+   "result_id": "QR08",
+   "estimate_pct": 99.0,
+   "n": 76,
+   "wilson95_low_pct": 93.4,
+   "wilson95_high_pct": 99.9,
+   "recorded_low": "93.4",
+   "recorded_high": "99.9"
+  }
+ ],
+ "benchmark_what_if": {
+  "label": "ASSUMPTION_ONLY",
+  "source_of_rates": "S040",
+  "payers_if_this_app_matched_benchmark": {
+   "freemium_d35": {
+    "1000": 21.0,
+    "5000": 105.0,
+    "20000": 420.0
+   },
+   "hard_paywall_d35": {
+    "1000": 107.0,
+    "5000": 535.0,
+    "20000": 2140.0
+   },
+   "north_america_median_d35": {
+    "1000": 26.0,
+    "5000": 130.0,
+    "20000": 520.0
+   }
+  }
+ },
+ "decision": {
+  "label": "ASSUMPTION_ONLY",
+  "not_a_probability": true,
+  "max_regret": {
+   "A": 2,
+   "B": 3,
+   "C": 2,
+   "D": 3,
+   "E": 1,
+   "F": 2,
+   "G": 1
+  },
+  "minimax_regret_set": [
+   "E",
+   "G"
+  ],
+  "mean_regret_if_scenarios_equally_weighted_reference_only": {
+   "A": 1.5,
+   "B": 1.75,
+   "C": 1.0,
+   "D": 2.0,
+   "E": 0.25,
+   "F": 1.25,
+   "G": 0.5
+  },
+  "sensitivity_single_cell_variants": 53,
+  "times_in_minimax_set_across_variants": {
+   "A": 0,
+   "B": 0,
+   "C": 1,
+   "D": 0,
+   "E": 51,
+   "F": 0,
+   "G": 48
+  },
+  "minimax_set_if_one_scenario_removed": {
+   "alpha": [
+    "E"
+   ],
+   "beta": [
+    "E",
+    "G"
+   ],
+   "gamma": [
+    "E",
+    "G"
+   ],
+   "delta": [
+    "E",
+    "G"
+   ]
+  }
+ }
+}
