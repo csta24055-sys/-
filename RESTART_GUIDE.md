@@ -9,7 +9,7 @@
    - `python scripts/build_state.py --done <完了ID,...> --current <実行中ID>`（状態保存）
    - `.venv/bin/python -m pytest` と `cd frontend && npm test`
    - commit / push（ブランチ `claude/air-quality-research-os-19gu2g`）、`RUN_HISTORY.md` に1行追記
-6. 自動再開: 毎時の定期タスク（このセッションに届く）。終了条件は第19章（全タスク done ＋ `QUALITY_AUDIT.md` の監査）。恒久的ブロック（Box取得不能など）は `EXECUTION_STATE.json` の blocked に理由を書き、同じ処理を繰り返さない。
+6. 自動再開: 毎時の定期タスク（trig_01G2NK6VVHvHoqvMjYpoUtAE）は 2026-11-10 にユーザー指示で**停止済み**（enabled=false）。残りはユーザー操作待ちのみのため。再開が必要になったらユーザーに確認してから有効化する。cc-autoresume の週次の起動予約（.claude/autoresume.json の weekly）は別に残っている。
 
 ## タスクID
 | ID | 内容 |
