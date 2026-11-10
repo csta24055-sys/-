@@ -7,7 +7,8 @@
 | Q-C02-A27-T02-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「世界貿易の分断/再統合」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
 | Q-C02-A27-T03-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「AI・半導体・データセンター需要」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
 | Q-C02-A27-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「資源価格・金利・為替の複合条件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
-| Q-C02-A27-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「脱炭素・原子力・再エネ転換」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
+| Q-C02-A27-T05-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 三菱商事において「脱炭素・原子力・再エネ転換」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
 | Q-C02-A27-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「人口減少・新興国成長の差異」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
 | Q-C02-A27-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「政府政策・外交秩序の転換」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
 | Q-C02-A27-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「先行指標・逆転条件・感度分析」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 中期経営計画／IEAシナリオ／政府長期計画 |
+| Q-C02-A27-T05-01 | Q-C02-A27-T05-00 | ATOMIC | ANSWERED | 脱炭素は三菱商事の原料炭事業の価値にどう影響するか？ |  |

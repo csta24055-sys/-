@@ -5,6 +5,10 @@
 | SRC-C02-0001 | 株式会社国際協力銀行（JBIC） | [三菱商事株式会社による米国天然ガス開発事業者の買収資金を融資](https://www.jbic.go.jp/ja/information/press/press-2026/press_00005.html) | 2026-04-13 | BANK | DIRECT | OG-JBIC-2026-00005 | `c5411d880c7d` |
 | SRC-C02-0002 | 株式会社日本貿易保険（NEXI） | [ポーランド／西ポメラニア県・ポメラニア県243MW太陽光発電事業案件（Çalık Enerji向けクレジットライン利用・融資保険の引受）](https://www.nexi.go.jp/topics/newsrelease/202604141136.html) | 2026-04-27 | OTHER | DIRECT | OG-NEXI-202604141136 | `c0b761a1d06c` |
 | SRC-C02-0003 | 株式会社日本格付研究所（JCR） | [【決算レポート】総合商社の26/3期決算の注目点（KR-2606）](https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf) | 2026-06-12 | OTHER | DIRECT | OG-JCR-KR-2606 | `bf496691e806` |
+| SRC-C02-0004 | 三菱商事株式会社（EDINET提出書類） | [有価証券報告書 2025年度（自2025年4月1日 至2026年3月31日）EDINET書類管理番号S100YB25](https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YB25.pdf) | 2026-06-12 | COMPANY | DIRECT | OG-C02-YUHO-FY2025 | `ef565a22d233` |
+| SRC-C02-0005 | Latham & Watkins LLP（売手Aethon側の法律顧問） | [Latham Advises Aethon in Completed Sale of Haynesville Business to Mitsubishi](https://www.lw.com/en/news/2026/07/latham-advises-aethon-in-completed-sale-of-haynesville-business-to-mitsubishi) | 2026-07-15 | OTHER | DIRECT | OG-LW-AETHON-2026-07 | `af12b139a742` |
+| SRC-C02-0006 | 千代田化工建設株式会社（EDINET提出書類） | [臨時報告書（第98回定時株主総会・種類株主総会の決議結果）EDINET書類管理番号S100YM6P](https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YM6P.pdf) | 2026-06-26 | COMPANY | DIRECT | OG-CHIYODA-RINJI-2026-06 | `1ce906430a6d` |
+| SRC-C02-0007 | 千代田化工建設株式会社（東京証券取引所の適時開示、日本取引所グループのサイト掲載） | [A種優先株式の一部取得及び消却の完了並びにコミットメントライン契約の締結及び劣後金銭消費貸借契約の期限前返済完了に関するお知らせ](https://www2.jpx.co.jp/disc/63660/140120260629583626.pdf) | 2026-06-30 | COMPANY | DIRECT | OG-CHIYODA-TD-2026-06-30 | `7c545e931bef` |
 
 ## 検索ログ
 
@@ -14,3 +18,8 @@
 | SL-C02-0002 | 2026-11-10T01:04:20+09:00 | TDnet 適時開示一覧（2026年5月の決算短信） | 0 |  | FETCH_FAILED TDnetの公開一覧は直近約1か月分のみで、2026年5月分は404。  |
 | SL-C02-0003 | 2026-11-10T01:04:20+09:00 | JBIC 2025・2026年度本文（263件）／NEXI（30件）に「三菱商事」 | 2 | SRC-C02-0001, SRC-C02-0002 | None   |
 | SL-C02-0004 | 2026-11-10T06:29:08+09:00 | JCR格付一覧 /ratinglist/corp/8058 とセクターレポート | 1 | SRC-C02-0003 | None 三菱商事はJCRの格付対象外（一覧へリダイレクト）。セクターレポートに三菱商事の集計値と分析あり。  |
+| SL-C02-0005 | 2026-11-10T21:18:43+09:00 | EDINET 書類ダウンロード https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/{書類管理番号}.pdf（API不要の公開URL） | 1 | SRC-C02-0004 | None EDINET API（v2）はキーが必要で未使用。公開ダウンロードURLは丸紅の既知の書類ID（S100YAY4）で200応答を確認したうえで使用。EDINETの検索画面（disclosure2.edinet-fsa.go.jp）は本環境から403。  |
+| SL-C02-0006 | 2026-11-10T21:18:43+09:00 | IRBANK 三菱商事（E02529）提出書類一覧 https://irbank.net/E02529/reports | 1 |  | None 第三者サイト（robots.txtで/search以外を許可）は書類ID（S100YB25、提出日6/12、有報）の特定にのみ使用し、内容は採用しない。TDnet（release.tdnet.info）はrobots.txtで全面不許可のため使用しない。R&I（r-i.co.jp）はrobots.txtを含め403で未取得。  |
+| SL-C02-0007 | 2026-11-10T21:19:49+09:00 | 三菱商事 有価証券報告書 S100YB25 本文の全章（事業・財務・株式・ガバナンス・従業員・注記） | 1 | SRC-C02-0004 | None 253頁を章ごとに確認し、30軸に対応する記載を抜粋した。  |
+| SL-C02-0008 | 2026-11-10T21:24:54+09:00 | Mitsubishi Corporation completes acquisition Aethon Haynesville 2026（ウェブ検索） | 10 | SRC-C02-0005 | None Aethon側のBusiness Wire発表（2026-07-14）は本環境からタイムアウトで未取得。売手側代理人Latham & Watkinsの公表を採用。報道（$7.5B表記）は二次情報のため不採用。  |
+| SL-C02-0009 | 2026-11-10T21:24:54+09:00 | 千代田化工建設 第98回定時株主総会 定款変更 承認 三菱商事 持分法 2026年6月（ウェブ検索） | 9 | SRC-C02-0006, SRC-C02-0007 | None 千代田化工建設の臨時報告書（EDINET）と適時開示（JPXサイト掲載PDF）を採用。三菱商事の2026年1月28日リリースは会社サイトが403で未取得。  |

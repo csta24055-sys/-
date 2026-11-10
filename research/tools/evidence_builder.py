@@ -225,6 +225,10 @@ def main(argv: list[str]) -> int:
     for h in spec.get("hypotheses", []):
         axis = h["topics"][0][:7]
         ids = lambda idx: [spec["claims"][i]["_id"] if isinstance(i, int) else i for i in idx]  # noqa: E731
+        known = {x["claim_id"] for x in all_claims} | {x.get("_id") for x in spec.get("claims", [])}
+        for ref in ids(h.get("for", [])) + ids(h.get("against", [])):
+            if ref not in known:
+                errors.append(f"hypothesis cites unknown claim {ref}")
         hyp_by_axis[axis].append({
             "hypothesis_id": f"HYP-{sc}-{hn:04d}", "company_id": cid, "axis_id": axis, "topic_ids": h["topics"],
             "question_id": None, "observed_phenomenon": h["phenomenon"], "explanation": h["explanation"],
@@ -236,7 +240,15 @@ def main(argv: list[str]) -> int:
     # relations
     rn = next_num(relations, "relation_id")
     for r in spec.get("relations", []):
-        evp = [passage(e[0], e[1], e[2], "relation") for e in r["ev"]]
+        evp = []
+        for e in r["ev"]:
+            if isinstance(e, str):  # reuse an already verified passage of this company
+                if not any(p["passage_id"] == e for p in passages):
+                    errors.append(f"relation cites unknown passage {e}")
+                    continue
+                evp.append(e)
+            else:
+                evp.append(passage(e[0], e[1], e[2], "relation"))
         relations.append({"relation_id": f"REL-{sc}-{rn:04d}", "company_id": cid, "type": r["type"], "from_entity": r["from"],
                           "to_entity": r["to"], "via_entity": r.get("via"), "valid_from": r.get("valid_from"), "valid_to": r.get("valid_to"),
                           "amount": r.get("amount"), "evidence": [p for p in evp if p], "status": r.get("status", "CONFIRMED_ONE_SIDE"),

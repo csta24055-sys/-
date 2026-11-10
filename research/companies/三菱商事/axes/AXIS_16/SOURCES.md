@@ -2,3 +2,4 @@
 # 三菱商事 / AXIS_16：この軸で使用した出典
 
 - SRC-C02-0001：株式会社国際協力銀行（JBIC）「三菱商事株式会社による米国天然ガス開発事業者の買収資金を融資」2026-04-13 <https://www.jbic.go.jp/ja/information/press/press-2026/press_00005.html>
+- SRC-C02-0004：三菱商事株式会社（EDINET提出書類）「有価証券報告書 2025年度（自2025年4月1日 至2026年3月31日）EDINET書類管理番号S100YB25」2026-06-12 <https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YB25.pdf>

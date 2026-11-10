@@ -9,5 +9,6 @@
 | Q-C02-A09-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「PPP・PFI・コンセッション」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書（不動産・インフラ）／国土交通省／PPP/PFI公表資料／REIT開示 |
 | Q-C02-A09-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「建物ライフサイクル・改修・ZEB」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書（不動産・インフラ）／国土交通省／PPP/PFI公表資料／REIT開示 |
 | Q-C02-A09-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「建設コスト・人手不足・契約」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書（不動産・インフラ）／国土交通省／PPP/PFI公表資料／REIT開示 |
-| Q-C02-A09-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「投資案件の設計・施工・運営分担」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書（不動産・インフラ）／国土交通省／PPP/PFI公表資料／REIT開示 |
+| Q-C02-A09-T07-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 三菱商事において「投資案件の設計・施工・運営分担」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書（不動産・インフラ）／国土交通省／PPP/PFI公表資料／REIT開示 |
 | Q-C02-A09-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「建築設備・インフラ技術と価値評価」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書（不動産・インフラ）／国土交通省／PPP/PFI公表資料／REIT開示 |
+| Q-C02-A09-T07-01 | Q-C02-A09-T07-00 | ATOMIC | ANSWERED | エンジニアリング子会社の大型案件は三菱商事の業績にどう影響したか？ |  |

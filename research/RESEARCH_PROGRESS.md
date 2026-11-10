@@ -6,7 +6,7 @@ RESEARCH_STATUS = **INCOMPLETE**（基準日 2026-11-01）
 | 会社 | COMPANY_RESEARCH_STATUS | 報告書 | 軸PASS | 軸進行中 | テーマ状態 | 主張 | 出典 |
 |---|---|---|---|---|---|---|---|
 | 三井物産 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 30 | {'NOT_STARTED': 196, 'IN_PROGRESS': 43, 'PASS': 1} | 59 | 7 |
-| 三菱商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 10 | {'NOT_STARTED': 227, 'IN_PROGRESS': 13} | 14 | 3 |
+| 三菱商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 30 | {'NOT_STARTED': 147, 'IN_PROGRESS': 91, 'PASS': 2} | 126 | 7 |
 | 伊藤忠商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 30 | {'NOT_STARTED': 194, 'IN_PROGRESS': 46} | 50 | 4 |
 | 住友商事 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 30 | {'NOT_STARTED': 191, 'IN_PROGRESS': 48, 'PASS': 1} | 55 | 5 |
 | 丸紅 | PARTIAL | WRITTEN_PARTIAL | 0/30 | 30 | {'IN_PROGRESS': 51, 'NOT_STARTED': 189} | 66 | 8 |

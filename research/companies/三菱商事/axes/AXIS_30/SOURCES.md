@@ -3,3 +3,5 @@
 
 - SRC-C02-0001：株式会社国際協力銀行（JBIC）「三菱商事株式会社による米国天然ガス開発事業者の買収資金を融資」2026-04-13 <https://www.jbic.go.jp/ja/information/press/press-2026/press_00005.html>
 - SRC-C02-0003：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>
+- SRC-C02-0004：三菱商事株式会社（EDINET提出書類）「有価証券報告書 2025年度（自2025年4月1日 至2026年3月31日）EDINET書類管理番号S100YB25」2026-06-12 <https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YB25.pdf>
+- SRC-C02-0005：Latham & Watkins LLP（売手Aethon側の法律顧問）「Latham Advises Aethon in Completed Sale of Haynesville Business to Mitsubishi」2026-07-15 <https://www.lw.com/en/news/2026/07/latham-advises-aethon-in-completed-sale-of-haynesville-business-to-mitsubishi>

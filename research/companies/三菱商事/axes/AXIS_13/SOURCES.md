@@ -3,3 +3,6 @@
 
 - SRC-C02-0001：株式会社国際協力銀行（JBIC）「三菱商事株式会社による米国天然ガス開発事業者の買収資金を融資」2026-04-13 <https://www.jbic.go.jp/ja/information/press/press-2026/press_00005.html>
 - SRC-C02-0002：株式会社日本貿易保険（NEXI）「ポーランド／西ポメラニア県・ポメラニア県243MW太陽光発電事業案件（Çalık Enerji向けクレジットライン利用・融資保険の引受）」2026-04-27 <https://www.nexi.go.jp/topics/newsrelease/202604141136.html>
+- SRC-C02-0004：三菱商事株式会社（EDINET提出書類）「有価証券報告書 2025年度（自2025年4月1日 至2026年3月31日）EDINET書類管理番号S100YB25」2026-06-12 <https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YB25.pdf>
+- SRC-C02-0005：Latham & Watkins LLP（売手Aethon側の法律顧問）「Latham Advises Aethon in Completed Sale of Haynesville Business to Mitsubishi」2026-07-15 <https://www.lw.com/en/news/2026/07/latham-advises-aethon-in-completed-sale-of-haynesville-business-to-mitsubishi>
+- SRC-C02-0007：千代田化工建設株式会社（東京証券取引所の適時開示、日本取引所グループのサイト掲載）「A種優先株式の一部取得及び消却の完了並びにコミットメントライン契約の締結及び劣後金銭消費貸借契約の期限前返済完了に関するお知らせ」2026-06-30 <https://www2.jpx.co.jp/disc/63660/140120260629583626.pdf>

@@ -9,7 +9,7 @@
 | 会社 | 会社ゲート | 当期利益（親会社帰属）（億円） | ROE（各社定義）（%） | 自己資本比率（各社定義）（%） | ネットDER（各社定義）（倍） | 連結従業員（人） | 本体従業員（人） | 本体平均年間給与（万円） |
 |---|---|---|---|---|---|---|---|---|
 | 三井物産 | PARTIAL | 8,340<br/><sub>OBS-C01-0048</sub> | 10.22<br/><sub>OBS-C01-0051</sub> | 42.11<br/><sub>OBS-C01-0052</sub> | 0.47<br/><sub>OBS-C01-0034</sub> | 55,463<br/><sub>OBS-C01-0053</sub> | 5,333<br/><sub>OBS-C01-0054</sub> | 2,059<br/><sub>OBS-C01-0055</sub> |
-| 三菱商事 | PARTIAL | — | — | — | — | — | — | — |
+| 三菱商事 | PARTIAL | 8,005<br/><sub>OBS-C02-0005</sub> | 8.5<br/><sub>OBS-C02-0006</sub> | 39.1<br/><sub>OBS-C02-0007</sub> | — | 63,037<br/><sub>OBS-C02-0008</sub> | 4,456<br/><sub>OBS-C02-0009</sub> | 2,113<br/><sub>OBS-C02-0010</sub> |
 | 伊藤忠商事 | PARTIAL | 9,003<br/><sub>OBS-C03-0001</sub> | 14.59<br/><sub>OBS-C03-0004</sub> | 39.38<br/><sub>OBS-C03-0005</sub> | 0.46<br/><sub>OBS-C03-0009</sub> | 114,570<br/><sub>OBS-C03-0010</sub> | 4,125<br/><sub>OBS-C03-0011</sub> | 1,991<br/><sub>OBS-C03-0012</sub> |
 | 住友商事 | PARTIAL | 6,003<br/><sub>OBS-C04-0001</sub> | 12.9<br/><sub>OBS-C04-0004</sub> | 33.9<br/><sub>OBS-C04-0005</sub> | 0.68<br/><sub>OBS-C04-0007</sub> | 82,488<br/><sub>OBS-C04-0008</sub> | 4,938<br/><sub>OBS-C04-0009</sub> | 1,840<br/><sub>OBS-C04-0010</sub> |
 | 丸紅 | PARTIAL | 5,439<br/><sub>OBS-C05-0001</sub> | 13.6<br/><sub>OBS-C05-0003</sub> | 41.43<br/><sub>OBS-C05-0011</sub> | 0.43<br/><sub>OBS-C05-0005</sub> | 52,658<br/><sub>OBS-C05-0012</sub> | 4,225<br/><sub>OBS-C05-0013</sub> | 1,784<br/><sub>OBS-C05-0014</sub> |

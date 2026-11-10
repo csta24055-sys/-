@@ -2,3 +2,5 @@
 # 三菱商事 / AXIS_15：この軸で使用した出典
 
 - SRC-C02-0003：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>
+- SRC-C02-0004：三菱商事株式会社（EDINET提出書類）「有価証券報告書 2025年度（自2025年4月1日 至2026年3月31日）EDINET書類管理番号S100YB25」2026-06-12 <https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YB25.pdf>
+- SRC-C02-0006：千代田化工建設株式会社（EDINET提出書類）「臨時報告書（第98回定時株主総会・種類株主総会の決議結果）EDINET書類管理番号S100YM6P」2026-06-26 <https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YM6P.pdf>
