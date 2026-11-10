@@ -2,3 +2,5 @@
 # 伊藤忠商事 / AXIS_15：この軸で使用した出典
 
 - SRC-C03-0001：伊藤忠商事株式会社「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://www.itochu.co.jp/ja/ir/download/__icsFiles/afieldfile/2026/06/12/security_102_1.pdf>
+- SRC-C03-0003：株式会社日本格付研究所（JCR）「【伊藤忠商事】据置：AA+／安定的，J-1+（26-D-0686）」2026-09-16 <https://www.jcr.co.jp/download/fa577d3a1a0dba80daa7da78ba8caaf13f3db26bea8ae8c33d/26d0686.pdf>
+- SRC-C03-0004：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>

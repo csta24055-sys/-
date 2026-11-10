@@ -2,3 +2,5 @@
 # 丸紅 / AXIS_02：この軸で使用した出典
 
 - SRC-C05-0001：丸紅株式会社「統合報告書2026（全ページ・印刷用）」2026-09-08 <https://www.marubeni.com/jp/ir/reports/integrated_report/pdf/2026_jp_all_single.pdf>
+- SRC-C05-0005：丸紅株式会社（IR資料配信サービス eir-parts 経由）「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://ssl4.eir-parts.net/doc/8002/yuho_pdf/S100YAY4/00.pdf>
+- SRC-C05-0006：株式会社日本格付研究所（JCR）「【丸紅】据置：AA／安定的，A+（劣後），J-1+（26-D-0238）」2026-06-03 <https://www.jcr.co.jp/download/a884788238882643be71e8838a18bb4a823aaa887b2e728aae/26d0238.pdf>

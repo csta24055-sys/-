@@ -6,6 +6,10 @@
 | SRC-C05-0002 | 丸紅株式会社 | [第102期有価証券報告書を掲載いたしました（お知らせ）](https://www.marubeni.com/jp/news/2026/ir/financialstatements.pdf) | 2026-06-12 | COMPANY | DIRECT | OG-C05-COMPANY-DISCLOSURE | `4c3a029e569b` |
 | SRC-C05-0003 | 株式会社国際協力銀行（JBIC） | [サウジアラビアの陸上風力発電事業案件に対するプロジェクトファイナンス](https://www.jbic.go.jp/ja/information/press/press-2025/press_00151.html) | 2026-01-27 | BANK | DIRECT | OG-JBIC-2025-00151 | `5f9516f06e43` |
 | SRC-C05-0004 | 株式会社国際協力銀行（JBIC） | [Aircastle Limitedによる航空機購入資金の融資](https://www.jbic.go.jp/ja/information/press/press-2026/press_00077.html) | 2026-10-02 | BANK | DIRECT | OG-JBIC-2026-00077 | `c03f2e801d3e` |
+| SRC-C05-0005 | 丸紅株式会社（IR資料配信サービス eir-parts 経由） | [第102期有価証券報告書（自2025年4月1日 至2026年3月31日）](https://ssl4.eir-parts.net/doc/8002/yuho_pdf/S100YAY4/00.pdf) | 2026-06-12 | COMPANY | DIRECT | OG-C05-COMPANY-DISCLOSURE | `01a61db5af7d` |
+| SRC-C05-0006 | 株式会社日本格付研究所（JCR） | [【丸紅】据置：AA／安定的，A+（劣後），J-1+（26-D-0238）](https://www.jcr.co.jp/download/a884788238882643be71e8838a18bb4a823aaa887b2e728aae/26d0238.pdf) | 2026-06-03 | OTHER | DIRECT | OG-JCR-26-D-0238 | `40c9392f8225` |
+| SRC-C05-0007 | 株式会社日本格付研究所（JCR） | [【丸紅】ハイブリッド商品（劣後ローン）新規：A+（25-D-1411）](https://www.jcr.co.jp/download/b1a21901d143cdf961d226c4bd6b94b44f46949461d1c41d3a/25d1411.pdf) | 2026-01-19 | OTHER | DIRECT | OG-JCR-25-D-1411 | `3bbf87252509` |
+| SRC-C05-0008 | 株式会社日本格付研究所（JCR） | [【決算レポート】総合商社の26/3期決算の注目点（KR-2606）](https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf) | 2026-06-12 | OTHER | DIRECT | OG-JCR-KR-2606 | `bf496691e806` |
 
 ## 検索ログ
 
@@ -14,3 +18,6 @@
 | SL-C05-0001 | 2026-11-10T01:02:56+09:00 | 丸紅IR『有価証券報告書』ページ（/jp/ir/reports/security_reports/）をブラウザ描画しPDFリンク抽出 | 0 |  | BLOCKED eir-parts（ssl4.eir-parts.net）のスクリプトが一覧を描画せずPDFリンクを取得できなかった。お知らせPDFのみ取得。  |
 | SL-C05-0002 | 2026-11-10T01:02:56+09:00 | 丸紅IR統合報告書2026（全ページ・印刷用PDF） | 1 | SRC-C05-0001 | None poppler-data導入後に日本語抽出可能。2段組の語順混在に注意。  |
 | SL-C05-0003 | 2026-11-10T01:02:56+09:00 | JBIC 2025・2026年度本文（263件）に「丸紅」 | 2 | SRC-C05-0003, SRC-C05-0004 | None   |
+| SL-C05-0004 | 2026-11-10T01:30:32+09:00 | eir-parts配信の公開フィード https://ssl4.eir-parts.net/V4Public/EIR/8002/ja/announcement/announcement_2.js（丸紅IRページの一覧の実データ） | 118 | SRC-C05-0005 | None news_type=yuho 118件から2026年3月期有報（2026-06-12、S100YAY4）を採用。2027年3月期の半期報告書は基準日後のため除外。  |
+| SL-C05-0005 | 2026-11-10T01:35:56+09:00 | 第102期有報の残り3軸（05・09・10）の精読：事業の内容・セグメント業績 | 1 | SRC-C05-0005 | None 電力・インフラの増減要因は表の配置がセグメント間で曖昧なため、要因の帰属を主張しなかった。  |
+| SL-C05-0006 | 2026-11-10T06:29:09+09:00 | JCR格付一覧 /ratinglist/corp/8002（丸紅）のニュースリリース | 5 | SRC-C05-0006, SRC-C05-0007, SRC-C05-0008 | None 据置（26-D-0238）と劣後ローン新規（25-D-1411）を採用。債券新規等は重複のため不採用。  |

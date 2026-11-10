@@ -150,16 +150,17 @@ def main(argv: list[str]) -> int:
                 continue
             key, page, excerpt = item[0], item[1], item[2]
             direction = item[3] if len(item) > 3 else "SUPPORT"
+            relation = item[4] if len(item) > 4 else "PRIMARY_DIRECT"
             pid = passage(key, page, excerpt, x.get("section", ""))
             if pid:
-                ev.append({"passage_id": pid, "direction": direction, "relation": "PRIMARY_DIRECT"})
+                ev.append({"passage_id": pid, "direction": direction, "relation": relation})
         cid_ = f"CLM-{sc}-{cn:04d}"
         cn += 1
         axis = x["topic"][:7]
         row = {"claim_id": cid_, "company_id": cid, "axis_id": axis, "topic_id": x["topic"], "question_id": None,
                "claim_type": x["type"], "statement": x["statement"], "evidence": ev,
                "valid_from": x.get("valid_from"), "valid_to": x.get("valid_to"), "validity": x.get("validity", "CURRENT"),
-               "info_class": x.get("info_class"), "snapshot": "asof_2026-11-01", "notes": x.get("notes", ""), "recorded_at": NOW}
+               "info_class": x.get("info_class"), "snapshot": x.get("snapshot", "asof_2026-11-01"), "notes": x.get("notes", ""), "recorded_at": NOW}
         if x.get("model_ref"):
             row["model_ref"] = x["model_ref"]
         claim_rows_by_axis.setdefault(axis, []).append(row)
@@ -185,10 +186,20 @@ def main(argv: list[str]) -> int:
     for a in sorted((cdir / "axes").glob("AXIS_*")):
         qfiles[a.name] = read_jsonl(a / "QUESTIONS.jsonl")
 
+    rank = {"OPEN": 0, "BACKLOG": 0, "BLOCKED": 0, "PARTIAL": 1, "EVALUATED_UNRESOLVED": 2, "ANSWERED": 3}
+
     def add_q(topic, text, status, reason, claim_ids):
         axis = topic[:7]
         qs = qfiles[axis]
         ax, t = axis.split("_")[1], topic.split("_")[-1]
+        same = next((q for q in qs if q["topic_id"] == topic and q.get("kind") == "ATOMIC" and q["question"] == text), None)
+        if same:  # reuse the existing question instead of filing a duplicate; never downgrade its status
+            new_ids = [c for c in claim_ids if c not in same.get("claim_ids", [])]
+            same["claim_ids"] = same.get("claim_ids", []) + new_ids
+            if rank.get(status, 0) > rank.get(same["status"], 0):
+                same.setdefault("resolution_log", []).append({"at": NOW, "from": same["status"], "to": status, "claim_ids": new_ids, "reason": reason})
+                same["status"] = status
+            return same["question_id"]
         k = 1 + max([int(q["question_id"].rsplit("-", 1)[1]) for q in qs if q["topic_id"] == topic], default=0)
         qid = f"Q-{sc}-A{ax}-{t}-{k:02d}"
         qs.append({"question_id": qid, "company_id": cid, "axis_id": axis, "topic_id": topic, "parent_question_id": f"Q-{sc}-A{ax}-{t}-00",

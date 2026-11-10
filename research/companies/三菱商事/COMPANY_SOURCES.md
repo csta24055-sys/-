@@ -4,6 +4,7 @@
 |---|---|---|---|---|---|---|---|
 | SRC-C02-0001 | 株式会社国際協力銀行（JBIC） | [三菱商事株式会社による米国天然ガス開発事業者の買収資金を融資](https://www.jbic.go.jp/ja/information/press/press-2026/press_00005.html) | 2026-04-13 | BANK | DIRECT | OG-JBIC-2026-00005 | `c5411d880c7d` |
 | SRC-C02-0002 | 株式会社日本貿易保険（NEXI） | [ポーランド／西ポメラニア県・ポメラニア県243MW太陽光発電事業案件（Çalık Enerji向けクレジットライン利用・融資保険の引受）](https://www.nexi.go.jp/topics/newsrelease/202604141136.html) | 2026-04-27 | OTHER | DIRECT | OG-NEXI-202604141136 | `c0b761a1d06c` |
+| SRC-C02-0003 | 株式会社日本格付研究所（JCR） | [【決算レポート】総合商社の26/3期決算の注目点（KR-2606）](https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf) | 2026-06-12 | OTHER | DIRECT | OG-JCR-KR-2606 | `bf496691e806` |
 
 ## 検索ログ
 
@@ -12,3 +13,4 @@
 | SL-C02-0001 | 2026-11-10T01:04:20+09:00 | GET https://www.mitsubishicorp.com/jp/ja/ir/ （curl・Chromium双方） | 0 |  | FETCH_FAILED HTTP 403（全ページ）。英語版 /jp/en/ir/ も403。会社一次資料は本セッションでは取得不能（BLOCKED）。  |
 | SL-C02-0002 | 2026-11-10T01:04:20+09:00 | TDnet 適時開示一覧（2026年5月の決算短信） | 0 |  | FETCH_FAILED TDnetの公開一覧は直近約1か月分のみで、2026年5月分は404。  |
 | SL-C02-0003 | 2026-11-10T01:04:20+09:00 | JBIC 2025・2026年度本文（263件）／NEXI（30件）に「三菱商事」 | 2 | SRC-C02-0001, SRC-C02-0002 | None   |
+| SL-C02-0004 | 2026-11-10T06:29:08+09:00 | JCR格付一覧 /ratinglist/corp/8058 とセクターレポート | 1 | SRC-C02-0003 | None 三菱商事はJCRの格付対象外（一覧へリダイレクト）。セクターレポートに三菱商事の集計値と分析あり。  |

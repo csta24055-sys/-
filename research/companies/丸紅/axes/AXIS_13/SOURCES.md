@@ -3,3 +3,6 @@
 
 - SRC-C05-0001：丸紅株式会社「統合報告書2026（全ページ・印刷用）」2026-09-08 <https://www.marubeni.com/jp/ir/reports/integrated_report/pdf/2026_jp_all_single.pdf>
 - SRC-C05-0003：株式会社国際協力銀行（JBIC）「サウジアラビアの陸上風力発電事業案件に対するプロジェクトファイナンス」2026-01-27 <https://www.jbic.go.jp/ja/information/press/press-2025/press_00151.html>
+- SRC-C05-0005：丸紅株式会社（IR資料配信サービス eir-parts 経由）「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://ssl4.eir-parts.net/doc/8002/yuho_pdf/S100YAY4/00.pdf>
+- SRC-C05-0006：株式会社日本格付研究所（JCR）「【丸紅】据置：AA／安定的，A+（劣後），J-1+（26-D-0238）」2026-06-03 <https://www.jcr.co.jp/download/a884788238882643be71e8838a18bb4a823aaa887b2e728aae/26d0238.pdf>
+- SRC-C05-0007：株式会社日本格付研究所（JCR）「【丸紅】ハイブリッド商品（劣後ローン）新規：A+（25-D-1411）」2026-01-19 <https://www.jcr.co.jp/download/b1a21901d143cdf961d226c4bd6b94b44f46949461d1c41d3a/25d1411.pdf>

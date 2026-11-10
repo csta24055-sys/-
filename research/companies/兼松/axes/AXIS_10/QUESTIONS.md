@@ -5,9 +5,10 @@
 |---|---|---|---|---|---|
 | Q-C08-A10-T01-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「AI基盤モデル・クラウド・データセンター」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C08-A10-T02-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「DX投資と事業生産性」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
-| Q-C08-A10-T03-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「企業間データ連携と情報セキュリティ」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
+| Q-C08-A10-T03-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 兼松において「企業間データ連携と情報セキュリティ」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C08-A10-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「半導体・通信・サイバーリスク」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C08-A10-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「特許・ライセンス・技術移転」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C08-A10-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「SaaS・プラットフォーム事業化」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C08-A10-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「自動化による職種・商流の変化」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
 | Q-C08-A10-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「AI活用の信頼性・監査・競争優位」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 統合報告書（DX）／特許DB（J-PlatPat等）／投資先開示 |
+| Q-C08-A10-T03-01 | Q-C08-A10-T03-00 | ATOMIC | ANSWERED | 兼松のデジタル・サイバー分野の投資は？ |  |

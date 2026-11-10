@@ -2,3 +2,4 @@
 # 双日 / AXIS_04：この軸で使用した出典
 
 - SRC-C06-0001：双日株式会社「第23期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-09 <https://s3-ap-northeast-1.amazonaws.com/sojitz-doc/pdf/jp/ir_202405/reports/vsecurity/20260609.pdf>
+- SRC-C06-0002：株式会社日本格付研究所（JCR）「【双日】据置：A+／安定的，J-1（26-D-0327）」2026-08-07 <https://www.jcr.co.jp/download/4214b804540fe1a040584e24900ea52104e892142120254446/26d0327.pdf>

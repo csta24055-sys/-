@@ -94,6 +94,13 @@ def global_id_owner(all_data: list[dict]) -> dict:
 
 # --------------------------------------------------------------------------------------------- integrity
 
+def shared_registry(ctx: "Ctx") -> dict:
+    """registry/shared_sources.jsonl (loaded once per gate run): every public source a company ledger marks as shared."""
+    if getattr(ctx, "shared", None) is None:
+        ctx.shared = {r["shared_source_id"]: r for r in read_jsonl(research_root() / "registry" / "shared_sources.jsonl")}
+    return ctx.shared
+
+
 def check_integrity(d: dict, owner: dict, ctx: Ctx) -> None:
     c = d["company"]
     cid, sc = c["company_id"], short_code(c["company_id"])
@@ -141,6 +148,13 @@ def check_integrity(d: dict, owner: dict, ctx: Ctx) -> None:
                     ctx.err("E_SOURCE_INCOMPLETE", cid, f"{s['source_id']} DIRECT source lacks {f}", s["source_id"])
         if s.get("snapshot", ASOF_SNAPSHOT) == ASOF_SNAPSHOT and (s.get("published_at") or "") > AS_OF:
             ctx.err("E_ASOF_VIOLATION", cid, f"{s['source_id']} published {s.get('published_at')} after as-of {AS_OF} but filed in {ASOF_SNAPSHOT}", s["source_id"])
+        sh = s.get("shared_source_id")
+        if sh:
+            r = shared_registry(ctx).get(sh)
+            if r is None:
+                ctx.err("E_SHARED_UNREGISTERED", cid, f"{s['source_id']} cites {sh}, which is not in registry/shared_sources.jsonl", s["source_id"])
+            elif r.get("url") != s.get("url") or r.get("sha256") != s.get("sha256") or cid not in r.get("used_by_companies", []):
+                ctx.err("E_SHARED_MISMATCH", cid, f"{s['source_id']} differs from shared entry {sh} (url / sha256 / used_by_companies)", s["source_id"])
 
     for p in d["passages"]:
         if p.get("source_id") not in src:
@@ -240,9 +254,15 @@ def check_integrity(d: dict, owner: dict, ctx: Ctx) -> None:
         check_model(d, m, ctx)
 
 
+INDEPENDENT_RELATIONS = ("PRIMARY_DIRECT", "PRIMARY_INDIRECT")
+
+
 def origin_groups(x: dict, psg: dict, src: dict, direction="SUPPORT") -> set:
+    """Origin groups that independently support a claim. SECONDARY/REPOST evidence (e.g. a rating agency
+    table compiled from the company's own results) never counts as an additional independent origin."""
     return {src.get(psg[e["passage_id"]]["source_id"], {}).get("origin_group_id")
-            for e in x.get("evidence", []) if e.get("passage_id") in psg and e.get("direction") == direction}
+            for e in x.get("evidence", []) if e.get("passage_id") in psg and e.get("direction") == direction
+            and e.get("relation", "PRIMARY_DIRECT") in INDEPENDENT_RELATIONS}
 
 
 def check_model(d: dict, m: dict, ctx: Ctx) -> None:

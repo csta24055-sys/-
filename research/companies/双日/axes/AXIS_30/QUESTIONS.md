@@ -8,6 +8,8 @@
 | Q-C06-A30-T03-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「物流・港湾・PPPインフラ案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C06-A30-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「データセンター・不動産案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C06-A30-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「食品・消費財・ヘルスケア案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
-| Q-C06-A30-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「M&A成功・失敗・撤退案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
+| Q-C06-A30-T06-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 双日において「M&A成功・失敗・撤退案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C06-A30-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「政策金融・銀行協調融資案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
 | Q-C06-A30-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「複数会社の競合・共同投資案件」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 個別案件の会社リリース／JBIC/NEXI/相手先/当局の案件資料／有価証券報告書の案件記述 |
+| Q-C06-A30-T06-01 | Q-C06-A30-T06-00 | ATOMIC | PARTIAL | 双日の近年の買収はどの分野に集中しているか？ |  |
+| Q-C06-A30-T06-02 | Q-C06-A30-T06-00 | ATOMIC | BACKLOG | McClure・Freestate・Ellis Air・Climatech・日本エイアンドエル各買収の時期・対価・持分は？ |  |

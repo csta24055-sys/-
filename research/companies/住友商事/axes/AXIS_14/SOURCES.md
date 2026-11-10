@@ -2,3 +2,4 @@
 # 住友商事 / AXIS_14：この軸で使用した出典
 
 - SRC-C04-0001：住友商事株式会社「第158期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://www.sumitomocorp.com/-/media/Files/hq/ir/report/yuho/2025/202603yuho.pdf?sc_lang=ja>
+- SRC-C04-0005：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>

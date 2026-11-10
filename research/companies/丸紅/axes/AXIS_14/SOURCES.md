@@ -2,3 +2,5 @@
 # 丸紅 / AXIS_14：この軸で使用した出典
 
 - SRC-C05-0001：丸紅株式会社「統合報告書2026（全ページ・印刷用）」2026-09-08 <https://www.marubeni.com/jp/ir/reports/integrated_report/pdf/2026_jp_all_single.pdf>
+- SRC-C05-0005：丸紅株式会社（IR資料配信サービス eir-parts 経由）「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://ssl4.eir-parts.net/doc/8002/yuho_pdf/S100YAY4/00.pdf>
+- SRC-C05-0008：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>

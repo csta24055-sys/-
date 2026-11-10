@@ -20,20 +20,21 @@
     "report_missing_sections": [],
     "axes_registered": 30,
     "axes_pass": 0,
-    "axes_in_progress": 5,
+    "axes_in_progress": 10,
     "topics_registered": 240,
     "topics_by_state": {
-      "NOT_STARTED": 234,
-      "IN_PROGRESS": 6
+      "NOT_STARTED": 227,
+      "IN_PROGRESS": 13
     },
-    "questions_registered": 247,
-    "sources_direct": 2,
-    "independent_origin_groups": 2,
-    "passages": 14,
+    "questions_registered": 251,
+    "sources_direct": 3,
+    "independent_origin_groups": 3,
+    "passages": 26,
     "observations": 2,
     "claims_by_type": {
-      "PARTY_CLAIM": 2,
-      "FACT": 4
+      "PARTY_CLAIM": 9,
+      "FACT": 4,
+      "ANALYSIS": 1
     },
     "hypotheses": 2,
     "counterevidence_items": 0,
@@ -45,7 +46,12 @@
         "CLM-C02-0002",
         "CLM-C02-0006",
         "CLM-C02-0003",
-        "CLM-C02-0001"
+        "CLM-C02-0001",
+        "CLM-C02-0011"
+      ],
+      "OG-JCR-KR-2606": [
+        "CLM-C02-0013",
+        "CLM-C02-0012"
       ],
       "OG-NEXI-202604141136": [
         "CLM-C02-0004",
@@ -55,7 +61,12 @@
         "CLM-C02-0002",
         "CLM-C02-0006",
         "CLM-C02-0003",
-        "CLM-C02-0001"
+        "CLM-C02-0001",
+        "CLM-C02-0011"
+      ],
+      "PUBLISHER:株式会社日本格付研究所（JCR）": [
+        "CLM-C02-0013",
+        "CLM-C02-0012"
       ],
       "PUBLISHER:株式会社日本貿易保険（NEXI）": [
         "CLM-C02-0004",
@@ -70,9 +81,10 @@
         }
       },
       "AXIS_02": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       },
       "AXIS_03": {
@@ -82,9 +94,10 @@
         }
       },
       "AXIS_04": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       },
       "AXIS_05": {
@@ -144,15 +157,17 @@
         }
       },
       "AXIS_14": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "IN_PROGRESS": 3,
+          "NOT_STARTED": 5
         }
       },
       "AXIS_15": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       },
       "AXIS_16": {
@@ -212,9 +227,10 @@
         }
       },
       "AXIS_25": {
-        "state": "NOT_STARTED",
+        "state": "IN_PROGRESS",
         "topics": {
-          "NOT_STARTED": 8
+          "NOT_STARTED": 7,
+          "IN_PROGRESS": 1
         }
       },
       "AXIS_26": {
@@ -489,28 +505,30 @@
     {
       "topic_id": "AXIS_02_T02",
       "axis_id": "AXIS_02",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
+        "atomic_questions_resolved_or_backlogged": true,
+        "unknowns_recorded": true,
         "synthesis_written": false,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "questions": 1,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_02_T03",
@@ -957,28 +975,30 @@
     {
       "topic_id": "AXIS_04_T04",
       "axis_id": "AXIS_04",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
+        "atomic_questions_resolved_or_backlogged": true,
+        "unknowns_recorded": true,
         "synthesis_written": false,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
-      "questions": 0,
+      "questions": 1,
       "independent_origin_groups": 0,
-      "direct_sources": [],
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_04_T05",
@@ -2965,7 +2985,35 @@
     {
       "topic_id": "AXIS_14_T01",
       "axis_id": "AXIS_14",
-      "declared": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
+      "checks": {
+        "has_claims>=2": false,
+        "has_direct_fact": false,
+        "independent_origin_groups>=2": false,
+        "competing_hypotheses>=2": false,
+        "hypotheses_have_counterevidence_notes": false,
+        "atomic_questions_resolved_or_backlogged": false,
+        "unknowns_recorded": true,
+        "synthesis_written": false,
+        "search_logged": true,
+        "no_claims_pending_recheck": true
+      },
+      "claims": 1,
+      "hypotheses": 0,
+      "questions": 2,
+      "independent_origin_groups": 0,
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
+      "claims_pending_recheck": [],
+      "contradicting_evidence": 0,
+      "state": "IN_PROGRESS"
+    },
+    {
+      "topic_id": "AXIS_14_T02",
+      "axis_id": "AXIS_14",
+      "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
@@ -2979,40 +3027,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
-      "hypotheses": 0,
-      "questions": 1,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
-      "claims_pending_recheck": [],
-      "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
-    },
-    {
-      "topic_id": "AXIS_14_T02",
-      "axis_id": "AXIS_14",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
-      "checks": {
-        "has_claims>=2": false,
-        "has_direct_fact": false,
-        "independent_origin_groups>=2": false,
-        "competing_hypotheses>=2": false,
-        "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
-        "synthesis_written": false,
-        "search_logged": true,
-        "no_claims_pending_recheck": true
-      },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
-      "direct_sources": [],
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_14_T03",
@@ -3121,8 +3145,8 @@
     {
       "topic_id": "AXIS_14_T07",
       "axis_id": "AXIS_14",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -3135,20 +3159,22 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
-      "direct_sources": [],
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_14_T08",
       "axis_id": "AXIS_14",
       "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -3163,7 +3189,7 @@
       },
       "claims": 0,
       "hypotheses": 0,
-      "questions": 0,
+      "questions": 1,
       "independent_origin_groups": 0,
       "direct_sources": [],
       "claims_pending_recheck": [],
@@ -3225,8 +3251,8 @@
     {
       "topic_id": "AXIS_15_T03",
       "axis_id": "AXIS_15",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -3239,14 +3265,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
-      "direct_sources": [],
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_15_T04",
@@ -5283,8 +5311,8 @@
     {
       "topic_id": "AXIS_25_T02",
       "axis_id": "AXIS_25",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -5297,14 +5325,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0003"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_25_T03",
@@ -6430,7 +6460,7 @@
       "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": true,
@@ -6441,12 +6471,13 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 1,
+      "claims": 2,
       "hypotheses": 2,
       "questions": 1,
       "independent_origin_groups": 1,
       "direct_sources": [
-        "SRC-C02-0001"
+        "SRC-C02-0001",
+        "SRC-C02-0003"
       ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
@@ -6505,7 +6536,7 @@
       "state": "NOT_STARTED"
     }
   ],
-  "report_md": "<!-- generated by tools/build_reports.py from this company's ledgers; hand-written part: REPORT_SUMMARY.md -->\n# 三菱商事：独立総合インテリジェンス研究書\n\n> COMPANY_ID: `COMPANY_02`（Mitsubishi Corporation）／ 基準日: 2026-11-01 ／ 研究ゲート: **PARTIAL**\n> 30軸: PASS 0・進行中 5 ／ 240テーマ: {'NOT_STARTED': 234, 'IN_PROGRESS': 6} ／ 主張 6（{'PARTY_CLAIM': 2, 'FACT': 4}）\n> 本書はこの会社の資料だけで成立し、他社の研究書・出典IDを参照しない。各文末のIDから原文位置（台帳）へ遡れる。未調査の章は未調査と明記する。\n\n## 総括（研究者による統合・手書き）\n\n**研究の制約を先に記す**：三菱商事の会社サイトは本環境から全ページ403で、有価証券報告書・統合報告書を取得できなかった。EDINET APIもキーがなくBLOCKEDである。そのため本書は、三菱商事を当事者とするJBIC・NEXIの公表文だけに基づく、極めて限定的な初期調査にとどまる。財務・沿革・株主・人事の章は未調査で、他社の資料からの推定で埋めることはしない。\n\n**確認できたこと**：JBICは2026年3月31日、三菱商事本体と約1,560百万米ドル、米国法人と約815百万米ドルの貸付契約を締結した（JBIC分）。資金使途は、米国の天然ガス開発事業者Aethonの買収資金の一部である（CLM-C02-0001）。JBICの説明では、三菱商事はガス・LNGを中核事業とし、米国の上流ガスを起点に複合的なバリューチェーンを目指している（CLM-C02-0002、融資者による記述）。NEXIとは、三菱商事が出資するトルコのCalik Enerjiを介した三者の協力覚書があり、クレジットライン枠を通じて再エネ案件が支援されている（CLM-C02-0004）。\n\n**仮説（いずれも未決）**：エネルギー安全保障政策が大型の政策融資を呼んだとする説明（HYP-C02-0001）と、大型買収の資金規模・条件の要請による説明（HYP-C02-0002）がある。買収総額と三菱商事の財務数値がないため、どちらとも検証できない。\n\n**次の作業**：会社開示の取得経路を確保する（EDINET APIキー、または会社サイトへの別経路）。それまで三菱商事の会社ゲートは事実上BLOCKEDである。\n\n## 1. 会社の成立・歴史・経路依存\n（未調査：AXIS_01）\n\n## 2. 全事業・商流・所有資産・グループ会社\n- 【当事者の主張】JBICの説明では、三菱商事は天然ガス・LNG事業を中核事業の一つとし、近年は米国を戦略地域として中下流を含むガス事業を強化しており、本買収を通じ米国の上流ガスを起点とした複合的なバリューチェーン構築を目指す。（CLM-C02-0002／AXIS_05_T01）\n\n## 3. 事業別の資本配分・収益構造・投資実行・撤退\n（未調査：AXIS_15, AXIS_14）\n\n## 4. 銀行融資・政策金融・金利・為替・財務\n- 【確認事実】NEXIは2026年4月、Calik Enerji（トルコ、三菱商事が出資）によるポーランドの太陽光発電ポートフォリオ（255MW、うち243MW運転中）買収資金へのドイツ銀行東京支店の融資に融資保険を付けた。融資は、NEXI・Calik Enerji・三菱商事間の協力覚書に基づき2024年5月に設定したクレジットライン枠の下で行われる。（CLM-C02-0004／AXIS_13_T03）\n- 【確認事実】公表資料で確認できる三菱商事関連の協調融資では、三菱UFJ銀行が民間金融機関の筆頭として記載されている（JBICのAethon案件）。（CLM-C02-0006／AXIS_13_T01）\n\n## 5. 政府・国家・規制・外交・国際金融\n- 【当事者の主張】JBICはこの融資を、第7次エネルギー基本計画（2025年2月閣議決定）で天然ガスが重要なエネルギー源と位置づけられていることを踏まえ、LNGの長期安定確保・調達先多角化に資するエネルギー安全保障上重要な取組と位置づけている。（CLM-C02-0003／AXIS_16_T06）\n\n## 6. 世界情勢・市場・資源・物流・リスク\n- 【確認事実】三菱商事が出資するCalik Enerjiは、トルコ・中央アジア・中東・アフリカ・欧州等でエネルギー・インフラ案件のEPC、配電・小売、再エネ発電投資を行い、NEXIのクレジットライン枠でコソボのZatriq風力（73MW）等も支援されている。（CLM-C02-0005／AXIS_17_T04）\n\n## 7. 経営者・ガバナンス・部門・人事・採用・意思決定\n（未調査：AXIS_21, AXIS_22, AXIS_28）\n\n## 8. AI・技術革新・不動産・産業設備・環境\n（未調査：AXIS_09, AXIS_10, AXIS_23）\n\n## 9. 個別案件の資金・製品・サービス・権限の流れ\n- 【確認事実】JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。（CLM-C02-0001／AXIS_30_T06）\n\n## 10. 統計分析・数理モデル・競合仮説・反証\n| 仮説 | 説明 | 評価 | 反証の記録 |\n|---|---|---|---|\n| HYP-C02-0001 | H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。 | UNRESOLVED | 0件 |\n| HYP-C02-0002 | H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。 | UNRESOLVED | 0件 |\n（未調査：AXIS_26）\n\n## 11. 2030・2035・2040・2050年の複数シナリオ\n（未調査：AXIS_27）\n\n## 12. 社内30軸の分析をつなぐ会社固有の因果モデル\n総括の因果説明（上記）が現時点の会社固有モデル。30軸を結ぶ定量モデルは未構築。\n\n## 13. 他社・銀行・政府との立証済み関係リンク\n- REL-C02-0001：ENT-JBIC → ENT-COMPANY_02（LENDS_TO、1560 百万米ドル、CONFIRMED_ONE_SIDE）\n- REL-C02-0002：ENT-COMPANY_02 → ENT-CALIK-ENERJI（INVESTS_IN、CONFIRMED_ONE_SIDE）\n- 他の総合商社との関係は、会社別研究の後に `cross_company/` で双方の原文IDを突き合わせて扱う（本書には転記しない）。\n\n## 14. 確認できない内容と追加調査\n- Q-C02-A01-T02-01（BLOCKED）三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。\n- Q-C02-A14-T01-01（BLOCKED）三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。\n- Q-C02-A22-T05-01（BLOCKED）三菱商事本体の従業員数・平均給与等は？\n- Q-C02-A24-T01-01（BLOCKED）三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。\n- 未着手のROOT研究カード：233件\n\n## 15. 2026-11-01版と月次版の差分／会社別研究ゲート\n- スナップショット：asof_2026-11-01, monthly_2026-11\n- 再確認イベント：0件（ledger/claim_status_events.jsonl）\n- ゲートの正本は `COMPANY_RESEARCH_STATUS.json`、更新履歴は `UPDATE_HISTORY.md`。\n",
+  "report_md": "<!-- generated by tools/build_reports.py from this company's ledgers; hand-written part: REPORT_SUMMARY.md -->\n# 三菱商事：独立総合インテリジェンス研究書\n\n> COMPANY_ID: `COMPANY_02`（Mitsubishi Corporation）／ 基準日: 2026-11-01 ／ 研究ゲート: **PARTIAL**\n> 30軸: PASS 0・進行中 10 ／ 240テーマ: {'NOT_STARTED': 227, 'IN_PROGRESS': 13} ／ 主張 14（{'PARTY_CLAIM': 9, 'FACT': 4, 'ANALYSIS': 1}）\n> 本書はこの会社の資料だけで成立し、他社の研究書・出典IDを参照しない。各文末のIDから原文位置（台帳）へ遡れる。未調査の章は未調査と明記する。\n\n## 総括（研究者による統合・手書き）\n\n**研究の制約を先に記す**：三菱商事の会社サイトは本環境から全ページ403で、有価証券報告書・統合報告書を取得できなかった。EDINET APIもキーがなくBLOCKEDである。そのため本書は、三菱商事を当事者とするJBIC・NEXIの公表文だけに基づく、極めて限定的な初期調査にとどまる。財務・沿革・株主・人事の章は未調査で、他社の資料からの推定で埋めることはしない。\n\n**確認できたこと**：JBICは2026年3月31日、三菱商事本体と約1,560百万米ドル、米国法人と約815百万米ドルの貸付契約を締結した（JBIC分）。資金使途は、米国の天然ガス開発事業者Aethonの買収資金の一部である（CLM-C02-0001）。JBICの説明では、三菱商事はガス・LNGを中核事業とし、米国の上流ガスを起点に複合的なバリューチェーンを目指している（CLM-C02-0002、融資者による記述）。NEXIとは、三菱商事が出資するトルコのCalik Enerjiを介した三者の協力覚書があり、クレジットライン枠を通じて再エネ案件が支援されている（CLM-C02-0004）。\n\n**仮説（いずれも未決）**：エネルギー安全保障政策が大型の政策融資を呼んだとする説明（HYP-C02-0001）と、大型買収の資金規模・条件の要請による説明（HYP-C02-0002）がある。買収総額と三菱商事の財務数値がないため、どちらとも検証できない。\n\n**次の作業**：会社開示の取得経路を確保する（EDINET APIキー、または会社サイトへの別経路）。それまで三菱商事の会社ゲートは事実上BLOCKEDである。\n\n## 1. 会社の成立・歴史・経路依存\n（未調査：AXIS_01）\n\n## 2. 全事業・商流・所有資産・グループ会社\n- 【当事者の主張】JCRは、現状の資源価格を前提とすれば三菱商事（と三井物産）の最終利益の4〜5割を資源分野が占めている模様だと推定している。（CLM-C02-0013／AXIS_02_T02）\n- 【当事者の主張】JCRによると、三菱商事のFY2025最終利益に対して、銅価格上昇で約430億円のプラス、原料炭価格下落で約240億円のマイナス要因が生じた。（CLM-C02-0009／AXIS_04_T04）\n- 【当事者の主張】JBICの説明では、三菱商事は天然ガス・LNG事業を中核事業の一つとし、近年は米国を戦略地域として中下流を含むガス事業を強化しており、本買収を通じ米国の上流ガスを起点とした複合的なバリューチェーン構築を目指す。（CLM-C02-0002／AXIS_05_T01）\n\n## 3. 事業別の資本配分・収益構造・投資実行・撤退\n- 【当事者の主張】JCRによると、FY2025の三菱商事の投資額は1兆円を超えた。（CLM-C02-0014／AXIS_14_T02）\n- 【当事者の主張】JCRは最近の大型投資の例として三菱商事の米国シェールガス事業（投資金額約8,000億円）を挙げている。（CLM-C02-0010／AXIS_15_T03）\n\n## 4. 銀行融資・政策金融・金利・為替・財務\n- 【確認事実】NEXIは2026年4月、Calik Enerji（トルコ、三菱商事が出資）によるポーランドの太陽光発電ポートフォリオ（255MW、うち243MW運転中）買収資金へのドイツ銀行東京支店の融資に融資保険を付けた。融資は、NEXI・Calik Enerji・三菱商事間の協力覚書に基づき2024年5月に設定したクレジットライン枠の下で行われる。（CLM-C02-0004／AXIS_13_T03）\n- 【確認事実】公表資料で確認できる三菱商事関連の協調融資では、三菱UFJ銀行が民間金融機関の筆頭として記載されている（JBICのAethon案件）。（CLM-C02-0006／AXIS_13_T01）\n- 【当事者の主張】JCRの集計（各社決算資料よりJCR作成）では、三菱商事のFY2025（26/3期）の収益は18兆9,160億円（前期18兆6,176億円）、営業利益4,186億円（前期3,711億円）、最終利益8,005億円（前期9,507億円）、27/3期の会社予想は1兆1,000億円。（CLM-C02-0007／AXIS_14_T01）\n- 【当事者の主張】JCRの集計では、三菱商事のネット有利子負債は3兆472億円から3兆8,882億円に増え、自己資本は9兆3,687億円から9兆4,406億円、ネットDERは0.33倍から0.41倍に上昇した（FY2025）。（CLM-C02-0008／AXIS_14_T07）\n\n## 5. 政府・国家・規制・外交・国際金融\n- 【当事者の主張】JBICはこの融資を、第7次エネルギー基本計画（2025年2月閣議決定）で天然ガスが重要なエネルギー源と位置づけられていることを踏まえ、LNGの長期安定確保・調達先多角化に資するエネルギー安全保障上重要な取組と位置づけている。（CLM-C02-0003／AXIS_16_T06）\n\n## 6. 世界情勢・市場・資源・物流・リスク\n- 【確認事実】三菱商事が出資するCalik Enerjiは、トルコ・中央アジア・中東・アフリカ・欧州等でエネルギー・インフラ案件のEPC、配電・小売、再エネ発電投資を行い、NEXIのクレジットライン枠でコソボのZatriq風力（73MW）等も支援されている。（CLM-C02-0005／AXIS_17_T04）\n- 【当事者の主張】JCRは、三菱商事のFY2025の減益要因として鉄鉱石・原料炭など資源価格の下落と、前年に計上されたリサイクル・特殊要因に伴う利益の反動減を挙げている。（CLM-C02-0012／AXIS_25_T02）\n\n## 7. 経営者・ガバナンス・部門・人事・採用・意思決定\n（未調査：AXIS_21, AXIS_22, AXIS_28）\n\n## 8. AI・技術革新・不動産・産業設備・環境\n（未調査：AXIS_09, AXIS_10, AXIS_23）\n\n## 9. 個別案件の資金・製品・サービス・権限の流れ\n- 【確認事実】JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。（CLM-C02-0001／AXIS_30_T06）\n- 【分析】JBICは三菱商事による米国の天然ガス開発事業者（Aethon）買収資金の一部として、JBIC分で本体約1,560百万米ドル、米国法人約815百万米ドルを民間金融機関との協調融資で融資した。JCRは三菱商事の米国シェールガス事業の投資金額を約8,000億円としている。両資料は案件名の表記が異なり（JBIC：米国天然ガス開発事業者の買収、JCR：米国シェールガス事業）、同一案件であることは推定にとどまる。協調融資の総額と為替前提が開示資料にないため、投資額に対するJBIC融資の比率は算出しない。（CLM-C02-0011／AXIS_30_T06）\n\n## 10. 統計分析・数理モデル・競合仮説・反証\n| 仮説 | 説明 | 評価 | 反証の記録 |\n|---|---|---|---|\n| HYP-C02-0001 | H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。 | UNRESOLVED | 0件 |\n| HYP-C02-0002 | H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。 | UNRESOLVED | 0件 |\n（未調査：AXIS_26）\n\n## 11. 2030・2035・2040・2050年の複数シナリオ\n（未調査：AXIS_27）\n\n## 12. 社内30軸の分析をつなぐ会社固有の因果モデル\n総括の因果説明（上記）が現時点の会社固有モデル。30軸を結ぶ定量モデルは未構築。\n\n## 13. 他社・銀行・政府との立証済み関係リンク\n- REL-C02-0001：ENT-JBIC → ENT-COMPANY_02（LENDS_TO、1560 百万米ドル、CONFIRMED_ONE_SIDE）\n- REL-C02-0002：ENT-COMPANY_02 → ENT-CALIK-ENERJI（INVESTS_IN、CONFIRMED_ONE_SIDE）\n- 他の総合商社との関係は、会社別研究の後に `cross_company/` で双方の原文IDを突き合わせて扱う（本書には転記しない）。\n\n## 14. 確認できない内容と追加調査\n- Q-C02-A01-T02-01（BLOCKED）三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。\n- Q-C02-A14-T01-01（BLOCKED）三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。\n- Q-C02-A14-T08-01（BLOCKED）JCRが集計した三菱商事の財務数値（最終利益8,005億円、ネットDER0.41倍等）を三菱商事自身の有報で照合する。\n- Q-C02-A22-T05-01（BLOCKED）三菱商事本体の従業員数・平均給与等は？\n- Q-C02-A24-T01-01（BLOCKED）三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。\n- 未着手のROOT研究カード：230件\n\n## 15. 2026-11-01版と月次版の差分／会社別研究ゲート\n- スナップショット：asof_2026-11-01, monthly_2026-11\n- 再確認イベント：0件（ledger/claim_status_events.jsonl）\n- ゲートの正本は `COMPANY_RESEARCH_STATUS.json`、更新履歴は `UPDATE_HISTORY.md`。\n",
   "axes": [
     {
       "axis_id": "AXIS_01",
@@ -6574,8 +6605,8 @@
     {
       "axis_id": "AXIS_02",
       "axis_name": "総合商社ビジネスモデル",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_02 総合商社ビジネスモデル：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_02` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_02_T01 | トレーディング収益・手数料・マージン | NOT_STARTED |\n| AXIS_02_T02 | 資源・非資源の事業投資収益 | NOT_STARTED |\n| AXIS_02_T03 | 物流・在庫・金融・信用供与の機能 | NOT_STARTED |\n| AXIS_02_T04 | オフテイク契約・商権・長期調達 | NOT_STARTED |\n| AXIS_02_T05 | 事業経営・オペレーター機能 | NOT_STARTED |\n| AXIS_02_T06 | 資本回収・EXIT・バリューアップ | NOT_STARTED |\n| AXIS_02_T07 | 事業部門間のシナジー実態 | NOT_STARTED |\n| AXIS_02_T08 | 商社と投資銀行・ファンド・メーカーの違い | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_02 総合商社ビジネスモデル：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_02_T02\n- 【当事者の主張】JCRは、現状の資源価格を前提とすれば三菱商事（と三井物産）の最終利益の4〜5割を資源分野が占めている模様だと推定している。（CLM-C02-0013／AXIS_02_T02）\n\n## 問い\n- Q-C02-A02-T02-01（PARTIAL）三菱商事の資源依存度は？\n",
       "topics": [
         {
           "topic_id": "AXIS_02_T01",
@@ -6588,8 +6619,8 @@
           "topic_id": "AXIS_02_T02",
           "name": "資源・非資源の事業投資収益",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_02_T03",
@@ -6702,8 +6733,8 @@
     {
       "axis_id": "AXIS_04",
       "axis_name": "資源・鉱物・素材",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_04 資源・鉱物・素材：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_04` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_04_T01 | 鉄鉱石・銅・アルミ・ニッケル・リチウム | NOT_STARTED |\n| AXIS_04_T02 | 希土類・重要鉱物・精錬 | NOT_STARTED |\n| AXIS_04_T03 | 炭鉱・鉱山権益と採掘コスト | NOT_STARTED |\n| AXIS_04_T04 | 金属価格サイクル・需給・在庫 | NOT_STARTED |\n| AXIS_04_T05 | 精錬・製鋼・化学素材の産業連関 | NOT_STARTED |\n| AXIS_04_T06 | 資源国の税制・ロイヤルティ・国有化 | NOT_STARTED |\n| AXIS_04_T07 | 資源開発の環境負荷・地域合意 | NOT_STARTED |\n| AXIS_04_T08 | 資源権益の会計・評価・減損 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_04 資源・鉱物・素材：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_04_T04\n- 【当事者の主張】JCRによると、三菱商事のFY2025最終利益に対して、銅価格上昇で約430億円のプラス、原料炭価格下落で約240億円のマイナス要因が生じた。（CLM-C02-0009／AXIS_04_T04）\n\n## 問い\n- Q-C02-A04-T04-01（PARTIAL）資源価格は三菱商事の利益にどう伝わったか？\n",
       "topics": [
         {
           "topic_id": "AXIS_04_T01",
@@ -6730,8 +6761,8 @@
           "topic_id": "AXIS_04_T04",
           "name": "金属価格サイクル・需給・在庫",
           "priority": "P2",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_04_T05",
@@ -7342,22 +7373,22 @@
     {
       "axis_id": "AXIS_14",
       "axis_name": "企業財務・会計・資本配分",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_14 企業財務・会計・資本配分：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n## 問い\n- Q-C02-A14-T01-01（BLOCKED）三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_14 企業財務・会計・資本配分：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_14_T01\n- 【当事者の主張】JCRの集計（各社決算資料よりJCR作成）では、三菱商事のFY2025（26/3期）の収益は18兆9,160億円（前期18兆6,176億円）、営業利益4,186億円（前期3,711億円）、最終利益8,005億円（前期9,507億円）、27/3期の会社予想は1兆1,000億円。（CLM-C02-0007／AXIS_14_T01）\n\n### AXIS_14_T02\n- 【当事者の主張】JCRによると、FY2025の三菱商事の投資額は1兆円を超えた。（CLM-C02-0014／AXIS_14_T02）\n\n### AXIS_14_T07\n- 【当事者の主張】JCRの集計では、三菱商事のネット有利子負債は3兆472億円から3兆8,882億円に増え、自己資本は9兆3,687億円から9兆4,406億円、ネットDERは0.33倍から0.41倍に上昇した（FY2025）。（CLM-C02-0008／AXIS_14_T07）\n\n## 問い\n- Q-C02-A14-T01-01（BLOCKED）三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。\n- Q-C02-A14-T01-02（PARTIAL）三菱商事の業績規模は（第三者資料による）？\n- Q-C02-A14-T08-01（BLOCKED）JCRが集計した三菱商事の財務数値（最終利益8,005億円、ネットDER0.41倍等）を三菱商事自身の有報で照合する。\n",
       "topics": [
         {
           "topic_id": "AXIS_14_T01",
           "name": "連結財務・IFRS/J-GAAP差異",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_14_T02",
           "name": "事業セグメント利益とキャッシュフロー",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_14_T03",
@@ -7391,8 +7422,8 @@
           "topic_id": "AXIS_14_T07",
           "name": "負債構成・流動性・金融制約",
           "priority": "P1",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_14_T08",
@@ -7406,8 +7437,8 @@
     {
       "axis_id": "AXIS_15",
       "axis_name": "投資・M&A・案件経済性",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_15 投資・M&A・案件経済性：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_15` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_15_T01 | 投資案件発掘とパイプライン | NOT_STARTED |\n| AXIS_15_T02 | 事前FS・DD・リスク評価 | NOT_STARTED |\n| AXIS_15_T03 | 株式取得・JV・持分法・子会社化 | NOT_STARTED |\n| AXIS_15_T04 | DCF・IRR・NPVと感度分析 | NOT_STARTED |\n| AXIS_15_T05 | 買収後統合・事業運営・改善 | NOT_STARTED |\n| AXIS_15_T06 | 撤退・減損・売却・破綻事例 | NOT_STARTED |\n| AXIS_15_T07 | 契約条件とキャッシュフロー優先順位 | NOT_STARTED |\n| AXIS_15_T08 | 投資失敗の要因比較と競合仮説 | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_15 投資・M&A・案件経済性：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_15_T03\n- 【当事者の主張】JCRは最近の大型投資の例として三菱商事の米国シェールガス事業（投資金額約8,000億円）を挙げている。（CLM-C02-0010／AXIS_15_T03）\n",
       "topics": [
         {
           "topic_id": "AXIS_15_T01",
@@ -7427,8 +7458,8 @@
           "topic_id": "AXIS_15_T03",
           "name": "株式取得・JV・持分法・子会社化",
           "priority": "P2",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_15_T04",
@@ -8046,8 +8077,8 @@
     {
       "axis_id": "AXIS_25",
       "axis_name": "ショック・危機・リスク連鎖",
-      "state": "NOT_STARTED",
-      "synthesis_md": "<!-- TEMPLATE:NOT_STARTED -->\n# 三菱商事 / AXIS_25 ショック・危機・リスク連鎖：社内独立軸レポート\n\n> COMPANY_ID: `COMPANY_02` / AXIS: `AXIS_25` / 状態: **NOT_STARTED**（未着手） / 基準日: 2026-11-01\n\nこの軸はまだ調査されていない。以下のテーマは登録のみで、証拠・主張・分析は存在しない。\n\n| topic_id | テーマ | 状態 |\n|---|---|---|\n| AXIS_25_T01 | 金融危機・信用収縮 | NOT_STARTED |\n| AXIS_25_T02 | 商品価格急騰・急落 | NOT_STARTED |\n| AXIS_25_T03 | 戦争・経済制裁・政情不安 | NOT_STARTED |\n| AXIS_25_T04 | 自然災害・パンデミック | NOT_STARTED |\n| AXIS_25_T05 | サイバー攻撃・情報漏洩 | NOT_STARTED |\n| AXIS_25_T06 | 大型投資失敗・資産減損 | NOT_STARTED |\n| AXIS_25_T07 | 危機対応・BCP・代替調達 | NOT_STARTED |\n| AXIS_25_T08 | リスク相関と複合ショック | NOT_STARTED |\n\n## 現時点で分かったこと\n（未着手）\n\n## 未確認の重要事項\n（未着手）\n\n## この軸が会社全体へ与える影響\n（未着手）\n",
+      "state": "IN_PROGRESS",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_25 ショック・危機・リスク連鎖：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_25_T02\n- 【当事者の主張】JCRは、三菱商事のFY2025の減益要因として鉄鉱石・原料炭など資源価格の下落と、前年に計上されたリサイクル・特殊要因に伴う利益の反動減を挙げている。（CLM-C02-0012／AXIS_25_T02）\n",
       "topics": [
         {
           "topic_id": "AXIS_25_T01",
@@ -8060,8 +8091,8 @@
           "topic_id": "AXIS_25_T02",
           "name": "商品価格急騰・急落",
           "priority": "P2",
-          "declared": "NOT_STARTED",
-          "applicability": "UNKNOWN"
+          "declared": "IN_PROGRESS",
+          "applicability": "APPLICABLE"
         },
         {
           "topic_id": "AXIS_25_T03",
@@ -8367,7 +8398,7 @@
       "axis_id": "AXIS_30",
       "axis_name": "事業別ケーススタディと因果検証",
       "state": "IN_PROGRESS",
-      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_30 事業別ケーススタディと因果検証：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_30_T06\n- 【確認事実】JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。（CLM-C02-0001／AXIS_30_T06）\n\n## 競合仮説\n- HYP-C02-0001（UNRESOLVED）H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。\n- HYP-C02-0002（UNRESOLVED）H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。\n\n## 問い\n- Q-C02-A30-T06-01（PARTIAL）三菱商事の米国天然ガス事業買収はどう資金手当てされたか？\n",
+      "synthesis_md": "<!-- AUTO_DIGEST -->\n# 三菱商事 / AXIS_30 事業別ケーススタディと因果検証：初期調査ダイジェスト（自動生成）\n\n> COMPANY_ID: `COMPANY_02` / 基準日: 2026-11-01\n> **これは台帳から機械的に並べた一覧で、分析レポートではない。** 研究ゲートは自動ダイジェストを「執筆済みの統合」と見なさないため、この軸のテーマはこのままではPASSにならない。\n\n## 主張（テーマ別）\n\n### AXIS_30_T06\n- 【確認事実】JBICは2026年3月31日、三菱商事と融資金額約1,560百万米ドル（JBIC分）、同社米国法人Mitsubishi Corporation (Americas)と約815百万米ドル（JBIC分）の貸付契約を締結した。資金使途は、米国で天然ガスの開発・生産・販売等を手掛けるAethon III LLC、Aethon United LP等の買収資金の一部で、三菱UFJ銀行をはじめとする民間金融機関との協調融資。（CLM-C02-0001／AXIS_30_T06）\n- 【分析】JBICは三菱商事による米国の天然ガス開発事業者（Aethon）買収資金の一部として、JBIC分で本体約1,560百万米ドル、米国法人約815百万米ドルを民間金融機関との協調融資で融資した。JCRは三菱商事の米国シェールガス事業の投資金額を約8,000億円としている。両資料は案件名の表記が異なり（JBIC：米国天然ガス開発事業者の買収、JCR：米国シェールガス事業）、同一案件であることは推定にとどまる。協調融資の総額と為替前提が開示資料にないため、投資額に対するJBIC融資の比率は算出しない。（CLM-C02-0011／AXIS_30_T06）\n\n## 競合仮説\n- HYP-C02-0001（UNRESOLVED）H1 エネルギー安全保障政策仮説：日本のLNG長期確保政策に沿う上流ガス取得であるため、政策金融が大規模に動員された。\n- HYP-C02-0002（UNRESOLVED）H2 調達規模・条件仮説：大型買収の資金需要が大きく、長期・大口の資金を確保するために政策金融と民間協調融資を組み合わせた。\n\n## 問い\n- Q-C02-A30-T06-01（PARTIAL）三菱商事の米国天然ガス事業買収はどう資金手当てされたか？\n",
       "topics": [
         {
           "topic_id": "AXIS_30_T01",
@@ -8468,6 +8499,26 @@
       "snapshot": "asof_2026-11-01",
       "license": "公開資料。原文は再配布せず位置参照と最小限の抜粋のみ保存",
       "notes": "政府100%出資の貿易保険会社（ECA）。三菱商事はCalik Enerjiへの出資者・協力覚書の当事者。"
+    },
+    {
+      "source_id": "SRC-C02-0003",
+      "company_id": "COMPANY_02",
+      "url": "https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf",
+      "publisher": "株式会社日本格付研究所（JCR）",
+      "title": "【決算レポート】総合商社の26/3期決算の注目点（KR-2606）",
+      "doc_type": "セクターレポート",
+      "source_type": "OTHER",
+      "access": "DIRECT",
+      "published_at": "2026-06-12",
+      "retrieved_at": "2026-11-10T06:29:08+09:00",
+      "sha256": "bf496691e8069155d20168a50cf60848bd8162396e1893a5f37b1218fec279bb",
+      "etag": null,
+      "last_modified": "Fri, 12 Jun 2026 02:23:41 GMT",
+      "origin_group_id": "OG-JCR-KR-2606",
+      "shared_source_id": "SHS-JCR-KR-2606",
+      "snapshot": "asof_2026-11-01",
+      "license": "公開資料。原文は再配布せず位置参照と最小限の抜粋のみ保存",
+      "notes": "金融庁登録の信用格付業者。格付判断・分析は格付会社自身の見解（会社開示とは独立の起源）。ただし図表の財務数値は「各社決算資料よりJCR作成」で会社開示の転記（独立の検証にならない）。"
     }
   ],
   "passages": [
@@ -8624,6 +8675,138 @@
       "section": "",
       "excerpt": "コソボ共和国のZatriq風力発電案件（総発電容量73MW）",
       "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0015",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 2
+      },
+      "section": "",
+      "excerpt": "収益 186,176 189,160",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0016",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 2
+      },
+      "section": "",
+      "excerpt": "最終利益 9,507 8,005 11,000",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0017",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 3
+      },
+      "section": "",
+      "excerpt": "ネット有利子負債 30,472 38,882",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0018",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 3
+      },
+      "section": "",
+      "excerpt": "自己資本 93,687 94,406",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0019",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 3
+      },
+      "section": "",
+      "excerpt": "ネット DER 0.33 0.41",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0020",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 1
+      },
+      "section": "",
+      "excerpt": "三菱商事では 26/3 期の親会社の所有者に帰属する当期利益（最終利益）に対し、銅で約 430 億円のプラス要因、 原料炭で約 240 億円のマイナス要因が生じた",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0021",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 1
+      },
+      "section": "",
+      "excerpt": "三菱商事の米国シェールガス事業（投資金額約 8,000 億円）",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0022",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 1
+      },
+      "section": "",
+      "excerpt": "三菱商事では、前年に計上されたリサイクル・特殊要因に 伴う利益の反動減が大きく、減益幅が拡大した",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0023",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 1
+      },
+      "section": "",
+      "excerpt": "資源分野での鉄鉱石、原料炭な どの価格下落の影響を強く受けた三菱商事、三井物産、双日は減益となり",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0024",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 2
+      },
+      "section": "",
+      "excerpt": "現状の資源価格を前提と すれば、三菱商事、三井物産では 4～5 割が資源分野で占められている模様である",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0025",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 1
+      },
+      "section": "",
+      "excerpt": "三菱商事、 三井物産、住友商事では投資額が 1 兆円を超えた",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
+    },
+    {
+      "passage_id": "PSG-C02-0026",
+      "company_id": "COMPANY_02",
+      "source_id": "SRC-C02-0003",
+      "locator": {
+        "pdf_page": 2
+      },
+      "section": "",
+      "excerpt": "営業利益 3,711 4,186",
+      "verified": "EXCERPT_MATCHED_IN_EXTRACTED_TEXT"
     }
   ],
   "observations": [
@@ -8659,6 +8842,52 @@
     }
   ],
   "claims": [
+    {
+      "claim_id": "CLM-C02-0013",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_02",
+      "topic_id": "AXIS_02_T02",
+      "question_id": "Q-C02-A02-T02-01",
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRは、現状の資源価格を前提とすれば三菱商事（と三井物産）の最終利益の4〜5割を資源分野が占めている模様だと推定している。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0024",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "CURRENT",
+      "info_class": "MARKET_OUTLOOK",
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T06:29:08+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0009",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_04",
+      "topic_id": "AXIS_04_T04",
+      "question_id": "Q-C02-A04-T04-01",
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRによると、三菱商事のFY2025最終利益に対して、銅価格上昇で約430億円のプラス、原料炭価格下落で約240億円のマイナス要因が生じた。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0020",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T06:29:08+09:00"
+    },
     {
       "claim_id": "CLM-C02-0002",
       "company_id": "COMPANY_02",
@@ -8749,6 +8978,119 @@
       "recorded_at": "2026-11-10T01:04:20+09:00"
     },
     {
+      "claim_id": "CLM-C02-0007",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T01",
+      "question_id": "Q-C02-A14-T01-02",
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRの集計（各社決算資料よりJCR作成）では、三菱商事のFY2025（26/3期）の収益は18兆9,160億円（前期18兆6,176億円）、営業利益4,186億円（前期3,711億円）、最終利益8,005億円（前期9,507億円）、27/3期の会社予想は1兆1,000億円。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0015",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        },
+        {
+          "passage_id": "PSG-C02-0016",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        },
+        {
+          "passage_id": "PSG-C02-0026",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": "AUDITED_FINANCIAL",
+      "snapshot": "asof_2026-11-01",
+      "notes": "会社開示の二次的転記（JCR作成の図表）。三菱商事の有報（EDINET S100YB25）との照合は別の主張で行う。",
+      "recorded_at": "2026-11-10T06:29:08+09:00",
+      "revised_in_audit": "AUD-20261110-JCR-01"
+    },
+    {
+      "claim_id": "CLM-C02-0008",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T07",
+      "question_id": null,
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRの集計では、三菱商事のネット有利子負債は3兆472億円から3兆8,882億円に増え、自己資本は9兆3,687億円から9兆4,406億円、ネットDERは0.33倍から0.41倍に上昇した（FY2025）。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0017",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        },
+        {
+          "passage_id": "PSG-C02-0018",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        },
+        {
+          "passage_id": "PSG-C02-0019",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": "AUDITED_FINANCIAL",
+      "snapshot": "asof_2026-11-01",
+      "notes": "会社開示の二次的転記。",
+      "recorded_at": "2026-11-10T06:29:08+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0014",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T02",
+      "question_id": null,
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRによると、FY2025の三菱商事の投資額は1兆円を超えた。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0025",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T06:29:08+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0010",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_15",
+      "topic_id": "AXIS_15_T03",
+      "question_id": null,
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRは最近の大型投資の例として三菱商事の米国シェールガス事業（投資金額約8,000億円）を挙げている。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0021",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T06:29:08+09:00"
+    },
+    {
       "claim_id": "CLM-C02-0003",
       "company_id": "COMPANY_02",
       "axis_id": "AXIS_16",
@@ -8805,6 +9147,35 @@
       "recorded_at": "2026-11-10T01:04:20+09:00"
     },
     {
+      "claim_id": "CLM-C02-0012",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_25",
+      "topic_id": "AXIS_25_T02",
+      "question_id": null,
+      "claim_type": "PARTY_CLAIM",
+      "statement": "JCRは、三菱商事のFY2025の減益要因として鉄鉱石・原料炭など資源価格の下落と、前年に計上されたリサイクル・特殊要因に伴う利益の反動減を挙げている。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0022",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        },
+        {
+          "passage_id": "PSG-C02-0023",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "",
+      "recorded_at": "2026-11-10T06:29:08+09:00",
+      "revised_in_audit": "AUD-20261110-JCR-08"
+    },
+    {
       "claim_id": "CLM-C02-0001",
       "company_id": "COMPANY_02",
       "axis_id": "AXIS_30",
@@ -8841,6 +9212,39 @@
       "snapshot": "asof_2026-11-01",
       "notes": "買収総額・持分比率・協調融資総額は本資料に記載なし。",
       "recorded_at": "2026-11-10T01:04:20+09:00"
+    },
+    {
+      "claim_id": "CLM-C02-0011",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_30",
+      "topic_id": "AXIS_30_T06",
+      "question_id": null,
+      "claim_type": "ANALYSIS",
+      "statement": "JBICは三菱商事による米国の天然ガス開発事業者（Aethon）買収資金の一部として、JBIC分で本体約1,560百万米ドル、米国法人約815百万米ドルを民間金融機関との協調融資で融資した。JCRは三菱商事の米国シェールガス事業の投資金額を約8,000億円としている。両資料は案件名の表記が異なり（JBIC：米国天然ガス開発事業者の買収、JCR：米国シェールガス事業）、同一案件であることは推定にとどまる。協調融資の総額と為替前提が開示資料にないため、投資額に対するJBIC融資の比率は算出しない。",
+      "evidence": [
+        {
+          "passage_id": "PSG-C02-0001",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0002",
+          "direction": "SUPPORT",
+          "relation": "PRIMARY_DIRECT"
+        },
+        {
+          "passage_id": "PSG-C02-0021",
+          "direction": "SUPPORT",
+          "relation": "SECONDARY"
+        }
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "validity": "HISTORICAL_IMMUTABLE",
+      "info_class": null,
+      "snapshot": "asof_2026-11-01",
+      "notes": "比率を出すには為替前提と協調融資総額が必要で、いずれも三菱商事の台帳に一次資料がない。三菱商事の有報（BLOCKED）で取得額・資金調達を確認する。",
+      "recorded_at": "2026-11-10T06:29:08+09:00"
     }
   ],
   "hypotheses": [
@@ -8939,6 +9343,87 @@
       "status": "BLOCKED",
       "discovery_reason": "会社サイト取得不能",
       "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A02-T02-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_02",
+      "topic_id": "AXIS_02_T02",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「資源・非資源の事業投資収益」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 資源・非資源の事業投資収益",
+        "Mitsubishi Corporation 資源・非資源の事業投資収益",
+        "site:www.mitsubishicorp.com 資源・非資源の事業投資収益"
+      ],
+      "source_route": [
+        "有価証券報告書「事業の内容」「セグメント情報」",
+        "統合報告書",
+        "決算説明資料"
+      ],
+      "priority": "P1",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A02-T02-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_02",
+      "topic_id": "AXIS_02_T02",
+      "parent_question_id": "Q-C02-A02-T02-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事の資源依存度は？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "PARTIAL",
+      "discovery_reason": "初期全軸調査（一次資料）",
+      "claim_ids": [
+        "CLM-C02-0013"
+      ]
+    },
+    {
+      "question_id": "Q-C02-A04-T04-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_04",
+      "topic_id": "AXIS_04_T04",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「金属価格サイクル・需給・在庫」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 金属価格サイクル・需給・在庫",
+        "Mitsubishi Corporation 金属価格サイクル・需給・在庫",
+        "site:www.mitsubishicorp.com 金属価格サイクル・需給・在庫"
+      ],
+      "source_route": [
+        "有価証券報告書（金属資源セグメント・権益一覧）",
+        "JOGMEC資料",
+        "豪州・チリ等の資源当局/取引所開示",
+        "パートナー企業の年次報告"
+      ],
+      "priority": "P2",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A04-T04-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_04",
+      "topic_id": "AXIS_04_T04",
+      "parent_question_id": "Q-C02-A04-T04-00",
+      "kind": "ATOMIC",
+      "question": "資源価格は三菱商事の利益にどう伝わったか？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "PARTIAL",
+      "discovery_reason": "初期全軸調査（一次資料）",
+      "claim_ids": [
+        "CLM-C02-0009"
+      ]
     },
     {
       "question_id": "Q-C02-A05-T01-00",
@@ -9048,6 +9533,29 @@
       "claim_ids": []
     },
     {
+      "question_id": "Q-C02-A14-T08-00",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T08",
+      "parent_question_id": null,
+      "kind": "ROOT_RESEARCH_CARD",
+      "question": "三菱商事において「財務指標の定義・単体と連結の区別」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続）",
+      "search_queries": [
+        "三菱商事 財務指標の定義・単体と連結の区別",
+        "Mitsubishi Corporation 財務指標の定義・単体と連結の区別",
+        "site:www.mitsubishicorp.com 財務指標の定義・単体と連結の区別"
+      ],
+      "source_route": [
+        "有価証券報告書（連結財務諸表・注記）",
+        "決算短信",
+        "決算説明資料"
+      ],
+      "priority": "P1",
+      "status": "IN_PROGRESS",
+      "discovery_reason": "STEP1 初期登録（company_axis_registry.csv）",
+      "claim_ids": []
+    },
+    {
       "question_id": "Q-C02-A14-T01-01",
       "company_id": "COMPANY_02",
       "axis_id": "AXIS_14",
@@ -9060,6 +9568,38 @@
       "priority": "P1",
       "status": "BLOCKED",
       "discovery_reason": "mitsubishicorp.comが全ページ403、EDINET APIはキー無しで401",
+      "claim_ids": []
+    },
+    {
+      "question_id": "Q-C02-A14-T01-02",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T01",
+      "parent_question_id": "Q-C02-A14-T01-00",
+      "kind": "ATOMIC",
+      "question": "三菱商事の業績規模は（第三者資料による）？",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "PARTIAL",
+      "discovery_reason": "初期全軸調査（一次資料）",
+      "claim_ids": [
+        "CLM-C02-0007"
+      ]
+    },
+    {
+      "question_id": "Q-C02-A14-T08-01",
+      "company_id": "COMPANY_02",
+      "axis_id": "AXIS_14",
+      "topic_id": "AXIS_14_T08",
+      "parent_question_id": "Q-C02-A14-T08-00",
+      "kind": "ATOMIC",
+      "question": "JCRが集計した三菱商事の財務数値（最終利益8,005億円、ネットDER0.41倍等）を三菱商事自身の有報で照合する。",
+      "search_queries": [],
+      "source_route": [],
+      "priority": "P1",
+      "status": "BLOCKED",
+      "discovery_reason": "会社サイト403・EDINETキー無し",
       "claim_ids": []
     },
     {
@@ -9179,7 +9719,7 @@
       ]
     }
   ],
-  "root_questions_not_started": 233,
+  "root_questions_not_started": 230,
   "relations": [
     {
       "relation_id": "REL-C02-0001",
@@ -9298,6 +9838,28 @@
         "AXIS_30",
         "AXIS_05"
       ]
+    },
+    {
+      "log_id": "SL-C02-0004",
+      "company_id": "COMPANY_02",
+      "at": "2026-11-10T06:29:08+09:00",
+      "query": "JCR格付一覧 /ratinglist/corp/8058 とセクターレポート",
+      "language": "ja",
+      "results": 1,
+      "adopted": [
+        "SRC-C02-0003"
+      ],
+      "excluded": [],
+      "status": null,
+      "notes": "三菱商事はJCRの格付対象外（一覧へリダイレクト）。セクターレポートに三菱商事の集計値と分析あり。",
+      "axis_ids": [
+        "AXIS_02",
+        "AXIS_04",
+        "AXIS_14",
+        "AXIS_15",
+        "AXIS_25",
+        "AXIS_30"
+      ]
     }
   ],
   "models": [],
@@ -9307,5 +9869,5 @@
   ],
   "claim_status_events": [],
   "update_history_md": "# 三菱商事：月次更新履歴\n\n| UPDATE_ID | 実行日 | 結果 | 詳細 |\n|---|---|---|---|\n| UPD-2026-11-C02 | 2026-11-09 | OK | checked 2 sources {'UNCHANGED': 2}; source-driven NEEDS_RECHECK 0, scheduled re-check 0; reports to re-verify: none |\n",
-  "next_steps_md": "<!-- generated by tools/build_reports.py from open questions; edit the questions, not this file -->\n# 三菱商事：次回再開手順（NEXT_STEPS）\n\n## 1. 未解決の問い（優先順：OPEN → BACKLOG → BLOCKED）\n\n- [BLOCKED] Q-C02-A01-T02-01：三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。（会社サイト取得不能）\n- [BLOCKED] Q-C02-A14-T01-01：三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。（mitsubishicorp.comが全ページ403、EDINET APIはキー無しで401）\n- [BLOCKED] Q-C02-A22-T05-01：三菱商事本体の従業員数・平均給与等は？（会社サイト取得不能）\n- [BLOCKED] Q-C02-A24-T01-01：三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。（会社サイト取得不能）\n\n## 2. まだ一次資料の主張がない軸\n\n- AXIS_02, AXIS_03, AXIS_04, AXIS_06, AXIS_07, AXIS_08, AXIS_09, AXIS_10, AXIS_11, AXIS_12, AXIS_15, AXIS_18, AXIS_19, AXIS_20, AXIS_21, AXIS_23, AXIS_25, AXIS_26, AXIS_27, AXIS_28, AXIS_29\n\n## 3. 手順\n\n1. `python3 research/research_gates.py --company COMPANY_02` で現状を確認する。\n2. 一次資料を取得し、`research/tools/evidence_builder.py` 用のspecを書く（抜粋は原文頁と機械照合される）。\n3. 主張・仮説・問いを追加したら、該当軸の SYNTHESIS.md を手書きで更新する（自動ダイジェストのままではPASSにならない）。\n4. `research/run_all.sh` が全て通ってからコミットする。\n"
+  "next_steps_md": "<!-- generated by tools/build_reports.py from open questions; edit the questions, not this file -->\n# 三菱商事：次回再開手順（NEXT_STEPS）\n\n## 1. 未解決の問い（優先順：OPEN → BACKLOG → BLOCKED）\n\n- [BLOCKED] Q-C02-A01-T02-01：三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。（会社サイト取得不能）\n- [BLOCKED] Q-C02-A14-T01-01：三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。（mitsubishicorp.comが全ページ403、EDINET APIはキー無しで401）\n- [BLOCKED] Q-C02-A14-T08-01：JCRが集計した三菱商事の財務数値（最終利益8,005億円、ネットDER0.41倍等）を三菱商事自身の有報で照合する。（会社サイト403・EDINETキー無し）\n- [BLOCKED] Q-C02-A22-T05-01：三菱商事本体の従業員数・平均給与等は？（会社サイト取得不能）\n- [BLOCKED] Q-C02-A24-T01-01：三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。（会社サイト取得不能）\n\n## 2. まだ一次資料の主張がない軸\n\n- AXIS_03, AXIS_06, AXIS_07, AXIS_08, AXIS_09, AXIS_10, AXIS_11, AXIS_12, AXIS_18, AXIS_19, AXIS_20, AXIS_21, AXIS_23, AXIS_26, AXIS_27, AXIS_28, AXIS_29\n\n## 3. 手順\n\n1. `python3 research/research_gates.py --company COMPANY_02` で現状を確認する。\n2. 一次資料を取得し、`research/tools/evidence_builder.py` 用のspecを書く（抜粋は原文頁と機械照合される）。\n3. 主張・仮説・問いを追加したら、該当軸の SYNTHESIS.md を手書きで更新する（自動ダイジェストのままではPASSにならない）。\n4. `research/run_all.sh` が全て通ってからコミットする。\n"
 }

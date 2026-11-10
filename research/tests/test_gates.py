@@ -219,7 +219,7 @@ class TestMonthlyUpdate(Base):
         m = {s["url"]: {"status": 200, "sha256": s["sha256"], "error": None} for s in self.sources()}
         r = monthly_update.run("2026-12", "COMPANY_01", fetch=self.fake(m))
         c = r["companies"][0]
-        self.assertEqual(c["by_class"], {"UNCHANGED": 6})
+        self.assertEqual(c["by_class"], {"UNCHANGED": len(self.sources())})  # every source fetched with an identical hash
         self.assertEqual(c["claims_needs_recheck"], [])
         self.assertEqual(r["status"], "COMPLETED")
 
@@ -351,6 +351,33 @@ class TestCrossCompany(Base):
         p = self.c("豊田通商") / "axes" / "AXIS_13" / "SYNTHESIS.md"
         p.write_text("<!-- AUTO_DIGEST -->\nAXIS_13_T03 の主張一覧\n", encoding="utf-8")
         self.assertIn("E_UNSUPPORTED_PASS", self.codes())
+
+
+
+class TestSharedRegistry(Base):
+    """A source a ledger marks as shared must be registered once, identically, with that company listed as a user."""
+
+    def reg(self):
+        return self.root / "registry" / "shared_sources.jsonl"
+
+    def test_unregistered_shared_source(self):
+        rows = [r for r in jl_read(self.reg()) if r["shared_source_id"] != "SHS-JCR-KR-2606"]
+        jl_write(self.reg(), rows)
+        self.assertIn("E_SHARED_UNREGISTERED", self.codes())
+
+    def test_company_missing_from_used_by(self):
+        rows = jl_read(self.reg())
+        for r in rows:
+            if r["shared_source_id"] == "SHS-JCR-KR-2606":
+                r["used_by_companies"] = [c for c in r["used_by_companies"] if c != "COMPANY_04"]
+        jl_write(self.reg(), rows)
+        self.assertIn("E_SHARED_MISMATCH", self.codes("COMPANY_04"))
+
+    def test_hash_differs_from_registry(self):
+        rows = jl_read(self.reg())
+        rows[0]["sha256"] = "0" * 64
+        jl_write(self.reg(), rows)
+        self.assertIn("E_SHARED_MISMATCH", self.codes())
 
 
 if __name__ == "__main__":

@@ -5,12 +5,13 @@
 
 - [BLOCKED] Q-C02-A01-T02-01：三菱商事の沿革（三菱合資・旧三菱商事の解体と再統合）を一次資料で確認する。（会社サイト取得不能）
 - [BLOCKED] Q-C02-A14-T01-01：三菱商事の連結業績・財務（有価証券報告書）を取得する。会社サイトが本環境から403のため、EDINET（要APIキー）か別経路が必要。（mitsubishicorp.comが全ページ403、EDINET APIはキー無しで401）
+- [BLOCKED] Q-C02-A14-T08-01：JCRが集計した三菱商事の財務数値（最終利益8,005億円、ネットDER0.41倍等）を三菱商事自身の有報で照合する。（会社サイト403・EDINETキー無し）
 - [BLOCKED] Q-C02-A22-T05-01：三菱商事本体の従業員数・平均給与等は？（会社サイト取得不能）
 - [BLOCKED] Q-C02-A24-T01-01：三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。（会社サイト取得不能）
 
 ## 2. まだ一次資料の主張がない軸
 
-- AXIS_02, AXIS_03, AXIS_04, AXIS_06, AXIS_07, AXIS_08, AXIS_09, AXIS_10, AXIS_11, AXIS_12, AXIS_15, AXIS_18, AXIS_19, AXIS_20, AXIS_21, AXIS_23, AXIS_25, AXIS_26, AXIS_27, AXIS_28, AXIS_29
+- AXIS_03, AXIS_06, AXIS_07, AXIS_08, AXIS_09, AXIS_10, AXIS_11, AXIS_12, AXIS_18, AXIS_19, AXIS_20, AXIS_21, AXIS_23, AXIS_26, AXIS_27, AXIS_28, AXIS_29
 
 ## 3. 手順
 

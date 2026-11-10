@@ -2,3 +2,4 @@
 # 三井物産 / AXIS_02：この軸で使用した出典
 
 - SRC-C01-0001：三井物産株式会社（EDINET提出書類の会社サイト掲載PDF）「第107期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://www.mitsui.com/jp/ja/ir/library/securities/__icsFiles/afieldfile/2026/08/12/ja_107yuho.pdf>
+- SRC-C01-0007：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>

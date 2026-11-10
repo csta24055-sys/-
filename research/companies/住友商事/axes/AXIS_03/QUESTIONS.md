@@ -9,6 +9,7 @@
 | Q-C04-A03-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「商流・所有権・船荷証券・信用状」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C04-A03-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「調達から最終消費までのバリューチェーン」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C04-A03-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「商権と仲介業者の競争」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
-| Q-C04-A03-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「関税・貿易協定と国境コスト」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
+| Q-C04-A03-T07-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 住友商事において「関税・貿易協定と国境コスト」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C04-A03-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「商品貿易データの欠測・計上基準」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C04-A03-T01-01 | Q-C04-A03-T01-00 | ATOMIC | OPEN | 住友商事の商品別・地域別取扱高は公開資料で分かるか？ |  |
+| Q-C04-A03-T07-01 | Q-C04-A03-T07-00 | ATOMIC | ANSWERED | 米国の関税は住友商事のどの事業に影響していると会社は見ているか？ |  |

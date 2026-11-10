@@ -13,14 +13,14 @@
     "IN_PROGRESS": 38,
     "PASS": 1
   },
-  "questions_registered": 259,
-  "sources_direct": 3,
-  "independent_origin_groups": 2,
-  "passages": 102,
+  "questions_registered": 260,
+  "sources_direct": 4,
+  "independent_origin_groups": 3,
+  "passages": 106,
   "observations": 10,
   "claims_by_type": {
-    "FACT": 22,
-    "ANALYSIS": 3,
+    "FACT": 24,
+    "ANALYSIS": 4,
     "PARTY_CLAIM": 17,
     "FORECAST": 1
   },
@@ -72,10 +72,18 @@
       "CLM-C07-0025",
       "CLM-C07-0032"
     ],
+    "OG-JCR-LIST-8015": [
+      "CLM-C07-0044",
+      "CLM-C07-0045"
+    ],
     "OG-NEXI-202607141235": [
       "CLM-C07-0010",
       "CLM-C07-0028",
       "CLM-C07-0029"
+    ],
+    "PUBLISHER:株式会社日本格付研究所（JCR）": [
+      "CLM-C07-0044",
+      "CLM-C07-0045"
     ],
     "PUBLISHER:株式会社日本貿易保険（NEXI）": [
       "CLM-C07-0010",
@@ -3032,23 +3040,24 @@
       "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
-        "independent_origin_groups>=2": false,
+        "independent_origin_groups>=2": true,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
+        "atomic_questions_resolved_or_backlogged": true,
+        "unknowns_recorded": true,
         "synthesis_written": true,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 1,
+      "claims": 4,
       "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 1,
+      "questions": 1,
+      "independent_origin_groups": 2,
       "direct_sources": [
-        "SRC-C07-0001"
+        "SRC-C07-0001",
+        "SRC-C07-0004"
       ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,

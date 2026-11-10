@@ -9,6 +9,7 @@
 | Q-C06-A03-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「商流・所有権・船荷証券・信用状」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C06-A03-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「調達から最終消費までのバリューチェーン」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C06-A03-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「商権と仲介業者の競争」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
-| Q-C06-A03-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「関税・貿易協定と国境コスト」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
+| Q-C06-A03-T07-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 双日において「関税・貿易協定と国境コスト」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C06-A03-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 双日において「商品貿易データの欠測・計上基準」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C06-A03-T01-01 | Q-C06-A03-T01-00 | ATOMIC | OPEN | 双日の貿易取引（輸出入・外国間）の規模と商品構成は？ |  |
+| Q-C06-A03-T07-01 | Q-C06-A03-T07-00 | ATOMIC | ANSWERED | 双日は通商政策の変化をどう認識しているか？ |  |

@@ -2,3 +2,4 @@
 # 双日 / AXIS_21：この軸で使用した出典
 
 - SRC-C06-0001：双日株式会社「第23期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-09 <https://s3-ap-northeast-1.amazonaws.com/sojitz-doc/pdf/jp/ir_202405/reports/vsecurity/20260609.pdf>
+- SRC-C06-0004：株式会社日本格付研究所（JCR）「【決算レポート】総合商社の26/3期決算の注目点（KR-2606）」2026-06-12 <https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf>

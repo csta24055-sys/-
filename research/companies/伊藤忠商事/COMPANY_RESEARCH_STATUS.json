@@ -9,18 +9,18 @@
   "axes_in_progress": 30,
   "topics_registered": 240,
   "topics_by_state": {
-    "NOT_STARTED": 195,
-    "IN_PROGRESS": 45
+    "NOT_STARTED": 194,
+    "IN_PROGRESS": 46
   },
-  "questions_registered": 266,
-  "sources_direct": 2,
-  "independent_origin_groups": 2,
-  "passages": 111,
+  "questions_registered": 268,
+  "sources_direct": 4,
+  "independent_origin_groups": 4,
+  "passages": 117,
   "observations": 13,
   "claims_by_type": {
-    "FACT": 31,
+    "FACT": 32,
     "ANALYSIS": 4,
-    "PARTY_CLAIM": 10,
+    "PARTY_CLAIM": 12,
     "FORECAST": 2
   },
   "hypotheses": 3,
@@ -76,6 +76,10 @@
       "CLM-C03-0043",
       "CLM-C03-0029"
     ],
+    "OG-JCR-26-D-0686": [
+      "CLM-C03-0049"
+    ],
+    "OG-JCR-KR-2606": [],
     "OG-NEXI-202601261035": [
       "CLM-C03-0032",
       "CLM-C03-0033"
@@ -126,6 +130,9 @@
       "CLM-C03-0039",
       "CLM-C03-0043",
       "CLM-C03-0029"
+    ],
+    "PUBLISHER:株式会社日本格付研究所（JCR）": [
+      "CLM-C03-0049"
     ],
     "PUBLISHER:株式会社日本貿易保険（NEXI）": [
       "CLM-C03-0032",
@@ -234,8 +241,8 @@
     "AXIS_15": {
       "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 7,
-        "IN_PROGRESS": 1
+        "IN_PROGRESS": 2,
+        "NOT_STARTED": 6
       }
     },
     "AXIS_16": {
@@ -3043,23 +3050,24 @@
       "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
-        "independent_origin_groups>=2": false,
+        "independent_origin_groups>=2": true,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
+        "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 1,
+      "claims": 2,
       "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 1,
+      "questions": 1,
+      "independent_origin_groups": 2,
       "direct_sources": [
-        "SRC-C03-0001"
+        "SRC-C03-0001",
+        "SRC-C03-0003"
       ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
@@ -3310,8 +3318,8 @@
     {
       "topic_id": "AXIS_15_T01",
       "axis_id": "AXIS_15",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
@@ -3324,14 +3332,16 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
       "independent_origin_groups": 0,
-      "direct_sources": [],
+      "direct_sources": [
+        "SRC-C03-0004"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_15_T02",
@@ -3365,9 +3375,9 @@
       "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
-        "independent_origin_groups>=2": false,
+        "independent_origin_groups>=2": true,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": true,
         "atomic_questions_resolved_or_backlogged": false,
@@ -3376,12 +3386,13 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 1,
+      "claims": 2,
       "hypotheses": 1,
-      "questions": 2,
-      "independent_origin_groups": 1,
+      "questions": 3,
+      "independent_origin_groups": 2,
       "direct_sources": [
-        "SRC-C03-0001"
+        "SRC-C03-0001",
+        "SRC-C03-0003"
       ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,

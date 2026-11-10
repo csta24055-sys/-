@@ -3,3 +3,4 @@
 
 - SRC-C03-0001：伊藤忠商事株式会社「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://www.itochu.co.jp/ja/ir/download/__icsFiles/afieldfile/2026/06/12/security_102_1.pdf>
 - SRC-C03-0002：株式会社日本貿易保険（NEXI）「トルコ共和国／Anadolu IsuzuによるSamAuto買収案件に係る融資保険の引受（トルコ輸銀ツーステップローン）」2026-01-29 <https://www.nexi.go.jp/topics/newsrelease/202601261035.html>
+- SRC-C03-0003：株式会社日本格付研究所（JCR）「【伊藤忠商事】据置：AA+／安定的，J-1+（26-D-0686）」2026-09-16 <https://www.jcr.co.jp/download/fa577d3a1a0dba80daa7da78ba8caaf13f3db26bea8ae8c33d/26d0686.pdf>

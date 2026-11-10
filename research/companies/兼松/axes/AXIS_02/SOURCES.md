@@ -2,3 +2,4 @@
 # 兼松 / AXIS_02：この軸で使用した出典
 
 - SRC-C08-0001：兼松株式会社「第132期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-22 <https://www.kanematsu.co.jp/securities_reports/SR_2026_4q>
+- SRC-C08-0002：株式会社日本格付研究所（JCR）「【兼松】据置：A／安定的（25-D-1371）」2026-01-23 <https://www.jcr.co.jp/download/a9a026829fc2fac424884eb05fef532e8a0d88228f3fce3e2b/25d1371.pdf>

@@ -3,3 +3,4 @@
 
 - SRC-C07-0001：豊田通商株式会社「第105期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-18 <https://www.toyota-tsusho.com/ir/library/securities-report/upload_files/105th_yuho_ALL.pdf>
 - SRC-C07-0003：株式会社日本貿易保険（NEXI）「チュニジア共和国／太陽光発電事業（再保険の引受） -多数国間投資保証機関（MIGA）との協力案件」2026-07-21 <https://www.nexi.go.jp/topics/newsrelease/202607141235.html>
+- SRC-C07-0004：株式会社日本格付研究所（JCR）「格付一覧 豊田通商（8015）発行体ページ」2026-11-10 <https://www.jcr.co.jp/ratinglist/corp/8015>

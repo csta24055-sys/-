@@ -9,5 +9,6 @@
 | Q-C08-A03-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「商流・所有権・船荷証券・信用状」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C08-A03-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「調達から最終消費までのバリューチェーン」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C08-A03-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「商権と仲介業者の競争」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
-| Q-C08-A03-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「関税・貿易協定と国境コスト」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
+| Q-C08-A03-T07-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 兼松において「関税・貿易協定と国境コスト」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
 | Q-C08-A03-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 兼松において「商品貿易データの欠測・計上基準」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 財務省貿易統計／UN Comtrade／WTO統計／会社のトレーディング事業開示 |
+| Q-C08-A03-T07-01 | Q-C08-A03-T07-00 | ATOMIC | ANSWERED | 通商政策は兼松の事業にどう影響しうるか？ |  |

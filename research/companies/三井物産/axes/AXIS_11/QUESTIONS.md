@@ -7,7 +7,8 @@
 | Q-C01-A11-T02-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「インフレ・失業・賃金・生産性」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
 | Q-C01-A11-T03-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「景気循環と資本財・消費財需要」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
 | Q-C01-A11-T04-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「新興国の資本形成とインフラ需要」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
-| Q-C01-A11-T05-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「中国・米国・EU・ASEANの経済政策」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
+| Q-C01-A11-T05-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 三井物産において「中国・米国・EU・ASEANの経済政策」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
 | Q-C01-A11-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「産業別の需要弾力性と景気感応度」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
 | Q-C01-A11-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「購買力・所得分配・中間層形成」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
 | Q-C01-A11-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三井物産において「マクロ統計の基準・改訂・比較可能性」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | IMF WEO／世界銀行WDI／OECD／内閣府/各国統計局 |
+| Q-C01-A11-T05-01 | Q-C01-A11-T05-00 | ATOMIC | ANSWERED | 三井物産はマクロ環境をどう認識しているか？ |  |
