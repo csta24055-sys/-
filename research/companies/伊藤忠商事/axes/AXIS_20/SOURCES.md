@@ -2,3 +2,4 @@
 # 伊藤忠商事 / AXIS_20：この軸で使用した出典
 
 - SRC-C03-0001：伊藤忠商事株式会社「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://www.itochu.co.jp/ja/ir/download/__icsFiles/afieldfile/2026/06/12/security_102_1.pdf>
+- SRC-C03-0005：Berkshire Hathaway Inc.（National Indemnity Companyの親会社）「Berkshire Hathaway Inc. 2025 Letter to Shareholders」2026-02-28 <https://www.berkshirehathaway.com/letters/2025ltr.pdf>

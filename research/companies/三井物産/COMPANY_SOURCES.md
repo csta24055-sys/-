@@ -9,6 +9,7 @@
 | SRC-C01-0005 | 株式会社国際協力銀行（JBIC） | [豪州Rhodes Ridge鉄鉱山権益一部取得に対する融資](https://www.jbic.go.jp/ja/information/press/press-2025/press_00179.html) | 2026-03-10 | BANK | DIRECT | OG-JBIC-2025-00179 | `6a6e5840a656` |
 | SRC-C01-0006 | 株式会社日本貿易保険（NEXI） | [バングラデシュ人民共和国／ACI Logistics向け融資に係る融資保険の引受](https://www.nexi.go.jp/topics/newsrelease/202603161085.html) | 2026-03-31 | OTHER | DIRECT | OG-NEXI-202603161085 | `627971fe3e0f` |
 | SRC-C01-0007 | 株式会社日本格付研究所（JCR） | [【決算レポート】総合商社の26/3期決算の注目点（KR-2606）](https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf) | 2026-06-12 | OTHER | DIRECT | OG-JCR-KR-2606 | `bf496691e806` |
+| SRC-C01-0008 | Berkshire Hathaway Inc.（National Indemnity Companyの親会社） | [Berkshire Hathaway Inc. 2025 Letter to Shareholders](https://www.berkshirehathaway.com/letters/2025ltr.pdf) | 2026-02-28 | OTHER | DIRECT | OG-BRK-2025LTR | `8a7daf309556` |
 
 ## 検索ログ
 
@@ -23,3 +24,4 @@
 | SL-C01-0007 | 2026-11-10T01:06:05+09:00 | 第107期有報（SRC-C01-0001）の全章を軸別に再読（沿革・セグメント・感応度・リスク・関係会社・役員・従業員） | 1 | SRC-C01-0001 | None 2回目の読解。新規出典なし。  |
 | SL-C01-0008 | 2026-11-10T01:27:10+09:00 | 第107期有報の未着手15軸の精読（経営環境・中計2029・サステナビリティ・関係会社・主要設備・参考情報） | 1 | SRC-C01-0001 | None 訴訟・課徴金の個別記載は初期検索で検出されず（AXIS_18_T03はOPEN）。  |
 | SL-C01-0009 | 2026-11-10T06:29:08+09:00 | JCR格付一覧 /ratinglist/corp/8031（三井物産）とセクターレポート（2606_KR_総合商社） | 1 | SRC-C01-0007 | None 三井物産はJCRの格付対象外（発行体ページが一覧へリダイレクト）。セクターレポートのみ採用。  |
+| SL-C01-0010 | 2026-11-10T21:35:53+09:00 | Berkshire Hathaway 2025 Letter to Shareholders（https://www.berkshirehathaway.com/letters/2025ltr.pdf） | 1 | SRC-C01-0008 | None 日本の5商社の保有割合・取得原価・時価・配当を株主自身が記載。  |

@@ -64,6 +64,8 @@ const SHOTS = shotsIdx > 0 ? process.argv[shotsIdx + 1] : null;
     await page.waitForSelector("h1:has-text('会社間ネットワーク')");
     const net = await page.textContent("main");
     check("network page lists verified cross-company edges", net.includes("XREL-0001") && net.includes("VERIFIED_BOTH_SIDES") && net.includes("ONE_SIDED"));
+    check("network page shows evidence levels and the company graph", net.includes("BOTH_SIDES+THIRD_PARTY") && (await page.$$("figure svg line")).length > 0);
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "network.png"), fullPage: false });
     await page.goto(base + "#/gates");
     await page.waitForSelector("h1:has-text('研究ゲート')");
     check("gates page", (await page.textContent("main")).includes("RESEARCH_STATUS"));

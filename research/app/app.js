@@ -254,12 +254,33 @@ function relGraph(p) {
   return `<div class="tbl"><svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:520px;max-width:${W}px" role="img" aria-label="${esc(p.company.name_ja)}の関係エッジ">${edges}${nodes}</svg></div>`;
 }
 
+function crossGraph(companies, rel) {
+  // one line per company pair; solid = both companies' own disclosures, dashed = one side only, thick = third-party confirmation as well
+  const W = 440, R = 130, cx = W / 2, cy = W / 2, pos = {}, ang = {};
+  companies.forEach((c, i) => { const a = -Math.PI / 2 + (2 * Math.PI * i) / companies.length; ang[c.company_id] = a; pos[c.company_id] = [cx + R * Math.cos(a), cy + R * Math.sin(a)]; });
+  const pairs = {};
+  rel.forEach((r) => { const k = [r.company_a, r.company_b].sort().join("|"); (pairs[k] = pairs[k] || []).push(r); });
+  const lines = Object.entries(pairs).map(([k, rs]) => {
+    const [a, b] = k.split("|"); if (!pos[a] || !pos[b]) return "";
+    const both = rs.some((r) => r.status === "VERIFIED_BOTH_SIDES"), tp = rs.some((r) => (r.evidence_level || "").endsWith("+THIRD_PARTY"));
+    const [x1, y1] = pos[a], [x2, y2] = pos[b];
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--accent)" stroke-opacity=".7" stroke-width="${tp ? 3 : 1.5}" ${both ? "" : 'stroke-dasharray="5 4"'}><title>${esc(rs.map((r) => `${r.relation_id} ${r.type} ${r.evidence_level || r.status}`).join("\n"))}</title></line>`
+      + `<text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2}" font-size="10" fill="var(--muted)" text-anchor="middle">${rs.length}</text>`;
+  }).join("");
+  const nodes = companies.map((c) => {
+    const [x, y] = pos[c.company_id], a = ang[c.company_id], co = Math.cos(a);
+    const lx = cx + (R + 16) * co, ly = cy + (R + 16) * Math.sin(a) + 4, anchor = co > 0.3 ? "start" : co < -0.3 ? "end" : "middle";
+    return `<circle cx="${x}" cy="${y}" r="7" class="node-c"></circle><text x="${lx}" y="${ly + (Math.abs(co) <= 0.3 ? (Math.sin(a) < 0 ? -4 : 8) : 0)}" font-size="11" fill="var(--fg)" text-anchor="${anchor}">${esc(c.name_ja)}</text>`;
+  }).join("");
+  return `<figure style="margin:1rem 0;max-width:460px"><svg viewBox="0 0 ${W} ${W}" role="img" aria-label="会社間エッジの図">${lines}${nodes}</svg><figcaption class="muted" style="font-size:.8rem">線は会社の組。数字はその組のエッジ数。実線＝両側確認を含む、破線＝片側確認のみ、太線＝第三者確認つきを含む。線の有無は関係の存在だけを示し、影響の強さではない。</figcaption></figure>`;
+}
+
 async function viewNetwork() {
   setNav("network");
   const [d, x] = await Promise.all([loadCompanies(), getJSON("data/cross_company.json")]);
-  $view.innerHTML = `<h1>会社間ネットワーク</h1><p class="lede">8社それぞれの独立研究が終わった後に、出資・JV・協調融資・競合などを双方の原資料IDで接続する層です。片方の会社の資料だけで確認した関係はここに載せず、各社ページの「関係」に置いています。</p>
-    <div class="row">状態 ${pill(x.layers.cross_company || "NOT_STARTED")}<span class="muted">会社間エッジ: 両側確認 ${x.relations.filter((r) => r.status === "VERIFIED_BOTH_SIDES").length}件・片側のみ ${x.relations.filter((r) => r.status === "ONE_SIDED").length}件（存在の記録で、因果は主張しない）</span></div>
-    ${x.relations.length ? "" : '<div class="warn">会社間エッジはまだ0件です。推測でエッジは作りません。</div>'}
+  $view.innerHTML = `<h1>会社間ネットワーク</h1><p class="lede">8社それぞれの独立研究の上に、出資・JV・共通株主・同一市場への参加などを各社の原資料IDで接続する層です。証拠水準（片側確認・両側確認・第三者確認）は引用した原文の出所からゲートが計算します。</p>
+    <div class="row">状態 ${pill(x.layers.cross_company || "NOT_STARTED")}<span class="muted">会社間エッジ: 両側確認 ${x.relations.filter((r) => r.status === "VERIFIED_BOTH_SIDES").length}件・片側のみ ${x.relations.filter((r) => r.status === "ONE_SIDED").length}件・うち第三者確認つき ${x.relations.filter((r) => (r.evidence_level || "").endsWith("+THIRD_PARTY")).length}件（存在の記録で、因果は主張しない）</span></div>
+    ${x.relations.length ? crossGraph(d.companies, x.relations) : '<div class="warn">会社間エッジはまだ0件です。推測でエッジは作りません。</div>'}
     ${x.report_md ? md(x.report_md) : ""}
     <h2>各社が自社の台帳で確認した外部関係</h2><div class="tbl"><table><thead><tr><th>会社</th><th>会社ゲート</th><th>主張</th><th>開く</th></tr></thead><tbody>${d.companies.map((c) => `<tr><td>${esc(c.name_ja)}</td><td>${pill(c.status)}</td><td>${c.claims}</td><td><a href="#/c/${c.short_code}/relations">関係を見る</a></td></tr>`).join("")}</tbody></table></div>`;
 }

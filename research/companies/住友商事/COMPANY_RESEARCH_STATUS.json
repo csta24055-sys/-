@@ -9,18 +9,18 @@
   "axes_in_progress": 30,
   "topics_registered": 240,
   "topics_by_state": {
-    "NOT_STARTED": 191,
-    "IN_PROGRESS": 48,
+    "NOT_STARTED": 189,
+    "IN_PROGRESS": 50,
     "PASS": 1
   },
-  "questions_registered": 267,
-  "sources_direct": 5,
-  "independent_origin_groups": 5,
-  "passages": 138,
+  "questions_registered": 269,
+  "sources_direct": 6,
+  "independent_origin_groups": 6,
+  "passages": 148,
   "observations": 11,
   "claims_by_type": {
-    "FACT": 31,
-    "ANALYSIS": 6,
+    "FACT": 33,
+    "ANALYSIS": 7,
     "PARTY_CLAIM": 17,
     "FORECAST": 1
   },
@@ -30,6 +30,9 @@
   "models": [],
   "errors": 0,
   "source_ablation_claims_losing_all_support": {
+    "OG-BRK-2025LTR": [
+      "CLM-C04-0056"
+    ],
     "OG-C04-YUHO-158": [
       "CLM-C04-0001",
       "CLM-C04-0002",
@@ -65,6 +68,7 @@
       "CLM-C04-0025",
       "CLM-C04-0044",
       "CLM-C04-0027",
+      "CLM-C04-0058",
       "CLM-C04-0034",
       "CLM-C04-0035",
       "CLM-C04-0037",
@@ -91,6 +95,9 @@
     ],
     "OG-JCR-KR-2606": [
       "CLM-C04-0054"
+    ],
+    "PUBLISHER:Berkshire Hathaway Inc.（National Indemnity Companyの親会社）": [
+      "CLM-C04-0056"
     ],
     "PUBLISHER:住友商事株式会社": [
       "CLM-C04-0001",
@@ -127,6 +134,7 @@
       "CLM-C04-0025",
       "CLM-C04-0044",
       "CLM-C04-0027",
+      "CLM-C04-0058",
       "CLM-C04-0034",
       "CLM-C04-0035",
       "CLM-C04-0037",
@@ -288,15 +296,15 @@
     "AXIS_20": {
       "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 6,
-        "IN_PROGRESS": 2
+        "NOT_STARTED": 5,
+        "IN_PROGRESS": 3
       }
     },
     "AXIS_21": {
       "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 6,
-        "IN_PROGRESS": 2
+        "NOT_STARTED": 5,
+        "IN_PROGRESS": 3
       }
     },
     "AXIS_22": {
@@ -4547,12 +4555,12 @@
     {
       "topic_id": "AXIS_20_T07",
       "axis_id": "AXIS_20",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
         "has_direct_fact": false,
-        "independent_origin_groups>=2": false,
+        "independent_origin_groups>=2": true,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": false,
@@ -4561,14 +4569,17 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
       "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "independent_origin_groups": 2,
+      "direct_sources": [
+        "SRC-C04-0001",
+        "SRC-C04-0006"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_20_T08",
@@ -4733,28 +4744,30 @@
     {
       "topic_id": "AXIS_21_T06",
       "axis_id": "AXIS_21",
-      "declared": "NOT_STARTED",
-      "computed": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
+      "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
+        "atomic_questions_resolved_or_backlogged": true,
         "unknowns_recorded": false,
         "synthesis_written": false,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
-      "questions": 0,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "questions": 1,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C04-0001"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_21_T07",
@@ -5236,9 +5249,9 @@
       "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
-        "independent_origin_groups>=2": false,
+        "independent_origin_groups>=2": true,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": true,
@@ -5247,12 +5260,13 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 1,
+      "claims": 2,
       "hypotheses": 0,
-      "questions": 1,
-      "independent_origin_groups": 1,
+      "questions": 2,
+      "independent_origin_groups": 2,
       "direct_sources": [
-        "SRC-C04-0001"
+        "SRC-C04-0001",
+        "SRC-C04-0006"
       ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,

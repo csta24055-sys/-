@@ -9,6 +9,7 @@
 | SRC-C02-0005 | Latham & Watkins LLP（売手Aethon側の法律顧問） | [Latham Advises Aethon in Completed Sale of Haynesville Business to Mitsubishi](https://www.lw.com/en/news/2026/07/latham-advises-aethon-in-completed-sale-of-haynesville-business-to-mitsubishi) | 2026-07-15 | OTHER | DIRECT | OG-LW-AETHON-2026-07 | `af12b139a742` |
 | SRC-C02-0006 | 千代田化工建設株式会社（EDINET提出書類） | [臨時報告書（第98回定時株主総会・種類株主総会の決議結果）EDINET書類管理番号S100YM6P](https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YM6P.pdf) | 2026-06-26 | COMPANY | DIRECT | OG-CHIYODA-RINJI-2026-06 | `1ce906430a6d` |
 | SRC-C02-0007 | 千代田化工建設株式会社（東京証券取引所の適時開示、日本取引所グループのサイト掲載） | [A種優先株式の一部取得及び消却の完了並びにコミットメントライン契約の締結及び劣後金銭消費貸借契約の期限前返済完了に関するお知らせ](https://www2.jpx.co.jp/disc/63660/140120260629583626.pdf) | 2026-06-30 | COMPANY | DIRECT | OG-CHIYODA-TD-2026-06-30 | `7c545e931bef` |
+| SRC-C02-0008 | Berkshire Hathaway Inc.（National Indemnity Companyの親会社） | [Berkshire Hathaway Inc. 2025 Letter to Shareholders](https://www.berkshirehathaway.com/letters/2025ltr.pdf) | 2026-02-28 | OTHER | DIRECT | OG-BRK-2025LTR | `8a7daf309556` |
 
 ## 検索ログ
 
@@ -23,3 +24,4 @@
 | SL-C02-0007 | 2026-11-10T21:19:49+09:00 | 三菱商事 有価証券報告書 S100YB25 本文の全章（事業・財務・株式・ガバナンス・従業員・注記） | 1 | SRC-C02-0004 | None 253頁を章ごとに確認し、30軸に対応する記載を抜粋した。  |
 | SL-C02-0008 | 2026-11-10T21:24:54+09:00 | Mitsubishi Corporation completes acquisition Aethon Haynesville 2026（ウェブ検索） | 10 | SRC-C02-0005 | None Aethon側のBusiness Wire発表（2026-07-14）は本環境からタイムアウトで未取得。売手側代理人Latham & Watkinsの公表を採用。報道（$7.5B表記）は二次情報のため不採用。  |
 | SL-C02-0009 | 2026-11-10T21:24:54+09:00 | 千代田化工建設 第98回定時株主総会 定款変更 承認 三菱商事 持分法 2026年6月（ウェブ検索） | 9 | SRC-C02-0006, SRC-C02-0007 | None 千代田化工建設の臨時報告書（EDINET）と適時開示（JPXサイト掲載PDF）を採用。三菱商事の2026年1月28日リリースは会社サイトが403で未取得。  |
+| SL-C02-0010 | 2026-11-10T21:35:53+09:00 | Berkshire Hathaway 2025 Letter to Shareholders（日本の保有一覧） | 1 | SRC-C02-0008 | None   |

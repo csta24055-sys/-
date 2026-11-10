@@ -17,6 +17,7 @@
 
 ### AXIS_20_T06
 - 【確認事実】三菱商事は、National Indemnity Companyが主要株主（議決権の10%以上）に該当するとして、2025年8月28日付で臨時報告書（主要株主の異動）を提出した。2026年3月31日現在の名義上の大株主は、日本マスタートラスト信託銀行（信託口）16.65%、STATE STREET BANK AND TRUST COMPANY 505104 10.91%、日本カストディ銀行（信託口）5.28%、明治安田生命保険3.41%など。（CLM-C02-0094／AXIS_20_T06）
+- 【分析】Berkshireの手紙は2025年12月31日時点の三菱商事株式の保有を10.8%とし、三菱商事の有報は2026年3月31日現在の名義株主STATE STREET BANK AND TRUST COMPANY 505104を10.91%（自己株式を除く発行済株式に対する割合）とする。National Indemnityは2025年8月に主要株主（議決権10%以上）となった。数値の近さは、この名義口座がNational Indemnityの保管口座であることと整合するが、時点と分母が違うため証明にはならない。（CLM-C02-0128／AXIS_20_T06）
 
 ### AXIS_20_T07
 - 【確認事実】千代田化工建設は2026年6月30日、三菱商事からA種優先株式110,400,000株（発行済A種優先株式の63.1%）を1株499.2円、総額55,111,680,000円で取得して消却した。残りのA種優先株式は2028年6月末までに全株償還し、財務的自立を果たしたうえでプライム市場への移行と普通株主への復配を目指すとしている。（CLM-C02-0124／AXIS_20_T07）
@@ -28,5 +29,5 @@
 - Q-C02-A20-T04-01（ANSWERED）三菱商事は他の総合商社とどの事業を共同で持つか？
 - Q-C02-A20-T05-01（ANSWERED）三菱グループ企業との資本・人的関係は？
 - Q-C02-A20-T06-01（PARTIAL）三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。
-- Q-C02-A20-T06-02（BACKLOG）STATE STREET BANK AND TRUST COMPANY 505104（10.91%）はNational Indemnity Companyの保管口座か？National Indemnityの実際の保有比率は？
+- Q-C02-A20-T06-02（PARTIAL）STATE STREET BANK AND TRUST COMPANY 505104（10.91%）はNational Indemnity Companyの保管口座か？National Indemnityの実際の保有比率は？
 - Q-C02-A20-T07-01（ANSWERED）三菱商事と千代田化工建設の資本関係はどう変わっているか？

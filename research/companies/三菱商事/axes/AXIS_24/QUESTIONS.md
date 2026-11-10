@@ -11,6 +11,7 @@
 | Q-C02-A24-T06-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「格付けと株主リスク許容度」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書「大株主の状況」／大量保有報告書／株価・配当データ |
 | Q-C02-A24-T07-00 |  | ROOT_RESEARCH_CARD | IN_PROGRESS | 三菱商事において「事業評価と純資産・含み価値」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書「大株主の状況」／大量保有報告書／株価・配当データ |
 | Q-C02-A24-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 三菱商事において「公表データと市場予測の識別」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書「大株主の状況」／大量保有報告書／株価・配当データ |
-| Q-C02-A24-T01-01 | Q-C02-A24-T01-00 | ATOMIC | BLOCKED | 三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。 |  |
+| Q-C02-A24-T01-01 | Q-C02-A24-T01-00 | ATOMIC | PARTIAL | 三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。 |  |
 | Q-C02-A24-T02-01 | Q-C02-A24-T02-00 | ATOMIC | ANSWERED | 市場は三菱商事をどう評価しているか？ |  |
 | Q-C02-A24-T07-01 | Q-C02-A24-T07-00 | ATOMIC | ANSWERED | 三菱商事の政策保有株式は？ |  |
+| Q-C02-A24-T01-02 | Q-C02-A24-T01-00 | ATOMIC | ANSWERED | 三菱商事の大株主Berkshire Hathaway（National Indemnity）の保有は、株主自身の資料でどう示されているか？ |  |

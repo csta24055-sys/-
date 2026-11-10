@@ -9,18 +9,18 @@
   "axes_in_progress": 30,
   "topics_registered": 240,
   "topics_by_state": {
-    "NOT_STARTED": 147,
-    "IN_PROGRESS": 91,
+    "NOT_STARTED": 146,
+    "IN_PROGRESS": 92,
     "PASS": 2
   },
-  "questions_registered": 310,
-  "sources_direct": 7,
-  "independent_origin_groups": 7,
-  "passages": 432,
+  "questions_registered": 311,
+  "sources_direct": 8,
+  "independent_origin_groups": 8,
+  "passages": 437,
   "observations": 19,
   "claims_by_type": {
-    "FACT": 73,
-    "ANALYSIS": 18,
+    "FACT": 74,
+    "ANALYSIS": 19,
     "PARTY_CLAIM": 34,
     "UNKNOWN": 1
   },
@@ -30,6 +30,9 @@
   "models": [],
   "errors": 0,
   "source_ablation_claims_losing_all_support": {
+    "OG-BRK-2025LTR": [
+      "CLM-C02-0127"
+    ],
     "OG-C02-YUHO-FY2025": [
       "CLM-C02-0015",
       "CLM-C02-0016",
@@ -156,6 +159,9 @@
     "OG-NEXI-202604141136": [
       "CLM-C02-0004",
       "CLM-C02-0005"
+    ],
+    "PUBLISHER:Berkshire Hathaway Inc.（National Indemnity Companyの親会社）": [
+      "CLM-C02-0127"
     ],
     "PUBLISHER:Latham & Watkins LLP（売手Aethon側の法律顧問）": [],
     "PUBLISHER:三菱商事株式会社（EDINET提出書類）": [
@@ -449,8 +455,8 @@
     "AXIS_24": {
       "state": "IN_PROGRESS",
       "topics": {
-        "NOT_STARTED": 6,
-        "IN_PROGRESS": 2
+        "IN_PROGRESS": 3,
+        "NOT_STARTED": 5
       }
     },
     "AXIS_25": {
@@ -4738,9 +4744,9 @@
       "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
-        "has_claims>=2": false,
+        "has_claims>=2": true,
         "has_direct_fact": true,
-        "independent_origin_groups>=2": false,
+        "independent_origin_groups>=2": true,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
         "atomic_questions_resolved_or_backlogged": true,
@@ -4749,12 +4755,13 @@
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 1,
+      "claims": 2,
       "hypotheses": 0,
       "questions": 2,
-      "independent_origin_groups": 1,
+      "independent_origin_groups": 2,
       "direct_sources": [
-        "SRC-C02-0004"
+        "SRC-C02-0004",
+        "SRC-C02-0008"
       ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
@@ -5461,28 +5468,30 @@
     {
       "topic_id": "AXIS_24_T01",
       "axis_id": "AXIS_24",
-      "declared": "NOT_STARTED",
+      "declared": "IN_PROGRESS",
       "computed": "IN_PROGRESS",
       "checks": {
         "has_claims>=2": false,
-        "has_direct_fact": false,
+        "has_direct_fact": true,
         "independent_origin_groups>=2": false,
         "competing_hypotheses>=2": false,
         "hypotheses_have_counterevidence_notes": false,
-        "atomic_questions_resolved_or_backlogged": false,
-        "unknowns_recorded": false,
+        "atomic_questions_resolved_or_backlogged": true,
+        "unknowns_recorded": true,
         "synthesis_written": false,
         "search_logged": true,
         "no_claims_pending_recheck": true
       },
-      "claims": 0,
+      "claims": 1,
       "hypotheses": 0,
-      "questions": 1,
-      "independent_origin_groups": 0,
-      "direct_sources": [],
+      "questions": 2,
+      "independent_origin_groups": 1,
+      "direct_sources": [
+        "SRC-C02-0008"
+      ],
       "claims_pending_recheck": [],
       "contradicting_evidence": 0,
-      "state": "NOT_STARTED"
+      "state": "IN_PROGRESS"
     },
     {
       "topic_id": "AXIS_24_T02",

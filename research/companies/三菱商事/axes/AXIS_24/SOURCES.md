@@ -2,3 +2,4 @@
 # 三菱商事 / AXIS_24：この軸で使用した出典
 
 - SRC-C02-0004：三菱商事株式会社（EDINET提出書類）「有価証券報告書 2025年度（自2025年4月1日 至2026年3月31日）EDINET書類管理番号S100YB25」2026-06-12 <https://disclosure2dl.edinet-fsa.go.jp/searchdocument/pdf/S100YB25.pdf>
+- SRC-C02-0008：Berkshire Hathaway Inc.（National Indemnity Companyの親会社）「Berkshire Hathaway Inc. 2025 Letter to Shareholders」2026-02-28 <https://www.berkshirehathaway.com/letters/2025ltr.pdf>

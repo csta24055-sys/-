@@ -17,7 +17,9 @@
         "PSG-C05-0002",
         "PSG-C05-0004"
       ],
+      "third_party_evidence": [],
       "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
       "causal": false,
       "notes": "両社とも1858年の初代伊藤忠兵衛の麻布商いを起源とする。伊藤忠側は1918年の分割（伊藤忠商店→丸紅商店）と1949年の大建産業の4社分割を記載し、丸紅側は創業者を伊藤忠兵衛、設立を1949年とする。起源の共有は事実だが、現在の事業構造への影響は各社の仮説（伊藤忠HYP、丸紅HYP）で個別に扱う。"
     },
@@ -35,9 +37,20 @@
       "evidence_b": [
         "PSG-C03-0098"
       ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_01",
+          "passage_id": "PSG-C01-0140"
+        },
+        {
+          "company": "COMPANY_03",
+          "passage_id": "PSG-C03-0118"
+        }
+      ],
       "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
       "causal": false,
-      "notes": "National Indemnity Company（Berkshire Hathaway完全子会社）の大量保有報告書（2025-03-10現在）を両社が有報で注記。保有割合：三井物産9.82%、伊藤忠8.53%（分割前株数ベース）。両社とも2026-03-31の実質所有は確認できないと記載。共通株主の存在は記録するが、両社の経営判断への影響（因果）は主張しない。"
+      "notes": "National Indemnity Company（Berkshire Hathaway完全子会社）の大量保有報告書（2025-03-10現在）を両社が有報で注記。保有割合：三井物産9.82%、伊藤忠8.53%（分割前株数ベース）。両社とも2026-03-31の実質所有は確認できないと記載。共通株主の存在は記録するが、両社の経営判断への影響（因果）は主張しない。 第三者確認：Berkshire Hathawayの2025年株主への手紙が2025年12月31日時点の保有を記載（10.4%・10.1%、各社台帳の同一共有資料SHS-BRK-2025LTR）。"
     },
     {
       "relation_id": "XREL-0003",
@@ -53,9 +66,20 @@
       "evidence_b": [
         "PSG-C04-0097"
       ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_01",
+          "passage_id": "PSG-C01-0140"
+        },
+        {
+          "company": "COMPANY_04",
+          "passage_id": "PSG-C04-0139"
+        }
+      ],
       "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
       "causal": false,
-      "notes": "保有割合：三井物産9.82%、住友商事9.29%（いずれも2025-03-10現在の報告記載値）。"
+      "notes": "保有割合：三井物産9.82%、住友商事9.29%（いずれも2025-03-10現在の報告記載値）。 第三者確認：Berkshire Hathawayの2025年株主への手紙が2025年12月31日時点の保有を記載（10.4%・9.7%、各社台帳の同一共有資料SHS-BRK-2025LTR）。"
     },
     {
       "relation_id": "XREL-0004",
@@ -71,9 +95,20 @@
       "evidence_b": [
         "PSG-C04-0097"
       ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_03",
+          "passage_id": "PSG-C03-0118"
+        },
+        {
+          "company": "COMPANY_04",
+          "passage_id": "PSG-C04-0139"
+        }
+      ],
       "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
       "causal": false,
-      "notes": "三菱商事・丸紅の同株主の保有は、両社の有報が未取得のため本レイヤーでは未接続（三菱商事は会社サイト403、丸紅は有報リンク取得不能）。"
+      "notes": "三菱商事・丸紅の同株主の保有は、両社の有報が未取得のため本レイヤーでは未接続（三菱商事は会社サイト403、丸紅は有報リンク取得不能）。 第三者確認：Berkshire Hathawayの2025年株主への手紙が2025年12月31日時点の保有を記載（10.1%・9.7%、各社台帳の同一共有資料SHS-BRK-2025LTR）。"
     },
     {
       "relation_id": "XREL-0005",
@@ -87,7 +122,9 @@
         "PSG-C01-0076"
       ],
       "evidence_b": [],
+      "third_party_evidence": [],
       "status": "ONE_SIDED",
+      "evidence_level": "ONE_SIDED",
       "causal": false,
       "notes": "三井物産の有報に議決権70.0%の連結子会社 Mitsui-Itochu Iron（豪州鉄鉱石投資）。伊藤忠の有報（第102期）の確認範囲では同社への言及を見つけられず、伊藤忠側の持分は未確認。"
     },
@@ -102,10 +139,14 @@
       "evidence_a": [
         "PSG-C03-0106"
       ],
-      "evidence_b": [],
-      "status": "ONE_SIDED",
+      "evidence_b": [
+        "PSG-C05-0061"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
       "causal": false,
-      "notes": "伊藤忠側に「伊藤忠丸紅鉄鋼…（現・ジョイント・ベンチャー）」の記載。丸紅側は統合報告書の範囲では未確認（有報未取得）。"
+      "notes": "伊藤忠側に「伊藤忠丸紅鉄鋼…（現・ジョイント・ベンチャー）」の記載。丸紅側は統合報告書の範囲では未確認（有報未取得）。 セッション4：丸紅の有報の沿革（2001年10月、伊藤忠商事と共同で設立した伊藤忠丸紅鉄鋼へ鉄鋼製品の営業を承継させる新設分割）で丸紅側も確認し、両側確認に更新。"
     },
     {
       "relation_id": "XREL-0007",
@@ -119,9 +160,379 @@
         "PSG-C04-0109"
       ],
       "evidence_b": [],
+      "third_party_evidence": [],
       "status": "ONE_SIDED",
+      "evidence_level": "ONE_SIDED",
       "causal": false,
       "notes": "住友商事の関連会社等に伊藤忠丸紅住商テクノスチール（議決権33.33%、うち間接22.16%）。社名上の共同事業者である伊藤忠・丸紅側の持分は未確認。"
+    },
+    {
+      "relation_id": "XREL-0008",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_01",
+      "company_b": "COMPANY_02",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C01-0015"
+      ],
+      "evidence_b": [
+        "PSG-C02-0336"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_01",
+          "passage_id": "PSG-C01-0140"
+        },
+        {
+          "company": "COMPANY_02",
+          "passage_id": "PSG-C02-0433"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（三井物産：大量保有報告書（2025-03-10現在9.82%）／三菱商事：主要株主（議決権10%以上）の異動の臨時報告書（2025-08-28））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を10.4%・10.8%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0009",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_03",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0336"
+      ],
+      "evidence_b": [
+        "PSG-C03-0098"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_02",
+          "passage_id": "PSG-C02-0433"
+        },
+        {
+          "company": "COMPANY_03",
+          "passage_id": "PSG-C03-0118"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（三菱商事：主要株主（議決権10%以上）の異動の臨時報告書（2025-08-28）／伊藤忠：大量保有報告書（8.53%、分割前株数ベース））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を10.8%・10.1%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0010",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_04",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0336"
+      ],
+      "evidence_b": [
+        "PSG-C04-0097"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_02",
+          "passage_id": "PSG-C02-0433"
+        },
+        {
+          "company": "COMPANY_04",
+          "passage_id": "PSG-C04-0139"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（三菱商事：主要株主（議決権10%以上）の異動の臨時報告書（2025-08-28）／住友商事：大量保有報告書（9.29%））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を10.8%・9.7%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0011",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_01",
+      "company_b": "COMPANY_05",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C01-0015"
+      ],
+      "evidence_b": [
+        "PSG-C05-0134"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_01",
+          "passage_id": "PSG-C01-0140"
+        },
+        {
+          "company": "COMPANY_05",
+          "passage_id": "PSG-C05-0165"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（三井物産：大量保有報告書（2025-03-10現在9.82%）／丸紅：主要株主（議決権10%以上）の異動の臨時報告書（2026-05-07））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を10.4%・9.8%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0012",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_05",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0336"
+      ],
+      "evidence_b": [
+        "PSG-C05-0134"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_02",
+          "passage_id": "PSG-C02-0433"
+        },
+        {
+          "company": "COMPANY_05",
+          "passage_id": "PSG-C05-0165"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（三菱商事：主要株主（議決権10%以上）の異動の臨時報告書（2025-08-28）／丸紅：主要株主（議決権10%以上）の異動の臨時報告書（2026-05-07））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を10.8%・9.8%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0013",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_03",
+      "company_b": "COMPANY_05",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C03-0098"
+      ],
+      "evidence_b": [
+        "PSG-C05-0134"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_03",
+          "passage_id": "PSG-C03-0118"
+        },
+        {
+          "company": "COMPANY_05",
+          "passage_id": "PSG-C05-0165"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（伊藤忠：大量保有報告書（8.53%、分割前株数ベース）／丸紅：主要株主（議決権10%以上）の異動の臨時報告書（2026-05-07））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を10.1%・9.8%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0014",
+      "type": "COMMON_MAJOR_SHAREHOLDER",
+      "company_a": "COMPANY_04",
+      "company_b": "COMPANY_05",
+      "via_entity": "ENT-NATIONAL-INDEMNITY",
+      "valid_from": "2025-12-31",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C04-0097"
+      ],
+      "evidence_b": [
+        "PSG-C05-0134"
+      ],
+      "third_party_evidence": [
+        {
+          "company": "COMPANY_04",
+          "passage_id": "PSG-C04-0139"
+        },
+        {
+          "company": "COMPANY_05",
+          "passage_id": "PSG-C05-0165"
+        }
+      ],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES+THIRD_PARTY",
+      "causal": false,
+      "notes": "両社の自社開示がNational Indemnity Company（Berkshire Hathaway完全子会社）を大株主として記載（住友商事：大量保有報告書（9.29%）／丸紅：主要株主（議決権10%以上）の異動の臨時報告書（2026-05-07））。第三者確認：Berkshireの2025年株主への手紙が2025年12月31日時点の保有を9.7%・9.8%と記載。valid_fromは5社すべての保有が同一資料で確認できる日付。共通株主の存在のみを記録し、両社の経営判断への影響（因果）は主張しない。"
+    },
+    {
+      "relation_id": "XREL-0015",
+      "type": "CO_INVESTMENT",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_01",
+      "via_entity": "ENT-MIMI",
+      "valid_from": null,
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0099"
+      ],
+      "evidence_b": [
+        "PSG-C01-0135",
+        "PSG-C01-0136"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "Japan Australia LNG（MIMI、豪州パース）について、三菱商事は議決権50.00%（間接、共同支配企業）、三井物産は50.0%と各自の有報に記載。資本金も一致（2,504,286千米ドル）。相手方の名称はどちらの該当箇所にもなく、両社で100%となることから共同出資と判断した（推論部分）。"
+    },
+    {
+      "relation_id": "XREL-0016",
+      "type": "CO_INVESTMENT",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_01",
+      "via_entity": "ENT-CAMERON-LNG",
+      "valid_from": null,
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0098"
+      ],
+      "evidence_b": [
+        "PSG-C01-0137"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "Cameron LNG Holdings（米国ルイジアナ州）に、三菱商事は16.60%（間接）、三井物産は子会社を通じ16.60%（第2位株主の一社、株主間協定に基づく取締役派遣）を保有と各自の有報に記載。筆頭株主（50.20%）は三井物産側の記載のみ。"
+    },
+    {
+      "relation_id": "XREL-0017",
+      "type": "CO_INVESTMENT",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_01",
+      "via_entity": "ENT-ANGLO-AMERICAN-SUR",
+      "valid_from": null,
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0393",
+        "PSG-C02-0303"
+      ],
+      "evidence_b": [
+        "PSG-C01-0138"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "チリの銅事業会社Anglo American Surに、三菱商事は20.4%（取得額45.1億米ドル）を保有し、コデルコと三井物産の合弁会社（29.5%）を共同保有者として名指しする。三井物産は子会社を通じた同社への投融資を記載。三井物産側の出資比率・合弁構造はこの箇所に記載がない。"
+    },
+    {
+      "relation_id": "XREL-0018",
+      "type": "COMMON_INVESTEE",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_01",
+      "via_entity": "ENT-DM-MITSUI-SUGAR",
+      "valid_from": null,
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0149"
+      ],
+      "evidence_b": [
+        "PSG-C01-0139"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "DM三井製糖を三菱商事は20.76%、三井物産は27.8%で、いずれも持分法適用会社として記載。共同出資の契約関係があるかは記載がない（共通の投資先として記録）。"
+    },
+    {
+      "relation_id": "XREL-0019",
+      "type": "JOINT_VENTURE",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_06",
+      "via_entity": "ENT-METAL-ONE",
+      "valid_from": "2003-01",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0324",
+        "PSG-C02-0325",
+        "PSG-C02-0326"
+      ],
+      "evidence_b": [
+        "PSG-C06-0099",
+        "PSG-C06-0100"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "三菱商事は2003年1月に日商岩井（現 双日）と共同新設分割でメタルワンを設立し、議決権60.00%で連結（非支配持分40.00%）。双日はメタルワン（資本金1,000億円）の40.0%を持分法で保有し、重要な関連会社とする。比率と資本金が一致。"
+    },
+    {
+      "relation_id": "XREL-0020",
+      "type": "COMMON_INVESTEE",
+      "company_a": "COMPANY_02",
+      "company_b": "COMPANY_03",
+      "via_entity": "ENT-ISUZU",
+      "valid_from": null,
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C02-0170",
+        "PSG-C02-0172"
+      ],
+      "evidence_b": [
+        "PSG-C03-0125"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "両社ともいすゞ自動車の株式を保有（三菱商事は63,633,040株・1,413億円で商用車ビジネスのコア・パートナーと位置づけ、伊藤忠は公正価値1,176億円）。両社がいすゞと別々に提携していることを示すだけで、三菱商事と伊藤忠の間の取引・協調は示さない。"
+    },
+    {
+      "relation_id": "XREL-0021",
+      "type": "SAME_MARKET_PARTICIPANT",
+      "company_a": "COMPANY_04",
+      "company_b": "COMPANY_05",
+      "via_entity": "米国の航空機リース事業",
+      "valid_from": null,
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C04-0031"
+      ],
+      "evidence_b": [
+        "PSG-C05-0170"
+      ],
+      "third_party_evidence": [],
+      "status": "VERIFIED_BOTH_SIDES",
+      "evidence_level": "BOTH_SIDES",
+      "causal": false,
+      "notes": "住友商事は米国航空機リース会社（Air Lease）の買収を2026年4月に完了、丸紅は丸紅アビエーションを通じてAircastleを保有と各自の有報に記載。同じ市場への参加を示すだけで、両社の取引・競合の程度は示さない。伊藤忠もJCRの記述（米国航空機リース会社への投資決定）で候補だが、伊藤忠自身の開示で未確認のためエッジ化していない。"
+    },
+    {
+      "relation_id": "XREL-0022",
+      "type": "PERSONNEL_HISTORY",
+      "company_a": "COMPANY_04",
+      "company_b": "COMPANY_02",
+      "via_entity": "朝倉陽保（住友商事 社外取締役）",
+      "valid_from": "2024-06",
+      "valid_to": null,
+      "evidence_a": [
+        "PSG-C04-0144",
+        "PSG-C04-0146"
+      ],
+      "evidence_b": [],
+      "third_party_evidence": [],
+      "status": "ONE_SIDED",
+      "evidence_level": "ONE_SIDED",
+      "causal": false,
+      "notes": "住友商事の社外取締役（2024年6月就任）が1984年に三菱商事に入社し、2016年に丸の内キャピタルの社長となった経歴を住友商事の有報が記載。三菱商事の有報は丸の内キャピタルを持分法適用会社として記載するが、人物には触れない。過去の経歴上のつながりで、現在の取引関係や影響は示さない。"
     }
   ],
   "entities": [
@@ -385,5 +796,5 @@
     }
   },
   "note": "会社間エッジは双方の会社台帳の原文IDが揃ったものだけを VERIFIED_BOTH_SIDES とし、片側のみは ONE_SIDED と表示する。",
-  "report_md": "<!-- generated by tools/build_cross_company.py; company ledgers are the source of truth -->\n# 会社間比較・接続レイヤー（COMPARATIVE_REPORT）\n\n> 状態：**PARTIAL**（基準日 2026-11-01）。このレイヤーは8社それぞれの独立研究の**上に載る派生物**で、各社の研究書を上書きしない。\n> 各社が自社の資料で報告した値を並べているだけで、定義の違いは補正していない。どの会社のゲートもPASSしていないため、比較は暫定である。\n\n## 1. 各社が自社資料で報告した標準指標（FY2025＝2026年3月期）\n\n| 会社 | 会社ゲート | 当期利益（親会社帰属）（億円） | ROE（各社定義）（%） | 自己資本比率（各社定義）（%） | ネットDER（各社定義）（倍） | 連結従業員（人） | 本体従業員（人） | 本体平均年間給与（万円） |\n|---|---|---|---|---|---|---|---|---|\n| 三井物産 | PARTIAL | 8,340<br/><sub>OBS-C01-0048</sub> | 10.22<br/><sub>OBS-C01-0051</sub> | 42.11<br/><sub>OBS-C01-0052</sub> | 0.47<br/><sub>OBS-C01-0034</sub> | 55,463<br/><sub>OBS-C01-0053</sub> | 5,333<br/><sub>OBS-C01-0054</sub> | 2,059<br/><sub>OBS-C01-0055</sub> |\n| 三菱商事 | PARTIAL | 8,005<br/><sub>OBS-C02-0005</sub> | 8.5<br/><sub>OBS-C02-0006</sub> | 39.1<br/><sub>OBS-C02-0007</sub> | — | 63,037<br/><sub>OBS-C02-0008</sub> | 4,456<br/><sub>OBS-C02-0009</sub> | 2,113<br/><sub>OBS-C02-0010</sub> |\n| 伊藤忠商事 | PARTIAL | 9,003<br/><sub>OBS-C03-0001</sub> | 14.59<br/><sub>OBS-C03-0004</sub> | 39.38<br/><sub>OBS-C03-0005</sub> | 0.46<br/><sub>OBS-C03-0009</sub> | 114,570<br/><sub>OBS-C03-0010</sub> | 4,125<br/><sub>OBS-C03-0011</sub> | 1,991<br/><sub>OBS-C03-0012</sub> |\n| 住友商事 | PARTIAL | 6,003<br/><sub>OBS-C04-0001</sub> | 12.9<br/><sub>OBS-C04-0004</sub> | 33.9<br/><sub>OBS-C04-0005</sub> | 0.68<br/><sub>OBS-C04-0007</sub> | 82,488<br/><sub>OBS-C04-0008</sub> | 4,938<br/><sub>OBS-C04-0009</sub> | 1,840<br/><sub>OBS-C04-0010</sub> |\n| 丸紅 | PARTIAL | 5,439<br/><sub>OBS-C05-0001</sub> | 13.6<br/><sub>OBS-C05-0003</sub> | 41.43<br/><sub>OBS-C05-0011</sub> | 0.43<br/><sub>OBS-C05-0005</sub> | 52,658<br/><sub>OBS-C05-0012</sub> | 4,225<br/><sub>OBS-C05-0013</sub> | 1,784<br/><sub>OBS-C05-0014</sub> |\n| 双日 | PARTIAL | 1,036<br/><sub>OBS-C06-0001</sub> | 10.1<br/><sub>OBS-C06-0004</sub> | 29.9<br/><sub>OBS-C06-0005</sub> | 0.95<br/><sub>OBS-C06-0006</sub> | 26,789<br/><sub>OBS-C06-0007</sub> | 2,519<br/><sub>OBS-C06-0008</sub> | 1,257<br/><sub>OBS-C06-0009</sub> |\n| 豊田通商 | PARTIAL | 3,705<br/><sub>OBS-C07-0001</sub> | 12.82<br/><sub>OBS-C07-0004</sub> | 37.04<br/><sub>OBS-C07-0005</sub> | 0.3<br/><sub>OBS-C07-0006</sub> | 74,927<br/><sub>OBS-C07-0007</sub> | 2,466<br/><sub>OBS-C07-0008</sub> | 1,421<br/><sub>OBS-C07-0009</sub> |\n| 兼松 | PARTIAL | 325<br/><sub>OBS-C08-0001</sub> | 17.0<br/><sub>OBS-C08-0004</sub> | 28.4<br/><sub>OBS-C08-0005</sub> | 0.45<br/><sub>OBS-C08-0006</sub> | 8,604<br/><sub>OBS-C08-0007</sub> | 861<br/><sub>OBS-C08-0008</sub> | 1,202<br/><sub>OBS-C08-0009</sub> |\n\n**比較上の注意（補正していない定義差）**\n- ROE・自己資本比率：分母が「親会社所有者帰属持分」か「株主資本」かで各社が異なる。丸紅の値は統合報告書の財務データ表（監査対象外の任意開示）による。\n- ネットDER：リース負債の扱いや分母（株主資本／資本合計）が各社で異なる。丸紅は2022年度に分母を変更している。豊田通商は会社記載の概数（0.3倍）。\n- 本体平均給与：賞与・手当の含め方は各社の注記に従う。三井物産は千円単位の開示を換算した。\n- **三菱商事は会社開示を取得できず（会社サイトが403）、指標はすべて空欄**。他社の値で推定して埋めることはしない。\n- 数値の並列は相関・優劣の主張ではない。差の原因は各社の研究書の仮説で個別に扱う。\n\n## 2. 公表資料で確認できた政策金融・政策保険（JBIC・NEXI、2025〜2026年度の公表文検索）\n\n| 会社 | 件数 | 案件（公表日・機関・件名・会社内出典ID） |\n|---|---|---|\n| 三井物産 | 5 | 2025-07-01 JBIC：米国における低炭素アンモニアの製造・販売事業に対する融資（SRC-C01-0002）<br/>2025-08-21 JBIC：サブサハラ・アフリカ地域でETC Groupが実施するL（SRC-C01-0003）<br/>2026-02-25 JBIC：UAEにおけるRuwais LNG事業に対する融資（SRC-C01-0004）<br/>2026-03-10 JBIC：豪州Rhodes Ridge鉄鉱山権益一部取得に対する融（SRC-C01-0005）<br/>2026-03-31 NEXI：バングラデシュ人民共和国／ACI Logistics向け（SRC-C01-0006） |\n| 三菱商事 | 2 | 2026-04-13 JBIC：三菱商事株式会社による米国天然ガス開発事業者の買収資金を（SRC-C02-0001）<br/>2026-04-27 NEXI：ポーランド／西ポメラニア県・ポメラニア県243MW太陽光（SRC-C02-0002） |\n| 伊藤忠商事 | 1 | 2026-01-29 NEXI：トルコ共和国／Anadolu IsuzuによるSamAu（SRC-C03-0002） |\n| 住友商事 | 3 | 2025-10-29 JBIC：ウズベキスタンにおける太陽光発電および蓄電事業2案件に対（SRC-C04-0002）<br/>2026-01-19 JBIC：カタールにおける天然ガス火力発電・淡水化事業に対するプロ（SRC-C04-0003）<br/>2026-04-15 JBIC：住友商事株式会社および三井住友ファイナンス&リース株式会（SRC-C04-0004） |\n| 丸紅 | 2 | 2026-01-27 JBIC：サウジアラビアの陸上風力発電事業案件に対するプロジェクト（SRC-C05-0003）<br/>2026-10-02 JBIC：Aircastle Limitedによる航空機購入資金の（SRC-C05-0004） |\n| 双日 | 0 | 該当なし（2025〜2026年度の公表文検索） |\n| 豊田通商 | 1 | 2026-07-21 NEXI：チュニジア共和国／太陽光発電事業（再保険の引受） -多数（SRC-C07-0003） |\n| 兼松 | 0 | 該当なし（2025〜2026年度の公表文検索） |\n\n検索範囲：JBICの2025・2026年度のプレスリリース本文263件、NEXIの一覧から取得できた30件（網羅性は未確認）。件数は「公表された案件」で、利用の有無や規模の全体を表さない（公表の選択バイアスがある）。\n\n## 3. 会社間の関係エッジ（双方の会社台帳の原文IDで検証）\n\n| ID | 関係型 | 会社 | 経由・対象 | 状態 | A社の根拠 | B社の根拠 |\n|---|---|---|---|---|---|---|\n| XREL-0001 | HISTORICAL_SHARED_ORIGIN | 伊藤忠商事 ↔ 丸紅 | 伊藤忠兵衛（1858年創業）／大建産業（1944〜1949） | VERIFIED_BOTH_SIDES | PSG-C03-0001, PSG-C03-0002, PSG-C03-0004 | PSG-C05-0002, PSG-C05-0004 |\n| XREL-0002 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 伊藤忠商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | PSG-C01-0015 | PSG-C03-0098 |\n| XREL-0003 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | PSG-C01-0015 | PSG-C04-0097 |\n| XREL-0004 | COMMON_MAJOR_SHAREHOLDER | 伊藤忠商事 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | PSG-C03-0098 | PSG-C04-0097 |\n| XREL-0005 | JOINT_VENTURE | 三井物産 ↔ 伊藤忠商事 | ENT-MITSUI-ITOCHU-IRON | ONE_SIDED | PSG-C01-0076 | — |\n| XREL-0006 | JOINT_VENTURE | 伊藤忠商事 ↔ 丸紅 | ENT-ITOCHU-MARUBENI-STEEL | ONE_SIDED | PSG-C03-0106 | — |\n| XREL-0007 | JOINT_VENTURE | 住友商事 ↔ 伊藤忠商事 | ENT-IMS-TECHNOSTEEL | ONE_SIDED | PSG-C04-0109 | — |\n\n- `VERIFIED_BOTH_SIDES`：両社がそれぞれ自社の資料で同じ関係を記載していることを確認した。\n- `ONE_SIDED`：片方の会社の資料だけで確認した。相手側の資料と突き合わせるまで、相手会社の研究には反映しない。\n- どのエッジも**関係の存在**を記録するだけで、因果（例：共通株主が両社の経営判断に影響した）は主張しない（`causal: false`）。\n\n## 4. 未接続・未研究の接続先\n- 三菱商事・丸紅と National Indemnity Company の関係（両社の有報が未取得）。\n- Mitsui-Itochu Iron の伊藤忠側持分、伊藤忠丸紅鉄鋼の丸紅側記載、伊藤忠丸紅住商テクノスチールの伊藤忠・丸紅側記載。\n- 共通の協調融資銀行（三井住友銀行・三菱UFJ銀行・みずほ銀行）を介した関係は、各社の公表案件数が少ないため、まだエッジ化していない。\n"
+  "report_md": "<!-- generated by tools/build_cross_company.py; company ledgers are the source of truth -->\n# 会社間比較・接続レイヤー（COMPARATIVE_REPORT）\n\n> 状態：**PARTIAL**（基準日 2026-11-01）。このレイヤーは8社それぞれの独立研究の**上に載る派生物**で、各社の研究書を上書きしない。\n> 各社が自社の資料で報告した値を並べているだけで、定義の違いは補正していない。どの会社のゲートもPASSしていないため、比較は暫定である。\n\n## 1. 各社が自社資料で報告した標準指標（FY2025＝2026年3月期）\n\n| 会社 | 会社ゲート | 当期利益（親会社帰属）（億円） | ROE（各社定義）（%） | 自己資本比率（各社定義）（%） | ネットDER（各社定義）（倍） | 連結従業員（人） | 本体従業員（人） | 本体平均年間給与（万円） |\n|---|---|---|---|---|---|---|---|---|\n| 三井物産 | PARTIAL | 8,340<br/><sub>OBS-C01-0048</sub> | 10.22<br/><sub>OBS-C01-0051</sub> | 42.11<br/><sub>OBS-C01-0052</sub> | 0.47<br/><sub>OBS-C01-0034</sub> | 55,463<br/><sub>OBS-C01-0053</sub> | 5,333<br/><sub>OBS-C01-0054</sub> | 2,059<br/><sub>OBS-C01-0055</sub> |\n| 三菱商事 | PARTIAL | 8,005<br/><sub>OBS-C02-0005</sub> | 8.5<br/><sub>OBS-C02-0006</sub> | 39.1<br/><sub>OBS-C02-0007</sub> | — | 63,037<br/><sub>OBS-C02-0008</sub> | 4,456<br/><sub>OBS-C02-0009</sub> | 2,113<br/><sub>OBS-C02-0010</sub> |\n| 伊藤忠商事 | PARTIAL | 9,003<br/><sub>OBS-C03-0001</sub> | 14.59<br/><sub>OBS-C03-0004</sub> | 39.38<br/><sub>OBS-C03-0005</sub> | 0.46<br/><sub>OBS-C03-0009</sub> | 114,570<br/><sub>OBS-C03-0010</sub> | 4,125<br/><sub>OBS-C03-0011</sub> | 1,991<br/><sub>OBS-C03-0012</sub> |\n| 住友商事 | PARTIAL | 6,003<br/><sub>OBS-C04-0001</sub> | 12.9<br/><sub>OBS-C04-0004</sub> | 33.9<br/><sub>OBS-C04-0005</sub> | 0.68<br/><sub>OBS-C04-0007</sub> | 82,488<br/><sub>OBS-C04-0008</sub> | 4,938<br/><sub>OBS-C04-0009</sub> | 1,840<br/><sub>OBS-C04-0010</sub> |\n| 丸紅 | PARTIAL | 5,439<br/><sub>OBS-C05-0001</sub> | 13.6<br/><sub>OBS-C05-0003</sub> | 41.43<br/><sub>OBS-C05-0011</sub> | 0.43<br/><sub>OBS-C05-0005</sub> | 52,658<br/><sub>OBS-C05-0012</sub> | 4,225<br/><sub>OBS-C05-0013</sub> | 1,784<br/><sub>OBS-C05-0014</sub> |\n| 双日 | PARTIAL | 1,036<br/><sub>OBS-C06-0001</sub> | 10.1<br/><sub>OBS-C06-0004</sub> | 29.9<br/><sub>OBS-C06-0005</sub> | 0.95<br/><sub>OBS-C06-0006</sub> | 26,789<br/><sub>OBS-C06-0007</sub> | 2,519<br/><sub>OBS-C06-0008</sub> | 1,257<br/><sub>OBS-C06-0009</sub> |\n| 豊田通商 | PARTIAL | 3,705<br/><sub>OBS-C07-0001</sub> | 12.82<br/><sub>OBS-C07-0004</sub> | 37.04<br/><sub>OBS-C07-0005</sub> | 0.3<br/><sub>OBS-C07-0006</sub> | 74,927<br/><sub>OBS-C07-0007</sub> | 2,466<br/><sub>OBS-C07-0008</sub> | 1,421<br/><sub>OBS-C07-0009</sub> |\n| 兼松 | PARTIAL | 325<br/><sub>OBS-C08-0001</sub> | 17.0<br/><sub>OBS-C08-0004</sub> | 28.4<br/><sub>OBS-C08-0005</sub> | 0.45<br/><sub>OBS-C08-0006</sub> | 8,604<br/><sub>OBS-C08-0007</sub> | 861<br/><sub>OBS-C08-0008</sub> | 1,202<br/><sub>OBS-C08-0009</sub> |\n\n**比較上の注意（補正していない定義差）**\n- ROE・自己資本比率：分母が「親会社所有者帰属持分」か「株主資本」かで各社が異なる。丸紅の値は統合報告書の財務データ表（監査対象外の任意開示）による。\n- ネットDER：リース負債の扱いや分母（株主資本／資本合計）が各社で異なる。丸紅は2022年度に分母を変更している。豊田通商は会社記載の概数（0.3倍）。\n- 本体平均給与：賞与・手当の含め方は各社の注記に従う。三井物産は千円単位の開示を換算した。\n- 三菱商事の値は2025年度有価証券報告書（EDINET S100YB25）による。三菱商事は有報で実績のネットDERを開示していないため空欄とし、計算値（約0.41倍）は三菱商事の研究書の分析（CLM-C02-0075）にとどめる。\n- 本体従業員：三菱商事は提出会社の経営指標の「従業員数」（就業人員4,456名）を採用した。在籍ベース（5,328名）とは異なる。各社の定義は各社の注記に従う。\n- 数値の並列は相関・優劣の主張ではない。差の原因は各社の研究書の仮説で個別に扱う。\n\n## 2. 公表資料で確認できた政策金融・政策保険（JBIC・NEXI、2025〜2026年度の公表文検索）\n\n| 会社 | 件数 | 案件（公表日・機関・件名・会社内出典ID） |\n|---|---|---|\n| 三井物産 | 5 | 2025-07-01 JBIC：米国における低炭素アンモニアの製造・販売事業に対する融資（SRC-C01-0002）<br/>2025-08-21 JBIC：サブサハラ・アフリカ地域でETC Groupが実施するL（SRC-C01-0003）<br/>2026-02-25 JBIC：UAEにおけるRuwais LNG事業に対する融資（SRC-C01-0004）<br/>2026-03-10 JBIC：豪州Rhodes Ridge鉄鉱山権益一部取得に対する融（SRC-C01-0005）<br/>2026-03-31 NEXI：バングラデシュ人民共和国／ACI Logistics向け（SRC-C01-0006） |\n| 三菱商事 | 2 | 2026-04-13 JBIC：三菱商事株式会社による米国天然ガス開発事業者の買収資金を（SRC-C02-0001）<br/>2026-04-27 NEXI：ポーランド／西ポメラニア県・ポメラニア県243MW太陽光（SRC-C02-0002） |\n| 伊藤忠商事 | 1 | 2026-01-29 NEXI：トルコ共和国／Anadolu IsuzuによるSamAu（SRC-C03-0002） |\n| 住友商事 | 3 | 2025-10-29 JBIC：ウズベキスタンにおける太陽光発電および蓄電事業2案件に対（SRC-C04-0002）<br/>2026-01-19 JBIC：カタールにおける天然ガス火力発電・淡水化事業に対するプロ（SRC-C04-0003）<br/>2026-04-15 JBIC：住友商事株式会社および三井住友ファイナンス&リース株式会（SRC-C04-0004） |\n| 丸紅 | 2 | 2026-01-27 JBIC：サウジアラビアの陸上風力発電事業案件に対するプロジェクト（SRC-C05-0003）<br/>2026-10-02 JBIC：Aircastle Limitedによる航空機購入資金の（SRC-C05-0004） |\n| 双日 | 0 | 該当なし（2025〜2026年度の公表文検索） |\n| 豊田通商 | 1 | 2026-07-21 NEXI：チュニジア共和国／太陽光発電事業（再保険の引受） -多数（SRC-C07-0003） |\n| 兼松 | 0 | 該当なし（2025〜2026年度の公表文検索） |\n\n検索範囲：JBICの2025・2026年度のプレスリリース本文263件、NEXIの一覧から取得できた30件（網羅性は未確認）。件数は「公表された案件」で、利用の有無や規模の全体を表さない（公表の選択バイアスがある）。\n\n## 3. 会社間の関係エッジ（双方の会社台帳の原文IDで検証）\n\n| ID | 関係型 | 会社 | 経由・対象 | 状態 | 証拠水準 | A社の自社資料 | B社の自社資料 | 第三者資料 |\n|---|---|---|---|---|---|---|---|---|\n| XREL-0001 | HISTORICAL_SHARED_ORIGIN | 伊藤忠商事 ↔ 丸紅 | 伊藤忠兵衛（1858年創業）／大建産業（1944〜1949） | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C03-0001, PSG-C03-0002, PSG-C03-0004 | PSG-C05-0002, PSG-C05-0004 | — |\n| XREL-0002 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 伊藤忠商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C03-0098 | PSG-C01-0140, PSG-C03-0118 |\n| XREL-0003 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C04-0097 | PSG-C01-0140, PSG-C04-0139 |\n| XREL-0004 | COMMON_MAJOR_SHAREHOLDER | 伊藤忠商事 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C03-0098 | PSG-C04-0097 | PSG-C03-0118, PSG-C04-0139 |\n| XREL-0005 | JOINT_VENTURE | 三井物産 ↔ 伊藤忠商事 | ENT-MITSUI-ITOCHU-IRON | ONE_SIDED | ONE_SIDED | PSG-C01-0076 | — | — |\n| XREL-0006 | JOINT_VENTURE | 伊藤忠商事 ↔ 丸紅 | ENT-ITOCHU-MARUBENI-STEEL | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C03-0106 | PSG-C05-0061 | — |\n| XREL-0007 | JOINT_VENTURE | 住友商事 ↔ 伊藤忠商事 | ENT-IMS-TECHNOSTEEL | ONE_SIDED | ONE_SIDED | PSG-C04-0109 | — | — |\n| XREL-0008 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 三菱商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C02-0336 | PSG-C01-0140, PSG-C02-0433 |\n| XREL-0009 | COMMON_MAJOR_SHAREHOLDER | 三菱商事 ↔ 伊藤忠商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C02-0336 | PSG-C03-0098 | PSG-C02-0433, PSG-C03-0118 |\n| XREL-0010 | COMMON_MAJOR_SHAREHOLDER | 三菱商事 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C02-0336 | PSG-C04-0097 | PSG-C02-0433, PSG-C04-0139 |\n| XREL-0011 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C05-0134 | PSG-C01-0140, PSG-C05-0165 |\n| XREL-0012 | COMMON_MAJOR_SHAREHOLDER | 三菱商事 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C02-0336 | PSG-C05-0134 | PSG-C02-0433, PSG-C05-0165 |\n| XREL-0013 | COMMON_MAJOR_SHAREHOLDER | 伊藤忠商事 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C03-0098 | PSG-C05-0134 | PSG-C03-0118, PSG-C05-0165 |\n| XREL-0014 | COMMON_MAJOR_SHAREHOLDER | 住友商事 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C04-0097 | PSG-C05-0134 | PSG-C04-0139, PSG-C05-0165 |\n| XREL-0015 | CO_INVESTMENT | 三菱商事 ↔ 三井物産 | ENT-MIMI | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0099 | PSG-C01-0135, PSG-C01-0136 | — |\n| XREL-0016 | CO_INVESTMENT | 三菱商事 ↔ 三井物産 | ENT-CAMERON-LNG | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0098 | PSG-C01-0137 | — |\n| XREL-0017 | CO_INVESTMENT | 三菱商事 ↔ 三井物産 | ENT-ANGLO-AMERICAN-SUR | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0393, PSG-C02-0303 | PSG-C01-0138 | — |\n| XREL-0018 | COMMON_INVESTEE | 三菱商事 ↔ 三井物産 | ENT-DM-MITSUI-SUGAR | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0149 | PSG-C01-0139 | — |\n| XREL-0019 | JOINT_VENTURE | 三菱商事 ↔ 双日 | ENT-METAL-ONE | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0324, PSG-C02-0325, PSG-C02-0326 | PSG-C06-0099, PSG-C06-0100 | — |\n| XREL-0020 | COMMON_INVESTEE | 三菱商事 ↔ 伊藤忠商事 | ENT-ISUZU | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0170, PSG-C02-0172 | PSG-C03-0125 | — |\n| XREL-0021 | SAME_MARKET_PARTICIPANT | 住友商事 ↔ 丸紅 | 米国の航空機リース事業 | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C04-0031 | PSG-C05-0170 | — |\n| XREL-0022 | PERSONNEL_HISTORY | 住友商事 ↔ 三菱商事 | 朝倉陽保（住友商事 社外取締役） | ONE_SIDED | ONE_SIDED | PSG-C04-0144, PSG-C04-0146 | — | — |\n\n- 証拠水準は、引用した原文の出所からゲートが計算する（宣言値と食い違えば `E_EVIDENCE_LEVEL`）。\n  - `BOTH_SIDES`（両側確認）：両社がそれぞれ**自社の開示**で同じ関係を記載している。JBIC・JCR等の第三者資料が会社の台帳にあっても、会社側の確認には数えない。\n  - `ONE_SIDED`（片側確認）：片方の会社の自社開示だけで確認した。相手側の資料と突き合わせるまで、相手会社の研究には反映しない。\n  - `+THIRD_PARTY`（第三者確認）：どちらの会社の開示でもない資料（例：Berkshire Hathawayの株主への手紙）が同じ関係を記載している。\n- どのエッジも**関係の存在**を記録するだけで、因果（例：共通株主が両社の経営判断に影響した）は主張しない（`causal: false`）。\n\n### 3.1 会社ごとの接続数（エッジの存在の数で、影響力の大きさではない）\n\n| 会社 | エッジ数 | COMMON_INVESTEE | COMMON_MAJOR_SHAREHOLDER | CO_INVESTMENT | HISTORICAL_SHARED_ORIGIN | JOINT_VENTURE | PERSONNEL_HISTORY | SAME_MARKET_PARTICIPANT | 接続先 |\n|---|---|---|---|---|---|---|---|---|---|\n| 三井物産 | 9 | 1 | 4 | 3 | 0 | 1 | 0 | 0 | 三菱商事、丸紅、伊藤忠商事、住友商事 |\n| 三菱商事 | 11 | 2 | 4 | 3 | 0 | 1 | 1 | 0 | 三井物産、丸紅、伊藤忠商事、住友商事、双日 |\n| 伊藤忠商事 | 9 | 1 | 4 | 0 | 1 | 3 | 0 | 0 | 三井物産、三菱商事、丸紅、住友商事 |\n| 住友商事 | 7 | 0 | 4 | 0 | 0 | 1 | 1 | 1 | 三井物産、三菱商事、丸紅、伊藤忠商事 |\n| 丸紅 | 7 | 0 | 4 | 0 | 1 | 1 | 0 | 1 | 三井物産、三菱商事、伊藤忠商事、住友商事 |\n| 双日 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 三菱商事 |\n| 豊田通商 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | — |\n| 兼松 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | — |\n\n### 3.2 共通の外部ショックへの言及（エッジではない）\n\n- **EXP-0001**：2026年3月前後の中東情勢の緊迫化（ホルムズ海峡の通航制限・カタールLNGの被害等）（各社の有価証券報告書（2026年6月提出）の経営環境・リスクの記述）。各社が自社の資料で同じ出来事に言及していることの一覧で、影響の大きさの比較や因果の主張ではない。ホルムズ海峡に明示的に触れるのは三井物産・三菱商事・住友商事で、他の5社は『中東情勢』として一般的に記載している。8社すべての有報が言及している。\n\n| ID | 会社 | 各社の台帳の主張 |\n|---|---|---|\n| EXP-0001 | 三井物産 | CLM-C01-0037, CLM-C01-0038, CLM-C01-0040 |\n| EXP-0001 | 三菱商事 | CLM-C02-0087 |\n| EXP-0001 | 伊藤忠商事 | CLM-C03-0046, CLM-C03-0018 |\n| EXP-0001 | 住友商事 | CLM-C04-0045, CLM-C04-0011 |\n| EXP-0001 | 丸紅 | CLM-C05-0043 |\n| EXP-0001 | 双日 | CLM-C06-0026 |\n| EXP-0001 | 豊田通商 | CLM-C07-0012 |\n| EXP-0001 | 兼松 | CLM-C08-0045 |\n\n## 4. 未接続・未研究の接続先\n- Mitsui-Itochu Iron（XREL-0005）と伊藤忠丸紅住商テクノスチール（XREL-0007）は片側確認のまま。伊藤忠・丸紅の有報本文の検索では該当の記載を見つけられなかった。\n- 伊藤忠の米国航空機リース会社への投資は、JCRの記述（第三者）だけで伊藤忠自身の開示がなく、航空機リース市場のエッジ（XREL-0021）に加えていない。\n- かどや製油：三菱商事は26.91%を持分法で保有し、三井物産は関係会社のうち有報提出会社として名前を挙げるが、三井物産側の出資比率の記載を確認していない。\n- 共通の協調融資銀行：公表資料で確認できたのは三菱商事（三菱UFJ銀行、Aethon案件）と三井物産（みずほ銀行、鉄鉱石案件）のみで、同じ銀行を介した会社間の重なりはまだ見つかっていない。\n- 豊田通商・兼松・双日とNational Indemnityの関係はない（Berkshireの手紙の日本の保有一覧は5社のみ）。\n"
 }

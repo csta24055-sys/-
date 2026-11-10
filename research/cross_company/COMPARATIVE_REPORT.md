@@ -21,7 +21,8 @@
 - ROE・自己資本比率：分母が「親会社所有者帰属持分」か「株主資本」かで各社が異なる。丸紅の値は統合報告書の財務データ表（監査対象外の任意開示）による。
 - ネットDER：リース負債の扱いや分母（株主資本／資本合計）が各社で異なる。丸紅は2022年度に分母を変更している。豊田通商は会社記載の概数（0.3倍）。
 - 本体平均給与：賞与・手当の含め方は各社の注記に従う。三井物産は千円単位の開示を換算した。
-- **三菱商事は会社開示を取得できず（会社サイトが403）、指標はすべて空欄**。他社の値で推定して埋めることはしない。
+- 三菱商事の値は2025年度有価証券報告書（EDINET S100YB25）による。三菱商事は有報で実績のネットDERを開示していないため空欄とし、計算値（約0.41倍）は三菱商事の研究書の分析（CLM-C02-0075）にとどめる。
+- 本体従業員：三菱商事は提出会社の経営指標の「従業員数」（就業人員4,456名）を採用した。在籍ベース（5,328名）とは異なる。各社の定義は各社の注記に従う。
 - 数値の並列は相関・優劣の主張ではない。差の原因は各社の研究書の仮説で個別に扱う。
 
 ## 2. 公表資料で確認できた政策金融・政策保険（JBIC・NEXI、2025〜2026年度の公表文検索）
@@ -41,21 +42,68 @@
 
 ## 3. 会社間の関係エッジ（双方の会社台帳の原文IDで検証）
 
-| ID | 関係型 | 会社 | 経由・対象 | 状態 | A社の根拠 | B社の根拠 |
-|---|---|---|---|---|---|---|
-| XREL-0001 | HISTORICAL_SHARED_ORIGIN | 伊藤忠商事 ↔ 丸紅 | 伊藤忠兵衛（1858年創業）／大建産業（1944〜1949） | VERIFIED_BOTH_SIDES | PSG-C03-0001, PSG-C03-0002, PSG-C03-0004 | PSG-C05-0002, PSG-C05-0004 |
-| XREL-0002 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 伊藤忠商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | PSG-C01-0015 | PSG-C03-0098 |
-| XREL-0003 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | PSG-C01-0015 | PSG-C04-0097 |
-| XREL-0004 | COMMON_MAJOR_SHAREHOLDER | 伊藤忠商事 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | PSG-C03-0098 | PSG-C04-0097 |
-| XREL-0005 | JOINT_VENTURE | 三井物産 ↔ 伊藤忠商事 | ENT-MITSUI-ITOCHU-IRON | ONE_SIDED | PSG-C01-0076 | — |
-| XREL-0006 | JOINT_VENTURE | 伊藤忠商事 ↔ 丸紅 | ENT-ITOCHU-MARUBENI-STEEL | ONE_SIDED | PSG-C03-0106 | — |
-| XREL-0007 | JOINT_VENTURE | 住友商事 ↔ 伊藤忠商事 | ENT-IMS-TECHNOSTEEL | ONE_SIDED | PSG-C04-0109 | — |
+| ID | 関係型 | 会社 | 経由・対象 | 状態 | 証拠水準 | A社の自社資料 | B社の自社資料 | 第三者資料 |
+|---|---|---|---|---|---|---|---|---|
+| XREL-0001 | HISTORICAL_SHARED_ORIGIN | 伊藤忠商事 ↔ 丸紅 | 伊藤忠兵衛（1858年創業）／大建産業（1944〜1949） | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C03-0001, PSG-C03-0002, PSG-C03-0004 | PSG-C05-0002, PSG-C05-0004 | — |
+| XREL-0002 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 伊藤忠商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C03-0098 | PSG-C01-0140, PSG-C03-0118 |
+| XREL-0003 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C04-0097 | PSG-C01-0140, PSG-C04-0139 |
+| XREL-0004 | COMMON_MAJOR_SHAREHOLDER | 伊藤忠商事 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C03-0098 | PSG-C04-0097 | PSG-C03-0118, PSG-C04-0139 |
+| XREL-0005 | JOINT_VENTURE | 三井物産 ↔ 伊藤忠商事 | ENT-MITSUI-ITOCHU-IRON | ONE_SIDED | ONE_SIDED | PSG-C01-0076 | — | — |
+| XREL-0006 | JOINT_VENTURE | 伊藤忠商事 ↔ 丸紅 | ENT-ITOCHU-MARUBENI-STEEL | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C03-0106 | PSG-C05-0061 | — |
+| XREL-0007 | JOINT_VENTURE | 住友商事 ↔ 伊藤忠商事 | ENT-IMS-TECHNOSTEEL | ONE_SIDED | ONE_SIDED | PSG-C04-0109 | — | — |
+| XREL-0008 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 三菱商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C02-0336 | PSG-C01-0140, PSG-C02-0433 |
+| XREL-0009 | COMMON_MAJOR_SHAREHOLDER | 三菱商事 ↔ 伊藤忠商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C02-0336 | PSG-C03-0098 | PSG-C02-0433, PSG-C03-0118 |
+| XREL-0010 | COMMON_MAJOR_SHAREHOLDER | 三菱商事 ↔ 住友商事 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C02-0336 | PSG-C04-0097 | PSG-C02-0433, PSG-C04-0139 |
+| XREL-0011 | COMMON_MAJOR_SHAREHOLDER | 三井物産 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C01-0015 | PSG-C05-0134 | PSG-C01-0140, PSG-C05-0165 |
+| XREL-0012 | COMMON_MAJOR_SHAREHOLDER | 三菱商事 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C02-0336 | PSG-C05-0134 | PSG-C02-0433, PSG-C05-0165 |
+| XREL-0013 | COMMON_MAJOR_SHAREHOLDER | 伊藤忠商事 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C03-0098 | PSG-C05-0134 | PSG-C03-0118, PSG-C05-0165 |
+| XREL-0014 | COMMON_MAJOR_SHAREHOLDER | 住友商事 ↔ 丸紅 | ENT-NATIONAL-INDEMNITY | VERIFIED_BOTH_SIDES | BOTH_SIDES+THIRD_PARTY | PSG-C04-0097 | PSG-C05-0134 | PSG-C04-0139, PSG-C05-0165 |
+| XREL-0015 | CO_INVESTMENT | 三菱商事 ↔ 三井物産 | ENT-MIMI | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0099 | PSG-C01-0135, PSG-C01-0136 | — |
+| XREL-0016 | CO_INVESTMENT | 三菱商事 ↔ 三井物産 | ENT-CAMERON-LNG | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0098 | PSG-C01-0137 | — |
+| XREL-0017 | CO_INVESTMENT | 三菱商事 ↔ 三井物産 | ENT-ANGLO-AMERICAN-SUR | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0393, PSG-C02-0303 | PSG-C01-0138 | — |
+| XREL-0018 | COMMON_INVESTEE | 三菱商事 ↔ 三井物産 | ENT-DM-MITSUI-SUGAR | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0149 | PSG-C01-0139 | — |
+| XREL-0019 | JOINT_VENTURE | 三菱商事 ↔ 双日 | ENT-METAL-ONE | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0324, PSG-C02-0325, PSG-C02-0326 | PSG-C06-0099, PSG-C06-0100 | — |
+| XREL-0020 | COMMON_INVESTEE | 三菱商事 ↔ 伊藤忠商事 | ENT-ISUZU | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C02-0170, PSG-C02-0172 | PSG-C03-0125 | — |
+| XREL-0021 | SAME_MARKET_PARTICIPANT | 住友商事 ↔ 丸紅 | 米国の航空機リース事業 | VERIFIED_BOTH_SIDES | BOTH_SIDES | PSG-C04-0031 | PSG-C05-0170 | — |
+| XREL-0022 | PERSONNEL_HISTORY | 住友商事 ↔ 三菱商事 | 朝倉陽保（住友商事 社外取締役） | ONE_SIDED | ONE_SIDED | PSG-C04-0144, PSG-C04-0146 | — | — |
 
-- `VERIFIED_BOTH_SIDES`：両社がそれぞれ自社の資料で同じ関係を記載していることを確認した。
-- `ONE_SIDED`：片方の会社の資料だけで確認した。相手側の資料と突き合わせるまで、相手会社の研究には反映しない。
+- 証拠水準は、引用した原文の出所からゲートが計算する（宣言値と食い違えば `E_EVIDENCE_LEVEL`）。
+  - `BOTH_SIDES`（両側確認）：両社がそれぞれ**自社の開示**で同じ関係を記載している。JBIC・JCR等の第三者資料が会社の台帳にあっても、会社側の確認には数えない。
+  - `ONE_SIDED`（片側確認）：片方の会社の自社開示だけで確認した。相手側の資料と突き合わせるまで、相手会社の研究には反映しない。
+  - `+THIRD_PARTY`（第三者確認）：どちらの会社の開示でもない資料（例：Berkshire Hathawayの株主への手紙）が同じ関係を記載している。
 - どのエッジも**関係の存在**を記録するだけで、因果（例：共通株主が両社の経営判断に影響した）は主張しない（`causal: false`）。
 
+### 3.1 会社ごとの接続数（エッジの存在の数で、影響力の大きさではない）
+
+| 会社 | エッジ数 | COMMON_INVESTEE | COMMON_MAJOR_SHAREHOLDER | CO_INVESTMENT | HISTORICAL_SHARED_ORIGIN | JOINT_VENTURE | PERSONNEL_HISTORY | SAME_MARKET_PARTICIPANT | 接続先 |
+|---|---|---|---|---|---|---|---|---|---|
+| 三井物産 | 9 | 1 | 4 | 3 | 0 | 1 | 0 | 0 | 三菱商事、丸紅、伊藤忠商事、住友商事 |
+| 三菱商事 | 11 | 2 | 4 | 3 | 0 | 1 | 1 | 0 | 三井物産、丸紅、伊藤忠商事、住友商事、双日 |
+| 伊藤忠商事 | 9 | 1 | 4 | 0 | 1 | 3 | 0 | 0 | 三井物産、三菱商事、丸紅、住友商事 |
+| 住友商事 | 7 | 0 | 4 | 0 | 0 | 1 | 1 | 1 | 三井物産、三菱商事、丸紅、伊藤忠商事 |
+| 丸紅 | 7 | 0 | 4 | 0 | 1 | 1 | 0 | 1 | 三井物産、三菱商事、伊藤忠商事、住友商事 |
+| 双日 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 三菱商事 |
+| 豊田通商 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | — |
+| 兼松 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | — |
+
+### 3.2 共通の外部ショックへの言及（エッジではない）
+
+- **EXP-0001**：2026年3月前後の中東情勢の緊迫化（ホルムズ海峡の通航制限・カタールLNGの被害等）（各社の有価証券報告書（2026年6月提出）の経営環境・リスクの記述）。各社が自社の資料で同じ出来事に言及していることの一覧で、影響の大きさの比較や因果の主張ではない。ホルムズ海峡に明示的に触れるのは三井物産・三菱商事・住友商事で、他の5社は『中東情勢』として一般的に記載している。8社すべての有報が言及している。
+
+| ID | 会社 | 各社の台帳の主張 |
+|---|---|---|
+| EXP-0001 | 三井物産 | CLM-C01-0037, CLM-C01-0038, CLM-C01-0040 |
+| EXP-0001 | 三菱商事 | CLM-C02-0087 |
+| EXP-0001 | 伊藤忠商事 | CLM-C03-0046, CLM-C03-0018 |
+| EXP-0001 | 住友商事 | CLM-C04-0045, CLM-C04-0011 |
+| EXP-0001 | 丸紅 | CLM-C05-0043 |
+| EXP-0001 | 双日 | CLM-C06-0026 |
+| EXP-0001 | 豊田通商 | CLM-C07-0012 |
+| EXP-0001 | 兼松 | CLM-C08-0045 |
+
 ## 4. 未接続・未研究の接続先
-- 三菱商事・丸紅と National Indemnity Company の関係（両社の有報が未取得）。
-- Mitsui-Itochu Iron の伊藤忠側持分、伊藤忠丸紅鉄鋼の丸紅側記載、伊藤忠丸紅住商テクノスチールの伊藤忠・丸紅側記載。
-- 共通の協調融資銀行（三井住友銀行・三菱UFJ銀行・みずほ銀行）を介した関係は、各社の公表案件数が少ないため、まだエッジ化していない。
+- Mitsui-Itochu Iron（XREL-0005）と伊藤忠丸紅住商テクノスチール（XREL-0007）は片側確認のまま。伊藤忠・丸紅の有報本文の検索では該当の記載を見つけられなかった。
+- 伊藤忠の米国航空機リース会社への投資は、JCRの記述（第三者）だけで伊藤忠自身の開示がなく、航空機リース市場のエッジ（XREL-0021）に加えていない。
+- かどや製油：三菱商事は26.91%を持分法で保有し、三井物産は関係会社のうち有報提出会社として名前を挙げるが、三井物産側の出資比率の記載を確認していない。
+- 共通の協調融資銀行：公表資料で確認できたのは三菱商事（三菱UFJ銀行、Aethon案件）と三井物産（みずほ銀行、鉄鉱石案件）のみで、同じ銀行を介した会社間の重なりはまだ見つかっていない。
+- 豊田通商・兼松・双日とNational Indemnityの関係はない（Berkshireの手紙の日本の保有一覧は5社のみ）。

@@ -437,13 +437,33 @@ def company_gate(d: dict, ctx: Ctx) -> dict:
 
 
 XREL_STATUS = ("VERIFIED_BOTH_SIDES", "ONE_SIDED")
+XREL_TYPES = ("HISTORICAL_SHARED_ORIGIN", "COMMON_MAJOR_SHAREHOLDER", "JOINT_VENTURE", "CO_INVESTMENT", "COMMON_INVESTEE",
+              "SAME_MARKET_PARTICIPANT", "PERSONNEL_HISTORY")
+EVIDENCE_LEVELS = ("ONE_SIDED", "BOTH_SIDES", "ONE_SIDED+THIRD_PARTY", "BOTH_SIDES+THIRD_PARTY")
+OWN_ORIGIN = re.compile(r"^OG-C\d{2}-")
+
+
+def edge_evidence_level(r: dict, origin: dict) -> str:
+    """片側確認・両側確認・第三者確認. A side counts only when it cites that company's OWN disclosure (origin OG-Cxx-);
+    third-party evidence must come from a source that is no trading company's own disclosure."""
+    def own(cid, pid):
+        return origin.get(cid, {}).get(pid, "").startswith(f"OG-{short_code(cid)}-")
+    a = any(own(r.get("company_a"), p) for p in r.get("evidence_a", []))
+    b = any(own(r.get("company_b"), p) for p in r.get("evidence_b", []))
+    tp = any(t.get("passage_id") in origin.get(t.get("company"), {}) and not OWN_ORIGIN.match(origin[t["company"]][t["passage_id"]])
+             for t in r.get("third_party_evidence", []))
+    base = "BOTH_SIDES" if a and b else ("ONE_SIDED" if a or b else "NONE")
+    return base + ("+THIRD_PARTY" if tp and base != "NONE" else "")
 
 
 def check_cross_relations(rel: list[dict], ctx: Ctx) -> None:
     """Every cross-company edge must point back to passages in each company's OWN ledger (directive STEP 7)."""
-    ledgers = {}
+    ledgers, origin = {}, {}
     for c in companies():
-        ledgers[c["company_id"]] = {p["passage_id"] for p in read_jsonl(company_dir(c) / "ledger" / "passages.jsonl")}
+        src = {s["source_id"]: s.get("origin_group_id", "") for s in read_jsonl(company_dir(c) / "ledger" / "sources.jsonl")}
+        psg = read_jsonl(company_dir(c) / "ledger" / "passages.jsonl")
+        ledgers[c["company_id"]] = {p["passage_id"] for p in psg}
+        origin[c["company_id"]] = {p["passage_id"]: src.get(p.get("source_id"), "") for p in psg}
     seen = set()
     for r in rel:
         rid = r.get("relation_id", "?")
@@ -463,9 +483,38 @@ def check_cross_relations(rel: list[dict], ctx: Ctx) -> None:
             for pid in ev:
                 if pid not in ledgers[cid]:
                     ctx.err("E_FOREIGN_EVIDENCE", "CROSS", f"{rid}: {pid} is not in {cid}'s ledger", rid)
-        both = bool(r.get("evidence_a")) and bool(r.get("evidence_b"))
-        if r.get("status") == "VERIFIED_BOTH_SIDES" and not both:
-            ctx.err("E_UNSUPPORTED_PASS", "CROSS", f"{rid}: VERIFIED_BOTH_SIDES without evidence from both companies", rid)
+        if r.get("type") not in XREL_TYPES:
+            ctx.err("E_ENUM", "CROSS", f"{rid}.type={r.get('type')}", rid)
+        for tpe in r.get("third_party_evidence", []):
+            if tpe.get("passage_id") not in ledgers.get(tpe.get("company"), set()):
+                ctx.err("E_FOREIGN_EVIDENCE", "CROSS", f"{rid}: third-party {tpe.get('passage_id')} is not in {tpe.get('company')}'s ledger", rid)
+        level = edge_evidence_level(r, origin)
+        if level.startswith("NONE"):
+            ctx.err("E_UNSUPPORTED_PASS", "CROSS", f"{rid}: neither company's own disclosure supports the edge", rid)
+        if r.get("status") == "VERIFIED_BOTH_SIDES" and not level.startswith("BOTH_SIDES"):
+            ctx.err("E_UNSUPPORTED_PASS", "CROSS", f"{rid}: VERIFIED_BOTH_SIDES needs each company's own disclosure (computed {level})", rid)
+        if r.get("status") == "ONE_SIDED" and level.startswith("BOTH_SIDES"):
+            ctx.err("E_STATUS_MISMATCH", "CROSS", f"{rid}: both companies' own disclosures are cited; status should be VERIFIED_BOTH_SIDES", rid)
+        if r.get("evidence_level") != level:
+            ctx.err("E_EVIDENCE_LEVEL", "CROSS", f"{rid}: evidence_level={r.get('evidence_level')} but the cited passages give {level}", rid)
+
+
+def check_common_exposures(rows: list[dict], ctx: Ctx) -> None:
+    """A shared external event is recorded per company from that company's OWN claims; it is not an edge between companies."""
+    claims = {}
+    for c in companies():
+        claims[c["company_id"]] = {x["claim_id"] for a in (company_dir(c) / "axes").glob("AXIS_*") for x in read_jsonl(a / "CLAIMS.jsonl")}
+    for r in rows:
+        eid = r.get("exposure_id", "?")
+        if r.get("causal") not in (False, None):
+            ctx.err("E_CAUSAL_ON_EXISTENCE", "CROSS", f"{eid}: an exposure list records mentions only", eid)
+        for cid, ids in r.get("claims", {}).items():
+            if cid not in claims:
+                ctx.err("E_MISSING_REF", "CROSS", f"{eid}: unknown company {cid}", eid)
+                continue
+            for x in ids:
+                if x not in claims[cid]:
+                    ctx.err("E_FOREIGN_EVIDENCE", "CROSS", f"{eid}: {x} is not in {cid}'s ledger", eid)
 
 
 def layer_gates(company_results: list[dict], ctx: Ctx) -> dict:
@@ -473,6 +522,7 @@ def layer_gates(company_results: list[dict], ctx: Ctx) -> dict:
     passed = {r["company_id"] for r in company_results if r["company_research_status"] == "PASS"}
     rel = read_jsonl(root / "cross_company" / "relations.jsonl")
     check_cross_relations(rel, ctx)
+    check_common_exposures(read_jsonl(root / "cross_company" / "common_exposures.jsonl"), ctx)
     if not rel:
         cross = "NOT_STARTED"
     else:

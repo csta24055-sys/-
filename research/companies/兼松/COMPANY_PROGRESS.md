@@ -4,7 +4,7 @@
 - COMPANY_RESEARCH_STATUS: **PARTIAL**（報告書: WRITTEN_PARTIAL）
 - 30軸: PASS 0 / IN_PROGRESS 30
 - 240テーマ: {'IN_PROGRESS': 41, 'NOT_STARTED': 199}
-- 問い登録: 258／出典(DIRECT): 3／独立起源: 3／主張: {'FACT': 27, 'ANALYSIS': 4, 'PARTY_CLAIM': 12, 'FORECAST': 1}／仮説: 2
+- 問い登録: 259／出典(DIRECT): 3／独立起源: 3／主張: {'FACT': 27, 'ANALYSIS': 4, 'PARTY_CLAIM': 13, 'FORECAST': 1}／仮説: 2
 
 | 軸 | 状態 | テーマ内訳 |
 |---|---|---|

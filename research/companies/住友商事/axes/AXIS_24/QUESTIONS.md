@@ -12,3 +12,4 @@
 | Q-C04-A24-T07-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「事業評価と純資産・含み価値」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書「大株主の状況」／大量保有報告書／株価・配当データ |
 | Q-C04-A24-T08-00 |  | ROOT_RESEARCH_CARD | NOT_STARTED | 住友商事において「公表データと市場予測の識別」は何が観測でき、なぜそうなっているか（研究カード12項目：What/When/Where/Who/資金/モノ/決定権/Why/反証/定量/変化/接続） | 有価証券報告書「大株主の状況」／大量保有報告書／株価・配当データ |
 | Q-C04-A24-T01-01 | Q-C04-A24-T01-00 | ATOMIC | ANSWERED | 住友商事の株主構成は？ |  |
+| Q-C04-A24-T01-02 | Q-C04-A24-T01-00 | ATOMIC | ANSWERED | 住友商事の大株主Berkshire Hathaway（National Indemnity）の保有は、株主自身の資料でどう示されているか？ |  |

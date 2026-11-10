@@ -14,5 +14,5 @@
 | Q-C02-A20-T04-01 | Q-C02-A20-T04-00 | ATOMIC | ANSWERED | 三菱商事は他の総合商社とどの事業を共同で持つか？ |  |
 | Q-C02-A20-T05-01 | Q-C02-A20-T05-00 | ATOMIC | ANSWERED | 三菱グループ企業との資本・人的関係は？ |  |
 | Q-C02-A20-T06-01 | Q-C02-A20-T06-00 | ATOMIC | PARTIAL | 三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。 |  |
-| Q-C02-A20-T06-02 | Q-C02-A20-T06-00 | ATOMIC | BACKLOG | STATE STREET BANK AND TRUST COMPANY 505104（10.91%）はNational Indemnity Companyの保管口座か？National Indemnityの実際の保有比率は？ |  |
+| Q-C02-A20-T06-02 | Q-C02-A20-T06-00 | ATOMIC | PARTIAL | STATE STREET BANK AND TRUST COMPANY 505104（10.91%）はNational Indemnity Companyの保管口座か？National Indemnityの実際の保有比率は？ |  |
 | Q-C02-A20-T07-01 | Q-C02-A20-T07-00 | ATOMIC | ANSWERED | 三菱商事と千代田化工建設の資本関係はどう変わっているか？ |  |

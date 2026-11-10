@@ -7,6 +7,7 @@
 | SRC-C04-0003 | 株式会社国際協力銀行（JBIC） | [カタールにおける天然ガス火力発電・淡水化事業に対するプロジェクトファイナンス](https://www.jbic.go.jp/ja/information/press/press-2025/press_00146.html) | 2026-01-19 | BANK | DIRECT | OG-JBIC-2025-00146 | `574e38654471` |
 | SRC-C04-0004 | 株式会社国際協力銀行（JBIC） | [住友商事株式会社および三井住友ファイナンス&リース株式会社傘下の航空機リース会社SMBC Aviation Capital Limitedによる米国航空機リース会社Air Lease Corporationの買収資金を融資](https://www.jbic.go.jp/ja/information/press/press-2026/press_00008.html) | 2026-04-15 | BANK | DIRECT | OG-JBIC-2026-00008 | `bec3953ee14c` |
 | SRC-C04-0005 | 株式会社日本格付研究所（JCR） | [【決算レポート】総合商社の26/3期決算の注目点（KR-2606）](https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf) | 2026-06-12 | OTHER | DIRECT | OG-JCR-KR-2606 | `bf496691e806` |
+| SRC-C04-0006 | Berkshire Hathaway Inc.（National Indemnity Companyの親会社） | [Berkshire Hathaway Inc. 2025 Letter to Shareholders](https://www.berkshirehathaway.com/letters/2025ltr.pdf) | 2026-02-28 | OTHER | DIRECT | OG-BRK-2025LTR | `8a7daf309556` |
 
 ## 検索ログ
 
@@ -17,3 +18,4 @@
 | SL-C04-0003 | 2026-11-10T01:08:12+09:00 | Air Lease買収の深掘り：JBIC公表文（press-2026_00008）と有報p15の再読 | 2 | SRC-C04-0004, SRC-C04-0001 | None 買収対価の一次資料（住友商事の適時開示）は未取得。  |
 | SL-C04-0004 | 2026-11-10T01:31:24+09:00 | 第158期有報の未着手6軸（03・11・12・18・19・29）の精読 | 1 | SRC-C04-0001 | None 為替感応度の数値は初期検索で検出されず（OPENのまま）。  |
 | SL-C04-0005 | 2026-11-10T06:29:08+09:00 | JCR格付一覧 /ratinglist/corp/8053（住友商事）とセクターレポート | 1 | SRC-C04-0005 | None 住友商事はJCRの格付対象外（一覧へリダイレクト）。  |
+| SL-C04-0006 | 2026-11-10T21:35:53+09:00 | Berkshire Hathaway 2025 Letter to Shareholders（日本の保有一覧） | 1 | SRC-C04-0006 | None   |

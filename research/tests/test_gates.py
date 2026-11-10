@@ -106,7 +106,8 @@ class TestBaseline(Base):
         p = self.root / "registry" / "company_registry.csv"
         lines = open(p, encoding="utf-8").read().splitlines()
         p.write_text("\n".join(lines[:2]) + "\n", encoding="utf-8")
-        (self.root / "cross_company" / "relations.jsonl").write_text("", encoding="utf-8")  # derived layer, rebuilt later
+        for derived in ("relations.jsonl", "common_exposures.jsonl"):  # cross-company layers are derived and rebuilt later
+            (self.root / "cross_company" / derived).write_text("", encoding="utf-8")
         after = research_gates.run("COMPANY_01")
         self.assertEqual(after["errors"], [])
         a = after["companies"][0]
@@ -346,6 +347,37 @@ class TestCrossCompany(Base):
         jl_append(self.rel_path(), {"relation_id": "XREL-9003", "type": "COMMON_MAJOR_SHAREHOLDER", "company_a": "COMPANY_01", "company_b": "COMPANY_03",
                                     "evidence_a": ["PSG-C01-0015"], "evidence_b": ["PSG-C03-0098"], "status": "VERIFIED_BOTH_SIDES", "causal": True})
         self.assertIn("E_CAUSAL_ON_EXISTENCE", self.codes())
+
+    def edge(self, rid):
+        return next(r for r in jl_read(self.rel_path()) if r["relation_id"] == rid)
+
+    def test_declared_evidence_level_must_match_cited_passages(self):
+        r = dict(self.edge("XREL-0002"), relation_id="XREL-9004", evidence_level="ONE_SIDED")
+        jl_append(self.rel_path(), r)
+        self.assertIn("E_EVIDENCE_LEVEL", self.codes())
+
+    def test_third_party_passage_cannot_stand_in_for_a_company_side(self):
+        # PSG-C02-0001 is JBIC's release in Mitsubishi Corp's ledger: a third party, not Mitsubishi Corp's own disclosure
+        r = dict(self.edge("XREL-0015"), relation_id="XREL-9005", evidence_a=["PSG-C02-0001"])
+        jl_append(self.rel_path(), r)
+        self.assertIn("E_UNSUPPORTED_PASS", self.codes())
+
+    def test_company_disclosure_does_not_count_as_third_party(self):
+        r = dict(self.edge("XREL-0015"), relation_id="XREL-9006", third_party_evidence=[{"company": "COMPANY_01", "passage_id": "PSG-C01-0015"}],
+                 evidence_level="BOTH_SIDES+THIRD_PARTY")
+        jl_append(self.rel_path(), r)
+        self.assertIn("E_EVIDENCE_LEVEL", self.codes())
+
+    def test_unknown_edge_type(self):
+        jl_append(self.rel_path(), dict(self.edge("XREL-0015"), relation_id="XREL-9007", type="FRIENDSHIP"))
+        self.assertIn("E_ENUM", self.codes())
+
+    def test_exposure_claims_must_be_in_each_companys_ledger(self):
+        p = self.root / "cross_company" / "common_exposures.jsonl"
+        rows = jl_read(p)
+        rows[0]["claims"]["COMPANY_08"] = ["CLM-C01-0038"]
+        jl_write(p, rows)
+        self.assertIn("E_FOREIGN_EVIDENCE", self.codes())
 
     def test_auto_digest_never_counts_as_written_synthesis(self):
         p = self.c("豊田通商") / "axes" / "AXIS_13" / "SYNTHESIS.md"

@@ -2,3 +2,4 @@
 # 丸紅 / AXIS_08：この軸で使用した出典
 
 - SRC-C05-0004：株式会社国際協力銀行（JBIC）「Aircastle Limitedによる航空機購入資金の融資」2026-10-02 <https://www.jbic.go.jp/ja/information/press/press-2026/press_00077.html>
+- SRC-C05-0005：丸紅株式会社（IR資料配信サービス eir-parts 経由）「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://ssl4.eir-parts.net/doc/8002/yuho_pdf/S100YAY4/00.pdf>

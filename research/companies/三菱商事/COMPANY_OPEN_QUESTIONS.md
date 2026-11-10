@@ -13,8 +13,8 @@
 | Q-C02-A14-T04-02 | PARTIAL | FY2025の株主還元はどう賄われたか？ | 初期全軸調査（一次資料） |
 | Q-C02-A15-T07-02 | OPEN | 千代田化工建設の転換権凍結（連結除外）を三菱商事が決めた理由は？ | 有報は決定と会計上の帰結のみを記し、理由を記していない。 |
 | Q-C02-A20-T06-01 | PARTIAL | 三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。 | 初期全軸調査（一次資料） |
-| Q-C02-A20-T06-02 | BACKLOG | STATE STREET BANK AND TRUST COMPANY 505104（10.91%）はNational Indemnity Companyの保管口座か？National Indemnityの実際の保有比率は？ | 有報は名義株主のみ。National Indemnityの大量保有報告書（EDINET）で確認できる可能性がある。 |
-| Q-C02-A24-T01-01 | BLOCKED | 三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。 | 会社サイト取得不能 |
+| Q-C02-A20-T06-02 | PARTIAL | STATE STREET BANK AND TRUST COMPANY 505104（10.91%）はNational Indemnity Companyの保管口座か？National Indemnityの実際の保有比率は？ | 有報は名義株主のみ。National Indemnityの大量保有報告書（EDINET）で確認できる可能性がある。 |
+| Q-C02-A24-T01-01 | PARTIAL | 三菱商事の大株主（National Indemnity Companyの保有状況を含む）を一次資料で確認する。 | 会社サイト取得不能 |
 | Q-C02-A29-T08-01 | PARTIAL | 三菱商事の開示のうちas-of時点で古くなっている情報は？ | 初期全軸調査（一次資料） |
 | Q-C02-A30-T06-01 | PARTIAL | 三菱商事の米国天然ガス事業買収はどう資金手当てされたか？ | 初期全軸調査（一次資料） |
 | Q-C02-A30-T06-03 | PARTIAL | Aethon買収はas-of（2026年11月1日）までに完了したか（関係当局の承認・取得日・最終取得額）？ | 有報提出時点（2026年6月12日）では『完全子会社となる見込み』。 |

@@ -6,6 +6,7 @@
 | SRC-C03-0002 | 株式会社日本貿易保険（NEXI） | [トルコ共和国／Anadolu IsuzuによるSamAuto買収案件に係る融資保険の引受（トルコ輸銀ツーステップローン）](https://www.nexi.go.jp/topics/newsrelease/202601261035.html) | 2026-01-29 | OTHER | DIRECT | OG-NEXI-202601261035 | `c03e8e88cce9` |
 | SRC-C03-0003 | 株式会社日本格付研究所（JCR） | [【伊藤忠商事】据置：AA+／安定的，J-1+（26-D-0686）](https://www.jcr.co.jp/download/fa577d3a1a0dba80daa7da78ba8caaf13f3db26bea8ae8c33d/26d0686.pdf) | 2026-09-16 | OTHER | DIRECT | OG-JCR-26-D-0686 | `d8a377d9773e` |
 | SRC-C03-0004 | 株式会社日本格付研究所（JCR） | [【決算レポート】総合商社の26/3期決算の注目点（KR-2606）](https://www.jcr.co.jp/download/44b44784314a3abd43dddb23d4da99db778b78d3dd9344dc04/2606_KR_総合商社_jp.pdf) | 2026-06-12 | OTHER | DIRECT | OG-JCR-KR-2606 | `bf496691e806` |
+| SRC-C03-0005 | Berkshire Hathaway Inc.（National Indemnity Companyの親会社） | [Berkshire Hathaway Inc. 2025 Letter to Shareholders](https://www.berkshirehathaway.com/letters/2025ltr.pdf) | 2026-02-28 | OTHER | DIRECT | OG-BRK-2025LTR | `8a7daf309556` |
 
 ## 検索ログ
 
@@ -16,3 +17,4 @@
 | SL-C03-0003 | 2026-11-10T00:49:28+09:00 | NEXI ニュースリリース（取得できた30件）本文に「伊藤忠」 | 1 | SRC-C03-0002 | None NEXI一覧の網羅性は未確認。  |
 | SL-C03-0004 | 2026-11-10T01:31:24+09:00 | 第102期有報のAXIS_03（関税・保護主義）とAXIS_12（金利）の精読 | 1 | SRC-C03-0001 | None   |
 | SL-C03-0005 | 2026-11-10T06:29:08+09:00 | JCR格付一覧 /ratinglist/corp/8001（伊藤忠商事）のニュースリリース | 5 | SRC-C03-0003, SRC-C03-0004 | None 最新の据置リリース（26-D-0686、2026-09-16）を採用。債券新規リリース4件は発行体格付の情報が重複するため不採用。  |
+| SL-C03-0006 | 2026-11-10T21:35:53+09:00 | Berkshire Hathaway 2025 Letter to Shareholders（日本の保有一覧） | 1 | SRC-C03-0005 | None   |

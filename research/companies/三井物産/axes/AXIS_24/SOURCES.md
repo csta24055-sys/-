@@ -2,3 +2,4 @@
 # 三井物産 / AXIS_24：この軸で使用した出典
 
 - SRC-C01-0001：三井物産株式会社（EDINET提出書類の会社サイト掲載PDF）「第107期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://www.mitsui.com/jp/ja/ir/library/securities/__icsFiles/afieldfile/2026/08/12/ja_107yuho.pdf>
+- SRC-C01-0008：Berkshire Hathaway Inc.（National Indemnity Companyの親会社）「Berkshire Hathaway Inc. 2025 Letter to Shareholders」2026-02-28 <https://www.berkshirehathaway.com/letters/2025ltr.pdf>

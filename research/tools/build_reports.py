@@ -164,13 +164,25 @@ def next_steps(d: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+SESSION_HEADER = ("| セッション | 日付 | 収集資料数 | 確認済み事実（FACT）数 | 独立起源グループ数 | PASSテーマ | 未検証仮説 | 次回着手（OPENの問い） "
+                  "| 主張数 | 着手テーマ数 | 独立起源（一次の根拠のみ） | 再確認周期のないCURRENT主張 |\n"
+                  "|---|---|---|---|---|---|---|---|---|---|---|---|\n")
+
+
 def session_log(d: dict, status: dict, session: str, date: str) -> str:
     facts = sum(1 for x in d["claims"] if x["claim_type"] == "FACT")
     unverified = [h["hypothesis_id"] for h in d["hypotheses"] if h["status"] in ("UNRESOLVED", "SUPPORTED_WEAKLY", "WEAKENED")]
     passed = [t["topic_id"] for t in status.get("topics", []) if t.get("state") == "PASS"]
+    started = sum(1 for t in status.get("topics", []) if t.get("state") in ("IN_PROGRESS", "PASS"))
     nxt = [q["question_id"] for q in d["questions"] if q.get("kind") != "ROOT_RESEARCH_CARD" and q.get("status") == "OPEN"][:5]
+    psg = {p["passage_id"]: p for p in d["passages"]}
+    src = {s["source_id"]: s for s in d["sources"]}
+    primary = {src.get(psg[e["passage_id"]]["source_id"], {}).get("origin_group_id") for x in d["claims"] for e in x.get("evidence", [])
+               if e.get("passage_id") in psg and e.get("relation", "PRIMARY_DIRECT") in ("PRIMARY_DIRECT", "PRIMARY_INDIRECT")}
+    no_recheck = sum(1 for x in d["claims"] if x.get("validity") == "CURRENT" and not x.get("info_class"))
     return (f"| {session} | {date} | {len(d['sources'])} | {facts} | {len({s.get('origin_group_id') for s in d['sources']})} | "
-            f"{len(passed)}（{', '.join(passed) or '—'}） | {len(unverified)}（{', '.join(unverified) or '—'}） | {', '.join(nxt) or '—'} |\n")
+            f"{len(passed)}（{', '.join(passed) or '—'}） | {len(unverified)}（{', '.join(unverified) or '—'}） | {', '.join(nxt) or '—'} "
+            f"| {len(d['claims'])} | {started} | {len(primary - {None})} | {no_recheck} |\n")
 
 
 def main(argv=None) -> int:
@@ -194,10 +206,15 @@ def main(argv=None) -> int:
         if a.session:
             p = cdir / "SESSION_LOG.md"
             if not p.exists():
-                p.write_text(f"# {c['name_ja']}：セッション記録\n\n| セッション | 日付 | 収集資料数 | 確認済み事実（FACT）数 | 独立起源グループ数 | PASSテーマ | 未検証仮説 | 次回着手（OPENの問い） |\n|---|---|---|---|---|---|---|---|\n", encoding="utf-8")
+                p.write_text(f"# {c['name_ja']}：セッション記録\n\n" + SESSION_HEADER, encoding="utf-8")
             text = p.read_text(encoding="utf-8")
-            if f"| {a.session} |" not in text:
-                p.write_text(text + session_log(d, status, a.session, a.date or ""), encoding="utf-8")
+            lines = text.splitlines(keepends=True)
+            for i, line in enumerate(lines):  # widen an older 8-column header in place; earlier rows keep their cells
+                if line.startswith("| セッション |") and "主張数" not in line:
+                    lines[i:i + 2] = [SESSION_HEADER]
+                    text = "".join(lines)
+                    break
+            p.write_text(text if f"| {a.session} |" in text else text + session_log(d, status, a.session, a.date or ""), encoding="utf-8")
     print("built reports, digests, next steps" + (f", session log {a.session}" if a.session else ""))
     return 0
 

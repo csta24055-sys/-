@@ -2,3 +2,4 @@
 # 丸紅 / AXIS_20：この軸で使用した出典
 
 - SRC-C05-0005：丸紅株式会社（IR資料配信サービス eir-parts 経由）「第102期有価証券報告書（自2025年4月1日 至2026年3月31日）」2026-06-12 <https://ssl4.eir-parts.net/doc/8002/yuho_pdf/S100YAY4/00.pdf>
+- SRC-C05-0009：Berkshire Hathaway Inc.（National Indemnity Companyの親会社）「Berkshire Hathaway Inc. 2025 Letter to Shareholders」2026-02-28 <https://www.berkshirehathaway.com/letters/2025ltr.pdf>
