@@ -1,0 +1,2799 @@
+{
+ "schema_version": "1.0",
+ "generated": "2026-11-11",
+ "source": "02_SOURCES/ALL_198_SHEETS.json (sheet names, visibility and formula-XML-node counts only)",
+ "method": "Sheets are grouped into families by normalising the sheet name: the _GHG/_CO2 suffix, whitespace, the method name inside 各種パラメータ(...), the (2)/(3) suffix and the 排出係数固定/変化 qualifier are removed. Grouping uses names only.",
+ "evidence_level": "OBSERVED for names and node counts; the calculation content of every family is NOT_INSPECTED (original formula bodies are not available in this repository or this study environment).",
+ "warning": "Formula XML node counts are a proxy for how often a calculation is repeated in the original workbooks. They are not execution time, not a count of distinct formulas, and not evidence that sheets with equal names or counts contain identical formulas.",
+ "total_sheets": 198,
+ "total_formula_nodes": 3818483,
+ "family_count": 59,
+ "families_with_formulas": 41,
+ "nodes_by_scope_suffix": {
+  "NONE": 116739,
+  "GHG": 1857127,
+  "CO2": 1844617
+ },
+ "nodes_by_book": {
+  "STD": 2271450,
+  "SIM": 1433467,
+  "DET": 105273,
+  "CLS": 0,
+  "SUM": 8293
+ },
+ "families": [
+  {
+   "family_id": "SF-01",
+   "family": "資材構成",
+   "formula_xml_nodes": 3145987,
+   "share_of_all_nodes": 0.823884,
+   "cumulative_share": 0.823884,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 1573069,
+    "CO2": 1572918,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 1983694,
+    "SIM": 1162293
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 52,
+     "sheet_name": "資材構成_GHG",
+     "formula_xml_nodes": 991944,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 53,
+     "sheet_name": "資材構成_CO2",
+     "formula_xml_nodes": 991750,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 25,
+     "sheet_name": "資材構成_GHG",
+     "formula_xml_nodes": 581125,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 26,
+     "sheet_name": "資材構成_CO2",
+     "formula_xml_nodes": 581168,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-02",
+   "family": "経年表記",
+   "formula_xml_nodes": 83620,
+   "share_of_all_nodes": 0.021899,
+   "cumulative_share": 0.845783,
+   "sheet_count": 6,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 4734,
+    "CO2": 4734,
+    "NONE": 74152
+   },
+   "by_book": {
+    "STD": 4734,
+    "SIM": 4734,
+    "DET": 74152
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 25,
+     "sheet_name": "経年表記_GHG",
+     "formula_xml_nodes": 2367,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 26,
+     "sheet_name": "経年表記_CO2",
+     "formula_xml_nodes": 2367,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 66,
+     "sheet_name": "経年表記_GHG",
+     "formula_xml_nodes": 2367,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 67,
+     "sheet_name": "経年表記_CO2",
+     "formula_xml_nodes": 2367,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 11,
+     "sheet_name": "経年表記(排出係数固定)",
+     "formula_xml_nodes": 17640,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 19,
+     "sheet_name": "経年表記 (排出係数変化)",
+     "formula_xml_nodes": 56512,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-03",
+   "family": "発生品目別分析",
+   "formula_xml_nodes": 74360,
+   "share_of_all_nodes": 0.019474,
+   "cumulative_share": 0.865256,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 37180,
+    "CO2": 37180,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 37112,
+    "SIM": 37248
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 29,
+     "sheet_name": "発生品目別分析_GHG",
+     "formula_xml_nodes": 18556,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 30,
+     "sheet_name": "発生品目別分析_CO2",
+     "formula_xml_nodes": 18556,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 36,
+     "sheet_name": "発生品目別分析_GHG",
+     "formula_xml_nodes": 18624,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 37,
+     "sheet_name": "発生品目別分析_CO2",
+     "formula_xml_nodes": 18624,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-04",
+   "family": "空",
+   "formula_xml_nodes": 71356,
+   "share_of_all_nodes": 0.018687,
+   "cumulative_share": 0.883943,
+   "sheet_count": 6,
+   "books": [
+    "STD",
+    "SIM",
+    "CLS",
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 35646,
+    "CO2": 35710,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 35710,
+    "SIM": 35646,
+    "CLS": 0,
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 55,
+     "sheet_name": "空_GHG",
+     "formula_xml_nodes": 17823,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 59,
+     "sheet_name": "空_CO2",
+     "formula_xml_nodes": 17887,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 32,
+     "sheet_name": "空_GHG",
+     "formula_xml_nodes": 17823,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 43,
+     "sheet_name": "空_CO2",
+     "formula_xml_nodes": 17823,
+     "visibility": "hidden"
+    },
+    {
+     "book": "CLS",
+     "sheet_index": 3,
+     "sheet_name": "空",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SUM",
+     "sheet_index": 5,
+     "sheet_name": "空",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-05",
+   "family": "衛",
+   "formula_xml_nodes": 69308,
+   "share_of_all_nodes": 0.018151,
+   "cumulative_share": 0.902094,
+   "sheet_count": 6,
+   "books": [
+    "STD",
+    "SIM",
+    "CLS",
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 34623,
+    "CO2": 34685,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 34686,
+    "SIM": 34622,
+    "CLS": 0,
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 56,
+     "sheet_name": "衛_GHG",
+     "formula_xml_nodes": 17312,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 60,
+     "sheet_name": "衛_CO2",
+     "formula_xml_nodes": 17374,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 33,
+     "sheet_name": "衛_GHG",
+     "formula_xml_nodes": 17311,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 44,
+     "sheet_name": "衛_CO2",
+     "formula_xml_nodes": 17311,
+     "visibility": "hidden"
+    },
+    {
+     "book": "CLS",
+     "sheet_index": 4,
+     "sheet_name": "衛",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SUM",
+     "sheet_index": 6,
+     "sheet_name": "衛",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-06",
+   "family": "更新周期集計",
+   "formula_xml_nodes": 65907,
+   "share_of_all_nodes": 0.01726,
+   "cumulative_share": 0.919354,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 32953,
+    "CO2": 32954,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 32953,
+    "SIM": 32954
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 35,
+     "sheet_name": "更新周期集計_GHG",
+     "formula_xml_nodes": 16476,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 36,
+     "sheet_name": "更新周期集計_CO2",
+     "formula_xml_nodes": 16477,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 64,
+     "sheet_name": "更新周期集計_GHG",
+     "formula_xml_nodes": 16477,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 65,
+     "sheet_name": "更新周期集計_CO2",
+     "formula_xml_nodes": 16477,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-07",
+   "family": "電",
+   "formula_xml_nodes": 59614,
+   "share_of_all_nodes": 0.015612,
+   "cumulative_share": 0.934966,
+   "sheet_count": 6,
+   "books": [
+    "STD",
+    "SIM",
+    "CLS",
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 29782,
+    "CO2": 29832,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 30067,
+    "SIM": 29547,
+    "CLS": 0,
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 54,
+     "sheet_name": "電_GHG",
+     "formula_xml_nodes": 15009,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 58,
+     "sheet_name": "電_CO2",
+     "formula_xml_nodes": 15058,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 31,
+     "sheet_name": "電_GHG",
+     "formula_xml_nodes": 14773,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 42,
+     "sheet_name": "電_CO2",
+     "formula_xml_nodes": 14774,
+     "visibility": "hidden"
+    },
+    {
+     "book": "CLS",
+     "sheet_index": 2,
+     "sheet_name": "電",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SUM",
+     "sheet_index": 4,
+     "sheet_name": "電",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-08",
+   "family": "処理別分析",
+   "formula_xml_nodes": 58954,
+   "share_of_all_nodes": 0.015439,
+   "cumulative_share": 0.950405,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 24850,
+    "CO2": 24850,
+    "NONE": 9254
+   },
+   "by_book": {
+    "STD": 24868,
+    "SIM": 24832,
+    "DET": 9254
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 27,
+     "sheet_name": "処理別分析_GHG",
+     "formula_xml_nodes": 12434,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 28,
+     "sheet_name": "処理別分析_CO2",
+     "formula_xml_nodes": 12434,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 40,
+     "sheet_name": "処理別分析_GHG",
+     "formula_xml_nodes": 12416,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 41,
+     "sheet_name": "処理別分析_CO2",
+     "formula_xml_nodes": 12416,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 23,
+     "sheet_name": "処理別分析",
+     "formula_xml_nodes": 9254,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-09",
+   "family": "設備LCW分析",
+   "formula_xml_nodes": 43334,
+   "share_of_all_nodes": 0.011348,
+   "cumulative_share": 0.961754,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 21667,
+    "CO2": 21667,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 22022,
+    "SIM": 21312
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 74,
+     "sheet_name": "設備LCW分析_GHG",
+     "formula_xml_nodes": 11011,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 75,
+     "sheet_name": "設備LCW分析_CO2",
+     "formula_xml_nodes": 11011,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 35,
+     "sheet_name": "設備LCW分析_GHG",
+     "formula_xml_nodes": 10656,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 70,
+     "sheet_name": "設備LCW分析_CO2",
+     "formula_xml_nodes": 10656,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-10",
+   "family": "入力シート(A1～5,B2～5,C1～4)",
+   "formula_xml_nodes": 26805,
+   "share_of_all_nodes": 0.00702,
+   "cumulative_share": 0.968773,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 12196,
+    "CO2": 14609,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 19178,
+    "SIM": 7627
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 5,
+     "sheet_name": "入力シート (A1～5,B2～5,C1～4)_GHG",
+     "formula_xml_nodes": 8722,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 6,
+     "sheet_name": "入力シート (A1～5,B2～5,C1～4)_CO2",
+     "formula_xml_nodes": 10456,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 5,
+     "sheet_name": "入力シート (A1～5,B2～5,C1～4)_GHG",
+     "formula_xml_nodes": 3474,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 6,
+     "sheet_name": "入力シート (A1～5,B2～5,C1～4)_CO2",
+     "formula_xml_nodes": 4153,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-11",
+   "family": "入力-2",
+   "formula_xml_nodes": 24438,
+   "share_of_all_nodes": 0.0064,
+   "cumulative_share": 0.975173,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 12219,
+    "CO2": 12219,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 9414,
+    "SIM": 15024
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 45,
+     "sheet_name": "入力-2_GHG",
+     "formula_xml_nodes": 4707,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 46,
+     "sheet_name": "入力-2_CO2",
+     "formula_xml_nodes": 4707,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 29,
+     "sheet_name": "入力-2_GHG",
+     "formula_xml_nodes": 7512,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 30,
+     "sheet_name": "入力-2_CO2",
+     "formula_xml_nodes": 7512,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-12",
+   "family": "算定結果報告用シート(副)",
+   "formula_xml_nodes": 18820,
+   "share_of_all_nodes": 0.004929,
+   "cumulative_share": 0.980102,
+   "sheet_count": 3,
+   "books": [
+    "STD",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 821,
+    "CO2": 821,
+    "NONE": 17178
+   },
+   "by_book": {
+    "STD": 1642,
+    "DET": 17178
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 18,
+     "sheet_name": "算定結果報告用シート(2)_GHG",
+     "formula_xml_nodes": 821,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 19,
+     "sheet_name": "算定結果報告用シート(3)_CO2",
+     "formula_xml_nodes": 821,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 10,
+     "sheet_name": "算定結果報告用シート(2)",
+     "formula_xml_nodes": 17178,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-13",
+   "family": "複合原単位",
+   "formula_xml_nodes": 15942,
+   "share_of_all_nodes": 0.004175,
+   "cumulative_share": 0.984277,
+   "sheet_count": 6,
+   "books": [
+    "STD",
+    "SIM",
+    "CLS",
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 7978,
+    "CO2": 7964,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 7976,
+    "SIM": 7966,
+    "CLS": 0,
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 50,
+     "sheet_name": "複合原単位_GHG",
+     "formula_xml_nodes": 3993,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 51,
+     "sheet_name": "複合原単位_CO2",
+     "formula_xml_nodes": 3983,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 23,
+     "sheet_name": "複合原単位_GHG",
+     "formula_xml_nodes": 3985,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 24,
+     "sheet_name": "複合原単位_CO2",
+     "formula_xml_nodes": 3981,
+     "visibility": "visible"
+    },
+    {
+     "book": "CLS",
+     "sheet_index": 7,
+     "sheet_name": "複合原単位",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SUM",
+     "sheet_index": 2,
+     "sheet_name": "複合原単位",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-14",
+   "family": "原単位",
+   "formula_xml_nodes": 9326,
+   "share_of_all_nodes": 0.002442,
+   "cumulative_share": 0.986719,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 9216,
+    "CO2": 110,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 4687,
+    "SIM": 4639,
+    "DET": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 48,
+     "sheet_name": "原単位_GHG",
+     "formula_xml_nodes": 4631,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 49,
+     "sheet_name": "原単位_CO2",
+     "formula_xml_nodes": 56,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 21,
+     "sheet_name": "原単位_GHG",
+     "formula_xml_nodes": 4585,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 22,
+     "sheet_name": "原単位_CO2",
+     "formula_xml_nodes": 54,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 18,
+     "sheet_name": "原単位",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-15",
+   "family": "排出量計算集計表",
+   "formula_xml_nodes": 8173,
+   "share_of_all_nodes": 0.00214,
+   "cumulative_share": 0.98886,
+   "sheet_count": 1,
+   "books": [
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 8173
+   },
+   "by_book": {
+    "SUM": 8173
+   },
+   "members": [
+    {
+     "book": "SUM",
+     "sheet_index": 1,
+     "sheet_name": "排出量計算集計表",
+     "formula_xml_nodes": 8173,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-16",
+   "family": "LCR･LCW集計",
+   "formula_xml_nodes": 6713,
+   "share_of_all_nodes": 0.001758,
+   "cumulative_share": 0.990618,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 2941,
+    "CO2": 2941,
+    "NONE": 831
+   },
+   "by_book": {
+    "STD": 2942,
+    "SIM": 2940,
+    "DET": 831
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 23,
+     "sheet_name": "LCR･LCW集計_GHG",
+     "formula_xml_nodes": 1471,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 24,
+     "sheet_name": "LCR･LCW集計_CO2",
+     "formula_xml_nodes": 1471,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 38,
+     "sheet_name": "LCR･LCW集計_GHG",
+     "formula_xml_nodes": 1470,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 39,
+     "sheet_name": "LCR･LCW集計_CO2",
+     "formula_xml_nodes": 1470,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 22,
+     "sheet_name": "LCR･LCW集計",
+     "formula_xml_nodes": 831,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-17",
+   "family": "昇",
+   "formula_xml_nodes": 6155,
+   "share_of_all_nodes": 0.001612,
+   "cumulative_share": 0.99223,
+   "sheet_count": 6,
+   "books": [
+    "STD",
+    "SIM",
+    "CLS",
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 3076,
+    "CO2": 3079,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 3135,
+    "SIM": 3020,
+    "CLS": 0,
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 57,
+     "sheet_name": "昇_GHG",
+     "formula_xml_nodes": 1566,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 61,
+     "sheet_name": "昇_CO2",
+     "formula_xml_nodes": 1569,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 34,
+     "sheet_name": "昇_GHG",
+     "formula_xml_nodes": 1510,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 45,
+     "sheet_name": "昇_CO2",
+     "formula_xml_nodes": 1510,
+     "visibility": "hidden"
+    },
+    {
+     "book": "CLS",
+     "sheet_index": 5,
+     "sheet_name": "昇",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SUM",
+     "sheet_index": 7,
+     "sheet_name": "昇",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-18",
+   "family": "排出係数",
+   "formula_xml_nodes": 5550,
+   "share_of_all_nodes": 0.001453,
+   "cumulative_share": 0.993683,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 2220,
+    "CO2": 2220,
+    "NONE": 1110
+   },
+   "by_book": {
+    "STD": 2220,
+    "SIM": 2220,
+    "DET": 1110
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 37,
+     "sheet_name": "排出係数_GHG",
+     "formula_xml_nodes": 1110,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 38,
+     "sheet_name": "排出係数_CO2",
+     "formula_xml_nodes": 1110,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 62,
+     "sheet_name": "排出係数_GHG",
+     "formula_xml_nodes": 1110,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 68,
+     "sheet_name": "排出係数_CO2",
+     "formula_xml_nodes": 1110,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 20,
+     "sheet_name": "排出係数",
+     "formula_xml_nodes": 1110,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-19",
+   "family": "工事分倍率内訳_2015",
+   "formula_xml_nodes": 3981,
+   "share_of_all_nodes": 0.001043,
+   "cumulative_share": 0.994726,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 1592,
+    "CO2": 1592,
+    "NONE": 797
+   },
+   "by_book": {
+    "STD": 1592,
+    "SIM": 1592,
+    "DET": 797
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 63,
+     "sheet_name": "工事分倍率内訳_2015_GHG",
+     "formula_xml_nodes": 796,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 64,
+     "sheet_name": "工事分倍率内訳_2015_CO2",
+     "formula_xml_nodes": 796,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 46,
+     "sheet_name": "工事分倍率内訳_2015_GHG",
+     "formula_xml_nodes": 796,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 47,
+     "sheet_name": "工事分倍率内訳_2015_CO2",
+     "formula_xml_nodes": 796,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 24,
+     "sheet_name": "工事分倍率内訳_2015",
+     "formula_xml_nodes": 797,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-20",
+   "family": "EPD組込",
+   "formula_xml_nodes": 3173,
+   "share_of_all_nodes": 0.000831,
+   "cumulative_share": 0.995557,
+   "sheet_count": 2,
+   "books": [
+    "STD"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 3173
+   },
+   "by_book": {
+    "STD": 3173
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 47,
+     "sheet_name": "EPD組込",
+     "formula_xml_nodes": 3173,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 62,
+     "sheet_name": "EPD組込_CO2",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-21",
+   "family": "NF3",
+   "formula_xml_nodes": 2596,
+   "share_of_all_nodes": 0.00068,
+   "cumulative_share": 0.996236,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 2596,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 1298,
+    "SIM": 1298
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 70,
+     "sheet_name": "NF3_GHG",
+     "formula_xml_nodes": 1298,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 52,
+     "sheet_name": "NF3_GHG",
+     "formula_xml_nodes": 1298,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-22",
+   "family": "木材_炭素貯蔵",
+   "formula_xml_nodes": 2237,
+   "share_of_all_nodes": 0.000586,
+   "cumulative_share": 0.996822,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 884,
+    "CO2": 884,
+    "NONE": 469
+   },
+   "by_book": {
+    "STD": 884,
+    "SIM": 884,
+    "DET": 469
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 33,
+     "sheet_name": "木材_炭素貯蔵_GHG",
+     "formula_xml_nodes": 442,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 34,
+     "sheet_name": "木材_炭素貯蔵_CO2",
+     "formula_xml_nodes": 442,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 71,
+     "sheet_name": "木材_炭素貯蔵_GHG",
+     "formula_xml_nodes": 442,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 72,
+     "sheet_name": "木材_炭素貯蔵_CO2",
+     "formula_xml_nodes": 442,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 9,
+     "sheet_name": "木材_炭素貯蔵",
+     "formula_xml_nodes": 469,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-23",
+   "family": "入力シート(B1)",
+   "formula_xml_nodes": 2084,
+   "share_of_all_nodes": 0.000546,
+   "cumulative_share": 0.997368,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 524,
+    "CO2": 1167,
+    "NONE": 393
+   },
+   "by_book": {
+    "STD": 873,
+    "SIM": 818,
+    "DET": 393
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 7,
+     "sheet_name": "入力シート (B1)_GHG",
+     "formula_xml_nodes": 262,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 8,
+     "sheet_name": "入力シート (B1)_CO2",
+     "formula_xml_nodes": 611,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 7,
+     "sheet_name": "入力シート (B1)_GHG",
+     "formula_xml_nodes": 262,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 8,
+     "sheet_name": "入力シート (B1)_CO2",
+     "formula_xml_nodes": 556,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 15,
+     "sheet_name": "入力シート (B1)",
+     "formula_xml_nodes": 393,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-24",
+   "family": "WLC算定結果",
+   "formula_xml_nodes": 1717,
+   "share_of_all_nodes": 0.00045,
+   "cumulative_share": 0.997818,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 624,
+    "CO2": 624,
+    "NONE": 469
+   },
+   "by_book": {
+    "STD": 684,
+    "SIM": 564,
+    "DET": 469
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 20,
+     "sheet_name": "WLC算定結果_GHG",
+     "formula_xml_nodes": 342,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 21,
+     "sheet_name": "WLC算定結果_CO2",
+     "formula_xml_nodes": 342,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 18,
+     "sheet_name": "WLC算定結果_GHG",
+     "formula_xml_nodes": 282,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 19,
+     "sheet_name": "WLC算定結果_CO2",
+     "formula_xml_nodes": 282,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 12,
+     "sheet_name": "WLC算定結果",
+     "formula_xml_nodes": 469,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-25",
+   "family": "HFCs",
+   "formula_xml_nodes": 1298,
+   "share_of_all_nodes": 0.00034,
+   "cumulative_share": 0.998158,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 1298,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 1298,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 71,
+     "sheet_name": "HFCs_GHG",
+     "formula_xml_nodes": 1298,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 53,
+     "sheet_name": "HFCs_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-26",
+   "family": "PFCs",
+   "formula_xml_nodes": 1298,
+   "share_of_all_nodes": 0.00034,
+   "cumulative_share": 0.998498,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 1298,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 1298,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 72,
+     "sheet_name": "PFCs_GHG",
+     "formula_xml_nodes": 1298,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 54,
+     "sheet_name": "PFCs_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-27",
+   "family": "SF6",
+   "formula_xml_nodes": 1298,
+   "share_of_all_nodes": 0.00034,
+   "cumulative_share": 0.998837,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 1298,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 1298,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 69,
+     "sheet_name": "SF6_GHG",
+     "formula_xml_nodes": 1298,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 51,
+     "sheet_name": "SF6_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-28",
+   "family": "UpfrontCarbon算定結果",
+   "formula_xml_nodes": 785,
+   "share_of_all_nodes": 0.000206,
+   "cumulative_share": 0.999043,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 326,
+    "CO2": 320,
+    "NONE": 139
+   },
+   "by_book": {
+    "STD": 350,
+    "SIM": 296,
+    "DET": 139
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 14,
+     "sheet_name": "Upfront Carbon 算定結果_GHG",
+     "formula_xml_nodes": 175,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 22,
+     "sheet_name": "Upfront Carbon 算定結果_CO2",
+     "formula_xml_nodes": 175,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 14,
+     "sheet_name": "Upfront Carbon 算定結果_GHG",
+     "formula_xml_nodes": 151,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 20,
+     "sheet_name": "Upfront Carbon 算定結果_CO2",
+     "formula_xml_nodes": 145,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 14,
+     "sheet_name": "Upfront Carbon 算定結果",
+     "formula_xml_nodes": 139,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-29",
+   "family": "標準値管理シート",
+   "formula_xml_nodes": 752,
+   "share_of_all_nodes": 0.000197,
+   "cumulative_share": 0.99924,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 376,
+    "CO2": 376,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 376,
+    "SIM": 376
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 31,
+     "sheet_name": "標準値管理シート_GHG",
+     "formula_xml_nodes": 188,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 32,
+     "sheet_name": "標準値管理シート_CO2",
+     "formula_xml_nodes": 188,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 58,
+     "sheet_name": "標準値管理シート_GHG",
+     "formula_xml_nodes": 188,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 59,
+     "sheet_name": "標準値管理シート_CO2",
+     "formula_xml_nodes": 188,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-30",
+   "family": "詳細算定結果",
+   "formula_xml_nodes": 502,
+   "share_of_all_nodes": 0.000131,
+   "cumulative_share": 0.999371,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 204,
+    "CO2": 204,
+    "NONE": 94
+   },
+   "by_book": {
+    "STD": 216,
+    "SIM": 192,
+    "DET": 94
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 11,
+     "sheet_name": "詳細算定結果_GHG",
+     "formula_xml_nodes": 108,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 15,
+     "sheet_name": "詳細算定結果_CO2",
+     "formula_xml_nodes": 108,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 11,
+     "sheet_name": "詳細算定結果_GHG",
+     "formula_xml_nodes": 96,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 15,
+     "sheet_name": "詳細算定結果_CO2",
+     "formula_xml_nodes": 96,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 6,
+     "sheet_name": "詳細算定結果",
+     "formula_xml_nodes": 94,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-31",
+   "family": "入力-1",
+   "formula_xml_nodes": 500,
+   "share_of_all_nodes": 0.000131,
+   "cumulative_share": 0.999502,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 250,
+    "CO2": 250,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 250,
+    "SIM": 250
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 43,
+     "sheet_name": "入力-1_GHG",
+     "formula_xml_nodes": 125,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 44,
+     "sheet_name": "入力-1_CO2",
+     "formula_xml_nodes": 125,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 27,
+     "sheet_name": "入力-1_GHG",
+     "formula_xml_nodes": 125,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 28,
+     "sheet_name": "入力-1_CO2",
+     "formula_xml_nodes": 125,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-32",
+   "family": "算定結果報告用シート",
+   "formula_xml_nodes": 438,
+   "share_of_all_nodes": 0.000115,
+   "cumulative_share": 0.999617,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 179,
+    "CO2": 179,
+    "NONE": 80
+   },
+   "by_book": {
+    "STD": 194,
+    "SIM": 164,
+    "DET": 80
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 13,
+     "sheet_name": "算定結果報告用シート_GHG",
+     "formula_xml_nodes": 97,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 17,
+     "sheet_name": "算定結果報告用シート_CO2",
+     "formula_xml_nodes": 97,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 13,
+     "sheet_name": "算定結果報告用シート_GHG",
+     "formula_xml_nodes": 82,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 17,
+     "sheet_name": "算定結果報告用シート_CO2",
+     "formula_xml_nodes": 82,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 8,
+     "sheet_name": "算定結果報告用シート",
+     "formula_xml_nodes": 80,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-33",
+   "family": "入力シート(B6,7)",
+   "formula_xml_nodes": 345,
+   "share_of_all_nodes": 9e-05,
+   "cumulative_share": 0.999707,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 108,
+    "CO2": 166,
+    "NONE": 71
+   },
+   "by_book": {
+    "STD": 137,
+    "SIM": 137,
+    "DET": 71
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 9,
+     "sheet_name": "入力シート (B6, 7)_GHG",
+     "formula_xml_nodes": 54,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 10,
+     "sheet_name": "入力シート (B6, 7)_CO2",
+     "formula_xml_nodes": 83,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 9,
+     "sheet_name": "入力シート (B6, 7)_GHG",
+     "formula_xml_nodes": 54,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 10,
+     "sheet_name": "入力シート (B6, 7)_CO2",
+     "formula_xml_nodes": 83,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 13,
+     "sheet_name": "入力シート (B6, 7)",
+     "formula_xml_nodes": 71,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-34",
+   "family": "算定結果",
+   "formula_xml_nodes": 273,
+   "share_of_all_nodes": 7.1e-05,
+   "cumulative_share": 0.999779,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 128,
+    "CO2": 128,
+    "NONE": 17
+   },
+   "by_book": {
+    "STD": 218,
+    "SIM": 38,
+    "DET": 17
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 12,
+     "sheet_name": "算定結果_GHG",
+     "formula_xml_nodes": 109,
+     "visibility": "visible"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 16,
+     "sheet_name": "算定結果_CO2",
+     "formula_xml_nodes": 109,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 12,
+     "sheet_name": "算定結果_GHG",
+     "formula_xml_nodes": 19,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 16,
+     "sheet_name": "算定結果_CO2",
+     "formula_xml_nodes": 19,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 7,
+     "sheet_name": "算定結果",
+     "formula_xml_nodes": 17,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-35",
+   "family": "各種パラメータ(算定法)",
+   "formula_xml_nodes": 216,
+   "share_of_all_nodes": 5.7e-05,
+   "cumulative_share": 0.999836,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 102,
+    "CO2": 102,
+    "NONE": 12
+   },
+   "by_book": {
+    "STD": 102,
+    "SIM": 102,
+    "DET": 12
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 41,
+     "sheet_name": "各種パラメータ (標準算定法)_GHG",
+     "formula_xml_nodes": 51,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 42,
+     "sheet_name": "各種パラメータ (標準算定法)_CO2",
+     "formula_xml_nodes": 51,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 63,
+     "sheet_name": "各種パラメータ (簡易算定法)_GHG",
+     "formula_xml_nodes": 51,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 69,
+     "sheet_name": "各種パラメータ (簡易算定法)_CO2",
+     "formula_xml_nodes": 51,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 17,
+     "sheet_name": "各種パラメータ (詳細算定法)",
+     "formula_xml_nodes": 12,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-36",
+   "family": "エネルギー統計値",
+   "formula_xml_nodes": 211,
+   "share_of_all_nodes": 5.5e-05,
+   "cumulative_share": 0.999891,
+   "sheet_count": 5,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 96,
+    "CO2": 96,
+    "NONE": 19
+   },
+   "by_book": {
+    "STD": 96,
+    "SIM": 96,
+    "DET": 19
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 39,
+     "sheet_name": "エネルギー統計値_GHG",
+     "formula_xml_nodes": 48,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 40,
+     "sheet_name": "エネルギー統計値_CO2",
+     "formula_xml_nodes": 48,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 60,
+     "sheet_name": "エネルギー統計値_GHG",
+     "formula_xml_nodes": 48,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 61,
+     "sheet_name": "エネルギー統計値_CO2",
+     "formula_xml_nodes": 48,
+     "visibility": "hidden"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 21,
+     "sheet_name": "エネルギー統計値",
+     "formula_xml_nodes": 19,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-37",
+   "family": "入力シート",
+   "formula_xml_nodes": 159,
+   "share_of_all_nodes": 4.2e-05,
+   "cumulative_share": 0.999932,
+   "sheet_count": 1,
+   "books": [
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 159
+   },
+   "by_book": {
+    "DET": 159
+   },
+   "members": [
+    {
+     "book": "DET",
+     "sheet_index": 5,
+     "sheet_name": "入力シート",
+     "formula_xml_nodes": 159,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-38",
+   "family": "SHASE",
+   "formula_xml_nodes": 120,
+   "share_of_all_nodes": 3.1e-05,
+   "cumulative_share": 0.999964,
+   "sheet_count": 1,
+   "books": [
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 120
+   },
+   "by_book": {
+    "SUM": 120
+   },
+   "members": [
+    {
+     "book": "SUM",
+     "sheet_index": 8,
+     "sheet_name": "SHASE",
+     "formula_xml_nodes": 120,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-39",
+   "family": "コンクリート",
+   "formula_xml_nodes": 72,
+   "share_of_all_nodes": 1.9e-05,
+   "cumulative_share": 0.999983,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 36,
+    "CO2": 36,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 36,
+    "SIM": 36
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 76,
+     "sheet_name": "コンクリート_GHG",
+     "formula_xml_nodes": 18,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 77,
+     "sheet_name": "コンクリート_CO2",
+     "formula_xml_nodes": 18,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 57,
+     "sheet_name": "コンクリート_GHG",
+     "formula_xml_nodes": 18,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 73,
+     "sheet_name": "コンクリート_CO2",
+     "formula_xml_nodes": 18,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-40",
+   "family": "GHG",
+   "formula_xml_nodes": 37,
+   "share_of_all_nodes": 1e-05,
+   "cumulative_share": 0.999992,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 37,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 37,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 73,
+     "sheet_name": "GHG_GHG",
+     "formula_xml_nodes": 37,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 55,
+     "sheet_name": "GHG_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-41",
+   "family": "LCA参照シート（名称変更不可）",
+   "formula_xml_nodes": 29,
+   "share_of_all_nodes": 8e-06,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 29
+   },
+   "by_book": {
+    "DET": 29
+   },
+   "members": [
+    {
+     "book": "DET",
+     "sheet_index": 16,
+     "sheet_name": "LCA参照シート（名称変更不可）",
+     "formula_xml_nodes": 29,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-42",
+   "family": "CH4",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 67,
+     "sheet_name": "CH4_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 49,
+     "sheet_name": "CH4_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-43",
+   "family": "CO2",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 4,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 65,
+     "sheet_name": "CO2_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    },
+    {
+     "book": "STD",
+     "sheet_index": 66,
+     "sheet_name": "CO2_CO2",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 48,
+     "sheet_name": "CO2_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 56,
+     "sheet_name": "CO2_CO2",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-44",
+   "family": "N2O",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 2,
+   "books": [
+    "STD",
+    "SIM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 68,
+     "sheet_name": "N2O_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 50,
+     "sheet_name": "N2O_GHG",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-45",
+   "family": "コード表昇",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 11,
+     "sheet_name": "コード表 昇",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-46",
+   "family": "コード表空",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 9,
+     "sheet_name": "コード表 空",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-47",
+   "family": "コード表衛",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 10,
+     "sheet_name": "コード表 衛",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-48",
+   "family": "コード表電",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 8,
+     "sheet_name": "コード表 電",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-49",
+   "family": "チェックリスト",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 3,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0,
+    "DET": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 4,
+     "sheet_name": "チェックリスト",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 4,
+     "sheet_name": "チェックリスト",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 4,
+     "sheet_name": "チェックリスト",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-50",
+   "family": "修正更新履歴",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 3,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0,
+    "DET": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 2,
+     "sheet_name": "修正更新履歴",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 2,
+     "sheet_name": "修正更新履歴",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 2,
+     "sheet_name": "修正更新履歴",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-51",
+   "family": "建",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 1,
+     "sheet_name": "建",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-52",
+   "family": "排出原単位",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "SUM",
+     "sheet_index": 3,
+     "sheet_name": "排出原単位",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-53",
+   "family": "注意事項",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 3,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0,
+    "DET": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 3,
+     "sheet_name": "注意事項",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 3,
+     "sheet_name": "注意事項",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 3,
+     "sheet_name": "注意事項",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-54",
+   "family": "物価",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "SUM",
+     "sheet_index": 11,
+     "sheet_name": "物価",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-55",
+   "family": "物価補正",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "SUM",
+     "sheet_index": 9,
+     "sheet_name": "物価補正",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-56",
+   "family": "算出分類",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 6,
+     "sheet_name": "算出分類",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-57",
+   "family": "表紙",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 3,
+   "books": [
+    "STD",
+    "SIM",
+    "DET"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "STD": 0,
+    "SIM": 0,
+    "DET": 0
+   },
+   "members": [
+    {
+     "book": "STD",
+     "sheet_index": 1,
+     "sheet_name": "表紙",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SIM",
+     "sheet_index": 1,
+     "sheet_name": "表紙",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "DET",
+     "sheet_index": 1,
+     "sheet_name": "表紙",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-58",
+   "family": "配管・ケーブル",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 2,
+   "books": [
+    "CLS",
+    "SUM"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0,
+    "SUM": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 13,
+     "sheet_name": "配管・ケーブル",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    },
+    {
+     "book": "SUM",
+     "sheet_index": 10,
+     "sheet_name": "配管・ケーブル",
+     "formula_xml_nodes": 0,
+     "visibility": "hidden"
+    }
+   ]
+  },
+  {
+   "family_id": "SF-59",
+   "family": "電気主要設備機器",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "cumulative_share": 1.0,
+   "sheet_count": 1,
+   "books": [
+    "CLS"
+   ],
+   "by_scope_suffix": {
+    "GHG": 0,
+    "CO2": 0,
+    "NONE": 0
+   },
+   "by_book": {
+    "CLS": 0
+   },
+   "members": [
+    {
+     "book": "CLS",
+     "sheet_index": 12,
+     "sheet_name": "電気主要設備機器",
+     "formula_xml_nodes": 0,
+     "visibility": "visible"
+    }
+   ]
+  }
+ ]
+}
