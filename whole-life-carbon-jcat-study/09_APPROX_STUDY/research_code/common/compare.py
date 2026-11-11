@@ -15,6 +15,8 @@ def flatten(value: Any, prefix: str = "") -> dict[str, Any]:
     out: dict[str, Any] = {}
     if isinstance(value, dict):
         for key in sorted(value, key=str):
+            if str(key).startswith("_"):
+                continue  # working data for downstream units, not a result
             out.update(flatten(value[key], f"{prefix}.{key}" if prefix else str(key)))
     elif isinstance(value, (list, tuple)):
         for i, item in enumerate(value):

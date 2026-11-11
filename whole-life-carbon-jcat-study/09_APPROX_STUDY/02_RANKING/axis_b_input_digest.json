@@ -1,0 +1,1779 @@
+{
+ "note": "Facts about each evaluation unit for axis-B scoring. Opinions about how to simplify are deliberately left out.",
+ "unit_count": 70,
+ "units": [
+  {
+   "id": "SYS-01",
+   "name": "入力数値の状態判定",
+   "stage": "PRE",
+   "origin": "EXISTING_53",
+   "purpose": "各入力値に 5 種類の状態（OBSERVED / ESTIMATE / EXPLICIT_ZERO / MISSING / DERIVED）のいずれか 1 つを割り当て、「不明（未入力）」と「明示的な 0」を分離する。あわせて計算停止条件（必須の入力が MISSING のとき、その入力を使う計算を止め、0 で代用しない）を定める。算術計算ではなく、入力値ごとの決定表による分類と停止判定であり、結果は screen:validation に表示され、数値入力を読むすべての計算の前提条件になる。feeds には、for",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "state(v, src) = MISSING if v is null; DERIVED if origin(v) == engine; EXPLICIT_ZERO if v == 0; OBSERVED if src in S_measured; ESTIMATE otherwise.   halt(u) = OR_{x in required(u)} [ state(x) == MISSING ]",
+   "loop_dims": [
+    "items",
+    "fields"
+   ],
+   "complexity": "O(N*K) [N=入力レコード数, K=1レコード当たりの数値項目数（定数）。実質 O(N)]",
+   "n_inputs": 2,
+   "n_branches": 6,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "入力数値の状態判定。数値入力を 1 つずつ調べ、欠損（None）は MISSING、算出値は DERIVED、0 は EXPLICIT_ZERO、それ以外は宣言された状態（OBSERVED・ESTIMATE）とする。MISSING の場所を列挙する。その値が計算で使われるかどうかは問わない。機器の耐用年数と交換年一覧のように「どちらか一方」でよい項目は、両方ないときだけ欠損とする。",
+   "boundary_unit_caveats": [
+    "MISSING（未入力）と EXPLICIT_ZERO（明示的な 0）を同一視しない。集計で MISSING を 0 として加えると過小評価になる。",
+    "状態の語彙が資料ごとに異なる。formulas.json は 5 状態、03_INPUTS/README は 6 状態（USER_ESTIMATE・LICENSED_DEFAULT を含む）、01_COMPLIANCE ",
+    "07_AUDIT の確認区分（OBSERVED / SAMPLED / INFERRED / NOT_VERIFIED / RESTRICTED）は資料調査の確認レベルであり、入力値の状態とは別の軸である。同じ語 OBS"
+   ]
+  },
+  {
+   "id": "SYS-02",
+   "name": "単位整合性検証",
+   "stage": "PRE",
+   "origin": "EXISTING_53",
+   "purpose": "活動量（数量）の単位と、係数の分母の単位が、文書化された換算を経て一致することを行ごとに確認する。一致しない行、換算の根拠がない行は不合格とし、その行の「数量 × 係数」を計算させない。真偽を返す判定であり、合格のときは換算係数 c（同じ単位なら 1）を返して、後段の A13-01 などが Q × c × EF を計算できるようにする。feeds には「活動量 × 単位当たり係数」の積を計算する単位を、前提条件（ゲート）としての依存として挙げた。",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "ok_i = [u_q_i == u_f_i] OR [exists c(u_q_i -> u_f_i | material_i) with documented basis];   Q'_i = Q_i * c_i   (c_i = 1 if u_q_i == u_f_i)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N) [N=「活動量 × 係数」を計算する行数。相異なる (材料, 数量単位, 係数単位) の組 D について判定す",
+   "n_inputs": 5,
+   "n_branches": 5,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "単位整合性検証。「活動量×係数」を計算するすべての組について、数量の単位が係数の分母の単位と一致するか、登録された換算（行固有の換算を優先、連鎖なし）があることを確かめる。同じ数量が複数の係数（製造・搬入・据付）と組になる行は、1 つでも換算できなければその行を 1 件として報告する。",
+   "boundary_unit_caveats": [
+    "kgCO2e と tCO2e、kg と t、m3 と kg、m2 と m3 を、換算の根拠なしに同一視しない。",
+    "式が検査するのは係数の分母の単位だけである。分子の側（kgCO2e か tCO2e か、CO2 のみか GHG 全体か）は別に確認する必要がある（BOUNDARY.results_gas_scope）。",
+    "単位が一致しても算定境界が一致するとは限らない（A1-A3 の係数が A4 を含む場合など）。境界は FACTOR.factor_stages・FACTOR.factor_boundary で別に検査する（QA-01）。"
+   ]
+  },
+  {
+   "id": "SYS-03",
+   "name": "係数権限ゲート",
+   "stage": "PRE",
+   "origin": "EXISTING_53",
+   "purpose": "各係数について、その利用許諾が実際の利用目的（研究内部での利用、公表、商用、SaaS 提供など）を認めているかを判定し、認められない係数とライセンス不明の係数を計算に適用させない。係数ごとに真偽を返す権限の判定であり、数値計算ではない。01_COMPLIANCE 1-E の権限状態（PERMITTED_PUBLIC / PERMISSION_REQUIRED / RESTRICTED / UNKNOWN）による判断を、係数 1 件ごとに実行する位置づけである。feeds には、式の中で係数（authorized /",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "usable(f) = [license(f) is known] AND [intended_use in allowed_uses(license(f))] AND [source_url(f) is not null]",
+   "loop_dims": [
+    "factors"
+   ],
+   "complexity": "O(F) [F=使用する相異なる係数の数。行ごとに判定すれば O(N)]",
+   "n_inputs": 5,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "係数権限ゲート。係数を参照している箇所を 1 つずつ調べ、係数が存在し、使用許諾の状態がPERMITTED_PUBLIC で、出典の参照が空でないことを確かめる。電力係数シナリオも対象。使えない係数を係数 ID ごとに報告し、影響を受ける参照箇所の数を数える。",
+   "boundary_unit_caveats": [
+    "権限の合格は、単位（SYS-02）や算定境界（QA-01）の合格を意味しない。3 つの判定を 1 つの合否フラグにまとめず、理由コードを分けて保持する。",
+    "許諾は利用目的ごとに異なる。研究内部の検算に使える係数が、公開・商用・SaaS 提供に使えるとは限らない。利用目的が変われば全係数を判定し直す。",
+    "係数を使ってよいかどうかと、比較・検証の結果を公表してよいかどうかは別の許諾事項である（01_COMPLIANCE 1-B の 4、1-F）。SYS-03 の合格を公表の許諾とみなさない。"
+   ]
+  },
+  {
+   "id": "SYS-04",
+   "name": "延床面積との面積整合",
+   "stage": "PRE",
+   "origin": "EXISTING_53",
+   "purpose": "用途別床面積の合計と延べ床面積が整合しているかを、計算の前に確認する。式は A_total = sum(use_area_by_function) という等式で書かれており、(a) 用途別面積の合計 S を算出する、(b) 入力された延べ床面積 A と比べる、の 2 つの処理を含む。結果は output:data_checks に出力される。同じ検算が QA 段階の QA-04（許容差つき）にもある。feeds のうち SUM-04・SUM-05 は、面積を分母に使う式に対する前提条件（ゲート）としての依存である。",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "MASS_BALANCE_CONSTRAINT",
+   "canonical_form": "S = sum_{u in U} a_u;   r = A - S;   pass = [ r == 0 ]    (QA-04 uses the same residual with pass = [ abs(r) <= tol ])",
+   "loop_dims": [
+    "uses"
+   ],
+   "complexity": "O(U) [U=用途区分の数]",
+   "n_inputs": 2,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "延床面積との面積整合。用途別面積を用途名の昇順に足し、延床面積との差 r = A - S を求める。A が欠損または 0 以下のときは INVALID。|r| <= 1e-9*A のとき一致とする。数値は補正しない。",
+   "boundary_unit_caveats": [
+    "単位は m2。副分類 MASS_BALANCE_CONSTRAINT は「部分和と全体の収支制約」という構造を示すために付けたもので、対象は質量ではなく面積である。C-05（質量 kg）や QA-01（排出量 kgCO2",
+    "延べ床面積、用途別面積、建築面積（PROJECT.building_footprint）、基準階面積（PROJECT.typical_floor_area）は定義の異なる面積であり、互いに代用しない。",
+    "用途別面積に共用部・駐車場・機械室を含めるかどうかで合計が変わる。面積の算定基準を揃えずに比較しない。"
+   ]
+  },
+  {
+   "id": "A13-01",
+   "name": "資材製造排出量（単位・境界確認後）",
+   "stage": "A1-A3",
+   "origin": "EXISTING_53",
+   "purpose": "資材行ごとの数量（固有単位）に、同じ単位を分母とする製造段階（A1-A3）の排出係数を掛け、全行を合計して建物の資材製造排出量 [kgCO2e] を得る。アップフロント・エンボディド・ホールライフの各合計に入る基幹式で、資材行数 N に比例して反復する。単位の一致と係数の段階範囲の確認が済んだ行だけを計算対象にすることが式名に含まれている。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_A13 = sum_{i=1..N} q_i * f_i ; q_i = quantity of line i in native unit u_i, f_i = EF_i [kgCO2e/u_i] ; vector form E = q^T f ; grouped form E = sum_k f_k * (sum_{i: factor(i)=k} q_i)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 6,
+   "n_branches": 6,
+   "depends_on": [
+    "A13-05",
+    "X-15"
+   ],
+   "definition_used_in_reference_calculation": "資材製造排出量。製品固有値（EPD）を適用しない資材の行について、発注量×換算倍率×係数（汎用係数または A13-02 の複合係数）を行の順に足す。係数を決められない行と数量が欠損の行は足さずに件数を数える。",
+   "boundary_unit_caveats": [
+    "数量は行ごとに固有単位（kg, t, m2, m3, 個など）で、数量どうしを単位を跨いで合計してはならない。加算できるのは kgCO2e に変換した後の積だけ。区分集約は同一単位の行に限る。",
+    "係数の段階範囲は A1-A3 に限る。現場着（A4 込み）やゆりかごから墓場までの係数を混ぜると、A4-01/A4-02 や C 段階と二重計上になる。",
+    "同一資材行を A13-01（汎用係数）と A13-03（EPD）の両方で計上しない。複合材に直接係数と A13-02 の合成係数を重ねて適用しない。"
+   ]
+  },
+  {
+   "id": "A13-02",
+   "name": "複合材の構成比からの推計",
+   "stage": "A1-A3",
+   "origin": "EXISTING_53",
+   "purpose": "配合や構成が分かる複合材について、構成材 j の質量比と構成材の排出係数の加重和から、複合材の単位質量当たり製造係数を推計する。直接の係数がない複合品を既存の構成材係数に帰着させるための係数生成式で、結果は排出量ではなく係数（中間量）である。質量比の合計が1であることを前提条件として検査する。",
+   "structure_class": "WEIGHTED_AVERAGE",
+   "structure_subclass": "MATRIX_EXPANSION",
+   "canonical_form": "EF_c[k] = sum_{j=1..J} W[k,j] * EF[j], subject to W[k,j] >= 0 and |sum_j W[k,j] - 1| <= eps ; matrix form ef_c = W ef ; downstream E = q_c^T (W ef) = (W^T q_c)^T ef",
+   "loop_dims": [
+    "composites",
+    "components"
+   ],
+   "complexity": "O(K*J)（K は複合材の種類数、J は構成材数。疎な構成表なら非ゼロ要素数に比例）",
+   "n_inputs": 5,
+   "n_branches": 5,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "複合材の構成比からの推計。複合品の行ごとに、構成材の係数（kg 当たり、対象段階が A1-A3 のみ、使用許諾あり）を質量比で加重して複合係数を作る。質量比の合計が 1 から 1e-6 を超えてずれる行、使えない構成係数を含む行は係数を作らない。正規化はしない。",
+   "boundary_unit_caveats": [
+    "出力は kgCO2e/kg の係数であり排出量ではない。formulas.json と outputs.json では output:stage.A1-A3 の producer に挙がっているが、段階合計へ直接加えると",
+    "質量比による加重は構成材係数が質量当たり（kgCO2e/kg）のときだけ有効。体積比・面積比の配合や m3・m2 当たりの係数は、密度・面密度の換算なしに混ぜられない。",
+    "混練・加工・組立のエネルギー（A3 相当）は構成材の加重和に含まれない。含める場合は別の加算項として明示する必要があり、無視すると過小評価になる。"
+   ]
+  },
+  {
+   "id": "A13-03",
+   "name": "EPD/商品固有値",
+   "stage": "A1-A3",
+   "origin": "EXISTING_53",
+   "purpose": "有効な EPD（環境製品宣言）や商品固有値がある資材行について、宣言単位に換算した数量に製品固有の A1-A3 係数を掛けて排出量を求める。EPD の対象段階・宣言単位・有効期限が一致することを条件とする、ゲート付きの積である。汎用係数による A13-01 の該当行を置き換える役割を持つ。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "PREDICATE_GATE",
+   "canonical_form": "E_epd = sum_{i in I_epd} g_i * (c_i * Q_i) * f_epd_i ; g_i = 1 if (stages_i == A1-A3 and unit_ok_i and valid_until_i >= assessment_date and usable_i) else 0 ; c_i = conversion from native unit to declared unit ; combined with A13-01: E_A1A3 = sum_i Q_i * ( g_i*c_i*f_epd_i + (1 - g_i)*f_gen_i )",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N_epd)（EPD を持つ行数。全行を走査する実装では O(N)）",
+   "n_inputs": 9,
+   "n_branches": 6,
+   "depends_on": [
+    "A13-05",
+    "X-15"
+   ],
+   "definition_used_in_reference_calculation": "EPD／商品固有値。製品固有値の適用条件（使用許諾、対象段階が A1-A3 のみ、単位が換算可能、算定日に有効）を満たす行について、発注量×換算倍率×製品固有値を足す。A13-01 とは行ごとに択一。",
+   "boundary_unit_caveats": [
+    "同一行を A13-01 と二重計上しない（行単位の排他選択）。",
+    "EPD の宣言値は A1-A3 モジュールだけを使う。A4、A5、C、D のモジュール値を含む合計値を A1-A3 に入れない。D（便益）を控除しない。",
+    "宣言単位（1 m2、1 m3、1 t、1 個など）と数量単位の換算には根拠が必要。宣言単位が機能単位（性能当たり）の場合は単純な数量換算ができない。"
+   ]
+  },
+  {
+   "id": "A13-04",
+   "name": "未数量工事項目の推定",
+   "stage": "A1-A3",
+   "origin": "EXISTING_53",
+   "purpose": "数量を拾えていない工事項目（雑工事や付帯部材など）の製造排出量を、費用比率などから推定して A1-A3 に上乗せするための推定式。概念式は引数（費用比率、対象範囲、許諾済み係数）を挙げるだけで、関数形は未設計である。J-CAT 固有の倍率を流用しないことが明記されている。",
+   "structure_class": "RATIO",
+   "structure_subclass": "UNDEFINED_MODEL",
+   "canonical_form": "E_unq = sum_i e_i * r_i / (1 - r_i),  0 <= r_i < 1   (本研究が独立に設計した上乗せ式。概念式そのものはモデル未定義)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 4,
+   "n_branches": 4,
+   "depends_on": [
+    "A13-01",
+    "A13-03"
+   ],
+   "definition_used_in_reference_calculation": "未数量工事項目の推定（本研究が独立に設計した上乗せ式）。行ごとの未数量費用比率 r（0 < r < 1）について、その行の製造排出 e に r/(1-r) を掛けた分を足す。概念式自体はモデル未定義であり、他のツールの倍率とは無関係。",
+   "boundary_unit_caveats": [
+    "J-CAT 固有の倍率（工事分倍率など）の値・内訳を流用しない。SF-19（工事分倍率内訳_2015）は名称から倍率による上乗せの構造が推定されるだけで（INFERRED）、対象範囲・算定式・値は未調査であり、値は流用禁",
+    "費用比率は金額基準の無次元量で、質量比や排出比と同一視できない（費用が高く排出が小さい項目と、その逆の項目で乖離する）。",
+    "結果は推定値であり、実数量に基づく A13-01、A13-03 と区別して表示・集計する。"
+   ]
+  },
+  {
+   "id": "A13-05",
+   "name": "数量による端材の扱い",
+   "stage": "A1-A3",
+   "origin": "EXISTING_53",
+   "purpose": "施工時の端材（ロス）を見込んで、据付数量から発注（製造）数量を逆算する数量補正。数量の基準（設計・発注・実績）に応じて補正の要否を切り替え、設計数量と発注数量の二重計上を防ぐ。結果は A1-A3 の製造量、A4 の輸送量、A5 の端材廃棄量の基礎になる。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "Q_ord_i = Q_inst_i * g(w_i), g(w) = 1/(1 - w), 0 <= w < 1 ; inverse Q_inst_i = Q_ord_i * (1 - w_i) ; waste_i = Q_ord_i - Q_inst_i = Q_inst_i * w_i/(1 - w_i) = Q_ord_i * w_i",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 3,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "数量による端材の扱い。端材率 w は発注量に対する比（0 <= w < 1）。数量の基準が DESIGN なら据付量 = Q、発注量 = Q/(1-w)。ORDERED・AS_BUILT なら 発注量 = Q、据付量 = Q*(1-w)。Q または w が欠損・範囲外の行は算出しない（0 にしない）。",
+   "boundary_unit_caveats": [
+    "端材率の定義基準：式は発注量基準（端材/発注量）。据付量基準（端材/据付量）の率を同じ式に入れると相対 w^2/(1−w^2) の過大になる。",
+    "数量基準が発注・実績の行に補正を掛けると端材の二重計上になる。",
+    "数量は固有単位のままなので、端材量を質量（kg）の工事廃棄物（A5-03）と突き合わせるには換算が必要。"
+   ]
+  },
+  {
+   "id": "A4-01",
+   "name": "質量距離ベースの輸送",
+   "stage": "A4",
+   "origin": "EXISTING_53",
+   "purpose": "資材・製品を出荷地から現場まで運ぶ際の排出量を、輸送質量 [t] × 輸送距離 [km] × 輸送手段別の排出係数 [kgCO2e/(t*km)] の総和で求める（トンキロ法）。輸送手段に応じて係数を選ぶ。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "E_A4 = sum_{i=1..N} m_i * d_i * f_{mode(i)} ; grouped exact form E_A4 = sum_{k in modes} f_k * TKM_k, TKM_k = sum_{i: mode(i)=k} m_i * d_i [t*km]",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)（輸送手段でグループ化した後の係数乗算は O(M)、M は輸送手段数）",
+   "n_inputs": 4,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "質量距離ベースの輸送。数量当たりの搬入係数を持たない資材の行について、輸送質量[t]×距離[km]×輸送手段の係数[kgCO2e/tkm] を足す。積載率では補正しない。",
+   "boundary_unit_caveats": [
+    "単位：質量は t、距離は km、係数は kgCO2e/(t*km)。数量が kg や m3 の資材は質量換算が必要で、kg と t の1000倍の取り違えに注意する。",
+    "片道か往復か、空車回送、積載率の扱いは係数の定義に依存する。積載率（TRANSPORT.load_factor）で補正したうえで積載率込みの係数を使うと二重補正になる。",
+    "A1-A3 係数が現場着（A4 込み）の資材をここで再計上しない。A4-01 と A4-02 は同一行で排他。"
+   ]
+  },
+  {
+   "id": "A4-02",
+   "name": "製品別輸送負荷",
+   "stage": "A4",
+   "origin": "EXISTING_53",
+   "purpose": "資材数量（固有単位）に、製品別にあらかじめ整備された単位数量当たりの輸送排出係数を掛けて合計する、簡易な輸送算定。距離や質量を個別に与えない場合の A4 の算定経路で、A1-A3 の係数に A4 が含まれていないことを前提条件とする。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_A4 = sum_{i=1..N} Q_i * f_tr_i ; f_tr_i [kgCO2e per native unit of line i] ; joint evaluation with A13-01: [E_A13, E_A4] = q^T [f_A13, f_tr]",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 4,
+   "n_branches": 4,
+   "depends_on": [
+    "A13-05"
+   ],
+   "definition_used_in_reference_calculation": "製品別輸送負荷。数量当たりの搬入係数を持つ資材の行について、発注量×換算倍率×搬入係数を足す。A4-01 とは行ごとに択一。",
+   "boundary_unit_caveats": [
+    "A1-A3 係数の境界に A4 が含まれていないこと。含まれる行に適用すると二重計上になる。",
+    "同一資材で A4-01 と併用しない。",
+    "輸送係数の分母単位を資材の数量単位と一致させる（m3 当たりと t 当たりの混同に注意）。"
+   ]
+  },
+  {
+   "id": "A5-01",
+   "name": "仮設電気",
+   "stage": "A5",
+   "origin": "EXISTING_53",
+   "purpose": "工事期間中の仮設電力（現場事務所、揚重機、照明など）の使用量 [kWh] に、施工時点・地域の電力排出係数を掛けて、施工段階の電力起因排出量を求める。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "E_site_power = W_site * f_grid(y_c) ; multi-year variant E_site_power = sum_{y in construction years} W_y * f_grid(y)",
+   "loop_dims": [],
+   "complexity": "O(1)",
+   "n_inputs": 3,
+   "n_branches": 2,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "仮設電気。工期全体の買電量[kWh]×工事期間の電力排出係数。電力係数シナリオの使用許諾がない、または買電量が欠損のときは算出しない。",
+   "boundary_unit_caveats": [
+    "kWh は工期の総量であり年間値ではない。B6 の年間値 [kWh/年] とは時間の次元が異なる。",
+    "電力係数は施工年のものを使う。運用期間の将来係数や評価開始年の係数を流用しない。",
+    "発電機による自家発電分は燃料（A5-02）で計上し、kWh に含めない（二重計上）。"
+   ]
+  },
+  {
+   "id": "A5-02",
+   "name": "施工燃料",
+   "stage": "A5",
+   "origin": "EXISTING_53",
+   "purpose": "工事で消費する燃料（軽油、ガスなど）の量に燃料別の排出係数を掛けて合計し、重機や発電機などの燃料起因排出量を求める。燃料ごとに単位（L、m3、MJ）が異なるため、単位換算を伴う。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "RATIO",
+   "canonical_form": "E_site_fuels = sum_{f in fuels} V_f * c_f * EF_f ; c_f = unit conversion (c_f = 1 if EF_f is per native unit of V_f; otherwise e.g. heating value [MJ per L] with EF_f per MJ)",
+   "loop_dims": [
+    "fuels"
+   ],
+   "complexity": "O(F)（F は燃料の種類数。現行の入力では F=2）",
+   "n_inputs": 4,
+   "n_branches": 3,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "施工燃料。燃料の種類ごとに 数量×換算倍率×係数 を足す。換算できない・欠損の燃料は足さずに数える。",
+   "boundary_unit_caveats": [
+    "単位：軽油は L、ガスは m3、熱量は MJ で、そのまま加算できない。加算できるのは kgCO2e に換算した後だけ。ガスは種類（都市ガス、LPG など）と体積の基準状態によって係数が異なる。",
+    "発熱量の基準（高位か低位か）を係数の定義と揃える。",
+    "係数の範囲（燃焼のみか、燃料の上流を含むか）を B6-02 と揃える。"
+   ]
+  },
+  {
+   "id": "A5-03",
+   "name": "工事廃棄物",
+   "stage": "A5",
+   "origin": "EXISTING_53",
+   "purpose": "工事中に発生する廃棄物（端材、梱包材、その他の建設副産物）の質量に、種類別・処理方法別の処理係数を掛けて合計し、施工段階の廃棄物処理排出量を求める。解体時の廃棄物（C1-C4）と重複させないことが条件。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_cw = sum_{w in waste types} M_w * f_proc_w ; M_w [kg], f_proc_w [kgCO2e/kg]",
+   "loop_dims": [
+    "waste_types"
+   ],
+   "complexity": "O(W)（W は廃棄物の種別数）",
+   "n_inputs": 3,
+   "n_branches": 3,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "工事廃棄物。廃棄物の種別ごとに 質量[kg]×処理係数 を足す。",
+   "boundary_unit_caveats": [
+    "解体時の廃棄物（C1-C4）と同じ質量を二重計上しない。A5 は施工中に発生した分だけ。",
+    "端材の製造排出（A13-05 経由で A1-A3）と端材の処理排出（本式）は別物で、両方を計上してよいが、端材量が両者で整合していること（Q_ord − Q_inst の質量換算値と site_waste_mass）。",
+    "単位：入力は kg。C2-01 の輸送質量は t。資材の固有単位（m3、m2）からは質量換算が必要。"
+   ]
+  },
+  {
+   "id": "A5-04",
+   "name": "工事負荷の合計",
+   "stage": "A5",
+   "origin": "EXISTING_53",
+   "purpose": "施工段階（A5）の構成要素（仮設電力、施工燃料、工事廃棄物、その他の検証済み現場負荷）を合計して A5 の段階結果を得る集計式。積み残した工種は合計に混ぜず別管理する。",
+   "structure_class": "SUM_OF_STAGES",
+   "structure_subclass": null,
+   "canonical_form": "E_A5 = sum_{k in {power, fuels, waste, other}} E_k = E_site_power + E_site_fuels + E_cw + E_other",
+   "loop_dims": [],
+   "complexity": "O(1)（加算4項）",
+   "n_inputs": 4,
+   "n_branches": 3,
+   "depends_on": [
+    "A5-01",
+    "A5-02",
+    "A5-03"
+   ],
+   "definition_used_in_reference_calculation": "工事負荷の合計。仮設電気・施工燃料・工事廃棄物をこの順に足す。その他の現場排出は入力がないため 0 を足さず、未評価として印を付ける。",
+   "boundary_unit_caveats": [
+    "outputs.json では A5-01〜A5-04 がいずれも output:stage.A5 の producer とされている。A5-04 は A5-01〜A5-03 を内包するので、producer を単純に合",
+    "E_other_verified_site に対応する入力項目が無い（仮設工事 CONSTRUCTION.temporary_works は文字列項目で式に未接続）。未入力を 0 と見なすと過小評価になる。",
+    "端材の製造・輸送を A5 に含める整理とは段階の切り方が異なる（本モデルでは A1-A3 と A4 に計上）。他の整理による A5 の値と直接比較しない。"
+   ]
+  },
+  {
+   "id": "B1-01",
+   "name": "物質のCO2e充填量",
+   "stage": "B1",
+   "origin": "EXISTING_53",
+   "purpose": "冷媒等の初期充填量を CO2 換算した在庫量を求める（排出量ではない）。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "M = sum_d m_d * GWP_d",
+   "loop_dims": [
+    "devices"
+   ],
+   "complexity": "O(D)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "物質の CO2e 充填量。機器ごとに 初期充填質量×GWP を足す。排出量ではなく在庫量であり、どの段階合計にも加えない。",
+   "boundary_unit_caveats": [
+    "在庫量であり排出量ではない。段階合計・WLC に加算してはならない",
+    "GWP の版が機器間で揃っていること"
+   ]
+  },
+  {
+   "id": "B1-02",
+   "name": "使用期間の漏洩",
+   "stage": "B1",
+   "origin": "EXISTING_53",
+   "purpose": "使用期間中に機器から漏れる冷媒等の排出量を、残存量を年ごとに更新しながら積算する。",
+   "structure_class": "RECURRENCE",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_d GWP_d * sum_{y=1..Y} w_y * r_d * m_{d,y};  m_{d,y+1} = m_{d,y} * (1 - r_d*w_y) [補充なし],  m_{d,y+1} = m0_d [補充あり または 交換年]",
+   "loop_dims": [
+    "devices",
+    "years"
+   ],
+   "complexity": "O(D*T)",
+   "n_inputs": 7,
+   "n_branches": 3,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "使用期間の漏洩。機器ごとに評価年を 1 年ずつ進め、その年の漏洩 = 年初の残存量×年間漏洩率×年重みとする。毎年補充する機器は残存量が常に初期充填量、補充しない機器は年末に漏洩分を残存量から引く。機器の交換（交換年一覧、なければ耐用年数の倍数）は、それが属する年の年末に反映し、残存量を初期充填量に戻す。充填量・GWP・漏洩率のいずれかが欠損の機器は計上しない。",
+   "boundary_unit_caveats": [
+    "B1 段階の排出量。充填量（B1-01）や更新時損失（B1-03）と合算する際に同じ質量を二重に数えない",
+    "漏洩率は年率。端数年は年重みで按分"
+   ]
+  },
+  {
+   "id": "B1-03",
+   "name": "更新時の漏洩",
+   "stage": "B1",
+   "origin": "EXISTING_53",
+   "purpose": "機器交換のたびに、旧機器に残っていた冷媒等のうち回収されずに失われる分を排出として計上する。",
+   "structure_class": "EVENT_SCHEDULE",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_d GWP_d * rho_d * sum_{e in events_d} m_d(t_e-)",
+   "loop_dims": [
+    "devices",
+    "events"
+   ],
+   "complexity": "O(D*K)",
+   "n_inputs": 6,
+   "n_branches": 2,
+   "depends_on": [
+    "B1-02"
+   ],
+   "definition_used_in_reference_calculation": "更新時の漏洩。機器の交換 1 回ごとに、交換直前の残存量×交換時損失率×GWP を足す（残存量は B1-02 の年次計算の値）。損失率が欠損の機器は計上しない。",
+   "boundary_unit_caveats": [
+    "同じ交換を B4（機器更新）や C（廃棄）で重ねて計上しない",
+    "損失率は 1 事象当たりの率で、年率ではない"
+   ]
+  },
+  {
+   "id": "B1-04",
+   "name": "廃棄時未回収量",
+   "stage": "B1/C",
+   "origin": "EXISTING_53",
+   "purpose": "評価期間の終わりに機器に残っている冷媒等のうち、回収されない分を排出として計上する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_d GWP_d * m_d(T) * (1 - c_d)",
+   "loop_dims": [
+    "devices"
+   ],
+   "complexity": "O(D)",
+   "n_inputs": 5,
+   "n_branches": 1,
+   "depends_on": [
+    "B1-02"
+   ],
+   "definition_used_in_reference_calculation": "廃棄時未回収量。評価期間の終わりの残存量×(1 − 回収率)×GWP を機器ごとに足す。本研究の基準計算では B1 段階に帰属させる（C 段階には入れない）。",
+   "boundary_unit_caveats": [
+    "B1 と C のどちらか一方にだけ入れる（本研究の基準計算は B1）",
+    "回収率は質量比"
+   ]
+  },
+  {
+   "id": "B2-01",
+   "name": "施設管理に帰属させる運用負荷",
+   "stage": "B2",
+   "origin": "EXISTING_53",
+   "purpose": "運用時の電力排出のうち施設管理に帰属させる分を、比率で切り出す。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "E_B2 = s * sum_y w_y * E_elec_y;  (B6 側は同額を差し引く)",
+   "loop_dims": [],
+   "complexity": "O(1)（B6-01 の結果を再利用）",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [
+    "B6-01"
+   ],
+   "definition_used_in_reference_calculation": "施設管理に帰属させる運用負荷。評価期間の買電排出（年重み付きの合計）×施設管理の比率。段階ベクトルでは同額を B6 から差し引く（B6 と B2 の合計は変わらない）。",
+   "boundary_unit_caveats": [
+    "B6 と二重計上しない：切り出した分は B6 から同額を引く",
+    "比率は排出量に対する比で、エネルギー量に対する比と一致するのは係数が共通のときだけ"
+   ]
+  },
+  {
+   "id": "B3-01",
+   "name": "年間修繕",
+   "stage": "B3",
+   "origin": "EXISTING_53",
+   "purpose": "修繕による排出を年ごとに積算する。更新を行う年は修繕を計上しない。",
+   "structure_class": "TIME_SERIES_SUM",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_i r_i * e0_i * sum_{y=1..Y} w_y * s_{i,y};  s_{i,y} = 0 (更新が属する年) / 1 (それ以外)",
+   "loop_dims": [
+    "items",
+    "years"
+   ],
+   "complexity": "O(N*T)",
+   "n_inputs": 6,
+   "n_branches": 3,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "B4-01",
+    "B4-03",
+    "X-01"
+   ],
+   "definition_used_in_reference_calculation": "年間修繕。資材・設備の行ごと、評価年ごとに、初期の製造排出 e0×年間修繕率 r×年重み w_y を足す。その行の更新が属する年は修繕を計上しない。修繕率が欠損の行は足さない。",
+   "boundary_unit_caveats": [
+    "B3-02 とは択一（両方を足さない）",
+    "修繕の係数に製造段階の係数を流用している点は推定であり、実績修繕とは区別する"
+   ]
+  },
+  {
+   "id": "B3-02",
+   "name": "期間中の反復修繕（推計）",
+   "stage": "B3",
+   "origin": "EXISTING_53",
+   "purpose": "修繕による排出を、初期排出×年間修繕率×評価年数で概算する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E = T * sum_i e0_i * r_i",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "X-01"
+   ],
+   "definition_used_in_reference_calculation": "期間中の反復修繕（推計）。資材・設備の行ごとに 初期の製造排出×年間修繕率×評価年数 T を足す。B3-01 とは択一で、段階合計には B3-01 を使う（本式は更新年の除外をしない概算）。",
+   "boundary_unit_caveats": [
+    "B3-01 とは択一",
+    "T は評価年数（端数年を含む実数）"
+   ]
+  },
+  {
+   "id": "B4-01",
+   "name": "更新イベント年の生成",
+   "stage": "B4",
+   "origin": "EXISTING_53",
+   "purpose": "設備機器ごとに、評価期間内の更新年の一覧を作る。",
+   "structure_class": "EVENT_SCHEDULE",
+   "structure_subclass": null,
+   "canonical_form": "events_i = { n*L_i : n = 1,2,... and n*L_i < T }  (明示の一覧があれば 0 < t < T のものを採用)",
+   "loop_dims": [
+    "items",
+    "events"
+   ],
+   "complexity": "O(sum_i T/L_i)",
+   "n_inputs": 2,
+   "n_branches": 2,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "更新イベント年の生成。設備の行ごとに、明示の更新年一覧があれば 0 < t < T のものを、なければ耐用年数 L の倍数 n*L（n = 1, 2, ...）で n*L < T のものを、1 つずつ数え上げて一覧にする。評価期間の終わりちょうどの更新は含めない。",
+   "boundary_unit_caveats": [
+    "事象の時点は竣工からの経過年",
+    "評価期間の終わりちょうど（n*L = T）は数えない"
+   ]
+  },
+  {
+   "id": "B4-02",
+   "name": "機器・資材更新負荷",
+   "stage": "B4",
+   "origin": "EXISTING_53",
+   "purpose": "更新のたびに発生する製造・搬入・据付・廃棄の排出を合計する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_i sum_{e in events_i} (e_mfg_i + e_del_i + e_inst_i + e_disp_i)  =  sum_i N_i * u_i",
+   "loop_dims": [
+    "items",
+    "events"
+   ],
+   "complexity": "O(sum_i N_i)",
+   "n_inputs": 5,
+   "n_branches": 2,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A13-05",
+    "A4-01",
+    "A4-02",
+    "B4-01",
+    "B4-03",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ],
+   "definition_used_in_reference_calculation": "機器・資材更新負荷。更新 1 回ごとに、その行の 製造（A1-A3 の行結果）＋搬入（A4 の行結果）＋据付（据付係数があれば 発注量×係数）＋旧品の廃棄（C2・C3・C4 の行結果、設備は廃棄質量×係数）を足す。資材は B4-03 の回数だけ、設備は B4-01 の一覧の事象ごとに繰り返す。事象は発生年 ceil(t) に置く。",
+   "boundary_unit_caveats": [
+    "初期の製造（A1-A3）と更新時の製造を区別する",
+    "更新時の廃棄を C 段階と重ねて計上しない（C は最終世代だけ）"
+   ]
+  },
+  {
+   "id": "B4-03",
+   "name": "交換回数の概算",
+   "stage": "B4",
+   "origin": "EXISTING_53",
+   "purpose": "資材ごとに、評価期間内の更新回数を数える。",
+   "structure_class": "COUNT_FLOOR",
+   "structure_subclass": null,
+   "canonical_form": "N_i = #{ n >= 1 : n*c_i < T }  =  ceil(T/c_i) - 1",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)（数え上げなら O(sum T/c)）",
+   "n_inputs": 2,
+   "n_branches": 2,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "交換回数の概算。資材の行ごとに、更新周期 c の倍数 n*c が n*c < T を満たす正の整数 n の個数を数え上げる。周期が欠損の行は 0 回。",
+   "boundary_unit_caveats": [
+    "T ちょうどの更新は数えない",
+    "周期の単位は年"
+   ]
+  },
+  {
+   "id": "B5-01",
+   "name": "大型改修・建替イベント",
+   "stage": "B5",
+   "origin": "EXISTING_53",
+   "purpose": "建物の建替・大規模改修を、建替周期ごとの事象として計上する。",
+   "structure_class": "EVENT_SCHEDULE",
+   "structure_subclass": null,
+   "canonical_form": "E = N(T, C) * phi * (E_A1A3 + E_A4 + E_A5 + E_C1 + E_C2 + E_C3 + E_C4);  N = #{ n >= 1 : n*C < T }",
+   "loop_dims": [
+    "events"
+   ],
+   "complexity": "O(T/C)",
+   "n_inputs": 4,
+   "n_branches": 2,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A13-04",
+    "A4-01",
+    "A4-02",
+    "A5-04",
+    "C1-01",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ],
+   "definition_used_in_reference_calculation": "大型改修・建替イベント。建替シナリオが NONE でなければ、建替周期 C の倍数 n*C（n*C < T）ごとに、範囲比 phi×（初期の A1-A3＋A4＋A5＋C1〜C4 の合計）を足す。部材の更新周期は建替で初期化しない。",
+   "boundary_unit_caveats": [
+    "新築時の A 段階と建替時の A 段階を重ねて数えない",
+    "部材の更新周期を建替で初期化するかどうかは本研究では初期化しない前提（未解決事項）"
+   ]
+  },
+  {
+   "id": "B6-01",
+   "name": "年間買電排出",
+   "stage": "B6",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとの買電量に、その年の電力排出係数を掛ける。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_elec_y = n_y * g_y   (y = 1..Y)",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [
+    "B6-04",
+    "X-06"
+   ],
+   "definition_used_in_reference_calculation": "年間買電排出。評価年ごとに 買電量×その年の電力排出係数。電力係数シナリオの使用許諾がなければ算出しない。",
+   "boundary_unit_caveats": [
+    "年度と暦年を混ぜない",
+    "係数が含む範囲（発電時のみか上流を含むか）を揃える"
+   ]
+  },
+  {
+   "id": "B6-02",
+   "name": "燃料の年間排出",
+   "stage": "B6",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとの燃料・熱の消費量に排出係数を掛ける。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_fuel_y = sum_f a_{f,y} * c_f * EF_f",
+   "loop_dims": [
+    "years",
+    "fuels"
+   ],
+   "complexity": "O(T*F)",
+   "n_inputs": 3,
+   "n_branches": 2,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "燃料の年間排出。評価年ごとに、ガス・石油・地域熱の消費量×換算倍率×係数 を足す。",
+   "boundary_unit_caveats": [
+    "係数が含む範囲（燃焼のみか上流を含むか）",
+    "単位（m3、L、MJ）の換算根拠"
+   ]
+  },
+  {
+   "id": "B6-03",
+   "name": "評価年数の積算",
+   "stage": "B6",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとの運用排出を評価期間にわたって積算する。",
+   "structure_class": "TIME_SERIES_SUM",
+   "structure_subclass": null,
+   "canonical_form": "E_B6 = sum_{y=1..Y} w_y * (E_elec_y + E_fuel_y);  w_y = min(1, T - (y-1))",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [
+    "B6-01",
+    "B6-02"
+   ],
+   "definition_used_in_reference_calculation": "評価年数の積算。評価年ごとの（買電排出＋燃料排出）×年重み を y = 1..Y で足す。",
+   "boundary_unit_caveats": [
+    "B2-01 で切り出した分を二重に数えない",
+    "T が整数でないときは最終年を按分"
+   ]
+  },
+  {
+   "id": "B6-04",
+   "name": "オンサイト発電の扱い",
+   "stage": "B6",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとに、消費量から自家消費した発電量を差し引いて買電量を求める。",
+   "structure_class": "MAX_CLAMP",
+   "structure_subclass": null,
+   "canonical_form": "n_y = max(0, c_y - (g_y - x_y))",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "オンサイト発電の扱い。評価年ごとに 買電量 = max(0, 消費量 − (発電量 − 売電量)) を求める。",
+   "boundary_unit_caveats": [
+    "売電分を排出削減として二重に差し引かない",
+    "自家消費分と売電分を区別する"
+   ]
+  },
+  {
+   "id": "B7-01",
+   "name": "上水利用排出",
+   "stage": "B7",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとの上水使用量に係数を掛ける。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_w_y = v_y * f_w",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "上水利用排出。評価年ごとに 上水使用量×係数。",
+   "boundary_unit_caveats": [
+    "上水と下水を 1 つの係数で重ねて数えない"
+   ]
+  },
+  {
+   "id": "B7-02",
+   "name": "下水処理排出",
+   "stage": "B7",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとの下水量に係数を掛ける。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_s_y = v_y * f_s",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "下水処理排出。評価年ごとに 下水量×係数。",
+   "boundary_unit_caveats": [
+    "上水の係数に下水処理が含まれていないこと"
+   ]
+  },
+  {
+   "id": "B7-03",
+   "name": "一般廃棄物排出",
+   "stage": "B7",
+   "origin": "EXISTING_53",
+   "purpose": "年ごとの一般廃棄物量に係数を掛ける。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_m_y = k_y * f_m",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "一般廃棄物排出。評価年ごとに 一般廃棄物量×係数。",
+   "boundary_unit_caveats": [
+    "運用時の一般廃棄物であり、工事廃棄物（A5-03）・解体廃棄物（C）と区別する"
+   ]
+  },
+  {
+   "id": "B7-04",
+   "name": "評価期間積算",
+   "stage": "B7",
+   "origin": "EXISTING_53",
+   "purpose": "水・廃棄物の年ごとの排出を評価期間にわたって積算する。",
+   "structure_class": "TIME_SERIES_SUM",
+   "structure_subclass": null,
+   "canonical_form": "E_B7 = sum_{y=1..Y} w_y * (E_w_y + E_s_y + E_m_y)",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [
+    "B7-01",
+    "B7-02",
+    "B7-03"
+   ],
+   "definition_used_in_reference_calculation": "評価期間積算。評価年ごとの（上水＋下水＋一般廃棄物）の排出×年重み を y = 1..Y で足す。",
+   "boundary_unit_caveats": [
+    "B7 に含める範囲は設計上の選択で、B6 と重ねない"
+   ]
+  },
+  {
+   "id": "C1-01",
+   "name": "解体作業排出",
+   "stage": "C1",
+   "origin": "EXISTING_53",
+   "purpose": "解体作業の活動量に係数を掛けて合計する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_C1 = sum_a q_a * f_a",
+   "loop_dims": [
+    "activities"
+   ],
+   "complexity": "O(K)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "解体作業排出。解体の活動ごとに 活動量×換算倍率×係数 を足す。",
+   "boundary_unit_caveats": [
+    "工事段階の現場燃料（A5-02）と混ぜない"
+   ]
+  },
+  {
+   "id": "C2-01",
+   "name": "廃棄物搬出",
+   "stage": "C2",
+   "origin": "EXISTING_53",
+   "purpose": "廃棄物の搬出に伴う排出を、質量×距離×係数で求める。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "E_C2 = sum_i (m_i/1000) * d_i * f_i  +  sum_h M_h * D_h * f_h",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "廃棄物搬出。資材の行ごとに 廃棄質量[kg]/1000×搬出距離[km]×係数[kgCO2e/tkm] を足し、さらに行に属さない搬出（質量[t]×距離×係数）を足す。",
+   "boundary_unit_caveats": [
+    "片道か往復かを係数の定義に合わせる",
+    "kg と t を混ぜない"
+   ]
+  },
+  {
+   "id": "C3-01",
+   "name": "廃棄物処理",
+   "stage": "C3",
+   "origin": "EXISTING_53",
+   "purpose": "廃棄物を処理経路ごとに按分し、経路ごとの係数を掛けて合計する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "WEIGHTED_AVERAGE",
+   "canonical_form": "E_C3 = sum_i m_i * sum_{r in {REUSE, RECYCLE, PROCESSING}} p_{i,r} * f_{i,r}",
+   "loop_dims": [
+    "items",
+    "routes"
+   ],
+   "complexity": "O(N*R)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "廃棄物処理。資材の行ごと、最終処分以外の処理経路（再使用・リサイクル・中間処理）ごとに廃棄質量×経路の比率×経路の係数 を足す。",
+   "boundary_unit_caveats": [
+    "リサイクルの便益（モジュール D）を C3 に入れない",
+    "C3 と C4 で同じ質量を重ねて数えない"
+   ]
+  },
+  {
+   "id": "C4-01",
+   "name": "最終処分",
+   "stage": "C4",
+   "origin": "EXISTING_53",
+   "purpose": "最終処分される質量に係数を掛けて合計する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_C4 = sum_i m_i * p_{i,LANDFILL} * f_{i,LANDFILL}",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "最終処分。資材の行ごとに 廃棄質量×最終処分の比率×最終処分の係数 を足す。",
+   "boundary_unit_caveats": [
+    "処理後の残渣を含めるかどうかを C3 と揃える"
+   ]
+  },
+  {
+   "id": "C-05",
+   "name": "資材の質量収支",
+   "stage": "C1-C4",
+   "origin": "EXISTING_53",
+   "purpose": "資材ごとに、経路別の質量の合計が廃棄時の質量を超えていないことを検査する。",
+   "structure_class": "MASS_BALANCE_CONSTRAINT",
+   "structure_subclass": null,
+   "canonical_form": "ok_i = [ sum_r p_{i,r} <= 1 + tol ] AND [ m_eol_i <= m_inst_i * (1 + tol) ]",
+   "loop_dims": [
+    "items",
+    "routes"
+   ],
+   "complexity": "O(N*R)",
+   "n_inputs": 3,
+   "n_branches": 2,
+   "depends_on": [
+    "A13-05"
+   ],
+   "definition_used_in_reference_calculation": "資材の質量収支。資材の行ごとに、経路の比率が負でなく合計が 1 を超えないこと（許容 1e-6）、廃棄質量が発注質量（kg へ換算できる行のみ）を超えないことを検査する。合計が 1 未満の行は違反ではなく未配分として数える。数値は補正しない。",
+   "boundary_unit_caveats": [
+    "数値を補正しない",
+    "許容差を仕様として宣言する"
+   ]
+  },
+  {
+   "id": "STO-01",
+   "name": "木材の炭素貯蔵",
+   "stage": "MEMO",
+   "origin": "EXISTING_53",
+   "purpose": "木材に固定されている生物由来の炭素の量を、絶乾質量 × 炭素含有率 × CO2 と C の分子量比によって、CO2 換算量として求める。排出量の合計からは自動で控除せず、参考値（メモ）として独立に表示する。出力は output:carbon_storage_memo であり、SUM-01〜08 のどの式にも渡さない。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "RATIO",
+   "canonical_form": "S = k * sum_i ( m_dry_i * cf_i ),   m_dry_i = V_i * rho_i / (1 + w_i),   k = M_CO2 / M_C  (= 44/12)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N_t) [N_t=木材の行数。樹種・製品ごとに集計すれば乗算は O(D)、D=相異なる樹種・製品の数]",
+   "n_inputs": 5,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "木材の炭素貯蔵（参考値）。木材数量[m3]×絶乾密度[kg/m3]×炭素含有率×44/12。排出の合計には加減しない。",
+   "boundary_unit_caveats": [
+    "貯蔵量は排出量ではない。SUM-01〜03 の合計から自動で差し引かない（01_COMPLIANCE 1-D、05_OUTPUTS の原則）。",
+    "単位は kgCO2（生物由来の炭素の CO2 換算）。化石由来を含む排出量 kgCO2e と同じ列に入れない。",
+    "質量は絶乾質量である。気乾質量、生材の質量、体積（m3）をそのまま掛けない。含水率の基準（乾量基準か湿量基準か）で換算式が変わる。"
+   ]
+  },
+  {
+   "id": "STO-02",
+   "name": "コンクリート炭酸化等の取り扱い",
+   "stage": "MEMO",
+   "origin": "EXISTING_53",
+   "purpose": "コンクリートの炭酸化などによる CO2 の固定・吸収量を、活動量 × 検証済みの吸収係数として求める。測定値、境界、期間、量のそれぞれに独立した根拠が必要であり、根拠がなければ計算しない。排出量の合計には加減せず、参考値（メモ）として表示する。出力は output:carbon_uptake_memo であり、SUM-01〜08 のどの式にも渡さない。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "U = sum_i ( a_i * u_i ),   a_i = activity [m3 or m2],   u_i = verified uptake factor [kgCO2 per unit of a_i, for a declared period]",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N_c) [N_c=コンクリートの行数]",
+   "n_inputs": 4,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "コンクリート炭酸化等の取り扱い（参考値）。コンクリート数量[m3]×換算倍率×吸収係数。排出の合計には加減しない。",
+   "boundary_unit_caveats": [
+    "吸収量は排出量の控除ではない。SUM-01〜03 の合計に加減しない（05_OUTPUTS の原則）。",
+    "単位は kgCO2。活動量が体積（m3）か露出表面積（m2）かで係数の単位が異なる。体積当たりの係数に面積を掛けない。",
+    "吸収係数は対象期間に依存する。期間累計の係数と年当たりの係数、使用段階の吸収と解体・破砕後の吸収を混同しない。"
+   ]
+  },
+  {
+   "id": "SUM-01",
+   "name": "アップフロント",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "アップフロントカーボン（竣工までに発生する排出量）を、資材製造 A1-A3、輸送 A4、施工 A5 の 3 段階の合計として求める。段階結果の単純な加算であり、計算対象に含めた段階だけを足す。未算入の項目と工程別の内訳を併記することが求められている。出力は output:upfront。",
+   "structure_class": "SUM_OF_STAGES",
+   "structure_subclass": null,
+   "canonical_form": "E_up = sum_{s in S_up} m_s * E_s,   S_up = {A1-A3, A4, A5},   m_s = [ s in included_stages ]",
+   "loop_dims": [
+    "stages"
+   ],
+   "complexity": "O(1) [加算 2 回。段階数を S とすれば O(S)]",
+   "n_inputs": 1,
+   "n_branches": 2,
+   "depends_on": [
+    "X-02"
+   ],
+   "definition_used_in_reference_calculation": "アップフロント。対象段階のうち A1-A3・A4・A5 の値をこの順に足す。",
+   "boundary_unit_caveats": [
+    "アップフロントは竣工時点までの A1-A3・A4・A5 だけである。使用段階の更新（B4-02）や建替（B5-01）で生じる製造・輸送・施工は、同じ種類の活動でも含めない。",
+    "A1-A3 の係数が A4 や A5 を含む場合（FACTOR.factor_stages）、A4・A5 を別に足すと二重計上になる。",
+    "A4-01 と A4-02、A13-01 と A13-03 は、同じ品目に対する代替法であり、両方を足さない。"
+   ]
+  },
+  {
+   "id": "SUM-02",
+   "name": "エンボディド",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "エンボディドカーボン（建物の資材・設備・工事に由来する排出量）を、A1-A3・A4・A5 に、使用段階の B1〜B5 と解体・廃棄段階の C1〜C4 を加えた合計として求める。運用エネルギー B6 と、水・廃棄物 B7 は含めない。出力は output:embodied。",
+   "structure_class": "SUM_OF_STAGES",
+   "structure_subclass": null,
+   "canonical_form": "E_emb = sum_{s in S_emb} m_s * E_s,   S_emb = {A1-A3, A4, A5, B1, B2, B3, B4, B5, C1, C2, C3, C4}    ( = E_up + sum_{s in B1..B5} m_s*E_s + sum_{s in C1..C4} m_s*E_s )",
+   "loop_dims": [
+    "stages"
+   ],
+   "complexity": "O(1) [加算 11 回。段階数を S とすれば O(S)]",
+   "n_inputs": 1,
+   "n_branches": 3,
+   "depends_on": [
+    "X-02"
+   ],
+   "definition_used_in_reference_calculation": "エンボディド。対象段階のうち A1-A3・A4・A5・B1〜B5・C1〜C4 の値を足す（B6・B7 は含めない）。",
+   "boundary_unit_caveats": [
+    "B6（運用エネルギー）と B7（水・一般廃棄物）を含めない。",
+    "B2-01 は運用電力の一部を B2 に帰属させる式であり、エネルギーに由来する量がエンボディドに入る。B6 から同じ量を除いていないと、SUM-03 で二重になる。B2 をエンボディドに含めるかどうかは、勘定境界の設計",
+    "B1-04（廃棄時の未回収冷媒）は段階が「B1/C」であり、B1 と C の両方に入れると二重になる。"
+   ]
+  },
+  {
+   "id": "SUM-03",
+   "name": "ホールライフ",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "ホールライフカーボン（WLC）を、計算対象として選んだ A1〜C4 の各段階の結果の合計として求める。選んだ段階だけを加算する。面積原単位（SUM-04）、年平均原単位（SUM-05）、t 換算（SUM-06）、段階別割合（SUM-07）、改善案との比較（SUM-08）の分子・基準になる中心の合計である。出力は output:total_wlc。",
+   "structure_class": "SUM_OF_STAGES",
+   "structure_subclass": null,
+   "canonical_form": "E_WLC = sum_{s in S_all} m_s * E_s,   S_all = {A1-A3, A4, A5, B1, ..., B7, C1, ..., C4} (14 stages),   m_s = [ s in included_stages ]",
+   "loop_dims": [
+    "stages"
+   ],
+   "complexity": "O(S) [S=14 段階。加算 13 回]",
+   "n_inputs": 1,
+   "n_branches": 3,
+   "depends_on": [
+    "X-02"
+   ],
+   "definition_used_in_reference_calculation": "ホールライフ。対象段階（最大 14 段階）の値を A1-A3 から C4 の順に足す。",
+   "boundary_unit_caveats": [
+    "合計するのは A1〜C4 だけである。D（範囲外の便益）、木材の炭素貯蔵（STO-01）、コンクリートの吸収（STO-02）は加減しない（05_OUTPUTS の原則）。",
+    "一部の段階だけを選んだ合計を「ホールライフ」と呼ばない。選んだ段階の一覧を必ず併記する。",
+    "B2-01 と B6、B1-04 の B1 / C の帰属、B1-03 と B4、A5-03 と C、B5-01 と A、A1-A3 の係数に含まれる A4 など、段階の間の二重計上（QA-01 の対象）を解消したうえで"
+   ]
+  },
+  {
+   "id": "SUM-04",
+   "name": "延べ床面積当たり",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "ホールライフカーボンを延べ床面積で割り、床面積当たりの原単位（kgCO2e/m2）を求める。規模の異なる建物どうしを比べるための正規化である。床面積は正の有限値でなければならない。出力は output:wlc_kgco2e_per_m2。depends_on の SYS-01・SYS-04 は、分母の面積に対する前提条件（ゲート）としての依存である。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "I_area = E_WLC / A    (defined only if A is finite and A > 0)",
+   "loop_dims": [],
+   "complexity": "O(1)",
+   "n_inputs": 1,
+   "n_branches": 3,
+   "depends_on": [
+    "SUM-03"
+   ],
+   "definition_used_in_reference_calculation": "延べ床面積当たり。ホールライフの合計÷延床面積。延床面積が欠損または 0 以下のときは算出しない。",
+   "boundary_unit_caveats": [
+    "単位は kgCO2e/m2（評価期間の累計を面積で割ったもの）。年当たりの kgCO2e/(m2·年)（SUM-05）と混同しない。",
+    "outputs.json では本出力の単位が「kgCO2e (stage total)」と書かれており、実際の単位 kgCO2e/m2 と一致していない（スキーマの側の誤記と考えられる）。",
+    "分母は延べ床面積である。建築面積、基準階面積、用途別面積、空調面積など別の面積で割った値と比較しない。"
+   ]
+  },
+  {
+   "id": "SUM-05",
+   "name": "年平均・床面積当たり",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "ホールライフカーボンを、延べ床面積と評価年数の積で割り、床面積・年当たりの原単位（kgCO2e/(m2·年)）を求める。評価期間の長さが異なる算定結果を比べるための正規化である。評価期間が 0 のときは計算を禁止する。出力は output:wlc_kgco2e_per_m2_year。depends_on の SYS-01・SYS-04 は、分母に対する前提条件（ゲート）としての依存である。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "I_annual = E_WLC / (A * T)  =  I_area / T    (defined only if A > 0 and T > 0)",
+   "loop_dims": [],
+   "complexity": "O(1)",
+   "n_inputs": 2,
+   "n_branches": 4,
+   "depends_on": [
+    "SUM-03"
+   ],
+   "definition_used_in_reference_calculation": "年平均・床面積当たり。ホールライフの合計÷（延床面積×評価年数）。面積が無効、または評価年数が 0 以下のときは算出しない。",
+   "boundary_unit_caveats": [
+    "単位は kgCO2e/(m2·年)。期間累計の kgCO2e/m2（SUM-04）と混同しない。",
+    "outputs.json では本出力の単位が「kgCO2e (stage total)」と書かれており、実際の単位と一致していない。",
+    "年平均は単純な期間平均であり、各年の実際の排出量ではない（A 段階は初年、C 段階は最終年に集中する）。年次推移の値と混同しない。"
+   ]
+  },
+  {
+   "id": "SUM-06",
+   "name": "t-CO2e換算",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "ホールライフカーボンの単位を kgCO2e から tCO2e に換算する（1000 で割る）。表示・報告のための単位換算であり、値の意味は変えない。結果のガスの範囲（GHG 全体か CO2 のみか）は、表示のラベルとして引き継ぐ。出力は output:wlc_tco2e。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "E_t = E_kg / 1000    (1 t = 1000 kg, exact by unit definition)",
+   "loop_dims": [],
+   "complexity": "O(1)",
+   "n_inputs": 1,
+   "n_branches": 3,
+   "depends_on": [
+    "SUM-03"
+   ],
+   "definition_used_in_reference_calculation": "t-CO2e 換算。ホールライフの合計[kgCO2e]÷1000。",
+   "boundary_unit_caveats": [
+    "t は 1000 kg（メートルトン）。kgCO2e と tCO2e の取り違えは 1000 倍の誤りになる。換算を 2 回適用しない。適用漏れも起こさない。",
+    "この式はガスの範囲を換算しない。GHG 全体（CO2e）の結果と CO2 のみの結果は別の計算であり、定数倍では互いに変換できない。",
+    "outputs.json では本出力の単位が「kgCO2e (stage total)」と書かれているが、実際の単位は tCO2e である。"
+   ]
+  },
+  {
+   "id": "SUM-07",
+   "name": "段階別割合",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "各段階の排出量が全体の合計に占める割合を求める。どの段階が支配的かを示す内訳表示のための正規化である。合計が 0 や負のときは特例の扱いが必要になる。出力は output:stage_share。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "share_s = E_s / E_tot  for each included stage s,   E_tot = sum_s m_s * E_s;   invariant: sum_s share_s = 1    (defined only if E_tot > 0)",
+   "loop_dims": [
+    "stages"
+   ],
+   "complexity": "O(S) [S=14 段階]",
+   "n_inputs": 1,
+   "n_branches": 4,
+   "depends_on": [
+    "SUM-03",
+    "X-02"
+   ],
+   "definition_used_in_reference_calculation": "段階別割合。対象段階ごとに 段階の値÷ホールライフの合計。合計が 0 以下、または負の段階がある場合は定義しない。",
+   "boundary_unit_caveats": [
+    "割合は無次元（0〜1）。百分率（%）の表示との取り違えは 100 倍の誤りになる。",
+    "分母に含まれる段階の集合が異なる割合どうしを比較しない（全段階の WLC に対する割合か、対象段階だけの部分和に対する割合か）。",
+    "負の段階結果があると、割合が 1 を超えたり負になったりして、「内訳」として解釈できなくなる。貯蔵・吸収（STO-01・STO-02）や D を負の値として混ぜない。"
+   ]
+  },
+  {
+   "id": "SUM-08",
+   "name": "改善案との差分",
+   "stage": "SUM",
+   "origin": "EXISTING_53",
+   "purpose": "改善案の合計と基準案の合計の差（delta）と、基準案に対する削減率（saving_pct）を求める。面積、評価期間、算定境界、係数のバージョンが両案で一致する場合に限って比較できる。出力は output:scenario_comparison（差と削減率の 2 つの値）。式自体は減算と除算だが、両案それぞれについて SUM-03 までの全計算が済んでいることが前提になる。",
+   "structure_class": "RATIO",
+   "structure_subclass": "PREDICATE_GATE",
+   "canonical_form": "comparable = [A_p == A_b] AND [T_p == T_b] AND [stages_p == stages_b] AND [factor_version_p == factor_version_b];   delta = P - B;   saving = (B - P) / B = -delta / B    (defined only if comparable and B > 0)",
+   "loop_dims": [],
+   "complexity": "O(1) [式自体。ただし両案の全計算（SUM-03 まで）を 2 回実行することが前提]",
+   "n_inputs": 6,
+   "n_branches": 4,
+   "depends_on": [
+    "SUM-03"
+   ],
+   "definition_used_in_reference_calculation": "改善案との差分。基準シナリオが指定されていれば、基準シナリオを同じ基準計算で最初から計算し、差 = 当該案 − 基準案、削減率 = (基準案 − 当該案)÷基準案 を求める。延床面積・評価期間・対象段階・ガスの範囲・係数の版（公開年の集合）がすべて一致する場合だけ比較可能とする。",
+   "boundary_unit_caveats": [
+    "比較できるのは、延べ床面積、評価期間、対象段階、係数のバージョン、ガスの範囲、機能単位が一致する 2 案だけである。1 つでも異なる場合は差を出さない。",
+    "delta は「改善案 − 基準案」（改善なら負）、saving_pct は「（基準案 − 改善案）/ 基準案」（改善なら正）で、符号の向きが逆である。取り違えない。",
+    "saving_pct は名称に pct とあるが、式が返すのは分率である。百分率との取り違えは 100 倍の誤りになる。"
+   ]
+  },
+  {
+   "id": "QA-01",
+   "name": "相互排他の境界",
+   "stage": "QA",
+   "origin": "EXISTING_53",
+   "purpose": "各段階の合計が、その段階を構成する行（発生源ごとの構成要素）を重複なく 1 回ずつ足したものに等しいことを確認する。目的は二重計上の検出であり、(a) 構成要素の和と段階合計の突合（算術）と、(b) 同じ活動が複数の段階や複数の式で数えられていないことの確認（集合の排他性）からなる。注記は A4・A5・B6・B7 などを例に挙げている。結果は output:data_checks に出力し、53 式のどれにも数値として渡さない。",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "MASS_BALANCE_CONSTRAINT",
+   "canonical_form": "(a) for each included stage s: abs( E_s - sum_{l: stage(l)=s} e_l ) <= tol_s;   (b) for each (flow r, stage s): n(r,s) = sum_l [ flow(l)=r and s in cover(l) ] <= 1;   (c) for each item i and each alternative group g: sum_{u in g} [ u applied to i ] <= 1;   pass = (a) AND (b) AND (c)",
+   "loop_dims": [
+    "stages",
+    "components"
+   ],
+   "complexity": "O(L) [L=行レベルの結果の件数。(流れ, 段階) をキーにしたハッシュ集計 1 回]",
+   "n_inputs": 5,
+   "n_branches": 5,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A4-01",
+    "A4-02",
+    "X-02",
+    "X-04"
+   ],
+   "definition_used_in_reference_calculation": "相互排他の境界。(a) 段階ごとに、段階の値と、その段階の排出の行を足し直した値が相対 1e-9 以内で一致すること、(b) 資材の行ごとに A13-01 と A13-03 が両方計上されていないこと、(c) A4-01 と A4-02 が両方計上されていないことを確かめる。",
+   "boundary_unit_caveats": [
+    "A1-A3 と A4：A1-A3 の係数の境界（FACTOR.factor_stages）が A4 を含む場合、A4-01 / A4-02 を加えると輸送が二重になる。",
+    "A4-01（質量 × 距離）と A4-02（製品別の輸送係数）は、同じ品目に対する代替法であり、両方を加算しない。",
+    "A5-03（工事廃棄物）と C1〜C4（解体・廃棄）で同じ廃棄物を二重に数えない。A5-02（施工の燃料）と C1-01（解体の現場燃料）は別の活動として区別する。"
+   ]
+  },
+  {
+   "id": "QA-02",
+   "name": "時間境界検査",
+   "stage": "QA",
+   "origin": "EXISTING_53",
+   "purpose": "更新・交換などのイベント年がすべて評価期間の内側（0 以上、評価年数未満）にあることを確認する。評価期間の外のイベントが B4・B1 の排出量に混入することと、年の数え方（基準年を 0 とするか 1 とするか）の取り違えを防ぐための、時間境界の検査である。結果は output:data_checks に出力する。feeds の B4-02・B1-03 は、範囲外のイベントを含む一覧を使わせないための前提条件（ゲート）としての依存である（本研究の設計上の選択）。",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": null,
+   "canonical_form": "pass = AND_{e in E} [ 0 <= t_e < T ]  =  [ min_e t_e >= 0 ] AND [ max_e t_e < T ]    (E empty -> true)",
+   "loop_dims": [
+    "events"
+   ],
+   "complexity": "O(E) [E=イベント年の総件数。一覧が昇順に並んでいれば先頭と末尾の 2 比較で O(1)]",
+   "n_inputs": 3,
+   "n_branches": 4,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "時間境界検査。明示された更新年・交換年（設備の更新年一覧、冷媒機器の交換年一覧）のすべてが0 <= t < T を満たすことを確かめる。評価期間の終わりちょうど（t = T）は不合格。",
+   "boundary_unit_caveats": [
+    "年の表現を混同しない：竣工からの経過年（0 始まり）、運用年の序数（1 始まり。B6-03 は y = 1..T）、暦年（BOUNDARY.study_start_year を基準とする西暦）。同じ整数でも意味が 1 年",
+    "下限の等号が式ごとに異なる：QA-02 は t >= 0、B4-01 は 0 < y。t = 0 の更新は初期建設（A1〜A5）と同じ時点であり、合格させると初期の製造と更新が二重に計上される恐れがある。",
+    "上限 t < T は、T ちょうどの更新を除外する。T の時点で解体する想定なら妥当だが、建替シナリオ（B5-01、BOUNDARY.replacement_cycle）で使用を続ける場合は、T の扱いを別に定める必要が"
+   ]
+  },
+  {
+   "id": "QA-03",
+   "name": "出典ゲート",
+   "stage": "QA",
+   "origin": "EXISTING_53",
+   "purpose": "計算に実際に使われたすべての係数が、許可されたライセンスを持つことを最後に確認する。SYS-03 が係数 1 件ごとの適用可否を判定するのに対し、QA-03 は使用した係数の全体について同じ判定の論理積を取り、1 件でも不許可があれば結果の公表を止めるための出口の検査である。結果は output:data_checks に出力する。",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "pass = AND_{f in F_used} usable(f),   usable(f) as defined in SYS-03,   F_used = set of distinct factor ids referenced by computed rows    (F_used empty -> true)",
+   "loop_dims": [
+    "factors"
+   ],
+   "complexity": "O(F) [F=使用した相異なる係数の数。SYS-03 の結果を保持していれば追加の表引きは不要]",
+   "n_inputs": 5,
+   "n_branches": 3,
+   "depends_on": [
+    "X-04"
+   ],
+   "definition_used_in_reference_calculation": "出典ゲート。排出の行で実際に使われた係数を 1 つずつ調べ、すべて使用許諾があり出典の参照が空でないことを確かめる。",
+   "boundary_unit_caveats": [
+    "「使用した係数」の範囲を取り違えない：直接適用した係数だけでなく、複合材の構成係数（A13-02）、年次の電力係数シナリオ（B6-01、A5-01）、輸送係数（A4-01 / A4-02）、処理・処分の係数（C3-01 ",
+    "係数表に登録されているが計算に使われなかった係数は対象外である。計算対象外の段階の係数は使われないので、検査の対象にならない。",
+    "許諾は利用目的ごとに異なる。研究内部の検算に対する合格を、公開・商用に対する合格とみなさない。"
+   ]
+  },
+  {
+   "id": "QA-04",
+   "name": "用途別面積の検算",
+   "stage": "QA",
+   "origin": "EXISTING_53",
+   "purpose": "延べ床面積と用途別床面積の合計との差が、宣言された許容差以内であることを確認する。SYS-04 と同じ入力、同じ残差に対する、許容差つきの合否判定である。差があっても数値は補正しない。結果は output:data_checks に出力する。",
+   "structure_class": "PREDICATE_GATE",
+   "structure_subclass": "MASS_BALANCE_CONSTRAINT",
+   "canonical_form": "pass = [ abs( A - sum_{u in U} a_u ) <= tol ]",
+   "loop_dims": [
+    "uses"
+   ],
+   "complexity": "O(U) [U=用途区分の数。SYS-04 の残差を再利用すれば O(1)]",
+   "n_inputs": 3,
+   "n_branches": 3,
+   "depends_on": [
+    "SYS-04"
+   ],
+   "definition_used_in_reference_calculation": "用途別面積の検算。SYS-04 の残差 r について |r| <= 1e-6×延床面積 なら合格。延床面積が無効なら判定しない。",
+   "boundary_unit_caveats": [
+    "単位は m2。許容差が絶対値（m2）か相対値（比率）かを混同しない。",
+    "副分類 MASS_BALANCE_CONSTRAINT は収支制約という構造を示すためのもので、対象は面積である。C-05（質量）・QA-01（排出量）と同じ関数で扱っても、量を混ぜない。",
+    "延べ床面積・用途別面積・建築面積・基準階面積は別の面積である。面積の算定基準（共用部・駐車場・地下階の扱い）が揃っていることが比較の前提になる。"
+   ]
+  },
+  {
+   "id": "X-01",
+   "name": "設備機器の初期製造排出",
+   "stage": "A1-A3",
+   "origin": "ADDITIONAL",
+   "purpose": "設備機器の初期製造に伴う排出を、数量×係数で合計する。53 式には設備の初期製造を計上する式がない。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_e q_e * f_e",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(M)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "設備機器の初期製造排出。設備の行ごとに 数量×換算倍率×係数 を足す。",
+   "boundary_unit_caveats": [
+    "資材行と設備行で同じ品目を重ねて数えない"
+   ]
+  },
+  {
+   "id": "X-02",
+   "name": "段階結果ベクトルの合成（択一・合算の規則）",
+   "stage": "SUM",
+   "origin": "ADDITIONAL",
+   "purpose": "各式の結果から 14 段階の結果ベクトルを作る。択一の式（EPD と汎用係数、質量距離法と数量法、B3-01 と B3-02）と、足し合わせる式を規則として定める。",
+   "structure_class": "SUM_OF_STAGES",
+   "structure_subclass": null,
+   "canonical_form": "E_s = sum_{u in members(s)} v_u   (択一の組は行ごとにどちらか一方)",
+   "loop_dims": [
+    "stages"
+   ],
+   "complexity": "O(S)",
+   "n_inputs": 1,
+   "n_branches": 3,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A13-04",
+    "A4-01",
+    "A4-02",
+    "A5-04",
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "B2-01",
+    "B3-01",
+    "B4-02",
+    "B5-01",
+    "B6-03",
+    "B7-04",
+    "C1-01",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ],
+   "definition_used_in_reference_calculation": "段階結果ベクトルの合成。14 段階の値を次の規則で作る：A1-A3 = A13-01＋A13-03＋A13-04＋X-01、A4 = A4-01＋A4-02、A5 = A5-04、B1 = B1-02＋B1-03＋B1-04、B2 = B2-01、B3 = B3-01（B3-02 は使わない）、B4 = B4-02、B5 = B5-01、B6 = B6-03 − B2-01、B7 = B7-04、C1 = C1-01、C2 = C2-01、C3 = C3-01＋X-14、C4 = C4-01。対象外の段階は結果に含めない（0 にしない）。",
+   "boundary_unit_caveats": [
+    "択一の式を両方足さない",
+    "参考値（STO）を入れない",
+    "対象外の段階を 0 として扱わない"
+   ]
+  },
+  {
+   "id": "X-03",
+   "name": "複合品の構成資材への展開（資材別の数量と排出）",
+   "stage": "A1-A3",
+   "origin": "ADDITIONAL",
+   "purpose": "複合品の行を構成資材に展開し、構成資材ごとの質量と排出を集計する（A13-02 は係数を作るだけで、資材別の内訳は出さない）。",
+   "structure_class": "MATRIX_EXPANSION",
+   "structure_subclass": "WEIGHTED_AVERAGE",
+   "canonical_form": "M_j = sum_i q_i * W[i,j];   E_j = M_j * f_j;   sum_j E_j = sum_i q_i * (W f)_i",
+   "loop_dims": [
+    "items",
+    "components"
+   ],
+   "complexity": "O(非ゼロ要素数)",
+   "n_inputs": 4,
+   "n_branches": 2,
+   "depends_on": [
+    "A13-05",
+    "X-15"
+   ],
+   "definition_used_in_reference_calculation": "複合品の構成資材への展開。複合係数で計算した行を構成材に展開し、構成材ごとの質量（発注量を kg に換算×質量比）と排出（質量×構成材の係数）を合計する。",
+   "boundary_unit_caveats": [
+    "構成比は質量比。体積や面積の比と混ぜない",
+    "展開後の資材と、単独で入力された同じ資材を重ねて数えない"
+   ]
+  },
+  {
+   "id": "X-04",
+   "name": "ガス別内訳と CO2 換算の合算",
+   "stage": "SUM",
+   "origin": "ADDITIONAL",
+   "purpose": "各行の排出をガス別に求め、GWP を掛けて CO2 換算の合計と突き合わせる。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": "MATRIX_EXPANSION",
+   "canonical_form": "m_g = sum_r a_r * k_r * h_{r,g};   E = sum_g GWP_g * m_g",
+   "loop_dims": [
+    "items",
+    "gases"
+   ],
+   "complexity": "O(R*G)",
+   "n_inputs": 4,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A13-04",
+    "A4-01",
+    "A4-02",
+    "A5-01",
+    "A5-02",
+    "A5-03",
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "B2-01",
+    "B3-01",
+    "B4-02",
+    "B5-01",
+    "B6-03",
+    "B7-04",
+    "C1-01",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ],
+   "definition_used_in_reference_calculation": "ガス別内訳と CO2 換算の合算。全 14 段階の排出の行（係数 ID と活動量）を 1 行ずつたどり、ガスごとに 活動量×係数のガス別量 を足す。買電と冷媒はガス別の内訳を持たないため CO2 換算量のまま別掲する。ガス別量×GWP の合計＋買電＋冷媒 が段階合計の総和に一致することを確かめる。",
+   "boundary_unit_caveats": [
+    "ガス別の質量（kg）と CO2 換算量（kgCO2e）を混ぜない",
+    "GWP の版を揃える"
+   ]
+  },
+  {
+   "id": "X-05",
+   "name": "GHG 版と CO2 版の並行算定",
+   "stage": "SUM",
+   "origin": "ADDITIONAL",
+   "purpose": "全ガスの CO2 換算結果と並べて、CO2 だけの結果を同じ手順で求める。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_CO2[s] = sum_{r in s} a_r * k_r * h_{r,CO2}   (全ガス版と同じ式で係数列だけが違う)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(R)",
+   "n_inputs": 1,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A13-04",
+    "A4-01",
+    "A4-02",
+    "A5-01",
+    "A5-02",
+    "A5-03",
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "B2-01",
+    "B3-01",
+    "B4-02",
+    "B5-01",
+    "B6-03",
+    "B7-04",
+    "C1-01",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ],
+   "definition_used_in_reference_calculation": "GHG 版と CO2 版の並行算定。全ガス版と同じ行を改めてたどり、係数の CO2 の量だけを使って段階別の CO2 排出を求める。買電は CO2 として数え、冷媒は 0 とする。対象段階の合計を値とする。",
+   "boundary_unit_caveats": [
+    "CO2 版と全ガス版を合算しない",
+    "冷媒（B1）は CO2 版では 0"
+   ]
+  },
+  {
+   "id": "X-06",
+   "name": "電力排出係数の年次系列の生成",
+   "stage": "B6",
+   "origin": "ADDITIONAL",
+   "purpose": "シナリオの種類（一定・直線的に低下して下限で止まる・段階的・年次表）から、年ごとの電力排出係数を作る。",
+   "structure_class": "MAX_CLAMP",
+   "structure_subclass": "LOOKUP_JOIN",
+   "canonical_form": "g_k = start (一定);  max(floor, start - d*k) (直線低下);  直前の段の値 (段階);  表の値 (年次表)",
+   "loop_dims": [
+    "years"
+   ],
+   "complexity": "O(T)",
+   "n_inputs": 3,
+   "n_branches": 2,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "電力排出係数の年次系列の生成。評価年 y（表の添字 k = y-1）ごとに、シナリオの種類に応じて一定値、max(下限, 初期値 − 年低下量×k)、該当する段の値、年次表の値 のいずれかを作る。",
+   "boundary_unit_caveats": [
+    "年度と暦年",
+    "係数の含む範囲",
+    "将来係数の出典と使用許諾"
+   ]
+  },
+  {
+   "id": "X-07",
+   "name": "経年表記（年次・累積の排出系列）",
+   "stage": "SUM",
+   "origin": "ADDITIONAL",
+   "purpose": "全段階の排出を発生年に配置し、年ごとの値と累積値の系列を作る。",
+   "structure_class": "TIME_SERIES_SUM",
+   "structure_subclass": null,
+   "canonical_form": "e_0 = 初期段階;  e_y = 年次の排出 + その年の事象の排出;  c_y = c_{y-1} + e_y;  c_Y = E_WLC",
+   "loop_dims": [
+    "years",
+    "items"
+   ],
+   "complexity": "O(T + 事象数)",
+   "n_inputs": 1,
+   "n_branches": 3,
+   "depends_on": [
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "B3-01",
+    "B4-02",
+    "B5-01",
+    "B6-01",
+    "B6-02",
+    "B7-01",
+    "B7-02",
+    "B7-03",
+    "X-02"
+   ],
+   "definition_used_in_reference_calculation": "経年表記（年次・累積の排出系列）。対象段階について、初期段階（A1-A3・A4・A5）を時点 0 に、年次の排出（B6・B2・B7・B1 の漏洩・B3）を各評価年に、事象の排出（B4・B5・B1 の更新時損失）を発生年に、廃棄段階（C1〜C4）と B1 の廃棄時未回収を最終年に置き、累積を作る。累積の最終値は対象段階の合計に一致する。",
+   "boundary_unit_caveats": [
+    "事象の年の規約を B4-01 と揃える",
+    "係数固定と係数変化の系列を混ぜない"
+   ]
+  },
+  {
+   "id": "X-08",
+   "name": "更新周期別の集計",
+   "stage": "B4",
+   "origin": "ADDITIONAL",
+   "purpose": "更新 1 回当たりの排出を更新周期ごとに合算し、周期別の回数と排出を出す。",
+   "structure_class": "LOOKUP_JOIN",
+   "structure_subclass": null,
+   "canonical_form": "U_c = sum_{i: cycle(i)=c} u_i;   E_c = N(T, c) * U_c;   sum_c E_c = E_B4（周期で更新する行の分）",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-01",
+    "A13-03",
+    "A13-05",
+    "A4-01",
+    "A4-02",
+    "B4-01",
+    "B4-02",
+    "B4-03",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ],
+   "definition_used_in_reference_calculation": "更新周期別の集計。更新 1 回当たりの排出 u を周期の値ごとに合算して U_c とし、E_c = 回数×U_c を出す。明示の更新年一覧を持つ設備は「EXPLICIT」にまとめる。合計は B4-02 に一致する。",
+   "boundary_unit_caveats": [
+    "初期の製造を含めない",
+    "明示の一覧で更新する行は周期別に入らない"
+   ]
+  },
+  {
+   "id": "X-09",
+   "name": "廃棄物の発生品目別・処理経路別の集計",
+   "stage": "C1-C4",
+   "origin": "ADDITIONAL",
+   "purpose": "廃棄時の質量と排出を、資材区分（発生品目）と処理経路の 2 方向で集計する。",
+   "structure_class": "LOOKUP_JOIN",
+   "structure_subclass": "MATRIX_EXPANSION",
+   "canonical_form": "M[c,r] = sum_{i in c} m_i * p_{i,r};   E[c,r] = sum_{i in c} m_i * p_{i,r} * f_{i,r}",
+   "loop_dims": [
+    "items",
+    "routes"
+   ],
+   "complexity": "O(N*R)",
+   "n_inputs": 5,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "廃棄物の発生品目別・処理経路別の集計。資材の行ごと、処理経路ごとに 質量×比率 と、それに経路の係数を掛けた排出を、資材区分×経路の表に足し込む。",
+   "boundary_unit_caveats": [
+    "質量（kg）と排出（kgCO2e）の表を混ぜない",
+    "工事廃棄物と解体廃棄物を区別する"
+   ]
+  },
+  {
+   "id": "X-10",
+   "name": "ライフサイクル資源量・廃棄物量の集計",
+   "stage": "SUM",
+   "origin": "ADDITIONAL",
+   "purpose": "評価期間を通じた資材の投入質量と廃棄物の質量を、更新分を含めて合計する（排出量ではなく質量）。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "R = sum_i mo_i * (1 + N_i);   W = sum_i [ (mo_i - mi_i) * (1 + N_i) + me_i * (1 + N_i) ] + sum_e me_e * (1 + N_e)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 5,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-05",
+    "B4-01",
+    "B4-03"
+   ],
+   "definition_used_in_reference_calculation": "ライフサイクル資源量・廃棄物量の集計（単位 kg）。資材の行ごとに、発注質量×(1＋更新回数) を資源量に、（端材質量＋廃棄質量）×(1＋更新回数) を廃棄物量に足す。設備は 廃棄質量×(1＋更新回数) を廃棄物量に足す。kg へ換算できない行は対象外として数える。",
+   "boundary_unit_caveats": [
+    "単位は kg。排出量（kgCO2e）と合算しない",
+    "質量へ換算できない行は対象外として件数を報告"
+   ]
+  },
+  {
+   "id": "X-11",
+   "name": "床面積当たり統計値による運用エネルギーの推定",
+   "stage": "B6",
+   "origin": "ADDITIONAL",
+   "purpose": "年間の電力使用量が不明なとき、延床面積×面積当たりの使用量で推定し、係数の累積を掛ける。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_est = A * i_elec * sum_y w_y * g_y",
+   "loop_dims": [],
+   "complexity": "O(1)（係数の累積を再利用）",
+   "n_inputs": 4,
+   "n_branches": 1,
+   "depends_on": [
+    "X-06"
+   ],
+   "definition_used_in_reference_calculation": "床面積当たり統計値による運用エネルギーの推定。延床面積×面積当たり年間電力使用量×（電力排出係数の年重み付き合計）。実績の買電量を使わない推定値で、段階合計には使わない。",
+   "boundary_unit_caveats": [
+    "統計値は利用許諾のある独立データに限る",
+    "推定値と実績値を区別して表示する",
+    "自家発電の差し引きを含まない"
+   ]
+  },
+  {
+   "id": "X-12",
+   "name": "積載率による輸送排出の補正",
+   "stage": "A4",
+   "origin": "ADDITIONAL",
+   "purpose": "輸送の係数が満載基準で与えられているとき、積載率で割って補正した輸送排出を求める。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_i m_i * d_i * f_i / lf_i",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 4,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "積載率による輸送排出の補正。A4-01 と同じ行について 質量×距離×係数÷積載率 を足す。係数が満載基準のときの代替値で、段階合計には使わない（A4-01 と択一）。",
+   "boundary_unit_caveats": [
+    "係数がすでに平均的な積載率を含んでいる場合は使わない（二重補正）",
+    "A4-01 とは択一"
+   ]
+  },
+  {
+   "id": "X-13",
+   "name": "端材の再使用を考慮した正味の発注量",
+   "stage": "A1-A3",
+   "origin": "ADDITIONAL",
+   "purpose": "端材のうち再使用される分を差し引いた、新規製造が必要な数量と、処分される端材量を求める。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "Q_net_i = Q_inst_i + (Q_ord_i - Q_inst_i) * (1 - rho_i);   waste_disp_i = (Q_ord_i - Q_inst_i) * (1 - rho_i)",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)",
+   "n_inputs": 4,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-05"
+   ],
+   "definition_used_in_reference_calculation": "端材の再使用を考慮した正味の発注量。処分される端材 = (発注量 - 据付量)*(1 - 再使用率)、正味の発注量 = 据付量 + 処分される端材。A13-05 の発注量の代替値で、段階合計には使わない。",
+   "boundary_unit_caveats": [
+    "再使用した端材を別の行で重ねて控除しない",
+    "A13-05 の発注量とは択一"
+   ]
+  },
+  {
+   "id": "X-14",
+   "name": "設備機器の廃棄時排出",
+   "stage": "C3",
+   "origin": "ADDITIONAL",
+   "purpose": "設備機器の廃棄質量に処理の係数を掛けて合計する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E = sum_e me_e * f_e",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(M)",
+   "n_inputs": 2,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "設備機器の廃棄時排出。設備の行ごとに 廃棄質量[kg]×処理係数 を足す（C3 段階）。",
+   "boundary_unit_caveats": [
+    "冷媒の廃棄時排出（B1-04）と重ねない",
+    "更新時の廃棄（B4-02）と最終世代の廃棄を区別する"
+   ]
+  },
+  {
+   "id": "X-15",
+   "name": "係数の検索結合と適用優先順位の解決",
+   "stage": "PRE",
+   "origin": "ADDITIONAL",
+   "purpose": "各行について、係数の ID から係数レコードを引き、製品固有値・複合係数・汎用係数のどれを使うかを決め、数量の単位を係数の単位へ換算する倍率を求める。",
+   "structure_class": "LOOKUP_JOIN",
+   "structure_subclass": null,
+   "canonical_form": "f_i = EPD_i (条件を満たすとき);  (W f)_i (複合品);  F[id_i] (それ以外);   c_i = 単位換算の倍率",
+   "loop_dims": [
+    "items"
+   ],
+   "complexity": "O(N)（辞書引き）",
+   "n_inputs": 5,
+   "n_branches": 3,
+   "depends_on": [
+    "A13-02"
+   ],
+   "definition_used_in_reference_calculation": "係数の検索結合と適用優先順位の解決。資材の行ごとに (1) 適用条件を満たす製品固有値（EPD）、(2) 複合品なら A13-02 の複合係数（数量は kg へ換算）、(3) 汎用係数、の順で係数を決め、数量の単位から係数の単位への換算倍率を求める。決められない行は未解決とする。",
+   "boundary_unit_caveats": [
+    "優先順位の規則を固定し、結果に採用した係数の種別を残す",
+    "単位換算は登録された根拠があるものだけ"
+   ]
+  },
+  {
+   "id": "X-16",
+   "name": "物価補正（費用ベース係数の基準年換算）",
+   "stage": "A1-A3",
+   "origin": "ADDITIONAL",
+   "purpose": "費用当たりの係数を使うために、費用を係数の基準年の価格水準へ換算する。",
+   "structure_class": "RATIO",
+   "structure_subclass": null,
+   "canonical_form": "C_base = C_year * P_base / P_year;   E = C_base * f_cost",
+   "loop_dims": [],
+   "complexity": "O(1)",
+   "n_inputs": 3,
+   "n_branches": 1,
+   "depends_on": [],
+   "definition_used_in_reference_calculation": "モデル・入力が未定義のため基準計算なし",
+   "boundary_unit_caveats": [
+    "費用ベースと数量ベースを同じ品目に重ねて使わない",
+    "物価指数と費用当たり係数は利用許諾のある独立データに限る"
+   ]
+  },
+  {
+   "id": "X-17",
+   "name": "主要数量による簡易算定（要約数量×代表係数）",
+   "stage": "A1-A3",
+   "origin": "ADDITIONAL",
+   "purpose": "鉄筋・鉄骨・コンクリート・木材・外装・内装の 6 つの要約数量に、区分ごとの代表係数を掛けて製造段階の排出を概算する。",
+   "structure_class": "LINEAR_SUM_PRODUCT",
+   "structure_subclass": null,
+   "canonical_form": "E_simple = sum_{k=1..6} Q_k * fbar_k",
+   "loop_dims": [
+    "classes"
+   ],
+   "complexity": "O(6)",
+   "n_inputs": 7,
+   "n_branches": 1,
+   "depends_on": [
+    "A13-01",
+    "A13-03"
+   ],
+   "definition_used_in_reference_calculation": "主要数量による簡易算定。6 区分（鉄筋・鉄骨・コンクリート・木材・外装・内装）ごとに、代表係数 fbar = 区分内の行の製造排出の合計 ÷ 要約数量 を求め、要約数量×代表係数 を足す。代表係数をその建物自身から作るので、6 区分の範囲では詳細計算と一致する（範囲外の資材は含まない）。",
+   "boundary_unit_caveats": [
+    "6 区分に入らない資材と設備は含まれない（詳細計算の全体とは範囲が違う）",
+    "詳細行と要約数量を重ねて数えない",
+    "代表係数は利用許諾のある独立データに限る"
+   ]
+  }
+ ]
+}

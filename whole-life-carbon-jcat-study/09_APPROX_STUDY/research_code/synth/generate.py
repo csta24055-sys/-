@@ -1280,8 +1280,16 @@ def _add_state_variety(scenario: Scenario, ctx: _Ctx, rng: random.Random, free_r
             row.provenance_id = rng.choice(ids)
     zero_paths: list[str] = []
     for i in sorted(_take(free_rows, max(1, round(0.01 * len(scenario.materials))) if scenario.materials else 0)):
-        scenario.materials[i].quantity = 0.0
-        scenario.materials[i].states["quantity"] = STATE_EXPLICIT_ZERO
+        row = scenario.materials[i]
+        row.quantity = 0.0
+        row.states["quantity"] = STATE_EXPLICIT_ZERO
+        # a row with no quantity carries no mass either (kept consistent, also explicit zeros)
+        if row.transport.mass_t is not None:
+            row.transport.mass_t = 0.0
+            row.states["transport.mass_t"] = STATE_EXPLICIT_ZERO
+        if row.end_of_life.mass_kg is not None:
+            row.end_of_life.mass_kg = 0.0
+            row.states["end_of_life.mass_kg"] = STATE_EXPLICIT_ZERO
         zero_paths.append(f"materials[{i}].quantity")
     scenario.meta.flags["state_variety"] = {
         "material_rows_estimate_or_derived": estimate_rows,

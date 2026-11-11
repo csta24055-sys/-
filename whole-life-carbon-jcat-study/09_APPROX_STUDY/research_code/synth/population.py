@@ -6,7 +6,7 @@ would hit only by accident; each overwrite keeps the scenario a valid input set.
 """
 from __future__ import annotations
 
-import math
+import copy
 import random
 from typing import Callable, Iterator
 
@@ -21,10 +21,42 @@ SIZE_WEIGHTS = (("S", 0.65), ("M", 0.33), ("L", 0.02))
 LIFE_MODES = ("MIXED", "EXACT_DIVISOR", "NON_DIVISOR", "CONTINUOUS", "INTEGER")
 SMALL = {"n_materials": 12, "n_equipment": 6, "n_refrigerants": 4}
 
+# Comparison baselines are a second INPUT scenario, looked up by scenario id
+# (``Boundary.baseline_scenario`` holds the id of the baseline of a proposal).
+BASELINES: dict[str, Scenario] = {}
+
+
+def attach_baseline(proposal: Scenario) -> Scenario:
+    """Create, register and link a fictional "before improvement" twin of ``proposal``.
+
+    The twin has the same area, period, stages and factor table (so it is comparable),
+    15 percent more electricity and gas demand, no on-site generation, and 20 percent
+    larger quantities in every tenth material row.
+    """
+    base = copy.deepcopy(proposal)
+    base.meta.scenario_id = proposal.meta.scenario_id + "-BASELINE"
+    base.boundary.baseline_scenario = None
+    op = base.operation
+    for profile, scale in ((op.electricity, 1.15), (op.gas, 1.15), (op.onsite_generation, 0.0), (op.onsite_export, 0.0)):
+        profile.table = [v * scale for v in profile.table]
+        if profile.base is not None:
+            profile.base *= scale
+        if profile.slope is not None:
+            profile.slope *= scale
+    for row in base.materials[::10]:
+        if row.quantity is not None:
+            row.quantity *= 1.2
+    BASELINES[base.meta.scenario_id] = base
+    proposal.boundary.baseline_scenario = base.meta.scenario_id
+    return base
+
 
 def standard_benchmark() -> list[Scenario]:
-    """The three benchmark scenarios (same structure and use, sizes S / M / L)."""
-    return [make_scenario(BENCHMARK_SEEDS[size], "RC", "office", size, 60.0) for size in ("S", "M", "L")]
+    """The three benchmark scenarios (same structure and use, sizes S / M / L), each with a baseline twin."""
+    out = [make_scenario(BENCHMARK_SEEDS[size], "RC", "office", size, 60.0) for size in ("S", "M", "L")]
+    for scn in out:
+        attach_baseline(scn)
+    return out
 
 
 def verification_population(n: int, seed: int, max_size: str = "L") -> Iterator[Scenario]:
@@ -47,7 +79,10 @@ def verification_population(n: int, seed: int, max_size: str = "L") -> Iterator[
             options["reconstruction_scenario"] = rng.choice(("REBUILD_IDENTICAL", "MAJOR_REFURBISHMENT"))
         if rng.random() < 0.10:
             options["results_gas_scope"] = "CO2_ONLY"
-        yield make_scenario(rng.randrange(1, 10**9), structure, use, size, period, **options)
+        scn = make_scenario(rng.randrange(1, 10**9), structure, use, size, period, **options)
+        if rng.random() < 0.20:
+            attach_baseline(scn)
+        yield scn
 
 
 def _set_profile(profile: AnnualProfile, values: list[float]) -> None:
@@ -56,11 +91,12 @@ def _set_profile(profile: AnnualProfile, values: list[float]) -> None:
 
 def _zero_quantities(s: Scenario) -> None:
     for row in s.materials[::2]:
-        row.quantity = 0.0
-        row.states["quantity"] = STATE_EXPLICIT_ZERO
+        row.quantity = row.transport.mass_t = row.end_of_life.mass_kg = 0.0
+        for name in ("quantity", "transport.mass_t", "end_of_life.mass_kg"):
+            row.states[name] = STATE_EXPLICIT_ZERO
     for eq in s.equipment[::2]:
-        eq.quantity = 0.0
-        eq.states["quantity"] = STATE_EXPLICIT_ZERO
+        eq.quantity = eq.end_of_life_mass_kg = 0.0
+        eq.states["quantity"] = eq.states["end_of_life_mass_kg"] = STATE_EXPLICIT_ZERO
 
 
 def _full_recycling(s: Scenario) -> None:
@@ -152,4 +188,5 @@ def edge_cases() -> list[tuple[str, Scenario]]:
         _case("explicit_event_lists", explicit_event_share=1.0, change_list_share=1.0),
         _case("top_up_all", top_up=True, n_refrigerants=8),
         _case("top_up_none", top_up=False, n_refrigerants=8),
+        _case("with_baseline", lambda s: attach_baseline(s) and None),
     ]
