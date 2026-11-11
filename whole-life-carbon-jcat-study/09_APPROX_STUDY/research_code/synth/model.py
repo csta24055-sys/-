@@ -159,34 +159,25 @@ def base_unit_conversions() -> list[UnitConversion]:
     ]
 
 
-def usable_multiplier(value: Any) -> Optional[float]:
-    """``value`` when it is a finite number > 0, else None (a conversion that cannot be used)."""
-    if value is not None and 0.0 < value < float("inf"):
-        return value
-    return None
-
-
 def conversion_factor(
     table: Sequence[UnitConversion],
     from_unit: str,
     to_unit: str,
     extra: Sequence[UnitConversion] = (),
 ) -> Optional[float]:
-    """Multiplier from ``from_unit`` to ``to_unit`` or None when there is no usable conversion.
+    """Multiplier from ``from_unit`` to ``to_unit`` or None when undocumented.
 
     ``extra`` (row-specific conversions) is searched before ``table``. Pure
-    lookup: no chaining and no inversion of entries. The first entry for the
-    unit pair decides: when its multiplier is missing, not finite or not
-    positive the answer is None ("no conversion"); later entries are not tried.
+    lookup: no chaining and no inversion of entries.
     """
     if from_unit == to_unit:
         return 1.0
     for conv in extra:
         if conv.from_unit == from_unit and conv.to_unit == to_unit:
-            return usable_multiplier(conv.factor)
+            return conv.factor
     for conv in table:
         if conv.from_unit == from_unit and conv.to_unit == to_unit:
-            return usable_multiplier(conv.factor)
+            return conv.factor
     return None
 
 
@@ -725,9 +716,7 @@ def factor_references(scenario: Scenario) -> Iterator[tuple[str, Optional[str]]]
     """Yield (path, factor_id) for every factor reference slot that is in use.
 
     Optional slots that are None by design (no EPD, no delivery factor, ...)
-    are skipped; mandatory slots are yielded even when None. A slot is
-    mandatory when a calculation leaves the row out and counts it without the
-    factor; the end-of-life factor of an equipment row is such a slot.
+    are skipped; mandatory slots are yielded even when None.
     """
     for i, row in enumerate(scenario.materials):
         base = f"materials[{i}]"
@@ -750,8 +739,7 @@ def factor_references(scenario: Scenario) -> Iterator[tuple[str, Optional[str]]]
     for i, eq in enumerate(scenario.equipment):
         base = f"equipment[{i}]"
         yield f"{base}.factor_id", eq.factor_id
-        yield f"{base}.eol_factor_id", eq.eol_factor_id
-        for name in ("delivery_factor_id", "installation_factor_id"):
+        for name in ("eol_factor_id", "delivery_factor_id", "installation_factor_id"):
             value = getattr(eq, name)
             if value is not None:
                 yield f"{base}.{name}", value

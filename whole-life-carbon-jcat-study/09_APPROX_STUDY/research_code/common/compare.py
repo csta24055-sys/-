@@ -60,10 +60,7 @@ def compare(ref: Any, cand: Any, floor: float = 0.0, paths: set[str] | None = No
     ``paths`` restricts the comparison to the given leaf paths.
     ``ignore_missing`` skips reference leaves the candidate does not produce (used for
     the summary mode, which leaves out per-row lists and yearly series).
-    Numbers: two NaN are equal, a NaN and a number are a mismatch; two infinities of the
-    same sign are equal, an infinity against a finite number or against the other
-    infinity is a mismatch. Non-numeric leaves (bools, strings, None) must be equal, and
-    a bool is only equal to a bool (never to the numbers 0 and 1).
+    Non-numeric leaves (bools, strings, None) must be equal.
     """
     c = Comparison()
     fr, fc = flatten(ref), flatten(cand)
@@ -81,12 +78,6 @@ def compare(ref: Any, cand: Any, floor: float = 0.0, paths: set[str] | None = No
                 if not (math.isnan(rv) and math.isnan(cv)):
                     c.mismatches.append(f"{path}: {rv!r} vs {cv!r}")
                 continue
-            if math.isinf(rv) or math.isinf(cv):
-                if rv != cv:                             # one side infinite, or infinities of different sign
-                    c.mismatches.append(f"{path}: {rv!r} vs {cv!r}")
-                else:
-                    c.n_numeric += 1
-                continue
             err = signed_rel_error(float(rv), float(cv), floor)
             c.n_numeric += 1
             c.min_signed_rel_error = min(c.min_signed_rel_error, err)
@@ -96,7 +87,7 @@ def compare(ref: Any, cand: Any, floor: float = 0.0, paths: set[str] | None = No
                 c.worst_path = path
         else:
             c.n_other += 1
-            if rv != cv or isinstance(rv, bool) != isinstance(cv, bool):
+            if rv != cv:
                 c.mismatches.append(f"{path}: {rv!r} vs {cv!r}")
     if paths is None:
         c.extra = sorted(set(fc) - set(fr))

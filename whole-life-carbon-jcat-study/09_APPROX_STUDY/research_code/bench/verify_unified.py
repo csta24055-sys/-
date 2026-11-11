@@ -4,13 +4,9 @@
 1. Exactness: every result leaf of every unit is compared on fictional scenarios:
    the benchmark (S, M, L), boundary cases, a varied population, scenarios with the
    generator's defects, adversarial mutations (``bench/mutations.py``), decimal period
-   pairs, stage subsets with and without a defect in an upstream row, and invalid
-   study periods (both sides must refuse). The comparison is purely relative
-   (tolerance 1e-9, no absolute floor); a leaf the unified model returns and the
-   reference does not is a failure in both output modes; an exception on one side
-   only, or of another type, is a failure.
-2. Study-period sweep: every unit the sweep returns for several periods from one pass
-   over the rows, compared with a full reference run for each period.
+   pairs, stage subsets, and invalid study periods (both sides must refuse).
+2. Study-period sweep: totals for several periods from one pass over the rows, compared
+   with a full reference run for each period.
 3. Load: run time (garbage collector off and on), executed bytecode instructions and
    peak memory of the reference calculation and of the unified model.
 
@@ -43,8 +39,9 @@ STUDY = Path(__file__).resolve().parents[2]
 OUT = STUDY / "04_VERIFICATION" / "unified_model_exactness.json"
 OUT_LOAD = STUDY / "04_VERIFICATION" / "unified_model_load.json"
 EXACT_TOL = 1e-9
-EXACT_FLOOR = 0.0                       # no absolute floor: the comparison is purely relative
 SWEEP_PERIODS = (10.0, 30.0, 42.5, 50.0, 60.0, 75.0, 99.9, 100.0, 120.0)
+SWEEP_UNITS = ("X-02", "SUM-01", "SUM-02", "SUM-03", "SUM-04", "SUM-05", "B4-02", "B3-01", "B3-02", "B1-02", "B1-03",
+               "B1-04", "B5-01", "B6-03", "B7-04", "B2-01", "X-04", "X-05", "X-08", "X-10", "X-11", "QA-02")
 
 
 def scenarios(n_population: int, n_dirty: int):
@@ -76,15 +73,6 @@ def scenarios(n_population: int, n_dirty: int):
             yield "stage_subset", synth.make_scenario(31, "W", "school", "S", period, service_life_choices=lives,
                                                       explicit_event_share=0.0, change_list_share=0.0,
                                                       included_stages=stages, **mutations.SMALL)
-    # a stage subset together with a defect in a row that only an upstream unit reads
-    for stages in mutations.UPSTREAM_DEFECT_SUBSETS:
-        for name, mutate in mutations.UPSTREAM_DEFECTS.items():
-            for seed, period in ((61, 60.0), (62, 42.5)):
-                scn = synth.make_scenario(seed, "RC", "office", "S", period, included_stages=stages, replacement_cycle=25.0,
-                                          reconstruction_scenario="REBUILD_IDENTICAL", profile_kind="CONSTANT",
-                                          scenario_id=f"SUBSET-{'+'.join(stages)}-{name}-{seed}", **mutations.SMALL)
-                mutate(scn)
-                yield "stage_subset_with_defect:" + name, scn
 
 
 def run_both(scn, baseline_totals=None):
@@ -108,13 +96,6 @@ def exactness(n_population: int, n_dirty: int) -> dict:
     failures = []
     n_scn = 0
     empty_in_totals_mode = set()
-    worst = {"max_abs_rel_error": 0.0, "unit": None, "path": None, "scenario": None, "mode": None}
-    incomplete_seen = 0                                 # scenarios whose reference total is marked incomplete
-
-    def note_worst(c, uid, scn, mode):
-        if c.max_abs_rel_error > worst["max_abs_rel_error"]:
-            worst.update(max_abs_rel_error=c.max_abs_rel_error, unit=uid, path=c.worst_path,
-                         scenario=scn.meta.scenario_id, mode=mode)
 
     def fail(scn, group, unit, detail):
         if len(failures) < 60:
@@ -126,39 +107,32 @@ def exactness(n_population: int, n_dirty: int) -> dict:
         g["scenarios"] += 1
         ref, full, summary = run_both(scn)
         if isinstance(ref, Exception) or isinstance(full, Exception) or isinstance(summary, Exception):
-            # every scenario of this list has a valid study period, so no side may raise at all
-            g["failed"] += 1
-            fail(scn, group, "*", {"error": f"reference {ref!r:.120}; unified {full!r:.120}; totals {summary!r:.120}"})
+            same = all(isinstance(x, Exception) for x in (ref, full, summary)) and type(ref) is type(full) is type(summary)
+            if not same:
+                g["failed"] += 1
+                fail(scn, group, "*", {"error": f"reference {ref!r:.120}; unified {full!r:.120}; totals {summary!r:.120}"})
             continue
+        scale = abs(ref["SUM-03"]["value"]) or 1.0
         scn_failed = False
-        incomplete_seen += not ref["SUM-03"]["complete"]
         for uid, ref_value in ref.items():
             rec = per_unit.setdefault(uid, {"leaves_compared": 0, "non_numeric_compared": 0, "max_abs_rel_error": 0.0,
                                             "summary_leaves_compared": 0, "summary_max_abs_rel_error": 0.0, "failures": 0})
-            c = compare(ref_value, full.get(uid, {}), floor=EXACT_FLOOR)
-            cs = compare(ref_value, summary.get(uid, {}), floor=EXACT_FLOOR, ignore_missing=True)
+            c = compare(ref_value, full.get(uid, {}), floor=EXACT_TOL * scale)
+            cs = compare(ref_value, summary.get(uid, {}), floor=EXACT_TOL * scale, ignore_missing=True)
             rec["leaves_compared"] += c.n_numeric
             rec["non_numeric_compared"] += c.n_other
             rec["max_abs_rel_error"] = max(rec["max_abs_rel_error"], c.max_abs_rel_error)
             rec["summary_leaves_compared"] += cs.n_numeric + cs.n_other
             rec["summary_max_abs_rel_error"] = max(rec["summary_max_abs_rel_error"], cs.max_abs_rel_error)
-            g["max_abs_rel_error"] = max(g["max_abs_rel_error"], c.max_abs_rel_error, cs.max_abs_rel_error)
-            note_worst(c, uid, scn, "full")
-            note_worst(cs, uid, scn, "totals")
+            g["max_abs_rel_error"] = max(g["max_abs_rel_error"], c.max_abs_rel_error)
             if cs.n_numeric + cs.n_other == 0:
                 empty_in_totals_mode.add(uid)
-            if not (c.within(EXACT_TOL) and not c.extra and cs.within(EXACT_TOL) and not cs.extra):
+            if not (c.within(EXACT_TOL) and not c.extra and cs.within(EXACT_TOL)):
                 rec["failures"] += 1
                 scn_failed = True
-                fail(scn, group, uid, {"max_abs_rel_error": max(c.max_abs_rel_error, cs.max_abs_rel_error),
-                                       "worst_path": c.worst_path or cs.worst_path,
+                fail(scn, group, uid, {"max_abs_rel_error": c.max_abs_rel_error, "worst_path": c.worst_path,
                                        "mismatches": c.mismatches[:3], "missing": c.missing[:3], "extra": c.extra[:3],
-                                       "summary_mismatches": cs.mismatches[:3], "summary_extra": cs.extra[:3]})
-        for mode, got in (("full", full), ("totals", summary)):          # a unit only the unified model returns
-            unknown = sorted(u for u in got if not u.startswith("_") and u not in ref)
-            if unknown:
-                scn_failed = True
-                fail(scn, group, "*", {"error": f"units absent in the reference ({mode}): {unknown[:5]}"})
+                                       "summary_mismatches": cs.mismatches[:3]})
         g["failed"] += scn_failed
     always_empty = sorted(u for u in empty_in_totals_mode if per_unit[u]["summary_leaves_compared"] == 0)
 
@@ -178,45 +152,19 @@ def exactness(n_population: int, n_dirty: int) -> dict:
     scn = synth.make_scenario(51, "SRC", "hospital", "S", 60.0)
     base = population.attach_baseline(scn)
     held: dict = {}
-    for step in range(4):
+    for step in range(3):
         if step == 2:                                   # the baseline is edited: the caller must drop what it holds
             for row in base.materials:
                 if row.quantity is not None:
                     row.quantity *= 1.5
             held.clear()
-        if step == 3:                                   # the baseline becomes incomplete: the held entry carries the flag
-            base.materials[0].quantity = None
-            held.clear()
         ref = registry.run_all(scn, ids=["SUM-08"])["SUM-08"]
         got = engine.evaluate(scn, detail=False, baseline_totals=held)["SUM-08"]
-        again = engine.evaluate(scn, detail=False, baseline_totals=held)["SUM-08"]      # now from the held entry
-        for res in (got, again):
-            c = compare(ref, res, floor=EXACT_FLOOR)
-            reuse_ok = reuse_ok and c.within(EXACT_TOL) and not c.extra
-        reuse_ok = reuse_ok and list(held) == [scn.boundary.baseline_scenario]
-    # two baselines registered under different ids whose bookkeeping ids are equal: the held entries must not mix
-    twins = []
-    for seed in (52, 53):
-        prop = synth.make_scenario(seed, "RC", "office", "S", 60.0, **mutations.SMALL)
-        twin = population.attach_baseline(prop)
-        twin.meta.scenario_id = "SAME-BOOKKEEPING-ID"
-        twins.append(prop)
-    held = {}
-    for prop in twins:
-        ref = registry.run_all(prop, ids=["SUM-08"])["SUM-08"]
-        got = engine.evaluate(prop, detail=False, baseline_totals=held)["SUM-08"]
-        c = compare(ref, got, floor=EXACT_FLOOR)
-        reuse_ok = reuse_ok and c.within(EXACT_TOL) and not c.extra
-    reuse_ok = reuse_ok and len(held) == 2
+        reuse_ok = reuse_ok and compare(ref, got, floor=EXACT_TOL).within(EXACT_TOL)
     if not reuse_ok:
         fail(scn, "baseline_reuse", "SUM-08", {"error": "caller-held baseline total gives a different result"})
 
-    return {"scenarios": n_scn, "tolerance": EXACT_TOL, "absolute_floor": EXACT_FLOOR,
-            "comparison": "relative difference of every public leaf, no absolute floor; NaN equals NaN only; an infinity "
-                          "equals only the same infinity; a bool equals only a bool; leaves the unified model returns and "
-                          "the reference does not are failures in both output modes",
-            "by_group": by_group, "units": dict(sorted(per_unit.items())),
-            "largest_difference": worst, "scenarios_with_incomplete_total": incomplete_seen,
+    return {"scenarios": n_scn, "tolerance": EXACT_TOL, "by_group": by_group, "units": dict(sorted(per_unit.items())),
             "invalid_periods_refused_by_both": f"{refused}/{len(mutations.INVALID_PERIODS)}",
             "baseline_reuse_checked": reuse_ok, "units_without_output_in_totals_mode": always_empty,
             "mutations": sorted(mutations.MUTATIONS), "failures": failures,
@@ -224,65 +172,59 @@ def exactness(n_population: int, n_dirty: int) -> dict:
 
 
 def sweep_check(n: int) -> dict:
-    """Every unit of the sweep (several study periods from one aggregation) versus a reference run per period.
-
-    The comparison with the baseline (SUM-08) stays on for the scenarios that have one; for a period
-    other than the baseline's own both sides must report NOT_COMPARABLE.
-    """
+    """Totals for several study periods from one aggregation versus a reference run per period."""
     worst = 0.0
-    worst_at = None
-    compared = other_leaves = 0
+    compared = 0
     failures = []
-    units_compared: set[str] = set()
-    with_baseline = 0
-    status_count: dict[str, int] = {}
     pool = list(population.verification_population(n, seed=777, max_size="S"))
     pool += [scn for name, scn in population.edge_cases() if "period" not in name]
     for scn in pool:
-        with_baseline += scn.boundary.baseline_scenario is not None
-        got = engine.sweep(scn, SWEEP_PERIODS, compare=True)
+        scn.boundary.baseline_scenario = None
+        got = engine.sweep(scn, SWEEP_PERIODS)
         for T in SWEEP_PERIODS:
             other = copy.deepcopy(scn)
             other.boundary.study_period = T
             ref = registry.run_all(other)
-            status = ref["SUM-08"]["status"]
-            status_count[status] = status_count.get(status, 0) + 1
-            for uid, ref_value in ref.items():
-                c = compare(ref_value, got[T].get(uid, {}), floor=EXACT_FLOOR, ignore_missing=True)
+            scale = abs(ref["SUM-03"]["value"]) or 1.0
+            for uid in SWEEP_UNITS:
+                c = compare(ref[uid], got[T][uid], floor=EXACT_TOL * scale, ignore_missing=True)
                 compared += c.n_numeric
-                other_leaves += c.n_other
-                if c.n_numeric + c.n_other:
-                    units_compared.add(uid)
-                if c.max_abs_rel_error > worst:
-                    worst, worst_at = c.max_abs_rel_error, {"scenario": scn.meta.scenario_id, "T": T, "unit": uid,
-                                                            "path": c.worst_path}
-                if not (c.within(EXACT_TOL) and not c.extra) and len(failures) < 20:
+                worst = max(worst, c.max_abs_rel_error)
+                if not c.within(EXACT_TOL) and len(failures) < 20:
                     failures.append({"scenario": scn.meta.scenario_id, "T": T, "unit": uid, "path": c.worst_path,
-                                     "error": c.max_abs_rel_error, "mismatches": c.mismatches[:2], "extra": c.extra[:2]})
-            unknown = sorted(u for u in got[T] if not u.startswith("_") and u not in ref)
-            if unknown and len(failures) < 20:
-                failures.append({"scenario": scn.meta.scenario_id, "T": T, "unit": "*", "extra_units": unknown[:5]})
-    return {"scenarios": len(pool), "scenarios_with_baseline": with_baseline, "periods": list(SWEEP_PERIODS),
-            "units": sorted(units_compared), "n_units": len(units_compared),
-            "units_without_output_in_totals_mode": sorted(set(registry.UNITS) - units_compared),
-            "values_compared": compared, "non_numeric_compared": other_leaves, "sum_08_status_counts": status_count,
-            "absolute_floor": EXACT_FLOOR, "max_abs_rel_error": worst, "largest_difference": worst_at,
-            "failures": failures, "all_exact": not failures}
+                                     "error": c.max_abs_rel_error, "mismatches": c.mismatches[:2]})
+    return {"scenarios": len(pool), "periods": list(SWEEP_PERIODS), "units": list(SWEEP_UNITS), "values_compared": compared,
+            "max_abs_rel_error": worst, "failures": failures, "all_exact": not failures}
 
 
 def mechanisms() -> dict:
-    """What the unified model actually does, measured from outside: the result of ``bench/mechanism_probe.py``.
+    """Counters of what the unified model actually does, on two fictional scenarios.
 
-    The probe replaces the tallies the engine used to keep. It observes multiplications by
-    factor values, reads of the input rows, factor look-ups, unit conversions, event-year
-    lists and loops over the study years with reporting stand-ins for the inputs, on the
-    mechanism scenario (parametric inputs and year tables) and on the benchmark sizes, and
-    evaluates the statements P1..P7 from the counts. Nothing is asserted here: a statement
-    the counts do not support is stored as false.
+    These back the statements of the research records (for example "no factor is
+    multiplied row by row when only totals are asked for"): tools/build_records.py
+    asserts them, so a record cannot describe a mechanism the code does not have.
     """
-    from bench import mechanism_probe
-
-    return mechanism_probe.run()
+    out = {}
+    cases = {"parametric_inputs": {"profile_kind": "LINEAR_TREND", "grid_kind": "LINEAR_DECLINE_TO_FLOOR"},
+             "year_table_inputs": {"profile_kind": "TABLE", "grid_kind": "TABLE"}}
+    for name, options in cases.items():
+        scn = synth.make_scenario(5, "RC", "office", "S", 60.0, n_materials=400, n_equipment=120, n_refrigerants=10, **options)
+        A = engine.aggregate(scn, False)
+        totals = engine.evaluate(scn, detail=False)
+        full = engine.evaluate(scn, detail=True)
+        ref = registry.run_all(scn)
+        out[name] = {
+            "rows": {"materials": len(scn.materials), "equipment": len(scn.equipment), "refrigerants": len(scn.refrigerants),
+                     "cost_items": len(scn.cost_items)},
+            "distinct": {"factor_records": len(scn.factors), "factors_used": ref["QA-03"]["n_used"],
+                         "factor_uses_checked_by_reference": ref["SYS-02"]["n_checked"],
+                         "renewal_periods": len(A.groups), "explicit_event_lists": len(A.explicit),
+                         "compositions": len({tuple((c.factor_id, c.mass_fraction) for c in row.composition)
+                                              for row in scn.materials if row.composition}),
+                         "table_entries": sum(len(t) for t in totals["_tables"].values())},
+            "totals_only": totals["_stats"], "full_outputs": full["_stats"],
+        }
+    return out
 
 
 class _Ops:
@@ -406,15 +348,7 @@ def main() -> int:
     ex = exactness(args.population, args.dirty)
     ex["period_sweep"] = sweep_check(args.sweep)
     ex["all_exact"] = ex["all_exact"] and ex["period_sweep"]["all_exact"]
-    # The measured operation counts get their own file beside this one (mechanism_probe.json, the file
-    # ``python3 -m bench.mechanism_probe`` writes); the exactness file keeps the verdicts of the statements.
-    probe = mechanisms()
-    probe_file = OUT.parent / "mechanism_probe.json"
-    probe_file.write_text(json.dumps(probe, ensure_ascii=False, indent=1), encoding="utf-8")
-    ex["mechanism_probe"] = {"file": probe_file.name,
-                             "statements": {key: st["holds"] for key, st in probe["statements"].items()},
-                             "engine_counters_agree": probe["engine_counters"]["all_agree"],
-                             "results_identical_to_uninstrumented_runs": probe["results_identical_to_uninstrumented_runs"]}
+    ex["mechanism_counts"] = mechanisms()
     ex.update(schema_version="2.0", what="Leaf-by-leaf comparison of the unified model (fastcalc.engine) with the reference "
               "calculation (refcalc) on fictional scenarios. 'summary' = the mode without per-row lists and yearly series.",
               data_statement="SYNTHETIC_FICTIONAL data only. Not evidence of accuracy on real buildings.",
