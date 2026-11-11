@@ -1,0 +1,1337 @@
+{
+ "candidate": "TC-B-01",
+ "specification": "research_code/specs/pre_a.py",
+ "engine": "research_code/tstudy/msp.py",
+ "data_statement": "fictional data, independent concept model",
+ "evidence_level": "N (numerical); counts are read from the specification by the check script",
+ "checked_by": "implementer only",
+ "form": "out[g] = sum over rows x of a table, sum over terms t, prod_k phi_{t,k}(x), grouped by g",
+ "primitives": {
+  "sum_product_core": "Engine.core (one function; every sp step ends in it)",
+  "first_match": "Engine.run_match (min over row positions; a second primitive, counted separately)"
+ },
+ "n_vocabulary_elements_used": 26,
+ "undocumented_elements": [],
+ "elements": {
+  "factor:column": {
+   "what": "a column used as a number",
+   "in_the_form": "factor type 1 (input column or earlier result)",
+   "total": 147,
+   "n_units_using": 18,
+   "per_unit": {
+    "A13-05": 4,
+    "X-13": 5,
+    "A13-02": 8,
+    "X-15": 15,
+    "A13-01": 4,
+    "A13-03": 4,
+    "A13-04": 4,
+    "X-01": 7,
+    "X-03": 9,
+    "A4-01": 8,
+    "X-12": 8,
+    "A4-02": 7,
+    "A5-01": 5,
+    "A5-02": 6,
+    "A5-03": 6,
+    "A5-04": 3,
+    "X-17": 36,
+    "X-16": 8
+   }
+  },
+  "factor:const": {
+   "what": "a numeric constant as a factor (only -1 is used: differences)",
+   "in_the_form": "factor type 1, degenerate (constant column)",
+   "total": 2,
+   "n_units_using": 2,
+   "per_unit": {
+    "X-13": 1,
+    "A13-02": 1
+   }
+  },
+  "fn:inv": {
+   "what": "1/x",
+   "in_the_form": "factor type 3",
+   "total": 8,
+   "n_units_using": 3,
+   "per_unit": {
+    "X-12": 1,
+    "X-17": 6,
+    "X-16": 1
+   }
+  },
+  "fn:inv_one_minus": {
+   "what": "1/(1 - x)",
+   "in_the_form": "factor type 3",
+   "total": 1,
+   "n_units_using": 1,
+   "per_unit": {
+    "A13-05": 1
+   }
+  },
+  "fn:one_minus": {
+   "what": "1 - x",
+   "in_the_form": "factor type 3 (polynomial)",
+   "total": 2,
+   "n_units_using": 2,
+   "per_unit": {
+    "A13-05": 1,
+    "X-13": 1
+   }
+  },
+  "fn:ratio_one_minus": {
+   "what": "x/(1 - x)",
+   "in_the_form": "factor type 3",
+   "total": 1,
+   "n_units_using": 1,
+   "per_unit": {
+    "A13-04": 1
+   }
+  },
+  "group:by": {
+   "what": "scatter-add by a reference column into the rows of the referenced table (child rows to parent row, component rows to factor record)",
+   "in_the_form": "grouping: by key",
+   "total": 10,
+   "n_units_using": 3,
+   "per_unit": {
+    "(shared)": 3,
+    "A13-02": 3,
+    "X-15": 1,
+    "X-03": 3
+   }
+  },
+  "group:none": {
+   "what": "per row, no sum (result is a column)",
+   "in_the_form": "grouping: none",
+   "total": 106,
+   "n_units_using": 18,
+   "per_unit": {
+    "(shared)": 3,
+    "A13-05": 3,
+    "X-13": 4,
+    "A13-02": 7,
+    "X-15": 17,
+    "A13-01": 2,
+    "A13-03": 1,
+    "A13-04": 3,
+    "X-01": 6,
+    "X-03": 3,
+    "A4-01": 6,
+    "X-12": 6,
+    "A4-02": 6,
+    "A5-01": 3,
+    "A5-02": 5,
+    "A5-03": 5,
+    "A5-04": 1,
+    "X-17": 19,
+    "X-16": 6
+   }
+  },
+  "group:total": {
+   "what": "one number for the scenario",
+   "in_the_form": "grouping: total",
+   "total": 32,
+   "n_units_using": 16,
+   "per_unit": {
+    "A13-05": 1,
+    "A13-02": 1,
+    "X-15": 2,
+    "A13-01": 2,
+    "A13-03": 2,
+    "A13-04": 2,
+    "X-01": 2,
+    "X-03": 1,
+    "A4-01": 2,
+    "X-12": 2,
+    "A4-02": 2,
+    "A5-01": 1,
+    "A5-02": 2,
+    "A5-03": 2,
+    "X-17": 6,
+    "X-16": 2
+   }
+  },
+  "operand:const": {
+   "what": "constant operand of a predicate or key",
+   "in_the_form": "addressing",
+   "total": 218,
+   "n_units_using": 17,
+   "per_unit": {
+    "(shared)": 9,
+    "A13-05": 9,
+    "X-13": 6,
+    "A13-02": 18,
+    "X-15": 31,
+    "A13-01": 8,
+    "A13-03": 4,
+    "A13-04": 3,
+    "X-01": 6,
+    "X-03": 7,
+    "A4-01": 15,
+    "X-12": 15,
+    "A4-02": 7,
+    "A5-01": 13,
+    "A5-02": 6,
+    "A5-03": 15,
+    "X-17": 40,
+    "X-16": 6
+   }
+  },
+  "operand:of": {
+   "what": "single value of a one-row table (scenario scalar) broadcast to all rows",
+   "in_the_form": "addressing (join without key)",
+   "total": 21,
+   "n_units_using": 3,
+   "per_unit": {
+    "X-15": 1,
+    "A5-01": 2,
+    "X-17": 18
+   }
+  },
+  "operand:own": {
+   "what": "column of the step's table",
+   "in_the_form": "addressing",
+   "total": 511,
+   "n_units_using": 18,
+   "per_unit": {
+    "(shared)": 9,
+    "A13-05": 17,
+    "X-13": 13,
+    "A13-02": 31,
+    "X-15": 102,
+    "A13-01": 12,
+    "A13-03": 8,
+    "A13-04": 10,
+    "X-01": 33,
+    "X-03": 11,
+    "A4-01": 28,
+    "X-12": 30,
+    "A4-02": 35,
+    "A5-01": 15,
+    "A5-02": 32,
+    "A5-03": 23,
+    "A5-04": 3,
+    "X-17": 64,
+    "X-16": 35
+   }
+  },
+  "operand:via": {
+   "what": "column of another table gathered through a reference column (join through a key)",
+   "in_the_form": "factor type 2 (equal keys) folded into addressing",
+   "total": 78,
+   "n_units_using": 11,
+   "per_unit": {
+    "A13-02": 6,
+    "X-15": 19,
+    "X-01": 6,
+    "X-03": 5,
+    "A4-01": 6,
+    "X-12": 6,
+    "A4-02": 6,
+    "A5-01": 2,
+    "A5-02": 6,
+    "A5-03": 6,
+    "X-16": 10
+   }
+  },
+  "pred.not": {
+   "what": "negation flag of a predicate: 1 - [P]",
+   "in_the_form": "factor type 2",
+   "total": 92,
+   "n_units_using": 12,
+   "per_unit": {
+    "A13-05": 2,
+    "A13-02": 6,
+    "X-15": 19,
+    "A13-04": 1,
+    "X-01": 6,
+    "A4-01": 8,
+    "X-12": 8,
+    "A4-02": 6,
+    "A5-02": 6,
+    "A5-03": 6,
+    "X-17": 18,
+    "X-16": 6
+   }
+  },
+  "pred:eq": {
+   "what": "x == constant, or equal values of two columns",
+   "in_the_form": "factor type 2",
+   "total": 241,
+   "n_units_using": 17,
+   "per_unit": {
+    "(shared)": 9,
+    "A13-05": 9,
+    "X-13": 6,
+    "A13-02": 15,
+    "X-15": 46,
+    "A13-01": 8,
+    "A13-03": 4,
+    "A13-04": 3,
+    "X-01": 12,
+    "X-03": 7,
+    "A4-01": 12,
+    "X-12": 12,
+    "A4-02": 13,
+    "A5-01": 9,
+    "A5-02": 12,
+    "A5-03": 12,
+    "X-17": 40,
+    "X-16": 12
+   }
+  },
+  "pred:le": {
+   "what": "a <= b for two columns (used once: assessment date <= validity date, ISO text order)",
+   "in_the_form": "factor type 2; on strings it needs the text order (pre-processing: rank of the string)",
+   "total": 1,
+   "n_units_using": 1,
+   "per_unit": {
+    "X-15": 1
+   }
+  },
+  "pred:present": {
+   "what": "value is not missing",
+   "in_the_form": "factor type 2",
+   "total": 94,
+   "n_units_using": 11,
+   "per_unit": {
+    "A13-02": 9,
+    "X-15": 25,
+    "A13-04": 1,
+    "X-01": 7,
+    "A4-01": 9,
+    "X-12": 9,
+    "A4-02": 9,
+    "A5-01": 4,
+    "A5-02": 7,
+    "A5-03": 7,
+    "X-16": 7
+   }
+  },
+  "pred:range": {
+   "what": "lo <= x <= hi with open / closed ends ('finite and >= 0', ratio, positive)",
+   "in_the_form": "factor type 2",
+   "total": 18,
+   "n_units_using": 11,
+   "per_unit": {
+    "A13-05": 2,
+    "X-13": 1,
+    "A13-02": 2,
+    "A13-04": 1,
+    "X-01": 1,
+    "A4-01": 2,
+    "X-12": 3,
+    "A5-01": 1,
+    "A5-02": 1,
+    "A5-03": 1,
+    "X-16": 3
+   }
+  },
+  "read:const": {
+   "what": "literal value stored in the specification",
+   "in_the_form": "post-processing (no computation)",
+   "total": 1,
+   "n_units_using": 1,
+   "per_unit": {
+    "A5-04": 1
+   }
+  },
+  "read:dict": {
+   "what": "dictionary key column -> value for rows with a non-zero count",
+   "in_the_form": "post-processing",
+   "total": 2,
+   "n_units_using": 1,
+   "per_unit": {
+    "X-03": 2
+   }
+  },
+  "read:enum": {
+   "what": "label of the indicator column that is 1, None when none",
+   "in_the_form": "post-processing",
+   "total": 1,
+   "n_units_using": 1,
+   "per_unit": {
+    "X-15": 1
+   }
+  },
+  "read:record": {
+   "what": "nested dictionary of read-outs",
+   "in_the_form": "post-processing",
+   "total": 8,
+   "n_units_using": 2,
+   "per_unit": {
+    "A5-04": 1,
+    "X-17": 7
+   }
+  },
+  "read:rows": {
+   "what": "list per row, None where an indicator column is 0",
+   "in_the_form": "post-processing",
+   "total": 15,
+   "n_units_using": 12,
+   "per_unit": {
+    "A13-05": 2,
+    "X-13": 2,
+    "A13-02": 1,
+    "X-15": 2,
+    "A13-01": 1,
+    "A13-03": 1,
+    "A13-04": 1,
+    "X-01": 1,
+    "A4-01": 1,
+    "X-12": 1,
+    "A4-02": 1,
+    "X-16": 1
+   }
+  },
+  "read:scalar": {
+   "what": "read one number (float; int and bool only when the value is exactly integral / 0 or 1)",
+   "in_the_form": "post-processing",
+   "total": 50,
+   "n_units_using": 17,
+   "per_unit": {
+    "A13-05": 1,
+    "A13-02": 1,
+    "X-15": 2,
+    "A13-01": 2,
+    "A13-03": 2,
+    "A13-04": 2,
+    "X-01": 2,
+    "X-03": 1,
+    "A4-01": 2,
+    "X-12": 2,
+    "A4-02": 2,
+    "A5-01": 2,
+    "A5-02": 2,
+    "A5-03": 2,
+    "A5-04": 4,
+    "X-17": 19,
+    "X-16": 2
+   }
+  },
+  "step:match": {
+   "what": "first match of a keyed look-up: reference to the first row of another table whose key columns equal the key of the row (missing when none)",
+   "in_the_form": "factor type 2 (equal keys) restricted to the first matching row; needs the order of the rows (min over row positions), which the (+, x) form does not have",
+   "total": 37,
+   "n_units_using": 10,
+   "per_unit": {
+    "A13-02": 3,
+    "X-15": 9,
+    "X-01": 3,
+    "A4-01": 3,
+    "X-12": 3,
+    "A4-02": 3,
+    "A5-01": 2,
+    "A5-02": 3,
+    "A5-03": 3,
+    "X-16": 5
+   }
+  },
+  "step:sp": {
+   "what": "masked sum-product: out[g] = sum over rows x of a table, sum over terms, product of factors; every sp step ends in the single function Engine.core (scatter-add of row products)",
+   "in_the_form": "the form itself",
+   "total": 148,
+   "n_units_using": 18,
+   "per_unit": {
+    "(shared)": 6,
+    "A13-05": 4,
+    "X-13": 4,
+    "A13-02": 11,
+    "X-15": 20,
+    "A13-01": 4,
+    "A13-03": 3,
+    "A13-04": 5,
+    "X-01": 8,
+    "X-03": 7,
+    "A4-01": 8,
+    "X-12": 8,
+    "A4-02": 8,
+    "A5-01": 4,
+    "A5-02": 7,
+    "A5-03": 7,
+    "A5-04": 1,
+    "X-17": 25,
+    "X-16": 8
+   }
+  }
+ },
+ "templates": {
+  "STAGE": {
+   "steps_in_body": 2,
+   "instantiations_written": 3
+  },
+  "CONV": {
+   "steps_in_body": 4,
+   "instantiations_written": 1
+  },
+  "FACTOR": {
+   "steps_in_body": 4,
+   "instantiations_written": 10
+  },
+  "CLASS": {
+   "steps_in_body": 4,
+   "instantiations_written": 6
+  }
+ },
+ "per_unit": {
+  "(shared)": {
+   "steps_as_written": 3,
+   "steps_expanded": 6,
+   "sp_steps": 6,
+   "match_steps": 0,
+   "terms": 6,
+   "steps_from_templates": {
+    "STAGE": 6
+   },
+   "elements_used": [
+    "group:by",
+    "group:none",
+    "operand:const",
+    "operand:own",
+    "pred:eq",
+    "step:sp"
+   ]
+  },
+  "A13-05": {
+   "steps_as_written": 4,
+   "steps_expanded": 4,
+   "sp_steps": 4,
+   "match_steps": 0,
+   "terms": 6,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "fn:inv_one_minus",
+    "fn:one_minus",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "pred.not",
+    "pred:eq",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "X-13": {
+   "steps_as_written": 4,
+   "steps_expanded": 4,
+   "sp_steps": 4,
+   "match_steps": 0,
+   "terms": 6,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "factor:const",
+    "fn:one_minus",
+    "group:none",
+    "operand:const",
+    "operand:own",
+    "pred:eq",
+    "pred:range",
+    "read:rows",
+    "step:sp"
+   ]
+  },
+  "A13-02": {
+   "steps_as_written": 8,
+   "steps_expanded": 14,
+   "sp_steps": 11,
+   "match_steps": 3,
+   "terms": 16,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "factor:const",
+    "group:by",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "X-15": {
+   "steps_as_written": 14,
+   "steps_expanded": 29,
+   "sp_steps": 20,
+   "match_steps": 9,
+   "terms": 38,
+   "steps_from_templates": {
+    "FACTOR": 6,
+    "FACTOR/CONV": 8,
+    "CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "group:by",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:of",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:le",
+    "pred:present",
+    "read:enum",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "A13-01": {
+   "steps_as_written": 4,
+   "steps_expanded": 4,
+   "sp_steps": 4,
+   "match_steps": 0,
+   "terms": 5,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "pred:eq",
+    "read:rows",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "A13-03": {
+   "steps_as_written": 3,
+   "steps_expanded": 3,
+   "sp_steps": 3,
+   "match_steps": 0,
+   "terms": 3,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "pred:eq",
+    "read:rows",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "A13-04": {
+   "steps_as_written": 5,
+   "steps_expanded": 5,
+   "sp_steps": 5,
+   "match_steps": 0,
+   "terms": 6,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "fn:ratio_one_minus",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "X-01": {
+   "steps_as_written": 5,
+   "steps_expanded": 11,
+   "sp_steps": 8,
+   "match_steps": 3,
+   "terms": 12,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "X-03": {
+   "steps_as_written": 7,
+   "steps_expanded": 7,
+   "sp_steps": 7,
+   "match_steps": 0,
+   "terms": 7,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "group:by",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred:eq",
+    "read:dict",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "A4-01": {
+   "steps_as_written": 5,
+   "steps_expanded": 11,
+   "sp_steps": 8,
+   "match_steps": 3,
+   "terms": 12,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "X-12": {
+   "steps_as_written": 5,
+   "steps_expanded": 11,
+   "sp_steps": 8,
+   "match_steps": 3,
+   "terms": 12,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "fn:inv",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "A4-02": {
+   "steps_as_written": 5,
+   "steps_expanded": 11,
+   "sp_steps": 8,
+   "match_steps": 3,
+   "terms": 12,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "A5-01": {
+   "steps_as_written": 6,
+   "steps_expanded": 6,
+   "sp_steps": 4,
+   "match_steps": 2,
+   "terms": 8,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:of",
+    "operand:own",
+    "operand:via",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "A5-02": {
+   "steps_as_written": 4,
+   "steps_expanded": 10,
+   "sp_steps": 7,
+   "match_steps": 3,
+   "terms": 11,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "A5-03": {
+   "steps_as_written": 4,
+   "steps_expanded": 10,
+   "sp_steps": 7,
+   "match_steps": 3,
+   "terms": 11,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  },
+  "A5-04": {
+   "steps_as_written": 1,
+   "steps_expanded": 1,
+   "sp_steps": 1,
+   "match_steps": 0,
+   "terms": 3,
+   "steps_from_templates": {},
+   "elements_used": [
+    "factor:column",
+    "group:none",
+    "operand:own",
+    "read:const",
+    "read:record",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "X-17": {
+   "steps_as_written": 7,
+   "steps_expanded": 25,
+   "sp_steps": 25,
+   "match_steps": 0,
+   "terms": 37,
+   "steps_from_templates": {
+    "CLASS": 24
+   },
+   "elements_used": [
+    "factor:column",
+    "fn:inv",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:of",
+    "operand:own",
+    "pred.not",
+    "pred:eq",
+    "read:record",
+    "read:scalar",
+    "step:sp"
+   ]
+  },
+  "X-16": {
+   "steps_as_written": 7,
+   "steps_expanded": 13,
+   "sp_steps": 8,
+   "match_steps": 5,
+   "terms": 12,
+   "steps_from_templates": {
+    "FACTOR": 3,
+    "FACTOR/CONV": 4
+   },
+   "elements_used": [
+    "factor:column",
+    "fn:inv",
+    "group:none",
+    "group:total",
+    "operand:const",
+    "operand:own",
+    "operand:via",
+    "pred.not",
+    "pred:eq",
+    "pred:present",
+    "pred:range",
+    "read:rows",
+    "read:scalar",
+    "step:match",
+    "step:sp"
+   ]
+  }
+ },
+ "vocabulary_growth_in_specification_order": [
+  {
+   "unit": "(shared)",
+   "new_elements": [
+    "group:by",
+    "group:none",
+    "operand:const",
+    "operand:own",
+    "pred:eq",
+    "step:sp"
+   ],
+   "cumulative": 6
+  },
+  {
+   "unit": "A13-05",
+   "new_elements": [
+    "factor:column",
+    "fn:inv_one_minus",
+    "fn:one_minus",
+    "group:total",
+    "pred.not",
+    "pred:range",
+    "read:rows",
+    "read:scalar"
+   ],
+   "cumulative": 14
+  },
+  {
+   "unit": "X-13",
+   "new_elements": [
+    "factor:const"
+   ],
+   "cumulative": 15
+  },
+  {
+   "unit": "A13-02",
+   "new_elements": [
+    "operand:via",
+    "pred:present",
+    "step:match"
+   ],
+   "cumulative": 18
+  },
+  {
+   "unit": "X-15",
+   "new_elements": [
+    "operand:of",
+    "pred:le",
+    "read:enum"
+   ],
+   "cumulative": 21
+  },
+  {
+   "unit": "A13-01",
+   "new_elements": [],
+   "cumulative": 21
+  },
+  {
+   "unit": "A13-03",
+   "new_elements": [],
+   "cumulative": 21
+  },
+  {
+   "unit": "A13-04",
+   "new_elements": [
+    "fn:ratio_one_minus"
+   ],
+   "cumulative": 22
+  },
+  {
+   "unit": "X-01",
+   "new_elements": [],
+   "cumulative": 22
+  },
+  {
+   "unit": "X-03",
+   "new_elements": [
+    "read:dict"
+   ],
+   "cumulative": 23
+  },
+  {
+   "unit": "A4-01",
+   "new_elements": [],
+   "cumulative": 23
+  },
+  {
+   "unit": "X-12",
+   "new_elements": [
+    "fn:inv"
+   ],
+   "cumulative": 24
+  },
+  {
+   "unit": "A4-02",
+   "new_elements": [],
+   "cumulative": 24
+  },
+  {
+   "unit": "A5-01",
+   "new_elements": [],
+   "cumulative": 24
+  },
+  {
+   "unit": "A5-02",
+   "new_elements": [],
+   "cumulative": 24
+  },
+  {
+   "unit": "A5-03",
+   "new_elements": [],
+   "cumulative": 24
+  },
+  {
+   "unit": "A5-04",
+   "new_elements": [
+    "read:const",
+    "read:record"
+   ],
+   "cumulative": 26
+  },
+  {
+   "unit": "X-17",
+   "new_elements": [],
+   "cumulative": 26
+  },
+  {
+   "unit": "X-16",
+   "new_elements": [],
+   "cumulative": 26
+  }
+ ],
+ "beyond_the_form": {
+  "(templates)": [
+   "use: template instantiation by textual substitution (STAGE, CONV, FACTOR, CLASS). Not a computation, but the specification is written with it; step counts are given after expansion."
+  ],
+  "(shared)": [
+   "stage gate 'stages == [stage]' is evaluated as (length == 1) and (one entry equal to the stage): a scatter-add over the child table factors.stages"
+  ],
+  "(every unit with a factor look-up)": [
+   "match: record by factor id (dictionary key, unique: no order needed)",
+   "match: first row-specific conversion (order = position in the row's list) and first scenario conversion (order = row order of the table); priority identity > row-specific > scenario table is written as three mutually exclusive predicate products (negation flag)"
+  ],
+  "A13-05": [
+   "division Q/(1-w) is the product Q * (1/(1-w)): can differ from the reference in the last bit"
+  ],
+  "X-13": [
+   "difference ordered - installed needs the constant factor -1"
+  ],
+  "A13-02": [
+   "'|sum - 1| <= 1e-6' needs the constant -1 (residual) and a range predicate",
+   "the reference stops at the first unusable component; the specification counts unusable components (same public result because the partial sum is discarded)"
+  ],
+  "X-15": [
+   "list equality (declared stages == stages of the record) needs a positional join: gather the record row into the child table, match on (record row, position), count equal entries (3 steps)",
+   "validity date >= assessment date: text order of ISO dates (pre-processing: rank of interned strings)",
+   "priority declaration > composite > generic: mutually exclusive indicator columns (negation), not min",
+   "enumeration 'kind' is read from three indicator columns (post-processing)"
+  ],
+  "X-03": [
+   "dictionary outputs keyed by factor id: scatter-add into the factor table plus a count column that selects the keys (post-processing read-out)"
+  ],
+  "A5-01": [
+   "NOT EXPRESSED EXACTLY: the reference splits the grid unit text at '/' (text operation). The specification uses a closed list of three texts (kgCO2e/kWh, kgCO2e/MWh, kgCO2e/MJ); a scenario that registers a conversion from kWh to another unit is outside the list",
+   "match with constant keys (kWh -> MWh, kWh -> MJ)"
+  ],
+  "A5-04": [
+   "output 'other_assessed' is a literal constant; 'parts' is a read-out of results of other units"
+  ],
+  "X-17": [
+   "six summary classes are six instantiations of one template (4 steps each); the classes and their summary columns are listed in the specification because a column cannot be addressed by a value",
+   "division sum/quantity is the product sum * (1/quantity)"
+  ],
+  "X-16": [
+   "match: price index by year (dictionary key, unique)",
+   "ratio of two indices is index * (1/index)"
+  ],
+  "X-12": [
+   "division by the load factor is a product with 1/x"
+  ],
+  "(all units)": [
+   "integer-typed inputs passed through by the reference keep type int; the engine returns float (type only)",
+   "strings are interned to integer codes before evaluation (pre-processing, generic)"
+  ]
+ },
+ "first_match_order_needed_in_data": {
+  "design": {
+   "A13-02": {
+    "match_probes": 389226,
+    "match_order_decided": 0
+   },
+   "X-15": {
+    "match_probes": 476563,
+    "match_order_decided": 0
+   },
+   "X-01": {
+    "match_probes": 52920,
+    "match_order_decided": 0
+   },
+   "A4-01": {
+    "match_probes": 176400,
+    "match_order_decided": 0
+   },
+   "X-12": {
+    "match_probes": 176400,
+    "match_order_decided": 0
+   },
+   "A4-02": {
+    "match_probes": 176400,
+    "match_order_decided": 0
+   },
+   "A5-01": {
+    "match_probes": 120,
+    "match_order_decided": 0
+   },
+   "A5-02": {
+    "match_probes": 453,
+    "match_order_decided": 0
+   },
+   "A5-03": {
+    "match_probes": 804,
+    "match_order_decided": 0
+   },
+   "X-16": {
+    "match_probes": 1590,
+    "match_order_decided": 0
+   }
+  },
+  "evaluation": {
+   "A13-02": {
+    "match_probes": 314400,
+    "match_order_decided": 0
+   },
+   "X-15": {
+    "match_probes": 374425,
+    "match_order_decided": 0
+   },
+   "X-01": {
+    "match_probes": 41580,
+    "match_order_decided": 0
+   },
+   "A4-01": {
+    "match_probes": 138600,
+    "match_order_decided": 0
+   },
+   "X-12": {
+    "match_probes": 138600,
+    "match_order_decided": 0
+   },
+   "A4-02": {
+    "match_probes": 138600,
+    "match_order_decided": 0
+   },
+   "A5-01": {
+    "match_probes": 120,
+    "match_order_decided": 0
+   },
+   "A5-02": {
+    "match_probes": 453,
+    "match_order_decided": 0
+   },
+   "A5-03": {
+    "match_probes": 807,
+    "match_order_decided": 0
+   },
+   "X-16": {
+    "match_probes": 1635,
+    "match_order_decided": 0
+   }
+  },
+  "edge": {
+   "A13-02": {
+    "match_probes": 3540,
+    "match_order_decided": 0
+   },
+   "X-15": {
+    "match_probes": 2832,
+    "match_order_decided": 0
+   },
+   "X-01": {
+    "match_probes": 525,
+    "match_order_decided": 0
+   },
+   "A4-01": {
+    "match_probes": 1047,
+    "match_order_decided": 0
+   },
+   "X-12": {
+    "match_probes": 1047,
+    "match_order_decided": 0
+   },
+   "A4-02": {
+    "match_probes": 1047,
+    "match_order_decided": 0
+   },
+   "A5-01": {
+    "match_probes": 62,
+    "match_order_decided": 0
+   },
+   "A5-02": {
+    "match_probes": 186,
+    "match_order_decided": 0
+   },
+   "A5-03": {
+    "match_probes": 372,
+    "match_order_decided": 0
+   },
+   "X-16": {
+    "match_probes": 930,
+    "match_order_decided": 0
+   }
+  },
+  "dirty": {
+   "A13-02": {
+    "match_probes": 26826,
+    "match_order_decided": 0
+   },
+   "X-15": {
+    "match_probes": 32442,
+    "match_order_decided": 0
+   },
+   "X-01": {
+    "match_probes": 3600,
+    "match_order_decided": 0
+   },
+   "A4-01": {
+    "match_probes": 12000,
+    "match_order_decided": 0
+   },
+   "X-12": {
+    "match_probes": 12000,
+    "match_order_decided": 0
+   },
+   "A4-02": {
+    "match_probes": 12000,
+    "match_order_decided": 0
+   },
+   "A5-01": {
+    "match_probes": 40,
+    "match_order_decided": 0
+   },
+   "A5-02": {
+    "match_probes": 135,
+    "match_order_decided": 0
+   },
+   "A5-03": {
+    "match_probes": 279,
+    "match_order_decided": 0
+   },
+   "X-16": {
+    "match_probes": 530,
+    "match_order_decided": 0
+   }
+  },
+  "probe": {
+   "A13-02": {
+    "match_probes": 18369,
+    "match_order_decided": 44
+   },
+   "X-15": {
+    "match_probes": 24231,
+    "match_order_decided": 33
+   },
+   "X-01": {
+    "match_probes": 1440,
+    "match_order_decided": 0
+   },
+   "A4-01": {
+    "match_probes": 8640,
+    "match_order_decided": 0
+   },
+   "X-12": {
+    "match_probes": 8640,
+    "match_order_decided": 0
+   },
+   "A4-02": {
+    "match_probes": 8640,
+    "match_order_decided": 3
+   },
+   "A5-01": {
+    "match_probes": 80,
+    "match_order_decided": 0
+   },
+   "A5-02": {
+    "match_probes": 252,
+    "match_order_decided": 1
+   },
+   "A5-03": {
+    "match_probes": 474,
+    "match_order_decided": 1
+   },
+   "X-16": {
+    "match_probes": 975,
+    "match_order_decided": 0
+   }
+  }
+ },
+ "totals": {
+  "units": 18,
+  "steps_expanded": 185,
+  "sp_steps": 148,
+  "match_steps": 37,
+  "steps_as_written": 101
+ }
+}

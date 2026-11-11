@@ -4,7 +4,8 @@ The scenario of the frozen generator is a tree of dataclasses. This module flatt
 reflection into tables of columns, without any knowledge of evaluation units:
 
   * a list of records becomes a table; a record nested in a row becomes dotted columns
-    (``transport.mass_t``);
+    (``transport.mass_t``) plus a count column ``<field>#`` that is 1 where the record exists
+    (missing where the field is None), so an optional record can be told from an absent one;
   * a list of records inside a row becomes a child table ``parent.field`` with a ``_parent``
     column (row index in the parent) and ``_pos`` (position in the list);
   * a list of numbers inside a row becomes a child table with ``_parent``, ``_pos``, ``value``;
@@ -98,6 +99,7 @@ def _is_record(v) -> bool:
 def _put_value(tabs: Tables, tname: str, row: int, col: str, v) -> None:
     t = tabs.table(tname)
     if _is_record(v):
+        t.put(row, col + "#", 1)
         _put_record(tabs, tname, row, v, col + ".")
     elif isinstance(v, (list, tuple)):
         t.put(row, col + "#", len(v))
