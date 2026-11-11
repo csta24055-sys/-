@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0",
+  "note": "独立アプリの出力スキーマ草案。公式J-CATの画面コピーではない",
+  "output_count": 32,
+  "outputs": [
+    {
+      "output_id": "output:carbon_storage_memo",
+      "producer_formula_ids": [
+        "STO-01"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:carbon_uptake_memo",
+      "producer_formula_ids": [
+        "STO-02"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:data_checks",
+      "producer_formula_ids": [
+        "SYS-04",
+        "C-05",
+        "QA-01",
+        "QA-02",
+        "QA-03",
+        "QA-04"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:embodied",
+      "producer_formula_ids": [
+        "SUM-02"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:energy_balance",
+      "producer_formula_ids": [
+        "B6-04"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:material_quantity",
+      "producer_formula_ids": [
+        "A13-05"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:refrigerant_eol",
+      "producer_formula_ids": [
+        "B1-04"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:refrigerant_inventory",
+      "producer_formula_ids": [
+        "B1-01"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:replacement_count",
+      "producer_formula_ids": [
+        "B4-03"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:replacement_schedule",
+      "producer_formula_ids": [
+        "B4-01"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:scenario_comparison",
+      "producer_formula_ids": [
+        "SUM-08"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.A1-A3",
+      "producer_formula_ids": [
+        "A13-01",
+        "A13-02",
+        "A13-03",
+        "A13-04"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.A4",
+      "producer_formula_ids": [
+        "A4-01",
+        "A4-02"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.A5",
+      "producer_formula_ids": [
+        "A5-01",
+        "A5-02",
+        "A5-03",
+        "A5-04"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B1",
+      "producer_formula_ids": [
+        "B1-02",
+        "B1-03"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B2",
+      "producer_formula_ids": [
+        "B2-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B3",
+      "producer_formula_ids": [
+        "B3-01",
+        "B3-02"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B4",
+      "producer_formula_ids": [
+        "B4-02"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B5",
+      "producer_formula_ids": [
+        "B5-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B6",
+      "producer_formula_ids": [
+        "B6-01",
+        "B6-02",
+        "B6-03"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.B7",
+      "producer_formula_ids": [
+        "B7-01",
+        "B7-02",
+        "B7-03",
+        "B7-04"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.C1",
+      "producer_formula_ids": [
+        "C1-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.C2",
+      "producer_formula_ids": [
+        "C2-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.C3",
+      "producer_formula_ids": [
+        "C3-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage.C4",
+      "producer_formula_ids": [
+        "C4-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:stage_share",
+      "producer_formula_ids": [
+        "SUM-07"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:total_wlc",
+      "producer_formula_ids": [
+        "SUM-03"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:upfront",
+      "producer_formula_ids": [
+        "SUM-01"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:wlc_kgco2e_per_m2",
+      "producer_formula_ids": [
+        "SUM-04"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:wlc_kgco2e_per_m2_year",
+      "producer_formula_ids": [
+        "SUM-05"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "output:wlc_tco2e",
+      "producer_formula_ids": [
+        "SUM-06"
+      ],
+      "unit": "kgCO2e (stage total)",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    },
+    {
+      "output_id": "screen:validation",
+      "producer_formula_ids": [
+        "SYS-01",
+        "SYS-02",
+        "SYS-03"
+      ],
+      "unit": "depends_on_output",
+      "status": "SCHEMA_DRAFT",
+      "source_method": "independent_calculation_not_official_jcat"
+    }
+  ]
+}
