@@ -17,3 +17,24 @@ python3 -B -m checks.check_baseline
 ```
 
 基準計算と生成器のコードは書き換えない。このフォルダのコードは、`09_APPROX_STUDY/` に何も書き込まない。
+
+## 候補と実験のコード
+
+| 所在 | 役割 |
+|---|---|
+| `tstudy/rampstep.py`、`tstudy/knots.py` | 評価期間への依存の共通の形（ゲート付きのクリップ・ランプ）と、その節点スペクトル（累積和と二分探索） |
+| `tstudy/tables.py` | シナリオを表（列）に直す前処理。入力の型だけを見る。評価単位の知識を持たない |
+| `tstudy/msp.py` | マスク付き積和の演算子（候補 TC-B-01）。評価単位による分岐を持たない |
+| `specs/pre_a.py` | 製品段階・輸送・施工の 18 単位の仕様（データだけ） |
+| `checks/check_msp_pre_a.py` | 演算子と仕様の検査（基準計算との照合、故障注入、語彙の記録、時間） |
+| `experiments/exp01〜exp04` | 実験 EXP-01〜04（`../03_ROUTES/experiments/README.md`） |
+| `experiments/expA1_route_a_recount.py` | ルート A（旧研究の統合モデル）の数え直し。旧研究のコードは読み込むだけで、書き換えない |
+| `tools_render_ledgers.py` | 調査台帳と分類台帳の文書を、元のデータから作る（計算はしない） |
+
+```
+python3 -B -m checks.check_msp_pre_a
+python3 -B -m experiments.exp01_rampstep_sweep 60 M
+python3 -B -m experiments.exp02_knot_spectrum 30 M L
+python3 -B -m experiments.exp03_fourier_counting 40 M
+python3 -B -m experiments.exp04_pod_time_curves 100 M
+```
