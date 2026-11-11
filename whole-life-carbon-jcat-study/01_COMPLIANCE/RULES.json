@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "checked": "2026-11-11",
+  "repository_visibility": "public",
+  "rules": [
+    {
+      "id": "R01",
+      "severity": "BLOCK",
+      "activity": "commit_official_jcat_zip_xlsx_xlsm_pdf",
+      "status": "RESTRICTED",
+      "required_action": "keep local-only; do not publish"
+    },
+    {
+      "id": "R02",
+      "severity": "BLOCK",
+      "activity": "redistribute_full_proprietary_formulas_or_macro",
+      "status": "RESTRICTED",
+      "required_action": "do not publish; independent implementation or permission"
+    },
+    {
+      "id": "R03",
+      "severity": "BLOCK",
+      "activity": "reuse_jcat_emission_factors_default_lifetimes_repair_rates_refrigerant_leakage_construction_multipliers",
+      "status": "RESTRICTED",
+      "required_action": "obtain written permission or legally reusable independent data"
+    },
+    {
+      "id": "R04",
+      "severity": "BLOCK",
+      "activity": "modify_and_redistribute_jcat",
+      "status": "RESTRICTED",
+      "required_action": "do not modify/redistribute without permission"
+    },
+    {
+      "id": "R05",
+      "severity": "BLOCK",
+      "activity": "represent_as_official_jcat_or_equivalent",
+      "status": "NOT_PERMITTED_AS_CLAIM",
+      "required_action": "independent-app disclaimer and verified test evidence"
+    },
+    {
+      "id": "R06",
+      "severity": "REVIEW",
+      "activity": "publish_method_description_or_comparison",
+      "status": "PERMISSION_REVIEW",
+      "required_action": "avoid verbatim text; confirm scope before publication"
+    },
+    {
+      "id": "R07",
+      "severity": "MUST",
+      "activity": "store_factors",
+      "status": "LICENSED_ONLY",
+      "required_action": "source/version/unit/jurisdiction/usage rights"
+    },
+    {
+      "id": "R08",
+      "severity": "MUST",
+      "activity": "handle_unknown_inputs",
+      "status": "INVARIANT",
+      "required_action": "unknown is not zero"
+    },
+    {
+      "id": "R09",
+      "severity": "MUST",
+      "activity": "full_formula_parity_claim",
+      "status": "UNVERIFIED",
+      "required_action": "hold until independent tests and authority clearance"
+    }
+  ],
+  "sources": [
+    "https://www.ibecs.or.jp/zero-carbon_building/jcat/licenseterms.html",
+    "https://www.ibecs.or.jp/zero-carbon_building/jcat/faq.html"
+  ]
+}

@@ -1,0 +1,1615 @@
+{
+  "schema_version": "1.0",
+  "checked": "2026-11-11",
+  "input_count": 124,
+  "formula_count": 53,
+  "output_count": 32,
+  "missing_reference_errors": [],
+  "links_by_formula": [
+    {
+      "formula_id": "SYS-01",
+      "input_ids": [
+        "PROVENANCE.source_type",
+        "PROVENANCE.data_quality"
+      ],
+      "output_id": "screen:validation",
+      "stage": "PRE",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SYS-02",
+      "input_ids": [
+        "MATERIAL.quantity",
+        "MATERIAL.quantity_unit",
+        "FACTOR.factor_unit"
+      ],
+      "output_id": "screen:validation",
+      "stage": "PRE",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SYS-03",
+      "input_ids": [
+        "FACTOR.factor_license",
+        "FACTOR.factor_source_url"
+      ],
+      "output_id": "screen:validation",
+      "stage": "PRE",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SYS-04",
+      "input_ids": [
+        "PROJECT.use_area_breakdown",
+        "PROJECT.gross_floor_area"
+      ],
+      "output_id": "output:data_checks",
+      "stage": "PRE",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A13-01",
+      "input_ids": [
+        "MATERIAL.quantity",
+        "MATERIAL.quantity_unit",
+        "FACTOR.factor_value",
+        "FACTOR.factor_stages"
+      ],
+      "output_id": "output:stage.A1-A3",
+      "stage": "A1-A3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A13-02",
+      "input_ids": [
+        "MATERIAL.material_specification",
+        "FACTOR.factor_id"
+      ],
+      "output_id": "output:stage.A1-A3",
+      "stage": "A1-A3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A13-03",
+      "input_ids": [
+        "MATERIAL.additional_epd_reference",
+        "MATERIAL.quantity",
+        "FACTOR.factor_boundary"
+      ],
+      "output_id": "output:stage.A1-A3",
+      "stage": "A1-A3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A13-04",
+      "input_ids": [
+        "MATERIAL.unquantified_cost_ratio",
+        "FACTOR.factor_id",
+        "PROVENANCE.source_type"
+      ],
+      "output_id": "output:stage.A1-A3",
+      "stage": "A1-A3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A13-05",
+      "input_ids": [
+        "MATERIAL.quantity",
+        "MATERIAL.waste_rate",
+        "MATERIAL.quantity_basis"
+      ],
+      "output_id": "output:material_quantity",
+      "stage": "A1-A3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A4-01",
+      "input_ids": [
+        "TRANSPORT.transported_mass",
+        "TRANSPORT.distance",
+        "TRANSPORT.mode",
+        "TRANSPORT.transport_factor_id"
+      ],
+      "output_id": "output:stage.A4",
+      "stage": "A4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A4-02",
+      "input_ids": [
+        "MATERIAL.quantity",
+        "TRANSPORT.transport_factor_id"
+      ],
+      "output_id": "output:stage.A4",
+      "stage": "A4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A5-01",
+      "input_ids": [
+        "CONSTRUCTION.site_electricity",
+        "OPERATION.grid_factor_scenario_id"
+      ],
+      "output_id": "output:stage.A5",
+      "stage": "A5",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A5-02",
+      "input_ids": [
+        "CONSTRUCTION.site_diesel",
+        "CONSTRUCTION.site_gas",
+        "FACTOR.factor_id"
+      ],
+      "output_id": "output:stage.A5",
+      "stage": "A5",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A5-03",
+      "input_ids": [
+        "CONSTRUCTION.site_waste_mass",
+        "FACTOR.factor_id"
+      ],
+      "output_id": "output:stage.A5",
+      "stage": "A5",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "A5-04",
+      "input_ids": [
+        "CONSTRUCTION.site_electricity",
+        "CONSTRUCTION.site_diesel",
+        "CONSTRUCTION.site_waste_mass"
+      ],
+      "output_id": "output:stage.A5",
+      "stage": "A5",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B1-01",
+      "input_ids": [
+        "REFRIGERANT.charge_mass",
+        "REFRIGERANT.gwp"
+      ],
+      "output_id": "output:refrigerant_inventory",
+      "stage": "B1",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B1-02",
+      "input_ids": [
+        "REFRIGERANT.charge_mass",
+        "REFRIGERANT.annual_leak_rate",
+        "REFRIGERANT.gwp",
+        "BOUNDARY.study_period"
+      ],
+      "output_id": "output:stage.B1",
+      "stage": "B1",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B1-03",
+      "input_ids": [
+        "REFRIGERANT.replacement_loss_rate",
+        "REFRIGERANT.refrigerant_change_years",
+        "REFRIGERANT.gwp"
+      ],
+      "output_id": "output:stage.B1",
+      "stage": "B1",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B1-04",
+      "input_ids": [
+        "REFRIGERANT.end_of_life_recovery_rate",
+        "REFRIGERANT.gwp"
+      ],
+      "output_id": "output:refrigerant_eol",
+      "stage": "B1/C",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B2-01",
+      "input_ids": [
+        "OPERATION.facility_management_ratio",
+        "OPERATION.electricity_per_year"
+      ],
+      "output_id": "output:stage.B2",
+      "stage": "B2",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B3-01",
+      "input_ids": [
+        "MATERIAL.repair_rate",
+        "MATERIAL.material_life",
+        "EQUIPMENT.equipment_repair_rate"
+      ],
+      "output_id": "output:stage.B3",
+      "stage": "B3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B3-02",
+      "input_ids": [
+        "MATERIAL.repair_rate",
+        "BOUNDARY.study_period"
+      ],
+      "output_id": "output:stage.B3",
+      "stage": "B3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B4-01",
+      "input_ids": [
+        "EQUIPMENT.equipment_service_life",
+        "BOUNDARY.study_period"
+      ],
+      "output_id": "output:replacement_schedule",
+      "stage": "B4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B4-02",
+      "input_ids": [
+        "EQUIPMENT.equipment_quantity",
+        "EQUIPMENT.replacement_event_list",
+        "FACTOR.factor_id"
+      ],
+      "output_id": "output:stage.B4",
+      "stage": "B4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B4-03",
+      "input_ids": [
+        "MATERIAL.refresh_cycles",
+        "BOUNDARY.study_period"
+      ],
+      "output_id": "output:replacement_count",
+      "stage": "B4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B5-01",
+      "input_ids": [
+        "BOUNDARY.replacement_cycle",
+        "BOUNDARY.reconstruction_scenario"
+      ],
+      "output_id": "output:stage.B5",
+      "stage": "B5",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B6-01",
+      "input_ids": [
+        "OPERATION.electricity_per_year",
+        "OPERATION.grid_factor_scenario_id",
+        "BOUNDARY.study_start_year"
+      ],
+      "output_id": "output:stage.B6",
+      "stage": "B6",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B6-02",
+      "input_ids": [
+        "OPERATION.gas_per_year",
+        "OPERATION.oil_per_year",
+        "OPERATION.district_heat_per_year"
+      ],
+      "output_id": "output:stage.B6",
+      "stage": "B6",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B6-03",
+      "input_ids": [
+        "BOUNDARY.study_period",
+        "OPERATION.grid_factor_scenario_id"
+      ],
+      "output_id": "output:stage.B6",
+      "stage": "B6",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B6-04",
+      "input_ids": [
+        "OPERATION.onsite_generation_per_year",
+        "OPERATION.onsite_export_per_year",
+        "OPERATION.electricity_per_year"
+      ],
+      "output_id": "output:energy_balance",
+      "stage": "B6",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B7-01",
+      "input_ids": [
+        "WATER_WASTE.water_per_year",
+        "WATER_WASTE.water_factor_id"
+      ],
+      "output_id": "output:stage.B7",
+      "stage": "B7",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B7-02",
+      "input_ids": [
+        "WATER_WASTE.sewage_per_year",
+        "WATER_WASTE.sewage_factor_id"
+      ],
+      "output_id": "output:stage.B7",
+      "stage": "B7",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B7-03",
+      "input_ids": [
+        "WATER_WASTE.municipal_waste_per_year",
+        "WATER_WASTE.waste_factor_id"
+      ],
+      "output_id": "output:stage.B7",
+      "stage": "B7",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "B7-04",
+      "input_ids": [
+        "WATER_WASTE.water_per_year",
+        "WATER_WASTE.sewage_per_year",
+        "BOUNDARY.study_period"
+      ],
+      "output_id": "output:stage.B7",
+      "stage": "B7",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "C1-01",
+      "input_ids": [
+        "END_OF_LIFE.demolition_activity",
+        "END_OF_LIFE.demolition_factor_id"
+      ],
+      "output_id": "output:stage.C1",
+      "stage": "C1",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "C2-01",
+      "input_ids": [
+        "END_OF_LIFE.waste_transport_mass",
+        "END_OF_LIFE.waste_transport_distance"
+      ],
+      "output_id": "output:stage.C2",
+      "stage": "C2",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "C3-01",
+      "input_ids": [
+        "END_OF_LIFE.waste_treatment_route",
+        "END_OF_LIFE.waste_recycle_fraction",
+        "END_OF_LIFE.eol_factor_ids"
+      ],
+      "output_id": "output:stage.C3",
+      "stage": "C3",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "C4-01",
+      "input_ids": [
+        "END_OF_LIFE.landfill_quantity",
+        "END_OF_LIFE.eol_factor_ids"
+      ],
+      "output_id": "output:stage.C4",
+      "stage": "C4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "C-05",
+      "input_ids": [
+        "END_OF_LIFE.waste_reuse_fraction",
+        "END_OF_LIFE.waste_recycle_fraction",
+        "MATERIAL.quantity"
+      ],
+      "output_id": "output:data_checks",
+      "stage": "C1-C4",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "STO-01",
+      "input_ids": [
+        "MATERIAL.timber_quantity",
+        "MATERIAL.material_specification"
+      ],
+      "output_id": "output:carbon_storage_memo",
+      "stage": "MEMO",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "STO-02",
+      "input_ids": [
+        "MATERIAL.concrete_volume",
+        "FACTOR.factor_id"
+      ],
+      "output_id": "output:carbon_uptake_memo",
+      "stage": "MEMO",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-01",
+      "input_ids": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output_id": "output:upfront",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-02",
+      "input_ids": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output_id": "output:embodied",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-03",
+      "input_ids": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output_id": "output:total_wlc",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-04",
+      "input_ids": [
+        "PROJECT.gross_floor_area"
+      ],
+      "output_id": "output:wlc_kgco2e_per_m2",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-05",
+      "input_ids": [
+        "PROJECT.gross_floor_area",
+        "BOUNDARY.study_period"
+      ],
+      "output_id": "output:wlc_kgco2e_per_m2_year",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-06",
+      "input_ids": [
+        "BOUNDARY.results_gas_scope"
+      ],
+      "output_id": "output:wlc_tco2e",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-07",
+      "input_ids": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output_id": "output:stage_share",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "SUM-08",
+      "input_ids": [
+        "BOUNDARY.baseline_scenario"
+      ],
+      "output_id": "output:scenario_comparison",
+      "stage": "SUM",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "QA-01",
+      "input_ids": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output_id": "output:data_checks",
+      "stage": "QA",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "QA-02",
+      "input_ids": [
+        "BOUNDARY.study_period",
+        "EQUIPMENT.replacement_event_list"
+      ],
+      "output_id": "output:data_checks",
+      "stage": "QA",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "QA-03",
+      "input_ids": [
+        "FACTOR.factor_license",
+        "FACTOR.factor_source_url"
+      ],
+      "output_id": "output:data_checks",
+      "stage": "QA",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    },
+    {
+      "formula_id": "QA-04",
+      "input_ids": [
+        "PROJECT.gross_floor_area",
+        "PROJECT.use_area_breakdown"
+      ],
+      "output_id": "output:data_checks",
+      "stage": "QA",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT"
+    }
+  ],
+  "links_by_input": [
+    {
+      "input_id": "PROJECT.building_name",
+      "label": "建物名称",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.project_type",
+      "label": "新築・既存・増改築",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.location",
+      "label": "建物所在地・地域",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.climate_zone",
+      "label": "地域・気候条件",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.building_use",
+      "label": "主用途",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.use_area_breakdown",
+      "label": "用途別床面積",
+      "unit": "m2",
+      "linked_formula_ids": [
+        "SYS-04",
+        "QA-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "PROJECT.structure_type",
+      "label": "主要構造（S/RC/SRC/W等）",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.number_of_floors_above",
+      "label": "地上階数",
+      "unit": "floors",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.number_of_floors_below",
+      "label": "地下階数",
+      "unit": "floors",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.gross_floor_area",
+      "label": "延べ床面積",
+      "unit": "m2",
+      "linked_formula_ids": [
+        "SYS-04",
+        "SUM-04",
+        "SUM-05",
+        "QA-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "PROJECT.building_footprint",
+      "label": "建築面積",
+      "unit": "m2",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.typical_floor_area",
+      "label": "基準階面積",
+      "unit": "m2",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.building_height",
+      "label": "建物高さ",
+      "unit": "m",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.maximum_span",
+      "label": "最大スパン",
+      "unit": "m",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.building_shape",
+      "label": "建物形状",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.roof_system",
+      "label": "屋根構法",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.facade_system",
+      "label": "外壁構法",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.foundation_system",
+      "label": "基礎・杭仕様",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.completion_year",
+      "label": "竣工年",
+      "unit": "year",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.assessment_date",
+      "label": "算定日",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.assessor",
+      "label": "算定者",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROJECT.design_stage",
+      "label": "基本計画・基本設計・施工・竣工",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.study_period",
+      "label": "評価期間",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B1-02",
+        "B3-02",
+        "B4-01",
+        "B4-03",
+        "B6-03",
+        "B7-04",
+        "SUM-05",
+        "QA-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.replacement_cycle",
+      "label": "建物の建替周期",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B5-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.study_start_year",
+      "label": "評価開始年度",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B6-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.included_lifecycle_stages",
+      "label": "計算対象A1〜C4",
+      "unit": null,
+      "linked_formula_ids": [
+        "SUM-01",
+        "SUM-02",
+        "SUM-03",
+        "SUM-07",
+        "QA-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.functional_unit",
+      "label": "機能単位",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.baseline_scenario",
+      "label": "基準シナリオID",
+      "unit": null,
+      "linked_formula_ids": [
+        "SUM-08"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.excluded_scope_notes",
+      "label": "算定対象外とした範囲",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.reconstruction_scenario",
+      "label": "建替シナリオ",
+      "unit": null,
+      "linked_formula_ids": [
+        "B5-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "BOUNDARY.results_gas_scope",
+      "label": "GHG/CO2e表記と含むガス",
+      "unit": null,
+      "linked_formula_ids": [
+        "SUM-06"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.material_id",
+      "label": "材料行ID",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.construction_division",
+      "label": "工種（基礎・躯体・外装・内装等）",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.material_class",
+      "label": "資材の分類（コンクリート等）",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.material_specification",
+      "label": "材種・規格・強度・厚さ・樹種",
+      "unit": null,
+      "linked_formula_ids": [
+        "A13-02",
+        "STO-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.quantity",
+      "label": "数量",
+      "unit": "per_record",
+      "linked_formula_ids": [
+        "SYS-02",
+        "A13-01",
+        "A13-03",
+        "A13-05",
+        "A4-02",
+        "C-05"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.quantity_unit",
+      "label": "数量の単位",
+      "unit": null,
+      "linked_formula_ids": [
+        "SYS-02",
+        "A13-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.quantity_basis",
+      "label": "設計数量・発注数量・実績数量",
+      "unit": null,
+      "linked_formula_ids": [
+        "A13-05"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.waste_rate",
+      "label": "施工端材率",
+      "unit": "fraction",
+      "linked_formula_ids": [
+        "A13-05"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.reuse_rate",
+      "label": "端材の再使用率",
+      "unit": "fraction",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.material_life",
+      "label": "資材耐用年数",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B3-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.repair_rate",
+      "label": "年間修繕率",
+      "unit": "fraction/year",
+      "linked_formula_ids": [
+        "B3-01",
+        "B3-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.refresh_cycles",
+      "label": "更新周期（素材）",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B4-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.additional_epd_reference",
+      "label": "EPD資料ID（利用許諾別確認）",
+      "unit": null,
+      "linked_formula_ids": [
+        "A13-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.unquantified_cost_ratio",
+      "label": "数量把握外の費用比率",
+      "unit": "fraction",
+      "linked_formula_ids": [
+        "A13-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.reinforcement_quantity",
+      "label": "鉄筋数量",
+      "unit": "kg",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.steel_quantity",
+      "label": "鉄骨数量",
+      "unit": "kg",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.concrete_volume",
+      "label": "コンクリート数量",
+      "unit": "m3",
+      "linked_formula_ids": [
+        "STO-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.timber_quantity",
+      "label": "木材数量",
+      "unit": "m3",
+      "linked_formula_ids": [
+        "STO-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "MATERIAL.envelope_area",
+      "label": "外装数量",
+      "unit": "m2",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "MATERIAL.interior_area",
+      "label": "内装数量",
+      "unit": "m2",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_id",
+      "label": "独立係数ID",
+      "unit": null,
+      "linked_formula_ids": [
+        "A13-02",
+        "A13-04",
+        "A5-02",
+        "A5-03",
+        "B4-02",
+        "STO-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_value",
+      "label": "独立係数数値",
+      "unit": "kgCO2e/unit",
+      "linked_formula_ids": [
+        "A13-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_unit",
+      "label": "係数の分母単位",
+      "unit": null,
+      "linked_formula_ids": [
+        "SYS-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_stages",
+      "label": "係数が含む段階",
+      "unit": null,
+      "linked_formula_ids": [
+        "A13-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_source_url",
+      "label": "係数の出典URL",
+      "unit": null,
+      "linked_formula_ids": [
+        "SYS-03",
+        "QA-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_release_year",
+      "label": "係数版・年度",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_region",
+      "label": "適用国・地域",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_license",
+      "label": "再利用・改変・SaaS提供の許諾根拠",
+      "unit": null,
+      "linked_formula_ids": [
+        "SYS-03",
+        "QA-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_boundary",
+      "label": "機能単位・LCA境界",
+      "unit": null,
+      "linked_formula_ids": [
+        "A13-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_valid_until",
+      "label": "有効期限・更新期限",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "FACTOR.factor_quality_score",
+      "label": "出典の品質フラグ",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "TRANSPORT.transported_mass",
+      "label": "資材輸送質量",
+      "unit": "tonne",
+      "linked_formula_ids": [
+        "A4-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "TRANSPORT.distance",
+      "label": "輸送距離",
+      "unit": "km",
+      "linked_formula_ids": [
+        "A4-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "TRANSPORT.mode",
+      "label": "輸送手段・車種",
+      "unit": null,
+      "linked_formula_ids": [
+        "A4-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "TRANSPORT.load_factor",
+      "label": "積載率",
+      "unit": "fraction",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "TRANSPORT.transport_factor_id",
+      "label": "輸送原単位（独立ライセンス）",
+      "unit": null,
+      "linked_formula_ids": [
+        "A4-01",
+        "A4-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "CONSTRUCTION.site_diesel",
+      "label": "工事燃料の年間・工期総量",
+      "unit": "L",
+      "linked_formula_ids": [
+        "A5-02",
+        "A5-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "CONSTRUCTION.site_electricity",
+      "label": "仮設電力使用量",
+      "unit": "kWh",
+      "linked_formula_ids": [
+        "A5-01",
+        "A5-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "CONSTRUCTION.site_gas",
+      "label": "工事用ガス使用量",
+      "unit": "m3",
+      "linked_formula_ids": [
+        "A5-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "CONSTRUCTION.site_waste_mass",
+      "label": "工事廃棄物の数量",
+      "unit": "kg",
+      "linked_formula_ids": [
+        "A5-03",
+        "A5-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "CONSTRUCTION.site_duration",
+      "label": "工事期間",
+      "unit": "month",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "CONSTRUCTION.temporary_works",
+      "label": "仮設工事の範囲・数量",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_id",
+      "label": "設備行ID",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_trade",
+      "label": "電気・空調・給排水・昇降機",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_model",
+      "label": "製品・機器仕様",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_quantity",
+      "label": "設備数量",
+      "unit": "unit",
+      "linked_formula_ids": [
+        "B4-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_factor_id",
+      "label": "独立した設備原単位",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_service_life",
+      "label": "機器耐用年数",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B4-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_repair_rate",
+      "label": "年間設備修繕率",
+      "unit": "fraction/year",
+      "linked_formula_ids": [
+        "B3-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.replacement_event_list",
+      "label": "交換工事の実施年一覧",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B4-02",
+        "QA-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "EQUIPMENT.equipment_end_of_life_mass",
+      "label": "廃棄設備量",
+      "unit": "kg",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.substance",
+      "label": "冷媒・発泡剤・消火剤・絶縁ガスの種類",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.application",
+      "label": "用途（断熱・空調・消火・絶縁）",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.charge_mass",
+      "label": "機器充填質量",
+      "unit": "kg",
+      "linked_formula_ids": [
+        "B1-01",
+        "B1-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.gwp",
+      "label": "GWP（採用版指定）",
+      "unit": "kgCO2e/kg",
+      "linked_formula_ids": [
+        "B1-01",
+        "B1-02",
+        "B1-03",
+        "B1-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.annual_leak_rate",
+      "label": "使用時の年間漏洩率",
+      "unit": "fraction/year",
+      "linked_formula_ids": [
+        "B1-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.replacement_loss_rate",
+      "label": "交換時損失率",
+      "unit": "fraction/event",
+      "linked_formula_ids": [
+        "B1-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.end_of_life_recovery_rate",
+      "label": "廃棄時回収率",
+      "unit": "fraction",
+      "linked_formula_ids": [
+        "B1-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "REFRIGERANT.refrigerant_change_years",
+      "label": "物質交換年一覧",
+      "unit": "year",
+      "linked_formula_ids": [
+        "B1-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.new_or_existing",
+      "label": "新築・既存区分",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "OPERATION.electricity_per_year",
+      "label": "年間買電量",
+      "unit": "kWh/year",
+      "linked_formula_ids": [
+        "B2-01",
+        "B6-01",
+        "B6-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.electricity_per_m2_per_year",
+      "label": "延床面積当たり年間電力",
+      "unit": "kWh/m2/year",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "OPERATION.gas_per_year",
+      "label": "年間ガス消費量",
+      "unit": "m3/year",
+      "linked_formula_ids": [
+        "B6-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.oil_per_year",
+      "label": "年間石油消費量",
+      "unit": "L/year",
+      "linked_formula_ids": [
+        "B6-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.district_heat_per_year",
+      "label": "年間地域熱購入量",
+      "unit": "MJ/year",
+      "linked_formula_ids": [
+        "B6-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.onsite_generation_per_year",
+      "label": "年間創エネ発電量",
+      "unit": "kWh/year",
+      "linked_formula_ids": [
+        "B6-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.onsite_export_per_year",
+      "label": "年間売電量",
+      "unit": "kWh/year",
+      "linked_formula_ids": [
+        "B6-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.grid_factor_scenario_id",
+      "label": "電力排出係数年次シナリオ",
+      "unit": null,
+      "linked_formula_ids": [
+        "A5-01",
+        "B6-01",
+        "B6-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.facility_management_ratio",
+      "label": "施設管理用途の消費比率",
+      "unit": "fraction",
+      "linked_formula_ids": [
+        "B2-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "OPERATION.energy_simulation_basis",
+      "label": "実績/設計計算/CASBEE等の根拠",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "WATER_WASTE.water_per_year",
+      "label": "年間上水使用量",
+      "unit": "m3/year",
+      "linked_formula_ids": [
+        "B7-01",
+        "B7-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "WATER_WASTE.sewage_per_year",
+      "label": "年間下水量",
+      "unit": "m3/year",
+      "linked_formula_ids": [
+        "B7-02",
+        "B7-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "WATER_WASTE.municipal_waste_per_year",
+      "label": "年間一般廃棄物量",
+      "unit": "kg/year",
+      "linked_formula_ids": [
+        "B7-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "WATER_WASTE.water_factor_id",
+      "label": "上水原単位の独立ID",
+      "unit": null,
+      "linked_formula_ids": [
+        "B7-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "WATER_WASTE.sewage_factor_id",
+      "label": "下水原単位の独立ID",
+      "unit": null,
+      "linked_formula_ids": [
+        "B7-02"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "WATER_WASTE.waste_factor_id",
+      "label": "廃棄物処理原単位の独立ID",
+      "unit": null,
+      "linked_formula_ids": [
+        "B7-03"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.demolition_activity",
+      "label": "解体・撤去活動量",
+      "unit": "unit",
+      "linked_formula_ids": [
+        "C1-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.demolition_factor_id",
+      "label": "解体原単位",
+      "unit": null,
+      "linked_formula_ids": [
+        "C1-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.waste_transport_mass",
+      "label": "廃材輸送量",
+      "unit": "tonne",
+      "linked_formula_ids": [
+        "C2-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.waste_transport_distance",
+      "label": "廃材搬出距離",
+      "unit": "km",
+      "linked_formula_ids": [
+        "C2-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.waste_treatment_route",
+      "label": "中間処理・リユース・リサイクル経路",
+      "unit": null,
+      "linked_formula_ids": [
+        "C3-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.waste_recycle_fraction",
+      "label": "リサイクル率",
+      "unit": "fraction",
+      "linked_formula_ids": [
+        "C3-01",
+        "C-05"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.waste_reuse_fraction",
+      "label": "リユース率",
+      "unit": "fraction",
+      "linked_formula_ids": [
+        "C-05"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.landfill_quantity",
+      "label": "最終処分量",
+      "unit": "kg",
+      "linked_formula_ids": [
+        "C4-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "END_OF_LIFE.eol_factor_ids",
+      "label": "処理・最終処分独立原単位ID",
+      "unit": null,
+      "linked_formula_ids": [
+        "C3-01",
+        "C4-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.source_type",
+      "label": "測定・設計・推定・文献の種別",
+      "unit": null,
+      "linked_formula_ids": [
+        "SYS-01",
+        "A13-04"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.source_reference",
+      "label": "入力項目の一次資料・証拠URL",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.license_status",
+      "label": "使用許諾の状態",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.data_quality",
+      "label": "データ品質・不確実性",
+      "unit": null,
+      "linked_formula_ids": [
+        "SYS-01"
+      ],
+      "linkage_status": "LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.last_verified_at",
+      "label": "最終確認日",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.measurement_year",
+      "label": "原データの測定年度",
+      "unit": "year",
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.user_override_reason",
+      "label": "デフォルト変更理由",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    },
+    {
+      "input_id": "PROVENANCE.uncertainty_distribution",
+      "label": "不確実性の範囲・分布",
+      "unit": null,
+      "linked_formula_ids": [],
+      "linkage_status": "NOT_YET_LINKED"
+    }
+  ],
+  "unmapped_input_count": 53,
+  "release_gate": "BLOCKED_UNTIL_ALL_REQUIRED_INPUTS_LINKED_AND_TESTED"
+}
