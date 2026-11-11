@@ -1,10 +1,10 @@
 {
   "status": "DESIGN_DRAFT",
   "verification": "NOT_VERIFIED",
-  "evidence_level": "INFERRED",
-  "taxonomy_version": "0.1.0-draft",
+  "origin_kind": "SELF_AUTHORED",
+  "taxonomy_version": "0.2.0-draft",
   "created": "2026-11-11",
-  "note": "本ファイルの分類名・符号（code）は、一般的な建築用語から本研究で選んだ暫定案である。J-CAT を含むいかなる許諾の必要な分類表・コード表・規格本文からも取っておらず、分類表ワークブックのシート名から中身を推測して埋めることもしていない。実在の材料データセットは未入手であり、この階層が実データに適合するか、何件の材料がどのノードに入るかは不明である。全ノードは提案（DRAFT）または予約（RESERVED）であり、有効（ACTIVE）なノードは無い。",
+  "note": "本ファイルの分類名・符号（code）は、特定の分類表・コード表・規格本文を参照せずに、一般的な建築用語から本研究で選んだ暫定案である。分類表ワークブックのシート名から中身を推測して埋めることもしていない。ただし、許諾の必要な分類表の中身は参照できないので、既存の分類表と似ていないかは照合していない。ノードを有効化する前に、権利に詳しい人が類似を確認する（README U-19）。実在の材料データセットは未入手であり、この階層が実データに適合するか、何件の材料がどのノードに入るかは不明である。全ノードは提案（DRAFT）または予約（RESERVED）であり、有効（ACTIVE）なノードは無い。",
   "related_files": {
     "design_draft": "README.md",
     "record_schemas": "taxonomy_schema.json",
@@ -14,7 +14,7 @@
     {
       "axis": "FUNCTION",
       "name": "部位軸",
-      "principle": "建物の中のどこで、何の役割で使うか。報告・集計の標準単位（指示書第7章の9区分）はこの軸の第2階層に置く。"
+      "principle": "建物の中のどこで、何の役割で使うか。報告・集計の標準単位（指示書第7章の9つの区分）はこの軸の第2階層（部位グループ）に置く。"
     },
     {
       "axis": "ITEM",
@@ -27,7 +27,7 @@
       "axis": "FUNCTION",
       "level": 1,
       "level_kind": "DIVISION",
-      "name": "区分",
+      "name": "大区分",
       "note": "建物本体か設備か。選択操作には使わず、集計の大区分としてだけ持つ。"
     },
     {
@@ -35,7 +35,7 @@
       "level": 2,
       "level_kind": "GROUP",
       "name": "部位グループ",
-      "note": "指示書第7章の9区分。報告・集計の標準単位。"
+      "note": "指示書第7章の9つの区分に対応する。報告・集計の標準単位。"
     },
     {
       "axis": "FUNCTION",
@@ -52,6 +52,7 @@
       "note": "単一素材の品目は主たる素材で、機器・線状品・複合品は物理的な種別で分ける。"
     }
   ],
+  "levels_note": "階層の番号（level）はこの表だけが持つ。ノードは level_kind だけを持つ。",
   "levels_not_in_this_file": [
     {
       "axis": "ITEM",
@@ -116,31 +117,55 @@
     }
   ],
   "rules": [
-    "ID（id）は意味を持たない連番であり、親・階層・名称を埋め込まない。再利用しない。並び順や階層を ID の大小から読み取らない。",
-    "符号（code）は人が読むための英語の符号で、兄弟の中で一意。区分・部位グループ・素材系統の code は集計の見出しに使うため、有効化後は変更しない。",
-    "「未分類」「その他」という受け皿のノードは作らない。配置できない行は、行の側の状態（placement_state = UNPLACED）として別掲する。",
-    "RESERVED のノードは、指示書の「など」に備えた予約であり、算定範囲に含めるかどうかを決めるまで使用できない。"
+    "ID（node_id）は意味を持たない連番であり、親・階層・名称を埋め込まない。接頭辞（FN-／IN-）は種別と軸だけを表す。再利用しない。並び順・階層・新旧を ID の大小から読み取らない。",
+    "符号（code）は人が読むための英語の符号で、（軸、階層）の中で一意。大区分・部位グループ・素材系統の code は集計の見出しに使うため、有効化後は変更しない。",
+    "定義（含むもの）を書けない受け皿のノード（「未分類」「その他」など）は、予約としても作らない。配置できない行は行の側の状態（placement_state = UNPLACED）、系統を決められない品種は substance_class_id = null とし、どちらも集計で別掲する。",
+    "RESERVED のノードは、指示書の「など」に備えた予約であり、算定範囲に含めるかどうかを決めるまで使用できない。親は暫定である。"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC-000001",
+      "title": "本研究で自分で付けた分類名・符号",
+      "origin_kind": "SELF_AUTHORED",
+      "source_version": "0.2.0-draft",
+      "retrieved_at": "2026-11-11",
+      "content_kinds": [
+        "CLASSIFICATION_LABELS"
+      ],
+      "license_status": "PERMITTED_PUBLIC",
+      "license_evidence_ref": "自作であること（README.md 1章の作成過程の記述）。既存の分類表との類似は未照合（README U-19）",
+      "permitted_uses": [
+        "INTERNAL_RESEARCH",
+        "PUBLIC_REDISTRIBUTION"
+      ],
+      "storage_policy": "MAY_STORE_IN_PUBLIC_REPO",
+      "license_reviewed_by": "draft_author（自己申告。第三者による確認は未実施）",
+      "license_reviewed_at": "2026-11-11",
+      "license_valid_until": null
+    }
   ],
   "node_defaults": {
-    "note": "各ノードでは共通項目（taxonomy_schema.json の common_fields）を省略している。全ノードに次の値が当てはまる。出典台帳はまだ作っていないので、来歴の source_id には「自分で付けた名称」を表す仮の値 SELF_AUTHORED を置く。",
+    "note": "各ノードでは共通項目（taxonomy_schema.json の common_fields）を省略している。全ノードに次の値が当てはまる。license_status は手入力ではなく、来歴が指す出典 SRC-000001（本ファイルの sources）の状態から導いた値である。",
     "created_in_release": "0.1.0-draft",
     "license_status": "PERMITTED_PUBLIC",
     "compartment": "PUBLIC_RELEASE",
     "provenance": [
       {
-        "source_id": "SELF_AUTHORED",
+        "source_id": "SRC-000001",
         "raw_id": null,
-        "derivation": "CURATED"
+        "derivation": "CURATED",
+        "role": "RELIED_ON",
+        "via_merge_event_id": null
       }
     ],
     "record_version": 1,
+    "created_by": "draft_author",
     "reviewed_by": null
   },
   "nodes": [
     {
-      "id": "FN-000001",
+      "node_id": "FN-000001",
       "axis": "FUNCTION",
-      "level": 1,
       "level_kind": "DIVISION",
       "code": "BUILDING",
       "name": "建築",
@@ -149,9 +174,8 @@
       "note": "建物そのものを構成する部分。"
     },
     {
-      "id": "FN-000002",
+      "node_id": "FN-000002",
       "axis": "FUNCTION",
-      "level": 1,
       "level_kind": "DIVISION",
       "code": "SERVICES",
       "name": "設備",
@@ -160,141 +184,129 @@
       "note": "エネルギー・流体・空気・情報・人や物を運ぶ系統を構成する部分。"
     },
     {
-      "id": "FN-000003",
+      "node_id": "FN-000003",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "FOUNDATION",
       "name": "基礎",
       "parent": "FN-000001",
       "status": "DRAFT",
+      "default_input_group": "MATERIAL",
       "note": "建物の荷重を地盤へ伝える部分。躯体との境界（基礎梁、地下部分、土間）は未確定。"
     },
     {
-      "id": "FN-000004",
+      "node_id": "FN-000004",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "STRUCTURE",
       "name": "躯体",
       "parent": "FN-000001",
       "status": "DRAFT",
+      "default_input_group": "MATERIAL",
       "note": "基礎より上で荷重を支える部分。荷重を支える役割と仕上げの役割を兼ねるものは、暫定でこちらに置く。"
     },
     {
-      "id": "FN-000005",
+      "node_id": "FN-000005",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "ROOF_EXTERIOR_WALL",
       "name": "屋根・外壁",
       "parent": "FN-000001",
       "status": "DRAFT",
-      "note": "外気に接する面の非耐力の層（仕上げ・下地・断熱・防水）。指示書の区分に従い1グループとし、屋根と外壁は部位要素で分ける。"
+      "default_input_group": "MATERIAL",
+      "note": "外気に接する面の非耐力の層（仕上げ・下地・断熱・防水）。指示書の区分に従って同じグループとし、屋根と外壁は部位要素で分ける。"
     },
     {
-      "id": "FN-000006",
+      "node_id": "FN-000006",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "OPENING",
       "name": "開口部",
       "parent": "FN-000001",
       "status": "DRAFT",
+      "default_input_group": "MATERIAL",
       "note": "窓・扉などの建具。内部建具を内装に置くかどうかは未確定。"
     },
     {
-      "id": "FN-000007",
+      "node_id": "FN-000007",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "INTERIOR",
       "name": "内装",
       "parent": "FN-000001",
       "status": "DRAFT",
+      "default_input_group": "MATERIAL",
       "note": "室内側の仕上げ・下地・間仕切。天井に組み込む設備器具との境界は未確定。"
     },
     {
-      "id": "FN-000008",
+      "node_id": "FN-000008",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "ELECTRICAL",
       "name": "電気設備",
       "parent": "FN-000002",
       "status": "DRAFT",
+      "default_input_group": "EQUIPMENT",
       "note": "電力・照明・通信の系統。"
     },
     {
-      "id": "FN-000009",
+      "node_id": "FN-000009",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "HVAC",
       "name": "空調設備",
       "parent": "FN-000002",
       "status": "DRAFT",
+      "default_input_group": "EQUIPMENT",
       "note": "熱と空気を扱う系統。換気をここに含める扱いは暫定。"
     },
     {
-      "id": "FN-000010",
+      "node_id": "FN-000010",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "PLUMBING",
       "name": "給排水設備",
       "parent": "FN-000002",
       "status": "DRAFT",
+      "default_input_group": "EQUIPMENT",
       "note": "水を扱う系統と衛生器具。"
     },
     {
-      "id": "FN-000011",
+      "node_id": "FN-000011",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "CONVEYANCE",
       "name": "搬送設備",
       "parent": "FN-000002",
       "status": "DRAFT",
-      "note": "人・物を運ぶ設備。"
+      "default_input_group": "EQUIPMENT",
+      "note": "人・物を運ぶ設備。エレベーター・エスカレーターに当たらない搬送設備は、定義した部位要素を足すまで未配置とする。"
     },
     {
-      "id": "FN-000012",
+      "node_id": "FN-000012",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "EXTERNAL_WORKS",
       "name": "外構",
       "parent": "FN-000001",
       "status": "RESERVED",
-      "note": "予約。算定範囲に含めるか、どの区分の下に置くかは未決定。"
+      "default_input_group": "MATERIAL",
+      "note": "予約。算定範囲に含めるかは未決定。親（建築）は暫定で、どの大区分の下に置くかも未決定。"
     },
     {
-      "id": "FN-000013",
+      "node_id": "FN-000013",
       "axis": "FUNCTION",
-      "level": 2,
       "level_kind": "GROUP",
       "code": "TEMPORARY_WORKS",
       "name": "仮設",
       "parent": "FN-000001",
       "status": "RESERVED",
-      "note": "予約。建物に残らないもの（型枠・足場など）。施工段階の扱いと合わせて決める。"
+      "default_input_group": "MATERIAL",
+      "note": "予約。建物に残らないもの（型枠・足場など）。施工段階の扱いと合わせて決める。親（建築）は暫定。"
     },
     {
-      "id": "FN-000014",
+      "node_id": "FN-000015",
       "axis": "FUNCTION",
-      "level": 2,
-      "level_kind": "GROUP",
-      "code": "OTHER_SERVICES",
-      "name": "その他設備",
-      "parent": "FN-000002",
-      "status": "RESERVED",
-      "note": "予約。4職種に入らない設備（防災系など）の置き場。必要性は実データで確認する。"
-    },
-    {
-      "id": "FN-000015",
-      "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "PILE_GROUNDWORK",
       "name": "杭・地業",
@@ -303,9 +315,8 @@
       "note": "杭、地盤に関わる工事。"
     },
     {
-      "id": "FN-000016",
+      "node_id": "FN-000016",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "FOOTING",
       "name": "基礎本体",
@@ -314,9 +325,8 @@
       "note": "基礎の本体部分。"
     },
     {
-      "id": "FN-000017",
+      "node_id": "FN-000017",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "FOUNDATION_BEAM",
       "name": "基礎梁",
@@ -325,9 +335,8 @@
       "note": "基礎どうしをつなぐ梁。躯体の梁との境界は未確定。"
     },
     {
-      "id": "FN-000018",
+      "node_id": "FN-000018",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "COLUMN",
       "name": "柱",
@@ -336,9 +345,8 @@
       "note": "鉛直方向の荷重を支える部材。"
     },
     {
-      "id": "FN-000019",
+      "node_id": "FN-000019",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "BEAM",
       "name": "梁",
@@ -347,9 +355,8 @@
       "note": "水平方向に架け渡す部材。"
     },
     {
-      "id": "FN-000020",
+      "node_id": "FN-000020",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "FLOOR_SLAB",
       "name": "床",
@@ -358,9 +365,8 @@
       "note": "構造体としての床。仕上げは内装の床仕上に置く。"
     },
     {
-      "id": "FN-000021",
+      "node_id": "FN-000021",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "STRUCTURAL_WALL",
       "name": "耐力壁",
@@ -369,9 +375,8 @@
       "note": "荷重を支える壁の本体。その外側の仕上げ層は屋根・外壁に置く。"
     },
     {
-      "id": "FN-000022",
+      "node_id": "FN-000022",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "STAIR",
       "name": "階段",
@@ -380,9 +385,8 @@
       "note": "構造体としての階段。"
     },
     {
-      "id": "FN-000023",
+      "node_id": "FN-000023",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "ROOF_COVERING",
       "name": "屋根仕上・防水",
@@ -391,9 +395,8 @@
       "note": "屋根の仕上げ層と防水層。"
     },
     {
-      "id": "FN-000024",
+      "node_id": "FN-000024",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "ROOF_INSULATION",
       "name": "屋根断熱",
@@ -402,9 +405,8 @@
       "note": "屋根の断熱層。"
     },
     {
-      "id": "FN-000025",
+      "node_id": "FN-000025",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "EXT_WALL_FINISH",
       "name": "外壁仕上",
@@ -413,9 +415,8 @@
       "note": "外壁の仕上げ層。"
     },
     {
-      "id": "FN-000026",
+      "node_id": "FN-000026",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "EXT_WALL_BACKING",
       "name": "外壁下地",
@@ -424,9 +425,8 @@
       "note": "外壁の下地層。"
     },
     {
-      "id": "FN-000027",
+      "node_id": "FN-000027",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "EXT_WALL_INSULATION",
       "name": "外壁断熱",
@@ -435,9 +435,8 @@
       "note": "外壁の断熱層。"
     },
     {
-      "id": "FN-000028",
+      "node_id": "FN-000028",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "EXT_WINDOW",
       "name": "外部窓",
@@ -446,9 +445,8 @@
       "note": "外気に面する窓。"
     },
     {
-      "id": "FN-000029",
+      "node_id": "FN-000029",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "EXT_DOOR",
       "name": "外部扉",
@@ -457,9 +455,8 @@
       "note": "外気に面する扉。"
     },
     {
-      "id": "FN-000030",
+      "node_id": "FN-000030",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "INT_DOOR",
       "name": "内部建具",
@@ -468,9 +465,8 @@
       "note": "室内の建具。内装に移す可能性がある（未確定）。"
     },
     {
-      "id": "FN-000031",
+      "node_id": "FN-000031",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "FLOOR_FINISH",
       "name": "床仕上",
@@ -479,9 +475,8 @@
       "note": "室内の床の仕上げと下地。"
     },
     {
-      "id": "FN-000032",
+      "node_id": "FN-000032",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "WALL_FINISH",
       "name": "壁仕上",
@@ -490,9 +485,8 @@
       "note": "室内の壁の仕上げと下地。"
     },
     {
-      "id": "FN-000033",
+      "node_id": "FN-000033",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "CEILING",
       "name": "天井",
@@ -501,9 +495,8 @@
       "note": "天井の仕上げと下地。"
     },
     {
-      "id": "FN-000034",
+      "node_id": "FN-000034",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "PARTITION",
       "name": "間仕切",
@@ -512,9 +505,8 @@
       "note": "荷重を支えない室内の壁。"
     },
     {
-      "id": "FN-000035",
+      "node_id": "FN-000035",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "POWER_RECEIVING",
       "name": "受変電",
@@ -523,9 +515,8 @@
       "note": "電力を受け、電圧を変える系統。"
     },
     {
-      "id": "FN-000036",
+      "node_id": "FN-000036",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "WIRING",
       "name": "幹線・配線",
@@ -534,9 +525,8 @@
       "note": "電力を配る線路。"
     },
     {
-      "id": "FN-000037",
+      "node_id": "FN-000037",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "LIGHTING",
       "name": "照明",
@@ -545,9 +535,8 @@
       "note": "照明器具とその系統。"
     },
     {
-      "id": "FN-000038",
+      "node_id": "FN-000038",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "COMMUNICATION",
       "name": "通信・弱電",
@@ -556,9 +545,8 @@
       "note": "情報・信号の系統。"
     },
     {
-      "id": "FN-000039",
+      "node_id": "FN-000039",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "GENERATION_STORAGE",
       "name": "発電・蓄電",
@@ -567,9 +555,8 @@
       "note": "建物側の発電・蓄電の機器。所属は暫定。"
     },
     {
-      "id": "FN-000040",
+      "node_id": "FN-000040",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "HEAT_SOURCE",
       "name": "熱源",
@@ -578,9 +565,8 @@
       "note": "冷熱・温熱をつくる機器。"
     },
     {
-      "id": "FN-000041",
+      "node_id": "FN-000041",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "AIR_HANDLING",
       "name": "空調機",
@@ -589,9 +575,8 @@
       "note": "空気を調整して送る機器。"
     },
     {
-      "id": "FN-000042",
+      "node_id": "FN-000042",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "DUCTWORK",
       "name": "ダクト",
@@ -600,9 +585,8 @@
       "note": "空気を運ぶ経路とその保温。"
     },
     {
-      "id": "FN-000043",
+      "node_id": "FN-000043",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "HVAC_PIPING",
       "name": "空調配管",
@@ -611,9 +595,8 @@
       "note": "熱を運ぶ流体の配管とその付属機器。"
     },
     {
-      "id": "FN-000044",
+      "node_id": "FN-000044",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "VENTILATION",
       "name": "換気",
@@ -622,9 +605,8 @@
       "note": "換気の機器と経路。空調設備に含める扱いは暫定。"
     },
     {
-      "id": "FN-000045",
+      "node_id": "FN-000045",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "CONTROLS",
       "name": "自動制御",
@@ -633,9 +615,8 @@
       "note": "設備を制御する機器。電気設備との境界は未確定。"
     },
     {
-      "id": "FN-000046",
+      "node_id": "FN-000046",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "WATER_SUPPLY",
       "name": "給水",
@@ -644,9 +625,8 @@
       "note": "水を供給する系統。"
     },
     {
-      "id": "FN-000047",
+      "node_id": "FN-000047",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "HOT_WATER",
       "name": "給湯",
@@ -655,9 +635,8 @@
       "note": "湯をつくり供給する系統。"
     },
     {
-      "id": "FN-000048",
+      "node_id": "FN-000048",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "DRAINAGE",
       "name": "排水",
@@ -666,9 +645,8 @@
       "note": "水を排出する系統。"
     },
     {
-      "id": "FN-000049",
+      "node_id": "FN-000049",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "SANITARY_FIXTURES",
       "name": "衛生器具",
@@ -677,9 +655,8 @@
       "note": "水まわりの器具。"
     },
     {
-      "id": "FN-000050",
+      "node_id": "FN-000050",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "ELEVATOR",
       "name": "エレベーター",
@@ -688,9 +665,8 @@
       "note": "かごで昇降する搬送設備。"
     },
     {
-      "id": "FN-000051",
+      "node_id": "FN-000051",
       "axis": "FUNCTION",
-      "level": 3,
       "level_kind": "ELEMENT",
       "code": "ESCALATOR",
       "name": "エスカレーター",
@@ -699,218 +675,258 @@
       "note": "階段状の連続搬送設備。"
     },
     {
-      "id": "FN-000052",
-      "axis": "FUNCTION",
-      "level": 3,
-      "level_kind": "ELEMENT",
-      "code": "OTHER_CONVEYANCE",
-      "name": "その他搬送",
-      "parent": "FN-000011",
-      "status": "DRAFT",
-      "note": "上の2つに当たらない搬送設備。受け皿になりやすいので、実データで細分するか廃止するかを決める。"
-    },
-    {
-      "id": "IN-000001",
+      "node_id": "IN-000001",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "CEMENTITIOUS",
       "name": "コンクリート・セメント系",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "セメントを結合材とする素材。"
     },
     {
-      "id": "IN-000002",
+      "node_id": "IN-000002",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "FERROUS_METAL",
       "name": "鉄鋼",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "鉄を主とする金属素材。"
     },
     {
-      "id": "IN-000003",
+      "node_id": "IN-000003",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "NONFERROUS_METAL",
       "name": "非鉄金属",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "鉄以外の金属素材。"
     },
     {
-      "id": "IN-000004",
+      "node_id": "IN-000004",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "TIMBER",
       "name": "木材・木質材料",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "木を主とする素材。生物由来炭素の扱いは計算側の別メモ（相殺しない）に従う。"
     },
     {
-      "id": "IN-000005",
+      "node_id": "IN-000005",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "MASONRY_CERAMIC",
       "name": "組積・窯業系",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "焼成・成形した無機質の素材。"
     },
     {
-      "id": "IN-000006",
+      "node_id": "IN-000006",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "STONE_AGGREGATE_EARTH",
       "name": "石材・骨材・土",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "天然の鉱物質の素材。"
     },
     {
-      "id": "IN-000007",
+      "node_id": "IN-000007",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "GLASS",
       "name": "ガラス",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "ガラスを主とする素材。"
     },
     {
-      "id": "IN-000008",
+      "node_id": "IN-000008",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "MINERAL_BOARD",
       "name": "無機質ボード",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "無機質の板状材料。形態による括りであり、素材による括りへ分け直す可能性がある。"
     },
     {
-      "id": "IN-000009",
+      "node_id": "IN-000009",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "INSULATION",
       "name": "断熱・保温材",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "機能による括りであり、素材（鉱物繊維系・樹脂発泡系など）へ分け直す可能性がある。建築と設備の両方で使う。"
     },
     {
-      "id": "IN-000010",
+      "node_id": "IN-000010",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "WATERPROOFING_SEALANT",
       "name": "防水・シーリング材",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "機能による括り。素材による括りへ分け直す可能性がある。"
     },
     {
-      "id": "IN-000011",
+      "node_id": "IN-000011",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "COATING",
       "name": "塗料・仕上塗材",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "塗って使う仕上げ材料。"
     },
     {
-      "id": "IN-000012",
+      "node_id": "IN-000012",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "POLYMER",
       "name": "樹脂・プラスチック",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "BULK_MATERIAL"
+      ],
       "note": "合成樹脂を主とする素材（上の機能による括りに入らないもの）。"
     },
     {
-      "id": "IN-000013",
+      "node_id": "IN-000013",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "FORMED_PRODUCT",
       "name": "建具・金物などの成形品",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "SHAPED_PRODUCT"
+      ],
       "note": "工場で形が決まり、個数または面積で数える製品。"
     },
     {
-      "id": "IN-000014",
+      "node_id": "IN-000014",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "MACHINE_UNIT",
       "name": "機器本体",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "EQUIPMENT_UNIT"
+      ],
       "note": "単体で機能し、台数で数える機械・装置。職種では分けない。"
     },
     {
-      "id": "IN-000015",
+      "node_id": "IN-000015",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "TERMINAL_FIXTURE",
       "name": "器具・端末",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "EQUIPMENT_UNIT"
+      ],
       "note": "系統の末端に付く器具（照明器具、衛生器具、吹出口など）。"
     },
     {
-      "id": "IN-000016",
+      "node_id": "IN-000016",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "PANEL_CONTROL",
       "name": "盤・制御機器",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "EQUIPMENT_UNIT"
+      ],
       "note": "盤類と制御用の機器。"
     },
     {
-      "id": "IN-000017",
+      "node_id": "IN-000017",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "DISTRIBUTION_LINE",
       "name": "配管・ダクト・配線",
       "parent": null,
       "status": "DRAFT",
+      "allowed_item_kinds": [
+        "LINEAR_ITEM"
+      ],
       "note": "流体・空気・電気・信号を通す線状のもの。長さで数える。"
     },
     {
-      "id": "IN-000018",
+      "node_id": "IN-000018",
       "axis": "ITEM",
-      "level": 1,
       "level_kind": "SUBSTANCE_CLASS",
       "code": "COMPOSITE",
       "name": "複合品",
       "parent": null,
       "status": "DRAFT",
-      "note": "複数の品目を決まった構成で含み、1つの単位で数量を拾うもの。構成が得られれば構成品の行へ展開する。"
+      "allowed_item_kinds": [
+        "COMPOSITE_ITEM"
+      ],
+      "note": "複数の品目を決まった構成で含み、ひとつの単位で数量を拾うもの。構成が得られれば構成品の行へ展開する。"
     }
   ],
+  "withdrawn_draft_ids": {
+    "note": "草案の段階（公開した版は無い）で取り下げたノードの ID。欠番とし、再利用しない。",
+    "ids": [
+      {
+        "node_id": "FN-000014",
+        "reason": "「その他設備」（予約）。含むものを定義できない受け皿だったので取り下げた。4つの設備グループに入らない設備（防災系など）は、定義したグループを足すまで未配置とする（README U-03）。"
+      },
+      {
+        "node_id": "FN-000052",
+        "reason": "「その他搬送」。含むものを定義できない受け皿だったので取り下げた。エレベーター・エスカレーターに当たらない搬送設備は、定義した部位要素を足すまで未配置とする。"
+      }
+    ]
+  },
   "known_weaknesses": [
     "品目軸の第1階層は「主たる素材」と「機器・線状品・複合品の種別」の2つの原理を併用している。断熱・保温材、防水・シーリング材、無機質ボードは機能または形態による括りで、素材による括りと重なりうる。実データで重なりの件数を測ってから分け直す。",
     "部位要素（第3階層）の粒度と件数は、実際の数量内訳と照合していない。細かすぎる・粗すぎる・境界が決められない、のいずれも起こりうる。",
-    "部位グループの境界（基礎と躯体、躯体と屋根・外壁、開口部と内装、内装と設備、設備どうし）は、定義文に「含む・含まない」を書いて確定させる必要がある。本ファイルの note は確定した定義ではない。"
+    "部位グループの境界（基礎と躯体、躯体と屋根・外壁、開口部と内装、内装と設備、設備どうし）は、定義文に「含む・含まない」を書いて確定させる必要がある。本ファイルの note は確定した定義ではない。",
+    "素材・品目系統18件の網羅性は確認していない。どの系統の定義にも当てはまらない品種は、近い系統に寄せず品目未分類（substance_class_id = null）にする。allowed_item_kinds と default_input_group の値は暫定である。",
+    "設備の部位要素（系統の分け方）は一般的な用語から選んだもので、業界で広く使われる内訳の区分と似た形になりうる。既存の分類表との類似は照合していない。"
   ]
 }

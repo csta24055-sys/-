@@ -3,289 +3,651 @@
   "verification": "NOT_VERIFIED",
   "all_records_flag": "FICTIONAL_PLACEHOLDER",
   "created": "2026-11-11",
-  "note": "本ファイルのレコードはすべて架空のプレースホルダである。「架空ボードA」「架空ボードB」「架空充填材X」「架空下地材Y」「架空外壁構成Z」という材料・製品・構成、および出典 SRC-FICT-* は実在しない。排出係数・耐用年数・修繕率・密度・構成比の値は1つも含まない（参照はすべて null）。数量（100、200、50）と厚さ（12、100）は説明のために置いた入力値である。この例が示すのは、レコードどうしが矛盾なく組めることだけであり、実データへの適合や実用上の妥当性は示さない。",
+  "note": "本ファイルのレコードはすべて架空のプレースホルダである。「架空ボードA」「架空ボードB」「架空板A」「架空充填材X」「架空下地材Y」「架空機器Q」「架空配管R」「架空外壁構成Z」「架空機器一式S」という材料・製品・構成、および出典 SRC-FICT-* は実在しない。排出係数・耐用年数・修繕率・密度・構成比の値は1つも含まない（参照はすべて null）。数量（100、200、50、2）と厚さ（12、100）は説明のために置いた入力値である。この例が示すのは、レコードどうしが矛盾なく組めることだけであり、実データへの適合や実用上の妥当性は示さない。例は建築の一部（屋根・外壁、内装）と空調設備の最小の例だけで、基礎・躯体・開口部・電気設備・給排水設備・搬送設備の例は無い。",
   "id_note": "ID に含まれる FICT は例示用の印であり、taxonomy_schema.json の ID 形式にわざと一致させていない。部位・素材系統のノード ID（FN-、IN-）だけは classification_tree.json の草案ノードを指す。",
   "schema": "taxonomy_schema.json",
+  "illustration_only": {
+    "note": "次の節と項目は説明用であり、taxonomy_schema.json の定義には無い。", "sections": ["assumed_active_nodes", "duplicate_handling", "what_this_shows"],
+    "fields": ["record_flag", "explanation", "identity_array_for_illustration", "gate_result", "input_for_illustration"]
+  },
+  "assumed_active_nodes": {
+    "note": "classification_tree.json のノードはすべて DRAFT または RESERVED である。この例の中に限り、架空の版 REL-FICT-0001 で次のノード（例が参照するノードとその親）が定義を与えられて ACTIVE になったと仮定する。INV-11 はこの仮定の下で検査した。実際のノードの状態は変えていない。",
+    "node_ids": ["FN-000001", "FN-000002", "FN-000005", "FN-000007", "FN-000009", "FN-000026", "FN-000027", "FN-000034", "FN-000040", "FN-000043", "IN-000002", "IN-000008", "IN-000009", "IN-000014", "IN-000017"]
+  },
   "release": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "release_id": "REL-FICT-0001", "parent_release_id": null, "schema_version": "0.1.0-draft", "normalizer_version": "norm-fict-0.1", "compartment": "PUBLIC_RELEASE", "manifest_hash": "（例では省略）", "invariant_report": {"checked": false}, "breaking_change_ids": [], "status": "DRAFT"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "release_id": "REL-FICT-0001", "parent_release_id": null, "schema_version": "0.2.0-draft", "normalizer_version": "norm-fict-0.1", "compartment": "PUBLIC_RELEASE", "manifest_hash": null,
+      "invariant_report": {"INV-01": "PASS", "INV-02": "PASS", "INV-03": "PASS", "INV-04": "PASS", "INV-05": "PASS", "INV-06": "PASS", "INV-07": "PASS", "INV-08": "PASS", "INV-09": "PASS", "INV-10": "PASS", "INV-11": "PASS", "INV-12": "PASS", "INV-13": "NOT_RUN", "INV-14": "PASS", "INV-15": "NOT_RUN", "INV-16": "NOT_RUN", "INV-17": "PASS", "INV-18": "PASS", "INV-19": "PASS", "INV-20": "PASS", "INV-21": "PASS", "INV-22": "PASS"},
+      "breaking_change_ids": ["MT-FICT-0005", "CM-FICT-0003", "CM-FICT-0006", "CM-FICT-0007"], "status": "DRAFT",
+      "explanation": "invariant_report は、この例に対して一時的なスクリプトで検査した結果である（INV-11 は assumed_active_nodes の仮定の下で）。INV-13・INV-15・INV-16 は実行していないので、この版は公開できない状態（DRAFT）のままである。"
+    }
   ],
   "source": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0000", "title": "本例の命名・整理判断（表示名、別名、等価関係）", "origin_kind": "SELF_AUTHORED", "source_version": "fict-0.1", "retrieved_at": "2026-11-11", "content_kinds": ["NAMES", "SPEC_ATTRIBUTES"], "license_status": "PERMITTED_PUBLIC", "license_evidence_ref": "本例のために自分で書いた文字列", "permitted_uses": ["INTERNAL_RESEARCH", "PUBLIC_REDISTRIBUTION"], "storage_policy": "MAY_STORE_IN_PUBLIC_REPO", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0001", "title": "架空の数量内訳書（本例のために作った文字列）", "origin_kind": "SYNTHETIC_FICTIONAL", "source_version": "fict-0.1", "retrieved_at": "2026-11-11", "content_kinds": ["NAMES", "UNITS", "CLASSIFICATION_LABELS"], "license_status": "PERMITTED_PUBLIC", "license_evidence_ref": "本例のために作成した架空の文字列", "permitted_uses": ["INTERNAL_RESEARCH", "PUBLIC_REDISTRIBUTION"], "storage_policy": "MAY_STORE_IN_PUBLIC_REPO", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0002", "title": "架空の材料一覧（本例のために作った文字列）", "origin_kind": "SYNTHETIC_FICTIONAL", "source_version": "fict-0.1", "retrieved_at": "2026-11-11", "content_kinds": ["NAMES", "UNITS"], "license_status": "PERMITTED_PUBLIC", "license_evidence_ref": "本例のために作成した架空の文字列", "permitted_uses": ["INTERNAL_RESEARCH", "PUBLIC_REDISTRIBUTION"], "storage_policy": "MAY_STORE_IN_PUBLIC_REPO", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0003", "title": "許諾が未確認だと仮定した架空の第三者データ", "origin_kind": "THIRD_PARTY_DATASET", "source_version": "fict-0.1", "retrieved_at": "2026-11-11", "content_kinds": ["NAMES"], "license_status": "UNKNOWN", "license_evidence_ref": null, "permitted_uses": [], "storage_policy": "DO_NOT_INGEST", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null, "gate_result": "取り込まない。中身は1行も保存せず、理由（許諾未確認）だけを記録する。この出典にしか無い名称は、どのレコードにも現れない。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0000", "title": "本例の命名・整理判断（表示名、別名、等価関係）", "origin_kind": "SELF_AUTHORED", "source_version": "fict-0.1", "retrieved_at": "2026-11-11",
+      "content_kinds": ["NAMES", "SPEC_ATTRIBUTES"], "license_status": "PERMITTED_PUBLIC", "license_evidence_ref": "本例のために自分で書いた文字列", "permitted_uses": ["INTERNAL_RESEARCH", "PUBLIC_REDISTRIBUTION"],
+      "storage_policy": "MAY_STORE_IN_PUBLIC_REPO", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0001", "title": "架空の数量内訳書（本例のために作った文字列。名称・単位・見出しだけを受領し、数量は受領しない）", "origin_kind": "SYNTHETIC_FICTIONAL", "source_version": "fict-0.1", "retrieved_at": "2026-11-11",
+      "content_kinds": ["NAMES", "UNITS", "CLASSIFICATION_LABELS"], "license_status": "PERMITTED_PUBLIC", "license_evidence_ref": "本例のために作成した架空の文字列", "permitted_uses": ["INTERNAL_RESEARCH", "PUBLIC_REDISTRIBUTION"],
+      "storage_policy": "MAY_STORE_IN_PUBLIC_REPO", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0002", "title": "架空の材料一覧（本例のために作った文字列）", "origin_kind": "SYNTHETIC_FICTIONAL", "source_version": "fict-0.1", "retrieved_at": "2026-11-11",
+      "content_kinds": ["NAMES", "UNITS"], "license_status": "PERMITTED_PUBLIC", "license_evidence_ref": "本例のために作成した架空の文字列", "permitted_uses": ["INTERNAL_RESEARCH", "PUBLIC_REDISTRIBUTION"], "storage_policy": "MAY_STORE_IN_PUBLIC_REPO",
+      "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "source_id": "SRC-FICT-0003", "title": "許諾が未確認だと仮定した架空の第三者データ", "origin_kind": "THIRD_PARTY_DATASET", "source_version": "fict-0.1", "retrieved_at": "2026-11-11", "content_kinds": ["NAMES"],
+      "license_status": "UNKNOWN", "license_evidence_ref": null, "permitted_uses": [], "storage_policy": "DO_NOT_INGEST", "license_reviewed_by": "reviewer_a", "license_reviewed_at": "2026-11-11", "license_valid_until": null,
+      "gate_result": "取り込まない。中身は1行も保存せず、理由（許諾未確認）だけを記録する。この出典にしか無い名称は、どのレコードにも現れない。"
+    }
   ],
   "raw_record": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0001", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行1", "name_text": "架空ボードＡ　厚１２ｍｍ", "spec_text": null, "unit_text": "㎡", "class_text": "外壁", "content_hash": "7142138b6040aa30290b80414fc310bf87ffafb536d33d09040af1e8339ceb78", "duplicate_of_raw": null, "occurrence_count": 2, "intake_status": "ACCEPTED", "ingested_in_release": "REL-FICT-0001"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0002", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行2", "name_text": "架空ﾎﾞｰﾄﾞA t=12", "spec_text": null, "unit_text": "m2", "class_text": "外壁", "content_hash": "653c6e6f670fe22e548da414105e16a7abc22d096d33af7cdc8ba047a6233737", "duplicate_of_raw": null, "occurrence_count": 1, "intake_status": "ACCEPTED", "ingested_in_release": "REL-FICT-0001"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0003", "source_id": "SRC-FICT-0002", "source_locator": "架空の一覧 行1", "name_text": "かくうボードA 12ミリ", "spec_text": null, "unit_text": "平米", "class_text": null, "content_hash": "e71375b80dc60f010bc0a298b99109977fcd1bfc10b440122feb63140065466c", "duplicate_of_raw": null, "occurrence_count": 1, "intake_status": "ACCEPTED", "ingested_in_release": "REL-FICT-0001"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0004", "source_id": "SRC-FICT-0002", "source_locator": "架空の一覧 行2", "name_text": "架空ボードA 厚12mm", "spec_text": null, "unit_text": "枚", "class_text": null, "content_hash": "5302bbb19de1c6ec7e4cf996859dcf51e73cb434f76df6f48e45d419e3ae3067", "duplicate_of_raw": null, "occurrence_count": 1, "intake_status": "ACCEPTED", "ingested_in_release": "REL-FICT-0001"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0005", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行7", "name_text": "架空ボードＡ　厚１２ｍｍ", "spec_text": null, "unit_text": "㎡", "class_text": "外壁", "content_hash": "7142138b6040aa30290b80414fc310bf87ffafb536d33d09040af1e8339ceb78", "duplicate_of_raw": "RAW-FICT-0001", "occurrence_count": 1, "intake_status": "DUPLICATE_RAW", "ingested_in_release": "REL-FICT-0001"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0006", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行9", "name_text": "架空ボード", "spec_text": null, "unit_text": "m2", "class_text": "内装", "content_hash": "47c3aa3613217b57edb7efd4577ec8a487e8f9390bdd9933b0d3fbdbc900ee07", "duplicate_of_raw": null, "occurrence_count": 1, "intake_status": "ACCEPTED", "ingested_in_release": "REL-FICT-0001"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0001", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行1", "name_text": "架空ボードＡ　厚１２ｍｍ", "spec_text": null, "unit_text": "㎡", "class_text": "外壁",
+      "content_hash": "1803a2b4bb7959d9432d56d185e156bcc76994f891d861729e1032d05d0cc66e", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0002", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行2", "name_text": "架空ﾎﾞｰﾄﾞA t=12", "spec_text": null, "unit_text": "m2", "class_text": "外壁",
+      "content_hash": "04ead1d701f8193143b82620300a699996168ad27cc87c1de76ab83fe2cb61a6", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0003", "source_id": "SRC-FICT-0002", "source_locator": "架空の一覧 行1", "name_text": "かくうボードA 12ミリ", "spec_text": null, "unit_text": "平米", "class_text": null,
+      "content_hash": "5fdb49ec00035ad96482470eac79a66a9685aec6f9ec3e7a7b45705e726ff5cc", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0004", "source_id": "SRC-FICT-0002", "source_locator": "架空の一覧 行2", "name_text": "架空ボードA 厚12mm", "spec_text": null, "unit_text": "枚", "class_text": null,
+      "content_hash": "b6cc3ef3089081a057250933eda00d9dde1c63e8799524007a74b5e089c5dacb", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0005", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行7", "name_text": "架空ボードＡ　厚１２ｍｍ", "spec_text": null, "unit_text": "㎡", "class_text": "外壁",
+      "content_hash": "1803a2b4bb7959d9432d56d185e156bcc76994f891d861729e1032d05d0cc66e", "duplicate_of_raw": "RAW-FICT-0001", "intake_status": "DUPLICATE_RAW", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0006", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行9", "name_text": "架空ボード", "spec_text": null, "unit_text": "m2", "class_text": "内装",
+      "content_hash": "559ab81da41530e2b94e2ec0f9d57b1a2851f83e0f18045bfaaa7869a30da46c", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0007", "source_id": "SRC-FICT-0002", "source_locator": "架空の一覧 行3", "name_text": "架空充填材X", "spec_text": null, "unit_text": "kg", "class_text": null,
+      "content_hash": "18db12363f4715cb5e5c2a23462f973a3c4f08ef0ee81a9624f7db8f384cb645", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0008", "source_id": "SRC-FICT-0001", "source_locator": "架空の内訳書 行12", "name_text": "架空の共通経費", "spec_text": null, "unit_text": "式", "class_text": null,
+      "content_hash": "a1fd55e274d5c5b4563d21cd1a11b6e70a719d3a312120be112e0e60e386ce84", "duplicate_of_raw": null, "intake_status": "OUT_OF_SCOPE", "intake_note": "材料でない行（架空の判断。CD-FICT-0005）", "ingested_in_release": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0009", "source_id": "SRC-FICT-0002", "source_locator": "架空の一覧 行4", "name_text": "架空板A 厚12mm", "spec_text": null, "unit_text": "m2", "class_text": null,
+      "content_hash": "79332b225a235c89f805c3ddc0631aa589732ea826dc7957972be8de8b3531e2", "duplicate_of_raw": null, "intake_status": "ACCEPTED", "intake_note": null, "ingested_in_release": "REL-FICT-0001"
+    }
   ],
-  "normalization_trace": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0001", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボードa", "variant_keys": [], "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "厚12mm"}], "unit_code": "m2", "residual_text": "", "flags": [], "resolved_to": "CM-FICT-0001", "explanation": "全角英数字と全角空白は互換正規化で統一される。単位欄の「㎡」も互換正規化で m2 になる。別名の行は増えない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0002", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボードa", "variant_keys": [], "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": true, "matched_text": "t=12"}], "unit_code": "m2", "residual_text": "", "flags": ["SPEC_UNIT_ASSUMED"], "resolved_to": "CM-FICT-0001", "explanation": "半角カナは互換正規化で統一される。名称欄の t= は厚さの接頭語として読み、単位欄の t（質量）とは別の解析器で扱う。数値に単位が無いので仮定した旨を残し、確認者が mm と確定した。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0003", "normalizer_version": "norm-fict-0.1", "name_key": "カクウボードa", "variant_keys": [], "spec_tokens": [{"attribute_code": null, "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "12ミリ"}], "unit_code": "m2", "residual_text": "", "flags": ["ALIAS_UNRESOLVED"], "resolved_to": "CM-FICT-0001", "explanation": "ひらがなはカタカナに畳むが、漢字とかなの読み替えは規則では行わない。別名が無いので下書きの品種 MT-FICT-0005 と正規材料 CM-FICT-0003 が作られ、人の確認を経て統合された（merge_event）。単位欄の「平米」は unit_def の表記として登録済み。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0004", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボードa", "variant_keys": [], "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "厚12mm"}], "unit_code": "ct_mai", "residual_text": "", "flags": [], "resolved_to": "CM-FICT-0001", "explanation": "同一性は同じで単位だけが違う（D2）。別の材料にせず、枚→m2 の換算 UC-FICT-0002 を登録する。1枚の面積が出典に無いので換算は停止状態のまま残る。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0006", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボード", "variant_keys": [], "spec_tokens": [], "unit_code": "m2", "residual_text": "", "flags": ["ALIAS_AMBIGUOUS"], "resolved_to": null, "explanation": "総称。別名 AL-FICT-0003 が2つの品種を候補に持つ。どちらかへ自動で寄せず、人が1回選ぶまで未解決のままにする。"}
+  "normalized_record": [
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0001", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボードa", "variant_keys": [],
+      "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "厚12mm"}], "unit_code": "m2", "residual_text": "", "flags": [], "resolved_to": "CM-FICT-0001",
+      "resolved_in_release": "REL-FICT-0001", "explanation": "全角英数字と全角空白は互換正規化で統一される。単位欄の「㎡」も互換正規化で m2 になる。別名の行は増えない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0002", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボードa", "variant_keys": [],
+      "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": true, "matched_text": "t=12"}], "unit_code": "m2", "residual_text": "", "flags": ["SPEC_UNIT_ASSUMED"],
+      "resolved_to": "CM-FICT-0001", "resolved_in_release": "REL-FICT-0001",
+      "explanation": "半角カナは互換正規化で統一される。名称欄の t= は厚さの接頭語として読み、単位欄の t（質量）とは別の解析器で扱う。数値に単位が無いので、仮定した単位は確認されるまで止まる（SPEC_UNIT_UNCONFIRMED）。確認者が mm と確定した記録が CD-FICT-0001 である。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0003", "normalizer_version": "norm-fict-0.1", "name_key": "カクウボードa", "variant_keys": [],
+      "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "12ミリ"}], "unit_code": "m2", "residual_text": "", "flags": [], "resolved_to": "CM-FICT-0001",
+      "resolved_in_release": "REL-FICT-0001", "explanation": "ひらがなはカタカナに畳むが、漢字とかなの読み替えは規則では行わない。別名が無い間は ALIAS_UNRESOLVED で止まり、下書きの品種は自動では作られない。人が別名 AL-FICT-0002 を登録した（CD-FICT-0002）後の再正規化で解決した。単位欄の「平米」は unit_def の表記として登録済み。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0004", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボードa", "variant_keys": [],
+      "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "厚12mm"}], "unit_code": "ct_mai", "residual_text": "", "flags": [], "resolved_to": "CM-FICT-0001",
+      "resolved_in_release": "REL-FICT-0001", "explanation": "同一性は同じで単位だけが違う（D2）。別の材料にせず、枚→m2 の換算 UC-FICT-0002 を登録する（CD-FICT-0003）。1枚の面積が出典に無いので換算は停止状態のまま残る。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0006", "normalizer_version": "norm-fict-0.1", "name_key": "架空ボード", "variant_keys": [], "spec_tokens": [], "unit_code": "m2", "residual_text": "",
+      "flags": ["ALIAS_AMBIGUOUS"], "resolved_to": null, "resolved_in_release": null, "explanation": "総称。別名 AL-FICT-0003 が2つの品種を候補に持つ。どちらかへ自動で寄せず、人が1回選ぶまで未解決のままにする。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0007", "normalizer_version": "norm-fict-0.1", "name_key": "架空充填材x", "variant_keys": [], "spec_tokens": [], "unit_code": "kg", "residual_text": "", "flags": [],
+      "resolved_to": "CM-FICT-0004", "resolved_in_release": "REL-FICT-0001", "explanation": "同じ材料が、宣言単位（m3）とは次元の違う単位（kg）で現れた例。別の品種にせず、質量と体積の間の換算 UC-FICT-0004 で表す（CD-FICT-0004）。密度の参照が無いので換算は停止状態のままで、kg で入力された数量は計算せずに止まる。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "raw_id": "RAW-FICT-0009", "normalizer_version": "norm-fict-0.1", "name_key": "架空板a", "variant_keys": [],
+      "spec_tokens": [{"attribute_code": "thickness_mm", "value": "12", "unit_code": "mm", "unit_assumed": false, "matched_text": "厚12mm"}], "unit_code": "m2", "residual_text": "", "flags": [], "resolved_to": "CM-FICT-0001",
+      "resolved_in_release": "REL-FICT-0001", "explanation": "別名が無かったので未解決で止まり、判断者が新しい品種の下書きを作った（CD-FICT-0006）。その後、同じ品種と確認されて統合され（ME-FICT-0001）、別名 AL-FICT-0005 を通じて解決するようになった。"
+    }
+  ],
+  "curation_decision": [
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "decision_id": "CD-FICT-0001", "decision_kind": "SPEC_UNIT_CONFIRMED", "raw_ids": ["RAW-FICT-0002"], "subject_ids": ["CM-FICT-0001"], "outcome": "名称欄の t= に続く数値の単位を mm と確定した（架空の判断）。",
+      "restricted_source_not_consulted": true, "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11", "normalizer_version": "norm-fict-0.1", "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "decision_id": "CD-FICT-0002", "decision_kind": "ALIAS_REGISTERED", "raw_ids": ["RAW-FICT-0003"], "subject_ids": ["AL-FICT-0002"],
+      "outcome": "かな書きの名称が架空ボードAを指すと判断し、別名を登録した。新しい品種は作っていない（架空の判断）。", "restricted_source_not_consulted": true, "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11", "normalizer_version": "norm-fict-0.1",
+      "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "decision_id": "CD-FICT-0003", "decision_kind": "UNIT_VARIANT_CONFIRMED", "raw_ids": ["RAW-FICT-0004"], "subject_ids": ["UC-FICT-0002"], "outcome": "同じ材料が枚で数えられていると確認し、換算を停止状態で登録した（架空の判断）。",
+      "restricted_source_not_consulted": true, "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11", "normalizer_version": "norm-fict-0.1", "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "decision_id": "CD-FICT-0004", "decision_kind": "UNIT_VARIANT_CONFIRMED", "raw_ids": ["RAW-FICT-0007"], "subject_ids": ["UC-FICT-0004"],
+      "outcome": "同じ材料が質量で数えられていると確認した。品種は分けず、既存の換算に観測の来歴を足した（架空の判断）。", "restricted_source_not_consulted": true, "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11", "normalizer_version": "norm-fict-0.1",
+      "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "decision_id": "CD-FICT-0005", "decision_kind": "MARKED_OUT_OF_SCOPE", "raw_ids": ["RAW-FICT-0008"], "subject_ids": [], "outcome": "材料でない行（経費）として対象外にした（架空の判断）。",
+      "restricted_source_not_consulted": true, "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11", "normalizer_version": "norm-fict-0.1", "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "decision_id": "CD-FICT-0006", "decision_kind": "NEW_TYPE_CREATED", "raw_ids": ["RAW-FICT-0009"], "subject_ids": ["MT-FICT-0005", "CM-FICT-0003"],
+      "outcome": "既存の品種に当たらないと考え、新しい品種の下書きを作った（架空の判断。後に統合された）。", "restricted_source_not_consulted": true, "decided_by": "reviewer_c", "reviewed_by": null, "decided_at": "2026-11-11", "normalizer_version": "norm-fict-0.1",
+      "release_id": "REL-FICT-0001"
+    }
   ],
   "unit_def": [
     {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "m2", "label": "平方メートル", "dimension": "AREA", "base_unit_code": "m2", "to_base_factor": "1", "is_calculable": true, "text_aliases": ["m2", "平米"]},
     {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "m3", "label": "立方メートル", "dimension": "VOLUME", "base_unit_code": "m3", "to_base_factor": "1", "is_calculable": true, "text_aliases": ["m3"]},
     {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "kg", "label": "キログラム", "dimension": "MASS", "base_unit_code": "kg", "to_base_factor": "1", "is_calculable": true, "text_aliases": ["kg"]},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "ct_mai", "label": "枚", "dimension": "COUNT", "base_unit_code": "ct_mai", "to_base_factor": null, "is_calculable": true, "text_aliases": ["枚"]}
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "m", "label": "メートル", "dimension": "LENGTH", "base_unit_code": "m", "to_base_factor": "1", "is_calculable": true, "text_aliases": ["m"]},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "mm", "label": "ミリメートル", "dimension": "LENGTH", "base_unit_code": "m", "to_base_factor": "0.001", "is_calculable": true, "text_aliases": ["mm"]},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "ct_mai", "label": "枚", "dimension": "COUNT", "base_unit_code": "ct_mai", "to_base_factor": null, "is_calculable": true, "text_aliases": ["枚"]},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "unit_code": "ct_dai", "label": "台", "dimension": "COUNT", "base_unit_code": "ct_dai", "to_base_factor": null, "is_calculable": true, "text_aliases": ["台"]}
   ],
   "material_type": [
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0001", "substance_class_id": "IN-000008", "name": "架空ボードA", "name_key": "架空ボードa", "item_kind": "BULK_MATERIAL",
-      "declared_unit": "m2", "declared_unit_basis": "PROVISIONAL",
-      "spec_attributes": [
-        {"attribute_code": "thickness_mm", "label": "厚さ", "value_type": "DECIMAL", "unit_code": "mm", "canonical_format": "指数表記なし・末尾の0なしの10進文字列", "role": "IDENTITY", "affects": ["UNKNOWN"], "required": true, "axis_mode": "ENUMERATED", "allowed_values": null, "parse_patterns": [{"prefix_tokens": ["厚", "t=", "t"], "suffix_tokens": ["mm", "ミリ"], "assumed_unit_code": "mm"}]}
-      ],
-      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN",
-      "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": null,
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0001", "substance_class_id": "IN-000008", "name": "架空ボードA", "name_key": "架空ボードa", "item_kind": "BULK_MATERIAL", "declared_unit": "m2",
+      "declared_unit_basis": "PROVISIONAL",
+      "spec_attributes": [{"attribute_code": "thickness_mm", "label": "厚さ", "quantity_kind": "DIMENSION", "value_type": "DECIMAL", "unit_code": "mm", "canonical_format": "DECIMAL_PLAIN", "role": "IDENTITY", "affects": ["UNKNOWN"], "required": true, "axis_mode": "ENUMERATED", "allowed_values": null, "allowed_values_provenance": null, "parse_patterns": [{"prefix_tokens": ["厚", "t=", "t"], "suffix_tokens": ["mm", "ミリ"], "assumed_unit_code": "mm"}]}],
+      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": null,
       "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0001", "derivation": "NORMALIZED"}, {"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}],
-      "record_version": 2, "reviewed_by": "reviewer_b"
+      "provenance": [{"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0001", "derivation": "NORMALIZED", "role": "RELIED_ON", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0009", "derivation": "MERGED", "role": "RELIED_ON", "via_merge_event_id": "ME-FICT-0001"}],
+      "record_version": 2, "created_by": "reviewer_a", "reviewed_by": "reviewer_b"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0002", "substance_class_id": "IN-000009", "name": "架空充填材X", "name_key": "架空充填材x", "item_kind": "BULK_MATERIAL",
-      "declared_unit": "m3", "declared_unit_basis": "PROVISIONAL", "spec_attributes": [],
-      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN",
-      "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": null,
-      "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}],
-      "record_version": 1, "reviewed_by": "reviewer_b"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0002", "substance_class_id": "IN-000009", "name": "架空充填材X", "name_key": "架空充填材x", "item_kind": "BULK_MATERIAL", "declared_unit": "m3",
+      "declared_unit_basis": "PROVISIONAL", "spec_attributes": [], "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": [],
+      "biogenic_flag": null, "calc_class": null, "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0003", "substance_class_id": "IN-000002", "name": "架空下地材Y", "name_key": "架空下地材y", "item_kind": "BULK_MATERIAL",
-      "declared_unit": "kg", "declared_unit_basis": "PROVISIONAL", "spec_attributes": [],
-      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN",
-      "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": null,
-      "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}],
-      "record_version": 1, "reviewed_by": "reviewer_b"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0003", "substance_class_id": "IN-000002", "name": "架空下地材Y", "name_key": "架空下地材y", "item_kind": "BULK_MATERIAL", "declared_unit": "kg",
+      "declared_unit_basis": "PROVISIONAL", "spec_attributes": [], "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": [],
+      "biogenic_flag": null, "calc_class": null, "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0004", "substance_class_id": "IN-000008", "name": "架空ボードB", "name_key": "架空ボードb", "item_kind": "BULK_MATERIAL",
-      "declared_unit": "m2", "declared_unit_basis": "PROVISIONAL",
-      "spec_attributes": [
-        {"attribute_code": "thickness_mm", "label": "厚さ", "value_type": "DECIMAL", "unit_code": "mm", "canonical_format": "指数表記なし・末尾の0なしの10進文字列", "role": "IDENTITY", "affects": ["UNKNOWN"], "required": true, "axis_mode": "ENUMERATED", "allowed_values": null, "parse_patterns": []}
-      ],
-      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN",
-      "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": null,
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0004", "substance_class_id": "IN-000008", "name": "架空ボードB", "name_key": "架空ボードb", "item_kind": "BULK_MATERIAL", "declared_unit": "m2",
+      "declared_unit_basis": "PROVISIONAL",
+      "spec_attributes": [{"attribute_code": "thickness_mm", "label": "厚さ", "quantity_kind": "DIMENSION", "value_type": "DECIMAL", "unit_code": "mm", "canonical_format": "DECIMAL_PLAIN", "role": "IDENTITY", "affects": ["UNKNOWN"], "required": true, "axis_mode": "ENUMERATED", "allowed_values": null, "allowed_values_provenance": null, "parse_patterns": []}],
+      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": null,
       "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}],
-      "record_version": 1, "reviewed_by": "reviewer_b"
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0005", "substance_class_id": "IN-000008", "name": "かくうボードA", "name_key": "カクウボードa", "item_kind": "BULK_MATERIAL",
-      "declared_unit": "m2", "declared_unit_basis": "PROVISIONAL", "spec_attributes": [],
-      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN",
-      "dependent_requirements": [], "biogenic_flag": null, "calc_class": null, "merged_into": "MT-FICT-0001",
-      "status": "MERGED", "created_in_release": "REL-FICT-0001", "retired_in_release": "REL-FICT-0001", "replaced_by": ["MT-FICT-0001"], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0003", "derivation": "NORMALIZED"}],
-      "record_version": 2, "reviewed_by": null,
-      "explanation": "RAW-FICT-0003 の名称が解決できなかったために下書きとして作られ、ME-FICT-0001 で MT-FICT-0001 に統合された。行は消さずに残す。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0005", "substance_class_id": "IN-000008", "name": "架空板A", "name_key": "架空板a", "item_kind": "BULK_MATERIAL", "declared_unit": "m2", "declared_unit_basis": "PROVISIONAL",
+      "spec_attributes": [{"attribute_code": "thickness_mm", "label": "厚さ", "quantity_kind": "DIMENSION", "value_type": "DECIMAL", "unit_code": "mm", "canonical_format": "DECIMAL_PLAIN", "role": "IDENTITY", "affects": ["UNKNOWN"], "required": true, "axis_mode": "ENUMERATED", "allowed_values": null, "allowed_values_provenance": null, "parse_patterns": []}],
+      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": [], "biogenic_flag": null, "calc_class": null,
+      "merged_into": "MT-FICT-0001", "status": "MERGED", "created_in_release": "REL-FICT-0001", "retired_in_release": "REL-FICT-0001", "replaced_by": ["MT-FICT-0001"], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0009", "derivation": "NORMALIZED", "role": "RELIED_ON", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}],
+      "record_version": 2, "created_by": "reviewer_c", "reviewed_by": null, "explanation": "RAW-FICT-0009 の名称が解決できなかったとき、判断者が下書きとして作った（CD-FICT-0006。自動では作られない）。宣言単位・種別・同一性属性が MT-FICT-0001 と同じなので統合でき（INV-17）、ME-FICT-0001 で統合された。行は消さずに残す。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0006", "substance_class_id": "IN-000014", "name": "架空機器Q", "name_key": "架空機器q", "item_kind": "EQUIPMENT_UNIT", "declared_unit": "ct_dai",
+      "declared_unit_basis": "PROVISIONAL",
+      "spec_attributes": [{"attribute_code": "capacity_class", "label": "容量区分", "quantity_kind": "CAPACITY_CLASS", "value_type": "ENUM", "unit_code": null, "canonical_format": "ENUM_CODE", "role": "IDENTITY", "affects": ["UNKNOWN"], "required": true, "axis_mode": "ENUMERATED", "allowed_values": ["FICT_CLASS_S", "FICT_CLASS_L"], "allowed_values_provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "parse_patterns": []}],
+      "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": ["REFRIGERANT_CHARGE"], "biogenic_flag": null, "calc_class": null,
+      "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "設備の最小の例（台で数える機器）。容量は区分の名前として持ち、容量の値や、容量を活動量にする計算は持たない（README U-13）。付随して要る入力（冷媒）は、値を補わずに未入力の要求として行に残る。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "type_id": "MT-FICT-0007", "substance_class_id": "IN-000017", "name": "架空配管R", "name_key": "架空配管r", "item_kind": "LINEAR_ITEM", "declared_unit": "m", "declared_unit_basis": "PROVISIONAL",
+      "spec_attributes": [], "representative_material_id": null, "representative_rule": "NOT_DECIDED", "representative_basis_note": null, "spread_class": "UNKNOWN", "dependent_requirements": [], "biogenic_flag": null, "calc_class": null,
+      "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "設備の最小の例（長さで数える線状品）。口径などの仕様属性は例では省略した。"
     }
   ],
   "canonical_material": [
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0001", "type_id": "MT-FICT-0001", "material_kind": "SPECIFIC",
-      "attribute_values": {"thickness_mm": "12"}, "product_key": null, "derivation_rule": null,
-      "identity_string_for_illustration": "v1|MT-FICT-0001|thickness_mm=12|GENERIC",
-      "identity_key": "5caea2b14fc691c96552a75e72d98e8d0bac0ffe58dc3d6f064561b2fad8c763",
-      "name": "架空ボードA 厚12mm", "mass_path_status": "NOT_REGISTERED", "merged_into": null,
-      "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [
-        {"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0001", "derivation": "PARSED_FROM_TEXT"},
-        {"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0002", "derivation": "PARSED_FROM_TEXT"},
-        {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0004", "derivation": "PARSED_FROM_TEXT"},
-        {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0003", "derivation": "MERGED"}
-      ],
-      "record_version": 3, "reviewed_by": "reviewer_b"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0001", "type_id": "MT-FICT-0001", "material_kind": "SPECIFIC", "attribute_values": {"thickness_mm": "12"}, "product_key": null,
+      "identity_key": "2f82a8d7ca3f1c9c0d74f52d8a69e76df6a1c2ffd64e42ab454fef8e96d5d50b", "identity_array_for_illustration": ["v2", "MT-FICT-0001", "SPECIFIC", [["thickness_mm", "12"]], null], "name": "架空ボードA 厚12mm",
+      "mass_path_status": "NOT_REGISTERED", "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0001", "derivation": "PARSED_FROM_TEXT", "role": "RELIED_ON", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0002", "derivation": "PARSED_FROM_TEXT", "role": "OBSERVED_MATCH", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0004", "derivation": "PARSED_FROM_TEXT", "role": "OBSERVED_MATCH", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0003", "derivation": "PARSED_FROM_TEXT", "role": "OBSERVED_MATCH", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0009", "derivation": "MERGED", "role": "RELIED_ON", "via_merge_event_id": "ME-FICT-0002"}],
+      "record_version": 3, "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "内容の根拠にした出典（RELIED_ON）は最初の1件で、同じ内容を観測しただけの受領レコードは OBSERVED_MATCH として足す。実効ライセンスは RELIED_ON の出典だけから計算する。"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0003", "type_id": "MT-FICT-0001", "material_kind": "SPECIFIC",
-      "attribute_values": {"thickness_mm": "12"}, "product_key": null, "derivation_rule": null,
-      "identity_string_for_illustration": "v1|MT-FICT-0001|thickness_mm=12|GENERIC",
-      "identity_key": "5caea2b14fc691c96552a75e72d98e8d0bac0ffe58dc3d6f064561b2fad8c763",
-      "name": "かくうボードA 厚12mm", "mass_path_status": "NOT_REGISTERED", "merged_into": "CM-FICT-0001",
-      "status": "MERGED", "created_in_release": "REL-FICT-0001", "retired_in_release": "REL-FICT-0001", "replaced_by": ["CM-FICT-0001"], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0003", "derivation": "PARSED_FROM_TEXT"}],
-      "record_version": 2, "reviewed_by": null,
-      "explanation": "作成時は下書きの品種 MT-FICT-0005 に属していた（その時点の同一性キーは 43faf2274763f3a15a2bf6fb2a042bf68621d144f6d39efce7d8707bce992a5e）。品種の統合で type_id が MT-FICT-0001 に替わり、計算し直したキーが CM-FICT-0001 と一致したので、ME-FICT-0002 で統合された。一意であるべきなのは ACTIVE の中だけである。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0003", "type_id": "MT-FICT-0001", "material_kind": "SPECIFIC", "attribute_values": {"thickness_mm": "12"}, "product_key": null,
+      "identity_key": "2f82a8d7ca3f1c9c0d74f52d8a69e76df6a1c2ffd64e42ab454fef8e96d5d50b", "identity_array_for_illustration": ["v2", "MT-FICT-0001", "SPECIFIC", [["thickness_mm", "12"]], null], "name": "架空板A 厚12mm",
+      "mass_path_status": "NOT_REGISTERED", "merged_into": "CM-FICT-0001", "status": "MERGED", "created_in_release": "REL-FICT-0001", "retired_in_release": "REL-FICT-0001", "replaced_by": ["CM-FICT-0001"],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0009", "derivation": "PARSED_FROM_TEXT", "role": "RELIED_ON", "via_merge_event_id": null}],
+      "record_version": 2, "created_by": "reviewer_c", "reviewed_by": null,
+      "explanation": "作成時は下書きの品種 MT-FICT-0005 に属していた（その時点の同一性キーは bac5d22686e0c658be62817a178d14445a382491f5811657ceacfeb67e7dbc31）。品種の統合 ME-FICT-0001 で type_id が MT-FICT-0001 に付け替えられ、計算し直したキーが CM-FICT-0001 と一致したので、ME-FICT-0002 で統合された。一意であるべきなのは ACTIVE の中だけである。"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0004", "type_id": "MT-FICT-0002", "material_kind": "SPECIFIC",
-      "attribute_values": {}, "product_key": null, "derivation_rule": null,
-      "identity_string_for_illustration": "v1|MT-FICT-0002||GENERIC",
-      "identity_key": "52a57e675a9b2140bf80738571501cbee02df6dd6c7be1e048edd09c00d2c404",
-      "name": "架空充填材X", "mass_path_status": "BLOCKED_BASIS_MISSING", "merged_into": null,
-      "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}],
-      "record_version": 1, "reviewed_by": "reviewer_b"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0004", "type_id": "MT-FICT-0002", "material_kind": "SPECIFIC", "attribute_values": {}, "product_key": null,
+      "identity_key": "001618fb43d0f0ce4ee77a20113212e27e3417a6c658207ab94d6a3bb65eaac2", "identity_array_for_illustration": ["v2", "MT-FICT-0002", "SPECIFIC", [], null], "name": "架空充填材X", "mass_path_status": "BLOCKED_BASIS_MISSING",
+      "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0005", "type_id": "MT-FICT-0003", "material_kind": "SPECIFIC",
-      "attribute_values": {}, "product_key": null, "derivation_rule": null,
-      "identity_string_for_illustration": "v1|MT-FICT-0003||GENERIC",
-      "identity_key": "49a00cef0b0d428ce7b7e9a369a58d27cf14091bb358cf834480557f3d906dd9",
-      "name": "架空下地材Y", "mass_path_status": "DIRECT", "merged_into": null,
-      "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
-      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}],
-      "record_version": 1, "reviewed_by": "reviewer_b"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0005", "type_id": "MT-FICT-0003", "material_kind": "SPECIFIC", "attribute_values": {}, "product_key": null,
+      "identity_key": "4ffef570ec6d86baeacb369d3da84506731e886b5b9298667233800c5f81e4fc", "identity_array_for_illustration": ["v2", "MT-FICT-0003", "SPECIFIC", [], null], "name": "架空下地材Y", "mass_path_status": "DIRECT",
+      "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0006", "type_id": "MT-FICT-0004", "material_kind": "PRODUCT_SPECIFIC", "attribute_values": {"thickness_mm": "12"}, "product_key": "FICT-B1",
+      "identity_key": "2444088272c13e57512b6c0c544bf56c830a3b4a40c0f58f705e75744967f040", "identity_array_for_illustration": ["v2", "MT-FICT-0004", "PRODUCT_SPECIFIC", [["thickness_mm", "12"]], "FICT-B1"], "name": "架空ボードB 厚12mm 架空製品B1",
+      "mass_path_status": "NOT_REGISTERED", "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 3, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "特定製品の例。束縛するときは CANONICAL_MATERIAL の水準を使う（製品だけの水準は無い）。CM-FICT-0007 と一度統合され（ME-FICT-0003）、取り消された（ME-FICT-0004）。統合で引き継いだ来歴は、取り消しのときに外した。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0007", "type_id": "MT-FICT-0004", "material_kind": "PRODUCT_SPECIFIC", "attribute_values": {"thickness_mm": "12"}, "product_key": "FICT-B-1",
+      "identity_key": "b86c19f56a31d14736aa438b2a3464fb570d4d226a7d4a7da74f14e6e3d2aebe", "identity_array_for_illustration": ["v2", "MT-FICT-0004", "PRODUCT_SPECIFIC", [["thickness_mm", "12"]], "FICT-B-1"],
+      "name": "架空ボードB 厚12mm 架空製品B-1", "mass_path_status": "NOT_REGISTERED", "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 3,
+      "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "ME-FICT-0003 で CM-FICT-0006 に統合されて MERGED になり、ME-FICT-0004 の分割で統合前の状態（ACTIVE、merged_into = null、換算 UC-FICT-0005 の適用範囲）に戻った。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0008", "type_id": "MT-FICT-0006", "material_kind": "SPECIFIC", "attribute_values": {"capacity_class": "FICT_CLASS_S"}, "product_key": null,
+      "identity_key": "993fd8564410a78e0e43ef32b2baa3995e64fd72e9610d6a771c283a36b2915a", "identity_array_for_illustration": ["v2", "MT-FICT-0006", "SPECIFIC", [["capacity_class", "FICT_CLASS_S"]], null], "name": "架空機器Q 区分S",
+      "mass_path_status": "NOT_REGISTERED", "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "canonical_id": "CM-FICT-0009", "type_id": "MT-FICT-0007", "material_kind": "SPECIFIC", "attribute_values": {}, "product_key": null,
+      "identity_key": "a1eb1b3ae4110d09ae8e0f0c5e6d6af4e900616decb3049c2aefd4cc3d7e159c", "identity_array_for_illustration": ["v2", "MT-FICT-0007", "SPECIFIC", [], null], "name": "架空配管R", "mass_path_status": "NOT_REGISTERED",
+      "merged_into": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b"
     }
   ],
   "alias": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0001", "normalized_key": "架空ボードa", "surface_form": "架空ボードA", "alias_type": "CANONICAL_NAME", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE", "target_ids": ["MT-FICT-0001"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "created_by": "reviewer_a", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "「架空ボードＡ」「架空ﾎﾞｰﾄﾞA」「架空ﾎﾞｰﾄﾞＡ」は正規化で同じキーに落ちるので、この1行で足りる。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0002", "normalized_key": "カクウボードa", "surface_form": "かくうボードA", "alias_type": "SCRIPT_VARIANT", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE", "target_ids": ["MT-FICT-0001"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "created_by": "reviewer_a", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0003", "derivation": "MERGED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "漢字とかなの読み替えは規則では決められないので、人が登録する行になる。統合 ME-FICT-0001 で、退く側の名称を別名に移して作られた。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0003", "normalized_key": "架空ボード", "surface_form": "架空ボード", "alias_type": "GENERIC_TERM", "target_kind": "MATERIAL_TYPE", "resolution": "AMBIGUOUS", "target_ids": ["MT-FICT-0001", "MT-FICT-0004"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "created_by": "reviewer_a", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0006", "derivation": "NORMALIZED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "総称。候補を2件返し、どちらかへ自動で寄せない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0004", "normalized_key": "架空ボードb", "surface_form": "架空ボードB", "alias_type": "CANONICAL_NAME", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE", "target_ids": ["MT-FICT-0004"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "created_by": "reviewer_a", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "架空充填材X・架空下地材Y の正式名の別名は、例では省略した。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0001", "normalized_key": "架空ボードa", "surface_form": "架空ボードA", "alias_type": "CANONICAL_NAME", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE",
+      "target_ids": ["MT-FICT-0001"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "「架空ボードＡ」「架空ﾎﾞｰﾄﾞA」「架空ﾎﾞｰﾄﾞＡ」は正規化で同じキーに落ちるので、この1行で足りる。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0002", "normalized_key": "カクウボードa", "surface_form": "かくうボードA", "alias_type": "READING_KANA", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE",
+      "target_ids": ["MT-FICT-0001"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0003", "derivation": "NORMALIZED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "漢字とかなの読み替えは規則では決められないので、人が登録する行になる（CD-FICT-0002）。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0003", "normalized_key": "架空ボード", "surface_form": "架空ボード", "alias_type": "GENERIC_TERM", "target_kind": "MATERIAL_TYPE", "resolution": "AMBIGUOUS",
+      "target_ids": ["MT-FICT-0001", "MT-FICT-0004"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0001", "raw_id": "RAW-FICT-0006", "derivation": "NORMALIZED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "総称。候補を2件返し、どちらかへ自動で寄せない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0004", "normalized_key": "架空ボードb", "surface_form": "架空ボードB", "alias_type": "CANONICAL_NAME", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE",
+      "target_ids": ["MT-FICT-0004"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0005", "normalized_key": "架空板a", "surface_form": "架空板A", "alias_type": "SYNONYM", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE", "target_ids": ["MT-FICT-0001"],
+      "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0009", "derivation": "MERGED", "role": "RELIED_ON", "via_merge_event_id": "ME-FICT-0001"}],
+      "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "統合 ME-FICT-0001 で、退く側の名称を別名に移して作られた。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0006", "normalized_key": "架空充填材x", "surface_form": "架空充填材X", "alias_type": "CANONICAL_NAME", "target_kind": "MATERIAL_TYPE", "resolution": "UNIQUE",
+      "target_ids": ["MT-FICT-0002"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "架空下地材Y・架空機器Q・架空配管R と特定製品の正式名の別名は、例では省略した。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "alias_id": "AL-FICT-0007", "normalized_key": "架空製品b-1", "surface_form": "架空製品B-1", "alias_type": "LEGACY_NAME", "target_kind": "CANONICAL_MATERIAL", "resolution": "UNIQUE",
+      "target_ids": ["CM-FICT-0006"], "context_node_id": null, "evidence_kind": "SYNTHETIC_FICTIONAL", "rights_note": null, "normalizer_version": "norm-fict-0.1", "status": "DEPRECATED", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": "REL-FICT-0001", "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "MERGED", "role": "RELIED_ON", "via_merge_event_id": "ME-FICT-0003"}], "record_version": 2, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "統合 ME-FICT-0003 が作った別名。分割 ME-FICT-0004 で廃止（DEPRECATED）にした。行は消さずに残す。"
+    }
   ],
   "unit_conversion": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0001", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0001", "conversion_kind": "THICKNESS", "from_unit": "m2", "to_unit": "m3", "basis_parameter": "thickness_mm", "basis_origin": "IDENTITY_ATTRIBUTE", "basis_attribute_code": "thickness_mm", "param_source_order": [], "basis_ref": null, "curated_ratio": null, "basis_value_state": "DERIVED", "basis_license_status": "PERMITTED_PUBLIC", "applicability": null, "invertible": true, "conversion_status": "USABLE", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "m3 = m2 × 厚さ(mm) ÷ 1000。根拠は正規材料レコード自身の仕様値なので、外部の値が要らない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0002", "scope_kind": "CANONICAL_MATERIAL", "scope_id": "CM-FICT-0001", "conversion_kind": "AREA_PER_PIECE", "from_unit": "ct_mai", "to_unit": "m2", "basis_parameter": "area_per_piece_m2", "basis_origin": "EXTERNAL_LEDGER", "basis_attribute_code": null, "param_source_order": [], "basis_ref": null, "curated_ratio": null, "basis_value_state": "MISSING", "basis_license_status": "UNKNOWN", "applicability": null, "invertible": false, "conversion_status": "BLOCKED_BASIS_MISSING", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0004", "derivation": "NORMALIZED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "「枚」で数える行が実際に現れたという事実を残すために登録する。1枚の面積が無いので、枚で入力された数量は計算せずに止まる（CONVERSION_BASIS_MISSING）。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0003", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0002", "conversion_kind": "THICKNESS", "from_unit": "m2", "to_unit": "m3", "basis_parameter": "thickness_mm", "basis_origin": "ROW_PARAMETER", "basis_attribute_code": null, "param_source_order": ["SPEC_TOKEN", "USER_INPUT"], "basis_ref": null, "curated_ratio": null, "basis_value_state": "DERIVED", "basis_license_status": "PERMITTED_PUBLIC", "applicability": null, "invertible": true, "conversion_status": "USABLE", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "充填する厚さは材料の属性ではなく使い方で決まるので、行ごとに与える。名称にも入力にも無ければ止まり、既定の厚さは補わない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0004", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0002", "conversion_kind": "DENSITY", "from_unit": "m3", "to_unit": "kg", "basis_parameter": "density_kg_per_m3", "basis_origin": "EXTERNAL_LEDGER", "basis_attribute_code": null, "param_source_order": [], "basis_ref": null, "curated_ratio": null, "basis_value_state": "MISSING", "basis_license_status": "UNKNOWN", "applicability": null, "invertible": false, "conversion_status": "BLOCKED_BASIS_MISSING", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "密度が無いので質量への経路が無い。この材料の輸送・廃棄段階は「0」ではなく「計算できない」になる。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0001", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0001", "conversion_kind": "THICKNESS", "from_unit": "m2", "to_unit": "m3", "basis_parameter": "thickness",
+      "basis_unit_code": "mm", "basis_origin": "IDENTITY_ATTRIBUTE", "basis_attribute_code": "thickness_mm", "param_source_order": [], "basis_ref": null, "equivalence_evidence_kind": null, "basis_value_state": "DERIVED",
+      "basis_license_status": "PERMITTED_PUBLIC", "applicability": null, "invertible": true, "conversion_status": "USABLE", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1,
+      "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "m3 = m2 × 厚さ。厚さの単位は basis_unit_code（mm）で持ち、定数は単位辞書の倍率（mm は m の 0.001 倍）から導く。根拠は正規材料レコード自身の寸法なので、外部の値が要らない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0002", "scope_kind": "CANONICAL_MATERIAL", "scope_id": "CM-FICT-0001", "conversion_kind": "AREA_PER_PIECE", "from_unit": "ct_mai", "to_unit": "m2",
+      "basis_parameter": "area_per_piece", "basis_unit_code": null, "basis_origin": "EXTERNAL_LEDGER", "basis_attribute_code": null, "param_source_order": [], "basis_ref": null, "equivalence_evidence_kind": null,
+      "basis_value_state": "MISSING", "basis_license_status": "UNKNOWN", "applicability": null, "invertible": false, "conversion_status": "BLOCKED_BASIS_MISSING", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0004", "derivation": "NORMALIZED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "「枚」で数える行が実際に現れたという事実を残すために登録する。1枚の面積が無いので、枚で入力された数量は計算せずに止まる（CONVERSION_BASIS_MISSING）。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0003", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0002", "conversion_kind": "THICKNESS", "from_unit": "m2", "to_unit": "m3", "basis_parameter": "thickness",
+      "basis_unit_code": "mm", "basis_origin": "ROW_PARAMETER", "basis_attribute_code": null, "param_source_order": ["USER_INPUT", "SPEC_TOKEN"], "basis_ref": null, "equivalence_evidence_kind": null, "basis_value_state": "DERIVED",
+      "basis_license_status": "PERMITTED_PUBLIC", "applicability": null, "invertible": true, "conversion_status": "USABLE", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1,
+      "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "充填する厚さは材料の属性ではなく使い方で決まるので、行ごとに与える。名称にも入力にも無ければ止まり、既定の厚さは補わない。両方にあって食い違えば止まる。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0004", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0002", "conversion_kind": "DENSITY", "from_unit": "m3", "to_unit": "kg", "basis_parameter": "density",
+      "basis_unit_code": null, "basis_origin": "EXTERNAL_LEDGER", "basis_attribute_code": null, "param_source_order": [], "basis_ref": null, "equivalence_evidence_kind": null, "basis_value_state": "MISSING",
+      "basis_license_status": "UNKNOWN", "applicability": null, "invertible": true, "conversion_status": "BLOCKED_BASIS_MISSING", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}, {"source_id": "SRC-FICT-0002", "raw_id": "RAW-FICT-0007", "derivation": "NORMALIZED", "role": "OBSERVED_MATCH", "via_merge_event_id": null}],
+      "record_version": 2, "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "密度の参照が無いので質量への経路が無い。この材料の輸送・廃棄段階は「0」ではなく「計算できない」になる。同じ材料が kg で現れた事実（RAW-FICT-0007）も、別の品種ではなくこの換算に残す。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "conversion_id": "UC-FICT-0005", "scope_kind": "CANONICAL_MATERIAL", "scope_id": "CM-FICT-0007", "conversion_kind": "AREA_PER_PIECE", "from_unit": "ct_mai", "to_unit": "m2",
+      "basis_parameter": "area_per_piece", "basis_unit_code": null, "basis_origin": "EXTERNAL_LEDGER", "basis_attribute_code": null, "param_source_order": [], "basis_ref": null, "equivalence_evidence_kind": null,
+      "basis_value_state": "MISSING", "basis_license_status": "UNKNOWN", "applicability": null, "invertible": false, "conversion_status": "BLOCKED_BASIS_MISSING", "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 3, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "統合 ME-FICT-0003 で適用範囲が CM-FICT-0006 に付け替えられ、分割 ME-FICT-0004 で CM-FICT-0007 に戻った（付け替えは merge_event.repointed_refs に残る）。"
+    }
   ],
   "placement": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0001", "function_node_id": "FN-000026", "type_id": "MT-FICT-0001", "material_ids_limit": [], "is_primary": true, "entry_unit": "m2", "representative_override_id": null, "context_condition": null, "sort_key": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "屋根・外壁の「外壁下地」での使用。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0002", "function_node_id": "FN-000034", "type_id": "MT-FICT-0001", "material_ids_limit": [], "is_primary": false, "entry_unit": "m2", "representative_override_id": null, "context_condition": null, "sort_key": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "内装の「間仕切」での使用。同じ品種が2つの部位グループで使われるが、品種と正規材料レコードは複製せず、配置を増やすだけである。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0003", "function_node_id": "FN-000027", "type_id": "MT-FICT-0002", "material_ids_limit": [], "is_primary": true, "entry_unit": "m2", "representative_override_id": null, "context_condition": null, "sort_key": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "屋根・外壁の「外壁断熱」での使用。数量は面積で入れ、宣言単位 m3 へは UC-FICT-0003 で換算する。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0004", "function_node_id": "FN-000026", "type_id": "MT-FICT-0003", "material_ids_limit": [], "is_primary": true, "entry_unit": "kg", "representative_override_id": null, "context_condition": null, "sort_key": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "屋根・外壁の「外壁下地」での使用。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0001", "function_node_id": "FN-000026", "type_id": "MT-FICT-0001", "material_ids_limit": [], "is_primary": true, "entry_unit": "m2",
+      "representative_override_id": null, "context_condition": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "屋根・外壁の「外壁下地」での使用。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0002", "function_node_id": "FN-000034", "type_id": "MT-FICT-0001", "material_ids_limit": [], "is_primary": false, "entry_unit": "m2",
+      "representative_override_id": null, "context_condition": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "内装の「間仕切」での使用。同じ品種が2つの部位グループで使われるが、品種と正規材料レコードは複製せず、配置を増やすだけである。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0003", "function_node_id": "FN-000027", "type_id": "MT-FICT-0002", "material_ids_limit": [], "is_primary": true, "entry_unit": "m2",
+      "representative_override_id": null, "context_condition": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "屋根・外壁の「外壁断熱」での使用。数量は面積で入れ、宣言単位 m3 へは UC-FICT-0003 で換算する。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0004", "function_node_id": "FN-000026", "type_id": "MT-FICT-0003", "material_ids_limit": [], "is_primary": true, "entry_unit": "kg",
+      "representative_override_id": null, "context_condition": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "屋根・外壁の「外壁下地」での使用。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0005", "function_node_id": "FN-000040", "type_id": "MT-FICT-0006", "material_ids_limit": [], "is_primary": true, "entry_unit": "ct_dai",
+      "representative_override_id": null, "context_condition": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "空調設備の「熱源」での使用。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "placement_id": "PL-FICT-0006", "function_node_id": "FN-000043", "type_id": "MT-FICT-0007", "material_ids_limit": [], "is_primary": true, "entry_unit": "m",
+      "representative_override_id": null, "context_condition": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC",
+      "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a",
+      "reviewed_by": "reviewer_b", "explanation": "空調設備の「空調配管」での使用。"
+    }
   ],
   "duplicate_handling": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D0_RAW_EXACT", "records": ["RAW-FICT-0001", "RAW-FICT-0005"], "handling": "同じ出典の同じ内容の行。content_hash が一致するので、受領時に RAW-FICT-0001 の occurrence_count を 2 にし、RAW-FICT-0005 は以降の処理に進めない。統合イベントは作らない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D1_IDENTITY", "records": ["RAW-FICT-0001", "RAW-FICT-0002"], "handling": "表記は違うが正規化後の同一性キーが一致する。2件目は新しいレコードを作らず、CM-FICT-0001 に来歴を足す。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D2_UNIT_VARIANT", "records": ["RAW-FICT-0001", "RAW-FICT-0004"], "handling": "同一性は同じで単位だけが違う。正規材料レコードは1件のままにし、単位換算 UC-FICT-0002 を登録する。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D3_NEAR", "records": ["MT-FICT-0001", "MT-FICT-0005"], "handling": "名称が近いが規則では一致しない。人が同じ品種と確認して統合した（ME-FICT-0001）。続いて配下のレコードが D1 として統合された（ME-FICT-0002）。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D3_NEAR", "records": ["MT-FICT-0001", "MT-FICT-0004"], "handling": "名称が近いが別の品種。統合せず、類似関係 SL-FICT-0001 として残す。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D0_RAW_EXACT", "records": ["RAW-FICT-0001", "RAW-FICT-0005"],
+      "handling": "同じ出典の同じ内容の行。content_hash が一致するので、RAW-FICT-0005 は別レコードのまま DUPLICATE_RAW として残し、以降の処理に進めない。先行レコードは書き換えず、出現回数は duplicate_of_raw を数えて求める。統合イベントは作らない。案件の数量行にはこの扱いをしない。"
+    },
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D1_IDENTITY", "records": ["RAW-FICT-0001", "RAW-FICT-0002"], "handling": "表記は違うが正規化後の同一性キーが一致する。2件目は新しいレコードを作らず、CM-FICT-0001 に来歴（OBSERVED_MATCH）を足す。"},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D2_UNIT_VARIANT", "records": ["RAW-FICT-0001", "RAW-FICT-0004"], "handling": "同一性は同じで単位だけが違う（面積と枚）。正規材料レコードは1件のままにし、単位換算 UC-FICT-0002 を登録する。"},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D2_UNIT_VARIANT", "records": ["CM-FICT-0004", "RAW-FICT-0007"], "handling": "同じ材料が体積（宣言単位）と質量で現れる。次元が違っても別の品種にせず、換算 UC-FICT-0004 で表す。根拠（密度の参照）が無いので停止状態のままになる。"},
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D3_NEAR", "records": ["MT-FICT-0001", "MT-FICT-0005"],
+      "handling": "名称が近いが規則では一致しない。宣言単位・種別・同一性属性が同じであることを確かめたうえで、人が同じ品種と確認して統合した（ME-FICT-0001）。配下のレコードの統合（ME-FICT-0002）は、その承認の範囲に含まれる。"
+    },
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D3_NEAR", "records": ["MT-FICT-0001", "MT-FICT-0004"], "handling": "名称が近いが別の品種。統合せず、類似関係 SL-FICT-0001 として残す。"},
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "duplicate_level": "D3_NEAR", "records": ["CM-FICT-0006", "CM-FICT-0007"],
+      "handling": "一度統合した（ME-FICT-0003）が、別の製品と分かって取り消した（ME-FICT-0004）。付け替えた参照を戻し、結論を SL-FICT-0002（DISTINCT_CONFIRMED）に残す。"
+    }
   ],
   "merge_event": [
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "merge_event_id": "ME-FICT-0001", "event_kind": "MERGE", "target_kind": "MATERIAL_TYPE", "survivor_id": "MT-FICT-0001", "merged_ids": ["MT-FICT-0005"], "duplicate_level": "D3_NEAR", "survivor_rule_applied": "ACTIVE_OVER_DRAFT",
-      "field_resolutions": [
-        {"field": "name", "kept_value": "架空ボードA", "discarded_values": ["かくうボードA"], "rule": "MOVE_TO_ALIAS"},
-        {"field": "spec_attributes", "kept_value": "thickness_mm（IDENTITY）", "discarded_values": [], "rule": "KEEP_SURVIVOR"},
-        {"field": "license_status", "kept_value": "PERMITTED_PUBLIC", "discarded_values": [], "rule": "MOST_RESTRICTIVE"}
-      ],
-      "aliases_created": ["AL-FICT-0002"], "license_before": "PERMITTED_PUBLIC", "license_after": "PERMITTED_PUBLIC",
-      "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11",
-      "reason": "ひらがな表記と漢字表記が同じ品種を指すと、2人が確認した（架空の判断）。", "release_id": "REL-FICT-0001"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "merge_event_id": "ME-FICT-0001", "event_kind": "MERGE", "reverts_event_id": null, "target_kind": "MATERIAL_TYPE", "survivor_id": "MT-FICT-0001", "merged_ids": ["MT-FICT-0005"],
+      "duplicate_level": "D3_NEAR", "survivor_rule_applied": "ACTIVE_OVER_DRAFT",
+      "field_resolutions": [{"field": "name", "kept_value": "架空ボードA", "discarded_values": ["架空板A"], "rule": "MOVE_TO_ALIAS"}, {"field": "spec_attributes", "kept_value": ["thickness_mm"], "discarded_values": [], "rule": "KEEP_SURVIVOR"}, {"field": "provenance", "kept_value": null, "discarded_values": [], "rule": "UNION"}, {"field": "license_status", "kept_value": "PERMITTED_PUBLIC", "discarded_values": [], "rule": "MOST_RESTRICTIVE"}],
+      "aliases_created": ["AL-FICT-0005"], "repointed_refs": [{"ref_kind": "CANONICAL_MATERIAL", "ref_id": "CM-FICT-0003", "field": "type_id", "from_id": "MT-FICT-0005", "to_id": "MT-FICT-0001"}],
+      "affected_descendant_ids": ["CM-FICT-0003"], "caused_by_event_id": null, "license_before": "PERMITTED_PUBLIC", "license_after": "PERMITTED_PUBLIC", "decided_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "decided_at": "2026-11-11", "reason": "別の表記で作られた下書きの品種が、同じ品種を指すと確認した。宣言単位・種別・同一性属性は同じである（架空の判断）。", "release_id": "REL-FICT-0001"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "merge_event_id": "ME-FICT-0002", "event_kind": "MERGE", "target_kind": "CANONICAL_MATERIAL", "survivor_id": "CM-FICT-0001", "merged_ids": ["CM-FICT-0003"], "duplicate_level": "D1_IDENTITY", "survivor_rule_applied": "ACTIVE_OVER_DRAFT",
-      "field_resolutions": [
-        {"field": "name", "kept_value": "架空ボードA 厚12mm", "discarded_values": ["かくうボードA 厚12mm"], "rule": "KEEP_SURVIVOR"},
-        {"field": "provenance", "kept_value": "4件（RAW-FICT-0003 の来歴を引き継いだ）", "discarded_values": [], "rule": "UNION"},
-        {"field": "license_status", "kept_value": "PERMITTED_PUBLIC", "discarded_values": [], "rule": "MOST_RESTRICTIVE"}
-      ],
-      "aliases_created": [], "license_before": "PERMITTED_PUBLIC", "license_after": "PERMITTED_PUBLIC",
-      "decided_by": "system", "reviewed_by": null, "decided_at": "2026-11-11",
-      "reason": "品種の統合（ME-FICT-0001）により同一性キーが完全に一致したため。完全一致は自動統合してよい唯一の場合である。", "release_id": "REL-FICT-0001"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "merge_event_id": "ME-FICT-0002", "event_kind": "MERGE", "reverts_event_id": null, "target_kind": "CANONICAL_MATERIAL", "survivor_id": "CM-FICT-0001", "merged_ids": ["CM-FICT-0003"],
+      "duplicate_level": "D1_IDENTITY", "survivor_rule_applied": "ACTIVE_OVER_DRAFT",
+      "field_resolutions": [{"field": "name", "kept_value": "架空ボードA 厚12mm", "discarded_values": ["架空板A 厚12mm"], "rule": "KEEP_SURVIVOR"}, {"field": "provenance", "kept_value": null, "discarded_values": [], "rule": "UNION"}, {"field": "license_status", "kept_value": "PERMITTED_PUBLIC", "discarded_values": [], "rule": "MOST_RESTRICTIVE"}],
+      "aliases_created": [], "repointed_refs": [], "affected_descendant_ids": [], "caused_by_event_id": "ME-FICT-0001", "license_before": "PERMITTED_PUBLIC", "license_after": "PERMITTED_PUBLIC", "decided_by": "system",
+      "reviewed_by": null, "decided_at": "2026-11-11", "reason": "品種の統合により同一性キーが完全に一致したため。元の統合 ME-FICT-0001 の確認者の承認の範囲に含まれる。", "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "merge_event_id": "ME-FICT-0003", "event_kind": "MERGE", "reverts_event_id": null, "target_kind": "CANONICAL_MATERIAL", "survivor_id": "CM-FICT-0006", "merged_ids": ["CM-FICT-0007"],
+      "duplicate_level": "D3_NEAR", "survivor_rule_applied": "REVIEWER_DECISION",
+      "field_resolutions": [{"field": "product_key", "kept_value": "FICT-B1", "discarded_values": ["FICT-B-1"], "rule": "MOVE_TO_ALIAS"}, {"field": "provenance", "kept_value": null, "discarded_values": [], "rule": "UNION"}, {"field": "license_status", "kept_value": "PERMITTED_PUBLIC", "discarded_values": [], "rule": "MOST_RESTRICTIVE"}],
+      "aliases_created": ["AL-FICT-0007"], "repointed_refs": [{"ref_kind": "UNIT_CONVERSION", "ref_id": "UC-FICT-0005", "field": "scope_id", "from_id": "CM-FICT-0007", "to_id": "CM-FICT-0006"}], "affected_descendant_ids": [],
+      "caused_by_event_id": null, "license_before": "PERMITTED_PUBLIC", "license_after": "PERMITTED_PUBLIC", "decided_by": "reviewer_a", "reviewed_by": "reviewer_b", "decided_at": "2026-11-11",
+      "reason": "製品の識別文字列の表記ゆれと判断した。どちらも有効で作成した版も同じなので、残す側は判断者が決めた（架空の判断。後に ME-FICT-0004 で取り消した）。", "release_id": "REL-FICT-0001"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "merge_event_id": "ME-FICT-0004", "event_kind": "SPLIT", "reverts_event_id": "ME-FICT-0003", "target_kind": "CANONICAL_MATERIAL", "survivor_id": "CM-FICT-0006",
+      "merged_ids": ["CM-FICT-0007"], "duplicate_level": null, "survivor_rule_applied": null, "field_resolutions": [], "aliases_created": [],
+      "repointed_refs": [{"ref_kind": "UNIT_CONVERSION", "ref_id": "UC-FICT-0005", "field": "scope_id", "from_id": "CM-FICT-0006", "to_id": "CM-FICT-0007"}], "affected_descendant_ids": [], "caused_by_event_id": null,
+      "license_before": null, "license_after": null, "decided_by": "reviewer_a", "reviewed_by": "reviewer_c", "decided_at": "2026-11-11",
+      "reason": "別の製品であることが分かったので、統合を取り消した。付け替えた換算を戻し、統合で引き継いだ来歴を外し、統合が作った別名 AL-FICT-0007 を廃止した。結論は SL-FICT-0002 に残した（架空の判断）。", "release_id": "REL-FICT-0001"
     }
   ],
   "similarity_link": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "link_id": "SL-FICT-0001", "target_kind": "MATERIAL_TYPE", "left_id": "MT-FICT-0001", "right_id": "MT-FICT-0004", "relation": "SIMILAR", "basis": "素材系統と宣言単位が同じで名称が近い。仕様と出典は別（架空の判断）。", "substitution_policy": "NONE", "verification_status": "NOT_VERIFIED", "decided_by": "reviewer_a", "decided_at": "2026-11-11", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b", "explanation": "検索と提案にだけ使う。計算での置き換えは許していない。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "link_id": "SL-FICT-0001", "target_kind": "MATERIAL_TYPE", "left_id": "MT-FICT-0001", "right_id": "MT-FICT-0004", "relation": "SIMILAR", "basis": "素材系統と宣言単位が同じで名称が近い。仕様と出典は別（架空の判断）。",
+      "substitution_policy": "NONE", "verification_status": "NOT_VERIFIED", "decided_by": "reviewer_a", "decided_at": "2026-11-11", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1,
+      "created_by": "reviewer_a", "reviewed_by": "reviewer_b", "explanation": "検索と提案にだけ使う。計算での置き換えは許していない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "link_id": "SL-FICT-0002", "target_kind": "CANONICAL_MATERIAL", "left_id": "CM-FICT-0006", "right_id": "CM-FICT-0007", "relation": "DISTINCT_CONFIRMED", "basis": "識別文字列は似ているが別の製品（架空の判断）。",
+      "substitution_policy": "NONE", "verification_status": "NOT_VERIFIED", "decided_by": "reviewer_a", "decided_at": "2026-11-11", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [],
+      "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1,
+      "created_by": "reviewer_a", "reviewed_by": "reviewer_c", "explanation": "分割 ME-FICT-0004 の結論を残し、同じ統合の提案を繰り返さないようにする。"
+    }
   ],
   "assembly": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "name": "架空外壁構成Z", "assembly_kind": "LAYERED_ASSEMBLY", "function_node_id": "FN-000005", "composite_material_id": null, "driver_dimension": "AREA", "driver_unit": "m2", "expansion_mode": "EXPAND_TO_ROWS", "context_condition": null, "stage_note": "構成要素の係数は未束縛。束縛するときは、含む段階が構成要素の間でそろっていることを確認する。", "status": "ACTIVE", "created_in_release": "REL-FICT-0001", "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": "reviewer_b"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "name": "架空外壁構成Z", "assembly_kind": "LAYERED_ASSEMBLY", "function_node_id": "FN-000005", "composite_material_id": null, "driver_dimension": "AREA",
+      "driver_unit": "m2", "driver_measure": "FICT_MEASURE_WALL_AREA", "expansion_mode": "EXPAND_TO_ROWS", "context_condition": null, "stage_note": "構成要素の係数は未束縛。束縛するときは、含む段階が構成要素の間でそろっていることを確認する。", "status": "ACTIVE",
+      "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "基準数量が何を測った面積か（driver_measure）は架空の符号で、語彙は未定義である。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0002", "name": "架空機器一式S", "assembly_kind": "SYSTEM_KIT", "function_node_id": "FN-000009", "composite_material_id": null, "driver_dimension": "COUNT",
+      "driver_unit": "ct_dai", "driver_measure": "FICT_MEASURE_UNIT_COUNT", "expansion_mode": "EXPAND_TO_ROWS", "context_condition": null, "stage_note": null, "status": "ACTIVE", "created_in_release": "REL-FICT-0001",
+      "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": "reviewer_b",
+      "explanation": "設備の最小の例（機器と付属の配管の一式）。基準数量は機器の台数。"
+    }
   ],
   "assembly_component": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "line_no": 1, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0001", "component_unit": "m2", "ratio_basis": "DRIVER_IDENTITY", "ratio_ref": null, "ratio_param_name": null, "ratio_value_state": "DERIVED", "placement_id": "PL-FICT-0001", "default_included": true, "optional": false, "substitutable": true, "explanation": "基準数量（外壁の面積）そのものが構成要素の数量になる。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "line_no": 2, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0004", "component_unit": "m3", "ratio_basis": "GEOMETRIC_DEFINITION", "ratio_ref": null, "ratio_param_name": "thickness_mm", "ratio_value_state": "DERIVED", "placement_id": "PL-FICT-0003", "default_included": true, "optional": false, "substitutable": true, "explanation": "面積 × 厚さ(mm) ÷ 1000 で決まる。厚さは行ごとに与える。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "line_no": 3, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0005", "component_unit": "kg", "ratio_basis": "EXTERNAL_LEDGER", "ratio_ref": null, "ratio_param_name": null, "ratio_value_state": "MISSING", "placement_id": "PL-FICT-0004", "default_included": true, "optional": true, "substitutable": true, "explanation": "面積あたりの質量は出典と許諾の確認できた値が必要で、未入手。値は置かず、参照が null のまま残る。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "line_no": 1, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0001", "component_unit": "m2", "ratio_basis": "DRIVER_IDENTITY", "ratio_ref": null,
+      "ratio_param_name": null, "ratio_param_unit_code": null, "component_measure": "FICT_MEASURE_WALL_AREA", "ratio_value_state": "DERIVED", "placement_id": "PL-FICT-0001", "optional": false, "substitutable": true,
+      "explanation": "基準数量そのものが構成要素の数量になる。単位と測り方が基準数量と同じなので許される。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "line_no": 2, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0004", "component_unit": "m3", "ratio_basis": "GEOMETRIC_DEFINITION",
+      "ratio_ref": null, "ratio_param_name": "thickness", "ratio_param_unit_code": "mm", "component_measure": null, "ratio_value_state": "DERIVED", "placement_id": "PL-FICT-0003", "optional": false, "substitutable": true,
+      "explanation": "面積 × 厚さで決まる。厚さは行ごとに与え、単位は ratio_param_unit_code（mm）で持つ。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0001", "line_no": 3, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0005", "component_unit": "kg", "ratio_basis": "EXTERNAL_LEDGER", "ratio_ref": null,
+      "ratio_param_name": null, "ratio_param_unit_code": null, "component_measure": null, "ratio_value_state": "MISSING", "placement_id": "PL-FICT-0004", "optional": true, "substitutable": true,
+      "explanation": "面積あたりの質量は出典と許諾の確認できた値が必要で、未入手。値は置かず、参照が null のまま残る。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0002", "line_no": 1, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0008", "component_unit": "ct_dai", "ratio_basis": "DRIVER_IDENTITY", "ratio_ref": null,
+      "ratio_param_name": null, "ratio_param_unit_code": null, "component_measure": "FICT_MEASURE_UNIT_COUNT", "ratio_value_state": "DERIVED", "placement_id": "PL-FICT-0005", "optional": false, "substitutable": true,
+      "explanation": "基準数量（台数）そのものが機器の数量になる。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "assembly_id": "AS-FICT-0002", "line_no": 2, "target_kind": "CANONICAL_MATERIAL", "target_id": "CM-FICT-0009", "component_unit": "m", "ratio_basis": "EXTERNAL_LEDGER", "ratio_ref": null,
+      "ratio_param_name": null, "ratio_param_unit_code": null, "component_measure": null, "ratio_value_state": "MISSING", "placement_id": "PL-FICT-0006", "optional": true, "substitutable": true,
+      "explanation": "1台あたりの配管の長さは未入手。値は置かず、参照が null のまま残る。"
+    }
   ],
   "param_binding": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "binding_id": "PB-FICT-0001", "scope_kind": "CANONICAL_MATERIAL", "scope_id": "CM-FICT-0001", "param_kind": "FACTOR", "param_ref": null, "binding_unit": null, "stages": [], "link_basis": null, "proxy_reason": null, "context_condition": null, "value_state": "MISSING", "priority_rank": null, "status": "DRAFT", "created_in_release": "REL-FICT-0001", "license_status": "UNKNOWN", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": null, "explanation": "係数の置き場だけを示す下書き。参照先が無いので、この材料の行は計算できない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "binding_id": "PB-FICT-0002", "scope_kind": "FUNCTION_NODE", "scope_id": "FN-000026", "param_kind": "SERVICE_LIFE", "param_ref": null, "binding_unit": null, "stages": [], "link_basis": null, "proxy_reason": null, "context_condition": null, "value_state": "MISSING", "priority_rank": null, "status": "DRAFT", "created_in_release": "REL-FICT-0001", "license_status": "UNKNOWN", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": null, "explanation": "耐用年数を部位要素の水準に束縛する場合の置き場。値は持たない。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "binding_id": "PB-FICT-0003", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0001", "param_kind": "EOL_ROUTE", "param_ref": null, "binding_unit": null, "stages": [], "link_basis": null, "proxy_reason": null, "context_condition": null, "value_state": "MISSING", "priority_rank": null, "status": "DRAFT", "created_in_release": "REL-FICT-0001", "license_status": "UNKNOWN", "compartment": "PUBLIC_RELEASE", "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED"}], "record_version": 1, "reviewed_by": null, "explanation": "廃棄経路を品種の水準に束縛する場合の置き場。値は持たない。"}
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "binding_id": "PB-FICT-0001", "scope_kind": "CANONICAL_MATERIAL", "scope_id": "CM-FICT-0001", "param_kind": "FACTOR", "param_ref": null, "binding_unit": null, "stages": [],
+      "boundary_ref": null, "link_basis": null, "proxy_reason": null, "proxy_link_id": null, "context_condition": null, "value_state": "MISSING", "param_license_status": "UNKNOWN", "priority_rank": null, "rank_decided_by": null,
+      "rank_reason": null, "status": "DRAFT", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": null,
+      "explanation": "係数の置き場だけを示す下書き。参照が無いので束縛としては数えず、この材料の行は計算できない。レコード自身の license_status は来歴（自作）から PERMITTED_PUBLIC、参照先の値の状態は param_license_status = UNKNOWN と、別々に持つ。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "binding_id": "PB-FICT-0002", "scope_kind": "FUNCTION_NODE", "scope_id": "FN-000026", "param_kind": "SERVICE_LIFE", "param_ref": null, "binding_unit": null, "stages": [],
+      "boundary_ref": null, "link_basis": null, "proxy_reason": null, "proxy_link_id": null, "context_condition": null, "value_state": "MISSING", "param_license_status": "UNKNOWN", "priority_rank": null, "rank_decided_by": null,
+      "rank_reason": null, "status": "DRAFT", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": null,
+      "explanation": "耐用年数を部位要素の水準に束縛する場合の置き場。値は持たない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "binding_id": "PB-FICT-0003", "scope_kind": "MATERIAL_TYPE", "scope_id": "MT-FICT-0001", "param_kind": "EOL_ROUTE", "param_ref": null, "binding_unit": null, "stages": [],
+      "boundary_ref": null, "link_basis": null, "proxy_reason": null, "proxy_link_id": null, "context_condition": null, "value_state": "MISSING", "param_license_status": "UNKNOWN", "priority_rank": null, "rank_decided_by": null,
+      "rank_reason": null, "status": "DRAFT", "created_in_release": "REL-FICT-0001", "retired_in_release": null, "replaced_by": [], "license_status": "PERMITTED_PUBLIC", "compartment": "PUBLIC_RELEASE",
+      "provenance": [{"source_id": "SRC-FICT-0000", "raw_id": null, "derivation": "CURATED", "role": "RELIED_ON", "via_merge_event_id": null}], "record_version": 1, "created_by": "reviewer_a", "reviewed_by": null,
+      "explanation": "廃棄経路を品種の水準に束縛する場合の置き場。値は持たない。"
+    }
+  ],
+  "selection": [
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "selection_id": "SEL-FICT-0001", "project_id": "PRJ-FICT-0001", "selection_path": "ALIAS_SEARCH", "operation_count": {"pick": 0, "enter": 1, "search": 1, "accept": 3, "override": 0},
+      "candidate_counts": []
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "selection_id": "SEL-FICT-0002", "project_id": "PRJ-FICT-0001", "selection_path": "TREE", "operation_count": {"pick": 3, "enter": 2, "search": 0, "accept": 0, "override": 0},
+      "candidate_counts": [9, 5, 1]
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "selection_id": "SEL-FICT-0003", "project_id": "PRJ-FICT-0001", "selection_path": "ASSEMBLY", "operation_count": {"pick": 2, "enter": 2, "search": 0, "accept": 0, "override": 0},
+      "candidate_counts": [9, 1]
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "selection_id": "SEL-FICT-0004", "project_id": "PRJ-FICT-0001", "selection_path": "ASSEMBLY", "operation_count": {"pick": 2, "enter": 2, "search": 0, "accept": 0, "override": 0},
+      "candidate_counts": [9, 1]
+    }
   ],
   "calc_row": [
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0001", "selection_id": "SEL-FICT-0001", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
-      "input_for_illustration": {"name_text": "架空ﾎﾞｰﾄﾞＡ　ｔ＝１２", "unit_text": "ｍ２", "quantity": 100},
-      "canonical_id": "CM-FICT-0001", "placement_state": "PLACED", "placement_id": "PL-FICT-0001", "zone_id": null,
-      "entry_quantity": 100, "entry_unit": "m2", "quantity_basis": "DESIGN",
-      "activity": 100, "activity_unit": "m2", "activity_state": "USER_ESTIMATE", "conversion_ids": [], "conversion_params": {},
-      "factor_ref": null, "factor_stages": [], "mass_per_unit_ref": null, "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
-      "param_states": {
-        "FACTOR": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "CANONICAL_MATERIAL"},
-        "SERVICE_LIFE": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "FUNCTION_NODE"},
-        "EOL_ROUTE": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "MATERIAL_TYPE"}
-      },
-      "representativeness": "REFINED", "defaulted_fields": ["placement_id"], "selection_path": "ALIAS_SEARCH",
-      "operation_count": {"pick": 0, "enter": 1, "search": 1, "accept": 0, "override": 0}, "candidate_counts": [],
-      "assembly_id": null, "assembly_line_no": null, "dependent_requirements": [],
-      "computable": false, "blocking_reasons": ["FACTOR_MISSING", "DOUBLE_COUNT_UNRESOLVED"], "warnings": ["SPEC_UNIT_ASSUMED", "MASS_PATH_UNAVAILABLE"],
-      "explanation": "名称の入力1回と数量の入力1回で、品種・厚さ・単位・既定の配置まで決まる。全角・半角カナのゆれは規則で吸収され、別名 AL-FICT-0001 に一致する。配置は既定（is_primary）を使ったので defaulted_fields に残る。係数の参照が無いので計算はできない。ROW-FICT-0003 と同じ配置・同じ品種なので、置き換えか追加数量かを決めるまで二重計上の検査で止まる。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0001", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0001", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"name_text": "架空ﾎﾞｰﾄﾞＡ　ｔ＝１２", "quantity": 100}, "canonical_id": "CM-FICT-0001", "placement_state": "PLACED", "placement_id": "PL-FICT-0001", "zone_id": null, "entry_quantity": 100, "entry_unit": "m2",
+      "driver_quantity": null, "driver_unit": null, "quantity_basis": "DESIGN", "activity": 100, "activity_unit": "m2", "activity_state": "USER_ESTIMATE", "conversion_ids": [], "conversion_params": {}, "factor_ref": null,
+      "factor_unit": null, "factor_stages": [], "factor_boundary_ref": null, "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "REFINED", "defaulted_fields": ["placement_id", "entry_unit", "spec_unit:thickness_mm"], "assembly_id": null, "assembly_line_no": null, "import_source_id": null, "import_locator": null,
+      "dependent_requirements": [], "computable": false, "blocking_reasons": ["FACTOR_MISSING", "DOUBLE_COUNT_UNRESOLVED"], "warnings": ["SPEC_UNIT_ASSUMED", "MASS_PATH_UNAVAILABLE"],
+      "explanation": "名称の入力1回と数量の入力1回に、承認が3回付く（既定の配置、その配置の入力単位、仮定した厚さの単位 mm）。承認の無い既定は適用しない。全角・半角カナのゆれは規則で吸収され、別名 AL-FICT-0001 に一致する。係数の参照が無いので計算はできない。ROW-FICT-0003 と同じ配置・同じ品種なので、置き換えか追加数量かを決めるまで二重計上の検査で止まる。回数は、別名が登録済みで既定が当たる場合の構造上の下限であり、測定値ではない。"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0002", "selection_id": "SEL-FICT-0002", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
-      "input_for_illustration": {"path": ["屋根・外壁", "外壁断熱", "架空充填材X"], "thickness_mm": 100, "quantity": 200},
-      "canonical_id": "CM-FICT-0004", "placement_state": "PLACED", "placement_id": "PL-FICT-0003", "zone_id": "ZONE-FICT-B",
-      "entry_quantity": 200, "entry_unit": "m2", "quantity_basis": "DESIGN",
-      "activity": 20, "activity_unit": "m3", "activity_state": "DERIVED", "conversion_ids": ["UC-FICT-0003"], "conversion_params": {"thickness_mm": {"value": 100, "source": "USER_INPUT"}},
-      "factor_ref": null, "factor_stages": [], "mass_per_unit_ref": null, "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
-      "param_states": {"FACTOR": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "NONE"}},
-      "representativeness": "EXACT", "defaulted_fields": [], "selection_path": "TREE",
-      "operation_count": {"pick": 3, "enter": 2, "search": 0, "accept": 0, "override": 0}, "candidate_counts": [9, 5, 1],
-      "assembly_id": null, "assembly_line_no": null, "dependent_requirements": [],
-      "computable": false, "blocking_reasons": ["FACTOR_MISSING"], "warnings": ["CONVERSION_APPLIED", "MASS_PATH_UNAVAILABLE"],
-      "explanation": "単位換算の例。配置が入力単位を m2 に決めるので、単位を選ぶ操作は無い。200 m2 × 100 mm ÷ 1000 = 20 m3。換算した活動量は DERIVED とし、元の入力値・換算 ID・厚さの取得元を残す。候補数 [9, 5, 1] のうち最後の 1 は、この例に配置が1件しか無いためで、実際の候補数を示すものではない。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0002", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0002", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"path": ["屋根・外壁", "外壁断熱", "架空充填材X"], "thickness": 100, "thickness_unit": "mm", "quantity": 200}, "canonical_id": "CM-FICT-0004", "placement_state": "PLACED", "placement_id": "PL-FICT-0003",
+      "zone_id": "ZN-FICT-B", "entry_quantity": 200, "entry_unit": "m2", "driver_quantity": null, "driver_unit": null, "quantity_basis": "DESIGN", "activity": 20, "activity_unit": "m3", "activity_state": "DERIVED",
+      "conversion_ids": ["UC-FICT-0003"], "conversion_params": {"thickness": {"value": 100, "unit_code": "mm", "unit_assumed": false, "source": "USER_INPUT"}}, "factor_ref": null, "factor_unit": null, "factor_stages": [],
+      "factor_boundary_ref": null, "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "EXACT", "defaulted_fields": [], "assembly_id": null, "assembly_line_no": null, "import_source_id": null, "import_locator": null, "dependent_requirements": [], "computable": false,
+      "blocking_reasons": ["FACTOR_MISSING", "DOUBLE_COUNT_UNRESOLVED"], "warnings": ["CONVERSION_APPLIED", "MASS_PATH_UNAVAILABLE"],
+      "explanation": "単位換算の例。選んだ配置が入力単位を m2 に決めるので、単位を選ぶ操作は無い（自分で選んだ配置の単位なので既定の承認にも当たらない）。200 m2 × 100 mm = 20 m3。換算した活動量は DERIVED とし、元の入力値・換算 ID・厚さの値と単位と取得元を残す。ゾーンを分けていない ROW-FICT-0004（同じ配置・同じ品種）はすべてのゾーンと重なるので、二重計上の検査で止まる。候補数 [9, 5, 1] の最後の 1 は、この例に配置が1件しか無いためで、実際の候補数を示すものではない。"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0003", "selection_id": "SEL-FICT-0003", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
-      "input_for_illustration": {"path": ["屋根・外壁", "架空外壁構成Z"], "driver_quantity": 50, "thickness_mm": 100},
-      "canonical_id": "CM-FICT-0001", "placement_state": "PLACED", "placement_id": "PL-FICT-0001", "zone_id": null,
-      "entry_quantity": 50, "entry_unit": "m2", "quantity_basis": "DESIGN",
-      "activity": 50, "activity_unit": "m2", "activity_state": "DERIVED", "conversion_ids": [], "conversion_params": {},
-      "factor_ref": null, "factor_stages": [], "mass_per_unit_ref": null, "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
-      "param_states": {"FACTOR": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "CANONICAL_MATERIAL"}},
-      "representativeness": "EXACT", "defaulted_fields": [], "selection_path": "ASSEMBLY",
-      "operation_count": {"pick": 2, "enter": 2, "search": 0, "accept": 0, "override": 0}, "candidate_counts": [9, 1],
-      "assembly_id": "AS-FICT-0001", "assembly_line_no": 1, "dependent_requirements": [],
-      "computable": false, "blocking_reasons": ["FACTOR_MISSING", "DOUBLE_COUNT_UNRESOLVED"], "warnings": ["MASS_PATH_UNAVAILABLE"],
-      "explanation": "アセンブリの例（1行目）。部位グループとアセンブリを選び、基準数量と厚さを入れる4操作で3行ができる。構成量は基準数量そのもの。ROW-FICT-0001 と同じ配置・同じ品種なので、二重計上の検査で止まる。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0003", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0003", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"path": ["屋根・外壁", "架空外壁構成Z"], "driver_quantity": 50, "thickness": 100, "thickness_unit": "mm"}, "canonical_id": "CM-FICT-0001", "placement_state": "PLACED", "placement_id": "PL-FICT-0001",
+      "zone_id": null, "entry_quantity": null, "entry_unit": null, "driver_quantity": 50, "driver_unit": "m2", "quantity_basis": "DESIGN", "activity": 50, "activity_unit": "m2", "activity_state": "DERIVED", "conversion_ids": [],
+      "conversion_params": {}, "factor_ref": null, "factor_unit": null, "factor_stages": [], "factor_boundary_ref": null, "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null,
+      "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "EXACT", "defaulted_fields": [], "assembly_id": "AS-FICT-0001", "assembly_line_no": 1, "import_source_id": null, "import_locator": null, "dependent_requirements": [], "computable": false,
+      "blocking_reasons": ["FACTOR_MISSING", "DOUBLE_COUNT_UNRESOLVED"], "warnings": ["MASS_PATH_UNAVAILABLE"],
+      "explanation": "アセンブリの例（1行目）。部位グループとアセンブリを選び、基準数量と厚さを入れる4操作で3行ができる。基準数量は入力数量とは別の項目（driver_quantity）に持つ。構成量は基準数量そのもの。ROW-FICT-0001 と同じ配置・同じ品種なので、二重計上の検査で止まる。"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0004", "selection_id": "SEL-FICT-0003", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
-      "input_for_illustration": {"path": ["屋根・外壁", "架空外壁構成Z"], "driver_quantity": 50, "thickness_mm": 100},
-      "canonical_id": "CM-FICT-0004", "placement_state": "PLACED", "placement_id": "PL-FICT-0003", "zone_id": null,
-      "entry_quantity": 50, "entry_unit": "m2", "quantity_basis": "DESIGN",
-      "activity": 5, "activity_unit": "m3", "activity_state": "DERIVED", "conversion_ids": [], "conversion_params": {"thickness_mm": {"value": 100, "source": "USER_INPUT"}},
-      "factor_ref": null, "factor_stages": [], "mass_per_unit_ref": null, "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
-      "param_states": {"FACTOR": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "NONE"}},
-      "representativeness": "EXACT", "defaulted_fields": [], "selection_path": "ASSEMBLY",
-      "operation_count": {"pick": 2, "enter": 2, "search": 0, "accept": 0, "override": 0}, "candidate_counts": [9, 1],
-      "assembly_id": "AS-FICT-0001", "assembly_line_no": 2, "dependent_requirements": [],
-      "computable": false, "blocking_reasons": ["FACTOR_MISSING"], "warnings": ["MASS_PATH_UNAVAILABLE"],
-      "explanation": "アセンブリの例（2行目）。50 m2 × 100 mm ÷ 1000 = 5 m3。ROW-FICT-0002 とは区分（zone_id）が違うので、二重計上の検査には掛からない。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0004", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0003", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"path": ["屋根・外壁", "架空外壁構成Z"], "driver_quantity": 50, "thickness": 100, "thickness_unit": "mm"}, "canonical_id": "CM-FICT-0004", "placement_state": "PLACED", "placement_id": "PL-FICT-0003",
+      "zone_id": null, "entry_quantity": null, "entry_unit": null, "driver_quantity": 50, "driver_unit": "m2", "quantity_basis": "DESIGN", "activity": 5, "activity_unit": "m3", "activity_state": "DERIVED", "conversion_ids": [],
+      "conversion_params": {"thickness": {"value": 100, "unit_code": "mm", "unit_assumed": false, "source": "USER_INPUT"}}, "factor_ref": null, "factor_unit": null, "factor_stages": [], "factor_boundary_ref": null,
+      "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "EXACT", "defaulted_fields": [], "assembly_id": "AS-FICT-0001", "assembly_line_no": 2, "import_source_id": null, "import_locator": null, "dependent_requirements": [], "computable": false,
+      "blocking_reasons": ["FACTOR_MISSING", "DOUBLE_COUNT_UNRESOLVED"], "warnings": ["MASS_PATH_UNAVAILABLE"],
+      "explanation": "アセンブリの例（2行目）。50 m2 × 100 mm = 5 m3。ゾーンを分けていない行はすべてのゾーンと重なるものとして扱うので、ゾーン ZN-FICT-B の ROW-FICT-0002 と二重計上の検査に掛かる。"
     },
     {
-      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0005", "selection_id": "SEL-FICT-0003", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
-      "input_for_illustration": {"path": ["屋根・外壁", "架空外壁構成Z"], "driver_quantity": 50, "thickness_mm": 100},
-      "canonical_id": "CM-FICT-0005", "placement_state": "PLACED", "placement_id": "PL-FICT-0004", "zone_id": null,
-      "entry_quantity": 50, "entry_unit": "m2", "quantity_basis": "DESIGN",
-      "activity": null, "activity_unit": "kg", "activity_state": "MISSING", "conversion_ids": [], "conversion_params": {},
-      "factor_ref": null, "factor_stages": [], "mass_per_unit_ref": null, "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null, "waste_rate_ref": null,
-      "param_states": {"FACTOR": {"value_state": "MISSING", "license_status": "UNKNOWN", "bound_from": "NONE"}},
-      "representativeness": "EXACT", "defaulted_fields": [], "selection_path": "ASSEMBLY",
-      "operation_count": {"pick": 2, "enter": 2, "search": 0, "accept": 0, "override": 0}, "candidate_counts": [9, 1],
-      "assembly_id": "AS-FICT-0001", "assembly_line_no": 3, "dependent_requirements": [],
-      "computable": false, "blocking_reasons": ["ASSEMBLY_RATIO_MISSING", "QUANTITY_MISSING", "FACTOR_MISSING"], "warnings": [],
-      "explanation": "アセンブリの例（3行目）。構成量の参照が無いので数量は欠損のまま（0 にしない）。利用者が数量を直接入れれば、入力が1回増えて行が完成する。"
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0005", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0003", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"path": ["屋根・外壁", "架空外壁構成Z"], "driver_quantity": 50, "thickness": 100, "thickness_unit": "mm"}, "canonical_id": "CM-FICT-0005", "placement_state": "PLACED", "placement_id": "PL-FICT-0004",
+      "zone_id": null, "entry_quantity": null, "entry_unit": null, "driver_quantity": 50, "driver_unit": "m2", "quantity_basis": "DESIGN", "activity": null, "activity_unit": "kg", "activity_state": "MISSING", "conversion_ids": [],
+      "conversion_params": {}, "factor_ref": null, "factor_unit": null, "factor_stages": [], "factor_boundary_ref": null, "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null,
+      "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "EXACT", "defaulted_fields": [], "assembly_id": "AS-FICT-0001", "assembly_line_no": 3, "import_source_id": null, "import_locator": null, "dependent_requirements": [], "computable": false,
+      "blocking_reasons": ["ASSEMBLY_RATIO_MISSING", "FACTOR_MISSING"], "warnings": [], "explanation": "アセンブリの例（3行目）。構成量の参照が無いので活動量は欠損のまま（0 にしない）。基準数量（m2）を、kg で数える行の入力数量として扱うことはしない。利用者が数量を直接入れれば、入力が1回増えて行が完成する（ROW-FICT-0007 がその例）。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0006", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0004", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"path": ["空調設備", "架空機器一式S"], "driver_quantity": 2, "direct_quantity_line_2": 50}, "canonical_id": "CM-FICT-0008", "placement_state": "PLACED", "placement_id": "PL-FICT-0005", "zone_id": null,
+      "entry_quantity": null, "entry_unit": null, "driver_quantity": 2, "driver_unit": "ct_dai", "quantity_basis": "DESIGN", "activity": 2, "activity_unit": "ct_dai", "activity_state": "DERIVED", "conversion_ids": [],
+      "conversion_params": {}, "factor_ref": null, "factor_unit": null, "factor_stages": [], "factor_boundary_ref": null, "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null,
+      "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "EXACT", "defaulted_fields": [], "assembly_id": "AS-FICT-0002", "assembly_line_no": 1, "import_source_id": null, "import_locator": null,
+      "dependent_requirements": [{"kind": "REFRIGERANT_CHARGE", "state": "MISSING"}], "computable": false, "blocking_reasons": ["FACTOR_MISSING"], "warnings": ["MASS_PATH_UNAVAILABLE"],
+      "explanation": "設備の例（機器。台で数える）。基準数量（台数）がそのまま活動量になる。付随して要る入力（冷媒）は、値を補わずに未入力の要求として残る。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "row_id": "ROW-FICT-0007", "project_id": "PRJ-FICT-0001", "selection_id": "SEL-FICT-0004", "release_id": "REL-FICT-0001", "resolution_mode": "STRICT",
+      "input_for_illustration": {"path": ["空調設備", "架空機器一式S"], "driver_quantity": 2, "direct_quantity_line_2": 50}, "canonical_id": "CM-FICT-0009", "placement_state": "PLACED", "placement_id": "PL-FICT-0006", "zone_id": null,
+      "entry_quantity": 50, "entry_unit": "m", "driver_quantity": 2, "driver_unit": "ct_dai", "quantity_basis": "DESIGN", "activity": 50, "activity_unit": "m", "activity_state": "USER_ESTIMATE", "conversion_ids": [],
+      "conversion_params": {}, "factor_ref": null, "factor_unit": null, "factor_stages": [], "factor_boundary_ref": null, "mass_conversion_ids": [], "service_life_ref": null, "repair_rate_ref": null, "eol_route_ref": null,
+      "waste_rate_ref": null,
+      "param_states": {"FACTOR": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "SERVICE_LIFE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "REPAIR_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "EOL_ROUTE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}, "WASTE_RATE": {"value_state": "MISSING", "param_license_status": "UNKNOWN", "bound_from": "NONE", "via_default_placement": false}},
+      "representativeness": "EXACT", "defaulted_fields": [], "assembly_id": "AS-FICT-0002", "assembly_line_no": 2, "import_source_id": null, "import_locator": null, "dependent_requirements": [], "computable": false,
+      "blocking_reasons": ["FACTOR_MISSING"], "warnings": ["MASS_PATH_UNAVAILABLE"], "explanation": "設備の例（線状品。長さで数える）。1台あたりの配管の長さが無いので、利用者が長さを直接入れた（入力が1回増える）。基準数量とは別に、入力数量として残す。"
     }
   ],
   "what_this_shows": [
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "別名（名称ゆれ）", "records": ["AL-FICT-0001", "AL-FICT-0002", "AL-FICT-0003", "RAW-FICT-0001", "RAW-FICT-0002", "RAW-FICT-0003", "RAW-FICT-0006"], "point": "規則で吸収できるゆれは行を増やさない。規則で決められないゆれは人が別名に登録する。総称は候補を返して止める。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "単位換算", "records": ["UC-FICT-0001", "UC-FICT-0002", "UC-FICT-0003", "UC-FICT-0004", "ROW-FICT-0002"], "point": "根拠が仕様値または行ごとの入力なら換算できる。外部の値が要る換算は、参照が無ければ止まる。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "重複の統合", "records": ["RAW-FICT-0005", "RAW-FICT-0004", "MT-FICT-0005", "CM-FICT-0003", "ME-FICT-0001", "ME-FICT-0002", "SL-FICT-0001"], "point": "重複の水準ごとに扱いが違う。統合しても行は消さず、取り消せる。似ているだけのものは統合しない。"},
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "topic": "別名（名称ゆれ）", "records": ["AL-FICT-0001", "AL-FICT-0002", "AL-FICT-0003", "RAW-FICT-0001", "RAW-FICT-0002", "RAW-FICT-0003", "RAW-FICT-0006"],
+      "point": "規則で吸収できるゆれは行を増やさない。規則で決められないゆれは人が別名に登録し、判断記録を残す。総称は候補を返して止める。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "topic": "単位換算", "records": ["UC-FICT-0001", "UC-FICT-0002", "UC-FICT-0003", "UC-FICT-0004", "RAW-FICT-0007", "ROW-FICT-0002"],
+      "point": "根拠が寸法の仕様値または行ごとの入力なら換算できる。外部の値が要る換算は、参照が無ければ止まる。次元の違う単位で現れても品種は分けない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "topic": "重複の統合と取り消し",
+      "records": ["RAW-FICT-0005", "RAW-FICT-0004", "MT-FICT-0005", "CM-FICT-0003", "ME-FICT-0001", "ME-FICT-0002", "ME-FICT-0003", "ME-FICT-0004", "SL-FICT-0001", "SL-FICT-0002"],
+      "point": "重複の水準ごとに扱いが違う。統合しても行は消さず、付け替えた参照を記録するので取り消せる。似ているだけのものは統合しない。"
+    },
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "topic": "人の判断記録", "records": ["CD-FICT-0001", "CD-FICT-0002", "CD-FICT-0003", "CD-FICT-0004", "CD-FICT-0005", "CD-FICT-0006"],
+      "point": "規則で決まらないこと（仮定した単位の確定、別名の登録、対象外の判定、新しい品種の作成）は、人の判断として残す。下書きは自動では作られない。"
+    },
     {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "アセンブリ", "records": ["AS-FICT-0001", "ROW-FICT-0003", "ROW-FICT-0004", "ROW-FICT-0005"], "point": "1回の指定を構成要素ごとの行に展開する。構成量の値は持たず、欠けた行は欠けたまま残る。"},
+    {
+      "record_flag": "FICTIONAL_PLACEHOLDER", "topic": "設備の最小の例", "records": ["MT-FICT-0006", "MT-FICT-0007", "AS-FICT-0002", "ROW-FICT-0006", "ROW-FICT-0007"],
+      "point": "台で数える機器、長さで数える線状品、機器と付属の一式が、建築の材料と同じレコードで組める。組めることだけを示し、設備の分類の妥当性は示さない。"
+    },
     {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "複数の部位で使う材料", "records": ["PL-FICT-0001", "PL-FICT-0002"], "point": "品目は1回だけ登録し、配置を増やす。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "許諾の関門", "records": ["SRC-FICT-0003"], "point": "許諾が確認できない出典は、中身を保存せずに止める。"},
-    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "二重計上の検査", "records": ["ROW-FICT-0001", "ROW-FICT-0003"], "point": "アセンブリ由来の行と個別指定の行が、同じ配置・同じ品種・同じ区分で重なったら止める。"}
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "許諾の関門と対象外", "records": ["SRC-FICT-0003", "RAW-FICT-0008"], "point": "許諾が確認できない出典は、中身を保存せずに止める。材料でない行は、理由を付けて対象外にする。"},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "二重計上の検査", "records": ["ROW-FICT-0001", "ROW-FICT-0003", "ROW-FICT-0002", "ROW-FICT-0004"], "point": "アセンブリ由来の行と個別指定の行が、同じ案件・同じ配置・同じ品種で重なったら止める。ゾーンを分けていない行は、すべてのゾーンと重なるものとして扱う。"},
+    {"record_flag": "FICTIONAL_PLACEHOLDER", "topic": "操作の計測", "records": ["SEL-FICT-0001", "SEL-FICT-0002", "SEL-FICT-0003", "SEL-FICT-0004"], "point": "操作の回数は計算行ではなく指定ごとの記録に持つ。既定・仮定の承認も数える。回数は構造上の下限であり、測定値ではない。"}
   ]
 }
