@@ -193,4 +193,9 @@ def edge_cases() -> list[tuple[str, Scenario]]:
         _case("top_up_all", top_up=True, n_refrigerants=8),
         _case("top_up_none", top_up=False, n_refrigerants=8),
         _case("with_baseline", lambda s: attach_baseline(s) and None),
+        # 1.000000001 is the double whose product with (1 - 1e-9) rounds to exactly 1.0 in floating point:
+        # with the exact time rules event n of this life belongs to year n + 1
+        _case("life_at_year_tolerance", service_life_choices=[1.000000001, 2.000000002, 0.999999999],
+              explicit_event_share=0.0, change_list_share=0.0, replacement_cycle=1.000000001,
+              reconstruction_scenario="MAJOR_REFURBISHMENT"),
     ]

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from synth import model
 
-from .base import GRID, annual_unit, convert, grid_unit, lookup, nonneg
+from .base import GRID, annual_unit, convert, finite, grid_unit, lookup, nonneg, positive
 from .registry import unit
 
 M_FIELDS = ("quantity", "waste_rate", "reuse_rate", "material_life", "repair_rate", "refresh_cycle")
@@ -15,10 +15,15 @@ E_FIELDS = ("quantity", "service_life", "repair_rate", "end_of_life_mass_kg")
 R_FIELDS = ("charge_mass_kg", "gwp", "annual_leak_rate", "replacement_loss_rate", "end_of_life_recovery_rate")
 
 
+NOT_FINITE = "NOT_FINITE"   # finding of SYS-01 for a NaN or infinite value (not a declared value state)
+
+
 def _state(scn, owner, name, value):
     declared = model.value_state(scn, owner, name)
     if value is None:
         return model.STATE_MISSING
+    if not finite(value):
+        return NOT_FINITE
     if declared == model.STATE_DERIVED:
         return model.STATE_DERIVED
     if value == 0:
@@ -28,18 +33,29 @@ def _state(scn, owner, name, value):
 
 @unit("SYS-01")
 def sys_01(scn, res):
-    """入力数値の状態判定。数値入力を 1 つずつ調べ、欠損（None）は MISSING、算出値は DERIVED、
-    0 は EXPLICIT_ZERO、それ以外は宣言された状態（OBSERVED・ESTIMATE）とする。MISSING の場所を列挙する。
-    その値が計算で使われるかどうかは問わない。機器の耐用年数と交換年一覧のように「どちらか一方」でよい項目は、
-    両方ないときだけ欠損とする。"""
+    """入力数値の状態判定。次の数値入力を 1 つずつ調べる：延床面積、資材の行の数量・端材率・再使用率・材料寿命・
+    修繕率・更新周期・輸送質量・輸送距離・廃棄質量、設備の行の数量・耐用年数・修繕率・廃棄質量、冷媒機器の
+    充填量・GWP・年間漏洩率・交換時損失率・回収率、工事の買電量・燃料の数量・廃棄物の質量、解体の活動量、
+    行に属さない搬出の質量と距離。欠損（None）は MISSING、NaN・無限大は NOT_FINITE、算出値は DERIVED、
+    0 は EXPLICIT_ZERO、それ以外は宣言された状態（OBSERVED・ESTIMATE）とする。MISSING と NOT_FINITE の場所を
+    違反として列挙し、NOT_FINITE の場所は not_finite にも挙げる。その値が計算で使われるかどうかは問わない。
+    設備の耐用年数が欠損していても、更新年一覧があれば数えない。冷媒機器の耐用年数は、耐用年数も交換年一覧も
+    無いときだけ MISSING として数える。ここに挙げていない入力（建替周期、範囲比、施設管理の比率、積載率、
+    搬出距離、経路の比率、構成比、年次量、電力係数、係数の値、換算倍率、要約数量、費用など）は調べない。
+    それらの不備は、その入力を使う単位が件数または computed で報告し、段階合計に流れ込む単位であれば、
+    X-02 が合計を不完全とする。"""
     counts = {s: 0 for s in model.VALUE_STATES}
-    missing = []
+    counts[NOT_FINITE] = 0
+    violations, not_finite = [], []
 
     def see(owner, name, value, path):
         st = _state(scn, owner, name, value)
         counts[st] += 1
         if st == model.STATE_MISSING:
-            missing.append(path)
+            violations.append(path)
+        elif st == NOT_FINITE:
+            violations.append(path)
+            not_finite.append(path)
 
     see(scn.project, "gross_floor_area", scn.project.gross_floor_area, "project.gross_floor_area")
     for i, row in enumerate(scn.materials):
@@ -72,19 +88,30 @@ def sys_01(scn, res):
     for i, haul in enumerate(end.waste_hauls):
         see(end, f"waste_hauls[{i}].mass_t", haul.mass_t, f"end_of_life.waste_hauls[{i}].mass_t")
         see(end, f"waste_hauls[{i}].distance_km", haul.distance_km, f"end_of_life.waste_hauls[{i}].distance_km")
-    return {"ok": not missing, "counts": counts, "violations": missing}
+    return {"ok": not violations, "counts": counts, "violations": violations, "not_finite": not_finite}
+
+
+class UnitOnly:
+    """A pure unit conversion (no factor record): the unit the activity must convert to, as a value."""
+
+    __slots__ = ("unit",)
+
+    def __init__(self, unit):
+        self.unit = unit
 
 
 def factor_uses(scn):
     """Every place where an activity meets a factor: (path, activity unit, factor id, row conversions, stage).
 
-    A use with factor id "UNIT:<unit>" is a pure unit conversion (no factor record).
+    A use whose third item is a ``UnitOnly`` is a pure unit conversion (no factor record).
+    The EPD factor of a material row is not listed here: X-15 decides whether it applies
+    and reports a declined one.
     """
     for i, row in enumerate(scn.materials):
         base = f"materials[{i}]"
         qu, extra, tr, eol = row.quantity_unit, row.conversions, row.transport, row.end_of_life
         if row.composition is not None:
-            yield f"{base}.quantity_unit", qu, "UNIT:kg", extra, None
+            yield f"{base}.quantity_unit", qu, UnitOnly("kg"), extra, None
             for comp in row.composition:
                 yield f"{base}.composition", "kg", comp.factor_id, (), "A1-A3"
         else:
@@ -109,16 +136,16 @@ def factor_uses(scn):
             yield f"{base}.end_of_life", "kg", eq.eol_factor_id, (), "C3"
     site = scn.construction
     gu = grid_unit(scn.operation.grid)
-    yield "construction.electricity", "kWh", f"UNIT:{gu}", (), None
+    yield "construction.electricity", "kWh", UnitOnly(gu), (), None
     for i, fuel in enumerate(site.fuels):
         yield f"construction.fuels[{i}].unit", fuel.unit, fuel.factor_id, fuel.conversions, "A5"
     for i, waste in enumerate(site.waste_streams):
         yield f"construction.waste_streams[{i}]", "kg", waste.factor_id, (), "A5"
     op, ww = scn.operation, scn.water_waste
     eu = annual_unit(op.electricity.unit)
-    yield "operation.electricity", eu, f"UNIT:{gu}", (), None
-    yield "operation.onsite_generation", annual_unit(op.onsite_generation.unit), f"UNIT:{eu}", (), None
-    yield "operation.onsite_export", annual_unit(op.onsite_export.unit), f"UNIT:{eu}", (), None
+    yield "operation.electricity", eu, UnitOnly(gu), (), None
+    yield "operation.onsite_generation", annual_unit(op.onsite_generation.unit), UnitOnly(eu), (), None
+    yield "operation.onsite_export", annual_unit(op.onsite_export.unit), UnitOnly(eu), (), None
     yield "operation.gas", annual_unit(op.gas.unit), op.gas_factor_id, (), "B6"
     yield "operation.oil", annual_unit(op.oil.unit), op.oil_factor_id, (), "B6"
     yield "operation.district_heat", annual_unit(op.district_heat.unit), op.district_heat_factor_id, (), "B6"
@@ -138,18 +165,20 @@ def factor_uses(scn):
 
 @unit("SYS-02")
 def sys_02(scn, res):
-    """単位整合性検証。活動量と係数が出会うすべての箇所（資材の製造・搬入・輸送・据付・搬出・処理経路、
+    """単位整合性検証。活動量と係数が出会う箇所（資材の製造・搬入・輸送・据付・搬出・処理経路、
     設備、工事の燃料・廃棄物・電力、運用の年次量、解体、参考値、費用項目）について、活動量の単位が
     係数の分母の単位と一致するか、登録された換算（行固有の換算を優先、連鎖なし）があることを確かめる。
+    倍率が有限の正の数でない換算は、換算なしとして扱う。
     年次量の単位は「単位/year」でなければならない。あわせて、係数の対象段階が使う段階と一致するかを確かめる。
-    係数そのものが無い箇所は SYS-03 が報告する。"""
+    係数そのものが無い箇所は SYS-03 が報告する。製品固有値（EPD）の係数はここでは調べない
+    （適用できない EPD は汎用係数に切り替わり、X-15 が件数を報告する）。"""
     violations, stage_mismatches = set(), set()
     n = 0
     for path, act_unit, fid, extra, stage in factor_uses(scn):
         n += 1
-        if isinstance(fid, str) and fid.startswith("UNIT:"):
-            target = fid[5:]
-            if act_unit is None or target == "None" or convert(scn, act_unit, target, extra) is None:
+        if isinstance(fid, UnitOnly):
+            target = fid.unit
+            if act_unit is None or target is None or convert(scn, act_unit, target, extra) is None:
                 violations.add(path)
             continue
         if act_unit is None:
@@ -170,7 +199,11 @@ def sys_02(scn, res):
 def sys_03(scn, res):
     """係数権限ゲート。係数を参照している箇所を 1 つずつ調べ、係数 ID が空でなく、係数の記録が存在し、
     使用許諾の状態が PERMITTED_PUBLIC で、出典の参照が空でないことを確かめる。電力係数シナリオも対象。
-    空の参照は場所ごとに、記録のない係数と使用許諾のない係数は係数 ID ごとに報告し、影響を受ける参照箇所の数を数える。"""
+    係数が無いと計算がその行・経路を除外して数える箇所（資材の係数・輸送・搬出・処理経路、設備の製造係数と
+    廃棄係数、工事・運用・解体の係数、費用項目）は、ID が空でも調べる。無くてもよい箇所（EPD、据付、
+    数量当たりの搬入、設備の搬入・据付、参考値の吸収係数）は、ID があるときだけ調べる。
+    空の参照は場所ごとに、記録のない係数と使用許諾のない係数は係数 ID ごとに報告し、影響を受ける参照箇所の数を数える。
+    係数の値が使えるかどうか（有限で 0 以上）はここでは調べない。"""
     bad: dict[str, int] = {}
     n = 0
     for path, fid in model.factor_references(scn):
@@ -195,12 +228,16 @@ def sys_03(scn, res):
 @unit("SYS-04")
 def sys_04(scn, res):
     """延床面積との面積整合。用途別面積を用途名の昇順に足し、延床面積との差 r = A - S を求める。
-    A が欠損または 0 以下のときは INVALID。|r| <= 1e-9*A のとき一致とする。数値は補正しない。"""
+    A が欠損・有限でない・0 以下のとき、または用途別面積に欠損・有限でない値・負の値があるときは INVALID
+    （用途別面積が使えないときは合計も出さない）。|r| <= 1e-9*A のとき一致とする。数値は補正しない。"""
     area = scn.project.gross_floor_area
     total = 0.0
     for use in sorted(scn.project.use_area_breakdown):
-        total += scn.project.use_area_breakdown[use]
-    if area is None or not area > 0.0:
+        value = scn.project.use_area_breakdown[use]
+        if not nonneg(value):
+            return {"ok": False, "status": "INVALID", "sum": None, "residual": None}
+        total += value
+    if not positive(area):
         return {"ok": False, "status": "INVALID", "sum": total, "residual": None}
     residual = area - total
     return {"ok": abs(residual) <= 1e-9 * area, "status": "EVALUATED", "sum": total, "residual": residual}
@@ -231,26 +268,30 @@ def a13_05(scn, res):
 @unit("X-13", depends_on=("A13-05",))
 def x_13(scn, res):
     """端材の再使用を考慮した正味の発注量。処分される端材 = (発注量 - 据付量)*(1 - 再使用率)、
-    正味の発注量 = 据付量 + 処分される端材。再使用率は 0〜1。A13-05 の発注量の代替値で、段階合計には使わない。"""
+    正味の発注量 = 据付量 + 処分される端材。再使用率は 0〜1。発注量が算出されていない行、再使用率が欠損または
+    範囲外の行は算出せずに数える。A13-05 の発注量の代替値で、段階合計には使わない。"""
     q_ord, q_inst = res["A13-05"]["q_ord"], res["A13-05"]["q_inst"]
     net, disposed = [], []
+    skipped = 0
     for i, row in enumerate(scn.materials):
         rho = row.reuse_rate
         if q_ord[i] is None or rho is None or not 0.0 <= rho <= 1.0:
             net.append(None)
             disposed.append(None)
+            skipped += 1
             continue
         d = (q_ord[i] - q_inst[i]) * (1.0 - rho)
         disposed.append(d)
         net.append(q_inst[i] + d)
-    return {"by_item": net, "waste_by_item": disposed}
+    return {"by_item": net, "waste_by_item": disposed, "n_skipped": skipped}
 
 
 @unit("A13-02")
 def a13_02(scn, res):
     """複合材の構成比からの推計。複合品の行ごとに、構成材の係数（対象段階が A1-A3 のみ、使用許諾あり、
-    kg へ換算可能）を質量比で加重して kg 当たりの複合係数を作る。質量比が負のもの、合計が 1 から 1e-6 を超えて
-    ずれる行、使えない構成係数を含む行は係数を作らない。正規化はしない。"""
+    値とガス別量が有限で 0 以上、kg へ換算可能）を質量比で加重して kg 当たりの複合係数を作る。質量比が欠損・
+    有限でない・負のもの、合計が 1 から 1e-6 を超えてずれる行、使えない構成係数を含む行は係数を作らず、
+    n_invalid に数える。正規化はしない。"""
     out, parts = [], []
     invalid = 0
     for row in scn.materials:
@@ -298,8 +339,10 @@ def x_15(scn, res):
     """係数の検索結合と適用優先順位の解決。資材の行ごとに (1) 製品固有値（EPD）、(2) 複合品なら A13-02 の複合係数
     （数量は kg へ換算）、(3) 汎用係数、の順で係数を決め、数量の単位から係数の単位への換算倍率を求める。
     EPD を使うのは、行の宣言（対象段階・単位・有効期限）が係数の記録と一致し、使用許諾があり、対象段階が A1-A3 のみで、
-    有効期限が算定日以降（当日を含む）で、単位を換算できるときだけ。汎用係数も対象段階が A1-A3 のみのものに限る。
-    決められない行は未解決とする。"""
+    値とガス別量が有限かつ 0 以上で、有効期限が算定日以降（当日を含む）で、単位を換算できるときだけ。
+    適用できない EPD を持つ行は n_epd_declined に数え、(2)(3) の係数へ進む。汎用係数も、使用許諾があり、
+    対象段階が A1-A3 のみで、値とガス別量が有限かつ 0 以上で、単位を換算できるものに限る。
+    倍率が有限の正の数でない換算は、換算なしとして扱う。決められない行は未解決とし、n_unresolved に数える。"""
     composite = res["A13-02"]["by_item"]
     kind, factor, conv = [], [], []
     unresolved = declined = 0
@@ -381,7 +424,7 @@ def a13_03(scn, res):
 def a13_04(scn, res):
     """未数量工事項目の推定（本研究が独立に設計した上乗せ式）。行ごとの未数量費用比率 r（0 < r < 1）
     について、その行の製造排出 e に r/(1-r) を掛けた分を足す。r が 0 または欠損の行は何も足さない。
-    r が負または 1 以上の行は足さずに数える。概念式自体はモデル未定義であり、他のツールの倍率とは無関係。"""
+    それ以外で 0 < r < 1 を満たさない行（負、1 以上、有限でない値）は足さずに数える。概念式自体はモデル未定義であり、他のツールの倍率とは無関係。"""
     a, b = res["A13-01"], res["A13-03"]
     total = 0.0
     by_item, row_lines = [], []
@@ -407,7 +450,8 @@ def a13_04(scn, res):
 
 @unit("X-01")
 def x_01(scn, res):
-    """設備機器の初期製造排出。設備の行ごとに 数量×換算倍率×係数 を足す（係数の対象段階は A1-A3）。"""
+    """設備機器の初期製造排出。設備の行ごとに 数量×換算倍率×係数 を足す（係数の対象段階は A1-A3）。
+    数量が欠損・有限でない・負、または係数が使えない行は足さずに数える。"""
     total = 0.0
     by_item, row_lines = [], []
     skipped = set()
@@ -460,7 +504,7 @@ def _transport(scn, res, with_load_factor):
             row_lines.append([])
             continue
         hit = lookup(scn, tr.factor_id, "A4", "tkm")
-        bad_load = with_load_factor and not (tr.load_factor is not None and tr.load_factor > 0.0)
+        bad_load = with_load_factor and not positive(tr.load_factor)
         if hit is None or not nonneg(tr.mass_t) or not nonneg(tr.distance_km) or bad_load:
             skipped.add(i)
             by_item.append(0.0)
@@ -486,8 +530,8 @@ def a4_01(scn, res):
 
 @unit("X-12")
 def x_12(scn, res):
-    """積載率による輸送排出の補正。A4-01 と同じ行について 質量×距離×係数÷積載率 を足す。積載率は正の数。
-    係数が満載基準のときの代替値で、段階合計には使わない（A4-01 と択一）。"""
+    """積載率による輸送排出の補正。A4-01 と同じ行について 質量×距離×係数÷積載率 を足す。積載率は有限の正の数で、
+    そうでない行は足さずに数える。係数が満載基準のときの代替値で、段階合計には使わない（A4-01 と択一）。"""
     return _transport(scn, res, True)
 
 
@@ -522,12 +566,14 @@ def a4_02(scn, res):
 @unit("A5-01")
 def a5_01(scn, res):
     """仮設電気。工期全体の買電量[kWh]×換算倍率×工事期間の電力排出係数。電力係数シナリオの使用許諾がない、
-    買電量が欠損・負、または kWh を係数の単位へ換算できないときは算出しない。"""
+    買電量が欠損・有限でない・負、工事期間の電力排出係数が欠損・有限でない・負、または kWh を係数の単位へ換算できないときは
+    算出しない。"""
     kwh = scn.construction.electricity_kwh
     grid = scn.operation.grid
     gu = grid_unit(grid)
     conv = convert(scn, "kWh", gu) if gu is not None else None
-    if not nonneg(kwh) or conv is None or grid.licence_status not in model.ALLOWED_LICENCE_STATES:
+    if (not nonneg(kwh) or conv is None or grid.licence_status not in model.ALLOWED_LICENCE_STATES
+            or not nonneg(grid.construction_value)):
         return {"value": 0.0, "computed": False, "_lines": []}
     e = kwh * conv * grid.construction_value
     return {"value": e, "computed": True, "_lines": [(GRID, e)]}
@@ -536,7 +582,7 @@ def a5_01(scn, res):
 @unit("A5-02")
 def a5_02(scn, res):
     """施工燃料。燃料の種類ごとに 数量×換算倍率×係数 を足す（係数の対象段階は A5）。
-    換算できない・欠損・負の燃料は足さずに数える。"""
+    換算できない燃料、数量が欠損・有限でない・負の燃料、係数が使えない燃料は足さずに数える。"""
     total = 0.0
     lines = []
     skipped = 0
@@ -571,7 +617,8 @@ def a5_03(scn, res):
 @unit("A5-04", depends_on=("A5-01", "A5-02", "A5-03"))
 def a5_04(scn, res):
     """工事負荷の合計。仮設電気・施工燃料・工事廃棄物をこの順に足す。その他の現場排出は入力がないため 0 を足さず、
-    未評価として印を付ける。"""
+    未評価として印を付ける。据付係数による据付（資材・設備の「数量×据付係数」）は A5 には含めない。
+    据付係数は更新のとき（B4-02）にだけ使う。"""
     parts = {"power": res["A5-01"]["value"], "fuels": res["A5-02"]["value"], "waste": res["A5-03"]["value"]}
     total = 0.0
     for key in ("power", "fuels", "waste"):
@@ -604,8 +651,10 @@ def summary_quantity(scn, key):
 def x_17(scn, res):
     """主要数量による簡易算定。6 区分（鉄筋・鉄骨・コンクリート・木材・外装・内装）ごとに、
     代表係数 fbar = 区分内の行の製造排出の合計 ÷ 要約数量 を求め、要約数量×代表係数 を足す。
-    代表係数をその建物自身から作るので、定義上、6 区分の製造排出を区分別に集計し直したものに等しい
-    （範囲外の資材は含まない）。代表係数を建物の外から与える場合の精度は、ここでは扱わない。"""
+    要約数量が欠損・有限でない・0 以下の区分は代表係数を作れないので、足さずに n_classes_skipped に数える
+    （その区分の fbar は None、排出は 0）。代表係数をその建物自身から作るので、要約数量が正の区分については、
+    定義上、その区分の製造排出を集計し直したものに等しい（範囲外の資材は含まない）。
+    代表係数を建物の外から与える場合の精度は、ここでは扱わない。"""
     a, b = res["A13-01"]["by_item"], res["A13-03"]["by_item"]
     sums = {k: 0.0 for k in SIMPLE_CLASSES}
     for i, row in enumerate(scn.materials):
@@ -614,20 +663,25 @@ def x_17(scn, res):
             sums[k] += a[i] + b[i]
     total = 0.0
     by_class = {}
+    skipped = 0
     for k in SIMPLE_CLASSES:
         q = summary_quantity(scn, k)
-        fbar = sums[k] / q if q else 0.0
+        if not positive(q):
+            skipped += 1
+            by_class[k] = {"quantity": q, "fbar": None, "emission": 0.0}
+            continue
+        fbar = sums[k] / q
         e = q * fbar
         total += e
         by_class[k] = {"quantity": q, "fbar": fbar, "emission": e}
-    return {"value": total, "by_class": by_class}
+    return {"value": total, "by_class": by_class, "n_classes_skipped": skipped}
 
 
 @unit("X-16")
 def x_16(scn, res):
     """物価補正（費用ベース係数の基準年換算）。費用だけが分かっている項目ごとに、
     費用×(係数の基準年の物価指数÷費用の年の物価指数)×換算倍率×費用当たり係数 を足す（係数の対象段階は A1-A3）。
-    費用が欠損・負、指数が無いか 0 以下、係数が使えない項目は足さずに数える。
+    費用が欠損・有限でない・負、指数が無い・有限でない・0 以下、係数が使えない項目は足さずに数える。
     未数量分の代替推定であり、段階合計には使わない（A13-04 と択一）。"""
     total = 0.0
     by_item = []
@@ -636,7 +690,7 @@ def x_16(scn, res):
         p_cost = scn.price_index.get(item.price_year)
         p_base = scn.price_index.get(item.factor_base_year)
         hit = lookup(scn, item.factor_id, "A1-A3", item.currency)
-        if not nonneg(item.amount) or hit is None or p_cost is None or p_base is None or not p_cost > 0.0 or not p_base > 0.0:
+        if not nonneg(item.amount) or hit is None or not positive(p_cost) or not positive(p_base):
             skipped += 1
             by_item.append(0.0)
             continue
