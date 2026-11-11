@@ -1,0 +1,213 @@
+{
+ "n_checked": 57,
+ "not_resolved": [
+  {
+   "finding": "V1-03",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:293, 81; index_detail/T07_exactness_load.md:71",
+   "note": "CK-R3-19 と 1.1 の表は直っている（REC-4、NUM-1、REP-17、|SUM-03|×1e-12 の絶対差、8 シナリオ×9 期間。records.md:110 の 7 と numeric.md:134 の 5 に合う）。ただし同じ言い方が CK-R3-03 の「使い道」に残っている：INDEX.md:932 と index_detail/T06_unified_models.md:127「T を変える再計算は乗数の計算だけで済む」。訂正案：「周期で与えられる行については、T を変える再計算は乗数の計算で済む（D2 の導出による）。明示の更新年一覧を持つ行と冷媒機器の行は、評価期間ごとに計算し直す（REC-4、REC-7）」。",
+   "checker": "FV1"
+  },
+  {
+   "finding": "V1-07",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:180, 84; index_detail/T04_reference_calculation.md:508",
+   "note": "「18 件が合うと報告、索引が 3 件に限定、B-2・B-3 にも同じ限定」に直っている（rederive.md:146 の 7 に合う。残る 15 件の列挙も 15 件）。ただし同じ項目の詳細の「確かめ方」（T04_reference_calculation.md:503）に「B-1〜B-21 を 1 件ずつコードと照合し」が残り、訂正後の「1 件ごとの照合の記録は無い」と食い違う。訂正案：「第2回の再導出の検査担当が、B-1〜B-21 は B-11・B-17・B-18 を除きコードと合うと 1 文で報告した（1 件ごとの照合の記録は無い）」。",
+   "checker": "FV1"
+  },
+  {
+   "finding": "V1-11",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:300, 83; HANDOVER.md:41; index_detail/T07_exactness_load.md:104",
+   "note": "条件（基準案との比較を除く）と「約 100 命令以内」「検査担当 1 者、反証なし」は入った。数値は unified_model_load.json と合う（0.5419、0.6355、0.6759、0.7261、0.4487、0.5434）。残り 2 点。(1) 加えた文「基準案との比較を含めると 44.9％・54.3％」は第2回が数え直していない値で、直後の「数え直し…合った」に含まれるように読める（新規 FV1-N01）。(2) 同じ無条件の文が CK-R5-14 に残る（index_detail/T09_records_reports.md:496「…54.2％ 減と 63.6％ 減…第2回の検査が数え直して一致した」）。訂正案：「基準案との比較（SUM-08）を除いた計算どうしで…。この 2 つの規模の命令数は、第2回の検査担当 1 者が数え直し、約 100 命令以内の差で合った（反証検査なし）」。",
+   "checker": "FV1"
+  },
+  {
+   "finding": "V2-11",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:368; index_detail/T09_records_reports.md:56",
+   "note": "CK-R5-01 は「43ba5d7 の時点で…一致した。README.md にはその後に手書きの注記」と直っている。ただし同じ現在形の文が CK-R1-05 に残る：INDEX.md:124 と index_detail/T02_ledger.md:48「(7) 自動生成の README 6 点は再生成した内容と同じで、古い生成物ではない」。6 点には 09_APPROX_STUDY/README.md が入り、43ba5d7 の後に 9 行が加わっている（git diff --stat 43ba5d7 HEAD）。訂正案：「(7) 自動生成の README 6 点は、43ba5d7 の時点で、再生成した内容と同じだった（古い生成物ではない）。公開中の版の 09_APPROX_STUDY/README.md には、その後に手書きの終了の注記を加えてある」。",
+   "checker": "FV1"
+  },
+  {
+   "finding": "F1-01",
+   "status": "NEW_ERROR",
+   "where_now": "STOP_STATUS.md:108-109; HANDOVER.md:142; INDEX.md:1133; materials/interrupted_fix/working_files/README.md:3,24-53",
+   "note": "実質は解決した。今も残っている作業用フォルダの停止前のファイルを、自分で SHA-256 と Git の blob の有無で照合した：通常のファイル 399 件のうち 382 件は materials/ に同じ内容があり（316＋追加 61＋圧縮にまとめた 5）、14 件は Git に同じ内容の blob があり、どちらにも無いのは pickle 3 件だけ（名前・大きさ・SHA-256 は README と一致、合計 255.45 MB）。選別の条件は README:3 に書かれた。ただし訂正文の件数に小さい誤りが 2 つある（FV2-N01）。(1)「400 件」「15 件は Git と同じ内容」は、リポジトリのファイルを指すシンボリックリンク 2 件のうち input_usage.py だけを数え、mutations.py を落としている（F1 の 401 件＝399＋2）。(2) INDEX.md:1133 は working_files/ に 61 件とするが、実際は 60 件＋圧縮 2 件で、61 件目の approx_old.json は earlier_session_scratch/ にある。",
+   "checker": "FV2"
+  },
+  {
+   "finding": "F1-02",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:694; index_detail/FINDINGS_59.md:8",
+   "note": "INDEX 5.2 と登録簿の冒頭は直っている（findings_repro.py に出る REP は 13 個で、記載の 13 件と一致）。しかし、5 件を根拠に使う項目と「読んでいない範囲」の記述は、18 件全部を再実行で再現したという元の文のままである：T02_ledger.md:43（CK-R1-05「報告書の監査の指摘 18 件は、全体の調整役が検査のスクリプトを再実行して再現した」）、T02_ledger.md:402（CK-R1-21。REP-10・11 を使う）、T02_ledger.md:543（CK-R7-30。REP-10）、T09_records_reports.md:358（CK-R5-10。REP-11・12・15）、T09_records_reports.md:869（CK-R5-25「REP-1〜18 …主担当が検査担当のスクリプトを再実行して再現したもの」）、NOT_COVERED.md:74、FINDINGS_59.md:1028。overrides.json に F1-02 の訂正は無い。直し方：これらの文を「REP の指摘には反証検査担当が付いていない。主担当が停止前に再実行して同じ出力を得たのは 13 件（REP-1〜9、13、14、16、18）で、REP-10・11・12・15・17 は検査担当 1 者の報告だけ」にそろえる（overrides.json に加えて再生成する。NOT_COVERED.md と FINDINGS_59.md:1028 は分類担当の申告の写しなので、冒頭に同じ注記を足す）。",
+   "checker": "FV2"
+  },
+  {
+   "finding": "C1-01",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:798-811; HANDOVER.md:103",
+   "note": "6.1 は 8 条件になり、CK-R7-19 の (1)〜(6) と NUM-1・NUM-10 を覆う。R6.json の各指摘の文面と突き合わせて、条件に添えた指摘の番号は内容と合う。HANDOVER.md:103 は 6.1 を指すだけになった。残り：(a) FINDINGS_59.md:42（群 2 の「新研究で使うときの注意」）は「基準計算の値を正として使えるのは、14 段階すべてを含む境界で、入力が有限・範囲内の場合に限る」のままで、元の指摘と同じ不足がある。「基準計算の値を正として使える入力の条件は、INDEX.md の 6.1 の 8 項目である」に改める。(b) CK-R7-19 の内容（INDEX.md:630、T04_reference_calculation.md:430）の「入力が有限で範囲内、かつ 14 段階すべてを対象にする場合には現れない」も 2 条件だけで、同じ項目の (3)〜(6) と合わない。「INDEX.md の 6.1 の条件を満たす入力では現れない」に改める。(c) 追加の観察：RED-5（基準案の合計が不完全でも、SUM-08 が印なしに比較する）は群 2 にあるが、8 条件のどれにも当たらない。「9. 基準案との比較（SUM-08）を使うのは、基準案の合計が完全なときに限る（RED-5）」を足すか、条件に入れない理由を書く。",
+   "checker": "FV2"
+  },
+  {
+   "finding": "C1-02",
+   "status": "PARTLY",
+   "where_now": "index_detail/T11_interrupted_fix.md:275-277,482-484; INDEX.md:1035,1040",
+   "note": "CK-R3-31 のルートは B・C になり、CK-R3-31・CK-R7-32 の条件は「設計の記録として読むだけにする。…使わない（HANDOVER.md 4.1・4.2）」に改まった。残り（重さは中）：同じ委ね方が、再利用候補（ルート A・B・C）の別の 2 項目に残っている。(a) CK-R7-17（区分 1。T04_reference_calculation.md:386）「どの版を基準計算とするかを最初に固定する：コミット済みの版（43ba5d7 と同じ）と、中断した修正の版（65ff124。定義が変わる、未検証）がある。」→「基準計算は公開中の版（43ba5d7 と同じ）に固定する。中断した修正の版（65ff124）は使わない（HANDOVER.md 4.2）。」(b) CK-R7-19（T04_reference_calculation.md:451）「穴を埋めた版を基準にしたい場合は、新研究の側でその扱いを明示して決める必要がある」→「穴を埋めた版（65ff124）は基準にしない。穴のある入力は、比較から外すか、既知の例外として扱う（INDEX.md 6.1）。」(c) CK-R3-31 の使い道（INDEX.md:1035 の表に出る文）「対照にする定義の候補になる」は、条件の「基準にも出発点にも使わない」と食い違って読める。「時間の規則を丸めに依存しない形で定義する案の記録として読む（基準や対照には使わない）」に改める。",
+   "checker": "FV2"
+  },
+  {
+   "finding": "C1-12",
+   "status": "PARTLY",
+   "where_now": "index_detail/T05_synthetic_data_harness.md:205-206",
+   "note": "「確かめ方」と「確かめた者」は直った（reports.md:128 に「The study's 28 unit tests pass.」がある）。しかし同じ項目の「今の時点で言ってよいこと」（T05_synthetic_data_harness.md:210）は「合否は未確認（確認には実行が必要）」のままで、項目の中で食い違う。「合格は、第2回の検査担当 1 者の報告による（反証検査なし）。今の環境での合否は未確認（確認には実行が必要）」に改める。",
+   "checker": "FV2"
+  }
+ ],
+ "new_findings": [
+  {
+   "id": "FV1-N01",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T07_exactness_load.md の CK-R3-20 にある）",
+   "where": "2 節 CK-R3-20「言ってよいこと」（INDEX.md:300、T07_exactness_load.md:104）",
+   "quoted": "基準案との比較を含めると、全出力の減り方は 44.9％・54.3％ である。第2回の検査担当 1 者が命令数を数え直し、約 100 命令以内の差で合った。",
+   "problem": "訂正で加えた 44.9％・54.3％ は、第2回が数え直していない値である。第2回の数え直しは、基準計算・全出力・合計のみの 3 つ（基準案との比較なし）だけである。区分 1 の文の中で、直後の「数え直し…合った」に含まれるように読める。基準案を含む測定は、同じ索引では CK-R3-21（区分 2、作成者のみ）の範囲である。数値そのものは JSON と合う。",
+   "evidence": "materials/round2_review/triage/reports.md:128 の 2「recounted bytecode instructions for benchmarks S and M (reference, full, totals) … (54.2/67.6 % and 63.6/72.6 %)」；09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json の unified_full_outputs_with_baseline_comparison.instruction_reduction＝0.4487（S）、0.5434（M）；index_detail/T07_exactness_load.md:126, 131（CK-R3-21：第2回で測り直されていない部分、確かめた者は作成者のみ）",
+   "suggested_fix": "文の順を入れ替え、「…67.6％・72.6％ 少なかった。第2回の検査担当 1 者がこの命令数を数え直し、約 100 命令以内の差で合った。基準案との比較を含めた場合の全出力の減り方 44.9％・54.3％ は作成者の測定だけで、第2回は数え直していない（CK-R3-21）」と書く。",
+   "checker": "FV1"
+  },
+  {
+   "id": "FV1-N02",
+   "severity": "LOW",
+   "file": "index_detail/T01〜T12 の各ファイル",
+   "where": "各ファイルの 3 行目（前書き）",
+   "quoted": "分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。",
+   "problem": "点検の反映の後は、31 項目で分類担当の記述を訂正の一覧で書き換えてある。「そのまま載せる」は事実と合わなくなった。各項目に「停止後の点検による訂正」の注記はある（31 項目すべてにあることを確かめた）ので、前書きだけが古い。",
+   "evidence": "materials/classification/overrides.json（31 項目）；index_detail の「停止後の点検による訂正」の行は 31（T02 2、T04 3、T05 1、T06 7、T07 4、T08 5、T09 2、T10 2、T11 3、T12 2）；index_detail/T02_ledger.md:3、T06_unified_models.md:3、T09_records_reports.md:3",
+   "suggested_fix": "「分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。停止後の点検で改めた項目には『停止後の点検による訂正』と記してある」に直す（render_index.py の前書きの文）。",
+   "checker": "FV1"
+  },
+  {
+   "id": "FV1-N03",
+   "severity": "LOW",
+   "file": "INDEX.md、HANDOVER.md",
+   "where": "INDEX.md 0.1 の 4（17 行）、HANDOVER.md 7 節「別の担当による点検」（178 行）",
+   "quoted": "指摘は 57 件（重い 1、中 17、軽い 39）で、すべて反映した。／57 件すべてを反映した。",
+   "problem": "V1・V2 の 34 件のうち 4 件（V1-03、V1-07、V1-11、V2-11）は、指摘された箇所は直っているが、同じ問題がほかの欄や項目に残っている。「すべて反映した」は、この残りを直すまでは言い過ぎになる。件数と内訳（57＝16＋18＋9＋14、重い 1・中 17・軽い 39）は review の JSON と合う。",
+   "evidence": "この点検の results の V1-03（INDEX.md:932）、V1-07（T04_reference_calculation.md:503）、V1-11（T09_records_reports.md:496）、V2-11（INDEX.md:124）；materials/classification/review/summary.json の bySev",
+   "suggested_fix": "残りの 4 か所を直す。そのうえで「すべて反映した。反映の後の再点検で見つかった残り（4 件）も直した」と書く。HANDOVER.md:179 の「改めて点検することはしていない」も、再点検をしたことに合わせて直す。",
+   "checker": "FV1"
+  },
+  {
+   "id": "FV2-N01",
+   "severity": "LOW",
+   "file": "HANDOVER.md（同じ数：STOP_STATUS.md、INDEX.md、materials/interrupted_fix/working_files/README.md）",
+   "where": "HANDOVER.md:142、working_files/README.md:37-53、INDEX.md:1133、STOP_STATUS.md:108",
+   "quoted": "停止前に作った作業用フォルダのファイル 400 件のうち、397 件は `materials/` または Git の履歴に同じ内容がある（…15 件は Git にある版と同じ内容…） ／ 段階 a2・b2 の途中のスクリプト・ログ・試行の出力（61 件と、圧縮した比較用の記録 2 件）",
+   "problem": "F1-01 の訂正で入った件数が、2 か所で 1 件ずつずれている。(1) 停止前の作業用フォルダは、通常のファイル 399 件と、リポジトリのファイルを指すシンボリックリンク 2 件（a2/shadow_before/bench/input_usage.py と mutations.py）である。「400 件」と README の「15 件」は、リンクのうち input_usage.py だけを数え、mutations.py を落としている。点検 F1 の 401 件（＝399＋2）とも合わない。(2) 追加の 61 件のうち working_files/ にあるのは 60 件（a2 35、b2 25）で、残る 1 件（approx_old.json）は earlier_session_scratch/ に置かれている。INDEX 8.3 は 61 件とも working_files/ にあると読め、working_files/README.md は approx_old.json に触れていない。保存の中身に欠けは無い（保存していないのは pickle 3 件だけ、という結論は変わらない）。",
+   "evidence": "作業用フォルダ（読み取りのみ）を照合：15:35:30 UTC 以前の通常のファイル 399 件。SHA-256 が materials/ のファイル（.gz は展開後）と一致 382 件、Git の blob として存在 14 件、どちらにも無い 3 件（pickle）。シンボリックリンクは 5 件（フォルダ 3、ファイル 2：shadow_before/bench/input_usage.py と mutations.py。どちらも 09_APPROX_STUDY/research_code/bench/ を指す）。git ls-files working_files は 63 件（README.md 1、a2 37（うち .gz 2）、b2 25）。git diff --name-status b2b8a6e c6bf26e に earlier_session_scratch/approx_old.json の追加がある。",
+   "suggested_fix": "HANDOVER.md:142 を「停止前に作った作業用フォルダの通常のファイル 399 件のうち、396 件は materials/ または Git の履歴に同じ内容がある（停止の直後に 316 件を複写し、点検の指摘を受けて 61 件と圧縮した記録 2 件を追加した。14 件は Git にある版と同じ内容、5 件は内容が同じ 2 種類の記録で、圧縮した 2 件にまとめた）。ほかに、リポジトリのファイルを指すシンボリックリンクが 2 件ある（複写していない）。保存しなかったのは 3 件」に改める。working_files/README.md の一覧は「14 件」とし、input_usage.py と mutations.py はリンクとして別に書く。INDEX.md:1133 は「60 件と、圧縮した比較用の記録 2 件。同じ時に approx_old.json を earlier_session_scratch/ に追加した」に改める。",
+   "checker": "FV2"
+  },
+  {
+   "id": "FV2-N02",
+   "severity": "LOW",
+   "file": "index_detail/T01・T02・T04・T06・T07・T09・T10・T11（「分類の根拠」の行）",
+   "where": "24 か所。例：T11_interrupted_fix.md:281「STOP_STATUS.md:54, 86-87, 97-99」、T10_material_taxonomy.md:46「STOP_STATUS.md:46（旧タスク #5 は未着手）」、T06_unified_models.md:675「STOP_STATUS.md:18, 56」",
+   "quoted": "[`STOP_STATUS.md`](../STOP_STATUS.md):54, 86-87, 97-99",
+   "problem": "項目の「分類の根拠」が挙げる STOP_STATUS.md の行番号は、点検の前の版（b2b8a6e）のものである。訂正で STOP_STATUS.md の行がずれたので、今の文書では別の行を指す。たとえば 54 行は、前は段階 a1 の行で、今は表の前の説明文（a1 の行は 58 行）。46 行は、前は旧タスク #5 の行で、今は空行。97-99 行は、前は 6 節で、今は 5 節の表の末尾（6 節は 104-112 行）。読み手が根拠をたどれない。訂正が作った食い違いである。",
+   "evidence": "git show b2b8a6e:…/STOP_STATUS.md と今の STOP_STATUS.md の 18・22・46・54・56〜59・86・90・97 行を見比べた（18・22 行だけ同じ）。行番号つきの参照は index_detail に 24 か所（grep）。分類の JSON（R*.json）は変更されていない。",
+   "suggested_fix": "INDEX.md の 0.5 に「項目の『分類の根拠』にある STOP_STATUS.md の行番号は、点検の前の版（b2b8a6e）のものである。その版は `git show b2b8a6e:<パス>` で読める」と書く。または、生成のときに STOP_STATUS.md の行番号を節の番号に置き換える。",
+   "checker": "FV2"
+  },
+  {
+   "id": "FV2-N03",
+   "severity": "LOW",
+   "file": "INDEX.md、STOP_STATUS.md、HANDOVER.md と materials/classification/README.md",
+   "where": "INDEX.md:1119、STOP_STATUS.md:77、HANDOVER.md:83 と、materials/classification/README.md:18-25",
+   "quoted": "**`materials/` の下にある Python のスクリプトは、どれも実行しない。** ／ `render_index.py` は JSON と文書と Git の一覧を読むだけで、旧研究のコードを読み込まない。生成の手順（リポジトリの最上位で）：python3 -I …/render_index.py …",
+   "problem": "C1-03 の訂正で、3 文書は materials/ の下のスクリプトを例外なしに「実行しない」とした。一方、同じ materials/ の下の classification/README.md は、索引の生成スクリプト render_index.py の実行の手順を載せている（索引の再生成に必要で、旧研究のコードは読み込まない）。INDEX 8.3 の最後の行は「旧研究のコードを読み込まない」と書くが、禁止の例外とは書いていない。後任は、索引を再生成してよいのかどうかを判断できない。",
+   "evidence": "render_index.py の import は json・os・re・subprocess・sys・collections だけで、subprocess は git の一覧の取得に使う（読んだだけで、実行していない）。materials/classification の .py は 1 本で、旧研究のモジュールの読み込みは 0 件（grep）。",
+   "suggested_fix": "3 文書の該当の文に「（索引の生成スクリプト `materials/classification/render_index.py` を除く。これは JSON と文書と Git の一覧を読むだけで、旧研究のコードを読み込まない）」を加える。",
+   "checker": "FV2"
+  },
+  {
+   "id": "FV2-N04",
+   "severity": "LOW",
+   "file": "HANDOVER.md、INDEX.md",
+   "where": "HANDOVER.md:178、INDEX.md:17",
+   "quoted": "57 件すべてを反映した。 ／ 指摘は 57 件（重い 1、中 17、軽い 39）で、すべて反映した。",
+   "problem": "担当した 23 件のうち 4 件（F1-02、C1-01、C1-02、C1-12）は、指摘が挙げた主な箇所だけが直り、同じ内容が詳細の項目や登録簿に残っている（各件の結果を参照）。「すべて反映した」は根拠より広い。件数（57＝16＋18＋9＋14、重い 1・中 17・軽い 39）は review/ の 4 つの JSON と合う。",
+   "evidence": "この点検の results の F1-02、C1-01、C1-02、C1-12。review/V1・V2・F1・C1.json の findings の件数と severity の集計。",
+   "suggested_fix": "残りを直した後に「57 件すべてを反映した（反映の後の再点検で見つかった残りも直した）」とする。直さない場合は「57 件すべてに対応した。うち F1-02、C1-01、C1-02、C1-12 は、詳細の項目に元の文が一部残る」と書く。",
+   "checker": "FV2"
+  },
+  {
+   "id": "FV2-N05",
+   "severity": "LOW",
+   "file": "INDEX.md（materials/classification/INDEX_head.md）",
+   "where": "INDEX.md:19（0.1 の 6）",
+   "quoted": "項目の表と詳細は、分類担当が書いた JSON と訂正の一覧（`materials/classification/`）から機械的に生成した。0 節、1 節、6.1〜6.2 節、8 節、9 節は索引の作成者が書いた。",
+   "problem": "訂正で加わった 5.3 節（旧タスクと項目の対応）と 6.3 節（候補と項目の対応、注の欄）は、分類担当の JSON には無く、索引の作成者が生成スクリプトの中に書いた内容である。5.2 節の説明文（判定の行の括弧書き、38 件の内訳の文）も同じ。0.1 の一覧に入っていないので、読み手は分類担当の結果と受け取る。",
+   "evidence": "render_index.py:510-521（5.3 の表を文字列で直接書いている）、527-541（CMAP と CNOTE：候補から項目への対応と注）。6.3 の題・段階・結論は candidates.json から読んでいる。",
+   "suggested_fix": "「0 節、1 節、5.2 節の説明文、5.3 節、6.1〜6.2 節、6.3 節の項目との対応と注、8 節、9 節は索引の作成者が書いた（6.3 の題と結論は candidates.json の記載）」に改める。",
+   "checker": "FV2"
+  },
+  {
+   "id": "FV2-N06",
+   "severity": "LOW",
+   "file": "INDEX.md（materials/classification/INDEX_tail.md）",
+   "where": "INDEX.md:1141（9 節の 1 つ目）、INDEX.md:1133（8.3 の working_files の行）",
+   "quoted": "主なもの：中断時の差分（723 KB）の全文、検査担当のスクリプトの中身、単位別の記録 454 件の個々の文面、評価者の理由文の大半、`materials/earlier_session_scratch/` の中身。",
+   "problem": "点検の後に追加した作業ファイル（working_files/ の 60 件と圧縮 2 件、approx_old.json）は、分類（b2b8a6e より前）の後、点検（c6bf26e より前）の後に加わったので、分類担当も点検担当 4 者も読んでいない。8.3 は「未検証」と書くだけで、9 節と NOT_COVERED.md には出てこない。どの項目の所在にも入っていない。",
+   "evidence": "git log -- materials/interrupted_fix/working_files は c6bf26e の 1 件だけ。NOT_COVERED.md は c6bf26e で変更されていない（git diff --stat）。grep で NOT_COVERED.md に working_files の語は無い。",
+   "suggested_fix": "9 節の「主なもの」に「点検の後に追加した `materials/interrupted_fix/working_files/` と `earlier_session_scratch/approx_old.json`（分類担当も点検担当も読んでいない。どの項目の所在にも入っていない）」を加える。",
+   "checker": "FV2"
+  },
+  {
+   "id": "FV2-N07",
+   "severity": "LOW",
+   "file": "INDEX.md（materials/classification/INDEX_tail.md）",
+   "where": "INDEX.md:1101（8.1 の最後の行）、INDEX.md:1130、INDEX.md:1136",
+   "quoted": "| それ以降 | 点検の指摘の反映、追加で保存した作業ファイル |",
+   "problem": "8 節の小さい漏れ。(1) 8.1 の「それ以降」の行は、STOP_STATUS.md:98 の同じ行にある「受領した新指示書の全文（NEW_DIRECTIVE.md）」が無く、2 文書で文が違う。(2) 8.3 の agent_reports/ の行は 5 ファイルを挙げるが、フォルダには 6 ファイルあり、cmp_committed_vs_new.log.txt が無い。(3) 8.3 は wfD_fix/ を「スクリプト」と説明するが、wfD_fix/backup/ に修正前の草案 4 ファイルの写しがある。",
+   "evidence": "STOP_STATUS.md:98。git ls-files materials/interrupted_fix/agent_reports（6 件）、materials/earlier_session_scratch/wfD_fix（10 件：backup/ の 4 件と .py 6 本）。",
+   "suggested_fix": "(1) 8.1 を STOP_STATUS.md:98 と同じ文にする。(2) agent_reports/ の行に「b2 の新旧の比較のログ（`cmp_committed_vs_new.log.txt`）」を加える。(3) wfD_fix/ の説明に「`backup/` は修正前の草案 4 ファイルの写し」を加える。",
+   "checker": "FV2"
+  }
+ ],
+ "rule_checks": [
+  {
+   "checker": "FV1",
+   "rule_check": "no。旧研究のコード（refcalc、fastcalc、bench、synth、tools、common、試験、生成器、materials の下のスクリプト）は実行も import もしていない。render_index.py、driver.py、units_c_sum.py、base.py は grep と sed で読んだだけである。リポジトリのファイルは変更していない（git は log、diff、status、grep だけ）。書いたのは自分の作業フォルダと結果ファイル /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/review2/FV1.json だけ。Python は -I で、作業フォルダから JSON とテキストの解析だけに使った。Web は使っていない。",
+   "not_checked": [
+    "記録された数値（681 シナリオの一致、命令数、総当たりの件数、近似の統計値）が今の環境で再現するか。旧研究の実行が要るので確かめていない。",
+    "検査担当と反証検査担当の実際の出力ファイル。triage の文面を記録として扱った。",
+    "F1・C1 の指摘 23 件の反映（担当外）。HANDOVER 5 節の 400／316／61／15／5／3 と 75／72／3 は、文書どうしの整合（316＋61＋15＋5＝397、＋3＝400。STOP_STATUS 6 節、INDEX 8.3 と同じ数）だけを見た。実際のファイル数は数えていない。",
+    "INDEX.md の 3〜5.1 節、6.4〜6.5 節、7 節の全行と、index_detail の割当外の項目の本文。語句の検索に掛かった行だけを読んだ。",
+    "REP-2・11・14・18 の triage の本文（V2 の引用をそのまま使った）。REC-2 は「about 62-63 units」の箇所だけを読んだ。",
+    "CK-R3-16 の新しい文「和と比の指標は…同じ程度の精度で合う」の数値での裏付け。記録には無く、一般的な誤差の伝わり方の説明として読んだ。",
+    "render_index.py の全体。注記を出す部分だけを読んだ。索引を生成し直して INDEX.md と一致するかは、実行しないので確かめていない。",
+    "STOP_ORDER.md、NEW_DIRECTIVE.md の内容と、10_TRANSFORM_STUDY（対象外）。"
+   ]
+  },
+  {
+   "checker": "FV2",
+   "rule_check": "no",
+   "not_checked": [
+    "F1-02 のうち「主担当が停止前に findings_repro.py を再実行して同じ出力を得た」という事実そのもの。根拠はリポジトリの外のセッションの記録で、読んでいない。確かめたのは、スクリプトに出る REP の番号が 13 個であることだけ",
+    "リモートの実際の状態。fetch は使っていない。手元の追跡用の参照が HEAD と同じことだけを見た",
+    "プロセス、予約、タスク一覧の今の状態（STOP_STATUS 1 節・2 節）。確かめ直していない",
+    "追加で保存した作業ファイル（working_files/ の 60 件と圧縮 2 件）の中身。件数、内容のハッシュ、import と出力先の文字列の検索だけ",
+    "working_files/README.md の「公開中の版、43ba5d7、65ff124 のいずれかに同じ内容がある」について、どのコミットにあるか。Git に同じ内容の blob があることだけを確かめた",
+    "INDEX 8.3 の earlier_session_scratch/ の説明のうち、judge_na/、judge_input_data_model/、最上位のスクリプトとログの用途。ファイル名の一覧と、approx_old.json が候補 16 件・母集団 400 の出力であることだけを見た",
+    "6.3 の注のうち、AP-20「400 件を含むのは相対 1e-12 の許容差つき」と AP-06b「不等式の向きだけ独立に確認」の裏付け。approx.md:112 の「独自に再実装していない」の一覧だけを照合した",
+    "V1・V2 の 34 件の指摘と、それによる訂正（HANDOVER 2.1・2.2・4.4 の変更、INDEX 1.1・1.2 のほかの行、overrides.json の V1・V2 の項目）。担当外",
+    "65ff124 の差分の中身、checker_scripts の中身、旧研究のコードの動作。実行していない",
+    "新研究のフォルダ（10_TRANSFORM_STUDY）。対象外"
+   ]
+  }
+ ],
+ "missing": []
+}

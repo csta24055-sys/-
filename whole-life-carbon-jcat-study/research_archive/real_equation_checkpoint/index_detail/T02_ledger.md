@@ -1,6 +1,6 @@
 # 索引の詳細 T02：評価単位の台帳・シート族・依存関係
 
-[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。
+[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。停止後の点検で改めた項目には「停止後の点検による訂正」と記してある。
 旧研究の数値はすべて架空データでの値で、対象は独立概念モデルである。原版の表計算との一致や、実建物での精度を示すものではない。
 所在の表記：`09_APPROX_STUDY/…` などは `whole-life-carbon-jcat-study/` からの位置、`materials/…` はこの保存フォルダからの位置。
 
@@ -40,12 +40,12 @@
   - [`09_APPROX_STUDY/02_RANKING/axis_b.json`](../../../09_APPROX_STUDY/02_RANKING/axis_b.json)
   - [`09_APPROX_STUDY/02_RANKING/research_priority.json`](../../../09_APPROX_STUDY/02_RANKING/research_priority.json)
   - [`09_APPROX_STUDY/02_RANKING/README.md`](../../../09_APPROX_STUDY/02_RANKING/README.md)
-- **確かめ方**：第2回の「報告書の監査」の検査が、(1) 自動生成の README 6 点をメモリ上で再生成し、ディスクの内容とバイト単位で同じことを確認、(2) 台帳の数を JSON から数え直し、(3) 軸 A・軸 B・優先スコア・着手順・着手群を研究の順位付けの関数で入力から再計算して差 0、(4) ファイル間の参照を突き合わせた。数は完全一致で比べている。報告書の監査の指摘 18 件は、全体の調整役が検査のスクリプトを再実行して再現した（検査が「合った」と報告した項目のすべてを再実行したかは、記録からは分からない）。第1回の検査でも報告書の数字 54 個を再計算して合った（初版）。
+- **確かめ方**：第2回の「報告書の監査」の検査が、(1) 自動生成の README 6 点をメモリ上で再生成し、ディスクの内容とバイト単位で同じことを確認、(2) 台帳の数を JSON から数え直し、(3) 軸 A・軸 B・優先スコア・着手順・着手群を研究の順位付けの関数で入力から再計算して差 0、(4) ファイル間の参照を突き合わせた。数は完全一致で比べている。報告書の監査の指摘 18 件は、全体の調整役が検査のスクリプトを再実行して再現した（検査が「合った」と報告した項目のすべてを再実行したかは、記録からは分からない）。第1回の検査でも報告書の数字 54 個を再計算して合った（初版）。（再点検による補足：REP の指摘には反証検査担当が付いていない。主担当が停止前に検査担当のスクリプトを再実行して同じ出力を得たのは 13 件（REP-1〜9、13、14、16、18）で、REP-10・11・12・15・17 は検査担当 1 者の報告だけである。）
 - **確かめた者**：独立検査（第2回）で再現
 - **言える範囲**：コミット 43ba5d7 の版（HEAD の 01_LEDGER・02_RANKING と同一）のファイルどうしの整合。独立概念モデルの 70 評価単位と、シート名・数式ノード数というメタデータについての数である。分類・推定・採点の内容が正しいこと、原版の数式を調べたことは含まない。
 - **関係する第2回の指摘**：REP-8、REP-11、REP-18、REP-1、REP-7
 - **第2回の指摘の影響**：数え直して合わなかった箇所、数は合うが意味が違う箇所が、この 5 件の指摘に当たる（CK-R1-21 に一覧）。それらを除いた範囲がこの項目である。
-- **今の時点で言ってよいこと**：次の数と対応は、第2回の検査の数え直しと合っている。(1) 評価単位 70 件（既存 53、追加 17）。既存 53 件の ID と名称は 04_FORMULAS/formulas.json と同じ。(2) 入力の申告を数えた値は 116 種類（入力仕様の 88、NEW: を付けたもの 28）。(3) 198 シート、59 シート族（数式を持つ族 41）、数式ノード 3,818,483。02_SOURCES の一覧と同じ。状態別の族数 24・9・11・15 とノード数 3,708,176・79,260・31,047・0 は、付いている表示を数えた値。(4) 未接続の入力 53 項目の内訳 30・14・9、評価単位にしなかったもの 7 件。(5) units.json の sheet_family_links と sheet_family_coverage.json の対応の不一致 0（70 単位）。depends_on・feeds は基準計算の登録簿と同じ。(6) 軸 A・軸 B・優先スコア・着手順・着手群は入力から再計算して差 0。README の表（軸 A の 700 個の値、軸 B の 70 行、着手順の 70 行）は JSON と同じ。research_priority.json と progress_ledger.json の順序・群の不一致 0。(7) 自動生成の README 6 点は再生成した内容と同じで、古い生成物ではない。
+- **今の時点で言ってよいこと**：次の数と対応は、第2回の検査の数え直しと合っている。(1) 評価単位 70 件（既存 53、追加 17）。既存 53 件の ID と名称は 04_FORMULAS/formulas.json と同じ。(2) 入力の申告を数えた値は 116 種類（入力仕様の 88、NEW: を付けたもの 28）。(3) 198 シート、59 シート族（数式を持つ族 41）、数式ノード 3,818,483。02_SOURCES の一覧と同じ。状態別の族数 24・9・11・15 とノード数 3,708,176・79,260・31,047・0 は、付いている表示を数えた値。(4) 未接続の入力 53 項目の内訳 30・14・9、評価単位にしなかったもの 7 件。(5) units.json の sheet_family_links と sheet_family_coverage.json の対応の不一致 0（70 単位）。depends_on・feeds は基準計算の登録簿と同じ。(6) 軸 A・軸 B・優先スコア・着手順・着手群は入力から再計算して差 0。README の表（軸 A の 700 個の値、軸 B の 70 行、着手順の 70 行）は JSON と同じ。research_priority.json と progress_ledger.json の順序・群の不一致 0。(7) 自動生成の README 6 点は、43ba5d7 の時点で、再生成した内容と同じだった（公開中の版の 09_APPROX_STUDY/README.md には、その後に手書きの終了の注記を加えてある）。古い生成物ではない。
 - **使ってはいけない記述**：
   - 01_LEDGER/README.md の構造別の表のうち「活動量×係数の総和 29」「比・換算 11」（単位から数えると 30 と 10）
   - 02_RANKING/README.md 11 行目の「軸 A 22 件（重みを変えた場合だけ入るもの 6 件）…和集合 42 件」の読み方（CK-R1-20）
@@ -61,6 +61,7 @@
   - [`09_APPROX_STUDY/01_LEDGER/sheet_family_coverage.json`](../../../09_APPROX_STUDY/01_LEDGER/sheet_family_coverage.json): families_by_status
   - [`09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md`](../../../09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md):70（報告書の数字 54 個を再計算して一致。初版）
 - **分類した観点**：R1（統制文書・台帳・順位）
+- **停止後の点検による訂正**：点検の指摘 再点検 V2-11、F1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R1.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r1-06"></a>
 
@@ -399,7 +400,7 @@
   - [`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../../09_APPROX_STUDY/04_VERIFICATION/README.md)
   - [`09_APPROX_STUDY/05_DECISIONS/README.md`](../../../09_APPROX_STUDY/05_DECISIONS/README.md)
   - [`09_APPROX_STUDY/03_MODELS/judge_proposal_trace.json`](../../../09_APPROX_STUDY/03_MODELS/judge_proposal_trace.json)
-- **確かめ方**：第2回の「報告書の監査」の検査が JSON から数え直して見つけた（REP）。この検査の指摘には第2の検証者は付かず、全体の調整役が検査のスクリプトを再実行して再現した。RED-6 は反証役の検証者が CONFIRMED とした。この読み取りでも、保存された JSON の解析だけで (1)〜(7) の数、(8) の台帳の文面、(9) の 52 件と 56 件を確かめ、指摘と同じだった。(8) のコードの動作と (9) の「測定なし 14 件」は確かめていない。
+- **確かめ方**：第2回の「報告書の監査」の検査が JSON から数え直して見つけた（REP）。REP の指摘には反証検査担当が付いていない。主担当が停止前に検査担当のスクリプトを再実行して同じ出力を得たのは 13 件（REP-1〜9、13、14、16、18）で、REP-10・11・12・15・17 は検査担当 1 者の報告だけである。RED-6 は反証役の検証者が CONFIRMED とした。この読み取りでも、保存された JSON の解析だけで (1)〜(7) の数、(8) の台帳の文面、(9) の 52 件と 56 件を確かめ、指摘と同じだった。(8) のコードの動作と (9) の「測定なし 14 件」は確かめていない。
 - **確かめた者**：独立検査（第2回）で再現
 - **言える範囲**：43ba5d7 の版（HEAD と同じ）の台帳・順位・報告の記述。
 - **関係する第2回の指摘**：REP-1、REP-2、REP-7、REP-8、REP-10、REP-11、REP-18、RED-6
@@ -426,6 +427,7 @@
   - [`materials/interrupted_fix/specs/SPEC_B3.md`](../materials/interrupted_fix/specs/SPEC_B3.md):20-57、[`materials/interrupted_fix/specs/STAGE_C_NOTES.md`](../materials/interrupted_fix/specs/STAGE_C_NOTES.md):31-32, 40-41（直す設計。未着手）
   - [`STOP_STATUS.md`](../STOP_STATUS.md):57-62
 - **分類した観点**：R1（統制文書・台帳・順位）
+- **停止後の点検による訂正**：点検の指摘 再点検 F1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R1.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-01"></a>
 
@@ -540,7 +542,7 @@
   - [`09_APPROX_STUDY/01_LEDGER/README.md`](../../../09_APPROX_STUDY/01_LEDGER/README.md)
   - [`09_APPROX_STUDY/01_LEDGER/unlinked_input_disposition.json`](../../../09_APPROX_STUDY/01_LEDGER/unlinked_input_disposition.json)
   - [`09_APPROX_STUDY/05_DECISIONS/README.md`](../../../09_APPROX_STUDY/05_DECISIONS/README.md)
-- **確かめ方**：第2回の報告書検査が JSON から数え直して確認（REP の指摘には第2検証者が付いておらず、主担当が検査のスクリプトを再実行して再現）。構造分類の件数は R7 も units.json から数え直した。
+- **確かめ方**：第2回の報告書検査が JSON から数え直して確認（REP の指摘には反証検査担当が付いていない。主担当が停止前に検査担当のスクリプトを再実行して同じ出力を得たのは 13 件（REP-1〜9、13、14、16、18）で、REP-10・11・12・15・17 は検査担当 1 者の報告だけである）。構造分類の件数は R7 も units.json から数え直した。
 - **確かめた者**：独立検査（第2回）で再現（第2検証者なし）
 - **言える範囲**：台帳の記述についての事実。
 - **関係する第2回の指摘**：REP-7、REP-8、REP-10、REP-18、RED-6
@@ -558,4 +560,5 @@
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):61-71（RED-6：branches の NaN の記述は台帳の内部の食い違い）
   - [`09_APPROX_STUDY/01_LEDGER/units.json`](../../../09_APPROX_STUDY/01_LEDGER/units.json): units[id=A13-04].structure_subclass="UNDEFINED_MODEL"、computable_in_reference=true
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
+- **停止後の点検による訂正**：点検の指摘 再点検 F1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 

@@ -89,6 +89,13 @@ def load():
             items.append(it)
     r6 = json.load(open(os.path.join(SRC, "R6.json"), encoding="utf-8"))
     apply_overrides(items)
+    path = os.path.join(SRC, "overrides.json")
+    if os.path.exists(path):
+        for ro in json.load(open(path, encoding="utf-8")).get("register_overrides", []):
+            if ro["where"] == "groups[1].consequence_for_reuse":
+                g = r6["groups"][1]
+                assert ro["old"] in g["consequence_for_reuse"]
+                g["consequence_for_reuse"] = g["consequence_for_reuse"].replace(ro["old"], ro["new"])
     return items, meta, r6
 
 
@@ -239,7 +246,8 @@ def main():
         o = []
         o.append("# 索引の詳細 %s：%s" % (t, tname))
         o.append("")
-        o.append("[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。")
+        o.append("[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。"
+                 "停止後の点検で改めた項目には「停止後の点検による訂正」と記してある。")
         o.append("旧研究の数値はすべて架空データでの値で、対象は独立概念モデルである。原版の表計算との一致や、実建物での精度を示すものではない。")
         o.append("所在の表記：`09_APPROX_STUDY/…` などは `whole-life-carbon-jcat-study/` からの位置、`materials/…` はこの保存フォルダからの位置。")
         o.append("")
@@ -370,6 +378,8 @@ def main():
         o.append("")
     o.append("## この登録簿が扱っていないこと")
     o.append("")
+    o.append("下は分類担当（観点 R6）の申告の写しである。REP の 18 件の再実行については、冒頭の記述（13 件は主担当が再実行、5 件は検査担当 1 者の報告だけ）が、停止後の点検で確かめた内容である。")
+    o.append("")
     for x in r6["not_covered"]:
         o.append("- %s" % x)
     open(os.path.join(ARCH_DIR, "index_detail", "FINDINGS_59.md"), "w", encoding="utf-8").write("\n".join(o) + "\n")
@@ -379,6 +389,10 @@ def main():
     o.append("# 分類担当が読んでいない範囲・分類できなかった範囲")
     o.append("")
     o.append("[INDEX.md](../INDEX.md) の 9 節の詳細。観点ごとに、分類担当が申告した内容をそのまま載せる。")
+    o.append("")
+    o.append("停止後の点検で分かった補足：(1) REP の 18 件のうち、主担当が停止前に検査担当のスクリプトを再実行して同じ出力を得たのは 13 件（REP-1〜9、13、14、16、18）で、"
+             "REP-10・11・12・15・17 は検査担当 1 者の報告だけである。(2) 点検の後に追加した `materials/interrupted_fix/working_files/` と "
+             "`materials/earlier_session_scratch/approx_old.json` は、分類担当も点検担当も読んでいない。")
     o.append("")
     for L in LENSES:
         o.append("## %s（%s）" % (L, LENS_NAME[L]))

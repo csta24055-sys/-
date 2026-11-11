@@ -1,6 +1,6 @@
 # 索引の詳細 T04：基準計算と規約
 
-[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。
+[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。停止後の点検で改めた項目には「停止後の点検による訂正」と記してある。
 旧研究の数値はすべて架空データでの値で、対象は独立概念モデルである。原版の表計算との一致や、実建物での精度を示すものではない。
 所在の表記：`09_APPROX_STUDY/…` などは `whole-life-carbon-jcat-study/` からの位置、`materials/…` はこの保存フォルダからの位置。
 
@@ -383,7 +383,7 @@
   - 「基準計算の正しさ」を、現実の排出量や他のツールの結果との一致として読むこと（06_OPEN_ISSUES D-1・D-2：対象外）
 - **新研究での再利用**：候補（ルート A・B・C）
   - 使い道：新しい定式化の誤差を測るときの基準値を出す計算として使う。ルート B では、この関数群の定義文とコードが「元の式」に当たる。
-  - 条件・注意：どの版を基準計算とするかを最初に固定する：コミット済みの版（43ba5d7 と同じ）と、中断した修正の版（65ff124。定義が変わる、未検証）がある。指示は基準計算の変更を禁じているので、穴のある入力範囲（CK-R7-19、CK-R7-20）は、基準計算を直すのではなく測定の母集団から外すか別扱いにする必要がある。結果の形（value／by_item／by_year／by_stage／ok と violations、「_」で始まるキーは下流用で比較の対象外）は registry.py と base.py の冒頭にある。
+  - 条件・注意：基準計算は公開中の版（43ba5d7 と同じ）に固定する。中断した修正の版は使わない（HANDOVER.md 4.2）。版は 2 つある：コミット済みの版（43ba5d7 と同じ）と、中断した修正の版（65ff124。定義が変わる、未検証）がある。指示は基準計算の変更を禁じているので、穴のある入力範囲（CK-R7-19、CK-R7-20）は、基準計算を直すのではなく測定の母集団から外すか別扱いにする必要がある。結果の形（value／by_item／by_year／by_stage／ok と violations、「_」で始まるキーは下流用で比較の対象外）は registry.py と base.py の冒頭にある。
 - **分類の根拠**：
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):146（CHECKS PERFORMED 1：53 単位、119 シナリオ、数値と件数が相対 1e-9 以内。差は 4 点）
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):148（COULD NOT CHECK：再導出していない単位、規模、期間、規約の出典）
@@ -391,7 +391,7 @@
   - [`09_APPROX_STUDY/research_code/tests/test_refcalc.py`](../../../09_APPROX_STUDY/research_code/tests/test_refcalc.py)（test_hand_calculation ほか 8 件。R7 は名前だけ確認）；[`materials/round2_review/triage/reports.md`](../materials/round2_review/triage/reports.md):128（「The study's 28 unit tests pass」）
   - [`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md):73-75（D-1〜D-3）
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
-- **停止後の点検による訂正**：点検の指摘 V1-12 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
+- **停止後の点検による訂正**：点検の指摘 V1-12、再点検 C1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-18"></a>
 
@@ -427,7 +427,7 @@
 ## CK-R7-19　基準計算の定義の穴（不正な値・部分的な境界・検査との食い違い）
 
 - **区分**：4　不具合・未解決事項
-- **内容**：第2回の検査で確認された、基準計算の定義とコードの欠陥。入力が有限で範囲内、かつ 14 段階すべてを対象にする場合には現れないが、それ以外では、合計が黙って変わる・不完全の印が付かない・全体が例外で止まる、のいずれかが起きる。
+- **内容**：第2回の検査で確認された、基準計算の定義とコードの欠陥。INDEX.md の 6.1 の条件を満たす入力（有限で範囲内、周期が有限の正の数、14 段階すべてを対象、など）にする場合には現れないが、それ以外では、合計が黙って変わる・不完全の印が付かない・全体が例外で止まる、のいずれかが起きる。
 - **所在**：
   - [`09_APPROX_STUDY/research_code/refcalc/base.py`](../../../09_APPROX_STUDY/research_code/refcalc/base.py)
   - [`09_APPROX_STUDY/research_code/refcalc/units_pre_a.py`](../../../09_APPROX_STUDY/research_code/refcalc/units_pre_a.py)
@@ -448,7 +448,7 @@
   - INDEPENDENT_REVIEW.md 2.2 の「除外して数える規則に統一」
 - **新研究での再利用**：候補（ルート A・B・C）
   - 使い道：新しい定式化の定義域を決めるときの「避ける入力範囲」の一覧として使う。誤差測定の母集団からこれらの入力を外す、または「基準値なし」として扱う根拠になる。
-  - 条件・注意：指示は基準計算の変更を禁じているので、穴を埋めた版を基準にしたい場合は、新研究の側でその扱いを明示して決める必要がある（この確認作業は修正を行わない）。基準計算と統合モデルは、有限の欠陥入力では互いに一致する（同じ穴を共有する）ので、両者の一致は穴が無いことの証拠にならない。
+  - 条件・注意：指示は基準計算の変更を禁じているので、穴を埋めた版を基準にしたい場合は、新研究の側でその扱いを明示して決める必要がある（この確認作業は修正を行わない）。基準計算と統合モデルは、有限の欠陥入力では互いに一致する（同じ穴を共有する）ので、両者の一致は穴が無いことの証拠にならない。（再点検による補足：穴を埋めた版（65ff124）は基準にしない。穴のある入力は、比較から外すか、既知の例外として扱う。INDEX.md 6.1、HANDOVER.md 4.2。）
 - **分類の根拠**：
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):1-11（RED-1：対象段階 B3 だけで SUM-03 98378.05→43676.16、complete 真）
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):13-23（RED-2）、25-35（RED-3：SUM-03 7893398.71→6619741.07、complete 真）、37-71（RED-4・RED-5・RED-6）、109-131（RED-10・RED-11）
@@ -456,6 +456,7 @@
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):150（検証者の追加 1〜3）
   - [`09_APPROX_STUDY/research_code/refcalc/units_c_sum.py`](../../../09_APPROX_STUDY/research_code/refcalc/units_c_sum.py):240-250（STAGE_UNITS、_incomplete）；[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../../09_APPROX_STUDY/research_code/refcalc/base.py):152-164（profile_values：検査なし）
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
+- **停止後の点検による訂正**：点検の指摘 再点検 C1-01、C1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-20"></a>
 
@@ -500,7 +501,7 @@
 - **所在**：
   - [`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md)
   - [`09_APPROX_STUDY/research_code/refcalc/base.py`](../../../09_APPROX_STUDY/research_code/refcalc/base.py)
-- **確かめ方**：規約の一覧と影響の試算は 06_OPEN_ISSUES の B にコミット済み（影響の大きさは第1回の独立検査による試算と明記）。第2回の再導出検査が B-1〜B-21 を 1 件ずつコードと照合し、B-11・B-17・B-18 を除いて符合と報告。影響の数字（B-7、B-10、B-11、B-12）は第2回の 2 つの検査が再計算して一致。
+- **確かめ方**：規約の一覧と影響の試算は 06_OPEN_ISSUES の B にコミット済み（影響の大きさは第1回の独立検査による試算と明記）。第2回の再導出の検査担当が、B-1〜B-21 は B-11・B-17・B-18 を除きコードと合うと 1 文で報告した（1 件ごとの照合の記録は無い）。影響の数字（B-7、B-10、B-11、B-12）は第2回の 2 つの検査が再計算して一致。
 - **確かめた者**：独立検査（第2回）で再現
 - **言える範囲**：架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。「符合」は規約の文とコードの挙動が合うという意味で、規約の選び方の妥当性ではない。影響の数字は架空の境界条件の例と標準ベンチマーク S でのもの。
 - **関係する第2回の指摘**：RED-1、RED-2、RED-3、RED-8、REP-17、NUM-1
@@ -520,7 +521,7 @@
   - [`materials/round2_review/triage/reports.md`](../materials/round2_review/triage/reports.md):128（CHECKS 2：B-7、B-10、B-11 の数字を再現）、113-118（REP-17。第2検証者なし）
   - [`materials/round2_review/triage/numeric.md`](../materials/round2_review/triage/numeric.md):138（検証者の追加 1：B-15 の端）
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
-- **停止後の点検による訂正**：点検の指摘 V1-07 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
+- **停止後の点検による訂正**：点検の指摘 V1-07、再点検 V1-07 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-29"></a>
 

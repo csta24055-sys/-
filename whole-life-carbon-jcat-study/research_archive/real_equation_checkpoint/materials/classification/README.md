@@ -10,7 +10,7 @@
 | `R1.json`〜`R5.json`、`R7.json` | 観点ごとの分類結果（項目の一覧） |
 | `R6.json` | 第2回の独立検査の指摘 59 件の登録簿 |
 | `overrides.json` | 停止後の点検の指摘により、分類担当の記述に加えた訂正の一覧。`R*.json` は分類担当の元の記述のまま残してある |
-| `review/` | 停止後の点検（別の AI 作業担当 4 者、読み取りだけ）の結果。`V1.json`・`V2.json`（検証済みとした主張の裏付け）、`F1.json`（停止と保存の事実）、`C1.json`（漏れ・誤分類・遵守事項）、`summary.json`（全体）、`check_workflow_script.js`（点検担当への指示） |
+| `review/` | 停止後の点検（別の AI 作業担当 4 者、読み取りだけ）の結果。`V1.json`・`V2.json`（検証済みとした主張の裏付け）、`F1.json`（停止と保存の事実）、`C1.json`（漏れ・誤分類・遵守事項）、`summary.json`（全体）、`check_workflow_script.js`（点検担当への指示）。`review/recheck/` は、反映の後の再点検（別の 2 者）の結果 |
 | `readers_summary.json` | 分類担当ごとの要約、禁止事項を守ったかの申告、分類担当が挙げた問題点 |
 | `INDEX_head.md`、`INDEX_reuse_intro.md`、`INDEX_tail.md` | `INDEX.md` のうち、索引の作成者が書いた部分 |
 | `render_index.py` | 上の JSON と文章から `INDEX.md` と `index_detail/` を生成するスクリプト |

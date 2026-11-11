@@ -1,0 +1,252 @@
+{
+ "checker": "FV1",
+ "rule_check": "no。旧研究のコード（refcalc、fastcalc、bench、synth、tools、common、試験、生成器、materials の下のスクリプト）は実行も import もしていない。render_index.py、driver.py、units_c_sum.py、base.py は grep と sed で読んだだけである。リポジトリのファイルは変更していない（git は log、diff、status、grep だけ）。書いたのは自分の作業フォルダと結果ファイルだけ。Python は -I で、作業フォルダから JSON とテキストの解析だけに使った。Web は使っていない。",
+ "results": [
+  {
+   "finding": "V1-01",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:79-80; HANDOVER.md:53",
+   "note": "1.1 の表を 2 行に分け、(1) 回数関数・年重み付き和・冷媒の等比は総当たり、(2) 行の合算と積和・建替・指標は「読み比べと 681 シナリオ全体の一致。専用の総当たりは無い」とした。records.md:110・112 と合う。HANDOVER 2.2 も同じ区別になっている。"
+  },
+  {
+   "finding": "V1-02",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:277; index_detail/T06_unified_models.md:772",
+   "note": "差の範囲は 5.2e-8〜6.4e-5、総当たりの 1 例 1.08e-9、冷媒の 5.8e-9 に直してある。numeric.md の NUM-10 (b)(e) と CHECKS 3 に合う。「上の件数」は「件数は『確かめ方』に記した」に直り、詳細 T06:767 に件数がある。"
+  },
+  {
+   "finding": "V1-03",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:293, 81; index_detail/T07_exactness_load.md:71",
+   "note": "CK-R3-19 と 1.1 の表は直っている（REC-4、NUM-1、REP-17、|SUM-03|×1e-12 の絶対差、8 シナリオ×9 期間。records.md:110 の 7 と numeric.md:134 の 5 に合う）。ただし同じ言い方が CK-R3-03 の「使い道」に残っている：INDEX.md:932 と index_detail/T06_unified_models.md:127「T を変える再計算は乗数の計算だけで済む」。訂正案：「周期で与えられる行については、T を変える再計算は乗数の計算で済む（D2 の導出による）。明示の更新年一覧を持つ行と冷媒機器の行は、評価期間ごとに計算し直す（REC-4、REC-7）」。"
+  },
+  {
+   "finding": "V1-04",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:269; index_detail/T06_unified_models.md:512",
+   "note": "和と比の指標に限り、差を取る指標（SUM-08 の delta）は桁落ちすると書いてある。NUM-10 (c) の 4.2e-5 と合う。"
+  },
+  {
+   "finding": "V1-05",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:133; index_detail/T02_ledger.md:169",
+   "note": "確かめた者は第2回だけになり、「第1回の検査は初版が対象で、この版は見ていない」と添えてある。INDEPENDENT_REVIEW.md:3 と合う。区分 1 のほかの 33 項目の「確かめた者」に第1回は無い。"
+  },
+  {
+   "finding": "V1-06",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:147-148, 78; index_detail/T02_ledger.md:476, 480",
+   "note": "流れの記述を units.json の depends_on と照合した（B3-01 は 5 つ、B4-02 は 12、B5-01 は A5-04 を含む 12。辺 183、深さ 0〜7、SUM-03 の上流 37）。合っている。確かめた者も、宣言との一致（第2回）と、辺の数・閉路なし（分類担当と点検担当の解析）に分けてある。"
+  },
+  {
+   "finding": "V1-07",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:180, 84; index_detail/T04_reference_calculation.md:508",
+   "note": "「18 件が合うと報告、索引が 3 件に限定、B-2・B-3 にも同じ限定」に直っている（rederive.md:146 の 7 に合う。残る 15 件の列挙も 15 件）。ただし同じ項目の詳細の「確かめ方」（T04_reference_calculation.md:503）に「B-1〜B-21 を 1 件ずつコードと照合し」が残り、訂正後の「1 件ごとの照合の記録は無い」と食い違う。訂正案：「第2回の再導出の検査担当が、B-1〜B-21 は B-11・B-17・B-18 を除きコードと合うと 1 文で報告した（1 件ごとの照合の記録は無い）」。"
+  },
+  {
+   "finding": "V1-08",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:255; index_detail/T06_unified_models.md:450",
+   "note": "「T が整数をわずかに超える場合を除く（1.08e-9、5.2e-8〜6.4e-5）。総当たりの相手は検査担当が書いた逐次計算」が加わっている。numeric.md:134 と合う。"
+  },
+  {
+   "finding": "V1-09",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:204; index_detail/T06_unified_models.md:137 付近",
+   "note": "「周期で与えられる行については」「明示の更新年一覧を持つ行は行ごと（REC-7）」が入っている。同じ項目の「使い道」に残る無条件の文は V1-03 に記した。"
+  },
+  {
+   "finding": "V1-10",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:308",
+   "note": "「相対 1e-9 を超える差は 0 件（最大 4.77e-13）」に直っている。numeric.md:112・118 と合う。"
+  },
+  {
+   "finding": "V1-11",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:300, 83; HANDOVER.md:41; index_detail/T07_exactness_load.md:104",
+   "note": "条件（基準案との比較を除く）と「約 100 命令以内」「検査担当 1 者、反証なし」は入った。数値は unified_model_load.json と合う（0.5419、0.6355、0.6759、0.7261、0.4487、0.5434）。残り 2 点。(1) 加えた文「基準案との比較を含めると 44.9％・54.3％」は第2回が数え直していない値で、直後の「数え直し…合った」に含まれるように読める（新規 FV1-N01）。(2) 同じ無条件の文が CK-R5-14 に残る（index_detail/T09_records_reports.md:496「…54.2％ 減と 63.6％ 減…第2回の検査が数え直して一致した」）。訂正案：「基準案との比較（SUM-08）を除いた計算どうしで…。この 2 つの規模の命令数は、第2回の検査担当 1 者が数え直し、約 100 命令以内の差で合った（反証検査なし）」。"
+  },
+  {
+   "finding": "V1-12",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:132, 156, 172",
+   "note": "完全性の印を比べていないこと、X-04 はガス別内訳、SUM-08 は基準案のある 3 シナリオ、「確かめ方」への言い換え、版の呼び方が入っている。driver.py の KEYS（X-02 は by_stage、SUM-01〜06 は value、C-05 は ok と n_mass_unchecked）と合う。軽い残り：CK-R2-01 の再利用の行（INDEX.md:900）と T06_unified_models.md:60 に「60e720f の基準計算／refcalc」という呼び方が残る（コードは同じなので内容の誤りではない）。"
+  },
+  {
+   "finding": "V1-13",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:225-227; index_detail/T06_unified_models.md:290, 298, 300",
+   "note": "「根拠の強さ」の注記、関係する指摘への NUM-3・NUM-6 の追加、「不備のない係数とガスの一覧について」の限定が入っている。"
+  },
+  {
+   "finding": "V1-14",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:286",
+   "note": "「検査担当 1 者と反証検査担当 1 者」に直っている。numeric.md:134 の 9 と :118 に合う。"
+  },
+  {
+   "finding": "V1-15",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:262",
+   "note": "「2 者の合計。うち 40,000 件は絶対差 1e-12 による判定」と、漏洩率が 1 に近い場合の除外が入っている。40,000＋150,000＝190,000。"
+  },
+  {
+   "finding": "V1-16",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:77, 84",
+   "note": "2 行目に「書き直しとの一致は検査担当 1 者の報告で、反証検査担当はやり直していない」、規約の行に「検査担当 1 者の 1 文の報告」がある。「文面の一致は検査担当 2 者」は rederive.md:146 の 4 と reports.md:128 の 3 に合う。"
+  },
+  {
+   "finding": "V2-01",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:46, 52-53, 481, 1015; index_detail/T09_records_reports.md:585, 596; HANDOVER.md:44, 176",
+   "note": "CK-R5-17 は区分 2 に移り、件数は 34／80／25／32（計 171、再利用 133）になった。分類 JSON と訂正の一覧から数え直して合った。HANDOVER 2.1 の要点 7 も区分 2。STO-01・STO-02・X-17 の定義文は units.json と合う。ほかに区分 1 と書いた箇所は無い。"
+  },
+  {
+   "finding": "V2-02",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:352, 851; index_detail/T08_approximation.md:702",
+   "note": "候補の一覧を文に入れ、AP-06b を「不等式の向きだけ独立に確認、測定は作成者だけ」と分け、未数量分の比率の条件を加えてある。approx.md:110 の 3 と :112、APP-5 に合う。"
+  },
+  {
+   "finding": "V2-03",
+   "status": "RESOLVED",
+   "where_now": "index_detail/T09_records_reports.md:54-55",
+   "note": "「4 件を除き不一致は報告されていない」は消え、REP-2・7・11・14・18 が本文と関係する指摘の両方に入っている。"
+  },
+  {
+   "finding": "V2-04",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:85",
+   "note": "「第2回が数え直した範囲で」「REP-1・2・7・8・9・11・13・14・18 を除く」「検査担当 1 者の数え直し。反証検査担当なし」が入っている。"
+  },
+  {
+   "finding": "V2-05",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:97",
+   "note": "「検査担当の例で 62.8％、反証検査担当の別の例で 71.0％」に直っている。8087162.85→2343456.08 は −71.0％（計算した）。"
+  },
+  {
+   "finding": "V2-06",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:98",
+   "note": "年次量（旧記述と矛盾）、電力係数・係数の値・換算倍率（挙げていない穴）、不正な周期・耐用年数（事象なし）に分けてある。rederive.md:23・35 の訂正後の判定と合う。"
+  },
+  {
+   "finding": "V2-07",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:317, 852",
+   "note": "「相対 1e-12 の許容差つきの判定。許容差なしでは 394 件」が入っている。approx.md:110 の 1 と合う。"
+  },
+  {
+   "finding": "V2-08",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:325; index_detail/T08_approximation.md:183",
+   "note": "確かめた者を 3 者の範囲に分け、「用途別の内訳は再現なし」としてある。reports.md:128 の 2、approx.md:112 と合う。"
+  },
+  {
+   "finding": "V2-09",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:331",
+   "note": "「複合品の製造排出（X-03。段階の値ではない）」「AP-07b は波及させると合計の 95％点 1.20％」「AP-07a の波及後の値に独立の測定は無い」が入っている。JSON の −20.2％、−14.7％〜+7.5％ と approx.md の APP-3 に合う。"
+  },
+  {
+   "finding": "V2-10",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:359",
+   "note": "「主な対象の n・平均・95％点・最小・最大」「n は 80〜400」「内訳と副次の対象は再現していない」が入っている。approximation_study.json の n（80、98、197、200、400）と合う。"
+  },
+  {
+   "finding": "V2-11",
+   "status": "PARTLY",
+   "where_now": "INDEX.md:368; index_detail/T09_records_reports.md:56",
+   "note": "CK-R5-01 は「43ba5d7 の時点で…一致した。README.md にはその後に手書きの注記」と直っている。ただし同じ現在形の文が CK-R1-05 に残る：INDEX.md:124 と index_detail/T02_ledger.md:48「(7) 自動生成の README 6 点は再生成した内容と同じで、古い生成物ではない」。6 点には 09_APPROX_STUDY/README.md が入り、43ba5d7 の後に 9 行が加わっている（git diff --stat 43ba5d7 HEAD）。訂正案：「(7) 自動生成の README 6 点は、43ba5d7 の時点で、再生成した内容と同じだった（古い生成物ではない）。公開中の版の 09_APPROX_STUDY/README.md には、その後に手書きの終了の注記を加えてある」。"
+  },
+  {
+   "finding": "V2-12",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:82; HANDOVER.md:54",
+   "note": "「目標（段階 2％ または合計 1％）のどちらかを外れた」「AP-04 が外れたのは段階の目標だけ」「AP-07a・b は複合品の製造排出に対する値」になっている。JSON の within_stage_target／within_total_target と合う（AP-04 は false／true、ほかの 7 件は false／false）。"
+  },
+  {
+   "finding": "V2-13",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:29, 91, 96; HANDOVER.md:119",
+   "note": "0.2 に「REP の 18 件には反証検査担当が付いていない」、1.2 の前書きに REP だけの行の断り、66 単位の行と HANDOVER 4.4 に「反証検査なし」が入っている。「さらに少ないとする」は「14 単位に異論（数え直した数は示していない）」に直り、reports.md:25 と合う。"
+  },
+  {
+   "finding": "V2-14",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:820",
+   "note": "共分散の恒等式は AP-17 だけ第2回が確認、AP-08・AP-18c は未確認、−41％〜+337％ は検査担当が組んだ標本外の構成の値、と書き分けてある。−1.9％〜+1.1％ は JSON（max_under −0.0188、max_over +0.0113）と合う。"
+  },
+  {
+   "finding": "V2-15",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:815, 78, 147",
+   "note": "「宣言された依存（depends_on）」の限定と「X-07 は宣言に無い B2-01 を読む」が入っている。units_c_sum.py:379-380・395 を読んで確かめた。"
+  },
+  {
+   "finding": "V2-16",
+   "status": "RESOLVED",
+   "where_now": "INDEX.md:798-807; HANDOVER.md:103",
+   "note": "条件が 8 項目になり、2 番目に更新周期・耐用年数・建替周期（RED-3）がある。HANDOVER 4.2 は「6.1 の 8 項目」を参照するだけにしてあり、数も合う。"
+  },
+  {
+   "finding": "V2-17",
+   "status": "RESOLVED",
+   "where_now": "HANDOVER.md:52",
+   "note": "「定義文と規約文だけから独立に書き直した計算と…一致（表示・件数の 4 点を除く。完全性の印は比べていない。検査担当 1 者の報告）」になっている。"
+  },
+  {
+   "finding": "V2-18",
+   "status": "RESOLVED",
+   "where_now": "HANDOVER.md:41, 43",
+   "note": "要点 4 は「検査担当 1 者が数え直し、約 100 命令以内の差で合った（反証検査なし）」、要点 6 は「作成者の測定では…（区分 2。第2回は報告書と JSON の一致だけ）」になっている。"
+  }
+ ],
+ "new_findings": [
+  {
+   "id": "FV1-N01",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T07_exactness_load.md の CK-R3-20 にある）",
+   "where": "2 節 CK-R3-20「言ってよいこと」（INDEX.md:300、T07_exactness_load.md:104）",
+   "quoted": "基準案との比較を含めると、全出力の減り方は 44.9％・54.3％ である。第2回の検査担当 1 者が命令数を数え直し、約 100 命令以内の差で合った。",
+   "problem": "訂正で加えた 44.9％・54.3％ は、第2回が数え直していない値である。第2回の数え直しは、基準計算・全出力・合計のみの 3 つ（基準案との比較なし）だけである。区分 1 の文の中で、直後の「数え直し…合った」に含まれるように読める。基準案を含む測定は、同じ索引では CK-R3-21（区分 2、作成者のみ）の範囲である。数値そのものは JSON と合う。",
+   "evidence": "materials/round2_review/triage/reports.md:128 の 2「recounted bytecode instructions for benchmarks S and M (reference, full, totals) … (54.2/67.6 % and 63.6/72.6 %)」；09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json の unified_full_outputs_with_baseline_comparison.instruction_reduction＝0.4487（S）、0.5434（M）；index_detail/T07_exactness_load.md:126, 131（CK-R3-21：第2回で測り直されていない部分、確かめた者は作成者のみ）",
+   "suggested_fix": "文の順を入れ替え、「…67.6％・72.6％ 少なかった。第2回の検査担当 1 者がこの命令数を数え直し、約 100 命令以内の差で合った。基準案との比較を含めた場合の全出力の減り方 44.9％・54.3％ は作成者の測定だけで、第2回は数え直していない（CK-R3-21）」と書く。"
+  },
+  {
+   "id": "FV1-N02",
+   "severity": "LOW",
+   "file": "index_detail/T01〜T12 の各ファイル",
+   "where": "各ファイルの 3 行目（前書き）",
+   "quoted": "分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。",
+   "problem": "点検の反映の後は、31 項目で分類担当の記述を訂正の一覧で書き換えてある。「そのまま載せる」は事実と合わなくなった。各項目に「停止後の点検による訂正」の注記はある（31 項目すべてにあることを確かめた）ので、前書きだけが古い。",
+   "evidence": "materials/classification/overrides.json（31 項目）；index_detail の「停止後の点検による訂正」の行は 31（T02 2、T04 3、T05 1、T06 7、T07 4、T08 5、T09 2、T10 2、T11 3、T12 2）；index_detail/T02_ledger.md:3、T06_unified_models.md:3、T09_records_reports.md:3",
+   "suggested_fix": "「分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。停止後の点検で改めた項目には『停止後の点検による訂正』と記してある」に直す（render_index.py の前書きの文）。"
+  },
+  {
+   "id": "FV1-N03",
+   "severity": "LOW",
+   "file": "INDEX.md、HANDOVER.md",
+   "where": "INDEX.md 0.1 の 4（17 行）、HANDOVER.md 7 節「別の担当による点検」（178 行）",
+   "quoted": "指摘は 57 件（重い 1、中 17、軽い 39）で、すべて反映した。／57 件すべてを反映した。",
+   "problem": "V1・V2 の 34 件のうち 4 件（V1-03、V1-07、V1-11、V2-11）は、指摘された箇所は直っているが、同じ問題がほかの欄や項目に残っている。「すべて反映した」は、この残りを直すまでは言い過ぎになる。件数と内訳（57＝16＋18＋9＋14、重い 1・中 17・軽い 39）は review の JSON と合う。",
+   "evidence": "この点検の results の V1-03（INDEX.md:932）、V1-07（T04_reference_calculation.md:503）、V1-11（T09_records_reports.md:496）、V2-11（INDEX.md:124）；materials/classification/review/summary.json の bySev",
+   "suggested_fix": "残りの 4 か所を直す。そのうえで「すべて反映した。反映の後の再点検で見つかった残り（4 件）も直した」と書く。HANDOVER.md:179 の「改めて点検することはしていない」も、再点検をしたことに合わせて直す。"
+  }
+ ],
+ "not_checked": [
+  "記録された数値（681 シナリオの一致、命令数、総当たりの件数、近似の統計値）が今の環境で再現するか。旧研究の実行が要るので確かめていない。",
+  "検査担当と反証検査担当の実際の出力ファイル。triage の文面を記録として扱った。",
+  "F1・C1 の指摘 23 件の反映（担当外）。HANDOVER 5 節の 400／316／61／15／5／3 と 75／72／3 は、文書どうしの整合（316＋61＋15＋5＝397、＋3＝400。STOP_STATUS 6 節、INDEX 8.3 と同じ数）だけを見た。実際のファイル数は数えていない。",
+  "INDEX.md の 3〜5.1 節、6.4〜6.5 節、7 節の全行と、index_detail の割当外の項目の本文。語句の検索に掛かった行だけを読んだ。",
+  "REP-2・11・14・18 の triage の本文（V2 の引用をそのまま使った）。REC-2 は「about 62-63 units」の箇所だけを読んだ。",
+  "CK-R3-16 の新しい文「和と比の指標は…同じ程度の精度で合う」の数値での裏付け。記録には無く、一般的な誤差の伝わり方の説明として読んだ。",
+  "render_index.py の全体。注記を出す部分だけを読んだ。索引を生成し直して INDEX.md と一致するかは、実行しないので確かめていない。",
+  "STOP_ORDER.md、NEW_DIRECTIVE.md の内容と、10_TRANSFORM_STUDY（対象外）。"
+ ]
+}

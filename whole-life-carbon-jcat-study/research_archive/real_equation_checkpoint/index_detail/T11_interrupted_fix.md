@@ -1,6 +1,6 @@
 # 索引の詳細 T11：中断した修正（65ff124）と未実施の改訂
 
-[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。
+[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。停止後の点検で改めた項目には「停止後の点検による訂正」と記してある。
 旧研究の数値はすべて架空データでの値で、対象は独立概念モデルである。原版の表計算との一致や、実建物での精度を示すものではない。
 所在の表記：`09_APPROX_STUDY/…` などは `whole-life-carbon-jcat-study/` からの位置、`materials/…` はこの保存フォルダからの位置。
 
@@ -273,14 +273,14 @@
   - NUM-1 は修正済み（FIXED）である、を検証済みの事実として扱うこと
   - 閉形式は「いまや証明できる形で厳密」（仕様の表現。実装の検査はない）
 - **新研究での再利用**：候補（ルート B・C）
-  - 使い道：時間の規則を丸めに依存しない形で定義する案として読む。新研究が回数関数や年の割り当てを変換で表すとき、対照にする定義の候補になる。
+  - 使い道：時間の規則を丸めに依存しない形で定義する案として読む。基準や対照には使わない。
   - 条件・注意：設計の記録として読むだけにする。65ff124 のコード・閉形式・数値は、基準にも出発点にも使わない（HANDOVER.md 4.1・4.2）。新研究の基準計算は公開中の版で、周期 1.000000001 では丸めに依存したままである。
 - **分類の根拠**：
   - [`materials/interrupted_fix/specs/SPEC_A1.md`](../materials/interrupted_fix/specs/SPEC_A1.md):39-78
   - [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](../materials/interrupted_fix/agent_reports/A1_REPORT.json): findings (NUM-1, REC-1, APP-5), decisions, interface_changes
   - [`STOP_STATUS.md`](../STOP_STATUS.md):54, 86-87, 97-99
 - **分類した観点**：R3（統合モデルとその根拠）
-- **停止後の点検による訂正**：点検の指摘 C1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R3.json`、訂正の内容は `materials/classification/overrides.json` にある。
+- **停止後の点検による訂正**：点検の指摘 C1-02、再点検 C1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R3.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r3-32"></a>
 

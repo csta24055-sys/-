@@ -34,7 +34,7 @@ a1 がこの比較から得た結論は、`../agent_reports/A1_REPORT.json`（�
 | `a1/snap_before.pkl` | 67,141,050 | `4c7b9c243970fece60c6def08edb4c0b07255cc66596b8e3282f21b168c0d282` |
 | `a1/snap_after_final.pkl` | 121,745,517 | `4a316f23761bc1d07fc5d843d92d247bfb351c0235063f3532436729ff36b858` |
 
-次の 15 件は、公開中の版、`43ba5d7`、`65ff124` のいずれかに同じ内容のファイルがあるので、複写していない。
+次の 14 件は、Git の履歴（公開中の版、`43ba5d7`、`65ff124` のいずれか）に同じ内容のファイルがあるので、複写していない。
 
 - `a1/units_before.json`
 - `a1/input_usage_scratch.json`
@@ -49,5 +49,10 @@ a1 がこの比較から得た結論は、`../agent_reports/A1_REPORT.json`（�
 - `a2/models_before.json`
 - `a2/shadow_before/fastcalc/__init__.py`
 - `a2/shadow_before/bench/__init__.py`
-- `a2/shadow_before/bench/input_usage.py`
 - `a2/before/fastcalc/__init__.py`
+
+このほか、作業用フォルダには、リポジトリのファイルを指すシンボリックリンクが 2 件あった（`a2/shadow_before/bench/input_usage.py`、`a2/shadow_before/bench/mutations.py`）。リンク先はリポジトリにあるので、複写していない。
+
+同じ時に、近似検証の古い版の出力 1 件（作業用フォルダの最上位にあった `approx_old.json`）を `../../earlier_session_scratch/approx_old.json` に保存した。
+
+停止前の作業用フォルダの通常のファイルは 399 件で、内訳は次のとおり：停止の直後に複写 316、点検の後に複写 61（このフォルダ 60、`approx_old.json` 1）、圧縮した記録 2 件にまとめた 5、Git に同じ内容がある 14、保存しなかった 3。

@@ -14,9 +14,9 @@
 1. 停止後、旧研究のコード（基準計算、統合モデル、測定、試験、生成器）は**一度も実行していない**。分類は、コミット済みのファイルと保存した作業資料を読むことだけで行った。
 2. 分類担当は 7 観点（統制文書・台帳・順位／基準計算と架空データ／統合モデル／近似検証／記録と報告書／第2回の指摘の登録簿／再利用の下調べ）で、それぞれ別の AI 作業担当である。全員が「旧研究のコードを実行していない、リポジトリを変更していない」と申告し、分類の後に作業ツリーに変更が無いことを確かめた。
 3. したがって、この索引は**記録に何が書いてあるか**の整理である。記録された数値が今の環境で再現するかは確かめていない（確かめるには旧研究の実行が必要で、停止指示が禁じている）。
-4. 索引と停止の記録は、作成の後に、別の AI 作業担当 4 者が読み取りだけで点検した。指摘は 57 件（重い 1、中 17、軽い 39）で、すべて反映した。分類担当の記述を改めた箇所は、各項目の詳細に「停止後の点検による訂正」と記してある。点検の結果は `materials/classification/review/` にある。
+4. 索引と停止の記録は、作成の後に、別の AI 作業担当 4 者が読み取りだけで点検した。指摘は 57 件（重い 1、中 17、軽い 39）で、すべて反映した。反映の後に、さらに別の 2 者が再点検し、同じ問題がほかの欄に残っていた 9 件と、軽い新しい指摘 10 件を挙げた。これも反映した。分類担当の記述を改めた箇所は、各項目の詳細に「停止後の点検による訂正」と記してある。点検の結果は `materials/classification/review/` にある。
 5. 分類担当と点検担当が読まなかった範囲は 9 節と [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) にある。
-6. 項目の表と詳細は、分類担当が書いた JSON と訂正の一覧（`materials/classification/`）から機械的に生成した。0 節、1 節、6.1〜6.2 節、8 節、9 節は索引の作成者が書いた。
+6. 項目の表と詳細は、分類担当が書いた JSON と訂正の一覧（`materials/classification/`）から機械的に生成した。0 節、1 節、5.2 節の説明文、5.3 節、6.1〜6.2 節、6.3 節の「項目」と「注」の欄、8 節、9 節は索引の作成者が書いた（6.3 節の題と結論は `candidates.json` の記載）。
 
 ### 0.2 用語
 
@@ -64,6 +64,7 @@
 - `09_APPROX_STUDY/…`、`01_COMPLIANCE/…` など：`whole-life-carbon-jcat-study/` からの位置
 - `materials/…`、`index_detail/…`：この保存フォルダ（`whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/`）からの位置
 - 「コミット `65ff124` の版」：公開中の版には無く、`git show 65ff124:<パス>` で読める中断時の編集
+- 項目の「分類の根拠」にある `STOP_STATUS.md` の行番号は、点検の前の版（コミット `b2b8a6e`）のものである。その版は `git show b2b8a6e:<パス>` で読める
 
 ## 1. 最初に知っておくこと
 
@@ -121,7 +122,7 @@
 
 **[CK-R1-05](index_detail/T02_ledger.md#ck-r1-05)　台帳・順位表・自動生成の報告の、数と相互参照の整合（数え直しで一致した範囲）**
 
-- 言ってよいこと：次の数と対応は、第2回の検査の数え直しと合っている。(1) 評価単位 70 件（既存 53、追加 17）。既存 53 件の ID と名称は 04_FORMULAS/formulas.json と同じ。(2) 入力の申告を数えた値は 116 種類（入力仕様の 88、NEW: を付けたもの 28）。(3) 198 シート、59 シート族（数式を持つ族 41）、数式ノード 3,818,483。02_SOURCES の一覧と同じ。状態別の族数 24・9・11・15 とノード数 3,708,176・79,260・31,047・0 は、付いている表示を数えた値。(4) 未接続の入力 53 項目の内訳 30・14・9、評価単位にしなかったもの 7 件。(5) units.json の sheet_family_links と sheet_family_coverage.json の対応の不一致 0（70 単位）。depends_on・feeds は基準計算の登録簿と同じ。(6) 軸 A・軸 B・優先スコア・着手順・着手群は入力から再計算して差 0。README の表（軸 A の 700 個の値、軸 B の 70 行、着手順の 70 行）は JSON と同じ。research_priority.json と progress_ledger.json の順序・群の不一致 0。(7) 自動生成の README 6 点は再生成した内容と同じで、古い生成物ではない。
+- 言ってよいこと：次の数と対応は、第2回の検査の数え直しと合っている。(1) 評価単位 70 件（既存 53、追加 17）。既存 53 件の ID と名称は 04_FORMULAS/formulas.json と同じ。(2) 入力の申告を数えた値は 116 種類（入力仕様の 88、NEW: を付けたもの 28）。(3) 198 シート、59 シート族（数式を持つ族 41）、数式ノード 3,818,483。02_SOURCES の一覧と同じ。状態別の族数 24・9・11・15 とノード数 3,708,176・79,260・31,047・0 は、付いている表示を数えた値。(4) 未接続の入力 53 項目の内訳 30・14・9、評価単位にしなかったもの 7 件。(5) units.json の sheet_family_links と sheet_family_coverage.json の対応の不一致 0（70 単位）。depends_on・feeds は基準計算の登録簿と同じ。(6) 軸 A・軸 B・優先スコア・着手順・着手群は入力から再計算して差 0。README の表（軸 A の 700 個の値、軸 B の 70 行、着手順の 70 行）は JSON と同じ。research_priority.json と progress_ledger.json の順序・群の不一致 0。(7) 自動生成の README 6 点は、43ba5d7 の時点で、再生成した内容と同じだった（公開中の版の 09_APPROX_STUDY/README.md には、その後に手書きの終了の注記を加えてある）。古い生成物ではない。
 - 確かめた者：独立検査（第2回）で再現
 - 根拠の強さ：件数と相互参照の数え直しだけである。内容が正しいことの確認ではない。数え直したのは第2回の検査担当 1 者。
 - 所在：[`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)、[`09_APPROX_STUDY/01_LEDGER/sheet_families.json`](../../09_APPROX_STUDY/01_LEDGER/sheet_families.json)、[`09_APPROX_STUDY/01_LEDGER/sheet_family_coverage.json`](../../09_APPROX_STUDY/01_LEDGER/sheet_family_coverage.json)　ほか 6
@@ -297,7 +298,7 @@
 
 **[CK-R3-20](index_detail/T07_exactness_load.md#ck-r3-20)　負荷の測定：実行した命令数（規模 S・M、基準計算・全出力・合計のみ）**
 
-- 言ってよいこと：架空の標準ベンチマーク S・M で、基準案との比較（SUM-08）を除いた計算どうしを比べると、統合モデルが実行した命令数は基準計算より全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ 少なかった。基準案との比較を含めると、全出力の減り方は 44.9％・54.3％ である。第2回の検査担当 1 者が命令数を数え直し、約 100 命令以内の差で合った。
+- 言ってよいこと：架空の標準ベンチマーク S・M で、基準案との比較（SUM-08）を除いた計算どうしを比べると、統合モデルが実行した命令数は基準計算より全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ 少なかった。第2回の検査担当 1 者がこの命令数を数え直し、約 100 命令以内の差で合った。基準案との比較を含めた場合の全出力の減り方 44.9％・54.3％ は作成者の測定だけで、第2回は数え直していない（CK-R3-21）。
 - 確かめた者：独立検査（第2回）で再現（反証担当なし）
 - 根拠の強さ：数え直したのは報告書の検査担当 1 者。反証検査担当は付いていない。
 - 所在：[`09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json)、[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)、[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)
@@ -473,7 +474,7 @@
 | [CK-R5-03](index_detail/T09_records_reports.md#ck-r5-03) | **厳密な段階（M1・M2）の成功記録 118 件**<br>厳密な簡略化（M1：52 単位）と厳密な統合（M2：66 単位）について「基準計算と同じ結果になる」とした記録。理由文は「出力が基準計算と一致（681 シナリオ、数値 n 個、最大の相対差 …）」と、機構の記号があれば「仕組みの確認：…」からなる。 | [`09_APPROX_STUDY/03_MODELS/records/units.json`](../../09_APPROX_STUDY/03_MODELS/records/units.json)<br>[`09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json)<br>ほか 1 | 独立検査（第2回）で一部を再現、一部に誤りを指摘（REC-1・2・4・5・7 は CONFIRMED、REC-3・6 は PARTLY_CONFIRMED。 | A・C |
 | [CK-R5-05](index_detail/T09_records_reports.md#ck-r5-05) | **近似の段階の「不採用」記録 39 件（候補 16 種）**<br>M3（38 件）と M6（1 件）で、近似候補を測定したうえで不採用とした記録。候補は AP-01、02、03、04、05、06、06b、07a、07b、08、09a、09b、14、19b、20、22a の 16 種で、1 つの候補を複数の単位に付けている。 | [`09_APPROX_STUDY/03_MODELS/records/units.json`](../../09_APPROX_STUDY/03_MODELS/records/units.json)<br>[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)<br>ほか 2 | 作成者のみ（AP-04・AP-22a の統計だけ独立検査（第2回）で再現） | A・C |
 | [CK-R5-08](index_detail/T09_records_reports.md#ck-r5-08) | **進捗台帳（progress_ledger.json と PROGRESS.md）の構造と判定の規則**<br>70 単位のそれぞれについて、M1〜M6 の段階の結論（候補の記録の写しつき）、状態（6 種）、保留中の段階、統合先のモデル、着手順と群を持つ台帳。 | [`09_APPROX_STUDY/05_DECISIONS/progress_ledger.json`](../../09_APPROX_STUDY/05_DECISIONS/progress_ledger.json)<br>[`09_APPROX_STUDY/05_DECISIONS/PROGRESS.md`](../../09_APPROX_STUDY/05_DECISIONS/PROGRESS.md)<br>ほか 2 | 独立検査（第2回）で再現（規則どおりに求まることの再現。状態の中身は第2回の指摘で一部が争われている） | A・C |
-| [CK-R5-10](index_detail/T09_records_reports.md#ck-r5-10) | **自動生成の報告書 6 点と PROGRESS.md（文面としての状態）**<br>tools/build_reports.py が JSON から書く 6 つの README（第9章の README、01_LEDGER、02_RANKING、03_MODELS、04_VERIFICATION、05_DECISIONS）と、tools/progress_ledger.py が書く PROGRESS.md。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/01_LEDGER/README.md`](../../09_APPROX_STUDY/01_LEDGER/README.md)<br>ほか 6 | 独立検査（第2回）で数字の一致を再現。 | A・C |
+| [CK-R5-10](index_detail/T09_records_reports.md#ck-r5-10) | **自動生成の報告書 6 点と PROGRESS.md（文面としての状態）**<br>tools/build_reports.py が JSON から書く 6 つの README（第9章の README、01_LEDGER、02_RANKING、03_MODELS、04_VERIFICATION、05_DECISIONS）と、tools/progress_ledger.py が書く PROGRESS.md。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/01_LEDGER/README.md`](../../09_APPROX_STUDY/01_LEDGER/README.md)<br>ほか 6 | 独立検査（第2回）で数字の一致を再現。文面の誤りは未修正（REP の指摘には反証検査担当が付いていない。 | A・C |
 | [CK-R5-13](index_detail/T09_records_reports.md#ck-r5-13) | **README の要点 3「統合モデルは基準計算と一致した」**<br>第9章 README「結果の要点」の 3。全文：「統合モデルは基準計算と一致した。681 の架空シナリオ、数値 7,406,182 個を突き合わせて不一致なし（許容差は相対 1e-09）。不備のある入力や、冗長な入力どうしが食い違う場合も、同じ値を返し、同じ不備を報告する。」 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)<br>ほか 1 | 独立検査（第2回）で再現（681 シナリオの範囲の一致）。 | A・C |
 | [CK-R5-14](index_detail/T09_records_reports.md#ck-r5-14) | **README の要点 4「計算の重さは減った」**<br>第9章 README「結果の要点」の 4。全文：「計算の重さは減った。資材 2 万行の規模で、実行した命令数は、基準計算と同じ出力をすべて出す場合に 66.3％ 減、合計・段階・指標・検査だけを求める場合に 73.6％ 減（時間は 1689 ms → 862 ms、624 ms。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)<br>ほか 2 | 作成者のみ（規模 S・M の命令数だけ独立検査（第2回）で再現） | A・C |
 | [CK-R5-15](index_detail/T09_records_reports.md#ck-r5-15) | **README の要点 5「近似は 1 つも採用していない」**<br>第9章 README「結果の要点」の 5。全文：「近似は 1 つも採用していない。近似候補 32 種を測定し、不採用 16、実データ待ちの保留 16。更新回数の連続近似のように重大な過小評価を生むものがあり、それ以外の多くも、厳密な閉形式が同じ手間で使えるため近似の利点がなかった。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)<br>ほか 2 | 作成者のみ（件数と 2 候補の統計は独立検査（第2回）で再現。 | A・B・C |
@@ -627,7 +628,7 @@
 | [CK-R2-07](index_detail/T04_reference_calculation.md#ck-r2-07) | **不正な値の扱いの穴（検査されない値、無効な周期、例外、ゲートとの食い違い）**<br>コミット版の基準計算には、検査なしで演算に使われる数値入力と、例外で止まる入力がある。(a) 年次量、電力係数（系列と工事期間の値）、係数値、ガス別量、換算倍率は、負・NaN・無限大でもそのまま掛けられ、件数も印も SYS-01〜03 も反応しない。 | [`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>[`09_APPROX_STUDY/research_code/refcalc/units_pre_a.py`](../../09_APPROX_STUDY/research_code/refcalc/units_pre_a.py)<br>ほか 4 | 独立検査（第2回）で再現 | — |
 | [CK-R2-09](index_detail/T04_reference_calculation.md#ck-r2-09) | **定義文とコードの食い違い、定義文に無い動作、数値上の限界（基準計算の側）**<br>基準計算の定義文（説明文）とコードの間、または定義の内部に残っている食い違いの一覧。X-04 は定義文で「一致することを確かめる」と言うが検査結果を返さない。B4-02・B3 の「製造排出」に未数量分 A13-04 が入るかが文から決まらない。 | [`09_APPROX_STUDY/research_code/refcalc/units_c_sum.py`](../../09_APPROX_STUDY/research_code/refcalc/units_c_sum.py)<br>[`09_APPROX_STUDY/research_code/refcalc/units_b.py`](../../09_APPROX_STUDY/research_code/refcalc/units_b.py)<br>ほか 3 | 独立検査（第2回）で再現 | — |
 | [CK-R2-10](index_detail/T04_reference_calculation.md#ck-r2-10) | **基準計算について検証できていないこと（06_OPEN_ISSUES の D）**<br>基準計算の精度と正しさについて、研究が自分で未検証と書いた 7 点。実建物での実用精度は対象外。他のツールの結果とは比較していない。基準計算と統合モデルはどちらも主担当（自動の AI エージェント）が書き、人による確認と手計算との全面的な照合はしていない。 | [`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md) | なし | — |
-| [CK-R7-19](index_detail/T04_reference_calculation.md#ck-r7-19) | **基準計算の定義の穴（不正な値・部分的な境界・検査との食い違い）**<br>第2回の検査で確認された、基準計算の定義とコードの欠陥。入力が有限で範囲内、かつ 14 段階すべてを対象にする場合には現れないが、それ以外では、合計が黙って変わる・不完全の印が付かない・全体が例外で止まる、のいずれかが起きる。 | [`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>[`09_APPROX_STUDY/research_code/refcalc/units_pre_a.py`](../../09_APPROX_STUDY/research_code/refcalc/units_pre_a.py)<br>ほか 4 | 独立検査（第2回）で再現 | A・B・C |
+| [CK-R7-19](index_detail/T04_reference_calculation.md#ck-r7-19) | **基準計算の定義の穴（不正な値・部分的な境界・検査との食い違い）**<br>第2回の検査で確認された、基準計算の定義とコードの欠陥。INDEX.md の 6.1 の条件を満たす入力（有限で範囲内、周期が有限の正の数、14 段階すべてを対象、など）にする場合には現れないが、それ以外では、合計が黙って変わる・不完全の印が付かない・全体が例外で止まる、のいずれかが起きる。 | [`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>[`09_APPROX_STUDY/research_code/refcalc/units_pre_a.py`](../../09_APPROX_STUDY/research_code/refcalc/units_pre_a.py)<br>ほか 4 | 独立検査（第2回）で再現 | A・B・C |
 | [CK-R7-20](index_detail/T04_reference_calculation.md#ck-r7-20) | **時間規則の端（周期 1.000000001）と、修繕の除外年の閉形式の不一致**<br>事象の属する年を ceil(τ·(1−1e-9)) で決める規約は、周期が倍精度の 1.000000001（1 値）のとき丸めに依存する。 | [`09_APPROX_STUDY/research_code/fastcalc/closed_forms.py`](../../09_APPROX_STUDY/research_code/fastcalc/closed_forms.py)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 3 | 独立検査（第2回）で再現 | A・B・C |
 | [CK-R7-29](index_detail/T04_reference_calculation.md#ck-r7-29) | **規約一覧に無い規約と、定義文に書かれていない挙動**<br>コードには在るが、06_OPEN_ISSUES の規約一覧（B-1〜B-21）や単位の定義文に書かれていない取り決め。値を変えるものと、出力の形だけのものがある。 | [`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md)<br>[`09_APPROX_STUDY/research_code/refcalc/units_b.py`](../../09_APPROX_STUDY/research_code/refcalc/units_b.py)<br>ほか 3 | 独立検査（第2回）で再現 | B・C |
 
@@ -795,7 +796,7 @@
 
 どのルートでも、誤差を測る基準は**公開中の版の基準計算**（`09_APPROX_STUDY/research_code/refcalc/`）である。これを変更しない。中断した修正の版（`65ff124`）は、基準にも出発点にも使わない。
 
-基準計算の値を正として使えるのは、次の条件をすべて満たす入力である。
+基準計算の値を正として使えるのは、次の条件をすべて満たす場合である。
 
 1. 数量、年次量、電力係数、係数の値、換算倍率が有限で範囲内である（負・NaN・無限大を含まない）。
 2. 更新周期、耐用年数、建替周期が有限の正の数である（負・0・NaN・無限大は、印なしに「事象なし」になる。RED-3）。
@@ -805,6 +806,7 @@
 6. 係数の ID が、内部の擬似キー（GRID、REFRIGERANT）と同じでない（NUM-5）。
 7. 係数のガス別の量が係数の値と合っている（値が 0 でガス別の量がある、などが無い。RED-4、NUM-3）。
 8. 値が、生成器が作る範囲の大きさである（極端な桁の値では桁落ち・桁あふれがある。NUM-10）。
+9. 基準案との比較（SUM-08）を使うのは、当該案と基準案の合計がどちらも完全なときに限る（合計が不完全でも、印なしに比べる。RED-5）。
 
 この条件の外では、基準計算の値そのものが定義文と食い違うか、印なしに一部を除いた値になるか、計算全体が例外になる（5.2 節の群 1・2、CK-R7-19）。
 条件の内側でも、定義文と規約の一覧だけでは基準計算の値が決まらない箇所がある（未数量分の上乗せを含む段階、資材の初期の据付の扱いなど。CK-R7-29、CK-R2-09）。ルート B で式を作り直すときは、定義文だけでなく `depends_on` とコードで確かめる。
@@ -929,7 +931,7 @@
 |---|---|---|---|---|
 | [CK-R3-01](index_detail/T06_unified_models.md#ck-r3-01) | 1 | A・C | 全体の形：排出＝Σ（活動量×係数）、評価期間への依存は乗数だけ | 新研究が少数の変換で書き直す対象の出発点になる。導出（式の変形）で確立している構造は 4 つ。(1) 排出は、行×係数キーの活動量の合算と係数ベクトルの積和で、線形である（D1）。 |
 | [CK-R3-02](index_detail/T06_unified_models.md#ck-r3-02) | 1 | A・C | 統合モデル K1 行テーブル | E＝A·v（A は 表×係数キーの活動量、v は係数の値）という行列の形として使う。 |
-| [CK-R3-03](index_detail/T06_unified_models.md#ck-r3-03) | 1 | A・C | 統合モデル K2 回数関数とライフサイクル乗数 | 周期ごとの合算 U_c が T に依存しないので、T を変える再計算は乗数の計算だけで済む（D2 の導出による）。回数は T と周期の天井関数（段差関数）。 |
+| [CK-R3-03](index_detail/T06_unified_models.md#ck-r3-03) | 1 | A・C | 統合モデル K2 回数関数とライフサイクル乗数 | 周期ごとの合算 U_c が T に依存しないので、周期で与えられる行については、T を変える再計算は乗数の計算で済む（D2 の導出による）。 |
 | [CK-R3-04](index_detail/T06_unified_models.md#ck-r3-04) | 2 | A・C | 統合モデル K3 年重み付き和（区分的に直線な系列のモーメント） | 使うのは所属の一覧ではなく閉形式（CK-R3-13、CK-R3-14）。年次の排出は、年の重みを掛けた系列どうしの内積として書ける。 |
 | [CK-R3-05](index_detail/T06_unified_models.md#ck-r3-05) | 1 | A・C | 統合モデル K4 充填サイクルの質量収支 | 機器ごとに（漏洩率、補充の有無、交換の年の並び）で決まる T の非線形関数として使う。補充なしの残存量は公比 1−r の等比で、交換の年に初期値へ戻る。 |
 | [CK-R3-06](index_detail/T06_unified_models.md#ck-r3-06) | 2 | A・B・C | 統合モデル K5 指標（段階ベクトルの線形関数） | 指標＝段階ベクトルへの選択（部分和）と除算、という定義上の事実として使う。新研究の出力側の写像に当たる。簡略化の成果ではない。 |
@@ -1032,7 +1034,7 @@
 | 項目 | 区分 | ルート | 成果 | 使い道（冒頭） |
 |---|---|---|---|---|
 | [CK-R2-18](index_detail/T11_interrupted_fix.md#ck-r2-18) | 3 | B・C | 第2回の指摘に対する基準計算の定義の修正方針（SPEC_A1.md の設計決定） | ルート B・C で時間の規約を式にするときの仮説として読める：回数 N = ceil(T×c / L) − 1、年 = max(1, ceil(n×L×c))、q = L×c ≥ 1 なら事象の年はすべて異なり、q < 1 なら年 1 から最後の事象… |
-| [CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31) | 2 | B・C | 中断した修正 a1：時間の判定を厳密な有理数の演算にし、閉形式を作り直す | 時間の規則を丸めに依存しない形で定義する案として読む。新研究が回数関数や年の割り当てを変換で表すとき、対照にする定義の候補になる。 |
+| [CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31) | 2 | B・C | 中断した修正 a1：時間の判定を厳密な有理数の演算にし、閉形式を作り直す | 時間の規則を丸めに依存しない形で定義する案として読む。基準や対照には使わない。 |
 | [CK-R4-23](index_detail/T11_interrupted_fix.md#ck-r4-23) | 2 | B・C | b2 の再測定と新しい候補（中断した修正。自己申告のみ） | 欠陥を直した測定の設計（基準量を段階の値で取る、下流まで計算し直した合計、パラメータの出所の表示、基準 0 の件数、入力数と命令数、候補が単位・段階・建物のどの水準で測られたかの表示）を、新研究の誤差測定の設計の参考にする。 |
 | [CK-R4-24](index_detail/T11_interrupted_fix.md#ck-r4-24) | 3 | A・C | b2 の設計（SPEC_B2）と結論文の書き換え案 | 旧研究の候補の理由文を引用するときに、どの文を使ってはいけないか（16 候補）を確かめる対照表として使える。 |
 | [CK-R5-30](index_detail/T11_interrupted_fix.md#ck-r5-30) | 3 | A・C | 予定だったが行われなかった改訂（Stage C）：記録・進捗台帳・報告書の生成器 | 新研究が旧成果を引用したり、自分の記録を作ったりするときの、裏付けの様式の案として使える（統合の所属は故障注入で確かめる、仕組みは外からの計測で確かめる、近似の証拠の範囲を単位・段階・建物全体で区別する）。 |
@@ -1098,7 +1100,7 @@
 | `0db5c77` | 上の編集を作業ツリーから取り除き、`09_APPROX_STUDY/` を `60e720f` と同じ内容に戻した版 |
 | `7bd1d43`、`580d287`、`25f70b8` | 停止の記録、保存資料、受領した停止指示 |
 | `b2b8a6e` | 索引と引継ぎ文書（点検の前の版） |
-| それ以降 | 点検の指摘の反映、追加で保存した作業ファイル |
+| それ以降 | 点検の指摘の反映、追加で保存した作業ファイル、受領した新指示書の全文（`NEW_DIRECTIVE.md`） |
 
 ### 8.2 旧研究の本体（削除していない）
 
@@ -1116,7 +1118,7 @@
 
 ### 8.3 この保存フォルダ
 
-**`materials/` の下にある Python のスクリプトは、どれも実行しない。** 多くが旧研究のコードを読み込み、実行は旧研究の計算の再開になる。保存の目的は記録である。
+**`materials/` の下にある Python のスクリプトは、どれも実行しない**（索引の生成スクリプト `materials/classification/render_index.py` を除く。これは JSON と文書と Git の一覧を読むだけで、旧研究のコードを読み込まない）。多くが旧研究のコードを読み込み、実行は旧研究の計算の再開になる。保存の目的は記録である。
 
 | 所在 | 内容 | 注意 |
 |---|---|---|
@@ -1127,18 +1129,18 @@
 | `materials/round2_review/triage/` | 第2回の独立検査の指摘 59 件の全文（5 観点）と、反証検査担当の判定。`res.json` は構造化した元データ | 指摘の一次資料 |
 | `materials/round2_review/checker_scripts/` | 検査担当と反証検査担当が使った再現用のスクリプトとログ | **実行しない** |
 | `materials/interrupted_fix/specs/` | 中断した修正の仕様：`COMMON.md`（各段階に共通の指示）、`SPEC_A1.md`、`SPEC_A2.md`、`SPEC_B2.md`、`SPEC_B3.md`、`VERIFY_NUM.md` と `VERIFY_DEF.md`（修正後の反証検査の手順。未実施）、`STAGE_C_NOTES.md`（記録と報告書の改訂の予定。未実施） | 設計の資料。実装の完了や検証を意味しない |
-| `materials/interrupted_fix/agent_reports/` | 段階 a1・b2 の作業担当の報告（`A1_REPORT.json`、`B2_REPORT.json`、`B2_REPORT_long.json`）、b2 の結論文の案（`conclusion_proposals.json`、`candidate_lines.json`） | 自己申告。独立の検査なし |
+| `materials/interrupted_fix/agent_reports/` | 段階 a1・b2 の作業担当の報告（`A1_REPORT.json`、`B2_REPORT.json`、`B2_REPORT_long.json`）、b2 の結論文の案（`conclusion_proposals.json`、`candidate_lines.json`）、b2 の新旧の比較のログ（`cmp_committed_vs_new.log.txt`） | 自己申告。独立の検査なし |
 | `materials/interrupted_fix/a1_scratch/` | 段階 a1 の出力と、それを作ったスクリプト | 未検証。**スクリプトは実行しない** |
 | `materials/interrupted_fix/a2_partial_outputs/`、`b2_output/` | 段階 a2 の途中の出力、段階 b2 の出力 | 未検証 |
-| `materials/interrupted_fix/working_files/` | 点検の後に追加で保存した、段階 a2・b2 の途中のスクリプト・ログ・試行の出力（61 件と、圧縮した比較用の記録 2 件）。保存しなかったものの一覧は、同じフォルダの `README.md` にある | 未検証。**スクリプトは実行しない** |
+| `materials/interrupted_fix/working_files/` | 点検の後に追加で保存した、段階 a2・b2 の途中のスクリプト・ログ・試行の出力（60 件と、圧縮した比較用の記録 2 件）。同じ時に、近似検証の古い版の出力 1 件（`approx_old.json`）を `materials/earlier_session_scratch/` に追加した。保存しなかったものの一覧は、同じフォルダの `README.md` にある | 未検証。**スクリプトは実行しない** |
 | `materials/interrupted_fix/working_tree_at_stop_65ff124.patch` | 中断時の編集の差分（`65ff124` と同じ内容） | 適用しない |
 | `materials/interrupted_fix/workflow_script_DO_NOT_RUN.js` | 中断した修正のワークフローの定義 | **実行しない** |
-| `materials/earlier_session_scratch/` | それ以前の段階の作業用ファイル。`verify/` は第1回の検査の指摘の元データ（`findings_audit.json`、`findings_numeric.json`、`findings_rederive.json`）と検査用のスクリプト。`wfA/`、`wfA_b1b5_work/` は台帳の分析の作業ファイル。`wfB/`、`wfC/` は測定のログと比較用のスクリプト。`wfD/` は材料分類の 3 つの設計案（`design_taxonomy.md`、`design_normalization.md`、`design_selection_effort.md`）とレビューの指摘。`wfD_fix/`、`wfD_synth/` は材料分類の草案の修正と検査に使ったスクリプト。`judge_na/`、`judge_input_data_model/` と最上位のスクリプトは、評価者に渡す入力や報告書の部品を作ったもの。最上位の `approx_old.json` とログは、近似検証の古い版の出力 | 古い版の出力を含む（たとえば `wfB/axis_a_run.log.txt` は初版の測定で、公開中の版の測定ではない）。分類担当は中身を読んでいない。**スクリプトは実行しない**（`wfD_fix/` の一部は `09_APPROX_STUDY/07_MATERIAL_TAXONOMY/` を上書きする） |
+| `materials/earlier_session_scratch/` | それ以前の段階の作業用ファイル。`verify/` は第1回の検査の指摘の元データ（`findings_audit.json`、`findings_numeric.json`、`findings_rederive.json`）と検査用のスクリプト。`wfA/`、`wfA_b1b5_work/` は台帳の分析の作業ファイル。`wfB/`、`wfC/` は測定のログと比較用のスクリプト。`wfD/` は材料分類の 3 つの設計案（`design_taxonomy.md`、`design_normalization.md`、`design_selection_effort.md`）とレビューの指摘。`wfD_fix/`、`wfD_synth/` は材料分類の草案の修正と検査に使ったスクリプト（`wfD_fix/backup/` は修正前の草案 4 ファイルの写し）。`judge_na/`、`judge_input_data_model/` と最上位のスクリプトは、評価者に渡す入力や報告書の部品を作ったもの。最上位の `approx_old.json` とログは、近似検証の古い版の出力 | 古い版の出力を含む（たとえば `wfB/axis_a_run.log.txt` は初版の測定で、公開中の版の測定ではない）。分類担当は中身を読んでいない。**スクリプトは実行しない**（`wfD_fix/` の一部は `09_APPROX_STUDY/07_MATERIAL_TAXONOMY/` を上書きする） |
 | `materials/classification/` | この索引のもとになった分類の JSON（7 観点）、分類担当への指示、点検による訂正の一覧（`overrides.json`）、索引の生成スクリプト、点検の結果（`review/`） | 生成スクリプトは JSON と文書を読むだけで、旧研究のコードを読み込まない |
 
 ## 9. この索引が扱っていない範囲
 
-- 分類担当が読まなかったファイルと、読み取りだけでは確かめられなかった点は [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) に観点ごとに載せた。主なもの：中断時の差分（723 KB）の全文、検査担当のスクリプトの中身、単位別の記録 454 件の個々の文面、評価者の理由文の大半、`materials/earlier_session_scratch/` の中身。
+- 分類担当が読まなかったファイルと、読み取りだけでは確かめられなかった点は [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) に観点ごとに載せた。主なもの：中断時の差分（723 KB）の全文、検査担当のスクリプトの中身、単位別の記録 454 件の個々の文面、評価者の理由文の大半、`materials/earlier_session_scratch/` の中身、点検の後に追加した `materials/interrupted_fix/working_files/`（分類担当も点検担当も読んでいない。どの項目の所在にも入っていない）。
 - 公開中の版の試験 28 件が今の環境で通るかどうかは確かめていない（第2回の報告書の検査担当は合格を報告している）。
 - `65ff124` のコードが試験に通るか、指摘の再現が消えるかは確かめていない。
 - 分類担当の読み取りで見つかり、第2回の指摘には無い点が、少なくとも次の 5 つある。いずれも実行による確認はしていない。

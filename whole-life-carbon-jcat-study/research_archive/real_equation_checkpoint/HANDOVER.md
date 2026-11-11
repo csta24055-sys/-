@@ -80,7 +80,7 @@
 
 - 中断した修正のワークフロー（実行 ID `wf_47846e85-a79`）の再実行、`materials/interrupted_fix/workflow_script_DO_NOT_RUN.js` の実行
 - `materials/interrupted_fix/working_tree_at_stop_65ff124.patch` の適用、コミット `65ff124` の内容を公開中の版に戻すこと
-- `materials/` の下にあるスクリプトの実行。`materials/round2_review/checker_scripts/`、`materials/interrupted_fix/a1_scratch/`、`materials/interrupted_fix/working_files/`、`materials/earlier_session_scratch/` のスクリプトは旧研究のコードを読み込む。`earlier_session_scratch/wfD_fix/` の一部は `09_APPROX_STUDY/07_MATERIAL_TAXONOMY/` を上書きする
+- `materials/` の下にあるスクリプトの実行（索引の生成スクリプト `materials/classification/render_index.py` を除く。これは JSON と文書と Git の一覧を読むだけで、旧研究のコードを読み込まない）。`materials/round2_review/checker_scripts/`、`materials/interrupted_fix/a1_scratch/`、`materials/interrupted_fix/working_files/`、`materials/earlier_session_scratch/` のスクリプトは旧研究のコードを読み込む。`earlier_session_scratch/wfD_fix/` の一部は `09_APPROX_STUDY/07_MATERIAL_TAXONOMY/` を上書きする
 - 旧研究の記録・進捗台帳・報告書の再生成、旧研究の統合や近似の検討の続き
 - `09_APPROX_STUDY/` のファイルの書き換え（README 冒頭の終了の注記を除く）
 
@@ -100,7 +100,7 @@
 
 - 新研究では、基準計算と架空データの生成器を、誤差を測る基準として呼び出す。これは基準として使うことであり、旧研究の簡素化作業の再開ではない（作業担当の解釈。新指示書の第4章がルート A について「保存した実数簡素化成果を再利用する」と定め、第10章が「基準計算は変更せず」と定めていることによる。全文は [NEW_DIRECTIVE.md](NEW_DIRECTIVE.md)）。
 - 中断した修正の版（`65ff124`）の基準計算は使わない。未検証であり、公開済みの測定・記録と対応しない。
-- 基準計算の値を正として使える入力の条件は、[INDEX.md](INDEX.md) の 6.1 の 8 項目である（ここでは要約しない）。条件の外の入力の扱いは、新研究の測定の前に決めて記録する。
+- 基準計算の値を正として使える入力の条件は、[INDEX.md](INDEX.md) の 6.1 に挙げた 9 項目である（ここでは要約しない）。条件の外の入力の扱いは、新研究の測定の前に決めて記録する。
 - 基準計算に見つかっている定義の穴（指摘の群 1・2）は直さない。既知の制限として新研究の文書に書き写す。
 
 ### 4.3 旧研究の結果の引用の仕方
@@ -139,7 +139,7 @@
 | 旧研究のファイルを削除していないか | `git diff --stat 60e720f HEAD -- whole-life-carbon-jcat-study/09_APPROX_STUDY` の結果は README 冒頭の終了の注記の追加だけ。削除は無い。Git の履歴も書き換えていない。旧研究のフォルダの外では、研究フォルダの `README.md` の目次に 2 行（第9章の終了の注記と、保存フォルダの行）を足した |
 | 中断時の編集が残っているか | コミット `65ff124` と `materials/interrupted_fix/working_tree_at_stop_65ff124.patch` の両方にある |
 | 旧研究のフォルダのファイル 75 件と、索引の項目の対応 | 72 件は、いずれかの項目の「所在」に含まれる（フォルダ単位の所在に含まれるだけのものが 5 件ある）。残る 3 件は、実行文の無い初期化ファイル（`research_code/common/__init__.py`、`fastcalc/__init__.py`、`tools/__init__.py`。2 件は説明文だけ、1 件は空）である |
-| 作業用フォルダにあった資料 | 停止前に作った作業用フォルダのファイル 400 件のうち、397 件は `materials/` または Git の履歴に同じ内容がある（停止の直後に 316 件を複写し、点検の指摘を受けて 61 件と圧縮した記録 2 件を追加した。15 件は Git にある版と同じ内容、5 件は内容が同じ 2 種類の記録で、圧縮した 2 件にまとめた）。**保存しなかったのは 3 件**で、段階 a1 が取った結果の写し（pickle 形式、合計約 255 MB）である。セッションの終了とともに消える。名前・大きさ・SHA-256 と保存しなかった理由は `materials/interrupted_fix/working_files/README.md` にある。索引のもとになった分類の JSON と生成スクリプトは `materials/classification/` にある |
+| 作業用フォルダにあった資料 | 停止前に作った作業用フォルダの通常のファイル 399 件のうち、396 件は `materials/` または Git の履歴に同じ内容がある（停止の直後に 316 件を複写し、点検の指摘を受けて 61 件と圧縮した記録 2 件を追加した。14 件は Git にある版と同じ内容、5 件は内容が同じ 2 種類の記録で、圧縮した 2 件にまとめた）。ほかに、リポジトリのファイルを指すシンボリックリンクが 2 件ある（複写していない）。**保存しなかったのは 3 件**で、段階 a1 が取った結果の写し（pickle 形式、合計約 255 MB）である。セッションの終了とともに消える。名前・大きさ・SHA-256 と保存しなかった理由は `materials/interrupted_fix/working_files/README.md` にある。索引のもとになった分類の JSON と生成スクリプトは `materials/classification/` にある |
 | 原版のファイルが混ざっていないか | `whole-life-carbon-jcat-study/` の下に `.xlsx`、`.xlsm`、`.zip`、`.pdf` は無い（ファイル名の検索による） |
 
 ## 6. 利用者にしか解決できない事項
@@ -176,6 +176,7 @@
 - 重い指摘 1 件：区分 1 とした CK-R5-17（設計についての記述）に、独立の再現が無かった。区分 2 に移した。
 - 中程度の指摘の主なもの：区分 1 の「言ってよいこと」が根拠より広い箇所（総当たりをしていない導出を総当たり済みのように書いた要約、限定の抜け、数値の誤り 1 件）、基準計算を使える入力の条件の不足、中断した修正の版の採否を新研究に委ねる書き方、保存しなかった作業ファイルがあることの記載漏れ、実行してはいけないスクリプトの記載漏れ。
 - 57 件すべてを反映した。分類担当の記述を改めた箇所は `materials/classification/overrides.json` に、点検の結果は `materials/classification/review/` にある。点検で不足が分かった作業ファイルは追加で保存した（5 節）。
-- 反映の後、訂正した文書を改めて点検することはしていない。反映したのは作成者である。
+- 反映の後（コミット `c6bf26e`）、さらに別の AI 作業担当 2 者が、57 件の反映を 1 件ずつ確かめた（再点検）。48 件は解決していた。9 件は、指摘された箇所は直っていたが、同じ問題がほかの欄や項目に残っていた。ほかに軽い新しい指摘が 10 件あった（件数の 1 件のずれ、古くなった前書き、実行してよい生成スクリプトの扱いなど）。重い指摘は無い。これらも反映した。結果は `materials/classification/review/recheck/` にある。
+- 再点検の指摘を反映した後の文書は、改めて点検していない。反映したのは作成者である。
 
 以上により、移行条件 5 項目を満たしたと判断し、新研究（第1章以降）に移る。

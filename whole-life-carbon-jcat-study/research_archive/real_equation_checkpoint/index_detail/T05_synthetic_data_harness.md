@@ -1,6 +1,6 @@
 # 索引の詳細 T05：架空データ・比較の仕組み・試験
 
-[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとにそのまま載せる。
+[INDEX.md](../INDEX.md) の項目ごとの詳細。分類担当（読み取り専用）が書いた内容を、欄ごとに載せる。停止後の点検で改めた項目には「停止後の点検による訂正」と記してある。
 旧研究の数値はすべて架空データでの値で、対象は独立概念モデルである。原版の表計算との一致や、実建物での精度を示すものではない。
 所在の表記：`09_APPROX_STUDY/…` などは `whole-life-carbon-jcat-study/` からの位置、`materials/…` はこの保存フォルダからの位置。
 
@@ -207,7 +207,7 @@
 - **言える範囲**：架空データ。試験は研究の主担当が書いたもので、独立検査の一部ではない。
 - **関係する第2回の指摘**：NUM-1、RED-1
 - **第2回の指摘の影響**：NUM-1：test_closed_forms.py 26 行が引く周期のずれは 1e-15、1e-12、1e-10、1e-8、1e-6 で、1e-9 が無く、ナイフエッジを拾えなかった。RED-1：段階の部分集合を使う試験（test_refcalc.py 88・93 行）は不備なしだけ。
-- **今の時点で言ってよいこと**：28 件の試験がコミットされており、上の内容を検査する。合否は未確認（確認には実行が必要）。試験の合格は、第2回で見つかった欠陥が無いことを意味しない。
+- **今の時点で言ってよいこと**：28 件の試験がコミットされており、上の内容を検査する。合格は、第2回の検査担当 1 者の報告による（反証検査なし）。今の環境での合否は未確認（確認には実行が必要）。試験の合格は、第2回で見つかった欠陥が無いことを意味しない。
 - **使ってはいけない記述**：
   - research_code/README.md 18 行の試験の説明（手計算との照合、欠陥の検出、境界条件）を、基準計算の定義どおりの動作が試験で保証されていると読むこと（手計算は 1 例）
   - fastcalc/closed_forms.py の閉形式が「ループと同じ数を返す」ことを、この試験だけを根拠に言うこと（NUM-1）
@@ -221,7 +221,7 @@
   - [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](../materials/interrupted_fix/agent_reports/A1_REPORT.json)：tests（'Ran 68 tests ... OK' (was 28 tests)）
   - [`materials/round2_review/triage/numeric.md`](../materials/round2_review/triage/numeric.md):10（検証者：test_closed_forms.py 26 行は 1e-9 を引かない）、rederive.md:150（追記 3）
 - **分類した観点**：R2（基準計算・架空データ・比較・試験）
-- **停止後の点検による訂正**：点検の指摘 C1-12 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R2.json`、訂正の内容は `materials/classification/overrides.json` にある。
+- **停止後の点検による訂正**：点検の指摘 C1-12、再点検 C1-12 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R2.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-15"></a>
 
