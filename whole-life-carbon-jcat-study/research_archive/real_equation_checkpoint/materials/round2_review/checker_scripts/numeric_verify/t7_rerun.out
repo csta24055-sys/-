@@ -1,0 +1,120 @@
+total single-field cases: 3461
+
+== CRASH-ASYM ref=ok full=OverflowError tot=OverflowError: 2 cases
+     operation.grid.floor <- -inf  x1   e.g. variant 0 operation.grid.floor
+     operation.grid.start <- inf  x1   e.g. variant 0 operation.grid.start
+
+== CRASH-ASYM ref=ok full=ValueError tot=ValueError: 3 cases
+     operation.grid.annual_decline <- nan  x1   e.g. variant 0 operation.grid.annual_decline
+     operation.grid.floor <- nan  x1   e.g. variant 0 operation.grid.floor
+     operation.grid.start <- nan  x1   e.g. variant 0 operation.grid.start
+
+== DIFF units=B2-01,B6-03,QA-01,SUM-02,X-02,X-04,X-05,X-07: 8 cases
+     operation.grid.table[] <- -inf  x4   e.g. variant 2 operation.grid.table[0]
+     operation.grid.table[] <- inf  x4   e.g. variant 2 operation.grid.table[0]
+
+== DIFF units=B4-02,B5-01,QA-01,X-04: 6 cases
+     factors{}.value <- -inf  x1   e.g. variant 2 factors{F-MAT-CONCRETE-02}.value
+     factors{}.value <- inf  x1   e.g. variant 2 factors{F-MAT-CONCRETE-02}.value
+     factors{}.value <- nan  x1   e.g. variant 2 factors{F-MAT-CONCRETE-02}.value
+     unit_conversions[].factor <- -inf  x1   e.g. variant 2 unit_conversions[0].factor
+     unit_conversions[].factor <- inf  x1   e.g. variant 2 unit_conversions[0].factor
+     unit_conversions[].factor <- nan  x1   e.g. variant 2 unit_conversions[0].factor
+
+== DIFF units=B4-02,QA-01: 1 cases
+     materials[].conversions[].factor <- nan  x1   e.g. variant 0 materials[1].conversions[0].factor
+
+== DIFF units=B4-02,QA-01,X-04: 2 cases
+     materials[].conversions[].factor <- -inf  x1   e.g. variant 0 materials[1].conversions[0].factor
+     materials[].conversions[].factor <- inf  x1   e.g. variant 0 materials[1].conversions[0].factor
+
+== DIFF units=B5-01,QA-01,X-04: 6 cases
+     operation.grid.construction_value <- -inf  x2   e.g. variant 1 operation.grid.construction_value
+     operation.grid.construction_value <- inf  x2   e.g. variant 1 operation.grid.construction_value
+     operation.grid.construction_value <- nan  x2   e.g. variant 1 operation.grid.construction_value
+
+== DIFF units=B6-03,QA-01,SUM-03,SUM-04,SUM-05,SUM-06,SUM-07,X-02,X-04,X-05,X-07: 3 cases
+     operation.district_heat.slope <- inf  x1   e.g. variant 0 operation.district_heat.slope
+     operation.gas.slope <- inf  x1   e.g. variant 0 operation.gas.slope
+     operation.oil.slope <- inf  x1   e.g. variant 0 operation.oil.slope
+
+== DIFF units=B6-03,QA-01,SUM-03,SUM-04,SUM-05,SUM-06,X-02,X-04,X-05,X-07: 3 cases
+     operation.district_heat.slope <- -inf  x1   e.g. variant 0 operation.district_heat.slope
+     operation.gas.slope <- -inf  x1   e.g. variant 0 operation.gas.slope
+     operation.oil.slope <- -inf  x1   e.g. variant 0 operation.oil.slope
+
+== DIFF units=B7-04,QA-01,SUM-03,SUM-04,SUM-05,SUM-06,SUM-07,X-02,X-04,X-05,X-07: 3 cases
+     water_waste.municipal_waste.slope <- inf  x1   e.g. variant 0 water_waste.municipal_waste.slope
+     water_waste.sewage.slope <- inf  x1   e.g. variant 0 water_waste.sewage.slope
+     water_waste.water.slope <- inf  x1   e.g. variant 0 water_waste.water.slope
+
+== DIFF units=B7-04,QA-01,SUM-03,SUM-04,SUM-05,SUM-06,X-02,X-04,X-05,X-07: 3 cases
+     water_waste.municipal_waste.slope <- -inf  x1   e.g. variant 0 water_waste.municipal_waste.slope
+     water_waste.sewage.slope <- -inf  x1   e.g. variant 0 water_waste.sewage.slope
+     water_waste.water.slope <- -inf  x1   e.g. variant 0 water_waste.water.slope
+
+== DIFF units=QA-01: 142 cases
+     operation.district_heat.base <- -inf  x2   e.g. variant 0 operation.district_heat.base
+     operation.district_heat.base <- inf  x2   e.g. variant 0 operation.district_heat.base
+     operation.district_heat.base <- nan  x2   e.g. variant 0 operation.district_heat.base
+     operation.district_heat.slope <- nan  x1   e.g. variant 0 operation.district_heat.slope
+     operation.district_heat.table[] <- -inf  x5   e.g. variant 1 operation.district_heat.table[0]
+     operation.district_heat.table[] <- inf  x5   e.g. variant 1 operation.district_heat.table[0]
+     operation.district_heat.table[] <- nan  x5   e.g. variant 1 operation.district_heat.table[0]
+     operation.gas.base <- -inf  x2   e.g. variant 0 operation.gas.base
+     operation.gas.base <- inf  x2   e.g. variant 0 operation.gas.base
+     operation.gas.base <- nan  x2   e.g. variant 0 operation.gas.base
+     operation.gas.slope <- nan  x1   e.g. variant 0 operation.gas.slope
+     operation.gas.table[] <- -inf  x5   e.g. variant 1 operation.gas.table[0]
+     operation.gas.table[] <- inf  x5   e.g. variant 1 operation.gas.table[0]
+     operation.gas.table[] <- nan  x5   e.g. variant 1 operation.gas.table[0]
+     operation.grid.construction_value <- -inf  x1   e.g. variant 0 operation.grid.construction_value
+     operation.grid.construction_value <- inf  x1   e.g. variant 0 operation.grid.construction_value
+     operation.grid.construction_value <- nan  x1   e.g. variant 0 operation.grid.construction_value
+     operation.grid.steps[].value <- nan  x3   e.g. variant 1 operation.grid.steps[0].value
+     operation.grid.table[] <- nan  x4   e.g. variant 2 operation.grid.table[0]
+     operation.oil.base <- -inf  x2   e.g. variant 0 operation.oil.base
+     operation.oil.base <- inf  x2   e.g. variant 0 operation.oil.base
+     operation.oil.base <- nan  x2   e.g. variant 0 operation.oil.base
+     operation.oil.slope <- nan  x1   e.g. variant 0 operation.oil.slope
+     operation.oil.table[] <- -inf  x5   e.g. variant 1 operation.oil.table[0]
+     operation.oil.table[] <- inf  x5   e.g. variant 1 operation.oil.table[0]
+     operation.oil.table[] <- nan  x5   e.g. variant 1 operation.oil.table[0]
+     water_waste.municipal_waste.base <- -inf  x2   e.g. variant 0 water_waste.municipal_waste.base
+     water_waste.municipal_waste.base <- inf  x2   e.g. variant 0 water_waste.municipal_waste.base
+     water_waste.municipal_waste.base <- nan  x2   e.g. variant 0 water_waste.municipal_waste.base
+     water_waste.municipal_waste.slope <- nan  x1   e.g. variant 0 water_waste.municipal_waste.slope
+     water_waste.municipal_waste.table[] <- -inf  x5   e.g. variant 1 water_waste.municipal_waste.table[0]
+     water_waste.municipal_waste.table[] <- inf  x5   e.g. variant 1 water_waste.municipal_waste.table[0]
+     water_waste.municipal_waste.table[] <- nan  x5   e.g. variant 1 water_waste.municipal_waste.table[0]
+     water_waste.sewage.base <- -inf  x2   e.g. variant 0 water_waste.sewage.base
+     water_waste.sewage.base <- inf  x2   e.g. variant 0 water_waste.sewage.base
+     water_waste.sewage.base <- nan  x2   e.g. variant 0 water_waste.sewage.base
+     water_waste.sewage.slope <- nan  x1   e.g. variant 0 water_waste.sewage.slope
+     water_waste.sewage.table[] <- -inf  x5   e.g. variant 1 water_waste.sewage.table[0]
+     water_waste.sewage.table[] <- inf  x5   e.g. variant 1 water_waste.sewage.table[0]
+     water_waste.sewage.table[] <- nan  x5   e.g. variant 1 water_waste.sewage.table[0]
+     water_waste.water.base <- -inf  x2   e.g. variant 0 water_waste.water.base
+     water_waste.water.base <- inf  x2   e.g. variant 0 water_waste.water.base
+     water_waste.water.base <- nan  x2   e.g. variant 0 water_waste.water.base
+     water_waste.water.slope <- nan  x1   e.g. variant 0 water_waste.water.slope
+     water_waste.water.table[] <- -inf  x5   e.g. variant 1 water_waste.water.table[0]
+     water_waste.water.table[] <- inf  x5   e.g. variant 1 water_waste.water.table[0]
+     water_waste.water.table[] <- nan  x5   e.g. variant 1 water_waste.water.table[0]
+
+== DIFF units=QA-01,X-07: 30 cases
+     operation.electricity.base <- inf  x2   e.g. variant 0 operation.electricity.base
+     operation.electricity.slope <- inf  x1   e.g. variant 0 operation.electricity.slope
+     operation.electricity.table[] <- inf  x5   e.g. variant 1 operation.electricity.table[0]
+     operation.grid.steps[].value <- -inf  x3   e.g. variant 1 operation.grid.steps[0].value
+     operation.grid.steps[].value <- inf  x3   e.g. variant 1 operation.grid.steps[0].value
+     operation.onsite_export.base <- inf  x2   e.g. variant 0 operation.onsite_export.base
+     operation.onsite_export.slope <- inf  x1   e.g. variant 0 operation.onsite_export.slope
+     operation.onsite_export.table[] <- inf  x5   e.g. variant 1 operation.onsite_export.table[0]
+     operation.onsite_generation.base <- -inf  x2   e.g. variant 0 operation.onsite_generation.base
+     operation.onsite_generation.slope <- -inf  x1   e.g. variant 0 operation.onsite_generation.slope
+     operation.onsite_generation.table[] <- -inf  x5   e.g. variant 1 operation.onsite_generation.table[0]
+
+== same: 2928 cases
+
+== same-crash: 321 cases

@@ -1,0 +1,43 @@
+NUM-1  renewal period 1.000000001 (generator option only, no mutation)
+   B3-01: ref 229291.25152413402 unified 19107.60429367785 totals 19107.60429367785 rel -9.167e-01
+   SUM-02: ref 111522202.17969866 unified 111312018.5324682 totals 111312018.5324682 rel -1.885e-03
+   SUM-03: ref 114273919.42727956 unified 114063735.7800491 totals 114063735.7800491 rel -1.839e-03
+   unified full output: sum(B3-01.by_year) = 229291.25152413416 ; X-07.value = 114273919.42727958 ; QA-01 = {'ok': True, 'violations': []}
+   T=7.0: events 6, distinct event years 5, loop skip weight 5.0, closed form 6.0
+   T=30.0: events 29, distinct event years 26, loop skip weight 26.0, closed form 29.0
+   T=60.0: events 59, distinct event years 48, loop skip weight 48.0, closed form 59.0
+NUM-2  NaN / inf in fields without a range guard
+   grid.annual_decline=nan: ref X-06.source TABLE SUM-03 23295377.72621168 | unified ValueError('cannot convert float NaN to integer') | totals ValueError('cannot convert float NaN to integer')
+   grid.start=inf: ref X-06.source DESCRIPTOR | unified OverflowError('cannot convert float infinity to integer')
+   gas.base=nan: QA-01 ref {'ok': True, 'violations': []} unified {'ok': False, 'violations': ['stage B6']} totals {'ok': False, 'violations': ['stage B6']}
+   grid.construction_value=nan: B5-01.value ref 0.0 unified nan | QA-01 ref ok True unified {'ok': False, 'violations': ['stage A5', 'stage B5']}
+   gas.slope=inf: B6-03 ref nan unified inf | SUM-03 ref nan unified inf
+NUM-3  factor value 0.0 with a non-zero gas vector
+   X-04.value: ref 8893233.37821491 unified 8938913.46839103 totals 8938913.46839103 rel +5.136e-03
+   X-05.value: ref 7657743.887907367 unified 7701897.640142159 totals 7701897.640142159 rel +5.766e-03
+   SUM-03.value: ref 8689304.404214356 unified 8689304.404214349 totals 8689304.404214349 rel -8.574e-16
+   X-05.by_stage_co2.B3: ref 1022644.6261754053 unified 1066798.3784101966
+NUM-4  annual table shorter than the period AND unusable factor
+   ref: IndexError('list index out of range') | unified B7-01 n_skipped 1 SUM-03 24261602.395758245 | totals SUM-03 24261602.395758245
+   short electricity table + generation in kWh/day: ref: IndexError('list index out of range') | unified SUM-03 22767429.647382207
+NUM-5  factor id equal to the pseudo ids
+   id GRID: A5-01 ref 5328.16848 unified 12885.209905420988 | SUM-03 ref 8965567.801008811 unified 8895116.777675131 totals 8895116.777675131 rel -7.858e-03 | X-02.by_stage.A1-A3 ref 1017359.7731901141 unified 1004664.4311446042
+   id REFRIGERANT: A5-01 ref 5328.16848 unified 5328.16848 | SUM-03 ref 8965567.801008811 unified 8895116.777675131 totals 8895116.777675131 rel -7.858e-03 | X-02.by_stage.A1-A3 ref 1017359.7731901141 unified 1004664.4311446042
+NUM-6  gas list defects with composite rows
+   'CO2' twice: X-04.value ref 24813097.216983244 unified 34666227.111611426 totals 34666227.111611426
+   no 'CO2': ref X-05.value 6989160.3675219165 | unified KeyError('CO2') | totals KeyError('CO2')
+NUM-7  STEPWISE step index given as float 3.0
+   ref X-06.source DESCRIPTOR SUM-03 25710753.286804594 | unified TypeError("can't multiply sequence by non-int of type 'float'") | totals TypeError("can't multiply sequence by non-int of type 'float'")
+NUM-8  unit literally named 'None'
+   SYS-02.violations ref ['construction.electricity', 'operation.electricity', 'operation.onsite_export', 'operation.onsite_generation'] | unified ['construction.electricity'] | totals ['construction.electricity']
+NUM-9  baseline_totals keyed by meta.scenario_id
+   N9-A (registry key N9-A-BASELINE): baseline ref 9779571.537121847 unified 9779571.53712186; saving ref 0.153978 unified 0.153978
+   N9-B (registry key N9-B-BASELINE): baseline ref 8601741.597412234 unified 9779571.53712186; saving ref 0.302179 unified 0.386223
+NUM-10 ill-conditioned inputs (study's own comparison: floor 1e-9*|SUM-03|, tolerance 1e-9)
+   share 1.0, fuels x1e-7: [('X-02', 'by_stage.B6', '5.03e-08', []), ('QA-01', '', '0.00e+00', ['ok: False vs True'])]
+   T=1.000000001, electricity 0+1000k, only B6: [('B2-01', 'value', '5.25e-08', []), ('B6-03', 'value', '5.25e-08', []), ('X-02', 'by_stage_all.B6', '5.25e-08', [])]
+   two rows of 1.2e308 with factor 0.001: A13-01 ref 2.4e+305 unified inf | B5-01 ref 0.0 unified nan
+NUM-11 comparison function
+   compare(ref=inf, cand=1.0).within(1e-9) = True
+   compare(ref=inf, cand=-inf).within(1e-9) = True
+   compare(ref=-inf, cand=5.0).within(1e-9) = True

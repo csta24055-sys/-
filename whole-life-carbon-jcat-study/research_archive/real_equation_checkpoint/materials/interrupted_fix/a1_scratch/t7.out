@@ -1,0 +1,25 @@
+total single-field cases: 3461
+
+== same: 3383 cases
+
+== same-crash AttributeError: 18 cases
+     materials[].epd <- -inf  x6   e.g. variant 0 materials[1].epd
+     materials[].epd <- inf  x6   e.g. variant 0 materials[1].epd
+     materials[].epd <- nan  x6   e.g. variant 0 materials[1].epd
+
+== same-crash TypeError: 48 cases
+     equipment[].replacement_event_list <- -inf  x5   e.g. variant 0 equipment[1].replacement_event_list
+     equipment[].replacement_event_list <- inf  x5   e.g. variant 0 equipment[1].replacement_event_list
+     equipment[].replacement_event_list <- nan  x5   e.g. variant 0 equipment[1].replacement_event_list
+     materials[].composition <- -inf  x8   e.g. variant 0 materials[0].composition
+     materials[].composition <- inf  x8   e.g. variant 0 materials[0].composition
+     materials[].composition <- nan  x8   e.g. variant 0 materials[0].composition
+     refrigerants[].change_years <- -inf  x3   e.g. variant 1 refrigerants[1].change_years
+     refrigerants[].change_years <- inf  x3   e.g. variant 1 refrigerants[1].change_years
+     refrigerants[].change_years <- nan  x3   e.g. variant 1 refrigerants[1].change_years
+
+== same-crash ValueError: 12 cases
+     boundary.study_period <- -inf  x3   e.g. variant 0 boundary.study_period
+     boundary.study_period <- None  x3   e.g. variant 0 boundary.study_period
+     boundary.study_period <- inf  x3   e.g. variant 0 boundary.study_period
+     boundary.study_period <- nan  x3   e.g. variant 0 boundary.study_period

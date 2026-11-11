@@ -1,0 +1,44 @@
+NUM-1  renewal period 1.000000001 (generator option only, no mutation)
+   B3-01: ref 19107.604293677847 unified 19107.60429367785 totals 19107.60429367785 rel +1.904e-16
+   SUM-02: ref 111312290.59623154 unified 111312290.59623152 totals 111312290.59623152 rel -1.339e-16
+   SUM-03: ref 114064007.84381244 unified 114064007.84381242 totals 114064007.84381242 rel -1.306e-16
+   unified full output: sum(B3-01.by_year) = 19107.604293677847 ; X-07.value = 114064007.84381242 ; QA-01 = {'ok': True, 'violations': []}
+   T=7.0: events 6, distinct event years 6, loop skip weight 6.0, closed form 6.0
+   T=30.0: events 29, distinct event years 29, loop skip weight 29.0, closed form 29.0
+   T=60.0: events 59, distinct event years 59, loop skip weight 59.0, closed form 59.0
+NUM-2  NaN / inf in fields without a range guard
+   grid.annual_decline=nan: ref X-06.source TABLE SUM-03 23295377.72621168 | unified ok(X-06.source=TABLE, SUM-03=23295377.726211637, complete=True) | totals ok(X-06.source=TABLE, SUM-03=23295377.726211637, complete=True)
+   grid.start=inf: ref X-06.source TABLE | unified ok(X-06.source=TABLE, SUM-03=23295377.726211637, complete=True)
+      -> strict comparison [grid.start=inf]: 0 differences 
+   gas.base=nan: QA-01 ref {'ok': True, 'violations': []} unified {'ok': True, 'violations': []} totals {'ok': True, 'violations': []}
+   grid.construction_value=nan: B5-01.value ref 0.0 unified 0.0 | QA-01 ref ok True unified {'ok': True, 'violations': []}
+   gas.slope=inf: B6-03 ref 3778514.2122537126 unified 3778514.212253711 | SUM-03 ref 24292021.97133387 unified 24292021.97133383
+NUM-3  factor value 0.0 with a non-zero gas vector
+   X-04.value: ref 8938913.468391037 unified 8938913.46839103 totals 8938913.46839103 rel -8.335e-16
+   X-05.value: ref 7701897.64014216 unified 7701897.640142159 totals 7701897.640142159 rel -1.209e-16
+   SUM-03.value: ref 8689304.404214356 unified 8689304.404214349 totals 8689304.404214349 rel -8.574e-16
+   X-05.by_stage_co2.B3: ref 1066798.3784101969 unified 1066798.3784101966
+NUM-4  annual table shorter than the period AND unusable factor
+   ref: {'A13-02': {'by_item': [None, None, None, None, 2.5592512324 | unified B7-01 n_skipped 1 SUM-03 24261602.395758245 | totals SUM-03 24261602.395758245
+   short electricity table + generation in kWh/day: ref: {'A13-02': {'by_item': [None, None, None, None, 2.5592512324 | unified SUM-03 22767429.647382207
+NUM-5  factor id equal to the pseudo ids
+   id GRID: A5-01 ref 5328.16848 unified 5328.16848 | SUM-03 ref 8965567.801008811 unified 8965567.8010088 totals 8965567.8010088 rel -1.247e-15 | X-02.by_stage.A1-A3 ref 1017359.7731901141 unified 1017359.773190114
+   id REFRIGERANT: A5-01 ref 5328.16848 unified 5328.16848 | SUM-03 ref 8965567.801008811 unified 8965567.8010088 totals 8965567.8010088 rel -1.247e-15 | X-02.by_stage.A1-A3 ref 1017359.7731901141 unified 1017359.773190114
+NUM-6  gas list defects with composite rows
+   'CO2' twice: X-04.value ref 8145242.282838834 unified 8145242.282838838 totals 8145242.282838838
+   no 'CO2': ref X-05.value 6989160.3675219165 | unified ok(X-06.source=DESCRIPTOR, SUM-03=8145242.282838838, complete=True) | totals ok(X-06.source=DESCRIPTOR, SUM-03=8145242.282838838, complete=True)
+NUM-7  STEPWISE step index given as float 3.0
+   ref X-06.source TABLE SUM-03 23642992.308223665 | unified ok(X-06.source=TABLE, SUM-03=23642992.308223624, complete=True) | totals ok(X-06.source=TABLE, SUM-03=23642992.308223624, complete=True)
+NUM-8  unit literally named 'None'
+   SYS-02.violations ref ['construction.electricity'] | unified ['construction.electricity'] | totals ['construction.electricity']
+NUM-9  baseline_totals keyed by meta.scenario_id
+   N9-A (registry key N9-A-BASELINE): baseline ref 9779571.537121847 unified 9779571.53712186; saving ref 0.153978 unified 0.153978
+   N9-B (registry key N9-B-BASELINE): baseline ref 8601741.597412234 unified 8601741.597412238; saving ref 0.302179 unified 0.302179
+NUM-10 ill-conditioned inputs (study's own comparison: floor 1e-9*|SUM-03|, tolerance 1e-9)
+   share 1.0, fuels x1e-7: [('X-02', 'by_stage.B6', '5.03e-08', []), ('QA-01', '', '0.00e+00', ['ok: False vs True'])]
+   T=1.000000001, electricity 0+1000k, only B6: []
+   two rows of 1.2e308 with factor 0.001: A13-01 ref 2.4e+305 unified inf | B5-01 ref 0.0 unified 0.0
+NUM-11 comparison function
+   compare(ref=inf, cand=1.0).within(1e-9) = False
+   compare(ref=inf, cand=-inf).within(1e-9) = False
+   compare(ref=-inf, cand=5.0).within(1e-9) = False

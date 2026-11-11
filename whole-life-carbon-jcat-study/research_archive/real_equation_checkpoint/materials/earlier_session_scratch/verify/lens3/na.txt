@@ -1,0 +1,343 @@
+========= NOT_APPLICABLE distinct: 37
+[M1] n=11 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。
+   data: None
+   units: SYS-04, A13-05, B1-01, B2-01, STO-01, STO-02, SUM-04, SUM-05, SUM-06, SUM-07, X-13
+[M1] n=3 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 段階の値の和で、これ以上の簡略化はない。
+   data: None
+   units: SUM-01, SUM-02, SUM-03
+[M1] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 3 項の和で、これ以上の簡略化はない。
+   data: None
+   units: A5-04
+[M1] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: すでに閉形式（e0·r·T）で、これ以上の簡略化はない。
+   data: None
+   units: B3-02
+[M1] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 一覧を 1 回走査するだけで、これ以上の簡略化はない。
+   data: None
+   units: QA-02
+[M2] n=3 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。
+   data: None
+   units: B1-01, STO-01, STO-02
+[M3] n=16 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。
+   data: None
+   units: A13-01, A13-03, A13-04, A4-01, A4-02, A5-01, A5-02, A5-03, C1-01, C2-01, C3-01, C4-01, X-01, X-12, X-14, X-17
+[M3] n=9 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。
+   data: None
+   units: SYS-01, SYS-02, SYS-03, SYS-04, C-05, QA-01, QA-02, QA-03, QA-04
+[M3] n=7 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。
+   data: None
+   units: B1-01, STO-01, STO-02, SUM-04, SUM-05, SUM-06, SUM-07
+[M3] n=5 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。
+   data: None
+   units: A5-04, SUM-01, SUM-02, X-02, X-09
+[M3] n=5 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。
+   data: None
+   units: B6-02, B7-01, B7-02, B7-03, B7-04
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 構成比による加重和で、これより単純な式はない。寄与の小さい構成材の切り捨ては必ず過小評価になる。
+   data: None
+   units: A13-02
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 本式自体が B3-01 の概算であり、その誤差は AP-04 として B3-01 側に記録した。
+   data: None
+   units: B3-02
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 差と比だけの式で、これより単純な式はない。なお差は合計の誤差を増幅するので、合計を近似した場合は差の誤差を別に確認する必要がある。
+   data: None
+   units: SUM-08
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 寄与の小さい構成材の切り捨ては必ず過小評価になり、比率の補正なしには使えない。厳密な前計算で十分に軽い。
+   data: None
+   units: X-03
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: CO2 以外のガスを省くと必ず過小評価になる。厳密な集約で十分に軽い。
+   data: None
+   units: X-04
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: CO2 版を全ガス版の定数倍で近似すると、行ごとに CO2 の割合が違うため誤差が出る。厳密な集約で十分に軽い。
+   data: None
+   units: X-05
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 系列そのものが出力であり、刻みを粗くすると出力が変わる。
+   data: None
+   units: X-07
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: すでに面積×原単位×累積係数の 1 式で、これより単純な式はない。
+   data: None
+   units: X-11
+[M3] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 検索と優先順位の解決であり、近似の対象ではない。
+   data: None
+   units: X-15
+[M4] n=9 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。
+   data: None
+   units: SYS-01, SYS-02, SYS-03, SYS-04, C-05, QA-01, QA-02, QA-03, QA-04
+[M4] n=8 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。
+   data: None
+   units: B6-04, SUM-06, SUM-07, SUM-08, X-07, X-08, X-09, X-10
+[M4] n=3 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。
+   data: None
+   units: B1-01, STO-01, STO-02
+[M4] n=3 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。
+   data: None
+   units: X-03, X-04, X-05
+[M4] n=2 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 行ごとの倍率であり、共通の近似モデルにまとめる対象がない。
+   data: None
+   units: A13-05, X-13
+[M4] n=2 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 回数関数 1 つに厳密に統合済みで、近似モデルにまとめる利点がない。
+   data: None
+   units: B4-01, B4-03
+[M4] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 配合ごとの前計算で十分に軽く、近似モデルにまとめる利点がない。
+   data: None
+   units: A13-02
+[M4] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 累積係数 1 つに厳密に統合済みで、近似モデルにまとめる利点がない。
+   data: None
+   units: X-06
+[M4] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 同上。
+   data: None
+   units: X-15
+[M5] n=52 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。
+   data: None
+   units: A13-01, A13-02, A13-03, A13-04, A13-05, A4-01, A4-02, A5-01, A5-02, A5-03, A5-04, B1-01, B1-02, B1-03, B1-04, B2-01, B3-01, B3-02, B4-01, B4-02, B4-03, B5-01, B6-01, B6-02, B6-03, B6-04, B7-01, B7-02, B7-03, B7-04, C1-01, C2-01, C3-01, C4-01, STO-01, STO-02, SUM-06, SUM-07, SUM-08, X-01, X-03, X-04, X-05, X-06, X-07, X-08, X-09, X-10, X-11, X-12, X-13, X-14
+[M5] n=9 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。
+   data: None
+   units: SYS-01, SYS-02, SYS-03, SYS-04, C-05, QA-01, QA-02, QA-03, QA-04
+[M5] n=2 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 合計の代理モデルは SUM-03 で扱う。
+   data: None
+   units: SUM-01, SUM-02
+[M5] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 同上。
+   data: None
+   units: X-15
+[M6] n=39 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 厳密式が全条件で同じ手間で使えるため、近似との併用は不要。
+   data: None
+   units: A13-02, A13-04, A13-05, A4-01, A4-02, A5-01, A5-02, A5-03, A5-04, B1-01, B3-02, B4-03, B5-01, C1-01, C2-01, C3-01, C4-01, STO-01, STO-02, SUM-01, SUM-02, SUM-04, SUM-05, SUM-06, SUM-07, SUM-08, X-01, X-02, X-03, X-04, X-05, X-07, X-09, X-10, X-11, X-12, X-13, X-14, X-15
+[M6] n=9 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。
+   data: None
+   units: SYS-01, SYS-02, SYS-03, SYS-04, C-05, QA-01, QA-02, QA-03, QA-04
+[M6] n=3 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 交換年の一覧があってもなくても同じ閉形式が使えるため、併用は不要。
+   data: None
+   units: B1-02, B1-03, B1-04
+[M6] n=1 cand=None verif=NOT_VERIFIED
+   title: 検討の結果、対象外
+   reason: 厳密な統合モデルが十分に軽いため、近似との併用は不要。
+   data: None
+   units: SUM-03
+========= REJECTED distinct: 10
+[M3] n=6 cand=AP-01 verif=VERIFIED_ANALYTIC_AND_SYNTHETIC
+   title: 更新回数の連続近似 N ≈ max(0, T/c − 1)
+   reason: T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。
+   data: None
+   units: B4-01, B4-02, B4-03, B5-01, X-08, X-10
+[M3] n=6 cand=AP-02 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 更新回数の中点補正 N ≈ max(0, T/c − 1/2)
+   reason: 誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。
+   data: None
+   units: B4-01, B4-02, B4-03, B5-01, X-08, X-10
+[M3] n=6 cand=AP-03 verif=VERIFIED_ANALYTIC_AND_SYNTHETIC
+   title: 更新回数の切り捨てなし N ≈ T/c
+   reason: T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。
+   data: None
+   units: B4-01, B4-02, B4-03, B5-01, X-08, X-10
+[M3] n=4 cand=AP-08 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 買電排出を 平均買電量×平均係数×T で近似
+   reason: 買電量が一定なら誤差 0（このとき K3 の閉形式と同じ式）。一定でない場合は買電量と係数の相関の分だけずれ、B6 段階で -8.1％〜+11.8％。一定の場合は厳密な閉形式として採用済み（M1・M6）で、それ以外に広げる近似としては不採用。
+   data: None
+   units: B2-01, B6-01, B6-03, B6-04
+[M3] n=3 cand=AP-05 verif=VERIFIED_ANALYTIC_AND_SYNTHETIC
+   title: 冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k
+   reason: 1−(1−r)^k ≤ r·k なので必ず過大（安全側）だが、B1 段階で平均 +28.0％、最大 +180.7％ と大きい。厳密な閉形式（K4）が同じ手間で使えるため不採用。
+   data: None
+   units: B1-02, B1-03, B1-04
+[M3] n=2 cand=AP-06 verif=VERIFIED_ANALYTIC_AND_SYNTHETIC
+   title: 端材倍率の線形化 1/(1−w) ≈ 1+w
+   reason: 1+w < 1/(1−w) なので必ず過小評価（A1-A3 段階で平均 -0.3％、最大 -1.0％）。誤差は目標内だが、除算 1 回を乗算 1 回に替えるだけで得るものがなく、常に過小側に偏るため不採用。
+   data: None
+   units: A13-05, X-13
+[M3] n=1 cand=AP-04 verif=VERIFIED_ANALYTIC_AND_SYNTHETIC
+   title: 修繕の更新年除外を無視（B3-02 で B3-01 を代用）
+   reason: 更新年の除外を無視するので必ず過大（安全側）。B3 段階で平均 +2.1％、95 パーセンタイル 4.0％、最大 +5.4％ で段階 2％ の目標を超える。厳密な閉形式（K2）が同じ手間で使えるため不採用。
+   data: None
+   units: B3-01
+[M3] n=1 cand=AP-14 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める
+   reason: 更新が評価期間の途中で段差を作るため、直線補間では合計が -11.9％〜+22.8％ ずれる。統合モデルは評価期間を引数として厳密に計算でき十分に軽いので不採用。
+   data: None
+   units: SUM-03
+[M3] n=1 cand=AP-09a verif=VERIFIED_SYNTHETIC_ONLY
+   title: 電力係数を 5 年ごとの点の直線補間で持つ
+   reason: 一定の系列では誤差 0、直線低下では最大 +0.6％（過小なし）だが、段階的な系列では -4.0％〜+3.8％。パラメータ型の系列は厳密な閉形式（K3）があり、補間に置き換える利点がないため不採用。
+   data: None
+   units: X-06
+[M3] n=1 cand=AP-09b verif=VERIFIED_SYNTHETIC_ONLY
+   title: 電力係数を 10 年ごとの点の直線補間で持つ
+   reason: 10 年刻みでは B6 段階で -5.4％〜+7.5％。5 年刻み（AP-09a）より悪く、同じ理由で不採用。
+   data: None
+   units: X-06
+========= HOLD distinct: 21
+[M4] n=4 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A1-A3 では 95 パーセンタイル 108％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: A13-01, A13-03, A13-04, X-01
+[M4] n=4 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A5 では 95 パーセンタイル 145％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: A5-01, A5-02, A5-03, A5-04
+[M4] n=4 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B7 では 95 パーセンタイル 425％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B7-01, B7-02, B7-03, B7-04
+[M4] n=4 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: SUM-01, SUM-02, SUM-03, X-02
+[M4] n=3 cand=AP-10 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算
+   reason: 架空の母集団では資材製造の誤差が 95 パーセンタイルで 93.8％。ただし架空データの係数と数量のばらつきは実建物を表していないので、この値から採否を判断できない。
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: A13-01, A13-03, X-17
+[M4] n=3 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A4 では 95 パーセンタイル 215％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: A4-01, A4-02, X-12
+[M4] n=3 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B1 では 95 パーセンタイル 2928％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B1-02, B1-03, B1-04
+[M4] n=3 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B6 では 95 パーセンタイル 135％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B6-01, B6-02, B6-03
+[M4] n=3 cand=AP-11 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: SUM-03, SUM-04, SUM-05
+[M4] n=2 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B3 では 95 パーセンタイル 149％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B3-01, B3-02
+[M4] n=2 cand=AP-13 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用
+   reason: 架空の母集団では B6 段階で -14.9％〜+70.4％。面積当たり使用量と実績の関係は架空データでは意味を持たない。
+   data: 実建物の年間エネルギー使用量と延床面積、利用許諾のある面積当たり統計値。
+   units: B6-01, X-11
+[M4] n=2 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C3 では 95 パーセンタイル 209％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: C3-01, X-14
+[M4] n=1 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B2 では 95 パーセンタイル 388％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B2-01
+[M4] n=1 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B4 では 95 パーセンタイル 158％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B4-02
+[M4] n=1 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B5 では 95 パーセンタイル 116％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: B5-01
+[M4] n=1 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C1 では 95 パーセンタイル 229％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: C1-01
+[M4] n=1 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C2 では 95 パーセンタイル 164％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: C2-01
+[M4] n=1 cand=AP-15 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C4 では 95 パーセンタイル 514％）
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: C4-01
+[M5] n=4 cand=AP-16 verif=VERIFIED_SYNTHETIC_ONLY
+   title: ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 74.8％。架空データでは実用精度を評価できない。
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: SUM-03, SUM-04, SUM-05, X-02
+[M5] n=2 cand=AP-11 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算
+   reason: 架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: X-02, X-17
+[M6] n=3 cand=AP-12 verif=VERIFIED_SYNTHETIC_ONLY
+   title: 質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う
+   reason: 架空の母集団では平均 -9.5％、最大 -40.3％ の過小評価。質量の大きい行ほど係数が小さい傾向があると過小になる。実建物での傾向は未確認。
+   data: 実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。
+   units: A13-01, A13-03, X-17

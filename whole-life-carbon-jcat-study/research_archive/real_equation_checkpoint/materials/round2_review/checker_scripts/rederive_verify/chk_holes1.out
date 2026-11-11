@@ -1,0 +1,48 @@
+doc diffs 0 registered 70 ledger 70
+
+== H1: B3 / B5 only boundary with an upstream skipped row ==
+['B3'] clean 98378.05307674105 True | defective 43676.15603264954 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B5'] clean 894813.8719735858 True | defective 333032.13729313586 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B3', 'B5'] clean 993191.9250503269 True | defective 376708.29332578543 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B2'] clean 143618.45466486923 True | defective 143618.45466486923 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B4'] clean 333158.14319778414 True | defective 195758.7238836726 complete False ['B4-02'] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B1'] clean 1009814.2258425589 True | defective 1009814.2258425589 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+
+== H2: annual quantities negative / NaN are used silently ==
+B6-03 1910920.7007465807 -> 1106878.119067683 B7-04 99907.16237530056 -> 70795.69728101224 B6-02 n_skipped 0 complete True [] SYS-01 ok True SYS-02 ok True by_stage B7 70795.69728101224 SUM-07 True
+gas base NaN: SUM-03 nan complete True SYS-01 ok True B6-02 n_skipped 0 match False
+
+== H3: grid factor negative / NaN / None ==
+neg B6-03 -2036536.4850088784 B2-01 {'value': -93047.26573687674, 'computed': True} SUM-03 118767.38062134014 complete True matches_table True SYS ok True True True
+nan B6-03 nan B2-01 {'value': nan, 'computed': True} SUM-03 nan complete True matches_table False SYS ok True True True
+construction_value None RAISED TypeError unsupported operand type(s) for *: 'float' and 'NoneType'
+construction_value neg A5-01 -30324.2 SUM-03 6948082.911480472 complete True
+table None TABLE kind RAISED TypeError unsupported operand type(s) for *: 'float' and 'NoneType'
+
+== H4: C-05 with None / NaN / negative fraction or mass ==
+fraction None RAISED TypeError unsupported operand type(s) for +=: 'float' and 'NoneType'
+fraction NaN C-05 {'ok': True, 'violations': [], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 1 C3 n_skipped 0 C3 by_item0 305.1706477788741 complete False
+fraction 3.0 others kept C-05 {'ok': False, 'violations': ['materials[0].end_of_life.routes'], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 0 C3 n_skipped 0 C3 by_item0 3436.7916978269113 complete True
+mass -1 C-05 {'ok': True, 'violations': [], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 0 C3 n_skipped 1 C3 by_item0 0.0 complete False
+mass NaN C-05 {'ok': True, 'violations': [], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 0 C3 n_skipped 1 C3 by_item0 0.0 complete False
+mass inf C-05 {'ok': False, 'violations': ['materials[0].end_of_life.mass_kg'], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 0 C3 n_skipped 1 C3 by_item0 0.0 complete False
+
+== H5: conversion factor / factor value never validated ==
+rows with row conversions [0, 1, 7, 11]
+neg conversion row 0 A13-01 by_item 30326.531311112896 -> -30326.531311112896 n_skipped 0 complete True SYS-02 ok True C-05 ok False
+factor value NaN F-MAT-INSULATION-02 A1-A3 nan (clean 351318.43189744785 ) SUM-03 nan complete True SYS-01/02/03 ok True True True QA-01 True QA-03 True SUM-07 defined False
+factor value negative F-MAT-INSULATION-02 A1-A3 272056.1390015914 (clean 351318.43189744785 ) SUM-03 6840060.24836876 complete True SYS-01/02/03 ok True True True QA-01 True QA-03 True SUM-07 defined True
+factor value None RAISED TypeError unsupported operand type(s) for *: 'float' and 'NoneType'
+
+== H6: gas amounts inconsistent with the factor value: does anything check X-04's identity? ==
+X-04 value 7240695.004724691 sum of 14 stages 6998584.834160472 rel diff 0.03459416100558867 X-04 keys ['value', 'by_gas', 'co2e_from_gases', 'grid_co2e', 'refrigerant_co2e', 'by_stage_recomputed'] QA-01 {'ok': True, 'violations': []} QA-03 ok True X-05 5994853.522053535 SUM-03 6998584.834160472
+
+== H7: SYS-01 coverage ==
+SYS-01 True [] | B2-01 {'value': 0.0, 'computed': False} B5-01 computed False A13-05 n_skipped 1 X-16 n_skipped 1 complete False ['A13-01', 'B2-01', 'B4-02', 'B5-01']
+
+== H8: invalid periods / cycles give no events silently ==
+clean B4 333158.14319778414 B5 894813.8719735858 B1 1009814.2258425589 SUM-03 7893398.706134058
+defect B4 0.0 B5 0.0 B1 961944.1260155122 SUM-03 6619741.0708777765 complete True [] SYS-01 ok True [] QA-02 ok True B5 computed True n_partial 0
+
+== H9: short profile table ==
+RAISED IndexError list index out of range

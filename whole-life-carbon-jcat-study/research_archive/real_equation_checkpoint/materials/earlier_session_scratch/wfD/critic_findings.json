@@ -1,0 +1,130 @@
+{
+ "findings": [
+  {
+   "severity": "HIGH",
+   "issue": "算定境界（係数が含む段階・対象範囲）の取り違えを機械的に止められない。(a) taxonomy_schema.json の param_binding.stages は array<string> の自由記述（例 \"A1-A3\"）で語彙が無く、表記ゆれで一致判定が不定になる。(b) 行や式が「どの段階の係数を必要とするか」を表す項目がどこにも無く、FACTOR_STAGE_MISMATCH と INV-14 は「束縛と台帳の記載の一致」しか検査できない。輸送・施工まで含む係数を製造段階の式に通して別途加算する二重計上や、一部段階しか含まない係数による過小評価を検出できない。(c) priority_rank は同じ水準の複数参照から1つを採用する順位で、分母単位や段階が違う参照どうしでも順位で選べる。README 3.1-3・3.6 D4 の「選んで捨てない」と矛盾し、順位の根拠・判断者の項目も無い。(d) calc_row は factor_stages を持つが係数の分母単位を持たず、行だけでは単位整合（SYS-02）を再検査できない。binding_unit が宣言単位と違う場合の「その単位で入力された数量にしか使えない」は、activity_unit が常に宣言単位なので表現できない。(e) 係数が対象に何を含むか（付属品・下地・施工込みか等。既存入力 FACTOR.factor_boundary に相当）の置き場が無く、D4 で1レコードにまとめた出典間で対象範囲が違っても区別できない。",
+   "proposed_fix": "stages を列挙型（段階を1つずつ表す値の配列）にする。param_kind または使う概念式ごとに required_stages を schema に定義し、束縛の stages と集合として一致しなければ FACTOR_STAGE_MISMATCH で停止する。同じ scope・param_kind で分母単位・段階・対象範囲のいずれかが違う参照が複数あるときは、priority_rank で選ばず停止する（例 BINDING_BOUNDARY_CONFLICT）。priority_rank には判断者と理由を必須にする。calc_row に factor_unit（分母単位）と対象範囲の参照を追加する。param_binding に対象範囲の記述（値ではなく台帳への参照と要約）を追加し、「同じ名称でも含む範囲が違う出典」を未解決事項に加える。"
+  },
+  {
+   "severity": "HIGH",
+   "issue": "単位の桁と基準が、項目名と仮定だけで運ばれている。(a) 換算根拠の単位が名前に埋め込まれている（unit_conversion.basis_parameter の thickness_mm。assembly_component.ratio_param_name の説明の例は thickness_m、example_records.json は thickness_mm）。「÷1000」は explanation の文章にしか無く、calc_row.conversion_params の値にも単位項目が無い。(b) 単位の無い仕様トークンは parse_patterns.assumed_unit_code で補われ、警告 SPEC_UNIT_ASSUMED だけで通る。換算に使う寸法（param_source_order の先頭が SPEC_TOKEN）でも同じで、README 4.4「換算に使う寸法は既定値で補わない」の趣旨に反して 10〜1000 倍の差が警告だけで通りうる。(c) 名称経路では数量の単位が既定の配置の entry_unit で決まる（単位を選ぶ操作を無くす設計）。入力者が別の単位のつもりでも検出できず、ROW-FICT-0001 の defaulted_fields は placement_id だけで entry_unit は載らない。(d) 優先順が食い違う：resolution_orders.identity_attribute_value は USER_CHOSEN が SPEC_TOKEN より先、conversion_parameter と param_source_order は SPEC_TOKEN が USER_INPUT より先。両者の値が違ったときの扱いが無い。",
+   "proposed_fix": "unit_conversion と assembly_component に basis_unit_code（unit_def への参照）を必須で追加し、換算の定数は単位辞書から導く。conversion_params の各値に unit_code と unit_assumed を持たせる。換算・構成量に使う値の単位を仮定した場合は警告ではなく停止（例 SPEC_UNIT_UNCONFIRMED）とし、承認を ACCEPT として1回数える。entry_unit を既定の配置から決めた場合は defaulted_fields に載せる。名称のトークンと入力値が食い違えば停止（例 PARAM_SOURCE_CONFLICT）とし、2つの優先順をそろえる。ratio_param_name の例を thickness_mm に直す。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "「単位違い」の規則が文書内で食い違う。README 3.5・6.3 と material_type.constraints は「宣言単位の次元が違えば別の品種」とする一方、README 3.6 D2 と例（RAW-FICT-0001 の m2 と RAW-FICT-0004 の枚。AREA と COUNT で次元が違う）は「同じレコード＋換算」とする。同じ材料を出典Aが質量、出典Bが体積で載せている場合に、別の品種にする（指示書が解消を求める単位違いの重複が残る）のか、1品種にまとめるのかが決まらない。複数出典で係数の分母単位が違うときに宣言単位をどれに合わせるかも未定義。",
+   "proposed_fix": "判定基準を1つにする：品種を分けるのは物が違うときだけとし、出典側の単位の違いは次元が違っても unit_conversion（根拠が無ければ BLOCKED_BASIS_MISSING）で表す。「次元の違う単位を同じ品種の宣言単位にしない」は「宣言単位は品種ごとに1つ」という意味に書き直す。分母単位が複数あるときの宣言単位の決め方を未解決事項に加え、同じ材料が質量と体積で現れる架空例を1件足す。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "品種の統合（merge_event、target_kind = MATERIAL_TYPE）に前提条件が無い。宣言単位・仕様属性の定義（role を含む）・item_kind が違う品種どうしでも D3 として統合でき、決着は KEEP_SURVIVOR で残す側の定義に揃う。退く側の配下レコードは identity_key を計算し直され、一致すれば system が確認者なしで自動統合する（ME-FICT-0002）。束縛の binding_unit、配置の entry_unit、アセンブリの component_unit、旧い版で作った計算行の activity の単位の意味が変わりうる。停止 MERGE_REDIRECT_NEEDS_CONFIRMATION と警告 REDIRECTED_BY_MERGE のどちらになるかの条件も書かれていない。",
+   "proposed_fix": "統合の前提条件を不変条件にする：宣言単位が同じ（または USABLE な換算がある）、同一性属性の集合と role が同じ、item_kind が同じ。満たさない組は統合せず similarity_link にとどめる。品種の統合に伴う配下の再計算と自動統合は、元の merge_event の確認者の承認範囲に含め、影響を受けた配下の ID を記録する。宣言単位・同一性属性・係数の分母単位のいずれかが変わる付け替えは必ず停止すると定義する。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "単位コードが同じでも測っている量が違う場合の区別が無い。(a) assembly は driver_dimension と driver_unit だけを持ち、何の面積・長さか（延床面積、壁の面積、開口を除いた面積など）を持たない。DRIVER_IDENTITY は基準数量をそのまま構成要素の数量にするので、基準が違うと単位は合ったまま数量がずれる。(b) quantity_basis（DESIGN／ORDERED／AS_BUILT）が違う行の混在、端材を含む数量と含まない数量の扱いが定義されておらず、不明を表す値も無い（必須なので推測で埋めることになる）。(c) zone_id の語彙が未定義で、null（区分なし＝全体かもしれない）と特定の区分を「違う区分」とみなして二重計上の検査から外している（ROW-FICT-0004 と ROW-FICT-0002）。(d) アセンブリから展開した行は entry_quantity・entry_unit に基準数量を入れるため、宣言単位も配置の入力単位も kg の行（ROW-FICT-0005）に m2 が入る。「許された単位以外は止める」の規則と合わず、entry_quantity = 50 なのに停止理由が QUANTITY_MISSING になっている。",
+   "proposed_fix": "assembly に基準数量が何を測ったものかを表す項目を足し、DRIVER_IDENTITY は構成要素側と測り方が同じときだけ許す。calc_row の基準数量を driver_quantity・driver_unit として entry_quantity・entry_unit から分ける。quantity_basis に不明の値を足し、基準の違う行を合算するときの規則（少なくとも警告）を定める。zone_id が null の行は、同じ配置・品種のすべての区分と重なるものとして二重計上の検査に掛ける。数量の測り方（開口の控除など）と区分の語彙を未解決事項に加える。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "性質の違うパラメータや経路を1つにまとめている箇所がある。(a) README 5章は service_life_ref を MATERIAL.material_life、MATERIAL.refresh_cycles（既存入力では別項目）、EQUIPMENT.equipment_service_life の3つに対応させており、耐用年数と更新周期が param_kind SERVICE_LIFE の1つに畳まれる。(b) 質量は param_binding（MASS_PER_UNIT）と unit_conversion の質量への経路の2系統で得られるが、両者が食い違ったときの検査が無い（食い違いの検査は unit_conversion の中だけ）。製造段階の活動量と輸送・廃棄段階の質量が別の根拠から出る可能性がある。(c) 経路が複数あるときの許容差は未設定で、設定されるまで止めるのか通すのかが決まっていない。",
+   "proposed_fix": "(a) 耐用年数と更新周期を同じ参照にするか分けるかを未解決事項に明記し、決まるまで対応表では別の行にする。(b) 質量の取得元を1系統に決めるか、両方あるときは比較して食い違えば停止する規則を足す。(c) 許容差が未設定の間は、経路が複数あれば常に停止すると明記する。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "D0（同じ出典の同じ内容の行）の扱いに、来歴と数量を失う余地がある。(a) README 3.2・3.6 は「受領時に1件へ集約」と書くが、例は重複行（RAW-FICT-0005）を別レコードとして残している。どちらが正しいかで source_locator が残るかどうかが変わる。(b) raw_record は「更新・削除しない」のに、後続の重複を受領すると先行レコードの occurrence_count を書き換える（RAW-FICT-0001 が 2）。(c) 例の出典 SRC-FICT-0001 は数量内訳書であり、内訳書では同じ名称・単位・見出しの行が別の数量で複数回現れうる。カタログ用の受領（名称だけ）と案件の取込（数量を持つ行）の区別が書かれておらず、取込が D0 を通ると2行目以降の数量が落ちる（過小評価の方向）。(d) calc_row には取込元の行を指す項目が無く、取込から作った行の来歴をたどれない。(e) 経費など材料でない行の行き先が無い（intake_status は ACCEPTED／DUPLICATE_RAW／REJECTED_FORMAT のみ）ので、未解決のまま残るか、黙って落とすかになる。",
+   "proposed_fix": "D0 はカタログ用の名称の受領にだけ適用し、案件の数量行には適用しないと明記する。重複行は別レコードとして残す形に README を合わせ、occurrence_count は保存せず duplicate_of_raw から数える派生値にする。calc_row に取込元の所在（出典と行の位置）を持たせる。材料でない行を理由付きで対象外にする状態（例 OUT_OF_SCOPE）を足し、件数を別掲する。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "「統合は取り消せる」という記述を merge_event の定義が支えていない。(a) SPLIT がどの統合を取り消すのかを指す項目が無く、survivor_id・merged_ids・duplicate_level・survivor_rule_applied が SPLIT でも必須。(b) INV-11 は別名・配置・束縛・構成要素・類似関係の参照先を ACTIVE に限るので、統合時にこれらを残す側へ付け替える必要があるが、付け替えた行の記録が無く元に戻せない。退く側に付いていた束縛・換算（scope が CANONICAL_MATERIAL）の扱いも書かれていない。(c) 来歴は UNION で残す側に足されるが、どの統合で入った要素かの印が無い（derivation = MERGED だけ）ので、複数回統合した後は切り分けられない。(d) FILL_FROM_MERGED_IF_NULL で残す側の空欄を埋めた値を、分割時に戻すかどうかが決まらない。(e) survivor_rule の OLDER_ID は ID の大小で新旧を決めるもので、classification_tree.json の rules「ID の大小から順序を読み取らない」と合わない。",
+   "proposed_fix": "merge_event に reverts_event_id（SPLIT のとき必須）と repointed_refs（付け替えた別名・配置・束縛・換算・構成要素・類似関係の ID と、付け替え前の参照先）を追加し、来歴の各要素に via_merge_event_id を持たせる。SPLIT で必須にする項目を分けて定義する。退く側の束縛・換算は消さず、出典を保ったまま残す側の別の行として移すと明記する。OLDER_ID は作成した版の順に置き換える。架空例に SPLIT を1件足し、統合前の状態に戻ることを示す。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "ライセンス状態の伝播の定義に問題がある。(a) INV-02 は「来歴でつながる全出典のうち最も制限の強い状態」とするため、自分で付けた名称を別の出典でも観測したと記録するだけで状態が悪化しうる（license_valid_until を過ぎた出典は UNKNOWN 扱い）。来歴を足すほど使えなくなるので、来歴を記録しない方向の圧力になる。(b) 統合には「悪化する統合は成立させない」があるが、README 3.2 手順5の「同じ同一性キーなら来歴を足す」（統合イベントを作らない）には同じ歯止めが無い。(c) param_binding の license_status は、例では参照先パラメータの状態（UNKNOWN）として使われ、来歴（SRC-FICT-0000 = PERMITTED_PUBLIC）から計算した値と一致しない。PB-FICT-0001〜0003 は INV-02 と INV-03（PUBLIC_RELEASE に PERMITTED_PUBLIC 以外が無い）に反する（検査スクリプトで確認）。unit_conversion は license_status と basis_license_status を分けているのに、param_binding には分けが無い。",
+   "proposed_fix": "来歴の要素に役割（依拠した出典か、一致を確認しただけの出典か）を持たせ、実効ライセンスは依拠した出典だけから計算する。来歴の追加にも「悪化するなら追加せず、理由を記録する」歯止めを置く。param_binding に参照先の値のライセンス状態を表す項目を追加してレコード自身の license_status と分け、INV-02・INV-03・INV-14 がどちらを見るかを書き分ける。例の PB-FICT-* を直す。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "正規化の結果と人の判断の置き場がレコード定義に無い。example_records.json の normalization_trace（name_key、variant_keys、spec_tokens、residual_text、flags）と duplicate_handling は taxonomy_schema.json の17種に含まれない。N9 の「解釈できずに残った文字列」、単位を仮定した数値を確認者が確定した事実（RAW-FICT-0002「確認者が mm と確定した」）、未解決の名称や配置についての判断は、どのレコードにも残らない。INV-15 は「受領レコードと人の判断記録から版を作り直すと同じ manifest_hash」と述べるが、「人の判断記録」に当たるレコードが定義されておらず検査できない。また例では、名称が解決できないと下書きの品種と正規材料レコードが自動で作られる（MT-FICT-0005、CM-FICT-0003）が、README 3.2・4.2 は「人が判断する」としか書いていない。",
+   "proposed_fix": "追記専用の判断記録（判断の種類、対象の raw_id、決めた内容、判断者・確認者、日付、正規化規則の版）を定義し、INV-15 の「人の判断記録」がそれと merge_event・alias・similarity_link を指すと明記する。正規化結果は「raw_id × 正規化規則の版ごとの派生物」として様式を schema に載せる。未解決の名称から下書きレコードを自動で作るのかどうかを README で決め、例と合わせる。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "係数の代用に、検証の関門を通らない経路がある。README 3.4 と similarity_link は「代用（PROXY_CANDIDATE）は誤差を検証するまで有効にしない」とするが、param_binding は link_basis = PROXY と proxy_reason だけで代用の係数参照を直接登録でき、検証状態も similarity_link への参照も要らない。",
+   "proposed_fix": "link_basis = PROXY の束縛には、置き換えが許可済み（substitution_policy = ALLOWED_WITH_FLAG）の similarity_link の ID を必須にする。または束縛に検証状態を持たせ、NOT_VERIFIED の代用を使う行は computable = false にする不変条件を足す。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "「値を持たない」の検査が項目名だけに依存しており、抜け道がある。(a) 仕様属性は名前を自由に定義でき、密度・単位質量・耐用年数などを IDENTITY 属性として canonical_material.attribute_values に入れられる。それを basis_origin = IDENTITY_ATTRIBUTE の換算の根拠にすると、外部台帳と許諾の確認を通らずに物性値がカタログに入る。(b) unit_conversion.curated_ratio（数え方の等価比）は、製品の入数や構成比に当たる値の入れ物になりうる。(c) applicability、context_condition、derivation_rule、note、basis、stage_note は自由記述またはオブジェクトで、値を書けてしまう。(d) 許容値の一覧（allowed_values）や寸法の系列は出典の製品系列そのものでありうるが、属性値ごとの来歴は無い。",
+   "proposed_fix": "仕様属性に「何の量か」を表す列挙項目を足し、寸法・等級・区分だけを許して物性値・性能値・年数・率を禁止する（INV-04 の検査対象に加える）。curated_ratio は数え方どうしの等価に限ると定義し、根拠の種類と来歴を必須にする。自由記述・オブジェクトの項目は検査で数値の有無を確認する対象として列挙する。属性の許容値に来歴を持たせる。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "束縛の水準に曖昧さがある。(a) binding_scope_kind・bound_from・探索順に PRODUCT があるが、製品のレコードは無い（製品は material_kind = PRODUCT_SPECIFIC の canonical_material）。scope_id が canonical_id なのか product_key（出典側の文字列になりうる）なのか決まらず、PRODUCT と CANONICAL_MATERIAL の2水準が同じ ID 空間で重なる。(b) FUNCTION_NODE は区分・部位グループ・部位要素のどれにも束縛できるが、その中の優先順が無い。alias も、context_node_id 付きの行と null の行が同じキーで並んだときの優先が無い。(c) 探索順は README 自身が暫定（U-07）とするのに、複数の水準に同じ種別の束縛があるときは警告 BINDING_LEVEL_CONFLICT を出すだけで、順序どおりに1つを採用する。名称経路で既定の配置を使った行では、その配置や部位に束縛された耐用年数・修繕率まで既定で決まる。",
+   "proposed_fix": "PRODUCT を水準から外して CANONICAL_MATERIAL（PRODUCT_SPECIFIC）に一本化するか、製品のレコードと ID の接頭辞を定義する。FUNCTION_NODE の中の順序（部位要素→部位グループ→区分）と、別名の文脈付きの行の優先を明記する。探索順が確定するまで、STRICT では水準の衝突を停止にする。既定の配置に由来する束縛で決まった項目は defaulted_fields に載せる。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "正規材料レコードの同一性と行の識別に穴がある。(a) material_kind = TYPE_REPRESENTATIVE（代表のために別に作った一般レコード）は成立しない：必須の同一性属性を持たなければ ACTIVE にできず（canonical_material.constraints）、INV-10 は代表を ACTIVE に限る。属性値を持たせると同一性キーに material_kind が入っていないので SPECIFIC のレコードと衝突し（INV-05）、D1 として自動統合の対象になる。(b) 同一性キーの元の文字列は「|」「;」「=」で連結するが、TEXT 型の属性値や product_key にこれらの文字が入った場合の規則が無い。(c) calc_row.constraints は「同じ案件・配置・区分で」と書くが、calc_row に案件を表す項目が無い。selection_id（例では SEL-）と zone_id の接頭辞は id_prefixes に無い。",
+   "proposed_fix": "同一性キーの元の文字列に material_kind（少なくとも代表かどうか）を含め、代表レコードについては必須属性の例外を明記するか、TYPE_REPRESENTATIVE をやめて「既存の SPECIFIC を代表に指名する」形だけにする。連結は区切り文字のエスケープまたは正規化した JSON で行うと定める。calc_row に案件の ID を追加し、selection と zone の ID 形式を定義する。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "「その他」の受け皿を作らないという規則に、分類階層自身が反している。classification_tree.json の rules と classification_node.constraints は「『未分類』『その他』という受け皿のノードは作らない」とし、README 2.2 も同旨だが、FN-000014「その他設備」（RESERVED の部位グループ）と FN-000052「その他搬送」（DRAFT の部位要素）がある。README は懸念として触れているだけで、規則との関係を解いていない。",
+   "proposed_fix": "FN-000052 を削除して該当行は未配置（UNPLACED）にするか、「含むもの」を定義した名称に改める。FN-000014 は名称を中身で定義できるまで置かないか、規則の側を「定義の無い受け皿は作らない。予約ノードは使用不可で、定義を与えるまで有効化しない」と書き直して3ファイルの文言をそろえる。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "README 1章の「言えること」（例示レコードの参照・列挙値・必須項目・同一性キーが定義と矛盾しない）は、読み手に実際より広く受け取られる。私の検査では、列挙値・必須項目・参照・同一性キー（SHA-256）・content_hash は確かに一致したが、例は不変条件に反している：ACTIVE の配置4件と品種4件が DRAFT のノードを参照（INV-11。classification_tree.json には ACTIVE のノードが無い）、PB-FICT-0001〜0003 が INV-02・INV-03 に不一致。release の invariant_report は checked = false である。ほかに細かな不整合がある：AL-FICT-0002 は漢字とかなの読み替えなのに alias_type が SCRIPT_VARIANT（READING_KANA があり、規則で吸収できる字種のゆれは行を増やさないはず）。CM-FICT-0003 の「作成時のキー」は thickness_mm=12 を含むが、当時の品種 MT-FICT-0005 の spec_attributes は空。同じ材料・同じ配置の ROW-FICT-0001 と ROW-FICT-0003 で param_states の内容が違い、参照が null の下書き束縛を bound_from の水準として扱っている。検査に使ったスクリプトは収録されておらず再現できない。",
+   "proposed_fix": "「言えること」を、行った検査の一覧（構文、列挙値、必須項目、参照先の存在、同一性キーの再計算）に限定し、「INV-01〜16 は例に対して実行していない」と明記する。例のレコードを DRAFT にそろえるか、参照先を含めて不変条件を満たす形に直す。上記の個別の不整合を修正する。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "操作数の数え方が、既定の承認を数えていない。README 4.1 は ACCEPT を「あらかじめ選ばれた既定を承認する」操作と定義し、8章12項は「既定・代表を黙って適用しない」とするが、4.3 の名称経路の最小操作数は SEARCH 1 ＋ ENTER 1 で、既定の配置と仮定した単位の承認を含まない。ROW-FICT-0001 は既定の配置を使い SPEC_UNIT_ASSUMED の警告があるのに accept = 0。既定を承認なしで適用するなら8章12項と合わず、承認が要るなら最小操作数は過小である。また 6.1 の「階層から3〜4、名称から2〜3、取込から0〜2」などは前提条件の注記なしに回数を並べており、8章14項（実データなしに操作数の数値を述べない）と緊張する。",
+   "proposed_fix": "既定の採用を ACCEPT として数えるか、数えないなら「既定は記録付きで自動採用する」と定義を改め、8章12項の文言を合わせる。4.3・6.1・例の explanation の回数には「構造上の下限。前提：別名が登録済み、既定が当たる、仕様値が名称にある。未測定」を各所に付す。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "指示書の9区分は分類階層と README 2.2 にすべて現れるが、設備の4区分（電気・空調・給排水・搬送）はデータ構造として試されていない。(a) 例示は屋根・外壁と内装だけで、基礎・躯体・開口部と設備4区分の架空例が1件も無い（EQUIPMENT_UNIT、DISTRIBUTION_LINE、台・基などの個数単位、SYSTEM_KIT、dependent_requirements は未使用）。(b) item_kind は「計算行の形を決める」とされるが、種別ごとの行の形の表が無い。default_input_group と allowed_item_kinds は classification_tree.json のどのノードにも入っていない。(c) 容量を活動量とする行は対象外（U-13）で、dimension にも該当が無いため、機器の指定がこの構造でできるかは不明。dependent_requirement は REFRIGERANT_CHARGE の1値だけ。(d) README 2.2 は給排水設備の未確定の境界を「—」としているが、境界が無いことを示す根拠は無い。一般的な語彙の範囲でも、ガラス張りの外壁や天窓（屋根・外壁か開口部か）、消火・ガス（給排水かその他設備か）、給湯の熱源（給排水か空調か）、機械式の駐車装置（搬送か）は列挙されていない。",
+   "proposed_fix": "設備の架空例を最小限追加する（架空の機器1件を台で数える行、長さで数える線状品1件、SYSTEM_KIT 1件）。item_kind ごとの行の形（数量の種類、付随して要る入力、対応する既存入力群）の表を README 5章に足すか、未定義であることを未解決事項に明記する。「—」を「未検討」に改め、上の境界候補を U-02・U-03 に加える。README 1章に「3〜5章の構造は建築側の架空例でしか組んでいない」と書く。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "品目軸には「分類できない」状態が無い。部位軸は placement_state = UNPLACED で受け皿なしを貫いているが、material_type.substance_class_id は必須で null を許さない。18系統のどれにも定義上当てはめにくい品目（一般的な語彙でいえば繊維系の床材、紙系の壁装、ゴム、石こう系、接着剤、冷媒など）は、近い系統に寄せて登録するしかなく、README 8章13項が部位側で禁じている「近い分類に寄せる」が品目側で起こる。18系統の網羅性は未確認である。また INV-13 の「合計の一致」は何の合計か（排出量か活動量か）が書かれておらず、計算できない行が0として抜けても等式は成り立つ。",
+   "proposed_fix": "substance_class_id に null を許し、品目未分類の状態を別掲する（部位側の未配置と対称にする）。INV-13 を「段階ごとの排出量の合計」と明記し、活動量は単位をまたいで合算しないこと、すべての合計に計算できない行の件数を併記することを加える。18系統の網羅性を未解決事項に加える。"
+  },
+  {
+   "severity": "MEDIUM",
+   "issue": "未解決事項（U-01〜U-18）に載っていない論点がある。(1) 同じ名称でも含む範囲（付属品・施工の有無）が違う出典の扱い。(2) 複数出典で係数の分母単位が違うときの宣言単位の決め方。(3) 数量の測り方と数量の基準（設計・発注・実績、端材の有無）の混在。(4) 区分（棟・階）の語彙と案件の識別。(5) 内訳書の材料でない行の扱い。(6) 係数の版・地域・時点が違う参照の区別（既存入力には FACTOR.factor_region・factor_release_year があるが束縛には無い）。(7) 既存入力の集約数量項目（MATERIAL.reinforcement_quantity、steel_quantity、concrete_volume、timber_quantity、envelope_area、interior_area）と、品種・代表レコード・粗い指定との関係。README 5章の対応表にも出てこない。(8) 再使用材・既存部分を残す工事の材料を同一性にどう入れるか（MATERIAL.reuse_rate）。(9) 冷媒以外の付随要求（発泡剤、消火剤、絶縁ガスなど既存入力の REFRIGERANT 群に当たるもの）。(10) 実建物の内訳書（D-2・D-3）は守秘のため公開できないが、現行の関門は「許可（証拠あり）以外は取り込まない」で非公開区画は予約のみなので、U-01〜U-03・U-06・U-17 の測定に必要なデータを取り込む手段が無い。非公開の内訳書で見た言い回しを公開の別名にしてよいかも未定。(11) 「制限付きの出典に載っている名称を別名にしない」は、その出典の中身を保存しない以上、機械的に検査できない。一般的な名称はどの出典にも載っている。",
+   "proposed_fix": "上の11点を7.1の表に追加する（暫定の扱いと、決めるのに必要なものを添える）。(10) は U-11 と D-2・D-3 を結び付け、「非公開区画の規則が決まるまで実データでの測定はできない」と明記する。(11) は「別名には肯定的な根拠（自分で書いた一般語、許可された出典での観測、利用者の確認）を必須とし、整理の作業中は制限付きの出典を参照しない。その旨を判断記録に残す」という手続きの規則に書き直す。"
+  },
+  {
+   "severity": "LOW",
+   "issue": "実データに裏付けられていない断定がある。(a) README 4.3「手間の大半は数量の拾い出しであり」は経験則で、根拠データが無い。(b) README 3.1-2「統合漏れは操作が1回増えるだけ」は言い過ぎで、同じ材料の重複レコードに別々の束縛が付けば、どちらを選ぶかで結果が変わる。(c) README 1章「どの既存分類表の写しでもない」、classification_tree.json の note「いかなる…分類表・コード表・規格本文からも取っておらず」は、結果についての断定であり、リポジトリからは検証できない。部位要素の並び（設備の系統分けなど）は業界で広く使われる内訳の区分と似た形になりやすい。(d) 6章の3案は収録されておらず、「不変条件13件」などの比較内容は読み手が確認できない。(e) classification_tree.json の evidence_level = INFERRED は研究プロトコル P2 の語彙に無く、「シート名から推定した」と読める余地があり、同じファイルの note と食い違って見える。",
+   "proposed_fix": "(a) は「と想定している（未確認）」に、(b) は「誤統合のほうが検出しにくい」という趣旨に改める。(c) は過程の記述（特定の分類表を参照せずに作成した。既存の分類表との類似は未照合）に改め、ノードを有効化する前に権利に詳しい人が類似を確認することを未解決事項と公開前の関門に加える。(d) は「3案は未収録で、本節の記述は検証できない」と冒頭に書く。(e) は自作の提案であることを表す値に改めるか、項目を削る。"
+  },
+  {
+   "severity": "LOW",
+   "issue": "ID・階層・用語に曖昧さが残る。(a) 「区分」が3つの意味で使われている：部位軸の第1階層（建築／設備）、指示書の「9区分」（実際は第2階層の部位グループ）、棟・階の区分（zone_id）。(b) 「ID に意味を埋め込まない」としながら、接頭辞 FN-／IN- は軸を表す。classification_node の主キーだけが id で、他は *_id。(c) code は「兄弟の中で一意」だが、集計の見出しとして階層全体で使うので、階層内で一意でないと衝突する。(d) FORMED_PRODUCT・DISTRIBUTION_LINE・COMPOSITE が、素材・品目系統の code と item_kind の列挙値の両方に別の意味で現れる。allowed_item_kinds が未設定なので、系統と item_kind が矛盾する組合せを止められない。(e) level と level_kind は同じことを二重に持ち、対応を保証する不変条件が無い。品目軸の第2・第3階層は別のレコード種別なので、「階層3」だけでは部位要素か正規材料レコードか決まらない。(f) record_status の QUARANTINED と DEPRECATED、records の core（true／false）は、どこにも説明が無い。core は品種と配置が false で、それを参照する正規材料レコードが true になっている。(g) 共通項目に作成者が無い（alias だけにある）ので、「確認者は作成者と別人」を検査できない。(h) 外構・仮設の予約ノードは note で「どの区分の下に置くかは未決定」としながら parent が建築に決まっている。",
+   "proposed_fix": "第1階層を「大区分」、zone を「ゾーン」と呼び分け、「9区分」は「9つの部位グループ」と書く。接頭辞は種別だけを表すと明記するか、ノードを1つの接頭辞にする。code は（軸、階層）の中で一意とする。item_kind と系統の code の重複する語を改名し、allowed_item_kinds を草案の18系統に入れて不変条件にする。level_kind を唯一の正とし level は導出値とする。QUARANTINED・DEPRECATED・core の意味を conventions に書く。共通項目に created_by を足す。予約ノードの親が暫定であることを明記する。"
+  },
+  {
+   "severity": "LOW",
+   "issue": "README と JSON の小さな不一致。(a) README 5章の表と見出しは6項目だが、schema には施工端材率（param_kind WASTE_RATE、calc_row.waste_rate_ref）があり、既存入力 MATERIAL.waste_rate との対応が書かれていない。(b) README のファイル表は schema を「17種」とするが、example_records.json には schema に無い節（normalization_trace、duplicate_handling、what_this_shows）と項目（identity_string_for_illustration、gate_result、input_for_illustration、explanation、record_flag）がある。(c) classification_tree.json の node_defaults は、来歴の source_id に列挙値 SELF_AUTHORED を仮の ID として置き、出典レコードも許諾の証拠も無いまま license_status = PERMITTED_PUBLIC を手で設定している（「手入力しない」「INV-03 は license_evidence_ref を要する」と合わない）。例のほうは SRC-FICT-0000 を使っており、2ファイルで表し方が違う。(d) JSON の値に文章が入っている箇所がある（canonical_format、merge_event.field_resolutions の kept_value「4件（…）」、manifest_hash「（例では省略）」）。",
+   "proposed_fix": "(a) 5章の表に施工端材率の行を足す。(b) 例にだけある節と項目を「説明用で定義外」と example_records.json の冒頭に列挙するか、schema に説明用項目として載せる。(c) 分類階層の側にも自作を表す出典レコード（仮でよい）を置き、状態は来歴から導く形にそろえる。(d) 形式の指定は符号にし、説明は explanation に移す。"
+  },
+  {
+   "severity": "LOW",
+   "issue": "画面・アプリの設計に寄っている要素がある。README は「候補・既定・並び順はデータの性質」と断っているが、(a) classification_node.sort_key と placement.sort_key（候補の並び順）、label（表示）、(b) assembly の STARTER_SET（部位と案件条件から決まる出発点の一式）と context_condition（「候補に出す案件条件」）、assembly_component の default_included・optional、(c) calc_row の operation_count・candidate_counts・selection_path は、材料を特定するデータ構造ではなく、提示の仕方や操作の計測に当たる。特に (c) は計算研究へ渡す行に操作の計測値を混ぜており、同じ selection_id の行に同じ値を写す形になっている。",
+   "proposed_fix": "操作の計測は calc_row から外し、測定用の別レコード（指定1回につき1件。selection_id で行と結ぶ）にする。sort_key と STARTER_SET は「次段階以降の検討事項」として予約扱いにし、今回の定義からは外すか使用不可と明記する。context_condition は「候補に出す条件」ではなく「組合せが成り立つ条件」として定義し直す。"
+  },
+  {
+   "severity": "LOW",
+   "issue": "資源配分約10％の構造調査としては規模が大きい。taxonomy_schema.json はレコード17種・項目226・列挙58種（値246）、4ファイルで約207KBあり、版の管理、確認者の運用、公開区画まで含む。README の U-16 が過剰の懸念を挙げているが、次段階でまず必要な最小の組がどれかは示されていない（core の意味が未定義のため）。",
+   "proposed_fix": "次段階の最初の作業（実データの受領、名称の正規化、重複の判定）に要る最小の組を README に明示し、それ以外（版の公開、区画、アセンブリ、操作の計測、束縛の継承など）は「実データを見てから要否を決める」と区分する。core をその区分の印として定義し直す。"
+  }
+ ],
+ "overall": "対象は /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/07_MATERIAL_TAXONOMY の4ファイル（README.md、taxonomy_schema.json、classification_tree.json、example_records.json）。ファイルは編集していない。\n\n確認できたこと\n- 3つの JSON は python3 で読み込め、重複キーも無い。README の件数（レコード17種、不変条件16件、70ノード＝部位軸52＋品目軸18、部位要素38件）は JSON と一致する。\n- 例示レコードの列挙値、必須項目、参照先の存在、同一性キーと content_hash（SHA-256 を再計算）は定義と一致する。\n- ライセンス上の問題は見つからなかった。JSON の数値は階層番号、版番号、行番号、説明用の数量（50・100・200）、厚さ（12・100）、操作回数だけで、排出係数・耐用年数・修繕率・密度・構成比の値は無い。分類名は一般的な語彙で、規格本文の写しも無い。ただし、許諾の必要な分類表の中身は参照できない（してはならない）ので、「どの分類表とも似ていない」ことは確認していない。\n- 指示書の9区分はすべて分類階層と README 2.2 にある。UI や アプリのコードは無い。README 5章が引く概念式 ID と既存入力項目 ID は、04_FORMULAS/formulas.json と 03_INPUTS/inputs.json に実在する。\n\n主な弱点（指摘25件：HIGH 2、MEDIUM 18、LOW 5）\n1. 算定境界：係数の段階が自由記述で、必要な段階の定義が無く、priority_rank で境界の違う参照を選べる。計算行に係数の分母単位が無い。\n2. 単位：換算根拠の単位が項目名にだけあり（thickness_mm と thickness_m が混在）、単位を仮定した寸法や既定の入力単位が警告だけで計算に入る。「次元が違えば別の品種」と「単位違いは換算」の規則が食い違う。\n3. 来歴：重複行の集約、統合の取り消し、最も厳しいライセンスの伝播、正規化結果と人の判断の記録に、情報を失うか再現できない箇所がある。\n4. 整合：「その他」の受け皿を禁じる規則に分類階層自身が反する。例は INV-02・INV-03・INV-11 を満たしていない。既定の承認を操作数に数えていない。\n5. 網羅：設備4区分は階層にあるだけで、架空例でも試されていない。品目軸には未分類の状態が無い。未解決事項に11点の漏れがある（特に、守秘の必要な内訳書を現行の関門では取り込めない点）。\n\n実データが無いので、階層の粒度や操作数の妥当性は評価していない。上の指摘はすべて文書と定義の内部整合についてのものである。検査用の一時スクリプトは /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/check1.py、/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/check2.py、/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/check3.py に置いた（リポジトリの外）。"
+}

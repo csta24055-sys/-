@@ -1,0 +1,876 @@
+mode=combo mutations=644 scenarios compared: 3999 (46s) status={'ok': 3483, 'diff': 508, 'crash_asym': 8}
+
+== ('mismatch', 'full', 'SYS-03', 'violations[*]') count 412
+   muts: [('mat.end_of_life.haul_factor_id=dangling/one', 24), ('mat.end_of_life.haul_factor_id=dangling/all', 23), ('mat.factor_id=dangling/all', 22), ('mat.routes.factor_id=None/one', 20), ('mat.transport.delivery_factor_id=dangling/all', 20), ('mat.epd.factor_id=None|dangling/all', 20), ('eq.installation_factor_id=dangling/all', 20), ('mat.transport.factor_id=dangling/all', 20)]
+    {"k": 4, "bseed": 821958, "names": ["dev.end_of_life_recovery_rate=2/one", "mat.waste_rate=0.999999/all", "mat.routes.factor_id=None/one", "dev.replacement_loss_rate=neg/all"], "mseed": 128854, "T": 100.0, "finding": {"kind": "mismatch", "mode": "full", "unit": "SYS-03", "items": ["violations[0]: 'materials[5].end_of_life.routes[2].factor_id (no factor)' vs 'materials[5].end_of_life.routes (no factor)'"], "n": 1}}
+
+== ('mismatch', 'summary', 'SYS-03', 'violations[*]') count 412
+   muts: [('mat.end_of_life.haul_factor_id=dangling/one', 24), ('mat.end_of_life.haul_factor_id=dangling/all', 23), ('mat.factor_id=dangling/all', 22), ('mat.routes.factor_id=None/one', 20), ('mat.transport.delivery_factor_id=dangling/all', 20), ('mat.epd.factor_id=None|dangling/all', 20), ('eq.installation_factor_id=dangling/all', 20), ('mat.transport.factor_id=dangling/all', 20)]
+    {"k": 4, "bseed": 821958, "names": ["dev.end_of_life_recovery_rate=2/one", "mat.waste_rate=0.999999/all", "mat.routes.factor_id=None/one", "dev.replacement_loss_rate=neg/all"], "mseed": 128854, "T": 100.0, "finding": {"kind": "mismatch", "mode": "summary", "unit": "SYS-03", "items": ["violations[0]: 'materials[5].end_of_life.routes[2].factor_id (no factor)' vs 'materials[5].end_of_life.routes (no factor)'"], "n": 1}}
+
+== ('missing', 'full', 'SYS-03', 'violations[*]') count 182
+   muts: [('mat.end_of_life.haul_factor_id=dangling/all', 23), ('mat.factor_id=dangling/all', 21), ('mat.transport.delivery_factor_id=dangling/all', 20), ('eq.installation_factor_id=dangling/all', 20), ('mat.transport.factor_id=dangling/all', 20), ('eq.factor_id=dangling/all', 18), ('mat.epd.factor_id=None|dangling/all', 18), ('mat.installation_factor_id=dangling/all', 16)]
+    {"k": 6, "bseed": 705124, "names": ["eq.end_of_life_mass_kg=huge/all", "mat.end_of_life.haul_factor_id=dangling/all", "mat.refresh_cycle=huge/all", "mat.quantity_unit=m3/one"], "mseed": 892757, "T": 24.0, "finding": {"kind": "missing", "mode": "full", "unit": "SYS-03", "items": ["violations[1]", "violations[2]", "violations[3]", "violations[4]"], "n": 13}}
+
+== ('numeric', 'full', 'X-07', 'by_year[*]') count 49
+   muts: [('grid.table!=descriptor(one entry)', 21), ('grid.steps=negative_and_beyond', 10), ('mat.repair_rate=huge/one', 8), ('eq.repair_rate=huge/one', 5), ('operation.factor_ids=None|dangling|unlicensed', 3), ('eq.factor_id=None/all', 3), ('grid.steps=duplicate_from_index', 3), ('grid.steps=unsorted', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "X-07", "path": "by_year[9]", "err": 0.06818261941671916, "ref": 288978.4065477442, "cand": 269275.1018344494, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'SUM-03', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-03", "path": "value", "err": 0.008462770846428606, "ref": 13092400.52159709, "cand": 12981602.53615315, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'SUM-04', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-04", "path": "value", "err": 0.008462770846428649, "ref": 7063.6096690569675, "cand": 7003.831959079121, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'SUM-05', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-05", "path": "value", "err": 0.008462770846428503, "ref": 706.3609598420871, "cand": 700.3831889040803, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'SUM-06', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-06", "path": "value", "err": 0.008462770846428717, "ref": 13092.40052159709, "cand": 12981.60253615315, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'SUM-03', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-03", "path": "value", "err": 0.008462770846428606, "ref": 13092400.52159709, "cand": 12981602.53615315, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'SUM-04', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-04", "path": "value", "err": 0.008462770846428649, "ref": 7063.6096690569675, "cand": 7003.831959079121, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'SUM-05', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-05", "path": "value", "err": 0.008462770846428503, "ref": 706.3609598420871, "cand": 700.3831889040803, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'SUM-06', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-06", "path": "value", "err": 0.008462770846428717, "ref": 13092.40052159709, "cand": 12981.60253615315, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'X-07', 'value') count 45
+   muts: [('grid.table!=descriptor(one entry)', 15), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table!=descriptor(one entry)/one', 7), ('profile.table_clamped_at_zero(linear negative)/all', 7), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 3), ('mat.quantity_unit=furlong/all', 3), ('dev.leak_extremes_mix', 3)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-07", "path": "value", "err": 0.008462770846428606, "ref": 13092400.52159709, "cand": 12981602.53615315, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'B6-03', 'value') count 43
+   muts: [('grid.table!=descriptor(one entry)', 17), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table_clamped_at_zero(linear negative)/all', 6), ('profile.table!=descriptor(one entry)/one', 4), ('grid.steps=negative_and_beyond', 4), ('mat.quantity_unit=furlong/all', 3), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "B6-03", "path": "value", "err": 0.047506404288090054, "ref": 2332274.713363734, "cand": 2221476.727919787, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'B6-03', 'value') count 43
+   muts: [('grid.table!=descriptor(one entry)', 17), ('profile.constant_with_nonzero_slope/all', 8), ('profile.table_clamped_at_zero(linear negative)/all', 6), ('profile.table!=descriptor(one entry)/one', 4), ('grid.steps=negative_and_beyond', 4), ('mat.quantity_unit=furlong/all', 3), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "B6-03", "path": "value", "err": 0.047506404288090054, "ref": 2332274.713363734, "cand": 2221476.727919787, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'B6-01', 'by_year[*]') count 36
+   muts: [('grid.table!=descriptor(one entry)', 22), ('grid.steps=negative_and_beyond', 10), ('eq.factor_id=None/all', 3), ('grid.steps=duplicate_from_index', 3), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('mat.reuse_rate=int0/all', 2), ('mat.quantity_unit=furlong/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "B6-01", "path": "by_year[10]", "err": 0.09994974191795712, "ref": 194461.09896015003, "cand": 175024.76230600072, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'B2-01', 'value') count 26
+   muts: [('grid.table!=descriptor(one entry)', 17), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "B2-01", "path": "value", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'B2-01', 'value') count 26
+   muts: [('grid.table!=descriptor(one entry)', 17), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "B2-01", "path": "value", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'X-02', 'by_stage.B2') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "X-02", "path": "by_stage.B2", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'X-04', 'by_stage_recomputed.B2') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_stage_recomputed.B2", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'SUM-02', 'value') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-02", "path": "value", "err": 0.0012936744997370472, "ref": 10979811.178772265, "cand": 10965606.87703836, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'X-05', 'by_stage_co2.B2') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "by_stage_co2.B2", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'X-02', 'by_stage.B2') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-02", "path": "by_stage.B2", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'X-04', 'by_stage_recomputed.B2') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_stage_recomputed.B2", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'SUM-02', 'value') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-02", "path": "value", "err": 0.0012936744997370472, "ref": 10979811.178772265, "cand": 10965606.87703836, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'X-05', 'by_stage_co2.B2') count 24
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('eq.factor_id=None/all', 2), ('mat.quantity_unit=furlong/all', 2), ('grid.steps=duplicate_from_index', 2), ('mat.repair_rate=1e-6/all', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "by_stage_co2.B2", "err": 0.05951047822068259, "ref": 238685.72659154516, "cand": 224481.4248576312, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B2') count 23
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('mat.quantity_unit=furlong/all', 2), ('mat.repair_rate=1e-6/all', 2), ('dev.change_years=[-5]/all', 2), ('mat.installation_factor_id=None/one', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B2", "err": 0.051483399587356864, "ref": 0.01823086042913304, "cand": 0.01729227375683865, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B2') count 23
+   muts: [('grid.table!=descriptor(one entry)', 15), ('grid.steps=negative_and_beyond', 4), ('operation.factor_ids=None|dangling|unlicensed', 2), ('grid.steps=unsorted', 2), ('mat.quantity_unit=furlong/all', 2), ('mat.repair_rate=1e-6/all', 2), ('dev.change_years=[-5]/all', 2), ('mat.installation_factor_id=None/one', 2)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B2", "err": 0.051483399587356864, "ref": 0.01823086042913304, "cand": 0.01729227375683865, "scale": 13092400.52159709}}
+
+== ('numeric', 'full', 'B7-04', 'value') count 17
+   muts: [('profile.constant_with_nonzero_slope/all', 7), ('profile.table_clamped_at_zero(linear negative)/all', 6), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "full", "unit": "B7-04", "path": "value", "err": 0.03508278359336094, "ref": 87285.63622857459, "cand": 90347.8593151905, "scale": 5079870.116699948}}
+
+== ('numeric', 'summary', 'B7-04', 'value') count 17
+   muts: [('profile.constant_with_nonzero_slope/all', 7), ('profile.table_clamped_at_zero(linear negative)/all', 6), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "summary", "unit": "B7-04", "path": "value", "err": 0.03508278359336094, "ref": 87285.63622857459, "cand": 90347.8593151905, "scale": 5079870.116699948}}
+
+== ('numeric', 'full', 'B3-01', 'by_year[*]') count 16
+   muts: [('mat.repair_rate=huge/one', 8), ('eq.repair_rate=huge/one', 5), ('eq.repair_rate=huge/all', 2), ('eq.repair_rate=1.5/one', 1), ('dev.end_of_life_recovery_rate=None/one', 1), ('eq.replacement_event_list=None/one', 1), ('dev.gwp=tiny/one', 1), ('mat.refresh_cycle=one/all', 1)]
+    {"k": 1, "bseed": 104563, "names": ["mat.repair_rate=huge/one", "eq.repair_rate=1.5/one", "dev.end_of_life_recovery_rate=None/one"], "mseed": 569713, "T": 62.5, "finding": {"kind": "numeric", "mode": "full", "unit": "B3-01", "path": "by_year[32]", "err": 2.4502842726456827e-09, "ref": 18159.31570251453, "cand": 18159.088727092603, "scale": 9.263228126662758e+16}}
+
+== ('numeric', 'full', 'X-05', 'by_stage_co2.B7') count 15
+   muts: [('profile.constant_with_nonzero_slope/all', 6), ('profile.table_clamped_at_zero(linear negative)/all', 5), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "by_stage_co2.B7", "err": 0.03335581885891539, "ref": 75156.07369997866, "cand": 77662.96608046244, "scale": 5079870.116699948}}
+
+== ('numeric', 'summary', 'X-05', 'by_stage_co2.B7') count 15
+   muts: [('profile.constant_with_nonzero_slope/all', 6), ('profile.table_clamped_at_zero(linear negative)/all', 5), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "by_stage_co2.B7", "err": 0.03335581885891539, "ref": 75156.07369997866, "cand": 77662.96608046244, "scale": 5079870.116699948}}
+
+== ('numeric', 'full', 'B1-02', 'by_item[*]') count 14
+   muts: [('dev.leak_extremes_mix', 6), ('dev.annual_leak_rate=1e-12/all', 3), ('mat.transport.mass_t=None/one', 2), ('dev.annual_leak_rate=1e-9/all', 2), ('mat.transport.mass_t=tiny/all', 2), ('dev.annual_leak_rate=tiny/one', 2), ('dev.replacement_loss_rate=0/all', 1), ('mat.material_life=int0/all', 1)]
+    {"k": 7, "bseed": 440205, "names": ["dev.replacement_loss_rate=0/all", "mat.material_life=int0/all", "dev.end_of_life_recovery_rate=2/one", "dev.leak_extremes_mix"], "mseed": 67898, "T": 59.999999, "finding": {"kind": "numeric", "mode": "full", "unit": "B1-02", "path": "by_item[2]", "err": 2.5725257495732345e-08, "ref": 0.00510856253986876, "cand": 0.00510856240574597, "scale": 5213661.681947181}}
+
+== ('numeric', 'full', 'X-02', 'by_stage.B7') count 13
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('profile.constant_with_nonzero_slope/all', 4), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "full", "unit": "X-02", "path": "by_stage.B7", "err": 0.03508278359336094, "ref": 87285.63622857459, "cand": 90347.8593151905, "scale": 5079870.116699948}}
+
+== ('numeric', 'summary', 'X-02', 'by_stage.B7') count 13
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('profile.constant_with_nonzero_slope/all', 4), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-02", "path": "by_stage.B7", "err": 0.03508278359336094, "ref": 87285.63622857459, "cand": 90347.8593151905, "scale": 5079870.116699948}}
+
+== ('numeric', 'summary', 'B1-02', 'value') count 13
+   muts: [('dev.annual_leak_rate=tiny/all', 5), ('dev.annual_leak_rate=1e-12/all', 4), ('dev.annual_leak_rate=1e-9/all', 4), ('mat.waste_rate=0/one', 2), ('eq.replacement_event_list=[ulp]/one', 1), ('mat.construction_division=INTERIOR/half', 1), ('baseline=zero_or_negative_total', 1), ('mat.refresh_cycle=neg/one', 1)]
+    {"k": 6, "bseed": 228256, "names": ["eq.replacement_event_list=[ulp]/one", "mat.construction_division=INTERIOR/half", "dev.annual_leak_rate=tiny/all"], "mseed": 175619, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "B1-02", "path": "value", "err": 3.3699480011763932e-09, "ref": 5.164736524776357e-06, "cand": 5.16467352842463e-06, "scale": 18693567.884517636}}
+
+== ('numeric', 'full', 'X-04', 'by_stage_recomputed.B7') count 12
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('profile.constant_with_nonzero_slope/all', 4), ('profile.table!=descriptor(one entry)/one', 3), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_stage_recomputed.B7", "err": 0.03508278359336198, "ref": 87285.6362285745, "cand": 90347.8593151905, "scale": 5079870.116699948}}
+
+== ('numeric', 'summary', 'X-04', 'by_stage_recomputed.B7') count 12
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('profile.constant_with_nonzero_slope/all', 4), ('profile.table!=descriptor(one entry)/one', 3), ('dev.leak_extremes_mix', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_stage_recomputed.B7", "err": 0.03508278359336198, "ref": 87285.6362285745, "cand": 90347.8593151905, "scale": 5079870.116699948}}
+
+== ('numeric', 'full', 'X-02', 'by_stage.B6') count 11
+   muts: [('profile.table!=descriptor(one entry)/one', 4), ('profile.constant_with_nonzero_slope/all', 3), ('profile.table_clamped_at_zero(linear negative)/all', 2), ('grid.table!=descriptor(one entry)', 2), ('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-02", "path": "by_stage.B6", "err": 0.0034805559529528943, "ref": 1780815.2199764661, "cand": 1774616.992961468, "scale": 3039175.418569953}}
+
+== ('numeric', 'summary', 'X-02', 'by_stage.B6') count 11
+   muts: [('profile.table!=descriptor(one entry)/one', 4), ('profile.constant_with_nonzero_slope/all', 3), ('profile.table_clamped_at_zero(linear negative)/all', 2), ('grid.table!=descriptor(one entry)', 2), ('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-02", "path": "by_stage.B6", "err": 0.0034805559529528943, "ref": 1780815.2199764661, "cand": 1774616.992961468, "scale": 3039175.418569953}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B7') count 10
+   muts: [('profile.constant_with_nonzero_slope/all', 4), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('profile.table_clamped_at_zero(linear negative)/all', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B7", "err": 0.02746601357403449, "ref": 0.01718265117480567, "cand": 0.017654590105210782, "scale": 5079870.116699948}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B7') count 10
+   muts: [('profile.constant_with_nonzero_slope/all', 4), ('profile.table!=descriptor(one entry)/one', 4), ('dev.leak_extremes_mix', 2), ('profile.table_clamped_at_zero(linear negative)/all', 2), ('mat.composition=empty/all', 2), ('mat.refresh_cycle=int0/one', 1), ('mat.routes.fraction=neg/one', 1), ('eq.repair_rate=0.5/one', 1)]
+    {"k": 1, "bseed": 985772, "names": ["profile.constant_with_nonzero_slope/all", "mat.refresh_cycle=int0/one", "mat.routes.fraction=neg/one", "eq.repair_rate=0.5/one"], "mseed": 106893, "T": 62.5, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B7", "err": 0.02746601357403449, "ref": 0.01718265117480567, "cand": 0.017654590105210782, "scale": 5079870.116699948}}
+
+== ('numeric', 'full', 'X-05', 'by_stage_co2.B6') count 8
+   muts: [('profile.table!=descriptor(one entry)/one', 4), ('grid.table!=descriptor(one entry)', 2), ('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('mat.routes.factor_id=dangling/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "by_stage_co2.B6", "err": 0.0030250444499014036, "ref": 1682873.5398379264, "cand": 1677782.7725763537, "scale": 3039175.418569953}}
+
+== ('numeric', 'summary', 'X-05', 'by_stage_co2.B6') count 8
+   muts: [('profile.table!=descriptor(one entry)/one', 4), ('grid.table!=descriptor(one entry)', 2), ('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('mat.routes.factor_id=dangling/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "by_stage_co2.B6", "err": 0.0030250444499014036, "ref": 1682873.5398379264, "cand": 1677782.7725763537, "scale": 3039175.418569953}}
+
+== ('crash_asym', '(\'TypeError\', "units_b.py:371 unsupported operand type(s) for -: \'NoneType\' and \'float\'")', '(\'TypeError\', "engine.py:1075 unsupported operand type(s) for -: \'NoneType\' and \'float\'")', 'None') count 8
+   muts: [('grid.steps=first_from_index>0', 8), ('eq.quantity=None/all', 1), ('eq.end_of_life_mass_kg=0/one', 1), ('dev.annual_leak_rate=1e-4/one', 1), ('mat.end_of_life.haul_factor_id=None/one', 1), ('dev.annual_leak_rate=1e-6/one', 1), ('mat.transport.load_factor=0/all', 1), ('dev.service_life=0.3/one', 1)]
+    {"k": 5, "bseed": 256464, "names": ["eq.quantity=None/all", "grid.steps=first_from_index>0"], "mseed": 371504, "T": 0.5, "finding": {"kind": "crash_asym", "ref": ["TypeError", "units_b.py:371 unsupported operand type(s) for -: 'NoneType' and 'float'"], "full": ["TypeError", "engine.py:1075 unsupported operand type(s) for -: 'NoneType' and 'float'"], "summ": null}}
+
+== ('numeric', 'full', 'B1-02', 'value') count 8
+   muts: [('dev.annual_leak_rate=tiny/all', 5), ('dev.annual_leak_rate=1e-9/all', 2), ('eq.replacement_event_list=[ulp]/one', 1), ('mat.construction_division=INTERIOR/half', 1), ('mat.routes.fraction=all_landfill/all', 1), ('project.assessment_date=late|early', 1), ('eq.service_life=0.999999999/all', 1), ('dev.service_life=neg/all', 1)]
+    {"k": 6, "bseed": 228256, "names": ["eq.replacement_event_list=[ulp]/one", "mat.construction_division=INTERIOR/half", "dev.annual_leak_rate=tiny/all"], "mseed": 175619, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B1-02", "path": "value", "err": 3.3699480011763932e-09, "ref": 5.164736524776357e-06, "cand": 5.16467352842463e-06, "scale": 18693567.884517636}}
+
+== ('numeric', 'full', 'X-11', 'value') count 6
+   muts: [('grid.steps=unsorted', 2), ('grid.steps=duplicate_from_index', 2), ('grid.to_linear(params)', 2), ('operation.factor_ids=None|dangling|unlicensed', 1), ('eq.replacement_event_list=sameyear/one', 1), ('mat.refresh_cycle=0.1/all', 1), ('mat.end_of_life.haul_factor_id=None/one', 1), ('dev.end_of_life_recovery_rate=neg/one', 1)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "full", "unit": "X-11", "path": "value", "err": 0.0599698455505734, "ref": 2094224.4233002444, "cand": 1968634.10808669, "scale": 13092400.52159709}}
+
+== ('numeric', 'summary', 'X-11', 'value') count 6
+   muts: [('grid.steps=unsorted', 2), ('grid.steps=duplicate_from_index', 2), ('grid.to_linear(params)', 2), ('operation.factor_ids=None|dangling|unlicensed', 1), ('eq.replacement_event_list=sameyear/one', 1), ('mat.refresh_cycle=0.1/all', 1), ('mat.end_of_life.haul_factor_id=None/one', 1), ('dev.end_of_life_recovery_rate=neg/one', 1)]
+    {"k": 8, "bseed": 508256, "names": ["profile.linear_negative_unclamped/all", "operation.factor_ids=None|dangling|unlicensed", "eq.replacement_event_list=sameyear/one", "grid.steps=unsorted"], "mseed": 449305, "T": 10.0000001, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-11", "path": "value", "err": 0.0599698455505734, "ref": 2094224.4233002444, "cand": 1968634.10808669, "scale": 13092400.52159709}}
+
+== ('crash_asym', 'None', '(\'OverflowError\', "closed_forms.py:150 (34, \'Numerical result out of range\')")', '(\'OverflowError\', "closed_forms.py:150 (34, \'Numerical result out of range\')")') count 6
+   muts: [('dev.annual_leak_rate=huge/all', 4), ('dev.annual_leak_rate=huge/one', 2), ('mat.repair_rate=1.5/all', 1), ('eq.replacement_event_list=None/one', 1), ('dev.service_life=T/7/one', 1), ('mat.transport.load_factor=2/one', 1), ('dev.end_of_life_recovery_rate=2/one', 1), ('dev.change_years=empty/one', 1)]
+    {"k": 3, "bseed": 296455, "names": ["dev.annual_leak_rate=huge/all", "mat.repair_rate=1.5/all", "eq.replacement_event_list=None/one", "dev.service_life=T/7/one"], "mseed": 517864, "T": 30.0, "finding": {"kind": "crash_asym", "ref": null, "full": ["OverflowError", "closed_forms.py:150 (34, 'Numerical result out of range')"], "summ": ["OverflowError", "closed_forms.py:150 (34, 'Numerical result out of range')"]}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B6') count 6
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('mat.routes.factor_id=dangling/one', 1), ('dev.charge_mass_kg=0/one', 1), ('mat.refresh_cycle=0.1/all', 1), ('mat.end_of_life.haul_factor_id=None/one', 1), ('grid.steps=duplicate_from_index', 1), ('dev.end_of_life_recovery_rate=neg/one', 1)]
+    {"k": 3, "bseed": 459742, "names": ["mat.routes.factor_id=dangling/one", "profile.table!=descriptor(one entry)/one", "dev.charge_mass_kg=0/one"], "mseed": 879057, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B6", "err": 0.0016691029560446094, "ref": 0.09332664478266006, "cand": 0.0931708730039756, "scale": 13234922.69073063}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B6') count 6
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('mat.routes.factor_id=dangling/one', 1), ('dev.charge_mass_kg=0/one', 1), ('mat.refresh_cycle=0.1/all', 1), ('mat.end_of_life.haul_factor_id=None/one', 1), ('grid.steps=duplicate_from_index', 1), ('dev.end_of_life_recovery_rate=neg/one', 1)]
+    {"k": 3, "bseed": 459742, "names": ["mat.routes.factor_id=dangling/one", "profile.table!=descriptor(one entry)/one", "dev.charge_mass_kg=0/one"], "mseed": 879057, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B6", "err": 0.0016691029560446094, "ref": 0.09332664478266006, "cand": 0.0931708730039756, "scale": 13234922.69073063}}
+
+== ('mismatch', 'full', 'SUM-07', 'defined') count 5
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('dev.change_years=[T-ulp]/all', 1), ('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('dev.charge_mass_kg=huge/one', 1), ('mat.repair_rate=0.5/all', 1)]
+    {"k": 7, "bseed": 668627, "names": ["mat.quantity_unit=furlong/all", "eq.quantity=int0/one", "profile.table_clamped_at_zero(linear negative)/all"], "mseed": 300327, "T": 59.999999, "finding": {"kind": "mismatch", "mode": "full", "unit": "SUM-07", "items": ["defined: True vs False"], "n": 1}}
+
+== ('missing', 'full', 'SUM-07', 'by_stage.A1-A3') count 5
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('dev.change_years=[T-ulp]/all', 1), ('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('dev.charge_mass_kg=huge/one', 1), ('mat.repair_rate=0.5/all', 1)]
+    {"k": 7, "bseed": 668627, "names": ["mat.quantity_unit=furlong/all", "eq.quantity=int0/one", "profile.table_clamped_at_zero(linear negative)/all"], "mseed": 300327, "T": 59.999999, "finding": {"kind": "missing", "mode": "full", "unit": "SUM-07", "items": ["by_stage.A1-A3", "by_stage.A4", "by_stage.A5", "by_stage.B1"], "n": 14}}
+
+== ('mismatch', 'summary', 'SUM-07', 'defined') count 5
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 5), ('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('dev.change_years=[T-ulp]/all', 1), ('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('dev.charge_mass_kg=huge/one', 1), ('mat.repair_rate=0.5/all', 1)]
+    {"k": 7, "bseed": 668627, "names": ["mat.quantity_unit=furlong/all", "eq.quantity=int0/one", "profile.table_clamped_at_zero(linear negative)/all"], "mseed": 300327, "T": 59.999999, "finding": {"kind": "mismatch", "mode": "summary", "unit": "SUM-07", "items": ["defined: True vs False"], "n": 1}}
+
+== ('numeric', 'full', 'X-04', 'by_stage_recomputed.B6') count 4
+   muts: [('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('eq.repair_rate=huge/all', 1), ('eq.end_of_life_mass_kg=int0/all', 1), ('dev.charge_mass_kg=neg/one', 1), ('profile.table!=descriptor(one entry)/one', 1), ('eq.replacement_event_list=mix_outside/one', 1)]
+    {"k": 7, "bseed": 668627, "names": ["mat.quantity_unit=furlong/all", "eq.quantity=int0/one", "profile.table_clamped_at_zero(linear negative)/all"], "mseed": 300327, "T": 59.999999, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_stage_recomputed.B6", "err": 63.967918610393866, "ref": 66993.43048840472, "cand": -4218436.878424947, "scale": 522376.07559090713}}
+
+== ('numeric', 'summary', 'X-04', 'by_stage_recomputed.B6') count 4
+   muts: [('mat.quantity_unit=furlong/all', 1), ('eq.quantity=int0/one', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('eq.repair_rate=huge/all', 1), ('eq.end_of_life_mass_kg=int0/all', 1), ('dev.charge_mass_kg=neg/one', 1), ('profile.table!=descriptor(one entry)/one', 1), ('eq.replacement_event_list=mix_outside/one', 1)]
+    {"k": 7, "bseed": 668627, "names": ["mat.quantity_unit=furlong/all", "eq.quantity=int0/one", "profile.table_clamped_at_zero(linear negative)/all"], "mseed": 300327, "T": 59.999999, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_stage_recomputed.B6", "err": 63.967918610393866, "ref": 66993.43048840472, "cand": -4218436.878424947, "scale": 522376.07559090713}}
+
+== ('numeric', 'full', 'SUM-08', 'delta') count 3
+   muts: [('baseline=stages_same_set_different_order_or_dups', 2), ('eq.quantity=huge/all', 1), ('dev.annual_leak_rate=1e-12/one', 1), ('eq.end_of_life_mass_kg=neg/one', 1), ('factors.value=0|neg|huge/some', 1), ('dev.change_years=intfloatmix/one', 1), ('mat.provenance_id=dangling/one', 1), ('baseline=comparable', 1)]
+    {"k": 6, "bseed": 311862, "names": ["eq.quantity=huge/all", "baseline=stages_same_set_different_order_or_dups", "dev.annual_leak_rate=1e-12/one", "eq.end_of_life_mass_kg=neg/one"], "mseed": 273713, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-08", "path": "delta", "err": 1.7036223202491706e-07, "ref": -2278960.0, "cand": -2278952.0, "scale": 4.69587648912109e+16}}
+
+== ('numeric', 'summary', 'SUM-08', 'delta') count 3
+   muts: [('baseline=stages_same_set_different_order_or_dups', 2), ('eq.quantity=huge/all', 1), ('dev.annual_leak_rate=1e-12/one', 1), ('eq.end_of_life_mass_kg=neg/one', 1), ('factors.value=0|neg|huge/some', 1), ('dev.change_years=intfloatmix/one', 1), ('mat.provenance_id=dangling/one', 1), ('baseline=comparable', 1)]
+    {"k": 6, "bseed": 311862, "names": ["eq.quantity=huge/all", "baseline=stages_same_set_different_order_or_dups", "dev.annual_leak_rate=1e-12/one", "eq.end_of_life_mass_kg=neg/one"], "mseed": 273713, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-08", "path": "delta", "err": 1.7036223202491706e-07, "ref": -2278960.0, "cand": -2278952.0, "scale": 4.69587648912109e+16}}
+
+== ('numeric', 'full', 'X-04', 'by_gas.NF3') count 2
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('dev.gwp=neg/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_gas.NF3", "err": 0.015170755931294428, "ref": 121.69247937445854, "cand": 119.84631247119455, "scale": 3039175.418569953}}
+
+== ('numeric', 'summary', 'X-04', 'by_gas.NF3') count 2
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('dev.gwp=neg/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_gas.NF3", "err": 0.015170755931294428, "ref": 121.69247937445854, "cand": 119.84631247119455, "scale": 3039175.418569953}}
+
+== ('numeric', 'full', 'X-04', 'by_gas.N2O') count 2
+   muts: [('mat.routes.factor_id=dangling/one', 1), ('profile.table!=descriptor(one entry)/one', 1), ('dev.charge_mass_kg=0/one', 1), ('dev.service_life=None/one', 1), ('profile.constant_with_nonzero_slope/all', 1), ('mat.installation_factor_id=dangling/all', 1), ('eq.repair_rate=0/one', 1)]
+    {"k": 3, "bseed": 459742, "names": ["mat.routes.factor_id=dangling/one", "profile.table!=descriptor(one entry)/one", "dev.charge_mass_kg=0/one"], "mseed": 879057, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_gas.N2O", "err": 0.010814309437802275, "ref": 149.2735306250275, "cand": 147.6592404739752, "scale": 13234922.69073063}}
+
+== ('numeric', 'summary', 'X-04', 'by_gas.N2O') count 2
+   muts: [('mat.routes.factor_id=dangling/one', 1), ('profile.table!=descriptor(one entry)/one', 1), ('dev.charge_mass_kg=0/one', 1), ('dev.service_life=None/one', 1), ('profile.constant_with_nonzero_slope/all', 1), ('mat.installation_factor_id=dangling/all', 1), ('eq.repair_rate=0/one', 1)]
+    {"k": 3, "bseed": 459742, "names": ["mat.routes.factor_id=dangling/one", "profile.table!=descriptor(one entry)/one", "dev.charge_mass_kg=0/one"], "mseed": 879057, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_gas.N2O", "err": 0.010814309437802275, "ref": 149.2735306250275, "cand": 147.6592404739752, "scale": 13234922.69073063}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.C3') count 1
+   muts: [('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('profile.table!=descriptor(one entry)/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.C3", "err": 0.002043611482558224, "ref": 0.007411204875157374, "cand": 0.007426350498539837, "scale": 3039175.418569953}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.C3') count 1
+   muts: [('mat.refresh_cycle=0.999999999/one', 1), ('dev.service_life=0.999999999/one', 1), ('profile.table!=descriptor(one entry)/one', 1)]
+    {"k": 6, "bseed": 343544, "names": ["mat.refresh_cycle=0.999999999/one", "dev.service_life=0.999999999/one", "profile.table!=descriptor(one entry)/one"], "mseed": 431894, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.C3", "err": 0.002043611482558224, "ref": 0.007411204875157374, "cand": 0.007426350498539837, "scale": 3039175.418569953}}
+
+== ('numeric', 'full', 'X-07', 'cumulative[*]') count 1
+   muts: [('eq.repair_rate=huge/all', 1), ('mat.refresh_cycle=one/all', 1), ('eq.replacement_event_list=[ulp]/all', 1)]
+    {"k": 2, "bseed": 979983, "names": ["eq.repair_rate=huge/all", "mat.refresh_cycle=one/all", "eq.replacement_event_list=[ulp]/all"], "mseed": 377413, "T": 2.5, "finding": {"kind": "numeric", "mode": "full", "unit": "X-07", "path": "cumulative[1]", "err": 3.430352899508615e-08, "ref": 3638046.0057014856, "cand": 3638045.2673107134, "scale": 2.152521311272559e+16}}
+
+== ('numeric', 'full', 'X-04', 'grid_co2e') count 1
+   muts: [('grid.table!=descriptor(one entry)', 1), ('mat.repair_rate=huge/all', 1), ('mat.end_of_life.mass_kg=None/all', 1), ('mat.material_life=huge/one', 1)]
+    {"k": 0, "bseed": 467479, "names": ["grid.table!=descriptor(one entry)", "mat.repair_rate=huge/all", "mat.end_of_life.mass_kg=None/all", "mat.material_life=huge/one"], "mseed": 907879, "T": 60.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "grid_co2e", "err": 1.6413745674664276e-07, "ref": 6825498.176479617, "cand": 6882806.577994539, "scale": 3.491488332451845e+20}}
+
+== ('numeric', 'summary', 'X-04', 'grid_co2e') count 1
+   muts: [('grid.table!=descriptor(one entry)', 1), ('mat.repair_rate=huge/all', 1), ('mat.end_of_life.mass_kg=None/all', 1), ('mat.material_life=huge/one', 1)]
+    {"k": 0, "bseed": 467479, "names": ["grid.table!=descriptor(one entry)", "mat.repair_rate=huge/all", "mat.end_of_life.mass_kg=None/all", "mat.material_life=huge/one"], "mseed": 907879, "T": 60.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "grid_co2e", "err": 1.6413745674664276e-07, "ref": 6825498.176479617, "cand": 6882806.577994539, "scale": 3.491488332451845e+20}}
+
+== ('numeric', 'full', 'X-04', 'co2e_from_gases') count 1
+   muts: [('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('dev.charge_mass_kg=huge/one', 1)]
+    {"k": 3, "bseed": 554258, "names": ["eq.service_life=int1/one", "mat.end_of_life.haul_distance_km=neg/all", "profile.table_clamped_at_zero(linear negative)/all", "dev.charge_mass_kg=huge/one"], "mseed": 109823, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "co2e_from_gases", "err": 1.369284252672221, "ref": 960930.0411087304, "cand": -424059.4601699752, "scale": 1011469677370374.1}}
+
+== ('numeric', 'full', 'X-05', 'value') count 1
+   muts: [('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('dev.charge_mass_kg=huge/one', 1)]
+    {"k": 3, "bseed": 554258, "names": ["eq.service_life=int1/one", "mat.end_of_life.haul_distance_km=neg/all", "profile.table_clamped_at_zero(linear negative)/all", "dev.charge_mass_kg=huge/one"], "mseed": 109823, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "value", "err": 1.1737824707613251, "ref": 870903.8046297978, "cand": -316341.57237416046, "scale": 1011469677370374.1}}
+
+== ('numeric', 'summary', 'X-04', 'co2e_from_gases') count 1
+   muts: [('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('dev.charge_mass_kg=huge/one', 1)]
+    {"k": 3, "bseed": 554258, "names": ["eq.service_life=int1/one", "mat.end_of_life.haul_distance_km=neg/all", "profile.table_clamped_at_zero(linear negative)/all", "dev.charge_mass_kg=huge/one"], "mseed": 109823, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "co2e_from_gases", "err": 1.369284252672221, "ref": 960930.0411087304, "cand": -424059.4601699752, "scale": 1011469677370374.1}}
+
+== ('numeric', 'summary', 'X-05', 'value') count 1
+   muts: [('eq.service_life=int1/one', 1), ('mat.end_of_life.haul_distance_km=neg/all', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('dev.charge_mass_kg=huge/one', 1)]
+    {"k": 3, "bseed": 554258, "names": ["eq.service_life=int1/one", "mat.end_of_life.haul_distance_km=neg/all", "profile.table_clamped_at_zero(linear negative)/all", "dev.charge_mass_kg=huge/one"], "mseed": 109823, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "value", "err": 1.1737824707613251, "ref": 870903.8046297978, "cand": -316341.57237416046, "scale": 1011469677370374.1}}
+
+== ('numeric', 'full', 'X-04', 'by_gas.SF6') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1), ('eq.eol_factor_id=None/one', 1), ('mat.end_of_life.mass_kg=tiny/one', 1), ('eq.replacement_event_list=lastyear/all', 1)]
+    {"k": 0, "bseed": 910561, "names": ["profile.constant_with_nonzero_slope/all", "eq.eol_factor_id=None/one", "mat.end_of_life.mass_kg=tiny/one", "eq.replacement_event_list=lastyear/all"], "mseed": 865631, "T": 60.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_gas.SF6", "err": 0.022560470390413728, "ref": 12.090506497930315, "cand": 12.363274011781977, "scale": 8620548.758181533}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B4') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1), ('eq.eol_factor_id=None/one', 1), ('mat.end_of_life.mass_kg=tiny/one', 1), ('eq.replacement_event_list=lastyear/all', 1)]
+    {"k": 0, "bseed": 910561, "names": ["profile.constant_with_nonzero_slope/all", "eq.eol_factor_id=None/one", "mat.end_of_life.mass_kg=tiny/one", "eq.replacement_event_list=lastyear/all"], "mseed": 865631, "T": 60.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B4", "err": 0.0030251092071003887, "ref": 0.09005265188227261, "cand": 0.08978023277593974, "scale": 8620548.758181533}}
+
+== ('numeric', 'summary', 'X-04', 'by_gas.SF6') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1), ('eq.eol_factor_id=None/one', 1), ('mat.end_of_life.mass_kg=tiny/one', 1), ('eq.replacement_event_list=lastyear/all', 1)]
+    {"k": 0, "bseed": 910561, "names": ["profile.constant_with_nonzero_slope/all", "eq.eol_factor_id=None/one", "mat.end_of_life.mass_kg=tiny/one", "eq.replacement_event_list=lastyear/all"], "mseed": 865631, "T": 60.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_gas.SF6", "err": 0.022560470390413728, "ref": 12.090506497930315, "cand": 12.363274011781977, "scale": 8620548.758181533}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B4') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1), ('eq.eol_factor_id=None/one', 1), ('mat.end_of_life.mass_kg=tiny/one', 1), ('eq.replacement_event_list=lastyear/all', 1)]
+    {"k": 0, "bseed": 910561, "names": ["profile.constant_with_nonzero_slope/all", "eq.eol_factor_id=None/one", "mat.end_of_life.mass_kg=tiny/one", "eq.replacement_event_list=lastyear/all"], "mseed": 865631, "T": 60.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B4", "err": 0.0030251092071003887, "ref": 0.09005265188227261, "cand": 0.08978023277593974, "scale": 8620548.758181533}}
+
+== ('numeric', 'full', 'X-04', 'by_gas.CH4') count 1
+   muts: [('eq.end_of_life_mass_kg=neg/one', 1), ('dev.service_life=int1/all', 1), ('profile.table!=descriptor(one entry)/one', 1), ('mat.material_life=huge/all', 1)]
+    {"k": 4, "bseed": 842091, "names": ["eq.end_of_life_mass_kg=neg/one", "dev.service_life=int1/all", "profile.table!=descriptor(one entry)/one", "mat.material_life=huge/all"], "mseed": 953650, "T": 100.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_gas.CH4", "err": 0.0006961448398960375, "ref": 159.6770081136281, "cand": 159.56584978837975, "scale": 30192144.777452856}}
+
+== ('numeric', 'summary', 'X-04', 'by_gas.CH4') count 1
+   muts: [('eq.end_of_life_mass_kg=neg/one', 1), ('dev.service_life=int1/all', 1), ('profile.table!=descriptor(one entry)/one', 1), ('mat.material_life=huge/all', 1)]
+    {"k": 4, "bseed": 842091, "names": ["eq.end_of_life_mass_kg=neg/one", "dev.service_life=int1/all", "profile.table!=descriptor(one entry)/one", "mat.material_life=huge/all"], "mseed": 953650, "T": 100.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_gas.CH4", "err": 0.0006961448398960375, "ref": 159.6770081136281, "cand": 159.56584978837975, "scale": 30192144.777452856}}
+
+#### per mutation (only those with differences)
+baseline=comparable: 3/21  [('SUM-08:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+baseline=not_comparable: 2/14  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+baseline=stages_same_set_different_order_or_dups: 3/14  [('SUM-08:numeric', 4), ('SYS-03:mismatch', 2)]
+baseline=zero_or_negative_total: 1/17  [('B1-02:numeric', 2)]
+boundary.gas_scope=CO2_ONLY: 4/11  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+boundary.included=variants: 3/24  [('SYS-03:mismatch', 6)]
+boundary.replacement=variants: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+boundary.study_period=changed_after_generation: 2/24  [('SYS-03:mismatch', 4)]
+construction.electricity_kwh=None|0|neg: 1/17  [('SYS-03:mismatch', 2)]
+construction.fuels.quantity|unit|factor: 8/23  [('SYS-03:mismatch', 16)]
+construction.lists=empty: 1/17  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+construction.waste.mass|factor: 4/18  [('B3-01:numeric', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+dev.annual_leak_rate=0.3/all: 5/23  [('B1-02:numeric', 2), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+dev.annual_leak_rate=0.3/one: 3/24  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+dev.annual_leak_rate=0.5/all: 1/24  [('SYS-03:mismatch', 2)]
+dev.annual_leak_rate=0.5/one: 3/31  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+dev.annual_leak_rate=0.999999/one: 2/20  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('X-07:numeric', 1)]
+dev.annual_leak_rate=0/all: 2/11  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.annual_leak_rate=0/one: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=1-1e-12/one: 4/17  [('SYS-03:mismatch', 8), ('SYS-03:missing', 4)]
+dev.annual_leak_rate=1.5/all: 1/19  [('SYS-03:mismatch', 2)]
+dev.annual_leak_rate=1.5/one: 3/28  [('B6-01:numeric', 1), ('SYS-03:mismatch', 2), ('X-07:numeric', 1), ('crash_asym:crash_asym', 1)]
+dev.annual_leak_rate=1e-12/all: 4/14  [('B1-02:numeric', 8)]
+dev.annual_leak_rate=1e-12/one: 2/16  [('SUM-08:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=1e-4/all: 1/13  [('SYS-03:mismatch', 2)]
+dev.annual_leak_rate=1e-4/one: 6/23  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 8), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1), ('crash_asym:crash_asym', 1)]
+dev.annual_leak_rate=1e-6/all: 3/26  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=1e-6/one: 2/17  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+dev.annual_leak_rate=1e-9/all: 8/22  [('B1-02:numeric', 8), ('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+dev.annual_leak_rate=1e-9/one: 2/18  [('B1-02:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=None/all: 2/21  [('SYS-03:mismatch', 4)]
+dev.annual_leak_rate=huge/all: 6/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 4)]
+dev.annual_leak_rate=huge/one: 2/12  [('crash_asym:crash_asym', 2)]
+dev.annual_leak_rate=int0/all: 1/18  [('SYS-03:mismatch', 2)]
+dev.annual_leak_rate=int0/one: 1/19  [('SYS-03:mismatch', 2)]
+dev.annual_leak_rate=neg/all: 1/26  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=one/all: 1/17  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=one/one: 2/15  [('B1-02:numeric', 1), ('SYS-03:mismatch', 2)]
+dev.annual_leak_rate=tiny/all: 8/25  [('B1-02:numeric', 10), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+dev.annual_leak_rate=tiny/one: 4/20  [('B1-02:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.both_None_life_and_list/all: 2/17  [('SYS-03:mismatch', 4)]
+dev.change_years=None/all: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.change_years=None/one: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.change_years=[-5]/all: 6/28  [('B1-02:numeric', 2), ('B2-01:numeric', 4), ('B6-01:numeric', 2), ('B6-03:numeric', 4), ('SUM-02:numeric', 4), ('SUM-03:numeric', 4), ('SUM-04:numeric', 4), ('SUM-05:numeric', 4), ('SUM-06:numeric', 4), ('SUM-07:numeric', 4), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2), ('X-02:numeric', 4), ('X-04:numeric', 4), ('X-05:numeric', 4), ('X-07:numeric', 4), ('X-11:numeric', 2)]
+dev.change_years=[-5]/one: 2/23  [('B6-01:numeric', 1), ('SYS-03:mismatch', 2), ('X-07:numeric', 1)]
+dev.change_years=[0]/all: 1/16  [('SYS-03:mismatch', 2)]
+dev.change_years=[0]/one: 1/18  [('SYS-03:mismatch', 2)]
+dev.change_years=[T-ulp]/all: 2/14  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.change_years=[T-ulp]/one: 1/21  [('SYS-03:mismatch', 2)]
+dev.change_years=[T]/all: 4/24  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+dev.change_years=[T]/one: 2/14  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.change_years=[ulp]/all: 1/20  [('SYS-03:mismatch', 2)]
+dev.change_years=[ulp]/one: 3/18  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+dev.change_years=dups/all: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.change_years=dups/one: 3/22  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('crash_asym:crash_asym', 1)]
+dev.change_years=empty/all: 1/17  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.change_years=empty/one: 1/16  [('crash_asym:crash_asym', 1)]
+dev.change_years=intfloatmix/all: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.change_years=intfloatmix/one: 2/14  [('SUM-08:numeric', 2), ('SYS-03:mismatch', 2)]
+dev.change_years=ints/all: 1/12  [('crash_asym:crash_asym', 1)]
+dev.change_years=ints/one: 2/13  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.change_years=lastyear/all: 3/11  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+dev.change_years=lastyear/one: 1/14  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.change_years=mix_outside/all: 1/23  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.change_years=mix_outside/one: 1/20  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.change_years=nonint/all: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.change_years=nonint/one: 1/12  [('B3-01:numeric', 1)]
+dev.change_years=sameyear/all: 4/25  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+dev.change_years=unsorted/all: 1/16  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.charge_mass_kg=0/one: 1/13  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.charge_mass_kg=None/all: 1/15  [('SYS-03:mismatch', 2)]
+dev.charge_mass_kg=None/one: 1/19  [('SYS-03:mismatch', 2)]
+dev.charge_mass_kg=huge/all: 3/21  [('SYS-03:mismatch', 6)]
+dev.charge_mass_kg=huge/one: 2/16  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.charge_mass_kg=int0/all: 2/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.charge_mass_kg=int0/one: 1/27  [('SYS-03:mismatch', 2)]
+dev.charge_mass_kg=neg/all: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.charge_mass_kg=neg/one: 2/11  [('B6-03:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2)]
+dev.charge_mass_kg=one/all: 3/27  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+dev.charge_mass_kg=one/one: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.charge_mass_kg=tiny/all: 1/12  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.charge_mass_kg=tiny/one: 1/12  [('SYS-03:mismatch', 2)]
+dev.end_of_life_recovery_rate=0/one: 2/23  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.end_of_life_recovery_rate=1/all: 1/16  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.end_of_life_recovery_rate=1/one: 4/24  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 8), ('SYS-03:missing', 3), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+dev.end_of_life_recovery_rate=2/all: 3/19  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+dev.end_of_life_recovery_rate=2/one: 5/17  [('B1-02:numeric', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+dev.end_of_life_recovery_rate=None/all: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.end_of_life_recovery_rate=None/one: 3/21  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+dev.end_of_life_recovery_rate=neg/one: 5/24  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 8), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2)]
+dev.gwp=0/all: 3/20  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+dev.gwp=None/all: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.gwp=None/one: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.gwp=huge/all: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.gwp=huge/one: 1/26  [('SYS-03:mismatch', 2)]
+dev.gwp=int0/one: 1/21  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.gwp=neg/all: 3/14  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+dev.gwp=neg/one: 2/14  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.gwp=one/all: 1/14  [('B3-01:numeric', 1), ('X-07:numeric', 1)]
+dev.gwp=one/one: 1/27  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+dev.gwp=tiny/one: 2/22  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+dev.leak_extremes_mix: 9/29  [('B1-02:numeric', 6), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 4), ('B7-04:numeric', 4), ('SUM-02:numeric', 2), ('SUM-03:numeric', 6), ('SUM-04:numeric', 6), ('SUM-05:numeric', 6), ('SUM-06:numeric', 6), ('SUM-07:numeric', 6), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-02:numeric', 6), ('X-04:numeric', 6), ('X-05:numeric', 6), ('X-07:numeric', 4)]
+dev.replacement_loss_rate=0/all: 3/22  [('B1-02:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.replacement_loss_rate=0/one: 2/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.replacement_loss_rate=1/all: 1/19  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+dev.replacement_loss_rate=1/one: 2/18  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.replacement_loss_rate=2/one: 1/17  [('SYS-03:mismatch', 2)]
+dev.replacement_loss_rate=None/all: 1/23  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+dev.replacement_loss_rate=None/one: 3/16  [('SYS-03:mismatch', 6)]
+dev.replacement_loss_rate=neg/all: 5/23  [('SYS-03:mismatch', 10), ('SYS-03:missing', 2)]
+dev.replacement_loss_rate=neg/one: 3/14  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+dev.service_life=0.1/all: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.service_life=0.3/all: 2/10  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.service_life=0.3/one: 2/9  [('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+dev.service_life=0.5/all: 2/21  [('SYS-03:mismatch', 4)]
+dev.service_life=0.5/one: 3/21  [('SYS-03:mismatch', 6)]
+dev.service_life=0.999999999/all: 3/19  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+dev.service_life=0.999999999/one: 3/20  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.service_life=0/all: 4/20  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+dev.service_life=0/one: 2/13  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+dev.service_life=1.1/all: 1/12  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.service_life=1.1/one: 4/19  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+dev.service_life=None/all: 1/20  [('SYS-03:mismatch', 2)]
+dev.service_life=None/one: 3/21  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.service_life=T+ulp/all: 4/18  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+dev.service_life=T+ulp/one: 1/22  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+dev.service_life=T-ulp/all: 3/21  [('B1-02:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.service_life=T-ulp/one: 3/29  [('B1-02:numeric', 2), ('SYS-03:mismatch', 4)]
+dev.service_life=T/2/all: 1/23  [('SYS-03:mismatch', 2)]
+dev.service_life=T/7/all: 2/19  [('B6-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+dev.service_life=T/7/one: 2/30  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+dev.service_life=T/all: 2/17  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2)]
+dev.service_life=T/one: 1/15  [('SYS-03:mismatch', 2)]
+dev.service_life=huge/all: 2/27  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.service_life=huge/one: 3/21  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+dev.service_life=int0/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.service_life=int0/one: 4/21  [('SYS-03:mismatch', 8)]
+dev.service_life=int1/all: 2/13  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+dev.service_life=int1/one: 1/16  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.service_life=int10/all: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.service_life=int10/one: 2/26  [('SYS-03:mismatch', 4)]
+dev.service_life=neg/all: 1/17  [('B1-02:numeric', 2)]
+dev.service_life=neg/one: 3/21  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+dev.service_life=one/one: 1/15  [('SYS-03:mismatch', 2)]
+dev.top_up=False/all: 1/17  [('SYS-03:mismatch', 2)]
+dev.top_up=False/half: 2/24  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+dev.top_up=None/all: 2/20  [('B1-02:numeric', 1), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+dev.top_up=None/half: 2/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+dev.top_up=True/all: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.top_up=True/half: 1/10  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+dev.top_up=int0/all: 3/22  [('SYS-03:mismatch', 6)]
+dev.top_up=int1/all: 3/25  [('SYS-03:mismatch', 6), ('SYS-03:missing', 3)]
+dev.top_up=int1/half: 3/10  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eol.demolition.quantity|unit|factor: 4/17  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+eol.hauls.mass|dist|factor: 8/26  [('SYS-03:mismatch', 16), ('SYS-03:missing', 3)]
+eol.lists=empty: 1/14  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.both_None_life_and_list/all: 6/25  [('SYS-03:mismatch', 12), ('SYS-03:missing', 3)]
+eq.delivery_factor_id=None/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.delivery_factor_id=None/one: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.delivery_factor_id=dangling/all: 11/11  [('B1-02:numeric', 1), ('SYS-03:mismatch', 22), ('SYS-03:missing', 11)]
+eq.delivery_factor_id=dangling/one: 17/17  [('SYS-03:mismatch', 34)]
+eq.end_of_life_mass_kg=0/all: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.end_of_life_mass_kg=0/one: 2/17  [('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+eq.end_of_life_mass_kg=None/all: 2/19  [('SYS-03:mismatch', 4)]
+eq.end_of_life_mass_kg=None/one: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.end_of_life_mass_kg=huge/all: 2/16  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+eq.end_of_life_mass_kg=huge/one: 1/17  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+eq.end_of_life_mass_kg=int0/all: 1/12  [('B6-03:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2)]
+eq.end_of_life_mass_kg=int0/one: 2/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+eq.end_of_life_mass_kg=neg/all: 2/18  [('B1-02:numeric', 2), ('SYS-03:mismatch', 2)]
+eq.end_of_life_mass_kg=neg/one: 5/10  [('B6-01:numeric', 2), ('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SUM-08:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 3)]
+eq.end_of_life_mass_kg=one/all: 2/20  [('SYS-03:mismatch', 4)]
+eq.end_of_life_mass_kg=one/one: 2/18  [('B6-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+eq.end_of_life_mass_kg=tiny/all: 3/22  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+eq.end_of_life_mass_kg=tiny/one: 3/24  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+eq.eol_factor_id=None/all: 1/19  [('SYS-03:mismatch', 2)]
+eq.eol_factor_id=None/one: 2/19  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.eol_factor_id=dangling/all: 11/12  [('SYS-03:mismatch', 22), ('SYS-03:missing', 11)]
+eq.eol_factor_id=dangling/one: 18/18  [('SYS-03:mismatch', 36)]
+eq.factor_id=None/all: 4/16  [('B2-01:numeric', 4), ('B6-01:numeric', 3), ('B6-03:numeric', 4), ('SUM-02:numeric', 4), ('SUM-03:numeric', 4), ('SUM-04:numeric', 4), ('SUM-05:numeric', 4), ('SUM-06:numeric', 4), ('SUM-07:numeric', 4), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 4), ('X-04:numeric', 4), ('X-05:numeric', 4), ('X-07:numeric', 5)]
+eq.factor_id=dangling/all: 18/18  [('SYS-03:mismatch', 36), ('SYS-03:missing', 18)]
+eq.factor_id=dangling/one: 19/19  [('SYS-03:mismatch', 38), ('SYS-03:missing', 1)]
+eq.installation_factor_id=None/one: 2/30  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.installation_factor_id=dangling/all: 20/20  [('B3-01:numeric', 1), ('SYS-03:mismatch', 40), ('SYS-03:missing', 20), ('X-07:numeric', 1)]
+eq.installation_factor_id=dangling/one: 18/18  [('SYS-03:mismatch', 36)]
+eq.quantity=0/one: 6/21  [('B3-01:numeric', 1), ('SYS-03:mismatch', 10), ('SYS-03:missing', 2), ('X-07:numeric', 1)]
+eq.quantity=None/all: 2/17  [('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+eq.quantity=huge/all: 4/21  [('B6-01:numeric', 1), ('SUM-08:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+eq.quantity=huge/one: 2/10  [('SYS-03:mismatch', 4)]
+eq.quantity=int0/all: 1/16  [('SYS-03:mismatch', 2)]
+eq.quantity=int0/one: 1/19  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.quantity=neg/all: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.quantity=neg/one: 1/11  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.quantity=one/all: 1/16  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.quantity=one/one: 1/17  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.quantity=tiny/all: 5/26  [('SYS-03:mismatch', 10), ('SYS-03:missing', 1)]
+eq.quantity=tiny/one: 2/15  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.quantity_unit=furlong/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+eq.quantity_unit=furlong/one: 2/14  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.quantity_unit=kg/one: 2/13  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.repair_rate=0.5/one: 4/20  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.repair_rate=0.999999/one: 1/17  [('SYS-03:mismatch', 2)]
+eq.repair_rate=0/all: 1/15  [('SYS-03:mismatch', 2)]
+eq.repair_rate=0/one: 5/20  [('B1-02:numeric', 2), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 8), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.repair_rate=1.5/one: 2/18  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('X-07:numeric', 1)]
+eq.repair_rate=1e-4/all: 2/21  [('B1-02:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.repair_rate=1e-4/one: 1/19  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.repair_rate=1e-6/all: 2/14  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.repair_rate=1e-9/one: 1/22  [('SYS-03:mismatch', 2)]
+eq.repair_rate=None/all: 2/23  [('SYS-03:mismatch', 4)]
+eq.repair_rate=None/one: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.repair_rate=huge/all: 4/14  [('B3-01:numeric', 2), ('B6-03:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.repair_rate=huge/one: 7/18  [('B2-01:numeric', 2), ('B3-01:numeric', 5), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 6)]
+eq.repair_rate=int0/all: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+eq.repair_rate=int0/one: 3/19  [('SYS-03:mismatch', 6)]
+eq.repair_rate=neg/all: 1/14  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.repair_rate=one/all: 2/20  [('B3-01:numeric', 1), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.repair_rate=one/one: 5/22  [('B1-02:numeric', 2), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.repair_rate=tiny/all: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.repair_rate=tiny/one: 2/16  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.replacement_event_list=None/all: 3/24  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+eq.replacement_event_list=None/one: 2/16  [('B3-01:numeric', 1), ('X-07:numeric', 1), ('crash_asym:crash_asym', 1)]
+eq.replacement_event_list=[-5]/all: 1/16  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=[-5]/one: 1/21  [('crash_asym:crash_asym', 1)]
+eq.replacement_event_list=[0]/all: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.replacement_event_list=[0]/one: 2/13  [('SYS-03:mismatch', 4)]
+eq.replacement_event_list=[T-ulp]/all: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.replacement_event_list=[T-ulp]/one: 1/19  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=[T]/all: 1/21  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=[T]/one: 4/22  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+eq.replacement_event_list=[ulp]/all: 2/20  [('B1-02:numeric', 1), ('B3-01:numeric', 1), ('X-07:numeric', 1)]
+eq.replacement_event_list=[ulp]/one: 2/16  [('B1-02:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.replacement_event_list=dups/all: 2/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.replacement_event_list=dups/one: 4/23  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+eq.replacement_event_list=empty/all: 3/24  [('B1-02:numeric', 3), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.replacement_event_list=empty/one: 3/21  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.replacement_event_list=intfloatmix/one: 2/16  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.replacement_event_list=ints/all: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.replacement_event_list=ints/one: 1/25  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.replacement_event_list=lastyear/all: 3/16  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.replacement_event_list=lastyear/one: 1/17  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=mix_outside/all: 4/23  [('B3-01:numeric', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+eq.replacement_event_list=mix_outside/one: 2/20  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.replacement_event_list=nonint/all: 1/16  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=nonint/one: 2/22  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.replacement_event_list=sameyear/all: 1/23  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=sameyear/one: 2/14  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2)]
+eq.replacement_event_list=unsorted/all: 1/18  [('SYS-03:mismatch', 2)]
+eq.replacement_event_list=unsorted/one: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+eq.service_life=0.1/all: 1/20  [('SYS-03:mismatch', 2)]
+eq.service_life=0.1/one: 4/29  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.service_life=0.3/all: 4/16  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+eq.service_life=0.3/one: 1/18  [('SYS-03:mismatch', 2)]
+eq.service_life=0.5/all: 3/20  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+eq.service_life=0.5/one: 1/25  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.service_life=0.999999999/all: 5/26  [('B1-02:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+eq.service_life=0.999999999/one: 1/19  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+eq.service_life=0/all: 1/22  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.service_life=0/one: 2/29  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.service_life=1.1/all: 1/20  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.service_life=1.1/one: 5/19  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 8), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+eq.service_life=None/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.service_life=None/one: 4/19  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('crash_asym:crash_asym', 1)]
+eq.service_life=T+ulp/all: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+eq.service_life=T+ulp/one: 2/18  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+eq.service_life=T-ulp/all: 1/20  [('SYS-03:mismatch', 2)]
+eq.service_life=T-ulp/one: 1/14  [('SYS-03:mismatch', 2)]
+eq.service_life=T/2/all: 3/16  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+eq.service_life=T/2/one: 4/22  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+eq.service_life=T/3/all: 2/13  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.service_life=T/3/one: 2/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.service_life=T/7/all: 4/17  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.service_life=T/7/one: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.service_life=T/all: 1/16  [('B3-01:numeric', 1), ('X-07:numeric', 1)]
+eq.service_life=T/one: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+eq.service_life=huge/all: 3/21  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2)]
+eq.service_life=huge/one: 1/15  [('SYS-03:mismatch', 2)]
+eq.service_life=int0/all: 2/20  [('SYS-03:mismatch', 4)]
+eq.service_life=int0/one: 1/22  [('SYS-03:mismatch', 2)]
+eq.service_life=int1/one: 3/20  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+eq.service_life=int10/all: 5/15  [('SYS-03:mismatch', 10), ('SYS-03:missing', 2)]
+eq.service_life=int10/one: 1/13  [('SYS-03:mismatch', 2)]
+eq.service_life=neg/all: 2/20  [('B1-02:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.service_life=neg/one: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.service_life=one/all: 1/24  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+eq.service_life=one/one: 1/11  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+factors.delete_random/one: 7/12  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 12), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+factors.licence=bad/all: 2/13  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+factors.licence=random_bad/some: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+factors.release_year=changed/one: 1/10  [('SYS-03:mismatch', 2)]
+factors.source_url=empty/some: 2/18  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+factors.unit=changed/some: 1/18  [('SYS-03:mismatch', 2)]
+factors.value=0|neg|huge/some: 3/18  [('SUM-08:numeric', 2), ('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+gases=reordered|subset: 2/27  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+grid.steps=duplicate_from_index: 3/3  [('B2-01:numeric', 4), ('B6-01:numeric', 3), ('B6-03:numeric', 4), ('SUM-02:numeric', 4), ('SUM-03:numeric', 4), ('SUM-04:numeric', 4), ('SUM-05:numeric', 4), ('SUM-06:numeric', 4), ('SUM-07:numeric', 4), ('X-02:numeric', 4), ('X-04:numeric', 4), ('X-05:numeric', 4), ('X-07:numeric', 5), ('X-11:numeric', 4)]
+grid.steps=first_from_index>0: 8/8  [('crash_asym:crash_asym', 8)]
+grid.steps=negative_and_beyond: 10/10  [('B2-01:numeric', 8), ('B6-01:numeric', 10), ('B6-03:numeric', 8), ('B7-04:numeric', 2), ('SUM-02:numeric', 8), ('SUM-03:numeric', 8), ('SUM-04:numeric', 8), ('SUM-05:numeric', 8), ('SUM-06:numeric', 8), ('SUM-07:numeric', 8), ('X-02:numeric', 8), ('X-04:numeric', 8), ('X-05:numeric', 8), ('X-07:numeric', 14)]
+grid.steps=unsorted: 4/5  [('B2-01:numeric', 4), ('B6-01:numeric', 2), ('B6-03:numeric', 4), ('SUM-02:numeric', 4), ('SUM-03:numeric', 4), ('SUM-04:numeric', 4), ('SUM-05:numeric', 4), ('SUM-06:numeric', 4), ('SUM-07:numeric', 4), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-02:numeric', 4), ('X-04:numeric', 4), ('X-05:numeric', 4), ('X-07:numeric', 4), ('X-11:numeric', 4)]
+grid.table!=descriptor(one entry): 22/26  [('B2-01:numeric', 34), ('B6-01:numeric', 22), ('B6-03:numeric', 34), ('SUM-02:numeric', 30), ('SUM-03:numeric', 30), ('SUM-04:numeric', 30), ('SUM-05:numeric', 30), ('SUM-06:numeric', 30), ('SUM-07:numeric', 32), ('SYS-03:mismatch', 4), ('X-02:numeric', 34), ('X-04:numeric', 34), ('X-05:numeric', 34), ('X-07:numeric', 36)]
+grid.table!=descriptor(rel 1e-12 boundary): 2/25  [('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+grid.to_linear(params): 3/20  [('B2-01:numeric', 2), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1), ('X-11:numeric', 4)]
+grid.to_stepwise_sorted: 6/21  [('B6-01:numeric', 1), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 8), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+grid.to_table: 2/22  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+gwp=zero|neg|changed: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.composition.component=None|dangling|unlicensed|wrongunit/one: 9/16  [('SYS-03:mismatch', 18), ('SYS-03:missing', 2)]
+mat.composition.fraction_boundary/all: 3/29  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.composition.repeat_component/all: 1/21  [('SYS-03:mismatch', 2)]
+mat.composition.same_spec_different_content: 1/21  [('SYS-03:mismatch', 2)]
+mat.composition=None/one: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.composition=empty/all: 5/19  [('B1-02:numeric', 1), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 4), ('B7-04:numeric', 4), ('SUM-02:numeric', 2), ('SUM-03:numeric', 6), ('SUM-04:numeric', 6), ('SUM-05:numeric', 6), ('SUM-06:numeric', 6), ('SUM-07:numeric', 6), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 6), ('X-04:numeric', 6), ('X-05:numeric', 6), ('X-07:numeric', 4)]
+mat.composition=empty/one: 2/23  [('B3-01:numeric', 1), ('B6-01:numeric', 1), ('X-07:numeric', 2)]
+mat.composition_and_factor_dangling/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.construction_division=INTERIOR/half: 3/17  [('B1-02:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.construction_division=OPENINGS/half: 4/26  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.conversions=empty/all: 3/25  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('X-07:numeric', 1)]
+mat.delivery_factor=any_factor/half: 3/24  [('SYS-03:mismatch', 6)]
+mat.delivery_factor=valid_factor/half: 5/30  [('SYS-03:mismatch', 10), ('SYS-03:missing', 3)]
+mat.end_of_life.haul_distance_km=0/one: 5/19  [('B1-02:numeric', 2), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 3), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.end_of_life.haul_distance_km=huge/all: 3/18  [('SYS-03:mismatch', 6)]
+mat.end_of_life.haul_distance_km=neg/all: 3/16  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.end_of_life.haul_distance_km=neg/one: 2/24  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+mat.end_of_life.haul_factor_id=None/all: 3/20  [('SYS-03:mismatch', 6)]
+mat.end_of_life.haul_factor_id=None/one: 4/22  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2), ('crash_asym:crash_asym', 1)]
+mat.end_of_life.haul_factor_id=dangling/all: 23/23  [('SYS-03:mismatch', 46), ('SYS-03:missing', 23)]
+mat.end_of_life.haul_factor_id=dangling/one: 24/24  [('SYS-03:mismatch', 48)]
+mat.end_of_life.mass_kg=0/one: 4/13  [('SYS-03:mismatch', 8), ('SYS-03:missing', 3)]
+mat.end_of_life.mass_kg=None/all: 3/22  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2)]
+mat.end_of_life.mass_kg=None/one: 3/19  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+mat.end_of_life.mass_kg=huge/all: 1/12  [('B3-01:numeric', 1)]
+mat.end_of_life.mass_kg=huge/one: 3/23  [('SYS-03:mismatch', 6)]
+mat.end_of_life.mass_kg=int0/all: 2/19  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.end_of_life.mass_kg=neg/one: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.end_of_life.mass_kg=one/all: 2/13  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.end_of_life.mass_kg=one/one: 3/26  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+mat.end_of_life.mass_kg=tiny/all: 1/22  [('crash_asym:crash_asym', 1)]
+mat.end_of_life.mass_kg=tiny/one: 2/14  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.epd.factor_id=None|dangling/all: 20/20  [('SYS-03:mismatch', 40), ('SYS-03:missing', 18)]
+mat.epd=None/all: 3/21  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.epd=any_factor/half: 3/22  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.epd_on_composite/all: 3/19  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.factor_id=None/all: 1/16  [('SYS-03:mismatch', 2)]
+mat.factor_id=None/one: 1/21  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.factor_id=any_factor/half: 2/16  [('SYS-03:mismatch', 4)]
+mat.factor_id=dangling/all: 22/22  [('SYS-03:mismatch', 44), ('SYS-03:missing', 21)]
+mat.factor_id=dangling/one: 13/17  [('SYS-03:mismatch', 26)]
+mat.installation_factor=any_factor/all: 2/19  [('SYS-03:mismatch', 4)]
+mat.installation_factor_id=None/all: 2/17  [('B1-02:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.installation_factor_id=None/one: 7/14  [('B2-01:numeric', 4), ('B6-01:numeric', 2), ('B6-03:numeric', 4), ('B7-04:numeric', 2), ('SUM-02:numeric', 4), ('SUM-03:numeric', 4), ('SUM-04:numeric', 4), ('SUM-05:numeric', 4), ('SUM-06:numeric', 4), ('SUM-07:numeric', 4), ('SYS-03:mismatch', 10), ('SYS-03:missing', 2), ('X-02:numeric', 4), ('X-04:numeric', 4), ('X-05:numeric', 4), ('X-07:numeric', 4)]
+mat.installation_factor_id=dangling/all: 16/16  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 32), ('SYS-03:missing', 16), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.installation_factor_id=dangling/one: 14/14  [('SYS-03:mismatch', 28)]
+mat.make_composite_from_generic/half: 2/24  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.material_class=OTHERX/half: 3/21  [('B6-01:numeric', 1), ('SYS-03:mismatch', 4), ('X-07:numeric', 1)]
+mat.material_class=OTHERX/one: 1/23  [('SYS-03:mismatch', 2)]
+mat.material_class=REBAR/half: 1/21  [('SYS-03:mismatch', 2)]
+mat.material_class=REBAR/one: 1/17  [('SYS-03:mismatch', 2)]
+mat.material_class=TIMBER/half: 1/14  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.material_class=TIMBER/one: 5/25  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 10), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.material_life=0/all: 1/15  [('SYS-03:mismatch', 2)]
+mat.material_life=0/one: 5/26  [('SYS-03:mismatch', 10), ('SYS-03:missing', 2)]
+mat.material_life=None/one: 1/18  [('SYS-03:mismatch', 2)]
+mat.material_life=huge/all: 2/19  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.material_life=huge/one: 3/18  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2)]
+mat.material_life=int0/all: 3/24  [('B1-02:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.material_life=int0/one: 1/8  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2)]
+mat.material_life=neg/all: 1/15  [('SYS-03:mismatch', 2)]
+mat.material_life=neg/one: 2/12  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.material_life=one/all: 1/24  [('SYS-03:mismatch', 2)]
+mat.material_life=one/one: 4/19  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.material_life=tiny/all: 1/16  [('SYS-03:mismatch', 2)]
+mat.material_life=tiny/one: 4/15  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+mat.provenance_id=dangling/all: 2/18  [('SYS-03:mismatch', 4)]
+mat.provenance_id=dangling/one: 4/13  [('SUM-08:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+mat.provenance_id=empty/all: 1/21  [('SYS-03:mismatch', 2)]
+mat.provenance_id=empty/one: 3/17  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.quantity=0/all: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.quantity=0/one: 3/25  [('B2-01:numeric', 2), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1), ('X-11:numeric', 2)]
+mat.quantity=None/all: 1/15  [('SYS-03:mismatch', 2)]
+mat.quantity=None/one: 1/16  [('B1-02:numeric', 2)]
+mat.quantity=huge/all: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.quantity=int0/one: 2/17  [('SYS-03:mismatch', 4)]
+mat.quantity=neg/all: 1/23  [('SYS-03:mismatch', 2)]
+mat.quantity=neg/one: 2/16  [('SYS-03:mismatch', 4)]
+mat.quantity=one/all: 1/15  [('SYS-03:mismatch', 2)]
+mat.quantity=tiny/all: 2/16  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.quantity=tiny/one: 2/12  [('SYS-03:mismatch', 4)]
+mat.quantity_basis=DESIGN/all: 2/28  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.quantity_basis=ORDERED/all: 1/20  [('SYS-03:mismatch', 2)]
+mat.quantity_unit=furlong/all: 4/17  [('B2-01:numeric', 4), ('B6-01:numeric', 2), ('B6-03:numeric', 6), ('SUM-02:numeric', 4), ('SUM-03:numeric', 6), ('SUM-04:numeric', 6), ('SUM-05:numeric', 6), ('SUM-06:numeric', 6), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SUM-07:numeric', 4), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 6), ('X-04:numeric', 6), ('X-05:numeric', 6), ('X-07:numeric', 5)]
+mat.quantity_unit=furlong/one: 4/19  [('B1-02:numeric', 2), ('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+mat.quantity_unit=kg/all: 1/14  [('SYS-03:mismatch', 2)]
+mat.quantity_unit=m2/all: 2/25  [('B1-02:numeric', 1), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.quantity_unit=m2/one: 3/13  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.quantity_unit=m3/one: 4/25  [('B6-01:numeric', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+mat.quantity_unit=t/all: 1/22  [('SYS-03:mismatch', 2)]
+mat.refresh_cycle=0.1/all: 4/26  [('B2-01:numeric', 2), ('B3-01:numeric', 1), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 3), ('X-11:numeric', 2)]
+mat.refresh_cycle=0.1/one: 3/24  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4)]
+mat.refresh_cycle=0.3/all: 1/22  [('B1-02:numeric', 2)]
+mat.refresh_cycle=0.3/one: 2/17  [('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+mat.refresh_cycle=0.5/all: 4/21  [('B1-02:numeric', 1), ('B3-01:numeric', 1), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.refresh_cycle=0.5/one: 3/21  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.refresh_cycle=0.999999999/all: 1/15  [('B3-01:numeric', 1), ('X-07:numeric', 1)]
+mat.refresh_cycle=0.999999999/one: 2/16  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.refresh_cycle=0/all: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.refresh_cycle=0/one: 1/12  [('SYS-03:mismatch', 2)]
+mat.refresh_cycle=1.1/all: 1/17  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+mat.refresh_cycle=1.1/one: 1/15  [('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.refresh_cycle=None/all: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.refresh_cycle=T+ulp/all: 4/22  [('SYS-03:mismatch', 8), ('SYS-03:missing', 2)]
+mat.refresh_cycle=T+ulp/one: 1/16  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.refresh_cycle=T-ulp/all: 2/16  [('SYS-03:mismatch', 4)]
+mat.refresh_cycle=T-ulp/one: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.refresh_cycle=T/2/all: 1/15  [('SYS-03:mismatch', 2)]
+mat.refresh_cycle=T/2/one: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.refresh_cycle=T/3/all: 1/17  [('SYS-03:mismatch', 2)]
+mat.refresh_cycle=T/3/one: 1/18  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.refresh_cycle=T/7/one: 1/21  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('X-07:numeric', 1)]
+mat.refresh_cycle=T/all: 2/29  [('SYS-03:mismatch', 4)]
+mat.refresh_cycle=T/one: 1/11  [('SYS-03:mismatch', 2)]
+mat.refresh_cycle=huge/all: 3/21  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.refresh_cycle=int0/one: 3/20  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.refresh_cycle=int1/all: 2/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.refresh_cycle=int10/all: 2/20  [('SYS-03:mismatch', 4)]
+mat.refresh_cycle=int10/one: 3/18  [('SYS-03:mismatch', 6)]
+mat.refresh_cycle=neg/all: 1/12  [('SYS-03:mismatch', 2)]
+mat.refresh_cycle=neg/one: 3/18  [('B1-02:numeric', 2), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.refresh_cycle=one/all: 4/26  [('B3-01:numeric', 1), ('SYS-03:mismatch', 6), ('X-07:numeric', 1)]
+mat.refresh_cycle=one/one: 4/17  [('B3-01:numeric', 1), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.repair_rate=0.5/all: 2/19  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.repair_rate=0.999999/all: 1/17  [('SYS-03:mismatch', 2)]
+mat.repair_rate=0.999999/one: 1/16  [('SYS-03:mismatch', 2)]
+mat.repair_rate=0/all: 1/21  [('SYS-03:mismatch', 2)]
+mat.repair_rate=0/one: 2/20  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+mat.repair_rate=1.5/all: 3/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+mat.repair_rate=1.5/one: 4/24  [('B1-02:numeric', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.repair_rate=1e-4/all: 2/16  [('SYS-03:mismatch', 4)]
+mat.repair_rate=1e-4/one: 2/21  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.repair_rate=1e-6/all: 2/20  [('B2-01:numeric', 4), ('B6-01:numeric', 2), ('B6-03:numeric', 4), ('SUM-02:numeric', 4), ('SUM-03:numeric', 4), ('SUM-04:numeric', 4), ('SUM-05:numeric', 4), ('SUM-06:numeric', 4), ('SUM-07:numeric', 4), ('X-02:numeric', 4), ('X-04:numeric', 4), ('X-05:numeric', 4), ('X-07:numeric', 4)]
+mat.repair_rate=1e-9/all: 3/29  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.repair_rate=None/all: 4/14  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+mat.repair_rate=None/one: 5/21  [('SYS-03:mismatch', 10), ('SYS-03:missing', 2)]
+mat.repair_rate=huge/all: 4/25  [('B2-01:numeric', 2), ('B3-01:numeric', 1), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.repair_rate=huge/one: 9/24  [('B3-01:numeric', 8), ('SYS-03:mismatch', 4), ('X-07:numeric', 8)]
+mat.repair_rate=int0/all: 2/22  [('SYS-03:mismatch', 4)]
+mat.repair_rate=int0/one: 1/13  [('SYS-03:mismatch', 2)]
+mat.repair_rate=neg/all: 2/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.repair_rate=neg/one: 2/24  [('SYS-03:mismatch', 4)]
+mat.repair_rate=one/all: 1/13  [('SYS-03:mismatch', 2)]
+mat.repair_rate=one/one: 5/17  [('SYS-03:mismatch', 10), ('SYS-03:missing', 4)]
+mat.repair_rate=tiny/all: 1/17  [('SYS-03:mismatch', 2)]
+mat.repair_rate=tiny/one: 1/21  [('SYS-03:mismatch', 2)]
+mat.reuse_rate=0/all: 3/20  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.reuse_rate=0/one: 3/19  [('B6-01:numeric', 1), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+mat.reuse_rate=None/all: 1/13  [('SYS-03:mismatch', 2)]
+mat.reuse_rate=None/one: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.reuse_rate=huge/all: 4/19  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+mat.reuse_rate=huge/one: 2/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.reuse_rate=int0/all: 3/21  [('B2-01:numeric', 2), ('B6-01:numeric', 2), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 3)]
+mat.reuse_rate=int0/one: 1/11  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.reuse_rate=neg/one: 4/20  [('B6-01:numeric', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-07:numeric', 1)]
+mat.reuse_rate=one/all: 3/17  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.reuse_rate=one/one: 2/21  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.reuse_rate=tiny/all: 1/20  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.reuse_rate=tiny/one: 5/27  [('SYS-03:mismatch', 10), ('SYS-03:missing', 2)]
+mat.routes.duplicate_route/one: 1/19  [('SYS-03:mismatch', 2)]
+mat.routes.factor_id=None/one: 20/20  [('SYS-03:mismatch', 40)]
+mat.routes.factor_id=dangling/one: 13/13  [('B6-03:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 26), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.routes.fraction=all_landfill/all: 3/20  [('B1-02:numeric', 2), ('B6-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+mat.routes.fraction=boundary(1+1e-6)/all: 2/20  [('B2-01:numeric', 2), ('B3-01:numeric', 1), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.routes.fraction=neg/one: 1/6  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.routes=empty/one: 3/19  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.row_conversion_override/all: 1/15  [('SYS-03:mismatch', 2)]
+mat.states=DERIVED|MISSING|ESTIMATE|OBSERVED/all: 2/26  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.transport.delivery_factor_id=None/all: 3/11  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.transport.delivery_factor_id=dangling/all: 20/20  [('SYS-03:mismatch', 40), ('SYS-03:missing', 20)]
+mat.transport.delivery_factor_id=dangling/one: 15/16  [('SYS-03:mismatch', 30), ('SYS-03:missing', 3)]
+mat.transport.distance_km=0/all: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.transport.distance_km=0/one: 3/16  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.transport.distance_km=None/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.transport.distance_km=None/one: 2/19  [('SYS-03:mismatch', 4)]
+mat.transport.distance_km=huge/all: 4/21  [('SUM-08:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+mat.transport.distance_km=huge/one: 4/25  [('SYS-03:mismatch', 8)]
+mat.transport.distance_km=int0/all: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.transport.distance_km=int0/one: 3/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+mat.transport.distance_km=neg/one: 1/16  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+mat.transport.distance_km=one/all: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.transport.distance_km=one/one: 2/16  [('SYS-03:mismatch', 4)]
+mat.transport.distance_km=tiny/all: 1/24  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.transport.distance_km=tiny/one: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.transport.factor_id=None/all: 2/22  [('B3-01:numeric', 1), ('SYS-03:mismatch', 2), ('X-07:numeric', 1)]
+mat.transport.factor_id=dangling/all: 20/20  [('SYS-03:mismatch', 40), ('SYS-03:missing', 20)]
+mat.transport.factor_id=dangling/one: 19/22  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 38), ('SYS-03:missing', 3), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.transport.load_factor=0/all: 5/18  [('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:mismatch', 2), ('SUM-07:missing', 1), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1), ('crash_asym:crash_asym', 1)]
+mat.transport.load_factor=1e-9/all: 2/18  [('SYS-03:mismatch', 4)]
+mat.transport.load_factor=1e-9/one: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.transport.load_factor=2/all: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.transport.load_factor=2/one: 3/27  [('SYS-03:mismatch', 4), ('crash_asym:crash_asym', 1)]
+mat.transport.load_factor=None/one: 2/17  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.transport.load_factor=neg/all: 1/25  [('B6-01:numeric', 1), ('X-07:numeric', 1)]
+mat.transport.load_factor=neg/one: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.transport.mass_t=0/all: 2/16  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.transport.mass_t=0/one: 1/14  [('B3-01:numeric', 1), ('X-07:numeric', 1)]
+mat.transport.mass_t=None/all: 2/23  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.transport.mass_t=None/one: 4/23  [('B1-02:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.transport.mass_t=huge/all: 3/19  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.transport.mass_t=huge/one: 3/15  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.transport.mass_t=int0/one: 1/22  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.transport.mass_t=neg/all: 1/14  [('SYS-03:mismatch', 2)]
+mat.transport.mass_t=neg/one: 1/14  [('SYS-03:mismatch', 2)]
+mat.transport.mass_t=one/all: 3/17  [('SYS-03:mismatch', 6), ('SYS-03:missing', 3)]
+mat.transport.mass_t=one/one: 5/25  [('B6-01:numeric', 1), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 6), ('SYS-03:missing', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.transport.mass_t=tiny/all: 2/16  [('B1-02:numeric', 3)]
+mat.unquantified_cost_ratio=0.5/all: 3/23  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('X-07:numeric', 1)]
+mat.unquantified_cost_ratio=0.5/one: 2/20  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+mat.unquantified_cost_ratio=0.999/all: 2/20  [('SYS-03:mismatch', 4)]
+mat.unquantified_cost_ratio=0/all: 1/13  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.unquantified_cost_ratio=0/one: 1/15  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.unquantified_cost_ratio=None/all: 2/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.unquantified_cost_ratio=None/one: 1/11  [('SYS-03:mismatch', 2)]
+mat.unquantified_cost_ratio=huge/all: 2/20  [('B3-01:numeric', 1), ('X-07:numeric', 1), ('crash_asym:crash_asym', 1)]
+mat.unquantified_cost_ratio=neg/all: 3/25  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+mat.unquantified_cost_ratio=neg/one: 2/17  [('B1-02:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.unquantified_cost_ratio=one/one: 2/19  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.waste_rate=-0.1/all: 2/19  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.waste_rate=-0.1/one: 2/21  [('SYS-03:mismatch', 4)]
+mat.waste_rate=0.5/all: 3/27  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+mat.waste_rate=0.5/one: 4/18  [('SYS-03:mismatch', 8), ('SYS-03:missing', 1)]
+mat.waste_rate=0.999999/all: 1/22  [('SYS-03:mismatch', 2)]
+mat.waste_rate=0.999999/one: 2/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 2)]
+mat.waste_rate=0/all: 3/15  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.waste_rate=0/one: 4/32  [('B1-02:numeric', 4), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.waste_rate=None/all: 2/25  [('SYS-03:mismatch', 4)]
+mat.waste_rate=None/one: 3/18  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('crash_asym:crash_asym', 1)]
+mat.waste_rate=huge/all: 2/18  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+mat.waste_rate=huge/one: 1/15  [('B1-02:numeric', 2)]
+mat.waste_rate=int0/all: 1/16  [('crash_asym:crash_asym', 1)]
+mat.waste_rate=int0/one: 1/20  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+mat.waste_rate=neg/all: 3/21  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+mat.waste_rate=neg/one: 3/14  [('B3-01:numeric', 1), ('SYS-03:mismatch', 4), ('X-07:numeric', 1)]
+mat.waste_rate=one/one: 1/16  [('SYS-03:mismatch', 2)]
+mat.waste_rate=tiny/all: 2/14  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+mat.waste_rate=tiny/one: 1/15  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2), ('X-11:numeric', 2)]
+operation.all_factor_ids=None: 13/13  [('SYS-03:mismatch', 26), ('SYS-03:missing', 1)]
+operation.electricity_per_m2=0|neg: 2/21  [('B6-01:numeric', 1), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-07:numeric', 1)]
+operation.facility_management_ratio=0|1|neg|1.5: 3/16  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 4), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+operation.factor_ids=None|dangling|unlicensed: 11/24  [('B2-01:numeric', 4), ('B3-01:numeric', 1), ('B6-01:numeric', 2), ('B6-03:numeric', 4), ('B7-04:numeric', 2), ('SUM-02:numeric', 4), ('SUM-03:numeric', 6), ('SUM-04:numeric', 6), ('SUM-05:numeric', 6), ('SUM-06:numeric', 6), ('SUM-07:numeric', 6), ('SYS-03:mismatch', 22), ('SYS-03:missing', 1), ('X-02:numeric', 6), ('X-04:numeric', 6), ('X-05:numeric', 6), ('X-07:numeric', 6), ('X-11:numeric', 2)]
+profile.constant_with_nonzero_slope/all: 8/8  [('B1-02:numeric', 1), ('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 16), ('B7-04:numeric', 14), ('SUM-02:numeric', 2), ('SUM-03:numeric', 16), ('SUM-04:numeric', 16), ('SUM-05:numeric', 16), ('SUM-06:numeric', 16), ('SUM-07:numeric', 16), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 16), ('X-04:numeric', 16), ('X-05:numeric', 16), ('X-07:numeric', 9)]
+profile.kind=TABLE_keep_descriptor/all: 3/24  [('SYS-03:mismatch', 6), ('SYS-03:missing', 2)]
+profile.net_crosses_zero(linear): 2/18  [('B2-01:numeric', 2), ('B6-01:numeric', 1), ('B6-03:numeric', 2), ('SUM-02:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 2)]
+profile.table!=descriptor(one entry)/one: 8/14  [('B6-03:numeric', 8), ('B7-04:numeric', 8), ('SUM-03:numeric', 14), ('SUM-04:numeric', 14), ('SUM-05:numeric', 14), ('SUM-06:numeric', 14), ('SUM-07:numeric', 14), ('SYS-03:mismatch', 4), ('X-02:numeric', 16), ('X-04:numeric', 16), ('X-05:numeric', 16), ('X-07:numeric', 7)]
+profile.table_clamped_at_zero(linear negative)/all: 7/10  [('B1-02:numeric', 1), ('B6-03:numeric', 12), ('B7-04:numeric', 12), ('SUM-03:numeric', 14), ('SUM-04:numeric', 14), ('SUM-05:numeric', 14), ('SUM-06:numeric', 14), ('SUM-07:mismatch', 10), ('SUM-07:missing', 5), ('SUM-07:numeric', 4), ('X-02:numeric', 14), ('X-04:numeric', 14), ('X-05:numeric', 14), ('X-07:numeric', 7)]
+profile.to_table/all: 2/20  [('SYS-03:mismatch', 4), ('SYS-03:missing', 1)]
+profile.unit=unknown|convertible/one: 3/14  [('SYS-03:mismatch', 6), ('SYS-03:missing', 1)]
+project.assessment_date=late|early: 2/18  [('B1-02:numeric', 2), ('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+project.use_area_breakdown=variants: 3/13  [('B1-02:numeric', 2), ('SYS-03:mismatch', 2), ('crash_asym:crash_asym', 1)]
+provenance=empty: 1/20  [('B1-02:numeric', 2)]
+summary.concrete_uptake_factor=None|dangling|unlicensed|unit|nourl: 8/21  [('B1-02:numeric', 2), ('B6-03:numeric', 2), ('B7-04:numeric', 2), ('SUM-03:numeric', 2), ('SUM-04:numeric', 2), ('SUM-05:numeric', 2), ('SUM-06:numeric', 2), ('SUM-07:numeric', 2), ('SYS-03:mismatch', 12), ('X-02:numeric', 2), ('X-04:numeric', 2), ('X-05:numeric', 2), ('X-07:numeric', 1)]
+summary.quantities=0|neg|huge: 1/14  [('SYS-03:mismatch', 2)]
+summary.timber=variants: 1/18  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+unit_conversions+row_overrides_shadowing_table: 1/19  [('SYS-03:mismatch', 2), ('SYS-03:missing', 1)]
+unit_conversions=conflicting_duplicate_first: 1/20  [('crash_asym:crash_asym', 1)]
+unit_conversions=empty: 5/19  [('SYS-03:mismatch', 10), ('SYS-03:missing', 4)]

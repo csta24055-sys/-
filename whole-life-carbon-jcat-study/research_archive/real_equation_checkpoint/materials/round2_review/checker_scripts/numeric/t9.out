@@ -1,0 +1,35 @@
+=== (b) renewal period 1.000000001: minimal demonstrations
+T=60.0 material: B3-01 ref 859294.3560423767 unified full 790163.4198195644 totals 790163.4198195644 rel -8.045e-02; SUM-03 ref 21576994.14055635 unified 21507863.204333525 rel -3.204e-03; units failing the study's own comparison: ['B3-01', 'X-02', 'X-04', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-05', 'X-07']
+     unified full output: B3-01 value 790163.4198195644 vs sum of its own by_year 859294.3560423753 | X-07 value 21576994.140556343 vs SUM-03 21507863.204333525 | QA-01 {'ok': True, 'violations': []} ref QA-01 {'ok': True, 'violations': []}
+T=60.0 equipment: B3-01 ref 1138706.4458112828 unified full 1136391.4440984298 totals 1136391.4440984298 rel -2.033e-03; SUM-03 ref 11500582.413962925 unified 11498267.41225007 rel -2.013e-04; units failing the study's own comparison: ['B3-01', 'X-02', 'X-04', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-05', 'X-07']
+     unified full output: B3-01 value 1136391.4440984298 vs sum of its own by_year 1138706.445811284 | X-07 value 11500582.413962923 vs SUM-03 11498267.41225007 | QA-01 {'ok': True, 'violations': []} ref QA-01 {'ok': True, 'violations': []}
+T=30.0 material: B3-01 ref 417077.9168897662 unified full 398224.0251926373 totals 398224.0251926373 rel -4.520e-02; SUM-03 ref 11955674.613183547 unified 11936820.721486421 rel -1.577e-03; units failing the study's own comparison: ['B3-01', 'X-02', 'X-04', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-05', 'X-07']
+     unified full output: B3-01 value 398224.0251926373 vs sum of its own by_year 417077.9168897675 | X-07 value 11955674.613183549 vs SUM-03 11936820.721486421 | QA-01 {'ok': True, 'violations': []} ref QA-01 {'ok': True, 'violations': []}
+T=30.0 equipment: B3-01 ref 568932.3135033036 unified full 568300.9493997992 totals 568300.9493997992 rel -1.110e-03; SUM-03 ref 7020457.66140858 unified 7019826.2973050745 rel -8.993e-05; units failing the study's own comparison: ['B3-01', 'X-02', 'X-04', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-05', 'X-07']
+     unified full output: B3-01 value 568300.9493997992 vs sum of its own by_year 568932.3135033048 | X-07 value 7020457.66140858 vs SUM-03 7019826.2973050745 | QA-01 {'ok': True, 'violations': []} ref QA-01 {'ok': True, 'violations': []}
+T=62.5 material: B3-01 ref 893082.2348895258 unified full 823951.2986667133 totals 823951.2986667133 rel -7.741e-02; SUM-03 ref 22344739.914265677 unified 22275608.978042856 rel -3.094e-03; units failing the study's own comparison: ['B3-01', 'X-02', 'X-04', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-05', 'X-07']
+     unified full output: B3-01 value 823951.2986667133 vs sum of its own by_year 893082.2348895242 | X-07 value 22344739.91426567 vs SUM-03 22275608.978042856 | QA-01 {'ok': True, 'violations': []} ref QA-01 {'ok': True, 'violations': []}
+T=62.5 equipment: B3-01 ref 1187679.7643197856 unified full 1185364.7626069323 totals 1185364.7626069323 rel -1.949e-03; SUM-03 ref 11738470.268577695 unified 11736155.266864836 rel -1.972e-04; units failing the study's own comparison: ['B3-01', 'X-02', 'X-04', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-05', 'X-07']
+     unified full output: B3-01 value 1185364.7626069323 vs sum of its own by_year 1187679.7643197866 | X-07 value 11738470.268577691 vs SUM-03 11736155.266864836 | QA-01 {'ok': True, 'violations': []} ref QA-01 {'ok': True, 'violations': []}
+   sweep T=10.0: B3-01 ref 198539.3687129907 sweep 197765.72918828437
+   sweep T=30.0: B3-01 ref 573946.116384612 sweep 572785.6570975535
+   sweep T=60.0: B3-01 ref 1149439.5118186385 sweep 1145184.4944327539
+   sweep T=100.0: B3-01 ref 1922698.6364409463 sweep 1914962.241193885
+=== (a) facility_management_ratio = 1.0 with small fuel use
+  fuel scale 1: B6 stage ref 1487661.4887071447 unified 1487661.4887071527; QA-01 ref {'ok': True, 'violations': []} unified {'ok': True, 'violations': []}; failing units []
+  fuel scale 0.001: B6 stage ref 1487.6614886987954 unified 1487.6614887071526; QA-01 ref {'ok': True, 'violations': []} unified {'ok': True, 'violations': []}; failing units []
+  fuel scale 1e-05: B6 stage ref 14.876614885404706 unified 14.876614887071526; QA-01 ref {'ok': True, 'violations': []} unified {'ok': True, 'violations': []}; failing units []
+  fuel scale 1e-06: B6 stage ref 1.4876614902168512 unified 1.4876614887071526; QA-01 ref {'ok': True, 'violations': []} unified {'ok': True, 'violations': []}; failing units ['X-02']
+  fuel scale 1e-07: B6 stage ref 0.14876614138484 unified 0.14876614887071526; QA-01 ref {'ok': False, 'violations': ['stage B6']} unified {'ok': True, 'violations': []}; failing units ['X-02', 'QA-01']
+  fuel scale 1e-08: B6 stage ref 0.014876613393425941 unified 0.014876614887071527; QA-01 ref {'ok': False, 'violations': ['stage B6']} unified {'ok': True, 'violations': []}; failing units ['X-02', 'QA-01', 'X-05']
+  fuel scale 1e-09: B6 stage ref 0.00148765929043293 unified 0.0014876614887071528; QA-01 ref {'ok': False, 'violations': ['stage B6']} unified {'ok': True, 'violations': []}; failing units ['X-02', 'QA-01', 'X-05']
+  share 1.0, no fuel factor: B6 stage ref 0.0 unified 0.0; QA-01 ref ok=True unified ok=True; failing units []
+  share 0.9999999, no fuel factor: B6 stage ref 0.5193383228033781 unified 0.5193383228033781; QA-01 ref ok=True unified ok=True; failing units []
+  share 0.999999, no fuel factor: B6 stage ref 5.193383231759071 unified 5.193383231759071; QA-01 ref ok=True unified ok=True; failing units []
+  share 0.99999, no fuel factor: B6 stage ref 51.93383231572807 unified 51.93383231572807; QA-01 ref ok=True unified ok=True; failing units []
+=== (c) the study's compare() with infinities
+  compare(ref=inf, cand=1.0): within(1e-9)=True max_abs_rel_error=0.0 mismatches=[]
+  compare(ref=inf, cand=-inf): within(1e-9)=True max_abs_rel_error=0.0 mismatches=[]
+  compare(ref=1.0, cand=inf): within(1e-9)=False max_abs_rel_error=inf mismatches=[]
+  compare(ref=-inf, cand=5.0): within(1e-9)=True max_abs_rel_error=0.0 mismatches=[]
+  compare(ref ok=True,n=1 ; cand ok=1,n=True): within = True []

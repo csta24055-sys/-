@@ -1,0 +1,229 @@
+mode=single mutations=644 scenarios compared: 3195 (36s) status={'ok': 3052, 'diff': 142, 'crash_asym': 1}
+
+== ('mismatch', 'full', 'SYS-03', 'violations[*]') count 114
+   muts: [('mat.factor_id=dangling/all', 5), ('mat.transport.factor_id=dangling/one', 5), ('mat.transport.factor_id=dangling/all', 5), ('mat.transport.delivery_factor_id=dangling/one', 5), ('mat.transport.delivery_factor_id=dangling/all', 5), ('mat.end_of_life.haul_factor_id=dangling/one', 5), ('mat.end_of_life.haul_factor_id=dangling/all', 5), ('mat.installation_factor_id=dangling/one', 5)]
+    {"k": 1, "bseed": 314042, "names": ["mat.factor_id=dangling/one"], "mseed": 779830, "T": 62.5, "finding": {"kind": "mismatch", "mode": "full", "unit": "SYS-03", "items": ["violations[0]: 'materials[6].factor_id (no factor)' vs 'F-NO-SUCH (no factor)'"], "n": 1}}
+
+== ('mismatch', 'summary', 'SYS-03', 'violations[*]') count 114
+   muts: [('mat.factor_id=dangling/all', 5), ('mat.transport.factor_id=dangling/one', 5), ('mat.transport.factor_id=dangling/all', 5), ('mat.transport.delivery_factor_id=dangling/one', 5), ('mat.transport.delivery_factor_id=dangling/all', 5), ('mat.end_of_life.haul_factor_id=dangling/one', 5), ('mat.end_of_life.haul_factor_id=dangling/all', 5), ('mat.installation_factor_id=dangling/one', 5)]
+    {"k": 1, "bseed": 314042, "names": ["mat.factor_id=dangling/one"], "mseed": 779830, "T": 62.5, "finding": {"kind": "mismatch", "mode": "summary", "unit": "SYS-03", "items": ["violations[0]: 'materials[6].factor_id (no factor)' vs 'F-NO-SUCH (no factor)'"], "n": 1}}
+
+== ('missing', 'full', 'SYS-03', 'violations[*]') count 48
+   muts: [('mat.factor_id=dangling/all', 5), ('mat.transport.factor_id=dangling/all', 5), ('mat.transport.delivery_factor_id=dangling/all', 5), ('mat.end_of_life.haul_factor_id=dangling/all', 5), ('mat.installation_factor_id=dangling/all', 5), ('eq.factor_id=dangling/all', 5), ('eq.eol_factor_id=dangling/all', 5), ('eq.delivery_factor_id=dangling/all', 5)]
+    {"k": 0, "bseed": 333945, "names": ["mat.factor_id=dangling/all"], "mseed": 588264, "T": 60.0, "finding": {"kind": "missing", "mode": "full", "unit": "SYS-03", "items": ["violations[1]", "violations[2]", "violations[3]", "violations[4]"], "n": 13}}
+
+== ('numeric', 'full', 'X-07', 'by_year[*]') count 14
+   muts: [('grid.table!=descriptor(one entry)', 5), ('eq.repair_rate=huge/one', 3), ('mat.repair_rate=huge/one', 2), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1), ('grid.steps=negative_and_beyond', 1)]
+    {"k": 9, "bseed": 480399, "names": ["mat.repair_rate=huge/one"], "mseed": 67931, "T": 129.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-07", "path": "by_year[21]", "err": 1.2209624915205944e-09, "ref": 248341.15219241986, "cand": 248358.96574681648, "scale": 1.4589763830037813e+19}}
+
+== ('numeric', 'full', 'SUM-03', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-03", "path": "value", "err": 0.001961152795117559, "ref": 10715350.064479835, "cand": 10736364.503209453, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'SUM-04', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-04", "path": "value", "err": 0.001961152795117485, "ref": 3609.4418649509335, "cand": 3616.520531953196, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'SUM-05', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-05", "path": "value", "err": 0.0019611527951173906, "ref": 515.6345521358477, "cand": 516.645790279028, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'SUM-06', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-06", "path": "value", "err": 0.0019611527951176417, "ref": 10715.350064479835, "cand": 10736.364503209454, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'SUM-03', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-03", "path": "value", "err": 0.001961152795117559, "ref": 10715350.064479835, "cand": 10736364.503209453, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'SUM-04', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-04", "path": "value", "err": 0.001961152795117485, "ref": 3609.4418649509335, "cand": 3616.520531953196, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'SUM-05', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-05", "path": "value", "err": 0.0019611527951173906, "ref": 515.6345521358477, "cand": 516.645790279028, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'SUM-06', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-06", "path": "value", "err": 0.0019611527951176417, "ref": 10715.350064479835, "cand": 10736.364503209454, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'X-07', 'value') count 12
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-07", "path": "value", "err": 0.001961152795117385, "ref": 10715350.064479837, "cand": 10736364.503209453, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'B6-03', 'value') count 10
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B6-03", "path": "value", "err": 0.058940524300113706, "ref": 356536.3386083155, "cand": 377550.7773379325, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'B6-03', 'value') count 10
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('profile.constant_with_nonzero_slope/all', 2), ('grid.steps=unsorted', 1), ('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "B6-03", "path": "value", "err": 0.058940524300113706, "ref": 356536.3386083155, "cand": 377550.7773379325, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'B6-01', 'by_year[*]') count 9
+   muts: [('grid.table!=descriptor(one entry)', 5), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1), ('grid.steps=negative_and_beyond', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B6-01", "path": "by_year[6]", "err": 0.520545602628251, "ref": 40370.02449644073, "cand": 61384.46322605773, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'B2-01', 'value') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B2-01", "path": "value", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'X-02', 'by_stage.B2') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-02", "path": "by_stage.B2", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'X-04', 'by_stage_recomputed.B2') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_stage_recomputed.B2", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'SUM-02', 'value') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-02", "path": "value", "err": 0.0003592680627315058, "ref": 10394093.29586123, "cand": 10397827.561623484, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'X-05', 'by_stage_co2.B2') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "by_stage_co2.B2", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'B2-01', 'value') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "B2-01", "path": "value", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'X-02', 'by_stage.B2') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-02", "path": "by_stage.B2", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'X-04', 'by_stage_recomputed.B2') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_stage_recomputed.B2", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'SUM-02', 'value') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-02", "path": "value", "err": 0.0003592680627315058, "ref": 10394093.29586123, "cand": 10397827.561623484, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'X-05', 'by_stage_co2.B2') count 7
+   muts: [('grid.table!=descriptor(one entry)', 4), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "by_stage_co2.B2", "err": 0.07083142684662457, "ref": 52720.46503226543, "cand": 56454.730794518364, "scale": 10715350.064479835}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B2') count 6
+   muts: [('grid.table!=descriptor(one entry)', 3), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 3, "bseed": 245998, "names": ["grid.table!=descriptor(one entry)"], "mseed": 895145, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B2", "err": 0.015895429243424027, "ref": 0.01772047447092817, "cand": 0.018002149019040712, "scale": 11007228.51350356}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B2') count 6
+   muts: [('grid.table!=descriptor(one entry)', 3), ('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1)]
+    {"k": 3, "bseed": 245998, "names": ["grid.table!=descriptor(one entry)"], "mseed": 895145, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B2", "err": 0.015895429243424027, "ref": 0.01772047447092817, "cand": 0.018002149019040712, "scale": 11007228.51350356}}
+
+== ('numeric', 'full', 'B3-01', 'by_year[*]') count 5
+   muts: [('eq.repair_rate=huge/one', 3), ('mat.repair_rate=huge/one', 2)]
+    {"k": 9, "bseed": 480399, "names": ["mat.repair_rate=huge/one"], "mseed": 67931, "T": 129.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B3-01", "path": "by_year[21]", "err": 1.2209624915190982e-09, "ref": 50414.1864456034, "cand": 50432.0, "scale": 1.4589763830037813e+19}}
+
+== ('numeric', 'summary', 'B1-02', 'value') count 4
+   muts: [('dev.annual_leak_rate=1e-12/all', 3), ('dev.annual_leak_rate=1e-9/all', 1)]
+    {"k": 7, "bseed": 527792, "names": ["dev.annual_leak_rate=1e-9/all"], "mseed": 407105, "T": 59.999999, "finding": {"kind": "numeric", "mode": "summary", "unit": "B1-02", "path": "value", "err": 1.0398507772458584e-08, "ref": 0.0018266189670990837, "cand": 0.0018266189279354532, "scale": 3766274.0954706375}}
+
+== ('numeric', 'full', 'B1-02', 'by_item[*]') count 4
+   muts: [('dev.leak_extremes_mix', 2), ('dev.annual_leak_rate=1e-12/one', 1), ('dev.annual_leak_rate=1e-12/all', 1)]
+    {"k": 6, "bseed": 113407, "names": ["dev.annual_leak_rate=1e-12/one"], "mseed": 106933, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B1-02", "path": "by_item[5]", "err": 2.669222799298249e-08, "ref": 2.2590596567740207e-06, "cand": 2.259005778171286e-06, "scale": 2018512.7576770065}}
+
+== ('numeric', 'full', 'X-11', 'value') count 4
+   muts: [('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1), ('grid.to_linear(params)', 1)]
+    {"k": 4, "bseed": 654686, "names": ["grid.steps=unsorted"], "mseed": 806285, "T": 100.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-11", "path": "value", "err": 0.6962986402966622, "ref": 30249787.528304957, "cand": 9186901.603083286, "scale": 41515689.82300896}}
+
+== ('numeric', 'summary', 'X-11', 'value') count 4
+   muts: [('grid.steps=duplicate_from_index', 2), ('grid.steps=unsorted', 1), ('grid.to_linear(params)', 1)]
+    {"k": 4, "bseed": 654686, "names": ["grid.steps=unsorted"], "mseed": 806285, "T": 100.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-11", "path": "value", "err": 0.6962986402966622, "ref": 30249787.528304957, "cand": 9186901.603083286, "scale": 41515689.82300896}}
+
+== ('numeric', 'full', 'B7-04', 'value') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B7-04", "path": "value", "err": 0.015501642440874536, "ref": 487020.74744886294, "cand": 479471.1259606232, "scale": 5642072.672259023}}
+
+== ('numeric', 'full', 'X-02', 'by_stage.B7') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-02", "path": "by_stage.B7", "err": 0.015501642440874416, "ref": 487020.74744886294, "cand": 479471.12596062326, "scale": 5642072.672259023}}
+
+== ('numeric', 'full', 'X-04', 'by_stage_recomputed.B7') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_stage_recomputed.B7", "err": 0.01550164244087536, "ref": 487020.74744886335, "cand": 479471.1259606232, "scale": 5642072.672259023}}
+
+== ('numeric', 'full', 'X-05', 'by_stage_co2.B7') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "by_stage_co2.B7", "err": 0.015309853320367627, "ref": 381153.3538840425, "cand": 375317.9519435116, "scale": 5642072.672259023}}
+
+== ('numeric', 'summary', 'B7-04', 'value') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "B7-04", "path": "value", "err": 0.015501642440874536, "ref": 487020.74744886294, "cand": 479471.1259606232, "scale": 5642072.672259023}}
+
+== ('numeric', 'summary', 'X-02', 'by_stage.B7') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-02", "path": "by_stage.B7", "err": 0.015501642440874416, "ref": 487020.74744886294, "cand": 479471.12596062326, "scale": 5642072.672259023}}
+
+== ('numeric', 'summary', 'X-04', 'by_stage_recomputed.B7') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_stage_recomputed.B7", "err": 0.01550164244087536, "ref": 487020.74744886335, "cand": 479471.1259606232, "scale": 5642072.672259023}}
+
+== ('numeric', 'summary', 'X-05', 'by_stage_co2.B7') count 4
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.table_clamped_at_zero(linear negative)/all', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "by_stage_co2.B7", "err": 0.015309853320367627, "ref": 381153.3538840425, "cand": 375317.9519435116, "scale": 5642072.672259023}}
+
+== ('numeric', 'full', 'B1-02', 'value') count 3
+   muts: [('dev.annual_leak_rate=1e-12/all', 2), ('dev.annual_leak_rate=1e-9/all', 1)]
+    {"k": 7, "bseed": 527792, "names": ["dev.annual_leak_rate=1e-9/all"], "mseed": 407105, "T": 59.999999, "finding": {"kind": "numeric", "mode": "full", "unit": "B1-02", "path": "value", "err": 1.0398507772458584e-08, "ref": 0.0018266189670990837, "cand": 0.0018266189279354532, "scale": 3766274.0954706375}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B7') count 3
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B7", "err": 0.014182526361591265, "ref": 0.08631947437392104, "cand": 0.0850952461530942, "scale": 5642072.672259023}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B7') count 3
+   muts: [('profile.table!=descriptor(one entry)/one', 2), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 20910, "names": ["profile.table!=descriptor(one entry)/one"], "mseed": 806253, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B7", "err": 0.014182526361591265, "ref": 0.08631947437392104, "cand": 0.0850952461530942, "scale": 5642072.672259023}}
+
+== ('numeric', 'full', 'SUM-07', 'by_stage.B6') count 2
+   muts: [('grid.table!=descriptor(one entry)', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-07", "path": "by_stage.B6", "err": 0.054808482910956635, "ref": 0.02835333159885883, "cand": 0.02990733468926357, "scale": 10715350.064479835}}
+
+== ('numeric', 'summary', 'SUM-07', 'by_stage.B6') count 2
+   muts: [('grid.table!=descriptor(one entry)', 1), ('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 10, "bseed": 810499, "names": ["grid.table!=descriptor(one entry)"], "mseed": 133438, "T": 7.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-07", "path": "by_stage.B6", "err": 0.054808482910956635, "ref": 0.02835333159885883, "cand": 0.02990733468926357, "scale": 10715350.064479835}}
+
+== ('crash_asym', 'None', '(\'OverflowError\', "closed_forms.py:150 (34, \'Numerical result out of range\')")', '(\'OverflowError\', "closed_forms.py:150 (34, \'Numerical result out of range\')")') count 1
+   muts: [('dev.annual_leak_rate=huge/all', 1)]
+    {"k": 4, "bseed": 25722, "names": ["dev.annual_leak_rate=huge/all"], "mseed": 731893, "T": 100.0, "finding": {"kind": "crash_asym", "ref": null, "full": ["OverflowError", "closed_forms.py:150 (34, 'Numerical result out of range')"], "summ": ["OverflowError", "closed_forms.py:150 (34, 'Numerical result out of range')"]}}
+
+== ('crash_asym', '(\'TypeError\', "units_b.py:371 unsupported operand type(s) for -: \'NoneType\' and \'float\'")', '(\'TypeError\', "engine.py:1075 unsupported operand type(s) for -: \'NoneType\' and \'float\'")', 'None') count 1
+   muts: [('grid.steps=first_from_index>0', 1)]
+    {"k": 2, "bseed": 365179, "names": ["grid.steps=first_from_index>0"], "mseed": 740404, "T": 2.5, "finding": {"kind": "crash_asym", "ref": ["TypeError", "units_b.py:371 unsupported operand type(s) for -: 'NoneType' and 'float'"], "full": ["TypeError", "engine.py:1075 unsupported operand type(s) for -: 'NoneType' and 'float'"], "summ": null}}
+
+== ('mismatch', 'full', 'SUM-07', 'defined') count 1
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 8, "bseed": 848355, "names": ["profile.table_clamped_at_zero(linear negative)/all"], "mseed": 3550, "T": 10.0000001, "finding": {"kind": "mismatch", "mode": "full", "unit": "SUM-07", "items": ["defined: True vs False"], "n": 1}}
+
+== ('missing', 'full', 'SUM-07', 'by_stage.A1-A3') count 1
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 8, "bseed": 848355, "names": ["profile.table_clamped_at_zero(linear negative)/all"], "mseed": 3550, "T": 10.0000001, "finding": {"kind": "missing", "mode": "full", "unit": "SUM-07", "items": ["by_stage.A1-A3", "by_stage.A4", "by_stage.A5", "by_stage.B1"], "n": 14}}
+
+== ('mismatch', 'summary', 'SUM-07', 'defined') count 1
+   muts: [('profile.table_clamped_at_zero(linear negative)/all', 1)]
+    {"k": 8, "bseed": 848355, "names": ["profile.table_clamped_at_zero(linear negative)/all"], "mseed": 3550, "T": 10.0000001, "finding": {"kind": "mismatch", "mode": "summary", "unit": "SUM-07", "items": ["defined: True vs False"], "n": 1}}
+
+== ('numeric', 'full', 'X-02', 'by_stage.B6') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 458508, "names": ["profile.constant_with_nonzero_slope/all"], "mseed": 198470, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-02", "path": "by_stage.B6", "err": 0.00011562456162870371, "ref": 1489234.018677162, "cand": 1489406.210707734, "scale": 5597948.296479004}}
+
+== ('numeric', 'full', 'X-04', 'by_gas.PFCs') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 458508, "names": ["profile.constant_with_nonzero_slope/all"], "mseed": 198470, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-04", "path": "by_gas.PFCs", "err": 0.00025269675112956665, "ref": 209.32010163705542, "cand": 209.3729961466852, "scale": 5597948.296479004}}
+
+== ('numeric', 'full', 'X-05', 'by_stage_co2.B6') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 458508, "names": ["profile.constant_with_nonzero_slope/all"], "mseed": 198470, "T": 30.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-05", "path": "by_stage_co2.B6", "err": 9.603853224713468e-05, "ref": 1348866.7978048266, "cand": 1348996.3409922847, "scale": 5597948.296479004}}
+
+== ('numeric', 'summary', 'X-02', 'by_stage.B6') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 458508, "names": ["profile.constant_with_nonzero_slope/all"], "mseed": 198470, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-02", "path": "by_stage.B6", "err": 0.00011562456162870371, "ref": 1489234.018677162, "cand": 1489406.210707734, "scale": 5597948.296479004}}
+
+== ('numeric', 'summary', 'X-04', 'by_gas.PFCs') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 458508, "names": ["profile.constant_with_nonzero_slope/all"], "mseed": 198470, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-04", "path": "by_gas.PFCs", "err": 0.00025269675112956665, "ref": 209.32010163705542, "cand": 209.3729961466852, "scale": 5597948.296479004}}
+
+== ('numeric', 'summary', 'X-05', 'by_stage_co2.B6') count 1
+   muts: [('profile.constant_with_nonzero_slope/all', 1)]
+    {"k": 3, "bseed": 458508, "names": ["profile.constant_with_nonzero_slope/all"], "mseed": 198470, "T": 30.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "X-05", "path": "by_stage_co2.B6", "err": 9.603853224713468e-05, "ref": 1348866.7978048266, "cand": 1348996.3409922847, "scale": 5597948.296479004}}

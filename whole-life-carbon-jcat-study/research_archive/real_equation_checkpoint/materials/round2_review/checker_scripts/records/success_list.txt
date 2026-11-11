@@ -1,0 +1,120 @@
+454 Counter({'NOT_APPLICABLE': 226, 'SUCCESS': 118, 'HOLD': 71, 'REJECTED': 39})
+Counter({('M5', 'NOT_APPLICABLE'): 66, ('M2', 'SUCCESS'): 66, ('M6', 'NOT_APPLICABLE'): 65, ('M4', 'HOLD'): 53, ('M1', 'SUCCESS'): 52, ('M3', 'NOT_APPLICABLE'): 42, ('M3', 'REJECTED'): 38, ('M4', 'NOT_APPLICABLE'): 31, ('M1', 'NOT_APPLICABLE'): 18, ('M5', 'HOLD'): 8, ('M3', 'HOLD'): 6, ('M2', 'NOT_APPLICABLE'): 4, ('M6', 'HOLD'): 4, ('M6', 'REJECTED'): 1})
+EX-SYS-01-M1 | None | M-SINGLEPASS | None | VERIFIED_SYNTHETIC_ONLY | 入力状態の判定を、計算と同じ 1 回の走査の中で行う（入力を別にたどり直さない）
+EX-SYS-02-M1 | None | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 単位と対象段階の検査結果を、計算のための係数解決（係数・段階・単位の組ごとに 1 回）から読む
+EX-SYS-02-M2 | K7 | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数解決の表に統合（検査と計算が同じ解決結果を使う）
+EX-SYS-03-M1 | None | M-SINGLEPASS | None | VERIFIED_SYNTHETIC_ONLY | 係数の参照を走査の中で係数 ID ごとに数え、判定は係数 ID ごとに 1 回だけ行う
+EX-SYS-03-M2 | K7 | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数 ID ごとの表から判定を読む（係数解決の表に統合）
+EX-SYS-04-M2 | K6 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | QA-04・QA-01 と同じ残差判定関数（許容差と尺度だけが違う）で判定する
+EX-A13-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A13-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A13-02-M1 | None | M-RECIPE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 複合係数を配合の内容ごとに 1 回だけ計算する
+EX-A13-02-M2 | K7 | M-RECIPE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数解決の表に統合（複合係数は導出した係数キーとして表に入る）
+EX-A13-03-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A13-03-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A13-04-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A13-04-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A13-05-M2 | K1 | M-SINGLEPASS | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 発注量への倍率を、行テーブルに載せる活動量に含める（同じ走査で求める）
+EX-A4-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A4-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A4-02-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A4-02-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A5-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A5-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A5-02-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A5-02-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A5-03-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-A5-03-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-A5-04-M2 | K1 | None | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | A5 の 3 つの表の値の和として読む
+EX-B1-01-M2 | K4 | None | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 冷媒の走査の中で 充填量×GWP を求める（B1-02〜04 に共通の活動量の項）
+EX-B1-02-M1 | None | M-YEARLOOP | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、年ごとの残存量の更新を、充填サイクルごとの等比の閉形式に置き換える（年次の出力を求めるときは年ごとに計算する）
+EX-B1-02-M2 | K4 | M-YEARLOOP | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 充填サイクルの質量収支 1 式に統合（漏洩・交換前の残存・最終残存を同時に得る）
+EX-B1-03-M1 | None | M-YEARLOOP | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、年ごとの残存量の更新を、充填サイクルごとの等比の閉形式に置き換える（年次の出力を求めるときは年ごとに計算する）
+EX-B1-03-M2 | K4 | M-YEARLOOP | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 充填サイクルの質量収支 1 式に統合（漏洩・交換前の残存・最終残存を同時に得る）
+EX-B1-04-M1 | None | M-YEARLOOP | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、年ごとの残存量の更新を、充填サイクルごとの等比の閉形式に置き換える（年次の出力を求めるときは年ごとに計算する）
+EX-B1-04-M2 | K4 | M-YEARLOOP | D6 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 充填サイクルの質量収支 1 式に統合（漏洩・交換前の残存・最終残存を同時に得る）
+EX-B2-01-M2 | K3 | None | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 買電分（K3 で求めた値）×施設管理の割合 として求める
+EX-B3-01-M1 | None | M-GROUPS | D3 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年ごとの加算を (T − 更新が属する年の重み) の閉形式に置き換え、周期の値ごとに合算した 活動量×修繕率 に掛ける
+EX-B3-01-M2 | K2 | M-GROUPS | D3 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 周期ごとの合算に修繕年数の乗数を掛けて行テーブルに載せる
+EX-B3-02-M2 | K2 | M-GROUPS | D3 | VERIFIED_ANALYTIC_AND_SYNTHETIC | B3-01 と同じ合算に、乗数 T を掛けて求める
+EX-B4-01-M1 | None | M-EVENTS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では更新年の一覧を作らず、回数を閉形式で求める（端は一覧と同じ判定式で確かめる。一覧の出力を求めるときは一覧を作る）
+EX-B4-01-M2 | K2 | M-EVENTS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 回数関数 N(T,c) に統合
+EX-B4-02-M1 | None | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 更新の排出を、周期の値ごとに合算した 1 回分の活動量×回数 で求める（事象ごと・行ごとに足さない）
+EX-B4-02-M2 | K2 | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 周期ごとの合算に回数の乗数を掛けて行テーブルに載せる
+EX-B4-03-M1 | None | M-EVENTS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では更新年の一覧を作らず、回数を閉形式で求める（端は一覧と同じ判定式で確かめる。一覧の出力を求めるときは一覧を作る）。本単位は行別の回数だけを出力し、合計のみの出力では出力を持たない
+EX-B4-03-M2 | K2 | M-EVENTS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 回数関数 N(T,c) に統合
+EX-B5-01-M1 | None | M-EVENTS | D4 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 事象ごとの加算を 回数×範囲比×初期段階の和 に置き換える
+EX-B5-01-M2 | K2 | M-EVENTS | D4 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 回数関数と、初期段階の表への共通の乗数として統合
+EX-B6-01-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 買電量が一定または直線のとき、買電排出を B·G(T) + S·H(T) で求める（打ち切りが働く場合と年次表は年ごと）
+EX-B6-01-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式として統合
+EX-B6-02-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は表で 1 回掛ける（年次表は走査）
+EX-B6-02-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式として行テーブルに載せる
+EX-B6-03-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 買電分（B·G + S·H）と燃料分（等差級数）の和として求める
+EX-B6-03-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式に統合
+EX-B6-04-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 消費・発電・売電が一定または直線で、打ち切り max(0,·) が働かないことを両端の 2 点で確かめられるとき、年ごとの評価をしない（それ以外は年ごとに評価。本単位の年次の出力は合計のみの出力では作らない）
+EX-B6-04-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式に統合
+EX-B7-01-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は表で 1 回掛ける（年次表は走査）
+EX-B7-01-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式として行テーブルに載せる
+EX-B7-02-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は表で 1 回掛ける（年次表は走査）
+EX-B7-02-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式として行テーブルに載せる
+EX-B7-03-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は表で 1 回掛ける（年次表は走査）
+EX-B7-03-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式として行テーブルに載せる
+EX-B7-04-M2 | K1 | None | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | B7 の 3 つの表の値の和として読む
+EX-C1-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-C1-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-C2-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-C2-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-C3-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-C3-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-C4-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-C4-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-C-05-M1 | None | M-SINGLEPASS | None | VERIFIED_SYNTHETIC_ONLY | 経路比率の和と質量の比較を、廃棄段階の計算と同じ走査の中で行う
+EX-STO-02-M2 | K1 | None | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 参考値のタグを付けた表として行テーブルに載せる（値は同じ読み方で求め、段階合計には入れない）
+EX-SUM-01-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 段階ベクトルの一部の和として指標の段で求める
+EX-SUM-02-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 段階ベクトルの一部の和として指標の段で求める
+EX-SUM-03-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 段階ベクトルの和として指標の段で求める
+EX-SUM-04-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計÷尺度（面積、面積×年数）として指標の段で求める
+EX-SUM-05-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計÷尺度（面積、面積×年数）として指標の段で求める
+EX-SUM-06-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計÷1000 として指標の段で求める
+EX-SUM-07-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 段階÷合計 として指標の段で求める
+EX-SUM-08-M2 | K5 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 差と削減率を指標の段で求める（基準案の合計は同じ統合モデルで求める）
+EX-QA-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 段階合計を、単位別の表の和と段階別の表の和の 2 系統から求めて比べる（行をたどり直さない）
+EX-QA-01-M2 | K6 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | SYS-04・QA-04 と同じ残差判定関数で段階ごとに判定する
+EX-QA-02-M1 | None | M-SINGLEPASS | None | VERIFIED_SYNTHETIC_ONLY | 時間境界の検査を、更新と冷媒の計算と同じ走査の中で行う
+EX-QA-03-M1 | None | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 使用した係数の集合を、係数解決で使われたキーから得る（行をたどり直さない）
+EX-QA-03-M2 | K7 | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数解決の表から読む
+EX-QA-04-M1 | None | None | None | VERIFIED_SYNTHETIC_ONLY | SYS-04 で求めた残差を再利用し、面積を合計し直さない
+EX-QA-04-M2 | K6 | None | D7 | VERIFIED_ANALYTIC_AND_SYNTHETIC | SYS-04 と同じ残差判定関数（許容差 1e-6）
+EX-X-01-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-X-01-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-X-02-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 段階の値を、単位別の表の値の和として読む（行をたどらない）
+EX-X-02-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの段階別の合計
+EX-X-03-M1 | None | M-RECIPE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 配合ごとに行の質量を合算してから構成材へ展開する（展開の回数は配合の種類数）
+EX-X-03-M2 | K7 | M-RECIPE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 配合キーの行として合算し、最後に 1 回だけ展開（係数解決の表に統合）
+EX-X-04-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行を 1 本ずつたどらず、表の中で係数キーごとに合算した活動量にガス別の量を掛ける
+EX-X-04-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルに係数の列（ガス別）を足して読む
+EX-X-05-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 全ガス版と同じ表に CO2 の係数列を掛ける（行をたどり直さない）
+EX-X-05-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルに係数の列（CO2）を足して読む
+EX-X-06-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 一定・直線低下・段階の 3 種類を区分的に直線な 1 つの形で表し、合計に使う累積 G(T)・H(T) を閉形式で求める（年次表で与えられる系列は走査する。X-06 自身の年次の出力は、合計のみの出力では系列の出所と整合の報告だけになる）
+EX-X-06-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 区分的に直線な系列のモーメント G・H として統合
+EX-X-07-M1 | None | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では年次系列を作らず合計だけを返す。系列を求めるときは、周期の値ごとに合算した値を更新年に置く（行ごとに置かない）
+EX-X-07-M2 | K2 | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 回数関数と年重みから系列を組み立てる
+EX-X-08-M1 | None | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 周期ごとの合算は B4-02 の計算の途中結果そのもので、追加の走査をしない
+EX-X-08-M2 | K2 | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 回数関数×周期ごとの合算として統合
+EX-X-09-M1 | None | M-SINGLEPASS | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | C3・C4 と同じ走査で、資材区分×経路の表にも足し込む（行をたどり直さない）
+EX-X-09-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの集約キーを 資材区分×経路 にした表から読む
+EX-X-10-M1 | None | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 更新回数を閉形式で求め、周期の値ごとに合算した質量に (1＋回数) を掛ける
+EX-X-10-M2 | K2 | M-GROUPS | D2 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数の代わりに質量を持つ合算として、回数の乗数とともに統合
+EX-X-11-M1 | None | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 累積係数 G(T) を再利用し、面積×原単位×換算×G(T) の 1 式にする
+EX-X-11-M2 | K3 | M-YEARLOOP | D5 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 年重み付き和の閉形式に統合
+EX-X-12-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-X-12-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 参考値のタグを付けた表として行テーブルに載せる（値は同じ読み方で求め、段階合計には入れない）
+EX-X-13-M2 | K1 | M-SINGLEPASS | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | A13-05 と同じ走査で、行ごとの倍率として求める（行別の値だけを出力する単位で、合計のみの出力では出力を持たない）
+EX-X-14-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 合計のみの出力では、係数を行ごとに掛けず、表の中で係数キーごとに活動量を合算してから 1 回ずつ掛ける（行別の出力を求めるときは行ごとの積も作る）
+EX-X-14-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの 1 つの表として統合（値は 表の活動量×係数 の和として読む）
+EX-X-15-M1 | None | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数レコードと単位換算を、係数・段階・単位の組ごとに 1 回だけ解決する
+EX-X-15-M2 | K7 | M-RESOLVE | D8 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 係数解決の表に統合
+EX-X-16-M1 | None | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 物価の比 P_base/P_cost を行の乗数として活動量に含め、係数は表で 1 回掛ける
+EX-X-16-M2 | K1 | M-ROWPROD | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 参考値のタグを付けた表として行テーブルに載せる（値は同じ読み方で求め、段階合計には入れない）
+EX-X-17-M1 | None | M-SINGLEPASS | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 製造排出の活動量を、同じ走査の中で 6 区分の表にも足し込む（行をたどり直さない）
+EX-X-17-M2 | K1 | None | D1 | VERIFIED_ANALYTIC_AND_SYNTHETIC | 行テーブルの集約キーを 6 区分にした表から読む。なお本単位は定義上の恒等式（要約数量×(区分の排出÷要約数量)）で、区分別に並べ替えただけである

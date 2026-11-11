@@ -1,0 +1,48 @@
+doc diffs 0 registered 70 ledger 70
+
+== H1: B3 / B5 only boundary with an upstream skipped row ==
+['B3'] clean 98378.05307674105 True | defective 43676.15603264954 complete False ['A13-01', 'A13-05', 'X-01'] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B5'] clean 894813.8719735858 True | defective 333032.13729313586 complete False ['A13-01', 'A13-05', 'X-01'] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B3', 'B5'] clean 993191.9250503269 True | defective 376708.29332578543 complete False ['A13-01', 'A13-05', 'X-01'] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B2'] clean 143618.45466486923 True | defective 143618.45466486923 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B4'] clean 333158.14319778414 True | defective 195758.7238836726 complete False ['A13-01', 'A13-05', 'B4-02', 'X-01'] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+['B1'] clean 1009814.2258425589 True | defective 1009814.2258425589 complete True [] | A13-01 n_skipped 3 X-01 n_skipped 1 B3-01 n_skipped 0 B5 computed True
+
+== H2: annual quantities negative / NaN are used silently ==
+B6-03 1910920.7007465807 -> 1508899.4099071333 B7-04 99907.16237530056 -> 85351.42982815647 B6-02 n_skipped 1 complete False ['B6-02', 'B7-01'] SYS-01 ok True SYS-02 ok True by_stage B7 85351.42982815647 SUM-07 True
+gas base NaN: SUM-03 3489473.4338263115 complete False SYS-01 ok True B6-02 n_skipped 1 match False
+
+== H3: grid factor negative / NaN / None ==
+neg B6-03 668325.8910631214 B2-01 {'value': 0.0, 'computed': False} SUM-03 2823629.7566933404 complete False matches_table False SYS ok True True True
+nan B6-03 668325.8910631214 B2-01 {'value': 0.0, 'computed': False} SUM-03 2823629.7566933404 complete False matches_table False SYS ok True True True
+construction_value None A5-01 0.0 SUM-03 6978407.111480472 complete False
+construction_value neg A5-01 0.0 SUM-03 6978407.111480472 complete False
+table None TABLE kind A5-01 20177.72268 SUM-03 2823629.7566933404 complete False
+
+== H4: C-05 with None / NaN / negative fraction or mass ==
+fraction None C-05 {'ok': False, 'violations': ['materials[0].end_of_life.routes'], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 1 C3 n_skipped 0 C3 by_item0 305.1706477788741 complete False
+fraction NaN C-05 {'ok': False, 'violations': ['materials[0].end_of_life.routes'], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 1 C3 n_skipped 0 C3 by_item0 305.1706477788741 complete False
+fraction 3.0 others kept C-05 {'ok': False, 'violations': ['materials[0].end_of_life.routes'], 'under_allocated': [], 'n_mass_unchecked': 2} | C3 n_routes_skipped 0 C3 n_skipped 0 C3 by_item0 3436.7916978269113 complete True
+mass -1 C-05 {'ok': True, 'violations': [], 'under_allocated': [], 'n_mass_unchecked': 3} | C3 n_routes_skipped 0 C3 n_skipped 1 C3 by_item0 0.0 complete False
+mass NaN C-05 {'ok': True, 'violations': [], 'under_allocated': [], 'n_mass_unchecked': 3} | C3 n_routes_skipped 0 C3 n_skipped 1 C3 by_item0 0.0 complete False
+mass inf C-05 {'ok': True, 'violations': [], 'under_allocated': [], 'n_mass_unchecked': 3} | C3 n_routes_skipped 0 C3 n_skipped 1 C3 by_item0 0.0 complete False
+
+== H5: conversion factor / factor value never validated ==
+rows with row conversions [0, 1, 7, 11]
+neg conversion row 0 A13-01 by_item 30326.531311112896 -> 0.0 n_skipped 1 complete False SYS-02 ok False C-05 ok True
+factor value NaN F-MAT-INSULATION-02 A1-A3 274842.6780505681 (clean 351318.43189744785 ) SUM-03 6845633.326466712 complete False SYS-01/02/03 ok True True True QA-01 True QA-03 True SUM-07 defined True
+factor value negative F-MAT-INSULATION-02 A1-A3 274842.6780505681 (clean 351318.43189744785 ) SUM-03 6845633.326466712 complete False SYS-01/02/03 ok True True True QA-01 True QA-03 True SUM-07 defined True
+factor value None F-MAT-INSULATION-02 A1-A3 274842.6780505681 (clean 351318.43189744785 ) SUM-03 6845633.326466712 complete False SYS-01/02/03 ok True True True QA-01 True QA-03 True SUM-07 defined True
+
+== H6: gas amounts inconsistent with the factor value: does anything check X-04's identity? ==
+X-04 value 7240695.004724691 sum of 14 stages 6998584.834160472 rel diff 0.03459416100558867 X-04 keys ['value', 'by_gas', 'co2e_from_gases', 'grid_co2e', 'refrigerant_co2e', 'by_stage_recomputed', 'n_gases_skipped', 'matches_stage_total'] QA-01 {'ok': False, 'violations': ['gas breakdown total']} QA-03 ok True X-05 5994853.522053535 SUM-03 6998584.834160472
+
+== H7: SYS-01 coverage ==
+SYS-01 False ['materials[1].quantity'] | B2-01 {'value': 0.0, 'computed': False} B5-01 computed False A13-05 n_skipped 1 X-16 n_skipped 1 complete False ['A13-01', 'A13-05', 'B2-01', 'B4-02', 'B5-01']
+
+== H8: invalid periods / cycles give no events silently ==
+clean B4 333158.14319778414 B5 894813.8719735858 B1 1009814.2258425589 SUM-03 7893398.706134058
+defect B4 0.0 B5 0.0 B1 0.0 SUM-03 5657796.944862264 complete False ['B1-02', 'B1-03', 'B1-04', 'B4-01', 'B4-03', 'B5-01'] SYS-01 ok False ['equipment[0].service_life', 'equipment[1].service_life', 'equipment[2].service_life', 'equipment[3].service_life'] QA-02 ok True B5 computed False n_partial 0
+
+== H9: short profile table ==
+no error

@@ -1,0 +1,37 @@
+=== NUM-3 self-consistent NF3 case ===
+  factor value 0.0 by_gas.NF3 ref 512.1511408170801 full 534.5511408170801 | X-04.value 8634611.947827924 8634611.947827918
+  study failures: [('X-04', 'by_gas.NF3', 0.04373708894656228)]
+=== NUM-10 (a) share 1, tiny fuels ===
+  scale 1e-05: by_stage.B6 ref 14.876614885404706 full 14.876614887071526; fuel-only sum 14.876614887071526; QA-01 ref {'ok': True, 'violations': []} full True; fails []
+  scale 1e-06: by_stage.B6 ref 1.4876614902168512 full 1.4876614887071526; fuel-only sum 1.4876614887071524; QA-01 ref {'ok': True, 'violations': []} full True; fails [('X-02', 'by_stage.B6', '1.0e-09', [])]
+  scale 1e-07: by_stage.B6 ref 0.14876614138484 full 0.14876614887071526; fuel-only sum 0.14876614887071526; QA-01 ref {'ok': False, 'violations': ['stage B6']} full True; fails [('X-02', 'by_stage.B6', '5.0e-08', []), ('QA-01', '', '0.0e+00', ['ok: False vs True'])]
+=== NUM-10 (b) T just above 1 ===
+  T=1.000000001: B6-03 ref 5.924000490153959e-07 full 5.924000179291511e-07 rel 5.25e-08; study fails [('B2-01', '5.2e-08'), ('B6-03', '5.2e-08'), ('X-02', '5.2e-08'), ('X-04', '5.2e-08')]
+     exact (rational) B6-03 = 5.924000490153958e-07  -> ref rel err 1.79e-16, unified rel err 5.25e-08
+  T=1.000000000001: B6-03 ref 5.924526647049789e-10 full 5.924150059399835e-10 rel 6.36e-05; study fails [('B2-01', '6.4e-05'), ('B6-03', '6.4e-05'), ('X-02', '6.4e-05'), ('X-04', '6.4e-05')]
+     exact (rational) B6-03 = 5.924526647049788e-10  -> ref rel err 1.75e-16, unified rel err 6.36e-05
+  T=1e-08: B6-03 ref 0.001113507453376428 full 0.001113507463351337 rel 8.96e-09; study fails [('B2-01', '1.2e-08'), ('B6-03', '9.0e-09'), ('X-02', '1.2e-08'), ('X-04', '1.2e-08')]
+  T=1e-10: B6-03 ref 1.1135074533764281e-05 full 1.1135082906541044e-05 rel 7.52e-07; study fails [('B2-01', '9.7e-07'), ('B6-03', '7.5e-07'), ('X-02', '9.7e-07'), ('X-04', '9.7e-07')]
+=== NUM-10 (c) near-identical baseline ===
+  delta ref -8.886680006980896e-05 unified -8.887052536010742e-05 rel 4.1919932928107315e-05 | baselines 32954586.85776278 32954586.857762683 rel 2.9391218945654603e-15
+  study fails: [('SUM-08', 'delta', '1.13e-07')]
+=== NUM-10 (d) overflow ===
+  A13-01 2.4e+305 inf | B5-01 0.0 nan | reconstruction NONE
+=== NUM-10 (e) leak rate 1-1e-8 ===
+  by_year[1..3] ref [962.67299037327, 9.626730008360923e-06, 9.626730000795115e-14] full [962.67299037327, 9.626729952104699e-06, 9.626730066062312e-14] rel[2] 5.84e-09
+  B1-02 value 962.6730000000001 962.673 study fails: [('B1-02', 'by_year[2]', '5.84e-09'), ('X-07', 'by_year[2]', '5.84e-09')]
+=== NUM-11 compare() ===
+  ref=inf cand=1.0: within=True max_abs=0.0 n_numeric=1
+  ref=inf cand=-inf: within=True max_abs=0.0 n_numeric=1
+  ref=-inf cand=5.0: within=True max_abs=0.0 n_numeric=1
+  ref=1.0 cand=inf: within=False max_abs=inf n_numeric=1
+  ref=5.0 cand=-inf: within=False max_abs=inf n_numeric=1
+  ref=inf cand=inf: within=True max_abs=0.0 n_numeric=1
+  ref True vs cand 1: True []
+  ref 1 vs cand True: True []
+  extra key: within True extra ['b']
+  small leaf with floor 0.105, rel change 1e-7: within True 3.456190479107911e-10
+  size S: SUM-03 3.295e+07 floor 0.033: nonzero numeric leaves 4346, below floor 19 (0.44%)
+     extra leaves in totals mode: 0 extra units: [] | extra in full: 0
+  size M: SUM-03 1.052e+08 floor 0.105: nonzero numeric leaves 33208, below floor 1226 (3.69%)
+     extra leaves in totals mode: 0 extra units: [] | extra in full: 0

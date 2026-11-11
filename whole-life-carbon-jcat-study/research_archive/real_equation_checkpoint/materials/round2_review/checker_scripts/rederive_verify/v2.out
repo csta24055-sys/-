@@ -1,0 +1,58 @@
+=== seed 11 RC office
+(a) annual quantities
+  clean: SUM-03 3891494.7246657587 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=1910920.7007465807 B7-04.value=99907.16237530056 B6-02.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=8.28e-15 mism=0 missing=0 first=[]
+  gas & water base negative: SUM-03 3058340.6778925727 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=1106878.119067683 B7-04.value=70795.69728101224 B6-02.n_skipped=0 B7-01.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=8.28e-15 mism=0 missing=0 first=[]
+  gas base NaN (table too): SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-02.n_skipped=0 | ref-vs-fast within1e-9=False maxrel=8.28e-15 mism=1 missing=0 first=['QA-01.ok: True vs False']
+  gas base None + table[5] None: ref RAISED TypeError / fast RAISED TypeError
+  electricity demand negative: SUM-03 2589972.49252928 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-04.computed=True B6-01.computed=True | ref-vs-fast within1e-9=True maxrel=8.28e-15 mism=0 missing=0 first=[]
+     B6-01 total clean 1301522.232136482 -> 0.0
+(b) grid
+  clean: SUM-03 6998584.834160472 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=4843280.9685302535 B2-01.value=143618.45466486923 A5-01.value=20177.72268 | ref-vs-fast within1e-9=True maxrel=8.52e-15 mism=0 missing=0 first=[]
+  grid start -0.4: SUM-03 118767.38062134014 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=-2036536.4850088784 B2-01.value=-93047.26573687674 B2-01.computed=True | ref-vs-fast within1e-9=True maxrel=3.04e-13 mism=0 missing=0 first=[]
+  grid start NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=nan B2-01.value=nan B2-01.computed=True | ref-vs-fast within1e-9=False maxrel=8.28e-15 mism=1 missing=0 first=['QA-01.ok: True vs False']
+  construction_value -1: SUM-03 6948082.911480472 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A5-01.value=-30324.2 A5-01.computed=True | ref-vs-fast within1e-9=True maxrel=8.28e-15 mism=0 missing=0 first=[]
+  construction_value NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A5-01.value=nan A5-01.computed=True | ref-vs-fast within1e-9=False maxrel=8.28e-15 mism=3 missing=0 first=['B5-01.value: 0.0 vs nan', 'QA-01.ok: True vs False']
+  construction_value None: ref RAISED TypeError / fast RAISED TypeError
+(c) factor value
+  clean: SUM-03 6998584.834160472 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=351318.43189744785 | ref-vs-fast within1e-9=True maxrel=8.52e-15 mism=0 missing=0 first=[]
+  F-MAT-INSULATION-02 value NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=nan | ref-vs-fast within1e-9=False maxrel=8.28e-15 mism=4 missing=0 first=['B3-02.value: nan vs 100562.53281887708', 'B5-01.value: 0.0 vs nan']
+  F-MAT-INSULATION-02 value -5: SUM-03 6840060.24836876 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=272056.1390015914 | ref-vs-fast within1e-9=True maxrel=8.56e-15 mism=0 missing=0 first=[]
+  F-MAT-INSULATION-02 value None: ref RAISED TypeError / fast RAISED TypeError
+  F-MAT-INSULATION-02 value inf: SUM-03 inf complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=inf | ref-vs-fast within1e-9=False maxrel=8.28e-15 mism=4 missing=0 first=['B3-02.value: nan vs 100562.53281887708', 'B5-01.value: 0.0 vs nan']
+   negative factor values in the clean generated catalogue: []
+(d) row conversion
+  row 0 conversion negated: SUM-03 6816625.646293796 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A13-01.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=8.65e-15 mism=0 missing=0 first=[]
+     A13-01.by_item 30326.531311112896 -> -30326.531311112896
+  row 0 conversion NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A13-01.n_skipped=0 | ref-vs-fast within1e-9=False maxrel=8.28e-15 mism=4 missing=0 first=['B3-02.value: nan vs 100562.53281887708', 'B5-01.value: 0.0 vs nan']
+     A13-01.by_item 30326.531311112896 -> nan
+  row 0 conversion zero: SUM-03 6907605.240227134 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A13-01.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=8.77e-15 mism=0 missing=0 first=[]
+     A13-01.by_item 30326.531311112896 -> 0.0
+=== seed 305 S hospital
+(a) annual quantities
+  clean: SUM-03 14939775.406053906 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=8105146.7631311705 B7-04.value=799694.4980766437 B6-02.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=4.34e-15 mism=0 missing=0 first=[]
+  gas & water base negative: SUM-03 12767107.918627344 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=6083672.146744209 B7-04.value=648501.6270370425 B6-02.n_skipped=0 B7-01.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=4.34e-15 mism=0 missing=0 first=[]
+  gas base NaN (table too): SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-02.n_skipped=0 | ref-vs-fast within1e-9=False maxrel=4.34e-15 mism=1 missing=0 first=['QA-01.ok: True vs False']
+  gas base None + table[5] None: ref RAISED TypeError / fast RAISED TypeError
+  electricity demand negative: SUM-03 8369768.2987547 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-04.computed=True B6-01.computed=True | ref-vs-fast within1e-9=True maxrel=4.34e-15 mism=0 missing=0 first=[]
+     B6-01 total clean 6570007.107299205 -> 0.0
+(b) grid
+  clean: SUM-03 19622159.175130744 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=12734503.64804233 B2-01.value=1732402.2935606127 A5-01.value=20408.4776 | ref-vs-fast within1e-9=True maxrel=4.34e-15 mism=0 missing=0 first=[]
+  grid start -0.4: SUM-03 -646416.8968160932 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=-7534072.423904504 B2-01.value=-1129520.6477982805 B2-01.computed=True | ref-vs-fast within1e-9=True maxrel=1.61e-14 mism=0 missing=0 first=[]
+  grid start NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | B6-03.value=nan B2-01.value=nan B2-01.computed=True | ref-vs-fast within1e-9=False maxrel=4.34e-15 mism=1 missing=0 first=['QA-01.ok: True vs False']
+  construction_value -1: SUM-03 19570362.697530743 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A5-01.value=-31388.0 A5-01.computed=True | ref-vs-fast within1e-9=True maxrel=4.34e-15 mism=0 missing=0 first=[]
+  construction_value NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A5-01.value=nan A5-01.computed=True | ref-vs-fast within1e-9=False maxrel=4.34e-15 mism=3 missing=0 first=['B5-01.value: 0.0 vs nan', 'QA-01.ok: True vs False']
+  construction_value None: ref RAISED TypeError / fast RAISED TypeError
+(c) factor value
+  clean: SUM-03 14808571.861163203 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=1535068.1209279231 | ref-vs-fast within1e-9=True maxrel=4.43e-15 mism=0 missing=0 first=[]
+  F-MAT-STRUCTURAL_STEEL-02 value NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=nan | ref-vs-fast within1e-9=False maxrel=1.29e-15 mism=4 missing=0 first=['B4-02.by_item_material[0]: 0.0 vs nan', 'B5-01.value: 0.0 vs nan']
+  F-MAT-STRUCTURAL_STEEL-02 value -5: SUM-03 14674669.426178034 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=1482868.857428141 | ref-vs-fast within1e-9=True maxrel=7.50e-15 mism=0 missing=0 first=[]
+  F-MAT-STRUCTURAL_STEEL-02 value None: ref RAISED TypeError / fast RAISED TypeError
+  F-MAT-STRUCTURAL_STEEL-02 value inf: SUM-03 inf complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A1-A3=inf | ref-vs-fast within1e-9=False maxrel=1.29e-15 mism=4 missing=0 first=['B4-02.by_item_material[0]: 0.0 vs nan', 'B5-01.value: 0.0 vs nan']
+   negative factor values in the clean generated catalogue: []
+(d) row conversion
+  row 1 conversion negated: SUM-03 14022560.379425252 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A13-01.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=3.20e-15 mism=0 missing=0 first=[]
+     A13-01.by_item 121657.75401672522 -> -121657.75401672522
+  row 1 conversion NaN: SUM-03 nan complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A13-01.n_skipped=0 | ref-vs-fast within1e-9=False maxrel=1.29e-15 mism=3 missing=0 first=['B5-01.value: 0.0 vs nan', 'QA-01.ok: True vs False']
+     A13-01.by_item 121657.75401672522 -> nan
+  row 1 conversion zero: SUM-03 14415566.120294224 complete True inc [] gates SYS-01/02/03 True/True/True QA-01/03 True/True | A13-01.n_skipped=0 | ref-vs-fast within1e-9=True maxrel=8.78e-15 mism=0 missing=0 first=[]
+     A13-01.by_item 121657.75401672522 -> 0.0

@@ -1,0 +1,54 @@
+== 1. totals-mode output of each unit: keys, and whether any numeric (non-count) value is present
+   no value in totals mode: A13-02 ['n_invalid'] | reference keys: ['by_item', 'n_invalid']
+   no value in totals mode: A13-05 ['n_skipped'] | reference keys: ['n_skipped', 'q_inst', 'q_ord']
+   no value in totals mode: B4-01 ['n_events'] | reference keys: ['events', 'n_events']
+   no value in totals mode: B4-03 [] | reference keys: ['by_item']
+   no value in totals mode: B6-01 ['computed'] | reference keys: ['by_year', 'computed']
+   no value in totals mode: B6-02 ['descriptors_match_tables', 'n_skipped'] | reference keys: ['by_year', 'descriptors_match_tables', 'n_skipped']
+   no value in totals mode: B6-04 ['computed', 'descriptors_match_tables'] | reference keys: ['by_year', 'computed', 'descriptors_match_tables']
+   no value in totals mode: B7-01 ['descriptors_match_tables', 'n_skipped'] | reference keys: ['by_year', 'descriptors_match_tables', 'n_skipped']
+   no value in totals mode: B7-02 ['descriptors_match_tables', 'n_skipped'] | reference keys: ['by_year', 'descriptors_match_tables', 'n_skipped']
+   no value in totals mode: B7-03 ['descriptors_match_tables', 'n_skipped'] | reference keys: ['by_year', 'descriptors_match_tables', 'n_skipped']
+   no value in totals mode: C-05 ['n_mass_unchecked', 'ok', 'under_allocated', 'violations'] | reference keys: ['n_mass_unchecked', 'ok', 'under_allocated', 'violations']
+   no value in totals mode: QA-01 ['ok', 'violations'] | reference keys: ['ok', 'violations']
+   no value in totals mode: QA-02 ['ok', 'violations', 'warnings'] | reference keys: ['ok', 'violations', 'warnings']
+   no value in totals mode: QA-03 ['n_used', 'ok', 'violations'] | reference keys: ['n_used', 'ok', 'violations']
+   no value in totals mode: QA-04 ['ok', 'status'] | reference keys: ['ok', 'status']
+   no value in totals mode: SUM-08 ['delta', 'saving', 'status'] | reference keys: ['delta', 'saving', 'status']
+   no value in totals mode: SYS-02 ['n_checked', 'ok', 'stage_mismatches', 'violations'] | reference keys: ['n_checked', 'ok', 'stage_mismatches', 'violations']
+   no value in totals mode: SYS-03 ['n_checked', 'n_references_affected', 'ok', 'violations'] | reference keys: ['n_checked', 'n_references_affected', 'ok', 'violations']
+   no value in totals mode: X-06 ['matches_table', 'source'] | reference keys: ['by_year', 'matches_table', 'source']
+   no value in totals mode: X-13 [] | reference keys: ['by_item', 'waste_by_item']
+   no value in totals mode: X-15 ['n_epd_declined', 'n_unresolved'] | reference keys: ['conv', 'factor', 'kind', 'n_epd_declined', 'n_unresolved']
+
+== 2. group tables: entries multiplied for X-08 / B4-02 versus row lines
+   row lines added to the period groups: 3351; distinct (period, factor key) entries: 2691; entries in groups with >=1 renewal: 1949
+   groups 245; rows 520; entries in the unit tables (_tables): 831
+   table_factor_products reported: 3373
+   distinct refresh_cycle/service_life values: 254 sample: [(15.71, 1), (7.5, 3), (31.13, 1), (8.21, 1), (25.0, 10), (104.75, 1), (18.0, 9), (31.0, 4)]
+
+== 3. B1-01 is final after aggregate(), before any charge-cycle function runs
+   A.misc['b1_01'] = 55640.134600000005 reference B1-01 = 55640.134600000005 refrigerant_fractions calls so far: 0
+
+== 4. X-13 is not connected to any table: change every reuse_rate and compare tables
+   tables identical: True | units whose output changed: ['X-13']
+
+== 5. A5-01 table and the pseudo keys
+   _tables['A5-01'] = {'GRID': 31836.7637}  kWh*grid.construction_value = 31836.7637
+   _tables['B1'] = {'REFRIGERANT': 263754.157751324}  _tables['B2-01'] = {'GRID': 158602.2101466453}  _tables['B6-01'] = {'GRID': 1441838.2740604116}
+
+== 6. what the per-unit comparison detects when a closed form is deliberately broken
+   linear_weighted_sum x1.5 (the closed form named in the titles of B6-02, B7-01, B7-02, B7-03):
+       B6-02 [('full', 'pass', 62), ('totals', 'pass', 1)]
+       B7-01 [('full', 'pass', 62), ('totals', 'pass', 1)]
+       B7-02 [('full', 'pass', 62), ('totals', 'pass', 1)]
+       B7-03 [('full', 'pass', 62), ('totals', 'pass', 1)]
+       B7-04 [('full', 'FAIL', 1), ('totals', 'FAIL', 1)]
+       B6-03 [('full', 'FAIL', 1), ('totals', 'FAIL', 1)]
+   segment_moments x1.5 (the closed form named in the titles of X-06, B6-01, B6-04):
+       X-06 [('full', 'pass', 61), ('totals', 'pass', 0)]
+       B6-04 [('full', 'pass', 61), ('totals', 'pass', 0)]
+       B6-01 [('full', 'pass', 61), ('totals', 'pass', 0)]
+       B6-03 [('full', 'FAIL', 1), ('totals', 'FAIL', 1)]
+       B2-01 [('full', 'FAIL', 1), ('totals', 'FAIL', 1)]
+       X-11 [('full', 'FAIL', 1), ('totals', 'FAIL', 1)]

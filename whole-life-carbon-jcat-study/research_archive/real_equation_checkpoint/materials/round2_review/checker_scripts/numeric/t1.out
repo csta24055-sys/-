@@ -1,0 +1,128 @@
+[factor_id_GRID] 134 differences (SUM-03=23295377.72621168)
+    ('full', 'A5-01', 'value', 5328.16848, 12885.209905420988, 0.5864895861915013)
+    ('tot', 'A5-01', 'value', 5328.16848, 12885.209905420988, 0.5864895861915013)
+    ('full', 'A5-04', 'parts.power', 5328.16848, 12885.209905420988, 0.5864895861915013)
+    ('full', 'A5-04', 'value', 34816.94659732145, 42373.98802274244, 0.17834151983441043)
+    ('tot', 'A5-04', 'parts.power', 5328.16848, 12885.209905420988, 0.5864895861915013)
+    ('tot', 'A5-04', 'value', 34816.94659732145, 42373.98802274244, 0.17834151983441043)
+[factor_id_REFRIGERANT] 120 differences (SUM-03=23295377.72621168)
+    ('full', 'X-02', 'by_stage.A1-A3', 7073865.011161703, 7061169.669116195, 0.0017946825427790439)
+    ('full', 'X-02', 'by_stage.B3', 11947039.852970878, 11940065.539864713, 0.0005837691337766844)
+    ('full', 'X-02', 'by_stage.B4', 782511.3157577544, 731729.9475757163, 0.06489537871137789)
+    ('full', 'X-02', 'by_stage_all.A1-A3', 7073865.011161703, 7061169.669116195, 0.0017946825427790439)
+    ('full', 'X-02', 'by_stage_all.B3', 11947039.852970878, 11940065.539864713, 0.0005837691337766844)
+    ('full', 'X-02', 'by_stage_all.B4', 782511.3157577544, 731729.9475757163, 0.06489537871137789)
+[short_table_no_factor] CRASH ASYMMETRY: ref=IndexError('list index out of range') | full={'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0}, 'violations': []}, 'SYS-02': {'ok': True, 'n_checked': 160, 'violations': [], 'stage | tot={'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0}, 'violations': []}, 'SYS-02': {'ok': True, 'n_checked': 160, 'violations': [], 'stage
+[short_table_with_factor] no difference
+[short_table_bad_unit] CRASH ASYMMETRY: ref=IndexError('list index out of range') | full={'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0}, 'violations': []}, 'SYS-02': {'ok': False, 'n_checked': 160, 'violations': ['operati | tot={'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0}, 'violations': []}, 'SYS-02': {'ok': False, 'n_checked': 160, 'violations': ['operati
+[short_elec_table_net_not_ok] CRASH ASYMMETRY: ref=IndexError('list index out of range') | full={'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0}, 'violations': []}, 'SYS-02': {'ok': False, 'n_checked': 160, 'violations': ['operati | tot={'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0}, 'violations': []}, 'SYS-02': {'ok': False, 'n_checked': 160, 'violations': ['operati
+[short_table_constant_kind] no difference
+[empty_export_table] no difference
+[grid_decline_nan] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=ValueError('cannot convert float NaN to integer') | tot=ValueError('cannot convert float NaN to integer')
+[grid_start_nan] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=ValueError('cannot convert float NaN to integer') | tot=ValueError('cannot convert float NaN to integer')
+[grid_floor_nan] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=ValueError('cannot convert float NaN to integer') | tot=ValueError('cannot convert float NaN to integer')
+[grid_start_inf] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=OverflowError('cannot convert float infinity to integer') | tot=OverflowError('cannot convert float infinity to integer')
+[grid_decline_inf] no difference
+[grid_floor_neg_inf] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=OverflowError('cannot convert float infinity to integer') | tot=OverflowError('cannot convert float infinity to integer')
+[grid_decline_tiny] no difference
+[grid_decline_huge] no difference
+[grid_floor_eq_start] no difference
+[grid_floor_exact_int] no difference
+[steps_float_index] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=TypeError("can't multiply sequence by non-int of type 'float'") | tot=TypeError("can't multiply sequence by non-int of type 'float'")
+[steps_float_integral_index] CRASH ASYMMETRY: ref={'A13-02': {'by_item': [None, None, None, None, 2.559251232448831, None, None, None, None, None, None, 2.559251232448831], 'n_invalid': 0, '_parts': [None, None, None, None, [('F-CMP-001', 0.10263, 1. | full=TypeError("can't multiply sequence by non-int of type 'float'") | tot=TypeError("can't multiply sequence by non-int of type 'float'")
+[steps_one] no difference
+[steps_beyond] no difference
+[steps_dup_index] no difference
+[steps_bool_index] no difference
+[steps_value_nan] 7 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+    ('full', 'QA-01', 'violations[1]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+[steps_value_none] no difference
+[steps_neg_first] no difference
+[grid_const_nan] 7 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+    ('full', 'QA-01', 'violations[1]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+[grid_const_inf] 8 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+    ('full', 'QA-01', 'violations[1]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+[grid_const_none] no difference
+[grid_table_nan] 7 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+    ('full', 'QA-01', 'violations[1]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+[grid_table_none] no difference
+[gas_base_nan] 5 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B6', None)
+[gas_base_inf] 5 differences (SUM-03=inf)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B6', None)
+[water_slope_nan] 5 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B7', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B7', None)
+[elec_base_nan] no difference
+[elec_base_inf] 8 differences (SUM-03=nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+    ('full', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+    ('full', 'QA-01', 'violations[1]', '<absent in ref>', 'stage B6', None)
+    ('tot', 'QA-01', 'ok', True, False, None)
+    ('tot', 'QA-01', 'violations[0]', '<absent in ref>', 'stage B2', None)
+[factor_value_nan] 15 differences (SUM-03=nan)
+    ('full', 'B5-01', 'value', 0.0, nan, nan)
+    ('tot', 'B5-01', 'value', 0.0, nan, nan)
+    ('full', 'X-04', 'by_stage_recomputed.B5', 0.0, nan, nan)
+    ('tot', 'X-04', 'by_stage_recomputed.B5', 0.0, nan, nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+[factor_value_inf] 15 differences (SUM-03=inf)
+    ('full', 'B5-01', 'value', 0.0, nan, nan)
+    ('tot', 'B5-01', 'value', 0.0, nan, nan)
+    ('full', 'X-04', 'by_stage_recomputed.B5', 0.0, nan, nan)
+    ('tot', 'X-04', 'by_stage_recomputed.B5', 0.0, nan, nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+[factor_value_neg] no difference
+[factor_value_none] no difference
+[construction_value_nan] 11 differences (SUM-03=nan)
+    ('full', 'B5-01', 'value', 0.0, nan, nan)
+    ('tot', 'B5-01', 'value', 0.0, nan, nan)
+    ('full', 'X-04', 'by_stage_recomputed.B5', 0.0, nan, nan)
+    ('tot', 'X-04', 'by_stage_recomputed.B5', 0.0, nan, nan)
+    ('full', 'QA-01', 'ok', True, False, None)
+    ('full', 'QA-01', 'violations[]', '<empty>', '<missing>', None)
+[construction_value_none] no difference
+[unit_named_None] 2 differences (SUM-03=21867497.17188456)
+    ('full', 'SYS-02', 'violations[1]', 'operation.onsite_export', '<missing>', None)
+    ('full', 'SYS-02', 'violations[2]', 'operation.onsite_generation', '<missing>', None)
+[unit_named_None_grid_too] 3 differences (SUM-03=23290049.557731677)
+    ('full', 'SYS-02', 'violations[1]', 'operation.electricity', '<missing>', None)
+    ('full', 'SYS-02', 'violations[2]', 'operation.onsite_export', '<missing>', None)
+    ('full', 'SYS-02', 'violations[3]', 'operation.onsite_generation', '<missing>', None)
+[unit_empty_head] no difference
+
+SUMMARY of cases with differences: ['factor_id_GRID', 'factor_id_REFRIGERANT', 'short_table_no_factor', 'short_table_bad_unit', 'short_elec_table_net_not_ok', 'grid_decline_nan', 'grid_start_nan', 'grid_floor_nan', 'grid_start_inf', 'grid_floor_neg_inf', 'steps_float_index', 'steps_float_integral_index', 'steps_value_nan', 'grid_const_nan', 'grid_const_inf', 'grid_table_nan', 'gas_base_nan', 'gas_base_inf', 'water_slope_nan', 'elec_base_inf', 'factor_value_nan', 'factor_value_inf', 'construction_value_nan', 'unit_named_None', 'unit_named_None_grid_too']

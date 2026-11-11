@@ -1,0 +1,26 @@
+period repr 1.000000001 hex 0x1.000000044b830p+0
+p*(1-1e-9) = 1.0  == 1.0? True
+exact rational p*(1-eps_double) - 1 = 1.1002230240805722e-16
+7.0 n 6 distinct 5 years [1, 2, 4, 4, 6, 7] loop 5.0 cf 6.0
+   exact-rational years distinct: 6 [2, 3, 4, 5, 6, 7]
+30.0 n 29 distinct 26 years [1, 2, 4, 4, 6, 7, 8, 8, 10, 11, 12, 13] loop 26.0 cf 29.0
+   exact-rational years distinct: 29 [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+60.0 n 59 distinct 48 years [1, 2, 4, 4, 6, 7, 8, 8, 10, 11, 12, 13] loop 48.0 cf 59.0
+   exact-rational years distinct: 59 [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+neighbour failures (ulps offset, T, loop, cf): [(0, 7.0, 5.0, 6.0), (0, 30.0, 26.0, 29.0), (0, 60.0, 48.0, 59.0), (0, 99.9, 78.9, 98.9)]
+random scan near integers: bad 0 of 200000 distinct bad periods [] 0
+periods in scenario: materials [1.000000001] equipment [1.000000001]
+FAIL ('B3-01', 'value', 0.9166666666666666, 0.9166666666666666)
+FAIL ('X-02', 'by_stage.B3', 0.9166666666666666, 0.9166666666666666)
+FAIL ('X-04', 'by_stage_recomputed.B3', 0.9166666666666667, 0.9166666666666667)
+FAIL ('SUM-02', 'value', 0.0018846798495943148, 0.0018846798495943148)
+FAIL ('SUM-03', 'value', 0.0018392967379071627, 0.0018392967379071627)
+FAIL ('SUM-04', 'value', 0.0018392967379072243, 0.0018392967379072243)
+FAIL ('SUM-05', 'value', 0.0018392967379071827, 0.0018392967379071827)
+FAIL ('SUM-06', 'value', 0.001839296737907123, 0.001839296737907123)
+FAIL ('SUM-07', 'by_stage.B3', 0.016092811324071164, 0.016092811324071164)
+FAIL ('X-05', 'by_stage_co2.B3', 0.9166666666666666, 0.9166666666666666)
+FAIL ('X-07', 'cumulative[46]', 6.80589199875055e-16, 0.0018392967379067722)
+B3-01 229291.25152413402 19107.60429367785 19107.60429367785
+SUM-03 114273919.42727956 114063735.7800491
+SYS/QA flags ref: {'QA-01': True, 'QA-02': True, 'QA-03': True, 'SYS-04': True, 'QA-04': True, 'SYS-01': True, 'SYS-02': True, 'SYS-03': True}

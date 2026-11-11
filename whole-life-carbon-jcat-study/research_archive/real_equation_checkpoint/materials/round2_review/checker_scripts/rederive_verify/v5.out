@@ -1,0 +1,30 @@
+reconstruction_scenario NONE
+factor F-MAT-INSULATION-02 value NaN detail True
+    QA-01.ok: ref True | fast False
+    QA-01.violations: ref [] | fast ['stage A1-A3', 'stage B4', 'stage B5']
+    B5-01.value: ref 0.0 | fast nan
+    B3-02.value: ref nan | fast 100562.53281887708
+    SUM-03.value: ref nan | fast nan
+    SUM-03.complete: ref True | fast True
+factor F-MAT-INSULATION-02 value NaN detail False
+    QA-01.ok: ref True | fast False
+    QA-01.violations: ref [] | fast ['stage A1-A3', 'stage B4', 'stage B5']
+    B5-01.value: ref 0.0 | fast nan
+    B3-02.value: ref nan | fast 100562.53281887708
+    SUM-03.value: ref nan | fast nan
+    SUM-03.complete: ref True | fast True
+gas base NaN detail True
+    QA-01.ok: ref True | fast False
+    QA-01.violations: ref [] | fast ['stage B6']
+    B5-01.value: ref 0.0 | fast 0.0
+    B3-02.value: ref 100562.5328188771 | fast 100562.53281887708
+    SUM-03.value: ref nan | fast nan
+    SUM-03.complete: ref True | fast True
+gas base NaN detail False
+    QA-01.ok: ref True | fast False
+    QA-01.violations: ref [] | fast ['stage B6']
+    B5-01.value: ref 0.0 | fast 0.0
+    B3-02.value: ref 100562.5328188771 | fast 100562.53281887708
+    SUM-03.value: ref nan | fast nan
+    SUM-03.complete: ref True | fast True
+rows using F-MAT-INSULATION-02 [2] repair rates [0.0]

@@ -1,0 +1,28 @@
+scan c = 1 + j*1e-10, T = 60
+   j=10 c=1.000000001000 events=59 distinct_years=48 reference_skip=48.000000 closed_form=59.000000
+random scan c in [1, 1+3e-9], T in {10,30,42.5,60,100}
+   0/20000 mismatches; offsets c-1 of failing periods between 9.000e+00 and 0.000e+00
+random scan over wider ranges: c in [1+3e-9, 80] and (0,1)
+   mismatches outside the band: 0/300000
+
+end to end: one clean synthetic scenario, every material refresh_cycle / equipment service_life set to 1.000000001
+  seed 11 T 60.0 detail=False: ref B3-01 906094 fast 75507.8 | ref SUM-03 3.0254973e+08 fast 3.0171914e+08
+      B3-01: max rel err 9.167e-01; B4-02: max rel err 1.230e-15; X-02: max rel err 9.167e-01; SUM-03: max rel err 2.745e-03; X-07: max rel err 2.745e-03; QA-01: max rel err 0.000e+00
+  seed 11 T 60.0 detail=True: ref B3-01 906094 fast 75507.8 | ref SUM-03 3.0254973e+08 fast 3.0171914e+08
+      B3-01: max rel err 9.167e-01; B4-02: max rel err 1.670e-15; X-02: max rel err 9.167e-01; SUM-03: max rel err 2.745e-03; X-07: max rel err 7.491e-16; QA-01: max rel err 0.000e+00
+  seed 11 T 42.5 detail=False: ref B3-01 530249 fast 75749.8 | ref SUM-03 2.1755453e+08 fast 2.1710003e+08
+      B3-01: max rel err 8.571e-01; B4-02: max rel err 1.435e-16; X-02: max rel err 8.571e-01; SUM-03: max rel err 2.089e-03; X-07: max rel err 2.089e-03; QA-01: max rel err 0.000e+00
+  seed 11 T 42.5 detail=True: ref B3-01 530249 fast 75749.8 | ref SUM-03 2.1755453e+08 fast 2.1710003e+08
+      B3-01: max rel err 8.571e-01; B4-02: max rel err 1.173e-15; X-02: max rel err 8.571e-01; SUM-03: max rel err 2.089e-03; X-07: max rel err 6.549e-16; QA-01: max rel err 0.000e+00
+  seed 12 T 60.0 detail=False: ref B3-01 1.63223e+06 fast 136019 | ref SUM-03 5.5869093e+08 fast 5.5719471e+08
+      B3-01: max rel err 9.167e-01; B4-02: max rel err 4.389e-16; X-02: max rel err 9.167e-01; SUM-03: max rel err 2.678e-03; X-07: max rel err 2.678e-03; QA-01: max rel err 0.000e+00
+  seed 12 T 60.0 detail=True: ref B3-01 1.63223e+06 fast 136019 | ref SUM-03 5.5869093e+08 fast 5.5719471e+08
+      B3-01: max rel err 9.167e-01; B4-02: max rel err 1.673e-15; X-02: max rel err 9.167e-01; SUM-03: max rel err 2.678e-03; X-07: max rel err 1.779e-15; QA-01: max rel err 0.000e+00
+  seed 12 T 42.5 detail=False: ref B3-01 960364 fast 137195 | ref SUM-03 4.0120592e+08 fast 4.0038276e+08
+      B3-01: max rel err 8.571e-01; B4-02: max rel err 1.539e-16; X-02: max rel err 8.571e-01; SUM-03: max rel err 2.052e-03; X-07: max rel err 2.052e-03; QA-01: max rel err 0.000e+00
+  seed 12 T 42.5 detail=True: ref B3-01 960364 fast 137195 | ref SUM-03 4.0120592e+08 fast 4.0038276e+08
+      B3-01: max rel err 8.571e-01; B4-02: max rel err 1.414e-15; X-02: max rel err 8.571e-01; SUM-03: max rel err 2.052e-03; X-07: max rel err 1.775e-15; QA-01: max rel err 0.000e+00
+
+same with only ONE material row changed (seed 11, T 60)
+  row 0 B3-01 ref 4496716.615082827 fast 4496295.165992538 rel diff 9.372373808821598e-05
+  SUM-03 ref 17320346.162060883 fast 17319924.712970592 rel diff 2.433260203620942e-05

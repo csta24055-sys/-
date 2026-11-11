@@ -1,0 +1,32 @@
+===== parametric detail= False
+ rows: materials 400 equipment 120 refrigerants 10 | with EPD 37 | with row conversions 111 | composite 124 | explicit-event equipment 16
+ engine _stats: {'factor_resolutions': 299, 'unit_conversions_resolved': 8, 'recipes_computed': 30, 'rows_scanned': 520, 'row_factor_products': 0, 'year_loop_iterations': 0, 'event_lists_built': 0, 'table_factor_products': 3373, 'consistency_scan_values': 600}
+ aggregate measured: {'cf_products': 223, 'factor_dict_lookups': 818, 'conversion_factor_calls': 231, 'event_year_calls': 0}
+ finish measured:    {'cf_products': 3592, 'factor_dict_lookups': 1136, 'conversion_factor_calls': 0, 'event_year_calls': 231, 'values_calls': 9, 'values_elements': 540}
+ row attribute reads by phase/kind: {('aggregate', 'material'): 17168, ('aggregate', 'equipment'): 3248, ('aggregate', 'refrigerant'): 214, ('finish', 'refrigerant'): 136}
+ distinct rows touched by phase/kind: {('aggregate', 'material'): 400, ('aggregate', 'equipment'): 120, ('aggregate', 'refrigerant'): 10, ('finish', 'refrigerant'): 10}
+ table entries: 831  SYS-02 n_checked 4359 ref 4359
+===== parametric detail= True
+ rows: materials 400 equipment 120 refrigerants 10 | with EPD 37 | with row conversions 111 | composite 124 | explicit-event equipment 16
+ engine _stats: {'factor_resolutions': 299, 'unit_conversions_resolved': 8, 'recipes_computed': 30, 'rows_scanned': 520, 'row_factor_products': 520, 'year_loop_iterations': 660, 'event_lists_built': 104, 'table_factor_products': 3373, 'consistency_scan_values': 600}
+ aggregate measured: {'cf_products': 4083, 'factor_dict_lookups': 818, 'conversion_factor_calls': 231, 'event_year_calls': 0}
+ finish measured:    {'cf_products': 4425, 'factor_dict_lookups': 1136, 'conversion_factor_calls': 0, 'event_year_calls': 655, 'values_calls': 18, 'values_elements': 1080}
+ row attribute reads by phase/kind: {('aggregate', 'material'): 17568, ('aggregate', 'equipment'): 3248, ('aggregate', 'refrigerant'): 214, ('finish', 'refrigerant'): 1336, ('detail', 'equipment'): 277}
+ distinct rows touched by phase/kind: {('aggregate', 'material'): 400, ('aggregate', 'equipment'): 120, ('aggregate', 'refrigerant'): 10, ('finish', 'refrigerant'): 10, ('detail', 'equipment'): 104}
+ table entries: 831  SYS-02 n_checked 4359 ref 4359
+===== year_table detail= False
+ rows: materials 400 equipment 120 refrigerants 10 | with EPD 37 | with row conversions 111 | composite 124 | explicit-event equipment 16
+ engine _stats: {'factor_resolutions': 299, 'unit_conversions_resolved': 8, 'recipes_computed': 30, 'rows_scanned': 520, 'row_factor_products': 0, 'year_loop_iterations': 480, 'event_lists_built': 0, 'table_factor_products': 3373, 'consistency_scan_values': 600}
+ aggregate measured: {'cf_products': 223, 'factor_dict_lookups': 818, 'conversion_factor_calls': 231, 'event_year_calls': 0}
+ finish measured:    {'cf_products': 3592, 'factor_dict_lookups': 1136, 'conversion_factor_calls': 0, 'event_year_calls': 231, 'values_calls': 12, 'values_elements': 720}
+ row attribute reads by phase/kind: {('aggregate', 'material'): 17168, ('aggregate', 'equipment'): 3248, ('aggregate', 'refrigerant'): 214, ('finish', 'refrigerant'): 136}
+ distinct rows touched by phase/kind: {('aggregate', 'material'): 400, ('aggregate', 'equipment'): 120, ('aggregate', 'refrigerant'): 10, ('finish', 'refrigerant'): 10}
+ table entries: 831  SYS-02 n_checked 4359 ref 4359
+===== year_table detail= True
+ rows: materials 400 equipment 120 refrigerants 10 | with EPD 37 | with row conversions 111 | composite 124 | explicit-event equipment 16
+ engine _stats: {'factor_resolutions': 299, 'unit_conversions_resolved': 8, 'recipes_computed': 30, 'rows_scanned': 520, 'row_factor_products': 520, 'year_loop_iterations': 1080, 'event_lists_built': 104, 'table_factor_products': 3373, 'consistency_scan_values': 600}
+ aggregate measured: {'cf_products': 4083, 'factor_dict_lookups': 818, 'conversion_factor_calls': 231, 'event_year_calls': 0}
+ finish measured:    {'cf_products': 4425, 'factor_dict_lookups': 1136, 'conversion_factor_calls': 0, 'event_year_calls': 655, 'values_calls': 18, 'values_elements': 1080}
+ row attribute reads by phase/kind: {('aggregate', 'material'): 17568, ('aggregate', 'equipment'): 3248, ('aggregate', 'refrigerant'): 214, ('finish', 'refrigerant'): 1336, ('detail', 'equipment'): 277}
+ distinct rows touched by phase/kind: {('aggregate', 'material'): 400, ('aggregate', 'equipment'): 120, ('aggregate', 'refrigerant'): 10, ('finish', 'refrigerant'): 10, ('detail', 'equipment'): 104}
+ table entries: 831  SYS-02 n_checked 4359 ref 4359

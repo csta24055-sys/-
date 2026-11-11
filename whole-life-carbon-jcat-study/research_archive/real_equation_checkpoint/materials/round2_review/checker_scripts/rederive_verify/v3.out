@@ -1,0 +1,45 @@
+== RED-4 X-04 ==
+ seed 11: clean X-04 6998584.8342 sum14 6998584.8342 rel -2.66e-16; X-04 public keys ['value', 'by_gas', 'co2e_from_gases', 'grid_co2e', 'refrigerant_co2e', 'by_stage_recomputed']
+   F-MAT-INSULATION-02 CO2 x3.0: X-04 7240695.00 sum14 6998584.83 rel +3.4594% gates {'QA-01': True, 'QA-03': True, 'SYS-01': True, 'SYS-02': True, 'SYS-03': True, 'C-05': True} X-05 5752743.35->5994853.52 SUM-03 6998584.83 complete True [ref~fast True []]
+   F-MAT-INSULATION-02 CO2 x0.0: X-04 6877529.75 sum14 6998584.83 rel -1.7297% gates {'QA-01': True, 'QA-03': True, 'SYS-01': True, 'SYS-02': True, 'SYS-03': True, 'C-05': True} X-05 5752743.35->5631688.27 SUM-03 6998584.83 complete True [ref~fast True []]
+ seed 58: clean X-04 12649681.2574 sum14 12649681.2574 rel 2.94e-16; X-04 public keys ['value', 'by_gas', 'co2e_from_gases', 'grid_co2e', 'refrigerant_co2e', 'by_stage_recomputed']
+   F-MAT-MORTAR-04 CO2 x3.0: X-04 13511173.95 sum14 12649681.26 rel +6.8104% gates {'QA-01': True, 'QA-03': True, 'SYS-01': True, 'SYS-02': True, 'SYS-03': True, 'C-05': True} X-05 10706482.30->11567974.98 SUM-03 12649681.26 complete True [ref~fast True []]
+   F-MAT-MORTAR-04 CO2 x0.0: X-04 12218934.91 sum14 12649681.26 rel -3.4052% gates {'QA-01': True, 'QA-03': True, 'SYS-01': True, 'SYS-02': True, 'SYS-03': True, 'C-05': True} X-05 10706482.30->10275735.95 SUM-03 12649681.26 complete True [ref~fast True []]
+
+== RED-5 SUM-08 ==
+ seed 22 clean: {'status': 'COMPARED', 'baseline': 39225189.56948115, 'delta': -8326329.1582045145, 'saving': 0.2122699533027305}
+   baseline 4 rows None: ref {'status': 'COMPARED', 'baseline': 26336358.524917427, 'delta': 4562501.886359207, 'saving': -0.17323966341218056} | proposal complete True baseline complete False | fast {'status': 'COMPARED', 'baseline': 26336358.524917424, 'delta': 4562501.886359211, 'saving': -0.17323966341218072}
+   SUM-08 keys ['baseline', 'delta', 'saving', 'status']
+   proposal 4 rows None: {'status': 'COMPARED', 'baseline': 39225189.56948115, 'delta': -21205635.5009249, 'saving': 0.5406126964246408} proposal complete False
+   unknown id: {'status': 'NO_BASELINE', 'delta': None, 'saving': None} | no id: {'status': 'NO_BASELINE', 'delta': None, 'saving': None}
+ seed 91 clean: {'status': 'COMPARED', 'baseline': 14497221.657828862, 'delta': -3150831.4926387984, 'saving': 0.21734036817580635}
+   baseline 4 rows None: ref {'status': 'COMPARED', 'baseline': 12716784.975961383, 'delta': -1370394.81077132, 'saving': 0.1077626784884533} | proposal complete True baseline complete False | fast {'status': 'COMPARED', 'baseline': 12716784.975961383, 'delta': -1370394.8107713237, 'saving': 0.1077626784884536}
+   SUM-08 keys ['baseline', 'delta', 'saving', 'status']
+   proposal 4 rows None: {'status': 'COMPARED', 'baseline': 14497221.657828862, 'delta': -4857008.558888638, 'saving': 0.33503030260048017} proposal complete False
+   unknown id: {'status': 'NO_BASELINE', 'delta': None, 'saving': None} | no id: {'status': 'NO_BASELINE', 'delta': None, 'saving': None}
+
+== RED-6 SYS-01 coverage (one field at a time) ==
+ clean SYS-01 True {'OBSERVED': 168, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 5, 'MISSING': 0, 'DERIVED': 0}
+   operation.facility_management_ratio=None: SYS-01 ok True viol [] count-delta {} | complete False ['B2-01'] | changed {'B2-01': {'value': 0.0, 'computed': False}}
+   boundary.reconstruction_scope_fraction=None: SYS-01 ok True viol [] count-delta {} | complete False ['B5-01'] | changed {'B5-01': {'value': 0.0, 'computed': False}}
+   boundary.replacement_cycle=None: SYS-01 ok True viol [] count-delta {} | complete True [] | changed {'B5-01': {'value': 0.0}}
+   materials[0].unquantified_cost_ratio=None: SYS-01 ok True viol [] count-delta {} | complete True [] | changed {}
+   materials[2].transport.load_factor=None: SYS-01 ok True viol [] count-delta {} | complete True [] | changed {'X-12': {'value': 3642.776951989745, 'n_skipped': 1}}
+   materials[2].end_of_life.haul_distance_km=None: SYS-01 ok True viol [] count-delta {} | complete False ['B4-02', 'C2-01'] | changed {'B5-01': {'value': 894678.7292386955}, 'C2-01': {'value': 1826.3170459818236, 'n_skipped': 1}}
+   materials[2].end_of_life.routes[0].fraction=NaN: SYS-01 ok True viol [] count-delta {} | complete False ['B4-02', 'C3-01'] | changed {'B5-01': {'value': 894772.2486044149}, 'C3-01': {'value': 7363.922822286322, 'n_routes_skipped': 1}}
+   cost_items[0].amount=None: SYS-01 ok True viol [] count-delta {} | complete True [] | changed {'X-16': {'value': 126.59004278280992, 'n_skipped': 1}}
+   summary_quantities.timber_m3=None: RAISED TypeError unsupported operand type(s) for *: 'NoneType' and 'float'
+   operation.electricity_per_m2_per_year=None: SYS-01 ok True viol [] count-delta {} | complete True [] | changed {'X-11': {'value': None}}
+   materials[1].quantity=NaN: SYS-01 ok True viol [] count-delta {} | complete False ['A13-01', 'B4-02'] | changed {'B5-01': {'value': 890900.205485083}, 'A13-05': {'n_skipped': 1}}
+   materials[1].quantity=None (control): SYS-01 ok False viol ['materials[1].quantity'] count-delta {'OBSERVED': -1, 'MISSING': 1} | complete False ['A13-01', 'B4-02'] | changed {'B5-01': {'value': 890900.205485083}, 'A13-05': {'n_skipped': 1}}
+
+== RED-7/8/9 on standard benchmark S ==
+ stages {'A1-A3': 4228115.07, 'A4': 235455.03, 'A5': 76918.02, 'B1': 1157349.08, 'B2': 1235571.8, 'B3': 3766020.36, 'B4': 6490922.78, 'B5': 0.0, 'B6': 14935575.68, 'B7': 359342.89, 'C1': 109841.83, 'C2': 115891.88, 'C3': 214984.66, 'C4': 28597.76} SUM-01 4540488.13 SUM-03 32954586.86
+ A13-04 167094.80 = 3.9520% of A1-A3
+ RED-7: B4 code 6490922.78 with uplift 6526129.00 (+0.5424% of B4, +0.1068% of SUM-03); B3 code 3766020.36 with uplift 3913846.95 (+3.9253%)
+   B5 base contains A13-04: True | B4-02 deps contain A13-04: False | B3-01: False
+ RED-8: material rows with installation factor 92/200 (usable 92); initial installation 31617.67 = 41.106% of A5 (76918), 0.696% of SUM-01, 0.0959% of SUM-03
+   removing all material installation factors: A5 76918.02->76918.02 (unchanged => not in A5), B4 falls by 66458.86 = 1.024% of B4
+   B-11 equipment: delivery 277.38 = 0.118% of A4; installation 3856.34 = 5.014% of A5; material/equipment installation ratio 8.20
+ RED-9(1): equipment delivery+installation inside B4 = 6809.63 = 0.1049% of B4, 0.0207% of SUM-03
+ RED-9(2): B1-02 code 1077667.87 kgCO2e; with GWP=1 (mass reading) 939.36 kg

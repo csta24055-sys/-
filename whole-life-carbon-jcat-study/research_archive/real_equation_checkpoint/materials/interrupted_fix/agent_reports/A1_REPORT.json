@@ -1,0 +1,265 @@
+{
+ "files_changed": [
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/engine.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_engine.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py",
+  "/home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json"
+ ],
+ "findings": [
+  {
+   "id": "NUM-1",
+   "status": "FIXED",
+   "what": "All time tests (inside, year of an event, n-th periodic event = n*L exactly) are exact integer arithmetic on as_integer_ratio() in refcalc/base.py and fastcalc/closed_forms.py; renewal_count = ceil(T*c/L)-1, periodic_year(s), skip_weight_periodic decide with integers. For period 1.000000001 both sides now give the value of the written rule (T=60: 59 events in years 2..60).",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/repro_findings.py -> NUM-1: B3-01 ref 19107.604293677847 / unified 19107.60429367785, SUM-03 rel -1.3e-16, sum(by_year) equals value, QA-01 ok; tests/test_closed_forms.py compares counts, years and skip weights with literal fractions.Fraction loops on 3,000+ adversarial and 12,000 random (T, period) pairs (0 mismatches)."
+  },
+  {
+   "id": "NUM-2",
+   "status": "FIXED",
+   "what": "NaN/inf/negative/None in annual profiles, grid descriptor/table, construction value, factor value, gas amounts, conversion multipliers and GWP are never used in arithmetic: the series/row/unit is skipped and counted on both sides with the same predicates; QA-01 uses the same NaN-safe test on both sides; B5 with zero events is exactly 0.",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t7.py (3461 single-field cases): 3383 identical, 0 disagreements, 12 ValueError for boundary.study_period, 66 same-type exceptions where a number was put into a list/record field (wrong type). repro_findings.py NUM-2: grid decline NaN -> source TABLE on both, 0 strict differences."
+  },
+  {
+   "id": "NUM-3",
+   "status": "FIXED",
+   "what": "Reference B3-01 no longer drops a row because e0 == 0.0; a row with computed manufacturing and repair rate > 0 keeps its lines on both sides.",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t14.py: X-04.value ref 8938913.468391037 / unified 8938913.46839103, X-05 equal, 'units failing the study's own comparison: []' for the equipment and the material case; NF3 variant by_gas.NF3 485.59114081708 on both."
+  },
+  {
+   "id": "NUM-4",
+   "status": "FIXED",
+   "what": "An annual table shorter than the period (or with invalid entries) makes that series unusable (skipped and counted; electricity: B6-04/B6-01 computed False); a short copy of a parametric profile only sets descriptors_match_tables False. No IndexError on either side.",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t1.py: 46 cases 'no difference', 'SUMMARY of cases with differences: []'; repro_findings.py NUM-4 returns results on all three runs; t6.py baseline_short_profile_no_factor: same (INCOMPLETE)."
+  },
+  {
+   "id": "NUM-5",
+   "status": "FIXED",
+   "what": "Purchased-electricity and refrigerant lines are identified by module-level sentinel objects (refcalc.base.GRID/REFRIGERANT of class PseudoLine, fastcalc.engine.GRID/REFRIGERANT of class PseudoKey, repr '<GRID>'/'<REFRIGERANT>', identity comparison, copy/deepcopy/pickle keep identity).",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t12.py: factor ids 'GRID' and 'REFRIGERANT': A13-01, B6-03, B1-02, SUM-03, X-04 agree to 1e-15; A5-01 5328.16848 on both; mutations factor_id_named_GRID / _REFRIGERANT pass in exactness."
+  },
+  {
+   "id": "NUM-6",
+   "status": "FIXED",
+   "what": "X-04/X-05 use the gas list without repetitions (first occurrence, order kept), read each record's own amounts with 0 for a missing gas; X-05 does not need CO2 in the list; a gas without a usable GWP is left out and counted (n_gases_skipped).",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t10.py: 15 cases 'no difference' (gases without CO2, duplicate, empty, reversed, unknown gas, missing component amount, with and without composites; T=1000/999.9/500.5; tiny T)."
+  },
+  {
+   "id": "NUM-7",
+   "status": "FIXED",
+   "what": "A STEPWISE step index that is not of type int (float, bool) makes the descriptor not well formed on both sides: the table is used.",
+   "how_checked": "repro_findings.py NUM-7: X-06.source TABLE on reference, unified full and totals; t1.py steps_float_index / steps_float_integral_index / steps_bool_index: no difference."
+  },
+  {
+   "id": "NUM-8",
+   "status": "FIXED",
+   "what": "refcalc.units_pre_a.factor_uses passes the target unit as a value (class UnitOnly) instead of the text 'UNIT:<unit>'.",
+   "how_checked": "repro_findings.py NUM-8: SYS-02.violations ['construction.electricity'] on all three runs for units named 'None'."
+  },
+  {
+   "id": "NUM-9",
+   "status": "FIXED",
+   "what": "Caller-held baseline totals are keyed by boundary.baseline_scenario and stored as {'value', 'complete'}; meta is no longer read; docstrings of finish/evaluate state that the key identifies the baseline by name only and what invalidates an entry.",
+   "how_checked": "repro_findings.py NUM-9 and t6.py held_two_baselines_same_meta_id: both proposals equal to the reference (baseline 8601741.597412234 vs 8601741.597412238), held dict has two keys; t6.py: 29 cases same, 3 DIFFERENT = the documented stale/supplied held-entry cases (by design)."
+  },
+  {
+   "id": "NUM-10",
+   "status": "PARTLY_FIXED",
+   "what": "(b) fixed: segment_moments and linear_weighted_sum sum the full years and add the weighted last year. Additionally refrigerant_fractions computes the remaining share with exp (ordinary leak rates over ~120 years differed by 1.6e-8 on a B1-03.by_year leaf). (a) share 1.0 with fuels scaled <= 1e-6, (c) baselines differing by 1e-8, (d) overflow near 1e308, (e) leak rate within 1e-8 of 1 without top-up: no code change, still differ.",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t4.py / t9.py: T=1.000000001, 1+1e-12, 1e-6..1e-10 zero-base cases: 0 strict differences; share1_tiny_fuel: X-02.by_stage.B6 1.5e-6 and reference QA-01 False vs unified True; near_baseline_1e-08: SUM-08.delta 4.2e-5; overflow: A13-01 2.4e+305 vs inf. tests/test_closed_forms.py test_weighted_sums_just_above_a_whole_year and test_refrigerant_remainder_after_a_long_cycle (exact rational reference, 1e-12)."
+  },
+  {
+   "id": "NUM-11",
+   "status": "FIXED",
+   "what": "common.compare: an infinity equals only the same infinity, a bool only a bool. bench.verify_unified.exactness compares with floor 0 (EXACT_FLOOR), treats extra leaves in totals mode, units absent in the reference and ANY exception on a valid-period scenario as failures.",
+   "how_checked": "repro_findings.py NUM-11: compare(inf,1.0), (inf,-inf), (-inf,5.0) -> within False; inline check of 15 value pairs; reduced and full exactness runs pass with floor 0 (see acceptance d)."
+  },
+  {
+   "id": "RED-1",
+   "status": "FIXED",
+   "what": "Completeness follows the data flow: for each included stage the units X-02 composes it from plus their transitive depends_on closure (refcalc.units_c_sum.stage_upstream); a unit counts when n_skipped / n_routes_skipped / n_partial / n_invalid / n_unresolved > 0 or computed is False. The engine restates the table (STAGE_UPSTREAM, B6_UPSTREAM_WITHOUT_B2); a test asserts equality with the registry closure.",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/holes1.py H1: ['B3'], ['B5'], ['B3','B5'] -> complete False ['A13-01','A13-05','X-01'], ['B4'] -> False; holes5.py: reference and unified equal; holes6.py (negative quantities, B3 only): complete False. 90 'stage_subset_with_defect' scenarios in exactness, tests test_stage_subset_with_a_defect_in_an_upstream_row_is_incomplete / test_stage_subset_with_upstream_defect_is_incomplete_on_both_sides."
+  },
+  {
+   "id": "RED-2",
+   "status": "FIXED",
+   "what": "Annual quantities, grid values (series and construction value), factor values, gas amounts and conversion multipliers are validated (finite, >= 0; conversions > 0); the item is skipped and counted, totals incomplete. The clamp of B6-04 stays and its text says it is the definition of purchased electricity.",
+   "how_checked": "holes1.py H2/H3/H5: negative or NaN gas base -> B6-02 n_skipped 1, complete False; negative/NaN grid -> B2-01 computed False, complete False; construction value None/negative -> A5-01 0.0, complete False; negative conversion -> n_skipped 1, SYS-02 False; factor NaN/negative/None -> complete False and SUM-03 finite. holes5.py: negative electricity demand -> B6-04 computed False."
+  },
+  {
+   "id": "RED-3",
+   "status": "PARTLY_FIXED",
+   "what": "None = not renewed (nothing counted); a cycle/service life that is present but not finite positive gives no events and is counted: n_invalid in B4-01 and B4-03, refrigerant device skipped in B1-02/03/04; B5-01 computed False when the scenario is not NONE and the cycle is missing or invalid. Texts of B4-01, B4-03, B5-01, B1-02 rewritten. Not done here: the entry in section B of 06_OPEN_ISSUES (not my file).",
+   "how_checked": "holes1.py H8: complete False ['B1-02','B1-03','B1-04','B4-01','B4-03','B5-01'], B5 computed False; tests test_invalid_cycles_are_counted_and_missing_ones_are_not; mutations invalid_cycles, rebuild_cycle_missing/zero/infinite/nan pass."
+  },
+  {
+   "id": "RED-4",
+   "status": "FIXED",
+   "what": "X-04 returns matches_stage_total (|value - S| <= 1e-9*max(|S|,1), S = sum of X-02.by_stage_all) and depends on X-02; QA-01 has check (d) with violation entry 'gas breakdown total'.",
+   "how_checked": "holes1.py H6 (CO2 amount of one factor x3): QA-01 {'ok': False, 'violations': ['gas breakdown total']}; test_gas_breakdown_is_checked_against_the_stage_total; clean scenarios keep QA-01 ok (exactness run)."
+  },
+  {
+   "id": "RED-5",
+   "status": "FIXED",
+   "what": "SUM-08 statuses NO_BASELINE, BASELINE_NOT_FOUND, NOT_COMPARABLE, INCOMPLETE (delta and saving None), COMPARED; INCOMPLETE and COMPARED report proposal_complete and baseline_complete.",
+   "how_checked": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=.:/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1 python3 -B /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/holes4.py: baseline with 4 rows uncomputable -> {'status': 'INCOMPLETE', ..., 'proposal_complete': True, 'baseline_complete': False}; proposal incomplete -> INCOMPLETE; t6.py unregistered_baseline -> BASELINE_NOT_FOUND on all three."
+  },
+  {
+   "id": "RED-6",
+   "status": "FIXED",
+   "what": "SYS-01 keeps its examined fields, lists them in the text, says that other inputs are reported by the unit that needs them, and reports NaN/inf as NOT_FINITE (counts['NOT_FINITE'], not_finite list, violation). Ledger SYS-01 'branches' corrected by hand.",
+   "how_checked": "holes1.py H7: SYS-01 False ['materials[1].quantity'] for the NaN quantity; test_state_gate_reports_non_finite_values; 01_LEDGER/units.json SYS-01 branches now start with '値が None（欠損）→ MISSING' and '値が NaN・無限大 → NOT_FINITE'."
+  },
+  {
+   "id": "RED-7",
+   "status": "PARTLY_FIXED",
+   "what": "Texts say it: B4-02 and B3-01/B3-02 use A13-01 + A13-03 (X-01 for equipment) without the uplift A13-04; B5-01's base includes A13-04. No number changed. Not done here: listing the choice with its size in section B of 06_OPEN_ISSUES.",
+   "how_checked": "tools.sync_ledger: reference_semantics equals the docstrings (test_ledger_text_is_the_docstring); before/after snapshot of 299 scenarios: no value of a clean scenario changed in the reference (bit for bit)."
+  },
+  {
+   "id": "RED-8",
+   "status": "PARTLY_FIXED",
+   "what": "A5-04 text states that installation by factor is not part of A5 and is used only at renewals (B4-02). Not done here: adding material rows to B-11 of 06_OPEN_ISSUES.",
+   "how_checked": "Text only; synced to the ledger; no number changed (snapshot comparison)."
+  },
+  {
+   "id": "RED-9",
+   "status": "FIXED",
+   "what": "B4-02 text names equipment delivery (factor of stage A4) and installation (stage A5) per renewal and the stage A5 of the material installation factor; B1-02 text has 'x GWP'.",
+   "how_checked": "Text only; synced to the ledger; no number changed (snapshot comparison)."
+  },
+  {
+   "id": "RED-10",
+   "status": "FIXED",
+   "what": "No uncontrolled error left for missing/NaN values: C-05 (invalid fraction = violation, invalid mass = n_mass_unchecked), grid construction value, None in tables, factor value None, summary quantity None (X-17 n_classes_skipped), None in the use-area breakdown (SYS-04 INVALID, sum None), None in explicit lists (ignored, QA-02 fails), short annual tables. check_period only refuses an invalid study period.",
+   "how_checked": "holes1.py H3/H4/H9 ('no error'); t7.py: no exception except study period and wrong-type cases; test_gates_do_not_raise_on_missing_values, test_only_an_invalid_study_period_raises."
+  },
+  {
+   "id": "RED-11",
+   "status": "PARTLY_FIXED",
+   "what": "(2) fixed: an equipment row without disposal factor is a mandatory slot in model.factor_references, SYS-03 reports 'equipment[i].eol_factor_id (no factor)'. (1) SYS-02 text says the EPD factor is not examined (X-15 reports). (4) repeated values are each counted and QA-02 lists the list in warnings. (3) kept by decision (C3-01 text now says a zero-fraction route without a usable factor is counted). Not done here: listing these conventions in section B.",
+   "how_checked": "test_licence_gate_requires_the_equipment_disposal_factor; test_explicit_lists_with_missing_or_repeated_entries; mutation repeated_event_years in exactness."
+  },
+  {
+   "id": "RED-12",
+   "status": "PARTLY_FIXED",
+   "what": "(1) X-02/X-05 texts describe by_stage_all and by_stage_co2 (both kept: used by X-07, QA-01, tests, approx_study). (2) B2-01 computed False when B6-01 is not computed. (3) QA-01 text states the absolute floor. (4) SUM-05 unreachable branch and its text removed. (5) X-17 leaves out and counts classes without a positive summary quantity, text fixed. (6) X-13 has n_skipped. Not done: (7) no lower bound on a positive period (the reference still counts one event at a time); QA-01 (b),(c) still cannot fail by construction.",
+   "how_checked": "holes5.py: B6-01 computed False -> B2-01 {'value': 0.0, 'computed': False}; tests test_summary_classes_without_a_positive_quantity, test_net_order_quantity_counts_its_skipped_rows."
+  },
+  {
+   "id": "REC-1",
+   "status": "PARTLY_FIXED",
+   "what": "Code side fixed as NUM-1: the reference's year assignment is rounding-safe (exact) and the closed form is proved by the same integers (q = L*c >= 1 exactly -> distinct years; q < 1 -> years 1..year(last)). Not done here: DERIVATIONS.md D3 and the records (later stages).",
+   "how_checked": "As NUM-1."
+  },
+  {
+   "id": "APP-5",
+   "status": "DOCUMENTED_ONLY",
+   "what": "The exact rule is N = ceil(T*c/L) - 1 with c = the double nearest 1 - 1e-9, hence T*c/L - 1 <= N < T*c/L; the bound T/L - 1 <= N does not hold in general. Stated in the docstring of fastcalc.closed_forms.renewal_count; the candidate texts (AP-01, AP-20) belong to stage B2.",
+   "how_checked": "python: renewal_count(60.0, 19.99999999) = 2 while 60/19.99999999 - 1 = 2.0000000015; T*c/L - 1 <= N < T*c/L holds."
+  },
+  {
+   "id": "REP-17",
+   "status": "PARTLY_FIXED",
+   "what": "The ValueError 'year tables are shorter than the study period' is removed from check_period on both sides; a short grid table makes the grid unusable only when no well-formed descriptor exists. Convention text in refcalc/base.py updated. Not done here: 06_OPEN_ISSUES B-16/B-21 and DERIVATIONS.",
+   "how_checked": "test_only_an_invalid_study_period_raises, test_a_period_longer_than_the_year_tables_is_not_refused; mutations period_beyond_year_tables, short_grid_table, short_grid_table_copy pass; INVALID_PERIODS refused 6/6."
+  },
+  {
+   "id": "REP-16",
+   "status": "FIXED",
+   "what": "sweep_check compares every unit the sweep returns (70 units), with the baseline comparison on (engine.sweep(..., compare=True)), and records units, n_units, scenarios, scenarios_with_baseline and SUM-08 status counts. The README sentence is for the report stage.",
+   "how_checked": "sweep_check(16): 41 scenarios (3 with baseline), 70 units, 165177 values, worst 7.684e-14, all_exact True; sweep_check(40): 65 scenarios, 309705 values, worst 1.093e-13."
+  }
+ ],
+ "decisions": [
+  "B4-01.events now holds event YEARS (ints) per equipment row, not event times: the n-th periodic event is the exact product n*L, which has no float representation in general. refcalc.base.periodic_events / explicit_events return years too. event_year(y) == y for whole years, so bench/approx_study.py (not changed, run(12) still works) keeps computing the same skip years.",
+  "A repeated entry in an explicit list means the same VALUE listed more than once (QA-02 warning; each is counted). Two different times that fall in the same year are not reported.",
+  "Annual profile: when the descriptor of a parametric kind is not given (base None, or slope None for LINEAR_TREND) or the kind is unknown, the year table is the input (unchanged rule). A descriptor that is given but invalid makes the series unusable; there is no fallback to the table. For the grid a malformed descriptor falls back to the table as the spec says.",
+  "X-06 for an unusable grid: source 'NONE', computed False, by_year zeros, matches_table False. For source TABLE matches_table is True.",
+  "Exclusion counts are n_skipped, n_routes_skipped, n_partial, n_invalid, n_unresolved (plus computed False). n_epd_declined, n_mass_unchecked, n_excluded, n_classes_skipped, n_gases_skipped do not mark a total incomplete (listed in refcalc/base.py).",
+  "B6 with B2 outside the boundary is composed from B6-03 only, so its upstream set excludes B2-01 (an invalid facility-management ratio does not mark a B6-only total incomplete). The engine therefore has two restated tables (STAGE_UPSTREAM and B6_UPSTREAM_WITHOUT_B2); the test checks both against the registry.",
+  "The closure rule is conservative by design: e.g. a row with an unusable quantity marks A4 incomplete through A13-05 even when that row is delivered by mass and distance. incomplete_units of existing defective scenarios therefore list more units than before.",
+  "X-04 got the dependency X-02 (to compare with the sum of the 14 stage values); X-02's depends_on is now the full upstream set (+A13-02, A13-05, B4-01, B4-03, B6-04, X-06, X-15); X-07 now declares B2-01, which it already read (found by the new test test_units_read_only_their_declared_dependencies).",
+  "X-17: a skipped class has fbar None and emission 0.0. Clean scenarios whose building has no rows of a class (summary quantity 0) now report n_classes_skipped > 0; the value is unchanged.",
+  "SYS-01: violations holds MISSING and NOT_FINITE paths in order of examination; not_finite holds the latter; counts has the extra key 'NOT_FINITE'. The examined field set is unchanged (a refrigerant service life is only reported when it and the change list are both missing).",
+  "SYS-04 returns sum None when a use area is unusable; a non-finite gross floor area is INVALID and SUM-04/SUM-05/X-11 are None (area must be finite > 0).",
+  "SUM-08: NO_BASELINE only when boundary.baseline_scenario is None (a scenario registered under the key None is ignored); the INCOMPLETE result carries no 'baseline' value.",
+  "Deviation (beyond item 16): fastcalc.closed_forms.refrigerant_fractions computes the remaining share as m*exp(j*log1p(-rate)) instead of m - leak. Reason: with floor 0 the checker's fuzz (seeds 1526, 3742: leak rates 0.14, no change for 119-128 years) showed a B1-03.by_year leaf off by 1.6e-8 on valid ordinary inputs.",
+  "Deviation: products with zero renewals are exactly 0 in the engine (B5-01 value, B4-02.by_item_*), as in the reference loops, instead of 0*inf = NaN after an overflow.",
+  "Deviation: reference SUM-07 condition written as 'total > 0 and all stage values >= 0' (same result for numbers, same behaviour for NaN as the engine).",
+  "exactness(): any exception on a scenario of the list (all have a valid study period) is a failure, not only an asymmetric one. INVALID_PERIODS is now (0.0, -5.0, nan, inf, -inf, None); 500.0 moved to the mutations period_beyond_year_tables / period_beyond_year_table_copies.",
+  "Unit texts: '欠損・負' became '欠損・有限でない・負' where the code already rejected non-finite values (C1-01, C2-01, C4-01, X-14, X-10, STO-01, STO-02, A5-01, A5-02, X-16); texts of X-15, X-01, A13-04, B1-01, A13-02, X-12, SUM-02, SUM-03, SUM-04, QA-04 extended to describe existing code. No number changed by these.",
+  "The engine's _stats keys and values are unchanged (compared with the stored mechanism counts on the mechanism scenario: all equal); the per-row structure and counters were left for stage A2. The record part of a factor check is one helper (_record_ok) used by the resolver, the EPD branch and the recipe builder; it is not yet memoised per (factor, stage).",
+  "research_code/README.md not changed (no command changed). synth/generate.py not changed. synth/population.py: one edge case appended (life_at_year_tolerance); 154 existing scenarios checked bit-identical against the generator of git HEAD.",
+  "bench/mutations.py: 36 -> 214 mutations (33 hand-written for the second round, 29 targets x 5 bad values generated), DECIMAL_BOUNDARIES +3 entries with 1.000000001 and neighbours, UPSTREAM_DEFECT_SUBSETS x UPSTREAM_DEFECTS for the stage-subset scenarios."
+ ],
+ "interface_changes": [
+  "Result keys, both calculations: B4-01 +n_invalid, events = years (ints); B4-03 +n_invalid (present in totals mode); X-13 +n_skipped (present in totals mode); X-17 +n_classes_skipped, by_class[k].fbar None for a skipped class; X-06 +computed, source in {DESCRIPTOR, TABLE, NONE}; X-04 +matches_stage_total, +n_gases_skipped, by_gas keys = gas list without repetitions; SYS-01 +not_finite, counts['NOT_FINITE']; SUM-08 +proposal_complete, +baseline_complete, statuses NO_BASELINE / BASELINE_NOT_FOUND / NOT_COMPARABLE / INCOMPLETE / COMPARED.",
+  "Changed meaning: X-02.incomplete_units (data-flow closure, may list A13-02, A13-05, X-15, B4-01, B4-03, B6-04, X-06); B2-01.computed False when B6-01 is not computed; B5-01.computed False for a missing/invalid cycle with a rebuild scenario; B6-04/B6-01 computed False and B6-02/B7-0x n_skipped for unusable series; descriptors_match_tables / matches_table False for a short or non-finite copy; A5-01.computed False for an invalid construction value; B1-02/03/04 n_skipped include devices with an invalid service life; C-05 violations for invalid fractions, n_mass_unchecked for invalid masses; SYS-03 violation 'equipment[i].eol_factor_id (no factor)'; SYS-04 sum None / INVALID for unusable use areas; QA-01 violation 'gas breakdown total'; QA-02 violations for None/NaN/inf entries, warnings for repeated values.",
+  "units_without_output_in_totals_mode is now [] (was B4-03, X-13): tools/build_reports.py line 308 joins this list into a sentence and needs rewording.",
+  "refcalc.base: check_period only checks the study period; periodic_events(T, period) and explicit_events(T, entries) return event years; exact inside(tau, T), event_year(tau); new finite, invalid_period, factor_values_ok, profile_uses_descriptor, descriptor_values, profile_matches_table, grid_table_usable, grid_source, left_out, EXCLUSION_COUNTS, C_NUM, C_DEN, PseudoLine; profile_values and grid_values return None when unusable; same_series(values, table) takes the whole table; GRID / REFRIGERANT are objects.",
+  "refcalc.units_c_sum: STAGE_UNITS and _incomplete removed; new STAGE_SOURCES, B6_SOURCES_WITHOUT_B2, upstream_units(sources), stage_upstream(stage, b2_included=True), X02_DEPS, listed_gases(scn), within(residual, tol, scale). refcalc.units_pre_a: class UnitOnly, NOT_FINITE; factor_uses yields UnitOnly(unit) instead of 'UNIT:<unit>'. refcalc.units_b: _skip_years and _matches removed.",
+  "synth.model: usable_multiplier(value); conversion_factor returns None for a multiplier that is not finite > 0 (first matching entry decides); factor_references yields the equipment eol_factor_id slot also when None. synth.population.edge_cases(): 33 cases (new last one 'life_at_year_tolerance').",
+  "fastcalc.closed_forms: exact inside, event_year, renewal_count; new finite, nonneg, periodic_year(n, period), periodic_years(period, n_events), explicit_years(T, entries), skip_weight_years(T, years), table_usable(table, Y), C_NUM, C_DEN; skip_weight_events(T, events) kept; grid_segments returns None for the stricter well-formedness rule.",
+  "fastcalc.engine: GRID / REFRIGERANT are PseudoKey objects (keys of _tables); STAGE_UNITS replaced by STAGE_UPSTREAM, B6_UPSTREAM_WITHOUT_B2, EXCLUSION_COUNTS; new helpers _record_ok(rec, stage), _profile_state(profile, Y), _left_out(result), _valid_period(T); baseline_totals entries are {baseline id: {'value': total, 'complete': bool}} keyed by boundary.baseline_scenario; sweep(scn, periods, compare=False) (compare=True adds SUM-08 per period); finish raises ValueError for an invalid T argument.",
+  "common.compare.compare: infinity and bool strictness (see NUM-11).",
+  "bench.mutations: MUTATIONS has 214 entries; new BAD_VALUES, BAD_VALUE_TARGETS, UPSTREAM_DEFECT_SUBSETS, UPSTREAM_DEFECTS; INVALID_PERIODS changed. bench.verify_unified: EXACT_FLOOR = 0.0, SWEEP_UNITS removed; scenarios() yields the new group 'stage_subset_with_defect:<name>' (90 scenarios; tools/build_reports.GROUP_JA has no label for 'stage_subset_with_defect').",
+  "JSON of exactness(): new keys absolute_floor, comparison, largest_difference {max_abs_rel_error, unit, path, scenario, mode}, scenarios_with_incomplete_total; failures entries may carry summary_extra; by_group.max_abs_rel_error now includes totals mode. JSON of sweep_check(): units = all compared units (70), new n_units, scenarios_with_baseline, units_without_output_in_totals_mode, non_numeric_compared, sum_08_status_counts, absolute_floor, largest_difference. With (400, 60, sweep 40): 1490 exactness scenarios, 65 sweep scenarios.",
+  "01_LEDGER/units.json: reference_semantics of 50 units, depends_on of X-02, X-04, X-07 and the feeds they imply, SYS-01 branches (hand edit)."
+ ],
+ "tests": "cd /home/user/-/whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code && PYTHONPATH=. python3 -B -m unittest discover -s tests -t .  ->  'Ran 68 tests in 32.585s' / 'OK' (was 28 tests). New: tests/test_closed_forms.py rewritten against fractions.Fraction loops (14 tests), tests/test_refcalc.py class DefinitionTests (23 tests), tests/test_engine.py +9 tests.",
+ "acceptance": [
+  {
+   "item": "a. unit tests",
+   "result": "Ran 68 tests in 32.585s, OK.",
+   "passed": true
+  },
+  {
+   "item": "b. item-10 single-field sweep (adapted t7.py)",
+   "result": "3461 cases: 3383 identical on reference / unified full / unified totals, 0 disagreements. Exceptions: 12 x ValueError for boundary.study_period (intended) and 66 same-type exceptions (18 AttributeError, 48 TypeError) where the sweep writes nan/inf/-inf into a field that is None and expects a record or a list (materials[].epd, materials[].composition, equipment[].replacement_event_list, refrigerants[].change_years). These are wrong TYPES, declared out of scope in refcalc/base.py; not guarded. Output: /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/t7.out",
+   "passed": true
+  },
+  {
+   "item": "c. adapted checker scripts",
+   "result": "repro_findings.py: NUM-1..9 agree (output /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/repro_findings.out); t14.py: no failing unit; t12.py: agree; t10.py: 15/15 no difference (adapted: period set after generation because the generator refuses T > 300); t1.py: 46/46 no difference; t6.py: 29 same, 3 DIFFERENT = held-entry cases that are stale or supplied by design (adapted: held entry in the new format); holes1.py / holes4.py / holes5.py / holes6.py show complete False, counts, INCOMPLETE and computed False where the findings asked for them.",
+   "passed": true
+  },
+  {
+   "item": "d. reduced exactness run",
+   "result": "exactness(60, 20): 1110 scenarios, all_exact True, floor 0.0, no extra leaves, largest relative difference 1.408e-13 at B3-01.value (SYN-RC-office-L-T60-seed103, full mode), invalid periods refused 6/6, baseline reuse True. sweep_check(16): 41 scenarios, 70 units, 165177 values, largest 7.684e-14 at B3-01.value (T=120), all_exact True. Also the study's size exactness(400, 60) + sweep_check(40): 1490 scenarios all_exact True, largest 4.775e-13 at SUM-08.delta (SYN-W-residential-M-T99.9-seed834636725); sweep 65 scenarios, largest 1.093e-13. Scratch JSON: /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/exact_60_20.json, /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/a1/exact_400_60_40.json (nothing written to the study).",
+   "passed": true
+  },
+  {
+   "item": "e. checker's random fuzz (fuzz1.py + fuzzlib.py, WITH_KNOWN_BAD=1, seeds 0..6000)",
+   "result": "6000 scenarios, strict comparison without floor, 0 exceptions, 2 disagreements (seeds 1848, 2310). Both have one refrigerant device with leak rate 0.999999999 and no top-up (the NUM-10 (e) class the spec says not to change): yearly-series leaves <= 9.3e-5 kgCO2e and, for seed 2310, B1-03.value 3.5e-51 and B1-04.value 1.0e-23, relative differences 1e-8..2.7e-7 against a B1 stage of 4.6e5. An extended fuzz (fuzz2.py: the same plus NaN, +-inf, None, negative, 0 and other values written into random numeric leaves) on 6000 scenarios: 0 exceptions, the same 2 disagreements. Target 0 not reached because of these two.",
+   "passed": false
+  },
+  {
+   "item": "f. tools.sync_ledger and git diff --stat",
+   "result": "sync_ledger: 'synced 70 units (0 changed)' on the last run (49 changed on the first run; 50 reference_semantics texts differ from git HEAD in total). git diff --stat: 15 files changed, 2665 insertions(+), 590 deletions(-): 01_LEDGER/units.json 129, bench/mutations.py 461, bench/verify_unified.py 135, common/compare.py 13, fastcalc/closed_forms.py 193, fastcalc/engine.py 455, refcalc/base.py 332, refcalc/units_b.py 175, refcalc/units_c_sum.py 248, refcalc/units_pre_a.py 142, synth/model.py 24, synth/population.py 5, tests/test_closed_forms.py 286, tests/test_engine.py 205, tests/test_refcalc.py 452. No git command that changes anything was run; no __pycache__ in the tree.",
+   "passed": true
+  }
+ ],
+ "open_problems": [
+  "NUM-10 limits remain by instruction and must be documented by the orchestrator: (a) facility_management_ratio 1.0 with fuel use scaled by <= 1e-6: X-02.by_stage.B6 differs (1.5e-6 at scale 1e-9) and the REFERENCE QA-01 reports 'stage B6' for a valid input (it loses digits in B6-03 - B2-01); (c) SUM-08.delta for a baseline that differs by 1e-8 in one row: 4.2e-5 relative; (d) overflow (two rows of 1.2e308): A13-01 2.4e+305 vs inf; (e) leak rate within 1e-8 of 1 without top-up: tiny B1 leaves differ by 1e-8..3e-7.",
+  "Fuzz target 0 not met: 2 of 6000 scenarios (0.03 %) differ, both of class (e) above.",
+  "Underflow is a further limit of the same kind, seen once in an exploratory fuzz: a refrigerant charge of 5e-324 kg gives B1-02.by_item 0.0 in the reference and 7.5e-322 in the unified model.",
+  "Wrong-type inputs still raise (same exception on all three runs): a number where a record or list is expected (epd, composition, replacement_event_list, change_years). Out of scope as stated in refcalc/base.py.",
+  "RED-12 (7) not addressed (not in the spec): a very small positive period makes the reference count and store one entry per event (period 1e-9 years, T = 60: 6e10 events; an exploratory fuzz run was killed for lack of memory for this reason). The unified model has no such loop in totals mode but builds the year list in full-output mode.",
+  "The reference became heavier because the factor record (value and every gas amount) is re-checked at every use and the time tests use integers: executed instructions on the benchmark, reference x1.24 (S 2528394 -> 3135214, M 24869192 -> 30840145), unified full x1.10 / x1.08, unified totals x1.14 / x1.10 against the stored load file. The instruction reduction would read S totals 0.676 -> 0.701, M totals 0.726 -> 0.757, S full 0.542 -> 0.593, M full 0.636 -> 0.684. About 3 to 5 points of that rise come from the reference re-validating per use, not from a better unified model; the reports must say so after the re-measurement.",
+  "Texts outside my files still describe the old rules: 06_OPEN_ISSUES section B (B-11 material installation, B-16, B-17, B-18 with the B6-04 clamp as the named exception, B-21, new entries for invalid periods, the A13-04 choice of RED-7, repeated event years, zero-fraction routes), 03_MODELS/DERIVATIONS.md D3 (now: q = L*c >= 1 in exact arithmetic), records EX-B3-01-*, 04_VERIFICATION/README (floor, sweep scope, invalid periods list, 36 mutations -> 214), closed-form docstring claims quoted in records.",
+  "For stage B2 (bench/approx_study.py, not changed): refcalc.base.periodic_events and B4-01.events now hold years; the count rule is N = ceil(T*c/L) - 1, so T*c/L - 1 <= N < T*c/L. approx_study.run(12) still runs (row_data_rebuilds_reference_B4_max_rel_diff 1.6e-15).",
+  "For stage A2: the validity checks added per row in aggregate (cycle validity, X-13 count, C-05 fraction test, equipment eol reference) and _record_ok are not memoised; _stats is unchanged; STAGE_UPSTREAM / B6_UPSTREAM_WITHOUT_B2 must stay equal to the registry closure (tested).",
+  "Clean scenarios now report X-17.n_classes_skipped > 0 when a class has no rows (summary quantity 0); QA-02.warnings and incomplete_units lists of existing defective/mutated scenarios changed; SYS-04 of one generated defective scenario (negative use area) is now INVALID. Stored JSON outputs of the study are stale until regenerated."
+ ],
+ "report_file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/recheck/fix/A1_REPORT.json"
+}

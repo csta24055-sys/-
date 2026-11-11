@@ -1,0 +1,9 @@
+engine.evaluate signature: (scn, detail: 'bool' = True, baseline_totals: 'dict | None' = None) -> 'dict'
+['B3'] ref SUM-03 {'value': 43676.15603264954, 'complete': False} fast SUM-03 {'value': 43676.156032649786, 'complete': False} fast X-02 complete False ['A13-01', 'A13-05', 'X-01'] SYS-01 ok False ['materials[0].quantity', 'materials[2].quantity', 'materials[9].quantity'] SYS-03 ok False
+['B5'] ref SUM-03 {'value': 333032.13729313586, 'complete': False} fast SUM-03 {'value': 333032.13729313575, 'complete': False} fast X-02 complete False ['A13-01', 'A13-05', 'X-01'] SYS-01 ok False ['materials[0].quantity', 'materials[2].quantity', 'materials[9].quantity'] SYS-03 ok False
+
+-- negative electricity demand is clamped to 0 without a flag --
+B6-01 total clean 1301522.232136482 negative demand 0.0 B6-04 computed False match True complete False SYS-01 True
+
+-- B2-01 'computed' when B6-01 is not computed --
+B6-01 computed False B2-01 {'value': 0.0, 'computed': False} X-02 {'B2': 0.0} False ['B2-01', 'B6-01']

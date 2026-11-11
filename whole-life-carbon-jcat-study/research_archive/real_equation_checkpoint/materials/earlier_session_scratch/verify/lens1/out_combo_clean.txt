@@ -1,0 +1,32 @@
+mode=combo_clean mutations=644 scenarios compared: 6000 (71s) status={'ok': 5996, 'diff': 4}
+
+== ('numeric', 'full', 'SUM-08', 'delta') count 2
+   muts: [('eq.quantity=huge/one', 2), ('baseline=defective_baseline', 2), ('dev.service_life=T/all', 1), ('eq.service_life=one/one', 1), ('mat.repair_rate=neg/all', 1), ('mat.unquantified_cost_ratio=neg/one', 1)]
+    {"k": 6, "bseed": 897590, "names": ["dev.service_life=T/all", "eq.quantity=huge/one", "eq.service_life=one/one", "baseline=defective_baseline"], "mseed": 798742, "T": 24.0, "finding": {"kind": "numeric", "mode": "full", "unit": "SUM-08", "path": "delta", "err": 2.19072354002336e-07, "ref": 60075.25, "cand": 60075.0, "scale": 1141175485781899.2}}
+
+== ('numeric', 'summary', 'SUM-08', 'delta') count 2
+   muts: [('eq.quantity=huge/one', 2), ('baseline=defective_baseline', 2), ('dev.service_life=T/all', 1), ('eq.service_life=one/one', 1), ('mat.repair_rate=neg/all', 1), ('mat.unquantified_cost_ratio=neg/one', 1)]
+    {"k": 6, "bseed": 897590, "names": ["dev.service_life=T/all", "eq.quantity=huge/one", "eq.service_life=one/one", "baseline=defective_baseline"], "mseed": 798742, "T": 24.0, "finding": {"kind": "numeric", "mode": "summary", "unit": "SUM-08", "path": "delta", "err": 2.19072354002336e-07, "ref": 60075.25, "cand": 60075.0, "scale": 1141175485781899.2}}
+
+== ('numeric', 'full', 'X-07', 'cumulative[*]') count 1
+   muts: [('dev.top_up=int0/all', 1), ('dev.replacement_loss_rate=1/all', 1), ('dev.annual_leak_rate=neg/all', 1), ('grid.construction_value=0|neg', 1)]
+    {"k": 4, "bseed": 340492, "names": ["dev.top_up=int0/all", "dev.replacement_loss_rate=1/all", "dev.annual_leak_rate=neg/all", "grid.construction_value=0|neg"], "mseed": 309234, "T": 100.0, "finding": {"kind": "numeric", "mode": "full", "unit": "X-07", "path": "cumulative[80]", "err": 4.031152120790039e-06, "ref": 25966544.0, "cand": 25965520.0, "scale": 2.540216715511378e+17}}
+
+== ('numeric', 'full', 'B3-01', 'by_year[*]') count 1
+   muts: [('dev.change_years=[ulp]/one', 1), ('mat.unquantified_cost_ratio=neg/one', 1), ('dev.service_life=int1/one', 1), ('mat.quantity=huge/one', 1)]
+    {"k": 0, "bseed": 750838, "names": ["dev.change_years=[ulp]/one", "mat.unquantified_cost_ratio=neg/one", "dev.service_life=int1/one", "mat.quantity=huge/one"], "mseed": 886167, "T": 60.0, "finding": {"kind": "numeric", "mode": "full", "unit": "B3-01", "path": "by_year[20]", "err": 1.0904753842885001e-09, "ref": 33793.846213091645, "cand": 33793.84617624029, "scale": 18581687173736.664}}
+
+#### per mutation (only those with differences)
+baseline=defective_baseline: 2/38  [('SUM-08:numeric', 4)]
+dev.annual_leak_rate=neg/all: 1/33  [('X-07:numeric', 1)]
+dev.change_years=[ulp]/one: 1/36  [('B3-01:numeric', 1)]
+dev.replacement_loss_rate=1/all: 1/23  [('X-07:numeric', 1)]
+dev.service_life=T/all: 1/25  [('SUM-08:numeric', 2)]
+dev.service_life=int1/one: 1/29  [('B3-01:numeric', 1)]
+dev.top_up=int0/all: 1/30  [('X-07:numeric', 1)]
+eq.quantity=huge/one: 2/30  [('SUM-08:numeric', 4)]
+eq.service_life=one/one: 1/34  [('SUM-08:numeric', 2)]
+grid.construction_value=0|neg: 1/37  [('X-07:numeric', 1)]
+mat.quantity=huge/one: 1/30  [('B3-01:numeric', 1)]
+mat.repair_rate=neg/all: 1/38  [('SUM-08:numeric', 2)]
+mat.unquantified_cost_ratio=neg/one: 2/26  [('B3-01:numeric', 1), ('SUM-08:numeric', 2)]

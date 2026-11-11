@@ -1,0 +1,10 @@
+exactness(60, 20): scenarios 1110, all_exact True, floor 0.0, largest {'max_abs_rel_error': 1.408211172864469e-13, 'unit': 'B3-01', 'path': 'value', 'scenario': 'SYN-RC-office-L-T60-seed103', 'mode': 'full'}, incomplete totals 487, invalid periods refused 6/6, baseline reuse True, empty in totals mode [], 42s
+    benchmark {'scenarios': 3, 'max_abs_rel_error': 1.408211172864469e-13, 'failed': 0}
+    edge {'scenarios': 33, 'max_abs_rel_error': 2.1485382845960052e-14, 'failed': 0}
+    population {'scenarios': 60, 'max_abs_rel_error': 1.0843013169501197e-13, 'failed': 0}
+    defective {'scenarios': 20, 'max_abs_rel_error': 4.937157953263852e-14, 'failed': 0}
+    mutated {'scenarios': 856, 'max_abs_rel_error': 7.232601415399595e-14, 'failed': 0}
+    decimal {'scenarios': 16, 'max_abs_rel_error': 1.9220238888066365e-14, 'failed': 0}
+    stage_subset {'scenarios': 32, 'max_abs_rel_error': 2.053658166211498e-14, 'failed': 0}
+    stage_subset_with_defect {'scenarios': 90, 'max_abs_rel_error': 1.631044353952371e-14, 'failed': 0}
+sweep_check(16): scenarios 41 (with baseline 3), units 70, values 165177, statuses {'NO_BASELINE': 342, 'NOT_COMPARABLE': 24, 'COMPARED': 3}, worst 7.684e-14 at {'scenario': 'SYN-S-school-S-T100-seed882829444', 'T': 120.0, 'unit': 'B3-01', 'path': 'value'}, all_exact True, no output in totals mode [], 13s

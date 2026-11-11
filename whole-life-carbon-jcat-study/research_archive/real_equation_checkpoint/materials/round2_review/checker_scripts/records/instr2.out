@@ -1,0 +1,26 @@
+distinct (factor,stage,unit) triples from material+equipment rows without row conversions: 175
+per-row resolutions forced by row-specific conversions (not memoised): 105
+material rows with EPD (factor record looked up per row, outside use()): 37
+distinct EPD factor ids: 37
+
+-- aggregate, totals mode --
+   ('lookup', '_resolve', 173) 299
+   ('lookup', 'aggregate', 290) 37
+   ('lookup', 'aggregate', 697) 259
+   ('lookup', '_make_recipe', 749) 223
+   ('mul', '_make_recipe', 760) 223
+   model.conversion_factor calls: {('_make_recipe', 750): 223, ('conv', 142): 8}  engine counter unit_conversions_resolved = 8
+   engine counter factor_resolutions = 299
+
+-- finish, totals mode --
+   ('lookup', 'gas_of', 1045) 223
+   ('lookup', 'gas_of', 1049) 210
+   ('lookup', 'finish', 1150) 480
+   ('lookup', 'finish', 1178) 223
+   ('mul', 'tot', 819) 2847
+   ('mul', 'finish', 1072) 522
+   ('mul', 'finish', 1178) 223
+   refrigerant event-year lists passed to refrigerant_fractions (lengths): [2, 3, 5, 4, 2, 2, 2, 6, 5, 3]
+   explicit event lists filtered and passed to skip_weight_events (count, total events): 16 44 | explicit equipment: 16
+   engine counter event_lists_built = 0  table_factor_products = 3373
+   groups: 245  sum of len(group.u): 2691  lines if per row (approx: sum over tables of entries)  831

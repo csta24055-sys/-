@@ -1,0 +1,64 @@
+=== NUM-2 ===
+  grid.annual_decline=nan
+     ref {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.72621168}
+     full RAISES ValueError('cannot convert float NaN to integer')
+     tot RAISES ValueError('cannot convert float NaN to integer')
+  grid.start=nan
+     ref {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.72621168}
+     full RAISES ValueError('cannot convert float NaN to integer')
+     tot RAISES ValueError('cannot convert float NaN to integer')
+  grid.floor=nan
+     ref {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.72621168}
+     full RAISES ValueError('cannot convert float NaN to integer')
+     tot RAISES ValueError('cannot convert float NaN to integer')
+  grid.start=inf
+     ref {'X-06.source': 'DESCRIPTOR', 'SUM-03.value': nan}
+     full RAISES OverflowError('cannot convert float infinity to integer')
+     tot RAISES OverflowError('cannot convert float infinity to integer')
+  grid.floor=-inf
+     ref {'X-06.source': 'DESCRIPTOR', 'SUM-03.value': 23226396.882841732}
+     full RAISES OverflowError('cannot convert float infinity to integer')
+     tot RAISES OverflowError('cannot convert float infinity to integer')
+  grid.annual_decline=inf
+     ref {'X-06.source': 'DESCRIPTOR', 'SUM-03.value': 22063730.558828384}
+     full {'X-06.source': 'DESCRIPTOR', 'SUM-03.value': 22063730.558828343}
+     tot {'X-06.source': 'DESCRIPTOR', 'SUM-03.value': 22063730.558828343}
+  grid.start=-inf
+     ref {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.72621168}
+     full {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.726211637}
+     tot {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.726211637}
+  grid.floor=inf
+     ref {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.72621168}
+     full {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.726211637}
+     tot {'X-06.source': 'TABLE', 'SUM-03.value': 23295377.726211637}
+  baseline-only NaN decline: ref SUM-08 COMPARED | full ValueError('cannot convert float NaN to integer') | tot ValueError('cannot convert float NaN to integer')
+  gas.base=nan
+     ref {'QA-01.ok': True, 'QA-01.violations': [], 'B5-01.value': 0.0, 'B6-03.value': nan, 'SUM-03.value': nan}
+     full {'QA-01.ok': False, 'QA-01.violations': ['stage B6'], 'B5-01.value': 0.0, 'B6-03.value': nan, 'SUM-03.value': nan}
+     tot {'QA-01.ok': False, 'QA-01.violations': ['stage B6'], 'B5-01.value': 0.0, 'B6-03.value': nan, 'SUM-03.value': nan}
+  grid.construction_value=nan
+     ref {'QA-01.ok': True, 'QA-01.violations': [], 'B5-01.value': 0.0, 'B6-03.value': 5790697.090804422, 'SUM-03.value': nan}
+     full {'QA-01.ok': False, 'QA-01.violations': ['stage A5', 'stage B5'], 'B5-01.value': nan, 'B6-03.value': 5790697.090804422, 'SUM-03.value': nan}
+     tot {'QA-01.ok': False, 'QA-01.violations': ['stage A5', 'stage B5'], 'B5-01.value': nan, 'B6-03.value': 5790697.090804422, 'SUM-03.value': nan}
+  grid.construction_value=inf
+     ref {'QA-01.ok': True, 'QA-01.violations': [], 'B5-01.value': 0.0, 'B6-03.value': 5790697.090804422, 'SUM-03.value': inf}
+     full {'QA-01.ok': False, 'QA-01.violations': ['stage A5', 'stage B5'], 'B5-01.value': nan, 'B6-03.value': 5790697.090804422, 'SUM-03.value': inf}
+     tot {'QA-01.ok': False, 'QA-01.violations': ['stage A5', 'stage B5'], 'B5-01.value': nan, 'B6-03.value': 5790697.090804422, 'SUM-03.value': inf}
+  water.base=inf
+     ref {'QA-01.ok': True, 'QA-01.violations': [], 'B5-01.value': 0.0, 'B6-03.value': 5790697.090804422, 'SUM-03.value': inf}
+     full {'QA-01.ok': False, 'QA-01.violations': ['stage B7'], 'B5-01.value': 0.0, 'B6-03.value': 5790697.090804422, 'SUM-03.value': inf}
+     tot {'QA-01.ok': False, 'QA-01.violations': ['stage B7'], 'B5-01.value': 0.0, 'B6-03.value': 5790697.090804422, 'SUM-03.value': inf}
+  factor value nan (materials[0])
+     ref {'QA-01.ok': True, 'QA-01.violations': [], 'B5-01.value': 0.0, 'B6-03.value': 5790697.090804422, 'SUM-03.value': nan}
+     full {'QA-01.ok': False, 'QA-01.violations': ['stage A1-A3', 'stage B3', 'stage B4', 'stage B5'], 'B5-01.value': nan, 'B6-03.value': 5790697.090804422, 'SUM-03.value': nan}
+     tot {'QA-01.ok': False, 'QA-01.violations': ['stage A1-A3', 'stage B3', 'stage B4', 'stage B5'], 'B5-01.value': nan, 'B6-03.value': 5790697.090804422, 'SUM-03.value': nan}
+  gas.slope=inf
+     ref {'B6-03.value': nan, 'SUM-03.value': nan, 'QA-01.ok': True}
+     full {'B6-03.value': inf, 'SUM-03.value': inf, 'QA-01.ok': False}
+     tot {'B6-03.value': inf, 'SUM-03.value': inf, 'QA-01.ok': False}
+  grid kind of default scenario: LINEAR_DECLINE_TO_FLOOR
+  grid.table[0]=inf (kind TABLE)
+     ref {'B6-03.value': inf, 'B2-01.value': inf, 'X-06.source': 'TABLE'}
+     full {'B6-03.value': inf, 'B2-01.value': inf, 'X-06.source': 'TABLE'}
+     tot {'B6-03.value': inf, 'B2-01.value': inf, 'X-06.source': 'TABLE'}
+  study mutation nan_and_infinite_values -> study comparison failures: []

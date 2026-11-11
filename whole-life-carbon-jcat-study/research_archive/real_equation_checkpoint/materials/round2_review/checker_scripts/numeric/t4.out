@@ -1,0 +1,97 @@
+baseline differs in one row by 0.01: ref delta -88.86605819687247 eng delta -88.86605820059776 rel 4.19e-11; saving ref 2.696614554543352e-06 eng 2.6966145546564025e-06
+[near_baseline_0.01] strict diffs 0; fails under the study's comparison: 0
+baseline differs in one row by 0.0001: ref delta -0.8886605836451054 eng delta -0.8886605836451054 rel 0.00e+00; saving ref 2.6966217586622674e-08 eng 2.6966217586622757e-08
+[near_baseline_0.0001] strict diffs 0; fails under the study's comparison: 0
+baseline differs in one row by 1e-06: ref delta -0.008886609226465225 eng delta -0.008886609226465225 rel 0.00e+00; saving ref 2.696622859345444e-10 eng 2.696622859345452e-10
+[near_baseline_1e-06] strict diffs 0; fails under the study's comparison: 0
+baseline differs in one row by 1e-08: ref delta -8.886680006980896e-05 eng delta -8.887052536010742e-05 rel 4.19e-05; saving ref 2.69664433826381e-12 eng 2.6967573814136087e-12
+[near_baseline_1e-08] strict diffs 4; fails under the study's comparison: 1
+     strict ('full', 'SUM-08', 'delta', -8.886680006980896e-05, -8.887052536010742e-05, 4.191817572099262e-05)
+     strict ('full', 'SUM-08', 'saving', 2.69664433826381e-12, 2.6967573814136087e-12, 4.191817572393162e-05)
+     strict ('tot', 'SUM-08', 'delta', -8.886680006980896e-05, -8.887052536010742e-05, 4.191817572099262e-05)
+     strict ('tot', 'SUM-08', 'saving', 2.69664433826381e-12, 2.6967573814136087e-12, 4.191817572393162e-05)
+     study  ('SUM-08', 'delta', 1.1304314979128408e-07, [], 1.1304314979128408e-07, [])
+[share1_tiny_fuel] strict diffs 13; fails under the study's comparison: 3
+     strict ('full', 'X-02', 'by_stage.B6', 0.00148765929043293, 0.0014876614887071528, 1.4776709886601445e-06)
+     strict ('full', 'X-02', 'by_stage_all.B6', 0.00148765929043293, 0.0014876614887071528, 1.4776709886601445e-06)
+     strict ('tot', 'X-02', 'by_stage.B6', 0.00148765929043293, 0.0014876614887071528, 1.4776709886601445e-06)
+     strict ('tot', 'X-02', 'by_stage_all.B6', 0.00148765929043293, 0.0014876614887071528, 1.4776709886601445e-06)
+     strict ('full', 'QA-01', 'ok', False, True, None)
+     study  ('X-02', 'by_stage.B6', 1.2324082910009717e-07, [], 1.2324082910009717e-07, [])
+     study  ('QA-01', '', 0.0, ['ok: False vs True'], 0.0, ['ok: False vs True'])
+     study  ('X-05', 'by_stage_co2.B6', 1.0981713974682564e-08, [], 1.0981713974682564e-08, [])
+[T=1.0000001_zero_base] strict diffs 0; fails under the study's comparison: 0
+[T=1.000000001_zero_base] strict diffs 29; fails under the study's comparison: 10
+     strict ('full', 'B2-01', 'value', 1.9075281578295748e-08, 1.9075280577318665e-08, 5.247508816545407e-08)
+     strict ('tot', 'B2-01', 'value', 1.9075281578295748e-08, 1.9075280577318665e-08, 5.247508816545407e-08)
+     strict ('full', 'B6-03', 'value', 5.924000490153959e-07, 5.924000179291511e-07, 5.2475088155463e-08)
+     strict ('tot', 'B6-03', 'value', 5.924000490153959e-07, 5.924000179291511e-07, 5.2475088155463e-08)
+     strict ('full', 'X-02', 'by_stage.B6', 5.924000490153959e-07, 5.924000179291511e-07, 5.2475088155463e-08)
+     study  ('B2-01', 'value', 5.247508816545407e-08, [], 5.247508816545407e-08, [])
+     study  ('B6-03', 'value', 5.2475088155463e-08, [], 5.2475088155463e-08, [])
+     study  ('X-02', 'by_stage_all.B6', 5.247508820129949e-08, [], 5.247508820129949e-08, [])
+     study  ('X-04', 'by_stage_recomputed.B6', 5.247508820129949e-08, [], 5.247508820129949e-08, [])
+     study  ('SUM-03', 'value', 5.2475088155463e-08, [], 5.2475088155463e-08, [])
+[T=1.000000000001_zero_base] strict diffs 29; fails under the study's comparison: 10
+     strict ('full', 'B2-01', 'value', 1.907697580350032e-11, 1.907576319126747e-11, 6.356417523092385e-05)
+     strict ('tot', 'B2-01', 'value', 1.907697580350032e-11, 1.907576319126747e-11, 6.356417523092385e-05)
+     strict ('full', 'B6-03', 'value', 5.924526647049789e-10, 5.924150059399835e-10, 6.356417523104932e-05)
+     strict ('tot', 'B6-03', 'value', 5.924526647049789e-10, 5.924150059399835e-10, 6.356417523104932e-05)
+     strict ('full', 'X-02', 'by_stage.B6', 5.924526647049789e-10, 5.924150059399835e-10, 6.356417523104932e-05)
+     study  ('B2-01', 'value', 6.356417523092385e-05, [], 6.356417523092385e-05, [])
+     study  ('B6-03', 'value', 6.356417523104932e-05, [], 6.356417523104932e-05, [])
+     study  ('X-02', 'by_stage.B6', 6.356417523104932e-05, [], 6.356417523104932e-05, [])
+     study  ('X-04', 'by_stage_recomputed.B6', 6.356417523101404e-05, [], 6.356417523101404e-05, [])
+     study  ('SUM-03', 'value', 6.356417523104932e-05, [], 6.356417523104932e-05, [])
+[tinyT=1e-06] strict diffs 0; fails under the study's comparison: 0
+[tinyT=1e-08] strict diffs 31; fails under the study's comparison: 11
+     strict ('full', 'B2-01', 'value', 2.7871156675992602e-05, 2.7871156997184667e-05, 1.1524174060704809e-08)
+     strict ('tot', 'B2-01', 'value', 2.7871156675992602e-05, 2.7871156997184667e-05, 1.1524174060704809e-08)
+     strict ('full', 'B6-03', 'value', 0.001113507453376428, 0.001113507463351337, 8.958097945445142e-09)
+     strict ('tot', 'B6-03', 'value', 0.001113507453376428, 0.001113507463351337, 8.958097945445142e-09)
+     strict ('full', 'X-02', 'by_stage.B6', 0.001113507453376428, 0.001113507463351337, 8.958097945445142e-09)
+     study  ('B2-01', 'value', 1.1524174193511397e-08, [], 1.1524174193511397e-08, [])
+     study  ('B6-03', 'value', 8.958098025692661e-09, [], 8.958098025692661e-09, [])
+     study  ('X-02', 'by_stage_all.B2', 1.1524174193511397e-08, [], 1.1524174193511397e-08, [])
+     study  ('X-04', 'by_stage_recomputed.B2', 1.1524174193511397e-08, [], 1.1524174193511397e-08, [])
+     study  ('SUM-03', 'value', 8.958098025692661e-09, [], 8.958098025692661e-09, [])
+[tinyT=1e-10] strict diffs 31; fails under the study's comparison: 11
+     strict ('full', 'B2-01', 'value', 2.78711566759926e-07, 2.787118363633377e-07, 9.673195629361978e-07)
+     strict ('tot', 'B2-01', 'value', 2.78711566759926e-07, 2.787118363633377e-07, 9.673195629361978e-07)
+     strict ('full', 'B6-03', 'value', 1.1135074533764281e-05, 1.1135082906541044e-05, 7.519276535990795e-07)
+     strict ('tot', 'B6-03', 'value', 1.1135074533764281e-05, 1.1135082906541044e-05, 7.519276535990795e-07)
+     strict ('full', 'X-02', 'by_stage.B6', 1.1135074533764281e-05, 1.1135082906541044e-05, 7.519276535990795e-07)
+     study  ('B2-01', 'value', 9.673204986442398e-07, [], 9.673204986442398e-07, [])
+     study  ('B6-03', 'value', 7.519282189947009e-07, [], 7.519282189947009e-07, [])
+     study  ('X-02', 'by_stage_all.B2', 9.673204986442398e-07, [], 9.673204986442398e-07, [])
+     study  ('X-04', 'by_stage_recomputed.B2', 9.673204986442398e-07, [], 9.673204986442398e-07, [])
+     study  ('SUM-03', 'value', 7.519282189947009e-07, [], 7.519282189947009e-07, [])
+[overflow_activity_sum] strict diffs 138; fails under the study's comparison: 16
+     strict ('full', 'A13-01', 'value', 2.4e+305, inf, inf)
+     strict ('tot', 'A13-01', 'value', 2.4e+305, inf, inf)
+     strict ('full', 'B3-01', 'value', 2.315448000000003e+305, inf, inf)
+     strict ('tot', 'B3-01', 'value', 2.315448000000003e+305, inf, inf)
+     strict ('full', 'B3-02', 'value', 2.5790399999999997e+305, inf, inf)
+     study  ('A13-01', 'value', inf, [], inf, [])
+     study  ('B3-01', 'value', inf, [], inf, [])
+     study  ('B3-02', 'value', inf, [], inf, [])
+     study  ('B4-02', 'value', inf, [], inf, [])
+     study  ('B5-01', '', 0.0, ['value: 0.0 vs nan'], 0.0, ['value: 0.0 vs nan'])
+[neg_factor_cancel_0] strict diffs 0; fails under the study's comparison: 0
+[neg_factor_cancel_1] strict diffs 0; fails under the study's comparison: 0
+[neg_factor_cancel_2] strict diffs 0; fails under the study's comparison: 0
+[neg_factor_cancel_3] strict diffs 0; fails under the study's comparison: 0
+[neg_factor_cancel_4] strict diffs 0; fails under the study's comparison: 0
+[neg_factor_cancel_5] strict diffs 0; fails under the study's comparison: 0
+   B1-02 2888.019 2888.0190000000002 2888.0190000000002
+   B1-03 9.626730193329717e-14 1.0687817297849733e-13 1.0687817297849733e-13
+   B1-04 0.0 0.0 0.0
+[leak_rate_1-1e-8] strict diffs 90; fails under the study's comparison: 3
+     strict ('full', 'B1-02', 'by_year[2]', 9.626730008360923e-06, 9.626729952104699e-06, 5.843752072163671e-09)
+     strict ('full', 'B1-02', 'by_year[4]', 9.626730008360923e-06, 9.626729952104699e-06, 5.843752072163671e-09)
+     strict ('full', 'B1-02', 'by_year[5]', 9.626730000795115e-14, 9.626730066062312e-14, 6.77978884508598e-09)
+     strict ('full', 'B1-02', 'by_year[7]', 9.626730008360923e-06, 9.626729952104699e-06, 5.843752072163671e-09)
+     strict ('full', 'B1-02', 'by_year[8]', 9.626730000795115e-14, 9.626730066062312e-14, 6.77978884508598e-09)
+     study  ('B1-02', 'by_year[2]', 5.843752072163671e-09, [], 1.574599581534831e-16, [])
+     study  ('B1-03', 'by_year[2]', 3.674100484752064e-09, [], 3.674100151418726e-09, [])
+     study  ('X-07', 'by_year[4]', 5.843752072163671e-09, [], 1.574599581534831e-16, [])

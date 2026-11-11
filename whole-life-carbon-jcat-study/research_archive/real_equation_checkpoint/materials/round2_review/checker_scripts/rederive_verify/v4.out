@@ -1,0 +1,33 @@
+== RED-10 ==
+ clean C-05 True 6 under 0
+   route fraction None: ref RAISED TypeError: unsupported operand type(s) for +=: 'float' and 'NoneType' | fast RAISED TypeError: unsupported operand type(s) for +=: 'float' and 'NoneType' |
+   route fraction NaN: ref ok | fast ok | C-05 True viol [] under 0 unchecked 6 | C3 n_skipped 0 n_routes_skipped 1 complete False [ref~fast True []]
+   eol mass -1: ref ok | fast ok | C-05 True viol [] under 0 unchecked 6 | C3 n_skipped 1 n_routes_skipped 0 complete False [ref~fast True []]
+   eol mass NaN: ref ok | fast ok | C-05 True viol [] under 0 unchecked 6 | C3 n_skipped 1 n_routes_skipped 0 complete False [ref~fast True []]
+   eol mass None: ref ok | fast ok | C-05 True viol [] under 0 unchecked 7 | C3 n_skipped 1 n_routes_skipped 0 complete False [ref~fast True []]
+   grid.construction_value None: ref RAISED TypeError: unsupported operand type(s) for *: 'float' and 'NoneType' | fast RAISED TypeError: unsupported operand type(s) for *: 'float' and 'NoneType' |
+   grid TABLE with None entry: ref RAISED TypeError: unsupported operand type(s) for *: 'float' and 'NoneType' | fast RAISED TypeError: unsupported operand type(s) for *: 'float' and 'NoneType' |
+   factor value None: ref RAISED TypeError: unsupported operand type(s) for *: 'float' and 'NoneType' | fast RAISED TypeError: unsupported operand type(s) for *: 'float' and 'NoneType' |
+   summary concrete_m3 None: ref RAISED TypeError: unsupported operand type(s) for *: 'NoneType' and 'float' | fast RAISED TypeError: unsupported operand type(s) for *: 'NoneType' and 'float' |
+   summary timber_m3 None: ref RAISED TypeError: unsupported operand type(s) for *: 'NoneType' and 'float' | fast RAISED TypeError: unsupported operand type(s) for *: 'NoneType' and 'float' |
+   use_area_breakdown value None: ref RAISED TypeError: unsupported operand type(s) for +=: 'float' and 'NoneType' | fast RAISED TypeError: unsupported operand type(s) for +=: 'float' and 'NoneType' |
+   equipment replacement_event_list [None]: ref RAISED TypeError: '>' not supported between instances of 'NoneType' and 'int' | fast RAISED TypeError: '>=' not supported between instances of 'NoneType' and 'int' |
+   gas TABLE profile cut to 30 (T=60): ref RAISED IndexError: list index out of range | fast RAISED IndexError: list index out of range
+   grid table cut to 30 (T=60): ref RAISED ValueError: year tables are shorter than the study period | fast RAISED ValueError: year tables are shorter than the study period
+   gas CONSTANT profile, copy table cut to 30: ref ok | fast ok True
+
+== RED-11 ==
+ (1) EPD unusable on rows 0,1: X-15 kind ['EPD', 'EPD', 'EPD']->['GENERIC', 'GENERIC', 'EPD'] n_epd_declined 2 SYS-02 True [] [] SYS-03 True complete True A1-A3 1229626.19->1231654.50 n_skipped A13-01 0
+     EPD factor unlicensed: SYS-03 False ['factors{F-EPD-M000001}.licence_status'] SYS-02 True n_epd_declined 1 complete True
+ (2) equipment[0].eol_factor_id None: SYS-03 True [] SYS-02 True X-14 n_skipped 1 complete False ['B4-02', 'X-14']
+     clean benchmark equipment rows with eol_factor_id None: 0 of 6660
+ (3) zero-fraction route without factor: C3 n_routes_skipped 1 C4 0 complete False ['B4-02', 'C3-01'] SYS-03 ['materials[0].end_of_life.routes[0].factor_id (no factor)']
+ (4) [15] -> 936.997; [15,15,15] -> 2810.992; B4-01 events [15.0, 15.0, 15.0] QA-02 {'ok': True, 'violations': [], 'warnings': []}
+
+== RED-12 ==
+ (1) included ['A1-A3', 'B6']: by_stage keys ['A1-A3', 'B6'] by_stage_all keys 14; B6 by_stage 4843280.97 by_stage_all 4699662.51 diff 143618.45 B2-01 143618.45; X-05.by_stage_co2 keys 14
+ (2) grid licence UNKNOWN: B6-01 computed False B2-01 {'value': 0.0, 'computed': True} incomplete_units ['A5-01', 'B6-01']
+ (4) T=0 -> ValueError study_period must be a finite positive number of years
+ (5) X-17 clean 2895945.56 (re-aggregated manufacturing of the 6 classes 2895945.56); concrete_m3=0 -> ref 1194519.62 fast 1194519.62; CONCRETE {'quantity': 0.0, 'fbar': 0.0, 'emission': 0.0}
+ (6) X-13 keys ['by_item', 'waste_by_item'] by_item[0] None
+ (7) refresh_cycle 1e-4: [599999] 0.09s

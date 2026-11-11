@@ -1,0 +1,20 @@
+factor id 'GRID' (value 2.4183187813574896):
+    A13-01.value: ref 889549.9358003162 unified 889549.9358003163 totals 889549.9358003163
+    A5-01.value: ref 5328.16848 unified 12885.209905420988 totals 12885.209905420988
+    B6-03.value: ref 2785334.4832556485 unified 2785334.483255648 totals 2785334.483255648
+    B1-02.value: ref 260011.26972601505 unified 260011.26972601507 totals 260011.26972601507
+    SUM-03.value: ref 8965567.801008811 unified 8895116.777675131 totals 8895116.777675131
+    X-04.value: ref 8895116.777675135 unified 8895116.77767513 totals 8895116.77767513
+factor id 'REFRIGERANT' (value 2.4183187813574896):
+    A13-01.value: ref 889549.9358003162 unified 889549.9358003163 totals 889549.9358003163
+    B6-03.value: ref 2785334.4832556485 unified 2785334.483255648 totals 2785334.483255648
+    B1-02.value: ref 260011.26972601505 unified 260011.26972601507 totals 260011.26972601507
+    SUM-03.value: ref 8965567.801008811 unified 8895116.777675131 totals 8895116.777675131
+    X-04.value: ref 8895116.777675133 unified 8895116.777675128 totals 8895116.777675128
+unit named 'None': SYS-02 ref False ['construction.electricity', 'operation.electricity', 'operation.onsite_export', 'operation.onsite_generation'] | unified False ['construction.electricity'] | B6-01 computed ref True unified True
+STEPWISE from_index=3.0: ref X-06 source DESCRIPTOR | unified TypeError("can't multiply sequence by non-int of type 'float'")
+water table 59 entries (T=60) and no water factor: ref IndexError('list index out of range') | unified B7-01 {'n_skipped': 1, 'descriptors_match_tables': True, 'by_year': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]} | SYS-01 ok True SYS-03 violations ['water_waste.water_factor_id (no factor)']
+same table, factor usable: ref IndexError('list index out of range') | unified IndexError('list index out of range')
+grid annual_decline=nan: ref X-06 {'matches_table': True, 'source': 'TABLE'} SUM-03 {'value': 23295377.72621168, 'complete': True} | unified ValueError('cannot convert float NaN to integer') | totals ValueError('cannot convert float NaN to integer')
+gases list with 'CO2' twice: X-04 value ref 24813097.216983244 unified 34666227.111611426 ; by_gas.CO2 ref 11111903.2894296 unified 16038468.236743692 ; SUM-03 ref 8145242.282838846 unified 8145242.282838838
+gases list without 'CO2': ref X-05 6989160.3675219165 | unified KeyError('CO2') KeyError('CO2')

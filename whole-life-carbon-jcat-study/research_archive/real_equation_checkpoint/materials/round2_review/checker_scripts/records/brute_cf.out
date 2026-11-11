@@ -1,0 +1,16 @@
+D2/D3 periodic: 200612 (T,c) pairs, mismatches 24, worst |skip weight diff| 2.30e+01
+    ('skip', 7.0, 1.000000001, 6.0, 5.0)
+    ('years', 7.0, 1.000000001, 1.0, 2.0)
+    ('skip', 10.0, 1.000000001, 9.0, 7.0)
+    ('years', 10.0, 1.000000001, 1.0, 3.0)
+    ('skip', 30.0, 1.000000001, 29.0, 26.0)
+    ('years', 30.0, 1.000000001, 1.0, 4.0)
+    ('skip', 42.5, 1.000000001, 41.5, 35.5)
+    ('years', 42.5, 1.000000001, 1.0, 7.0)
+    ('skip', 59.999999, 1.000000001, 59.0, 48.0)
+    ('years', 59.999999, 1.000000001, 0.9999990000000025, 11.999999000000003)
+D3 explicit lists: 50000 cases, mismatches 0
+D5 linear_weighted_sum: 100000 cases, mismatches 0, worst rel diff 1.86e-13
+D5 grid: 120000 cases (52715 well-formed descriptors), mismatches 0, worst rel diff of G/H 2.56e-14
+D5 two-point guard: 95100 cases pass the guard; in 909 of them some year is (rounding) negative; mismatches beyond 1e-9 of the gross terms: 0; worst diff relative to gross terms 4.28e-15
+D6 refrigerant_fractions: 150000 cases, mismatches 0, worst diff 3.48e-15

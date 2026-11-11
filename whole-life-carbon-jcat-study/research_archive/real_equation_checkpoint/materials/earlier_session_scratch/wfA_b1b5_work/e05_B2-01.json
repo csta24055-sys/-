@@ -1,0 +1,78 @@
+{
+ "id": "B2-01",
+ "name": "施設管理に帰属させる運用負荷",
+ "stage": "B2",
+ "origin": "EXISTING_53",
+ "evidence_level": "EXISTING_CONCEPT",
+ "purpose": "運用時のエネルギー起源の排出のうち、施設管理（共用部の維持管理、清掃、保守など）の用途に当たる割合を B2（維持保全）に割り当てる配分式。対象とする運用排出に管理用途の消費比率を掛ける。B6（運用エネルギー）と同じ排出を両方に数えないための勘定の切り分けが主な目的である。",
+ "inputs": [
+  "OPERATION.facility_management_ratio",
+  "OPERATION.electricity_per_year",
+  "OPERATION.grid_factor_scenario_id",
+  "BOUNDARY.study_period"
+ ],
+ "n_inputs": 4,
+ "output": "output:stage.B2",
+ "structure_class": "RATIO",
+ "structure_subclass": "TIME_SERIES_SUM",
+ "canonical_form": "E_B2 = s * E_base ; E_base = sum_{y=1..T} a_y * f_y ; a_y = eligible purchased electricity [kWh/year], f_y = grid EF [kgCO2e/kWh], 0 <= s <= 1 ; carve-out complement: E_B6_elec = (1 - s) * E_base ; row-split form: a_y^B2 = s * a_y, a_y^B6 = (1 - s) * a_y",
+ "loop_dims": [
+  "years"
+ ],
+ "branches": [
+  "切り出し方式（B6 から同額を除く）か、上乗せ方式（B6 はそのまま）か",
+  "比率が MISSING なら配分せず、B2 を未計算として記録する（0 と見なさない）。EXPLICIT_ZERO なら B2 = 0",
+  "比率が 0 以上 1 以下の範囲外なら入力エラー",
+  "BOUNDARY.included_lifecycle_stages に B2 と B6 の片方しか含まれない場合は、配分によって合計が変わることを警告する",
+  "オンサイト発電の自家消費を差し引いた後の買電量（B6-04 の結果）を基準にする"
+ ],
+ "complexity": "O(T)（年別係数を使う場合）。係数の累積和を共用すれば O(1)",
+ "depends_on": [
+  "SYS-01",
+  "B6-01"
+ ],
+ "feeds": [
+  "B6-03",
+  "SUM-02",
+  "SUM-03",
+  "SUM-07",
+  "QA-01"
+ ],
+ "similar_units": [
+  "B3-02",
+  "A13-04",
+  "C3-01",
+  "SUM-07"
+ ],
+ "unification_potential": "【行の分割として核に吸収・厳密】比率を排出量ではなく活動量に掛け、年間買電量を a_y^B2 = s*a_y と a_y^B6 = (1 − s)*a_y の2行に分けて段階タグを付ければ、B2-01 は独立した式ではなくなり、B6-01・B6-03 と同じ「年次の活動量×係数の総和」の1行になる（E_B2 + E_B6 の合計は s によらず保存される）。これで B2 と B6 の二重計上は構造的に起こらなくなり、QA-01 の検査も自動的に満たされる。【配分行列としての一般化・厳密】用途・段階への配分は、活動量ベクトルに「行和が1の配分行列」を掛ける操作で、C3-01（処理経路への質量の配分）、C-05（質量収支）、A13-02（構成比）と同じ仕組みで表せる。SUM-07（段階別割合 = 段階合計／全体）はその逆向きの操作に当たる。【比例上乗せモデル・厳密】A13-04（費用比率）、B3-02（修繕率×年数）と合わせて P(E_base, rho) = E_base * rho の形に統一できる（本式は rho = s）。ただし基準量 E_base の範囲は式ごとに違うので、パラメータ表に基準量の定義を持たせる。【年次係数の累積和の共用・厳密】a_y が一定なら E_B2 = s * a * S_f、S_f = sum_{y=1..T} f_y で、S_f は B6-03 と共用できる。",
+ "approximation_potential": "式は乗算1回で、近似によって単純になる余地は無い（近似しない理由：既に線形の閉形式で、演算が減らない）。計算量は年数に比例するだけで、係数の累積和を共用すれば定数時間になる（厳密）。入力を減らす方向では、(a) 行の分割に吸収すれば式が1つ減る（厳密）。(b) 比率を用途別の代表値で置く場合、誤差は (s_default − s) * E_base で、比率の誤差に一次で比例する。代表値には独自の根拠が必要で、実建物の用途別エネルギー内訳が無い本研究では検証できない（保留）。(c) 年別に比率が変わる場合に期間平均の比率で置く近似は、a_y*f_y が年によらず一定なら厳密、係数が年々下がる場合は s_y と a_y*f_y の共分散の分だけずれる（符号不定）。",
+ "expected_precision_loss": "行の分割への吸収・累積和の共用：0（丸め差のみ）。比率の代表値化：B2 の相対誤差は (s_default − s)/s。切り出し方式ならホールライフ合計への影響は 0（B2 と B6 の間の移動だけ）だが、エンボディド合計（SUM-02）には (s_default − s) * E_base がそのまま出る。",
+ "boundary_unit_caveats": [
+  "OPERATION.electricity_per_year は kWh/年で、排出量ではない。比率を掛けただけでは kWh/年のままで、output:stage.B2（kgCO2e の段階合計）にならない。排出係数（年次シナリオ）と評価年数が必要。",
+  "切り出し方式では B6 から同額を除く。除かなければ同じ電力を B2 と B6 で二重に数える（formulas.json の notes）。",
+  "SUM-02（エンボディド）は B1〜B5 を含み B6 を含まない。したがって本式の比率は、運用排出の一部をエンボディドの側へ移す効果を持ち、エンボディド合計と段階別割合（SUM-07）を変える。ホールライフ合計（SUM-03）は B2 と B6 がともに対象なら変わらない。",
+  "比率がエネルギー量基準か排出量基準かを区別する。電力とガスなど係数の異なるエネルギー種別をまとめた排出量に、電力量基準の比率を掛けてはならない。",
+  "基準が買電量（自家消費を差し引いた後）か総消費量か。オンサイト発電の差し引き（B6-04）の前後で基準量が変わる。",
+  "維持保全に伴う資材や水の使用（清掃用水、消耗品など）は本式に含まれない。B7（水）や B3（修繕）と重ねない。",
+  "B2 に運用エネルギーの一部を入れるのはこの独立モデルの勘定規約であり、原版や規格の扱いを述べるものではない。",
+  "sheet_family_links は名称だけからの推定（INFERRED）。"
+ ],
+ "sheet_family_links": [
+  "SF-10",
+  "SF-33"
+ ],
+ "computable_in_reference": true,
+ "not_computable_reason": null,
+ "ambiguities": [
+  "E_eligible_operations の範囲（電力だけか、ガス・石油・地域熱を含むか。入力は電力量のみ）。",
+  "基準量が年間値か評価期間の合計か（出力は段階合計）。formulas.json の入力に評価年数が挙がっていない（本台帳で補った）。",
+  "電力量 [kWh] から排出量への換算に使う係数と年次（formulas.json の入力に係数が挙がっていない。本台帳で補った）。",
+  "切り出し（B6 から除く）か、上乗せ（B6 はそのまま）か。",
+  "比率の基準（エネルギー量の比か、排出量の比か、床面積の比か）。",
+  "比率が年によって変わるか。",
+  "オンサイト発電の自家消費を差し引く前か後か。",
+  "比率が MISSING のときに B2 を 0 とするのか、未計算とするのか。",
+  "B2 と B6 の片方だけを算定対象にしたときの扱い。"
+ ],
+ "reference_semantics_proposal": "【本研究の設計選択であり J-CAT の仕様ではない】(1) 基準量は買電に伴う排出だけとする：E_base = sum_{y=1..T} a_y * f_y。a_y は B6-04 で自家消費を差し引いた後の年間買電量 [kWh]、f_y は OPERATION.grid_factor_scenario_id が指す運用年 y（0始まりの年番号 y−1、暦年 BOUNDARY.study_start_year + y − 1）の係数で、B6-01 と同じ値を使う。燃料・熱は対象外。T は正の整数（年）。(2) s = OPERATION.facility_management_ratio はエネルギー量基準の無次元比で、期間を通じて一定、0 <= s <= 1。(3) 切り出し方式とする：E_B2 = s * E_base を output:stage.B2 に、(1 − s) * E_base を B6-03 の電力分に計上する。実装は活動量の分割（a_y^B2 = s*a_y、a_y^B6 = a_y − a_y^B2）で行い、両者の和が a_y と一致することを検査する。(4) s が MISSING の場合は配分せず、全量を B6 に残して B2 を NOT_COMPUTED とする（0 と表示しない）。EXPLICIT_ZERO の場合は B2 = 0。(5) B2 と B6 の一方だけが BOUNDARY.included_lifecycle_stages に含まれる場合は、s によって合計が変わることを警告として出力する。(6) 出力は年別の B2 の分、期間合計、B6 から除いた額。"
+}

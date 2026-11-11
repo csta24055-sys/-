@@ -1,0 +1,81 @@
+=== NUM-2 extra: grid TABLE with CONSTANT profiles, table[0]=inf ===
+  B6-03 inf nan nan | B2-01 inf nan
+=== NUM-3 ===
+  before: repair_rate 0.03167 factor F-EQ-PLUMBING-01 10196.448700027933 {'CO2': 9855.748266694525, 'CH4': 0.6934452189888117, 'N2O': 0.0, 'HFCs': 0.0, 'PFCs': 0.2299412963801671, 'SF6': 0.0, 'NF3': 0.661814166642287}
+  factor value == sum gwp*gas ? 10196.448700027933 10196.448700027933
+  clean scenario failures: []
+  repair only failures: []
+  X-04.value: ref 8893233.37821491 full 8938913.46839103 tot 8938913.46839103
+  X-04.co2e_from_gases: ref 7193620.249532455 full 7239300.339708573 tot 7239300.339708573
+  X-05.value: ref 7657743.887907367 full 7701897.640142159 tot 7701897.640142159
+  SUM-03.value: ref 8689304.404214356 full 8689304.404214349 tot 8689304.404214349
+  B3-01.value: ref 1127992.0518561916 full 1127992.0518561848 tot 1127992.0518561848
+  X-05.by_stage_co2.B3 1022644.6261754053 1066798.3784101966
+  ref X-04 value vs ref SUM of by_stage_all: 8893233.37821491 8689304.404214354 | unified: 8938913.46839103 8689304.404214347
+  study failures: [('X-04', 'by_gas.CO2', 0.007093501934465134), ('X-05', 'by_stage_co2.B3', 0.04317604679537814)]
+  ref by_gas CO2 A1-A3 contribution exists though value=0? ref X-05.by_stage_co2[A1-A3] 915259.7113958283 unified 915259.7113958283
+  material variant failures: [('X-04', 'by_gas.CH4', 0.011698432610624546), ('X-05', 'by_stage_co2.B3', 0.019278518024637592)]
+  value 0 AND gas vector 0 failures: []
+  quantity 0 failures: []
+=== NUM-4 ===
+  short water table only:  ['IndexError', 'IndexError', 'IndexError']
+  + factor None:  ["IndexError('list index out of range')", 'ok SUM-03=24261602.395758245', 'ok SUM-03=24261602.395758245']
+  short elec table only:  ['IndexError', 'IndexError', 'IndexError']
+  + generation kWh/day:  ["IndexError('list index out of range')", 'ok SUM-03=22767429.647382207', 'ok SUM-03=22767429.647382207']
+  short gas table + m3/month:  ["IndexError('list index out of range')", 'ok SUM-03=22965416.562647767', 'ok SUM-03=22965416.562647767']
+  baseline only:  ["IndexError('list index out of range')", "ok SUM-08={'status': 'COMPARED', 'baseline': 15645079.454661397, 'delta': -2423929.346221814, 'saving': 0.15493237686943243}", "ok SUM-08={'status': 'COMPARED', 'baseline': 15645079.454661397, 'delta': -2423929.346221814, 'saving': 0.15493237686943243}"]
+=== NUM-5 ===
+  id GRID: factor value 2.4183187813574896; A5-01 ref 5328.16848 full 12885.209905420988; SUM-03 ref 8965567.801008811 full 8895116.777675131 tot 8895116.777675131
+     ref X-04.value 8895116.777675135 ref sum by_stage_all 8965567.80100881 ref QA-01 {'ok': False, 'violations': ['stage A1-A3', 'stage B3', 'stage B4']} | full QA-01 {'ok': False, 'violations': ['stage A1-A3', 'stage A5', 'stage B3', 'stage B4']}
+     study failures: ['A5-01', 'A5-04', 'X-02', 'X-04', 'QA-01', 'SUM-01', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-07']
+  id REFRIGERANT: factor value 2.4183187813574896; A5-01 ref 5328.16848 full 5328.16848; SUM-03 ref 8965567.801008811 full 8895116.777675131 tot 8895116.777675131
+     ref X-04.value 8895116.777675133 ref sum by_stage_all 8965567.80100881 ref QA-01 {'ok': False, 'violations': ['stage A1-A3', 'stage B3', 'stage B4']} | full QA-01 {'ok': False, 'violations': ['stage A1-A3', 'stage B3', 'stage B4']}
+     study failures: ['X-02', 'X-04', 'SUM-01', 'SUM-02', 'SUM-03', 'SUM-04', 'SUM-05', 'SUM-06', 'SUM-07', 'X-07']
+=== NUM-6 ===
+  CO2 twice (composite 0.5): X-04 24813097.216983244 34666227.111611426 34666227.111611426 by_gas CO2 11111903.2894296 16038468.236743692
+  CO2 twice (no composite) failures: []
+  no CO2 (composite): ref X-05 6989160.3675219165 | full KeyError('CO2') | tot KeyError('CO2')
+  no CO2 (no composite) failures: []
+=== NUM-7 ===
+  from_index 3.0: ref X-06.source DESCRIPTOR | full TypeError("can't multiply sequence by non-int of type 'float'") | tot TypeError("can't multiply sequence by non-int of type 'float'")
+  from_index 2.5: ref X-06.source DESCRIPTOR | full TypeError("can't multiply sequence by non-int of type 'float'") | tot TypeError("can't multiply sequence by non-int of type 'float'")
+  GridStep def: @dataclass(slots=True)
+class GridStep:
+    from_index: int                        # first table index at which ``value`` applies
+    value: float
+
+=== NUM-8 ===
+  SYS-02 ref ['construction.electricity', 'operation.electricity', 'operation.onsite_export', 'operation.onsite_generation'] | full ['construction.electricity'] | B6-01.computed True True | A5-01.computed False False
+  study failures: [('SYS-02', [])]
+=== NUM-9 ===
+  baseline ids: N9-A-BASELINE N9-B-BASELINE registry keys: N9-A-BASELINE N9-B-BASELINE
+  natural ids: N9-A 9779571.537121847 9779571.53712186
+  natural ids: N9-B 8601741.597412234 8601741.597412238
+  colliding meta ids: N9-A 9779571.537121847 9779571.53712186 0.1539779631729852 0.1539779631729848
+  colliding meta ids: N9-B 8601741.597412234 9779571.53712186 0.30217855093308604 0.3862226209787613
+  ScenarioMeta doc: Generator bookkeeping. Not an input: calculations must not read it.
+  attach_baseline src:
+def attach_baseline(proposal: Scenario) -> Scenario:
+    """Create, register and link a fictional "before improvement" twin of ``proposal``.
+
+    The twin has the same area, period, stages and factor table (so it is comparable),
+    15 percent more electricity and gas demand, no on-site generation, and 20 percent
+    larger quantities in every tenth material row.
+    """
+    base = copy.deepcopy(proposal)
+    base.meta.scenario_id = proposal.meta.scenario_id + "-BASELINE"
+    base.boundary.baseline_scenario = None
+    op = base.operation
+    for profile, scale in ((op.electricity, 1.15), (op.gas, 1.15), (op.onsite_generation, 0.0), (op.onsite_export, 0.0)):
+        profile.table = [v * scale for v in profile.table]
+        if profile.base is not None:
+            profile.base *= scale
+        if profile.slope is not None:
+            profile.slope *= scale
+    for row in base.materials[::10]:
+        if row.quantity is not None:
+            row.quantity *= 1.2
+    BASELINES[base.meta.scenario_id] = base
+    proposal.boundary.baseline_scenario = base.meta.scenario_id
+    return base
+

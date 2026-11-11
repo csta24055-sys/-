@@ -1,0 +1,349 @@
+### SYS-01 [PRE] 入力数値の状態判定
+inputs: ['PROVENANCE.source_type', 'PROVENANCE.data_quality']
+depends_on: []
+入力数値の状態判定。数値入力を 1 つずつ調べ、欠損（None）は MISSING、算出値は DERIVED、0 は EXPLICIT_ZERO、それ以外は宣言された状態（OBSERVED・ESTIMATE）とする。MISSING の場所を列挙する。その値が計算で使われるかどうかは問わない。機器の耐用年数と交換年一覧のように「どちらか一方」でよい項目は、両方ないときだけ欠損とする。
+
+### SYS-02 [PRE] 単位整合性検証
+inputs: ['MATERIAL.quantity', 'MATERIAL.quantity_unit', 'FACTOR.factor_unit', 'NEW:CONVERSION.unit_conversion_table', 'NEW:MATERIAL.conversion_basis_property']
+depends_on: []
+単位整合性検証。活動量と係数が出会うすべての箇所（資材の製造・搬入・輸送・据付・搬出・処理経路、設備、工事の燃料・廃棄物・電力、運用の年次量、解体、参考値、費用項目）について、活動量の単位が係数の分母の単位と一致するか、登録された換算（行固有の換算を優先、連鎖なし）があることを確かめる。年次量の単位は「単位/year」でなければならない。あわせて、係数の対象段階が使う段階と一致するかを確かめる。係数そのものが無い箇所は SYS-03 が報告する。
+
+### SYS-03 [PRE] 係数権限ゲート
+inputs: ['FACTOR.factor_license', 'FACTOR.factor_source_url', 'PROVENANCE.license_status', 'NEW:PROJECT.intended_use', 'NEW:LICENSE.allowed_use_table']
+depends_on: []
+係数権限ゲート。係数を参照している箇所を 1 つずつ調べ、係数 ID が空でなく、係数の記録が存在し、使用許諾の状態が PERMITTED_PUBLIC で、出典の参照が空でないことを確かめる。電力係数シナリオも対象。空の参照は場所ごとに、記録のない係数と使用許諾のない係数は係数 ID ごとに報告し、影響を受ける参照箇所の数を数える。
+
+### SYS-04 [PRE] 延床面積との面積整合
+inputs: ['PROJECT.use_area_breakdown', 'PROJECT.gross_floor_area']
+depends_on: []
+延床面積との面積整合。用途別面積を用途名の昇順に足し、延床面積との差 r = A - S を求める。A が欠損または 0 以下のときは INVALID。|r| <= 1e-9*A のとき一致とする。数値は補正しない。
+
+### A13-01 [A1-A3] 資材製造排出量（単位・境界確認後）
+inputs: ['MATERIAL.quantity', 'MATERIAL.quantity_unit', 'FACTOR.factor_value', 'FACTOR.factor_stages', 'FACTOR.factor_id', 'FACTOR.factor_unit']
+depends_on: ['A13-02', 'A13-05', 'X-15']
+資材製造排出量。製品固有値（EPD）を適用しない資材の行について、発注量×換算倍率×係数（汎用係数または A13-02 の複合係数）を行の順に足す。係数を決められない行と数量が欠損・範囲外の行は足さずに件数を数える。
+
+### A13-02 [A1-A3] 複合材の構成比からの推計
+inputs: ['MATERIAL.material_specification', 'FACTOR.factor_id', 'NEW:MATERIAL.composition_mass_fractions', 'FACTOR.factor_unit', 'FACTOR.factor_stages']
+depends_on: []
+複合材の構成比からの推計。複合品の行ごとに、構成材の係数（対象段階が A1-A3 のみ、使用許諾あり、kg へ換算可能）を質量比で加重して kg 当たりの複合係数を作る。質量比が負のもの、合計が 1 から 1e-6 を超えてずれる行、使えない構成係数を含む行は係数を作らない。正規化はしない。
+
+### A13-03 [A1-A3] EPD/商品固有値
+inputs: ['MATERIAL.additional_epd_reference', 'MATERIAL.quantity', 'FACTOR.factor_boundary', 'MATERIAL.quantity_unit', 'FACTOR.factor_value', 'FACTOR.factor_unit', 'FACTOR.factor_stages', 'FACTOR.factor_valid_until', 'PROJECT.assessment_date']
+depends_on: ['A13-02', 'A13-05', 'X-15']
+EPD／商品固有値。X-15 が製品固有値を適用すると決めた行について、発注量×換算倍率×製品固有値を足す。A13-01 とは行ごとに択一。
+
+### A13-04 [A1-A3] 未数量工事項目の推定
+inputs: ['MATERIAL.unquantified_cost_ratio', 'FACTOR.factor_id', 'PROVENANCE.source_type', 'NEW:MATERIAL.unquantified_declared_scope']
+depends_on: ['A13-01', 'A13-03']
+未数量工事項目の推定（本研究が独立に設計した上乗せ式）。行ごとの未数量費用比率 r（0 < r < 1）について、その行の製造排出 e に r/(1-r) を掛けた分を足す。r が 0 または欠損の行は何も足さない。r が負または 1 以上の行は足さずに数える。概念式自体はモデル未定義であり、他のツールの倍率とは無関係。
+
+### A13-05 [A1-A3] 数量による端材の扱い
+inputs: ['MATERIAL.quantity', 'MATERIAL.waste_rate', 'MATERIAL.quantity_basis']
+depends_on: []
+数量による端材の扱い。端材率 w は発注量に対する比（0 <= w < 1）、数量 Q は 0 以上。数量の基準が DESIGN なら据付量 = Q、発注量 = Q/(1-w)。ORDERED・AS_BUILT なら 発注量 = Q、据付量 = Q*(1-w)。Q または w が欠損・範囲外の行は算出しない（0 にしない）。
+
+### A4-01 [A4] 質量距離ベースの輸送
+inputs: ['TRANSPORT.transported_mass', 'TRANSPORT.distance', 'TRANSPORT.mode', 'TRANSPORT.transport_factor_id']
+depends_on: []
+質量距離ベースの輸送。数量当たりの搬入係数を持たない資材の行について、輸送質量[t]×距離[km]×換算倍率×輸送手段の係数 を足す（係数の対象段階は A4、単位は tkm へ換算できること）。積載率では補正しない。
+
+### A4-02 [A4] 製品別輸送負荷
+inputs: ['MATERIAL.quantity', 'TRANSPORT.transport_factor_id', 'MATERIAL.quantity_unit', 'FACTOR.factor_stages']
+depends_on: ['A13-05']
+製品別輸送負荷。数量当たりの搬入係数を持つ資材の行について、発注量×換算倍率×搬入係数を足す（係数の対象段階は A4）。A4-01 とは行ごとに択一。
+
+### A5-01 [A5] 仮設電気
+inputs: ['CONSTRUCTION.site_electricity', 'OPERATION.grid_factor_scenario_id', 'PROJECT.completion_year']
+depends_on: []
+仮設電気。工期全体の買電量[kWh]×換算倍率×工事期間の電力排出係数。電力係数シナリオの使用許諾がない、買電量が欠損・負、または kWh を係数の単位へ換算できないときは算出しない。
+
+### A5-02 [A5] 施工燃料
+inputs: ['CONSTRUCTION.site_diesel', 'CONSTRUCTION.site_gas', 'FACTOR.factor_id', 'FACTOR.factor_unit']
+depends_on: []
+施工燃料。燃料の種類ごとに 数量×換算倍率×係数 を足す（係数の対象段階は A5）。換算できない・欠損・負の燃料は足さずに数える。
+
+### A5-03 [A5] 工事廃棄物
+inputs: ['CONSTRUCTION.site_waste_mass', 'FACTOR.factor_id', 'NEW:CONSTRUCTION.site_waste_type_breakdown']
+depends_on: []
+工事廃棄物。廃棄物の種別ごとに 質量[kg]×換算倍率×処理係数 を足す（係数の対象段階は A5）。
+
+### A5-04 [A5] 工事負荷の合計
+inputs: ['CONSTRUCTION.site_electricity', 'CONSTRUCTION.site_diesel', 'CONSTRUCTION.site_waste_mass', 'NEW:CONSTRUCTION.other_verified_site_emissions']
+depends_on: ['A5-01', 'A5-02', 'A5-03']
+工事負荷の合計。仮設電気・施工燃料・工事廃棄物をこの順に足す。その他の現場排出は入力がないため 0 を足さず、未評価として印を付ける。
+
+### B1-01 [B1] 物質のCO2e充填量
+inputs: ['REFRIGERANT.charge_mass', 'REFRIGERANT.gwp']
+depends_on: []
+物質の CO2e 充填量。機器ごとに 初期充填質量×GWP を足す（どちらも 0 以上）。排出量ではなく在庫量であり、どの段階合計にも加えない。
+
+### B1-02 [B1] 使用期間の漏洩
+inputs: ['REFRIGERANT.charge_mass', 'REFRIGERANT.annual_leak_rate', 'REFRIGERANT.gwp', 'BOUNDARY.study_period', 'REFRIGERANT.refrigerant_change_years', 'NEW:REFRIGERANT.top_up', 'NEW:REFRIGERANT.service_life']
+depends_on: []
+使用期間の漏洩。機器ごとに評価年を 1 年ずつ進め、その年の漏洩 = 年初の残存量×年間漏洩率×年重みとする。毎年補充する機器は残存量が常に初期充填量、補充しない機器は年末に漏洩分を残存量から引く。機器の交換（交換年一覧、なければ耐用年数の倍数）は、それが属する年の年末に反映し、残存量を初期充填量に戻す。充填量・GWP が欠損または負、漏洩率が欠損または 0〜1 の外の機器は計上せずに数える。
+
+### B1-03 [B1] 更新時の漏洩
+inputs: ['REFRIGERANT.replacement_loss_rate', 'REFRIGERANT.refrigerant_change_years', 'REFRIGERANT.gwp', 'REFRIGERANT.charge_mass', 'REFRIGERANT.annual_leak_rate', 'BOUNDARY.study_period']
+depends_on: ['B1-02']
+更新時の漏洩。機器の交換 1 回ごとに、交換直前の残存量×交換時損失率×GWP を足す（残存量は B1-02 の年次計算の値）。損失率が欠損または 0〜1 の外の機器、B1-02 で除外された機器は計上せずに数える。
+
+### B1-04 [B1/C] 廃棄時未回収量
+inputs: ['REFRIGERANT.end_of_life_recovery_rate', 'REFRIGERANT.gwp', 'REFRIGERANT.charge_mass', 'REFRIGERANT.annual_leak_rate', 'BOUNDARY.study_period']
+depends_on: ['B1-02']
+廃棄時未回収量。評価期間の終わりの残存量×(1 − 回収率)×GWP を機器ごとに足す。回収率が欠損または 0〜1 の外の機器、B1-02 で除外された機器は計上せずに数える（回収率 100％ とはみなさない）。本研究の基準計算では B1 段階に帰属させる（C 段階には入れない）。
+
+### B2-01 [B2] 施設管理に帰属させる運用負荷
+inputs: ['OPERATION.facility_management_ratio', 'OPERATION.electricity_per_year']
+depends_on: ['B6-01']
+施設管理に帰属させる運用負荷。評価期間の買電排出（年重み付きの合計）×施設管理の比率（0〜1）。比率が欠損または範囲外なら算出しない。B2 が対象段階に入っている場合に限り、段階ベクトルでは同額を B6 から差し引く（B6 と B2 の合計は変わらない）。B2 が対象外なら B6 から引かない。
+
+### B3-01 [B3] 年間修繕
+inputs: ['MATERIAL.repair_rate', 'MATERIAL.material_life', 'EQUIPMENT.equipment_repair_rate', 'BOUNDARY.study_period', 'MATERIAL.refresh_cycles', 'EQUIPMENT.equipment_service_life']
+depends_on: ['A13-01', 'A13-03', 'B4-01', 'B4-03', 'X-01']
+年間修繕。資材・設備の行ごと、評価年ごとに、初期の製造排出 e0×年間修繕率 r×年重み w_y を足す。その行の更新が属する年は修繕を計上しない。修繕率が欠損・負の行は足さずに数える。
+
+### B3-02 [B3] 期間中の反復修繕（推計）
+inputs: ['MATERIAL.repair_rate', 'BOUNDARY.study_period', 'EQUIPMENT.equipment_repair_rate']
+depends_on: ['A13-01', 'A13-03', 'X-01']
+期間中の反復修繕（推計）。資材・設備の行ごとに 初期の製造排出×年間修繕率×評価年数 T を足す。修繕率が欠損・負の行は足さずに数える。B3-01 とは択一で、段階合計には B3-01 を使う（本式は更新年の除外をしない概算）。
+
+### B4-01 [B4] 更新イベント年の生成
+inputs: ['EQUIPMENT.equipment_service_life', 'BOUNDARY.study_period']
+depends_on: []
+更新イベント年の生成。設備の行ごとに、明示の更新年一覧があれば 0 < t で評価期間の内側にあるものを、なければ耐用年数 L の倍数 n*L（n = 1, 2, ...）で評価期間の内側にあるものを、1 つずつ数え上げて一覧にする。評価期間の終わり（相対 1e-9 以内を含む）の更新は含めない。耐用年数が欠損・非正なら事象なし。
+
+### B4-02 [B4] 機器・資材更新負荷
+inputs: ['EQUIPMENT.equipment_quantity', 'EQUIPMENT.replacement_event_list', 'FACTOR.factor_id', 'MATERIAL.refresh_cycles', 'BOUNDARY.study_period']
+depends_on: ['A13-01', 'A13-03', 'A13-05', 'A4-01', 'A4-02', 'B4-01', 'B4-03', 'C2-01', 'C3-01', 'C4-01', 'X-01', 'X-14']
+機器・資材更新負荷。更新 1 回ごとに、その行の 製造（A1-A3 の行結果）＋搬入（A4 の行結果）＋据付（据付係数があれば 発注量×係数）＋旧品の廃棄（C2・C3・C4 の行結果、設備は廃棄質量×係数）を足す。資材は B4-03 の回数だけ、設備は B4-01 の一覧の事象ごとに繰り返す。事象は発生年に置く。構成要素のうち計算できなかったもの（上流で除外された行、使えない据付・搬入係数）は足さず、更新があるのに構成要素が欠けた行の数を n_partial に数える。
+
+### B4-03 [B4] 交換回数の概算
+inputs: ['MATERIAL.refresh_cycles', 'BOUNDARY.study_period']
+depends_on: []
+交換回数の概算。資材の行ごとに、更新周期 c の倍数 n*c が評価期間の内側にある正の整数 n の個数を数え上げる。周期が欠損・非正の行は 0 回。
+
+### B5-01 [B5] 大型改修・建替イベント
+inputs: ['BOUNDARY.replacement_cycle', 'BOUNDARY.reconstruction_scenario', 'BOUNDARY.study_period', 'NEW:BOUNDARY.reconstruction_scope_fraction']
+depends_on: ['A13-01', 'A13-03', 'A13-04', 'A4-01', 'A4-02', 'A5-04', 'C1-01', 'C2-01', 'C3-01', 'C4-01', 'X-01', 'X-14']
+大型改修・建替イベント。建替シナリオが NONE でなければ、建替周期 C の倍数 n*C で評価期間の内側にあるものごとに、範囲比 phi×（初期の A1-A3＋A4＋A5＋C1〜C4 の合計）を足す。範囲比が欠損または 0〜1 の外なら算出しない。部材の更新周期は建替で初期化しない。
+
+### B6-01 [B6] 年間買電排出
+inputs: ['OPERATION.electricity_per_year', 'OPERATION.grid_factor_scenario_id', 'BOUNDARY.study_start_year']
+depends_on: ['B6-04', 'X-06']
+年間買電排出。評価年ごとに 買電量×換算倍率×その年の電力排出係数（X-06 の系列）。電力係数シナリオの使用許諾がない、買電量が算出されていない、または買電量の単位を係数の単位へ換算できないときは算出しない。
+
+### B6-02 [B6] 燃料の年間排出
+inputs: ['OPERATION.gas_per_year', 'OPERATION.oil_per_year', 'OPERATION.district_heat_per_year']
+depends_on: []
+燃料の年間排出。評価年ごとに、ガス・石油・地域熱の消費量×換算倍率×係数 を足す（係数の対象段階は B6）。年次量は、一定・直線の記述子があればその値、なければ年次表の値。単位が「単位/year」でない、または係数が使えない燃料は足さずに数える。
+
+### B6-03 [B6] 評価年数の積算
+inputs: ['BOUNDARY.study_period', 'OPERATION.grid_factor_scenario_id']
+depends_on: ['B6-01', 'B6-02']
+評価年数の積算。評価年ごとの（買電排出＋燃料排出）×年重み を y = 1..Y で足す。
+
+### B6-04 [B6] オンサイト発電の扱い
+inputs: ['OPERATION.onsite_generation_per_year', 'OPERATION.onsite_export_per_year', 'OPERATION.electricity_per_year']
+depends_on: []
+オンサイト発電の扱い。評価年ごとに 買電量 = max(0, 消費量 − (発電量 − 売電量)) を求める。年次量は、一定・直線の記述子があればその値（年次表は写し）、なければ年次表の値。単位は「単位/year」で、発電量と売電量は消費量の単位へ換算できること。換算できなければ算出しない。
+
+### B7-01 [B7] 上水利用排出
+inputs: ['WATER_WASTE.water_per_year', 'WATER_WASTE.water_factor_id']
+depends_on: []
+上水利用排出。評価年ごとに 上水使用量×換算倍率×係数（係数の対象段階は B7）。年次量の扱いは B6-02 と同じ。
+
+### B7-02 [B7] 下水処理排出
+inputs: ['WATER_WASTE.sewage_per_year', 'WATER_WASTE.sewage_factor_id']
+depends_on: []
+下水処理排出。評価年ごとに 下水量×換算倍率×係数（係数の対象段階は B7）。年次量の扱いは B6-02 と同じ。
+
+### B7-03 [B7] 一般廃棄物排出
+inputs: ['WATER_WASTE.municipal_waste_per_year', 'WATER_WASTE.waste_factor_id']
+depends_on: []
+一般廃棄物排出。評価年ごとに 一般廃棄物量×換算倍率×係数（係数の対象段階は B7）。年次量の扱いは B6-02 と同じ。
+
+### B7-04 [B7] 評価期間積算
+inputs: ['WATER_WASTE.water_per_year', 'WATER_WASTE.sewage_per_year', 'BOUNDARY.study_period']
+depends_on: ['B7-01', 'B7-02', 'B7-03']
+評価期間積算。評価年ごとの（上水＋下水＋一般廃棄物）の排出×年重み を y = 1..Y で足す。
+
+### C1-01 [C1] 解体作業排出
+inputs: ['END_OF_LIFE.demolition_activity', 'END_OF_LIFE.demolition_factor_id']
+depends_on: []
+解体作業排出。解体の活動ごとに 活動量×換算倍率×係数 を足す（係数の対象段階は C1）。活動量が欠損・負、または係数が使えない活動は足さずに数える。
+
+### C2-01 [C2] 廃棄物搬出
+inputs: ['END_OF_LIFE.waste_transport_mass', 'END_OF_LIFE.waste_transport_distance']
+depends_on: []
+廃棄物搬出。資材の行ごとに 廃棄質量[kg]/1000×搬出距離[km]×換算倍率×係数 を足し（係数の対象段階は C2、tkm へ換算できること）、さらに行に属さない搬出（質量[t]×距離×換算倍率×係数）を足す。質量・距離が欠損・負、または係数が使えない行は足さずに数える。
+
+### C3-01 [C3] 廃棄物処理
+inputs: ['END_OF_LIFE.waste_treatment_route', 'END_OF_LIFE.waste_recycle_fraction', 'END_OF_LIFE.eol_factor_ids']
+depends_on: []
+廃棄物処理。資材の行ごと、最終処分以外の処理経路（再使用・リサイクル・中間処理）ごとに廃棄質量×経路の比率×換算倍率×経路の係数 を足す（係数の対象段階は C3）。廃棄質量が欠損・負の行は足さずにn_skipped に数える。比率が負、または係数が使えない経路は足さずに n_routes_skipped に数え、同じ行のほかの経路は計算する。
+
+### C4-01 [C4] 最終処分
+inputs: ['END_OF_LIFE.landfill_quantity', 'END_OF_LIFE.eol_factor_ids']
+depends_on: []
+最終処分。資材の行ごとに 廃棄質量×最終処分の比率×換算倍率×最終処分の係数 を足す（係数の対象段階は C4）。欠損・負・使えない係数の扱いは C3-01 と同じ。
+
+### C-05 [C1-C4] 資材の質量収支
+inputs: ['END_OF_LIFE.waste_reuse_fraction', 'END_OF_LIFE.waste_recycle_fraction', 'MATERIAL.quantity']
+depends_on: ['A13-05']
+資材の質量収支。資材の行ごとに、経路の比率が負でなく合計が 1 を超えないこと（許容 1e-6）、廃棄質量が据付質量（kg へ換算できる行のみ）を超えないこと（相対許容 1e-6）を検査する。端材は工事中に現場を出るので、建物に残る質量は据付質量である。合計が 1 未満の行は違反ではなく未配分として数える。数値は補正しない。
+
+### STO-01 [MEMO] 木材の炭素貯蔵
+inputs: ['MATERIAL.timber_quantity', 'MATERIAL.material_specification', 'NEW:MATERIAL.timber_density', 'NEW:MATERIAL.timber_moisture_content', 'NEW:MATERIAL.biogenic_carbon_fraction']
+depends_on: []
+木材の炭素貯蔵（参考値）。木材数量[m3]×絶乾密度[kg/m3]×炭素含有率×44/12。いずれかが欠損・負なら算出しない。排出の合計には加減しない。
+
+### STO-02 [MEMO] コンクリート炭酸化等の取り扱い
+inputs: ['MATERIAL.concrete_volume', 'FACTOR.factor_id', 'NEW:FACTOR.uptake_factor_period', 'NEW:MATERIAL.uptake_activity_basis']
+depends_on: []
+コンクリート炭酸化等の取り扱い（参考値）。コンクリート数量[m3]×換算倍率×吸収係数（係数は参考値用の段階 MEMO のもの）。数量が欠損・負、または係数が使えなければ算出しない。排出の合計には加減しない。
+
+### SUM-01 [SUM] アップフロント
+inputs: ['BOUNDARY.included_lifecycle_stages']
+depends_on: ['X-02']
+アップフロント。対象段階のうち A1-A3・A4・A5 の値をこの順に足す。除外した行などがあれば complete を偽にする（X-02 の判定）。
+
+### SUM-02 [SUM] エンボディド
+inputs: ['BOUNDARY.included_lifecycle_stages']
+depends_on: ['X-02']
+エンボディド。対象段階のうち A1-A3・A4・A5・B1〜B5・C1〜C4 の値を足す（B6・B7 は含めない）。B2 は買電排出から切り出した施設管理分なので、この合計には運用由来の分が含まれる。
+
+### SUM-03 [SUM] ホールライフ
+inputs: ['BOUNDARY.included_lifecycle_stages']
+depends_on: ['X-02']
+ホールライフ。対象段階（最大 14 段階）の値を A1-A3 から C4 の順に足す。除外した行などがあれば complete を偽にする。
+
+### SUM-04 [SUM] 延べ床面積当たり
+inputs: ['PROJECT.gross_floor_area']
+depends_on: ['SUM-03']
+延べ床面積当たり。ホールライフの合計÷延床面積。延床面積が欠損または 0 以下のときは算出しない。
+
+### SUM-05 [SUM] 年平均・床面積当たり
+inputs: ['PROJECT.gross_floor_area', 'BOUNDARY.study_period']
+depends_on: ['SUM-03']
+年平均・床面積当たり。ホールライフの合計÷（延床面積×評価年数）。面積が無効、または評価年数が 0 以下のときは算出しない。
+
+### SUM-06 [SUM] t-CO2e換算
+inputs: ['BOUNDARY.results_gas_scope']
+depends_on: ['SUM-03']
+t-CO2e 換算。ホールライフの合計[kgCO2e]÷1000。
+
+### SUM-07 [SUM] 段階別割合
+inputs: ['BOUNDARY.included_lifecycle_stages']
+depends_on: ['SUM-03', 'X-02']
+段階別割合。対象段階ごとに 段階の値÷ホールライフの合計。合計が 0 以下、または負の段階がある場合は定義しない。
+
+### SUM-08 [SUM] 改善案との差分
+inputs: ['BOUNDARY.baseline_scenario', 'PROJECT.gross_floor_area', 'BOUNDARY.study_period', 'BOUNDARY.included_lifecycle_stages', 'BOUNDARY.results_gas_scope', 'FACTOR.factor_release_year']
+depends_on: ['SUM-03']
+改善案との差分。基準シナリオが指定されていれば、基準シナリオを同じ基準計算で最初から計算し、差 = 当該案 − 基準案、削減率 = (基準案 − 当該案)÷基準案 を求める。延床面積・評価期間・対象段階・ガスの範囲・係数の版（公開年の集合）がすべて一致する場合だけ比較可能とする。
+
+### QA-01 [QA] 相互排他の境界
+inputs: ['BOUNDARY.included_lifecycle_stages', 'FACTOR.factor_stages', 'NEW:QA.reconciliation_tolerance', 'NEW:PROVENANCE.activity_flow_id', 'NEW:QA.exclusive_pair_rule_table']
+depends_on: ['A13-01', 'A13-03', 'A4-01', 'A4-02', 'X-02', 'X-04']
+相互排他の境界。(a) 段階ごとに、段階の値と、その段階の排出の行を足し直した値が相対 1e-9 以内で一致すること、(b) 資材の行ごとに A13-01 と A13-03 が両方計上されていないこと、(c) A4-01 と A4-02 が両方計上されていないことを確かめる。
+
+### QA-02 [QA] 時間境界検査
+inputs: ['BOUNDARY.study_period', 'EQUIPMENT.replacement_event_list', 'REFRIGERANT.refrigerant_change_years']
+depends_on: []
+時間境界検査。明示された更新年・交換年（設備の更新年一覧、冷媒機器の交換年一覧）のすべてが0 <= t かつ評価期間の内側（終わりから相対 1e-9 以内を除く）にあることを確かめる。評価期間の終わりちょうどは不合格。t = 0 は合格だが、計算では使われない（竣工時点そのもの）ので warnings に挙げる。
+
+### QA-03 [QA] 出典ゲート
+inputs: ['FACTOR.factor_license', 'FACTOR.factor_source_url', 'PROVENANCE.license_status', 'NEW:PROJECT.intended_use', 'NEW:LICENSE.allowed_use_table']
+depends_on: ['X-04']
+出典ゲート。排出の行で実際に使われた係数を 1 つずつ調べ、すべて使用許諾があり出典の参照が空でないことを確かめる。
+
+### QA-04 [QA] 用途別面積の検算
+inputs: ['PROJECT.gross_floor_area', 'PROJECT.use_area_breakdown', 'NEW:QA.area_tolerance']
+depends_on: ['SYS-04']
+用途別面積の検算。SYS-04 の残差 r について |r| <= 1e-6×延床面積 なら合格。延床面積が無効なら判定しない。
+
+### X-01 [A1-A3] 設備機器の初期製造排出
+inputs: ['EQUIPMENT.equipment_quantity', 'EQUIPMENT.equipment_factor_id', 'EQUIPMENT.equipment_trade']
+depends_on: []
+設備機器の初期製造排出。設備の行ごとに 数量×換算倍率×係数 を足す（係数の対象段階は A1-A3）。
+
+### X-02 [SUM] 段階結果ベクトルの合成（択一・合算の規則）
+inputs: ['BOUNDARY.included_lifecycle_stages']
+depends_on: ['A13-01', 'A13-03', 'A13-04', 'A4-01', 'A4-02', 'A5-01', 'A5-02', 'A5-03', 'A5-04', 'B1-02', 'B1-03', 'B1-04', 'B2-01', 'B3-01', 'B4-02', 'B5-01', 'B6-01', 'B6-02', 'B6-03', 'B7-01', 'B7-02', 'B7-03', 'B7-04', 'C1-01', 'C2-01', 'C3-01', 'C4-01', 'X-01', 'X-14']
+段階結果ベクトルの合成。14 段階の値を次の規則で作る：A1-A3 = A13-01＋A13-03＋A13-04＋X-01、A4 = A4-01＋A4-02、A5 = A5-04、B1 = B1-02＋B1-03＋B1-04、B2 = B2-01、B3 = B3-01（B3-02 は使わない）、B4 = B4-02、B5 = B5-01、B6 = B6-03 − B2-01、B7 = B7-04、C1 = C1-01、C2 = C2-01、C3 = C3-01＋X-14、C4 = C4-01。対象外の段階は結果に含めない（0 にしない）。B2 が対象外のときは B6 から B2-01 を引かず、B6 = B6-03 とする（施設管理分がどの段階からも消えないようにする）。対象段階に、計算できずに除外した行・経路・項目を持つ単位があれば、その単位を incomplete_units に挙げ、complete を偽にする。
+
+### X-03 [A1-A3] 複合品の構成資材への展開（資材別の数量と排出）
+inputs: ['MATERIAL.quantity', 'MATERIAL.quantity_unit', 'MATERIAL.material_specification', 'FACTOR.factor_id']
+depends_on: ['A13-02', 'A13-05', 'X-15']
+複合品の構成資材への展開。複合係数で計算した行を構成材に展開し、構成材ごとの質量（発注量を kg に換算×質量比）と排出（質量×構成材の係数）を合計する。
+
+### X-04 [SUM] ガス別内訳と CO2 換算の合算
+inputs: ['BOUNDARY.results_gas_scope', 'FACTOR.factor_value', 'NEW:FACTOR.gas_amounts', 'NEW:GWP']
+depends_on: ['A13-01', 'A13-03', 'A13-04', 'A4-01', 'A4-02', 'A5-01', 'A5-02', 'A5-03', 'B1-02', 'B1-03', 'B1-04', 'B2-01', 'B3-01', 'B4-02', 'B5-01', 'B6-03', 'B7-04', 'C1-01', 'C2-01', 'C3-01', 'C4-01', 'X-01', 'X-14']
+ガス別内訳と CO2 換算の合算。全 14 段階の排出の行（係数 ID と活動量）を 1 行ずつたどり、ガスごとに 活動量×係数のガス別量 を足す。買電と冷媒はガス別の内訳を持たないため CO2 換算量のまま別掲する。ガス別量×GWP の合計＋買電＋冷媒 が段階合計の総和に一致することを確かめる。
+
+### X-05 [SUM] GHG 版と CO2 版の並行算定
+inputs: ['BOUNDARY.results_gas_scope']
+depends_on: ['A13-01', 'A13-03', 'A13-04', 'A4-01', 'A4-02', 'A5-01', 'A5-02', 'A5-03', 'B1-02', 'B1-03', 'B1-04', 'B2-01', 'B3-01', 'B4-02', 'B5-01', 'B6-03', 'B7-04', 'C1-01', 'C2-01', 'C3-01', 'C4-01', 'X-01', 'X-14']
+GHG 版と CO2 版の並行算定。全ガス版と同じ行を改めてたどり、係数の CO2 の量だけを使って段階別の CO2 排出を求める。買電は CO2 として数え、冷媒は 0 とする。対象段階の合計を値とする（B2 が対象外で B6 が対象のときは、X-02 と同じく B2 の分を B6 に戻す）。
+
+### X-06 [B6] 電力排出係数の年次系列の生成
+inputs: ['OPERATION.grid_factor_scenario_id', 'BOUNDARY.study_start_year', 'BOUNDARY.study_period']
+depends_on: []
+電力排出係数の年次系列の生成。記述子が整っている場合（一定、直線低下で低下量が 0 以上かつ初期値が下限以上、段階的で段が添字 0 から厳密に増加）は、評価年 y（添字 k = y-1）ごとに 一定値、max(下限, 初期値 − 年低下量×k)、該当する段の値 を作る。それ以外は年次表の値を使う。どちらを使ったか（source）と、作った系列が年次表と一致するかを報告する。
+
+### X-07 [SUM] 経年表記（年次・累積の排出系列）
+inputs: ['BOUNDARY.study_period']
+depends_on: ['B1-02', 'B1-03', 'B1-04', 'B3-01', 'B4-02', 'B5-01', 'B6-01', 'B6-02', 'B7-01', 'B7-02', 'B7-03', 'X-02']
+経年表記（年次・累積の排出系列）。対象段階について、初期段階（A1-A3・A4・A5）を時点 0 に、年次の排出（B6・B2・B7・B1 の漏洩・B3）を各評価年に、事象の排出（B4・B5・B1 の更新時損失）を発生年に、廃棄段階（C1〜C4）と B1 の廃棄時未回収を最終年に置き、累積を作る。累積の最終値は対象段階の合計に一致する。買電排出の B2 と B6 への振り分けは X-02 と同じ規則。
+
+### X-08 [B4] 更新周期別の集計
+inputs: ['MATERIAL.refresh_cycles', 'EQUIPMENT.equipment_service_life', 'BOUNDARY.study_period']
+depends_on: ['A13-01', 'A13-03', 'A13-05', 'A4-01', 'A4-02', 'B4-01', 'B4-02', 'B4-03', 'C2-01', 'C3-01', 'C4-01', 'X-01', 'X-14']
+更新周期別の集計。更新 1 回当たりの排出 u を周期の値ごとに合算して U_c とし、E_c = 回数×U_c を出す。明示の更新年一覧を持つ設備は「EXPLICIT」にまとめる。合計は B4-02 に一致する。
+
+### X-09 [C1-C4] 廃棄物の発生品目別・処理経路別の集計
+inputs: ['END_OF_LIFE.waste_treatment_route', 'END_OF_LIFE.waste_recycle_fraction', 'END_OF_LIFE.waste_reuse_fraction', 'END_OF_LIFE.landfill_quantity', 'MATERIAL.material_class']
+depends_on: []
+廃棄物の発生品目別・処理経路別の集計。資材の行ごと、処理経路ごとに 質量×比率 と、それに経路の係数を掛けた排出を、資材区分×経路の表に足し込む。質量と比率が有効な経路は質量の表に入れ、係数も使える経路だけ排出の表に入れる（C3-01・C4-01 と同じ条件）。
+
+### X-10 [SUM] ライフサイクル資源量・廃棄物量の集計
+inputs: ['MATERIAL.quantity', 'MATERIAL.refresh_cycles', 'MATERIAL.waste_rate', 'EQUIPMENT.equipment_end_of_life_mass', 'BOUNDARY.study_period']
+depends_on: ['A13-05', 'B4-01', 'B4-03']
+ライフサイクル資源量・廃棄物量の集計（単位 kg）。資材の行ごとに、発注質量×(1＋更新回数) を資源量に、（端材質量＋廃棄質量）×(1＋更新回数) を廃棄物量に足す。設備は 廃棄質量×(1＋更新回数) を廃棄物量に足す。kg へ換算できない行、質量が欠損・負の行は対象外として数える。
+
+### X-11 [B6] 床面積当たり統計値による運用エネルギーの推定
+inputs: ['OPERATION.electricity_per_m2_per_year', 'PROJECT.gross_floor_area', 'PROJECT.building_use', 'OPERATION.grid_factor_scenario_id']
+depends_on: ['X-06']
+床面積当たり統計値による運用エネルギーの推定。延床面積×面積当たり年間電力使用量[kWh/m2/年]×換算倍率×（電力排出係数の年重み付き合計）。面積が正でない、原単位が負、係数シナリオの使用許諾がない、または kWh を係数の単位へ換算できないときは算出しない。実績の買電量を使わない推定値で、段階合計には使わない。
+
+### X-12 [A4] 積載率による輸送排出の補正
+inputs: ['TRANSPORT.transported_mass', 'TRANSPORT.distance', 'TRANSPORT.load_factor', 'TRANSPORT.transport_factor_id']
+depends_on: []
+積載率による輸送排出の補正。A4-01 と同じ行について 質量×距離×係数÷積載率 を足す。積載率は正の数。係数が満載基準のときの代替値で、段階合計には使わない（A4-01 と択一）。
+
+### X-13 [A1-A3] 端材の再使用を考慮した正味の発注量
+inputs: ['MATERIAL.quantity', 'MATERIAL.waste_rate', 'MATERIAL.reuse_rate', 'MATERIAL.quantity_basis']
+depends_on: ['A13-05']
+端材の再使用を考慮した正味の発注量。処分される端材 = (発注量 - 据付量)*(1 - 再使用率)、正味の発注量 = 据付量 + 処分される端材。再使用率は 0〜1。A13-05 の発注量の代替値で、段階合計には使わない。
+
+### X-14 [C3] 設備機器の廃棄時排出
+inputs: ['EQUIPMENT.equipment_end_of_life_mass', 'END_OF_LIFE.eol_factor_ids']
+depends_on: []
+設備機器の廃棄時排出。設備の行ごとに 廃棄質量[kg]×換算倍率×処理係数 を足す（C3 段階）。質量が欠損・負、または係数が使えない行は足さずに数える。
+
+### X-15 [PRE] 係数の検索結合と適用優先順位の解決
+inputs: ['FACTOR.factor_id', 'MATERIAL.material_class', 'MATERIAL.material_specification', 'MATERIAL.additional_epd_reference', 'EQUIPMENT.equipment_factor_id']
+depends_on: ['A13-02']
+係数の検索結合と適用優先順位の解決。資材の行ごとに (1) 製品固有値（EPD）、(2) 複合品なら A13-02 の複合係数（数量は kg へ換算）、(3) 汎用係数、の順で係数を決め、数量の単位から係数の単位への換算倍率を求める。EPD を使うのは、行の宣言（対象段階・単位・有効期限）が係数の記録と一致し、使用許諾があり、対象段階が A1-A3 のみで、有効期限が算定日以降（当日を含む）で、単位を換算できるときだけ。汎用係数も対象段階が A1-A3 のみのものに限る。決められない行は未解決とする。
+
+### X-16 [A1-A3] 物価補正（費用ベース係数の基準年換算）
+inputs: ['NEW:COST.amount', 'NEW:COST.currency', 'NEW:COST.price_year', 'NEW:COST.factor_id', 'NEW:COST.factor_base_year', 'NEW:PRICE_INDEX.value', 'FACTOR.factor_id']
+depends_on: []
+物価補正（費用ベース係数の基準年換算）。費用だけが分かっている項目ごとに、費用×(係数の基準年の物価指数÷費用の年の物価指数)×換算倍率×費用当たり係数 を足す（係数の対象段階は A1-A3）。費用が欠損・負、指数が無いか 0 以下、係数が使えない項目は足さずに数える。未数量分の代替推定であり、段階合計には使わない（A13-04 と択一）。
+
+### X-17 [A1-A3] 主要数量による簡易算定（要約数量×代表係数）
+inputs: ['MATERIAL.reinforcement_quantity', 'MATERIAL.steel_quantity', 'MATERIAL.concrete_volume', 'MATERIAL.timber_quantity', 'MATERIAL.envelope_area', 'MATERIAL.interior_area', 'FACTOR.factor_id']
+depends_on: ['A13-01', 'A13-03']
+主要数量による簡易算定。6 区分（鉄筋・鉄骨・コンクリート・木材・外装・内装）ごとに、代表係数 fbar = 区分内の行の製造排出の合計 ÷ 要約数量 を求め、要約数量×代表係数 を足す。代表係数をその建物自身から作るので、定義上、6 区分の製造排出を区分別に集計し直したものに等しい（範囲外の資材は含まない）。代表係数を建物の外から与える場合の精度は、ここでは扱わない。

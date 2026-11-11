@@ -1,0 +1,5309 @@
+{
+ "schema_version": "1.0",
+ "what": "Operation counts of the unified model (fastcalc.engine), observed from outside with reporting stand-ins for the inputs and wrappers around the shared functions. No count is a tally kept by the engine.",
+ "data_statement": "SYNTHETIC_FICTIONAL data only. Counts of this code on these inputs; not evidence about real buildings or about any other tool.",
+ "how_to_read": {
+  "phases": "aggregate = the pass over the input rows; finish = everything that depends on the study period; second_period_finish = finish again for another period from the same aggregation (totals-only mode)",
+  "multiplications": "products in which the named kind of value is an operand. while_reading_a_material_or_equipment_row excludes the builder of composite factors, which is reported as in_recipe_builder (it runs once per distinct composition). Any addition, subtraction or division with such a value would appear under other_arithmetic_with_these_values",
+  "year_loops": "nominal number of yearly values handled by the functions that loop over the study years, by class: value_loop (a total is accumulated year by year), series_generation (yearly values are generated from a descriptor), copy_check (descriptor values compared with the table copy), validity_scan (a year table that is the input is checked), yearly_output (series of the full outputs)",
+  "second_period": "30 years (twice that when the scenario's own period is 30)"
+ },
+ "year_loop_functions": {
+  "table_weighted_sum": "value_loop",
+  "table_moments": "value_loop",
+  "_purchased_series": "value_loop",
+  "segment_values": "series_generation",
+  "_values": "series_generation",
+  "_same": "copy_check",
+  "table_usable": "validity_scan",
+  "_add_leak_series": "yearly_output",
+  "_add_repair_series": "yearly_output",
+  "_annual_series": "yearly_output",
+  "_whole_life_series": "yearly_output"
+ },
+ "scenarios": {
+  "mechanism_parametric": {
+   "input": {
+    "rows": {
+     "materials": 400,
+     "equipment": 120,
+     "refrigerants": 10,
+     "cost_items": 3
+    },
+    "study_period": 60.0,
+    "distinct": {
+     "factor_records": 271,
+     "compositions": 30,
+     "renewal_periods": 245
+    },
+    "rows_with": {
+     "own_conversions": 111,
+     "product_specific_factor": 37,
+     "composition": 124,
+     "explicit_event_list": 16,
+     "refrigerant_change_list": 4
+    },
+    "annual_profiles_given_by_descriptor": 9,
+    "annual_profiles": 9,
+    "grid_given_by_descriptor": true,
+    "all_yearly_inputs_parametric": true,
+    "net_electricity_descriptors": true
+   },
+   "totals_only": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 10,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 10,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 10
+       }
+      },
+      "factor_value": {
+       "total": 223,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 223,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 223
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 400,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 17168,
+       "distinct_rows_read": 400
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 120,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 3144,
+       "distinct_rows_read": 120
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 10,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 250,
+       "distinct_rows_read": 10
+      }
+     },
+     "factor_table_lookups": {
+      "total": 518,
+      "by_function": {
+       "Resolver.record": 259,
+       "aggregate": 259
+      }
+     },
+     "record_checks": {
+      "calls": 259,
+      "distinct_factor_stage_pairs": 259,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 559,
+      "distinct_factor_stage_pairs": 259
+     },
+     "resolutions": {
+      "use_calls": 3305,
+      "per_triple": {
+       "calls": 194,
+       "distinct_triples": 194
+      },
+      "per_row_with_row_conversions": {
+       "calls": 105,
+       "distinct_triples": 27
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 614,
+       "from_pair_memo": 198,
+       "row_list_searched_first": 144
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 142,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 37,
+     "recipes_computed": 30,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 3591,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 3368,
+       "by_function": {
+        "finish": 223,
+        "tot": 3368
+       }
+      },
+      "gas_amount": {
+       "total": 5033,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3472,
+        "finish.gas_of": 1561
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 656,
+      "by_function": {
+       "finish": 223,
+       "finish.gas_of": 433
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 16,
+       "refrigerant_explicit": 4,
+       "refrigerant_periodic": 6
+      },
+      "years_listed": 78,
+      "exact_year_function_calls": 62
+     },
+     "closed_form_calls": {
+      "renewal_count": 251,
+      "skip_weight_periodic": 153,
+      "skip_weight_years": 16,
+      "linear_weighted_sum": 6,
+      "segment_moments": 1,
+      "refrigerant_fractions": 10
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "copy_check": 600,
+       "series_generation": 600
+      },
+      "by_function": {
+       "_same": {
+        "class": "copy_check",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "_profile_state": 540,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 9,
+        "yearly_values": 540,
+        "by_caller": {
+         "_profile_state": 540
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 600
+     },
+     "table_read_out": {
+      "calls": 262,
+      "entries": 3373
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "second_period_finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 2692,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 2469,
+       "by_function": {
+        "finish": 223,
+        "tot": 2469
+       }
+      },
+      "gas_amount": {
+       "total": 4937,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3376,
+        "finish.gas_of": 1561
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 655,
+      "by_function": {
+       "finish": 223,
+       "finish.gas_of": 432
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 16,
+       "refrigerant_explicit": 4,
+       "refrigerant_periodic": 6
+      },
+      "years_listed": 34,
+      "exact_year_function_calls": 27
+     },
+     "closed_form_calls": {
+      "renewal_count": 251,
+      "skip_weight_periodic": 83,
+      "skip_weight_years": 16,
+      "linear_weighted_sum": 6,
+      "segment_moments": 1,
+      "refrigerant_fractions": 10
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "copy_check": 300,
+       "series_generation": 300
+      },
+      "by_function": {
+       "_same": {
+        "class": "copy_check",
+        "calls": 10,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 270,
+         "finish": 30
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 9,
+        "yearly_values": 270,
+        "by_caller": {
+         "_profile_state": 270
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 300
+     },
+     "table_read_out": {
+      "calls": 185,
+      "entries": 2474
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "table_entries": 831,
+    "period_groups": 245
+   },
+   "full_outputs": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 10,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 10,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 10
+       }
+      },
+      "factor_value": {
+       "total": 4207,
+       "while_reading_a_material_or_equipment_row": 3984,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 223,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 223,
+        "aggregate": 3984
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 400,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 17168,
+       "distinct_rows_read": 400
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 120,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 3144,
+       "distinct_rows_read": 120
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 10,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 250,
+       "distinct_rows_read": 10
+      }
+     },
+     "factor_table_lookups": {
+      "total": 518,
+      "by_function": {
+       "Resolver.record": 259,
+       "aggregate": 259
+      }
+     },
+     "record_checks": {
+      "calls": 259,
+      "distinct_factor_stage_pairs": 259,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 559,
+      "distinct_factor_stage_pairs": 259
+     },
+     "resolutions": {
+      "use_calls": 3305,
+      "per_triple": {
+       "calls": 194,
+       "distinct_triples": 194
+      },
+      "per_row_with_row_conversions": {
+       "calls": 105,
+       "distinct_triples": 27
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 614,
+       "from_pair_memo": 198,
+       "row_list_searched_first": 144
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 142,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 37,
+     "recipes_computed": 30,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 4424,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 3368,
+       "by_function": {
+        "_annual_series": 360,
+        "_detail": 473,
+        "finish": 223,
+        "tot": 3368
+       }
+      },
+      "gas_amount": {
+       "total": 5033,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3472,
+        "finish.gas_of": 1561
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 656,
+      "by_function": {
+       "finish": 223,
+       "finish.gas_of": 433
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 16,
+       "periodic_material_equipment": 165,
+       "refrigerant_explicit": 4,
+       "refrigerant_periodic": 6
+      },
+      "years_listed": 458,
+      "exact_year_function_calls": 62
+     },
+     "closed_form_calls": {
+      "renewal_count": 251,
+      "skip_weight_periodic": 153,
+      "skip_weight_years": 16,
+      "linear_weighted_sum": 6,
+      "segment_moments": 1,
+      "refrigerant_fractions": 10
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "yearly_output": 15060,
+       "value_loop": 60,
+       "copy_check": 600,
+       "series_generation": 1140
+      },
+      "by_function": {
+       "_add_leak_series": {
+        "class": "yearly_output",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "finish": 600
+        }
+       },
+       "_add_repair_series": {
+        "class": "yearly_output",
+        "calls": 234,
+        "yearly_values": 14040,
+        "by_caller": {
+         "_detail": 14040
+        }
+       },
+       "_annual_series": {
+        "class": "yearly_output",
+        "calls": 4,
+        "yearly_values": 360,
+        "by_caller": {
+         "_detail": 360
+        }
+       },
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "_profile_state": 540,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 18,
+        "yearly_values": 1080,
+        "by_caller": {
+         "_annual_series": 360,
+         "_profile_state": 540,
+         "finish": 180
+        }
+       },
+       "_whole_life_series": {
+        "class": "yearly_output",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "_detail": 60
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 600
+     },
+     "table_read_out": {
+      "calls": 262,
+      "entries": 3373
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "table_entries": 831,
+    "period_groups": 245
+   },
+   "results_identical_to_an_uninstrumented_run": true
+  },
+  "mechanism_year_tables": {
+   "input": {
+    "rows": {
+     "materials": 400,
+     "equipment": 120,
+     "refrigerants": 10,
+     "cost_items": 3
+    },
+    "study_period": 60.0,
+    "distinct": {
+     "factor_records": 271,
+     "compositions": 30,
+     "renewal_periods": 245
+    },
+    "rows_with": {
+     "own_conversions": 111,
+     "product_specific_factor": 37,
+     "composition": 124,
+     "explicit_event_list": 16,
+     "refrigerant_change_list": 4
+    },
+    "annual_profiles_given_by_descriptor": 0,
+    "annual_profiles": 9,
+    "grid_given_by_descriptor": false,
+    "all_yearly_inputs_parametric": false,
+    "net_electricity_descriptors": false
+   },
+   "totals_only": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 10,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 10,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 10
+       }
+      },
+      "factor_value": {
+       "total": 223,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 223,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 223
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 400,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 17168,
+       "distinct_rows_read": 400
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 120,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 3144,
+       "distinct_rows_read": 120
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 10,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 250,
+       "distinct_rows_read": 10
+      }
+     },
+     "factor_table_lookups": {
+      "total": 518,
+      "by_function": {
+       "Resolver.record": 259,
+       "aggregate": 259
+      }
+     },
+     "record_checks": {
+      "calls": 259,
+      "distinct_factor_stage_pairs": 259,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 559,
+      "distinct_factor_stage_pairs": 259
+     },
+     "resolutions": {
+      "use_calls": 3305,
+      "per_triple": {
+       "calls": 194,
+       "distinct_triples": 194
+      },
+      "per_row_with_row_conversions": {
+       "calls": 105,
+       "distinct_triples": 27
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 614,
+       "from_pair_memo": 198,
+       "row_list_searched_first": 144
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 142,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 37,
+     "recipes_computed": 30,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 3591,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 3368,
+       "by_function": {
+        "finish": 223,
+        "tot": 3368
+       }
+      },
+      "gas_amount": {
+       "total": 5033,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3472,
+        "finish.gas_of": 1561
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 656,
+      "by_function": {
+       "finish": 223,
+       "finish.gas_of": 433
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 16,
+       "refrigerant_explicit": 4,
+       "refrigerant_periodic": 6
+      },
+      "years_listed": 78,
+      "exact_year_function_calls": 62
+     },
+     "closed_form_calls": {
+      "renewal_count": 251,
+      "skip_weight_periodic": 153,
+      "skip_weight_years": 16,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 10
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "value_loop": 480,
+       "series_generation": 180,
+       "validity_scan": 600
+      },
+      "by_function": {
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 3,
+        "yearly_values": 180,
+        "by_caller": {
+         "finish": 180
+        }
+       },
+       "table_moments": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "_profile_state": 540,
+         "finish": 60
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 6,
+        "yearly_values": 360,
+        "by_caller": {
+         "finish": 360
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_values": 180,
+      "finish": 60,
+      "table_moments": 120,
+      "table_usable": 600,
+      "table_weighted_sum": 360
+     },
+     "table_read_out": {
+      "calls": 262,
+      "entries": 3373
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "second_period_finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 2692,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 2469,
+       "by_function": {
+        "finish": 223,
+        "tot": 2469
+       }
+      },
+      "gas_amount": {
+       "total": 4937,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3376,
+        "finish.gas_of": 1561
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 655,
+      "by_function": {
+       "finish": 223,
+       "finish.gas_of": 432
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 16,
+       "refrigerant_explicit": 4,
+       "refrigerant_periodic": 6
+      },
+      "years_listed": 34,
+      "exact_year_function_calls": 27
+     },
+     "closed_form_calls": {
+      "renewal_count": 251,
+      "skip_weight_periodic": 83,
+      "skip_weight_years": 16,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 10
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "value_loop": 240,
+       "series_generation": 90,
+       "validity_scan": 300
+      },
+      "by_function": {
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 3,
+        "yearly_values": 90,
+        "by_caller": {
+         "finish": 90
+        }
+       },
+       "table_moments": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 10,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 270,
+         "finish": 30
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 6,
+        "yearly_values": 180,
+        "by_caller": {
+         "finish": 180
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_values": 90,
+      "finish": 30,
+      "table_moments": 60,
+      "table_usable": 300,
+      "table_weighted_sum": 180
+     },
+     "table_read_out": {
+      "calls": 185,
+      "entries": 2474
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "table_entries": 831,
+    "period_groups": 245
+   },
+   "full_outputs": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 10,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 10,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 10
+       }
+      },
+      "factor_value": {
+       "total": 4207,
+       "while_reading_a_material_or_equipment_row": 3984,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 223,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 223,
+        "aggregate": 3984
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 400,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 17168,
+       "distinct_rows_read": 400
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 120,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 3144,
+       "distinct_rows_read": 120
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 10,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 250,
+       "distinct_rows_read": 10
+      }
+     },
+     "factor_table_lookups": {
+      "total": 518,
+      "by_function": {
+       "Resolver.record": 259,
+       "aggregate": 259
+      }
+     },
+     "record_checks": {
+      "calls": 259,
+      "distinct_factor_stage_pairs": 259,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 559,
+      "distinct_factor_stage_pairs": 259
+     },
+     "resolutions": {
+      "use_calls": 3305,
+      "per_triple": {
+       "calls": 194,
+       "distinct_triples": 194
+      },
+      "per_row_with_row_conversions": {
+       "calls": 105,
+       "distinct_triples": 27
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 614,
+       "from_pair_memo": 198,
+       "row_list_searched_first": 144
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 142,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 37,
+     "recipes_computed": 30,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 4424,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 3368,
+       "by_function": {
+        "_annual_series": 360,
+        "_detail": 473,
+        "finish": 223,
+        "tot": 3368
+       }
+      },
+      "gas_amount": {
+       "total": 5033,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3472,
+        "finish.gas_of": 1561
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 656,
+      "by_function": {
+       "finish": 223,
+       "finish.gas_of": 433
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 16,
+       "periodic_material_equipment": 165,
+       "refrigerant_explicit": 4,
+       "refrigerant_periodic": 6
+      },
+      "years_listed": 458,
+      "exact_year_function_calls": 62
+     },
+     "closed_form_calls": {
+      "renewal_count": 251,
+      "skip_weight_periodic": 153,
+      "skip_weight_years": 16,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 10
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "yearly_output": 15060,
+       "value_loop": 480,
+       "series_generation": 540,
+       "validity_scan": 600
+      },
+      "by_function": {
+       "_add_leak_series": {
+        "class": "yearly_output",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "finish": 600
+        }
+       },
+       "_add_repair_series": {
+        "class": "yearly_output",
+        "calls": 234,
+        "yearly_values": 14040,
+        "by_caller": {
+         "_detail": 14040
+        }
+       },
+       "_annual_series": {
+        "class": "yearly_output",
+        "calls": 4,
+        "yearly_values": 360,
+        "by_caller": {
+         "_detail": 360
+        }
+       },
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 9,
+        "yearly_values": 540,
+        "by_caller": {
+         "_annual_series": 360,
+         "finish": 180
+        }
+       },
+       "_whole_life_series": {
+        "class": "yearly_output",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "_detail": 60
+        }
+       },
+       "table_moments": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "_profile_state": 540,
+         "finish": 60
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 6,
+        "yearly_values": 360,
+        "by_caller": {
+         "finish": 360
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_values": 540,
+      "finish": 60,
+      "table_moments": 120,
+      "table_usable": 600,
+      "table_weighted_sum": 360
+     },
+     "table_read_out": {
+      "calls": 262,
+      "entries": 3373
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "table_entries": 831,
+    "period_groups": 245
+   },
+   "results_identical_to_an_uninstrumented_run": true
+  },
+  "benchmark_S": {
+   "input": {
+    "rows": {
+     "materials": 200,
+     "equipment": 60,
+     "refrigerants": 5,
+     "cost_items": 6
+    },
+    "study_period": 60.0,
+    "distinct": {
+     "factor_records": 253,
+     "compositions": 15,
+     "renewal_periods": 161
+    },
+    "rows_with": {
+     "own_conversions": 50,
+     "product_specific_factor": 19,
+     "composition": 51,
+     "explicit_event_list": 10,
+     "refrigerant_change_list": 3
+    },
+    "annual_profiles_given_by_descriptor": 4,
+    "annual_profiles": 9,
+    "grid_given_by_descriptor": true,
+    "all_yearly_inputs_parametric": false,
+    "net_electricity_descriptors": false
+   },
+   "totals_only": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 5,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 5,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 5
+       }
+      },
+      "factor_value": {
+       "total": 101,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 101,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 101
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 200,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 8620,
+       "distinct_rows_read": 200
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 60,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 1576,
+       "distinct_rows_read": 60
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 5,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 125,
+       "distinct_rows_read": 5
+      }
+     },
+     "factor_table_lookups": {
+      "total": 472,
+      "by_function": {
+       "Resolver.record": 236,
+       "aggregate": 236
+      }
+     },
+     "record_checks": {
+      "calls": 236,
+      "distinct_factor_stage_pairs": 236,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 359,
+      "distinct_factor_stage_pairs": 236
+     },
+     "resolutions": {
+      "use_calls": 1678,
+      "per_triple": {
+       "calls": 189,
+       "distinct_triples": 189
+      },
+      "per_row_with_row_conversions": {
+       "calls": 50,
+       "distinct_triples": 24
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 6,
+      "distinct_unit_pairs": 6,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 381,
+       "from_pair_memo": 113,
+       "row_list_searched_first": 67
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 67,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 19,
+     "recipes_computed": 15,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 2154,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 2053,
+       "by_function": {
+        "finish": 101,
+        "tot": 2053
+       }
+      },
+      "gas_amount": {
+       "total": 3819,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3112,
+        "finish.gas_of": 707
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 395,
+      "by_function": {
+       "finish": 101,
+       "finish.gas_of": 294
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 10,
+       "refrigerant_explicit": 3,
+       "refrigerant_periodic": 2
+      },
+      "years_listed": 37,
+      "exact_year_function_calls": 28
+     },
+     "closed_form_calls": {
+      "renewal_count": 163,
+      "skip_weight_periodic": 92,
+      "skip_weight_years": 10,
+      "linear_weighted_sum": 2,
+      "segment_moments": 1,
+      "refrigerant_fractions": 5
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "value_loop": 300,
+       "copy_check": 300,
+       "series_generation": 480,
+       "validity_scan": 300
+      },
+      "by_function": {
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 5,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 240,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 7,
+        "yearly_values": 420,
+        "by_caller": {
+         "_profile_state": 240,
+         "finish": 180
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 5,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 300
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 4,
+        "yearly_values": 240,
+        "by_caller": {
+         "finish": 240
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 300,
+      "_values": 60,
+      "table_usable": 300,
+      "table_weighted_sum": 240
+     },
+     "table_read_out": {
+      "calls": 196,
+      "entries": 2058
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "second_period_finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 1702,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 1601,
+       "by_function": {
+        "finish": 101,
+        "tot": 1601
+       }
+      },
+      "gas_amount": {
+       "total": 3667,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 2960,
+        "finish.gas_of": 707
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 395,
+      "by_function": {
+       "finish": 101,
+       "finish.gas_of": 294
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 10,
+       "refrigerant_explicit": 3,
+       "refrigerant_periodic": 2
+      },
+      "years_listed": 16,
+      "exact_year_function_calls": 12
+     },
+     "closed_form_calls": {
+      "renewal_count": 163,
+      "skip_weight_periodic": 53,
+      "skip_weight_years": 10,
+      "linear_weighted_sum": 2,
+      "segment_moments": 1,
+      "refrigerant_fractions": 5
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "value_loop": 150,
+       "copy_check": 150,
+       "series_generation": 240,
+       "validity_scan": 150
+      },
+      "by_function": {
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 5,
+        "yearly_values": 150,
+        "by_caller": {
+         "_profile_state": 120,
+         "finish": 30
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 7,
+        "yearly_values": 210,
+        "by_caller": {
+         "_profile_state": 120,
+         "finish": 90
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 5,
+        "yearly_values": 150,
+        "by_caller": {
+         "_profile_state": 150
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 4,
+        "yearly_values": 120,
+        "by_caller": {
+         "finish": 120
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 150,
+      "_values": 30,
+      "table_usable": 150,
+      "table_weighted_sum": 120
+     },
+     "table_read_out": {
+      "calls": 153,
+      "entries": 1606
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 236,
+     "unit_pairs_resolved": 6,
+     "recipes_computed": 15
+    },
+    "table_entries": 653,
+    "period_groups": 161
+   },
+   "full_outputs": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 5,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 5,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 5
+       }
+      },
+      "factor_value": {
+       "total": 2085,
+       "while_reading_a_material_or_equipment_row": 1984,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 101,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 101,
+        "aggregate": 1984
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 200,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 8620,
+       "distinct_rows_read": 200
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 60,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 1576,
+       "distinct_rows_read": 60
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 5,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 125,
+       "distinct_rows_read": 5
+      }
+     },
+     "factor_table_lookups": {
+      "total": 472,
+      "by_function": {
+       "Resolver.record": 236,
+       "aggregate": 236
+      }
+     },
+     "record_checks": {
+      "calls": 236,
+      "distinct_factor_stage_pairs": 236,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 359,
+      "distinct_factor_stage_pairs": 236
+     },
+     "resolutions": {
+      "use_calls": 1678,
+      "per_triple": {
+       "calls": 189,
+       "distinct_triples": 189
+      },
+      "per_row_with_row_conversions": {
+       "calls": 50,
+       "distinct_triples": 24
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 6,
+      "distinct_unit_pairs": 6,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 381,
+       "from_pair_memo": 113,
+       "row_list_searched_first": 67
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 67,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 19,
+     "recipes_computed": 15,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 2777,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 2053,
+       "by_function": {
+        "_annual_series": 360,
+        "_detail": 263,
+        "finish": 101,
+        "tot": 2053
+       }
+      },
+      "gas_amount": {
+       "total": 3819,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 3112,
+        "finish.gas_of": 707
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 395,
+      "by_function": {
+       "finish": 101,
+       "finish.gas_of": 294
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 10,
+       "periodic_material_equipment": 99,
+       "refrigerant_explicit": 3,
+       "refrigerant_periodic": 2
+      },
+      "years_listed": 282,
+      "exact_year_function_calls": 28
+     },
+     "closed_form_calls": {
+      "renewal_count": 163,
+      "skip_weight_periodic": 92,
+      "skip_weight_years": 10,
+      "linear_weighted_sum": 2,
+      "segment_moments": 1,
+      "refrigerant_fractions": 5
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "yearly_output": 9900,
+       "value_loop": 300,
+       "copy_check": 300,
+       "series_generation": 840,
+       "validity_scan": 300
+      },
+      "by_function": {
+       "_add_leak_series": {
+        "class": "yearly_output",
+        "calls": 5,
+        "yearly_values": 300,
+        "by_caller": {
+         "finish": 300
+        }
+       },
+       "_add_repair_series": {
+        "class": "yearly_output",
+        "calls": 153,
+        "yearly_values": 9180,
+        "by_caller": {
+         "_detail": 9180
+        }
+       },
+       "_annual_series": {
+        "class": "yearly_output",
+        "calls": 4,
+        "yearly_values": 360,
+        "by_caller": {
+         "_detail": 360
+        }
+       },
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 5,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 240,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 13,
+        "yearly_values": 780,
+        "by_caller": {
+         "_annual_series": 360,
+         "_profile_state": 240,
+         "finish": 180
+        }
+       },
+       "_whole_life_series": {
+        "class": "yearly_output",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "_detail": 60
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 5,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 300
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 4,
+        "yearly_values": 240,
+        "by_caller": {
+         "finish": 240
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 300,
+      "_values": 300,
+      "table_usable": 300,
+      "table_weighted_sum": 240
+     },
+     "table_read_out": {
+      "calls": 196,
+      "entries": 2058
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 236,
+     "unit_pairs_resolved": 6,
+     "recipes_computed": 15
+    },
+    "table_entries": 653,
+    "period_groups": 161
+   },
+   "results_identical_to_an_uninstrumented_run": true
+  },
+  "benchmark_M": {
+   "input": {
+    "rows": {
+     "materials": 2000,
+     "equipment": 600,
+     "refrigerants": 40,
+     "cost_items": 4
+    },
+    "study_period": 60.0,
+    "distinct": {
+     "factor_records": 541,
+     "compositions": 148,
+     "renewal_periods": 869
+    },
+    "rows_with": {
+     "own_conversions": 535,
+     "product_specific_factor": 173,
+     "composition": 638,
+     "explicit_event_list": 93,
+     "refrigerant_change_list": 12
+    },
+    "annual_profiles_given_by_descriptor": 6,
+    "annual_profiles": 9,
+    "grid_given_by_descriptor": true,
+    "all_yearly_inputs_parametric": false,
+    "net_electricity_descriptors": true
+   },
+   "totals_only": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 40,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 40,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 40
+       }
+      },
+      "factor_value": {
+       "total": 1120,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 1120,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 1120
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 2000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 85637,
+       "distinct_rows_read": 2000
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 600,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 15749,
+       "distinct_rows_read": 600
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 40,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 1000,
+       "distinct_rows_read": 40
+      }
+     },
+     "factor_table_lookups": {
+      "total": 1066,
+      "by_function": {
+       "Resolver.record": 533,
+       "aggregate": 533
+      }
+     },
+     "record_checks": {
+      "calls": 533,
+      "distinct_factor_stage_pairs": 533,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 2094,
+      "distinct_factor_stage_pairs": 533
+     },
+     "resolutions": {
+      "use_calls": 16425,
+      "per_triple": {
+       "calls": 298,
+       "distinct_triples": 298
+      },
+      "per_row_with_row_conversions": {
+       "calls": 503,
+       "distinct_triples": 47
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 2508,
+       "from_pair_memo": 890,
+       "row_list_searched_first": 681
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 680,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 173,
+     "recipes_computed": 148,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 11913,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 10793,
+       "by_function": {
+        "finish": 1120,
+        "tot": 10793
+       }
+      },
+      "gas_amount": {
+       "total": 15632,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 7792,
+        "finish.gas_of": 7840
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 2656,
+      "by_function": {
+       "finish": 1120,
+       "finish.gas_of": 1536
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 93,
+       "refrigerant_explicit": 12,
+       "refrigerant_periodic": 28
+      },
+      "years_listed": 374,
+      "exact_year_function_calls": 292
+     },
+     "closed_form_calls": {
+      "renewal_count": 898,
+      "skip_weight_periodic": 492,
+      "skip_weight_years": 93,
+      "linear_weighted_sum": 3,
+      "segment_moments": 1,
+      "refrigerant_fractions": 40
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "copy_check": 420,
+       "series_generation": 420,
+       "validity_scan": 180,
+       "value_loop": 180
+      },
+      "by_function": {
+       "_same": {
+        "class": "copy_check",
+        "calls": 7,
+        "yearly_values": 420,
+        "by_caller": {
+         "_profile_state": 360,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 6,
+        "yearly_values": 360,
+        "by_caller": {
+         "_profile_state": 360
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 3,
+        "yearly_values": 180,
+        "by_caller": {
+         "_profile_state": 180
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 3,
+        "yearly_values": 180,
+        "by_caller": {
+         "finish": 180
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 420,
+      "table_usable": 180,
+      "table_weighted_sum": 180
+     },
+     "table_read_out": {
+      "calls": 660,
+      "entries": 10798
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "second_period_finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 8570,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 7450,
+       "by_function": {
+        "finish": 1120,
+        "tot": 7450
+       }
+      },
+      "gas_amount": {
+       "total": 15184,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 7344,
+        "finish.gas_of": 7840
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 2656,
+      "by_function": {
+       "finish": 1120,
+       "finish.gas_of": 1536
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 93,
+       "refrigerant_explicit": 12,
+       "refrigerant_periodic": 28
+      },
+      "years_listed": 156,
+      "exact_year_function_calls": 120
+     },
+     "closed_form_calls": {
+      "renewal_count": 898,
+      "skip_weight_periodic": 276,
+      "skip_weight_years": 93,
+      "linear_weighted_sum": 3,
+      "segment_moments": 1,
+      "refrigerant_fractions": 40
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "copy_check": 210,
+       "series_generation": 210,
+       "validity_scan": 90,
+       "value_loop": 90
+      },
+      "by_function": {
+       "_same": {
+        "class": "copy_check",
+        "calls": 7,
+        "yearly_values": 210,
+        "by_caller": {
+         "_profile_state": 180,
+         "finish": 30
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 6,
+        "yearly_values": 180,
+        "by_caller": {
+         "_profile_state": 180
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 3,
+        "yearly_values": 90,
+        "by_caller": {
+         "_profile_state": 90
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 3,
+        "yearly_values": 90,
+        "by_caller": {
+         "finish": 90
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 210,
+      "table_usable": 90,
+      "table_weighted_sum": 90
+     },
+     "table_read_out": {
+      "calls": 402,
+      "entries": 7455
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 533,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 148
+    },
+    "table_entries": 2591,
+    "period_groups": 869
+   },
+   "full_outputs": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 40,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 40,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 40
+       }
+      },
+      "factor_value": {
+       "total": 21040,
+       "while_reading_a_material_or_equipment_row": 19920,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 1120,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 1120,
+        "aggregate": 19920
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 2000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 85637,
+       "distinct_rows_read": 2000
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 600,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 15749,
+       "distinct_rows_read": 600
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 40,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 1000,
+       "distinct_rows_read": 40
+      }
+     },
+     "factor_table_lookups": {
+      "total": 1066,
+      "by_function": {
+       "Resolver.record": 533,
+       "aggregate": 533
+      }
+     },
+     "record_checks": {
+      "calls": 533,
+      "distinct_factor_stage_pairs": 533,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 2094,
+      "distinct_factor_stage_pairs": 533
+     },
+     "resolutions": {
+      "use_calls": 16425,
+      "per_triple": {
+       "calls": 298,
+       "distinct_triples": 298
+      },
+      "per_row_with_row_conversions": {
+       "calls": 503,
+       "distinct_triples": 47
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 2508,
+       "from_pair_memo": 890,
+       "row_list_searched_first": 681
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 680,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 173,
+     "recipes_computed": 148,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 14578,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 10793,
+       "by_function": {
+        "_annual_series": 360,
+        "_detail": 2305,
+        "finish": 1120,
+        "tot": 10793
+       }
+      },
+      "gas_amount": {
+       "total": 15632,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 7792,
+        "finish.gas_of": 7840
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 2656,
+      "by_function": {
+       "finish": 1120,
+       "finish.gas_of": 1536
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 93,
+       "periodic_material_equipment": 563,
+       "refrigerant_explicit": 12,
+       "refrigerant_periodic": 28
+      },
+      "years_listed": 1623,
+      "exact_year_function_calls": 292
+     },
+     "closed_form_calls": {
+      "renewal_count": 898,
+      "skip_weight_periodic": 492,
+      "skip_weight_years": 93,
+      "linear_weighted_sum": 3,
+      "segment_moments": 1,
+      "refrigerant_fractions": 40
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "yearly_output": 53400,
+       "value_loop": 240,
+       "copy_check": 420,
+       "series_generation": 960,
+       "validity_scan": 180
+      },
+      "by_function": {
+       "_add_leak_series": {
+        "class": "yearly_output",
+        "calls": 40,
+        "yearly_values": 2400,
+        "by_caller": {
+         "finish": 2400
+        }
+       },
+       "_add_repair_series": {
+        "class": "yearly_output",
+        "calls": 843,
+        "yearly_values": 50580,
+        "by_caller": {
+         "_detail": 50580
+        }
+       },
+       "_annual_series": {
+        "class": "yearly_output",
+        "calls": 4,
+        "yearly_values": 360,
+        "by_caller": {
+         "_detail": 360
+        }
+       },
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 7,
+        "yearly_values": 420,
+        "by_caller": {
+         "_profile_state": 360,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 15,
+        "yearly_values": 900,
+        "by_caller": {
+         "_annual_series": 360,
+         "_profile_state": 360,
+         "finish": 180
+        }
+       },
+       "_whole_life_series": {
+        "class": "yearly_output",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "_detail": 60
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 3,
+        "yearly_values": 180,
+        "by_caller": {
+         "_profile_state": 180
+        }
+       },
+       "table_weighted_sum": {
+        "class": "value_loop",
+        "calls": 3,
+        "yearly_values": 180,
+        "by_caller": {
+         "finish": 180
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 420,
+      "_values": 180,
+      "table_usable": 180,
+      "table_weighted_sum": 180
+     },
+     "table_read_out": {
+      "calls": 660,
+      "entries": 10798
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 533,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 148
+    },
+    "table_entries": 2591,
+    "period_groups": 869
+   },
+   "results_identical_to_an_uninstrumented_run": true
+  },
+  "benchmark_L": {
+   "input": {
+    "rows": {
+     "materials": 20000,
+     "equipment": 6000,
+     "refrigerants": 300,
+     "cost_items": 8
+    },
+    "study_period": 60.0,
+    "distinct": {
+     "factor_records": 2651,
+     "compositions": 1473,
+     "renewal_periods": 5154
+    },
+    "rows_with": {
+     "own_conversions": 5358,
+     "product_specific_factor": 1995,
+     "composition": 5941,
+     "explicit_event_list": 896,
+     "refrigerant_change_list": 88
+    },
+    "annual_profiles_given_by_descriptor": 7,
+    "annual_profiles": 9,
+    "grid_given_by_descriptor": true,
+    "all_yearly_inputs_parametric": false,
+    "net_electricity_descriptors": false
+   },
+   "totals_only": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 300,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 300,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 300
+       }
+      },
+      "factor_value": {
+       "total": 11130,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 11130,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 11130
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 20000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 857005,
+       "distinct_rows_read": 20000
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 6000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 157496,
+       "distinct_rows_read": 6000
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 300,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 7500,
+       "distinct_rows_read": 300
+      }
+     },
+     "factor_table_lookups": {
+      "total": 5286,
+      "by_function": {
+       "Resolver.record": 2643,
+       "aggregate": 2643
+      }
+     },
+     "record_checks": {
+      "calls": 2643,
+      "distinct_factor_stage_pairs": 2643,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 18782,
+      "distinct_factor_stage_pairs": 2643
+     },
+     "resolutions": {
+      "use_calls": 164457,
+      "per_triple": {
+       "calls": 474,
+       "distinct_triples": 474
+      },
+      "per_row_with_row_conversions": {
+       "calls": 5183,
+       "distinct_triples": 80
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 22769,
+       "from_pair_memo": 8659,
+       "row_list_searched_first": 7097
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 7080,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 1995,
+     "recipes_computed": 1473,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 81398,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 70268,
+       "by_function": {
+        "finish": 11130,
+        "tot": 70268
+       }
+      },
+      "gas_amount": {
+       "total": 118086,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 40176,
+        "finish.gas_of": 77910
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 24307,
+      "by_function": {
+       "finish": 11130,
+       "finish.gas_of": 13177
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 896,
+       "refrigerant_explicit": 88,
+       "refrigerant_periodic": 212
+      },
+      "years_listed": 3402,
+      "exact_year_function_calls": 2745
+     },
+     "closed_form_calls": {
+      "renewal_count": 5367,
+      "skip_weight_periodic": 2870,
+      "skip_weight_years": 896,
+      "linear_weighted_sum": 6,
+      "segment_moments": 1,
+      "refrigerant_fractions": 300
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "value_loop": 60,
+       "copy_check": 480,
+       "series_generation": 660,
+       "validity_scan": 120
+      },
+      "by_function": {
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 8,
+        "yearly_values": 480,
+        "by_caller": {
+         "_profile_state": 420,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 10,
+        "yearly_values": 600,
+        "by_caller": {
+         "_profile_state": 420,
+         "finish": 180
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 2,
+        "yearly_values": 120,
+        "by_caller": {
+         "_profile_state": 120
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 480,
+      "_values": 120,
+      "table_usable": 120
+     },
+     "table_read_out": {
+      "calls": 3257,
+      "entries": 70273
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "second_period_finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 60352,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 49222,
+       "by_function": {
+        "finish": 11130,
+        "tot": 49222
+       }
+      },
+      "gas_amount": {
+       "total": 114126,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 36216,
+        "finish.gas_of": 77910
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 24307,
+      "by_function": {
+       "finish": 11130,
+       "finish.gas_of": 13177
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 896,
+       "refrigerant_explicit": 88,
+       "refrigerant_periodic": 212
+      },
+      "years_listed": 1399,
+      "exact_year_function_calls": 1114
+     },
+     "closed_form_calls": {
+      "renewal_count": 5367,
+      "skip_weight_periodic": 1610,
+      "skip_weight_years": 896,
+      "linear_weighted_sum": 6,
+      "segment_moments": 1,
+      "refrigerant_fractions": 300
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "value_loop": 30,
+       "copy_check": 240,
+       "series_generation": 330,
+       "validity_scan": 60
+      },
+      "by_function": {
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 8,
+        "yearly_values": 240,
+        "by_caller": {
+         "_profile_state": 210,
+         "finish": 30
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 10,
+        "yearly_values": 300,
+        "by_caller": {
+         "_profile_state": 210,
+         "finish": 90
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 30,
+        "by_caller": {
+         "finish": 30
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 2,
+        "yearly_values": 60,
+        "by_caller": {
+         "_profile_state": 60
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 240,
+      "_values": 60,
+      "table_usable": 60
+     },
+     "table_read_out": {
+      "calls": 1811,
+      "entries": 49227
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 2643,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 1473
+    },
+    "table_entries": 18259,
+    "period_groups": 5154
+   },
+   "full_outputs": {
+    "aggregate": {
+     "multiplications": {
+      "device_gwp": {
+       "total": 300,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 300,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 300
+       }
+      },
+      "factor_value": {
+       "total": 210447,
+       "while_reading_a_material_or_equipment_row": 199317,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 11130,
+       "in_table_read_out": 0,
+       "by_function": {
+        "_make_recipe": 11130,
+        "aggregate": 199317
+       }
+      },
+      "grid_construction_value": {
+       "total": 1,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "aggregate": 1
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 1,
+       "rows_handed_out": 20000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 857005,
+       "distinct_rows_read": 20000
+      },
+      "equipment": {
+       "iterations": 1,
+       "rows_handed_out": 6000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 157496,
+       "distinct_rows_read": 6000
+      },
+      "refrigerants": {
+       "iterations": 1,
+       "rows_handed_out": 300,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 7500,
+       "distinct_rows_read": 300
+      }
+     },
+     "factor_table_lookups": {
+      "total": 5286,
+      "by_function": {
+       "Resolver.record": 2643,
+       "aggregate": 2643
+      }
+     },
+     "record_checks": {
+      "calls": 2643,
+      "distinct_factor_stage_pairs": 2643,
+      "most_checks_of_one_pair": 1
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 18782,
+      "distinct_factor_stage_pairs": 2643
+     },
+     "resolutions": {
+      "use_calls": 164457,
+      "per_triple": {
+       "calls": 474,
+       "distinct_triples": 474
+      },
+      "per_row_with_row_conversions": {
+       "calls": 5183,
+       "distinct_triples": 80
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 22769,
+       "from_pair_memo": 8659,
+       "row_list_searched_first": 7097
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 7080,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 1995,
+     "recipes_computed": 1473,
+     "event_year_lists": {
+      "lists_by_kind": {},
+      "years_listed": 0,
+      "exact_year_function_calls": 0
+     },
+     "closed_form_calls": {
+      "renewal_count": 0,
+      "skip_weight_periodic": 0,
+      "skip_weight_years": 0,
+      "linear_weighted_sum": 0,
+      "segment_moments": 0,
+      "refrigerant_fractions": 0
+     },
+     "year_loops": {
+      "yearly_values_by_class": {},
+      "by_function": {}
+     },
+     "year_table_values_read": {},
+     "table_read_out": {
+      "calls": 0,
+      "entries": 0
+     },
+     "indicator_calls": 0,
+     "residual_test_calls": 2
+    },
+    "finish": {
+     "multiplications": {
+      "factor_value": {
+       "total": 102047,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 70268,
+       "by_function": {
+        "_annual_series": 360,
+        "_detail": 20289,
+        "finish": 11130,
+        "tot": 70268
+       }
+      },
+      "gas_amount": {
+       "total": 118086,
+       "while_reading_a_material_or_equipment_row": 0,
+       "while_reading_a_refrigerant_row": 0,
+       "in_recipe_builder": 0,
+       "in_table_read_out": 0,
+       "by_function": {
+        "finish": 40176,
+        "finish.gas_of": 77910
+       }
+      }
+     },
+     "other_arithmetic_with_these_values": {},
+     "row_lists": {
+      "materials": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "equipment": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      },
+      "refrigerants": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "factor_table_lookups": {
+      "total": 24307,
+      "by_function": {
+       "finish": 11130,
+       "finish.gas_of": 13177
+      }
+     },
+     "record_checks": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0,
+      "most_checks_of_one_pair": 0
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 0,
+      "distinct_factor_stage_pairs": 0
+     },
+     "resolutions": {
+      "use_calls": 0,
+      "per_triple": {
+       "calls": 0,
+       "distinct_triples": 0
+      },
+      "per_row_with_row_conversions": {
+       "calls": 0,
+       "distinct_triples": 0
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 0,
+      "distinct_unit_pairs": 0,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 0,
+       "from_pair_memo": 0,
+       "row_list_searched_first": 0
+      },
+      "multiplier_checks_by_function": {}
+     },
+     "epd_applicability_checks": 0,
+     "recipes_computed": 0,
+     "event_year_lists": {
+      "lists_by_kind": {
+       "explicit_equipment": 896,
+       "periodic_material_equipment": 3160,
+       "refrigerant_explicit": 88,
+       "refrigerant_periodic": 212
+      },
+      "years_listed": 10523,
+      "exact_year_function_calls": 2745
+     },
+     "closed_form_calls": {
+      "renewal_count": 5367,
+      "skip_weight_periodic": 2870,
+      "skip_weight_years": 896,
+      "linear_weighted_sum": 6,
+      "segment_moments": 1,
+      "refrigerant_fractions": 300
+     },
+     "year_loops": {
+      "yearly_values_by_class": {
+       "yearly_output": 341820,
+       "value_loop": 60,
+       "copy_check": 480,
+       "series_generation": 1020,
+       "validity_scan": 120
+      },
+      "by_function": {
+       "_add_leak_series": {
+        "class": "yearly_output",
+        "calls": 300,
+        "yearly_values": 18000,
+        "by_caller": {
+         "finish": 18000
+        }
+       },
+       "_add_repair_series": {
+        "class": "yearly_output",
+        "calls": 5390,
+        "yearly_values": 323400,
+        "by_caller": {
+         "_detail": 323400
+        }
+       },
+       "_annual_series": {
+        "class": "yearly_output",
+        "calls": 4,
+        "yearly_values": 360,
+        "by_caller": {
+         "_detail": 360
+        }
+       },
+       "_purchased_series": {
+        "class": "value_loop",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "_same": {
+        "class": "copy_check",
+        "calls": 8,
+        "yearly_values": 480,
+        "by_caller": {
+         "_profile_state": 420,
+         "finish": 60
+        }
+       },
+       "_values": {
+        "class": "series_generation",
+        "calls": 16,
+        "yearly_values": 960,
+        "by_caller": {
+         "_annual_series": 360,
+         "_profile_state": 420,
+         "finish": 180
+        }
+       },
+       "_whole_life_series": {
+        "class": "yearly_output",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "_detail": 60
+        }
+       },
+       "segment_values": {
+        "class": "series_generation",
+        "calls": 1,
+        "yearly_values": 60,
+        "by_caller": {
+         "finish": 60
+        }
+       },
+       "table_usable": {
+        "class": "validity_scan",
+        "calls": 2,
+        "yearly_values": 120,
+        "by_caller": {
+         "_profile_state": 120
+        }
+       }
+      }
+     },
+     "year_table_values_read": {
+      "_same": 480,
+      "_values": 120,
+      "table_usable": 120
+     },
+     "table_read_out": {
+      "calls": 3257,
+      "entries": 70273
+     },
+     "indicator_calls": 20,
+     "residual_test_calls": 15
+    },
+    "engine_counters": {
+     "factor_records_resolved": 2643,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 1473
+    },
+    "table_entries": 18259,
+    "period_groups": 5154
+   },
+   "results_identical_to_an_uninstrumented_run": true
+  }
+ },
+ "statements": {
+  "P1": {
+   "statement": "totals-only mode: no multiplication by a factor-record value (or gas amount) is executed while a material or equipment row is being read. The only such products of the whole aggregation are those of the builder of composite factors (once per distinct composition, see P5); in finish they are those of the table read-out (one per table entry) and of the expansion of the composite factors (at most one per component of a composition). No other arithmetic uses these values",
+   "holds": true,
+   "evidence": {
+    "mechanism_parametric": {
+     "factor_value_products_per_row": 0,
+     "gas_amount_products_per_row": 0,
+     "factor_value_products_in_aggregation": 223,
+     "gas_amount_products_in_aggregation": 0,
+     "factor_value_products_in_recipe_builder": 223,
+     "other_arithmetic_with_factor_values_or_gas_amounts": 0,
+     "factor_value_products_in_table_read_out": 3368,
+     "table_entries_read": 3373,
+     "factor_value_products_elsewhere_in_finish": 223,
+     "full_outputs_factor_value_products_per_row": 3984,
+     "rows": 520
+    },
+    "mechanism_year_tables": {
+     "factor_value_products_per_row": 0,
+     "gas_amount_products_per_row": 0,
+     "factor_value_products_in_aggregation": 223,
+     "gas_amount_products_in_aggregation": 0,
+     "factor_value_products_in_recipe_builder": 223,
+     "other_arithmetic_with_factor_values_or_gas_amounts": 0,
+     "factor_value_products_in_table_read_out": 3368,
+     "table_entries_read": 3373,
+     "factor_value_products_elsewhere_in_finish": 223,
+     "full_outputs_factor_value_products_per_row": 3984,
+     "rows": 520
+    },
+    "benchmark_S": {
+     "factor_value_products_per_row": 0,
+     "gas_amount_products_per_row": 0,
+     "factor_value_products_in_aggregation": 101,
+     "gas_amount_products_in_aggregation": 0,
+     "factor_value_products_in_recipe_builder": 101,
+     "other_arithmetic_with_factor_values_or_gas_amounts": 0,
+     "factor_value_products_in_table_read_out": 2053,
+     "table_entries_read": 2058,
+     "factor_value_products_elsewhere_in_finish": 101,
+     "full_outputs_factor_value_products_per_row": 1984,
+     "rows": 260
+    },
+    "benchmark_M": {
+     "factor_value_products_per_row": 0,
+     "gas_amount_products_per_row": 0,
+     "factor_value_products_in_aggregation": 1120,
+     "gas_amount_products_in_aggregation": 0,
+     "factor_value_products_in_recipe_builder": 1120,
+     "other_arithmetic_with_factor_values_or_gas_amounts": 0,
+     "factor_value_products_in_table_read_out": 10793,
+     "table_entries_read": 10798,
+     "factor_value_products_elsewhere_in_finish": 1120,
+     "full_outputs_factor_value_products_per_row": 19920,
+     "rows": 2600
+    },
+    "benchmark_L": {
+     "factor_value_products_per_row": 0,
+     "gas_amount_products_per_row": 0,
+     "factor_value_products_in_aggregation": 11130,
+     "gas_amount_products_in_aggregation": 0,
+     "factor_value_products_in_recipe_builder": 11130,
+     "other_arithmetic_with_factor_values_or_gas_amounts": 0,
+     "factor_value_products_in_table_read_out": 70268,
+     "table_entries_read": 70273,
+     "factor_value_products_elsewhere_in_finish": 11130,
+     "full_outputs_factor_value_products_per_row": 199317,
+     "rows": 26000
+    }
+   }
+  },
+  "P2": {
+   "statement": "totals-only mode: the material list and the equipment list are each iterated exactly once, every row is handed out once, nothing is read by index, and finish reads no row and no row list",
+   "holds": true,
+   "evidence": {
+    "mechanism_parametric": {
+     "materials": {
+      "rows": 400,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 400,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 17168,
+       "distinct_rows_read": 400
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "equipment": {
+      "rows": 120,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 120,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 3144,
+       "distinct_rows_read": 120
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     }
+    },
+    "mechanism_year_tables": {
+     "materials": {
+      "rows": 400,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 400,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 17168,
+       "distinct_rows_read": 400
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "equipment": {
+      "rows": 120,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 120,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 3144,
+       "distinct_rows_read": 120
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     }
+    },
+    "benchmark_S": {
+     "materials": {
+      "rows": 200,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 200,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 8620,
+       "distinct_rows_read": 200
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "equipment": {
+      "rows": 60,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 60,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 1576,
+       "distinct_rows_read": 60
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     }
+    },
+    "benchmark_M": {
+     "materials": {
+      "rows": 2000,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 2000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 85637,
+       "distinct_rows_read": 2000
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "equipment": {
+      "rows": 600,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 600,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 15749,
+       "distinct_rows_read": 600
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     }
+    },
+    "benchmark_L": {
+     "materials": {
+      "rows": 20000,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 20000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 857005,
+       "distinct_rows_read": 20000
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     },
+     "equipment": {
+      "rows": 6000,
+      "aggregate": {
+       "iterations": 1,
+       "rows_handed_out": 6000,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 157496,
+       "distinct_rows_read": 6000
+      },
+      "finish": {
+       "iterations": 0,
+       "rows_handed_out": 0,
+       "indexed_reads": 0,
+       "length_reads": 0,
+       "attribute_reads": 0,
+       "distinct_rows_read": 0
+      }
+     }
+    }
+   }
+  },
+  "P3": {
+   "statement": "totals-only mode: no list of the years of periodic material or equipment renewals (and none for the rebuild) is built; the lists that are built are those of explicit event lists and of refrigerant charge changes, whose counts are given",
+   "holds": true,
+   "evidence": {
+    "mechanism_parametric": {
+     "lists_by_kind": {
+      "explicit_equipment": 16,
+      "refrigerant_explicit": 4,
+      "refrigerant_periodic": 6
+     },
+     "years_listed": 78,
+     "exact_year_function_calls": 62,
+     "full_outputs_lists_by_kind": {
+      "explicit_equipment": 16,
+      "periodic_material_equipment": 165,
+      "refrigerant_explicit": 4,
+      "refrigerant_periodic": 6
+     }
+    },
+    "mechanism_year_tables": {
+     "lists_by_kind": {
+      "explicit_equipment": 16,
+      "refrigerant_explicit": 4,
+      "refrigerant_periodic": 6
+     },
+     "years_listed": 78,
+     "exact_year_function_calls": 62,
+     "full_outputs_lists_by_kind": {
+      "explicit_equipment": 16,
+      "periodic_material_equipment": 165,
+      "refrigerant_explicit": 4,
+      "refrigerant_periodic": 6
+     }
+    },
+    "benchmark_S": {
+     "lists_by_kind": {
+      "explicit_equipment": 10,
+      "refrigerant_explicit": 3,
+      "refrigerant_periodic": 2
+     },
+     "years_listed": 37,
+     "exact_year_function_calls": 28,
+     "full_outputs_lists_by_kind": {
+      "explicit_equipment": 10,
+      "periodic_material_equipment": 99,
+      "refrigerant_explicit": 3,
+      "refrigerant_periodic": 2
+     }
+    },
+    "benchmark_M": {
+     "lists_by_kind": {
+      "explicit_equipment": 93,
+      "refrigerant_explicit": 12,
+      "refrigerant_periodic": 28
+     },
+     "years_listed": 374,
+     "exact_year_function_calls": 292,
+     "full_outputs_lists_by_kind": {
+      "explicit_equipment": 93,
+      "periodic_material_equipment": 563,
+      "refrigerant_explicit": 12,
+      "refrigerant_periodic": 28
+     }
+    },
+    "benchmark_L": {
+     "lists_by_kind": {
+      "explicit_equipment": 896,
+      "refrigerant_explicit": 88,
+      "refrigerant_periodic": 212
+     },
+     "years_listed": 3402,
+     "exact_year_function_calls": 2745,
+     "full_outputs_lists_by_kind": {
+      "explicit_equipment": 896,
+      "periodic_material_equipment": 3160,
+      "refrigerant_explicit": 88,
+      "refrigerant_periodic": 212
+     }
+    }
+   }
+  },
+  "P4": {
+   "statement": "parametric yearly inputs, totals-only mode: no loop that computes a value per year (class value_loop) runs; what remains is the consistency scan (descriptor values generated and compared with the table copy), whose size is given",
+   "holds": true,
+   "scenarios_it_was_evaluated_on": [
+    "mechanism_parametric"
+   ],
+   "evidence": {
+    "mechanism_parametric": {
+     "all_yearly_inputs_parametric": true,
+     "yearly_values_by_class": {
+      "copy_check": 600,
+      "series_generation": 600
+     },
+     "year_table_values_read": {
+      "_same": 600
+     },
+     "year_loops_in_aggregate": {}
+    },
+    "mechanism_year_tables": {
+     "all_yearly_inputs_parametric": false,
+     "yearly_values_by_class": {
+      "value_loop": 480,
+      "series_generation": 180,
+      "validity_scan": 600
+     },
+     "year_table_values_read": {
+      "_values": 180,
+      "finish": 60,
+      "table_moments": 120,
+      "table_usable": 600,
+      "table_weighted_sum": 360
+     },
+     "year_loops_in_aggregate": {}
+    },
+    "benchmark_S": {
+     "all_yearly_inputs_parametric": false,
+     "yearly_values_by_class": {
+      "value_loop": 300,
+      "copy_check": 300,
+      "series_generation": 480,
+      "validity_scan": 300
+     },
+     "year_table_values_read": {
+      "_same": 300,
+      "_values": 60,
+      "table_usable": 300,
+      "table_weighted_sum": 240
+     },
+     "year_loops_in_aggregate": {}
+    },
+    "benchmark_M": {
+     "all_yearly_inputs_parametric": false,
+     "yearly_values_by_class": {
+      "copy_check": 420,
+      "series_generation": 420,
+      "validity_scan": 180,
+      "value_loop": 180
+     },
+     "year_table_values_read": {
+      "_same": 420,
+      "table_usable": 180,
+      "table_weighted_sum": 180
+     },
+     "year_loops_in_aggregate": {}
+    },
+    "benchmark_L": {
+     "all_yearly_inputs_parametric": false,
+     "yearly_values_by_class": {
+      "value_loop": 60,
+      "copy_check": 480,
+      "series_generation": 660,
+      "validity_scan": 120
+     },
+     "year_table_values_read": {
+      "_same": 480,
+      "_values": 120,
+      "table_usable": 120
+     },
+     "year_loops_in_aggregate": {}
+    }
+   }
+  },
+  "P5": {
+   "statement": "composite factors: one computation per distinct composition, in both output modes",
+   "holds": true,
+   "evidence": {
+    "mechanism_parametric": {
+     "distinct_compositions": 30,
+     "rows_with_a_composition": 124,
+     "recipes_computed_totals_only": 30,
+     "recipes_computed_full_outputs": 30,
+     "recipes_computed_in_finish": 0
+    },
+    "mechanism_year_tables": {
+     "distinct_compositions": 30,
+     "rows_with_a_composition": 124,
+     "recipes_computed_totals_only": 30,
+     "recipes_computed_full_outputs": 30,
+     "recipes_computed_in_finish": 0
+    },
+    "benchmark_S": {
+     "distinct_compositions": 15,
+     "rows_with_a_composition": 51,
+     "recipes_computed_totals_only": 15,
+     "recipes_computed_full_outputs": 15,
+     "recipes_computed_in_finish": 0
+    },
+    "benchmark_M": {
+     "distinct_compositions": 148,
+     "rows_with_a_composition": 638,
+     "recipes_computed_totals_only": 148,
+     "recipes_computed_full_outputs": 148,
+     "recipes_computed_in_finish": 0
+    },
+    "benchmark_L": {
+     "distinct_compositions": 1473,
+     "rows_with_a_composition": 5941,
+     "recipes_computed_totals_only": 1473,
+     "recipes_computed_full_outputs": 1473,
+     "recipes_computed_in_finish": 0
+    }
+   }
+  },
+  "P6": {
+   "statement": "a second study period from the same aggregation reads no material row and no equipment row (the counts for the refrigerant rows are given as well)",
+   "holds": true,
+   "refrigerant_rows_read_again": false,
+   "evidence": {
+    "mechanism_parametric": {
+     "materials": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "equipment": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "refrigerants": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     }
+    },
+    "mechanism_year_tables": {
+     "materials": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "equipment": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "refrigerants": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     }
+    },
+    "benchmark_S": {
+     "materials": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "equipment": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "refrigerants": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     }
+    },
+    "benchmark_M": {
+     "materials": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "equipment": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "refrigerants": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     }
+    },
+    "benchmark_L": {
+     "materials": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "equipment": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     },
+     "refrigerants": {
+      "iterations": 0,
+      "rows_handed_out": 0,
+      "indexed_reads": 0,
+      "length_reads": 0,
+      "attribute_reads": 0,
+      "distinct_rows_read": 0
+     }
+    }
+   }
+  },
+  "P7": {
+   "statement": "the record part of a factor (exists, licence, stage, value and gas amounts valid) is checked once per (factor, stage); the scenario's conversion table is consulted once per unit pair; a resolution without row-specific conversions happens once per (factor, stage, unit). Work that is repeated per row is limited to the resolutions of rows that carry their own conversions and to the applicability check of a product-specific factor (both counted in the evidence), plus reads of the memos",
+   "holds": true,
+   "evidence": {
+    "mechanism_parametric": {
+     "record_checks": {
+      "calls": 259,
+      "distinct_factor_stage_pairs": 259,
+      "most_checks_of_one_pair": 1
+     },
+     "resolutions": {
+      "use_calls": 3305,
+      "per_triple": {
+       "calls": 194,
+       "distinct_triples": 194
+      },
+      "per_row_with_row_conversions": {
+       "calls": 105,
+       "distinct_triples": 27
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 614,
+       "from_pair_memo": 198,
+       "row_list_searched_first": 144
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 142,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 37,
+     "factor_table_lookups": {
+      "total": 518,
+      "by_function": {
+       "Resolver.record": 259,
+       "aggregate": 259
+      }
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 559,
+      "distinct_factor_stage_pairs": 259
+     },
+     "rows_with_own_conversions": 111,
+     "rows_with_product_specific_factor": 37,
+     "rows": 520
+    },
+    "mechanism_year_tables": {
+     "record_checks": {
+      "calls": 259,
+      "distinct_factor_stage_pairs": 259,
+      "most_checks_of_one_pair": 1
+     },
+     "resolutions": {
+      "use_calls": 3305,
+      "per_triple": {
+       "calls": 194,
+       "distinct_triples": 194
+      },
+      "per_row_with_row_conversions": {
+       "calls": 105,
+       "distinct_triples": 27
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 614,
+       "from_pair_memo": 198,
+       "row_list_searched_first": 144
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 142,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 37,
+     "factor_table_lookups": {
+      "total": 518,
+      "by_function": {
+       "Resolver.record": 259,
+       "aggregate": 259
+      }
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 559,
+      "distinct_factor_stage_pairs": 259
+     },
+     "rows_with_own_conversions": 111,
+     "rows_with_product_specific_factor": 37,
+     "rows": 520
+    },
+    "benchmark_S": {
+     "record_checks": {
+      "calls": 236,
+      "distinct_factor_stage_pairs": 236,
+      "most_checks_of_one_pair": 1
+     },
+     "resolutions": {
+      "use_calls": 1678,
+      "per_triple": {
+       "calls": 189,
+       "distinct_triples": 189
+      },
+      "per_row_with_row_conversions": {
+       "calls": 50,
+       "distinct_triples": 24
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 6,
+      "distinct_unit_pairs": 6,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 381,
+       "from_pair_memo": 113,
+       "row_list_searched_first": 67
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 67,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 19,
+     "factor_table_lookups": {
+      "total": 472,
+      "by_function": {
+       "Resolver.record": 236,
+       "aggregate": 236
+      }
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 359,
+      "distinct_factor_stage_pairs": 236
+     },
+     "rows_with_own_conversions": 50,
+     "rows_with_product_specific_factor": 19,
+     "rows": 260
+    },
+    "benchmark_M": {
+     "record_checks": {
+      "calls": 533,
+      "distinct_factor_stage_pairs": 533,
+      "most_checks_of_one_pair": 1
+     },
+     "resolutions": {
+      "use_calls": 16425,
+      "per_triple": {
+       "calls": 298,
+       "distinct_triples": 298
+      },
+      "per_row_with_row_conversions": {
+       "calls": 503,
+       "distinct_triples": 47
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 2508,
+       "from_pair_memo": 890,
+       "row_list_searched_first": 681
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 680,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 173,
+     "factor_table_lookups": {
+      "total": 1066,
+      "by_function": {
+       "Resolver.record": 533,
+       "aggregate": 533
+      }
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 2094,
+      "distinct_factor_stage_pairs": 533
+     },
+     "rows_with_own_conversions": 535,
+     "rows_with_product_specific_factor": 173,
+     "rows": 2600
+    },
+    "benchmark_L": {
+     "record_checks": {
+      "calls": 2643,
+      "distinct_factor_stage_pairs": 2643,
+      "most_checks_of_one_pair": 1
+     },
+     "resolutions": {
+      "use_calls": 164457,
+      "per_triple": {
+       "calls": 474,
+       "distinct_triples": 474
+      },
+      "per_row_with_row_conversions": {
+       "calls": 5183,
+       "distinct_triples": 80
+      }
+     },
+     "unit_conversions": {
+      "conversion_table_lookups": 8,
+      "distinct_unit_pairs": 8,
+      "conversion_table_identity_calls": 0,
+      "convert_calls": {
+       "identity": 22769,
+       "from_pair_memo": 8659,
+       "row_list_searched_first": 7097
+      },
+      "multiplier_checks_by_function": {
+       "Resolver.convert": 7080,
+       "conversion_factor": 2
+      }
+     },
+     "epd_applicability_checks": 1995,
+     "factor_table_lookups": {
+      "total": 5286,
+      "by_function": {
+       "Resolver.record": 2643,
+       "aggregate": 2643
+      }
+     },
+     "record_reads_from_the_resolution_table": {
+      "calls": 18782,
+      "distinct_factor_stage_pairs": 2643
+     },
+     "rows_with_own_conversions": 5358,
+     "rows_with_product_specific_factor": 1995,
+     "rows": 26000
+    }
+   }
+  }
+ },
+ "engine_counters": {
+  "all_agree": true,
+  "by_scenario": {
+   "mechanism_parametric/totals_only": {
+    "engine": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "observed": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "agree": true
+   },
+   "mechanism_parametric/full_outputs": {
+    "engine": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "observed": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "agree": true
+   },
+   "mechanism_year_tables/totals_only": {
+    "engine": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "observed": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "agree": true
+   },
+   "mechanism_year_tables/full_outputs": {
+    "engine": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "observed": {
+     "factor_records_resolved": 259,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 30
+    },
+    "agree": true
+   },
+   "benchmark_S/totals_only": {
+    "engine": {
+     "factor_records_resolved": 236,
+     "unit_pairs_resolved": 6,
+     "recipes_computed": 15
+    },
+    "observed": {
+     "factor_records_resolved": 236,
+     "unit_pairs_resolved": 6,
+     "recipes_computed": 15
+    },
+    "agree": true
+   },
+   "benchmark_S/full_outputs": {
+    "engine": {
+     "factor_records_resolved": 236,
+     "unit_pairs_resolved": 6,
+     "recipes_computed": 15
+    },
+    "observed": {
+     "factor_records_resolved": 236,
+     "unit_pairs_resolved": 6,
+     "recipes_computed": 15
+    },
+    "agree": true
+   },
+   "benchmark_M/totals_only": {
+    "engine": {
+     "factor_records_resolved": 533,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 148
+    },
+    "observed": {
+     "factor_records_resolved": 533,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 148
+    },
+    "agree": true
+   },
+   "benchmark_M/full_outputs": {
+    "engine": {
+     "factor_records_resolved": 533,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 148
+    },
+    "observed": {
+     "factor_records_resolved": 533,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 148
+    },
+    "agree": true
+   },
+   "benchmark_L/totals_only": {
+    "engine": {
+     "factor_records_resolved": 2643,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 1473
+    },
+    "observed": {
+     "factor_records_resolved": 2643,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 1473
+    },
+    "agree": true
+   },
+   "benchmark_L/full_outputs": {
+    "engine": {
+     "factor_records_resolved": 2643,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 1473
+    },
+    "observed": {
+     "factor_records_resolved": 2643,
+     "unit_pairs_resolved": 8,
+     "recipes_computed": 1473
+    },
+    "agree": true
+   }
+  }
+ },
+ "results_identical_to_uninstrumented_runs": true,
+ "notes": [
+  "The counters that remain in the engine's _stats (factor_records_resolved, unit_pairs_resolved, recipes_computed) are compared with the observed counts under engine_counters.",
+  "Pseudo-key lines: the charge x GWP of a refrigerant device (tag device_gwp) and the construction electricity x grid value (tag grid_construction_value) are multiplied once per device / once per scenario in the aggregation; they are reported under multiplications and are not factor-record values.",
+  "Row attribute reads are counted on the row object itself; reads of objects a row refers to (its transport or end-of-life record, its lists) are not counted separately."
+ ]
+}

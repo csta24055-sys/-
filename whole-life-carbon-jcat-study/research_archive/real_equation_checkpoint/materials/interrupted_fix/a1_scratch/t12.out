@@ -1,0 +1,21 @@
+factor id 'GRID' (value 2.4183187813574896):
+    A13-01.value: ref 889549.9358003162 unified 889549.9358003163 totals 889549.9358003163
+    B6-03.value: ref 2785334.4832556485 unified 2785334.483255648 totals 2785334.483255648
+    B1-02.value: ref 260011.26972601505 unified 260011.26972601507 totals 260011.26972601507
+    SUM-03.value: ref 8965567.801008811 unified 8965567.8010088 totals 8965567.8010088
+    X-04.value: ref 8965567.801008806 unified 8965567.801008798 totals 8965567.801008798
+    X-04.refrigerant_co2e: ref 266404.40587533603 unified 266404.4058753361 totals 266404.4058753361
+factor id 'REFRIGERANT' (value 2.4183187813574896):
+    A13-01.value: ref 889549.9358003162 unified 889549.9358003163 totals 889549.9358003163
+    B6-03.value: ref 2785334.4832556485 unified 2785334.483255648 totals 2785334.483255648
+    B1-02.value: ref 260011.26972601505 unified 260011.26972601507 totals 260011.26972601507
+    SUM-03.value: ref 8965567.801008811 unified 8965567.8010088 totals 8965567.8010088
+    X-04.value: ref 8965567.801008806 unified 8965567.801008798 totals 8965567.801008798
+    X-04.refrigerant_co2e: ref 266404.40587533603 unified 266404.4058753361 totals 266404.4058753361
+unit named 'None': SYS-02 ref False ['construction.electricity'] | unified False ['construction.electricity'] | B6-01 computed ref True unified True
+STEPWISE from_index=3.0: ref X-06 source TABLE | unified {'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MI
+water table 59 entries (T=60) and no water factor: ref {'A13-02': {'by_item': [None, None, None, None, 2.5592512324 | unified B7-01 {'n_skipped': 1, 'descriptors_match_tables': True, 'by_year': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+same table, factor usable: ref {'A13-02': {'by_item': [None, None, None, None, 2.5592512324 | unified {'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMAT
+grid annual_decline=nan: ref X-06 {'matches_table': True, 'source': 'TABLE', 'computed': True} SUM-03 {'value': 23295377.72621168, 'complete': True} | unified {'SYS-01': {'ok': True, 'counts': {'OBSERVED': 171, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 1, 'MISSING': 0, 'DERIVED': 0, 'NOT_FINITE': 0}, 'violations': [], 'not_finite': []}, 'SYS-02': {'ok': True, 'n_checked': 160, 'violations': [], 'stage_mismatches': []}, 'SYS-03
+gases list with 'CO2' twice: X-04 value ref 8145242.282838834 unified 8145242.282838838 ; by_gas.CO2 ref 5555951.644714792 unified 5555951.644714796 ; SUM-03 ref 8145242.282838846 unified 8145242.282838838
+gases list without 'CO2': ref X-05 6989160.3675219165 | unified {'SYS-01': {'ok': True, 'counts': {'OBSERVED': 170, 'ESTIMATE': 0, 'EXPLICIT_ZERO': 2, 'MISSING': 0, 'DERIVED': 0, 'NOT_FINITE': 0}, 'violations': [], 'not_finite': []}, 'SYS-02': {'ok': True, 'n_checked': 221, 'violations': [], 'stage_mismatches': []}, 'SYS-03': {'ok': True, 'n_checked': 210, 'violations': [], 'n_references_affected': 0}, 'SYS-04': {'ok
