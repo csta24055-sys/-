@@ -110,6 +110,9 @@ def cmd_init() -> int:
             "unit_hold_reason": "",
             "unified_models": [],
         }
+        if not u.get("computable_in_reference", True):
+            row["unit_hold"] = True
+            row["unit_hold_reason"] = u.get("not_computable_reason") or ""
         row.update({
             "name": u["name"],
             "stage": u["stage"],
@@ -240,6 +243,7 @@ def cmd_report() -> int:
         out.append(f"| {label} | {counts.get(key, 0)} |")
     out.append(f"| **合計** | **{len(rows)}** |")
     held = [u for u in rows if u["steps_on_hold"] and u["status"].startswith("DONE")]
+    unit_holds = [u for u in rows if u.get("unit_hold")]
     out += ["", f"検証完了のうち、一部の段階が保留中の単位：{len(held)} 件（下表の「保留中の段階」列）。", "",
             "## 単位別の状態", "",
             "| 着手順 | 群 | ID | 名称 | 状態 | M1 | M2 | M3 | M4 | M5 | M6 | 統合先モデル | 保留中の段階 |",
@@ -248,6 +252,9 @@ def cmd_report() -> int:
         steps = " | ".join(mark[u["steps"][m]["conclusion"]] for m in STEPS)
         out.append(f"| {u.get('order') or ''} | {u.get('wave') or ''} | {u['id']} | {u['name']} | {u['status_label']} | {steps} | "
                    f"{', '.join(u.get('unified_models') or []) or '—'} | {', '.join(u['steps_on_hold']) or '—'} |")
+    if unit_holds:
+        out += ["", "## 単位そのものが保留のもの", ""]
+        out += [f"- **{u['id']} {u['name']}**：{u.get('unit_hold_reason') or '理由未記入'}" for u in unit_holds]
     out += ["", "## 段階の意味", ""]
     out += [f"- **{m}**：{label}" for m, label in STEPS.items()]
     REPORT.write_text("\n".join(out) + "\n", encoding="utf-8")

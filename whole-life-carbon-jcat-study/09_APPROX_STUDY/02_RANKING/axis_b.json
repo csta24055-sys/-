@@ -1,0 +1,2590 @@
+{
+ "schema_version": "1.0",
+ "axis": "B",
+ "definition": "Room for simplification, approximation and unification. Eight criteria scored 0-3 by three independent judges; the score is the sum of per-criterion medians (0-24).",
+ "use": "Decides the order of work only. All units are research targets (directive amendment 01).",
+ "unit_count": 70,
+ "judges": [
+  "judge_algebraic_unification",
+  "judge_input_data_model",
+  "judge_numerical_approximation"
+ ],
+ "scores": {
+  "SYS-01": 4,
+  "SYS-02": 9,
+  "SYS-03": 8,
+  "SYS-04": 10,
+  "A13-01": 15,
+  "A13-02": 11,
+  "A13-03": 17,
+  "A13-04": 13,
+  "A13-05": 13,
+  "A4-01": 15,
+  "A4-02": 10,
+  "A5-01": 7,
+  "A5-02": 9,
+  "A5-03": 8,
+  "A5-04": 7,
+  "B1-01": 5,
+  "B1-02": 21,
+  "B1-03": 18,
+  "B1-04": 14,
+  "B2-01": 7,
+  "B3-01": 21,
+  "B3-02": 13,
+  "B4-01": 15,
+  "B4-02": 18,
+  "B4-03": 16,
+  "B5-01": 13,
+  "B6-01": 12,
+  "B6-02": 13,
+  "B6-03": 14,
+  "B6-04": 11,
+  "B7-01": 13,
+  "B7-02": 14,
+  "B7-03": 12,
+  "B7-04": 13,
+  "C1-01": 6,
+  "C2-01": 15,
+  "C3-01": 14,
+  "C4-01": 12,
+  "C-05": 7,
+  "STO-01": 13,
+  "STO-02": 6,
+  "SUM-01": 8,
+  "SUM-02": 9,
+  "SUM-03": 8,
+  "SUM-04": 7,
+  "SUM-05": 10,
+  "SUM-06": 5,
+  "SUM-07": 6,
+  "SUM-08": 10,
+  "QA-01": 10,
+  "QA-02": 8,
+  "QA-03": 11,
+  "QA-04": 12,
+  "X-01": 11,
+  "X-02": 9,
+  "X-03": 13,
+  "X-04": 14,
+  "X-05": 15,
+  "X-06": 17,
+  "X-07": 12,
+  "X-08": 13,
+  "X-09": 11,
+  "X-10": 12,
+  "X-11": 12,
+  "X-12": 14,
+  "X-13": 16,
+  "X-14": 10,
+  "X-15": 12,
+  "X-16": 9,
+  "X-17": 18
+ },
+ "unification_subscores": {
+  "SYS-01": 3,
+  "SYS-02": 7,
+  "SYS-03": 7,
+  "SYS-04": 9,
+  "A13-01": 10,
+  "A13-02": 8,
+  "A13-03": 11,
+  "A13-04": 7,
+  "A13-05": 8,
+  "A4-01": 10,
+  "A4-02": 8,
+  "A5-01": 7,
+  "A5-02": 7,
+  "A5-03": 6,
+  "A5-04": 6,
+  "B1-01": 5,
+  "B1-02": 11,
+  "B1-03": 11,
+  "B1-04": 10,
+  "B2-01": 6,
+  "B3-01": 11,
+  "B3-02": 11,
+  "B4-01": 11,
+  "B4-02": 11,
+  "B4-03": 11,
+  "B5-01": 8,
+  "B6-01": 8,
+  "B6-02": 8,
+  "B6-03": 10,
+  "B6-04": 4,
+  "B7-01": 10,
+  "B7-02": 10,
+  "B7-03": 9,
+  "B7-04": 9,
+  "C1-01": 5,
+  "C2-01": 10,
+  "C3-01": 10,
+  "C4-01": 10,
+  "C-05": 6,
+  "STO-01": 5,
+  "STO-02": 4,
+  "SUM-01": 8,
+  "SUM-02": 8,
+  "SUM-03": 8,
+  "SUM-04": 7,
+  "SUM-05": 8,
+  "SUM-06": 5,
+  "SUM-07": 5,
+  "SUM-08": 5,
+  "QA-01": 7,
+  "QA-02": 7,
+  "QA-03": 8,
+  "QA-04": 9,
+  "X-01": 9,
+  "X-02": 7,
+  "X-03": 10,
+  "X-04": 9,
+  "X-05": 10,
+  "X-06": 7,
+  "X-07": 8,
+  "X-08": 10,
+  "X-09": 9,
+  "X-10": 7,
+  "X-11": 10,
+  "X-12": 11,
+  "X-13": 11,
+  "X-14": 9,
+  "X-15": 8,
+  "X-16": 5,
+  "X-17": 12
+ },
+ "unification_criteria": [
+  "b2",
+  "b3",
+  "b4",
+  "b8"
+ ],
+ "reference_top30": {
+  "note": "Former selection rule, kept for reference. It does not limit the research scope.",
+  "share": 0.3,
+  "k": 21,
+  "cutoff_score": 13,
+  "members": [
+   "B1-02",
+   "B3-01",
+   "B1-03",
+   "B4-02",
+   "X-17",
+   "A13-03",
+   "X-06",
+   "B4-03",
+   "X-13",
+   "A13-01",
+   "A4-01",
+   "B4-01",
+   "C2-01",
+   "X-05",
+   "B1-04",
+   "B6-03",
+   "B7-02",
+   "C3-01",
+   "X-04",
+   "X-12",
+   "A13-04",
+   "A13-05",
+   "B3-02",
+   "B5-01",
+   "B6-02",
+   "B7-01",
+   "B7-04",
+   "STO-01",
+   "X-03",
+   "X-08"
+  ]
+ },
+ "disputed_units": [
+  "X-17",
+  "X-13",
+  "X-15",
+  "X-10",
+  "SUM-08",
+  "B2-01"
+ ],
+ "ranking": [
+  {
+   "rank": 1,
+   "id": "B1-02",
+   "b_score": 21,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 3,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 2,
+    "b6": 3,
+    "b7": 2,
+    "b8": 3
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 21,
+    "judge_input_data_model": 22,
+    "judge_numerical_approximation": 22
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "年ごとの漸化式は等比数列の閉形式に置き換えられる（補充ありは m0·r·T、補充なしは交換区間ごとに m0·(1 − (1−r)^L)）。B1-03 と B1-04 は同じ残存量 m_d(t) を使うので、機器ごとの 1 つの物質収支として 3 式をまとめられる。",
+    "judge_input_data_model": "年ごとの漸化式は交換区間ごとに等比級数の閉形式を持つので、年ループは不要である。B1-03・B1-04 が必要とする残存量も同じ閉形式から得られ、充填量×GWP と交換予定は他の式の前計算を再利用できる。",
+    "judge_numerical_approximation": "機器×年の漸化式だが、補充なしは等比数列、補充ありは線形で、交換区間ごとに厳密な閉形式があり、B1-03・B1-04 と残存量 m(t) を共有する。1 次近似 m0·r·T は過大側、2 次打ち切りは過小側になるので閉形式を使うべきである。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "機器の物質収支核：φ_leak = 補充あり r·T、補充なし Σ_区間 [1 − (1−r)^{L_k}]（端数年は r·w で按分）。E_B1 = Σ_d M_d·(φ_leak + ρ_d·Σ_事象 残存率 + (1 − c_d)·期末残存率) を 1 回の走査で求める。一次近似は E ≈ M_d·r·T。",
+    "judge_input_data_model": "区間長 L ごとに、補充なし: M(1−(1−r)^L)、補充あり: M·r·L の閉形式にする（端数年は年重み）。r·L が小さければ M·r·T の一次式で足りる。入力は (M_d, r, 補充タグ, B4-01 と共通の交換表) の4つに減らし、漏洩・更新時残存・期末残存を1つの機器マスバランス関数で返す。",
+    "judge_numerical_approximation": "区間長 n 年の漏洩 = m0·(1−q^n)、区間末の残存量 = m0·q^n（q=1−r、端数年は q^⌊n⌋·(1−r·端数)）、補充ありは漏洩 = m0·r·n・残存量 = m0。B1 合計 = GWP·[Σ_区間 漏洩 + ρ·Σ_e m(t_e−) + (1−c)·m(T)] を機器ごとに O(交換回数) で一括計算し、B1-02〜04 の年ループを廃止する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 2,
+   "id": "B3-01",
+   "b_score": 21,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 3,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 2,
+    "b6": 3,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 21,
+    "judge_input_data_model": 21,
+    "judge_numerical_approximation": 21
+   },
+   "judge_spread": 0,
+   "rationales": {
+    "judge_algebraic_unification": "年の二重ループ Σ_y w_y s_{i,y} は T − Σ_{更新事象} w_{年(e)}（T が整数なら T − N_i）という閉形式で、B4 の回数から直接求められる。B3-02 は同じ双線形形式で実効年数を T に固定した特殊形で、同じ入力に 2 つの式がある。",
+    "judge_input_data_model": "行×年の二重ループは、更新年の除外を交換回数の引き算に置き換えれば行ごとの1乗算になる。B3-02 は同じ入力で除外をしないだけの別式であり、1つの式のパラメータ違いにできる。",
+    "judge_numerical_approximation": "行×年の二重ループだが、Σ_y w_y·s_{i,y} は「T −（更新が属する年の重みの和）」で、整数年なら T−N_i の閉形式になる。B3-02 は除外なしの同式で、T に線形な上界（過大側）を与える。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B3 = Σ_i e0_i·r_i·τ_i、τ_i = T − κ·N'_i（κ = 1 で B3-01、κ = 0 で B3-02。N'_i は更新年の年重みの和）。年ループを廃止し、N_i は B4 の計数核を共用する。",
+    "judge_input_data_model": "E = Σ_i r_i·e0_i·(T − δ·N_i) とする（N_i は更新が属する年の数、最終の端数年だけ重みを補正）。δ=1 が B3-01、δ=0 が B3-02 である。修繕率を区分マスタに持てば Σ_k r_k·(T·E0_k − Σ_{i∈k} N_i·e0_i) と区分集約できる。",
+    "judge_numerical_approximation": "E_B3 = Σ_i r_i·e0_i·(T − κ·N_i*)（κ=1 が B3-01、κ=0 が B3-02、N_i* は更新年の重みの和で整数年なら ⌈T/c_i⌉−1）。O(N) で厳密、端数の最終年に更新が入る行だけ w_Y で補正する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 3,
+   "id": "B4-02",
+   "b_score": 18,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 1,
+    "b6": 2,
+    "b7": 2,
+    "b8": 3
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 18,
+    "judge_input_data_model": 20,
+    "judge_numerical_approximation": 19
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "事象ごとに同じ u_i を足す二重和は Σ_i N_i·u_i に畳め、事象ループは不要である。u_i は初期の行結果（製造・搬入・廃棄）の再利用で、X-08 は同じ和を周期別にまとめ直したものにすぎない。4 成分は 1 つの u_i に集約できる。",
+    "judge_input_data_model": "資材は回数、設備は事象一覧という2系統で、同じ「回数×1回当たり負荷」を計算している。1回当たり負荷は初期段階の行結果から1回作れば足り、周期値で先に集約すれば X-08 と同じ計算になる。",
+    "judge_numerical_approximation": "事象ごとに 4 項を足すが厳密に Σ_i N_i·u_i であり、周期でまとめた X-08 の Σ_c N(T,c)·U_c と同じ合計である。資材（回数）と設備（事象一覧）の 2 経路も回数関数で一本化できる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B4 = Σ_c N(T, c)·U_c、U_c = Σ_{i: 周期=c} u_i、u_i = 行結果行列 R[i, {製造, 搬入, 据付, 廃棄}] の行和。X-08 の表がそのまま内訳になる。建替（B5-01）は周期 C・範囲比 φ の擬似行として同じ核で計算する（段階タグは B4 と B5 で別）。",
+    "judge_input_data_model": "u_i（製造+搬入+据付+廃棄）を行結果から1回だけ合成し、資材・設備を種別タグ付きの1表にして E_B4 = Σ_c N(T,c)·U_c（U_c=周期別の u の合計）とする。年への配置が必要な場合だけ事象表を参照する。",
+    "judge_numerical_approximation": "u_i = 製造＋搬入＋据付＋廃棄 を 1 回計算し、周期ごとに U_c を集約して E_B4(T) = Σ_c N(T,c)·U_c（＋明示一覧の分）とする。T の感度分析は O(周期の種類数)。年率化 T·Σu_i/c_i は上界（過大側）、Σu_i·(T/c_i−1) は下界（過小側）として使い分ける。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 4,
+   "id": "B1-03",
+   "b_score": 18,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 1,
+    "b6": 2,
+    "b7": 2,
+    "b8": 3
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 18,
+    "judge_input_data_model": 18,
+    "judge_numerical_approximation": 18
+   },
+   "judge_spread": 0,
+   "rationales": {
+    "judge_algebraic_unification": "交換直前の残存量は B1-02 の年次計算に依存するが、閉形式 m0·(1−r)^L（補充ありは m0）で直接求められる。交換回数は B4-01・B4-03 と同じ計数関数 N(T, L) で、「回数×1 回当たりの量」という形は B4-02 と同じである。",
+    "judge_input_data_model": "交換直前の残存量は B1-02 の閉形式から直接得られ、年次計算への依存を外せる。交換年の生成は B4-01 と同じ規則を別に持っており、B1-04 とは「残存量×損失率」という同じ形である。",
+    "judge_numerical_approximation": "B1-02 の年次値に依存するが、交換直前の残存量は m0·(1−r)^L（補充ありは m0）の閉形式で得られる。B1-04 とは「残存量×損失割合×GWP」の同形で、損失率と回収率という逆向きの定義だけが違う。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E = Σ_d M_d·ρ_d·N(T, L_d)·(1−r_d)^{L_d}（補充ありは (1−r)^L を 1 とする）。N は共通の sched(T, 周期 | 明示の一覧) から取り、B1-04 は損失率 (1 − c) の期末事象として同じ事象列に加える。",
+    "judge_input_data_model": "残存量を M(1−r)^L（補充ありは M）で与え E = Σ_e ρ·M_d(t_e) とする。事象表は B4-01 と共用し、B1-04 と事象種別タグ（更新/期末）付きの1式にまとめる。",
+    "judge_numerical_approximation": "事象損失モデル E = GWP·λ_e·m(t_e−) に統一する（交換時 λ=ρ、評価期間末 λ=1−c）。定周期なら E_B1-03 = GWP·ρ·K·m0·(1−r)^L。m(t) は B1-02 の閉形式と同じ関数を使う。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 5,
+   "id": "X-17",
+   "b_score": 18,
+   "disputed": true,
+   "unification_subscore": 12,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 3
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 20,
+    "judge_input_data_model": 14,
+    "judge_numerical_approximation": 19
+   },
+   "judge_spread": 6,
+   "rationales": {
+    "judge_algebraic_unification": "基準計算では代表係数 fbar_k = E_k/Q_k を作ってから Q_k を掛け戻しており、積と商が打ち消し合って A13-01・A13-03 の区分別の和 E_k に等しい。A13-01 の集約形 Σ_k f_k Q_k を区分キーで適用したものにほかならない。",
+    "judge_input_data_model": "代表係数を詳細計算から作って要約数量に掛け戻すため、要約数量が相殺され、区分別の製造排出合計と同じ値になる。A13 台帳の区分タグ集計で代替でき、形としては A13 系に共通の縮約モデルである。",
+    "judge_numerical_approximation": "代表係数をその建物の詳細結果から作るため Q_k·fbar_k は区分別小計の恒等式で、A13-01/03 の区分集計と同じである。独立な代表係数を使えば 6 入力の線形代理モデルになるが、6 区分外の資材と設備を含まないため過小側に偏る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_simple = Σ_{k=1..6} E_k（行結果を区分で集計するだけ）。独立した代表係数表 Fbar[区分, 段階] があれば、A1-A3（と A4）の共通代替モデル E ≈ Q_class^T Fbar として使う。",
+    "judge_input_data_model": "基準計算では A13 台帳の区分タグ group-by（6 区分）で同じ値を得る。独立の代表係数を使う場合だけ E=Σ_k Q_k·fbar_k の6項式を縮約モデルとして残す。",
+    "judge_numerical_approximation": "詳細計算がある場合は E_k = Σ_{i∈k} e_i の区分小計として A1-A3 の走査から直接出力する。簡易算定としては E ≈ Σ_{k=1..6} Q_k·fbar_k（独立の代表係数）+ E_other とし、範囲外を「その他」区分または被覆率による割り戻しで補う。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 6,
+   "id": "X-06",
+   "b_score": 17,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 1,
+    "b3": 1,
+    "b4": 3,
+    "b5": 3,
+    "b6": 3,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 16,
+    "judge_input_data_model": 17,
+    "judge_numerical_approximation": 20
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "4 種類のシナリオ（一定・下限付き直線低下・段階・年次表）は、すべて節点列に対する補間（線形または直前値保持）で厳密に表せるので、種類による分岐は不要である。累積 Σ w_y g_y も区分 2 次の閉形式になる。",
+    "judge_input_data_model": "4種類のシナリオ分岐は、節点表と補間種別による1つの補間関数で厳密に表せる。生成した系列と年重み付き累計は B6-01・X-11・A5-01 が共通に使うので、1回だけ前計算すればよい。",
+    "judge_numerical_approximation": "4 種のシナリオ分岐は、すべて節点つきの区分線形（0 次または 1 次補間）の特殊形で、1 つの補間表に置き換えられる。直線低下＋下限は節点が実数でも厳密に一致し、累積も閉形式になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "節点表 {(k_j, g_j)} と補間モード（線形 / 直前値）の 1 モデル。一定 = 節点 1 個、直線低下 = (0, start) と (k*, floor)（k* = (start − floor)/d）、段階 = 直前値保持、年次表 = 全年の節点。G(T) は区間ごとの等差級数の和で求める。",
+    "judge_input_data_model": "全シナリオを節点表 (年, 係数, 補間=階段/線形) に正規化し、g_y を1関数で生成する（一定=節点1個、直線低下+下限=下限到達年までの2節点、段階=階段補間、年次表=そのまま）。g と G=Σ w·g を前計算して再利用する。",
+    "judge_numerical_approximation": "g(k) = interp(k; 節点 {(k_j, g_j)}, 次数 0 または 1, 範囲外は端の値を保持)：一定 = 1 節点、直線低下 = 2 節点 (0, g0) と ((g0−floor)/d, floor)、段階 = 0 次、年次表 = 全年を節点。累積 G(T) = K·g0 − d·K(K−1)/2 + (T−K)·floor を B6・B2・X-11・A5-01 に提供する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 7,
+   "id": "A13-03",
+   "b_score": 17,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 3,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 17,
+    "judge_input_data_model": 17,
+    "judge_numerical_approximation": 15
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "ゲート条件（許諾・段階・単位・有効期限）は SYS-02・SYS-03・X-15 がすでに判定しており、解決後は A13-01 と同じ Σ Q c f になる。9 入力のうち式に必要なのは Q・c・f* と選択子だけで、同じ段階なので境界の混在もない。",
+    "judge_input_data_model": "入力9個のうち適用条件（段階・単位・有効期限・許諾）は EPD ごとに1回判定すれば1つのフラグになる。A13-01 と同じ行数量に対する択一であり、実効係数を選ぶだけの1式に統合できる。",
+    "judge_numerical_approximation": "4 条件のゲートを和の中に持ち入力が 9 個あるが、条件判定は X-15 と重複し、A13-01 とは係数の出所が違うだけの同じ積である。固有値そのものは近似せず、判定の一元化と入力の縮約が対象になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_A1A3 = Σ_i Q_i c_i [g_i f_epd_i + (1 − g_i) f_gen_i] の 1 式に統合し、g_i と c_i は X-15 の解決結果を受け取る（入力 9 → 3＋選択子）。EPD 分と汎用分の内訳は g_i で分けて表示する。",
+    "judge_input_data_model": "EPD マスタで適用可否 g を1回判定し、X-15 で実効係数 f_eff = g·c·f_epd + (1−g)·f_gen を確定する。A1-A3 は Σ Q_i·f_eff_i の1式にし、EPD 適用分は係数種別タグで別掲する。",
+    "judge_numerical_approximation": "g_i の判定を X-15 に一本化し、E_A1A3 = Σ_i Q_i·(g_i·c_i·f_epd,i + (1−g_i)·f_gen,i) として A13-01 と 1 回の走査で計算する。行の入力は (Q_i, c_i, f_eff,i, 種別) に縮約し、種別ごとの小計で EPD 分を別掲する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 8,
+   "id": "B4-03",
+   "b_score": 16,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 3,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 0,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 17,
+    "judge_numerical_approximation": 16
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "数え上げは閉形式 ceil(T/c) − 1 に置き換えられ、B4-01 が作る集合の要素数と同じものである。同じ計数関数が B5-01 と B1 の交換にも別々に現れる。",
+    "judge_input_data_model": "数え上げは閉形式 ceil(T/c)−1 で置き換えられる。B4-01・B5-01・X-10 が同じ回数関数を別々に持っている。",
+    "judge_numerical_approximation": "基準計算は倍数を 1 つずつ数え上げるが、N=⌈T/c⌉−1 の閉形式がそのまま使え、B4-01・B5-01 と同じ回数規則の重複定義でもある。階段関数なので線形置換は最大 1 回分の誤差を持つ。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "N(T, c) = ceil(T/c) − 1 を共通の計数関数として B4-01・B4-03・B5-01・B1-02/03・X-08・X-10 で共用する。集計レベルの概算なら N ≈ T/c − 1/2。",
+    "judge_input_data_model": "N(T,c)=ceil(T/c)−1 を共通関数とし、相異なる周期値の参照表として1回計算する。B4-01 の事象数、B5-01 の建替回数、X-10 の世代数 1+N に同じ値を再利用する。",
+    "judge_numerical_approximation": "N(T,c) = ⌈T/c − ε⌉ − 1（T/c が丸め誤差で整数に近い場合の許容 ε を明示）を唯一の回数関数とし、B4-01・B5-01・X-08・X-10 から共用する。近似するなら T/c−1 ≦ N < T/c の上界側を使う（N が小さい行は相対誤差が大きいので厳密式を推奨）。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 9,
+   "id": "X-13",
+   "b_score": 16,
+   "disputed": true,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 3,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 16,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 19
+   },
+   "judge_spread": 7,
+   "rationales": {
+    "judge_algebraic_unification": "A13-05 に再使用率 rho を加えた一般形で、同じ行・同じ入力を使う。実効端材率 w' = w(1 − rho)/(1 − w·rho) を定義すれば A13-05 の式そのものになり、処分される端材量は Q_net − Q_inst と重複している。",
+    "judge_input_data_model": "A13-05 の数量確定に再使用率を加えただけで、再使用率 0 なら A13-05 と一致する。式は発注量基準の1つの倍率に整理できる。",
+    "judge_numerical_approximation": "Q_net = Q_ord·(1−ρw) と 1 項に簡約でき、有効端材率 w' = w(1−ρ)/(1−ρw) を使えば A13-05 と完全に同じ式になる。A13-05 は ρ=0 の特殊形である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "Q_net = Q_inst/(1 − w')、w' = w(1 − rho)/(1 − w·rho)（rho = 0 で A13-05 に一致）。処分される端材 = Q_net − Q_inst。入力は (Q, w') に減る。",
+    "judge_input_data_model": "A13-05 の数量確定関数に ρ（既定 0）を引数として追加し、Q_net = Q_ord·(1−ρ·w)、処分端材 = Q_ord·w·(1−ρ) とする。",
+    "judge_numerical_approximation": "g(w,ρ) = (1−ρw)/(1−w) を唯一の割り戻し関数とし、Q_net = Q_inst·g(w,ρ)、処分端材 = Q_inst·(1−ρ)·w/(1−w) とする。近似は g≈1+(1−ρ)·w+(1−ρ)·w^2（誤差は (1−ρ)·w^3/(1−w) で過小側）。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 10,
+   "id": "B4-01",
+   "b_score": 15,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 1,
+    "b6": 1,
+    "b7": 0,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 17,
+    "judge_numerical_approximation": 15
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "周期更新の一覧は (L, N) で決まる等差数列で、B4-03 は同じ集合の要素数、B5-01 と B1 の交換も同じ集合を別々に数えている。明示の一覧に対する 0 < t < T の選別は、QA-02 の区間述語と下限の等号だけが違う。",
+    "judge_input_data_model": "設備の耐用年数・明示一覧と資材の更新周期（B4-03）は、同じ概念を別の入力・別の式で扱っている。事象表は相異なる周期値ごとに1回作れば足り、QA-02 の区間判定も同じ条件である。",
+    "judge_numerical_approximation": "n·L<T の倍数を数え上げる式で、B4-03（回数）・B5-01 の N(T,C)・B1 の交換年と同じ規則を別々に持つ。件数は ⌈T/L⌉−1 の閉形式だが、連続近似は階段を滑らかにして事象の時点を失う。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "sched(T, 周期 | 明示の一覧) → (N, 事象年) を 1 つ定義する。周期のときは N = ceil(T/L) − 1、t_n = n·L を必要なときだけ生成する。資材・設備・冷媒機器・建物（建替）で共用し、範囲外の件数も同時に返して QA-02 に渡す。",
+    "judge_input_data_model": "資材・設備共通の「更新周期」列に統一し、相異なる周期値 c ごとに {n·c<T} の事象表を1回生成してキャッシュする（明示一覧は上書き列）。B4-03 はその件数、QA-02 は生成時の範囲外件数として得る。",
+    "judge_numerical_approximation": "events(T, L | 明示一覧) を 1 関数にし、件数 N(T,L) = ⌈T/L⌉−1、年 = L·(1..N) を直接生成する。B4-03・B5-01・B1-02/03 も同じ関数を呼び、QA-02 と下限の等号（0<t）を統一する。線形化するなら上界 T/L（過大側）だけを許容し、T/L−1 は過小なので使わない。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 11,
+   "id": "A4-01",
+   "b_score": 15,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 16,
+    "judge_numerical_approximation": 15
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "X-12 は同じ行を 1/lf 付きで再計算した同一の三重積、C2-01 は質量の単位（kg/1000）だけが違う同じトンキロ核である。A4-02 とは同じ A4 段階の行ごとの択一なので、選択子で 1 つの和にできる。輸送手段でグループ化した厳密形で変数も減る。",
+    "judge_input_data_model": "C2-01 と X-12 が同じ「質量×距離×係数」を、単位（kg/1000）や積載率の有無だけ変えて別式にしている。手段別にトンキロを先に集計すれば、係数の乗算は輸送手段の数だけで済む。",
+    "judge_numerical_approximation": "Σm·d·f のトンキロ法で、X-12（÷積載率）と C2-01（kg/1000 表記）が同じ核を別式で持ち、同じ品目に A4-02 という別法もある。平均距離による縮約は質量と距離の相関の分だけ偏る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "tkm(m, d, f; s, lf) = Σ_i (s·m_i)·d_i·f_i/lf_i を 1 つの核にする（A4-01: s=1, lf=1、X-12: lf を指定、C2-01: s=1/1000。段階タグは A4 と C2 で分ける）。計算は Σ_k (f_k/lf_k)·TKM_k の集約形で行う。",
+    "judge_input_data_model": "輸送台帳 (行, 段階タグ A4/C2, 質量[t], 距離, 手段, 積載率=既定1) の1式 E[s]=Σ m·d·f_mode/lf にする。手段別 TKM_k を先に集計し、距離は資材区分別の既定値表で補う（A4 と C2 の合計は混ぜない）。",
+    "judge_numerical_approximation": "トンキロ核 E = Σ_k (f_k/lf_k)·TKM_k（TKM_k = Σ m·d、lf の既定値 1、質量は t に正規化）を A4-01・X-12・C2-01 で共有する（段階の値は別々に保持）。距離を縮約するなら質量加重平均距離を使う（単純平均は重い資材が遠距離のとき過小）。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 12,
+   "id": "C2-01",
+   "b_score": 15,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 2,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 16,
+    "judge_input_data_model": 15,
+    "judge_numerical_approximation": 15
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "行に属する搬出（kg/1000）と行に属さない搬出（t）が、同じトンキロ積なのに単位の違う 2 つの和に分かれており、A4-01 とも同じ核である。質量の単位を揃えて擬似行にすれば 1 つの和になる。",
+    "judge_input_data_model": "行に属する搬出（kg/1000）と行に属さない搬出（t）を単位の違う2つの和で持ち、A4-01 と同じトンキロ式を別に定義している。1つの輸送台帳に揃えれば1式になる。",
+    "judge_numerical_approximation": "A4-01 と同じトンキロ法だが、行分は kg/1000、行に属さない分は t と単位の扱いが 2 通りある。C3-01・C4-01 と同じ行・同じ質量を別々に走査している。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "tkm(m, d, f; s) の核を A4-01 と共用する（s = 1/1000、段階タグ C2）。行に属さない搬出は質量を kg に揃えた擬似行として加え、(距離, 係数) の組ごとの TKM 集約形で計算する。",
+    "judge_input_data_model": "行に属さない搬出も輸送台帳の行（段階タグ C2、質量は t に統一）として持ち、A4-01 と同じ E[s]=Σ m·d·f の1式にする。処理先別のトンキロを先に集計し、距離は経路別の既定値表で補う（A4 の合計とは混ぜない）。",
+    "judge_numerical_approximation": "質量を t に正規化して E_C2 = Σ_k f_k·TKM_k とし、行に属さない搬出も同じ表の行として追加する。C2・C3・C4 は 1 回の走査で m_i·[d_i·f_i/1000, Σ_r p·f, p_L·f_L] の 3 列として出す（列は段階別に保持）。既定距離で縮約するなら質量加重平均距離を使う。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 13,
+   "id": "A13-01",
+   "b_score": 15,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 15,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "E = q^T f という線形形式の基本形で、A13-03（EPD）と X-01（設備）は同じ A1-A3 段階の同じ形、A4-02 は同じ q に別の係数列を掛けるだけである。係数でグループ化した厳密形 Σ_k f_k Q_k により、変数を行数 N から係数の種類数に減らせる。",
+    "judge_input_data_model": "式は q·f の積和で最小形だが、A13-03・X-01・A4-02 が同じ行数量に別の係数列を掛けるだけの別式になっている。係数ID・単位で数量を先に集約すれば、行数 N を相異なる係数の数 K まで減らせる。",
+    "judge_numerical_approximation": "Σq·f の最小形だが、A13-03・X-01 と同じ A1-A3 の「数量×換算×係数」で、X-15 が決めた有効係数を使えば 1 本になる。区分別代表係数への縮約は可能だが、範囲外の資材を落とすと過小側に偏る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "行表（資材＋設備）と係数行列 F[行, 段階列] による 1 回の縮約 e_s = Σ_i Q_i c_i F[i,s]。係数は X-15 が解決した f*_i を使い、A13-01 と A13-03 の択一は選択子 g_i で表す。段階列は分けたまま出力する。",
+    "judge_input_data_model": "行台帳 (行, 種別タグ, 段階タグ, 数量, 実効係数) に対する1つの積和カーネル E[s]=Σ q·c·f にする。同一係数・同一単位の行を先に集約して E=Σ_k f_k·Q_k とし、EPD/汎用/設備は係数種別タグの違いとして同じ表で処理する（段階別の結果は分離したまま）。",
+    "judge_numerical_approximation": "E_A1A3 = Σ_i Q_i·c_i·f_eff,i（f_eff は X-15 が EPD・複合・汎用から決めた 1 列）に統合し、係数ごとにまとめた厳密形 Σ_k f_k·(Σ q) で評価する。区分代表係数で近似する場合は「その他」区分を残して過小評価を防ぐ。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 14,
+   "id": "X-05",
+   "b_score": 15,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 1,
+    "b6": 1,
+    "b7": 1,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 14,
+    "judge_input_data_model": 13,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "全ガス版と同じ行・同じ式で係数の列だけが違い、X-04 の行列 A^T H の CO2 列そのものである。買電・冷媒の特例は列の値で表せる。CO2 と全ガスは定数倍では換算できないので、近似モデルは評価しない。",
+    "judge_input_data_model": "X-04 と同じ行・同じ式で係数列が違うだけなのに、行を再度たどっている。ガス別集計を（段階, ガス）で1回作れば、CO2 版はその1列である。",
+    "judge_numerical_approximation": "X-04 と同じ行を係数の CO2 列だけで再走査しており、ガス別行列の 1 列として同時に得られる。買電＝CO2、冷媒＝0 の例外も列の定義で表現できる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "X-04 の G = A^T H の CO2 列を取り出す（行の再走査を廃止する）。買電は CO2 列に全量、冷媒は 0 を入れる。全ガス版とは別の出力のままにする。",
+    "judge_input_data_model": "X-04 の集計を (段階, ガス) の2次元表として1回だけ作り、CO2 版はその CO2 列を読む（買電=CO2 扱い、冷媒=0 はガス別係数として表に持つ）。行の再走査を廃止する。",
+    "judge_numerical_approximation": "X-04 のガス別行列 E[s,g] の CO2 列を取り出すだけにし、独立の走査を廃止する。全ガス版に一定比率を掛ける近似は使わない（係数ごとに CO2 の比率が違う）。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 15,
+   "id": "C3-01",
+   "b_score": 14,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 15,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "E = Σ_i m_i Σ_r p_{i,r} f_{i,r} は C4-01 と経路の添字が違うだけの同じテンソル縮約で、X-09 は同じ積を区分×経路に集計したものである。X-14（設備）は p = 1 の行として同じ C3 に入る。経路の列を分けておけば C3 と C4 の境界は保たれる。",
+    "judge_input_data_model": "C4-01 は同じ式の経路＝最終処分の場合、X-09 は同じ積を別の切り口で集計したものである。経路比率と係数を区分単位で持てば、区分別の実効処理係数に前計算できる。",
+    "judge_numerical_approximation": "m·p·f を経路で足す式で、C4-01 は同じ式の最終処分の列、X-09 は同じ積の 2 方向集計である。同じ積を 3 か所で計算している。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "X[i,r] = m_i·p_{i,r}·f_{i,r} を 1 回作り、E_C3 = Σ_{r≠最終処分} X、E_C4 = Σ_{r=最終処分} X、X-09 = 区分別の集計として同じ表から取る。設備は p_{中間処理} = 1 の行として追加する。",
+    "judge_input_data_model": "経路を縦持ちにした表 (行, 経路タグ, 段階タグ C3/C4, 比率, 係数) で e = m·p·f を1回計算し、段階タグの group-by で C3・C4 を得る。区分共通なら φ_{c,s}=Σ_r p_r·f_r を前計算して E_s=Σ_c M_c·φ_{c,s}。",
+    "judge_numerical_approximation": "E[c,r] = Σ_{i∈c} m_i·p_{i,r}·f_{i,r} を 1 回だけ作り、C3 = 最終処分以外の列の和、C4 = 最終処分の列の和、X-09 = 表そのもの、とする。p·f を資材区分ごとの有効係数に事前集約すれば行の入力は質量だけになる。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 16,
+   "id": "B6-03",
+   "b_score": 14,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 1,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 1,
+    "b8": 3
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 14,
+    "judge_numerical_approximation": 16
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "年重み付き和 Σ_y w_y x_y は B7-04 と完全に同じ作用素で、被積分系列が違うだけである。B2-01 と X-07（累積）も同じ和の一部・途中経過を使う。",
+    "judge_input_data_model": "B7-04 と同じ年重み付き積算を段階ごとに別式で持っている。年重みは T から1回生成でき、B6-01・B6-02 と合わせて1つの年次フロー表の積和になる。",
+    "judge_numerical_approximation": "年重み付きの積算で、B7-04 と同じ累積関数を持ち、B2-01 が同じ和を再計算している。電力係数が直線低下＋下限なら累積は T の区分 2 次式、定常分は T に線形の閉形式になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "時間積算の作用素 I[x] = Σ_y w_y x_y を年次系列の行列（買電・燃料・上水・下水・一般廃棄物）に 1 回適用し、段階への割り当ては所属行列で行う。年間値が一定の系列は T·x。",
+    "judge_input_data_model": "年次フロー表 (キャリアタグ, 段階タグ B6/B7, 年間量, 係数系列) に対する1式 E[s]=Σ_k Σ_y w_y·a_{k,y}·f_{k,y} にする。重みベクトル w は T から1回生成して全式で共用する（段階別の結果は分離）。",
+    "judge_numerical_approximation": "accumulate(x, T) = Σ_{y≦⌊T⌋} x_y + (T−⌊T⌋)·x_{⌈T⌉} を B6-03・B7-04・B2-01・X-11 で共用する。定常入力なら E_B6 = n·G(T) + T·ē_fuel、G(T) = K·g0 − d·K(K−1)/2 + (T−K)·g_floor（K は下限到達までの年数、端数年は重みで補正）。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 17,
+   "id": "X-12",
+   "b_score": 14,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 14,
+    "judge_input_data_model": 14,
+    "judge_numerical_approximation": 15
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "A4-01 と同じ行・同じ入力に 1/lf を掛けただけで、lf = 1 が A4-01 である。同じ三重積が 2 つの式として別々に計算されている。",
+    "judge_input_data_model": "A4-01 と同じ行・同じ式に積載率の除算を加えただけの別式である。積載率が手段別に一定なら係数に織り込める。",
+    "judge_numerical_approximation": "A4-01 と同じ行に 1/積載率 を掛けるだけで、積載率の既定値を 1 にすれば A4-01 と 1 式になる。積載率を算術平均で代表させると 1/x の凸性により過小評価になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "tkm(m, d, f; lf) 核のパラメータ lf として統合し、実効係数 f_k/lf_k を輸送手段ごとに前計算して Σ_k (f_k/lf_k)·TKM_k で求める。A4-01 とは択一の出力のままにする。",
+    "judge_input_data_model": "A4-01 の式に lf 列（既定 1）を加えた1式 Σ m·d·f/lf にする。手段別に一定なら実効係数 f'_k=f_k/lf_k を前計算して入力列を減らす。",
+    "judge_numerical_approximation": "トンキロ核 E = Σ_k (f_k/lf_k)·TKM_k の有効係数 f_k/lf_k に吸収する（lf=1 が A4-01）。行ごとの lf を縮約するならトンキロ加重の調和平均を使い、算術平均は使わない。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 18,
+   "id": "X-04",
+   "b_score": 14,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 1,
+    "b6": 1,
+    "b7": 1,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 16,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "全 14 段階の行をもう一度たどるが、基準の排出は a^T (H·gwp)、ガス別は a^T H、CO2 版（X-05）はその CO2 列で、すべて同じ行列 A^T H の縮約である。Σ_g GWP_g h_{f,g} = f の突合は、行ごとではなく係数ごとに 1 回で足りる。",
+    "judge_input_data_model": "全段階の行を改めてたどり直しており、主計算と同じ活動量を二重に走査している。係数をガス別列で持てば CO2e 係数は導出でき、活動量を係数 ID で先に集約して行列積1回にできる。",
+    "judge_numerical_approximation": "全行を改めてたどるが、ガス別量は活動量ベクトルとガス別係数行列の積であり、X-05 の CO2 版はその 1 列である。買電・冷媒の別扱いも列の定義で表せるが、CO2 と全ガスの間を定数比で近似することはできない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "段階×ガスの行列 G = A^T H を 1 回計算する（A は段階別の活動量×換算倍率、H は係数×ガス）。全ガス版 = G·gwp、ガス別 = 列和、CO2 版 = CO2 列。買電と冷媒は CO2 換算の列として H に入れ、別掲の分岐をなくす。",
+    "judge_input_data_model": "係数マスタをガス別列 H で持ち、CO2e 係数 = H·GWP を導出する。活動量を係数 ID 別に A_f=Σ a·k と集約して m = Hᵀ·A、E = GWPᵀ·m とし、X-05 はその CO2 列とする。",
+    "judge_numerical_approximation": "E[s,g] = Σ_{r∈s} a_r·k_r·h_{r,g} を主計算と同じ 1 回の走査で作り、CO2e = E·GWP、CO2 版 = E[:,CO2]、突合 = 行和と段階合計の差、とする。買電・冷媒は「CO2e のみ」の列として同じ行列に載せる。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 19,
+   "id": "B1-04",
+   "b_score": 14,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 15,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "「残存量×損失率×GWP」は B1-03 と同じ形で、期末を損失率 (1 − c) の最終事象と見れば 1 つの事象和になる。残存量 m_d(T) は B1-02 の状態をそのまま使う。基準計算の帰属は B1 なので段階は混ざらない。",
+    "judge_input_data_model": "B1-03 と同じ「残存量×未回収率」で、損失率の定義（ρ と 1−c）だけが違う。期末の残存量は閉形式で与えられる。",
+    "judge_numerical_approximation": "期間末残存量×(1−回収率)×GWP で式自体は単純であり、m(T) は B1-02 の閉形式から直接得られる。B1-03 と同じ事象損失の形に統合できるが、帰属は基準計算どおり B1 に固定する前提である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "B1-03 の事象列の末尾に (t = T, 損失率 = 1 − c_d) を加え、E = Σ_d M_d·Σ_事象 損失率_e·残存率(t_e) の 1 式にする。出力は更新時と廃棄時に分けて残す。",
+    "judge_input_data_model": "事象表に期末事象を1行加え、E = Σ_e λ_e·M_d(t_e)（λ=ρ または 1−c）の1式に B1-03 と統合する。期末残存は M(1−r)^τ（τ=最後の交換からの年数）で求め、帰属段階は B1 のまま変えない。",
+    "judge_numerical_approximation": "評価期間末を「最後の事象」とみなし、B1-03 と同じ E = GWP·λ·m(t−)（λ=1−c）で計算する。m(T) = m0·(1−r)^(最終区間の年数)（補充ありは m0）。帰属段階は B1 のまま変えない。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 20,
+   "id": "B7-02",
+   "b_score": 14,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 13,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 0,
+   "rationales": {
+    "judge_algebraic_unification": "B7-01 と同じ形の式で、下水量は上水使用量から還元率で導ける場合が多く、入力を 1 つ減らせる。係数の範囲が重ならないことを確かめれば、同じ水量に (f_w + β·f_s) を掛ける 1 項になる。",
+    "judge_input_data_model": "B7-01 と同形で、同じ B7 段階内の別式である。下水量を上水量から排水率で導出すれば入力を1つ減らせる。",
+    "judge_numerical_approximation": "B7-01 と同じ形の 1 行式で、下水量を上水量に連動させれば独立入力を減らせる。係数を 1 つに合成する場合は上水係数との重複計上に注意が要る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B7 の共通式の 1 行にする。下水量 = β·上水使用量（β は入力、既定 1）とし、水量 1 系列×(f_w + β·f_s) で計算する（上水係数に下水処理が含まれないことが条件）。",
+    "judge_input_data_model": "B7 年次フロー表の種別タグ「下水」の行として同じ式で計算する。下水量 = 上水量×排水率（既定値）で導出する選択肢を持ち、係数は上水と別の列のまま保持して重複計上を避ける。",
+    "judge_numerical_approximation": "v_s = α·v_w（α は排水比、既定 1）として下水量の入力を省略可能にし、B7 の内積 [V_w, α·V_w, K]·[f_w, f_s, f_m] に統合する。α<1 を根拠なく置くと過小評価になるので既定は 1 とする。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 21,
+   "id": "B7-04",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 1,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 14,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "B6-03 と同じ年重み付き和の作用素で、同じ w_y と T を使う。式が別にあるのは被積分系列が違うからだけである。",
+    "judge_input_data_model": "B6-03 と同じ年重み付き積算で、B7-01〜03 を合わせれば1回の積和で済む。年重みは共通に前計算できる。",
+    "judge_numerical_approximation": "B6-03 と同一の年重み付き積算である。B7 の係数はすべて年に依らないため、定常入力なら T に線形な閉形式になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "B6-03 と共通の I[x] = Σ_y w_y x_y を使い、B7-01〜03 の 3 系列と合わせて E_B7 = Σ_k f_k·I[a_k] の 1 式にする（係数が一定なので、積算は量の側で 1 回）。",
+    "judge_input_data_model": "B7-01〜03 を含む1式 E_B7 = Σ_k f_k·V_k（V_k=Σ_y w_y·v_{k,y}）にする。積算関数は B6-03 と共通化し、段階タグだけを変える。",
+    "judge_numerical_approximation": "E_B7 = Σ_j f_j·accumulate(q_j, T)（j = 上水・下水・一般廃棄物）。定常なら E_B7 = T·(v_w·f_w + v_s·f_s + k·f_m) で厳密。積算関数は B6-03 と共用し、値は B7 に限定する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 22,
+   "id": "X-08",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 15
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "B4-02 と同じ入力・同じ和 Σ_i N_i u_i を周期の値でまとめ直したもので、合計は恒等的に一致する。変数は行数から相異なる周期の数に減る。",
+    "judge_input_data_model": "B4-02 と同じ合計を周期別に集計し直している。B4-02 を最初から周期集約形で計算すれば、この表はその中間結果そのものになる。",
+    "judge_numerical_approximation": "周期でまとめた Σ_c N(T,c)·U_c は B4-02 と同じ合計を与える効率形で、B4-02 の事象ループの代わりになる。式自体は既に簡潔である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "B4-02 を E_B4 = Σ_c N(T, c)·U_c の集約形で計算し、その表を X-08 の出力にする（式を 1 つにする）。明示の一覧を持つ行は EXPLICIT の群として Σ_事象 u_i を入れる。",
+    "judge_input_data_model": "B4-02 を E_B4 = Σ_c N(T,c)·U_c で計算し、(c, N, U_c, E_c) の中間表をそのまま X-08 の出力とする（EXPLICIT は周期タグの1値）。",
+    "judge_numerical_approximation": "X-08 の (c, U_c) の表を B4 の正本とし、B4-02 = Σ_c E_c + EXPLICIT の分として導出する。T を変える分析は表の再利用だけで済む。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 23,
+   "id": "A13-04",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 1,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 3,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 13,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "上乗せ r/(1−r) は A13-05 の端材 w/(1−w) と同じオッズ関数で、行の製造排出への乗数として線形核に畳み込める。モデル自体が未定義であり、行別の比率を建物全体の 1 つの比率に縮約する余地がある。推定値なので内訳は分けて表示する。",
+    "judge_input_data_model": "行ごとの比率 r_i と r/(1−r) の非線形項を持つが、比率が区分共通なら区分合計に1つの倍率を掛けるのと厳密に同じで、入力は大幅に減る。r が小さければ線形の e·r で足りる。",
+    "judge_numerical_approximation": "r/(1−r) という凸関数の上乗せで、A13-05 の w/(1−w) と同じ関数形である。r が小さければ多項式で置き換えられるが、級数の打ち切りや比率の平均化は必ず過小側に偏る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "h(x) = x/(1−x) を共通関数にし、E_unq = Σ_i e_i h(r_i) を線形核の行乗数として計算する。簡易形は E_unq ≈ h(r̄)·E_A1A3（r̄ は排出加重の平均比率。r が一様なら厳密）。",
+    "judge_input_data_model": "比率を工事区分（または建物全体）ごとの1値 R_k にまとめ E_unq = Σ_k E_k·R_k/(1−R_k) とする。小さい R では E_k·R_k の一次式で置き換え、割増関数 u(x)=x/(1−x) は A13-05 の端材量と共用する。",
+    "judge_numerical_approximation": "共通の割り戻し関数 φ(x)=x/(1−x) を A13-05 と共有する。近似するなら φ(r)≈r+r^2（相対誤差 r^2、過小側）ではなく、区間 [0, r_max] の弦 φ(r)≈r/(1−r_max)（過大側＝安全側）を使う。r が一律なら E_unq = φ(r)·Σe の 1 回の乗算になる。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 24,
+   "id": "B5-01",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 1,
+    "b6": 1,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 14,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "回数は B4-03 と同じ計数関数 N(T, C)、括弧内は SUM-01 の部分和（A1-A3＋A4＋A5）と C1〜C4 の和で、すでにある量の再利用である。シナリオ NONE の分岐は φ = 0 というパラメータで表せる。段階は B5 として B4 と分けたままにする。",
+    "judge_input_data_model": "回数は B4-03 と同じ関数、括弧内は段階ベクトルの部分和で SUM 系と同じマスク和である。シナリオ NONE の分岐は範囲比や周期の値で表せる。",
+    "judge_numerical_approximation": "回数×範囲比×初期合計で、B4-02 の「回数×1 回当たり排出」に周期 C の擬似品目を 1 つ加えた形と同じである。シナリオ NONE は phi=0 と同値なので分岐と入力を減らせる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B5 = N(T, C)·φ·Σ_{s∈A∪C} E_s（段階マスクの内積を再利用）。B4-02 の核に「建物全体」の擬似行（周期 C、u = φ·(E_up + E_C)）として入れ、NONE は φ = 0 で表す。",
+    "judge_input_data_model": "E_B5 = N(T,C)·φ·(k_B5ᵀE) とする。N は共通の回数関数、k_B5 は段階マスク表の1行であり、NONE は φ=0（または C≥T）で表してシナリオ分岐の入力を削る。",
+    "judge_numerical_approximation": "E_B5 = N(T,C)·phi·U_bldg（N は B4-03 と同じ ⌈T/C⌉−1、U_bldg は A1-A3＋A4＋A5＋C1〜C4 の初期合計）。NONE は phi=0 で表現し、入力を (C, phi) に縮約する。値は B5 として B4 と分けて保持する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 25,
+   "id": "A13-05",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 2,
+    "b4": 3,
+    "b5": 1,
+    "b6": 2,
+    "b7": 1,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 16
+   },
+   "judge_spread": 5,
+   "rationales": {
+    "judge_algebraic_unification": "X-13 は本式に再使用率 rho を加えた一般形で、rho = 0 が本式である。数量基準による 2 分岐は (1−w) のべき指数の切り替えで 1 式に書ける。式そのものはすでに単純である。",
+    "judge_input_data_model": "数量基準による切替と 1/(1−w) の補正は、行ごとに（発注量, 据付量, 端材量）の3列を1回確定すれば以後の分岐が不要になる。X-13 は再使用率を加えた同じ関数であり、端材率は資材区分マスタに寄せられる。",
+    "judge_numerical_approximation": "1/(1−w) の割り戻しと数量基準による場合分けからなり、X-13（ρ=0 が本式）や A13-04 と同じ関数形である。w≦0.1 なら低次多項式で十分だが、打ち切り誤差は常に過小側に出る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "Q_net = Q_inst·(1 − w·rho)/(1 − w) を共通モデルにし、rho = 0 で A13-05、rho > 0 で X-13。基準の切り替えは Q_ord = Q·(1−w)^(−δ)、Q_inst = Q·(1−w)^(1−δ)（δ = [基準 == DESIGN]）と書く。",
+    "judge_input_data_model": "数量確定を1関数 quantities(Q, 基準タグ, w, ρ=0) にして3列を前計算し、A1-A3・A4・A5・X-10 で再利用する。端材率は資材区分マスタに持ち、小さい w では 1/(1−w)≈1+w とする。",
+    "judge_numerical_approximation": "基準フラグ b（DESIGN=1、ORDERED・AS_BUILT=0）で Q_ord = Q·(1−w)^(−b)、Q_inst = Q·(1−w)^(1−b) と 1 式化し、X-13 の g(w,ρ)=(1−ρw)/(1−w) の ρ=0 として統合する。近似は 1/(1−w)≈1+w+w^2（相対誤差 w^3、過小側。1 次なら相対誤差 w^2）。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 26,
+   "id": "B3-02",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 11,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 13,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 0,
+   "rationales": {
+    "judge_algebraic_unification": "式自体は最も単純な形だが、B3-01 と同じ入力 (e0, r, T) の特殊形（更新年の除外なし）であり、別の式として持つ必要がない。段階合計では使われない代替値である。",
+    "judge_input_data_model": "式は最小形だが、B3-01 と同じ入力に対する別式として並存している。修繕率が区分共通なら、行ではなく区分合計で計算できる。",
+    "judge_numerical_approximation": "T·Σe0·r という既に最も単純な線形式で、B3-01 から更新年の除外を外した特殊形にすぎない。B3-01 に対して常に過大側で、相対差はおよそ N_i/T である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "B3-01 の統合式 Σ_i e0_i·r_i·(T − κ·N'_i) の κ = 0 として得る。R = Σ_i e0_i·r_i を 1 回集約すれば E = T·R。",
+    "judge_input_data_model": "B3-01 の閉形式 E=Σ r·e0·(T−δ·N) の δ=0 として1式化する。区分集約形は E = T·Σ_k r_k·E0_k。",
+    "judge_numerical_approximation": "B3-01 の統合式 Σ_i r_i·e0_i·(T − κ·N_i) の κ=0 として 1 式に吸収し、独立の式としては持たない。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 27,
+   "id": "B6-02",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "Σ_f a c EF は A5-02 と同じ入力構成・同じ形で、年の添字が付くだけである。換算倍率と係数は積にして 1 つにでき、年間消費が一定なら年ループは T 倍に畳める。",
+    "judge_input_data_model": "係数が年に依存しないので、年×燃料の二重ループは不要で、燃料ごとの年重み付き消費量累計に係数を1回掛ければ済む。換算倍率×係数は A5-02 と同じ燃料マスタで前計算できる。",
+    "judge_numerical_approximation": "燃料の係数は年に依らないので、年×燃料のループは「期間累計消費量×有効係数」に厳密に畳み込める。A5-02 と同じ関数形の重複定義でもある。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "EF'_f = c_f·EF_f を前計算し、年次活動表 a_{k,y}（電力・燃料・水・廃棄物）×係数の共通核に入れる。消費が一定なら E_B6,fuel = T·Σ_f a_f·EF'_f。",
+    "judge_input_data_model": "E_fuel = Σ_f k_f·(Σ_y w_y·a_{f,y})、k_f=c_f·EF_f は燃料マスタで前計算する。年間量が一定なら T·Σ_f a_f·k_f。",
+    "judge_numerical_approximation": "A_f = Σ_y w_y·a_{f,y} を先に求めて E = Σ_f A_f·k_f（k_f = c_f·EF_f）。消費が定常なら E = T·Σ_f a_f·k_f（T に線形で厳密）。関数は A5-02・C1-01 と共有し、値は B6 に限定する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 28,
+   "id": "STO-01",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 1,
+    "b3": 1,
+    "b4": 2,
+    "b5": 1,
+    "b6": 2,
+    "b7": 3,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "密度・含水率・炭素含有率・44/12 は樹種ごとの定数の積であり、体積当たりの貯蔵係数 1 つにまとめれば入力は体積と係数の 2 つになる。単位が kgCO2 の参考値なので、排出の線形核と値を合算する統合は認めず、計算ルーチンの共用にとどめる。",
+    "judge_input_data_model": "絶乾密度を直接持てば含水率は不要で、密度・炭素含有率・44/12 は樹種ごとの1係数に畳める。そうすると STO-02 と同じ「活動量×係数」の形になる。",
+    "judge_numerical_approximation": "正準形は含水率補正 ρ/(1+w) を含むが、基準計算は絶乾密度を直接使っており、樹種ごとの貯蔵係数 1 つに畳み込める。参考値なので排出量の式とは統合しない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "樹種・製品別の貯蔵係数 s_k = ρ_dry,k·cf_k·44/12 [kgCO2/m3] を表にし、S = Σ_k s_k·V_k（参考値の別台帳）。全体の概算は S ≈ s̄·V_total。",
+    "judge_input_data_model": "樹種マスタに s_k = ρ_dry·cf·44/12 [kgCO2/m3] を前計算し S = Σ_k s_k·V_k とする（樹種別に体積を先に集計）。STO-02 と共通の参考値台帳（種別タグ: 貯蔵/吸収）で計算し、排出の合計とは別表のままにする。",
+    "judge_numerical_approximation": "樹種・製品ごとに s_k = (44/12)·cf_k·ρ0_k [kgCO2/m3] を事前計算し、S = Σ_k s_k·V_k とする（入力は体積と樹種だけ）。cf=0.5 の一律近似は貯蔵量を過大に見せる誤差があり得るので、樹種別の値を保持する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 29,
+   "id": "X-03",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "A13-02 と同じ q・W・f を別の順序で縮約したもので、Σ_j E_j = Σ_i q_i (W f)_i が恒等的に成り立つ。同じ双線形形式の 2 つの括り方が別の式になっている。",
+    "judge_input_data_model": "A13-02 と同じ構成比行列を逆向きに使う計算である。複合品を先に構成材行へ展開しておけば、資材タグの集計だけになる。",
+    "judge_numerical_approximation": "A13-02 と同じ W と f を使い、同じ双線形形式 q^T W f を逆の結合順で評価している。構成材別の内訳を先に作れば、複合係数を経由する計算と 1 回にまとめられる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "双線形核 q^T W f で M = W^T q を先に作り、E_j = M_j f_j とその合計（= A13-02 経由の行結果の和）を同じ疎行列の 1 回の走査で得る。",
+    "judge_input_data_model": "複合品を入力時に構成材行（質量=q·W）へ展開した台帳を作り、X-03 は資材タグの group-by、排出は A13-01 の積和で得る（W を2回使わない）。",
+    "judge_numerical_approximation": "M = W^T q（構成材別質量）と E_j = M_j·f_j を 1 回計算し、A13-02 経由の行排出は Σ_j E_j で照合する。疎行列積 1 回で両方の出力を得る。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 30,
+   "id": "B7-01",
+   "b_score": 13,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 12
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "B7-01〜03 は「年別の量×一定の係数」という同一の式が 3 つ並び、B7-04 がそれを足すだけである。同じ B7 段階なので 1 つの線形形式にまとめても境界は混ざらない。上水と下水は水量という似た入力を使う。",
+    "judge_input_data_model": "B7-02・B7-03 と同形の「年間量×係数」を種別ごとに別式で持っている。種別タグ付きの1表にすれば1式になり、係数が一定なので年方向は累計量に畳める。",
+    "judge_numerical_approximation": "年ごとの使用量×定数係数で、係数が年に依らないため年ループは不要である。B7-02・B7-03 と同じ 1 行式が 3 本並んでおり、B7 内で 1 つの内積にできる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B7 = Σ_y w_y Σ_{k∈{上水, 下水, 一般廃棄物}} a_{k,y}·f_k の 1 式。量が一定なら T·Σ_k a_k f_k。内訳は k ごとに残す。",
+    "judge_input_data_model": "B7 年次フロー表 (種別タグ: 上水/下水/一般廃棄物, 年間量, 係数) の1式 E_B7 = Σ_k f_k·Σ_y w_y·v_{k,y} にする。年間量が一定なら T·Σ_k v_k·f_k。",
+    "judge_numerical_approximation": "E_B7 = [V_w, V_s, K]·[f_w, f_s, f_m]（V は期間累計 Σ w_y·v_y、定常なら T·v）として B7-01〜04 を 1 式にする。上水と下水の係数は別々の要素のまま保持する。"
+   },
+   "reference_top30": true
+  },
+  {
+   "rank": 31,
+   "id": "X-11",
+   "b_score": 12,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 3
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 15,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "B6 の買電の連鎖（B6-04 → B6-01 → B6-03）で年間買電量を A·i_elec に置いた特殊形で、係数の累積 G = Σ w_y g_y を共用する。本式自体がすでに簡易な代替モデルである。推定値なので実績値とは分けて表示する。",
+    "judge_input_data_model": "B6-01＋B6-03 と同じ「買電量×係数累計」で、買電量を面積×原単位で与えるだけの違いである。式自体は最小形である。",
+    "judge_numerical_approximation": "延床面積×原単位×累積係数という既に単純な推定式で、B6-01/03 の買電量を A·i に置き換えた同じ核である。累積係数を再利用すれば O(1) で、自家発電を引かないため実績より過大側になり得る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_elec = n̄·G(T) を共通の代替モデルにし、n̄ の出所をパラメータにする（実績の平均買電量／A·i_elec）。G(T) は X-06 の節点モデルの閉形式を使う。",
+    "judge_input_data_model": "B6 の式 E = n·G に「買電量の与え方タグ（実績 / 推定 n=A·i）」を付けて1式化し、G=Σ w·g は共用する（推定値は段階合計に入れず別掲のまま）。",
+    "judge_numerical_approximation": "E_est = (A·i_elec)·G(T) として、B6 の共通核 n·G(T) の n の与え方の 1 つにする（出力は推定値として実績と別掲）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 32,
+   "id": "B6-01",
+   "b_score": 12,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 13,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "年別の積 n_y·g_y は式として最小だが、B6-04（買電量）→ B6-01 → B6-03（積算）は同じ年ループの直列で、1 つの加重内積にまとめられる。買電量が一定なら係数の累積 G = Σ w_y g_y だけで決まる。",
+    "judge_input_data_model": "年ごとの積は最小形だが、B6-03 の積算・B2-01 の切り出し・X-11 の推定が同じ係数累計を別々に使っている。係数の年重み付き累計を1回作れば、買電側は1乗算または1内積になる。",
+    "judge_numerical_approximation": "年ごとの n_y·g_y という最小の積だが、X-06・B6-04・B6-03 と一続きの計算で、A5-01 の複数年形や X-11 とも同形である。買電量が定常なら年次値は年の区分線形関数になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B6,elec = Σ_y w_y·g_y·max(0, c_y − s_y) を 1 回の走査で求める。n が一定のときは E = n·G(T)（直線低下シナリオでは G は T の区分 2 次式）。X-11 と B2-01 は同じ G を共用する。",
+    "judge_input_data_model": "G = Σ_y w_y·g_y（およびベクトル w∘g）を X-06 で1回前計算する。買電量が年一定なら E = n·G、年変動でも nᵀ(w∘g) の1内積で、X-11 は n=A·i を入れた同じ式になる。",
+    "judge_numerical_approximation": "E_elec = n^T(w∘g) の内積として B6-03 と一体で評価し、n が一定なら E = n·G(T)（G(T) = Σ w_y·g_y は X-06 の閉形式）。年次系列が必要な X-07 には同じベクトルを渡す。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 33,
+   "id": "C4-01",
+   "b_score": 12,
+   "disputed": false,
+   "unification_subscore": 10,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 13,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 12
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "C3-01 と同じ入力 (m, p, f) を使い、経路を最終処分に限っただけの式である。X-09 の表の最終処分の列の和に等しい。",
+    "judge_input_data_model": "C3-01 の経路集合を最終処分に限っただけの同一式である。式自体は最小形である。",
+    "judge_numerical_approximation": "C3-01 と同じ m·p·f から最終処分の経路だけを取り出した式である。単独の式としては最小だが、独立に持つ必要がない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "経路テンソル X[i,r] の r = 最終処分の列和として得る（C3-01・X-09 と同じ 1 回の走査）。独立した式は不要で、段階タグは経路→段階の対応表で付ける。",
+    "judge_input_data_model": "C3-01 と同じ縦持ち経路表の経路タグ LANDFILL（段階タグ C4）の行として、同じ積和で計算する。",
+    "judge_numerical_approximation": "X-09 の経路別の表 E[c,r] の LANDFILL 列の和として取得する（C3 とは列で分離されたまま）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 34,
+   "id": "X-07",
+   "b_score": 12,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 1,
+    "b6": 2,
+    "b7": 0,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 10,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "各段階の結果を時点に配置し直すもので、段階×年の行列を 1 つ作れば、行和が段階合計、列和が年次値、前方累積が本式になる。B6-03・B7-04 の積算と同じ系列を再びたどっている。",
+    "judge_input_data_model": "段階結果を年に配置し直す処理で、区分ごとに配置規則を分岐させている。行台帳に発生年の列があれば、集計と累積和だけで得られる。",
+    "judge_numerical_approximation": "段階合計と同じ排出を時間軸に置き直しているだけで、累積の最終値は合計と一致する。年×段階の行列を 1 回作れば、合計・年次・累積はその周辺和になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E[s, y] を配置規則（t = 0／毎年／事象年／最終年）で 1 回だけ作り、X-02 は行和、X-07 は列和の累積として得る。概形は c(t) ≈ E_0 + ē·t + 事象の段差という区分線形で表せる。",
+    "judge_input_data_model": "行台帳に発生年の列（初期=0、年次=y、事象=ceil(t)、廃棄=最終年）を持たせ、group-by(year)＋累積和1回で系列を作る。",
+    "judge_numerical_approximation": "E[y,s] を 1 回作成し、段階合計 = 列和、年次 = 行和、累積 = 累積和とする。連続表現は c(t) = E_A + n·G(t) + ē·t + Σ_c U_c·N(t,c)（t=T で E_C を加算）という「線形＋区分 2 次＋階段」の閉形式で、T の感度分析に使える。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 35,
+   "id": "QA-04",
+   "b_score": 12,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 2,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 11
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "SYS-04 と同じ入力・同じ残差 r に対する、許容差付きの判定である。残差を再利用すれば比較 1 回で済み、独立した式である必要がない。",
+    "judge_input_data_model": "SYS-04 と同じ入力・同じ残差で、許容差だけが異なる。残差を再利用すれば入力は残差と許容差の2つになる（判定の近似は不可）。",
+    "judge_numerical_approximation": "SYS-04 と同じ残差に許容差 1e-6 を当てるだけの重複計算である。許容差を引数にすれば 1 関数になるが、合否なので近似は不可。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "balance(用途別面積, 延床面積, =, tol) を SYS-04 と共用し、tol の 2 水準（1e-9·A と 1e-6·A）を 1 回の残差計算で返す。",
+    "judge_input_data_model": "SYS-04 の残差 r を再利用し、check(r, tol) の規則表に tol=1e-6·A の行を追加するだけにする。",
+    "judge_numerical_approximation": "SYS-04 の r を再利用し、balance_check の tol_rel=1e-6 の水準として同時に判定する（SYS-04 の 1e-9 と 2 水準を 1 回で返す）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 36,
+   "id": "X-15",
+   "b_score": 12,
+   "disputed": true,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 15,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 11
+   },
+   "judge_spread": 6,
+   "rationales": {
+    "judge_algebraic_unification": "3 段の優先順位は「有効な最初の候補を取る」という 1 つの選択関数で、条件は A13-03 のゲート、SYS-02 の換算、SYS-03 の許諾と重複している。行ごとの解決結果を 1 回作れば、後段はすべて同じ線形核になる。表引きなので数値モデルでは置き換えられない。",
+    "judge_input_data_model": "係数の優先順位解決・EPD 適用判定・複合係数・単位換算を行ごとに行っており、SYS-02 の換算や A13-03 の条件判定と重複している。相異なる（係数ID, 単位）の組ごとに1回解決すれば足りるが、優先規則自体は近似しない。",
+    "judge_numerical_approximation": "EPD→複合→汎用の優先順位と換算倍率の決定で、SYS-02 の換算・A13-03 の適用条件・A13-02 の複合係数と判定が重複している。選択規則なので近似はしない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "resolve(行) = coalesce(g_i·EPD_i, (W f)_i, F[id_i]) → (f*, c, 採用種別, 理由コード) を 1 回実行して解決済み係数表を作る。SYS-02 の c と SYS-03 の usable は同じ結果を参照する。",
+    "judge_input_data_model": "相異なる (係数ID, 数量単位) の組ごとに実効係数表 (f_eff, c, 係数種別) を1回前計算して行へ結合する。優先順位は COALESCE(EPD, 複合, 汎用) の1式にし、換算は SYS-02 の結果を再利用する。",
+    "judge_numerical_approximation": "行ごとに (f_eff, c, 種別) を返す resolve() を唯一の決定点とし、A13-01/03 は Σ Q·c·f_eff を種別で分けて集計、SYS-02 は c が未解決の行を報告するだけにする。相異なる (係数 ID, 単位) の組でメモ化する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 37,
+   "id": "X-10",
+   "b_score": 12,
+   "disputed": true,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 1,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 8,
+    "judge_numerical_approximation": 14
+   },
+   "judge_spread": 6,
+   "rationales": {
+    "judge_algebraic_unification": "廃棄物量の式は (1 + N_i) が 2 つの項に繰り返されており、括り出せる。端材質量 (mo − mi) は A13-05、回数 N_i は B4 の計数核の再利用で、線形核に質量の列を持たせた形である。単位は kg なので排出とは別の台帳にする。",
+    "judge_input_data_model": "廃棄物量の式は (1+N) で括れるのに項を分けており、据付質量は発注質量と端材率から導出できる。世代数は B4 の回数を再利用できる。",
+    "judge_numerical_approximation": "W の 2 項は (1+N_i) でくくれ、R と W は同じ世代数の倍率を使う。廃棄質量=据付質量と置ける行では W=R（質量保存）となり入力が減るが、排出量とは単位が違うので統合しない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "R = Σ_i (1 + N_i)·mo_i、W = Σ_i (1 + N_i)·(mo_i − mi_i + me_i) + Σ_e (1 + N_e)·me_e。ライフサイクル乗数 (1 + N) を行ごとに 1 回だけ計算し、質量の列（kg）に掛ける。",
+    "judge_input_data_model": "世代数 G_i=1+N_i を B4 の表から引き、R=Σ mo·G、W=Σ (mo−mi+me)·G とする。mi は A13-05 の数量列から導出し、設備行も同じ台帳の種別タグで同じ式にする（単位は kg のまま）。",
+    "judge_numerical_approximation": "W = Σ_i (mo_i − mi_i + me_i)·(1+N_i) + Σ_e me_e·(1+N_e) に因数分解する。me_i = mi_i と置ける行は W_i = R_i = mo_i·(1+N_i)（me≦mi なので廃棄量は過大側）。N は B4-03 の共通関数から取得する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 38,
+   "id": "B7-03",
+   "b_score": 12,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 1,
+    "b4": 3,
+    "b5": 0,
+    "b6": 2,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "B7-01・B7-02 と同じ「年別の量×係数」で、B7 の 1 つの線形形式の 1 行になる。入力は質量で水量とは別だが、式の形は同一である。工事廃棄物・解体廃棄物とは段階が違うので混ぜない。",
+    "judge_input_data_model": "B7-01・B7-02 と同形の積で、種別タグの違いだけで同じ式になる。式自体は最小形である。",
+    "judge_numerical_approximation": "年ごとの廃棄物量×定数係数の最小形である。B7-01・02 と同じ核で B7 の内積に入るが、活動量の種類が違うので入力の共通化はできない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_B7 = Σ_y w_y Σ_k a_{k,y}·f_k の k = 一般廃棄物の行にする。量が一定なら T·k·f_m。",
+    "judge_input_data_model": "B7 年次フロー表の種別タグ「一般廃棄物」の行として、同じ式 Σ_k f_k·Σ_y w_y·v_{k,y} に統合する。",
+    "judge_numerical_approximation": "B7 の内積 [V_w, V_s, K]·[f_w, f_s, f_m] の第 3 要素として統合する（K は期間累計の一般廃棄物量、定常なら T·k）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 39,
+   "id": "A13-02",
+   "b_score": 11,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 12,
+    "judge_numerical_approximation": 11
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "ef_c = W ef は X-03 の M = W^T q と同じ双線形形式 q^T W f の括り方違いで、同じ W・q・f を 2 度縮約している。質量比合計の検査は収支述語と同形である。",
+    "judge_input_data_model": "同じ構成比行列 W を A13-02（W·ef）と X-03（Wᵀq）で2回使っている。複合品を入力段階で構成材行に展開すれば、複合係数という中間量そのものが不要になる。",
+    "judge_numerical_approximation": "W·ef の加重和で式は簡潔だが、同じ W と f を X-03 が逆の結合順で再計算している。質量比合計の検査は収支検査と共通化でき、A3 相当の加工分を含まない点は過小側の偏りとして残る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "双線形形式 q^T W f を 1 つの核にし、W f（複合係数。複合材の種類ごとに前計算して係数表へ格納）と W^T q（資材別質量、X-03）を同じ疎行列から得る。Σ_j W = 1 の検査は balance(…, tol=1e-6) を使う。",
+    "judge_input_data_model": "複合品行を q_i·W[i,j] の構成材行として台帳に展開し、A13-01 の積和で計算する（X-03 はその group-by）。係数として残す場合も、種類 K ごとに ef_c=W·ef を1回前計算してキャッシュする。",
+    "judge_numerical_approximation": "双線形形式 q^T W f を 1 回だけ評価する：M = W^T q（構成材別質量）→ E_j = M_j·f_j、複合係数 ef_c = W·ef はキャッシュ。合計=1 の検査は balance_check(mode=eq, tol=1e-6) を流用。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 40,
+   "id": "X-09",
+   "b_score": 11,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 10,
+    "judge_numerical_approximation": 13
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "C3-01・C4-01 と同じ積 m_i p_{i,r} f_{i,r} を区分×経路の表に集計するもので、C3・C4 はこの表の周辺和である。同じ入力で 3 つの式が同じテンソルをたどっている。",
+    "judge_input_data_model": "C3-01・C4-01 と同じ積 m·p·f を別の切り口で集計し直している。縦持ちの経路表で1回計算すれば、ピボットで得られる。",
+    "judge_numerical_approximation": "C3-01・C4-01 と同じ m·p·f を資材区分×経路の表に足し込む式で、段階の値はこの表の周辺和である。係数を区分×経路の表引きにすれば行ごとの入力も減る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "経路テンソルを区分で集約した M[c,r]、E[c,r] を 1 回作り、E_C3・E_C4 を列の部分和として取る。質量の表と排出の表は別に保つ。",
+    "judge_input_data_model": "縦持ち経路表で m·p と m·p·f を1回計算し、(資材区分, 経路) のピボットで M と E を、段階タグの group-by で C3・C4 を同時に得る（質量の表と排出の表は別）。",
+    "judge_numerical_approximation": "M[c,r] と E[c,r] を 1 回のグループ集計で作り、C3・C4 を列和として導出する。係数を (資材区分, 経路) の表引きにし、行の入力を (質量, 区分, 比率) に減らす。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 41,
+   "id": "QA-03",
+   "b_score": 11,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 2,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "SYS-03 と同じ 5 入力・同じ述語 usable(f) を、使用した係数の集合について論理積にしただけである。SYS-03 の結果を保持していれば表引きは不要になる。",
+    "judge_input_data_model": "SYS-03 と同じ述語の論理積であり、SYS-03 の結果を保持していれば5入力の再照会は不要になる（判定の近似は不可）。",
+    "judge_numerical_approximation": "SYS-03 の usable(f) を使用係数の集合で論理積するだけで、結果を保持していれば追加の表引きは不要である。入力 5 個は使用係数集合とキャッシュの 2 つに減る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "pass = all(usable_cache[f] for f in F_used)。入力は F_used と SYS-03 の結果の 2 つになる。理由コードは単位・境界の判定と分けて保持する。",
+    "judge_input_data_model": "SYS-03 が作る usable フラグ列を、台帳に残った係数 ID の集合に対して AND 集約するだけの1行に置き換える。",
+    "judge_numerical_approximation": "pass = all(usable_cache[f] for f in F_used)。F_used は計算の走査時に集合として記録する（複合材の構成係数・電力係数シナリオも含める）。SYS-03 と同じ規則表の 1 行にする。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 42,
+   "id": "B6-04",
+   "b_score": 11,
+   "disputed": false,
+   "unification_subscore": 4,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 0,
+    "b4": 1,
+    "b5": 2,
+    "b6": 2,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "自家消費量 s = g − x を 1 つの入力にすれば n = max(0, c − s) で、入力が整合していれば（自家消費 ≤ 消費）クランプは働かず線形の引き算になる。B6-01 の前処理として同じ年ループにまとめられる。",
+    "judge_input_data_model": "消費・発電・売電の3入力は自家消費量1つにまとめられ、物理的に自家消費≦消費であればクランプは働かない。買電量の実測があれば導出自体が不要である。",
+    "judge_numerical_approximation": "max(0, 消費−(発電−売電)) のクランプで、自家消費量を 1 入力にすれば 2 入力の減算になる。クランプを外した線形式は自家消費≦消費が保証される場合に限り厳密で、外すと負の買電となり過小評価になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "入力を (c_y, s_y) の 2 つにして n_y = c_y − s_y とし、s_y ≤ c_y は入力検査の規則に移す。計算は B6-01 の走査の中で行う。",
+    "judge_input_data_model": "自家消費量 s_y = g_y − x_y を1入力とし n_y = c_y − s_y とする（s>c は検査で検出し、クランプを廃止）。買電量が実測で与えられる場合は n_y を直接入力して3入力を1入力にする。",
+    "judge_numerical_approximation": "入力を (c_y, s_y = 発電−売電) に縮約して n_y = c_y − s_y とする。s_y≦c_y は前段の検査で保証し、違反時は max(0,·) を残す（クランプの省略は過小側に偏るため不可）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 43,
+   "id": "X-01",
+   "b_score": 11,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 1,
+    "b4": 3,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 7
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "数量×換算倍率×係数という A13-01 と同じ式を、同じ A1-A3 段階の設備の行に適用しているだけである。行表を 1 つにすれば式が 1 つ減り、同じ品目の重複も行 ID で検出できる。",
+    "judge_input_data_model": "A13-01 と同じ「数量×換算×係数」を、設備行が別表にあるというだけで別式にしている。種別タグを付ければ、同じ A1-A3 段階の同じ式で計算できる。",
+    "judge_numerical_approximation": "設備の数量×換算×係数で、A13-01 と同じ A1-A3 の同じ式を設備行に対して別に定義している。式自体は最小である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "設備の行に行種別のタグを付けて資材の行表に加え、A13-01 の線形核 Σ Q c f で同時に計算する。内訳は行種別で分けて表示する。",
+    "judge_input_data_model": "設備行を資材と同じ行台帳に「種別タグ=設備」で載せ、A13-01 の積和 Σ q·c·f をそのまま適用する（設備専用式を廃止し、内訳はタグで別掲）。",
+    "judge_numerical_approximation": "設備行を資材行と同じ「数量×有効係数」の表の行（種別=設備）として A13-01 の走査に含める。同じ品目の重複は種別キーで検査する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 44,
+   "id": "A4-02",
+   "b_score": 10,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 10,
+    "judge_numerical_approximation": 11
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "A13-01 と同じ数量ベクトル q に輸送係数の列を掛けるだけで、[E_A13, E_A4] = q^T [f_A13, f_tr] として 1 回の走査で得られる。A4-01 とは同じ段階の択一で、実効係数に直せば同じ形になる。式自体は最小である。",
+    "judge_input_data_model": "A13-01 と同じ行数量に輸送係数列を掛けるだけで、同じ走査で同時に計算できる。式自体は最小形である。",
+    "judge_numerical_approximation": "ΣQ·f_tr の最小形で、A13-01 と同じ数量ベクトルを使うため 1 回の走査で 2 列を同時に出せる。同じ品目の輸送に A4-01 と別の式を持つ点が統一の余地である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "係数行列に A4 列を加えて A13-01 と同時に縮約する。A4-01 の行は実効係数 f_tr_i = (単位数量当たり質量[t])·d_i·f_mode(i) に直して同じ列に入れ、E_A4 = Σ_i Q_i f_tr_i の 1 式にする（段階列は A1-A3 と分ける）。",
+    "judge_input_data_model": "係数マスタに搬入係数列を持たせ、[E_A13, E_A4] = qᵀ[f_A13, f_tr] を1回の走査で同時に出す（結果は段階別の列として分離を維持）。",
+    "judge_numerical_approximation": "[E_A13, E_A4] = q^T [f_A13, f_tr] として A13-01 と同時に評価する（列は段階別に分けたまま）。f_tr,i = (単位当たり質量)_i·d_i·f_mode と定義すれば、A4-01 と同じトンキロ核の「係数を事前計算した版」として 1 モデルに収まる。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 45,
+   "id": "SYS-04",
+   "b_score": 10,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 3,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 10,
+    "judge_input_data_model": 11,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "QA-04 と入力も残差 r = A − Σa_u も同一で、違いは許容差だけ（基準計算では相対 1e-9 と 1e-6）。同じ収支述語が 2 式に分かれている。",
+    "judge_input_data_model": "QA-04 と同じ入力・同じ残差に対し、許容差だけが異なる判定を2つ持っている。残差を1回計算して許容差を引数にすれば1つの規則になる（判定の近似は不可）。",
+    "judge_numerical_approximation": "QA-04 と同一の残差 r=A−Σa_u を別々に計算しており、違いは許容差（1e-9 と 1e-6）だけである。許容差を引数にした収支検査 1 本に統合できるが、合否なので近似はしない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "balance(parts, whole, op, tol) を 1 つ定義し、残差 r を 1 回計算して tol の 2 水準 (1e-9·A, 1e-6·A) で合否を返す。C-05・QA-01(a) も同じ述語の (op, tol) 違いとして扱う（量は混ぜない）。",
+    "judge_input_data_model": "r = A − Σa_u を1回計算して保持し、check(r, tol) の1規則に統合する（事前検査 tol=1e-9·A、QA 検査 tol=1e-6·A を規則表の2行として持つ）。",
+    "judge_numerical_approximation": "balance_check(total, parts, tol_rel, mode) を 1 つ定義し、r を 1 回計算して SYS-04（tol=1e-9）と QA-04（tol=1e-6）の 2 水準の合否を同時に返す。同じ関数を C-05 や構成比合計の検査にも使う（面積・質量・排出量は混ぜない）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 46,
+   "id": "QA-01",
+   "b_score": 10,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 1,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "(a) は SYS-04 などと同じ収支述語、(b) と (c) はキーが違うだけの同じ計数述語 n(key) ≤ 1 である。段階ベクトルを行台帳から所属行列で作り、択一を選択子で表せば、(a) と (c) は構成上つねに成り立つ。検査なので近似はしない。",
+    "judge_input_data_model": "択一と重複の排他性は行台帳の一意キーと「算定法」列で構造的に保証でき、段階合計の突合は同じ台帳の集計なら恒等的に成り立つ。検査規則は X-02・X-15 の択一規則と重複しており、判定の近似はできない。",
+    "judge_numerical_approximation": "(a) 段階合計の足し直しは X-02・X-04 の集計と同じ計算の再実行で、(b)(c) の排他は行ごとの手法を 1 つの選択子にすれば構造的に成立する。合否判定なので近似はしない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "ルール表に balance(行の和, 段階値, =, 1e-9) と uniq(key) ≤ 1（key = (流れ, 段階) と (行, 択一群)）の 2 種類の述語として載せ、行台帳のハッシュ集計 1 回で評価する。",
+    "judge_input_data_model": "行台帳に (流れ, 段階) の一意キーと行ごと1値の算定法列（EPD/汎用、トンキロ/数量係数）を持たせ、検査を「キー重複件数=0」の規則に縮約する。択一グループは X-02 と同じ規則表から読む。",
+    "judge_numerical_approximation": "行に「係数の種別」「輸送の手法」の単一の選択子の列を持たせて (b)(c) を構造的に保証し、(a) は X-04 の突合と同じ 1 回の走査で balance_check(tol=1e-9) として実行する。検査は理由コード別の規則表にまとめる。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 47,
+   "id": "SUM-05",
+   "b_score": 10,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 1,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 10,
+    "judge_numerical_approximation": 9
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "I_annual = I_area / T であり、SUM-04 の結果を再利用すれば除算 1 回とガード 1 つで済む。同じ入力（E_WLC と面積）に別の式が立っている。",
+    "judge_input_data_model": "SUM-04 の結果を T で割れば得られるのに、合計から計算し直している。分母違いの同じ正規化である。",
+    "judge_numerical_approximation": "E/(A·T) は SUM-04 の結果を T で割るだけで、面積の検査も SUM-04 と重複している。除数の表で 1 関数にできる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "ratio 核で d = A·T とするか、SUM-04 の結果を T で割る。面積のガードは SUM-04 と共用し、T > 0 だけを追加で確かめる。",
+    "judge_input_data_model": "I_annual = I_area / T として SUM-04 を再利用する（正規化関数の分母表の1行 d=A·T）。",
+    "judge_numerical_approximation": "I_annual = I_area / T として SUM-04 から導出する（T>0 の検査だけ追加）。除数の表つきの指標関数に統合する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 48,
+   "id": "X-14",
+   "b_score": 10,
+   "disputed": false,
+   "unification_subscore": 9,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 1,
+    "b8": 2
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 10,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "質量×処理係数は、C3-01 で経路比率を 1 にした場合と同じ形で、同じ C3 段階に加算される。設備の行を経路テンソルに加えれば独立した式は要らない。",
+    "judge_input_data_model": "C3-01 と同じ「廃棄質量×処理係数」を、設備行が別表にあるために別式にしている。同じ C3 段階なので、経路表に載せれば1式になる。",
+    "judge_numerical_approximation": "廃棄質量×処理係数の最小形で、C3-01 の経路比率 1 の行と同じである。設備だけ別式にしている点が統一の余地である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "設備の行を p_{中間処理} = 1 として C3-01 の経路テンソル X[i,r] に追加する。冷媒（B1-04）や更新時の廃棄（B4-02）との重複は行種別のタグで防ぐ。",
+    "judge_input_data_model": "設備の廃棄質量を C3 の縦持ち経路表に「種別タグ=設備、比率=1」の行として載せ、C3-01 と同じ積和で計算する。",
+    "judge_numerical_approximation": "設備行を C3-01 の表に「経路=中間処理、比率=1」の行として追加し、同じ走査で計算する（C3 段階内の統合）。更新時の廃棄（B4-02）とは世代キーで区別する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 49,
+   "id": "SUM-08",
+   "b_score": 10,
+   "disputed": true,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 1,
+    "b4": 1,
+    "b5": 0,
+    "b6": 2,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 10,
+    "judge_input_data_model": 5,
+    "judge_numerical_approximation": 12
+   },
+   "judge_spread": 7,
+   "rationales": {
+    "judge_algebraic_unification": "saving = −delta/B なので 2 つの出力は 1 つの差から得られ、比較可能性の判定は境界の等値検査の論理積である。基準案を最初から計算し直しているが、排出の核は行について線形なので、差は変更した行だけの線形形式で求められる。b6 は判定部分ではなく差分の算術に対する評価である。",
+    "judge_input_data_model": "式自体は減算と除算で単純であり、比較可否の判定は近似しない。比較可能性の項目は境界設定キー1つの等値比較にまとめられ、削減率は差分から導出できる。",
+    "judge_numerical_approximation": "式は減算と除算だが、delta と saving は符号が逆の同じ情報で、基準案の全再計算が前提になっている。大半の段階は活動量に線形なので差分は変更行だけで評価できるが、比較可能性の判定は厳密のまま残す。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "delta = Σ_{変更した行} (q'_i f'_i − q_i f_i)（行結果を保持して差分だけを評価する。回数などの非線形部分は該当行だけ再計算）。比較可能性は境界の署名（面積・期間・段階・ガス範囲・係数版）の一致 1 回で判定する。",
+    "judge_input_data_model": "面積・期間・段階・ガス範囲・係数版を1つの境界設定キーにまとめて等値比較を1回にする。saving = −delta/B と差分から導出し、積和で表せる段階は変更行だけの差分 Σ(a'−a)·f で再計算を省く。",
+    "judge_numerical_approximation": "比較条件を 1 つの境界署名（面積・期間・段階・ガス・係数版）の一致判定にまとめ、delta = Σ_{変更行} f·Δa（線形の段階は厳密）＋階段関数を含む段階（B1・B3・B4・B5）だけ再計算、saving = −delta/B とする。1 次感度による近似は凸な項で増加を過小に見積もるので、端材率・周期の変更には使わない。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 50,
+   "id": "X-02",
+   "b_score": 9,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 2,
+    "b2": 3,
+    "b3": 1,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 12,
+    "judge_input_data_model": 10,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "14 個の代入規則（B6 = B6-03 − B2-01 という引き算を含む）は、1 つの所属行列 M による E = M v で書ける。A5-04 はその 1 行、SUM-01〜03 はさらにその上の集合行列で、QA-01(a) は同じ和の再計算である。",
+    "judge_input_data_model": "段階ごとの加算・択一・差し引きを個別の規則として書いているが、符号付きの所属行列1つで表せる。行台帳に段階タグがあれば group-by 1回で済み、A5-04 や SUM 系の規則も同じ表に載る。",
+    "judge_numerical_approximation": "段階ごとの所属和で、A5-04・SUM-01〜03・QA-01(a) がすべて同じ「所属表による和」である。B6 = B6-03 − B2-01 の減算も符号つきの所属で表せるが、択一は規則であり近似しない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E = M v（M は 14×式数の行列。要素は 0/1 と配分比 s・1 − s）。SUM-01〜03 は B·M の合成行列で得る。対象外の段階は 0 にせず、マスク m_s で除外する。",
+    "judge_input_data_model": "式→段階の符号付き所属行列 S（B6 行の B2-01 は −1）で E = S·v の1回の行列積にする。台帳に段階タグを持つ場合は group-by(stage) に置き換え、SUM 系のマスク K と合わせて K·S·v とする。",
+    "judge_numerical_approximation": "符号つき所属行列 M_s（14×式数、要素 +1/0/−1）で E = M_s·v、続けて集計行列で [E_up, E_emb, E_WLC] を出す 2 段の疎行列積に統合する。対象外の段階はマスクで「未評価」のまま保持する（0 にしない）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 51,
+   "id": "SUM-02",
+   "b_score": 9,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 11,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 9
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "SUM-01・SUM-03 と同じマスク付き内積で、12 段階の列挙は E_up ＋ B1〜B5 ＋ C1〜C4、あるいは E_WLC − B6 − B7 と入れ子で書ける。",
+    "judge_input_data_model": "SUM-01 と同じ式の段階集合違いで、アップフロント分を足し直している。マスク行列の1行として表せる。",
+    "judge_numerical_approximation": "12 段階の列挙和だが、E_up に B1〜B5 と C1〜C4 を足した入れ子で、SUM-01 の和を再計算している。合計なので近似の対象ではない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "集合行列 B の「エンボディド」の行として SUM-01・SUM-03 と同時に計算する。累積和の形 E_emb = E_up + Σ_{B1..B5, C1..C4} m_s E_s で前段の結果を再利用する。",
+    "judge_input_data_model": "マスク行列 K の2行目として SUM-01・SUM-03 と同時に計算する（または E_emb = E_up + Σ_{B1..B5, C1..C4} m_s·E_s の差分加算）。",
+    "judge_numerical_approximation": "同じ所属行列 M の 1 行として計算する（E_emb = E_up + Σ_{B1..B5} + Σ_{C1..C4} の増分形）。B2 の帰属は X-02 の規則に従い変更しない。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 52,
+   "id": "X-16",
+   "b_score": 9,
+   "disputed": false,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 1,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 1,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 9,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 11
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "物価指数の比は換算倍率 c そのもので、「活動量×換算倍率×係数」という線形核に費用の行として入る。モデルと入力が未定義のため、基準計算での重複は確認できない。",
+    "judge_input_data_model": "式は単純だが、物価指数2つと費用当たり係数は年ごとの補正済み係数1つに前計算でき、入力は費用だけになる。モデルが未定義のため、統合の評価は控えめにした。",
+    "judge_numerical_approximation": "費用×物価比×費用当たり係数で、物価比は係数側に事前に掛けられる。モデル・入力が未定義で基準計算もないため、統合先は「活動量×換算×係数」の一般形にとどまる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "デフレータ c = P_base/P_year を単位換算表に「価格年」の換算として登録し、E = C·c·f_cost を線形核の 1 行にする（または年別の実効係数 f_cost·P_base/P_year を前計算する）。数量ベースの行とは択一にする。",
+    "judge_input_data_model": "年別の補正済み係数 f'_y = f_cost·P_base/P_y を係数表の1列として前計算し E = C_y·f'_y とする（汎用の活動量×係数の形に載る）。",
+    "judge_numerical_approximation": "E = C_year·k_year、k_year = f_cost·P_base/P_year（年別の有効係数）として共通核に載せる。指数が年次表なら年の間は線形補間する。数量ベースと同じ品目に重ねない検査は X-15 の種別で行う。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 53,
+   "id": "A5-02",
+   "b_score": 9,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 9,
+    "judge_input_data_model": 8,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "Σ V c EF は B6-02 の年別の式や C1-01 と同じ形で、入力構成（燃料量・換算倍率・係数）も同じなのに式が別に定義されている。換算倍率と係数は積にして 1 つにできる。段階が違うので合計は分けたままにする。",
+    "judge_input_data_model": "燃料×換算×係数は B6-02・C1-01 と同じ形で、燃料マスタを共有できる。換算倍率と係数は、燃料ごとに1つの固有単位当たり係数として前計算できる。",
+    "judge_numerical_approximation": "燃料量×換算×係数の和で、B6-02・C1-01 と同じ関数形を別々に定義している。換算と係数は事前に掛けて 1 係数にできるが、既に線形で近似の必要はない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "燃料別の実効係数 EF'_f = c_f·EF_f を前計算し、fuel_emission(量, EF') を A5-02 と B6-02 で共用する（段階タグは A5 と B6 で別）。A5 の中では現場活動表の行にする。",
+    "judge_input_data_model": "燃料マスタで k_f = c_f·EF_f を前計算し、(段階タグ, 燃料, 数量) の1表に対する同じ積和で A5・B6・C1 を計算する（段階別の結果は分離したまま）。",
+    "judge_numerical_approximation": "燃料ごとの有効係数 k_f = c_f·EF_f を事前計算し、E = Σ_f V_f·k_f を A5-02・B6-02・C1-01 で共有する関数にする（値は A5・B6・C1 に分けて保持）。係数の範囲（燃焼のみ／上流込み）は k_f の属性として 1 か所で管理する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 54,
+   "id": "SYS-02",
+   "b_score": 9,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 3,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 1,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 9,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "換算倍率 c_i は X-15 でも同じ (材料, 数量単位, 係数単位) から再度求めており、同じ表引きが 2 か所にある。判定そのものは近似できない。",
+    "judge_input_data_model": "換算倍率 c は X-15 でも求めており、同じ結合を2か所で実行している。判定は相異なる（材料, 数量単位, 係数単位）の組だけで足りるので行ごとの入力は減らせるが、合否判定そのものは近似しない。",
+    "judge_numerical_approximation": "合否判定なので近似は不可だが、換算倍率 c は X-15 でも求めており重複している。相異なる（材料, 数量単位, 係数単位）の組だけ判定すれば入力も減る。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "conv(材料, 数量単位, 係数単位) → (ok, c, 根拠) を相異なる組ごとに 1 回だけ解決してメモ化し、SYS-02 の合否と X-15 の倍率を同じ結果から取り出す。",
+    "judge_input_data_model": "相異なる (材料, 数量単位, 係数単位) の組ごとに換算表を1回引き、合否と c を同じ結合結果の列として保持して X-15 と共有する。",
+    "judge_numerical_approximation": "換算倍率 c(材料, u_q, u_f) を 1 つの換算表関数にまとめ、SYS-02 は「c が未登録なら不合格」を返すだけ、X-15 は同じ c を再利用する。評価は相異なる組 D 件のみ。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 55,
+   "id": "SUM-03",
+   "b_score": 8,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 10,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "SUM-01・SUM-02 を含む最大のマスク付き内積で、3 式は集合行列の 3 行として同時に得られる。SUM-07 の分母と QA-01(a) の突合も同じ和を使う。",
+    "judge_input_data_model": "SUM-01・SUM-02 と同じ式の全段階版で、部分和を再利用せず 14 段階を足し直している。マスク行列の1行として表せる。",
+    "judge_numerical_approximation": "14 段階のマスク付き加算で、SUM-02 に B6・B7 を足した入れ子である。X-07 の累積の最終値とも一致する重複がある。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_K = B·(m∘E) の「ホールライフ」の行。段階ベクトル E は X-02 の所属行列から E = M v で得るので、合成 B·M を 1 つの行列として持てる。",
+    "judge_input_data_model": "マスク行列 K の3行目として同時に計算する（または E_WLC = E_emb + m_B6·E_B6 + m_B7·E_B7）。",
+    "judge_numerical_approximation": "所属行列 M の 1 行として SUM-01・02 と同時に計算する（E_WLC = E_emb + E_B6 + E_B7）。D・貯蔵・吸収は行列に含めない。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 56,
+   "id": "QA-02",
+   "b_score": 8,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 3,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 9,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "B4-01 が明示の一覧に適用する 0 < t < T の選別と、同じ入力（事象年の一覧と T）に対する同じ区間述語で、下限の等号だけが食い違っている。検査なので近似はしない。",
+    "judge_input_data_model": "B4-01 が事象の採用時に同じ区間条件（下限の等号だけ異なる）を評価しており、同じ入力に別の不等式が使われている。一覧の最小・最大の2比較で足り、判定の近似はできない。",
+    "judge_numerical_approximation": "0≦t<T の区間判定で、B4-01 が明示一覧に適用する 0<t<T とほぼ同じ述語だが、下限の等号が食い違っている。min と max の 2 比較で足りるが、合否なので近似は不可。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "区間述語 in(t; 0, T, 下限を含むか) を sched() の中に 1 つだけ置き、採用した事象と範囲外の件数を同時に返す。下限の規約（t = 0 を許すか）を 1 か所で宣言する。",
+    "judge_input_data_model": "区間判定を1関数 in_period(t, T, 下限の等号) に統一し、B4-01 の事象表生成時に範囲外件数を返して QA-02 の合否とする（min/max の2比較）。",
+    "judge_numerical_approximation": "in_period(t, T, lower_open) を 1 つ定義し、QA-02 と B4-01・B1 の交換年で同じ述語を使う（下限の等号を 1 か所で決める）。評価は [min t が下限以上] かつ [max t < T] の 2 比較。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 57,
+   "id": "SUM-01",
+   "b_score": 8,
+   "disputed": false,
+   "unification_subscore": 8,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 10,
+    "judge_input_data_model": 8,
+    "judge_numerical_approximation": 7
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "SUM-01〜03 は同じ 14 段階ベクトルに対するマスク付き内積で、段階集合 S だけが違う。同じ入力に 3 つの式がある。式自体は加算だけで近似の余地はない。",
+    "judge_input_data_model": "SUM-02・SUM-03 と同じ段階ベクトルに対する部分和で、段階集合だけが違う。マスク行列1つで3つの合計を同時に出せる。",
+    "judge_numerical_approximation": "3 段階のマスク付き加算で式は最小である。SUM-02・SUM-03 と入れ子の関係にあり、同じ段階ベクトルを 3 回別々に足している。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "E_K = Σ_s B[K,s]·m_s·E_s（B は 3×14 の 0/1 行列、K ∈ {アップフロント, エンボディド, ホールライフ}）を 1 回の行列ベクトル積で求める。3 つの出力は別のまま保つ。",
+    "judge_input_data_model": "段階集合を 3×14 のマスク行列 K に持ち、[E_up, E_emb, E_WLC] = K·(m∘E) の1回の行列積にする。",
+    "judge_numerical_approximation": "所属行列 M（3×14、要素 0/1）を定義し、[E_up, E_emb, E_WLC] = M·(m∘E) を 1 回で計算する。未算入段階の一覧は m から自動生成する。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 58,
+   "id": "SYS-03",
+   "b_score": 8,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 1,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 8,
+    "judge_input_data_model": 9,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "QA-03 は同じ述語 usable(f) を使用済み係数の集合で論理積にしたもので、述語の評価が入口と出口で重複している。式自体は 3 条件の論理積で最小である。",
+    "judge_input_data_model": "QA-03 と同じ述語 usable(f) を入口と出口で別々に評価している。係数ごとに1回判定して列に持てば5入力は1フラグに畳める（判定の近似は不可）。",
+    "judge_numerical_approximation": "QA-03 と同じ述語 usable(f) を係数ごとに評価しており、結果を保持すれば QA-03 は論理積だけになる。ゲートなので近似は不可で、理由コードは単位・境界の判定と分けて保持する。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "usable(f) を係数 ID ごとに 1 回評価して保持し、畳み込み方をパラメータにする：map（SYS-03、係数ごと）と all over F_used（QA-03）。",
+    "judge_input_data_model": "係数マスタに利用目的別の usable フラグ列と理由コードを1回だけ前計算し、行はそれを参照する。QA-03 は同じ列を「使用した係数の集合」で論理積するだけにする。",
+    "judge_numerical_approximation": "usable(f) を相異なる係数 ID ごとに 1 回だけ評価してキャッシュし、SYS-03＝参照行への写像、QA-03＝使用係数集合上の AND として同じ表から出す。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 59,
+   "id": "A5-03",
+   "b_score": 8,
+   "disputed": false,
+   "unification_subscore": 6,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 2,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 8,
+    "judge_input_data_model": 6,
+    "judge_numerical_approximation": 10
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "質量×処理係数の線形和で、A5-01・A5-02 と同じ段階の活動表にまとめられる。端材分の質量は A13-05 の (Q_ord − Q_inst) を質量換算した値と整合している必要があり、独立した入力を減らせる。解体廃棄物（C）とは混ぜない。",
+    "judge_input_data_model": "質量×処理係数の最小形である。端材分の質量は A13-05 の（発注量−据付量）から導けるため、独立の入力として二重に持つ必要がない。",
+    "judge_numerical_approximation": "質量×処理係数の最小形で、C3-01・C4-01・X-14 と同じ核である。端材の質量は A13-05 の（発注−据付）から導けるので独立入力を減らせるが、梱包材などを落とすと過小になる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "A5 の現場活動表の行にする。端材由来の廃棄質量は A13-05 の端材量×質量換算で導出し、梱包材などの直接入力分だけを別の行として残す。",
+    "judge_input_data_model": "端材質量は A13-05 の端材量の質量換算から導出し、梱包材などの追加分だけを入力する。廃棄物台帳 (発生段階タグ, 種別, 質量, 処理係数) を C 段階と同じ形式にする（合計は段階別）。",
+    "judge_numerical_approximation": "端材分は A13-05 の waste_i を質量換算して自動生成し、梱包材・その他だけを追加入力とする。計算は「質量×処理係数」の共通関数（C3・C4・X-14 と共有、値は段階別）で行う。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 60,
+   "id": "B2-01",
+   "b_score": 7,
+   "disputed": true,
+   "unification_subscore": 6,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 8,
+    "judge_input_data_model": 5,
+    "judge_numerical_approximation": 12
+   },
+   "judge_spread": 7,
+   "rationales": {
+    "judge_algebraic_unification": "B6 の買電排出の積算値に比率 s を掛け、同額を B6 から引く配分であり、段階合成の所属行列に分数の要素を入れれば表せる。独立した式としては定数倍 1 回だけである。",
+    "judge_input_data_model": "B6 の買電排出の累計に比率を掛け、同額を B6 から引くという再配分であり、独立した計算内容はない。按分ベクトルとして B6 の積算と同時に処理できる。",
+    "judge_numerical_approximation": "買電排出の年重み付き合計に比率 s を掛け、同額を B6 から引くという「足して引く」構造で、B6-03 と同じ和を再計算している。比率による 1 回の按分に書き直せる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "X-02 の所属行列を実数値にする：M[B2, 買電] = s、M[B6, 買電] = 1 − s。S_elec = Σ_y w_y E_elec_y を 1 回計算すれば B2 と B6 が同時に得られ、差し引きの規則が不要になる。",
+    "judge_input_data_model": "Σ w·E_elec を1回計算し、帰属タグの按分 (s, 1−s) を掛けて B2・B6 を同時に出す（加えてから引く処理を廃止）。",
+    "judge_numerical_approximation": "(E_B2, E_B6elec) = (s, 1−s)·Σ_y w_y·E_elec,y と按分ベクトルで 1 回だけ計算する（合計は不変、段階は別々に出力）。買電量が一定なら Σ = n·G(T)（G は累積電力係数）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 61,
+   "id": "A5-04",
+   "b_score": 7,
+   "disputed": false,
+   "unification_subscore": 6,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 3,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 1,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 10,
+    "judge_input_data_model": 7,
+    "judge_numerical_approximation": 6
+   },
+   "judge_spread": 4,
+   "rationales": {
+    "judge_algebraic_unification": "A5-01〜03 の単純な和で、X-02 の段階合成規則 E_s = Σ_{u∈members(s)} v_u の s = A5 の場合そのものである。その他の現場排出には対応する入力がない。",
+    "judge_input_data_model": "3項の加算だけで、X-02 の所属規則の1行に置き換えられる。入力のない E_other の項は式から外せる。",
+    "judge_numerical_approximation": "A5-01〜03 の単純加算で、X-02 の段階合成（A5 = A5-04）と重複する素通しの式である。「その他」の未入力を 0 にしない扱いだけが固有の内容である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "X-02 の所属行列 M の A5 行（A5-01・A5-02・A5-03 に 1）として表し、独立した式としては廃止する。E_other は入力ができるまで項ごと除き、未評価の印だけを残す。",
+    "judge_input_data_model": "X-02 の所属表に A5 = {A5-01, A5-02, A5-03} を登録して専用式を廃止する（台帳の段階タグ group-by）。E_other は未評価フラグだけを残す。",
+    "judge_numerical_approximation": "X-02 の所属表に members(A5) = {A5-01, A5-02, A5-03, other} を直接書き、A5-04 を独立の式としては廃止する。other は未評価の印のまま保持する（0 で代用すると過小評価）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 62,
+   "id": "SUM-04",
+   "b_score": 7,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 2,
+    "b4": 3,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 9,
+    "judge_input_data_model": 7,
+    "judge_numerical_approximation": 6
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "SUM-04〜06 は同じ E_WLC を定数（A、A·T、1000）で割るだけで、分母だけが違う。分母が正かどうかのガードも共通である。除算 1 回なので、式の簡略化や近似の余地はない。",
+    "judge_input_data_model": "合計を分母で割るだけの最小形である。SUM-05・SUM-06 とは分母だけが違うので、分母表を引く1つの正規化関数にまとめられる。",
+    "judge_numerical_approximation": "E/A の 1 回の除算で、式自体に簡略化の余地はない。SUM-05・SUM-06 と同じ分子の正規化なので、除数の表で 1 関数にできる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "ratio(E, d; guard d > 0) を 1 つ定義し、d ∈ {A, A·T, 1000, E_tot, B} で SUM-04〜08 を表す。出力ごとに単位ラベルを持たせる。",
+    "judge_input_data_model": "正規化を I_k = E_WLC / d_k（d = A, A·T, 1000 の分母表）という1式にし、分母の有効性検査を共通で1回行う（出力の単位は分母表の行ごとに明記）。",
+    "judge_numerical_approximation": "E_WLC を除数の表 {1000, A, A·T} で割る 1 つの指標関数にし、単位ラベルを除数と一緒に持たせる。面積の検査は共通の前提条件として 1 回だけ行う。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 63,
+   "id": "A5-01",
+   "b_score": 7,
+   "disputed": false,
+   "unification_subscore": 7,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 6,
+    "judge_input_data_model": 7,
+    "judge_numerical_approximation": 8
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "活動量×係数の 1 項で、これ以上簡単にならない。同じ A5 段階の A5-02・A5-03 と同じ線形核の 1 行として扱える。電力係数は X-06 の系列から施工年の値を引くだけである。",
+    "judge_input_data_model": "単一の積で式は最小である。施工燃料と同じ「エネルギー種別×係数」の表に載せられ、電力係数は X-06 の系列から施工年の値を引けば別管理が不要になる。",
+    "judge_numerical_approximation": "kWh×係数の O(1) 計算で、式自体に簡略化の余地はほとんどない。A5-02・A5-03 と同じ「活動量×係数」で A5 内の 1 表にでき、複数年形は B6 の年次積と同形である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "A5 の現場活動表（電力・燃料・廃棄物）の 1 行として E_A5 = Σ_k a_k c_k f_k に入れる。電力係数は施工年の値を使い、運用期間の係数とは分ける。",
+    "judge_input_data_model": "施工エネルギー表 (種別タグ: 電力/軽油/ガス, 数量, 換算, 係数) に A5-02 と1表化し、電力係数は X-06 の年次系列の施工年の値を参照する。",
+    "judge_numerical_approximation": "A5 の現場活動表（kWh、燃料、廃棄物 kg）×係数の内積 1 本にまとめ、電力係数は X-06 と同じ生成関数から施工年の値を引く（運用期間の係数は流用しない）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 64,
+   "id": "C-05",
+   "b_score": 7,
+   "disputed": false,
+   "unification_subscore": 6,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 2,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 8,
+    "judge_input_data_model": 6,
+    "judge_numerical_approximation": 7
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "2 つの条件はどちらも「部分の和 ≤ 全体×(1＋許容差)」で、SYS-04・QA-04・QA-01(a) と同じ収支述語の関係演算子と許容差が違うだけである。A13-02 の質量比の検査も比率の合計を見る点が似ている。検査なので近似はしない。",
+    "judge_input_data_model": "行ごとの2つの不等式で式は単純であり、判定の近似はできない。面積・排出の収支検査と同じ「部分和と全体」の規則表に載せられるが、量は混ぜられない。",
+    "judge_numerical_approximation": "比率合計と質量上限の 2 つの不等式検査で、合否なので近似は不可。A13-02 の合計=1 の検査や SYS-04/QA-04 と同じ収支検査の形で、許容差と等号の規約が式ごとに違う。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "balance(parts, whole, op, tol) のルール表に (経路比率, 1, ≤, 1e-6)、(廃棄質量, 発注質量, ≤, tol) の 2 行として載せる。量（kg・m2・kgCO2e）は行ごとに分け、数値は補正しない。",
+    "judge_input_data_model": "収支ルール表 (量, 部分, 全体, 関係, 許容差) の2行として登録し、SYS-04/QA-04・QA-01(a) と同じ検査関数で実行する（量ごとに別の行・別の結果）。",
+    "judge_numerical_approximation": "balance_check(parts, total, tol=1e-6, mode='le') を 2 回呼ぶ形にし、他の収支検査（面積・構成比）と同じ関数・同じ規則表で管理する（質量・面積・排出量は混ぜない）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 65,
+   "id": "C1-01",
+   "b_score": 6,
+   "disputed": false,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 1,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 1,
+    "b7": 0,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 7,
+    "judge_input_data_model": 4,
+    "judge_numerical_approximation": 7
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "活動量×換算倍率×係数の線形和で式は最小である。同じ線形核の一例だが、C1 段階にほかの式はなく、A5-02 とは段階が違うので合計は統合できない。共通化できるのは計算ルーチンだけである。",
+    "judge_input_data_model": "活動量×換算×係数の最小形で、式の簡略化余地は小さい。汎用の活動量台帳に段階タグ付きで載せ、燃料・作業係数マスタを施工側と共用する余地がある。",
+    "judge_numerical_approximation": "活動量×換算×係数の最小形で、簡略化の余地は小さい。A5-02 と同じ関数形だが、活動と段階が別なので値は統合しない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "線形核 Σ a·c·f を段階タグ C1 で呼ぶ。換算倍率と係数は実効係数として前計算する。",
+    "judge_input_data_model": "活動量台帳 (段階タグ C1, 活動, 数量, 換算, 係数) の行として汎用の積和カーネルで計算する（A5-02 と燃料マスタを共用し、合計は段階別）。",
+    "judge_numerical_approximation": "計算関数だけを「活動量×有効係数」の共通関数（A5-02・B6-02 と共有）にする。式自体は現状維持。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 66,
+   "id": "SUM-07",
+   "b_score": 6,
+   "disputed": false,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 2,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 7,
+    "judge_input_data_model": 4,
+    "judge_numerical_approximation": 6
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "分母 E_tot は SUM-03 と同じ和の再計算で、割合は段階ベクトルを同じスカラーで割るだけである。ガード（合計 > 0、負の段階なし）は判定なので近似しない。",
+    "judge_input_data_model": "段階値を合計で割るだけで式は最小である。合計は SUM-03 の値を再利用でき、分母違いの正規化として同じ関数に載る。",
+    "judge_numerical_approximation": "段階値を合計で割る正規化で、式は最小である。SUM-03 の合計と同じ走査で出せる程度の統合余地にとどまる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "share = (m∘E)/E_WLC を ratio 核のベクトル版として計算し、分母は SUM-03 の結果を再利用する。",
+    "judge_input_data_model": "share = (m∘E)/E_WLC のベクトル除算1回にする（E_WLC は SUM-03 を再利用）。正規化関数の分母表に d=E_WLC の行を追加する。",
+    "judge_numerical_approximation": "SUM-03 の計算時に share = (m∘E)/E_WLC を同時に返す（E_WLC>0 かつ負の段階なしという条件はそのまま）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 67,
+   "id": "STO-02",
+   "b_score": 6,
+   "disputed": false,
+   "unification_subscore": 4,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 1,
+    "b3": 1,
+    "b4": 1,
+    "b5": 0,
+    "b6": 1,
+    "b7": 1,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 5,
+    "judge_input_data_model": 4,
+    "judge_numerical_approximation": 5
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "Σ a·u の最小形で、式を簡単にする余地はほとんどない。STO-01 とは同じ内積形だが、貯蔵と吸収は別の参考値で、排出とは単位も違うので、統合は評価しない。根拠の有無による計算可否は判定なので近似しない。",
+    "judge_input_data_model": "活動量×吸収係数の最小形で、簡略化余地は小さい。STO-01 を係数化すれば同じ参考値台帳に載せられる。",
+    "judge_numerical_approximation": "活動量×検証済み吸収係数の最小形で、根拠がなければ計算しないという条件が本体である。簡略化・近似の余地はほぼない。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "なし（内積ルーチンを STO-01 と共用する程度。出力と台帳は別のまま）。",
+    "judge_input_data_model": "参考値台帳 (種別タグ: 貯蔵/吸収, 活動量, 換算, 係数[kgCO2]) の積和に STO-01 と統合する（結果は種別ごとに別掲し、排出の合計に加減しない）。",
+    "judge_numerical_approximation": "なし"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 68,
+   "id": "SUM-06",
+   "b_score": 5,
+   "disputed": false,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 1,
+    "b4": 2,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 6,
+    "judge_input_data_model": 4,
+    "judge_numerical_approximation": 6
+   },
+   "judge_spread": 2,
+   "rationales": {
+    "judge_algebraic_unification": "定数 1000 による単位換算で、式というより表示の属性である。同じ E_WLC を割る ratio 核の一例として扱えるが、単位系の側で処理するほうが自然である。",
+    "judge_input_data_model": "1000 で割るだけの表示用換算で、簡略化の対象になる計算内容がほとんどない。表示の単位属性に落とせる。",
+    "judge_numerical_approximation": "1000 で割るだけの表示用の換算で、式というより出力の属性である。除数の表の 1 行として他の指標と統合できる。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "結果の値に単位を持たせ、表示のときに kg→t の換算を 1 回だけ適用する（ratio 核の d = 1000）。独立した式としては持たない。",
+    "judge_input_data_model": "独立の式ではなく、出力項目の表示単位属性（scale=1/1000、単位=tCO2e）として正規化関数の分母表に1行で持つ。",
+    "judge_numerical_approximation": "指標関数の除数の表の 1 行（除数 1000、単位 tCO2e）にするか、表示層の単位属性として扱い独立の式を廃止する。換算の二重適用は単位ラベルで防ぐ。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 69,
+   "id": "B1-01",
+   "b_score": 5,
+   "disputed": false,
+   "unification_subscore": 5,
+   "median_by_criterion": {
+    "b1": 0,
+    "b2": 2,
+    "b3": 1,
+    "b4": 1,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 1
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 6,
+    "judge_input_data_model": 3,
+    "judge_numerical_approximation": 5
+   },
+   "judge_spread": 3,
+   "rationales": {
+    "judge_algebraic_unification": "Σ m·GWP の単純な内積で式は最小である。この積 M_d = m0_d·GWP_d は B1-02〜04 のすべてに因子として現れるので、1 回の計算で共用できる。在庫量なので排出の合計には加えない。",
+    "judge_input_data_model": "最小の積和だが、同じ m·GWP を B1-02〜04 が各自で掛け直している。機器マスタの派生列として1回計算し、再利用すべき中間量である。",
+    "judge_numerical_approximation": "Σm·GWP の在庫量で式は最小であり、近似の対象にならない。B1-02〜04 がすべて m0·GWP に比例するので、共通の基底量として再利用できる程度である。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "M_d = m0_d·GWP_d を機器ごとに 1 回だけ計算し、B1-02〜04 は M_d×無次元の排出割合 φ_d として表す。B1-01 は Σ_d M_d を参考値として別掲する。",
+    "judge_input_data_model": "M_d = m_d·GWP_d を機器マスタの派生列として1回だけ計算し、B1-02〜04 は M_d を直接使う（在庫量の表示はその列の合計）。",
+    "judge_numerical_approximation": "M_d = m0_d·GWP_d を 1 回計算して B1-02〜04 の共通の乗数にする（在庫量そのものは段階合計に入れない）。"
+   },
+   "reference_top30": false
+  },
+  {
+   "rank": 70,
+   "id": "SYS-01",
+   "b_score": 4,
+   "disputed": false,
+   "unification_subscore": 3,
+   "median_by_criterion": {
+    "b1": 1,
+    "b2": 1,
+    "b3": 1,
+    "b4": 1,
+    "b5": 0,
+    "b6": 0,
+    "b7": 0,
+    "b8": 0
+   },
+   "judge_totals": {
+    "judge_algebraic_unification": 3,
+    "judge_input_data_model": 4,
+    "judge_numerical_approximation": 4
+   },
+   "judge_spread": 1,
+   "rationales": {
+    "judge_algebraic_unification": "5 状態の決定表と停止判定で、算術として同形の相手がなく統合余地は小さい。SYS-02・SYS-03 と同じ「行×規則→理由コード」の規則表に載せられる点と、状態語彙が資料間で揃っていない点だけを少し評価した。判定なので b5・b6 は 0。",
+    "judge_input_data_model": "入力ごとの決定表による分類で式はほぼ最小であり、判定の近似はできない。状態を入力表の1列として1回だけ付与し、他の事前ゲートと同じ理由コード付きルール表に載せる程度の統合余地にとどまる。",
+    "judge_numerical_approximation": "5 状態の決定表と停止述語で既に最小に近く、合否・分類なので近似は不可。語彙の統一と他のゲートとの規則表化の余地がわずかにある。"
+   },
+   "replacement_ideas": {
+    "judge_algebraic_unification": "(述語, 理由コード, 対象項目) を行とする共通ルール表エンジンに SYS-01〜03 を載せる。合否は 1 つのフラグにまとめず、理由コード別に保持する。",
+    "judge_input_data_model": "状態はロード時に入力表の state 列として1回付与し、停止判定は required(u) 対応表との結合に共通化する。SYS-02・SYS-03 と同じルール表（理由コードは分離して保持）で実行する。",
+    "judge_numerical_approximation": "状態の語彙を 1 つの列挙型に統一し、halt を「必須項目×状態」の規則表の 1 行として他のゲートと同じ表に載せる（判定は厳密のまま）。"
+   },
+   "reference_top30": false
+  }
+ ]
+}

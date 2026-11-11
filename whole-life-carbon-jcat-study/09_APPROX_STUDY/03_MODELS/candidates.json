@@ -1,0 +1,637 @@
+{
+ "schema_version": "1.0",
+ "targets": {
+  "total": 0.01,
+  "stage": 0.02
+ },
+ "note": "近似候補と測定した誤差（架空データ）。誤差 = (候補 − 基準)/基準。負は過小評価。",
+ "candidates": [
+  {
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "replaces": "回数関数 N(T,c)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "units": [
+    "B4-01",
+    "B4-02",
+    "B4-03",
+    "B5-01",
+    "X-08",
+    "X-10"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": -0.18678935445498268,
+    "mean_abs": 0.18678935445498268,
+    "p95_abs": 0.417084214890963,
+    "max_abs": 0.5848569142925497,
+    "max_over": 2.3677540321356074e-16,
+    "max_under": -0.5848569142925497,
+    "share_under_estimated": 0.775
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": -0.03417179713299748,
+    "mean_abs": 0.034171797132997485,
+    "p95_abs": 0.08116333216806988,
+    "max_abs": 0.19884854088011064,
+    "max_over": 8.39075465008764e-17,
+    "max_under": -0.19884854088011064,
+    "share_under_estimated": 0.775
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "replaces": "回数関数 N(T,c)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "units": [
+    "B4-01",
+    "B4-02",
+    "B4-03",
+    "B5-01",
+    "X-08",
+    "X-10"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.2252796382453251,
+    "mean_abs": 0.23273501398908636,
+    "p95_abs": 0.6684813397388274,
+    "max_abs": 9.818039759961078,
+    "max_over": 9.818039759961078,
+    "max_under": -0.15107784323846785,
+    "share_under_estimated": 0.0925
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.037837801987457065,
+    "mean_abs": 0.0395104406195104,
+    "p95_abs": 0.13708941601448038,
+    "max_abs": 0.2540249781150565,
+    "max_over": 0.2540249781150565,
+    "max_under": -0.05387147973938703,
+    "share_under_estimated": 0.0925
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "replaces": "回数関数 N(T,c)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "units": [
+    "B4-01",
+    "B4-02",
+    "B4-03",
+    "B5-01",
+    "X-08",
+    "X-10"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.9560110249928546,
+    "mean_abs": 0.9560110249928546,
+    "p95_abs": 2.5109910862831453,
+    "max_abs": 21.544335699731704,
+    "max_over": 21.544335699731704,
+    "max_under": 0.16201545891961897,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.14590198048192113,
+    "mean_abs": 0.14590198048192113,
+    "p95_abs": 0.2757882769080017,
+    "max_abs": 0.5080499562301134,
+    "max_over": 0.5080499562301134,
+    "max_under": 0.03343334365132949,
+    "share_under_estimated": 0.0
+   },
+   "under_estimates": false,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-04",
+   "title": "修繕の更新年除外を無視（B3-02 で B3-01 を代用）",
+   "replaces": "修繕の年次積算",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "reason": "更新年の除外を無視するので必ず過大（安全側）。B3 段階で平均 +2.1％、95 パーセンタイル 4.0％、最大 +5.4％ で段階 2％ の目標を超える。厳密な閉形式（K2）が同じ手間で使えるため不採用。",
+   "data_needed": null,
+   "units": [
+    "B3-01"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.020508638501509715,
+    "mean_abs": 0.020508638501509715,
+    "p95_abs": 0.039678038356731976,
+    "max_abs": 0.05424085086014781,
+    "max_over": 0.05424085086014781,
+    "max_under": 0.0006452105233139585,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.003115081900294418,
+    "mean_abs": 0.003115081900294418,
+    "p95_abs": 0.00627738853735932,
+    "max_abs": 0.009637486642616504,
+    "max_over": 0.009637486642616504,
+    "max_under": 0.00020994957076274473,
+    "share_under_estimated": 0.0
+   },
+   "under_estimates": false,
+   "within_stage_target": false,
+   "within_total_target": true
+  },
+  {
+   "candidate_id": "AP-05",
+   "title": "冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k",
+   "replaces": "充填サイクルの閉形式",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "reason": "1−(1−r)^k ≤ r·k なので必ず過大（安全側）だが、B1 段階で平均 +28.0％、最大 +180.7％ と大きい。厳密な閉形式（K4）が同じ手間で使えるため不採用。",
+   "data_needed": null,
+   "units": [
+    "B1-02",
+    "B1-03",
+    "B1-04"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.28023254890111104,
+    "mean_abs": 0.2802325489011111,
+    "p95_abs": 1.0977275916633362,
+    "max_abs": 1.8071323257606617,
+    "max_over": 1.8071323257606617,
+    "max_under": -1.318854290202261e-15,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.00516391117468878,
+    "mean_abs": 0.005163911174688781,
+    "p95_abs": 0.02346434353983997,
+    "max_abs": 0.09735250281524284,
+    "max_over": 0.09735250281524284,
+    "max_under": -5.876440663270259e-17,
+    "share_under_estimated": 0.0
+   },
+   "under_estimates": false,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-06",
+   "title": "端材倍率の線形化 1/(1−w) ≈ 1+w",
+   "replaces": "発注量の算出",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "reason": "1+w < 1/(1−w) なので必ず過小評価（A1-A3 段階で平均 -0.3％、最大 -1.0％）。誤差は目標内だが、除算 1 回を乗算 1 回に替えるだけで得るものがなく、常に過小側に偏るため不採用。",
+   "data_needed": null,
+   "units": [
+    "A13-05",
+    "X-13"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": -0.002550770462476406,
+    "mean_abs": 0.002550770462476406,
+    "p95_abs": 0.0046363318852625434,
+    "max_abs": 0.009660460958058888,
+    "max_over": -0.00048292062759360183,
+    "max_under": -0.009660460958058888,
+    "share_under_estimated": 1.0
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": -0.000580867868944142,
+    "mean_abs": 0.000580867868944142,
+    "p95_abs": 0.001271853867637051,
+    "max_abs": 0.003830938465287862,
+    "max_over": -6.287326308937314e-05,
+    "max_under": -0.003830938465287862,
+    "share_under_estimated": 1.0
+   },
+   "under_estimates": true,
+   "within_stage_target": true,
+   "within_total_target": true
+  },
+  {
+   "candidate_id": "AP-08",
+   "title": "買電排出を 平均買電量×平均係数×T で近似",
+   "replaces": "買電量×係数の年次積算",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "買電量が一定なら誤差 0（このとき K3 の閉形式と同じ式）。一定でない場合は買電量と係数の相関の分だけずれ、B6 段階で -8.1％〜+11.8％。一定の場合は厳密な閉形式として採用済み（M1・M6）で、それ以外に広げる近似としては不採用。",
+   "data_needed": null,
+   "units": [
+    "B2-01",
+    "B6-01",
+    "B6-03",
+    "B6-04"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.002240179862998769,
+    "mean_abs": 0.00680631613283671,
+    "p95_abs": 0.03239251779766558,
+    "max_abs": 0.11805711617115182,
+    "max_over": 0.11805711617115182,
+    "max_under": -0.08126099579866325,
+    "share_under_estimated": 0.2225
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.0005825149236308275,
+    "mean_abs": 0.0017832240803057316,
+    "p95_abs": 0.008610069059455163,
+    "max_abs": 0.04248498238103342,
+    "max_over": 0.04248498238103342,
+    "max_under": -0.021651320782909034,
+    "share_under_estimated": 0.2225
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-09a",
+   "title": "電力係数を 5 年ごとの点の直線補間で持つ",
+   "replaces": "年次の電力係数系列",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "一定の系列では誤差 0、直線低下では最大 +0.6％（過小なし）だが、段階的な系列では -4.0％〜+3.8％。パラメータ型の系列は厳密な閉形式（K3）があり、補間に置き換える利点がないため不採用。",
+   "data_needed": null,
+   "units": [
+    "X-06"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.00011339936556791047,
+    "mean_abs": 0.0038891950139514726,
+    "p95_abs": 0.015597680147839322,
+    "max_abs": 0.039503906333493044,
+    "max_over": 0.03816571453972242,
+    "max_under": -0.039503906333493044,
+    "share_under_estimated": 0.2375
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 3.776984666290579e-05,
+    "mean_abs": 0.0009843517677944704,
+    "p95_abs": 0.004461977501518102,
+    "max_abs": 0.010811845005864002,
+    "max_over": 0.010811845005864002,
+    "max_under": -0.009753641617391662,
+    "share_under_estimated": 0.2375
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-09b",
+   "title": "電力係数を 10 年ごとの点の直線補間で持つ",
+   "replaces": "年次の電力係数系列",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "10 年刻みでは B6 段階で -5.4％〜+7.5％。5 年刻み（AP-09a）より悪く、同じ理由で不採用。",
+   "data_needed": null,
+   "units": [
+    "X-06"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.0006441087540653474,
+    "mean_abs": 0.006682181250482817,
+    "p95_abs": 0.02761153651436088,
+    "max_abs": 0.07490042253079365,
+    "max_over": 0.07490042253079365,
+    "max_under": -0.05368180828134621,
+    "share_under_estimated": 0.2375
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.00025033931351169596,
+    "mean_abs": 0.00170919707283734,
+    "p95_abs": 0.00750979454938811,
+    "max_abs": 0.027774447676353158,
+    "max_over": 0.027774447676353158,
+    "max_under": -0.01836364253089361,
+    "share_under_estimated": 0.2375
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-12",
+   "title": "質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う",
+   "replaces": "資材製造の全行計算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "架空の母集団では平均 -9.5％、最大 -40.3％ の過小評価。質量の大きい行ほど係数が小さい傾向があると過小になる。実建物での傾向は未確認。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "units": [
+    "A13-01",
+    "A13-03",
+    "X-17"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": -0.09480924450535343,
+    "mean_abs": 0.09935749247118504,
+    "p95_abs": 0.26010050141238367,
+    "max_abs": 0.40301847244451605,
+    "max_over": 0.08140507738677695,
+    "max_under": -0.40301847244451605,
+    "share_under_estimated": 0.9025
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": -0.01505311758213198,
+    "mean_abs": 0.016318243014555343,
+    "p95_abs": 0.044141467625214675,
+    "max_abs": 0.12002093590574038,
+    "max_over": 0.05556097507496515,
+    "max_under": -0.12002093590574038,
+    "share_under_estimated": 0.9025
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-13",
+   "title": "面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用",
+   "replaces": "買電排出の年次積算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "架空の母集団では B6 段階で -14.9％〜+70.4％。面積当たり使用量と実績の関係は架空データでは意味を持たない。",
+   "data_needed": "実建物の年間エネルギー使用量と延床面積、利用許諾のある面積当たり統計値。",
+   "units": [
+    "B6-01",
+    "X-11"
+   ],
+   "stage_error": {
+    "n": 400,
+    "mean_signed": 0.11994978222956877,
+    "mean_abs": 0.13641519040940042,
+    "p95_abs": 0.4059684692995162,
+    "max_abs": 0.7044337987027853,
+    "max_over": 0.7044337987027853,
+    "max_under": -0.14863102214231863,
+    "share_under_estimated": 0.2325
+   },
+   "total_error": {
+    "n": 400,
+    "mean_signed": 0.029549902668001015,
+    "mean_abs": 0.03502284722122915,
+    "p95_abs": 0.11265236296731217,
+    "max_abs": 0.24344555177282928,
+    "max_over": 0.24344555177282928,
+    "max_under": -0.05669335859392043,
+    "share_under_estimated": 0.2325
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-10",
+   "title": "6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算",
+   "replaces": "資材製造の全行計算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "架空の母集団では資材製造の誤差が 95 パーセンタイルで 93.8％。ただし架空データの係数と数量のばらつきは実建物を表していないので、この値から採否を判断できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "units": [
+    "A13-01",
+    "A13-03",
+    "X-17"
+   ],
+   "stage_error": {
+    "n": 200,
+    "mean_signed": 0.09376377480029457,
+    "mean_abs": 0.3314281300909753,
+    "p95_abs": 0.9383117240561312,
+    "max_abs": 2.3917407788497105,
+    "max_over": 2.3917407788497105,
+    "max_under": -0.7046848958776679,
+    "share_under_estimated": 0.51
+   },
+   "total_error": {
+    "n": 200,
+    "mean_signed": 0.0036141556038145617,
+    "mean_abs": 0.057623441845053795,
+    "p95_abs": 0.16644418506165426,
+    "max_abs": 0.4279744742017822,
+    "max_over": 0.4279744742017822,
+    "max_under": -0.35125131517537456,
+    "share_under_estimated": 0.51
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "replaces": "全段階の計算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "units": [
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "X-02",
+    "X-17"
+   ],
+   "stage_error": {
+    "n": 200,
+    "mean_signed": 0.10344309210715032,
+    "mean_abs": 0.320952230756986,
+    "p95_abs": 0.8406833870131141,
+    "max_abs": 1.9882320859219687,
+    "max_over": 1.9882320859219687,
+    "max_under": -0.702627490861686,
+    "share_under_estimated": 0.445
+   },
+   "total_error": {
+    "n": 200,
+    "mean_signed": 0.10344309210715032,
+    "mean_abs": 0.320952230756986,
+    "p95_abs": 0.8406833870131141,
+    "max_abs": 1.9882320859219687,
+    "max_over": 1.9882320859219687,
+    "max_under": -0.702627490861686,
+    "share_under_estimated": 0.445
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "replaces": "各段階の詳細計算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "units": [
+    "A13-01",
+    "A13-03",
+    "A13-04",
+    "A4-01",
+    "A4-02",
+    "A5-01",
+    "A5-02",
+    "A5-03",
+    "A5-04",
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "B2-01",
+    "B3-01",
+    "B3-02",
+    "B4-02",
+    "B5-01",
+    "B6-01",
+    "B6-02",
+    "B6-03",
+    "B7-01",
+    "B7-02",
+    "B7-03",
+    "B7-04",
+    "C1-01",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "SUM-01",
+    "SUM-02",
+    "SUM-03",
+    "X-01",
+    "X-02",
+    "X-12",
+    "X-14"
+   ],
+   "stage_error": {
+    "n": 200,
+    "mean_signed": 0.08031937368084666,
+    "mean_abs": 0.2932772384383284,
+    "p95_abs": 0.8144827779296735,
+    "max_abs": 1.8617604545247568,
+    "max_over": 1.8617604545247568,
+    "max_under": -0.7320683112216935,
+    "share_under_estimated": 0.465
+   },
+   "total_error": {
+    "n": 200,
+    "mean_signed": 0.08031937368084666,
+    "mean_abs": 0.2932772384383284,
+    "p95_abs": 0.8144827779296735,
+    "max_abs": 1.8617604545247568,
+    "max_over": 1.8617604545247568,
+    "max_under": -0.7320683112216935,
+    "share_under_estimated": 0.465
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-16",
+   "title": "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）",
+   "replaces": "全段階の計算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 74.8％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "units": [
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "X-02"
+   ],
+   "stage_error": {
+    "n": 200,
+    "mean_signed": 0.0365001831820459,
+    "mean_abs": 0.2794891894825854,
+    "p95_abs": 0.747882736132453,
+    "max_abs": 1.931175533785876,
+    "max_over": 1.931175533785876,
+    "max_under": -0.7472373707614599,
+    "share_under_estimated": 0.535
+   },
+   "total_error": {
+    "n": 200,
+    "mean_signed": 0.0365001831820459,
+    "mean_abs": 0.2794891894825854,
+    "p95_abs": 0.747882736132453,
+    "max_abs": 1.931175533785876,
+    "max_over": 1.931175533785876,
+    "max_under": -0.7472373707614599,
+    "share_under_estimated": 0.535
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  },
+  {
+   "candidate_id": "AP-14",
+   "title": "評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める",
+   "replaces": "評価期間ごとの再計算",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "reason": "更新が評価期間の途中で段差を作るため、直線補間では合計が -11.9％〜+22.8％ ずれる。統合モデルは評価期間を引数として厳密に計算でき十分に軽いので不採用。",
+   "data_needed": null,
+   "units": [
+    "SUM-03"
+   ],
+   "stage_error": {
+    "n": 80,
+    "mean_signed": 0.023034668008592114,
+    "mean_abs": 0.03662765827785093,
+    "p95_abs": 0.11805804088560756,
+    "max_abs": 0.22768044216906164,
+    "max_over": 0.22768044216906164,
+    "max_under": -0.11931628211001837,
+    "share_under_estimated": 0.1875
+   },
+   "total_error": {
+    "n": 80,
+    "mean_signed": 0.023034668008592114,
+    "mean_abs": 0.03662765827785093,
+    "p95_abs": 0.11805804088560756,
+    "max_abs": 0.22768044216906164,
+    "max_over": 0.22768044216906164,
+    "max_under": -0.11931628211001837,
+    "share_under_estimated": 0.1875
+   },
+   "under_estimates": true,
+   "within_stage_target": false,
+   "within_total_target": false
+  }
+ ]
+}

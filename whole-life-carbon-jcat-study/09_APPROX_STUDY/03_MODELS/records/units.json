@@ -1,0 +1,5836 @@
+{
+ "schema_version": "1.0",
+ "note": "1 件 = 評価単位×検討段階×候補。SUCCESS は検証出力に裏付けがあるものだけ。架空データでの検証であり、実建物での精度を保証しない。",
+ "record_count": 432,
+ "records": [
+  {
+   "unit_id": "SYS-01",
+   "step": "M1",
+   "candidate_id": "EX-SYS-01-M1",
+   "title": "状態の判定を、計算と同じ行の単一走査に組み込む（入力を 2 度たどらない）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 2470 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-01",
+   "step": "M2",
+   "candidate_id": "EX-SYS-01-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 2470 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-01",
+   "step": "M3",
+   "candidate_id": "NA-SYS-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-01",
+   "step": "M4",
+   "candidate_id": "NA-SYS-01-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-01",
+   "step": "M5",
+   "candidate_id": "NA-SYS-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-01",
+   "step": "M6",
+   "candidate_id": "NA-SYS-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-02",
+   "step": "M1",
+   "candidate_id": "EX-SYS-02-M1",
+   "title": "単位の組ごとに換算を 1 回だけ引き、計算で使う換算結果をそのまま検査に使う",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-02",
+   "step": "M2",
+   "candidate_id": "EX-SYS-02-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-02",
+   "step": "M3",
+   "candidate_id": "NA-SYS-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-02",
+   "step": "M4",
+   "candidate_id": "NA-SYS-02-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-02",
+   "step": "M5",
+   "candidate_id": "NA-SYS-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-02",
+   "step": "M6",
+   "candidate_id": "NA-SYS-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-03",
+   "step": "M1",
+   "candidate_id": "EX-SYS-03-M1",
+   "title": "参照箇所ごとではなく係数 ID ごとに 1 回だけ判定し、参照数は数えるだけにする",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-03",
+   "step": "M2",
+   "candidate_id": "EX-SYS-03-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-03",
+   "step": "M3",
+   "candidate_id": "NA-SYS-03-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-03",
+   "step": "M4",
+   "candidate_id": "NA-SYS-03-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-03",
+   "step": "M5",
+   "candidate_id": "NA-SYS-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-03",
+   "step": "M6",
+   "candidate_id": "NA-SYS-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-04",
+   "step": "M1",
+   "candidate_id": "NA-SYS-04-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-04",
+   "step": "M2",
+   "candidate_id": "EX-SYS-04-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 972 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SYS-04",
+   "step": "M3",
+   "candidate_id": "NA-SYS-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-04",
+   "step": "M4",
+   "candidate_id": "NA-SYS-04-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-04",
+   "step": "M5",
+   "candidate_id": "NA-SYS-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SYS-04",
+   "step": "M6",
+   "candidate_id": "NA-SYS-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M1",
+   "candidate_id": "EX-A13-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M2",
+   "candidate_id": "EX-A13-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M3",
+   "candidate_id": "NA-A13-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M4",
+   "candidate_id": "AP-10",
+   "title": "6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では資材製造の誤差が 95 パーセンタイルで 93.8％。ただし架空データの係数と数量のばらつきは実建物を表していないので、この値から採否を判断できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A1-A3 では 95 パーセンタイル 108％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M5",
+   "candidate_id": "NA-A13-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-01",
+   "step": "M6",
+   "candidate_id": "AP-12",
+   "title": "質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では平均 -9.5％、最大 -40.3％ の過小評価。質量の大きい行ほど係数が小さい傾向があると過小になる。実建物での傾向は未確認。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-02",
+   "step": "M1",
+   "candidate_id": "EX-A13-02-M1",
+   "title": "複合係数を配合の内容ごとに 1 回だけ計算する",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 91978 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-02",
+   "step": "M2",
+   "candidate_id": "EX-A13-02-M2",
+   "title": "係数解決の一括化に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K7",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 91978 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-02",
+   "step": "M3",
+   "candidate_id": "NA-A13-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "構成比による加重和で、これより単純な式はない。寄与の小さい構成材の切り捨ては必ず過小評価になる。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-02",
+   "step": "M4",
+   "candidate_id": "NA-A13-02-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "配合ごとの前計算で十分に軽く、近似モデルにまとめる利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-02",
+   "step": "M5",
+   "candidate_id": "NA-A13-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-02",
+   "step": "M6",
+   "candidate_id": "NA-A13-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M1",
+   "candidate_id": "EX-A13-03-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M2",
+   "candidate_id": "EX-A13-03-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M3",
+   "candidate_id": "NA-A13-03-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M4",
+   "candidate_id": "AP-10",
+   "title": "6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では資材製造の誤差が 95 パーセンタイルで 93.8％。ただし架空データの係数と数量のばらつきは実建物を表していないので、この値から採否を判断できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A1-A3 では 95 パーセンタイル 108％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M5",
+   "candidate_id": "NA-A13-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-03",
+   "step": "M6",
+   "candidate_id": "AP-12",
+   "title": "質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では平均 -9.5％、最大 -40.3％ の過小評価。質量の大きい行ほど係数が小さい傾向があると過小になる。実建物での傾向は未確認。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-04",
+   "step": "M1",
+   "candidate_id": "EX-A13-04-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307455 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-04",
+   "step": "M2",
+   "candidate_id": "EX-A13-04-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307455 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-04",
+   "step": "M3",
+   "candidate_id": "NA-A13-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-04",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A1-A3 では 95 パーセンタイル 108％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-04",
+   "step": "M5",
+   "candidate_id": "NA-A13-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-04",
+   "step": "M6",
+   "candidate_id": "NA-A13-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-05",
+   "step": "M1",
+   "candidate_id": "NA-A13-05-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-05",
+   "step": "M2",
+   "candidate_id": "EX-A13-05-M2",
+   "title": "発注量への倍率を行の活動量に含める（行テーブル核の活動量）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 614170 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A13-05",
+   "step": "M3",
+   "candidate_id": "AP-06",
+   "title": "端材倍率の線形化 1/(1−w) ≈ 1+w",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "1+w < 1/(1−w) なので必ず過小評価（A1-A3 段階で平均 -0.3％、最大 -1.0％）。誤差は目標内だが、除算 1 回を乗算 1 回に替えるだけで得るものがなく、常に過小側に偏るため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A13-05",
+   "step": "M4",
+   "candidate_id": "NA-A13-05-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "行ごとの倍率であり、共通の近似モデルにまとめる対象がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-05",
+   "step": "M5",
+   "candidate_id": "NA-A13-05-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A13-05",
+   "step": "M6",
+   "candidate_id": "NA-A13-05-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A4-01",
+   "step": "M1",
+   "candidate_id": "EX-A4-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A4-01",
+   "step": "M2",
+   "candidate_id": "EX-A4-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A4-01",
+   "step": "M3",
+   "candidate_id": "NA-A4-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A4-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A4 では 95 パーセンタイル 215％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A4-01",
+   "step": "M5",
+   "candidate_id": "NA-A4-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A4-01",
+   "step": "M6",
+   "candidate_id": "NA-A4-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A4-02",
+   "step": "M1",
+   "candidate_id": "EX-A4-02-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A4-02",
+   "step": "M2",
+   "candidate_id": "EX-A4-02-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A4-02",
+   "step": "M3",
+   "candidate_id": "NA-A4-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A4-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A4 では 95 パーセンタイル 215％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A4-02",
+   "step": "M5",
+   "candidate_id": "NA-A4-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A4-02",
+   "step": "M6",
+   "candidate_id": "NA-A4-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-01",
+   "step": "M1",
+   "candidate_id": "EX-A5-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-01",
+   "step": "M2",
+   "candidate_id": "EX-A5-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-01",
+   "step": "M3",
+   "candidate_id": "NA-A5-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A5 では 95 パーセンタイル 145％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A5-01",
+   "step": "M5",
+   "candidate_id": "NA-A5-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-01",
+   "step": "M6",
+   "candidate_id": "NA-A5-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-02",
+   "step": "M1",
+   "candidate_id": "EX-A5-02-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-02",
+   "step": "M2",
+   "candidate_id": "EX-A5-02-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-02",
+   "step": "M3",
+   "candidate_id": "NA-A5-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A5 では 95 パーセンタイル 145％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A5-02",
+   "step": "M5",
+   "candidate_id": "NA-A5-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-02",
+   "step": "M6",
+   "candidate_id": "NA-A5-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-03",
+   "step": "M1",
+   "candidate_id": "EX-A5-03-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-03",
+   "step": "M2",
+   "candidate_id": "EX-A5-03-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-03",
+   "step": "M3",
+   "candidate_id": "NA-A5-03-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-03",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A5 では 95 パーセンタイル 145％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A5-03",
+   "step": "M5",
+   "candidate_id": "NA-A5-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-03",
+   "step": "M6",
+   "candidate_id": "NA-A5-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-04",
+   "step": "M1",
+   "candidate_id": "NA-A5-04-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "3 項の和で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-04",
+   "step": "M2",
+   "candidate_id": "EX-A5-04-M2",
+   "title": "行テーブル核の A5 段階の合計として読む",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 1976 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "A5-04",
+   "step": "M3",
+   "candidate_id": "NA-A5-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-04",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A5 では 95 パーセンタイル 145％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "A5-04",
+   "step": "M5",
+   "candidate_id": "NA-A5-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "A5-04",
+   "step": "M6",
+   "candidate_id": "NA-A5-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-01",
+   "step": "M1",
+   "candidate_id": "NA-B1-01-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-01",
+   "step": "M2",
+   "candidate_id": "NA-B1-01-M2",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-01",
+   "step": "M3",
+   "candidate_id": "NA-B1-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-01",
+   "step": "M4",
+   "candidate_id": "NA-B1-01-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-01",
+   "step": "M5",
+   "candidate_id": "NA-B1-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-01",
+   "step": "M6",
+   "candidate_id": "NA-B1-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-02",
+   "step": "M1",
+   "candidate_id": "EX-B1-02-M1",
+   "title": "年ごとの残存量の更新を、充填サイクルごとの等比の閉形式に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 38438 個、最大の相対差 9.8e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B1-02",
+   "step": "M2",
+   "candidate_id": "EX-B1-02-M2",
+   "title": "充填サイクルの質量収支 1 式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K4",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 38438 個、最大の相対差 9.8e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B1-02",
+   "step": "M3",
+   "candidate_id": "AP-05",
+   "title": "冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "1−(1−r)^k ≤ r·k なので必ず過大（安全側）だが、B1 段階で平均 +28.0％、最大 +180.7％ と大きい。厳密な閉形式（K4）が同じ手間で使えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B1-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B1 では 95 パーセンタイル 2928％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B1-02",
+   "step": "M5",
+   "candidate_id": "NA-B1-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-02",
+   "step": "M6",
+   "candidate_id": "NA-B1-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "交換年の一覧があってもなくても同じ閉形式が使えるため、併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-03",
+   "step": "M1",
+   "candidate_id": "EX-B1-03-M1",
+   "title": "年ごとの残存量の更新を、充填サイクルごとの等比の閉形式に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 2.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B1-03",
+   "step": "M2",
+   "candidate_id": "EX-B1-03-M2",
+   "title": "充填サイクルの質量収支 1 式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K4",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 2.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B1-03",
+   "step": "M3",
+   "candidate_id": "AP-05",
+   "title": "冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "1−(1−r)^k ≤ r·k なので必ず過大（安全側）だが、B1 段階で平均 +28.0％、最大 +180.7％ と大きい。厳密な閉形式（K4）が同じ手間で使えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B1-03",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B1 では 95 パーセンタイル 2928％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B1-03",
+   "step": "M5",
+   "candidate_id": "NA-B1-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-03",
+   "step": "M6",
+   "candidate_id": "NA-B1-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "交換年の一覧があってもなくても同じ閉形式が使えるため、併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-04",
+   "step": "M1",
+   "candidate_id": "EX-B1-04-M1",
+   "title": "年ごとの残存量の更新を、充填サイクルごとの等比の閉形式に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 1.0e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B1-04",
+   "step": "M2",
+   "candidate_id": "EX-B1-04-M2",
+   "title": "充填サイクルの質量収支 1 式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K4",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 1.0e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B1-04",
+   "step": "M3",
+   "candidate_id": "AP-05",
+   "title": "冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "1−(1−r)^k ≤ r·k なので必ず過大（安全側）だが、B1 段階で平均 +28.0％、最大 +180.7％ と大きい。厳密な閉形式（K4）が同じ手間で使えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B1-04",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B1 では 95 パーセンタイル 2928％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B1-04",
+   "step": "M5",
+   "candidate_id": "NA-B1-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B1-04",
+   "step": "M6",
+   "candidate_id": "NA-B1-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "交換年の一覧があってもなくても同じ閉形式が使えるため、併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B2-01",
+   "step": "M1",
+   "candidate_id": "NA-B2-01-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B2-01",
+   "step": "M2",
+   "candidate_id": "EX-B2-01-M2",
+   "title": "B6 の買電分に対する定数倍として指標の段で求める",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 3.4e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B2-01",
+   "step": "M3",
+   "candidate_id": "AP-08",
+   "title": "買電排出を 平均買電量×平均係数×T で近似",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "買電量が一定なら誤差 0（このとき K3 の閉形式と同じ式）。一定でない場合は買電量と係数の相関の分だけずれ、B6 段階で -8.1％〜+11.8％。一定の場合は厳密な閉形式として採用済み（M1・M6）で、それ以外に広げる近似としては不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B2-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B2 では 95 パーセンタイル 388％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B2-01",
+   "step": "M5",
+   "candidate_id": "NA-B2-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B2-01",
+   "step": "M6",
+   "candidate_id": "EX-B2-01-M6",
+   "title": "買電分が閉形式でも年次計算でも同じ 1 回の乗算（厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 3.4e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B3-01",
+   "step": "M1",
+   "candidate_id": "EX-B3-01-M1",
+   "title": "年ごとの加算を r·e0·(T − 更新が属する年の重み) の閉形式に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 1.5e-10）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B3-01",
+   "step": "M2",
+   "candidate_id": "EX-B3-01-M2",
+   "title": "行の乗数（修繕）として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 1.5e-10）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B3-01",
+   "step": "M3",
+   "candidate_id": "AP-04",
+   "title": "修繕の更新年除外を無視（B3-02 で B3-01 を代用）",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "更新年の除外を無視するので必ず過大（安全側）。B3 段階で平均 +2.1％、95 パーセンタイル 4.0％、最大 +5.4％ で段階 2％ の目標を超える。厳密な閉形式（K2）が同じ手間で使えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B3-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B3 では 95 パーセンタイル 149％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B3-01",
+   "step": "M5",
+   "candidate_id": "NA-B3-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B3-01",
+   "step": "M6",
+   "candidate_id": "EX-B3-01-M6",
+   "title": "周期更新は閉形式、明示の更新年一覧は一覧から除外年を求める（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 1.5e-10）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B3-02",
+   "step": "M1",
+   "candidate_id": "NA-B3-02-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに閉形式（e0·r·T）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B3-02",
+   "step": "M2",
+   "candidate_id": "EX-B3-02-M2",
+   "title": "行の乗数 r·T として同じ走査で求める",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B3-02",
+   "step": "M3",
+   "candidate_id": "NA-B3-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "本式自体が B3-01 の概算であり、その誤差は AP-04 として B3-01 側に記録した。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B3-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B3 では 95 パーセンタイル 149％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B3-02",
+   "step": "M5",
+   "candidate_id": "NA-B3-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B3-02",
+   "step": "M6",
+   "candidate_id": "NA-B3-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M1",
+   "candidate_id": "EX-B4-01-M1",
+   "title": "更新年の一覧を作らず、回数を閉形式 N = ceil(T/c) − 1 で求める（同じ判定式で端を補正）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 247940 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M2",
+   "candidate_id": "EX-B4-01-M2",
+   "title": "回数関数に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 247940 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M3",
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M3",
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M3",
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M4",
+   "candidate_id": "NA-B4-01-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "回数関数 1 つに厳密に統合済みで、近似モデルにまとめる利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M5",
+   "candidate_id": "NA-B4-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B4-01",
+   "step": "M6",
+   "candidate_id": "EX-B4-01-M6",
+   "title": "周期更新は閉形式、明示の更新年一覧は一覧を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 247940 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M1",
+   "candidate_id": "EX-B4-02-M1",
+   "title": "事象ごとの加算を 回数×1 回当たりの排出 に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 430948 個、最大の相対差 2.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M2",
+   "candidate_id": "EX-B4-02-M2",
+   "title": "行の乗数（更新回数）として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 430948 個、最大の相対差 2.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M3",
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M3",
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M3",
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B4 では 95 パーセンタイル 158％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M5",
+   "candidate_id": "NA-B4-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B4-02",
+   "step": "M6",
+   "candidate_id": "EX-B4-02-M6",
+   "title": "周期更新は閉形式、明示の更新年一覧は一覧を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 430948 個、最大の相対差 2.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M1",
+   "candidate_id": "EX-B4-03-M1",
+   "title": "更新年の一覧を作らず、回数を閉形式 N = ceil(T/c) − 1 で求める（同じ判定式で端を補正）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 306961 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M2",
+   "candidate_id": "EX-B4-03-M2",
+   "title": "回数関数に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 306961 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M3",
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M3",
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M3",
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M4",
+   "candidate_id": "NA-B4-03-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "回数関数 1 つに厳密に統合済みで、近似モデルにまとめる利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M5",
+   "candidate_id": "NA-B4-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B4-03",
+   "step": "M6",
+   "candidate_id": "NA-B4-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M1",
+   "candidate_id": "EX-B5-01-M1",
+   "title": "事象ごとの加算を 回数×範囲比×初期段階の和 に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 32320 個、最大の相対差 2.0e-16）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M2",
+   "candidate_id": "EX-B5-01-M2",
+   "title": "回数関数と、初期段階の行への共通乗数として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 32320 個、最大の相対差 2.0e-16）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M3",
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M3",
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M3",
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B5 では 95 パーセンタイル 116％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M5",
+   "candidate_id": "NA-B5-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B5-01",
+   "step": "M6",
+   "candidate_id": "NA-B5-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M1",
+   "candidate_id": "EX-B6-01-M1",
+   "title": "買電量が一定なら 買電量×累積係数 の 1 回の乗算にする",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M2",
+   "candidate_id": "EX-B6-01-M2",
+   "title": "年重み付き和の閉形式として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M3",
+   "candidate_id": "AP-08",
+   "title": "買電排出を 平均買電量×平均係数×T で近似",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "買電量が一定なら誤差 0（このとき K3 の閉形式と同じ式）。一定でない場合は買電量と係数の相関の分だけずれ、B6 段階で -8.1％〜+11.8％。一定の場合は厳密な閉形式として採用済み（M1・M6）で、それ以外に広げる近似としては不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M4",
+   "candidate_id": "AP-13",
+   "title": "面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では B6 段階で -14.9％〜+70.4％。面積当たり使用量と実績の関係は架空データでは意味を持たない。",
+   "data_needed": "実建物の年間エネルギー使用量と延床面積、利用許諾のある面積当たり統計値。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B6 では 95 パーセンタイル 135％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M5",
+   "candidate_id": "NA-B6-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-01",
+   "step": "M6",
+   "candidate_id": "EX-B6-01-M6",
+   "title": "一定なら閉形式、そうでなければ年次計算（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-02",
+   "step": "M1",
+   "candidate_id": "EX-B6-02-M1",
+   "title": "年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は最後に 1 回掛ける",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-02",
+   "step": "M2",
+   "candidate_id": "EX-B6-02-M2",
+   "title": "年重み付き和の閉形式として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-02",
+   "step": "M3",
+   "candidate_id": "NA-B6-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B6 では 95 パーセンタイル 135％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-02",
+   "step": "M5",
+   "candidate_id": "NA-B6-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-02",
+   "step": "M6",
+   "candidate_id": "EX-B6-02-M6",
+   "title": "一定・直線は閉形式、年次表は表を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-03",
+   "step": "M1",
+   "candidate_id": "EX-B6-03-M1",
+   "title": "年ごとの加算を 買電分（累積係数）＋燃料分（等差級数）の和に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 2.2e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-03",
+   "step": "M2",
+   "candidate_id": "EX-B6-03-M2",
+   "title": "年重み付き和の閉形式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 2.2e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-03",
+   "step": "M3",
+   "candidate_id": "AP-08",
+   "title": "買電排出を 平均買電量×平均係数×T で近似",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "買電量が一定なら誤差 0（このとき K3 の閉形式と同じ式）。一定でない場合は買電量と係数の相関の分だけずれ、B6 段階で -8.1％〜+11.8％。一定の場合は厳密な閉形式として採用済み（M1・M6）で、それ以外に広げる近似としては不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-03",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B6 では 95 パーセンタイル 135％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-03",
+   "step": "M5",
+   "candidate_id": "NA-B6-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-03",
+   "step": "M6",
+   "candidate_id": "EX-B6-03-M6",
+   "title": "一定なら閉形式、そうでなければ年次計算（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 2.2e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-04",
+   "step": "M1",
+   "candidate_id": "EX-B6-04-M1",
+   "title": "消費・発電・売電が一定なら max を 1 回だけ評価する",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-04",
+   "step": "M2",
+   "candidate_id": "EX-B6-04-M2",
+   "title": "年重み付き和の閉形式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B6-04",
+   "step": "M3",
+   "candidate_id": "AP-08",
+   "title": "買電排出を 平均買電量×平均係数×T で近似",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "買電量が一定なら誤差 0（このとき K3 の閉形式と同じ式）。一定でない場合は買電量と係数の相関の分だけずれ、B6 段階で -8.1％〜+11.8％。一定の場合は厳密な閉形式として採用済み（M1・M6）で、それ以外に広げる近似としては不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B6-04",
+   "step": "M4",
+   "candidate_id": "NA-B6-04-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-04",
+   "step": "M5",
+   "candidate_id": "NA-B6-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B6-04",
+   "step": "M6",
+   "candidate_id": "EX-B6-04-M6",
+   "title": "一定なら 1 回の評価、そうでなければ年ごとに評価（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-01",
+   "step": "M1",
+   "candidate_id": "EX-B7-01-M1",
+   "title": "年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は最後に 1 回掛ける",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-01",
+   "step": "M2",
+   "candidate_id": "EX-B7-01-M2",
+   "title": "年重み付き和の閉形式として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-01",
+   "step": "M3",
+   "candidate_id": "NA-B7-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B7 では 95 パーセンタイル 425％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B7-01",
+   "step": "M5",
+   "candidate_id": "NA-B7-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-01",
+   "step": "M6",
+   "candidate_id": "EX-B7-01-M6",
+   "title": "一定・直線は閉形式、年次表は表を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-02",
+   "step": "M1",
+   "candidate_id": "EX-B7-02-M1",
+   "title": "年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は最後に 1 回掛ける",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-02",
+   "step": "M2",
+   "candidate_id": "EX-B7-02-M2",
+   "title": "年重み付き和の閉形式として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-02",
+   "step": "M3",
+   "candidate_id": "NA-B7-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B7 では 95 パーセンタイル 425％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B7-02",
+   "step": "M5",
+   "candidate_id": "NA-B7-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-02",
+   "step": "M6",
+   "candidate_id": "EX-B7-02-M6",
+   "title": "一定・直線は閉形式、年次表は表を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-03",
+   "step": "M1",
+   "candidate_id": "EX-B7-03-M1",
+   "title": "年ごとの加算を等差級数の和（一定なら 値×T）に置き換え、係数は最後に 1 回掛ける",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-03",
+   "step": "M2",
+   "candidate_id": "EX-B7-03-M2",
+   "title": "年重み付き和の閉形式として行テーブル核に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-03",
+   "step": "M3",
+   "candidate_id": "NA-B7-03-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-03",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B7 では 95 パーセンタイル 425％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B7-03",
+   "step": "M5",
+   "candidate_id": "NA-B7-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-03",
+   "step": "M6",
+   "candidate_id": "EX-B7-03-M6",
+   "title": "一定・直線は閉形式、年次表は表を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31826 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-04",
+   "step": "M1",
+   "candidate_id": "EX-B7-04-M1",
+   "title": "年ごとの加算を等差級数の和に置き換える",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 2.6e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-04",
+   "step": "M2",
+   "candidate_id": "EX-B7-04-M2",
+   "title": "年重み付き和の閉形式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 2.6e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "B7-04",
+   "step": "M3",
+   "candidate_id": "NA-B7-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-04",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 B7 では 95 パーセンタイル 425％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "B7-04",
+   "step": "M5",
+   "candidate_id": "NA-B7-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "B7-04",
+   "step": "M6",
+   "candidate_id": "EX-B7-04-M6",
+   "title": "一定・直線は閉形式、年次表は表を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 2.6e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C1-01",
+   "step": "M1",
+   "candidate_id": "EX-C1-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C1-01",
+   "step": "M2",
+   "candidate_id": "EX-C1-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 988 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C1-01",
+   "step": "M3",
+   "candidate_id": "NA-C1-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C1-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C1 では 95 パーセンタイル 229％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "C1-01",
+   "step": "M5",
+   "candidate_id": "NA-C1-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C1-01",
+   "step": "M6",
+   "candidate_id": "NA-C1-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C2-01",
+   "step": "M1",
+   "candidate_id": "EX-C2-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C2-01",
+   "step": "M2",
+   "candidate_id": "EX-C2-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C2-01",
+   "step": "M3",
+   "candidate_id": "NA-C2-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C2-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C2 では 95 パーセンタイル 164％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "C2-01",
+   "step": "M5",
+   "candidate_id": "NA-C2-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C2-01",
+   "step": "M6",
+   "candidate_id": "NA-C2-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C3-01",
+   "step": "M1",
+   "candidate_id": "EX-C3-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C3-01",
+   "step": "M2",
+   "candidate_id": "EX-C3-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C3-01",
+   "step": "M3",
+   "candidate_id": "NA-C3-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C3-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C3 では 95 パーセンタイル 209％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "C3-01",
+   "step": "M5",
+   "candidate_id": "NA-C3-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C3-01",
+   "step": "M6",
+   "candidate_id": "NA-C3-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C4-01",
+   "step": "M1",
+   "candidate_id": "EX-C4-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C4-01",
+   "step": "M2",
+   "candidate_id": "EX-C4-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C4-01",
+   "step": "M3",
+   "candidate_id": "NA-C4-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C4-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C4 では 95 パーセンタイル 514％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "C4-01",
+   "step": "M5",
+   "candidate_id": "NA-C4-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C4-01",
+   "step": "M6",
+   "candidate_id": "NA-C4-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C-05",
+   "step": "M1",
+   "candidate_id": "EX-C-05-M1",
+   "title": "経路比率の和を、廃棄段階の計算と同じ走査の中で求める",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C-05",
+   "step": "M2",
+   "candidate_id": "EX-C-05-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "C-05",
+   "step": "M3",
+   "candidate_id": "NA-C-05-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C-05",
+   "step": "M4",
+   "candidate_id": "NA-C-05-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C-05",
+   "step": "M5",
+   "candidate_id": "NA-C-05-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "C-05",
+   "step": "M6",
+   "candidate_id": "NA-C-05-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-01",
+   "step": "M1",
+   "candidate_id": "NA-STO-01-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-01",
+   "step": "M2",
+   "candidate_id": "NA-STO-01-M2",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-01",
+   "step": "M3",
+   "candidate_id": "NA-STO-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-01",
+   "step": "M4",
+   "candidate_id": "NA-STO-01-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-01",
+   "step": "M5",
+   "candidate_id": "NA-STO-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-01",
+   "step": "M6",
+   "candidate_id": "NA-STO-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-02",
+   "step": "M1",
+   "candidate_id": "NA-STO-02-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-02",
+   "step": "M2",
+   "candidate_id": "NA-STO-02-M2",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-02",
+   "step": "M3",
+   "candidate_id": "NA-STO-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-02",
+   "step": "M4",
+   "candidate_id": "NA-STO-02-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "参考値（段階合計の外）であり、行テーブルへ統合すると段階合計と混同するおそれがある。関数形は活動量×係数と同じだが、境界を保つために統合しない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-02",
+   "step": "M5",
+   "candidate_id": "NA-STO-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "STO-02",
+   "step": "M6",
+   "candidate_id": "NA-STO-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-01",
+   "step": "M1",
+   "candidate_id": "NA-SUM-01-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "段階の値の和で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-01",
+   "step": "M2",
+   "candidate_id": "EX-SUM-01-M2",
+   "title": "指標行列の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 3.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-01",
+   "step": "M3",
+   "candidate_id": "NA-SUM-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-01",
+   "step": "M5",
+   "candidate_id": "NA-SUM-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "合計の代理モデルは SUM-03 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-01",
+   "step": "M6",
+   "candidate_id": "NA-SUM-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-02",
+   "step": "M1",
+   "candidate_id": "NA-SUM-02-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "段階の値の和で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-02",
+   "step": "M2",
+   "candidate_id": "EX-SUM-02-M2",
+   "title": "指標行列の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 8.3e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-02",
+   "step": "M3",
+   "candidate_id": "NA-SUM-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-02",
+   "step": "M5",
+   "candidate_id": "NA-SUM-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "合計の代理モデルは SUM-03 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-02",
+   "step": "M6",
+   "candidate_id": "NA-SUM-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M1",
+   "candidate_id": "NA-SUM-03-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "段階の値の和で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M2",
+   "candidate_id": "EX-SUM-03-M2",
+   "title": "指標行列の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 6.3e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M3",
+   "candidate_id": "AP-14",
+   "title": "評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "更新が評価期間の途中で段差を作るため、直線補間では合計が -11.9％〜+22.8％ ずれる。統合モデルは評価期間を引数として厳密に計算でき十分に軽いので不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M4",
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M5",
+   "candidate_id": "AP-16",
+   "title": "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 74.8％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-03",
+   "step": "M6",
+   "candidate_id": "NA-SUM-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密な統合モデルが十分に軽いため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-04",
+   "step": "M1",
+   "candidate_id": "NA-SUM-04-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-04",
+   "step": "M2",
+   "candidate_id": "EX-SUM-04-M2",
+   "title": "指標行列の 1 行（合計÷尺度）として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 478 個、最大の相対差 6.3e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-04",
+   "step": "M3",
+   "candidate_id": "NA-SUM-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-04",
+   "step": "M4",
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-04",
+   "step": "M5",
+   "candidate_id": "AP-16",
+   "title": "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 74.8％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-04",
+   "step": "M6",
+   "candidate_id": "NA-SUM-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-05",
+   "step": "M1",
+   "candidate_id": "NA-SUM-05-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-05",
+   "step": "M2",
+   "candidate_id": "EX-SUM-05-M2",
+   "title": "指標行列の 1 行（合計÷尺度）として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 478 個、最大の相対差 6.3e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-05",
+   "step": "M3",
+   "candidate_id": "NA-SUM-05-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-05",
+   "step": "M4",
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-05",
+   "step": "M5",
+   "candidate_id": "AP-16",
+   "title": "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 74.8％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-05",
+   "step": "M6",
+   "candidate_id": "NA-SUM-05-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-06",
+   "step": "M1",
+   "candidate_id": "NA-SUM-06-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-06",
+   "step": "M2",
+   "candidate_id": "EX-SUM-06-M2",
+   "title": "指標行列の 1 行（合計÷1000）として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 6.3e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-06",
+   "step": "M3",
+   "candidate_id": "NA-SUM-06-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-06",
+   "step": "M4",
+   "candidate_id": "NA-SUM-06-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-06",
+   "step": "M5",
+   "candidate_id": "NA-SUM-06-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-06",
+   "step": "M6",
+   "candidate_id": "NA-SUM-06-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-07",
+   "step": "M1",
+   "candidate_id": "NA-SUM-07-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-07",
+   "step": "M2",
+   "candidate_id": "EX-SUM-07-M2",
+   "title": "指標行列の 1 行（段階÷合計）として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K5",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 6906 個、最大の相対差 2.2e-13）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-07",
+   "step": "M3",
+   "candidate_id": "NA-SUM-07-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-07",
+   "step": "M4",
+   "candidate_id": "NA-SUM-07-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-07",
+   "step": "M5",
+   "candidate_id": "NA-SUM-07-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-07",
+   "step": "M6",
+   "candidate_id": "NA-SUM-07-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-08",
+   "step": "M1",
+   "candidate_id": "EX-SUM-08-M1",
+   "title": "基準案の合計を 1 回だけ計算して保持し、比較のたびに計算し直さない",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 255 個、最大の相対差 4.8e-13）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-08",
+   "step": "M2",
+   "candidate_id": "EX-SUM-08-M2",
+   "title": "基準案の結果の再利用に統合（差と比は指標の段で求める）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K8",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 255 個、最大の相対差 4.8e-13）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "SUM-08",
+   "step": "M3",
+   "candidate_id": "NA-SUM-08-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "差と比だけの式で、これより単純な式はない。なお差は合計の誤差を増幅するので、合計を近似した場合は差の誤差を別に確認する必要がある。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-08",
+   "step": "M4",
+   "candidate_id": "NA-SUM-08-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-08",
+   "step": "M5",
+   "candidate_id": "NA-SUM-08-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "SUM-08",
+   "step": "M6",
+   "candidate_id": "NA-SUM-08-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-01",
+   "step": "M1",
+   "candidate_id": "EX-QA-01-M1",
+   "title": "段階合計を同じ行テーブルから読むので突合は 2 系統の集計の比較 1 回になり、択一は分岐の構造で保証される",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 0 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-01",
+   "step": "M2",
+   "candidate_id": "EX-QA-01-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 0 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-01",
+   "step": "M3",
+   "candidate_id": "NA-QA-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-01",
+   "step": "M4",
+   "candidate_id": "NA-QA-01-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-01",
+   "step": "M5",
+   "candidate_id": "NA-QA-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-01",
+   "step": "M6",
+   "candidate_id": "NA-QA-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-02",
+   "step": "M1",
+   "candidate_id": "NA-QA-02-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "一覧を 1 回走査するだけで、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-02",
+   "step": "M2",
+   "candidate_id": "EX-QA-02-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 0 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-02",
+   "step": "M3",
+   "candidate_id": "NA-QA-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-02",
+   "step": "M4",
+   "candidate_id": "NA-QA-02-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-02",
+   "step": "M5",
+   "candidate_id": "NA-QA-02-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-02",
+   "step": "M6",
+   "candidate_id": "NA-QA-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-03",
+   "step": "M1",
+   "candidate_id": "EX-QA-03-M1",
+   "title": "使用した係数の集合を行テーブルのキーから得て、行をたどり直さない",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-03",
+   "step": "M2",
+   "candidate_id": "EX-QA-03-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-03",
+   "step": "M3",
+   "candidate_id": "NA-QA-03-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-03",
+   "step": "M4",
+   "candidate_id": "NA-QA-03-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-03",
+   "step": "M5",
+   "candidate_id": "NA-QA-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-03",
+   "step": "M6",
+   "candidate_id": "NA-QA-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-04",
+   "step": "M1",
+   "candidate_id": "EX-QA-04-M1",
+   "title": "SYS-04 の残差を再利用する",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 0 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-04",
+   "step": "M2",
+   "candidate_id": "EX-QA-04-M2",
+   "title": "検査規則表の 1 行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K6",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 0 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "QA-04",
+   "step": "M3",
+   "candidate_id": "NA-QA-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-04",
+   "step": "M4",
+   "candidate_id": "NA-QA-04-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-04",
+   "step": "M5",
+   "candidate_id": "NA-QA-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "QA-04",
+   "step": "M6",
+   "candidate_id": "NA-QA-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検査（合否や状態の判定）であり、近似すると判定の意味が失われるため、近似の対象にしない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-01",
+   "step": "M1",
+   "candidate_id": "EX-X-01-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 93149 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-01",
+   "step": "M2",
+   "candidate_id": "EX-X-01-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 93149 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-01",
+   "step": "M3",
+   "candidate_id": "NA-X-01-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-01",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A1-A3 では 95 パーセンタイル 108％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-01",
+   "step": "M5",
+   "candidate_id": "NA-X-01-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-01",
+   "step": "M6",
+   "candidate_id": "NA-X-01-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M1",
+   "candidate_id": "EX-X-02-M1",
+   "title": "段階の値を行テーブルの段階別合計として読む",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 13822 個、最大の相対差 2.8e-13）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M2",
+   "candidate_id": "EX-X-02-M2",
+   "title": "行テーブル核の段階別合計",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 13822 個、最大の相対差 2.8e-13）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M3",
+   "candidate_id": "NA-X-02-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M5",
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M5",
+   "candidate_id": "AP-16",
+   "title": "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 74.8％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-02",
+   "step": "M6",
+   "candidate_id": "NA-X-02-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-03",
+   "step": "M1",
+   "candidate_id": "EX-X-03-M1",
+   "title": "配合ごとに行の質量を合算してから構成比で展開する（展開は配合の数だけ）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 40212 個、最大の相対差 6.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-03",
+   "step": "M2",
+   "candidate_id": "EX-X-03-M2",
+   "title": "配合キーの行として行テーブル核に載せ、最後に 1 回だけ展開",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K7",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 40212 個、最大の相対差 6.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-03",
+   "step": "M3",
+   "candidate_id": "NA-X-03-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "寄与の小さい構成材の切り捨ては必ず過小評価になり、比率の補正なしには使えない。厳密な前計算で十分に軽い。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-03",
+   "step": "M4",
+   "candidate_id": "NA-X-03-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-03",
+   "step": "M5",
+   "candidate_id": "NA-X-03-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-03",
+   "step": "M6",
+   "candidate_id": "NA-X-03-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-04",
+   "step": "M1",
+   "candidate_id": "EX-X-04-M1",
+   "title": "行を 1 本ずつたどらず、段階と係数 ID ごとに合算した活動量にガス別の量を掛ける",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 12350 個、最大の相対差 2.7e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-04",
+   "step": "M2",
+   "candidate_id": "EX-X-04-M2",
+   "title": "行テーブル核に係数列（ガス別）を足すだけ",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 12350 個、最大の相対差 2.7e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-04",
+   "step": "M3",
+   "candidate_id": "NA-X-04-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "CO2 以外のガスを省くと必ず過小評価になる。厳密な集約で十分に軽い。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-04",
+   "step": "M4",
+   "candidate_id": "NA-X-04-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-04",
+   "step": "M5",
+   "candidate_id": "NA-X-04-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-04",
+   "step": "M6",
+   "candidate_id": "NA-X-04-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-05",
+   "step": "M1",
+   "candidate_id": "EX-X-05-M1",
+   "title": "全ガス版の計算を繰り返さず、同じ集約表に CO2 の係数列を掛ける",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 7410 個、最大の相対差 1.8e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-05",
+   "step": "M2",
+   "candidate_id": "EX-X-05-M2",
+   "title": "行テーブル核に係数列（CO2）を足すだけ",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 7410 個、最大の相対差 1.8e-14）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-05",
+   "step": "M3",
+   "candidate_id": "NA-X-05-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "CO2 版を全ガス版の定数倍で近似すると、行ごとに CO2 の割合が違うため誤差が出る。厳密な集約で十分に軽い。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-05",
+   "step": "M4",
+   "candidate_id": "NA-X-05-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "M1・M2 で厳密な簡略化と統合が得られており、近似に置き換えても計算量も入力項目も減らないため、近似の利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-05",
+   "step": "M5",
+   "candidate_id": "NA-X-05-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-05",
+   "step": "M6",
+   "candidate_id": "NA-X-05-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M1",
+   "candidate_id": "EX-X-06-M1",
+   "title": "係数の累積 G(T) を閉形式で求め、合計の計算には年次系列を使わない",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M2",
+   "candidate_id": "EX-X-06-M2",
+   "title": "年重み付き和の閉形式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M3",
+   "candidate_id": "AP-09a",
+   "title": "電力係数を 5 年ごとの点の直線補間で持つ",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "一定の系列では誤差 0、直線低下では最大 +0.6％（過小なし）だが、段階的な系列では -4.0％〜+3.8％。パラメータ型の系列は厳密な閉形式（K3）があり、補間に置き換える利点がないため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M3",
+   "candidate_id": "AP-09b",
+   "title": "電力係数を 10 年ごとの点の直線補間で持つ",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "10 年刻みでは B6 段階で -5.4％〜+7.5％。5 年刻み（AP-09a）より悪く、同じ理由で不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M4",
+   "candidate_id": "NA-X-06-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "累積係数 1 つに厳密に統合済みで、近似モデルにまとめる利点がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M5",
+   "candidate_id": "NA-X-06-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-06",
+   "step": "M6",
+   "candidate_id": "EX-X-06-M6",
+   "title": "一定・直線低下・段階は閉形式、年次表は表を走査（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 31332 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-07",
+   "step": "M1",
+   "candidate_id": "EX-X-07-M1",
+   "title": "更新と修繕の年次配置を、行ごとではなく周期の種類ごとに行う",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 63158 個、最大の相対差 3.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-07",
+   "step": "M2",
+   "candidate_id": "EX-X-07-M2",
+   "title": "回数関数と年重みで系列を組み立てる",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 63158 個、最大の相対差 3.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-07",
+   "step": "M3",
+   "candidate_id": "NA-X-07-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "系列そのものが出力であり、刻みを粗くすると出力が変わる。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-07",
+   "step": "M4",
+   "candidate_id": "NA-X-07-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-07",
+   "step": "M5",
+   "candidate_id": "NA-X-07-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-07",
+   "step": "M6",
+   "candidate_id": "NA-X-07-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M1",
+   "candidate_id": "EX-X-08-M1",
+   "title": "1 回当たりの排出を、同じ走査の中で周期ごとに合算する",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 306073 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M2",
+   "candidate_id": "EX-X-08-M2",
+   "title": "回数関数×周期別の合算として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 306073 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M3",
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M3",
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M3",
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M4",
+   "candidate_id": "NA-X-08-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M5",
+   "candidate_id": "NA-X-08-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-08",
+   "step": "M6",
+   "candidate_id": "EX-X-08-M6",
+   "title": "周期更新は周期別に合算、明示の一覧は別枠（どちらも厳密）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 306073 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-09",
+   "step": "M1",
+   "candidate_id": "EX-X-09-M1",
+   "title": "C3・C4 と同じ積を 1 回だけ計算し、資材区分×経路の表にも足し込む",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 50422 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-09",
+   "step": "M2",
+   "candidate_id": "EX-X-09-M2",
+   "title": "行テーブル核の集約キーを 資材区分×経路 にしたもの",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 50422 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-09",
+   "step": "M3",
+   "candidate_id": "NA-X-09-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-09",
+   "step": "M4",
+   "candidate_id": "NA-X-09-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-09",
+   "step": "M5",
+   "candidate_id": "NA-X-09-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-09",
+   "step": "M6",
+   "candidate_id": "NA-X-09-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M1",
+   "candidate_id": "EX-X-10-M1",
+   "title": "更新回数を閉形式で求め、同じ走査の中で質量を合算する",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 1482 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M2",
+   "candidate_id": "EX-X-10-M2",
+   "title": "係数を質量に置き換えた行として、回数の乗数とともに統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K2",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 1482 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M3",
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c − 1 ≤ ceil(T/c) − 1 なので必ず過小評価になる。B4 段階で平均 -18.7％、最大 -58.5％。重大な過小評価を生むため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M3",
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "誤差の符号が定まらず、B4 段階で -15.1％〜+981.8％。段階 2％ の目標を大きく超え、過小評価もあるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M3",
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "T/c > ceil(T/c) − 1 なので必ず過大。B4 段階で平均 +95.6％。目標を大きく超えるため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M4",
+   "candidate_id": "NA-X-10-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "他の単位の結果を集計・再配置するだけで、近似する対象となる独自の関数形がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M5",
+   "candidate_id": "NA-X-10-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-10",
+   "step": "M6",
+   "candidate_id": "NA-X-10-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-11",
+   "step": "M1",
+   "candidate_id": "EX-X-11-M1",
+   "title": "累積係数 G(T) を再利用し、面積×原単位×G(T) の 1 式にする",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 3.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-11",
+   "step": "M2",
+   "candidate_id": "EX-X-11-M2",
+   "title": "年重み付き和の閉形式に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K3",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 494 個、最大の相対差 3.3e-15）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-11",
+   "step": "M3",
+   "candidate_id": "NA-X-11-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに面積×原単位×累積係数の 1 式で、これより単純な式はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-11",
+   "step": "M4",
+   "candidate_id": "AP-13",
+   "title": "面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では B6 段階で -14.9％〜+70.4％。面積当たり使用量と実績の関係は架空データでは意味を持たない。",
+   "data_needed": "実建物の年間エネルギー使用量と延床面積、利用許諾のある面積当たり統計値。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-11",
+   "step": "M5",
+   "candidate_id": "NA-X-11-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-11",
+   "step": "M6",
+   "candidate_id": "NA-X-11-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-12",
+   "step": "M1",
+   "candidate_id": "EX-X-12-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-12",
+   "step": "M2",
+   "candidate_id": "EX-X-12-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 307949 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-12",
+   "step": "M3",
+   "candidate_id": "NA-X-12-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-12",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 A4 では 95 パーセンタイル 215％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-12",
+   "step": "M5",
+   "candidate_id": "NA-X-12-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-12",
+   "step": "M6",
+   "candidate_id": "NA-X-12-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-13",
+   "step": "M1",
+   "candidate_id": "NA-X-13-M1",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "すでに最小の形（四則演算 1〜2 回）で、これ以上の簡略化はない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-13",
+   "step": "M2",
+   "candidate_id": "EX-X-13-M2",
+   "title": "発注量と同じく、行の数量に掛ける倍率として同じ走査で求める",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 613676 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-13",
+   "step": "M3",
+   "candidate_id": "AP-06",
+   "title": "端材倍率の線形化 1/(1−w) ≈ 1+w",
+   "outcome": "REJECTED",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "1+w < 1/(1−w) なので必ず過小評価（A1-A3 段階で平均 -0.3％、最大 -1.0％）。誤差は目標内だが、除算 1 回を乗算 1 回に替えるだけで得るものがなく、常に過小側に偏るため不採用。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-13",
+   "step": "M4",
+   "candidate_id": "NA-X-13-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "行ごとの倍率であり、共通の近似モデルにまとめる対象がない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-13",
+   "step": "M5",
+   "candidate_id": "NA-X-13-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-13",
+   "step": "M6",
+   "candidate_id": "NA-X-13-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-14",
+   "step": "M1",
+   "candidate_id": "EX-X-14-M1",
+   "title": "段階と係数 ID ごとに活動量を合算してから係数を掛ける（係数の乗算は行数ではなく係数の種類数）",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 93149 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-14",
+   "step": "M2",
+   "candidate_id": "EX-X-14-M2",
+   "title": "行テーブル核の行として統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 93149 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-14",
+   "step": "M3",
+   "candidate_id": "NA-X-14-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-14",
+   "step": "M4",
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 81.4％。段階別にはさらに大きい。架空データでは実用精度を評価できない。（この単位の段階 C3 では 95 パーセンタイル 209％）",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-14",
+   "step": "M5",
+   "candidate_id": "NA-X-14-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "単位単独の代理モデルは、厳密式より入力も計算も増えるため利点がない。建物全体の代理モデルは SUM-03 の候補（AP-11・AP-16）で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-14",
+   "step": "M6",
+   "candidate_id": "NA-X-14-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-15",
+   "step": "M1",
+   "candidate_id": "EX-X-15-M1",
+   "title": "係数レコードと単位換算を ID・単位の組ごとに 1 回だけ解決する",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 612488 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-15",
+   "step": "M2",
+   "candidate_id": "EX-X-15-M2",
+   "title": "係数解決の一括化に統合",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K7",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 612488 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-15",
+   "step": "M3",
+   "candidate_id": "NA-X-15-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "検索と優先順位の解決であり、近似の対象ではない。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-15",
+   "step": "M4",
+   "candidate_id": "NA-X-15-M4",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "同上。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-15",
+   "step": "M5",
+   "candidate_id": "NA-X-15-M5",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "同上。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-15",
+   "step": "M6",
+   "candidate_id": "NA-X-15-M6",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "厳密式が全条件で同じ手間で使えるため、近似との併用は不要。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-17",
+   "step": "M1",
+   "candidate_id": "EX-X-17-M1",
+   "title": "製造排出を、同じ走査の中で 6 区分に足し込む",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": null,
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 9386 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-17",
+   "step": "M2",
+   "candidate_id": "EX-X-17-M2",
+   "title": "行テーブル核の集約キーを 6 区分にしたもの",
+   "outcome": "SUCCESS",
+   "verification": "VERIFIED_ANALYTIC_AND_SYNTHETIC",
+   "unified_model": "K1",
+   "reason": "基準計算と全出力が一致（494 シナリオ、数値 9386 個、最大の相対差 0.0e+00）。",
+   "data_needed": null,
+   "evidence": [
+    "04_VERIFICATION/unified_model_exactness.json",
+    "research_code/fastcalc/engine.py"
+   ]
+  },
+  {
+   "unit_id": "X-17",
+   "step": "M3",
+   "candidate_id": "NA-X-17-M3",
+   "title": "検討の結果、対象外",
+   "outcome": "NOT_APPLICABLE",
+   "verification": "NOT_VERIFIED",
+   "unified_model": null,
+   "reason": "関数形は活動量×係数の線形和で、これより単純な式はない。近似の余地は入力行数の削減だけであり、M4 で扱う。",
+   "data_needed": null,
+   "evidence": []
+  },
+  {
+   "unit_id": "X-17",
+   "step": "M4",
+   "candidate_id": "AP-10",
+   "title": "6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では資材製造の誤差が 95 パーセンタイルで 93.8％。ただし架空データの係数と数量のばらつきは実建物を表していないので、この値から採否を判断できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-17",
+   "step": "M5",
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では合計の誤差が 95 パーセンタイルで 84.1％。架空データでは実用精度を評価できない。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  },
+  {
+   "unit_id": "X-17",
+   "step": "M6",
+   "candidate_id": "AP-12",
+   "title": "質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う",
+   "outcome": "HOLD",
+   "verification": "VERIFIED_SYNTHETIC_ONLY",
+   "unified_model": null,
+   "reason": "架空の母集団では平均 -9.5％、最大 -40.3％ の過小評価。質量の大きい行ほど係数が小さい傾向があると過小になる。実建物での傾向は未確認。",
+   "data_needed": "実建物の数量内訳（資材行・設備行）と、利用許諾のある係数データ。構造・用途ごとに複数棟。",
+   "evidence": [
+    "04_VERIFICATION/approximation_study.json",
+    "research_code/bench/approx_study.py"
+   ]
+  }
+ ]
+}

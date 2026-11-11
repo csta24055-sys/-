@@ -18,6 +18,7 @@
 | 06 | [06_LINEAGE/README.md](06_LINEAGE/README.md) / [links.json](06_LINEAGE/links.json) | **入力→式→出力**の対応関係と未実装依存 |
 | 07 | [07_AUDIT/README.md](07_AUDIT/README.md) | 既知エラー、未検証点、根拠と検証ゲート |
 | 08 | [08_BUILD_PLAN/README.md](08_BUILD_PLAN/README.md) | 何を作るか／作らないか、段階ごとの検証 |
+| 09 | [09_APPROX_STUDY/README.md](09_APPROX_STUDY/README.md) | 計算式の近似化・統合研究（独立モデルの 70 評価単位、架空データでの検証。アプリは作らない） |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想

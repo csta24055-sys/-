@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -210,7 +211,7 @@ def run(n_population: int) -> dict:
             if k is not None:
                 class_e[k] += emis[i]
         records.append({"structure": scn.meta.structure, "use": scn.meta.use, "T": T, "area": scn.project.gross_floor_area,
-                        "wlc": wlc, "upfront": stage["A1-A3"] + stage["A4"] + stage["A5"], "class_e": class_e,
+                        "wlc": wlc, "stage": dict(stage), "class_e": class_e,
                         "class_q": {k: summary_quantity(scn, k) for k in SIMPLE_CLASSES}, "mat_ref": mat_ref,
                         "scenario": scn})
 
@@ -257,6 +258,50 @@ def run(n_population: int) -> dict:
             c11.add(r["scenario"], r["wlc"], mean_int[g] * r["area"] * r["T"], r["wlc"])
     out["AP-11"] = c11.result()
 
+    # AP-15: every stage from floor area (and study years for the use stages) times a (structure, use) mean intensity
+    ANNUAL = ("B1", "B2", "B3", "B4", "B5", "B6", "B7")
+    by_stage15 = {}
+    c15 = Collector("AP-15", "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+                    "各段階の詳細計算", "全14段階", ["全排出単位"])
+    for st in ("A1-A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "C1", "C2", "C3", "C4"):
+        scale = (lambda r: r["area"] * r["T"]) if st in ANNUAL else (lambda r: r["area"])
+        mean_s = group_mean(train, lambda r: (r["structure"], r["use"]), lambda r, st=st, scale=scale: r["stage"][st] / scale(r))
+        errs = []
+        for r in test:
+            g = (r["structure"], r["use"])
+            if g in mean_s and r["stage"][st] > 0.0:
+                errs.append(mean_s[g] * scale(r) / r["stage"][st] - 1.0)
+        by_stage15[st] = stats(errs)
+    for r in test:
+        g = (r["structure"], r["use"])
+        if g in mean_int:
+            approx = 0.0
+            for st in by_stage15:
+                scale = r["area"] * r["T"] if st in ANNUAL else r["area"]
+                m = group_mean(train, lambda q: (q["structure"], q["use"]), lambda q, st=st: q["stage"][st] / (q["area"] * q["T"] if st in ANNUAL else q["area"]))
+                approx += m[g] * scale
+            c15.add(r["scenario"], r["wlc"], approx, r["wlc"])
+    out["AP-15"] = c15.result()
+    out["AP-15"]["by_stage"] = by_stage15
+
+    # AP-16: log-linear least-squares regression of the whole-life total on area, study years, structure and use
+    import numpy as np
+    structures = sorted({r["structure"] for r in records})
+    uses = sorted({r["use"] for r in records})
+
+    def features(r):
+        return ([1.0, math.log(r["area"]), math.log(r["T"])] + [1.0 if r["structure"] == x else 0.0 for x in structures[1:]]
+                + [1.0 if r["use"] == x else 0.0 for x in uses[1:]])
+
+    X = np.array([features(r) for r in train])
+    y = np.array([math.log(r["wlc"]) for r in train])
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    c16 = Collector("AP-16", "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）", "全段階の計算", "WLC", ["SUM-03", "SUM-04", "SUM-05"])
+    for r in test:
+        c16.add(r["scenario"], r["wlc"], math.exp(float(np.dot(features(r), beta))), r["wlc"])
+    out["AP-16"] = c16.result()
+    out["AP-16"]["n_parameters"] = int(len(beta))
+
     # AP-14: whole-life total at another study period by linear interpolation between two evaluated periods
     c14 = Collector("AP-14", "評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める", "評価期間ごとの再計算", "WLC", ["SUM-03"])
     for r in records[: min(80, len(records))]:
@@ -269,7 +314,7 @@ def run(n_population: int) -> dict:
         approx = vals[50.0] + (vals[75.0] - vals[50.0]) * (60.0 - 50.0) / 25.0
         c14.add(r["scenario"], vals[60.0], approx, vals[60.0])
     out["AP-14"] = c14.result()
-    for cid in ("AP-10", "AP-11", "AP-12", "AP-13"):
+    for cid in ("AP-10", "AP-11", "AP-12", "AP-13", "AP-15", "AP-16"):
         out[cid]["data_dependence"] = ("誤差は建物ごとの資材構成・係数のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、"
                                        "実建物での精度を示さない。")
     out["AP-14"]["note"] = "同じ架空シナリオの評価期間だけを 50・60・75 年に変えて基準計算した結果どうしの比較。"
