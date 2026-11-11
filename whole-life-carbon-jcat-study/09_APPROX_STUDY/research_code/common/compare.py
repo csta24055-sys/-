@@ -52,11 +52,14 @@ class Comparison:
         return not self.mismatches and not self.missing and self.max_abs_rel_error <= rel_tol
 
 
-def compare(ref: Any, cand: Any, floor: float = 0.0, paths: set[str] | None = None) -> Comparison:
+def compare(ref: Any, cand: Any, floor: float = 0.0, paths: set[str] | None = None,
+            ignore_missing: bool = False) -> Comparison:
     """Compare every leaf of ``ref`` with ``cand``.
 
     ``floor`` guards relative errors of quantities whose reference is ~0.
     ``paths`` restricts the comparison to the given leaf paths.
+    ``ignore_missing`` skips reference leaves the candidate does not produce (used for
+    the summary mode, which leaves out per-row lists and yearly series).
     Non-numeric leaves (bools, strings, None) must be equal.
     """
     c = Comparison()
@@ -65,7 +68,8 @@ def compare(ref: Any, cand: Any, floor: float = 0.0, paths: set[str] | None = No
         if paths is not None and path not in paths:
             continue
         if path not in fc:
-            c.missing.append(path)
+            if not ignore_missing:
+                c.missing.append(path)
             continue
         cv = fc[path]
         numeric = isinstance(rv, (int, float)) and not isinstance(rv, bool)

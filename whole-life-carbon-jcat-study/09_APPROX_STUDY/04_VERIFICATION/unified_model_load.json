@@ -1,0 +1,174 @@
+{
+ "schema_version": "1.0",
+ "python": "3.13.18",
+ "repeats": 7,
+ "what": "Reference calculation versus the unified model on the standard benchmark (same language, same machine, pure Python on both sides). 'full outputs' produces every per-row list and yearly series the reference produces; 'totals only' leaves those out.",
+ "data_statement": "SYNTHETIC_FICTIONAL data only.",
+ "sizes": {
+  "S": {
+   "rows": {
+    "materials": 200,
+    "equipment": 60,
+    "refrigerants": 5,
+    "study_period": 60.0
+   },
+   "reference_all_units": {
+    "time_ms": 21.173124,
+    "time_ms_min": 20.085747,
+    "time_ms_max": 35.560367,
+    "peak_memory_kib": 1187.3984375,
+    "instructions": 2901320
+   },
+   "reference_without_SUM-08": {
+    "time_ms": 14.849009,
+    "time_ms_min": 13.600898,
+    "time_ms_max": 21.841962,
+    "peak_memory_kib": 696.7158203125,
+    "instructions": 2064852
+   },
+   "unified_full_outputs_baseline_recomputed": {
+    "time_ms": 10.811666,
+    "time_ms_min": 10.535217,
+    "time_ms_max": 15.612247,
+    "peak_memory_kib": 369.7314453125,
+    "instructions": 1301424,
+    "time_reduction_vs_reference": 0.48936840874308396,
+    "speedup_vs_reference": 1.9583590540070328,
+    "instruction_reduction_vs_reference": 0.5514372768257207,
+    "memory_reduction_vs_reference": 0.6886205728121484
+   },
+   "unified_full_outputs_baseline_cached": {
+    "time_ms": 9.231651,
+    "time_ms_min": 6.115863,
+    "time_ms_max": 12.971952,
+    "peak_memory_kib": 271.3330078125,
+    "instructions": 693826,
+    "time_reduction_vs_reference": 0.5639920212057512,
+    "speedup_vs_reference": 2.2935360099726476,
+    "instruction_reduction_vs_reference": 0.7608585057835744,
+    "memory_reduction_vs_reference": 0.7714895023916519
+   },
+   "unified_totals_only_baseline_cached": {
+    "time_ms": 5.24296,
+    "time_ms_min": 5.107469,
+    "time_ms_max": 8.059985,
+    "peak_memory_kib": 161.7548828125,
+    "instructions": 611184,
+    "time_reduction_vs_reference": 0.7523766450335813,
+    "speedup_vs_reference": 4.038391290416101,
+    "instruction_reduction_vs_reference": 0.7893427819061669,
+    "memory_reduction_vs_reference": 0.8637737109094856
+   }
+  },
+  "M": {
+   "rows": {
+    "materials": 2000,
+    "equipment": 600,
+    "refrigerants": 40,
+    "study_period": 60.0
+   },
+   "reference_all_units": {
+    "time_ms": 240.823084,
+    "time_ms_min": 228.300421,
+    "time_ms_max": 316.139442,
+    "peak_memory_kib": 11573.97265625,
+    "instructions": 28160281
+   },
+   "reference_without_SUM-08": {
+    "time_ms": 186.116573,
+    "time_ms_min": 164.224552,
+    "time_ms_max": 242.158186,
+    "peak_memory_kib": 6446.306640625,
+    "instructions": 20331065
+   },
+   "unified_full_outputs_baseline_recomputed": {
+    "time_ms": 88.916617,
+    "time_ms_min": 84.719208,
+    "time_ms_max": 111.399211,
+    "peak_memory_kib": 1823.3125,
+    "instructions": 11002402,
+    "time_reduction_vs_reference": 0.6307803408081927,
+    "speedup_vs_reference": 2.7084148286928187,
+    "instruction_reduction_vs_reference": 0.6092936004438307,
+    "memory_reduction_vs_reference": 0.8424644195944767
+   },
+   "unified_full_outputs_baseline_cached": {
+    "time_ms": 48.746698,
+    "time_ms_min": 46.957094,
+    "time_ms_max": 51.468199,
+    "peak_memory_kib": 1466.7373046875,
+    "instructions": 5790298,
+    "time_reduction_vs_reference": 0.7975829509765766,
+    "speedup_vs_reference": 4.940295320105579,
+    "instruction_reduction_vs_reference": 0.7943806739712576,
+    "memory_reduction_vs_reference": 0.873272786427791
+   },
+   "unified_totals_only_baseline_cached": {
+    "time_ms": 41.350735,
+    "time_ms_min": 39.032092,
+    "time_ms_max": 44.398942,
+    "peak_memory_kib": 544.5029296875,
+    "instructions": 5219722,
+    "time_reduction_vs_reference": 0.8282941389455838,
+    "speedup_vs_reference": 5.823913021134932,
+    "instruction_reduction_vs_reference": 0.8146424036038561,
+    "memory_reduction_vs_reference": 0.9529545346391097
+   }
+  },
+  "L": {
+   "rows": {
+    "materials": 20000,
+    "equipment": 6000,
+    "refrigerants": 300,
+    "study_period": 60.0
+   },
+   "reference_all_units": {
+    "time_ms": 3103.055519,
+    "time_ms_min": 2998.840457,
+    "time_ms_max": 3326.692563,
+    "peak_memory_kib": 113907.26953125,
+    "instructions": 278096808
+   },
+   "reference_without_SUM-08": {
+    "time_ms": 1458.850635,
+    "time_ms_min": 1355.569009,
+    "time_ms_max": 1564.172817,
+    "peak_memory_kib": 62580.0380859375,
+    "instructions": 200526722
+   },
+   "unified_full_outputs_baseline_recomputed": {
+    "time_ms": 925.789167,
+    "time_ms_min": 839.708558,
+    "time_ms_max": 985.738714,
+    "peak_memory_kib": 15324.8701171875,
+    "instructions": 105876854,
+    "time_reduction_vs_reference": 0.7016523999227873,
+    "speedup_vs_reference": 3.351795019437725,
+    "instruction_reduction_vs_reference": 0.6192805851982307,
+    "memory_reduction_vs_reference": 0.8654618780675523
+   },
+   "unified_full_outputs_baseline_cached": {
+    "time_ms": 471.980713,
+    "time_ms_min": 433.495078,
+    "time_ms_max": 558.023302,
+    "peak_memory_kib": 12752.4658203125,
+    "instructions": 55403311,
+    "time_reduction_vs_reference": 0.8478980765538794,
+    "speedup_vs_reference": 6.5745388180724245,
+    "instruction_reduction_vs_reference": 0.8007768898951189,
+    "memory_reduction_vs_reference": 0.8880451978807734
+   },
+   "unified_totals_only_baseline_cached": {
+    "time_ms": 415.901983,
+    "time_ms_min": 363.268729,
+    "time_ms_max": 479.813494,
+    "peak_memory_kib": 3492.6728515625,
+    "instructions": 50510701,
+    "time_reduction_vs_reference": 0.8659701766683086,
+    "speedup_vs_reference": 7.461026024970889,
+    "instruction_reduction_vs_reference": 0.8183700799615075,
+    "memory_reduction_vs_reference": 0.9693375772596823
+   }
+  }
+ }
+}
