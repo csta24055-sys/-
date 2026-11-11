@@ -1,0 +1,1063 @@
+{
+ "lens": "R2",
+ "read": [
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/README.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/__init__.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/__init__.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/generate.py (1-500 行、695-1060 行、1145-1421 行。係数カタログ・プロジェクト・運用の後半・解体・費用の生成部は関数名の一覧だけ)",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/io.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py (1-175 行：scenarios、run_both、exactness)",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_synth.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_engine.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md (1-70 行)",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json (JSON として読み、最上位のキーだけ)",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json (JSON として読み、件数と注記だけ)",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/README.md (基準計算に触れる行だけ)",
+  "whole-life-carbon-jcat-study/03_INPUTS/inputs.json (total_fields だけ)",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/VERIFY_DEF.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/exact_60_20.out (先頭だけ)",
+  "git log / git show --stat 65ff124 / git diff --stat 60e720f HEAD（読み取りだけ）"
+ ],
+ "items": [
+  {
+   "id": "CK-R2-01",
+   "title": "基準計算の本体（70 評価単位の逐次計算。誤差と負荷を測る基準）",
+   "what": "独立概念モデルの評価単位ごとに 1 関数を置き、概念式の定義どおりに行ごと・年ごと・事象ごとに計算する Python コード（標準ライブラリのみ、製品用エンジンではない）。関数の説明文がその単位の定義で、台帳の reference_semantics と同文。registry.run_all が評価期間を検査したうえで依存順に 70 単位を実行する。統合モデルと近似候補の誤差・負荷は、すべてこの結果を基準に測られた。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/__init__.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json"
+   ],
+   "state_category": 1,
+   "checked_how": "(1) 作成者の試験 tests/test_refcalc.py 8 件（手計算との照合 1 例、境界条件 32 件での恒等式と検査単位、標準ベンチマーク S、入れた不備の検出など）。(2) 04_VERIFICATION/unified_model_exactness.json：書き方の違う統合モデルと、架空の 681 シナリオ・70 単位で突き合わせ、許容差 相対 1e-9 で不一致 0（最大 4.8e-13）。(3) 第1回の独立検査（初版が対象）：定義からの再導出で定義の穴が見つかり、改めた（INDEPENDENT_REVIEW.md 2.2）。(4) 第2回の独立検査（43ba5d7 のコード。60e720f と同一）：検査担当が台帳の定義文と base.py の規約文だけから 53 単位を書き直し、119 シナリオ（検証用の母集団 24、境界条件 32、不備を入れたもの 14、壊し方 36、小数境界 5、段階の部分集合 8）で全数値・全件数が相対 1e-9 以内で一致。違いは表示と印の 4 点だけ（X-15 の未解決行の表示、B2-01 の computed が壊し方 4 件、SUM-07 の未定義時の形、負の廃棄質量での C-05 の n_mass_unchecked が 4 と 5）。X-04（by_gas）・X-05・SUM-08 は 50 シナリオで間接的に一致。14 段階の全部分集合 16,384 通り（1 シナリオ、T=62.5）で不整合 0。70 単位で台帳の定義文と説明文、depends_on が一致（差 0）。別の検査担当が 681 シナリオを床なしの厳密比較でやり直し、葉 7,962,996 個で不一致 0（最大 4.77e-13）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データのみ。独立概念モデルのみ。再導出に使われたのは小さいシナリオ（規模 M・L は対象外）、評価期間 99.9 年以下、許容差 相対 1e-9。規約（base.py の説明文）は所与として使われ、規約自体の当否は検査されていない。SYS-01〜04、QA-01、QA-03、QA-04、X-03、X-08、X-09、X-11、X-17、STO-01、STO-02 の 14 単位は独立の書き直しをしておらず、コードと定義文の読み比べと個別の入力での確認だけ。実建物での精度、原版ブックや他のツールとの関係は何も示さない。",
+   "round2_findings": [
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-4",
+    "RED-5",
+    "RED-6",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-10",
+    "RED-11",
+    "RED-12",
+    "NUM-1",
+    "NUM-2",
+    "NUM-3",
+    "NUM-4",
+    "NUM-5",
+    "NUM-8",
+    "NUM-10"
+   ],
+   "round2_effect": "不備のない入力での数値は否定されていない。弱められたのは次の 3 点。(a) 不備のある入力では「除外して数え、合計に不完全の印を付ける」という一般的な記述（RED-1、RED-2、RED-3、RED-5、RED-6、RED-10、NUM-2、NUM-4）。(b) 時間の規約が 2 進の丸めに依存しないという記述（NUM-1 への検証者の追記）。(c) 定義文がコードの動作を言い尽くしているという前提（RED-4、RED-7、RED-8、RED-9、RED-11、RED-12、NUM-3）。",
+   "claim_that_stands": "コミット 60e720f の基準計算は、架空の 119 シナリオで、定義文と規約文だけから独立に書き直した 53 単位の実装と、数値と件数が相対 1e-9 以内で一致した（例外は checked_how に記した 4 点：表示 2、印 1、負の廃棄質量を入れた壊し方での C-05 の件数 1）。X-04・X-05・SUM-08 は 50 シナリオで間接的に一致した。70 単位すべてで台帳の定義文と関数の説明文は同文である。不備のない架空シナリオについて、基準計算は書かれた定義どおりに計算する、と言える範囲はここまで。",
+   "claims_not_to_rely_on": [
+    "refcalc/base.py 46-47 行「A result that could not be computed completely is flagged」を、すべての入力で成り立つとする読み方（RED-1、RED-2、RED-3、RED-5）",
+    "09_APPROX_STUDY/README.md 26 行（60e720f では 18 行）「不備のある入力や、冗長な入力どうしが食い違う場合も、同じ値を返し、同じ不備を報告する」を一般の入力に広げた読み方（NUM-2、検証者の追記）",
+    "06_OPEN_ISSUES/README.md D-3 と INDEPENDENT_REVIEW.md 7 行「対応後の版に対する独立した検査は、まだ行っていない」（第2回の検査は行われたが、この 2 文書には反映されていない）",
+    "台帳 reference_note の「reference_semantics が定義」を、定義文だけで各単位の結果が決まるという意味に取ること（RED-4、RED-7、RED-9、RED-12）",
+    "基準計算の値を、実建物の排出量や、原版ブック・他のツールの結果の代わりに使うこと（06_OPEN_ISSUES D-1、D-2 が対象外と明記）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "コミット 60e720f の refcalc を変更せずに固定の基準（誤差の分母）として使う。70 単位の定義文（説明文 = reference_semantics）と depends_on は、ルート B で「元の式」と依存関係を読む出発点になる。結果の形式（value、by_item、by_year、by_stage、ok と violations、件数。「_」で始まるキーは作業用で比較対象外）は、新しいモデルとの突き合わせにそのまま使える。",
+   "reuse_conditions": "(1) コードを変えない。65ff124 の a1 の版は別物で未検証。(2) 定義どおりの動作が独立に確認されたのは、不備のない入力（make_scenario の dirty=False、境界条件 32 件、検証用の母集団）で、周期が生成器の作る値（整数、小数 2 桁、T/n）のとき。境界は 14 段階すべて、または不備のない入力での段階の部分集合。(3) 避ける入力：周期 1.000000001 のように τ×(1−1e-9) が整数に丸まる周期と極端に短い正の周期（CK-R2-03）、B3・B5 を上流の段階なしで含む境界と不備のある行の組合せ（CK-R2-05）、年次量・電力係数・係数値・換算倍率の負値・NaN・無限大、無効な周期、None を含む表や一覧、評価期間より短い年次表（CK-R2-07）、係数 ID「GRID」「REFRIGERANT」、値 0 でガス別量が 0 でない係数、施設管理の比率 1.0 で燃料がごく小さい入力（CK-R2-09）。(4) 規模 M・L と 99.9 年を超える評価期間は、定義からの再導出の対象外（統合モデルとの突き合わせだけがある）。(5) SUM-08 は synth.population.BASELINES というプロセス内の登録表を読む。基準案はシナリオの外にある入力として管理する。(6) 記録済みの負荷の数値（規模 S で 2,528,394 命令など）は 43ba5d7 のコードに対応する。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/__init__.py:1-7（1 単位 1 関数、簡略化なし、比較の基準）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py:34-43, 90-104（登録と依存順の実行、check_period）",
+    "refcalc/units_*.py の @unit の数：units_pre_a 22、units_b 22、units_c_sum 26、計 70（ソースの文字列を数えた）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json：units 70 件、computable_in_reference が真 70 件、reference_note",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json：scenarios 681、tolerance 1e-09、all_exact true、failures 0 件",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 1〜7：53 単位、119 シナリオ、16384 部分集合、70 単位の定義文一致）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:148（COULD NOT CHECK：独立に書き直していない 14 単位、規模 M・L と 99.9 年超は未実施）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:134（CHECKS PERFORMED 9：681 シナリオの床なし再比較、最大 4.77e-13）、numeric.md:118（葉 7,962,996 個、差 0）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md:7-8, 28-40（第1回の指摘と対応、対応後は未検査との記述）"
+   ]
+  },
+  {
+   "id": "CK-R2-02",
+   "title": "時間の規約（事象の数え方、年への割り当て、許容幅 1e-9）",
+   "what": "評価期間 T は実数。評価年は y = 1..ceil(T)、年重みは w_y = min(1, T − (y−1))。周期 L の事象は τ = n×L（n = 1, 2, …）を 1 つずつ数え上げ、τ < T×(1 − 1e-9) のものだけを評価期間の内側とする（T ちょうどは数えない）。事象は年 max(1, ceil(τ×(1 − 1e-9))) に属する。明示の一覧は 0 < t で内側のものだけを使い、周期が欠損・非有限・非正なら事象なし。by_year は Y+1 個で添字 0 が τ = 0。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py"
+   ],
+   "state_category": 1,
+   "checked_how": "作成者の試験が期待値を持つ：T=99.9・周期 33.3 で更新 2 回・建替 2 回（test_decimal_period_boundary）、T=10.5・周期 3.5 で更新 2 回、更新の年 4 と 7 を修繕から除く（test_hand_calculation）、(99.9, 33.3)→2、(99.9, 11.1)→8、(60.0, 0.1)→599、(12.3, 4.1)→2、(0.3, 0.1)→2、event_year(25×2.2)=55（test_closed_forms.py）。一致確認の「小数の評価期間と周期の端」10 シナリオで統合モデルと不一致 0。第2回：検査担当が同じ規約文から書いた独立実装と、小数境界と非整数の評価期間で一致。B1-02〜04、B3-01、B4-01〜03、B5-01、X-07、X-10、QA-02 の間に不整合なし。試験の合否は今回実行していない。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。規約は本研究が決めたもので、他のツールの仕様ではない（base.py 3-4 行）。確認された周期は、生成器の作る値と小数境界の組（99.9 と 33.3 など 5 組）。T ちょうどを数えない、切り上げた年に置く、という選択そのものの当否は検査対象外。",
+   "round2_findings": [
+    "NUM-1",
+    "RED-3",
+    "RED-11",
+    "RED-12"
+   ],
+   "round2_effect": "NUM-1 への検証者の追記により、「許容幅によって規約は 2 進の丸めに依存しない」は成り立たない（CK-R2-03）。RED-3：無効な周期が件数なしで「事象なし」になる規約は 06_OPEN_ISSUES の B に載っていない。RED-11(4)：明示の一覧で同じ年が重なると、その回数だけ数える（B に未記載、QA-02 は警告しない）。RED-12(7)：正の周期に下限がない。",
+   "claim_that_stands": "コミット版の基準計算は、内側の判定 τ < T×(1 − 1e-9) と年の割り当て max(1, ceil(τ×(1 − 1e-9))) を、B1・B3・B4・B5・X-07・X-10・QA-02 で同じ関数から使う。小数境界の 5 組と非整数の評価期間では、規約文から書いた独立実装と回数・年が一致した（第2回、架空データ）。",
+   "claims_not_to_rely_on": [
+    "refcalc/base.py 14-15 行「The tolerance makes the rule independent of binary rounding」",
+    "06_OPEN_ISSUES/README.md B-15 の括弧書き（許容幅で、小数の周期が浮動小数点の誤差で端をまたがない）を、すべての周期についての保証と読むこと",
+    "INDEPENDENT_REVIEW.md 35 行の対応（許容幅を定義した）で、端の問題が解消したという読み方"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "固定の基準の一部。新しいモデルが同じ回数と同じ年の割り当てを再現できるかを見る基準にする。回数は T と L だけで決まる階段状の関数、年の割り当ては切り上げで、少数の変換（母関数、畳み込みなど）で表す対象になる。",
+   "reuse_conditions": "周期は丸めの端を避ける。確認済みの反例は倍精度値 1.000000001 の 1 つ（CK-R2-03）。整数 m に対する m×(1±1e-9) 付近と 1/(1−1e-9) 付近は、a1 の仕様書が追加の試験対象に挙げた帯で、コミット版での挙動は未確認（実行が必要）。1 年未満の周期は 1 行当たりの事象が増える（0.1 年・T=60 で 599 回）。同じ年に複数の事象が入る場合の扱い（B1-02 は年末にまとめて反映）は定義文どおり。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:6-21（規約文）、66（EPS = 1e-9）、91-93（inside）、109-118（periodic_events）、125-126（event_year）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:26-28, 43（B-1、B-2、B-3、B-15）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py:58-83, 98-105",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py:80-86",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json：by_group.decimal（scenarios 10、failed 0）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 6：時間の規約は一貫して使われ、不整合なし）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:138（検証者の追記 1：基準計算のループは NUM-1 の入力で書かれた規約から外れる）"
+   ]
+  },
+  {
+   "id": "CK-R2-03",
+   "title": "時間の規約のナイフエッジ（周期 1.000000001 で年の割り当てが丸めで決まる）",
+   "what": "浮動小数点で 周期×(1 − 1e-9) がちょうど 1.0 に丸まる周期（倍精度値 1.000000001、16 進で 0x1.000000044b830p+0）では、事象の属する年が丸めで決まり、基準計算のループの結果が、書かれた規約を厳密な有理数で計算した結果と食い違う。不備のない有効な入力で起きる。あわせて、正の周期に下限がなく、ごく短い周期は事象を 1 つずつ数えて保持する（RED-12(7)）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の検査担当と検証者がそれぞれ自分のスクリプトで再現。T=7：事象 6 回の年が [1, 2, 4, 4, 6, 7]（異なる年 5）。T=30：異なる年 26（事象 29）。T=60：異なる年 48（事象 59）。厳密な有理数で規約を計算すると、T=60 の 59 回は年 2..60 の 59 個の異なる年に入る。全行の周期を 1.000000001 にした架空シナリオ（T=60、資材 12 行）で、B3-01 は基準計算 229291.25152413402、統合モデル 19107.60429367785（相対差 0.9167）、SUM-03 は 114273919.42727956 と 114063735.7800491（相対差 1.84e-3）。走査：検査担当 702,603 組（±4000 ulp）、検証者 1,512,126 組（±6000 ulp）と 1・2・3・5 付近の乱数 300,000 個で、食い違うのはこの倍精度値 1 つだけ。RED-12(7)：周期 1e-4 年・T=60 で 1 行が 599,999 事象。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。影響する単位は、同じ event_year を使う B3-01（修繕を除く年）、B4-02・B5-01 の by_year、B1-02〜04、X-07。「ほかに食い違う倍精度値がない」ことは証明されていない（走査した範囲で見つからなかっただけ）。内側の判定（回数）について同種の反例は第2回の資料に無い。",
+   "round2_findings": [
+    "NUM-1",
+    "RED-12"
+   ],
+   "round2_effect": "この項目自体が第2回の指摘。SPEC_A1 は REC-1 と APP-5 を同じ問題の別の見方として扱っている（両指摘の本文はこの読み取りの範囲外）。検証者の整理：この入力で閉形式（統合モデル）が返すのは厳密計算の値、基準計算のループが返すのは丸めの産物。どちらを正とするかは定義に書かれていない。",
+   "claim_that_stands": "周期が倍精度値 1.000000001 のとき、コミット版の基準計算は、書かれた規約の厳密な値とは違う年に事象を置く。この 1 点以外に食い違う周期は、約 151 万組の走査では見つかっていない。",
+   "claims_not_to_rely_on": [
+    "refcalc/base.py 14-15 行「independent of binary rounding」",
+    "fastcalc/closed_forms.py の説明文「All of them are exact」と、03_MODELS/DERIVATIONS.md D3 の「c >= 1 なら事象ごとに年が違い」（NUM-1 が引用。両ファイルの本文はこの読み取りの範囲外）",
+    "記録 EX-B3-01-M1 の成功・検証済みの表示を、すべての入力についての一致と読むこと（NUM-1）"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。固定の基準に与える入力の条件として引き継ぐ。",
+   "reuse_conditions": "新研究の入力に、周期 1.000000001（1 + 1e-9 に相当する倍精度値）を入れない。入れる場合は、基準計算の値を「定義の値」とみなせないことを明記する。極端に短い周期も避ける（第2回の例は 1e-4 年で 1 行 599,999 事象。1 行当たり約 1 万事象を超える周期は第2回でも試されていない）。a1 の版（厳密な整数演算）はこの欠陥への修正案だが未検証（CK-R2-19）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:1-11（NUM-1、判定 CONFIRMED、数値と走査の範囲）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:138（検証者の追記 1：厳密な有理数での年 2..60、基準計算は 48 個の異なる年）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:136, 142（RED-12(7)：refresh_cycle 1e-4、T=60 で B4-03 が [599999]）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:109-118, 125-126（数え上げと event_year。浮動小数点の積 n*period を使う）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py:26（試験が引く周期のずれは 1e-15、1e-12、1e-10、1e-8、1e-6 で、1e-9 が無い）"
+   ]
+  },
+  {
+   "id": "CK-R2-04",
+   "title": "完全性の印（X-02 の complete・incomplete_units、SUM-01〜03 の complete）",
+   "what": "X-02 が、対象段階ごとに手書きの表 STAGE_UNITS に載っている単位を見て、n_skipped・n_routes_skipped・n_partial が 1 以上、または computed が偽の単位を incomplete_units に挙げ、1 つでもあれば complete を偽にする。SUM-01〜03 はその complete を引き継ぐ。第1回の検査への対応として加えられた仕組み。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py"
+   ],
+   "state_category": 2,
+   "checked_how": "作成者の試験 1 件（test_wrong_unit_stage_or_range_is_skipped_and_reported：14 段階すべてが対象の小さいシナリオで、係数の単位・対象段階の誤り、負の数量、月単位の年次量を入れ、complete が偽、incomplete_units に C2-01 が入ることを期待）。第2回：再導出した実装と件数（B4-02 の n_partial、C3・C4 の経路の件数を含む）が 119 シナリオで一致。境界 ['A1-A3','B3'] では complete 偽・['A13-01','X-01']、['B4'] では偽・['B4-02'] を確認。境界に上流の段階が無い場合の穴が見つかった（CK-R2-05）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。印が働くことが確認されたのは、除外の件数を自分で持つ単位が対象段階に入っている場合だけ。",
+   "round2_findings": [
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-5",
+    "RED-12"
+   ],
+   "round2_effect": "RED-1（CONFIRMED）：B3・B5 は上流の単位の行結果から作るが、表には B3-01・B5-01 しか無く、上流で除外があっても complete は真のまま。RED-2・RED-3：検査されない値（負・NaN の年次量、無効な周期など）は件数に入らないので、14 段階すべてが対象でも complete は真のまま。RED-5：SUM-08 は完全性を見ない。RED-12(2)：B2-01 は B6-01 が算出されなくても computed 真を返す。",
+   "claim_that_stands": "X-02 の定義文（対象段階の単位が除外をしたらその単位を挙げる）どおりにコードは動く。「合計が不完全なら必ず印が付く」とは言えない。印は、対象段階に属する単位が自分で数えた除外だけを反映する。",
+   "claims_not_to_rely_on": [
+    "06_OPEN_ISSUES/README.md B-17「使えない行・経路・項目は合計に入れず、件数を報告し、合計に『不完全』の印を付ける」を一般の保証と読むこと",
+    "refcalc/base.py 46-47 行と、SUM-01・SUM-03 の定義文「除外した行などがあれば complete を偽にする」",
+    "INDEPENDENT_REVIEW.md 33 行の対応（合計に「不完全」の印を付ける）が、すべての境界で成り立つという読み方"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "固定の基準の出力の一部として読む。不備のない入力では常に complete が真になるので、新しいモデルとの比較では真であることの確認にだけ使う。",
+   "reuse_conditions": "不備のある入力の検出器としては使わない。complete が真でも、CK-R2-05 と CK-R2-07 の入力では合計が欠けている、または NaN・負になる。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:240-250（STAGE_UNITS、_incomplete）、253-291（X-02）、438-454（SUM-01〜03）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py:107-128",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:1-11（RED-1、検証者の確認値）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:45（B-17）"
+   ]
+  },
+  {
+   "id": "CK-R2-05",
+   "title": "完全性の印の穴（データの流れを追っていない。B3・B5、SUM-08、B2-01）",
+   "what": "対象段階に B3 または B5 があり、その上流の段階（A1-A3。B5 では A4・A5・C も）が対象外のとき、上流の行が除外されて B3・B5 の値が下がっても、complete は真、incomplete_units は空のままになる。SUM-08 は基準案と当該案の完全性を条件にも結果にも含めない。B2-01 は B6-01 が算出されないとき computed 真・値 0.0 を返す。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の検査担当と検証者が再現。架空シナリオ（シード 11、RC・office、T=60、資材 12 行、建替周期 25）で、数量の大きい資材 3 行を欠損、設備 1 行の係数を未登録にすると、対象 ['B3']：SUM-03 が 98378.05 → 43676.16（−55.6％）で complete 真。対象 ['B5']：894813.87 → 333032.14（−62.8％）で complete 真。対象 ['B3','B5']：993191.93 → 376708.29 で complete 真。使用許諾 RESTRICTED の係数 1 つだけでも、対象 ['B5'] で 894813.87 → 741862.36（−17.1％）、complete 真。統合モデルも同じ値と同じ印を返す。RED-5：基準案の数量上位 4 行を欠損にすると SUM-08 は COMPARED のまま、削減率が 0.2123 → −0.1732（符号が反転）。当該案の側を欠損にすると 0.5406。登録の無い基準案 ID は NO_BASELINE（指定なしと同じ）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。穴が現れるのは、B3 または B5 を上流の段階なしで含む境界と、上流の行の不備の組合せ。14 段階すべてが対象なら、同じ不備は A13-01・X-01 経由で印が付く。不備と部分集合の組合せを調べたのは B1、B2、B3、B4、B5、B3+B5 だけ。",
+   "round2_findings": [
+    "RED-1",
+    "RED-5",
+    "RED-12"
+   ],
+   "round2_effect": "RED-1 と RED-5 は CONFIRMED。検証に使われた段階の部分集合のシナリオ（verify_unified.py 73 行、population.py 186 行、test_refcalc.py 88・93 行）はすべて不備なしで、この組合せは一度も実行されていなかった。",
+   "claim_that_stands": "コミット版の基準計算と統合モデルは、この組合せで同じ欠けた合計と同じ「完全」の印を返す。2 つが一致していても、印が正しいことにはならない。",
+   "claims_not_to_rely_on": [
+    "06_OPEN_ISSUES/README.md B-17 の「合計に『不完全』の印を付ける」",
+    "SUM-08 の「比較可能な場合だけ比較する」を、合計が完全な場合だけ比較するという意味に取ること",
+    "基準計算と統合モデルが印まで一致していることを、印の正しさの根拠にすること"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。固定の基準の使い方の制約として引き継ぐ。",
+   "reuse_conditions": "新研究で段階の部分集合を使うなら、不備のない入力に限る。SUM-08 を使うなら、基準案と当該案の両方が完全であることを呼び出し側で確かめる。a1 の版はデータの流れに沿った印に作り直したと申告しているが未検証（CK-R2-21）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:1-11（RED-1）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:49-59（RED-5）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:133-143（RED-12(2)）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:150（検証者の追記 3：部分集合のシナリオはすべて不備なし。RESTRICTED の例）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:240-245（STAGE_UNITS の B3、B5）、495-518（SUM-08）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:199-206, 380-383（B3-01 は e0 = 0 の行を黙って飛ばす。B5-01 は上流の件数を見ない）"
+   ]
+  },
+  {
+   "id": "CK-R2-06",
+   "title": "使えない係数と不正な値の扱い（除外して数える規則。実装されている範囲）",
+   "what": "係数は、レコードがあり、使用許諾が PERMITTED_PUBLIC で、対象段階が使う段階と完全に同じで、単位が一致するか直接の換算が登録されているときだけ使う（base.lookup）。数量・質量・距離・率は、欠損（None）・NaN・無限大・負・範囲外なら、その行（または経路）を計算から除いて件数に数える（nonneg、ratio、positive）。0 や上限に丸めない。年次量の単位は「単位/year」だけ。評価期間が有限の正の数でなければ計算全体を ValueError にする。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+   ],
+   "state_category": 2,
+   "checked_how": "作成者の試験（test_defects_are_detected：生成器が入れた不備の場所と SYS-01・SYS-02・SYS-03・C-05・QA-02・A13-02 の報告が一致することを期待。test_wrong_unit_stage_or_range_is_skipped_and_reported。test_invalid_study_period_is_refused：0、−5、NaN、無限大で ValueError）。一致確認：不備を入れたシナリオ 60 件と、36 種類の壊し方×4 の 144 件で統合モデルと不一致 0。無効な評価期間は 5/5 で両方がエラー。第2回：不備を入れた 14 件と壊し方 36 件で、定義文から書いた独立実装と数値・件数が一致。係数レコードとの乗算はすべて base.lookup を通ることを読み取りで確認。同じ第2回で、規則の届かない入力が見つかった（CK-R2-07）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。確認されたのは、生成器の 8 種類の不備と mutations.py の 36 種類の壊し方が触る項目だけ。INVALID_PERIODS の 5 つ目は 500.0 で、これは評価期間が無効だからではなく、年次表（130 個）が評価期間より短いために check_period が ValueError を出す（コードの読み取りによる。実行はしていない）。",
+   "round2_findings": [
+    "RED-2",
+    "RED-3",
+    "RED-6",
+    "RED-10",
+    "RED-11",
+    "NUM-2",
+    "NUM-4"
+   ],
+   "round2_effect": "RED-2（CONFIRMED）：年次量（ガス、石油、地域熱、上水、下水、廃棄物）の負値・NaN は黙って使われ、B-18 と INDEPENDENT_REVIEW 2.2 の記述に反する。電力係数の値、工事期間の電力係数、係数値、換算倍率も検査されない（B-18 が名指ししていない穴）。RED-3（PARTLY_CONFIRMED）：無効な周期は件数なしで「事象なし」。RED-10（CONFIRMED）：評価期間以外の入力でも TypeError・IndexError が出る。RED-6（CONFIRMED）：SYS-01 が見るのは数値入力の一部。RED-11（PARTLY_CONFIRMED）：設備の廃棄係数が None のとき、SYS-03 は通り X-14 は除外する。",
+   "claim_that_stands": "nonneg・ratio・positive・lookup で守られている項目（資材・設備・冷媒の数量、質量、距離、率、係数の使用条件）については、生成器の 8 種類の不備と 36 種類の壊し方で、基準計算は定義文どおりに除外して数えた（第2回の独立実装と数値・件数が一致）。",
+   "claims_not_to_rely_on": [
+    "06_OPEN_ISSUES/README.md B-18「負の数量・質量・距離、範囲外の率は、その行を計算から除いて数える」を、年次量を含むすべての数値入力に及ぶと読むこと",
+    "refcalc/base.py 41-45 行「None means MISSING ... skipped and counted」を、すべての None で例外が出ないと読むこと",
+    "INDEPENDENT_REVIEW.md 36 行「除外して数える規則に統一」",
+    "04_VERIFICATION/README.md 25 行「無効な評価期間（0、負、非数、無限大）は 5/5 でエラー」の 5 件目が 500.0（年次表より長い期間）である点を、無効な評価期間の例として扱うこと"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "固定の基準の動作の一部。新しいモデルが、不備のある行を同じ条件で除外するかを見るときの参照になる。",
+   "reuse_conditions": "不備のある入力を新研究で使うなら、生成器の 8 種類と 36 種類の壊し方の範囲に限る。CK-R2-07 の入力は使わない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:32-47（係数の使用条件、欠損と不正な値）、96-106（positive、nonneg、ratio）、133-143（lookup）、69-76（check_period）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:45-49（B-17〜B-21）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py:107-146",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py:336（INVALID_PERIODS = (0.0, -5.0, nan, inf, 500.0)）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json：by_group.defective（60、failed 0）、by_group.mutated（144、failed 0）、invalid_periods_refused_by_both「5/5」",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 1、5）"
+   ]
+  },
+  {
+   "id": "CK-R2-07",
+   "title": "不正な値の扱いの穴（検査されない値、無効な周期、例外、ゲートとの食い違い）",
+   "what": "コミット版の基準計算には、検査なしで演算に使われる数値入力と、例外で止まる入力がある。(a) 年次量、電力係数（系列と工事期間の値）、係数値、ガス別量、換算倍率は、負・NaN・無限大でもそのまま掛けられ、件数も印も SYS-01〜03 も反応しない。(b) 負・0・NaN・無限大の更新周期・耐用年数・建替周期は、件数なしで「事象なし」になる。(c) None の経路比率・電力係数・係数値・要約数量・用途別面積・事象一覧の要素は TypeError、評価期間より短い TABLE 型の年次表は IndexError になる。(d) SYS-01 は数値入力の一部しか見ず、NaN を MISSING にしない。設備の廃棄係数が None でも SYS-03 は通るが X-14 は除外する。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の検査担当と検証者が再現（架空シナリオ、シード 11 ほか）。RED-2：ガスと上水の基準値を負にすると B6-03 が 1910920.70 → 1106878.12、B7-04 が 99907.16 → 70795.70、n_skipped 0、complete 真。ガスの基準値 NaN で SUM-03 が NaN、complete 真。電力係数の初期値 −0.4 で B6-03 が −2036536.49。工事期間の係数 −1 で A5-01 が −30324.2。係数値 NaN で SUM-03 が NaN、全ゲート合格。行の換算倍率を負にすると A13-01 の行結果が 30326.53 → −30326.53。検証者：ガスの基準値 −5e9 で SUM-03 が −630713478768.06、complete 真、全検査合格。RED-3：周期をすべて無効にすると B4 333158.14 → 0.0、B5 894813.87 → 0.0、SUM-03 7893398.71 → 6619741.07（−16.1％）、complete 真。RED-10：上の (c) の例外をそれぞれ再現。NUM-2：1 項目ずつ NaN・±無限大・None にした 3461 例のうち 212 例で基準計算と統合モデルが食い違う。NUM-4：短い年次表と、係数なしや単位違いが重なると、基準計算だけが IndexError。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。型の違う入力（文字列など）と、NaN・無限大が 2 か所以上ある組合せは調べられていない。負の電力需要を max(0, …) で 0 にするのは B6-04 の定義文に書かれた式で、欠陥ではなく B-18 の文言との不整合（検証者の整理）。",
+   "round2_findings": [
+    "RED-2",
+    "RED-3",
+    "RED-6",
+    "RED-10",
+    "RED-11",
+    "NUM-2",
+    "NUM-4",
+    "NUM-7"
+   ],
+   "round2_effect": "RED-2・RED-6・RED-10・NUM-2・NUM-4・NUM-7 は CONFIRMED、RED-3・RED-11 は PARTLY_CONFIRMED。RED-3 の訂正：無効な周期を事象なしとする規約は B4-01・B4-03 の定義文と base.py にはあり、無いのは B5-01・B1-02 の定義文、NaN・無限大への言及、06_OPEN_ISSUES の B。RED-11 の訂正：実際の食い違いは設備の廃棄係数（SYS-03 と X-14）だけで、EPD が使えないときの扱いは B-14 どおり。NUM-7：STEPWISE の段の添字が float でも基準計算は受け入れる（型注釈は int）。",
+   "claim_that_stands": "年次量・電力係数・係数値・換算倍率・周期・None を含む表という入力の種類では、コミット版の基準計算の合計は、負・NaN になったり例外で止まったりし、そのとき complete は真のままである。この種類の入力に対する基準計算の値は、定義の値として使えない。",
+   "claims_not_to_rely_on": [
+    "06_OPEN_ISSUES/README.md B-18 と B-21（評価期間だけがエラーになる、という読み方）",
+    "09_APPROX_STUDY/README.md 26 行と 04_VERIFICATION/README.md 23 行の「同じ値を返し、同じ不備を報告する」（NaN・無限大では基準計算は不備を何も報告せず、統合モデルと QA-01 の合否が食い違う）",
+    "SYS-01 の定義文「数値入力を 1 つずつ調べ」を、計算が読む数値入力すべてと読むこと。台帳の SYS-01 の branches 欄「NaN → MISSING」"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。固定の基準に与えてはいけない入力の一覧として引き継ぐ。",
+   "reuse_conditions": "新研究の入力は、数値がすべて有限で 0 以上（換算倍率は正）、周期は有限の正の数または None、年次表は ceil(T) 個以上、表や一覧に None を含まないものに限る。生成器の不備なしシナリオはこの条件を満たす設計と読める（実行による確認はしていない）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:13-23（RED-2）、25-35（RED-3）、61-71（RED-6）、109-119（RED-10）、121-131（RED-11）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:150（検証者の追記 1、2：非有限の入力での食い違い、追加の例外 3 か所）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:13-23（NUM-2）、37-47（NUM-4）、73-83（NUM-7）、138（検証者の追記 2）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:69-76（check_period は電力係数の表の長さしか見ない）、152-164（profile_values は検査なし）、184-203（grid_values）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:450-467（_annual は年次量を検査なしで掛ける）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py:29-75（SYS-01 が見る項目の固定の一覧）、526-533（A5-01 は construction_value を検査しない）"
+   ]
+  },
+  {
+   "id": "CK-R2-08",
+   "title": "規約の一覧（06_OPEN_ISSUES の B-1〜B-21 と base.py 冒頭の規約文）",
+   "what": "基準計算が、概念式の決めていない点をどう定めたかの一覧。06_OPEN_ISSUES/README.md の B に 21 項目（端数年の按分、T ちょうどを数えない、更新の年は修繕を除く、冷媒の交換は年末、B1-04 は B1 段階、建替で更新周期を初期化しない、係数は時点によらず固定、未数量分は r/(1−r)、B2 と B6 の振り分け、設備の初期の搬入・据付は不計上、記述子を正とする、など）と、一部に影響の大きさの試算。同じ規約の英文が refcalc/base.py の冒頭にある。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py"
+   ],
+   "state_category": 2,
+   "checked_how": "手書きの文書。第2回：B-1〜B-21 をコードと照合し、B-17（RED-1）、B-18（RED-2・RED-3）、B-11（RED-8）を除いて一致。付記の数値は再現：B-7（更新 31 → 19 回、B4 −40.6％、ホールライフ −1.90％）、B-10（11.52％、標準ベンチマーク S で SUM-02 の 7.00％）、B-11（A4 の 0.118％、A5 の 5.014％）、B-12（ガスの範囲で合計は変わらない）。一覧に無い規約がコードにあることも見つかった。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。影響の大きさは標準ベンチマーク S や境界条件の 1 例についての値で、一般の大きさではない。",
+   "round2_findings": [
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-7",
+    "RED-8",
+    "RED-10",
+    "RED-11",
+    "NUM-1",
+    "NUM-10"
+   ],
+   "round2_effect": "第2回の指摘は一覧に反映されていない。成り立たない項目：B-17（印が付かない境界がある）、B-18（年次量などに届かない）、B-15 の括弧書き（ナイフエッジ）。不足している項目：B-11 に資材の初期の据付が無い。一覧に無い規約：無効な周期は事象なし（RED-3）、未数量分 A13-04 を B3・B4 には入れず B5 には入れる（RED-7）、資材の据付係数は更新時だけ使う（RED-8）、明示の一覧の重複した年はその回数だけ数える・比率 0 で係数なしの経路も不完全にする（RED-11）。D-4 は許容差だけを述べ、桁落ちの限界を述べていない（NUM-10）。",
+   "claim_that_stands": "21 項目のうち B-11、B-17、B-18 を除く 18 項目は、コードの動作の記述として一致する（第2回の照合）。うち B-15 は判定式としては一致するが、括弧書きの目的（丸めで端をまたがない）は NUM-1 で成り立たない。B-21 は書かれたとおりだが、評価期間以外の入力でも例外が出る（RED-10）。B-7、B-10、B-11、B-12 に付いた影響の数値は再現された。一覧は、基準計算の規約のすべてではない。",
+   "claims_not_to_rely_on": [
+    "B-17 の「合計に『不完全』の印を付ける」",
+    "B-18 が「該当する全単位」に及ぶという記述",
+    "B-15 の括弧書き（浮動小数点の誤差で端をまたがないようにする許容幅）",
+    "B-11 が初期に計上しない据付のすべてだという読み方（資材の分 31617.67 kgCO2e、標準ベンチマーク S で報告値の A5 の 41.1％ に当たる分が載っていない）",
+    "B-21 を「評価期間以外の入力では例外は出ない」と読むこと（RED-10、NUM-4）",
+    "B の 21 項目が、結果を変える選択のすべてだという読み方"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新研究で「元の式」を読むときの前提の一覧として使う。規約を変えれば基準の値が変わる点（特に B-2、B-3、B-4、B-7、B-8、B-10、B-11、B-16）を、変換で表す対象の式の一部として扱う。",
+   "reuse_conditions": "第2回で見つかった一覧に無い規約（RED-3、RED-7、RED-8、RED-11）を補って読む。B-17・B-18・B-15 は書かれたとおりには成り立たない。規約は本研究の設計であり、他のツールの仕様ではない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:20-51",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:1-54",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 7：B-1〜B-21 の照合、再現した数値、一覧に無い規約）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:73-95（RED-7、RED-8 と数値）"
+   ]
+  },
+  {
+   "id": "CK-R2-09",
+   "title": "定義文とコードの食い違い、定義文に無い動作、数値上の限界（基準計算の側）",
+   "what": "基準計算の定義文（説明文）とコードの間、または定義の内部に残っている食い違いの一覧。X-04 は定義文で「一致することを確かめる」と言うが検査結果を返さない。B4-02・B3 の「製造排出」に未数量分 A13-04 が入るかが文から決まらない。X-02 の by_stage_all、X-05 の by_stage_co2 は定義文に無い。X-17 は要約数量 0 の区分を落とす。B3-01 は e0 = 0 の行の排出の行を捨てる。係数 ID が擬似 ID「GRID」「REFRIGERANT」と衝突すると基準計算の内部で矛盾する。施設管理の比率 1.0 で燃料がごく小さいと B6-03 − B2-01 で桁が落ちる。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の検査担当と検証者が再現（架空データ）。RED-4：係数 1 つの CO2 量を 3 倍にすると X-04 は 7240695.00、14 段階の和は 6998584.83（+3.46％）で、QA-01・QA-03 は合格のまま。RED-7：標準ベンチマーク S で A13-04 は 167094.80（A1-A3 の 3.95％）。B4 はコード 6490922.78、上乗せ込みの読み方で 6526129.00（+0.542％）。B3 は 3766020.36 と 3913846.95（+3.93％）。RED-8：同 S で、据付係数を持つ資材 92 行の初期の据付 31617.67 kgCO2e（報告値の A5 76918 の 41.1％、SUM-03 の 0.096％）は計上されない。RED-12(5)：同 S で concrete_m3 を 0 にすると X-17 が 2895945.56 → 1194519.62。NUM-3：値 0 でガス別量が 0 でない係数で、X-04 が基準計算 8893233.37821491、統合モデル 8938913.46839103（+5.136e-03）。NUM-5：資材の係数を ID「GRID」にすると SUM-03 が基準計算 8965567.801008811、統合モデル 8895116.777675131。基準計算は X-04 でその行を擬似行として扱い、QA-01 が不合格になる。NUM-10(a)：比率 1.0、燃料を 1e-7 倍で、X-02 の B6 が基準計算 0.14876614138484、燃料だけの和 0.14876614887071526。基準計算の QA-01 が有効な入力で不合格。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ、独立概念モデル。RED-7・RED-8・RED-9 の大きさは標準ベンチマーク S だけの値。RED-9 は文言だけの問題で、研究の数値は変わらない（判定 PARTLY_CONFIRMED）。NUM-3 と NUM-5 は、どちらの計算が正しいかを検査担当は判断していない。",
+   "round2_findings": [
+    "RED-4",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-11",
+    "RED-12",
+    "NUM-3",
+    "NUM-5",
+    "NUM-8",
+    "NUM-10"
+   ],
+   "round2_effect": "RED-4、RED-7、RED-8、RED-12、NUM-3、NUM-5、NUM-8、NUM-10 は CONFIRMED、RED-9 と RED-11 は PARTLY_CONFIRMED。その他の細目：QA-01 (a) は相対 1e-9 に絶対値の下限 1.0 を併用し、(b)(c) は作りの上で不合格になり得ない。SUM-05 の「評価年数 0 以下」の枝は到達しない。X-13 は無効な行を件数なしで None にする。SYS-02 は EPD の係数を見ない。SYS-02 は単位名が文字列「None」のとき欠損として報告する（NUM-8）。B4-02 の文は設備の搬入・据付と係数の段階（A4・A5）を、B1-02 の文は ×GWP を書いていない。",
+   "claim_that_stands": "コードの値は一意に決まる。食い違いは 2 種類ある。(1) 定義文の読み方で値が変わるもの（RED-7、RED-8、RED-9）。コードの読みは depends_on で確定し、どの架空シナリオにも同じ読みが当てはまる。(2) 特定の入力でだけ現れるもの（RED-4、RED-12(5)、NUM-3、NUM-5、NUM-10(a)）。係数のガス別量と値が食い違う入力、要約数量 0、擬似 ID と同じ係数 ID、桁落ちする大きさの組合せのとき。不備のない架空シナリオでは、X-04 の値と 14 段階の和は相対 3e-16 で一致する（RED-4 の検証者の確認、シード 11 の 1 例）。",
+   "claims_not_to_rely_on": [
+    "X-04 の定義文「ガス別量×GWP の合計＋買電＋冷媒 が段階合計の総和に一致することを確かめる」",
+    "X-17 の定義文「定義上、6 区分の製造排出を区分別に集計し直したものに等しい」（要約数量 0 の区分では成り立たない）",
+    "QA-01 の定義文「相対 1e-9 以内」（実際は 1e-9×max(|値|, 1.0)）",
+    "B4-02 の「製造（A1-A3 の行結果）」を、未数量分 A13-04 を含むと読むこと（コードは含めない。B5-01 は含める）",
+    "X-02 の定義文「対象外の段階は結果に含めない」（by_stage_all と X-05 の by_stage_co2 は 14 段階すべてを返す）"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。固定の基準の出力を読むときの注意として引き継ぐ。",
+   "reuse_conditions": "ルート B で定義文から式を組み直すときは、depends_on とコードで読みを確定する（B3・B4 の製造排出は A13-01 + A13-03、B5 の基準は A13-04 を含む）。by_stage と by_stage_all の B6 は B2 が対象外のとき B2-01 の分だけ違う。係数 ID に「GRID」「REFRIGERANT」を使わない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:37-47（RED-4）、73-83（RED-7）、85-95（RED-8）、97-107（RED-9）、121-131（RED-11）、133-143（RED-12）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:25-35（NUM-3）、49-59（NUM-5）、85-95（NUM-8）、109-119（NUM-10）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:322-352（X-04 は検査結果を返さない）、523-540（QA-01 の 531 行）、253-291（by_stage_all）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:204, 225（r == 0.0 or e0 == 0.0 で行を捨てる）、70（B4_DEPS に A13-04 が無い）、367-368（B5-01 の depends_on に A13-04 がある）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py:603-623（X-17 の 619 行）、152（target == \"None\"）"
+   ]
+  },
+  {
+   "id": "CK-R2-10",
+   "title": "基準計算について検証できていないこと（06_OPEN_ISSUES の D）",
+   "what": "基準計算の精度と正しさについて、研究が自分で未検証と書いた 7 点。実建物での実用精度は対象外。他のツールの結果とは比較していない。基準計算と統合モデルはどちらも主担当（自動の AI エージェント）が書き、人による確認と手計算との全面的な照合はしていない。許容差は相対 1e-9 で、表示上の丸めは扱っていない。測定は資材 2 万行まで。評価単位ごとの代理モデルは作っていない。「候補なし」は測定をしていない判断。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+   ],
+   "state_category": 4,
+   "checked_how": "文書の記述。第2回の検査で内容が否定された項目は無いが、D-3 の後半（改めた後の版に対する独立検査は行っていない）は、第2回の検査が行われた時点で古くなった。",
+   "checked_by": "なし",
+   "scope": "独立概念モデルと架空データについての限界の記述。",
+   "round2_findings": [
+    "NUM-10"
+   ],
+   "round2_effect": "NUM-10（CONFIRMED）：D-4 は許容差だけを述べ、桁落ち・桁あふれする入力では 1e-9 を超えるという限界を述べていない。第2回の検査の結果は、この文書にも INDEPENDENT_REVIEW.md にも記録されていない（STOP_STATUS.md 3 節）。",
+   "claim_that_stands": "基準計算は、現実の排出量、原版ブック、他のツールのいずれとも照合されていない。照合の相手は、同じ主担当が書いた統合モデルと、2 回の独立検査（自動の AI エージェント）による定義文からの書き直しだけである。人による確認は無い。",
+   "claims_not_to_rely_on": [
+    "D-3 の「改めた後の版に対する独立検査は、まだ行っていない」（第2回は行われた。ただしその指摘への対応は未完了で未検証）",
+    "D-4 を、すべての入力で相対 1e-9 の一致が成り立つという意味に取ること"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。固定の基準の位置づけ（何の正しさも保証しない、比較の物差しである）として引き継ぐ。",
+   "reuse_conditions": "新研究の誤差は「この基準計算に対する誤差」であり、実建物の精度ではないと書く。資材 2 万行を超える規模は未測定。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:71-79（D の 1〜7）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:109-119（NUM-10：D-4 は限界を述べていない）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:50-62（第2回の指摘は記録・報告書に未反映）"
+   ]
+  },
+  {
+   "id": "CK-R2-11",
+   "title": "架空シナリオのデータ構造（synth/model.py と JSON の入出力）",
+   "what": "架空の建物シナリオの入力側だけを持つデータ構造（dataclass 29 個。Scenario、Project、Boundary、MaterialRow、EquipmentRow、RefrigerantDevice、FactorRecord、AnnualProfile、GridFactorScenario など）。03_INPUTS/inputs.json の入力 124 項目を INPUT_FIELD_MAP で属性に対応付け、inputs.json に無い属性 73 個は「NEW:」付きで EXTRA_FIELD_MAP に載せる。計算結果は持たず、基準計算と統合モデルが同じ Scenario を読む。io.py が JSON への保存と復元をする。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/io.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/__init__.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md"
+   ],
+   "state_category": 2,
+   "checked_how": "作成者の試験（test_input_coverage：total が 124、test_json_round_trip、test_clean_scenario_is_consistent）。合否は今回実行していない。第2回の検査担当はこの構造を入力に使ったが、対応表そのものを検査した記録は、読んだ資料（numeric.md、rederive.md）には無い。件数 124・73・29 はソースの文字列を数えた値。",
+   "checked_by": "作成者のみ",
+   "scope": "架空データ用の入力スキーマ。独立概念モデルの入力仕様（03_INPUTS）に対応するもので、原版ブックの入力欄との対応は示さない。",
+   "round2_findings": [
+    "NUM-5",
+    "NUM-7",
+    "NUM-9",
+    "RED-5"
+   ],
+   "round2_effect": "構造そのものを否定する指摘は無い。構造が検査しない点が指摘の前提になっている：係数 ID は自由な文字列で擬似 ID を予約していない（NUM-5）、GridStep.from_index は int と注釈されているが検査されない（NUM-7）、ScenarioMeta は「計算で読まない」と書かれているが統合モデルが読んでいた（NUM-9）、基準案は Scenario の外の登録表 BASELINES から読む（RED-5）。",
+   "claim_that_stands": "データ構造と 2 つの対応表はコミットされており、基準計算、統合モデル、第2回の検査のすべてがこの構造を入力に使った。124 項目の対応は作成者の試験が検査する設計（合否は未確認、実行が必要）。",
+   "claims_not_to_rely_on": [
+    "「入力 124 項目すべてを属性に対応付け」（research_code/README.md 12 行、synth/README.md 13 行）を、独立に検査済みと読むこと",
+    "型注釈や「clean scenarios では…」という説明文を、入力時に検査される条件と読むこと"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "固定の入力スキーマとして使う。新しいモデルが同じ Scenario を読めば、基準計算と同じ入力で比較できる。JSON の保存・復元でシナリオを固定できる。",
+   "reuse_conditions": "構造は型も範囲も検査しない。meta は計算で読まない。基準案は synth.population.BASELINES（プロセス内の辞書）にあり、シナリオの JSON には含まれない。年次量と電力係数は記述子と年次表の両方を持つ（冗長な入力。整った記述子が正）。年次表は最低 130 個。CostItem と price_index は inputs.json に無い本研究の追加入力。数値はすべて架空。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py:1-35（データの規約）、671-692（Scenario）、787-924（INPUT_FIELD_MAP）、947-1021（EXTRA_FIELD_MAP）、1102-1137（check_input_coverage）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/io.py:15-55",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_synth.py:18-32",
+    "whole-life-carbon-jcat-study/03_INPUTS/inputs.json：total_fields 124",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:49-59, 73-83, 97-107（NUM-5、NUM-7、NUM-9）"
+   ]
+  },
+  {
+   "id": "CK-R2-12",
+   "title": "架空シナリオの生成器（synth/generate.py の make_scenario）",
+   "what": "make_scenario(seed, structure, use, size_class, study_period=60.0, dirty=False, **options)。固定シードの乱数（節ごとに独立した部分列）で架空シナリオを 1 つ作る。構造 4 種（S・RC・SRC・W）×用途 6 種。規模区分 S・M・L は、資材 200・2,000・20,000 行、設備 60・600・6,000 行、冷媒機器 5・40・300 台。評価期間は 0 < T ≤ 300。オプション 29 個。資材行の約 30％ は 3〜12 成分の複合品。dirty=True は 8 種類の不備をわざと入れ、入れた場所を meta.injected_defects に返す。倍率や範囲の表はすべて架空の例示。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/generate.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_synth.py"
+   ],
+   "state_category": 2,
+   "checked_how": "作成者の試験（test_deterministic：同じ引数で同じ JSON、test_clean_scenario_is_consistent：係数値 = Σ GWP×ガス別量、経路比率と質量比の和が 1、年次表の長さ、test_descriptors_match_tables、test_dirty_scenario_lists_defects）。合否は今回実行していない。第1回の検査への対応で、廃棄質量を据付量に合わせるよう生成器を直した（INDEPENDENT_REVIEW.md 38 行）。第2回：検査担当が 119 件、681 件、乱数の 20,260 件のシナリオ作りに使用。681 件の一覧を作り直した再比較で、記録の最大差 4.8e-13 が再現した（再現性の間接的な裏付け）。生成器を対象にした指摘は、読んだ資料には無い。",
+   "checked_by": "作成者のみ",
+   "scope": "架空データ。値の分布は本研究が作った例示で、実建物のばらつきを表さない（generate.py 1-16 行、synth/README.md 8 行）。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "RED-11"
+   ],
+   "round2_effect": "生成器の欠陥の指摘は無い。生成器が作らない入力が指摘の対象になった：周期 1.000000001（NUM-1）、NaN・無限大（NUM-2）。RED-11：不備なしの標準ベンチマークの設備 6,660 行に、廃棄係数が None の行は 0。",
+   "claim_that_stands": "生成器はコミットされており、同じ引数から同じシナリオを作る設計である（部分列のシードは「wlc-synth/1.0/<seed>/<節名>」）。第2回の検査担当が同じ一覧を作り直して記録値を再現しており、再現性に反する報告は無い。",
+   "claims_not_to_rely_on": [
+    "生成したシナリオ上の結果を、実建物での精度や規模の傾向として読むこと",
+    "dirty=False を「どんな検査でも不備が出ない」と読むこと（保証されるのは生成器の 8 種類の不備が無いこと）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "固定の入力生成器として使う。新しいモデルと固定の基準に同じシナリオを与える。規模 S・M・L と構造×用途 24 組で、行数や構成を変えた比較ができる。",
+   "reuse_conditions": "GENERATOR_VERSION 1.0 と乱数の消費順を変えない（変えると既存のシナリオが変わる）。README は Python 3.13 を前提と書く（他の版での同一性は未確認）。周期は _draw_life により、EXACT_DIVISOR 以外では T の約数から相対 1e-6 以内に入らない。整数、小数 2 桁、T/n のいずれかなので、ナイフエッジの周期は作らないと読めるが、実行による確認はしていない。service_life_choices で周期を直接指定するときは CK-R2-03 の値を避ける。不備入りは 8 種類だけ。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/generate.py:1-16（宣言）、42-49（規模区分、MAX_STUDY_PERIOD 300）、180-210（DEFAULT_OPTIONS 29 個）、246-255（不備 8 種類と反応する検査）、382-384（部分列）、447-476（_draw_life）、1177-1286（_inject_defects）、1335-1421（make_scenario）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md:18-25（規模区分の表）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_synth.py:23-80",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md:38",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:134（CHECKS PERFORMED 2、9）、rederive.md:130（clean の設備 6660 行）"
+   ]
+  },
+  {
+   "id": "CK-R2-13",
+   "title": "架空シナリオの集合（標準ベンチマーク S・M・L、検証用の母集団、境界条件 32 件、基準案の登録）",
+   "what": "standard_benchmark()：RC・office・T=60 の規模 S・M・L（シード 101・102・103）の 3 件で、それぞれに基準案の写し（電力・ガス 15％ 増、発電なし、資材 10 行に 1 行の数量 20％ 増）を付ける。verification_population(n, seed, max_size)：構造×用途 24 組を順に回し、規模（重み S 0.65、M 0.33、L 0.02）、評価期間（30・50・60・75・100、15％ の確率で 42.5・62.5・99.9）、周期の作り方 5 種、年次量と電力係数の種類などを乱数で変える。edge_cases()：資材 12 行・設備 6 行・冷媒 4 台の小さいシナリオ 32 件（耐用年数が評価期間と等しい・割り切る・わずかにずれる・より長い・1 年未満、数量ゼロ、1 行だけ、行なし、漏洩率と回収率の 0 と 1、1 年未満と非整数の評価期間、期間内の建替など）。BASELINES は基準案を ID で引く登録表。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py"
+   ],
+   "state_category": 2,
+   "checked_how": "作成者の試験（test_populations：規模と行数、24 組の網羅、境界条件の名前が重複なしで 30 件以上。test_edge_cases：32 件で恒等式と全ゲートの合格、complete 真を期待）。合否は今回実行していない。一致確認 681 件の内訳：標準ベンチマーク 3、境界条件 32、検証用の母集団 400（シード 20261111、max_size M）、不備入り 60、壊し方 144、小数境界 10、段階の部分集合 32。第2回：検査担当が母集団 24 件と境界条件 32 件を再導出に使い、681 件の一覧を作り直して再比較した。",
+   "checked_by": "作成者のみ",
+   "scope": "架空データ。検証用の母集団は一致確認では規模 M まで（規模 L は標準ベンチマークの 1 件だけ）。境界条件は規模 S 相当の小さいシナリオ。",
+   "round2_findings": [
+    "NUM-1",
+    "RED-1",
+    "RED-5"
+   ],
+   "round2_effect": "集合そのものの欠陥の指摘は無い。網羅の不足が指摘された：境界条件にナイフエッジの周期が無い（life_near_divisor の値は 19.999999、20.000001、29.9999999、30.0000001）。段階の部分集合のシナリオ（stage_subset）は不備なしだけ（RED-1 への検証者の追記）。基準案を Scenario の入力ではなくプロセス内の登録表から読む点は設計どおりで、登録の無い ID が「指定なし」と区別されない（RED-5）。",
+   "claim_that_stands": "3 つの関数と登録表はコミットされており、一致確認 681 件のうち 435 件（3 + 32 + 400）がここから作られた。第2回の検査担当も同じ関数でシナリオを作り、記録された最大差を再現した。",
+   "claims_not_to_rely_on": [
+    "境界条件 32 件が、基準計算の端の条件を網羅しているという読み方",
+    "検証用の母集団が規模 L を含むという読み方（一致確認は max_size M。重み 0.02 の L は使われていない）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "固定の評価用の集合として使う。標準ベンチマーク S・M・L は行数だけが違う 3 件で、規模への依存を見る。検証用の母集団は構造・用途・評価期間・入力の種類を振った分布、境界条件は少数行での端の動作の確認に使う。",
+   "reuse_conditions": "同じ引数（n、seed、max_size）で呼べば同じ列が得られる設計。attach_baseline は当該案の boundary.baseline_scenario を書き換え、BASELINES に登録する（プロセス内の状態）。SUM-08 を使う比較では登録表の中身を固定する。測定に使われた呼び出しは verification_population(400, seed=20261111, max_size=\"M\")。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py:17-22（シード、評価期間、規模の重み）、29-51（attach_baseline）、54-59（standard_benchmark）、62-85（verification_population）、157-196（edge_cases 32 件）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py:47-75（681 件の作り方）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json：by_group（benchmark 3、edge 32、population 400、defective 60、mutated 144、decimal 10、stage_subset 32）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_synth.py:82-90、tests/test_refcalc.py:41-49",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:150（検証者の追記 3）、numeric.md:134（CHECKS PERFORMED 9）"
+   ]
+  },
+  {
+   "id": "CK-R2-14",
+   "title": "入力を壊す操作（bench/mutations.py：36 種類の壊し方、小数境界、段階の部分集合、無効な評価期間）",
+   "what": "不備のない架空シナリオを書き換えて、生成器の 8 種類の不備が覆わない欠陥や極端な値を作る 36 個の操作（記述子と年次表の食い違い、係数レコードの欠落、段階・単位の誤り、負の値、範囲外の率、一部の項目の NaN と無限大、変則的な事象一覧、段の並びの乱れ、自分自身や互いを基準案にする指定、EPD の申告の食い違いなど）。DECIMAL_BOUNDARIES（評価期間 5 つと周期 14 個：99.9 と 33.3 など）、STAGE_SUBSETS（8 通り。空を含む）、INVALID_PERIODS（0.0、−5.0、NaN、無限大、500.0）も持つ。第1回の検査を受けて作られた。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py"
+   ],
+   "state_category": 2,
+   "checked_how": "一致確認で、36 種類×4（シード 11・12・13・14、評価期間 60・60・42.5・59.999999）= 144 件、小数境界 5×2 = 10 件、部分集合 8×4 = 32 件に使われ、基準計算と統合モデルの不一致 0。第2回：36 種類すべてで、定義文から書いた独立実装と基準計算の数値・件数が一致（壊し方に関わる違いは、B2-01 の computed が 4 件と、negative_values での C-05 の n_mass_unchecked が 4 と 5）。同じ第2回で、この一覧が覆わない入力の種類が見つかった。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データ。壊し方は規模 S 相当の小さいシナリオ（資材 12 行）に適用された。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "NUM-3",
+    "NUM-4",
+    "RED-1"
+   ],
+   "round2_effect": "一覧が覆わない種類：nan_and_infinite_values は検査で守られた項目（周期、数量 1 つ、漏洩率 1 つ）しか触らない（NUM-2）。年次量・電力係数・係数値・換算倍率の NaN・無限大・負、値 0 でガス別量のある係数（NUM-3）、短い年次表（NUM-4）、周期 1.000000001（NUM-1）、部分集合と不備の組合せ（RED-1）が無い。",
+   "claim_that_stands": "36 種類の壊し方については、基準計算は定義文から書いた独立実装と数値・件数が一致し、統合モデルとも一致した（架空データ、相対 1e-9）。この 36 種類が、起こり得る不備を代表するとは言えない。",
+   "claims_not_to_rely_on": [
+    "04_VERIFICATION/README.md 23 行の「36 種類の壊し方」での一致を、不備のある入力一般での一致と読むこと",
+    "nan_and_infinite_values の合格を、NaN・無限大の入力一般で 2 つの計算が一致する根拠にすること"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "新しいモデルが、不備のある行の除外と件数を固定の基準と同じに返すかを見る入力として使える。小数境界の 5 組は、回数の端の確認に使える。",
+   "reuse_conditions": "主な比較は不備のない入力で行い、これは補助にとどめる。壊した入力での基準計算の値は「定義に穴のある動作」を含む（CK-R2-05、CK-R2-07）。65ff124 の 214 種類の版は未検証で、コミット版の基準計算に与えると CK-R2-07 の例外や NaN が出る入力を含む。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py:293-330（MUTATIONS 36 個）、333-336（DECIMAL_BOUNDARIES、STAGE_SUBSETS、INVALID_PERIODS）、151-163（_nan_inf が触る項目）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py:58-75",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 1：36 個すべてで一致、違いの一覧）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:16, 21（NUM-2：研究の NaN の壊し方は守られた項目だけ）"
+   ]
+  },
+  {
+   "id": "CK-R2-15",
+   "title": "結果の比較の仕組み（common/compare.py）",
+   "what": "基準の結果と候補の結果を葉ごとに機械的に比べる関数群。flatten が入れ子の辞書とリストを「経路: 値」に開き、「_」で始まるキーを除く。signed_rel_error は (候補 − 基準) / max(|基準|, floor) で、負が過小評価。compare は数値の葉の最大の相対誤差、符号付きの最小・最大、数値以外の不一致、欠けた葉、余分な葉を返す。within(rel_tol) が合否。percentile は線形補間の百分位。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_engine.py"
+   ],
+   "state_category": 2,
+   "checked_how": "専用の試験は無い（tests に compare.py を対象にした試験は見当たらない）。verify_unified.exactness と tests/test_engine.py の agree が、floor = 1e-9×|SUM-03| を渡して使う。第2回：検査担当が自分の厳密な比較（床なし、無限大・型・余分な葉を検出）で 681 件をやり直し、不一致 0、余分な葉 0。compare の 4 つの弱点を直接の呼び出しで確認（CK-R2-16）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "比較の道具。架空データ上の基準計算と統合モデルの突き合わせに使われた。",
+   "round2_findings": [
+    "NUM-11"
+   ],
+   "round2_effect": "NUM-11（CONFIRMED、LOW）：無限大と bool の扱い、全葉に掛かる床、合計のみの出力での余分な葉の未検査が指摘された。研究の 681 件では、これらの弱点が隠した差は無かった（床なしの再比較で差 0）。",
+   "claim_that_stands": "研究の 681 シナリオについては、この比較が出した「不一致なし」は、床なし・型に厳密な別の比較でも再現された。比較関数が、あらゆる差を検出するとは言えない。",
+   "claims_not_to_rely_on": [
+    "04_VERIFICATION/README.md 21 行「許容差は相対 1e-09」を、床の無い純粋な相対比較と読むこと（実際は全葉に 1e-9×|SUM-03| kgCO2e の床が掛かる。README は床に触れていない）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新しいモデルの出力と固定の基準の出力を葉ごとに比べる道具として使える。符号付きの誤差で過小評価を分けて集計できる。",
+   "reuse_conditions": "純粋な相対誤差を見るなら floor を 0 にする（既定値は 0。研究の測定は床あり）。基準側が無限大の葉、bool と整数の混同、合計のみの出力での余分な葉は別に検査する（CK-R2-16）。無次元の葉（割合など）に kgCO2e の床を掛けない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py:13-26（flatten）、29-36（signed_rel_error）、39-52（Comparison、within）、55-94（compare）、97-104（percentile）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py:115-130（床の渡し方、合否の条件）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_engine.py:18-25",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:121-131（NUM-11）、134（CHECKS PERFORMED 9、10）"
+   ]
+  },
+  {
+   "id": "CK-R2-16",
+   "title": "比較の仕組みの既知の弱点（無限大、bool、床、余分な葉）",
+   "what": "compare.py と、それを使う一致確認の 4 つの弱点。(1) 基準の葉が ±無限大で候補が NaN 以外なら合格になる（符号付き誤差が NaN になり、abs(err) > max が偽）。(2) True と 1 を等しいとみなす。(3) 一致確認は床 1e-9×|SUM-03| を無次元の葉を含む全葉に掛けるので、床より小さい葉の実効の許容差は相対 1e-9 より緩い。(4) 合計のみの出力の比較は欠けた葉を無視し、余分な葉を調べない。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の検査担当と検証者が compare を直接呼んで確認：compare(基準 inf, 候補 1.0)、(inf, −inf)、(−inf, 5.0) は within が真、(1.0, inf) は偽。True と 1 は両方向で真。標準ベンチマーク S（SUM-03 3.295e7、床 0.033）で、0 でない数値の葉 4346 個のうち 19 個が床より小さい。M（床 0.105）で 33208 個のうち 1226 個（3.7％）。値 3.629e-04 の葉を相対 1e-7 変えても合格（報告される誤差 3.45e-10）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "比較の道具の弱点。研究の 681 件では、床なしの再比較で差 0、余分な葉 0 だったので、記録された一致の結果は変わらない。",
+   "round2_findings": [
+    "NUM-11"
+   ],
+   "round2_effect": "この項目自体が第2回の指摘（CONFIRMED）。",
+   "claim_that_stands": "上の 4 点はコミット版の compare.py と verify_unified.py に残っている。",
+   "claims_not_to_rely_on": [
+    "compare(...).within(1e-9) が真であることを、無限大や型の違いが無いことの根拠にすること",
+    "「許容差は相対 1e-09」を、床より小さい葉にも当てはまると読むこと"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。compare.py を使うときの注意として引き継ぐ。",
+   "reuse_conditions": "新研究で compare.py を使うなら、基準側の無限大・NaN、bool の葉、余分な葉を別に検査する。a1 の版は compare を厳しくしたと申告しているが未検証（CK-R2-23）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:121-131（NUM-11、検証者の確認値）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py:29-36, 75-91",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py:120-121, 130"
+   ]
+  },
+  {
+   "id": "CK-R2-17",
+   "title": "単体試験 28 件（tests/。コミット版）",
+   "what": "標準ライブラリ unittest の試験 4 ファイル・28 件（件数はソースの def test_ を数えた値）。test_synth.py 7 件：入力 124 項目の対応、同じ引数で同じシナリオ、JSON の往復、不備なしシナリオの整合、記述子と年次表の一致、不備入りの一覧、集合の規模。test_refcalc.py 8 件：台帳の単位がすべて登録済み、境界条件 32 件の恒等式と検査、標準ベンチマーク S と SUM-08、手計算との照合 1 例、B2 と B6 の振り分け、小数境界、使えない入力の除外と報告、入れた不備の検出。test_closed_forms.py 6 件：閉形式（更新回数、修繕を除く年、直線の和、電力係数のモーメント、冷媒）と基準計算のループの一致を乱数と境界値で。test_engine.py 7 件：統合モデルと基準計算の一致、演算の回数、評価期間の掃引、基準案、無効な評価期間の拒否。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_synth.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_engine.py"
+   ],
+   "state_category": 2,
+   "checked_how": "ソースを読んだだけで、今回は実行していない。コミット版で 28 件が合格したという記録は、読んだ文書には無い（A1_REPORT.json は修正前の件数を「was 28 tests」と書くだけ）。第2回で、試験が拾えなかった欠陥が見つかった。",
+   "checked_by": "作成者のみ",
+   "scope": "架空データ。試験は研究の主担当が書いたもので、独立検査の一部ではない。",
+   "round2_findings": [
+    "NUM-1",
+    "RED-1"
+   ],
+   "round2_effect": "NUM-1：test_closed_forms.py 26 行が引く周期のずれは 1e-15、1e-12、1e-10、1e-8、1e-6 で、1e-9 が無く、ナイフエッジを拾えなかった。RED-1：段階の部分集合を使う試験（test_refcalc.py 88・93 行）は不備なしだけ。",
+   "claim_that_stands": "28 件の試験がコミットされており、上の内容を検査する。合否は未確認（確認には実行が必要）。試験の合格は、第2回で見つかった欠陥が無いことを意味しない。",
+   "claims_not_to_rely_on": [
+    "research_code/README.md 18 行の試験の説明（手計算との照合、欠陥の検出、境界条件）を、基準計算の定義どおりの動作が試験で保証されていると読むこと（手計算は 1 例）",
+    "fastcalc/closed_forms.py の閉形式が「ループと同じ数を返す」ことを、この試験だけを根拠に言うこと（NUM-1）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "試験が持つ期待値（手計算の例：T=10.5、周期 3.5、冷媒 1 台。小数境界の回数の表）は、固定の基準の受け入れ例として読める。基準計算の恒等式（X-07 の最終値 = SUM-03、X-04 = 14 段階の和、X-08 = B4-02、X-09 = C3-01 + C4-01、B3-01 ≤ B3-02、X-05 ≤ 合計）は、新しいモデルの検査項目になる。",
+   "reuse_conditions": "実行するかどうかは新研究の側で決める（この読み取りでは実行していない）。test_closed_forms.py と test_engine.py は旧研究の統合モデル（fastcalc）を対象にする。",
+   "evidence": [
+    "tests/*.py の def test_ の数：test_synth 7、test_refcalc 8、test_closed_forms 6、test_engine 7、計 28（ソースの文字列を数えた）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py:29-39（恒等式）、58-83（手計算の例）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py:18-33（周期の作り方）、80-86",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：tests（'Ran 68 tests ... OK' (was 28 tests)）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:10（検証者：test_closed_forms.py 26 行は 1e-9 を引かない）、rederive.md:150（追記 3）"
+   ]
+  },
+  {
+   "id": "CK-R2-18",
+   "title": "第2回の指摘に対する基準計算の定義の修正方針（SPEC_A1.md の設計決定）",
+   "what": "中断した修正の段階 a1 に渡された指示書。一般原則は「欠損・非有限・範囲外の数値入力は演算に使わない。それを必要とする最小の単位（行、経路、年次系列、区分、単位）を除いて数え、依存する合計をすべて不完全にする。無効な評価期間以外の入力では例外を出さない」。時間の判定は、与えられた倍精度値の上の厳密な有理数演算にする：c = 1 − 1e-9 に最も近い倍精度値、内側 ⇔ τ < T×c、年 = max(1, ceil(τ×c))、n 回目の事象は n×L ちょうど。閉形式は 更新回数 = ceil(T×c / L) − 1。完全性は depends_on の推移閉包から求める。SUM-08 に BASELINE_NOT_FOUND と INCOMPLETE を加える。X-04 は実際の検査を返す。擬似行は番兵オブジェクトで区別する。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/VERIFY_DEF.md"
+   ],
+   "state_category": 3,
+   "checked_how": "指示書であり、検査の対象ではない。実装は a1 が申告したが（CK-R2-19〜23）、指示書が予定した独立の検査（VERIFY_DEF.md）は開始されなかった。",
+   "checked_by": "なし",
+   "scope": "独立概念モデルの定義をどう閉じるかの設計。架空データでの検証を前提にした方針で、どれも確定した定義ではない。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "NUM-3",
+    "NUM-4",
+    "NUM-5",
+    "NUM-6",
+    "NUM-7",
+    "NUM-8",
+    "NUM-9",
+    "NUM-10",
+    "NUM-11",
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-4",
+    "RED-5",
+    "RED-6",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-10",
+    "RED-11",
+    "RED-12",
+    "REC-1",
+    "APP-5",
+    "REP-16",
+    "REP-17"
+   ],
+   "round2_effect": "指摘 NUM-1〜11、RED-1〜12 と、同じ問題を別の見方から述べた REC-1、APP-5、REP-17 への対応方針（REP-16 は掃引の比較範囲）。方針として「変えない」と決めたもの：NUM-10 の (a)(c)(d)(e)（桁落ち・桁あふれの入力）、RED-11(3)、型の違う入力。",
+   "claim_that_stands": "第2回の指摘に対して、基準計算の定義をこう閉じるという方針が書かれている。採用も検証もされていない。",
+   "claims_not_to_rely_on": [
+    "指示書の規則（厳密な時間判定、妥当性の規則、データの流れに沿った完全性）を、コミット版の基準計算の動作と読むこと",
+    "指示書の「now provably exact」（閉形式が証明可能に厳密になる）を、証明済み・検証済みと読むこと"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "ルート B・C で時間の規約を式にするときの仮説として読める：回数 N = ceil(T×c / L) − 1、年 = max(1, ceil(n×L×c))、q = L×c ≥ 1 なら事象の年はすべて異なり、q < 1 なら年 1 から最後の事象の年までを埋める。また、固定の基準に与えてはいけない入力の種類を知る一覧として使える。",
+   "reuse_conditions": "仮説として扱う。新研究では基準計算を変えないので、この方針を基準計算に適用しない。式は、ナイフエッジの周期ではコミット版の基準計算と違う値を与える（その入力では基準計算のほうが丸めの産物）。それ以外の周期で同じ値になることは未検証。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md:28-37（一般原則）、39-78（時間の規約）、80-127（検査なしで使われていた値）、129-151（完全性、SUM-08）、153-169（ガス別内訳、擬似行）、171-193（ゲートと文言）、195-213（数値と比較）、215-220（変えないもの）、222-235（受け入れ条件）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/VERIFY_DEF.md:1-44（予定されていた独立検査の内容）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:52-60（a1 は完了を報告、独立の検査は未実施。反証検査は未着手）"
+   ]
+  },
+  {
+   "id": "CK-R2-19",
+   "title": "中断した修正 a1：時間の判定の厳密化（整数演算。事象の「年」を受け渡す）",
+   "what": "a1 の自己申告によると、65ff124 の refcalc/base.py と fastcalc/closed_forms.py で、内側の判定、事象の年、n 回目の事象 n×L を、as_integer_ratio() による整数演算で厳密に計算するようにした。periodic_events と explicit_events、B4-01 の events は、事象の時刻ではなく事象の年（整数）を返す。周期 1.000000001・T=60 では基準計算も統合モデルも 59 回を年 2..60 に置く、と申告。境界条件に life_at_year_tolerance を 1 件追加（33 件）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/",
+    "git コミット 65ff124（whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py、fastcalc/closed_forms.py、synth/population.py）"
+   ],
+   "state_category": 2,
+   "checked_how": "a1 の自己申告だけ。申告の内容：NUM-1 の再現スクリプトで B3-01 が基準計算 19107.604293677847、統合モデル 19107.60429367785。tests/test_closed_forms.py が fractions.Fraction で書いたループと、回数・年・除外の重みを 3,000 以上の端の組と 12,000 の乱数の組で比べて不一致 0。不備なしの 299 シナリオで、修正前後の基準計算の値がビット単位で同じ。独立の検査（VERIFY_DEF の 3）は開始されなかった。今回は実行していない。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "65ff124 のスナップショットにだけある。作業ツリー（HEAD）の 09_APPROX_STUDY には無い（0db5c77 で取り除いた）。架空データ、独立概念モデル。",
+   "round2_findings": [
+    "NUM-1",
+    "REC-1",
+    "APP-5"
+   ],
+   "round2_effect": "NUM-1 は FIXED、REC-1 は PARTLY_FIXED（DERIVATIONS.md D3 と記録は未改訂）、APP-5 は DOCUMENTED_ONLY と申告。この版の基準計算は、ナイフエッジの入力でコミット版と違う値を返す（B3-01 が 229291.25 → 19107.60）。",
+   "claim_that_stands": "65ff124 に、時間の判定を整数演算に置き換えたコードがある（パッチに as_integer_ratio の出現 16 か所）。正しく動くかは確認されていない。",
+   "claims_not_to_rely_on": [
+    "A1_REPORT.json の NUM-1「FIXED」と、試験の不一致 0 の申告を、検証済みと読むこと",
+    "「不備なしのシナリオでは修正前後で値が同じ」（299 シナリオ）を、確認済みの事実として使うこと"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "固定の基準としては使わない（基準計算を変えた版で、未検証）。式の仮説は CK-R2-18 から読む。",
+   "reuse_conditions": "参照するなら「未検証の修正案」と明記する。事象の受け渡しが時刻から年に変わっており、コミット版と結果のキーの意味が違う（B4-01 の events）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：findings[0]（NUM-1）、findings[23]（REC-1）、findings[24]（APP-5）、decisions[0]（events は年）、interface_changes",
+    "git show --stat 65ff124：refcalc/base.py 332 行、fastcalc/closed_forms.py 211 行、synth/population.py 5 行の変更",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch（as_integer_ratio の出現 16 か所。本文は読んでいない）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:54, 97-99（a1 は独立の検査が未実施。中断時点のコードは構文だけ確認し、実行していない）"
+   ]
+  },
+  {
+   "id": "CK-R2-20",
+   "title": "中断した修正 a1：値の妥当性の規則（検査なしの値を除外して数える。評価期間以外で例外を出さない）",
+   "what": "a1 の自己申告によると、65ff124 で、年次量、電力係数（記述子・年次表・工事期間の値）、係数値、ガス別量、換算倍率、GWP を「有限で 0 以上（換算倍率は正）」と検査し、満たさない系列・行・単位を除外して数えるようにした。無効な周期は事象なしにしたうえで n_invalid に数え、建替周期が無効なら B5-01 を computed 偽にする。None を含む表や一覧、短い年次表でも例外を出さず、check_period は評価期間だけを拒否する。conversion_factor は有限の正でない倍率に None を返す。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/",
+    "git コミット 65ff124（whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/、synth/model.py）"
+   ],
+   "state_category": 2,
+   "checked_how": "a1 の自己申告だけ。申告の内容：1 項目ずつ NaN・±無限大・None にした 3461 例で、基準計算・統合モデル（全出力・合計のみ）が同じ結果 3383 例、食い違い 0、評価期間による ValueError 12 例、型の違う値を入れたことによる同じ型の例外 66 例。RED-2・RED-3・RED-10 の再現スクリプトで、件数と complete 偽が出る。今回は実行していない。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "65ff124 のスナップショットにだけある。架空データ、独立概念モデル。型の違う入力（数値の代わりに文字列など、レコードや一覧の場所に数値）は対象外と申告。",
+   "round2_findings": [
+    "RED-2",
+    "RED-3",
+    "RED-10",
+    "NUM-2",
+    "NUM-4",
+    "NUM-7",
+    "REP-17"
+   ],
+   "round2_effect": "RED-2、RED-10、NUM-2、NUM-4、NUM-7 は FIXED、RED-3 と REP-17 は PARTLY_FIXED と申告（06_OPEN_ISSUES の B など、a1 の担当外の文書は未改訂）。副作用の申告：係数レコードを使うたびに検査するため、基準計算の実行命令数が 1.24 倍（規模 S で 2,528,394 → 3,135,214、M で 24,869,192 → 30,840,145）。",
+   "claim_that_stands": "65ff124 に、妥当性の検査を加えた基準計算のコードがある。規則が漏れなく実装されているか、コミット版と不備なしの入力で同じ値を返すかは確認されていない。",
+   "claims_not_to_rely_on": [
+    "A1_REPORT.json の「0 disagreements」「no exception except the study period」を検証済みと読むこと",
+    "この版の実行命令数（1.24 倍）を、43ba5d7 の負荷の測定値と並べて使うこと（負荷の測定はやり直されていない）"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "固定の基準としては使わない。どの入力がコミット版で検査されないかを知る参考資料にとどめる。",
+   "reuse_conditions": "参照するなら「未検証の修正案」と明記する。結果のキーが増え、意味が変わったものがある（n_invalid、X-06 の computed と source NONE、B6-04 の computed など）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：findings[1]（NUM-2）、[3]（NUM-4）、[6]（NUM-7）、[12]（RED-2）、[13]（RED-3）、[20]（RED-10）、[25]（REP-17）、acceptance[1]（3461 例）、open_problems（命令数 1.24 倍）",
+    "git show --stat 65ff124：refcalc/units_b.py 175 行、units_c_sum.py 248 行、units_pre_a.py 142 行、synth/model.py 24 行の変更",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md:80-127"
+   ]
+  },
+  {
+   "id": "CK-R2-21",
+   "title": "中断した修正 a1：データの流れに沿った完全性の印、B2-01 の computed、SUM-08 の状態の追加",
+   "what": "a1 の自己申告によると、65ff124 で、完全性を「X-02 が段階を作るのに使う単位と、その depends_on の推移閉包」から求めるようにした（手書きの表 STAGE_UNITS を廃止）。除外の件数は n_skipped、n_routes_skipped、n_partial、n_invalid、n_unresolved と computed 偽。B2-01 は B6-01 が算出されないとき computed 偽。SUM-08 の状態は NO_BASELINE、BASELINE_NOT_FOUND、NOT_COMPARABLE、INCOMPLETE（差と削減率は None）、COMPARED の 5 つで、proposal_complete と baseline_complete を返す。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/",
+    "git コミット 65ff124（whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py、units_b.py）"
+   ],
+   "state_category": 2,
+   "checked_how": "a1 の自己申告だけ。申告の内容：RED-1 の再現で、対象 ['B3']、['B5']、['B3','B5'] が complete 偽・['A13-01','A13-05','X-01']。「段階の部分集合＋上流の不備」のシナリオ 90 件を一致確認に追加。RED-5 の再現で、基準案の 4 行が算出不能なら状態 INCOMPLETE。今回は実行していない。独立の検査（VERIFY_DEF の 2）は開始されなかった。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "65ff124 のスナップショットにだけある。架空データ、独立概念モデル。",
+   "round2_findings": [
+    "RED-1",
+    "RED-5",
+    "RED-12",
+    "NUM-9"
+   ],
+   "round2_effect": "RED-1、RED-5、NUM-9 は FIXED、RED-12 は PARTLY_FIXED と申告。a1 自身の注記：閉包の規則は保守的で、たとえば数量の使えない行は、その行が質量と距離で搬入されていても A13-05 経由で A4 を不完全にする。既存の不備入りシナリオの incomplete_units は、以前より多くの単位を挙げる。",
+   "claim_that_stands": "65ff124 に、完全性の印を依存関係の閉包から求めるコードと、SUM-08 の 5 つの状態がある。印が過不足なく付くかは確認されていない。",
+   "claims_not_to_rely_on": [
+    "A1_REPORT.json の RED-1・RED-5「FIXED」を検証済みと読むこと",
+    "コミット版の SUM-08 に BASELINE_NOT_FOUND・INCOMPLETE の状態があると読むこと（コミット版は NO_BASELINE、NOT_COMPARABLE、COMPARED の 3 つ）"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "固定の基準としては使わない。完全性を依存関係から求めるという考え方は、新研究で依存関係の台帳を作るときの参考になる。",
+   "reuse_conditions": "参照するなら「未検証の修正案」と明記する。X-02、X-04、X-07 の depends_on がコミット版と違う（台帳 units.json も 65ff124 では書き換わっている）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：findings[11]（RED-1）、[15]（RED-5）、[22]（RED-12）、[8]（NUM-9）、decisions（閉包は保守的、B6 と B2、SUM-08 の NO_BASELINE の条件）、interface_changes",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:500-518（コミット版の SUM-08 の状態は 3 つ）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md:129-151",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/VERIFY_DEF.md:20-27（予定されていた検査）"
+   ]
+  },
+  {
+   "id": "CK-R2-22",
+   "title": "中断した修正 a1：ガス別内訳の検査、擬似行の番兵、ゲートと定義文の改訂",
+   "what": "a1 の自己申告によると、65ff124 で次を変えた。X-04 が matches_stage_total を返し、QA-01 に検査 (d)（違反名「gas breakdown total」）を加えた。B3-01 の「e0 = 0 なら行を捨てる」近道を外した。買電と冷媒の行を、文字列「GRID」「REFRIGERANT」ではなく番兵オブジェクトで区別する。ガスの一覧は重複を除いて使い、X-05 は CO2 が一覧に無くても動く。SYS-01 は NaN・無限大を NOT_FINITE として報告する。SYS-03 は廃棄係数の無い設備行を報告する。X-17 は要約数量が正でない区分を除いて数える。X-13 に n_skipped。台帳の定義文 50 単位分を書き換えた。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+    "git コミット 65ff124（whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/、whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json）"
+   ],
+   "state_category": 2,
+   "checked_how": "a1 の自己申告だけ。申告の内容：RED-4 の再現で QA-01 が不合格・['gas breakdown total']。NUM-3 の再現で X-04 が基準計算 8938913.468391037、統合モデル 8938913.46839103。NUM-5 の再現で係数 ID「GRID」「REFRIGERANT」でも一致。sync_ledger の最終実行で「synced 70 units (0 changed)」。今回は実行していない。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "65ff124 のスナップショットにだけある。架空データ、独立概念モデル。文言の改訂は a1 の担当ファイルだけで、06_OPEN_ISSUES の B、DERIVATIONS.md、記録、04_VERIFICATION/README は未改訂。",
+   "round2_findings": [
+    "RED-4",
+    "RED-6",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-11",
+    "RED-12",
+    "NUM-3",
+    "NUM-5",
+    "NUM-6",
+    "NUM-8"
+   ],
+   "round2_effect": "RED-4、RED-6、RED-9、NUM-3、NUM-5、NUM-6、NUM-8 は FIXED、RED-7、RED-8、RED-11、RED-12 は PARTLY_FIXED と申告。未対応と申告：RED-12(7)（正の周期に下限なし）、QA-01 の (b)(c) が不合格になり得ない点。NUM-3 の対応で、値 0・ガス別量ありの係数での X-04 の基準計算の値がコミット版と変わる（8893233.37821491 → 8938913.468391037）。",
+   "claim_that_stands": "65ff124 に、これらの変更を加えた基準計算と台帳がある。定義文とコードが一致しているかは確認されていない（VERIFY_DEF の 5 は開始されなかった）。",
+   "claims_not_to_rely_on": [
+    "65ff124 の台帳 units.json の reference_semantics を、コミット版（60e720f）の基準計算の定義として読むこと",
+    "A1_REPORT.json の「No number changed」（文言の改訂で数値は変わらない）を検証済みと読むこと"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "固定の基準としては使わない。書き直された定義文は、コミット版の定義文のどこが曖昧だったかを知る参考資料にとどめる。",
+   "reuse_conditions": "参照するなら「未検証の修正案」と明記する。定義文はコミット版の units.json（HEAD）から読む。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：findings[2]（NUM-3）、[4]（NUM-5）、[5]（NUM-6）、[7]（NUM-8）、[14]（RED-4）、[16]（RED-6）、[17]〜[19]（RED-7〜9）、[21]（RED-11）、[22]（RED-12）、acceptance[5]、interface_changes（units.json は 50 単位の定義文）",
+    "git show --stat 65ff124：01_LEDGER/units.json 129 行の変更",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md:153-193"
+   ]
+  },
+  {
+   "id": "CK-R2-23",
+   "title": "中断した修正 a1：試験 68 件、壊し方 214 種類、比較の厳格化、一致確認の自己申告",
+   "what": "a1 の自己申告によると、65ff124 で、試験を 28 件から 68 件に増やした（test_closed_forms.py を fractions.Fraction のループとの比較に書き直して 14 件、test_refcalc.py に DefinitionTests 23 件、test_engine.py に 9 件追加）。bench/mutations.py は 36 種類から 214 種類。compare.py は、無限大は同じ無限大とだけ、bool は bool とだけ等しいとする。verify_unified.exactness は床 0 で比べ、合計のみの出力の余分な葉と、有効な評価期間での例外を不合格にする。sweep_check は 70 単位すべてを比べる。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/exact_60_20.out",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/exact_400_60_40.out",
+    "git コミット 65ff124（whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/、bench/mutations.py、bench/verify_unified.py、common/compare.py）"
+   ],
+   "state_category": 2,
+   "checked_how": "a1 の自己申告だけ。申告の内容：68 件が合格（'Ran 68 tests in 32.585s' / 'OK'）。exactness(60, 20) は 1110 シナリオで all_exact 真、床 0、最大 1.408e-13（B3-01.value）。exactness(400, 60) と sweep_check(40) は 1490 シナリオで all_exact 真、最大 4.775e-13（SUM-08.delta）、掃引 65 シナリオで最大 1.093e-13。検査担当の乱数ファズ 6000 件は例外 0、食い違い 2 件（目標 0 に届かず、受け入れ条件 e は不合格）。STOP_STATUS は、65ff124 のコードが試験に通るかを確認していないと書く。今回も実行していない。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "65ff124 のスナップショットにだけある。数値は a1 の版の基準計算と統合モデルどうしの比較で、コミット版の測定値（681 シナリオ）とは対象が違う。研究の JSON（04_VERIFICATION）は書き換えられていない。",
+   "round2_findings": [
+    "NUM-10",
+    "NUM-11",
+    "REP-16"
+   ],
+   "round2_effect": "NUM-11 と REP-16 は FIXED、NUM-10 は PARTLY_FIXED と申告。a2（統合モデルの再構成）が同じファイルを途中まで書き換えた状態で停止しているので、65ff124 の tests/test_engine.py と bench/verify_unified.py は a1 の申告時点の内容と同じではない可能性がある（git show --stat で test_engine.py は 388 行、verify_unified.py は 182 行の変更。a1 の申告は 205 行と 135 行）。",
+   "claim_that_stands": "65ff124 に、増やした試験と壊し方、厳しくした比較のコードがある。a1 の申告した合格と一致の数値は、誰も再現していない。",
+   "claims_not_to_rely_on": [
+    "「Ran 68 tests ... OK」「1490 scenarios all_exact True」を、65ff124 の状態についての確認済みの結果と読むこと",
+    "a1 の一致確認の数値を、04_VERIFICATION の記録（681 シナリオ）の更新版として使うこと"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "固定の基準や評価用の集合としては使わない。fractions.Fraction で書いた独立のループと比べるという試験の作り方は、新研究で時間の式を確かめるときの参考になる。",
+   "reuse_conditions": "参照するなら「未検証」と明記する。214 種類の壊し方はコミット版の基準計算を前提にしていない（コミット版では例外や NaN になる入力を含む）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：tests、acceptance[0]〜[5]（a〜f。e は passed false）、findings[9]（NUM-10）、[10]（NUM-11）、[26]（REP-16）、decisions（mutations 36 → 214）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/a1_scratch/exact_60_20.out（exactness(60, 20)：scenarios 1110、all_exact True、floor 0.0）",
+    "git show --stat 65ff124：tests/test_refcalc.py 452 行、test_closed_forms.py 286 行、test_engine.py 388 行、bench/mutations.py 461 行、bench/verify_unified.py 182 行、common/compare.py 13 行",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:97-99"
+   ]
+  },
+  {
+   "id": "CK-R2-24",
+   "title": "中断した修正 a1 に残る未解決事項と副作用（自己申告の open_problems）",
+   "what": "a1 が自分の報告に残した未解決の点。(1) NUM-10 の限界は指示どおり変えていない：施設管理の比率 1.0 で燃料が 1e-6 倍以下、1e-8 だけ違う基準案、1e308 付近の桁あふれ、漏洩率が 1 から 1e-8 以内で補充なし。(2) 乱数ファズの目標 0 に届かず、6000 件中 2 件が食い違う。(3) 冷媒量 5e-324 kg の桁落ち。(4) 型の違う入力は例外のまま。(5) RED-12(7) は未対応：周期 1e-9 年・T=60 で 6e10 事象になり、試しのファズがメモリ不足で止まった。(6) 基準計算が重くなった（命令数 1.24 倍）。(7) 担当外の文書（06_OPEN_ISSUES の B、DERIVATIONS.md D3、記録、04_VERIFICATION/README）は古い規則のまま。(8) 結果のキーと意味が変わり、保存済みの JSON と tools/build_reports.py が合わなくなる。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/VERIFY_DEF.md"
+   ],
+   "state_category": 4,
+   "checked_how": "a1 の自己申告。独立の検査（V-DEF、V-NUM）と、その後の反証検査・修正の反復、記録と報告書の再生成は開始されなかった（STOP_STATUS.md 3 節）。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "65ff124 の a1 の版についての記述。コミット版（60e720f）の基準計算には当てはまらない点（1.24 倍、キーの変更）と、コミット版にも当てはまる点（NUM-10 の限界、RED-12(7)、型の違う入力）が混ざっている。",
+   "round2_findings": [
+    "NUM-10",
+    "RED-12",
+    "RED-3",
+    "RED-7",
+    "RED-8",
+    "RED-11",
+    "REP-17"
+   ],
+   "round2_effect": "第2回の指摘 59 件のうち、a1 の範囲の 27 件について、申告は FIXED 18、PARTLY_FIXED 8、DOCUMENTED_ONLY 1。PARTLY_FIXED の残りは主に担当外の文書の改訂。どの申告も独立に確認されていない。",
+   "claim_that_stands": "a1 の版は、(a) 独立の検査を受けていない、(b) a1 自身が食い違いの残り（2/6000）と未対応の点を申告している、(c) 43ba5d7 の測定・記録・報告書と対応しない、の 3 点から、基準としても成果としても確定していない。",
+   "claims_not_to_rely_on": [
+    "「a1 は完了」を、基準計算の定義の修正が済んだという意味に取ること（完了は作業担当の報告で、検査は未実施）",
+    "a1 の版の命令数の削減率の試算（規模 S の合計のみ 0.676 → 0.701 など）を測定結果として使うこと"
+   ],
+   "reuse_candidate": false,
+   "reuse_routes": [],
+   "reuse_how": "再利用する成果ではない。a1 の版を使わない理由と、使う場合に先に必要な作業（独立の検査、全測定のやり直し）の一覧として引き継ぐ。",
+   "reuse_conditions": "新研究は基準計算を変えないので、a1 の版を基準にしない。コミット版にも当てはまる限界（NUM-10、RED-12(7)、型の違う入力）は、入力の条件として CK-R2-03、CK-R2-07、CK-R2-09 と合わせて守る。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json：open_problems（10 項目）、acceptance[4]（e. passed false：6000 件中 2 件）、findings の status（FIXED 18、PARTLY_FIXED 8、DOCUMENTED_ONLY 1。JSON を数えた）",
+    "git show --stat 65ff124：refcalc の 4 ファイルの変更行数（base.py 332、units_b.py 175、units_c_sum.py 248、units_pre_a.py 142）は a1 の申告と同じ。fastcalc/engine.py（申告 455、スナップショット 1051）、closed_forms.py（193 と 211）、tests/test_engine.py（205 と 388）、bench/verify_unified.py（135 と 182）は申告より多く、後の段階の編集が重なっている",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:50-62（段階ごとの状態）、90-92（65ff124 を取り除いた理由）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/VERIFY_DEF.md:1-44"
+   ]
+  }
+ ],
+ "not_covered": [
+  "試験・測定・生成器は一切実行していない（指示による）。試験 28 件の合否、生成器の再現性、ナイフエッジの周期を生成器が作らないこと、は「未確認（実行が必要）」のまま。",
+  "fastcalc（engine.py、closed_forms.py）と tools/、bench/approx_study.py、measure_axis_a.py、input_usage.py は担当外で読んでいない。統合モデル側の指摘（NUM-6、NUM-9 など）は基準計算に関係する部分だけ記した。",
+  "bench/verify_unified.py は 1-175 行（scenarios、run_both、exactness）だけ読んだ。sweep_check と負荷の測定の部分は読んでいない。",
+  "synth/generate.py のうち、係数カタログ、GWP、出所、プロジェクト、運用の後半、上水・廃棄物、解体、費用の生成部（およそ 500-695 行、1060-1145 行）は関数名の一覧だけで、本文を読んでいない。",
+  "中断時点のパッチ（working_tree_at_stop_65ff124.patch）は、ファイルの一覧と文字列の出現数だけを見た。a1 のコードの中身は確認しておらず、CK-R2-19〜24 は申告の内容の分類である。",
+  "a1_scratch の出力は exact_60_20.out の先頭だけ見た。ほかの .out と .json は読んでいない。",
+  "第2回の指摘のうち records.md、approx.md、reports.md は担当外で読んでいない。REC-1、APP-5、REP-16、REP-17 は SPEC_A1.md と A1_REPORT.json での言及だけに基づく。",
+  "03_MODELS/DERIVATIONS.md、03_MODELS/records/、fastcalc/closed_forms.py の文言は直接読んでおらず、NUM-1 の引用を通してだけ触れた。",
+  "01_LEDGER/units.json は件数と注記だけを JSON として読んだ。70 単位の定義文と説明文が同文であることは、第2回の検査担当の報告（rederive.md CHECKS PERFORMED 4）に依る。"
+ ]
+}

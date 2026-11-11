@@ -1,0 +1,187 @@
+{
+ "results": [
+  {
+   "lens": "R1",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R1.json",
+   "n_items": 21,
+   "counts_by_state_category": {
+    "c1": 2,
+    "c2": 12,
+    "c3": 3,
+    "c4": 4
+   },
+   "n_reuse_candidates": 11,
+   "summary": "R1.json (lens R1: governance, ledger, ranking) is written and validated: it parses, and all 21 items carry all 17 fields with the right types. Item text is Japanese, plain style.\n\nWhat \"70 units\" means: 70 units of the independent concept model = 53 concept formulas of chapter 04 (same IDs and names) + 17 design proposals X-01..X-17 inferred from sheet names/node counts (9), unlinked inputs (6) and existing documents (2). No original formula body was inspected (100% of the 3,818,483 formula nodes uninspected; 9 sheet families have no name-based inference at all).\n\nCategory 1 (2 items, both narrowed):\n- CK-R1-05: counts and cross-references of ledger and ranking files that the second-round report checker re-computed and matched (70/53/17, 116/88/28 as a count of declarations, 198 sheets / 59 families / 3,818,483 nodes, ledger-to-coverage links 0 mismatches, both axes / priority / order / waves 0 differences). Consistency only, not correctness of content.\n- CK-R1-09: reference_semantics is identical to the reference-calculation docstrings for all 70 units (two second-round checkers, code of 43ba5d7); 53 units were re-implemented from the text alone and agreed within 1e-9 on 119 fictional scenarios. The wording \"the text fully defines each unit\" and conventions B-17 / B-18 are withdrawn.\n\nCategory 2 (12): directive copies, protocol v1.4 draft, the unit list itself, structure classes, declared inputs, unlinked-input disposition, sheet-family tally, coverage labels, axis A measurements, axis B scores, research order, and the 65ff124 ledger rewrite (50 reference_semantics texts, depends_on of X-02/X-04/X-07, self-reported only).\n\nCategory 3 (3): rules announced for v1.4 plus the unstarted b3 / stage-C designs; the ledger's potential/proposal fields; the judges' replacement ideas.\n\nCategory 4 (4): protocol and directive gaps (REP-3/4/5/6/15, REC-2/5); definition holes RED-1..12 plus REC-1/NUM-1; uninspected scope and the 7 structures not adopted; a single errata list of wrong or stale counts.\n\nWrong or stale counts, all re-counted from the stored JSON:\n- Structure classes: header and README say LINEAR_SUM_PRODUCT 29 / RATIO 11; the units give 30 / 10 (REP-8).\n- Inputs: \"116 (88+28) ... same\" is a declaration, not a measurement; measured reads are 77 specified + 56 added (REP-7). \"0 of 124 inputs are record-only\" is wrong: 47 are never read, and the ledger says 30 (REP-1).\n- Unlinked inputs: 3 of the 14 \"connected\" and 6 of the 9 \"implicitly used\" are never read (REP-7).\n- Top-30 wording: A 22, plus 6 sensitivity-only outside the 22, B 30; A∪B = 38 (overlap 14); 42 only with the 6 (REP-11).\n- Coverage labels: 3 COVERED_BY_EXISTING families list X-units (19,388 nodes), 11 NON_CALCULATION families have related units, 3 zero-formula families are COVERED_BY_ADDITIONAL (REP-18).\n- A13-04 ledger text still says \"not implemented\" (REP-10); SYS-01 branches say NaN → MISSING (RED-6).\n- Judge trace: 52 / 20 uses criterion b7; with b8 as the protocol defines it, 56 / 14 (REP-2). I re-counted 52 and 56 only, not the 14.\n\nProtocol: P2, P4, P5, P6 and P10 were applied as written and reproduced by re-computation. The v1.4 draft changed only P3, P4, the P7 vocabulary table and the history row.",
+   "rule_check": "no. I ran no code of the old study (no tests, benchmarks, tools or generators; no import of refcalc, fastcalc, bench, synth, tools or common) and changed no repository file (git status is clean; only git log / git show were used). Python was used only to parse JSON and Markdown and to count, run isolated from the scratchpad. One source file (tools/rank_axes.py) was read as text via grep, not executed.",
+   "problems": [
+    "Category 1 for CK-R1-05 depends on reading criterion (a) broadly: it covers plain count and consistency facts, not a measurement or derivation. Under a strict reading, downgrade it to 2; its claim_that_stands text stays valid either way.",
+    "CK-R1-09 is category 1 only in its narrowed wording. The same definitions carry 12 confirmed or partly confirmed RED findings plus REC-1/NUM-1, listed separately as CK-R1-10 (category 4). If another reader classified the reference calculation as 2, the two need reconciling.",
+    "The positive results I cite from the checkers' CHECKS PERFORMED sections (six generated READMEs byte-identical to a regeneration, the 53-unit re-derivation on 119 scenarios) are single-checker reports. The adversarial verifiers re-checked findings, not these, and I could not confirm them without a run.",
+    "Protocol v1.4 draft is internally inconsistent: the history row for 1.4 announces four rules (exact rational time rule, membership by fault injection, mechanism counted from outside, measurement scope levels) that appear nowhere in the body; P8 is still the v1.3 text.",
+    "Protocol P3 (v1.4) describes inputs_read_by_reference, n_inputs_read, inputs_declared_not_read and inputs_read_not_declared, but none of the 70 ledger units has these fields (stage b3 never started).",
+    "One stale statement that is not a round-2 finding: the SYS-01 purpose field says its feeds list 42 units, but feeds is empty and the gating relation is in gated_by (17 units). It is flagged as a reader observation in CK-R1-21.",
+    "The archived wfB/axis_a_run.log.txt (69 measured, 1 not measured) is from the first version, not the committed axis A measurement (70 measured, code of 43ba5d7).",
+    "INDEX.md and HANDOVER.md did not exist when I read the archive folder, although STOP_STATUS.md and the 09_APPROX_STUDY README link to them.",
+    "Not read in full: the long free-text fields of 62 of the 70 ledger units, 207 of the 210 judge rationales, numeric.md and approx.md (headings and relevant passages only), res.json, the checker scripts, SPEC_A1/A2/B2 and the B2 reports. Details are in not_covered.",
+    "During the work I created and then deleted a temporary folder (r1_work) inside the checkpoint folder; only R1.json remains there from me. My builder scripts are in the scratchpad folder r1_tmp, outside the checkpoint folder. R2.json already existed; I did not read or touch it."
+   ]
+  },
+  {
+   "lens": "R2",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R2.json",
+   "n_items": 24,
+   "counts_by_state_category": {
+    "c1": 2,
+    "c2": 14,
+    "c3": 1,
+    "c4": 7
+   },
+   "n_reuse_candidates": 12,
+   "summary": "R2.json is written and validated: it parses, has 24 items (CK-R2-01..24), and every item carries all 17 fields.\n\n**Category 1 (2 items, both narrowed):**\n- **CK-R2-01, the reference calculation as a whole.** 70 units, one literal function per unit, docstring identical to the ledger text. What stands: on 119 fictional scenarios the second-round checker's independent re-implementation of 53 units agreed within 1e-9, apart from four label/flag/count differences. This covers small scenarios only, T up to 99.9, and 14 units were not independently re-implemented.\n- **CK-R2-02, the time rules.** The same predicates are used across B1/B3/B4/B5/X-07/X-10/QA-02 and matched the independent implementation on the five decimal-boundary pairs. The wording \"independent of binary rounding\" is withdrawn.\n\n**Category 4 (7 items):**\n- **Knife-edge (CK-R2-03):** for the single double 1.000000001 the reference loop places events in different years than the written rule (48 vs 59 distinct years at T=60). No other failing period was found in about 1.5 million scanned pairs.\n- **Completeness hole (CK-R2-05):** with B3 or B5 in the boundary but not their upstream stages, a defective upstream row lowers the total by up to 62.8% while `complete` stays True. SUM-08 ignores completeness.\n- **Invalid-value gaps (CK-R2-07):** annual quantities, grid values, factor values and conversion multipliers are used unchecked; invalid cycles silently give no events; several None inputs raise TypeError or IndexError.\n- **Text/code differences (CK-R2-09)**, **unverified points of section D (CK-R2-10)**, **compare.py weaknesses (CK-R2-16)**, and **a1's own open problems (CK-R2-24)**.\n\n**Category 2 (14 items):** the completeness flag mechanism, the skip-and-count rule, the B-1..B-21 conventions list (B-11, B-17, B-18 do not hold as written), the data model, the generator, the scenario sets (S/M/L benchmark, verification population, 32 edge cases), the 36 mutations, compare.py, the 28 unit tests, and five items for what stage a1 says it changed.\n\n**Category 3 (1 item):** the SPEC_A1 design decisions.\n\n**Frozen-baseline note:** the committed refcalc at 60e720f, the Scenario model, `make_scenario`, the benchmark/population/edge-case sets and compare.py are reuse candidates for routes A, B and C. The reference is known to behave as defined on clean generated inputs with the generator's own periods and either the full 14-stage boundary or defect-free stage subsets. Inputs to avoid are listed per item: knife-edge and extremely short periods, partial boundaries combined with defects, negative/NaN/inf values in unvalidated fields, None inside tables or lists, annual tables shorter than the period, factor ids \"GRID\"/\"REFRIGERANT\", and ill-conditioned magnitudes. The a1 version in 65ff124 is not a baseline candidate.",
+   "rule_check": "no. I ran no test, benchmark, tool or generator of the old study and imported none of its modules; Python was used only with -I to parse JSON and source text and to write R2.json. No file inside /home/user/- was created, changed or deleted: `git diff --stat HEAD` and `git ls-files --others --exclude-standard` are both empty and there is no __pycache__. One deviation: I ran `git status --porcelain` once at the start, which is read-only but not on the brief's list of allowed git commands.",
+   "problems": [
+    "Category 1 for CK-R2-01 and CK-R2-02 rests on the second-round rederive checker's own CHECKS PERFORMED section (rederive.md line 146). The adversarial verifier re-ran the findings, not that agreement on 119 scenarios. If category 1 requires verifier-confirmed facts only, downgrade both to 2.",
+    "No record that the 28 committed unit tests passed exists in the documents I read; A1_REPORT.json only says 'was 28 tests'. Pass/fail is 'not confirmed (would need a run)'.",
+    "06_OPEN_ISSUES D-3 and INDEPENDENT_REVIEW.md line 7 still say no independent check of the revised version was done. The second round was performed but is not reflected in either file.",
+    "In 65ff124 the four refcalc files have the same changed-line counts as a1 reported, but fastcalc/engine.py (1051 vs 455), closed_forms.py (211 vs 193), tests/test_engine.py (388 vs 205) and bench/verify_unified.py (182 vs 135) carry later edits. a1's reported '68 tests OK' and exactness numbers may not describe the snapshot.",
+    "The fifth of the '5/5 invalid study periods refused' is 500.0. By reading the code it is refused because the year tables (130 entries) are shorter than the period, not because the period is invalid. This is from reading only, not a run.",
+    "The triage cites 09_APPROX_STUDY/README.md line 18 for the 'same values, same defects' sentence; at HEAD it is line 26 because the termination note added 8 lines.",
+    "Not read in full: synth/generate.py (catalogue, project, operation tail, end-of-life and cost sections seen as function names only), bench/verify_unified.py beyond line 175, the 65ff124 patch body, and the a1_scratch outputs other than the head of exact_60_20.out. REC-1, APP-5, REP-16 and REP-17 are known only through SPEC_A1.md and A1_REPORT.json.",
+    "Whether the generator can ever produce a knife-edge period is not confirmed. From the code it draws only integers, 2-decimal values or T/n, but that was not checked by a run.",
+    "A helper script that builds the JSON is at /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/r2_work/build_r2.py, outside the checkpoint folder and outside the repository. The only file I wrote in the checkpoint folder is R2.json."
+   ]
+  },
+  {
+   "lens": "R3",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R3.json",
+   "n_items": 37,
+   "counts_by_state_category": {
+    "c1": 15,
+    "c2": 12,
+    "c3": 4,
+    "c4": 6
+   },
+   "n_reuse_candidates": 28,
+   "summary": "観点 R3（統合モデルとその根拠）を 37 項目に分類し、R3.json に書いた。JSON として読め、全項目に全欄がある。\n\n区分 1（15 件）：全体の形、K1・K2・K4・K6（所属を狭めた形）、導出 D1・D2・D4・D5（2 件）・D6・D7、681 シナリオの厳密一致、評価期間の掃引、命令数（規模 S・M）。いずれも「架空データ・独立概念モデル・681 シナリオ・相対 1e-9」の範囲に限り、第2回の検査での再現を根拠にした。\n区分 2（12 件）：K3・K5・K7（所属の主張が第2回で弱められた）、D3、D8、規模 L と時間・メモリの負荷、軸 A の測定、入力項目の使用、成功記録 118 件の表示、a1 の自己申告 2 件、a2 の途中出力。\n区分 3（4 件）：故障注入による所属の確認、外からの計測、統合モデルの再構成、未実装の拡張案。\n区分 4（6 件）：手で置いた計数、「66 単位・70→11」の件数、周期 1.000000001 の反例、NUM-2〜9 の食い違い、NUM-10 の限界、NUM-11 の比較の弱点。\n\n再利用の要点（区分 5 向け）：\n- 導出で確立している構造は 4 つ：排出＝行×係数キーの活動量の合算と係数の積和（線形）、回数＝T と周期の天井関数（端の規約つき）、年重み付き和（等差級数と 2 乗和）、補充なし冷媒の等比。行の合算は T に依存しない。\n- 架空データで観測しただけのもの：一致の実測値、係数キーや周期の種類が行数より少ないこと、負荷の削減率、入力が減らないこと。構造の性質としては使えない。\n- 「66 単位」は使えない。第2回の 2 つの観点で数え方がそろっておらず、合意した数え直しはない。\n- 周期 1.000000001 では基準計算の側が丸めに依存する。a1 の修正案は基準計算を変えるので、「基準計算を変えない」条件との関係を先に決める必要がある。",
+   "rule_check": "no",
+   "problems": [
+    "項目数 37 は目安（8〜25）を超える。課題文が K1〜K7・導出・測定・設計案を別項目にするよう求めたため。",
+    "統合の件数の訂正値は 1 つに決まらない。記録の検査（REC-2）は「66 件中 58 件は規則どおり、見出しは約 62〜63」、報告書の検査（REP-4）は SUM-04〜08 などを「名札だけ」とする。INDEX に訂正後の単一の数を書かないこと。",
+    "REP の指摘と確認には反証担当が付いていない。命令数（規模 S・M）を区分 1 にした根拠は報告書の検査担当の数え直しだけである。",
+    "a2 の途中出力 2 ファイルは、65ff124 の作り直し途中の統合モデルについての数字で、60e720f のコードの結果ではない。a2 の報告は存在しない。",
+    "周期 1.000000001 では、書かれた定義を厳密な演算で評価した値と 60e720f の基準計算の値が違う（検証担当の指摘）。どちらを正とするかは未決で、a1 の修正は自己申告だけ。",
+    "「別の評価期間 4 通りで 92.1％ 減」は、統合モデル側が合算後の finish 4 回だけを測っている（verify_unified.py 288・309-310 行の読み取り。第2回の指摘ではなく、この読み手の観察）。",
+    "掃引の 64 シナリオの内訳は JSON に記録がなく確認できない（REP-16 は 32＋32 と書くが、スクリプトの既定値からは別の内訳も考えられる）。",
+    "a1 の報告は、床なしの比較では通常の漏洩率でも B1-03 の年次の値 1 個が 1.6e-8 ずれたと述べる（未検証）。681 シナリオについては第2回の床なしのやり直しで不一致 0。",
+    "読んでいないもの：refcalc と common/compare.py の本文、65ff124 のパッチの中身（一覧だけ）、記録 454 件の個々の題名、近似関係のファイル、02_RANKING の測定値、rederive.md・approx.md の大半。該当箇所は第2回の指摘の記述に依った（not_covered に列挙）。",
+    "公表の数字が今の環境で再現するかは確認していない（実行が必要）。",
+    "ほかの読み手と重なる可能性がある項目：軸 A の測定（CK-R3-22）、成功記録の表示（CK-R3-26）、NUM 系の不具合（CK-R3-27〜30）、a1 の修正（CK-R3-31・32）。",
+    "形式の確認のため、リポジトリ外の checkpoint/R2.json の先頭 60 行を開いた（分類の根拠には使っていない。read 欄に記載）。"
+   ]
+  },
+  {
+   "lens": "R4",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R4.json",
+   "n_items": 26,
+   "counts_by_state_category": {
+    "c1": 6,
+    "c2": 6,
+    "c3": 11,
+    "c4": 3
+   },
+   "n_reuse_candidates": 25,
+   "summary": "Lens R4 (approximation study, M3..M6): 26 items written to R4.json; the file parses, every item has all 17 fields, and all cited repo paths exist.\n\nCategory 1 (6 items, each narrowed; fictional population of 400, reference of 43ba5d7, reproduced by the second-round checker):\n- AP-01/02/03 with the AP-20 bracket (rejected)\n- AP-04 (rejected)\n- AP-07a/b (rejected)\n- AP-14 (rejected)\n- AP-22a (rejected)\n- the list of candidates whose error sign follows from an inequality\n\nCategory 2 (6 items):\n- overall conclusion \"no approximation adopted\" (16 REJECTED / 16 HOLD stands; coverage and \"same effort\" wording do not)\n- the measurement framework\n- AP-05 (measured variant differs from its title, APP-6)\n- AP-06/06b (AP-06b not independently re-implemented)\n- AP-08/09a/09b (reference quantity is B6-03, not stage B6, APP-2)\n- b2 re-measurements and new candidates AP-05a/b, 18d, 19c, 23a-c, 24a/b (self-reported, against the unverified reference of 65ff124)\n\nCategory 3 (11 items):\n- held candidates: AP-09c, AP-18a/18b/18, AP-18c, AP-10/10b, AP-11/15/16/13, AP-12, AP-17, AP-19a/b, AP-21/22b\n- the safe-side repair candidate from APP-1 (measured by checker and verifier, not in the committed study)\n- SPEC_B2 and the 41 conclusion proposals\n\nCategory 4 (3 items):\n- confirmed flaws of the error measurement (APP-2..9, REP-5/6/13)\n- practical accuracy cannot be established on fictional data\n- coverage gap: 204 of 280 M3..M6 unit-steps closed without measurement (REP-5, REC-8)\n\nReuse notes:\n- \"One common approximate model for structurally different formulas\": AP-18 family (class parameters across B3/B4/C3/C4), AP-15 (area intensity for all 14 stages), AP-10/10b, AP-11/16, and the class form of the safe-side repair candidate.\n- Recorded error behaviour: a variable that enters linearly (repair rate) aggregates exactly by a weighted mean; a variable that enters through the step count function (cycle) does not (B4 -44.0%..+63.2% even with the building's own rows).\n- Counterexamples for the new research: smooth replacements of the count function (AP-01..03) and interpolation over the study period (AP-14); sum-of-products replaced by product-of-means, where the error equals the sample covariance (AP-17, also AP-08 and AP-18c); AP-18b at -1.9%..+1.1% with the building's own parameters versus -41%..+337% with other buildings' (APP-9); upstream errors growing 1.7-2.5x in the building total (APP-3); errors diluted when measured on a sum of stages (APP-2).",
+   "rule_check": "no. No code of the old study was run or imported, and no repository file was created, changed or deleted. Python was used only to parse JSON and Markdown. The only file written is R4.json in the scratchpad checkpoint folder. One deviation from the allowed git list: I ran `git status --porcelain` once (read-only; output empty; the .git/index timestamp, 15:43:34 UTC, predates this session, so nothing was written). All other git commands were log, show --stat and diff --stat.",
+   "problems": [
+    "I ran `git status --porcelain` once, which is not on the brief's allowed list (log/show/diff/ls-files/grep). It is read-only, returned an empty result, and did not touch .git/index.",
+    "The item count is 26, one above the brief's typical 8-25, because rejected and held candidates of the same formula family were kept apart where their verification states differ.",
+    "Not confirmed (would need a run): every b2 number; b2's claim that the exact time rule of 65ff124 left the approximation numbers unchanged; the published values of AP-06b, AP-12, AP-13, AP-15 and AP-16, which the second-round checker did not re-implement.",
+    "REP-5, REP-6, REP-13, REP-2 and REP-14 had no adversarial verifier (only the orchestrator's re-run of the checker script); items that rest on them say so.",
+    "Protocol v1.4 draft (60e720f): the change log says the scope rule for approximation measurements (unit / stage / building) was laid down, but the body of P7 contains no such rule; the only implementation is the unverified b2.",
+    "Counts differ between two committed reports because one counts records and the other counts units (M3 rejected 38 vs 22, M4 hold 53 vs 39, M5 hold 8 vs 4); a reader of the index may mistake this for a contradiction.",
+    "Not read: checker scripts and logs (existence only), the b2 code in 65ff124 and the patch file, A1_REPORT.json, PROGRESS.md, progress_ledger.json, judge_proposal_trace.json, DERIVATIONS.md. Numbers from the second round are quoted from triage/approx.md.",
+    "STOP_STATUS.md refers to INDEX.md and HANDOVER.md, which are not yet in the archive folder (only STOP_ORDER.md, STOP_STATUS.md and materials/ exist).",
+    "Category 1 was given only to narrowed statements: measured error on the named quantity, sign, and rejection. Published 'total' columns, 'same effort' reasons and 'always' wordings are listed under claims_not_to_rely_on. If the index wants a stricter reading, CK-R4-05 (AP-04, touched by REP-6) and CK-R4-09 (AP-07a/b, touched by APP-3) are the two candidates for downgrade to category 2."
+   ]
+  },
+  {
+   "lens": "R5",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R5.json",
+   "n_items": 31,
+   "counts_by_state_category": {
+    "c1": 3,
+    "c2": 15,
+    "c3": 5,
+    "c4": 8
+   },
+   "n_reuse_candidates": 25,
+   "summary": "R5.json is written and validated: it parses, has 31 items (CK-R5-01..31), and every item carries all 17 fields. Categories: 3 verified, 15 provisional, 5 in-progress, 8 defects; 25 reuse candidates.\n\nHow the old study's published text may be quoted:\n\n- **Headline 1 (70 units = 53 + 17):** category 1, narrowed to the count and to \"all 70 have M1..M6 conclusions recorded\". Not quotable as \"all units examined for approximation\": 204 of 280 approximation unit-steps were closed without measurement (REP-5).\n- **Headline 2 (66 units into 7 models; \"70 → 11\"):** category 4, do not quote the numbers. REC-2 supports about 62-63; REP-4 disputes more (K5 SUM-04..08 and others). There is no agreed count.\n- **Headline 3 (exact agreement):** category 2. It stands only for the 681 fictional scenarios at relative 1e-9, which the round-2 verifier reproduced with a stricter comparison. \"Every input\" and \"same values and same defects for defective inputs\" are refuted (NUM-1..11, REC-1).\n- **Headline 4 (load):** category 2. Instruction counts for sizes S and M were re-counted in round 2. The headline figures (size L 66.3 % / 73.6 %, times, memory) are the author's measurement only; confirming them would need a run.\n- **Headline 5 (no approximation adopted):** category 2. The counts 32 / 16 / 16 stand. \"Same effort\" is an argument, not a measurement (REP-6), and the class-parameter figures are in-sample (APP-9).\n- **Headline 6 (inputs not reduced):** category 2. Both calculations read 77 + 56 inputs. The related sentences \"0 record-only inputs\" (actually 47 never read, REP-1) and \"116 … same\" (REP-7) are wrong.\n- **Headline 7 (design statement):** category 1, as a design fact only.\n\nOther classifications:\n\n- **Ledger counts 3/66/0/0/0/1:** 66 is contradicted. The zeros for \"approximation rejected\" and \"not verified\" fall if the disputed M2 records are dropped (A13-05 and X-13; B1-01). The 3 and the 1 are not contradicted. Of the 44 units with holds, 21 are on hold only through AP-15.\n- **454 records:** the note \"SUCCESS has three backings or the build fails\" is false; 96 of 118 have all three (REC-5), and several mechanism counters cannot fail (REC-4). The 226 NOT_APPLICABLE records are arguments, not results.\n- **Nine deliverables:** all exist in the state of 43ba5d7; none reflects round 2, and finalisation and the final audit never started.\n- **Judge-proposal trace:** maps b7 to M4 where the protocol says b8, so its 52 / 20 figures answer a different question (REP-2).\n- **First-review record:** several of its \"fixed\" statements are refuted by round 2, and it still says no re-check was done.\n- **07_MATERIAL_TAXONOMY:** a design draft (DESIGN_DRAFT / NOT_VERIFIED), not a data set. It had one internal-consistency review whose checks are not reproducible.\n- **Stage C:** the planned revision of records, ledger, reports and hand-written documents never started; the 65ff124 patch does not touch tools/, 03_MODELS, 05_DECISIONS or 06_OPEN_ISSUES.",
+   "rule_check": "no. I ran no code of the old study (no tests, benchmarks, tools or generators; no import of refcalc, fastcalc, bench, synth, tools or common) and changed no repository file. Python was used only with -I to json.load and count text/JSON files. The only file I wrote is R5.json in the scratchpad checkpoint folder. Afterwards the git diff was empty, .git/index was unmodified, and no __pycache__ existed.",
+   "problems": [
+    "I ran `git status --porcelain` once to confirm a clean tree. It is read-only but not on the brief's allowed list (log/show/diff/ls-files/grep); .git/index mtime stayed at 15:43:34, so nothing changed.",
+    "INDEX.md and HANDOVER.md did not exist in research_archive/real_equation_checkpoint/ when I read it, although the stop notice in 09_APPROX_STUDY/README.md and STOP_STATUS.md point to them.",
+    "Cross-lens reconciliation is needed. I put headline 1 (count of 70 units) in category 1 as a re-counted fact, while R1 lists the unit list itself as category 2. I put headline 3 (the published sentence) in category 2, while R3 lists the 681-scenario measurement as category 1. The objects differ (statement versus underlying outcome), but the index writer should decide how to show them.",
+    "Many classifications in this lens rest on REP-1..18, which had no second verifier (the orchestrator re-ran the checker's script). I marked this in checked_by wherever it applies.",
+    "There is no agreed number of unified units. The records checker counts 58 memberships 'as stated' and corrects the headline to about 62-63 (REC-2); the reports checker disputes K5 SUM-04..08 and the M2 successes without a mechanism (REP-4). The file says no number can be quoted.",
+    "Two cautions in the file are my own reading, not second-round findings: (a) headline 6's third sentence ('reducing inputs needs an approximate model') sits beside the study's own unimplemented exact input reductions (06_OPEN_ISSUES G-2, G-3; the AP-21 identity); (b) none of the 32 candidate titles is a transform-based candidate (text search of candidates.json).",
+    "Not confirmed (would need a run): size-L instruction counts, all times and memory, the approximation statistics other than AP-04 and AP-22a, and whether individual record titles match the code. For these I relied on the recorded values and on the second-round text.",
+    "Partial reads, all listed in not_covered: 04_VERIFICATION/README.md lines 113-239; build_reports.py lines 58-375 (searched, not read through); numeric.md, approx.md and rederive.md (headings and CLAIM/CORRECTED lines only, except NUM-2, NUM-10 and NUM-11 in full); deliverables 1-4 (01_LEDGER, 02_RANKING) were not read in this lens.",
+    "The committed EVALUATION_PROTOCOL.md (60e720f) has a revision-history row 1.4 saying the new rules 'were set' (it is listed before row 1.3), while the P8 evidence rule in the body is still the v1.3 text and the matching implementation was reverted or never started. A successor could misread the protocol as describing the committed code.",
+    "03_MODELS/records/ holds one file, units.json, with 454 records, not one file per unit. I parsed all 454 for counts but read only 14 records and 2 ledger units in full."
+   ]
+  },
+  {
+   "lens": "R6",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R6.json",
+   "n_items": 59,
+   "counts_by_state_category": {
+    "c1": 0,
+    "c2": 0,
+    "c3": 0,
+    "c4": 0
+   },
+   "n_reuse_candidates": 0,
+   "summary": "R6 = register of the 59 second-round findings and their state at the stop. The file parses, every id (NUM-1..11, RED-1..12, REC-1..9, APP-1..9, REP-1..18) appears exactly once with all required fields, 8 groups cover all 59 ids, and the counts were computed by parsing the written file.\n\nCounts (computed from the file):\n- by_verdict: CONFIRMED 33, PARTLY_CONFIRMED 8, NOT_SECOND_VERIFIED 18 (the REP findings). Severity and verdict were cross-checked against triage/res.json.\n- by_severity: HIGH 3 (NUM-1, RED-1, REC-1), MEDIUM 27, LOW 29.\n- by_state_at_stop: 中断時の編集で対応（自己申告・未検証） 38 (a1: 25, b2: 13); 途中で停止 10 (the 9 a2 findings plus REP-10); 未対応 10 (b3: 4, C: 6); 対応しない（文書化のみの予定で未実施） 1 (NUM-10).\n- by_assigned_stage: a1 26, a2 9, b2 13, b3 4, C 7, none 0.\n- in_committed_tree: 残っている for all 59. 09_APPROX_STUDY equals 60e720f except the hand-written termination banner in README.md, and 60e720f differs from 43ba5d7 (the version the checkers examined) only in EVALUATION_PROTOCOL.md. For most findings I also confirmed the cited line, wording or JSON value by text/JSON reading; nothing was run.\n\nHow the states were decided:\n- a1 and b2: the stage's self-report says FIXED or PARTLY_FIXED (19 FIXED, 20 PARTLY_FIXED; no mismatch with A1_REPORT.json / B2_REPORT.json) and a matching marker string is present in the 65ff124 patch.\n- a2: no report exists. The patch contains its partial edits (engine refactor with indicator(), a device table and a Resolver; new membership_check.py and mechanism_probe.py) and two unverified output JSONs.\n- b3 and C: nothing in the patch.\n- REP-10: the protocol part (P3/P4/P7) is already in the 60e720f draft; the A13-04 ledger part (b3) is untouched.\n\nGroups: (1) \"same result for every input\" does not hold; (2) holes in the reference definitions and unlisted conventions; (3) what the verification covers; (4) how \"66 units / 7 models / 70 to 11\" was counted; (5) mechanism counters and the backing of SUCCESS records; (6) measurement definitions in the approximation study; (7) scope of the M3-M6 records and progress counts; (8) ledger, input and report numbers. Each has a reuse caution for the new research.\n\nFields beyond the requested format: repro_files, also_stages, self_report_status, remaining_at_stop and committed_check per finding; state_rules, verdict_note and basis_for_in_committed_tree at top level; extra breakdowns in counts.",
+   "rule_check": "no",
+   "problems": [
+    "The statement that the 18 REP findings were reproduced by re-running the checker's script rests on BRIEF.md only: res.json has no verdicts for the reports lens and checker_scripts/reports/ holds no output file. They are recorded as NOT_SECOND_VERIFIED.",
+    "No test result exists for the 65ff124 tree as a whole. a1's '68 tests OK' predates a2's edits to fastcalc; b2's '106 tests OK' was taken while a2 was still editing, and b2 reports one transient failure of a2's test file. 'Addressed by the interrupted edits' therefore means a self-report plus a matching string in the patch, nothing more.",
+    "The protocol v1.4 draft in the committed tree (60e720f) says rules were established that the committed code and ledger do not have: exact rational time arithmetic, membership by fault injection, and the ledger fields inputs_read_by_reference / n_inputs_read (0 occurrences in 01_LEDGER/units.json). Its revision row lists P8 and P10, but the diff changes only the revision row, P3, P4 and the P7 vocabulary table. The file carries no draft marker; only the commit message says 'work in progress', whereas STOP_STATUS section 5 calls it marked as in progress.",
+    "Judgement calls in state_at_stop: (a) a1/b2 findings reported PARTLY_FIXED are filed under the self-reported category, with the unfinished documentation part in remaining_at_stop; (b) only NUM-10 is filed under 'document only', and its sub-case (b) was code-edited by a1; (c) REP-10 is filed as stopped part-way under stage C. The rules are written in the file's state_rules.",
+    "A finding spanning several stages has one assigned_stage (the build stage that owned the code or measurement side) and the others in also_stages: REC-5, REC-6, REC-7, REC-9 and REP-4 are a2 (+C); REP-3 is C (+a2); APP-5 is b2 (+a1, C).",
+    "The patch (723 KB) was not read in full; presence of chosen marker strings in added and removed lines was counted mechanically. Whether the edits actually resolve a finding is not confirmed (would need a run).",
+    "B2_REPORT_long.json, conclusion_proposals.json and candidate_lines.json were not read beyond their key structure, so b2's proposed conclusion texts are not in the register.",
+    "a1 self-reports (unverified) that the committed X-07 reads B2-01 without declaring it in depends_on. This matters if the new research uses depends_on for its dependency classification; it is noted in group 8.",
+    "If anyone considers the 65ff124 code: a1 reports the reference became about 1.24x heavier in executed instructions, so the published load reductions would change; b2 reports tools/build_records.py and tools/build_reports.py do not run on its new JSON. Both are self-reports.",
+    "The archived checker scripts import the old study's code and point at pre-stop scratch paths under /tmp. Running them would resume the old study; only their existence was checked."
+   ]
+  },
+  {
+   "lens": "R7",
+   "file": "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R7.json",
+   "n_items": 32,
+   "counts_by_state_category": {
+    "c1": 7,
+    "c2": 20,
+    "c3": 1,
+    "c4": 4
+   },
+   "n_reuse_candidates": 32,
+   "summary": "R7（新研究のための再利用の下調べ、構造の棚卸し）。出力は /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/R7.json（32 項目、すべて reuse_candidate=true、python で構文と全 17 欄の存在を確認済み）。\n\n内訳\n- 区分 1（7 件）：台帳の束縛欄（70 単位の定義文と依存がコードと同一）、依存グラフ（183 辺、閉路なし、深さ 0〜7、X-02 が 29 単位を受け、SUM-03 の上流 37 単位）、基準計算のうち第2回が定義文から書き直して一致した 53 単位（119 シナリオ）、681 シナリオでの基準計算と統合モデルの一致、閉形式 5 群（skip_weight_periodic を除く）、近似候補 27 件の誤差統計（反例として）、規約 B-1〜B-21 のうち但し書きなしでコードと合う 15 件。いずれも言える範囲を狭めて記載。\n- 区分 2（20 件）：式の族 F01〜F11（R7 の整理用の区分）、台帳の分析欄、入力データモデル、架空シナリオ生成器、独立の書き直しがない基準計算 17 単位、比較の仕組み、DERIVATIONS.md、統合モデル K1〜K7、再現のない近似 5 件、中断した修正（65ff124）の版。\n- 区分 3（1 件）：実装していない式の案 G-1〜G-7。\n- 区分 4（4 件）：基準計算の定義の穴、時間規則の端（周期 1.000000001）、規約一覧に無い規約、台帳の古い欄。\n\n族ごとの単位数（units.json から python で集計、計 70）：F01 行の和 19、F02 行ごとの数量の比 2、F03 加重和・行列展開 6、F04 事象の数え上げ 6、F05 年重み付き和 13、F06 係数系列 1、F07 冷媒の漸化式 3、F08 比・指標 4、F09 集約の木 5、F10 基準案との比較 1、F11 条件分岐・述語 10。台帳の構造分類を単位から数えると LINEAR_SUM_PRODUCT 30、RATIO 10 ほか（見出しの 29／11 は古い）。段階別：PRE 5、A1-A3 10、A4 3、A5 4、B1 3、B1/C 1、B2 1、B3 2、B4 4、B5 1、B6 6、B7 4、C1 1、C2 1、C3 2、C4 1、C1-C4 2、MEMO 2、SUM 13、QA 4。D 段階の単位は無い。\n\n後継者が使う前に知るべき主な点：(1) 基準計算には 2 つの版があり、コミット済みは 43ba5d7 と同じ、65ff124 は定義が変わる未検証の版。(2) 基準計算は、部分的な境界（B3・B5 だけ）、負・NaN の年次量や係数、無効な周期、None の一部の欄で、黙って値が変わるか例外になる。(3) 周期 1.000000001 では基準計算の年の割当て自体が丸めに依存する。(4) 検査の単位（SYS・QA）は計算を止めない。(5) 近似の誤差表の「B6 段階」は B6-03（B6＋B2）、合計への影響は下流への伝播を含まない。変換や新しい定式化の提案はしていない。",
+   "rule_check": "no — 旧研究のコード（refcalc、fastcalc、bench、synth、tools、common、tests）は実行も import もしていない。python は JSON とテキストの解析だけに使い、作業フォルダ（scratchpad/r7work）から -I で実行した。リポジトリのファイルは作成・変更・削除していない（終了時に git diff --stat HEAD は空、未追跡ファイル 0、__pycache__ なし）。使った git は log、diff --stat、show --stat、ls-files だけ。出力は checkpoint/R7.json の 1 ファイル（作業用のスクリプトは scratchpad/r7work 内）。",
+   "problems": [
+    "STOP_STATUS.md が参照する INDEX.md と HANDOVER.md は、確認時点で research_archive/real_equation_checkpoint/ にまだ無い（これから書かれる文書と理解した）。",
+    "基準計算に 2 つの版がある：コミット済み（HEAD＝43ba5d7 と同じコード）と、中断した修正の版（65ff124、自己申告だけで未検証、時間の判定・不正値の扱い・完全性の印・依存が変わる）。新研究の「変更しない基準計算」をどちらにするかを最初に固定する必要がある。",
+    "台帳 units.json の見出し structure_class_counts は古い（LINEAR_SUM_PRODUCT 29・RATIO 11。単位から数えると 30・10）。R7 の件数はすべて単位から数え直した値。",
+    "R7 のテキスト照合で見つけた点（第2回の指摘には無い。実行による確認はしていない）：X-07 の関数は res[\"B2-01\"] を読むが depends_on に B2-01 が無い（units_c_sum.py:379-380,395）。X-08 は B4-02 を依存に挙げるが関数内で読まない。補助関数を経由する読み取りまでは追っていない。",
+    "式の族 F01〜F11 は R7 が付けた整理用の区分で、旧研究の成果物には無い（独立の検査なし）。そのため族の 11 項目は区分 2 にした。各族の依存変数・線形性・分岐は定義文とコードの読み取りによる。",
+    "fastcalc/engine.py、synth/generate.py と population.py の本体、bench/approx_study.py・verify_unified.py・mutations.py の本体、candidates.json の結論文、中断した修正のパッチ本文と SPEC は読んでいない（R7.json の not_covered に記載）。K1〜K7 と生成器の項目は README・models.json・第2回の報告に基づく。",
+    "第2回の件数と数値（119 シナリオ、総当たりの件数、再現した統計値など）は triage/*.md の記載のまま引用した。R7 による再計算はしていない（再計算には旧研究のコードの実行が必要）。",
+    "第2回の REP-1〜REP-18 には第2検証者が付いていない（主担当が検査のスクリプトを再実行して再現）。REP に基づく記述（入力項目の実測との食い違い、見出しの件数、評価期間の振り直しの範囲など）はその前提。",
+    "項目数 32 は手順書の目安（8〜25）を超える。族ごとに 1 項目、検証の状態が違う成果は分ける、という指示に従った結果。",
+    "区分 1 の 7 件は、第2回の指摘に合わせて言える範囲を狭めたうえでの判定。特に「基準計算 53 単位」は「コードが定義文どおりに計算している」ことの確認であり、定義そのものの穴（CK-R7-19、CK-R7-20、CK-R7-29）は別項目にした。統合の担当が他の読み手の判定と突き合わせる必要がある。"
+   ]
+  }
+ ],
+ "missing": []
+}

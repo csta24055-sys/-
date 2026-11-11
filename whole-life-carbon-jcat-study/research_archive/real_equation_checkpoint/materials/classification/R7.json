@@ -1,0 +1,1502 @@
+{
+ "lens": "R7",
+ "read": [
+  "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint/BRIEF.md（リポジトリ外）",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/models.json",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/README.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json（python で候補ごとの統計を抽出）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json（python で見出しの欄を抽出）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/input_usage.json（python で見出しの欄を抽出）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json（python で outcome の件数だけ）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md",
+  "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json（冒頭から RED-10 まで）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/generate.py（関数名・定数名の行だけ）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py（関数名・定数名の行だけ）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py（関数名・定数名の行だけ）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py（関数名・定数名の行だけ）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tools/sync_ledger.py（該当行だけ）",
+  "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/*.py（テスト関数の名前だけ）",
+  "git log / git diff --stat / git show --stat（読み取りだけ）"
+ ],
+ "items": [
+  {
+   "id": "CK-R7-01",
+   "title": "台帳の束縛欄（70 単位の id・段階・基準定義文・依存）",
+   "what": "評価単位 70 件（既存 53、追加 17）の台帳のうち、基準計算のコードから機械的に写している欄（reference_semantics＝基準計算の各関数の説明文、depends_on、feeds）。段階別の件数は PRE 5、A1-A3 10、A4 3、A5 4、B1 3、B1/C 1、B2 1、B3 2、B4 4、B5 1、B6 6、B7 4、C1 1、C2 1、C3 2、C4 1、C1-C4 2、MEMO 2、SUM 13、QA 4（計 70）。段階は A1-A3〜C4 の 14 と PRE・MEMO・SUM・QA で、D 段階の単位は無い。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tools/sync_ledger.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py"
+   ],
+   "state_category": 1,
+   "checked_how": "tools/sync_ledger.py が説明文と依存をコードから台帳へ写す。第2回の検査 2 件が、70 単位すべてで reference_semantics＝説明文、depends_on・feeds＝登録の宣言（差 0）と報告。R7 も実行せずにテキスト照合（@unit の宣言と説明文を正規表現で読み、units.json と比較）し、差は依存 0 件・定義文 0 件。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。対象はコミット済みの版（43ba5d7 と同じコード）。追加単位（X-）は、シート名・未接続の入力項目・既存資料から推定した独立設計の案。",
+   "round2_findings": [
+    "RED-4",
+    "RED-7",
+    "RED-9",
+    "RED-12",
+    "REP-7",
+    "REP-8",
+    "REP-10"
+   ],
+   "round2_effect": "文字列の一致そのものには影響しない。定義文がコードの挙動を言い尽くしていない箇所（RED-4・RED-7・RED-9・RED-12）と、束縛欄以外の欄の古さ（REP-7・REP-8・REP-10）は別項目（CK-R7-03、CK-R7-30、CK-R7-29）。",
+   "claim_that_stands": "70 単位すべてで、台帳の reference_semantics は基準計算（43ba5d7 の版）の関数の説明文と同じ文字列、depends_on は登録の宣言と同じ、feeds は depends_on の逆引きである。",
+   "claims_not_to_rely_on": [
+    "「基準定義文だけで単位の結果が一意に決まる」（RED-7・RED-9・RED-12）",
+    "台帳の見出し structure_class_counts の「LINEAR_SUM_PRODUCT 29、RATIO 11」（単位から数えると 30 と 10。REP-8）",
+    "台帳の inputs 欄を、基準計算が読む入力項目の一覧として使うこと（REP-7）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "方程式グループの分類台帳を作るときの、単位 id・段階・定義文・依存の対応表として使う。",
+   "reuse_conditions": "定義文は 43ba5d7 の版のもの。中断した修正（65ff124）は units.json を 129 行、基準計算の 4 ファイルを書き換えており、定義文も依存も変わる（未検証。CK-R7-32）。追加単位 17 件は推定による設計案で、原版にその計算があることは確認していない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: unit_count=70、existing_unit_count=53、additional_unit_count=17、reference_note、dependency_note、scope_statement",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 4：70 単位で定義文＝説明文、depends_on＝登録、差 0）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:128（CHECKS PERFORMED 3 と 7：同じ結果。REP の指摘には第2検証者が付いていない）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tools/sync_ledger.py:5-7,64-83",
+    "R7 の集計（python、JSON とテキストの解析だけ）：段階別 PRE 5、A1-A3 10、A4 3、A5 4、B1 3、B1/C 1、B2 1、B3 2、B4 4、B5 1、B6 6、B7 4、C1 1、C2 1、C3 2、C4 1、C1-C4 2、MEMO 2、SUM 13、QA 4"
+   ]
+  },
+  {
+   "id": "CK-R7-02",
+   "title": "評価単位の依存グラフ（depends_on）",
+   "what": "どの単位の結果をどの単位が使うかを表す有向グラフ。頂点 70、辺 183、閉路なし、深さ 0〜7。依存を持たない単位 32、どこにも渡さない単位 30、その両方 10。段階ベクトル X-02 が 29 単位を直接受け、ホールライフ SUM-03 の上流は 37 単位。入力検査の関係 gated_by（38 辺）は別の欄で、台帳だけにある。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py"
+   ],
+   "state_category": 1,
+   "checked_how": "registry.order() が依存順に並べ、閉路があればエラーにする（コミット済みの全測定はこの順で実行された）。第2回の検査 2 件が台帳の依存＝登録の宣言（差 0）と報告。R7 は units.json から辺・深さ・上流を数え、@unit の宣言とテキスト照合した（差 0）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。グラフは「宣言された依存」で、43ba5d7 の版のもの。",
+   "round2_findings": [
+    "RED-1",
+    "RED-7",
+    "RED-5",
+    "RED-11"
+   ],
+   "round2_effect": "依存の宣言と台帳の一致には影響しない。ただし、不完全の印がこのグラフに沿って伝わらないこと（RED-1）、B3・B4 は A13-04 を使わず B5 は使うという違いが定義文ではなく依存だけで決まっていること（RED-7）、SUM-08 が基準案を入力の外の登録表から取ること（RED-5）は、グラフを使う前に知っておく必要がある。",
+   "claim_that_stands": "台帳の depends_on（183 辺）は基準計算の宣言と同じで、閉路が無い。主な流れ：A13-02→X-15、A13-05・X-15→A13-01／A13-03→A13-04；A1-A3・A4・C の行結果→B3-01・B4-02・B5-01；B6-04・X-06→B6-01→B6-03・B2-01；B7-01〜03→B7-04；B1-02→B1-03・B1-04；29 単位→X-02→SUM-01・SUM-02・SUM-03、SUM-03→SUM-04〜08；X-04→QA-01・QA-03；SYS-04→QA-04。",
+   "claims_not_to_rely_on": [
+    "「depends_on は、関数が読む他単位の結果をすべて挙げている」：X-07 の関数は res[\"B2-01\"] を読むが、依存に B2-01 が無い（X-02 経由で先に計算される。R7 のテキスト照合で見つけた点で、第2回の指摘には無い）",
+    "「gated_by の検査に通らない行は計算されない」：コード上、SYS の結果を読む単位は QA-04（SYS-04 の残差）だけで、計算は検査の結果を見ずに、単位ごとに除外して数える",
+    "「SUM-08 の依存は SUM-03 だけ」：実際には基準案のシナリオを synth.population.BASELINES（シナリオの外の登録表）から取り、基準計算全体をもう一度実行する"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "方程式グループ間の依存関係の台帳、計算順序、どの単位の誤差がどこへ伝わるか（上流の行結果→B3・B4・B5→合計）を調べるときの出発点。",
+   "reuse_conditions": "X-08 は B4-02 を依存に挙げるが関数の中では読まない（R7 のテキスト照合）。段階合計に入らない単位（SUM-03 の上流でない 32 単位：代替値、参考値、集計表、検査、指標）を合計の経路と混同しない。65ff124 では依存が変わる（自己申告では X-04 が X-02 に依存するようになる。未検証）。",
+   "evidence": [
+    "R7 の集計（python、units.json）：辺 183、feeds は depends_on の逆引きと一致、gated_by 38 辺（SYS-01 17、SYS-02 10、SYS-03 11）",
+    "層の構成：深さ 0＝32 単位（SYS-01、SYS-02、SYS-03、SYS-04、A13-02、A13-05、A4-01、A5-01、A5-02、A5-03、B1-01、B1-02、B4-01、B4-03、B6-02、B6-04、B7-01、B7-02、B7-03、C1-01、C2-01、C3-01、C4-01、STO-01、STO-02、QA-02、X-01、X-06、X-09、X-12、X-14、X-16）；深さ 1＝12 単位（A4-02、A5-04、B1-03、B1-04、B6-01、B7-04、C-05、QA-04、X-10、X-11、X-13、X-15）；深さ 2＝5 単位（A13-01、A13-03、B2-01、B6-03、X-03）；深さ 3＝5 単位（A13-04、B3-01、B3-02、B4-02、X-17）；深さ 4＝2 単位（B5-01、X-08）；深さ 5＝3 単位（X-02、X-04、X-05）；深さ 6＝6 単位（SUM-01、SUM-02、SUM-03、QA-01、QA-03、X-07）；深さ 7＝5 単位（SUM-04、SUM-05、SUM-06、SUM-07、SUM-08）",
+    "入る辺の多い単位：X-02 29、X-04 23、X-05 23、X-08 13、B4-02 12、B5-01 12。出る辺の多い単位：A13-01 11、A13-03 11、A13-05 9、X-01 8、A4-01 7、A4-02 7",
+    "SUM-03 の上流でない単位（自身を除く 32）：B1-01、B3-02、C-05、QA-01、QA-02、QA-03、QA-04、STO-01、STO-02、SUM-01、SUM-02、SUM-04、SUM-05、SUM-06、SUM-07、SUM-08、SYS-01、SYS-02、SYS-03、SYS-04、X-03、X-04、X-05、X-07、X-08、X-09、X-10、X-11、X-12、X-13、X-16、X-17",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:379-380,395（X-07 の依存の宣言と res[\"B2-01\"] の読み取り）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:500,516（SUM-08：population.BASELINES と run_all(base)）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:571-577（QA-04 だけが SYS の結果を読む。R7 の検索で res[\"SYS-…\"] は SYS-04 だけ）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:1-11（RED-1）、73-83（RED-7）、49-59（RED-5）"
+   ]
+  },
+  {
+   "id": "CK-R7-03",
+   "title": "台帳の分析欄（構造分類 13 種・標準形・分岐・未定義点）",
+   "what": "各単位に付けた structure_class（13 種）、structure_subclass、canonical_form、loop_dims、branches、complexity、similar_units、unification_potential、approximation_potential、ambiguities と、分析担当の定義案 reference_semantics_proposal（29 件）。自動分析（AI エージェント）と主担当が書いた分類と案で、基準計算が採用した定義ではない。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/README.md"
+   ],
+   "state_category": 2,
+   "checked_how": "構造分類の件数は第2回の報告書検査が単位から数え直した（見出しと 2 行が食い違う）。標準形や分岐の記述を、基準定義やコードと 1 件ずつ突き合わせた検査の記録は無い。",
+   "checked_by": "作成者のみ",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。評価軸 B（3 つの自動評価）の採点は初版の台帳に対するもの。",
+   "round2_findings": [
+    "REP-8",
+    "REP-10",
+    "RED-6",
+    "REP-7"
+   ],
+   "round2_effect": "見出しの件数が古い（REP-8）。A13-04 の「基準計算には実装しない」と UNDEFINED_MODEL は現状と合わない（REP-10）。SYS-01 の branches の「NaN→MISSING」は基準定義と食い違う（RED-6）。inputs 欄は基準計算が読む入力と合わない（REP-7）。",
+   "claim_that_stands": "単位から数えた構造分類は LINEAR_SUM_PRODUCT 30、RATIO 10、PREDICATE_GATE 8、SUM_OF_STAGES 5、TIME_SERIES_SUM 4、EVENT_SCHEDULE 3、LOOKUP_JOIN 3、MAX_CLAMP 2、WEIGHTED_AVERAGE 1、RECURRENCE 1、COUNT_FLOOR 1、MASS_BALANCE_CONSTRAINT 1、MATRIX_EXPANSION 1（計 70）。この分類と標準形は「どういう形の式か」の一次的な整理として読める。",
+   "claims_not_to_rely_on": [
+    "canonical_form を基準定義として使うこと（例：B4-03 は「ceil(T/c)−1」と書くが、基準定義は許容幅つきの数え上げ。SYS-04 は「r==0」と書くが、基準定義は |r|≦1e-9×A。SYS-03 は許諾の用途表を書くが、基準定義は PERMITTED_PUBLIC だけ。R7 の読み比べ）",
+    "見出しの structure_class_counts（29／11）",
+    "A13-04 の structure_subclass=UNDEFINED_MODEL と「基準計算との誤差比較はできない」",
+    "SYS-01 の branches「値が null・空・NaN → MISSING」"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "式の形の一次分類（13 種）、単位ごとの繰り返しの次元（loop_dims）、未定義点の一覧（ambiguities）を、新しい分類台帳の材料にする。",
+   "reuse_conditions": "束縛するのは reference_semantics だけ（units.json の reference_note）。分析欄は初版のままの箇所があり、後から変わった定義（B2 と B6 の規則、係数の使用条件など）を反映していない可能性がある。1 件ずつ基準定義と読み比べてから使う。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: structure_class_counts（見出し）と units[].structure_class（R7 の集計：LINEAR_SUM_PRODUCT 30、RATIO 10、PREDICATE_GATE 8、SUM_OF_STAGES 5、TIME_SERIES_SUM 4、EVENT_SCHEDULE 3、LOOKUP_JOIN 3、MAX_CLAMP 2、WEIGHTED_AVERAGE 1、RECURRENCE 1、COUNT_FLOOR 1、MASS_BALANCE_CONSTRAINT 1、MATRIX_EXPANSION 1）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: authorship_note（ANALYST 29 件、MAIN_SESSION 41 件）、reference_note",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:50-55（REP-8）、64-69（REP-10）、43-48（REP-7）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:61-71（RED-6）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:86（軸 B の採点は初版の台帳に対するもの）",
+    "R7 の整理用の族（CK-R7-04〜CK-R7-14）と件数（計 70）：F01 行の和（活動量×換算倍率×係数） 19、F02 行ごとの数量の比・換算 2、F03 加重和・行列の展開・区分別の再集計 6、F04 事象の数え上げ（T と周期） 6、F05 年重み付き和 13、F06 区分的に直線・段階的な係数系列 1、F07 冷媒の充填・漏洩・補充・交換 3、F08 比・指標 4、F09 集約の木 5、F10 基準案との比較 1、F11 条件分岐・述語 10"
+   ]
+  },
+  {
+   "id": "CK-R7-04",
+   "title": "式の族 F01：行の和（活動量×換算倍率×係数）",
+   "what": "行（資材・設備・燃料・廃棄物・解体活動・費用項目・機器）ごとに 活動量×換算倍率×係数値 を作って足す形の 19 単位。活動量は数量そのもの、質量×距離、質量×経路の比率、費用のいずれかで、行の乗数（未数量分 r/(1−r)、積載率 1/lf、物価の比）が付く単位がある。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md"
+   ],
+   "state_category": 2,
+   "checked_how": "値は第2回の再導出検査が定義文から書き直して比べた（下の evidence）。族としての形の読み取りは R7 だけ。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。有限で範囲内の入力について。",
+   "round2_findings": [
+    "RED-2",
+    "RED-7",
+    "RED-8",
+    "RED-10",
+    "RED-11",
+    "NUM-5",
+    "REP-10"
+   ],
+   "round2_effect": "係数値・換算倍率・建設時の電力係数は検査されずに掛けられる（負・NaN がそのまま合計に入る。RED-2）。係数値が None だと全体がエラーになる（RED-10）。係数 ID が「GRID」「REFRIGERANT」だと擬似行と衝突する（NUM-5）。資材の初期の据付は計上されない（RED-8）。",
+   "claim_that_stands": "有限で範囲内の入力では、この族の値は「行ごとの 活動量×換算倍率×係数値 の和」で、数量と係数値のそれぞれに 1 次、評価期間 T と年の添字に依存しない。",
+   "claims_not_to_rely_on": [
+    "「使えない係数・範囲外の値は必ず除外して数えられる」（係数値・換算倍率・建設時係数は対象外。RED-2）",
+    "「製造の行結果」に未数量分 A13-04 が含まれるという読み（B3・B4 では含まれず、B5 では含まれる。RED-7）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "行×係数の双一次の部分（段階 A1-A3・A4・A5・C1〜C4 の本体）を、行列・テンソルの形で書き直すときの対象範囲と、行結果が下流（B3・B4・B5・X-04・X-05・X-17）へ渡る点の確認に使う。ルート A では統合モデル K1（行テーブル）に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。係数の使用条件（レコードあり、PERMITTED_PUBLIC、対象段階がその段階だけ、単位が換算可能。行固有の換算を先に見る、連鎖なし）と、択一（A13-01／A13-03、A4-01／A4-02）は、和の外にある離散の分岐である。STO-01・STO-02 は独立の書き直しがない。",
+   "evidence": [
+    "件数（units.json から python で集計）：19 単位＝A13-01、A13-03、A13-04、A4-01、A4-02、A5-01、A5-02、A5-03、C1-01、C2-01、C3-01、C4-01、X-01、X-12、X-14、X-16、STO-01、STO-02、B1-01。台帳の structure_class：LINEAR_SUM_PRODUCT 17、RATIO 2。段階：A1-A3 5、A4 3、A5 3、C1 1、C2 1、C3 2、C4 1、MEMO 2、B1 1。出所：既存 15・追加 4。統合モデル（models.json）：K1 17、統合なし 1、K4 1",
+    "形：E=Σ_i a_i·c_i·f_k(i)。A4-01・C2-01 は a=質量×距離、C3-01・C4-01 は a=廃棄質量×経路の比率（行×経路の二重和）、A13-04 は 行の製造排出×r/(1−r)、X-12 は ÷積載率、X-16 は ×(基準年の物価指数÷費用の年の物価指数)、A5-01 は 買電量×換算×建設時の電力係数（係数レコードなし）、B1-01 は 充填質量×GWP（在庫量）、STO-01 は 数量×密度×炭素含有率×44/12",
+    "依存する変数：行 i、係数キー k(i)、段階（係数の対象段階との完全一致）、単位（換算倍率）。T・年添字・周期には依存しない。資材区分は式に現れない",
+    "線形性：数量と係数値に双一次。行パラメータの有理関数（r/(1−r)、1/lf、指数の比）が乗数に入る単位が 3（A13-04、X-12、X-16）",
+    "分岐：係数の使用条件（base.py:133-143 lookup）、択一（units_pre_a.py:331-362、452-519）、欠損・範囲外の行は足さずに n_skipped に数える",
+    "段階合計に入る：A13-01・A13-03・A13-04・X-01（A1-A3）、A4-01・A4-02（A4）、A5-01〜03（A5-04 経由で A5）、C1-01、C2-01、C3-01・X-14（C3）、C4-01。入らない：X-12、X-16、STO-01、STO-02、B1-01",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 17 単位（A13-01、A13-03、A13-04、A4-01、A4-02、A5-01、A5-02、A5-03、B1-01、C1-01、C2-01、C3-01、C4-01、X-01、X-12、X-14、X-16）。独立の書き直しなし 2 単位（STO-01、STO-02）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:13-23（RED-2）、73-95（RED-7・RED-8）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:49-59（NUM-5）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:13-37（D1）"
+   ]
+  },
+  {
+   "id": "CK-R7-05",
+   "title": "式の族 F02：行ごとの数量の比・換算（端材率・再使用率）",
+   "what": "資材の行ごとに、数量の基準と端材率から発注量と据付量を作る A13-05 と、端材の再使用を引いた正味の発注量 X-13 の 2 単位。結果は行ごとの一覧で、スカラーの合計を持たない。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py"
+   ],
+   "state_category": 2,
+   "checked_how": "2 単位とも第2回の再導出検査が定義文から書き直して値が一致。族の区分は R7 だけ。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。0≦w<1、Q≧0、0≦ρ≦1 の行について。",
+   "round2_findings": [
+    "REC-2",
+    "RED-12",
+    "APP-3"
+   ],
+   "round2_effect": "A13-05 と X-13 を統合モデル K1 の構成員に数えた記録は、統合の基準を満たさない（REC-2）。X-13 は無効な行の件数を返さない（RED-12）。端材倍率を変える近似の影響は下流の B3・B4・B5 に伝わる（APP-3）。",
+   "claim_that_stands": "A13-05：数量の基準が DESIGN なら 据付量=Q、発注量=Q/(1−w)。ORDERED・AS_BUILT なら 発注量=Q、据付量=Q(1−w)。X-13：処分される端材=(発注量−据付量)(1−ρ)、正味の発注量=据付量＋処分される端材。",
+   "claims_not_to_rely_on": [
+    "「A13-05・X-13 は行テーブル（K1）に統合された」（REC-2）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "行和の族 F01 に掛かる行の乗数（w の有理関数 1/(1−w)）の定義として使う。A13-05 の発注量は 9 単位（A13-01、A13-03、A4-02、B4-02、C-05、X-03、X-08、X-10、X-13）に渡る。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。数量の基準による場合分け（DESIGN とそれ以外）がある。Q または w が欠損・範囲外の行は None になり、下流で除外される。",
+   "evidence": [
+    "件数（units.json から python で集計）：2 単位＝A13-05、X-13。台帳の structure_class：RATIO 2。段階：A1-A3 2。出所：既存 1・追加 1。統合モデル（models.json）：K1 2",
+    "依存する変数：行 i、端材率 w、再使用率 ρ、数量の基準（3 値）。Q に 1 次、w に非線形（1/(1−w)）。T に依存しない",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py:209-246",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: A13-05.feeds",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 2 単位（A13-05、X-13）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:13-23（REC-2）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:25-35（APP-3：AP-06 の合計への影響は、伝播させると最大 −0.655％、記録は最大 −0.384％）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json: candidates.AP-06.stage_error（AP-06（端材倍率の線形化 1/(1−w) ≈ 1+w。記録の stage 欄：A1-A3）n=400、平均 -0.26％、範囲 -1.06％〜-0.05％、95％点（絶対値）0.48％）"
+   ]
+  },
+  {
+   "id": "CK-R7-06",
+   "title": "式の族 F03：加重和・行列の展開・区分別の再集計",
+   "what": "複合係数（質量比で加重した係数の和）A13-02、その構成材への展開 X-03、ガス別の内訳 X-04、CO2 だけの並行算定 X-05、資材区分×処理経路の表 X-09、6 区分の再集計 X-17 の 6 単位。同じ行の活動量に、別の列（質量比、ガス別量、区分、経路）を掛けて足し直す形である。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md"
+   ],
+   "state_category": 2,
+   "checked_how": "A13-02 は第2回が直接書き直して一致。X-04・X-05 は係数値をガス別量に置き換える間接的な方法で 50 シナリオ差なし。X-03・X-09・X-17 は独立の書き直しがない。",
+   "checked_by": "独立検査（第2回）で再現（A13-02 と、間接的に X-04・X-05。残り 3 単位は作成者のみ）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。有限で範囲内の入力について。",
+   "round2_findings": [
+    "RED-4",
+    "NUM-3",
+    "NUM-6",
+    "RED-10",
+    "RED-12"
+   ],
+   "round2_effect": "X-04 は定義文が「一致することを確かめる」と言うが、照合の結果を返さず、係数のガス別量が係数値と合わなくてもどの検査にも掛からない（RED-4）。係数値が 0 でガス別量が 0 でない係数では、基準計算は B3 のガス別の行を落とす（NUM-3）。ガスの一覧に重複があると複合品の扱いが分かれる（NUM-6。統合モデル側）。X-17 は要約数量が 0 の区分を落とし、None では全体がエラーになる（RED-12・RED-10）。",
+   "claim_that_stands": "A13-02：複合係数＝Σ_j(質量比_j×換算_j×係数_j)、質量比の合計が 1 から 1e-6 を超えてずれる行は係数を作らず、正規化しない。X-04：全 14 段階の行（係数 ID と活動量）にガス別量を掛けて足し、GWP で合算、買電と冷媒は別掲。X-05：同じ行に CO2 の量だけを掛ける。",
+   "claims_not_to_rely_on": [
+    "「X-04 はガス別量×GWP の合計が段階合計の総和に一致することを確かめる」（RED-4）",
+    "「X-17 は定義上、6 区分の製造排出の再集計に等しい」（要約数量が 0 の区分では成り立たない。RED-12）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "行×構成材、行×ガス（7 種）、区分（13）×経路（4）という添字の組を持つ線形の展開の一覧として使う。ルート A では K7（複合係数）と K1（同じ表の別の読み方）に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。X-04・X-05 は B 段階の行も通るので、T への依存を上流（B3・B4・B5・B6・B7）から引き継ぐ。資材区分が式に現れるのは X-09 と X-17 だけ。",
+   "evidence": [
+    "件数（units.json から python で集計）：6 単位＝A13-02、X-03、X-04、X-05、X-09、X-17。台帳の structure_class：WEIGHTED_AVERAGE 1、MATRIX_EXPANSION 1、LINEAR_SUM_PRODUCT 3、LOOKUP_JOIN 1。段階：A1-A3 3、SUM 2、C1-C4 1。出所：既存 1・追加 5。統合モデル（models.json）：K7 2、K1 4",
+    "依存する変数：行 i、構成材 j、ガス g、資材区分 c、経路 r、段階 s。いずれも線形（数量×比率×係数の多重線形）。分岐：係数の使用条件、質量比の合計の検査、区分の割当て（units_pre_a.py:585-594 simple_class）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py:249-280（A13-02）、429-449（X-03）、603-623（X-17）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:298-376（stage_lines、X-04、X-05）、163-187（X-09）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 1 単位（A13-02）。間接的な確認だけ 2 単位（X-04、X-05）。独立の書き直しなし 3 単位（X-03、X-09、X-17）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:37-47（RED-4）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:25-35（NUM-3）、61-71（NUM-6）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:21-37、136-137（D1・D8）"
+   ]
+  },
+  {
+   "id": "CK-R7-07",
+   "title": "式の族 F04：事象の数え上げ（評価期間 T と周期）",
+   "what": "周期 c の倍数 n·c が評価期間の内側にある個数 N(T,c) と、それを 1 回分の排出に掛ける形の 6 単位（更新年の一覧 B4-01、交換回数 B4-03、更新負荷 B4-02、建替 B5-01、周期別の集計 X-08、資源量・廃棄物量 X-10）。N は T と c の階段関数で、規約の許容幅を除けば ceil(T/c)−1 に等しい。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+   ],
+   "state_category": 2,
+   "checked_how": "B4-01・B4-02・B4-03・B5-01・X-10 は第2回が定義文から書き直して一致。回数の閉形式は第2回の 2 つの検査が数え上げと総当たりで比べ、不一致 0（CK-R7-23）。X-08 は独立の書き直しがない。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。周期が有限の正の数である行について。",
+   "round2_findings": [
+    "RED-1",
+    "RED-3",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-11",
+    "RED-12",
+    "APP-5",
+    "NUM-1"
+   ],
+   "round2_effect": "負・0・NaN・無限大の周期は「事象なし」になり、件数にも不完全の印にも出ない（RED-3、一部確認）。B5 の不完全の印は上流の除外を拾わない（RED-1）。明示の一覧に同じ年が重複していれば、その回数だけ数える（RED-11）。正の周期に下限がなく、周期 1e-4・T=60 では 1 行で 599999 回になる（RED-12）。事象の属する年の判定は周期 1.000000001 で丸めに依存する（NUM-1 の検証者の追加指摘。B4-02・B5-01 の年次の置き場所にも同じ判定が使われる）。",
+   "claim_that_stands": "N(T,c)=#{n≧1：n·c<T·(1−1e-9)}。明示の更新年一覧があれば 0<t かつ内側のものを使う。B4-02=Σ_i N_i·u_i（u_i は 製造＋搬入＋据付＋旧品の廃棄 の 1 回分）、B5-01=N(T,C)·範囲比·(初期の A1-A3＋A4＋A5＋C1〜C4)、X-10 は質量×(1＋N)。",
+   "claims_not_to_rely_on": [
+    "「T/c−1≦N が必ず成り立つ」（許容幅 1e-9 の範囲で破れる。APP-5）",
+    "「不正な周期は除外して数えられ、合計に不完全の印が付く」（RED-3）",
+    "「B4-02 の製造は A1-A3 の行結果」を未数量分込みと読むこと（A13-01＋A13-03 だけ。B5 は A13-04 込み。RED-7）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "床・天井関数で表される不連続な T 依存（T=n·c で 1 段上がる）と、「回数×1 回分」という積の形の所在を示す。ルート A では K2（回数関数と周期ごとの合算 Σ_c N(T,c)·U_c）に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。規約：T ちょうどの事象は数えない（B-2）、許容幅 1e-9（B-15）、事象は属する年（切り上げ）に置く（B-3）、建替があっても周期を初期化しない（B-7）、更新時も初期と同じ係数（B-8）。連続な近似は架空の母集団で大きく外れた（下の evidence）。",
+   "evidence": [
+    "件数（units.json から python で集計）：6 単位＝B4-01、B4-03、B4-02、B5-01、X-08、X-10。台帳の structure_class：EVENT_SCHEDULE 2、COUNT_FLOOR 1、LINEAR_SUM_PRODUCT 2、LOOKUP_JOIN 1。段階：B4 4、B5 1、SUM 1。出所：既存 4・追加 2。統合モデル（models.json）：K2 6",
+    "依存する変数：T、周期（資材の refresh_cycle、設備の service_life、建物の replacement_cycle）、行 i、事象の番号 n、事象の属する年。T と c に非線形（階段）、1 回分の排出 u_i に 1 次。T を動かすと c ごとに周期的に段が現れる",
+    "分岐：明示の一覧か周期か、建替シナリオが NONE か、範囲比が 0〜1 か、周期が欠損・非正なら 0 回",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:91-93（inside）、109-126（periodic_events、explicit_events、event_year）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:18-41、73-177、367-391",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 5 単位（B4-01、B4-02、B4-03、B5-01、X-10）。独立の書き直しなし 1 単位（X-08）。",
+    "反例（whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json、架空の母集団 400、B4 の段階誤差）：AP-01（更新回数の連続近似 N ≈ max(0, T/c − 1)。記録の stage 欄：B4）n=400、平均 -18.68％、範囲 -58.47％〜0.00％、95％点（絶対値）41.73％；AP-02（更新回数の中点補正 N ≈ max(0, T/c − 1/2)。記録の stage 欄：B4）n=400、平均 +22.52％、範囲 -15.11％〜+983.53％、95％点（絶対値）66.82％；AP-03（更新回数の切り捨てなし N ≈ T/c。記録の stage 欄：B4）n=400、平均 +95.56％、範囲 +16.20％〜+2158.07％、95％点（絶対値）251.09％",
+    "AP-20 の上下限の幅（基準値に対する比、同ファイル candidates.AP-20.bracket_width_relative_to_reference）：平均 114.24％、最大 2172.52％",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:25-35（RED-3）、121-143（RED-11・RED-12）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:49-59（APP-5）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:39-59、75-78（D2・D4）；whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:27-34,43,51"
+   ]
+  },
+  {
+   "id": "CK-R7-08",
+   "title": "式の族 F05：年重み付き和（年次量×年ごとの係数）",
+   "what": "評価年 y=1..Y（Y=ceil(T)）について、年次量と係数の積に年重み w_y=min(1, T−(y−1)) を掛けて足す形の 13 単位（買電と燃料の B6、施設管理分 B2、上水・下水・一般廃棄物の B7、修繕 B3、面積当たりの推定 X-11、年次・累積の系列 X-07）。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md"
+   ],
+   "state_category": 2,
+   "checked_how": "X-11 以外の 12 単位は第2回が定義文から書き直して一致。年和の閉形式は総当たりで不一致 0（CK-R7-23）だが、修繕の除外年の重みだけは周期 1.000000001 で基準計算と食い違う（CK-R7-20）。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。年次量・係数が有限で 0 以上、年次表が ceil(T) 以上の長さを持つ入力について。",
+   "round2_findings": [
+    "RED-2",
+    "RED-10",
+    "RED-12",
+    "NUM-1",
+    "REC-1",
+    "NUM-3",
+    "NUM-4",
+    "NUM-10",
+    "REC-6",
+    "REP-17",
+    "APP-2"
+   ],
+   "round2_effect": "年次量（ガス・石油・地域熱・上水・下水・廃棄物）は負や NaN でもそのまま使われ、規約 B-18 と食い違う（RED-2）。評価期間より短い年次表は IndexError になる（NUM-4、RED-10）。B6=B6-03−B2-01 は施設管理の比率が 1 に近く燃料が小さいと桁落ちする（NUM-10）。B2-01 は B6-01 が算出されていなくても computed=True、値 0 を返す（RED-12）。基準計算の B3-01 は 修繕率が 0 または初期排出が 0 の行のガス別の行を落とす（NUM-3）。",
+   "claim_that_stands": "年重みは Σ_y w_y=T。B6-04：買電量_y=max(0, 消費_y−(発電_y−売電_y))。B6-01：買電量_y×換算×電力係数_y。B6-03=Σ_y w_y(買電排出_y＋燃料排出_y)。B2-01=比率×Σ_y w_y·買電排出_y。B7-04 も同じ形。B3-01=Σ_i e0_i·r_i·Σ_{y∉S_i} w_y（S_i はその行の更新が属する年）。B3-02=T·Σ_i e0_i·r_i。X-07 は年次の値と事象の値を年に置いて累積する。",
+   "claims_not_to_rely_on": [
+    "「負の年次量は除外して数えられる」（B-18 の文言。RED-2）",
+    "「B6 段階」と書かれた近似誤差の表を段階 B6 の誤差として読むこと（測った量は B6-03＝段階 B6＋B2。APP-2）",
+    "「更新の周期が 1 年以上なら事象ごとに年が違う」（基準計算の浮動小数点の年の割当てでは周期 1.000000001 で成り立たない。REC-1・NUM-1）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "年の添字を持つ 2 つの系列の積の和（買電量×電力係数）、端数年の重み、打ち切り max(0,·)、事象の年を除く和（修繕）の所在を示す。ルート A では K3（区分的に直線な系列のモーメント）と K2（修繕の除外年の重み）に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。年次量は 一定・直線（base＋slope·k）・年次表 の 3 種で、一定と直線は記述子が正、年次表は写し（食い違いは報告だけ。B-16）。単位は「単位/year」に限る（B-20）。X-07 の関数は依存に宣言していない B2-01 を読む（CK-R7-02）。修繕は事象の数え上げ（F04）と結び付いている。",
+   "evidence": [
+    "件数（units.json から python で集計）：13 単位＝B6-01、B6-02、B6-03、B6-04、B7-01、B7-02、B7-03、B7-04、B2-01、X-11、B3-01、B3-02、X-07。台帳の structure_class：LINEAR_SUM_PRODUCT 7、TIME_SERIES_SUM 4、MAX_CLAMP 1、RATIO 1。段階：B6 5、B7 4、B2 1、B3 2、SUM 1。出所：既存 11・追加 2。統合モデル（models.json）：K3 9、K1 1、K2 3",
+    "依存する変数：年の添字 k=y−1、T（Y と最終年の重み）、燃料の種類、行 i（B3）、事象の年（B3-01、X-07）。年次量と係数に 1 次、買電量と電力係数については双一次（2 つの年系列の積）。打ち切り max(0,·) は区分的に 1 次。T への依存は、端数年の重みにより連続で区分的に 1 次（B3-01 と X-07 は事象の年を通じて不連続）。周期性は事象を通じてだけ現れる",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:83-88（year_weights）、152-164（profile_values）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:186-260（B3）、413-572（B6・B2・X-11・B7）；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:379-425（X-07）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 12 単位（B2-01、B3-01、B3-02、B6-01、B6-02、B6-03、B6-04、B7-01、B7-02、B7-03、B7-04、X-07）。独立の書き直しなし 1 単位（X-11）。",
+    "反例（whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json、架空の母集団。AP-08 の stage 欄は B6 だが、基準にとった量は B6-03＝段階 B6＋B2。APP-2）：AP-08（買電排出を 平均買電量×平均係数×T で近似。記録の stage 欄：B6）n=400、平均 +0.22％、範囲 -8.13％〜+11.81％、95％点（絶対値）3.24％；AP-04（修繕の更新年除外を無視（B3-02 で B3-01 を代用）。記録の stage 欄：B3）n=400、平均 +2.05％、範囲 +0.06％〜+5.42％、95％点（絶対値）3.97％；AP-14（評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める。記録の stage 欄：WLC）n=80、平均 +2.30％、範囲 -11.93％〜+22.77％、95％点（絶対値）11.80％",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:13-23（RED-2）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:37-47（NUM-4）、109-119（NUM-10）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:61-71（REC-6）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:13-23（APP-2）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:61-108（D3・D5）"
+   ]
+  },
+  {
+   "id": "CK-R7-09",
+   "title": "式の族 F06：区分的に直線・段階的な電力係数の年次系列（X-06）",
+   "what": "電力排出係数の年次系列を、記述子から作る 1 単位。一定、直線低下（下限つき：max(下限, 初期値−年低下量×k)）、段階（添字 0 から厳密に増える段）の 3 種は記述子が整っていれば記述子から、それ以外は年次表から取る。年次量の 一定・直線・年次表 の扱い（base.py の profile_values）も同じ考え方である。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py"
+   ],
+   "state_category": 2,
+   "checked_how": "第2回の再導出検査が定義文から書き直して一致。区分への分解（grid_segments）は、第2回の 2 つの検査がループと比べて同一と報告（不正な記述子を含む 120,000 件ほか）。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。記述子と年次表の値が有限である入力について。",
+   "round2_findings": [
+    "NUM-2",
+    "NUM-7",
+    "RED-2",
+    "REP-17"
+   ],
+   "round2_effect": "記述子に NaN・無限大があると、基準計算は年次表を使うか記述子を使い、統合モデルは例外になる（NUM-2）。段の添字が float だと統合モデルだけ例外になる（NUM-7）。係数の値は負でも NaN でも検査されない（RED-2）。記述子が整っていても、年次表が ceil(T) より短いと全体がエラーになる規則がどの規約一覧にも無い（REP-17）。",
+   "claim_that_stands": "添字 k=y−1 の系列は、整った記述子では区間ごとに g_k=α＋β·k（直線低下は下限に達する添字で 2 区間、段階は段ごとに定数）で、整っていなければ年次表の値。建設時の係数は添字 0 より前の別の 1 値。どちらを使ったか（source）と年次表との一致（matches_table）を報告する。",
+   "claims_not_to_rely_on": [
+    "「年次表は、整った記述子があれば写しにすぎない」（長さの検査は常に年次表に掛かる。REP-17）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "年の添字に対する係数系列の種類（定数、折れ線 1 か所、階段、任意の表）の一覧として使う。ルート A では K3 の G=Σ w·g、H=Σ w·k·g を求める区分の分解に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。「整っている」条件（低下量≧0、初期値≧下限、段が添字 0 から厳密に増加）は離散の分岐で、満たさなければ表に落ちる。年次表は 130 個以上かつ ceil(T) 個以上（synth/model.py）。",
+   "evidence": [
+    "件数（units.json から python で集計）：1 単位＝X-06。台帳の structure_class：MAX_CLAMP 1。段階：B6 1。出所：既存 0・追加 1。統合モデル（models.json）：K3 1",
+    "依存する変数：年の添字 k、系列の種類（4 値）、パラメータ（初期値、年低下量、下限、段）。k について区分的に 1 次または区分的に定数。max による折れ点が最大 1 つ",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:171-203（grid_well_formed、grid_values）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:396-406（X-06）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py:513-569（AnnualProfile、GridFactorScenario）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 1 単位（X-06）。",
+    "反例（whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json。stage 欄は B6 だが、基準にとった量は B6-03＝段階 B6＋B2。APP-2）：AP-09a（電力係数を 5 年ごとの点の直線補間で持つ（全種類の系列に適用）。記録の stage 欄：B6）n=400、平均 +0.01％、範囲 -3.95％〜+3.82％、95％点（絶対値）1.56％；AP-09b（電力係数を 10 年ごとの点の直線補間で持つ（全種類の系列に適用）。記録の stage 欄：B6）n=400、平均 +0.06％、範囲 -5.37％〜+7.49％、95％点（絶対値）2.76％；AP-09c（併用：パラメータ型の系列は厳密な閉形式、年次表の系列だけ 5 年ごとの点の直線補間。記録の stage 欄：B6）n=98、平均 +0.14％、範囲 -1.35％〜+1.73％、95％点（絶対値）1.27％",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:13-23（NUM-2）、73-83（NUM-7）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:113-118（REP-17）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:110（CHECKS 4：区分の分解は基準計算と同一）"
+   ]
+  },
+  {
+   "id": "CK-R7-10",
+   "title": "式の族 F07：冷媒の充填・漏洩・補充・交換（年ごとの漸化式）",
+   "what": "機器ごとに残存量を 1 年ずつ進める 3 単位（使用期間の漏洩 B1-02、交換時の損失 B1-03、廃棄時の未回収 B1-04）。その年の漏洩＝年初の残存量×年間漏洩率×年重み。補充しない機器は年末に漏洩分を引き、交換は属する年の年末に残存量を初期充填量へ戻す。毎年補充する機器は残存量が常に初期充填量。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md"
+   ],
+   "state_category": 2,
+   "checked_how": "3 単位とも第2回の再導出検査が定義文から書き直して一致。閉形式（refrigerant_fractions）は第2回の 2 つの検査が年ごとのループと 40,000 件・150,000 件で比べ、不一致 0。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。充填量・GWP が 0 以上、漏洩率・損失率・回収率が 0〜1 の機器について。",
+   "round2_findings": [
+    "RED-3",
+    "RED-9",
+    "NUM-10",
+    "APP-6"
+   ],
+   "round2_effect": "機器の耐用年数が負・NaN などでも「交換なし」として計算され、印が付かない（RED-3）。B1-02 の定義文の式には ×GWP が書かれていない（RED-9、文言）。漏洩率が 1 に極めて近く補充なしのとき、年次の小さな値で 1e-9 を超える差が出る（NUM-10）。近似候補 AP-05 が測ったのは題名の線形化ではなく「すべての機器を常に満充填とみなす」形である（APP-6）。",
+   "claim_that_stands": "補充なし：m_{y+1}=m_y·(1−r·w_y)、交換のない j 年のあとは m0·(1−r)^j。補充あり：m≡m0、漏洩は m0·r·T。B1-03=Σ_機器 損失率×GWP×Σ_交換 (交換直前の残存量)。B1-04=Σ_機器 (期末の残存量)×(1−回収率)×GWP。交換は交換年一覧（0<t かつ内側）、なければ耐用年数の倍数。B1-04 は B1 段階に入れる（B-6）。",
+   "claims_not_to_rely_on": [
+    "AP-05 の数値を「1−(1−r)^k≈r·k の線形化の誤差」として引用すること（APP-6）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "状態（残存量）を持つ唯一の族として、漸化式・等比の和・事象による初期化の所在を示す。ルート A では K4（充填サイクルの質量収支）に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。漏洩率 r に非線形（べき）、初期充填量と GWP に 1 次。交換の年は事象の数え上げ（F04）と同じ判定を使う。同じ年に複数の交換があれば、その回数だけ交換直前の残存量を記録する。",
+   "evidence": [
+    "件数（units.json から python で集計）：3 単位＝B1-02、B1-03、B1-04。台帳の structure_class：RECURRENCE 1、EVENT_SCHEDULE 1、LINEAR_SUM_PRODUCT 1。段階：B1 2、B1/C 1。出所：既存 3・追加 0。統合モデル（models.json）：K4 3",
+    "依存する変数：機器 d、評価年 y、T（Y と最終年の重み）、交換の年（周期または一覧）、漏洩率 r、補充の有無（2 値の分岐）、GWP、損失率、回収率。補充なしで交換が周期のとき、残存量は交換のたびに初期充填量へ戻る",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:265-362",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py:175-219；whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:110-119（D6）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 3 単位（B1-02、B1-03、B1-04）。",
+    "反例（whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json、B1 の段階誤差。APP-6 の但し書きつき）：AP-05（冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k。記録の stage 欄：B1）n=400、平均 +28.02％、範囲 0.00％〜+180.71％、95％点（絶対値）109.77％",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:134（CHECKS 3：refrigerant_fractions 40,000 件、絶対 1e-12 を超える差なし）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:110（CHECKS 4：150,000 件、不一致 0、最大 3.5e-15）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:97-107（RED-9）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:61-71（APP-6）"
+   ]
+  },
+  {
+   "id": "CK-R7-11",
+   "title": "式の族 F08：比・指標（原単位、単位換算、段階別割合）",
+   "what": "ホールライフの合計を延床面積、面積×評価年数、1000 で割る SUM-04・SUM-05・SUM-06 と、段階の値を合計で割る SUM-07 の 4 単位。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py"
+   ],
+   "state_category": 2,
+   "checked_how": "4 単位とも第2回の再導出検査が定義文から書き直して一致。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。",
+   "round2_findings": [
+    "RED-12",
+    "REP-4",
+    "NUM-11"
+   ],
+   "round2_effect": "SUM-05 の「評価年数が 0 以下」の分岐は、期間の検査が先にエラーにするので到達しない（RED-12）。SUM-04〜08 を統合モデル K5 に数えたのは名札によるもので、計算は基準計算と同じ式のまま（REP-4）。旧研究の比較関数は合計に比例する下限を全 leaf に掛けており、SUM-07 のような無次元の小さな値では相対 1e-9 より緩かった（NUM-11）。",
+   "claim_that_stands": "SUM-04=合計÷延床面積（面積が欠損または 0 以下なら算出しない）、SUM-05=合計÷(面積×T)、SUM-06=合計÷1000、SUM-07=対象段階ごとに 段階の値÷合計（合計が 0 以下、または負の段階があれば定義しない）。",
+   "claims_not_to_rely_on": [
+    "「SUM-04〜08 は共有のパラメータ付き関数に統合された」（REP-4）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "段階ベクトルの線形関数を尺度で割る形（尺度に対しては非線形）の一覧として使う。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。合計が不完全（complete が偽）でも指標は数値を返す。指標そのものは不完全の印を持たない。",
+   "evidence": [
+    "件数（units.json から python で集計）：4 単位＝SUM-04、SUM-05、SUM-06、SUM-07。台帳の structure_class：RATIO 4。段階：SUM 4。出所：既存 4・追加 0。統合モデル（models.json）：K5 4",
+    "依存する変数：段階 s、延床面積 A、T。段階の値に 1 次、A と T に対しては逆数。分岐：面積が無効なら None、割合は条件つきで未定義",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:457-492",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 4 単位（SUM-04、SUM-05、SUM-06、SUM-07）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:133-143（RED-12）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:22-27（REP-4。第2検証者なし）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:121-131（NUM-11）"
+   ]
+  },
+  {
+   "id": "CK-R7-12",
+   "title": "式の族 F09：集約の木（段階ベクトルと部分和）",
+   "what": "工事負荷の合計 A5-04、14 段階のベクトルを作る X-02、その部分和であるアップフロント SUM-01・エンボディド SUM-02・ホールライフ SUM-03 の 5 単位。対象段階の指定（included_lifecycle_stages）が 0／1 の重みとして掛かる。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+   ],
+   "state_category": 2,
+   "checked_how": "5 単位とも第2回が定義文から書き直して一致。さらに第2回は、欠陥のない 1 シナリオ（T=62.5、改修周期 25）で 14 段階の選び方 16384 通りすべてを調べ、不一致 0（二重計上・消失なし。記載済みの規約と RED-8 を除く）と報告。",
+   "checked_by": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。部分集合の確認は欠陥のない 1 シナリオだけ。",
+   "round2_findings": [
+    "RED-1",
+    "RED-5",
+    "RED-12",
+    "RED-8"
+   ],
+   "round2_effect": "不完全の印（complete、incomplete_units）は、段階を直接構成する単位の件数しか見ない。境界に B3 または B5 だけを含め、上流の A1-A3 などを外すと、上流で除外された行があっても complete が真のままになる（例：対象段階が B3 だけのとき SUM-03 が 98378.05 から 43676.16 へ下がって complete は真。RED-1、重大度 HIGH）。X-02 は定義文に無い by_stage_all（14 段階、B6 は常に B2 を引いた値）も返す（RED-12）。",
+   "claim_that_stands": "X-02 の規則：A1-A3=A13-01＋A13-03＋A13-04＋X-01、A4=A4-01＋A4-02、A5=A5-04、B1=B1-02＋B1-03＋B1-04、B2=B2-01、B3=B3-01、B4=B4-02、B5=B5-01、B6=B6-03−B2-01（B2 が対象外なら B6-03）、B7=B7-04、C1=C1-01、C2=C2-01、C3=C3-01＋X-14、C4=C4-01。対象外の段階は結果に入れない。SUM-01=A1-A3＋A4＋A5、SUM-02=A1-A3〜A5＋B1〜B5＋C1〜C4、SUM-03=14 段階。",
+   "claims_not_to_rely_on": [
+    "「合計から何かを除いたら、その合計には不完全の印が付く」（B-17 と base.py の文言。RED-1）",
+    "「X-02 は対象外の段階を結果に含めない」を全出力について読むこと（by_stage_all と X-05 の by_stage_co2 は 14 段階を返す。RED-12）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "最終の合計がどの単位の和でできているか（29 単位→14 段階→3 つの部分和）と、B2／B6 の条件つきの引き算、参考値・代替値を合計に入れない規則の確認に使う。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。規約：B1-04 は B1 に入れる（B-6）、B2 は買電排出の定率で B2 が対象のときだけ B6 から引く（B-10）、エンボディド SUM-02 は B2 を含む、ガスの範囲はラベルで合計は常に全ガス（B-12）、設備の初期の搬入・据付と資材の初期の据付は計上しない（B-11、RED-8）。",
+   "evidence": [
+    "件数（units.json から python で集計）：5 単位＝A5-04、X-02、SUM-01、SUM-02、SUM-03。台帳の structure_class：SUM_OF_STAGES 5。段階：A5 1、SUM 4。出所：既存 4・追加 1。統合モデル（models.json）：K1 2、K5 3",
+    "依存する変数：段階 s（14）、対象段階の集合。段階の値に 1 次（0／1 の重みつき和）。条件つきの項が 1 つ（B2 が対象かどうかで B6 の式が変わる）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:240-291（STAGE_UNITS、X-02）、430-454（SUM-01〜03）；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py:571-579（A5-04）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: X-02.depends_on（29 単位）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 5 単位（A5-04、SUM-01、SUM-02、SUM-03、X-02）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS 3：16384 通り、不一致 0）、1-11（RED-1）、85-95（RED-8）、133-143（RED-12）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:31,36-40（B-6、B-10、B-11、B-12）"
+   ]
+  },
+  {
+   "id": "CK-R7-13",
+   "title": "式の族 F10：基準案との比較（SUM-08）",
+   "what": "基準シナリオが指定されていれば、基準シナリオを同じ基準計算で最初から計算し、差＝当該案−基準案、削減率＝(基準案−当該案)÷基準案 を出す 1 単位。延床面積・評価期間・対象段階・ガスの範囲・係数の公開年の集合がすべて一致するときだけ比べる。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py"
+   ],
+   "state_category": 2,
+   "checked_how": "第2回の再導出検査は、基準案を計算し直す間接的な方法で 3 シナリオを確認（差なし）。数値の反例探しは、基準案に欠陥・別の期間・別の面積・循環・自己参照などを与えた場合に基準計算と統合モデルが一致することを確認（NUM-2・NUM-4 に由来する例外の非対称 2 件を除く）。",
+   "checked_by": "独立検査（第2回）で再現（間接的な確認。族の区分は検査なし）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。",
+   "round2_findings": [
+    "RED-5",
+    "NUM-9",
+    "NUM-10"
+   ],
+   "round2_effect": "完全性は比較の条件に入っておらず、基準案の合計が不完全でも status は COMPARED になり、基準案の不完全は結果のどこにも出ない（例：削減率 0.2123 が −0.1732 に変わる。RED-5）。登録されていない基準案の id は「基準案なし」と区別できない（RED-5）。1e-8 だけ違う基準案との差は桁落ちで相対 4.2e-5 ずれる（NUM-10）。",
+   "claim_that_stands": "status は NO_BASELINE／NOT_COMPARABLE／COMPARED の 3 値。COMPARED のとき delta=P−B、saving=(B−P)/B（B>0 のときだけ）。",
+   "claims_not_to_rely_on": [
+    "「比較可能な場合だけ比べる」を、両方の合計が完全であることまで含めて読むこと（RED-5）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "2 つのシナリオの合計の差と比という形、および「基準案の計算は全体の再実行」という計算上の位置づけの確認に使う。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。基準案はシナリオの入力に入っておらず、プロセス内の登録表 synth.population.BASELINES から id で引く。依存の宣言は SUM-03 だけで、再実行は依存グラフに現れない（CK-R7-02）。",
+   "evidence": [
+    "件数（units.json から python で集計）：1 単位＝SUM-08。台帳の structure_class：RATIO 1。段階：SUM 1。出所：既存 1・追加 0。統合モデル（models.json）：K5 1",
+    "依存する変数：当該案と基準案の 2 つの合計、比較条件 5 つ。差は 1 次、削減率は比。分岐：3 つの status",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:495-518；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py:26-29（BASELINES、attach_baseline）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 0 単位。間接的な確認だけ 1 単位（SUM-08）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:49-59（RED-5）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:97-119（NUM-9・NUM-10）、134（CHECKS 6）"
+   ]
+  },
+  {
+   "id": "CK-R7-14",
+   "title": "式の族 F11：条件分岐・述語（入力検査、整合の検査、係数の解決）",
+   "what": "入力値の状態 SYS-01、単位と段階の整合 SYS-02、係数の使用許諾 SYS-03、面積の整合 SYS-04・QA-04、段階合計の突合と択一 QA-01、時間境界 QA-02、出典 QA-03、質量収支 C-05、係数の検索と優先順位 X-15 の 10 単位。出力は真偽・列挙値・違反箇所の一覧・件数で、連続量ではない。区分は R7 が台帳の structure_class と基準定義文・コードを読んで付けた整理用のもので、旧研究の成果物ではない（独立の検査なし）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py"
+   ],
+   "state_category": 2,
+   "checked_how": "C-05・QA-02・X-15 は第2回が定義文から書き直して一致（C-05 の n_mass_unchecked に 1 件の差：負の廃棄質量）。残り 7 単位は独立の書き直しがなく、コードを読んだうえでの狙い撃ちの入力による確認だけ。",
+   "checked_by": "独立検査（第2回）で再現（3 単位）。残り 7 単位は作成者のみ",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。",
+   "round2_findings": [
+    "RED-4",
+    "RED-6",
+    "RED-10",
+    "RED-11",
+    "RED-12",
+    "NUM-2",
+    "NUM-8"
+   ],
+   "round2_effect": "SYS-01 が調べるのは数値入力の一部で、施設管理の比率、範囲比、建替周期、年次量、電力係数、経路の比率、質量比、要約数量などは対象外。NaN は MISSING にならない（RED-6）。C-05 は比率が None だと全体がエラー、NaN だと違反にも未配分にもならない（RED-10）。設備の廃棄係数が None でも SYS-03 は通るが、X-14 は行を除外し合計は不完全になる（RED-11）。QA-01 の (b)(c) は作り方から失敗し得ず、(a) は相対 1e-9 に絶対の下限 max(|値|,1) が付く（RED-12）。NaN の段階値に対する QA-01 の判定が基準計算と統合モデルで逆になる（NUM-2）。",
+   "claim_that_stands": "係数の使用条件は 1 つの規則（レコードあり、使用許諾 PERMITTED_PUBLIC、対象段階がその段階だけ、単位が換算可能）で、X-15 は 製品固有値（EPD）→複合係数→汎用係数 の順に決める。EPD は行の申告（対象段階・単位・有効期限）がレコードと一致し、算定日に有効なときだけ使う。許容差：SYS-04 は |r|≦1e-9×面積、QA-04 は 1e-6×面積、C-05 は 1e-6、QA-01 は相対 1e-9。",
+   "claims_not_to_rely_on": [
+    "「SYS-01 は数値入力を 1 つずつ調べ、MISSING の場所を列挙する」（RED-6）",
+    "「SYS-02 は活動量と係数が出会うすべての箇所を調べる」（EPD の係数は対象外。RED-11、一部確認）",
+    "「検査に通れば合計は完全」「検査が通らなければ計算されない」のどちらも成り立たない（計算は検査の結果を読まない。CK-R7-02）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "連続な式の外側にある離散の分岐（使える係数の選択、択一、妥当性、許容差つきの判定）の一覧として使う。ルート A では K7（係数解決）と K6（許容差つきの残差判定）に対応する。",
+   "reuse_conditions": "形の記述は 43ba5d7 の版の定義文とコードの読み取り。新しい定式化を作る作業は含まない。検査の単位は計算を止めず、報告するだけである。計算の側は単位ごとに「除外して数える」を行い、その範囲は検査の範囲と一致しない。新しい定式化で分岐を扱うときは、検査ではなく各単位の関数の条件を見る必要がある。",
+   "evidence": [
+    "件数（units.json から python で集計）：10 単位＝SYS-01、SYS-02、SYS-03、SYS-04、QA-01、QA-02、QA-03、QA-04、C-05、X-15。台帳の structure_class：PREDICATE_GATE 8、MASS_BALANCE_CONSTRAINT 1、LOOKUP_JOIN 1。段階：PRE 5、QA 4、C1-C4 1。出所：既存 9・追加 1。統合モデル（models.json）：統合なし 3、K7 4、K6 3",
+    "依存する変数：行・項目・係数・段階・単位の組、許容差。出力は不連続（真偽・列挙・一覧）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:133-143（lookup）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py:29-206（SYS-01〜04、factor_uses）、283-328（EPD の条件、X-15）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:135-160（C-05）、523-577（QA-01〜04）",
+    "第2回の再導出検査（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:145-148）での扱い：定義文から独立に書き直して値が一致 3 単位（C-05、QA-02、X-15）。独立の書き直しなし 7 単位（QA-01、QA-03、QA-04、SYS-01、SYS-02、SYS-03、SYS-04）。",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:61-71（RED-6）、109-143（RED-10・RED-11・RED-12）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:13-23（NUM-2）、85-95（NUM-8）"
+   ]
+  },
+  {
+   "id": "CK-R7-15",
+   "title": "入力データモデル（Scenario：スカラー欄と表）",
+   "what": "基準計算と統合モデルが共通に読む入力だけのデータ構造（dataclass 29 個）。入力仕様 124 項目（12 群）を属性に対応付け、仕様に無い 73 項目を「NEW:」として加えている。表は 資材行・設備行・冷媒機器・係数レコード・燃料・廃棄物・解体活動・搬出・費用項目、スカラーは 建物・境界・運用の比率など。年次量と電力係数は 記述子＋年次表 の両方を持つ。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/io.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/input_usage.json"
+   ],
+   "state_category": 2,
+   "checked_how": "124 項目の対応付けは tests/test_synth.py の test_input_coverage が調べる（コミット済み。R7 は実行していない）。読まれた入力項目の実測（33 シナリオ）が input_usage.json にあり、第2回の報告書検査が表の数字（77／56）と JSON の一致を確認。データモデルそのものの独立検査は無い。",
+   "checked_by": "作成者のみ",
+   "scope": "架空データだけ。入力仕様 124 項目は上位の章（03_INPUTS）の独立概念モデルのもの。原版の入力シートとの対応は未確認。",
+   "round2_findings": [
+    "REP-1",
+    "REP-7",
+    "NUM-5",
+    "NUM-6",
+    "NUM-7",
+    "NUM-9",
+    "RED-5",
+    "RED-10"
+   ],
+   "round2_effect": "基準計算が実際に読むのは仕様 124 項目のうち 77 と追加項目 73 のうち 56 で、仕様の 47 項目はどの計算にも読まれない。報告書の「0 項目は記録用」は生成器の誤り（REP-1）。台帳の入力一覧（88＋28）は実測と合わない（REP-7）。係数 ID は自由な文字列で、擬似 ID「GRID」「REFRIGERANT」と衝突し得る（NUM-5）。ガスの一覧の重複や CO2 の欠落（NUM-6）、段の添字の型（NUM-7）を検査する仕組みは無い。",
+   "claim_that_stands": "Scenario は meta、project、boundary、gases（7 種）、gwp、unit_conversions（単位の定義 20 行）、provenance、factors、summary_quantities、materials、equipment、refrigerants、construction、operation、water_waste、end_of_life、cost_items、price_index から成り、計算結果を持たない。None は欠損（0 ではない）。年次表は 130 個以上かつ ceil(T) 個以上。",
+   "claims_not_to_rely_on": [
+    "04_VERIFICATION/README の「入力仕様 124 項目のうち 0 項目は記録用で、どの計算にも使われない」（REP-1）",
+    "台帳・05_DECISIONS の「単位が参照する入力項目 116（既存 88＋追加 28）」を実測として読むこと（REP-7）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新研究で基準計算に与える入力の受け口。どの入力が式に効くか（行の表、年の表、スカラー）の一覧として使う。",
+   "reuse_conditions": "値はすべて架空。値の範囲や型の検査はモデルに無く、計算側の規則も一部の欄しか見ない（CK-R7-19）。meta は計算が読んではならない欄だが、統合モデルは 1 か所で読む（NUM-9）。65ff124 では model.py が 24 行変わっている（未検証）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py:672-692（Scenario）、372-401（MaterialRow）、429-473（EquipmentRow、RefrigerantDevice）、513-569（AnnualProfile、GridFactorScenario）、205-226（FactorRecord）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/model.py:787-924（INPUT_FIELD_MAP：R7 のテキスト集計で 124 項目）、947-1021（EXTRA_FIELD_MAP：73 項目）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/input_usage.json: inputs_in_specification=124、inputs_added_by_this_study=73、summary.reference_all_units={existing_inputs_read: 77, added_inputs_read: 56}、not_read_by_reference 64 件、what_is_measured（読まれた欄は必要な欄の上限）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:1-6（REP-1）、43-48（REP-7）。REP の指摘には第2検証者が付いていない（主担当が検査のスクリプトを再実行して再現）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:49-83（NUM-5・NUM-6・NUM-7）"
+   ]
+  },
+  {
+   "id": "CK-R7-16",
+   "title": "架空シナリオの生成器と母集団",
+   "what": "固定シードの乱数で建物の入力一式を作る make_scenario(seed, structure, use, size_class, study_period=60.0, dirty=False, **options) と、標準ベンチマーク（S・M・L）、検証用の母集団、境界条件 32 件、入力を壊す操作 36 種。構造 4 種×用途 6 種×規模 3 区分（資材行 200／2,000／20,000、設備行 60／600／6,000、冷媒機器 5／40／300）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/generate.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py"
+   ],
+   "state_category": 2,
+   "checked_how": "tests/test_synth.py（7 件：決定性、JSON の往復、記述子と年次表の一致など）がコミット済み。第2回の報告書検査が synth/README の記述（規模、境界条件 32、関数の引数、オプション）とコードの整合、実在の係数表らしい値が無いことを確認。第2回の各検査はこの生成器で作ったシナリオを使った。R7 は README と関数名・定数名だけを読み、本体は読んでいない。",
+   "checked_by": "作成者のみ（第2回は説明文との整合と値の性質だけを確認）",
+   "scope": "すべて架空値（SYNTHETIC_FICTIONAL）。構造・用途・規模の違いはモジュール内の架空の倍率表による。実建物の分布を表さない。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "RED-1",
+    "APP-4",
+    "APP-5",
+    "APP-8",
+    "APP-9",
+    "NUM-9"
+   ],
+   "round2_effect": "生成器が作らない入力があり、そこでの挙動は旧研究の測定に入っていない：周期が評価期間の約数から相対 1e-6 以内（EXACT_DIVISOR 以外。APP-5）、周期 1+1e-9（NUM-1）、負の係数、非有限の年次量・係数（NUM-2）、欠陥のある段階の部分集合（RED-1）。輸送距離は質量と独立に引く（APP-4）。明示の更新年一覧は自分の評価期間の内側だけ（APP-8）。シナリオごとに係数表が別の乱数で作られる。",
+   "claim_that_stands": "同じ引数からは同じシナリオが得られる、という宣言とその試験がコミットされている。規模・構造・用途・オプションの一覧は synth/README と OPTION_HELP にある。",
+   "claims_not_to_rely_on": [
+    "この母集団での誤差の大きさを実建物の精度として読むこと",
+    "「検証した 681 シナリオに無い種類の入力でも同じ結果になる」という推定"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新しい定式化の誤差測定と反例探索の入力に使う候補。母集団のシード（近似の検証は 400 件・シード 20261111・規模 M まで、と第2回の検査記録にある）を固定すれば旧研究の数字と同じ土俵で比べられる。",
+   "reuse_conditions": "誤差の分布は生成器の分布で決まる。区分ごとの代表値を使う候補の評価では、標本内（その建物自身の行から作る）か標本外かを区別する（APP-9）。生成器を動かすことは旧研究のコードの実行に当たるので、この確認作業では実行していない。65ff124 では population.py が 5 行、mutations.py が 461 行変わっている（未検証）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/README.md:6-8,18-32",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/generate.py:42-53（行数、複合品の割合 0.30、評価期間の上限 300、耐用年数の 5 つのモード）、1335（make_scenario）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py:17-26,29,54,62,157（ベンチマークのシード、評価期間の候補、BASELINES、attach_baseline、standard_benchmark、verification_population、edge_cases）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py:293,333-336（MUTATIONS、DECIMAL_BOUNDARIES、STAGE_SUBSETS、INVALID_PERIODS）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json: by_group（benchmark 3、edge 32、population 400、defective 60、mutated 144、decimal 10、stage_subset 32）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:4,40,57,93,110（母集団のシード、距離と質量の独立、約数の近傍を避ける、明示の一覧の範囲、係数表のばらつき）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:128（CHECKS 3・6：README との整合、実在の係数らしい値なし）"
+   ]
+  },
+  {
+   "id": "CK-R7-17",
+   "title": "基準計算（refcalc）のうち、定義文からの独立した書き直しと一致した 53 単位",
+   "what": "評価単位ごとに 1 関数で、定義文どおりに行ごと・年ごと・事象ごとに計算する逐次の実装（規約と補助関数 base.py、登録と依存順の実行 registry.py、単位の 3 モジュール）。新研究の指示で「変更しない」とされている基準値の出どころで、このうち 53 単位は第2回の検査が定義文だけから書き直して比べた。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py"
+   ],
+   "state_category": 1,
+   "checked_how": "コミット済みの確認：tests/test_refcalc.py 8 件（手計算との照合 test_hand_calculation、B2 と B6 の間に漏れがないこと、小数の評価期間の端、欠陥の検出など。第2回の報告書検査が旧研究のテスト 28 件の合格を報告）と、681 シナリオでの統合モデルとの突き合わせ。第2回の再導出：定義文と base.py の規約の説明だけから 53 単位を書き直し、119 シナリオ（母集団 24、境界条件 32、dirty 14、入力を壊す操作 36、小数の境界 5、段階の部分集合 8）で、すべての数値と件数が相対 1e-9 以内で一致。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。確認の範囲は第2回の 119 シナリオ（小さい規模）。43ba5d7 の版。規模 M・L と 99.9 年を超える期間は第2回の再導出では実行していない。再導出は base.py の規約の説明を与件として使っており、規約そのものを別の出典と照合したものではない。",
+   "round2_findings": [
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-7",
+    "RED-9",
+    "RED-10",
+    "RED-12",
+    "NUM-1",
+    "NUM-3"
+   ],
+   "round2_effect": "不正な入力、境界の部分集合、検査の網羅についての一般的な記述は成り立たない（CK-R7-19）。周期 1.000000001 では基準計算の年の割当てが、書かれた規則を厳密な算術で評価した結果と食い違う（CK-R7-20）。規約一覧に無い規約がある（CK-R7-29）。",
+   "claim_that_stands": "第2回の検査担当が定義文と規約の説明だけから書き直した実装と、基準計算の 53 単位（A13-01、A13-02、A13-03、A13-04、A13-05、A4-01、A4-02、A5-01、A5-02、A5-03、A5-04、B1-01、B1-02、B1-03、B1-04、B2-01、B3-01、B3-02、B4-01、B4-02、B4-03、B5-01、B6-01、B6-02、B6-03、B6-04、B7-01、B7-02、B7-03、B7-04、C-05、C1-01、C2-01、C3-01、C4-01、QA-02、SUM-01、SUM-02、SUM-03、SUM-04、SUM-05、SUM-06、SUM-07、X-01、X-02、X-06、X-07、X-10、X-12、X-13、X-14、X-15、X-16）の数値・件数は、119 架空シナリオ（境界条件、欠陥入り、入力を壊す操作 36 種、小数の境界、段階の部分集合を含む）で相対 1e-9 以内で一致した。差は 4 点だけ：X-15 が未解決の行に付ける印、B2-01 の computed（入力を壊した 4 件）、SUM-07 が未定義のときの出力、C-05 の n_mass_unchecked（負の廃棄質量）。これは「コードが定義文どおりに計算している」ことの確認で、定義そのものの穴（CK-R7-19）や、この 119 件に無い入力での挙動を覆うものではない。",
+   "claims_not_to_rely_on": [
+    "「欠損・範囲外の入力は必ず除外して数えられ、合計に不完全の印が付く」（RED-1・RED-2・RED-3）",
+    "「時間の判定は許容幅により 2 進の丸めに依存しない」（base.py の説明。NUM-1・REC-1 の検証者の追加指摘）",
+    "「評価期間が有限の正の数でないときだけ、計算全体がエラーになる」（B-21。RED-10・REP-17）",
+    "「基準計算の正しさ」を、現実の排出量や他のツールの結果との一致として読むこと（06_OPEN_ISSUES D-1・D-2：対象外）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新しい定式化の誤差を測るときの基準値を出す計算として使う。ルート B では、この関数群の定義文とコードが「元の式」に当たる。",
+   "reuse_conditions": "どの版を基準計算とするかを最初に固定する：コミット済みの版（43ba5d7 と同じ）と、中断した修正の版（65ff124。定義が変わる、未検証）がある。指示は基準計算の変更を禁じているので、穴のある入力範囲（CK-R7-19、CK-R7-20）は、基準計算を直すのではなく測定の母集団から外すか別扱いにする必要がある。結果の形（value／by_item／by_year／by_stage／ok と violations、「_」で始まるキーは下流用で比較の対象外）は registry.py と base.py の冒頭にある。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 1：53 単位、119 シナリオ、数値と件数が相対 1e-9 以内。差は 4 点）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:148（COULD NOT CHECK：再導出していない単位、規模、期間、規約の出典）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:1-54（規約）、69-76（check_period）；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/registry.py:1-14,90-104",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_refcalc.py（test_hand_calculation ほか 8 件。R7 は名前だけ確認）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:128（「The study's 28 unit tests pass」）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:73-75（D-1〜D-3）"
+   ]
+  },
+  {
+   "id": "CK-R7-18",
+   "title": "基準計算のうち、独立した書き直しがない 14 単位と、間接的な確認だけの 3 単位",
+   "what": "第2回の再導出検査が定義文から書き直さなかった 14 単位（QA-01、QA-03、QA-04、STO-01、STO-02、SYS-01、SYS-02、SYS-03、SYS-04、X-03、X-08、X-09、X-11、X-17）と、間接的な方法でだけ確かめた 3 単位（X-04、X-05、SUM-08）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json"
+   ],
+   "state_category": 2,
+   "checked_how": "14 単位は、第2回の検査担当がコードを読んだあとで定義文と読み比べ、狙い撃ちの入力で確かめただけ（本人が「独立の導出ではない」と記している）。X-05・X-04（ガス別）・SUM-08 は、書き直した実装の係数値をガス別量に置き換える、基準案を計算し直す、という間接的な方法で 50 シナリオ（うち基準案つき 3）差なし。統合モデルとの 681 シナリオの一致はこれらの単位にも及ぶが、基準計算と統合モデルは同じ主担当が書いた。",
+   "checked_by": "作成者のみ（第2回は読み比べと間接的な確認）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。",
+   "round2_findings": [
+    "RED-4",
+    "RED-5",
+    "RED-6",
+    "RED-11",
+    "RED-12",
+    "NUM-8"
+   ],
+   "round2_effect": "この 17 単位には検査・ゲートが多く、定義文とコードの食い違いの指摘が集まっている：X-04 は照合しない（RED-4）、SUM-08 は完全性を見ない（RED-5）、SYS-01 は一部の入力しか見ない（RED-6）、SYS-02・SYS-03 と計算の食い違い（RED-11）、QA-01 の下限と失敗し得ない検査、X-17 の要約数量 0（RED-12）。",
+   "claim_that_stands": "これらの単位も、台帳の定義文はコードの説明文と同じ文字列で、681 シナリオで統合モデルと相対 1e-9 以内で一致している。定義文からの独立した書き直しによる値の確認は無い。",
+   "claims_not_to_rely_on": [
+    "これら 17 単位の値を「独立に再導出して確認済み」として扱うこと"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "基準値として使う場合は、この 17 単位が独立の書き直しを経ていないことを前提にする。17 単位はどれも段階合計の外にある（X-11・X-17・STO-01・STO-02 は推定・参考値、X-03・X-08・X-09 は集計表、X-04・X-05 はガス別の内訳、SUM-08 は比較、SYS・QA は検査）。",
+   "reuse_conditions": "段階合計（SUM-03 の上流 37 単位）に入る単位は、この 17 単位に 1 つも含まれない（R7 の集計）。したがって合計の基準値への影響は無いが、ガス別内訳、CO2 のみの合計、基準案との差、検査の結果を新研究で使うなら別途の確認が要る。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 2：X-05・X-04・SUM-08 の間接的な再導出、50 シナリオ）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:148（COULD NOT CHECK：14 単位は独立に再実装していない）",
+    "R7 の集計（units.json）：この 17 単位と SUM-03 の上流 37 単位の共通部分は 0 単位",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:75（D-3：基準計算と統合モデルはどちらも主担当が書いた）"
+   ]
+  },
+  {
+   "id": "CK-R7-19",
+   "title": "基準計算の定義の穴（不正な値・部分的な境界・検査との食い違い）",
+   "what": "第2回の検査で確認された、基準計算の定義とコードの欠陥。入力が有限で範囲内、かつ 14 段階すべてを対象にする場合には現れないが、それ以外では、合計が黙って変わる・不完全の印が付かない・全体が例外で止まる、のいずれかが起きる。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の再導出検査と数値の反例探しが、架空シナリオに欠陥を入れて基準計算を実行し、反証担当の検証者が自分のスクリプトで再現（RED-1・2・4・5・6・10、NUM-2〜7 は CONFIRMED、RED-3・RED-11 は PARTLY_CONFIRMED）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。例の数値は小さい架空シナリオ（資材 12 行など）でのもの。",
+   "round2_findings": [
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-4",
+    "RED-5",
+    "RED-6",
+    "RED-10",
+    "RED-11",
+    "NUM-2",
+    "NUM-3",
+    "NUM-4",
+    "NUM-5",
+    "NUM-6",
+    "NUM-7"
+   ],
+   "round2_effect": "これらは未修正のままコミット済みの版に残っている。中断した修正（65ff124）は「修正した」と自己申告しているが、独立の検査を受けていない。",
+   "claim_that_stands": "次の入力範囲では、コミット済みの基準計算の結果を基準値として使えない：(1) B3 または B5 を含み上流の段階を外した境界で、上流に除外された行がある（complete が真のまま合計が下がる。例 −55.6％）。(2) 年次量、電力係数、建設時係数、係数値、換算倍率が負・NaN・無限大（そのまま合計に入り、complete は真、検査もすべて通る）。(3) 周期・耐用年数・建替周期が負・0・NaN・無限大（事象なし、印なし。例 −16.1％）。(4) 経路の比率・係数値・要約数量・用途別面積・更新年一覧の要素が None、年次表が評価期間より短い（TypeError・IndexError で全体が止まる）。(5) 係数 ID が「GRID」「REFRIGERANT」。(6) 係数のガス別量が係数値と合わない（どの検査にも掛からない）。",
+   "claims_not_to_rely_on": [
+    "06_OPEN_ISSUES B-17「使えない行・経路・項目は合計に入れず、件数を報告し、合計に『不完全』の印を付ける」を全ての境界について（RED-1）",
+    "06_OPEN_ISSUES B-18「負の数量・質量・距離、範囲外の率は、その行を計算から除いて数える」を年次量について（RED-2）",
+    "README・04_VERIFICATION の「不備のある入力でも、どちらの計算も同じ値を返し、同じ不備を報告する」という一般的な文（NUM-2。検証した 36 種の操作については成り立つ）",
+    "INDEPENDENT_REVIEW.md 2.2 の「除外して数える規則に統一」"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新しい定式化の定義域を決めるときの「避ける入力範囲」の一覧として使う。誤差測定の母集団からこれらの入力を外す、または「基準値なし」として扱う根拠になる。",
+   "reuse_conditions": "指示は基準計算の変更を禁じているので、穴を埋めた版を基準にしたい場合は、新研究の側でその扱いを明示して決める必要がある（この確認作業は修正を行わない）。基準計算と統合モデルは、有限の欠陥入力では互いに一致する（同じ穴を共有する）ので、両者の一致は穴が無いことの証拠にならない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:1-11（RED-1：対象段階 B3 だけで SUM-03 98378.05→43676.16、complete 真）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:13-23（RED-2）、25-35（RED-3：SUM-03 7893398.71→6619741.07、complete 真）、37-71（RED-4・RED-5・RED-6）、109-131（RED-10・RED-11）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:13-83（NUM-2〜NUM-7）、138（検証者の追加 2：年次量・係数値・電力係数に範囲の検査が無い）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:150（検証者の追加 1〜3）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:240-250（STAGE_UNITS、_incomplete）；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:152-164（profile_values：検査なし）"
+   ]
+  },
+  {
+   "id": "CK-R7-20",
+   "title": "時間規則の端（周期 1.000000001）と、修繕の除外年の閉形式の不一致",
+   "what": "事象の属する年を ceil(τ·(1−1e-9)) で決める規約は、周期が倍精度の 1.000000001（1 値）のとき丸めに依存する。基準計算のループは複数の事象を同じ年に置き、修繕の除外年の重みの閉形式 skip_weight_periodic は「周期が 1 以上なら事象ごとに年が違う」と仮定するので、B3-01 と、B3 を含む合計が食い違う。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の 2 つの検査（数値の反例探し、記録の監査）が別々に見つけ、それぞれの検証者が自分のスクリプトで再現（どちらも CONFIRMED、重大度 HIGH）。周辺の倍精度値（±4000〜6000 ulp）、70 万〜150 万組の (T, 周期)、40 万個の乱数の周期を走査して、失敗するのはこの 1 値だけと報告（ほかに無いことの証明ではない）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。欠陥のない入力で起きる。",
+   "round2_findings": [
+    "NUM-1",
+    "REC-1"
+   ],
+   "round2_effect": "「統合モデルはすべての入力で基準計算と同じ結果（相対 1e-9）」と、closed_forms.py の「All of them are exact」は、この入力で成り立たない。検証者の追加指摘：書かれた規則を有理数で厳密に評価すると 59 事象は 59 の異なる年に入り、閉形式の値のほうがそれに合う。基準計算のループの値（48 の異なる年）が丸めの産物である。",
+   "claim_that_stands": "周期 1.000000001 を資材の更新周期または設備の耐用年数に持つ行があると、基準計算と統合モデルは B3-01 で食い違う（全行がその周期の例：229291.25 対 19107.60、相対 −0.917。1 行だけなら 2e-6〜2e-3）。T=60 では事象 59 個に対し、基準計算の年の集合は 48 個。同じ年の判定は B4-02・B5-01・B1・X-07 の年次の置き場所にも使われ、そこでは両者が同じ産物を共有する。",
+   "claims_not_to_rely_on": [
+    "closed_forms.py 冒頭の「All of them are exact: they return the same number as the loop」",
+    "DERIVATIONS.md D3 の「c≧1 なら事象ごとに年が違い」を、基準計算の浮動小数点の年の割当てについて",
+    "base.py の「The tolerance makes the rule independent of binary rounding」",
+    "記録 EX-B3-01-M1 の「VERIFIED_ANALYTIC_AND_SYNTHETIC」と 04_VERIFICATION/README の「不一致なし」を、すべての入力についての主張として"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "時間を離散化する規約（許容幅つきの切り上げ）が、厳密な算術と浮動小数点で食い違う点の実例として使う。新しい定式化の誤差を測るとき、基準値そのものが丸めに依存する入力として別扱いにする。",
+   "reuse_conditions": "どちらを正とするかは決まっていない（基準計算を閉形式に合わせるか、閉形式を基準計算に合わせるか）。中断した修正（65ff124）は「時間の判定を整数の厳密な算術に変えた」と自己申告しているが、未検証で、基準計算の定義を変える。旧研究の試験（tests/test_closed_forms.py）は周期を約数から相対 1e-15、1e-12、1e-10、1e-8、1e-6 だけずらし、1e-9 を引かない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:1-11（NUM-1：T=7 で 6 事象・5 年、T=30 で 29・26、T=60 で 59・48。B3-01 229291.25152413402 対 19107.60429367785）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:1-11（REC-1）、114（検証者の追加 1：厳密な有理数の算術では 59 の異なる年）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:138（検証者の追加 1：B-15 の許容幅そのものの端）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py:1-11,58-71；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:12-17,125-126；whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:67"
+   ]
+  },
+  {
+   "id": "CK-R7-21",
+   "title": "比較の仕組み（結果の leaf ごとの比較、検証の実行、入力を壊す操作）",
+   "what": "基準計算の結果と候補の結果を、入れ子の辞書・リストを平らにして leaf ごとに比べる compare()（符号つき相対誤差、過小側を区別）、681 シナリオと評価期間の振り直しを実行する bench/verify_unified.py、入力を壊す 36 種の操作 bench/mutations.py。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/mutations.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json"
+   ],
+   "state_category": 2,
+   "checked_how": "第2回の数値の反例探しが compare() を直接呼んで性質を調べ、検証者が再現（NUM-11、CONFIRMED）。同じ検査は、下限なし・型に厳密な独自の比較で 681 シナリオをやり直し、隠れた差が無いこと（0 件）も確認した。",
+   "checked_by": "独立検査（第2回）で再現（欠点の確認と、実際には差を隠していなかったことの確認）",
+   "scope": "架空データだけ。43ba5d7 の版のコード。",
+   "round2_findings": [
+    "NUM-11",
+    "REP-16",
+    "NUM-2",
+    "RED-1"
+   ],
+   "round2_effect": "比較関数に欠点がある：基準側が ±無限大だと候補が何でも合格になる、真偽値と整数 1 を等しいとみなす、下限 1e-9×|SUM-03|（kgCO2e）を無次元の leaf を含む全 leaf に掛ける（報告書に記載なし）、合計のみの形式では余分なキーを調べない（NUM-11）。評価期間の振り直しの比較は 70 単位のうち 22 単位の合計だけ、基準案の比較は切って、小さい 64 シナリオで行った（REP-16）。入力を壊す操作は、検査のある欄にしか NaN を入れない（NUM-2）。段階の部分集合のシナリオは欠陥なしだけ（RED-1）。",
+   "claim_that_stands": "compare() は「_」で始まるキーを比較から外し、数値は (候補−基準)/max(|基準|, 下限)、数値でない leaf は等値で比べる。681 シナリオについては、この比較の欠点が差を隠していなかったことが第2回の厳密な再比較で確かめられている。",
+   "claims_not_to_rely_on": [
+    "「許容差は相対 1e-9」を、下限なしの純粋な相対誤差として読むこと（NUM-11）",
+    "「評価期間を 9 通りに変えた結果を基準計算と突き合わせた（172,404 個）」を全出力についての確認として読むこと（REP-16）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "新しい定式化と基準計算の結果を比べる道具の候補。過小評価を符号で区別する誤差の定義（負＝過小）と、leaf ごとの比較という方式は、そのまま参照できる。",
+   "reuse_conditions": "使うなら、無限大・真偽値・下限・余分なキーの 4 点の扱いを先に決める（第2回の検査担当は、下限なし・型に厳密な比較を別に書いて使った）。65ff124 では compare.py が 13 行、verify_unified.py が 182 行変わっている（自己申告では下限 0 に変更。未検証）。verify_unified.py と mutations.py の本体は R7 は読んでいない（関数名と定数だけ）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/common/compare.py:13-36,55-94",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py:41-43（EXACT_TOL=1e-9、SWEEP_PERIODS 9 通り、SWEEP_UNITS）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json: tolerance、period_sweep（scenarios 64、units 22 件、values_compared 172404）、mutations",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:121-131（NUM-11）、134（CHECKS 9・10）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:106-111（REP-16。第2検証者なし）"
+   ]
+  },
+  {
+   "id": "CK-R7-22",
+   "title": "681 架空シナリオでの基準計算と統合モデルの一致（記録された測定）",
+   "what": "統合モデル（fastcalc）の全出力と合計のみの 2 形式を、基準計算と leaf ごとに比べた記録。681 シナリオ（ベンチマーク 3、境界条件 32、母集団 400、欠陥入り 60、入力を壊す操作 144、小数の境界 10、段階の部分集合 32）で失敗 0、相対誤差の最大は 4.8e-13。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/verify_unified.py"
+   ],
+   "state_category": 1,
+   "checked_how": "旧研究の bench/verify_unified.py による測定（コミット済みの JSON）。第2回の数値の反例探しが、同じ 681 シナリオを下限なし・型に厳密な独自の比較でやり直し、相対 1e-9 を超える leaf 0（最大 4.77e-13、SUM-08.delta）。検証者も独自にやり直して 7,962,996 個の leaf で差 0、例外の非対称 0、余分な leaf 0。報告書検査は 94 シナリオを再実行して失敗 0、境界条件の群の最大誤差が保存値と全桁一致。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。この 681 シナリオについての事実で、43ba5d7 の版のコードどうしの一致。実建物での精度でも、原版ブックとの一致でもない。基準計算と統合モデルは同じ主担当が書いた。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "NUM-3",
+    "NUM-4",
+    "NUM-5",
+    "NUM-6",
+    "NUM-7",
+    "NUM-10",
+    "NUM-11",
+    "REP-16"
+   ],
+   "round2_effect": "「すべての入力で一致する」という一般化は成り立たない：欠陥のない入力で 1 件（周期 1.000000001。NUM-1）、非有限値（NUM-2）、係数値 0 でガス別量が 0 でない係数（NUM-3）、短い年次表と別の欠陥の組合せ（NUM-4）、擬似 ID と同じ係数 ID（NUM-5）、ガスの一覧の欠陥（NUM-6）、float の段の添字（NUM-7）、桁落ち・桁あふれ（NUM-10）で食い違う。",
+   "claim_that_stands": "この 681 シナリオでは、統合モデルの 2 形式は基準計算と相対 1e-9 以内で一致し（記録の最大 4.77e-13）、第2回の厳密な再比較でも差は 0 だった。",
+   "claims_not_to_rely_on": [
+    "「統合モデルは、すべての入力で基準計算と同じ結果になる」",
+    "「不備のある入力でも同じ値を返し、同じ不備を報告する」（検証した 36 種の操作の外では成り立たない例がある）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "ルート A で保存済みの簡素化成果（統合モデル）を出発点にするとき、その成果がこの母集団で基準計算を再現していたという根拠と、回帰確認の合格線（681 シナリオ、相対 1e-9）として使う。",
+   "reuse_conditions": "一致の範囲はこの母集団に限る。母集団に無い種類の入力（CK-R7-16 の一覧）では食い違いが確認されている。統合モデルの実装 engine.py は R7 は読んでいない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json: scenarios=681、tolerance=1e-09、by_group（benchmark 3 件・最大 1.4e-13、edge 32 件・最大 2.1e-14、population 400 件・最大 4.8e-13、defective 60 件・最大 4.9e-14、mutated 144 件・最大 4.2e-14、decimal 10 件・最大 1.5e-14、stage_subset 32 件・最大 2.1e-14）、failures=[]、all_exact=true",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:112,118（NUM-10 の本文と検証：681 シナリオを下限なしで再比較、差 0、最大 4.77e-13、7,962,996 leaf）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:134（CHECKS 9）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:128（CHECKS 2：94 シナリオの再実行）"
+   ]
+  },
+  {
+   "id": "CK-R7-23",
+   "title": "厳密な閉形式のうち、第2回の総当たりで基準のループと食い違わなかったもの",
+   "what": "ループを置き換える関数 5 群：回数 renewal_count、明示の一覧の除外年の重み skip_weight_events、一定・直線の年次量の年重み付き和 linear_weighted_sum、電力係数の区分への分解とモーメント grid_segments・segment_moments・table_moments、冷媒の充填サイクル refrigerant_fractions。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md"
+   ],
+   "state_category": 1,
+   "checked_how": "コミット済みの確認：tests/test_closed_forms.py 6 件（ループとの一致）と 681 シナリオの一致。第2回の 2 つの検査が、それぞれ自分で書いた逐次ループと総当たりで比べた：renewal_count 702,603 組と 500,612 件で不一致 0。skip_weight_events 20,000 件と 50,000 件で不一致 0。linear_weighted_sum 20,000 件（最大差 1.7e-15）と 100,000 件（最大 1.9e-13）。区分の分解とモーメントは 30,000 件（区分の値はループと同一。モーメントの最大差は T=1.0000001 での H の 1.08e-9）と 120,000 件（不正な記述子を含む。不一致 0、整っているかの判定も基準計算と同一）。refrigerant_fractions 40,000 件（絶対 1e-12 を超える差なし）と 150,000 件（最大 3.5e-15）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空の乱数入力での総当たり。有限の入力で、桁落ち・桁あふれを起こさない大きさの範囲。評価期間 300 年超と、1 行当たり約 1 万回を超える事象を生む周期は試されていない。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "NUM-10",
+    "REC-6",
+    "APP-5"
+   ],
+   "round2_effect": "同じファイルの skip_weight_periodic は周期 1.000000001 で基準計算と食い違う（CK-R7-20）ので、ここに含めない。segment_moments は T が整数の直上で桁落ちする（T=1.000000001、買電量が 0 から始まる直線のとき相対 5.2e-8。NUM-10）。grid_segments は NaN・無限大の記述子で例外になる（基準計算は年次表を使う。NUM-2）。漏洩率が 1−1e-8 で補充なしのとき年次の小さな値に 5.8e-9 の差（NUM-10）。旧研究の記録では、年和の閉形式は B6-03・B7-04・B2-01・X-11 と合計を通してだけ確かめられている（REC-6）。",
+   "claim_that_stands": "renewal_count は、基準計算と同じ判定式で前後を確かめるので、数え上げと同じ回数を返す（数学的には ceil(T/c)−1、許容幅 1e-9 を除く）。linear_weighted_sum は Σ_k w_{k+1}(b＋s·k)=b·T＋s·((Y−2)(Y−1)/2＋w_Y·(Y−1))。segment_moments は G=Σ w·g と H=Σ w·k·g を区間ごとの等差・平方和で求める。refrigerant_fractions は交換から交換までを m·(1−(1−r)^j) で求める。これらは上の件数の総当たりで、逐次ループと丸めの範囲で一致した（モーメントだけは T が整数の直上で桁落ちし、1.08e-9〜5.2e-8 の差が出る）。",
+   "claims_not_to_rely_on": [
+    "closed_forms.py 冒頭の「All of them are exact」をファイル全体について（skip_weight_periodic が例外。NUM-1）",
+    "「T/c−1≦N≦T/c が必ず成り立つ」（下側は許容幅 1e-9 の範囲で破れる。APP-5）",
+    "非有限の入力、T が整数の直上の極端な入力での一致"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "ルート A の材料。年の和・事象の数え上げ・冷媒の漸化式を、和の公式・階段関数・等比の式で置き換えた実例と、その一致の確認範囲として使う。",
+   "reuse_conditions": "買電排出の閉形式 B·G＋S·H は、買電量が両端（k=0 と k=Y−1）で 0 以上で打ち切りが働かないときだけ使える（それ以外と年次表は年ごとの計算）。この条件の確認は第2回の記録の監査が 95,100 件で不一致 0 と報告。65ff124 では closed_forms.py が 211 行変わっている（自己申告：時間の判定を整数の算術に、モーメントの足し方を変更。未検証）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py:41-55（renewal_count）、74-89（skip_weight_events、linear_weighted_sum）、94-170（grid_segments、segment_moments、table_moments）、175-219（refrigerant_fractions）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:134（CHECKS 3：総当たりの件数と最大差）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:110（CHECKS 4：総当たりの件数、2 点の条件 95,100 件）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:109-119（NUM-10）、13-23（NUM-2）、136（COULD NOT CHECK：300 年超、約 1 万回超の事象）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/tests/test_closed_forms.py（6 件。R7 は名前だけ確認）"
+   ]
+  },
+  {
+   "id": "CK-R7-24",
+   "title": "導出の文書 DERIVATIONS.md（D1〜D8）",
+   "what": "統合モデルが基準計算と同じ結果になる理由を式で示した文書。D1 行テーブル（和の順序の入れ替え）、D2 回数関数と周期ごとの合算、D3 修繕（除外年の重み）、D4 建替、D5 年重み付き和、D6 冷媒の充填サイクル、D7 指標と残差判定、D8 係数解決、と当てはまらない範囲。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md"
+   ],
+   "state_category": 2,
+   "checked_how": "第2回の記録の監査が、D1・D2・D4・D7 をコードと読み比べて一致、D5・D6 の式を総当たりで確認、D3 の 1 文が基準計算の浮動小数点の挙動と合わないこと、D8 と D6 の最後の行がコードを述べていないことを報告。",
+   "checked_by": "独立検査（第2回）で再現（D1・D2・D4・D5・D6・D7。D3 の 1 文、D8、D6 の最後の行は反証）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。式の変形についての文書で、丸めは演算の順序の分だけ生じる、と自ら断っている。",
+   "round2_findings": [
+    "REC-1",
+    "REC-2",
+    "REC-3",
+    "REC-7",
+    "REP-12",
+    "REP-17"
+   ],
+   "round2_effect": "D3 の「c≧1 なら事象ごとに年が違い」は、基準計算の浮動小数点の年の割当てでは周期 1.000000001 で成り立たない（REC-1。厳密な算術では成り立つ）。D8 の「1 回だけ解決」「SYS-03・QA-03 はこの解決の結果から読める」はコードの挙動と合わない（REC-2、REC-3 は一部確認）。D6 の最後の行（B1-01 は同じ走査で求まる）は、実際には 2 回の走査（REC-7）。D1 の「右辺は係数キーの数だけ乗算する」を「行数より乗算が少ない」と読んではならない（REP-12）。当てはまらない範囲に、年次表の長さの規則が無い（REP-17）。",
+   "claim_that_stands": "D1（Σ_i a_i·v_k(i)=Σ_k A_k·v_k）、D2（Σ_i N(T,c_i)·u_i=Σ_c N(T,c)·U_c）、D4、D7 は恒等式で、第2回の読み比べでコードと合っていた。D5 と D6 の式は、総当たりで逐次ループと一致した（CK-R7-23）。",
+   "claims_not_to_rely_on": [
+    "D3 の「c≧1 なら事象ごとに年が違い」を基準計算との一致の根拠として",
+    "D8 の「1 回だけ解決して覚えておけばよい」「SYS-03・QA-03 はこの解決の結果から読める」",
+    "D6 の「充填量×GWP（B1-01）は…同じ走査で求まる」"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "ルート A の材料。保存済みの簡素化が使っている変形の種類（和の順序の入れ替え、周期ごとの合算、等差・平方和、等比、残差判定）の一覧として読む。",
+   "reuse_conditions": "D1・D2・D4・D5・D6・D7 を使う。D3 は周期 1.000000001 の但し書きつき、D8 は「行固有の換算を持たない行について」に限る（規模 L では 5657 回の解決のうち 5183 回が行ごとの繰り返し。REC-3）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/DERIVATIONS.md:13-37（D1）、39-59（D2）、61-73（D3）、75-78（D4）、80-108（D5）、110-119（D6）、121-128（D7）、130-137（D8）、139-144（当てはまらない範囲）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:110（CHECKS 4：「D1, D2, D4, D7 match the code by reading; D8 and the last line of D6 do not describe the code」）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:1-11（REC-1）、25-35（REC-3）、73-83（REC-7）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:78-83（REP-12）、113-118（REP-17）"
+   ]
+  },
+  {
+   "id": "CK-R7-25",
+   "title": "統合モデル K1〜K7 の目録（保存済みの簡素化成果の構成）",
+   "what": "評価単位を、基準計算と同じ結果になる形で 7 つにまとめた目録：K1（行テーブル）26、K2（回数関数とライフサイクル乗数）9、K3（年重み付き和（区分的に直線な系列のモーメント））10、K4（充填サイクルの質量収支）4、K5（指標（段階ベクトルの線形関数））8、K6（許容差つきの残差判定）3、K7（係数解決の表）6。統合しなかった単位は C-05、QA-02、STO-01、SYS-01。実装は fastcalc/engine.py（評価期間に依存しない合算 aggregate と、乗数を掛けて値を読む finish）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/models.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/engine.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/fastcalc/closed_forms.py"
+   ],
+   "state_category": 2,
+   "checked_how": "値の一致は 681 シナリオの記録（CK-R7-22）。構成員の数え方と「仕組み」の記述は、第2回の記録の監査がコードに計測を入れて調べ、数え方の基準を満たさない構成員と、手で置いた計数を報告（検証者が再現）。中断した修正の a2 段階（統合の根拠を測定に置き換える作業、統合モデルの再構成）は途中で止まり、報告が無い。",
+   "checked_by": "独立検査（第2回）で再現（値の一致だけ。構成員の数え方と仕組みの計数は反証）",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。統合は近似ではなく、同じ値を別の計算順で求めるもの。",
+   "round2_findings": [
+    "REC-2",
+    "REC-3",
+    "REC-4",
+    "REC-5",
+    "REC-6",
+    "REC-7",
+    "REP-4",
+    "REP-9",
+    "REP-12"
+   ],
+   "round2_effect": "「66 単位が 7 つのモデルに統合」の件数は支えられない：X-13・B1-01・SYS-03 は統合の基準（共有の表から読むか、共有のパラメータ付き関数で求める）を満たさず、A13-05 は基準の文言どおりには満たさない。QA-03 は K7 ではなく K1 の表から読む。A5-01・B6-04 は形式的な構成員（REC-2）。K5 の SUM-04〜08 は基準計算と同じ式のままで、名札による統合（REP-4）。M-SINGLEPASS・M-EVENTS・M-ROWPROD の計数は固定の場所に置いた集計で、失敗し得ない（REC-4）。",
+   "claim_that_stands": "7 つの形（models.json の form 欄）は旧研究が使った変形の目録として読める。第2回の計測で確かめられたのは：合計のみの出力では、資材・設備の行は 1 回だけ読まれ、係数値を資材・設備の行ごとには掛けず、周期による資材・設備の更新年一覧を作らない。複合係数の計算回数は相異なる配合の数と同じ（30）。1 回の合算から 9 通りの評価期間の結果を求めて基準計算と一致（22 単位の合計）。",
+   "claims_not_to_rely_on": [
+    "「66 単位が 7 つの統合モデルに、結果を変えずにまとまった」「計算の定義の数 70→11」（REC-2、REP-4）",
+    "「行を読む回数 520」を全出力について、「更新年の一覧を 1 つも作らない」、「行ごとの係数の乗算 520 回」（REC-4、REP-12）",
+    "「係数・段階・単位の組ごとに 1 回だけ解決」（行固有の換算を持つ行は行ごと。REC-3）",
+    "「SUCCESS の記録は、出力の一致・仕組みの計数・導出の 3 つすべてに裏付けがある」（118 件中 96 件。REC-5）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "C"
+   ],
+   "reuse_how": "ルート A の出発点。保存済みの簡素化が計算体系をどういう 7 つの形に分けたかを示す。少数の変換にまとめ直すときの比較対象（変換の種類の数、どの単位がどの形に入るか）になる。",
+   "reuse_conditions": "構成員の件数は使わず、各モデルの form と、その値が実際にどの表・関数から出るかを engine.py で確かめてから使う（engine.py は 63,777 バイトで、R7 は読んでいない）。対象は 43ba5d7 の版。65ff124 の engine.py は再構成の途中（1,051 行の変更、未検証・未完成）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/models.json: models[].id／name／form／kept／derivation／units、not_unified、membership_rule、mechanisms",
+    "R7 の集計（models.json）：構成員 K1 26、K2 9、K3 10、K4 4、K5 8、K6 3、K7 6、計 66",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md:13-23（REC-2）、37-59（REC-4・REC-5）、110（CHECKS 1〜3：58 の構成員は記述どおり、M-RECIPE と M-SWEEP は成り立つ）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:22-27（REP-4。第2検証者なし）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:18,56（a2 は途中で停止）"
+   ]
+  },
+  {
+   "id": "CK-R7-26",
+   "title": "近似候補の誤差測定のうち、第2回の独立した再実装で統計値が再現した 27 件（反例として）",
+   "what": "厳密な式を簡単な式に置き換える候補を、架空の母集団で基準計算と比べた誤差の統計（件数、符号つき平均、95％点、最小、最大）。32 件のうち 27 件は、第2回の検査が自分の実装で同じ値を得た。どの置き換えがどの大きさで外れたかの記録で、採用された近似は無い（旧研究の結論は不採用 16、保留 16）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+   ],
+   "state_category": 1,
+   "checked_how": "旧研究の bench/approx_study.py による測定（コミット済みの JSON。母集団 400、候補により n は 80〜400）。第2回の近似の検査が、同じ母集団（400 件、シード 20261111、規模 M まで）で独立に実装し直し、27 候補の n・平均・95％点・最小・最大を 1e-15 以内で再現。検証者も主な候補を自分のコードで再現。報告書検査は AP-04 と AP-22a を基準計算だけから再計算して一致。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空の母集団だけ。数字は「コードに書かれたとおりの候補」を「コードが基準にとった量」と比べたもの。誤差の大きさは生成器の分布で決まり、実建物での精度を示さない。",
+   "round2_findings": [
+    "APP-1",
+    "APP-2",
+    "APP-3",
+    "APP-4",
+    "APP-5",
+    "APP-6",
+    "APP-7",
+    "APP-8",
+    "APP-9",
+    "REP-6",
+    "REP-13"
+   ],
+   "round2_effect": "統計値そのものは再現したが、何を測った数字かの読み方に但し書きが付く：「B6 段階」は B6-03（段階 B6＋B2）、「C3＋C4」は C3-01＋C4-01（設備の廃棄 X-14 を含まない）である（APP-2）。total_error は測った量の差を合計で割ったもので、下流（B3・B4・B5）への伝播を含まない（APP-3）。AP-05 は題名と違う形を測っている（APP-6）。AP-18a〜c と AP-19a は、評価する建物自身の行から代表値を作る標本内の値（APP-9）。資材区分別の表は基準が 0 の組を数えずに落とす（APP-7）。候補の計算時間・メモリ・入力数は測っていない（REP-6）。",
+   "claim_that_stands": "母集団 400 件（シード 20261111、規模 M まで）の架空シナリオで、27 候補（AP-01、AP-02、AP-03、AP-04、AP-05、AP-06、AP-07a、AP-07b、AP-08、AP-09a、AP-09b、AP-09c、AP-17、AP-18a、AP-18b、AP-18c、AP-18、AP-19a、AP-19b、AP-20、AP-22a、AP-10、AP-10b、AP-11、AP-21、AP-22b、AP-14）の誤差の統計値は、第2回の独立した再実装で再現した。符号についての解析的な主張のうち、AP-03・AP-04・AP-05・AP-19b が常に過大、AP-06・AP-07a・AP-22a が常に過小であることは、第2回が解析と数値の両方で確認した。",
+   "claims_not_to_rely_on": [
+    "AP-09c の within_stage_target=true を「段階 2％ の内側」として（段階 B2 では最大 +2.03％。APP-2）",
+    "total_error・「合計への影響」を建物全体への影響として（AP-06 は伝播させると 95％点 0.28％、記録は 0.13％。AP-07b は 1.20％ 対 0.63％。APP-3）",
+    "AP-18b の「B3 段階で −1.9％〜+1.1％」を入力を減らしたモデルの精度として（ほかの建物から代表値を取ると −41％〜+337％。APP-9）",
+    "AP-01・AP-20 の「T/c−1≦N なので基準を上回ることがない」「必ず成り立つ上下限」（APP-5）",
+    "AP-17 の結論文の最後の文「重い資材ほど遠くから運ぶ傾向が実際にあるかどうかで結果が決まる」（APP-4、一部確認）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新しい定式化の候補を絞るときの反例として使う：階段関数の連続化、年系列の積の平均化、行ごとの値の区分平均化などが、この架空の母集団でどれだけ外れたかが分かっている。目標値は 合計 1％、段階 2％（approximation_study.json の targets）。",
+   "reuse_conditions": "数字を引用するときは、測った量（B6-03 か段階か、C3-01＋C4-01 か段階か）、標本内か標本外か、伝播の有無を併記する。中断した修正の b2 段階は測定をやり直し候補を追加したと自己申告しているが、その出力は未検証で別物（whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/b2_output/）。測定コード approx_study.py の本体は R7 は読んでいない。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json: population=400、error_definition、targets={total: 0.01, stage: 0.02}、candidates.<id>.stage_error（以下の数字は ％ 表示・小数 2 桁に丸めたもの）",
+    "回数関数を連続な式に置き換える（B4）：AP-01（更新回数の連続近似 N ≈ max(0, T/c − 1)。記録の stage 欄：B4）n=400、平均 -18.68％、範囲 -58.47％〜0.00％、95％点（絶対値）41.73％；AP-02（更新回数の中点補正 N ≈ max(0, T/c − 1/2)。記録の stage 欄：B4）n=400、平均 +22.52％、範囲 -15.11％〜+983.53％、95％点（絶対値）66.82％；AP-03（更新回数の切り捨てなし N ≈ T/c。記録の stage 欄：B4）n=400、平均 +95.56％、範囲 +16.20％〜+2158.07％、95％点（絶対値）251.09％",
+    "修繕の除外年を無視する（B3）：AP-04（修繕の更新年除外を無視（B3-02 で B3-01 を代用）。記録の stage 欄：B3）n=400、平均 +2.05％、範囲 +0.06％〜+5.42％、95％点（絶対値）3.97％",
+    "冷媒（B1。測ったのは「常に満充填」の形）：AP-05（冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k。記録の stage 欄：B1）n=400、平均 +28.02％、範囲 0.00％〜+180.71％、95％点（絶対値）109.77％",
+    "端材倍率の線形化（A1-A3）：AP-06（端材倍率の線形化 1/(1−w) ≈ 1+w。記録の stage 欄：A1-A3）n=400、平均 -0.26％、範囲 -1.06％〜-0.05％、95％点（絶対値）0.48％",
+    "複合係数の小さい構成材の切り捨て：AP-07a（複合係数：質量比 5％ 未満の構成材を切り捨てる（補正なし）。記録の stage 欄：複合品の製造排出（X-03））n=400、平均 -4.13％、範囲 -20.18％〜-0.04％、95％点（絶対値）10.15％；AP-07b（複合係数：質量比 5％ 未満の構成材を切り捨て、残りの比率を合計 1 に補正。記録の stage 欄：複合品の製造排出（X-03））n=400、平均 -0.16％、範囲 -14.72％〜+7.47％、95％点（絶対値）5.06％",
+    "年系列の積を平均の積に置き換える（stage 欄は B6 だが、基準にとった量は B6-03＝段階 B6＋B2。APP-2）：AP-08（買電排出を 平均買電量×平均係数×T で近似。記録の stage 欄：B6）n=400、平均 +0.22％、範囲 -8.13％〜+11.81％、95％点（絶対値）3.24％",
+    "電力係数の系列を粗い点の補間で持つ（同じく基準にとった量は B6-03）：AP-09a（電力係数を 5 年ごとの点の直線補間で持つ（全種類の系列に適用）。記録の stage 欄：B6）n=400、平均 +0.01％、範囲 -3.95％〜+3.82％、95％点（絶対値）1.56％；AP-09b（電力係数を 10 年ごとの点の直線補間で持つ（全種類の系列に適用）。記録の stage 欄：B6）n=400、平均 +0.06％、範囲 -5.37％〜+7.49％、95％点（絶対値）2.76％；AP-09c（併用：パラメータ型の系列は厳密な閉形式、年次表の系列だけ 5 年ごとの点の直線補間。記録の stage 欄：B6）n=98、平均 +0.14％、範囲 -1.35％〜+1.73％、95％点（絶対値）1.27％",
+    "輸送を手段ごとの平均距離にする（A4）：AP-17（輸送：輸送手段ごとに 合計質量×単純平均距離 で求める。記録の stage 欄：A4）n=400、平均 +3.14％、範囲 -37.23％〜+116.64％、95％点（絶対値）43.29％",
+    "資材区分ごとの代表パラメータ（標本内。AP-18c の「C3＋C4」は C3-01＋C4-01 で、設備の廃棄 X-14 を含まない。APP-2）：AP-18a（区分パラメータ：資材区分ごとに代表更新周期（更新 1 回の排出で重み付けした調和平均）を 1 つ持つ。記録の stage 欄：B4）n=400、平均 +4.67％、範囲 -43.96％〜+63.17％、95％点（絶対値）35.14％；AP-18b（区分パラメータ：資材区分ごとに代表修繕率（初期排出で重み付けした平均）と代表更新周期を持つ。記録の stage 欄：B3）n=400、平均 -0.10％、範囲 -1.88％〜+1.13％、95％点（絶対値）0.68％；AP-18c（区分パラメータ：資材区分ごとに処理経路の比率（単純平均）と経路係数（単純平均）を持ち、行は質量だけにする。記録の stage 欄：C3＋C4）n=400、平均 +0.09％、範囲 -29.21％〜+40.22％、95％点（絶対値）15.59％；AP-18（区分パラメータによる共通近似モデル（AP-18a〜c を同時に適用）。記録の stage 欄：B3＋B4＋C3＋C4）n=400、平均 +2.58％、範囲 -24.35％〜+27.02％、95％点（絶対値）17.12％",
+    "未数量分の比率を 1 つにする：AP-19a（未数量分：行ごとの比率の代わりに単純平均の比率 1 つを使う。記録の stage 欄：未数量分（A13-04））n=400、平均 +4.56％、範囲 -50.15％〜+277.88％、95％点（絶対値）55.61％；AP-19b（未数量分：行ごとの比率の代わりに最大の比率 1 つを使う（安全側）。記録の stage 欄：未数量分（A13-04））n=400、平均 +116.93％、範囲 +0.58％〜+740.94％、95％点（絶対値）239.45％",
+    "ガスの扱い：AP-22a（全ガスの合計を CO2 のみの合計で代用する。記録の stage 欄：対象段階の合計）n=400、平均 -12.19％、範囲 -32.36％〜-4.69％、95％点（絶対値）17.74％；AP-22b（CO2 のみの合計 = 全ガスの合計 ×（構造×用途ごとの平均の CO2 比）。記録の stage 欄：CO2 のみの合計（X-05））n=200、平均 -0.16％、範囲 -8.69％〜+27.44％、95％点（絶対値）8.41％",
+    "要約数量・面積からの概算（標本外）：AP-10（6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算。記録の stage 欄：A1-A3（資材分））n=200、平均 +9.38％、範囲 -70.47％〜+239.17％、95％点（絶対値）93.83％；AP-10b（AP-10 に、6 区分に入らない資材の分の割増（構造×用途ごとの平均比）を掛ける。記録の stage 欄：A1-A3（資材分））n=200、平均 +16.68％、範囲 -69.18％〜+255.75％、95％点（絶対値）104.93％；AP-11（延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算。記録の stage 欄：WLC）n=200、平均 +10.35％、範囲 -70.27％〜+198.98％、95％点（絶対値）84.06％；AP-21（木材の炭素貯蔵：数量×（構造×用途ごとの平均の m3 当たり貯蔵量）。記録の stage 欄：STO-01（参考値））n=197、平均 +7.18％、範囲 -44.25％〜+121.14％、95％点（絶対値）82.08％",
+    "評価期間についての直線補間：AP-14（評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める。記録の stage 欄：WLC）n=80、平均 +2.30％、範囲 -11.93％〜+22.77％、95％点（絶対値）11.80％",
+    "点推定の代わりに上下限を使う（B4）：AP-20 n=400、基準値が上下限の内側にある割合 1.0（旧研究の判定は 1e-12 の余裕つき）、幅の平均は基準値の 114.24％、下限の誤差の平均 -18.68％、上限の誤差の平均 +95.56％",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:110（CHECKS 1：27 候補の統計値を 1e-15 以内で再現。CHECKS 3：符号の主張の確認）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:112（COULD NOT CHECK：AP-06b、AP-12、AP-13、AP-15、AP-16、構造・用途別の内訳は再実装していない）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:13-35（APP-2・APP-3）、61-107（APP-6〜APP-9）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:36-41（REP-6。第2検証者なし）"
+   ]
+  },
+  {
+   "id": "CK-R7-27",
+   "title": "近似候補の誤差測定のうち、第2回が再実装しなかった 5 件と内訳表",
+   "what": "第2回の近似の検査が独立に実装し直さず、数字を公表値のまま受け取った候補 5 件（AP-06b、AP-12、AP-13、AP-15、AP-16）と、AP-17 の副次の対象（X-12、C2）、X-10 の廃棄物量、構造・用途別の内訳（by_group）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json"
+   ],
+   "state_category": 2,
+   "checked_how": "旧研究の測定だけ。第2回の検査は「再実装していない（公表値のまま）」と明記。報告書検査は、2 つのファイルと報告書のあいだで数字が一致することだけを確認。",
+   "checked_by": "作成者のみ",
+   "scope": "架空の母集団だけ。AP-12・AP-13 は n=400、AP-15・AP-16 は n=200、AP-06b は行ごとの誤差（175,143 行）。",
+   "round2_findings": [
+    "REP-5",
+    "REP-6",
+    "REP-13",
+    "APP-9"
+   ],
+   "round2_effect": "AP-15（面積×段階ごとの平均原単位）は単位の式を使わない建物水準の代理で、その段階誤差が 33 単位の M4 の記録に付けられている（REP-5）。AP-06b は全行で過小なのに報告書の過小評価の欄が「—」（REP-13）。candidates.json と approximation_study.json で対象単位の一覧が 7 候補で違う（REP-13）。",
+   "claim_that_stands": "記録されている値は次のとおり（独立の再現なし）：AP-12（併用：質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う。記録の stage 欄：A1-A3（資材分））n=400、平均 -9.55％、範囲 -40.19％〜+8.25％、95％点（絶対値）25.92％；AP-13（面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用。記録の stage 欄：B6）n=400、平均 +11.99％、範囲 -14.86％〜+70.44％、95％点（絶対値）40.60％；AP-15（段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル。記録の stage 欄：WLC（段階別は by_stage））n=200、平均 +8.04％、範囲 -73.21％〜+186.35％、95％点（絶対値）81.46％；AP-16（ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）。記録の stage 欄：WLC）n=200、平均 +3.65％、範囲 -74.73％〜+193.27％、95％点（絶対値）74.80％；AP-06b（行ごとの正味発注量）n=175143、平均 -0.35％、範囲 -1.44％〜0.00％。",
+   "claims_not_to_rely_on": [
+    "これらの数字を「独立に再現された測定値」として引用すること",
+    "AP-15 の段階誤差を、その段階の個々の単位について近似を調べた結果として読むこと（REP-5）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "建物水準の代理モデル（面積・評価年数・構造・用途からの概算、対数線形回帰）と、上位の行だけ詳細計算する併用が、架空の母集団で大きく外れたという記録として参照する。",
+   "reuse_conditions": "再現が無いので、使う前に測り直すか、未検証と明記して引用する。誤差は各シナリオが別の乱数の係数表を持つことに強く左右される（第2回の所見）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json: candidates.AP-06b.row_error、AP-12／AP-13／AP-15／AP-16 の stage_error、AP-16.n_parameters=11",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md:112（COULD NOT CHECK）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:29-34（REP-5）、85-90（REP-13）。REP の指摘には第2検証者が付いていない"
+   ]
+  },
+  {
+   "id": "CK-R7-28",
+   "title": "本研究が決めた規約 B-1〜B-21 のうち、第2回でコードとの符合が確認されたもの",
+   "what": "概念式が決めていない点を旧研究が定めた 21 件の規約（評価期間は実数で最終年を按分、T ちょうどの事象は数えない、事象は属する年に置く、更新年は修繕を計上しない、冷媒の交換は年末に反映、など）。基準計算と統合モデルの両方がこの規約を前提にしている。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py"
+   ],
+   "state_category": 1,
+   "checked_how": "規約の一覧と影響の試算は 06_OPEN_ISSUES の B にコミット済み（影響の大きさは第1回の独立検査による試算と明記）。第2回の再導出検査が B-1〜B-21 を 1 件ずつコードと照合し、B-11・B-17・B-18 を除いて符合と報告。影響の数字（B-7、B-10、B-11、B-12）は第2回の 2 つの検査が再計算して一致。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。「符合」は規約の文とコードの挙動が合うという意味で、規約の選び方の妥当性ではない。影響の数字は架空の境界条件の例と標準ベンチマーク S でのもの。",
+   "round2_findings": [
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-8",
+    "REP-17",
+    "NUM-1"
+   ],
+   "round2_effect": "B-11（設備の初期の搬入・据付を計上しない）は設備については合うが、資材の行の据付係数にも同じ扱いがあり、一覧に無い（RED-8）。B-17（除外して数え、不完全の印）は部分的な境界で破れる（RED-1）。B-18（負の値・範囲外は除外して数える）は年次量で破れる（RED-2）。B-15（許容幅 1e-9）は実装どおりだが、周期 1.000000001 で丸めに依存する（NUM-1 の検証者の追加指摘）。B-16・B-21 は、年次表が ceil(T) より短いと全体がエラーになる規則を書いていない（REP-17）。",
+   "claim_that_stands": "但し書きなしでコードと合うと報告されたのは 15 件：B-1（T は実数、最終年を按分）、B-2（n×周期<T だけ数える）、B-3（事象は属する年に置く）、B-4（更新が属する年は修繕なし）、B-5（冷媒の交換は年末に反映）、B-6（B1-04 は B1 段階）、B-7（建替で更新周期を初期化しない）、B-8（更新・建替も初期と同じ係数）、B-9（未数量分は r/(1−r) の上乗せ）、B-10（B2 は買電排出の定率、B2 が対象のときだけ B6 から引く）、B-12（ガスの範囲はラベル、合計は全ガス）、B-13（経路比率の合計が 1 未満は未配分）、B-14（EPD の適用条件）、B-19（質量収支は据付量と比べる）、B-20（年次量の単位は「単位/year」だけ）。影響の数字：B-7 は境界条件の例（T=60、建替周期 25、範囲比 1.0）で更新 31 回→19 回、B4 −40.6％、合計 −1.9％。B-10 は B2 が標準ベンチマーク S の SUM-02 の 7.0％。B-11 は A4 の 0.12％、A5 の 5.0％。",
+   "claims_not_to_rely_on": [
+    "B-17 を全ての境界について、B-18 を年次量・電力係数・係数値・換算倍率・周期について（CK-R7-19）",
+    "B-11 を「計上しない初期分は設備だけ」として（資材の初期の据付は標準ベンチマーク S で 31617.67 kgCO2e、A5 の 41.1％ に当たる。RED-8）",
+    "B-21 を「全体がエラーになるのは評価期間が不正なときだけ」として（RED-10、REP-17）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "A",
+    "B",
+    "C"
+   ],
+   "reuse_how": "新しい定式化が基準計算と同じ値を出すために守る必要のある規約の一覧。特に、時間の離散化（B-1〜B-5、B-15）と段階への帰属（B-6、B-10、B-12）は式の形を直接決める。",
+   "reuse_conditions": "規約を変えれば結果も変わる（06_OPEN_ISSUES の B の冒頭）。B-8（係数は時点によらず固定）は「回数×1 回分」という形の前提で、更新時点の係数を使う場合の扱いは実装も検証もされていない（CK-R7-31）。一覧に無い規約がある（CK-R7-29）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:20-51（B-1〜B-21 と影響の大きさ）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:1-54（規約の説明）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:146（CHECKS PERFORMED 6・7：時間の規約は一貫して使われている。B-1〜B-21 は RED-1・RED-2／3・RED-8 の例外を除きコードと合う。B-7、B-10、B-11、B-12 の数字を再現）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:128（CHECKS 2：B-7、B-10、B-11 の数字を再現）、113-118（REP-17。第2検証者なし）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:138（検証者の追加 1：B-15 の端）"
+   ]
+  },
+  {
+   "id": "CK-R7-29",
+   "title": "規約一覧に無い規約と、定義文に書かれていない挙動",
+   "what": "コードには在るが、06_OPEN_ISSUES の規約一覧（B-1〜B-21）や単位の定義文に書かれていない取り決め。値を変えるものと、出力の形だけのものがある。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_c_sum.py",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_pre_a.py",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の再導出検査がコードと定義文・規約一覧を読み比べ、標準ベンチマーク S などで大きさを測り、検証者が再現（RED-7・RED-8・RED-12 は CONFIRMED、RED-3・RED-9・RED-11 は PARTLY_CONFIRMED）。",
+   "checked_by": "独立検査（第2回）で再現",
+   "scope": "架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。大きさの数字は標準ベンチマーク S（架空）だけ。",
+   "round2_findings": [
+    "RED-3",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-11",
+    "RED-12",
+    "REP-17",
+    "NUM-3"
+   ],
+   "round2_effect": "未記載のまま残っている。中断した修正（65ff124）は定義文を書き足したと自己申告しているが、規約一覧（06_OPEN_ISSUES）への追記はしていない、と同じ報告にある。",
+   "claim_that_stands": "(1) 更新（B4-02）と修繕（B3-01・B3-02）の「製造」は A13-01＋A13-03（設備は X-01）で、未数量分 A13-04 を含まない。建替（B5-01）の基礎は A13-04 を含む（S で、含めると B4 が +0.542％、B3 が +3.93％）。(2) 資材の行の据付係数は更新のときだけ使い、初期には計上しない（S で 31617.67 kgCO2e＝A5 の 41.1％、合計の 0.096％）。(3) 設備の更新 1 回には、数量×搬入係数（対象段階 A4）と数量×据付係数（A5）が加わる（S で B4 の 0.105％）。(4) 無効な周期は事象なしで、印が付かない。(5) 明示の一覧に重複した年は、その回数だけ数える。(6) 比率 0 で係数の無い経路でも、合計は不完全になる。(7) 記述子が整っていても、電力係数の年次表が ceil(T) より短ければ全体がエラー。(8) X-02 は by_stage_all、X-05 は by_stage_co2 として 14 段階すべてを返す。(9) 基準計算の B3-01 は 修繕率 0 または初期排出 0 の行の行データを落とす。",
+   "claims_not_to_rely_on": [
+    "06_OPEN_ISSUES の B を「結果を変える規約の全部」として読むこと",
+    "B4-02 の定義文の式の部分だけから設備の更新 1 回の内容を読むこと（RED-9）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "元の式から組み直すとき（ルート B）、定義文と規約一覧だけでは基準計算と合わなくなる箇所の一覧として使う。",
+   "reuse_conditions": "定義文と規約一覧に加えて、depends_on とコードの条件を読む必要がある。(1) は依存の宣言だけが決めている（B4-02・B3-01 の依存に A13-04 が無く、B5-01 には在る）。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:73-107（RED-7：A13-04 は S で A1-A3 の 3.95％。RED-8：92 行／200 行が据付係数を持つ。RED-9：設備の搬入・据付は B4 の 0.1049％）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:25-35（RED-3）、121-143（RED-11・RED-12）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:113-118（REP-17）；whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/numeric.md:25-35（NUM-3）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/units_b.py:44-67,70,186,204,225,367-368；whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/refcalc/base.py:74-75",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json: findings の RED-3／RED-7／RED-8（status PARTLY_FIXED。自己申告）"
+   ]
+  },
+  {
+   "id": "CK-R7-30",
+   "title": "台帳と記録の古い欄・食い違う欄",
+   "what": "台帳（units.json）と、それを写した報告書に残っている、現在のコードや測定と合わない記述。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/unlinked_input_disposition.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/05_DECISIONS/README.md"
+   ],
+   "state_category": 4,
+   "checked_how": "第2回の報告書検査が JSON から数え直して確認（REP の指摘には第2検証者が付いておらず、主担当が検査のスクリプトを再実行して再現）。構造分類の件数は R7 も units.json から数え直した。",
+   "checked_by": "独立検査（第2回）で再現（第2検証者なし）",
+   "scope": "台帳の記述についての事実。",
+   "round2_findings": [
+    "REP-7",
+    "REP-8",
+    "REP-10",
+    "REP-18",
+    "RED-6"
+   ],
+   "round2_effect": "未修正。台帳の見出しの件数は同期の道具（tools/sync_ledger.py）が更新しない。",
+   "claim_that_stands": "(1) 見出し structure_class_counts は LINEAR_SUM_PRODUCT 29・RATIO 11 だが、単位から数えると 30・10（ほかの 11 種は一致）。(2) 単位の inputs 欄は基準計算が読む入力と合わない：台帳は仕様の 88 項目と「NEW:」28 項目を挙げるが、実測は仕様 77 と追加 56。台帳に挙がる仕様 12 項目は読まれず、台帳の「NEW:」名 28 のうち実在の追加欄と合うのは 4。(3) A13-04 は「基準計算には実装しない」、UNDEFINED_MODEL と書かれているが、基準計算の関数があり近似候補も測られている。(4) SYS-01 の branches は NaN を MISSING とするが、基準定義は None だけ。(5) シート族の対応状況のラベルが一貫していない（影響は数式ノードの割合で 0.6 ポイント未満）。",
+   "claims_not_to_rely_on": [
+    "見出しの structure_class_counts、単位の inputs 欄、A13-04 の未実装の記述、SYS-01 の branches",
+    "05_DECISIONS の「単位が参照する入力項目 116（既存 88＋追加 28）｜同じ｜変化なし」"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "台帳を新しい分類台帳の材料にするとき、使ってはいけない欄の一覧として使う。",
+   "reuse_conditions": "入力項目は input_usage.json の実測（読まれた欄＝必要な欄の上限）か、基準計算の関数から取り直す。件数は単位から数える。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: structure_class_counts と units[].structure_class（R7 の集計）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md:43-55（REP-7・REP-8）、64-69（REP-10）、120-125（REP-18）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/rederive.md:61-71（RED-6：branches の NaN の記述は台帳の内部の食い違い）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/01_LEDGER/units.json: units[id=A13-04].structure_subclass=\"UNDEFINED_MODEL\"、computable_in_reference=true"
+   ]
+  },
+  {
+   "id": "CK-R7-31",
+   "title": "検討したが実装・検証していない式の案（06_OPEN_ISSUES の G-1〜G-7、B-8 の別の選択肢）",
+   "what": "旧研究が検討だけして実装も測定もしなかった 7 件：累積の年次系列の閉形式（G-1）、建替なしを範囲比 0 で表す（G-2）、記述子で与えられる年次量の年次表を入力から外す（G-3）、出所レコードごとの入力状態の前計算（G-4）、木材の炭素貯蔵を導出係数として行テーブルに載せる（G-5）、更新時点の係数を使う場合の統合（G-6）、評価単位ごとの代理モデル（G-7）。",
+   "locations": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md"
+   ],
+   "state_category": 3,
+   "checked_how": "実装も検証も無い（文書に「実装も検証もしていない」と明記）。G-1 は「年末ちょうどの事象の扱いが 1 点で違うことを確認した段階」とある。",
+   "checked_by": "なし",
+   "scope": "案の記述だけ。",
+   "round2_findings": [],
+   "round2_effect": "なし",
+   "claim_that_stands": "これらは案であって成果ではない。G-6 について文書が述べているのは「更新時点の係数を使うと、更新の排出は『回数×1 回当たり』ではなく『事象の年ごとの係数の和』になる。回数の代わりに事象年の係数の和を乗数にすれば同じ枠組みに入ると見込まれるが、実装も検証もしていない」まで。",
+   "claims_not_to_rely_on": [
+    "G-6 の「同じ枠組みに入ると見込まれる」を確認済みの性質として使うこと",
+    "G-2 の「式の上では同じ結果になる」を検証済みとして使うこと"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "旧研究が式の形について気づいていて手を付けなかった点の一覧として参照する（特に、規約 B-8 を変えると F04 の「回数×1 回分」という形が崩れる、という記述）。",
+   "reuse_conditions": "いずれも未検証。G-3 は入力仕様の変更（冗長な入力を持つ目的との兼ね合い）、G-2 も入力仕様の変更になる、と文書にある。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md:51（B-8 の別の選択肢について）、95-105（G-1〜G-7）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md:62-64（第1回の指摘のうち対応していないもの）"
+   ]
+  },
+  {
+   "id": "CK-R7-32",
+   "title": "中断した修正（65ff124）の基準計算・閉形式：定義が変わった未検証の版",
+   "what": "第2回の指摘を反映する作業の途中で止まった作業ツリーの記録。a1 段階（基準計算の定義、時間の厳密な判定、不正値の扱い、完全性の印）は作業担当が完了を報告したが、独立の検査を受けていない。この版では基準計算そのもの（base.py、単位の 3 モジュール）、閉形式、台帳の定義文と依存が書き換わっている。",
+   "locations": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_A1.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md"
+   ],
+   "state_category": 2,
+   "checked_how": "作業担当の自己申告だけ（A1_REPORT.json の how_checked に、反証スクリプトの再実行結果や追加したテスト名が書かれている）。停止の記録は、中断時点の Python ファイルが構文として読めることだけを確認し、試験は実行していないと述べている。",
+   "checked_by": "中断した修正の自己申告",
+   "scope": "コミット 65ff124 と保存したパッチにだけ在り、作業ツリーからは取り除かれている（0db5c77）。a2 段階（統合モデルの再構成）の編集は途中のものが同じコミットに混ざっている。",
+   "round2_findings": [
+    "NUM-1",
+    "NUM-2",
+    "NUM-3",
+    "NUM-4",
+    "NUM-5",
+    "NUM-6",
+    "NUM-7",
+    "NUM-8",
+    "NUM-9",
+    "NUM-10",
+    "NUM-11",
+    "RED-1",
+    "RED-2",
+    "RED-3",
+    "RED-4",
+    "RED-5",
+    "RED-6",
+    "RED-7",
+    "RED-8",
+    "RED-9",
+    "RED-10"
+   ],
+   "round2_effect": "この版は第2回の指摘への対応として書かれたもので、自己申告では NUM-1〜NUM-9、NUM-11、RED-1、RED-2、RED-4〜RED-6、RED-9、RED-10 を FIXED、NUM-10、RED-3、RED-7、RED-8 を PARTLY_FIXED としている（R7 が読んだのは報告の RED-10 まで）。検証されていない。",
+   "claim_that_stands": "在ること、変更の規模（23 ファイル、7,811 行の追加と 1,364 行の削除。基準計算 base.py 332 行、units_b.py 175 行、units_c_sum.py 248 行、units_pre_a.py 142 行、closed_forms.py 211 行、units.json 129 行）、自己申告の内容。それ以上は言えない。",
+   "claims_not_to_rely_on": [
+    "A1_REPORT の「FIXED」を修正済みの事実として使うこと",
+    "この版の基準計算を「基準計算」として、コミット済みの版の測定値（681 シナリオ、近似の誤差）と組み合わせること（定義が違う：自己申告では、時間の判定が整数の厳密な算術になり、不正値は除外して数えられ、完全性の印が依存の閉包に従う）"
+   ],
+   "reuse_candidate": true,
+   "reuse_routes": [
+    "B",
+    "C"
+   ],
+   "reuse_how": "基準計算の穴（CK-R7-19、CK-R7-20）をどう埋めようとしたかの設計の記録として読む。新研究が穴のある入力範囲を扱う場合の参考になる。",
+   "reuse_conditions": "新研究の指示は基準計算の変更を禁じている。この版を使うことは基準計算を差し替えることに当たるので、使うかどうかは新研究の側で明示して決め、使うなら独立の検査を先に行う必要がある。a2 の途中の編集（engine.py など）が同じコミットに含まれる点に注意する。",
+   "evidence": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md:50-62（段階ごとの状態）、84-92（コミットの説明と、取り除いた理由）、96-99（実行していないこと）",
+    "git show --stat 65ff124（R7 が読み取り専用で確認：23 files changed, 7811 insertions(+), 1364 deletions(-)）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/A1_REPORT.json: files_changed（15 件）、findings[].status／what／how_checked"
+   ]
+  }
+ ],
+ "not_covered": [
+  "research_code/fastcalc/engine.py（統合モデルの実装）は読んでいない。K1〜K7 の項目は models.json、DERIVATIONS.md、第2回の記録の監査の報告に基づく。",
+  "research_code/synth/generate.py と population.py の本体、bench/approx_study.py、bench/verify_unified.py、bench/mutations.py の本体は読んでいない（README と関数名・定数名だけ）。生成器の分布の細部は第2回の報告からの引用。",
+  "03_MODELS/candidates.json の結論文、03_MODELS/records/units.json、03_MODELS/README.md、01_LEDGER/README.md、sheet_families.json、sheet_family_coverage.json、02_RANKING、05_DECISIONS、07_MATERIAL_TAXONOMY は読んでいない（R7 の観点の外、または他の読み手の担当）。",
+  "materials/round2_review/triage/res.json（生の構造化結果）は読んでいない。同じ内容の triage/*.md を全文読んだ。",
+  "中断した修正：パッチの本文、SPEC_A1〜B3、B2_REPORT、a2_partial_outputs、b2_output は読んでいない。A1_REPORT.json は冒頭から RED-10 の項までを読んだ。65ff124 の版で依存グラフや定義文がどう変わるかは確認していない。",
+  "式の族 F01〜F11 は R7 が付けた整理用の区分で、旧研究の成果物には無い。各族の「依存する変数・線形性・分岐」は定義文とコードの読み取りで、実行による確認はしていない（実行は禁止）。",
+  "依存の宣言と関数本体の読み取りの食い違い（X-07 の B2-01、X-08 の B4-02）は R7 のテキスト照合によるもので、補助関数を経由する読み取りまでは追っていない。ほかに無いことは確認していない。",
+  "第2回の REP-1〜REP-18 には第2検証者が付いていない（主担当が検査のスクリプトを再実行して再現）。REP に基づく記述はその前提。",
+  "検査担当のスクリプト（materials/round2_review/checker_scripts/）は読んでいない。第2回の件数・数値は triage/*.md の記載のまま引用した（R7 は再計算していない。再計算には旧研究のコードの実行が必要）。"
+ ]
+}

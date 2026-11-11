@@ -1,0 +1,900 @@
+{
+  "lens": "R4",
+  "read": [
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/STOP_STATUS.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/README.md（結論の要約、近似候補と測定結果、評価者の提案との対照）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md（4 節 近似候補の誤差、5 節）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py（全文。読んだだけで実行していない）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py（verification_population の部分。読んだだけ）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md（改訂履歴、P7、P8、P10）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/05_DECISIONS/README.md（不採用・検証保留・段階別の表）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md（C、D、G）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/README.md（冒頭の終了の追記、項目 5・6）",
+    "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/records/units.json（段階×結論の件数を数えただけ）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md（APP-1〜9、CHECKS PERFORMED、COULD NOT CHECK、ADDITIONAL）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md（REP-2、REP-5、REP-6、REP-13、REP-14、REP-16、CHECKS の近似の部分）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md（REC-1、REC-8）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/res.json（構造だけ）",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_B2.md",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/B2_REPORT.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/B2_REPORT_long.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/conclusion_proposals.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/candidate_lines.json",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/cmp_committed_vs_new.log.txt",
+    "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/b2_output/approximation_study_UNVERIFIED.json（スキーマ、新しい候補 8 種の主な項目、既存候補の波及後の合計）",
+    "git（読み取りだけ）：git log --oneline、git diff --stat 60e720f -- whole-life-carbon-jcat-study/09_APPROX_STUDY、git show --stat 65ff124 -- research_code/bench"
+  ],
+  "items": [
+    {
+      "id": "CK-R4-01",
+      "title": "「近似は 1 つも採用していない」という全体の結論",
+      "what": "近似の段階（M3〜M6）で測定した候補 32 種のうち、採用（SUCCESS）は 0、不採用（REJECTED）16、実データ待ちの保留（HOLD）16 という結論。単位×段階×候補の記録では、M3 が不採用 38・保留 6・候補なし 42、M4 が保留 53・候補なし 31、M5 が保留 8・候補なし 66、M6 が不採用 1・保留 4・候補なし 65。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/05_DECISIONS/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/records/units.json"
+      ],
+      "state_category": 2,
+      "checked_how": "候補ごとの誤差を架空の母集団 400 シナリオで測り、暫定目標（建物全体 1％、主要段階 2％、重大な過小評価なし）と照らして候補ごとに結論を付けた。件数は candidates.json の outcome を数えた値（REJECTED 16、HOLD 16）と、records/units.json の段階×結論の件数で、このリーダーが JSON を読んで数え直し、報告書の表と一致した。",
+      "checked_by": "独立検査（第2回）で一部再現（測定値の再現と、不採用理由の点検）。件数の意味と網羅性には第2回の指摘が残る",
+      "scope": "架空データ、独立概念モデル、基準計算は 43ba5d7 の版。「採用なし」は測定した 32 候補についての記録で、近似が成り立たないことを示すものではない。",
+      "round2_findings": ["APP-1", "APP-2", "APP-9", "REP-2", "REP-5", "REP-6", "REC-8"],
+      "round2_effect": "第2回の検査担当は「目標を満たしているのに、成り立たない理由で不採用にされた候補」を見つけていない（approx.md CHECKS PERFORMED 4）。一方で次の指摘がある。(1) 測定していない変種があった（APP-1：修繕の安全側の形）。(2) 段階と合計の両方に目標内の印が付いた 3 候補（AP-06 不採用、AP-09c・AP-18b 保留）のうち、AP-09c の「段階 2％ の内側」は B2 段階で成り立たず（APP-2）、AP-18b は同じ建物の行から作った値である（APP-9）。(3) M3〜M6 の単位×段階 280 のうち 204 が測定なしの「候補なし」で、M4 が保留の 39 単位のうち 26 単位は建物水準の AP-15 だけが根拠（REP-5）。(4) 不採用理由の「厳密な閉形式が同じ手間で使える」は測定されていない（REP-6）。(5) 測定なしで見送った理由文に事実と違うものがある（REC-8）。",
+      "claim_that_stands": "測定した 32 候補のうち採用した候補はない（不採用 16、保留 16）。不採用の 16 は、架空の母集団で段階 2％ か合計 1％ の目標を超えるか、常に過小評価になる（AP-06 は誤差が目標内だが常に過小、AP-06b も常に過小、AP-20 は推定値ではなく幅の広い上下限）。保留の 16 は、架空データでは採否を決められないとして結論を出していない。",
+      "claims_not_to_rely_on": [
+        "「それ以外の多くも、厳密な閉形式が同じ手間で使えるため近似の利点がなかった」（README.md 項目 5、05_DECISIONS/README.md 42 行の理由 (2)）：手間は測定していない",
+        "「M4 … 保留 39 単位」「このうち 44 単位は、近似の段階に実データ待ちの保留がある」を、単位ごとに近似候補を調べた件数として読むこと",
+        "「評価軸 B の採点で 2 点以上だった単位×段階は 52 件、このうち測定をせずに見送ったものは 20 件」（REP-2：観点と段階の対応が手順書と違う）",
+        "AP-09c・AP-18b の「段階 2％ の内側」"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "新研究で旧研究の近似の結果に触れるときの、言える範囲を定める。採用済みの近似モデルは無いので、ルート A でそのまま引き継げる近似の成果は無い。引き継げるのは、測定値、誤差の出方の記録、反例である。",
+      "reuse_conditions": "「近似できない」とは書けない。書けるのは「32 候補を架空データで測り、採用に至らなかった」まで。204 の単位×段階は測定していない。",
+      "evidence": [
+        "03_MODELS/candidates.json：outcome の集計 REJECTED 16 / HOLD 16（このリーダーが集計）",
+        "03_MODELS/README.md:11、13-20",
+        "05_DECISIONS/README.md:42、90-95",
+        "09_APPROX_STUDY/README.md:28",
+        "03_MODELS/records/units.json：M3〜M6 の NOT_APPLICABLE は 42＋31＋66＋65 = 204 件（このリーダーが集計）",
+        "triage/approx.md CHECKS PERFORMED 4",
+        "triage/reports.md REP-5、REP-6"
+      ]
+    },
+    {
+      "id": "CK-R4-02",
+      "title": "近似候補の誤差測定の枠組み（測定プログラムと出力の形式）",
+      "what": "基準計算の結果に対して候補の値を計算し、符号付きの相対誤差 (候補 − 基準) ÷ 基準 を集める測定プログラム bench/approx_study.py と、その出力 approximation_study.json（schema 2.0、候補 32 種）。母集団は verification_population(400, seed=20261111, max_size='M')：構造 4 種×用途 6 種を順に回し、規模は S・M、評価期間は 30・50・60・75・100 年（15％ の確率で 42.5・62.5・99.9 年）。母集団から学習する候補（AP-10・10b・11・15・16・21・22b）は、生成順の前半 200 件で（構造×用途）ごとの平均や回帰係数を作り、後半 200 件で誤差を測る。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/synth/population.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md"
+      ],
+      "state_category": 2,
+      "checked_how": "候補ごとに stage_error（候補が変える量の誤差）と total_error（同じ差をホールライフ合計で割った値）を、件数・平均・絶対値の平均・95％点・最大・最大の過大・最大の過小・過小の割合で集計する。構造別・用途別は 30 候補、材料区分別は 7 候補（AP-01・02・03・06・07a・07b・18a）。行データから基準計算の B4 を組み直せることを確かめている（最大の相対差 3.2e-15）。目標値は合計 0.01、段階 0.02。",
+      "checked_by": "独立検査（第2回）で再現（公表した統計の再現）。測定の定義には確認済みの欠陥がある（CK-R4-03）",
+      "scope": "架空データ、独立概念モデル、43ba5d7 の基準計算、入力の欠陥のない母集団（不完全の印が付いたシナリオは 0 件、段階を除外したシナリオも 0 件）。",
+      "round2_findings": ["APP-2", "APP-3", "APP-7", "APP-8", "APP-9", "REP-6", "REP-13"],
+      "round2_effect": "第2回の検査担当は独自の実装で、AP-01〜03（B4・B5・X-10 の資源量）、04、05、06、07a、07b、08、09a、09b、09c、17、18a、18b、18c、18、19a、19b、20、22a、10、10b、11、21、22b、14 の公表統計を 1e-15 以下の差で再現し、再現できない統計は無かった。ゼロ除算、シナリオ単位の黙った除外（B5 以外）、学習と試験の間の漏れは見つからなかった。独自に再実装していないのは AP-06b、AP-12、AP-13、AP-15、AP-16、X-10 の廃棄物量、AP-17 の X-12・C2、構造別・用途別の内訳。報告書の検査担当は、README の候補の誤差表 275 個、AP-15 の段階表 380 個などを JSON から再計算し、AP-06b の過小評価の欄を除いて一致を確認した。定義の欠陥は CK-R4-03 にまとめた。",
+      "claim_that_stands": "approximation_study.json の数値は、43ba5d7 の測定プログラムが同じ母集団で出す値として再現できる（上に挙げた候補について）。数値が表す量は JSON の error_definition のとおりで、報告書の列名のとおりではないものがある。",
+      "claims_not_to_rely_on": [
+        "報告書の列名「合計への影響」「誤差を測った量 B6」「C3＋C4」をそのまま読むこと",
+        "手順書 v1.4 の改訂履歴の「近似候補の測定の範囲（単位・段階・建物全体）を区別することを定めた」：本文 P7 にその規則の文は無く、実装（b2）は未検証"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "新研究で変換後のモデルの誤差を測るときの集計様式（符号付き誤差、過小の割合、基準が 0 の件数、構造別・用途別・材料区分別、学習と試験の分割）のひな形になる。母集団の作り方とシードを同じにすれば、旧研究の値と直接比べられる。",
+      "reuse_conditions": "CK-R4-03 の欠陥（基準量の取り違え、下流へ波及させない合計、同じ建物の値を使う候補、基準 0 の組の黙った除外）を直してから使う。直した版（65ff124 の b2）は自己申告だけで未検証。このリーダーは旧研究のコードを実行していない。",
+      "evidence": [
+        "approx_study.py:41-85（集計と Collector）、158（母集団）、478-480（前半・後半の分割）、583-588（出力）",
+        "synth/population.py:17-19、60-85",
+        "approximation_study.json：schema_version 2.0、population 400、targets、row_data_rebuilds_reference_B4_max_rel_diff",
+        "triage/approx.md CHECKS PERFORMED 1、2、COULD NOT CHECK",
+        "triage/reports.md CHECKS（candidate error table 275 cells、AP-15 stage table 380 cells）",
+        "EVALUATION_PROTOCOL.md:12、163-167"
+      ]
+    },
+    {
+      "id": "CK-R4-03",
+      "title": "誤差測定方法の確認済みの欠陥（第2回の指摘）",
+      "what": "近似検証の測定の定義と表示にある欠陥の一覧。数値の再現性の問題ではなく、「何を測ったか」と「何と書いたか」の食い違いである。(1) 電力の候補（AP-08・09a・09b・09c・13）の基準量は B6-03（= 段階 B6 ＋ 段階 B2）なのに「B6 段階」と表示。買電だけからなる段階 B2 では誤差が約 1.3〜1.8 倍。AP-18c・AP-18 の「C3＋C4」は C3-01＋C4-01（資材のみ。設備の廃棄 X-14 を含まない）で、2 段階を合算している。(2) total_error は局所の差を合計で割った値で、下流（B3・B4・B5）への波及を含まない。(3) AP-18a〜c・AP-19a・AP-17 の代表値は評価する建物自身の行から作る（入力は減っていない最良の場合）。(4) 材料区分別の集計は、基準が 0 の（シナリオ, 区分）の組を数えずに除外する。(5) AP-05 は題名の式と測った式が違う。(6) AP-14 は明示の更新年一覧を延長しない。(7) 「必ず」とした不等式は相対 1e-9 の範囲で破れる。(8) 候補の時間・メモリ・命令数・入力数を測っていない。(9) 候補の対象単位の一覧が 2 つのファイルで違う。(10) 段階や建物の水準の測定値を、出力を測っていない単位の記録に付けている。",
+      "locations": [
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/checker_scripts/approx/",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/checker_scripts/approx_verify/",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 4,
+      "checked_how": "第2回の検査担当が独自の実装で母集団 400 件を測り直し、反証検査担当が別の実装で確かめた（APP-1〜9：CONFIRMED 6、PARTLY_CONFIRMED 3）。主な数値：APP-3 の波及後の合計の 95％点は AP-06 0.128％ → 0.284％、AP-07b 0.63％ → 1.20％、AP-17 0.46％ → 0.57％。APP-7 は 5195 組のうち 850 組が除外され、AP-03 では 850 組すべて、AP-02 では 694 組で候補が 0 でない。REP-5・6・13 は報告書の検査担当のスクリプトを作業担当が再実行して再現した（反証検査担当は付いていない）。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "43ba5d7 のコードと記録。09_APPROX_STUDY は 60e720f と同じ内容なので、現在の作業ツリーでも未修正。",
+      "round2_findings": ["APP-2", "APP-3", "APP-4", "APP-5", "APP-6", "APP-7", "APP-8", "APP-9", "REP-5", "REP-6", "REP-13"],
+      "round2_effect": "検査担当と反証検査担当の判定では、どの欠陥でも不採用・保留の結論そのものは変わらない。目標内の印が変わるのは AP-09c だけ（段階の印が真から偽。b2 の自己申告）。反証検査担当は APP-4・APP-8 を一部だけ認めた（AP-17 の最初の文は正しい、AP-14 の影響は 95％点 11.80％ → 11.93％ で無視できる）。",
+      "claim_that_stands": "上の欠陥は確認済みで、60e720f の記録・報告書には反映されていない。修正（b2）は 65ff124 に実装があるが、独立の検査を受けていない。",
+      "claims_not_to_rely_on": [
+        "04_VERIFICATION/README.md の「合計への影響（95％点）」と 03_MODELS/README.md の「合計：95％点」を、建物合計への影響として読むこと",
+        "「B6 段階」「C3＋C4」という対象の表示",
+        "04_VERIFICATION/README.md の AP-06b の過小評価の欄「—」（実際は全行で過小）",
+        "candidates.json と approximation_study.json の units（AP-06、AP-17、AP-18a、AP-22a、AP-11、AP-16、AP-15 で不一致）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "新研究の誤差測定を設計するときに避ける点の一覧として使う：基準量は段階の値で取り、合算した量で測らない。上流の量を変える候補は下流まで計算し直して建物合計を測る。パラメータを同じ建物から作るか他の建物から作るかを区別する。基準が 0 の件数を数える。候補の入力数と計算負荷を誤差と一緒に測る。",
+      "reuse_conditions": "一覧は旧研究の測定に対するもの。新研究のモデルでは下流への波及の経路が変わり得る。REP-5・6・13 には反証検査担当が付いていない。",
+      "evidence": [
+        "triage/approx.md：APP-2・3・5・6・7・9 の VERDICT CONFIRMED、APP-1・4・8 の VERDICT PARTLY_CONFIRMED",
+        "triage/reports.md REP-5、REP-6、REP-13",
+        "approx_study.py:58-60（total は局所の差）、70-74（基準 0 の区分を除外）、252（ref_c = C3-01 + C4-01）、409（b6_ref = B6-03）、280-287（AP-05）",
+        "STOP_STATUS.md 3 節（記録・報告書は第2回の指摘を反映していない）"
+      ]
+    },
+    {
+      "id": "CK-R4-04",
+      "title": "更新回数の連続近似（AP-01・AP-02・AP-03）と上下限（AP-20）",
+      "what": "段差のある回数関数 N(T,c) を、AP-01：max(0, T/c − 1)、AP-02：max(0, T/c − 1/2)、AP-03：T/c で置き換える M3 の候補 3 種と、AP-01 を下限・AP-03 を上限として使う M6 の候補 AP-20。明示の更新年一覧をもつ行は厳密のまま。4 つとも不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md"
+      ],
+      "state_category": 1,
+      "checked_how": "母集団 400 シナリオで B4 段階、B5（建替の回数に適用。基準が 0 でない 89 件）、X-10 の資源量と廃棄物量、材料区分別を測定。AP-01：B4 平均 -18.68％、95％点 41.73％、範囲 -58.5％〜+0.0％、過小 77.5％、合計に対する差の 95％点 8.12％、B5 で最大 -93.8％、X-10 の資源量で最大 -30.4％。AP-02：B4 平均 +22.52％、95％点 66.82％、範囲 -15.1％〜+983.5％、B5 で基準が 0 なのに計上する場合 128 件。AP-03：B4 平均 +95.56％、95％点 251.09％、範囲 +16.2％〜+2158.1％、B5 で同 133 件。AP-20：400 件すべてで基準値が上下限の間（相対 1e-12 の許容差つき）、幅は B4 に対して平均 114.2％（95％点 284.6％）。数値の出所は approximation_study.json。",
+      "checked_by": "独立検査（第2回）で再現（B4、B5、X-10 の資源量、AP-20 の幅と上下限を 1e-15 以下の差で再現）",
+      "scope": "架空データ（母集団 400、シード 20261111、規模 S・M）、独立概念モデル、43ba5d7 の基準計算。目標は段階 2％・合計 1％。実建物での精度は示さない。",
+      "round2_findings": ["APP-5", "APP-7"],
+      "round2_effect": "APP-5（CONFIRMED、LOW）：T/c − 1 ≤ N は、基準計算の時間境界の規則（評価期間の相対 1e-9 以内の事象は数えない）の下では相対 1e-9 の範囲で破れる。T=60・周期 19.99999999 の架空シナリオで下限が基準を +7.5e-10 上回り、研究自身の判定式が偽になる。母集団の生成器は周期を約数の近くに置かないので 400 件では見えない。上限 N ≤ T/c と AP-03 の「必ず過大」は成り立つ。許容差なしでは AP-20 は 394/400（丸めだけ）。APP-7（CONFIRMED、LOW）：材料区分別の表は基準が 0 の組を数えずに除いており、AP-02 で 694 組、AP-03 で 850 組は候補が 0 でない。AP-03 の理由文は B5 の 133 件に触れていない。AP-01 の区分別の表は影響を受けない。X-10 の廃棄物量と構造別・用途別の内訳は独自に再実装されていない。",
+      "claim_that_stands": "架空の母集団では、3 つの連続近似はどれも段階 2％・合計 1％ の目標を大きく外れる（AP-01 は 77.5％ のシナリオで過小で最大 -58.5％、AP-03 は常に過大で平均 +95.6％、AP-02 は符号が定まらない）。上下限 AP-20 は母集団の 400 件すべてを含むが、幅が B4 の平均 114.2％ あり推定値の代わりにならない。不採用の結論は第2回でも支持された。",
+      "claims_not_to_rely_on": [
+        "AP-01「基準を上回ることがなく」、AP-20「必ず成り立つ上下限」「基準値は必ずこの上下限の間に入る」：相対 1e-9 の範囲では成り立たない",
+        "AP-03「B5 で平均 +42.7％」を全シナリオの値として読むこと（基準が 0 でない 89 件の値。ほかに基準 0 で計上する 133 件がある）",
+        "AP-02・AP-03 の材料区分別の表（基準 0 の組が数えずに除かれている）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "反例として使う。段差のある回数関数を滑らかな式で置き換えると、周期が評価期間を割り切らない場合に大きくずれる。新研究で回数関数を変換（母関数、畳み込み、フーリエ級数など）で表す場合の試験例（非整数の評価期間、周期が約数に近い場合、基準が 0 回の場合）になる。T/c − 1 と T/c の上下限は、結果の検算用の範囲として使える。",
+      "reuse_conditions": "下限は相対 1e-9 の許容差つきで使う。数値は 43ba5d7 の基準計算に対するもの。b2 は「65ff124 の時間規則の変更で数値は変わらなかった」と自己申告しているが、確認されていない（確認には実行が要る）。",
+      "evidence": [
+        "approximation_study.json candidates.AP-01 / AP-02 / AP-03 の stage_error、total_error、other_targets（B5、X-10）",
+        "approximation_study.json candidates.AP-20：share_reference_inside_bracket 1.0、bracket_width_relative_to_reference.mean_abs 1.1424",
+        "approx_study.py:116-117、173-219",
+        "triage/approx.md CHECKS PERFORMED 1、APP-5、APP-7"
+      ]
+    },
+    {
+      "id": "CK-R4-05",
+      "title": "修繕の更新年除外を無視する形（AP-04）",
+      "what": "修繕（B3-01）で更新のある年を除外する処理を省き、除外しない値（B3-02）で代用する M3 の候補。不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md"
+      ],
+      "state_category": 1,
+      "checked_how": "母集団 400 件で B3 段階：平均 +2.05％、95％点 3.97％、範囲 +0.1％〜+5.4％、過小 0 件。合計に対する差は 95％点 0.63％、最大 0.96％。構造別・用途別でもすべて過大側（平均 +1.57％〜+2.79％）。比べている 2 つの値（B3-02 と段階 B3）はどちらも基準計算の出力。",
+      "checked_by": "独立検査（第2回）で再現（近似の検査担当、反証検査担当、報告書の検査担当がそれぞれ再計算し、件数・平均・95％点・最大・最小・合計の 95％点・構造別の平均が一致）",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。目標は段階 2％。",
+      "round2_findings": ["APP-1", "REP-6"],
+      "round2_effect": "数値と「必ず過大」（最小 +0.065％）は再現された。不採用理由の後半「厳密な閉形式（K2）が同じ手間で使える」は測定されていない（REP-6）。b2 の自己申告では、行ごとの命令数は候補 14.0 に対して厳密な閉形式 112.4 で、「同じ手間」と合わない（未検証）。APP-1（PARTLY_CONFIRMED）：除外する年数を連続近似に置き換える安全側の変種を測っていなかった（CK-R4-06）。",
+      "claim_that_stands": "架空の母集団で AP-04 は常に過大（安全側）で、B3 段階の最大 +5.4％ は段階 2％ の目標を超える。この理由による不採用は成り立つ。",
+      "claims_not_to_rely_on": [
+        "「厳密な閉形式（K2）が同じ手間で使えるため不採用」：手間は測っておらず、未検証の測定では候補のほうが軽い"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "過大側にしか外れない近似の例。除外項を落とした値は、安全側の変種（CK-R4-06）の過大の上限になる。新研究で修繕の式を「年の重みの和 − 除外する年の重み」の形で表すとき、除外項を省いた場合の誤差の大きさの目安（架空データで平均 +2％、最大 +5.4％）になる。",
+      "reuse_conditions": "誤差の大きさは架空データの周期の分布によるもの。周期が評価期間に近い架空シナリオ（T=30、周期 29 年）では +3.45％（反証検査担当の測定）。",
+      "evidence": [
+        "approximation_study.json candidates.AP-04.stage_error（mean_signed 0.0205、p95_abs 0.0397、max_over 0.0542、max_under 0.000645）",
+        "approx_study.py:222",
+        "04_VERIFICATION/README.md:153-166",
+        "triage/approx.md CHECKS PERFORMED 3（AP-04 always over、min +0.065%）、APP-1 V-EVIDENCE",
+        "triage/reports.md CHECKS（AP-04 と AP-22a を基準計算だけから再計算）",
+        "agent_reports/B2_REPORT.json findings REP-6（自己申告）"
+      ]
+    },
+    {
+      "id": "CK-R4-06",
+      "title": "修繕の安全側の候補（除外年数の連続近似。第2回で提案、b2 で AP-23a・b・c）",
+      "what": "修繕年数 = T − min(T, max(0, T/c − 1)) とする候補。行ごとの形と、資材区分ごとに Σe0·r と「e0·r で重み付けした調和平均の周期」の 2 つだけを持つ区分パラメータの形がある。60e720f の研究には無い。第2回の検査担当が測り、反証検査担当が別の実装で再現し、b2 が AP-23a（行ごと）・AP-23b（区分、同じ建物の値）・AP-23c（区分、他の建物の値）として実装した。",
+      "locations": [
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/checker_scripts/approx/recheck3.py",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/checker_scripts/approx_verify/v1.py",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/checker_scripts/approx_verify/v2.py",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/b2_output/approximation_study_UNVERIFIED.json",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/conclusion_proposals.json"
+      ],
+      "state_category": 3,
+      "checked_how": "検査担当と反証検査担当の測定（母集団 400 件）：行ごとの形は B3 平均 +0.297％、95％点 0.715％、最大 +1.438％、過小 0/400。区分の形は平均 +0.330％、95％点 0.834％、最大 +1.455％、過小 0/400。符号：周期 1 年以上の乱数 40 万組で「実際に除外される年の重み − 候補の除外年数」の最小は -4.4e-16。評価期間に近い周期だけの架空シナリオ（各 20 シード）：T=30・周期 [29] で +3.33％、[9.9, 14.9, 29] で +3.38％〜+3.53％、[7, 11, 13, 17, 23] で +1.14％〜+2.33％、T=50・[49, 24.5] で +2.00％。b2 の自己申告は同じ値。区分の値を他の建物から与える AP-23c は -39.4％〜+329.1％で、41.0％ のシナリオで過小（b2 だけの値）。",
+      "checked_by": "独立検査（第2回）の検査担当と反証検査担当が測定（研究本体の記録には無い）。b2 の実装は中断した修正の自己申告",
+      "scope": "架空データ、独立概念モデル。符号の保証は周期 1 年以上で、時間境界の許容差（相対 1e-9）の範囲。過大の大きさには保証が無い。",
+      "round2_findings": ["APP-1", "APP-9"],
+      "round2_effect": "APP-1 の判定は PARTLY_CONFIRMED（重大度は LOW に訂正）。「目標を満たす近似がある」とは言えない：母集団で 2％ の内側なのは生成器の周期の分布によるもので（周期が約数に一致する設定では候補が厳密になり統計を下げる）、周期が評価期間に近いと 2％ を超える。区分の形は同じ建物の行から作っており、評価期間より長い周期が区分に無ければ行ごとの形と代数的に同じ値になる（T/c − 1 は 1/c について線形）。行ごとの形は入力が厳密な式と同じ。",
+      "claim_that_stands": "周期が 1 年以上なら過小評価にならない修繕の近似があり、架空の母集団では B3 の過大は最大 +1.44％（区分の形 +1.46％）だった。過大の大きさは周期の分布で決まり、周期が評価期間に近い架空シナリオでは +3.5％ まで出た。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "「合計 1％・段階 2％・過小なしの目標を満たす近似が少なくとも 1 つある」（APP-1 の元の主張。反証検査で認められなかった）",
+        "区分の形を「入力を減らしたモデル」として読むこと（同じ建物の行から作っている）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "行ごとの条件を区分の少数の値にまとめても誤差の符号が保たれる例（max(0, x − 1) の凸性と調和平均による片側の保証）。新研究で除外項を連続化する変換を作るときの出発点と、保証が破れる条件（周期 1 年未満、他の建物の代表値）の試験例になる。",
+      "reuse_conditions": "未採用の候補。数値は第2回の検査担当・反証検査担当の独自実装と、b2（未検証）のもの。周期 1 年未満では過小になる（T=10.5・周期 0.9 の例）。60e720f の報告書からは引用できない。",
+      "evidence": [
+        "triage/approx.md APP-1：VERDICT PARTLY_CONFIRMED、V-EVIDENCE、CORRECTED、ADDITIONAL (verifier) 1",
+        "agent_reports/B2_REPORT_long.json findings APP-1（自己申告）",
+        "b2_output/approximation_study_UNVERIFIED.json candidates.AP-23a：sign_guarantee、stress_scenarios、within_stage_target false、within_stage_target_on_population true",
+        "agent_reports/conclusion_proposals.json AP-23a（REJECTED の案）、AP-23b・AP-23c（HOLD の案）"
+      ]
+    },
+    {
+      "id": "CK-R4-07",
+      "title": "冷媒漏洩の線形近似（AP-05）",
+      "what": "充填サイクルの閉形式 1−(1−r)^k を r·k で置き換える M3 の候補。不採用。測定プログラムが実際に測っているのは題名の式より粗い変種で、漏洩を m0·r·T とし、更新時の漏洩と廃棄時の残存にも満充填量 m0 を使う（すべての機器を毎年補充する機器として扱うのと同じ）。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md"
+      ],
+      "state_category": 2,
+      "checked_how": "母集団 400 件で B1 段階：平均 +28.02％、95％点 109.77％、範囲 -0.0％〜+180.7％、過小なし。合計に対する差は 95％点 2.35％、最大 9.74％。補充しない機器の「漏洩率×サイクル年数」別：0.05 以下（3 台）+3.2％〜+4.1％、0.05〜0.2（146 台）平均 +8.50％・+1.5％〜+17.0％、0.2 超（2285 台）平均 +93.5％。",
+      "checked_by": "独立検査（第2回）で再現（公表値は「満充填量をどこでも使う」変種の値として再現された）",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。",
+      "round2_findings": ["APP-6", "REP-5", "REP-6"],
+      "round2_effect": "APP-6（CONFIRMED、LOW）：公表値は題名の式のものではない。題名どおりの整合的な線形化（漏洩 m0·r·k、残存量 m0·max(0, 1−r·k)）では B1 平均 +23.89％、95％点 93.6％、最大 +164.3％、0.05〜0.2 の機器で平均 +3.4％（+0.6％〜+7.4％）。どちらの変種も段階 B1 を過小にせず、不採用は成り立つ。REP-5：B1 段階の値を B1-03・B1-04 の単位の記録にも付けているが、その単位の出力は測っていない。b2 の自己申告では、整合的な変種は単位 B1-03 で最大 -98.6％、B1-04 で最大 -90.5％ の過小になる（未検証）。REP-6：「厳密な閉形式（K4）が同じ手間で使える」は未測定（b2 の自己申告では命令数は厳密な閉形式の 0.43〜0.70 倍）。",
+      "claim_that_stands": "架空の母集団では、冷媒の線形化は 2 つの変種とも段階 B1 を過小にしないが、平均 +24％〜+28％、最大 +164％〜+181％ の過大になり、目標を大きく外れる。補充しない機器 2434 台のうち 2285 台は 漏洩率×サイクル年数 が 0.2 を超える。",
+      "claims_not_to_rely_on": [
+        "AP-05 の公表値（平均 +28.0％、最大 +180.7％）を、式 1−(1−r)^k ≈ r·k の誤差として引用すること",
+        "04_VERIFICATION/README.md 150 行の条件別の値（粗い変種の値）",
+        "「厳密な閉形式（K4）が同じ手間で使えるため不採用」",
+        "B1-03・B1-04 の単位の記録にある「必ず過大（安全側）」"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "等比の形（1−(1−r)^k）を 1 次で打ち切ると、使える範囲（r·k が小さい場合）が狭いことを示す反例。新研究で充填サイクルを等比級数や母関数で扱うとき、打ち切りの次数と適用範囲を r·k で区切る考え方の資料になる。",
+      "reuse_conditions": "公表値は題名と違う変種のもの。整合的な変種の値は第2回の検査担当・反証検査担当の測定で、記録には反映されていない。段階では安全側でも、単位ごとには過小になり得る（b2 の未検証の値）。",
+      "evidence": [
+        "approx_study.py:273-293（280 行のコメント every year leaks from a full charge）",
+        "approximation_study.json candidates.AP-05.stage_error、by_rate_times_cycle_years_no_top_up_devices",
+        "triage/approx.md APP-6：VERDICT CONFIRMED、V-EVIDENCE",
+        "agent_reports/B2_REPORT_long.json findings APP-6、open_problems（自己申告）"
+      ]
+    },
+    {
+      "id": "CK-R4-08",
+      "title": "端材倍率の線形化（AP-06・AP-06b）",
+      "what": "発注量の倍率 1/(1−w) を 1+w で置き換える候補（AP-06。A1-A3 段階で測定）と、端材の再使用を考慮した正味発注量 1 + w(1−ρ)/(1−w) を 1 + w(1−ρ) で置き換える候補（AP-06b。X-13 の行ごとに測定）。どちらも M3、不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 2,
+      "checked_how": "AP-06：母集団 400 件、A1-A3 段階で平均 -0.26％、95％点 0.48％、範囲 -1.1％〜-0.0％、全シナリオで過小。合計に対する差は 95％点 0.13％、最大 0.38％。段階・合計とも目標内の印が真。AP-06b：175,143 行、平均 -0.35％、95％点 1.00％、最大 -1.4％、全行で過小。",
+      "checked_by": "AP-06 は独立検査（第2回）で再現。AP-06b は作成者のみ（第2回は独自に再実装せず、不等式の向きだけ確かめた）",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。",
+      "round2_findings": ["APP-3", "REP-6", "REP-13"],
+      "round2_effect": "APP-3（CONFIRMED）：AP-06 の「合計」は局所の差で、発注量を使う下流（B3・B4・B5・A4）への波及を含まない。基準計算を近似した発注量で計算し直すと、合計は平均 -0.149％、95％点 0.284％、最大 -0.655％（公表は -0.059％・0.128％・-0.384％ で、1.7〜2.5 倍の差）。B3 は最大 -1.18％、B4 は最大 -0.66％。それでも 1％・2％ の内側にとどまる。REP-13：AP-06 の対象単位に X-13 を含むかどうかが 2 つのファイルで違う。04 の README は AP-06b の過小評価の欄が「—」。REP-6：「除算 1 回を乗算 1 回に替えるだけで得るものがない」は未測定（b2 の自己申告では命令数は同じ 16.1）。",
+      "claim_that_stands": "AP-06 は架空の母集団で常に過小評価になり（1+w < 1/(1−w)）、A1-A3 で最大 -1.1％、下流へ波及させた建物合計で最大 -0.66％。誤差は目標の内側だが常に過小側に偏るので不採用、という結論は第2回でも支持された。",
+      "claims_not_to_rely_on": [
+        "AP-06 の「合計：95％点 0.1％」を建物合計への影響として読むこと（波及させると 0.28％）",
+        "AP-06b の過小評価の欄「—」",
+        "AP-06b の数値を独立に確認済みとして扱うこと"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "誤差が目標内でも符号が過小側に固定される近似の例。新研究で有理式を級数（1/(1−w) = 1 + w + w² + …）で打ち切る場合、打ち切りが過小側に働くことと、上流の量の誤差が下流の段階を通って建物合計で 1.7〜2.5 倍になることの資料になる。",
+      "reuse_conditions": "波及後の値は第2回の検査担当と反証検査担当の測定で、記録には反映されていない。",
+      "evidence": [
+        "approximation_study.json candidates.AP-06：stage_error、total_error、within_stage_target true、within_total_target true",
+        "approximation_study.json candidates.AP-06b.row_error（n 175143）",
+        "approx_study.py:296-318",
+        "triage/approx.md APP-3：VERDICT CONFIRMED、V-EVIDENCE；COULD NOT CHECK（AP-06b）",
+        "triage/reports.md REP-13"
+      ]
+    },
+    {
+      "id": "CK-R4-09",
+      "title": "複合係数の構成材の切り捨て（AP-07a・AP-07b）",
+      "what": "複合係数の加重和で、質量比 5％ 未満の構成材を落とす M3 の候補。AP-07a は補正なし、AP-07b は残りの比率を合計 1 に補正する。どちらも不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md"
+      ],
+      "state_category": 1,
+      "checked_how": "母集団 400 件、複合品の製造排出（X-03）で測定。AP-07a：平均 -4.13％、95％点 10.15％、範囲 -20.2％〜-0.0％、全シナリオで過小。AP-07b：平均 -0.16％、95％点 5.06％、範囲 -14.7％〜+7.5％、過小 46.75％。材料区分別の内訳あり（AP-07a は区分別で最大 -61.7％）。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。誤差を測った量は複合品の製造排出で、建物合計ではない。目標は段階 2％。",
+      "round2_findings": ["APP-3", "REP-6"],
+      "round2_effect": "X-03 に対する値と AP-07a の「必ず過小」は再現された。APP-3（CONFIRMED）：公表の「合計」は局所の差。AP-07b を下流へ波及させると合計は -4.34％〜+2.56％、95％点 1.20％（公表は -1.78％〜+1.69％、0.63％）で、B3 は -12.4％〜+3.6％。AP-07a の波及後の値は b2 の自己申告だけ（95％点 2.95％、最大 -7.88％）。REP-6：「配合ごとに 1 回の計算で済む（K7）ので切り捨てる利点がない」は未測定（b2 の自己申告では命令数は候補のほうが多く 1.27〜1.55 倍）。",
+      "claim_that_stands": "架空の母集団では、質量比 5％ 未満の構成材を落とすと複合品の製造排出が最大 -20.2％（補正なし）、-14.7％〜+7.5％（補正あり）ずれ、段階 2％ の目標を超える。補正なしは常に過小。不採用は成り立つ。",
+      "claims_not_to_rely_on": [
+        "AP-07a・AP-07b の「合計：95％点 1.1％／0.6％」を建物合計への影響として読むこと（AP-07b は波及させると 1.20％）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "加重和の小さい項を落とすと、落とした項の係数が残りの平均と違う分だけずれる例。新研究で特異値分解やモード分解の打ち切りを評価するとき、「質量比で小さい項」と「排出への寄与で小さい項」が一致しないことの反例になる。",
+      "reuse_conditions": "誤差の大きさは架空の配合と係数の分布によるもの。",
+      "evidence": [
+        "approximation_study.json candidates.AP-07a / AP-07b の stage_error、by_material_class",
+        "approx_study.py:337-359",
+        "triage/approx.md APP-3 V-EVIDENCE、CHECKS PERFORMED 1、3",
+        "agent_reports/candidate_lines.json AP-07a・AP-07b の行（自己申告）"
+      ]
+    },
+    {
+      "id": "CK-R4-10",
+      "title": "買電排出の平均×平均（AP-08）と電力係数の補間（AP-09a・AP-09b）",
+      "what": "年次の積算 Σ(買電量×係数) を 平均買電量×平均係数×T で置き換える候補（AP-08）と、年次の電力係数系列を 5 年ごと（AP-09a）・10 年ごと（AP-09b）の点の直線補間で持つ候補。3 つとも M3、不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md"
+      ],
+      "state_category": 2,
+      "checked_how": "母集団 400 件。公表値（「B6 段階」と表示されているが、基準量は B6-03）：AP-08 は平均 +0.22％、95％点 3.24％、範囲 -8.1％〜+11.8％（買電量が一定の 116 件は誤差 0、直線の 131 件は -4.3％〜+11.8％、年次表の 153 件は -8.1％〜+6.8％）。AP-09a は平均 +0.01％、95％点 1.56％、範囲 -4.0％〜+3.8％（一定の系列 93 件は 0、直線低下 109 件は最大 +0.6％ で過小なし、段階的 100 件は -4.0％〜+3.8％、年次表 98 件は -1.3％〜+1.7％）。AP-09b は 95％点 2.76％、範囲 -5.4％〜+7.5％。",
+      "checked_by": "独立検査（第2回）で再現（B6-03 に対する値として）",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。公表値は B6-03（段階 B6 と段階 B2 の和）に対するもの。",
+      "round2_findings": ["APP-2", "REP-5", "REP-6"],
+      "round2_effect": "APP-2（CONFIRMED、MEDIUM）：基準量は B6-03 で、段階 B6（= B6-03 − B2-01）ではない。段階 B6 では公表の範囲が印刷の精度で成り立つ（AP-08 は -8.00％〜+11.64％）。買電だけからなる段階 B2 では AP-08 が -9.69％〜+14.89％（95％点 5.75％）、AP-09a が -5.56％〜+5.30％（95％点 2.60％）。B2-01 の単位の記録は B6-03 の値を引用している。REP-6：「厳密な閉形式（K3）が使えるので利点がない」は未測定（b2 の自己申告では命令数は候補のほうが多く、AP-08 は 1.12〜1.35 倍、AP-09a は 2.6〜3.4 倍）。不採用の結論は変わらない。",
+      "claim_that_stands": "架空の母集団で、平均×平均は買電量が一定のときだけ厳密で、一定でないと B6-03 に対して -8.1％〜+11.8％、段階 B2 では -9.7％〜+14.9％ ずれる。電力係数の補間は一定の系列で厳密、直線低下の系列では過大側だけ。5 年刻みの補間は全体で B6-03 に対して -4.0％〜+3.8％（両端は段階的な系列のもの）、段階 B2 に対して -5.6％〜+5.3％。3 つとも段階 2％ の目標を超え、不採用は成り立つ。",
+      "claims_not_to_rely_on": [
+        "「B6 段階で -8.1％〜+11.8％」などの「B6 段階」という表示（実際は B6-03 = B6＋B2 の値）",
+        "B2-01 の単位の記録にある「B6 段階で -8.1％〜+11.8％」（B2-01 自身の誤差は -9.7％〜+14.9％）",
+        "「厳密な閉形式が使えるので近似の利点がない」を測定結果として読むこと"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "時系列の積の和 Σ x_t·g_t を平均の積で置き換えると、買電量と係数の時間方向の共分散が落ちる例（AP-08）。係数系列を節点と直線補間で表すと、系列の形（一定、凸、段差、ゆらぎ）で誤差の符号と大きさが決まる例（AP-09）。新研究で年次系列を少数の基底（区分線形、フーリエ、時間方向のモード）で表すとき、段差のある系列が最も外れる試験例になる。",
+      "reuse_conditions": "誤差は買電だけの量（段階 B2、B6-01）で測ること。B6-03 に対する値は燃料の分で薄まっている。引用するときは B6-03 に対する値か段階 B2 に対する値かを区別する。",
+      "evidence": [
+        "approx_study.py:401-427（409 行 b6_ref = res['B6-03']['value']）",
+        "approximation_study.json candidates.AP-08.by_profile_kind、AP-09a.by_grid_kind、AP-09b.by_grid_kind",
+        "triage/approx.md APP-2：VERDICT CONFIRMED、V-EVIDENCE、CORRECTED；ADDITIONAL (verifier) 2",
+        "agent_reports/B2_REPORT.json findings APP-2、REP-6（自己申告）"
+      ]
+    },
+    {
+      "id": "CK-R4-11",
+      "title": "年次表の電力係数だけを 5 年刻みにする併用（AP-09c）",
+      "what": "記述子（一定・直線低下・段階）で与えられる系列は厳密な閉形式のまま、年次表で与えられる系列だけを 5 年ごとの点の直線補間で持つ M6 の候補。保留（必要なデータ：利用許諾のある電力排出係数の将来見通しの刻みと形）。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+      ],
+      "state_category": 3,
+      "checked_how": "年次表の系列をもつ 98 件で測定（残り 302 件は厳密に計算）。公表値（B6-03 に対して）：平均 +0.14％、95％点 1.27％、範囲 -1.3％〜+1.7％、過小 40.8％、合計に対する差の 95％点 0.40％。段階・合計とも目標内の印が真。",
+      "checked_by": "独立検査（第2回）で再現（B6-03 に対する値として）",
+      "scope": "架空データ（年次表の系列をもつ 98 シナリオ）、独立概念モデル、43ba5d7 の基準計算。架空の年次表は生成器が年ごとに ±5％ のゆらぎを付けたもの。",
+      "round2_findings": ["APP-2", "REC-8"],
+      "round2_effect": "APP-2（CONFIRMED）：段階 B6 では -1.313％〜+1.719％ で 2％ の内側だが、段階 B2 と単位 B6-01 では -1.855％〜+2.027％（95％点 1.72％）で、98 件中 1 件が 2％ を超える。b2 の自己申告では段階の目標内の印は偽になる。検査担当の所見：架空の年次表は生成器のゆらぎなので、この測定では採否を決められず、保留は妥当。REC-8（CONFIRMED）：年次表で与えられる他の年次量（燃料・水など）には閉形式が無く、同じ種類の補間で入力が減るのに、測られていなかった。b2 の自己申告：入力は平均 60.6 個から 13.2 個に減り、命令数は約 2.6 倍になる（未検証）。",
+      "claim_that_stands": "架空の年次表の系列では、5 年刻みの補間は B6-03 と段階 B6 に対して ±2％ の内側、段階 B2 では最大 +2.03％。過小になるシナリオが 40.8％ ある。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "「架空の系列では段階 2％ の内側」（段階 B2 と B6-01 では成り立たない）",
+        "approximation_study.json の AP-09c の within_stage_target = true"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "入力の形（記述子か年次表か）で厳密と近似を切り替える併用の測定例。年次系列を少数の節点で持つ表現の誤差の目安と、適用範囲の判定の例になる。",
+      "reuse_conditions": "架空の系列のゆらぎ（±5％）に対する値で、実際の系列の滑らかさは分からない。保留であり採用していない。",
+      "evidence": [
+        "candidates.json AP-09c：outcome HOLD、data_needed",
+        "approximation_study.json candidates.AP-09c：stage_error.n 98、n_scenarios_computed_exactly 302、within_stage_target true",
+        "approx_study.py:428-432",
+        "triage/approx.md APP-2 CORRECTED、CHECKS PERFORMED 4",
+        "triage/records.md REC-8：VERDICT CONFIRMED",
+        "agent_reports/B2_REPORT.json acceptance b (4)、conclusion_proposals.json AP-09c（自己申告）"
+      ]
+    },
+    {
+      "id": "CK-R4-12",
+      "title": "区分パラメータによる共通近似モデル（AP-18a・AP-18b・AP-18）",
+      "what": "資材区分ごとに代表値を持ち、行ごとの条件を使わない M4 の候補。AP-18a：代表更新周期（更新 1 回の排出で重み付けした調和平均）で B4 を計算。AP-18b：代表修繕率（初期排出で重み付けした平均）と代表周期で B3 を計算。AP-18：AP-18a〜c を同時に適用。すべて保留。第1回の検査で「M4 に結論の出た候補が無く、候補も面積原単位の系統だけ」と指摘されて加えた候補である。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団 400 件。AP-18a：B4 平均 +4.67％、95％点 35.14％、範囲 -44.0％〜+63.2％、過小 34.25％、合計に対する差の 95％点 7.24％。材料区分別では -100％ から +10356.8％（MEMBRANE）まで。AP-18b：B3 平均 -0.10％、95％点 0.68％、範囲 -1.9％〜+1.1％、過小 61.5％、段階・合計とも目標内の印が真。AP-18：平均 +2.58％、95％点 17.12％、範囲 -24.4％〜+27.0％、合計に対する差の 95％点 7.16％。",
+      "checked_by": "独立検査（第2回）で再現（公表した統計）。測定の意味には指摘がある",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。代表値は評価する建物自身の行から作っている。",
+      "round2_findings": ["APP-9", "APP-1", "APP-2", "APP-3", "REP-5"],
+      "round2_effect": "APP-9（CONFIRMED）：代表値は評価する建物自身の行から作っており、入力は減っておらず、最良の場合の値である。記録の文にはそれが書かれていない。AP-18b の代表値を他の建物（母集団の前半）から作って後半に当てはめると、B3 は -41.2％〜+336.8％、95％点 47.1％（構造×用途ごとに作っても -40.7％〜+327.6％、95％点 50.3％）、合計に対して 95％点 7.7％。同じ 200 件で建物自身の値を使うと -1.2％〜+0.5％（反証検査担当）。APP-1：AP-18b の保留理由「過小がある」は安全側の変種で避けられる（CK-R4-06）。AP-18 の合計は下流へ波及させていない局所の差で（APP-3）、「B3＋B4＋C3＋C4」の C3・C4 は C3-01＋C4-01 である（APP-2）。",
+      "claim_that_stands": "区分内で行の条件がそろっていれば厳密で、ばらつくとずれる。建物自身の行から代表値を作った最良の場合でも、架空の母集団で代表更新周期は B4 を -44.0％〜+63.2％ ずらす（研究の記録では、回数関数の段差のため）。修繕は修繕率について線形なので、初期排出で重み付けした代表修繕率は除外年を除いて厳密で、同じ建物の値なら B3 で -1.9％〜+1.1％。他の建物の代表値では B3 が -41％〜+337％。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "AP-18b「架空の母集団では B3 段階で -1.9％〜+1.1％（…段階 2％ の内側）」を、入力を減らしたモデルの誤差として読むこと",
+        "03_MODELS/README.md 140 行「測定した。架空データでは段階 2％ の内側だが過小があり、保留」",
+        "AP-18 の「B3＋B4＋C3＋C4 の合計」「ホールライフ合計に対して 95 パーセンタイル 7.2％」（C3-01＋C4-01 であり、合計は局所の差）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "構造の違う式（段差のある回数関数をもつ更新、年の重みと除外をもつ修繕、経路の加重和をもつ廃棄）を、区分ごとの少数のパラメータで 1 つの近似モデルにまとめる試みの主な例。記録された誤差の出方：線形に効く変数（修繕率）は加重平均で厳密にまとまり、段差を通って効く変数（周期）はまとまらない。新研究で行×条件の表を少数のモードで表すとき、どの変数が分離できてどれができないかの手がかりになる。同じ建物の値では小さい誤差が、他の建物の値では 2 桁大きくなることは、基底を別の建物から作る場合の反例になる。",
+      "reuse_conditions": "公表値は同じ建物の行から作った代表値によるもの（入力は減っていない）。他の建物の値を使う測定は第2回の検査担当と反証検査担当の独自の作り方によるもので、作り方で値が変わる。測定プログラムは fastcalc の閉形式（renewal_count、skip_weight_periodic）を呼んでおり、その閉形式には周期 1.000000001 年で外れる穴が確認されている（REC-1。母集団には該当する行は無い）。保留であり採用していない。",
+      "evidence": [
+        "approx_study.py:223-248、270-271",
+        "approximation_study.json candidates.AP-18a / AP-18b / AP-18 の stage_error、total_error、AP-18a.by_material_class",
+        "04_VERIFICATION/README.md:212-225",
+        "triage/approx.md APP-9：VERDICT CONFIRMED、V-EVIDENCE、CORRECTED",
+        "04_VERIFICATION/INDEPENDENT_REVIEW.md:56",
+        "06_OPEN_ISSUES/README.md:63（C-5）",
+        "triage/records.md REC-1"
+      ]
+    },
+    {
+      "id": "CK-R4-13",
+      "title": "廃棄段階の区分集約（AP-18c）",
+      "what": "資材区分ごとに処理経路の比率（単純平均）と経路係数（単純平均）を持ち、行は質量だけにする M4 の候補。保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団 400 件、C3-01＋C4-01（資材の処理と最終処分の合計）に対して：平均 +0.09％、95％点 15.59％、範囲 -29.2％〜+40.2％、過小 50.75％。合計に対する差は 95％点 0.23％、最大 0.69％で、合計の目標内の印が真。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。代表値は同じ建物の行の単純平均。",
+      "round2_findings": ["APP-2", "APP-3", "APP-9"],
+      "round2_effect": "APP-2（CONFIRMED）：「C3＋C4」は C3-01＋C4-01（資材のみ）で、段階 C3 に入る設備の廃棄 X-14（段階 C3 の平均 3.7％、最大 28.5％）を含まず、2 つの段階を合算している。段階別では C3 が -34.9％〜+42.8％（95％点 21.1％）、C4 が -38.6％〜+118.2％（95％点 33.4％）。X-14 を含む C3＋C4 では -28.7％〜+39.3％（95％点 15.0％）。APP-3：更新・建替へ波及させた合計の最大の過大は +0.77％（公表 +0.62％）。APP-9：代表値は同じ建物の行から作っている。",
+      "claim_that_stands": "区分内で経路の比率と係数が共通なら厳密。建物自身の行の単純平均を使っても、架空の母集団で資材の処理・最終処分の合計が -29.2％〜+40.2％、段階別には C4 で最大 +118.2％ ずれる。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "「C3＋C4 で -29.2％〜+40.2％」を段階 C3・段階 C4 の誤差として読むこと",
+        "合計の目標内の印（局所の差による）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "行を区分に集約するとき、比率の平均×係数の平均（積の平均ではない）を使うと、区分内の比率と係数の共分散が落ちる例。段階を合算して誤差を測ると、段階ごとの誤差（C4 で約 3 倍）が隠れる例でもある。",
+      "reuse_conditions": "同じ建物の値による最良の場合の値。保留であり採用していない。",
+      "evidence": [
+        "approx_study.py:250-271（252 行 ref_c = C3-01 + C4-01）",
+        "approximation_study.json candidates.AP-18c の stage_error、total_error",
+        "triage/approx.md APP-2 V-EVIDENCE、APP-3 EVIDENCE"
+      ]
+    },
+    {
+      "id": "CK-R4-14",
+      "title": "要約数量×代表係数による資材製造の概算（AP-10・AP-10b）",
+      "what": "6 区分の要約数量（X-17）に（構造×用途）ごとの代表係数を掛けて資材製造（A13-01＋A13-03）を概算する M4 の候補（AP-10）と、6 区分に入らない資材の分の割増（構造×用途ごとの平均比）を掛ける変種（AP-10b）。どちらも保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団の前半 200 件で代表係数（区分の排出の平均 ÷ 区分の数量の平均）を作り、後半 200 件で測定。AP-10：平均 +9.38％、95％点 93.83％、範囲 -70.5％〜+239.2％、合計に対する差の 95％点 16.65％。AP-10b：平均 +16.68％、95％点 104.93％、範囲 -69.2％〜+255.8％、合計に対する差の 95％点 18.40％。",
+      "checked_by": "独立検査（第2回）で再現（学習と試験の間に漏れが無いことも確認）",
+      "scope": "架空データ（学習 200、試験 200）、独立概念モデル、43ba5d7 の基準計算。誤差を測った量は資材製造（資材分）。",
+      "round2_findings": ["REP-5", "APP-3"],
+      "round2_effect": "公表した統計は再現された。検査担当の所見：誤差は、シナリオごとに架空の係数表が乱数で作られること（同じ構造×用途の中で区分の係数の最大÷最小の中央値が、コンクリートで 5 倍、鉄筋で 10 倍）で決まっており、「この値からは採否を判断できない」という研究の記述と合う。合計は下流へ波及させていない（b2 でも波及させていない）。REP-5 では、単位に固有の M4 候補がある 13 単位の一部として数えられている。",
+      "claim_that_stands": "架空の母集団で、他の建物から作った代表係数による概算は、資材製造を 95％点で 94％（割増つきで 105％）ずらす。この大きさは架空の係数表のばらつきを映したもので、実建物での精度を示さない。代表係数をその建物の加重平均にすれば恒等式になる（入力は減らない）。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "この誤差を「要約数量による概算は使えない」根拠として使うこと（架空の係数表のばらつきによる値）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "多数の行を少数の区分の数量にまとめ、区分ごとの係数で排出を復元するモデルを、作る建物と測る建物を分けて測った例。新研究で基底や代表値を複数の建物から作る場合の測り方（前半で作り後半で測る）の先例になる。",
+      "reuse_conditions": "架空データでは建物間のばらつきが生成器の設定で決まる。実データなしに精度は言えない。",
+      "evidence": [
+        "approx_study.py:494-509",
+        "approximation_study.json candidates.AP-10 / AP-10b の stage_error（n 200）",
+        "triage/approx.md CHECKS PERFORMED 1、2、4",
+        "06_OPEN_ISSUES/README.md:59（C-1）"
+      ]
+    },
+    {
+      "id": "CK-R4-15",
+      "title": "延床面積の原単位・回帰による代理モデル（AP-11・AP-15・AP-16・AP-13）",
+      "what": "単位の式を使わず、延床面積・評価年数・構造・用途だけから求める候補。AP-11（M5）：合計 = 面積×年数×（構造×用途）の平均原単位。AP-15（M4）：14 段階のそれぞれを 面積（使用段階は×年数）×平均原単位 で求める「共通近似モデル」。AP-16（M5）：合計の対数線形回帰（パラメータ 11 個）。AP-13（M4）：面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用。すべて保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+      ],
+      "state_category": 3,
+      "checked_how": "AP-11・15・16 は母集団の前半 200 件で平均や回帰係数を作り、後半 200 件で測定。AP-11：合計の誤差 平均 +10.35％、95％点 84.06％、範囲 -70.3％〜+199.0％。AP-15：合計 平均 +8.04％、95％点 81.46％、範囲 -73.2％〜+186.3％。段階別の 95％点は A1-A3 108％、B6 135％、B4 158％、B2 388％、B7 425％、C4 524％、B1 2928％（最大 +20635％）、B5 は 43 件で平均 -56％。AP-16：平均 +3.65％、95％点 74.80％、範囲 -74.7％〜+193.3％。AP-13：400 件、B6-03 に対して平均 +11.99％、95％点 40.60％、範囲 -14.9％〜+70.4％。",
+      "checked_by": "AP-11 は独立検査（第2回）で再現。AP-13・AP-15・AP-16 は作成者のみ（第2回は独自に再実装せず、報告書の表と JSON の一致だけ確認）",
+      "scope": "架空データ、独立概念モデル、43ba5d7 の基準計算。架空データは数量と係数を広い範囲の乱数で作っている。",
+      "round2_findings": ["REP-5", "REP-2", "REP-13", "APP-2"],
+      "round2_effect": "REP-5（MEDIUM）：AP-15 は単位の式を使わない建物水準の代理モデルなのに、段階の誤差が 33 単位の M4 の記録に付けられている。M4 が保留の 39 単位のうち 26 単位は AP-15 だけが M4 の記録で、保留 44 単位のうち 21 単位は AP-15 だけによる保留である。APP-2：AP-13 の基準量は B6-03。b2 の自己申告では段階 B2 で -19.9％〜+150.5％（未検証）。REP-13：AP-11・AP-16・AP-15 の対象単位の一覧が 2 つのファイルで違う。",
+      "claim_that_stands": "架空の母集団で、面積と年数だけからの代理モデルは合計を 95％点で 75％〜84％ ずらし、段階別にはさらに大きい。研究自身が、この大きさは架空データの作り方によるもので実建物での誤差を表さないと記している。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "AP-15 を「33 単位のそれぞれについて M4（共通の近似モデル）を検討した」根拠として読むこと",
+        "AP-13 の「B6 段階で -14.9％〜+70.4％」（B6-03 に対する値）",
+        "AP-13・AP-15・AP-16 の数値を独立に確認済みとして扱うこと"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "構造の違う 14 段階の式を、同じ形（面積×（年数）×原単位）の 1 つのモデルで置き換える、最も粗い例。新研究の少数変換モデルの比較相手（これより悪ければ意味が無いという基準線）として使える。",
+      "reuse_conditions": "架空の母集団の値は精度の根拠にならない。段階別の表の大小は生成器の設定を映している。AP-15 は単位の式を使っていない。",
+      "evidence": [
+        "approx_study.py:433-435（AP-13）、511-548（AP-11、AP-15、AP-16）",
+        "approximation_study.json candidates.AP-11 / AP-15（by_stage）/ AP-16（n_parameters 11）/ AP-13",
+        "04_VERIFICATION/README.md:229-248",
+        "triage/reports.md REP-5",
+        "triage/approx.md COULD NOT CHECK（AP-13、AP-15、AP-16）",
+        "06_OPEN_ISSUES/README.md:60、62、78（C-2、C-4、D-6）"
+      ]
+    },
+    {
+      "id": "CK-R4-16",
+      "title": "質量上位の行だけを詳細計算する併用（AP-12）",
+      "what": "質量上位 20％ の資材行だけを詳細に計算し、残りを質量比で補う M6 の候補。保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団 400 件、資材製造（A13-01＋A13-03）に対して：平均 -9.55％、95％点 25.92％、範囲 -40.2％〜+8.2％、過小 90％。合計に対する差の 95％点 4.47％、最大 13.05％。コードは資材行が 10 行以上のシナリオだけを対象にしている。",
+      "checked_by": "作成者のみ（第2回は独自に再実装していない）",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。上位の行は同じ建物の行から選ぶ。",
+      "round2_findings": ["REP-6", "APP-3", "APP-9"],
+      "round2_effect": "第2回の検査担当は AP-12 を独自に再実装しておらず、公表値をそのまま受け取った。REP-6：材料区分別の内訳が無い。b2 の自己申告では「同じ建物の値を使う候補」に分類され、下流への波及は測っていない。",
+      "claim_that_stands": "架空の母集団で過小側に偏った（90％ のシナリオで過小、最大 -40.2％）という測定値が記録されている。独立の再現は無い。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "AP-12 の数値を独立に確認済みとして扱うこと"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "寄与の大きい項だけを残す打ち切りで、順位付けを質量で行うと、質量の大きい行ほど係数が小さい場合に過小へ偏る例。新研究でモードや行の打ち切りの基準（質量か、排出への寄与か）を選ぶときの反例になる。",
+      "reuse_conditions": "独立に再現されていない。偏りは架空データの質量と係数の関係による。",
+      "evidence": [
+        "approx_study.py:329-335",
+        "approximation_study.json candidates.AP-12 の stage_error、total_error",
+        "triage/approx.md COULD NOT CHECK",
+        "06_OPEN_ISSUES/README.md:61（C-3）"
+      ]
+    },
+    {
+      "id": "CK-R4-17",
+      "title": "輸送の単純平均距離（AP-17）",
+      "what": "輸送手段ごとに 合計質量×単純平均距離 で輸送排出を求める M3 の候補。同じ置き換えを X-12（積載率補正後の輸送、参考値）と C2（廃棄物の搬出）にも当てて測っている。保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団 400 件、A4 段階：平均 +3.14％、95％点 43.29％、範囲 -37.2％〜+116.6％、過小 52.75％。合計に対する差は 95％点 0.46％、最大 1.47％。X-12：範囲 -39.3％〜+133.5％。C2：範囲 -26.5％〜+40.9％。",
+      "checked_by": "独立検査（第2回）で再現（A4 段階の値）。X-12 と C2 の値は再測定されていない",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。生成器は距離を質量と独立に引いている。平均距離は同じ建物の行から作る。",
+      "round2_findings": ["APP-4", "APP-3", "APP-9"],
+      "round2_effect": "APP-4（PARTLY_CONFIRMED）：候補の誤差は、輸送手段内の質量と距離の標本共分散に恒等的に等しい（400 件で残差は最大 5.4e-16）。研究の最初の文「質量と距離に相関があると単純平均ではずれる」は正しい。最後の文「重い資材ほど遠くから運ぶ傾向が実際にあるかどうかで結果が決まる」は不完全で、系統的な傾向が無くても、少数の重い行が質量の大半を占めるため偶然の共分散だけで -37％〜+117％ になる。建物内で実現した相関は平均 +0.025、範囲 -0.41〜+0.54 で、シナリオの誤差との相関は -0.82。APP-3（CONFIRMED）：下流へ波及させた合計は -1.97％〜+1.93％、95％点 0.574％（公表は -1.47％〜+1.25％、0.455％）、B4 は -3.47％〜+2.17％。APP-9：平均距離は同じ建物の行から作っており、入力は減っていない。",
+      "claim_that_stands": "単純平均距離による近似の誤差は、輸送手段内の質量と距離の標本共分散に等しい。架空の母集団では、質量と距離を独立に生成していても A4 段階が -37.2％〜+116.6％ ずれる。標本共分散が 0 のとき（たとえば距離がそろう、または質量がそろうとき）だけ厳密。質量で重み付けした平均距離は恒等式だが、入力は減らない。採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "「重い資材ほど遠くから運ぶ傾向が実際にあるかどうかで結果が決まる」",
+        "「合計：95％点 0.5％」を建物合計への影響として読むこと（波及させると 0.57％、最大 -1.97％）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "行ごとの積の和 Σ m_i·d_i を (Σm)×(d の平均) で置き換えたときの誤差が共分散に等しい、という恒等式がそのまま使える。新研究で行ごとの積の和を「合計×平均」の形（階数 1）で近似する場合の誤差項の形と、重みの分布の裾が重いと偶然の共分散が支配するという反例になる。",
+      "reuse_conditions": "恒等式は反証検査担当の測定で確かめたもので、60e720f の記録には書かれていない（b2 の実装は未検証）。X-12 と C2 の数値は再現されていない。",
+      "evidence": [
+        "approx_study.py:361-399",
+        "approximation_study.json candidates.AP-17 の stage_error、total_error、other_targets",
+        "triage/approx.md APP-4：VERDICT PARTLY_CONFIRMED、V-EVIDENCE、CORRECTED；APP-3 V-EVIDENCE；ADDITIONAL (verifier) 3"
+      ]
+    },
+    {
+      "id": "CK-R4-18",
+      "title": "未数量分の比率を 1 つにまとめる（AP-19a・AP-19b）",
+      "what": "未数量分（A13-04）の上乗せ倍率 r/(1−r) で、行ごとの比率の代わりに単純平均の比率 1 つ（AP-19a、保留）または最大の比率 1 つ（AP-19b、不採用）を使う M3 の候補。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団 400 件、未数量分（A13-04）に対して。AP-19a：平均 +4.56％、95％点 55.61％、範囲 -50.1％〜+277.9％、過小 52.75％、合計に対する差は 95％点 0.25％、最大 2.42％。AP-19b：平均 +116.93％、95％点 239.45％、範囲 +0.6％〜+740.9％、過小なし、合計に対する差の 95％点 1.05％。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。平均・最大は同じ建物の、比率をもつ行だけから作る。",
+      "round2_findings": ["APP-9", "APP-3", "REP-6"],
+      "round2_effect": "APP-9（CONFIRMED）：平均は同じ建物の行から作り、しかも「どの行が比率をもつか」（生成器では行の 15.0％）をそのまま使っている。全行に 1 つの比率を使うと A13-04 は -92.2％〜+1046％、95％点 229％（合計に対して 95％点 0.59％）。母集団の前半の平均比率を、比率をもつ行に当てはめると -49.1％〜+324％、95％点 67.5％。APP-3：AP-19a の波及後の合計はほぼ同じ（最大 -2.425％）。AP-19b の「必ず過大」（r/(1−r) は r について増加）は確かめられた。REP-6：材料区分別の内訳が無い。",
+      "claim_that_stands": "比率が行によらず一定なら厳密。ばらつくと、同じ建物の平均と行の区別を使った最良の場合でも未数量分が -50.1％〜+277.9％ ずれる。最大の比率を使う形は常に過大で平均 +116.9％。AP-19b の不採用は成り立ち、AP-19a の採否は決まっていない。",
+      "claims_not_to_rely_on": [
+        "AP-19a の値を「比率 1 個の入力で済むモデル」の誤差として読むこと（どの行が比率をもつかの情報を使っている）",
+        "AP-19a「ホールライフ合計に対しては 95 パーセンタイル 0.2％」を建物合計の誤差の上限として読むこと（最大は -2.4％）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "非線形の倍率 h(r) = r/(1−r) を平均の比率で評価するときの誤差の例。どの行に適用するかという構造の情報を捨てると、誤差が約 4 倍（95％点 55.6％ → 229％）になる例でもある。",
+      "reuse_conditions": "架空データの比率の分布によるもの。AP-19a は保留であり採用していない。",
+      "evidence": [
+        "approx_study.py:320-327",
+        "approximation_study.json candidates.AP-19a / AP-19b の stage_error、total_error",
+        "triage/approx.md APP-9：VERDICT CONFIRMED、V-EVIDENCE；APP-3 EVIDENCE；CHECKS PERFORMED 3"
+      ]
+    },
+    {
+      "id": "CK-R4-19",
+      "title": "評価期間についての直線補間（AP-14）",
+      "what": "評価期間 T=60 の合計を、同じシナリオの T=50 と T=75 の結果からの直線補間で求める M3 の候補。不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 1,
+      "checked_how": "母集団の先頭 80 件について、評価期間だけを 50・60・75 年に変えて基準計算（SUM-03）を行い、T=60 の値と補間値を比較。平均 +2.30％、95％点 11.80％、範囲 -11.9％〜+22.8％、過小 18.75％。",
+      "checked_by": "独立検査（第2回）で再現（検査担当と反証検査担当がそれぞれ同じ値を得た）",
+      "scope": "架空データ（80 シナリオ、評価期間 3 通り）、独立概念モデル、43ba5d7 の基準計算。目標は合計 1％。",
+      "round2_findings": ["APP-8", "REP-16"],
+      "round2_effect": "APP-8（PARTLY_CONFIRMED）：明示の更新年一覧はシナリオ自身の評価期間の内側だけに作られ、期間を延ばしても延長されないので、80 件中 46 件（自身の期間が 75 年未満）は厳密には「同じ建物を長い期間で評価したもの」ではない。反証検査担当が一覧を 75 年まで延長して測り直すと、平均 +2.331％、95％点 11.93％、範囲 -11.92％〜+22.97％ で、違いは 3 桁目だけだった。自身の期間が 75 年以上の 34 件では -2.68％〜+11.80％（95％点 6.95％）。どの場合も合計 1％ を大きく超え、不採用は変わらない。不採用理由の後半「統合モデルは 1 回の合算から別の評価期間の結果を厳密に求められる（K2）」は、この測定で確かめたものではない（評価期間を変えた一致確認の範囲は 22 単位の合計だけ：REP-16）。",
+      "claim_that_stands": "架空の 80 シナリオで、評価期間についての直線補間は合計を -11.9％〜+22.8％ ずらす（研究の記録では、更新が評価期間の途中で段差を作るため）。合計 1％ の目標を大きく超え、不採用は成り立つ。",
+      "claims_not_to_rely_on": [
+        "「同じ建物の T=50 と T=75」：46 件では明示の更新年一覧が延長されていない（数値への影響は 95％点で 11.80％ → 11.93％）",
+        "「統合モデルは 1 回の合算から別の評価期間の結果を厳密に求められる（K2）ので不採用」を、この測定の結果として読むこと"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "合計を評価期間 T の関数として見ると、更新の段差のために T について滑らかでない（2 点からの直線補間で ±10〜20％ 外れる）ことを示す反例。新研究で T を変数とする変換（ラプラス変換、母関数、T についての補間やモード分解）を試すときの試験例になる。",
+      "reuse_conditions": "80 件・3 つの評価期間だけの測定。",
+      "evidence": [
+        "approx_study.py:550-560",
+        "approximation_study.json candidates.AP-14（stage_error.n 80）",
+        "triage/approx.md APP-8：VERDICT PARTLY_CONFIRMED、V-EVIDENCE、CORRECTED",
+        "triage/reports.md REP-16"
+      ]
+    },
+    {
+      "id": "CK-R4-20",
+      "title": "全ガスの合計を CO2 のみの合計で代用する（AP-22a）",
+      "what": "対象段階の合計（全ガス）を CO2 のみの合計（X-05）で代用する M3 の候補。不採用。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py"
+      ],
+      "state_category": 1,
+      "checked_how": "母集団 400 件、対象段階の合計（SUM-03）に対して：平均 -12.19％、95％点 17.74％、範囲 -32.4％〜-4.7％、全シナリオで過小。",
+      "checked_by": "独立検査（第2回）で再現（近似の検査担当と報告書の検査担当がそれぞれ基準計算から再計算）",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。大きさは架空の係数のガス別内訳と冷媒の量による。",
+      "round2_findings": ["REP-13"],
+      "round2_effect": "数値と「必ず過小」（どの係数も CO2 の割合が 1 未満で、冷媒を落とすため）は再現・確認された。REP-13（LOW）：対象単位の一覧が 2 つのファイルで違う（X-05 を含むかどうか）。",
+      "claim_that_stands": "架空の母集団で、CO2 のみの合計は全ガスの合計を常に下回り、平均 -12.2％、最大 -32.4％。不採用は成り立つ。",
+      "claims_not_to_rely_on": [
+        "AP-22a の対象単位の一覧（candidates.json と approximation_study.json で不一致）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "ガス別の成分を 1 つだけ残すと常に過小になる例。新研究でガス別の次元を行列やテンソルの 1 つの軸として扱う場合、その軸を落とした結果は近似ではなく別の量（CO2 のみの結果）として扱う必要がある、という確認に使える。",
+      "reuse_conditions": "大きさは架空データによるもの。",
+      "evidence": [
+        "approx_study.py:437-439",
+        "approximation_study.json candidates.AP-22a.stage_error",
+        "triage/approx.md CHECKS PERFORMED 1、3",
+        "triage/reports.md CHECKS（AP-04 と AP-22a の再計算）、REP-13"
+      ]
+    },
+    {
+      "id": "CK-R4-21",
+      "title": "母集団の平均比で置き換える候補（AP-21・AP-22b）",
+      "what": "AP-21：木材の炭素貯蔵（STO-01、参考値）を 数量×（構造×用途）ごとの平均の m3 当たり貯蔵量 で求める。AP-22b：CO2 のみの合計を 全ガスの合計×（構造×用途）ごとの平均の CO2 比 で求める。どちらも M3、保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/approx_study.py",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md"
+      ],
+      "state_category": 3,
+      "checked_how": "母集団の前半 200 件で平均を作り、後半で測定。AP-21：197 件、平均 +7.18％、95％点 82.08％、範囲 -44.2％〜+121.1％。AP-22b：200 件、平均 -0.16％、95％点 8.41％、範囲 -8.7％〜+27.4％、過小 61％。どちらも合計に対する値は無い。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "架空データ（学習 200、試験 200 前後）、独立概念モデル、43ba5d7 の基準計算。",
+      "round2_findings": ["REP-6"],
+      "round2_effect": "公表した統計は再現された。検査担当の所見：AP-21 の範囲は生成器の 2 つの一様分布の範囲だけから導ける（解析では -46％〜+150％、測定は -44％〜+121％）。測定値は生成器の設定の写しで、採否の材料にならない。AP-21 は木材の無い試験シナリオ 3 件を除いている（候補も 0）。REP-6：AP-22b の「近似にする利点は小さい」は未測定（b2 の自己申告では、候補は 17 命令、厳密な読み方は係数の項目 1 つ当たり 9.1 命令で、項目は約 300 個・合わせて約 2,700 命令。未検証）。",
+      "claim_that_stands": "架空の母集団での誤差は生成器の設定で決まり、採否を決められない。m3 当たり貯蔵量 s = 密度×炭素含有率×44/12 を 1 つの入力にすること自体は恒等式（入力 3 つ → 2 つ）で、近似ではない。",
+      "claims_not_to_rely_on": [
+        "AP-21・AP-22b の数値を実建物での誤差の目安として使うこと"
+      ],
+      "reuse_candidate": false,
+      "reuse_routes": [],
+      "reuse_how": "新研究での使い道は見当たらない。架空データの測定値が生成器の設定の写しになる例として CK-R4-25 で触れる程度。",
+      "reuse_conditions": "保留であり採用していない。",
+      "evidence": [
+        "approx_study.py:562-576",
+        "approximation_study.json candidates.AP-21 / AP-22b の stage_error（total_error.n 0）",
+        "triage/approx.md CHECKS PERFORMED 1、2、4",
+        "06_OPEN_ISSUES/README.md:66（C-8）、103（G-5）"
+      ]
+    },
+    {
+      "id": "CK-R4-22",
+      "title": "誤差の符号が式から決まる候補（片側にしか外れない近似）の一覧",
+      "what": "近似候補のうち、誤差の符号が不等式で決まるもの。常に過大：AP-03（N < T/c）、AP-04（除外を省く）、AP-05（ベルヌーイの不等式。2 つの変種とも）、AP-19b（r/(1−r) は増加）。常に過小：AP-06・AP-06b（1+w < 1/(1−w)）、AP-07a（構成材を落とす）、AP-22a（CO2 以外を落とす）。条件つき：AP-09a は直線低下（下限つき）の系列では過小にならない。AP-01（基準以下）と AP-20 の下限は、相対 1e-9 の範囲を除いて成り立つ。candidates.json では 10 候補（AP-01、03、04、05、06、06b、07a、19b、20、22a）が VERIFIED_ANALYTIC_AND_SYNTHETIC。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/candidates.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md"
+      ],
+      "state_category": 1,
+      "checked_how": "研究は不等式を理由文に記し、母集団 400 件で測定がその符号どおりであること（過小の割合が 0 または 1）を記録した。第2回の検査担当が、式の上と数値の両方で点検した（AP-04 の最小は +0.065％、AP-06 は 400/400 で過小、AP-09a の直線低下の系列の最小は -0.0000）。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "架空データ（母集団 400）、独立概念モデル、43ba5d7 の基準計算。第2回の検査担当の確認では、母集団に負の係数は無く、生成器は周期を評価期間の約数から 1e-6 以内に置かない（約数に一致させる設定を除く）。",
+      "round2_findings": ["APP-5", "APP-6"],
+      "round2_effect": "APP-5（CONFIRMED）：T/c − 1 ≤ N は時間境界の規則の下で相対 1e-9 の範囲で破れる。上限 N ≤ T/c は成り立つ。APP-6（CONFIRMED）：AP-05 は測った式が題名と違うが、どちらの変種も過小にならない。検査担当は、符号の議論が行の排出が非負であることを使っており、母集団に負の係数が無いので崩れていないことを確かめた。AP-06b は独自の再実装が無く、不等式だけ確かめている。",
+      "claim_that_stands": "上の一覧の符号は、係数が非負で、端材率が 0 より大きく 1 未満で、周期が相対 1e-9 の境界の外にある入力について成り立ち、架空の母集団の測定でも例外は無かった。AP-01 と AP-20 の下限は相対 1e-9 の許容差つきで成り立つ。",
+      "claims_not_to_rely_on": [
+        "AP-01・AP-20 の「必ず」",
+        "検証状態 VERIFIED_ANALYTIC_AND_SYNTHETIC を「精度が検証済み」と読むこと（近似候補では「誤差の符号を決める不等式があり、測定がその符号どおり」という意味）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "新研究で「重大な過小評価なし」の条件を確かめるとき、片側にしか外れないことが式から分かる近似の例と、その示し方（凸性、単調性、ベルヌーイの不等式、項を落とす）として使える。上限と下限による検算にも使える。",
+      "reuse_conditions": "負の係数（控除など）を含む入力では符号の議論は成り立たない。段階の合計で安全側でも、単位ごとには過小になる場合がある（AP-05 の整合的な変種についての b2 の未検証の値）。",
+      "evidence": [
+        "candidates.json：verification = VERIFIED_ANALYTIC_AND_SYNTHETIC が 10 件（このリーダーが集計）",
+        "EVALUATION_PROTOCOL.md:179",
+        "triage/approx.md CHECKS PERFORMED 2（negative factors: none）、3；APP-5；APP-6"
+      ]
+    },
+    {
+      "id": "CK-R4-23",
+      "title": "b2 の再測定と新しい候補（中断した修正。自己申告のみ）",
+      "what": "第2回の指摘（APP-1〜9、REP-5・6・13、REC-8）を測定プログラムに反映した版と、その出力。approx_study.py を 4 つのモジュールに分け、schema 3.0 の出力（候補 40 種）を作った。既存 32 候補の再測定（電力の候補を段階 B6・B2 と単位の出力で測る、下流へ波及させた合計、パラメータの出所、基準 0 の件数、入力数、命令数、材料区分別の追加）と、新しい候補 AP-05a・AP-05b（AP-05 の 2 変種）、AP-18d（AP-18b を他の建物の値で）、AP-19c（全行に 1 つの比率）、AP-23a・b・c（修繕の安全側）、AP-24a・b（年次表の年次量を 5 年刻みに）を含む。基準計算は a1 が変更した 65ff124 の版で、これも未検証。",
+      "locations": [
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/b2_output/approximation_study_UNVERIFIED.json",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/B2_REPORT.json",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/B2_REPORT_long.json",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/candidate_lines.json",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/cmp_committed_vs_new.log.txt",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/working_tree_at_stop_65ff124.patch",
+        "コミット 65ff124 の whole-life-carbon-jcat-study/09_APPROX_STUDY/research_code/bench/（approx_study.py、approx_measures.py、approx_meta.py、approx_support.py）と tests/test_approx_study.py"
+      ],
+      "state_category": 2,
+      "checked_how": "作業担当の自己申告：母集団 400 の全体の実行を 4 回、単体試験 106 件（うち 16 件が新しい試験）が合格。公表済みの数値 3936 個は名前を変えた場所に同じ値で残り、違いは 29 個（表示、対象単位、材料区分別の追加、AP-09c の印など）。旧コードを新しい基準計算で動かすと公表ファイルと 4410 個すべて一致した（時間規則の変更では数値が変わらなかった）とも申告。第2回の検査担当・反証検査担当の値と一致すると申告されているもの：AP-23a・b、AP-18d、AP-19c、AP-05a、段階 B2 の値、波及後の合計、AP-14 の内訳、AP-17 の恒等式。b2 だけが出した値：AP-24a（173 件）段階 B7 -4.07％〜+2.14％、段階 B6 -1.77％〜+1.37％、入力 304.4 個 → 65.6 個、命令数 3.03 倍。AP-24b（153 件）段階 B6 -2.51％〜+3.04％、段階 B2 -5.93％〜+4.56％。AP-23c -39.4％〜+329.1％。行ごとの命令数（候補／厳密）：AP-01 47.0／63.0、AP-04 14.0／112.4、AP-06 16.1／16.1、AP-07b 134.4／86.9。",
+      "checked_by": "中断した修正の自己申告（独立の検査は未実施。このリーダーも実行していない）",
+      "scope": "架空データ、独立概念モデル、65ff124 の未検証の基準計算。記録と報告書を作る道具（tools/build_records.py、build_reports.py）は新しい JSON に対応しておらず、記録・報告書は再生成されていない。0db5c77 で作業ツリーからは取り除かれている。",
+      "round2_findings": ["APP-1", "APP-2", "APP-3", "APP-4", "APP-5", "APP-6", "APP-7", "APP-8", "APP-9", "REP-5", "REP-6", "REP-13", "REC-8"],
+      "round2_effect": "b2 は指摘 13 件のうち APP-8 を FIXED、残り 12 件を PARTLY_FIXED と申告した（測定の側だけ対応し、理由文・記録・報告書は後の段階に残した）。その後の段階（b3、反証検査と修正の反復、記録と報告書の再生成）は始まっていない。",
+      "claim_that_stands": "b2 の出力は保存されており、作業担当は第2回の検査担当の値と一致すると申告している。独立に確かめられたものではない。AP-24a・AP-24b・AP-23c・命令数・入力数は b2 だけが出した値で、ほかの誰も測っていない。",
+      "claims_not_to_rely_on": [
+        "b2 の数値を検証済みとして引用すること",
+        "AP-23a・AP-23b を「目標を満たす」と書くこと（b2 自身が、周期が評価期間に近い架空シナリオでは +3.5％ になるので書いてはならないと注記している）",
+        "AP-05a を単位ごとに「安全側」と書くこと（段階 B1 は過小にならないが、単位 B1-03・B1-04 は過小になると申告）",
+        "「時間規則の変更で近似の数値は変わらなかった」を確認済みとして扱うこと（未確認。確認には実行が要る）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "欠陥を直した測定の設計（基準量を段階の値で取る、下流まで計算し直した合計、パラメータの出所の表示、基準 0 の件数、入力数と命令数、候補が単位・段階・建物のどの水準で測られたかの表示）を、新研究の誤差測定の設計の参考にする。新しい候補の一覧は、旧研究が測っていなかった形の一覧として使える。数値を使う場合は新研究で測り直す。",
+      "reuse_conditions": "未検証。基準計算が 65ff124 の変更版であること。命令数は 20 シナリオの小さな計算の核の値で、時間とメモリは測っておらず、a2 が編集中だった fastcalc/closed_forms.py に依存する。他の建物から作るパラメータの結果は、作り方（構造×用途ごとの合計の比）で変わる。",
+      "evidence": [
+        "agent_reports/B2_REPORT.json：findings（status）、acceptance、open_problems、interface_changes",
+        "agent_reports/cmp_committed_vs_new.log.txt 1 行目（same 3936、diff 29、missing 0）",
+        "b2_output/approximation_study_UNVERIFIED.json：schema_version 3.0、candidates 40 件、error_definition、target_definition",
+        "STOP_STATUS.md 1 節・3 節（b2：完了を報告、独立の検査は未実施）",
+        "git show --stat 65ff124（bench の 4 ファイルと tests/test_approx_study.py）"
+      ]
+    },
+    {
+      "id": "CK-R4-24",
+      "title": "b2 の設計（SPEC_B2）と結論文の書き換え案",
+      "what": "測定の修正の仕様（SPEC_B2.md、変更 13 項目と受入条件 3 項目）と、b2 の作業担当が出した候補ごとの結論文の案（conclusion_proposals.json、41 件：書き換え 16、そのまま 16、新規 9）。新規の結論の案は AP-05a・AP-05b・AP-23a が不採用、AP-18d・AP-19c・AP-23b・AP-23c・AP-24a・AP-24b が保留。",
+      "locations": [
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/specs/SPEC_B2.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/conclusion_proposals.json",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/interrupted_fix/agent_reports/B2_REPORT.json"
+      ],
+      "state_category": 3,
+      "checked_how": "なし。案の段階で、記録（candidates.json、records/units.json）にも報告書にも反映されていない。",
+      "checked_by": "中断した修正の自己申告",
+      "scope": "旧研究の記録の文面についての案。架空データ、独立概念モデル。",
+      "round2_findings": ["APP-1", "APP-2", "APP-3", "APP-4", "APP-5", "APP-6", "APP-7", "APP-9", "REP-5", "REP-6", "REC-8"],
+      "round2_effect": "案は第2回の指摘を理由文に反映するためのもの（例：AP-17 は「誤差は標本共分散に等しい」、AP-18b は「同じ建物の値を使った最良の場合」、AP-09c は「B2 段階では 2％ をわずかに超える」、AP-04 は「同じ手間」を外す）。採用も検査もされていない。",
+      "claim_that_stands": "書き換え案と新規候補の結論の案が保存されている、という事実だけ。",
+      "claims_not_to_rely_on": [
+        "案の文を旧研究の結論として引用すること"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "C"],
+      "reuse_how": "旧研究の候補の理由文を引用するときに、どの文を使ってはいけないか（16 候補）を確かめる対照表として使える。",
+      "reuse_conditions": "案であり、確定した記録ではない。案の中の数値は b2 の未検証の測定による。",
+      "evidence": [
+        "agent_reports/conclusion_proposals.json：verdict の集計 REWORD 16 / SUPPORTED 16 / NEW 9、suggested_outcome（このリーダーが集計）",
+        "specs/SPEC_B2.md 変更 1〜13、受入条件 a〜c",
+        "agent_reports/B2_REPORT.json acceptance c"
+      ]
+    },
+    {
+      "id": "CK-R4-25",
+      "title": "架空データでは近似の実用精度を確立できない、という限界",
+      "what": "近似候補の誤差はすべて架空の母集団上の値で、実建物での精度を示さない。保留の 16 候補はこの理由で結論を出していない。架空データの測定は候補を否定できるが、精度を確立することはできない。必要な実データ（数量内訳、利用許諾のある係数、電力係数の将来見通し、輸送記録、区分内の条件の分布、樹種の物性、係数のガス別内訳）は入手されていない。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/approximation_study.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/04_VERIFICATION/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/approx.md"
+      ],
+      "state_category": 4,
+      "checked_how": "研究の記述（手順書 P7・P10、JSON の data_statement と保留 16 候補の data_dependence、報告書の注記）と、第2回の検査担当の具体的な確認による。AP-21 の誤差の範囲は生成器の 2 つの一様分布の範囲だけから導ける（解析 -46％〜+150％、測定 -44％〜+121％）。AP-10・AP-11 の誤差はシナリオごとの乱数の係数表で決まる（区分の係数の最大÷最小の中央値がコンクリートで 5 倍、鉄筋で 10 倍）。AP-09c の年次表は生成器の年ごと ±5％ のゆらぎである。修繕の安全側の候補が母集団で 2％ の内側に収まるのも、生成器の周期の分布の性質だった。",
+      "checked_by": "独立検査（第2回）で確認（否定されていない）",
+      "scope": "旧研究の近似のすべての数値。",
+      "round2_findings": ["APP-1", "APP-4", "APP-9"],
+      "round2_effect": "第2回はこの限界を否定せず、具体例で裏付けた。あわせて、保留理由の一部は「実データが無いと決められない」とは言えないことを指摘した：AP-17 は質量と距離が独立でも段階の目標を約 20 倍外れる（APP-4）。AP-18a〜c・AP-19a の値は同じ建物の値を使った最良の場合である（APP-9）。",
+      "claim_that_stands": "旧研究の近似の誤差は、どれも実建物での精度の根拠にならない。構造別・用途別・材料区分別の違いは生成器の設定を映したものである。",
+      "claims_not_to_rely_on": [
+        "「段階 2％ の内側」などの目標内の記述を、実用精度の見込みとして読むこと",
+        "構造別・用途別・材料区分別の誤差の違いを、実際の建物の違いとして読むこと"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["A", "B", "C"],
+      "reuse_how": "新研究の誤差評価にも同じ限界がかかる。架空データで書けるのは「この入力の分布ではこうなる」「この候補はこの入力で外れる」までである、という書き方の基準として使う。必要な実データの一覧（06_OPEN_ISSUES の C-1〜C-8）は、新研究で実データを求めるときの出発点になる。",
+      "reuse_conditions": "実データは利用条件の確認が要り、原単位などの流用禁止の規則に触れないものに限る（06_OPEN_ISSUES/README.md 69 行）。",
+      "evidence": [
+        "EVALUATION_PROTOCOL.md:158-166、180、236",
+        "approximation_study.json：data_statement、保留 16 候補の data_dependence（このリーダーが HOLD の 16 件と一致することを確認）",
+        "04_VERIFICATION/README.md:227、248",
+        "06_OPEN_ISSUES/README.md:53-69、73",
+        "triage/approx.md CHECKS PERFORMED 4、COULD NOT CHECK の最後の文",
+        "specs/SPEC_B2.md:19-20"
+      ]
+    },
+    {
+      "id": "CK-R4-26",
+      "title": "近似の段階の網羅性の不足（測定なしの見送り、建物水準の候補の付け替え）",
+      "what": "M3〜M6 の単位×段階 280 のうち 204 は、測定をせずに理由だけで見送った「候補なし」（NOT_APPLICABLE）である。M5 の理由 66 件中 54 件、M6 の理由 65 件中 51 件は同じ定型文。17 単位は測定した近似候補が 1 つも無いまま「検証完了」になっている。M4 が保留の 39 単位のうち 26 単位は、建物水準の AP-15 だけが M4 の記録である。単位に固有の M4 候補があるのは 13 単位（AP-10・10b、AP-13、AP-18 系）。評価単位ごとの代理モデル（M5）は作っていない。見送りの理由文には事実と違うものがある（B6-04 の M4、運用段階の単位の M6・M3）。",
+      "locations": [
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/records/units.json",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/03_MODELS/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/05_DECISIONS/README.md",
+        "whole-life-carbon-jcat-study/09_APPROX_STUDY/06_OPEN_ISSUES/README.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/reports.md",
+        "whole-life-carbon-jcat-study/research_archive/real_equation_checkpoint/materials/round2_review/triage/records.md"
+      ],
+      "state_category": 4,
+      "checked_how": "第2回の報告書の検査担当が記録を数えた（REP-5。作業担当がスクリプトを再実行して再現。反証検査担当は付いていない）。REC-8 は反証検査担当が CONFIRMED とした。このリーダーは records/units.json を読んで数え、M3〜M6 の NOT_APPLICABLE が 42＋31＋66＋65 = 204 件であることを確かめた。",
+      "checked_by": "独立検査（第2回）で再現",
+      "scope": "43ba5d7 の記録（60e720f でも同じ）。",
+      "round2_findings": ["REP-5", "REP-2", "REP-14", "REC-8"],
+      "round2_effect": "報告書は「候補なし（測定なし）」の欄と 06_OPEN_ISSUES の D-6・D-7 でこの点を開示しているので、隠れた欠陥ではなく、指示書の要件（対象を調べずに近似できないと判断しない）の弱まりと、件数の水増しである（REP-5）。REC-8（CONFIRMED）：B6-04 は 3 つの入力から年ごとに max(0, 消費 −（発電 − 売電）) を求める独自の式をもつのに「他の単位の値の和で独自の式がない」と書かれている。年次表で与えられる年次量には閉形式が無く、補間で入力が減るのに測られていなかった。b2 が AP-24a・b として測ったと申告している（未検証）。REP-2：評価者の提案との対照（52 件中 20 件が測定なし）は、観点と段階の対応が手順書と違い、手順書どおりなら 56 件中 14 件。",
+      "claim_that_stands": "近似を測定で調べたのは一部の単位×段階だけで、「候補なし」は測定をしていない判断である。",
+      "claims_not_to_rely_on": [
+        "「M4 … 保留 39 単位」「44 単位に実データ待ちの保留」を、単位ごとの検討の件数として読むこと",
+        "見送りの理由文「厳密式がすべての入力条件で同じ手間で使え」（運用段階の単位の M6）、「他の単位の値の和（または比）で、近似する対象となる独自の式がない」（B6-04 の M4）",
+        "M6 の理由文「場合分けは厳密な計算どうしで、M1 に記録した」（17 単位では M1 に記録が無い：REP-14）"
+      ],
+      "reuse_candidate": true,
+      "reuse_routes": ["B", "C"],
+      "reuse_how": "新研究で「旧研究が測っていない範囲」を特定する一覧として使う：年次表の入力をもつ運用段階の単位（B6-02、B6-04、B7-01〜03）、単位ごとの代理モデル、手順書どおりに数えたとき M4 が未測定の 5 単位（X-06、X-13、X-12、B3-02、X-07）。",
+      "reuse_conditions": "件数は 43ba5d7 の記録に対するもの。REP-5・REP-2・REP-14 には反証検査担当が付いていない。",
+      "evidence": [
+        "03_MODELS/records/units.json：段階×結論の件数（このリーダーが集計）",
+        "triage/reports.md REP-5、REP-2、REP-14",
+        "triage/records.md REC-8：VERDICT CONFIRMED",
+        "03_MODELS/README.md:13-22、132",
+        "06_OPEN_ISSUES/README.md:78-79、105"
+      ]
+    }
+  ],
+  "not_covered": [
+    "構造別・用途別（by_group）の内訳は項目にしていない。数値は approximation_study.json にあるが、第2回でも独自に再実装されていない。",
+    "05_DECISIONS/PROGRESS.md、progress_ledger.json、03_MODELS/judge_proposal_trace.json、03_MODELS/DERIVATIONS.md は読んでいない。REP-5・REP-2 の件数は triage の記述からの引用で、このリーダーが数え直したのは records/units.json の段階×結論の件数だけ。",
+    "第2回の検査担当のスクリプトとログ（checker_scripts/approx、approx_verify）は存在だけ確かめ、中身は読んでいない。数値は triage/approx.md の記述からの引用。",
+    "65ff124 の b2 のコード本文（approx_measures.py など）と working_tree_at_stop_65ff124.patch は読んでいない（git show --stat で存在だけ確かめた）。b2 の出力 JSON は、スキーマ、新しい候補 8 種の主な項目、候補ごとの 1 行要約、波及後の合計だけを読んだ。",
+    "A1_REPORT.json（b2 が使った基準計算の変更の内容）は読んでいない。",
+    "数値の再計算はしていない（旧研究のコードを実行していない）。未確認（実行が必要）：b2 のすべての数値、「時間規則の変更で近似の数値は変わらなかった」という b2 の申告、AP-06b・AP-12・AP-13・AP-15・AP-16 の公表値。",
+    "不採用理由にある「厳密な閉形式 K2・K3・K4・K7 が使える」という統合モデル側の主張の成否は、この担当の範囲外（統合モデルの担当の範囲）。"
+  ]
+}
