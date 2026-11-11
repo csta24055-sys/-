@@ -1,0 +1,4343 @@
+{
+ "schema_version": "2.0",
+ "population": 12,
+ "data_statement": "SYNTHETIC_FICTIONAL data only.",
+ "error_definition": "(candidate - reference) / reference, signed; negative = under-estimation. total_error divides the same difference by the whole-life total (all 14 stages).",
+ "by_material_class_note": "by_material_class は、資材の行に作用する候補について、1 シナリオ内の資材区分ごとの合計の誤差を集めたもの（設備は EQUIPMENT）。",
+ "row_data_rebuilds_reference_B4_max_rel_diff": 1.6200824040546356e-15,
+ "numbering_note": "AP-07 は複合係数の構成材の切り捨て（AP-07a・AP-07b）。初版では測定せずに番号だけ空けていた。AP-20 は点推定ではなく上下限。",
+ "targets": {
+  "total": 0.01,
+  "stage": 0.02
+ },
+ "candidates": {
+  "AP-01": {
+   "candidate_id": "AP-01",
+   "title": "更新回数の連続近似 N ≈ max(0, T/c − 1)",
+   "replaces": "回数関数 N(T,c)",
+   "stage": "B4",
+   "units": [
+    "B4-01",
+    "B4-03",
+    "B4-02",
+    "X-08",
+    "B5-01",
+    "X-10"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.19720820515751566,
+    "mean_abs": 0.19720820515751566,
+    "p95_abs": 0.4004477780808928,
+    "max_abs": 0.4230309193528229,
+    "max_over": 0.0,
+    "max_under": -0.4230309193528229,
+    "share_under_estimated": 0.8333333333333334
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.04295923873053528,
+    "mean_abs": 0.04295923873053528,
+    "p95_abs": 0.09714058633176781,
+    "max_abs": 0.10824235386212604,
+    "max_over": 0.0,
+    "max_under": -0.10824235386212604,
+    "share_under_estimated": 0.8333333333333334
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.26675573237225886,
+     "mean_abs": 0.26675573237225886,
+     "p95_abs": 0.4127658551383092,
+     "max_abs": 0.4230309193528229,
+     "max_over": -0.13455805517159833,
+     "max_under": -0.4230309193528229,
+     "share_under_estimated": 1.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.1276606779427724,
+     "mean_abs": 0.1276606779427724,
+     "p95_abs": 0.2898035827507816,
+     "max_abs": 0.33178183011687873,
+     "max_over": 0.0,
+     "max_under": -0.33178183011687873,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.19098533124738412,
+     "mean_abs": 0.19098533124738412,
+     "p95_abs": 0.36287212937002983,
+     "max_abs": 0.38197066249476824,
+     "max_over": 0.0,
+     "max_under": -0.38197066249476824,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.15062286395107513,
+     "mean_abs": 0.15062286395107513,
+     "p95_abs": 0.2861834415070427,
+     "max_abs": 0.30124572790215026,
+     "max_over": 0.0,
+     "max_under": -0.30124572790215026,
+     "share_under_estimated": 0.5
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.2934498800026566,
+     "mean_abs": 0.2934498800026566,
+     "p95_abs": 0.41007281541780627,
+     "max_abs": 0.4230309193528229,
+     "max_over": -0.1638688406524903,
+     "max_under": -0.4230309193528229,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.16025998019587434,
+     "mean_abs": 0.16025998019587434,
+     "p95_abs": 0.20131607772706434,
+     "max_abs": 0.20587786634164099,
+     "max_over": -0.11464209405010767,
+     "max_under": -0.20587786634164099,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.15476123290386518,
+     "mean_abs": 0.15476123290386518,
+     "p95_abs": 0.1555802958438285,
+     "max_abs": 0.15567130283715774,
+     "max_over": -0.1538511629705726,
+     "max_under": -0.15567130283715774,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.23316994264423851,
+     "mean_abs": 0.23316994264423851,
+     "p95_abs": 0.32192064136961474,
+     "max_abs": 0.33178183011687873,
+     "max_over": -0.13455805517159833,
+     "max_under": -0.33178183011687873,
+     "share_under_estimated": 1.0
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": -0.2569050157152837,
+     "mean_abs": 0.2569050157152837,
+     "p95_abs": 0.5608853975925969,
+     "max_abs": 0.6239447013232022,
+     "max_over": 0.0,
+     "max_under": -0.6239447013232022,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": -0.12246844183781602,
+     "mean_abs": 0.12246844183781602,
+     "p95_abs": 0.3169337123183751,
+     "max_abs": 0.38336265189258284,
+     "max_over": 0.0,
+     "max_under": -0.38336265189258284,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "CONCRETE": {
+     "n": 4,
+     "mean_signed": -0.7439200196430849,
+     "mean_abs": 0.7439200196430849,
+     "p95_abs": 0.8579228782017532,
+     "max_abs": 0.8618266122211166,
+     "max_over": -0.47802239020474824,
+     "max_under": -0.8618266122211166,
+     "share_under_estimated": 1.0
+    },
+    "EQUIPMENT": {
+     "n": 12,
+     "mean_signed": -0.12515822976530377,
+     "mean_abs": 0.12515822976530377,
+     "p95_abs": 0.3304466358528539,
+     "max_abs": 0.36651388671566854,
+     "max_over": 0.0,
+     "max_under": -0.36651388671566854,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": -0.10312195751152019,
+     "mean_abs": 0.10312195751152019,
+     "p95_abs": 0.2144546832883489,
+     "max_abs": 0.24050653556072463,
+     "max_over": 0.0,
+     "max_under": -0.24050653556072463,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": -0.2955166251422571,
+     "mean_abs": 0.2955166251422571,
+     "p95_abs": 0.7149867280323522,
+     "max_abs": 0.8501725111598558,
+     "max_over": 0.0,
+     "max_under": -0.8501725111598558,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": -0.2588789641693091,
+     "mean_abs": 0.2588789641693091,
+     "p95_abs": 0.6561635087226243,
+     "max_abs": 0.7489379017489696,
+     "max_over": 0.0,
+     "max_under": -0.7489379017489696,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": -0.2059332524578816,
+     "mean_abs": 0.2059332524578816,
+     "p95_abs": 0.5802005600610407,
+     "max_abs": 0.7412681941669752,
+     "max_over": 0.0,
+     "max_under": -0.7412681941669752,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": -0.2956696639631247,
+     "mean_abs": 0.2956696639631247,
+     "p95_abs": 0.6407873495940632,
+     "max_abs": 0.6997892125139494,
+     "max_over": 0.0,
+     "max_under": -0.6997892125139494,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": -0.1341711588094293,
+     "mean_abs": 0.1341711588094293,
+     "p95_abs": 0.2886297415126275,
+     "max_abs": 0.31192231251199326,
+     "max_over": 0.0,
+     "max_under": -0.31192231251199326,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": -0.13286343014681043,
+     "mean_abs": 0.13286343014681043,
+     "p95_abs": 0.3424105467196117,
+     "max_abs": 0.355510297488673,
+     "max_over": 0.0,
+     "max_under": -0.355510297488673,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "REBAR": {
+     "n": 4,
+     "mean_signed": -0.7851703312303364,
+     "mean_abs": 0.7851703312303364,
+     "p95_abs": 0.9057525776727104,
+     "max_abs": 0.9281544018115125,
+     "max_over": -0.6799702264154295,
+     "max_under": -0.9281544018115125,
+     "share_under_estimated": 1.0
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 3,
+     "mean_signed": -0.5902779081281254,
+     "mean_abs": 0.5902779081281254,
+     "p95_abs": 0.8332676780569088,
+     "max_abs": 0.8663873516370346,
+     "max_over": -0.36925575691156437,
+     "max_under": -0.8663873516370346,
+     "share_under_estimated": 1.0
+    },
+    "TIMBER": {
+     "n": 12,
+     "mean_signed": -0.21882730671946907,
+     "mean_abs": 0.21882730671946907,
+     "p95_abs": 0.6926574631356969,
+     "max_abs": 0.7173862497396727,
+     "max_over": 0.0,
+     "max_under": -0.7173862497396727,
+     "share_under_estimated": 0.8333333333333334
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "other_targets": {
+    "B5（建替・大型改修の回数に適用）": {
+     "stage_error": {
+      "n": 1,
+      "mean_signed": -0.30000000000000004,
+      "mean_abs": 0.30000000000000004,
+      "p95_abs": 0.30000000000000004,
+      "max_abs": 0.30000000000000004,
+      "max_over": -0.30000000000000004,
+      "max_under": -0.30000000000000004,
+      "share_under_estimated": 1.0
+     },
+     "total_error": {
+      "n": 8,
+      "mean_signed": -0.009443059348931363,
+      "mean_abs": 0.009443059348931363,
+      "p95_abs": 0.049103908614443116,
+      "max_abs": 0.0755444747914509,
+      "max_over": 0.0,
+      "max_under": -0.0755444747914509,
+      "share_under_estimated": 0.125
+     },
+     "n_reference_zero_candidate_nonzero": 0
+    },
+    "X-10 資源量[kg]": {
+     "n": 12,
+     "mean_signed": -0.07679291825854213,
+     "mean_abs": 0.07679291825854213,
+     "p95_abs": 0.19924299375079438,
+     "max_abs": 0.206359972351712,
+     "max_over": 0.0,
+     "max_under": -0.206359972351712,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "X-10 廃棄物量[kg]": {
+     "n": 12,
+     "mean_signed": -0.07685140972302452,
+     "mean_abs": 0.07685140972302452,
+     "p95_abs": 0.19433369942845868,
+     "max_abs": 0.205644925992157,
+     "max_over": 0.0,
+     "max_under": -0.205644925992157,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "X-08": "合計は B4-02 と同じ値なので、B4 の誤差がそのまま当てはまる。"
+   }
+  },
+  "AP-02": {
+   "candidate_id": "AP-02",
+   "title": "更新回数の中点補正 N ≈ max(0, T/c − 1/2)",
+   "replaces": "回数関数 N(T,c)",
+   "stage": "B4",
+   "units": [
+    "B4-01",
+    "B4-03",
+    "B4-02",
+    "X-08",
+    "B5-01",
+    "X-10"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.11933241197471821,
+    "mean_abs": 0.13205703015000314,
+    "p95_abs": 0.3631881171582,
+    "max_abs": 0.45525237384202244,
+    "max_over": 0.45525237384202244,
+    "max_under": -0.0487234960102377,
+    "share_under_estimated": 0.25
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.026214841428811975,
+    "mean_abs": 0.029195071911808004,
+    "p95_abs": 0.07640801351556024,
+    "max_abs": 0.08393494417058887,
+    "max_over": 0.08393494417058887,
+    "max_under": -0.01123243483823766,
+    "share_under_estimated": 0.25
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.05310739343178935,
+     "mean_abs": 0.07855662978235922,
+     "p95_abs": 0.217333805506279,
+     "max_abs": 0.24873674585964053,
+     "max_over": 0.24873674585964053,
+     "max_under": -0.0487234960102377,
+     "share_under_estimated": 0.5
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.18555743051764706,
+     "mean_abs": 0.18555743051764706,
+     "p95_abs": 0.413404984440285,
+     "max_abs": 0.45525237384202244,
+     "max_over": 0.45525237384202244,
+     "max_under": 0.019179678104021033,
+     "share_under_estimated": 0.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.08255365650025599,
+     "mean_abs": 0.13127715251049368,
+     "p95_abs": 0.20557544336072409,
+     "max_abs": 0.2138308090107497,
+     "max_over": 0.2138308090107497,
+     "max_under": -0.0487234960102377,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.1421819295030304,
+     "mean_abs": 0.1456808867320423,
+     "p95_abs": 0.27364462328476963,
+     "max_abs": 0.2878628162350727,
+     "max_over": 0.2878628162350727,
+     "max_under": -0.003498957229011909,
+     "share_under_estimated": 0.5
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.002472788854219492,
+     "mean_abs": 0.021652466958240524,
+     "p95_abs": 0.023877976927038067,
+     "max_abs": 0.024125255812460018,
+     "max_over": 0.019179678104021033,
+     "max_under": -0.024125255812460018,
+     "share_under_estimated": 0.5
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.10698937593935966,
+     "mean_abs": 0.10698937593935966,
+     "p95_abs": 0.12151142359551095,
+     "max_abs": 0.12312498444619444,
+     "max_over": 0.12312498444619444,
+     "max_under": 0.09085376743252488,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.2391913565893166,
+     "mean_abs": 0.2391913565893166,
+     "p95_abs": 0.43364627211675183,
+     "max_abs": 0.45525237384202244,
+     "max_over": 0.45525237384202244,
+     "max_under": 0.023130339336610756,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.14755094217056608,
+     "mean_abs": 0.14755094217056608,
+     "p95_abs": 0.2386181654907331,
+     "max_abs": 0.24873674585964053,
+     "max_over": 0.24873674585964053,
+     "max_under": 0.046365138481491645,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": 0.10306179783891554,
+     "mean_abs": 0.11902172462883548,
+     "p95_abs": 0.3834885693207984,
+     "max_abs": 0.39599990232265847,
+     "max_over": 0.39599990232265847,
+     "max_under": -0.046179089378255725,
+     "share_under_estimated": 0.25
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": 0.04084680445170685,
+     "mean_abs": 0.050356251650838985,
+     "p95_abs": 0.13180269573371325,
+     "max_abs": 0.15709812758087424,
+     "max_over": 0.15709812758087424,
+     "max_under": -0.02720899923548264,
+     "share_under_estimated": 0.25
+    },
+    "CONCRETE": {
+     "n": 4,
+     "mean_signed": 0.02166547713633645,
+     "mean_abs": 0.15851905163442137,
+     "p95_abs": 0.33148361837414697,
+     "max_abs": 0.36036905754151566,
+     "max_over": 0.36036905754151566,
+     "max_under": -0.16779946309239102,
+     "share_under_estimated": 0.75
+    },
+    "EQUIPMENT": {
+     "n": 12,
+     "mean_signed": 0.03703853135730044,
+     "mean_abs": 0.046143354701351946,
+     "p95_abs": 0.12459486472738905,
+     "max_abs": 0.13209460545789645,
+     "max_over": 0.13209460545789645,
+     "max_under": -0.041407581888495845,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": 0.05029304184807176,
+     "mean_abs": 0.05598929917917974,
+     "p95_abs": 0.11830249327437024,
+     "max_abs": 0.13814649177831503,
+     "max_over": 0.13814649177831503,
+     "max_under": -0.020475716417689156,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": 2.5125414829727086,
+     "mean_abs": 2.5571084186724664,
+     "p95_abs": 13.325792557143371,
+     "max_abs": 29.03089877444679,
+     "max_over": 29.03089877444679,
+     "max_under": -0.14178840887281874,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": 0.10691685649526451,
+     "mean_abs": 0.19038739732444565,
+     "p95_abs": 0.574375844794106,
+     "max_abs": 0.8347314555208205,
+     "max_over": 0.8347314555208205,
+     "max_under": -0.31945799726050617,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": 0.06141926412820133,
+     "mean_abs": 0.09682302628557078,
+     "p95_abs": 0.32842732820013987,
+     "max_abs": 0.583904238155675,
+     "max_over": 0.583904238155675,
+     "max_under": -0.11940076550924805,
+     "share_under_estimated": 0.25
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": 0.429845662149234,
+     "mean_abs": 0.454089610283613,
+     "p95_abs": 1.6632021679819227,
+     "max_abs": 3.0908882110686724,
+     "max_over": 3.0908882110686724,
+     "max_under": -0.10589285589739551,
+     "share_under_estimated": 0.25
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": 0.06507072679823846,
+     "mean_abs": 0.07280177926489831,
+     "p95_abs": 0.21626867549044265,
+     "max_abs": 0.25828419296726113,
+     "max_over": 0.25828419296726113,
+     "max_under": -0.02108204552913057,
+     "share_under_estimated": 0.25
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": 0.07082053991865207,
+     "mean_abs": 0.07267461422895762,
+     "p95_abs": 0.15763894935534756,
+     "max_abs": 0.1866022153872564,
+     "max_over": 0.1866022153872564,
+     "max_under": -0.01112444586183329,
+     "share_under_estimated": 0.08333333333333333
+    },
+    "REBAR": {
+     "n": 4,
+     "mean_signed": 0.26530432901493173,
+     "mean_abs": 0.4173412807919271,
+     "p95_abs": 0.6701615388593062,
+     "max_abs": 0.7294696914295528,
+     "max_over": 0.7294696914295528,
+     "max_under": -0.30407390355399083,
+     "share_under_estimated": 0.25
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 3,
+     "mean_signed": 0.5214815080915903,
+     "mean_abs": 0.619178135603952,
+     "p95_abs": 0.9340575456401363,
+     "max_abs": 0.9536982488572562,
+     "max_over": 0.9536982488572562,
+     "max_under": -0.14654494126854237,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "TIMBER": {
+     "n": 12,
+     "mean_signed": 0.22730882177843412,
+     "mean_abs": 0.3283837489796743,
+     "p95_abs": 1.422650838584939,
+     "max_abs": 2.798045419315863,
+     "max_over": 2.798045419315863,
+     "max_under": -0.2973279998050952,
+     "share_under_estimated": 0.4166666666666667
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "other_targets": {
+    "B5（建替・大型改修の回数に適用）": {
+     "stage_error": {
+      "n": 1,
+      "mean_signed": -0.04999999999999998,
+      "mean_abs": 0.04999999999999998,
+      "p95_abs": 0.04999999999999998,
+      "max_abs": 0.04999999999999998,
+      "max_over": -0.04999999999999998,
+      "max_under": -0.04999999999999998,
+      "share_under_estimated": 1.0
+     },
+     "total_error": {
+      "n": 8,
+      "mean_signed": 0.05413939430748047,
+      "mean_abs": 0.05728708075712426,
+      "p95_abs": 0.1350765233544915,
+      "max_abs": 0.1689050832217297,
+      "max_over": 0.1689050832217297,
+      "max_under": -0.012590745798575144,
+      "share_under_estimated": 0.125
+     },
+     "n_reference_zero_candidate_nonzero": 7
+    },
+    "X-10 資源量[kg]": {
+     "n": 12,
+     "mean_signed": 0.10354235587844081,
+     "mean_abs": 0.10354235587844081,
+     "p95_abs": 0.3064282878613236,
+     "max_abs": 0.3523135308632368,
+     "max_over": 0.3523135308632368,
+     "max_under": 0.003960426371804049,
+     "share_under_estimated": 0.0
+    },
+    "X-10 廃棄物量[kg]": {
+     "n": 12,
+     "mean_signed": 0.09971275883582344,
+     "mean_abs": 0.09971275883582344,
+     "p95_abs": 0.2937238371861469,
+     "max_abs": 0.34171775048829467,
+     "max_over": 0.34171775048829467,
+     "max_under": 0.004787530270200069,
+     "share_under_estimated": 0.0
+    },
+    "X-08": "合計は B4-02 と同じ値なので、B4 の誤差がそのまま当てはまる。"
+   }
+  },
+  "AP-03": {
+   "candidate_id": "AP-03",
+   "title": "更新回数の切り捨てなし N ≈ T/c",
+   "replaces": "回数関数 N(T,c)",
+   "stage": "B4",
+   "units": [
+    "B4-01",
+    "B4-03",
+    "B4-02",
+    "X-08",
+    "B5-01",
+    "X-10"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.6455917335006024,
+    "mean_abs": 0.6455917335006024,
+    "p95_abs": 1.2684993102221003,
+    "max_abs": 1.6134084282673928,
+    "max_over": 1.6134084282673928,
+    "max_under": 0.21352158069909066,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.13250318258196891,
+    "mean_abs": 0.13250318258196891,
+    "p95_abs": 0.22069687437146673,
+    "max_abs": 0.29746433875372574,
+    "max_over": 0.29746433875372574,
+    "max_under": 0.07811397503486986,
+    "share_under_estimated": 0.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.5667896472617641,
+     "mean_abs": 0.5667896472617641,
+     "p95_abs": 0.9243699632342168,
+     "max_abs": 0.9302879136641319,
+     "max_over": 0.9302879136641319,
+     "max_under": 0.21352158069909066,
+     "share_under_estimated": 0.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.7243938197394408,
+     "mean_abs": 0.7243938197394408,
+     "p95_abs": 1.4566315564286236,
+     "max_abs": 1.6134084282673928,
+     "max_over": 1.6134084282673928,
+     "max_under": 0.33634332749840756,
+     "share_under_estimated": 0.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.3906498052177787,
+     "mean_abs": 0.3906498052177787,
+     "p95_abs": 0.4239604367411285,
+     "max_abs": 0.4276616180215007,
+     "max_over": 0.4276616180215007,
+     "max_under": 0.35363799241405663,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.7530067730671387,
+     "mean_abs": 0.7530067730671387,
+     "p95_abs": 0.9125597996044326,
+     "max_abs": 0.9302879136641319,
+     "max_over": 0.9302879136641319,
+     "max_under": 0.5757256324701455,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.41014219350558634,
+     "mean_abs": 0.41014219350558634,
+     "p95_abs": 0.47656117291204714,
+     "max_abs": 0.48394105951276506,
+     "max_over": 0.48394105951276506,
+     "max_under": 0.33634332749840756,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.4598280983014752,
+     "mean_abs": 0.4598280983014752,
+     "p95_abs": 0.5074427126326091,
+     "max_abs": 0.5127332253360685,
+     "max_over": 0.5127332253360685,
+     "max_under": 0.4069229712668819,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.9134650044832417,
+     "mean_abs": 0.9134650044832417,
+     "p95_abs": 1.5434140858889778,
+     "max_abs": 1.6134084282673928,
+     "max_over": 1.6134084282673928,
+     "max_under": 0.21352158069909066,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.9464585264283938,
+     "mean_abs": 0.9464585264283938,
+     "p95_abs": 0.9823166994639237,
+     "max_abs": 0.986300940912316,
+     "max_over": 0.986300940912316,
+     "max_under": 0.9066161119444714,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": 0.5244394653463502,
+     "mean_abs": 0.5244394653463502,
+     "p95_abs": 1.3642146341508135,
+     "max_abs": 2.063588314657533,
+     "max_over": 2.063588314657533,
+     "max_under": 0.15747387507084415,
+     "share_under_estimated": 0.0
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": 0.21655667476596838,
+     "mean_abs": 0.21655667476596838,
+     "p95_abs": 0.5030495545526759,
+     "max_abs": 0.8462943953511927,
+     "max_over": 0.8462943953511927,
+     "max_under": 0.06765606686578611,
+     "share_under_estimated": 0.0
+    },
+    "CONCRETE": {
+     "n": 4,
+     "mean_signed": 0.9690357361225583,
+     "mean_abs": 0.9690357361225583,
+     "p95_abs": 1.3347694231455152,
+     "max_abs": 1.4001423119395113,
+     "max_over": 1.4001423119395113,
+     "max_under": 0.6720055425220451,
+     "share_under_estimated": 0.0
+    },
+    "EQUIPMENT": {
+     "n": 12,
+     "mean_signed": 0.2004199513234408,
+     "mean_abs": 0.2004199513234408,
+     "p95_abs": 0.39714357180061816,
+     "max_abs": 0.41285902703543853,
+     "max_over": 0.41285902703543853,
+     "max_under": 0.058991240594725304,
+     "share_under_estimated": 0.0
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": 0.2048070046914471,
+     "mean_abs": 0.2048070046914471,
+     "p95_abs": 0.3154569323838945,
+     "max_abs": 0.3616069253754393,
+     "max_over": 0.3616069253754393,
+     "max_under": 0.07060459751180256,
+     "share_under_estimated": 0.0
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": 7.827580847721698,
+     "mean_abs": 7.827580847721698,
+     "p95_abs": 40.55713959052731,
+     "max_abs": 88.96302971831712,
+     "max_over": 88.96302971831712,
+     "max_under": 0.13907578370967125,
+     "share_under_estimated": 0.0
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": 0.5072252872402696,
+     "mean_abs": 0.5072252872402696,
+     "p95_abs": 1.3426665331595253,
+     "max_abs": 2.1003847856445597,
+     "max_over": 2.1003847856445597,
+     "max_under": 0.11002190722795742,
+     "share_under_estimated": 0.0
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": 0.3408817212738837,
+     "mean_abs": 0.3408817212738837,
+     "p95_abs": 0.8539227139889871,
+     "max_abs": 1.1678084763113499,
+     "max_over": 1.1678084763113499,
+     "max_under": 0.0817182020353287,
+     "share_under_estimated": 0.0
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": 1.6556068271377924,
+     "mean_abs": 1.6556068271377924,
+     "p95_abs": 4.439801210960119,
+     "max_abs": 6.181776422137344,
+     "max_over": 6.181776422137344,
+     "max_under": 0.10752298584629075,
+     "share_under_estimated": 0.0
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": 0.27610324972650907,
+     "mean_abs": 0.27610324972650907,
+     "p95_abs": 0.6080604048860608,
+     "max_abs": 0.7198839836046073,
+     "max_over": 0.7198839836046073,
+     "max_under": 0.08138711013335871,
+     "share_under_estimated": 0.0
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": 0.28416012738574864,
+     "mean_abs": 0.28416012738574864,
+     "p95_abs": 0.46026702475279263,
+     "max_abs": 0.47534948149366907,
+     "max_over": 0.47534948149366907,
+     "max_under": 0.09436533160437857,
+     "share_under_estimated": 0.0
+    },
+    "REBAR": {
+     "n": 4,
+     "mean_signed": 1.5796176137506268,
+     "mean_abs": 1.5796176137506268,
+     "p95_abs": 2.4126096778290025,
+     "max_abs": 2.5115360879863493,
+     "max_over": 2.5115360879863493,
+     "max_under": 0.367805001921679,
+     "share_under_estimated": 0.0
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 3,
+     "mean_signed": 2.092655557619225,
+     "mean_abs": 2.092655557619225,
+     "p95_abs": 2.7528129221730437,
+     "max_abs": 2.7546322891820676,
+     "max_over": 2.7546322891820676,
+     "max_under": 0.7868957645837785,
+     "share_under_estimated": 0.0
+    },
+    "TIMBER": {
+     "n": 12,
+     "mean_signed": 2.002998838458043,
+     "mean_abs": 2.002998838458043,
+     "p95_abs": 10.033577261139849,
+     "max_abs": 21.204652248559032,
+     "max_over": 21.204652248559032,
+     "max_under": 0.032878411910669925,
+     "share_under_estimated": 0.0
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": false,
+   "other_targets": {
+    "B5（建替・大型改修の回数に適用）": {
+     "stage_error": {
+      "n": 1,
+      "mean_signed": 0.19999999999999993,
+      "mean_abs": 0.19999999999999993,
+      "p95_abs": 0.19999999999999993,
+      "max_abs": 0.19999999999999993,
+      "max_over": 0.19999999999999993,
+      "max_under": 0.19999999999999993,
+      "share_under_estimated": 0.0
+     },
+     "total_error": {
+      "n": 8,
+      "mean_signed": 0.15509315980589367,
+      "mean_abs": 0.15509315980589367,
+      "p95_abs": 0.3545105018740632,
+      "max_abs": 0.38978096128091466,
+      "max_over": 0.38978096128091466,
+      "max_under": 0.03560702856966712,
+      "share_under_estimated": 0.0
+     },
+     "n_reference_zero_candidate_nonzero": 7
+    },
+    "X-10 資源量[kg]": {
+     "n": 12,
+     "mean_signed": 0.41085214111554214,
+     "mean_abs": 0.41085214111554214,
+     "p95_abs": 0.6179079649851705,
+     "max_abs": 0.7046270617264752,
+     "max_over": 0.7046270617264752,
+     "max_under": 0.28487940955941715,
+     "share_under_estimated": 0.0
+    },
+    "X-10 廃棄物量[kg]": {
+     "n": 12,
+     "mean_signed": 0.3979605440491511,
+     "mean_abs": 0.3979605440491511,
+     "p95_abs": 0.5995244281712475,
+     "max_abs": 0.6834355009765916,
+     "max_over": 0.6834355009765916,
+     "max_under": 0.27869339571914287,
+     "share_under_estimated": 0.0
+    },
+    "X-08": "合計は B4-02 と同じ値なので、B4 の誤差がそのまま当てはまる。"
+   }
+  },
+  "AP-04": {
+   "candidate_id": "AP-04",
+   "title": "修繕の更新年除外を無視（B3-02 で B3-01 を代用）",
+   "replaces": "修繕の年次積算",
+   "stage": "B3",
+   "units": [
+    "B3-01",
+    "B3-02"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.0211906439377972,
+    "mean_abs": 0.0211906439377972,
+    "p95_abs": 0.03431366051628591,
+    "max_abs": 0.03515968987907319,
+    "max_over": 0.03515968987907319,
+    "max_under": 0.009426340424133928,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.0034642758128122166,
+    "mean_abs": 0.0034642758128122166,
+    "p95_abs": 0.0066776280444523104,
+    "max_abs": 0.007171977402491292,
+    "max_over": 0.007171977402491292,
+    "max_under": 0.0014778499560726397,
+    "share_under_estimated": 0.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.01699817609772394,
+     "mean_abs": 0.01699817609772394,
+     "p95_abs": 0.029762185478182393,
+     "max_abs": 0.03231202509934098,
+     "max_over": 0.03231202509934098,
+     "max_under": 0.009426340424133928,
+     "share_under_estimated": 0.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.025383111777870466,
+     "mean_abs": 0.025383111777870466,
+     "p95_abs": 0.03477513107780625,
+     "max_abs": 0.03515968987907319,
+     "max_over": 0.03515968987907319,
+     "max_under": 0.011065229453496627,
+     "share_under_estimated": 0.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.02376766894317687,
+     "mean_abs": 0.02376766894317687,
+     "p95_abs": 0.034020487785483555,
+     "max_abs": 0.03515968987907319,
+     "max_over": 0.03515968987907319,
+     "max_under": 0.012375648007280545,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.024684641143336947,
+     "mean_abs": 0.024684641143336947,
+     "p95_abs": 0.03272777332093857,
+     "max_abs": 0.033621454674005416,
+     "max_over": 0.033621454674005416,
+     "max_under": 0.01574782761266848,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.018225802580952286,
+     "mean_abs": 0.018225802580952286,
+     "p95_abs": 0.025615930958417577,
+     "max_abs": 0.026437056333691495,
+     "max_over": 0.026437056333691495,
+     "max_under": 0.010014548828213078,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.02623146546424717,
+     "mean_abs": 0.02623146546424717,
+     "p95_abs": 0.029938384428833658,
+     "max_abs": 0.030350264313787713,
+     "max_over": 0.030350264313787713,
+     "max_under": 0.02211266661470663,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.021688627276418803,
+     "mean_abs": 0.021688627276418803,
+     "p95_abs": 0.03124968531704876,
+     "max_abs": 0.03231202509934098,
+     "max_over": 0.03231202509934098,
+     "max_under": 0.011065229453496627,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.01254565821865114,
+     "mean_abs": 0.01254565821865114,
+     "p95_abs": 0.01535304423371663,
+     "max_abs": 0.015664976013168352,
+     "max_over": 0.015664976013168352,
+     "max_under": 0.009426340424133928,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": false
+  },
+  "AP-05": {
+   "candidate_id": "AP-05",
+   "title": "冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k",
+   "replaces": "充填サイクルの閉形式",
+   "stage": "B1",
+   "units": [
+    "B1-02",
+    "B1-03",
+    "B1-04"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.4504634067527868,
+    "mean_abs": 0.4504634067527868,
+    "p95_abs": 1.6012464538962565,
+    "max_abs": 1.8071323257606617,
+    "max_over": 1.8071323257606617,
+    "max_under": 7.000427271536748e-05,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.012570458914236499,
+    "mean_abs": 0.012570458914236499,
+    "p95_abs": 0.055614093380966026,
+    "max_abs": 0.0973761670699235,
+    "max_over": 0.0973761670699235,
+    "max_under": 2.0167185163391855e-07,
+    "share_under_estimated": 0.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.367880020979108,
+     "mean_abs": 0.367880020979108,
+     "p95_abs": 1.4047416857614907,
+     "max_abs": 1.8071323257606617,
+     "max_over": 1.8071323257606617,
+     "max_under": 0.006816650442214049,
+     "share_under_estimated": 0.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.5330467925264656,
+     "mean_abs": 0.5330467925264656,
+     "p95_abs": 1.3921525032309134,
+     "max_abs": 1.432794376916289,
+     "max_over": 1.432794376916289,
+     "max_under": 7.000427271536748e-05,
+     "share_under_estimated": 0.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.007748371169919862,
+     "mean_abs": 0.007748371169919862,
+     "p95_abs": 0.008586919824855092,
+     "max_abs": 0.008680091897625674,
+     "max_over": 0.008680091897625674,
+     "max_under": 0.006816650442214049,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.8151820713401337,
+     "mean_abs": 0.8151820713401337,
+     "p95_abs": 1.3710331463586733,
+     "max_abs": 1.432794376916289,
+     "max_over": 1.432794376916289,
+     "max_under": 0.19756976576397822,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.019569125550352246,
+     "mean_abs": 0.019569125550352246,
+     "p95_abs": 0.037118334700225436,
+     "max_abs": 0.03906824682798912,
+     "max_over": 0.03906824682798912,
+     "max_under": 7.000427271536748e-05,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 1.0401800445058547,
+     "mean_abs": 1.0401800445058547,
+     "p95_abs": 1.730437097635181,
+     "max_abs": 1.8071323257606617,
+     "max_over": 1.8071323257606617,
+     "max_under": 0.2732277632510475,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.6487075802934094,
+     "mean_abs": 0.6487075802934094,
+     "p95_abs": 1.208074951986649,
+     "max_abs": 1.2702268821747866,
+     "max_over": 1.2702268821747866,
+     "max_under": 0.027188278412031988,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.17139324765705105,
+     "mean_abs": 0.17139324765705105,
+     "p95_abs": 0.2090927977474013,
+     "max_abs": 0.21328163664632913,
+     "max_over": 0.21328163664632913,
+     "max_under": 0.129504858667773,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": false,
+   "by_rate_times_cycle_years_no_top_up_devices": {
+    "rk<=0.05": {
+     "n": 0
+    },
+    "0.05<rk<=0.2": {
+     "n": 1,
+     "mean_signed": 0.09512208212815221,
+     "mean_abs": 0.09512208212815221,
+     "p95_abs": 0.09512208212815221,
+     "max_abs": 0.09512208212815221,
+     "max_over": 0.09512208212815221,
+     "max_under": 0.09512208212815221,
+     "share_under_estimated": 0.0
+    },
+    "rk>0.2": {
+     "n": 47,
+     "mean_signed": 1.1262067274178267,
+     "mean_abs": 1.1262067274178267,
+     "p95_abs": 2.2814168657707543,
+     "max_abs": 2.6368779328266765,
+     "max_over": 2.6368779328266765,
+     "max_under": 0.18551977136358655,
+     "share_under_estimated": 0.0
+    }
+   }
+  },
+  "AP-06": {
+   "candidate_id": "AP-06",
+   "title": "端材倍率の線形化 1/(1−w) ≈ 1+w",
+   "replaces": "発注量の算出",
+   "stage": "A1-A3",
+   "units": [
+    "A13-05",
+    "X-13"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.002691928820764876,
+    "mean_abs": 0.002691928820764876,
+    "p95_abs": 0.004121375647850726,
+    "max_abs": 0.004389406837808691,
+    "max_over": -0.0013279635603977284,
+    "max_under": -0.004389406837808691,
+    "share_under_estimated": 1.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.0005587040850949638,
+    "mean_abs": 0.0005587040850949638,
+    "p95_abs": 0.0009396527106774997,
+    "max_abs": 0.0010006496725125495,
+    "max_over": -0.00023539375581962,
+    "max_under": -0.0010006496725125495,
+    "share_under_estimated": 1.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.0031024712088819745,
+     "mean_abs": 0.0031024712088819745,
+     "p95_abs": 0.004267574478736889,
+     "max_abs": 0.004389406837808691,
+     "max_over": -0.0013279635603977284,
+     "max_under": -0.004389406837808691,
+     "share_under_estimated": 1.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.002281386432647778,
+     "mean_abs": 0.002281386432647778,
+     "p95_abs": 0.0030172787693046863,
+     "max_abs": 0.0031443244867752,
+     "max_over": -0.0015600530659367032,
+     "max_under": -0.0031443244867752,
+     "share_under_estimated": 1.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.001484580525527938,
+     "mean_abs": 0.001484580525527938,
+     "p95_abs": 0.0016255357941451268,
+     "max_abs": 0.0016411974906581478,
+     "max_over": -0.0013279635603977284,
+     "max_under": -0.0016411974906581478,
+     "share_under_estimated": 1.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.0030449849728177566,
+     "mean_abs": 0.0030449849728177566,
+     "p95_abs": 0.0031343905353794555,
+     "max_abs": 0.0031443244867752,
+     "max_over": -0.002945645458860313,
+     "max_under": -0.0031443244867752,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.002821238721602163,
+     "mean_abs": 0.002821238721602163,
+     "p95_abs": 0.0034765913614175836,
+     "max_abs": 0.0035494083213970747,
+     "max_over": -0.0020930691218072513,
+     "max_under": -0.0035494083213970747,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.0035127742273509182,
+     "mean_abs": 0.0035127742273509182,
+     "p95_abs": 0.004301743576762914,
+     "max_abs": 0.004389406837808691,
+     "max_over": -0.0026361416168931458,
+     "max_under": -0.004389406837808691,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.0025569292435613875,
+     "mean_abs": 0.0025569292435613875,
+     "p95_abs": 0.0026078724567907374,
+     "max_abs": 0.0026135328138162206,
+     "max_over": -0.002500325673306555,
+     "max_under": -0.0026135328138162206,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.0027310652337290933,
+     "mean_abs": 0.0027310652337290933,
+     "p95_abs": 0.0037849761847422443,
+     "max_abs": 0.0039020774015214835,
+     "max_over": -0.0015600530659367032,
+     "max_under": -0.0039020774015214835,
+     "share_under_estimated": 1.0
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": -0.0029581797901529136,
+     "mean_abs": 0.0029581797901529136,
+     "p95_abs": 0.004282451915700452,
+     "max_abs": 0.004612738280733188,
+     "max_over": -0.001963287288985516,
+     "max_under": -0.004612738280733188,
+     "share_under_estimated": 1.0
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": -0.002416988367422278,
+     "mean_abs": 0.002416988367422278,
+     "p95_abs": 0.003914429740662655,
+     "max_abs": 0.00422674064169753,
+     "max_over": -0.0005323732893326553,
+     "max_under": -0.00422674064169753,
+     "share_under_estimated": 1.0
+    },
+    "CONCRETE": {
+     "n": 12,
+     "mean_signed": -0.0034417811721664964,
+     "mean_abs": 0.0034417811721664964,
+     "p95_abs": 0.004918189171772642,
+     "max_abs": 0.004955174057790786,
+     "max_over": -0.000746465153532461,
+     "max_under": -0.004955174057790786,
+     "share_under_estimated": 1.0
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": -0.003489609630801659,
+     "mean_abs": 0.003489609630801659,
+     "p95_abs": 0.007368649990674692,
+     "max_abs": 0.009460623125569962,
+     "max_over": -0.0004279713467156581,
+     "max_under": -0.009460623125569962,
+     "share_under_estimated": 1.0
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": -0.0028384266914658353,
+     "mean_abs": 0.0028384266914658353,
+     "p95_abs": 0.005847021541169254,
+     "max_abs": 0.006878883765277188,
+     "max_over": -0.00028129150986675046,
+     "max_under": -0.006878883765277188,
+     "share_under_estimated": 1.0
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": -0.00304183032168126,
+     "mean_abs": 0.00304183032168126,
+     "p95_abs": 0.004665347333875648,
+     "max_abs": 0.005481171638635204,
+     "max_over": -0.0014898378591510224,
+     "max_under": -0.005481171638635204,
+     "share_under_estimated": 1.0
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": -0.002082220869397871,
+     "mean_abs": 0.002082220869397871,
+     "p95_abs": 0.0050438643331347545,
+     "max_abs": 0.006118792167088065,
+     "max_over": -0.0001278906992046239,
+     "max_under": -0.006118792167088065,
+     "share_under_estimated": 1.0
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": -0.003900551988858036,
+     "mean_abs": 0.003900551988858036,
+     "p95_abs": 0.008378215128831508,
+     "max_abs": 0.010780958899803753,
+     "max_over": -0.0009560054938483058,
+     "max_under": -0.010780958899803753,
+     "share_under_estimated": 1.0
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": -0.0028247174819253733,
+     "mean_abs": 0.0028247174819253733,
+     "p95_abs": 0.005964597247349501,
+     "max_abs": 0.0063004481962836275,
+     "max_over": -0.0005500302372623188,
+     "max_under": -0.0063004481962836275,
+     "share_under_estimated": 1.0
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": -0.0020406605280566567,
+     "mean_abs": 0.0020406605280566567,
+     "p95_abs": 0.003832964421667493,
+     "max_abs": 0.0038846789545427664,
+     "max_over": -0.0006041458619607724,
+     "max_under": -0.0038846789545427664,
+     "share_under_estimated": 1.0
+    },
+    "REBAR": {
+     "n": 12,
+     "mean_signed": -0.0032603031029222024,
+     "mean_abs": 0.0032603031029222024,
+     "p95_abs": 0.005967919845593483,
+     "max_abs": 0.007205306590832422,
+     "max_over": -0.0005142932066745433,
+     "max_under": -0.007205306590832422,
+     "share_under_estimated": 1.0
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 12,
+     "mean_signed": -0.003331154482487105,
+     "mean_abs": 0.003331154482487105,
+     "p95_abs": 0.008149339257668226,
+     "max_abs": 0.009018929019170664,
+     "max_over": -0.000324566588244099,
+     "max_under": -0.009018929019170664,
+     "share_under_estimated": 1.0
+    },
+    "TIMBER": {
+     "n": 12,
+     "mean_signed": -0.0029872983829603568,
+     "mean_abs": 0.0029872983829603568,
+     "p95_abs": 0.007685417722044177,
+     "max_abs": 0.009804366604505278,
+     "max_over": 0.0,
+     "max_under": -0.009804366604505278,
+     "share_under_estimated": 0.8333333333333334
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": true,
+   "within_total_target": true,
+   "under_estimates": true
+  },
+  "AP-07a": {
+   "candidate_id": "AP-07a",
+   "title": "複合係数：質量比 5％ 未満の構成材を切り捨てる（補正なし）",
+   "replaces": "複合係数の加重和",
+   "stage": "複合品の製造排出（X-03）",
+   "units": [
+    "A13-02",
+    "X-03"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.03558623127403387,
+    "mean_abs": 0.03558623127403387,
+    "p95_abs": 0.08532729404606051,
+    "max_abs": 0.13251588010391505,
+    "max_over": -0.005810413829870503,
+    "max_under": -0.13251588010391505,
+    "share_under_estimated": 1.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.0031729315863580714,
+    "mean_abs": 0.0031729315863580714,
+    "p95_abs": 0.007344759642191543,
+    "max_abs": 0.01022090154086934,
+    "max_over": -0.00024413580893444976,
+    "max_under": -0.01022090154086934,
+    "share_under_estimated": 1.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.044432014320309327,
+     "mean_abs": 0.044432014320309327,
+     "p95_abs": 0.1110665228048903,
+     "max_abs": 0.13251588010391505,
+     "max_over": -0.009382996224845154,
+     "max_under": -0.13251588010391505,
+     "share_under_estimated": 1.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.02674044822775841,
+     "mean_abs": 0.02674044822775841,
+     "p95_abs": 0.04222812155385459,
+     "max_abs": 0.04315845425213478,
+     "max_over": -0.005810413829870503,
+     "max_under": -0.04315845425213478,
+     "share_under_estimated": 1.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.007596705027357828,
+     "mean_abs": 0.007596705027357828,
+     "p95_abs": 0.009204367105096421,
+     "max_abs": 0.009382996224845154,
+     "max_over": -0.005810413829870503,
+     "max_under": -0.009382996224845154,
+     "share_under_estimated": 1.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.03219725197309645,
+     "mean_abs": 0.03219725197309645,
+     "p95_abs": 0.036823061356746824,
+     "max_abs": 0.03733704017715242,
+     "max_over": -0.02705746376904047,
+     "max_under": -0.03733704017715242,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.08597650178146454,
+     "mean_abs": 0.08597650178146454,
+     "p95_abs": 0.12786194227166997,
+     "max_abs": 0.13251588010391505,
+     "max_over": -0.039437123459014026,
+     "max_under": -0.13251588010391505,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.0369263251485375,
+     "mean_abs": 0.0369263251485375,
+     "p95_abs": 0.045739238331888143,
+     "max_abs": 0.04671845090781599,
+     "max_over": -0.027134199389259,
+     "max_under": -0.04671845090781599,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.026493766269303547,
+     "mean_abs": 0.026493766269303547,
+     "p95_abs": 0.04149198545385166,
+     "max_abs": 0.04315845425213478,
+     "max_over": -0.00982907828647232,
+     "max_under": -0.04315845425213478,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.02432683744444335,
+     "mean_abs": 0.02432683744444335,
+     "p95_abs": 0.03941207871123462,
+     "max_abs": 0.041088216629766985,
+     "max_over": -0.007565458259119718,
+     "max_under": -0.041088216629766985,
+     "share_under_estimated": 1.0
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": -0.0423786460990451,
+     "mean_abs": 0.0423786460990451,
+     "p95_abs": 0.10724447439010229,
+     "max_abs": 0.13326909735190046,
+     "max_over": -0.009200288207942327,
+     "max_under": -0.13326909735190046,
+     "share_under_estimated": 1.0
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": -0.03466801103153613,
+     "mean_abs": 0.03466801103153613,
+     "p95_abs": 0.07864913500720037,
+     "max_abs": 0.08215955752118326,
+     "max_over": -0.005125682633446523,
+     "max_under": -0.08215955752118326,
+     "share_under_estimated": 1.0
+    },
+    "CONCRETE": {
+     "n": 12,
+     "mean_signed": -0.03371645750834997,
+     "mean_abs": 0.03371645750834997,
+     "p95_abs": 0.09044209506985948,
+     "max_abs": 0.1441086855225636,
+     "max_over": -0.0009044800118135466,
+     "max_under": -0.1441086855225636,
+     "share_under_estimated": 1.0
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": -0.06035589792371158,
+     "mean_abs": 0.06035589792371158,
+     "p95_abs": 0.16598738054871587,
+     "max_abs": 0.21995311433291417,
+     "max_over": -0.005282664650340765,
+     "max_under": -0.21995311433291417,
+     "share_under_estimated": 1.0
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": -0.02559184803191339,
+     "mean_abs": 0.02559184803191339,
+     "p95_abs": 0.06799325187430152,
+     "max_abs": 0.0857203949221545,
+     "max_over": -0.0006363114150339245,
+     "max_under": -0.0857203949221545,
+     "share_under_estimated": 1.0
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": -0.05588881277712149,
+     "mean_abs": 0.05588881277712149,
+     "p95_abs": 0.14100672880861875,
+     "max_abs": 0.15603668076907787,
+     "max_over": -0.000513862582751294,
+     "max_under": -0.15603668076907787,
+     "share_under_estimated": 1.0
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": -0.03638761441675179,
+     "mean_abs": 0.03638761441675179,
+     "p95_abs": 0.12498430508116787,
+     "max_abs": 0.19249780178618753,
+     "max_over": 0.0,
+     "max_under": -0.19249780178618753,
+     "share_under_estimated": 0.75
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": -0.027106311631480324,
+     "mean_abs": 0.027106311631480324,
+     "p95_abs": 0.07943731011444934,
+     "max_abs": 0.08148088670727095,
+     "max_over": 0.0,
+     "max_under": -0.08148088670727095,
+     "share_under_estimated": 0.9166666666666666
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": -0.03745683568481667,
+     "mean_abs": 0.03745683568481667,
+     "p95_abs": 0.0911938852189128,
+     "max_abs": 0.09826722106001365,
+     "max_over": -0.0036371949203613057,
+     "max_under": -0.09826722106001365,
+     "share_under_estimated": 1.0
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": -0.038658442752045025,
+     "mean_abs": 0.038658442752045025,
+     "p95_abs": 0.09426523147184371,
+     "max_abs": 0.09749925119451758,
+     "max_over": 0.0,
+     "max_under": -0.09749925119451758,
+     "share_under_estimated": 0.9166666666666666
+    },
+    "REBAR": {
+     "n": 12,
+     "mean_signed": -0.02702757535606279,
+     "mean_abs": 0.02702757535606279,
+     "p95_abs": 0.06507884648376969,
+     "max_abs": 0.07368130388231274,
+     "max_over": 0.0,
+     "max_under": -0.07368130388231274,
+     "share_under_estimated": 0.9166666666666666
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 11,
+     "mean_signed": -0.032999226789937684,
+     "mean_abs": 0.032999226789937684,
+     "p95_abs": 0.09338411473917613,
+     "max_abs": 0.10232006297533462,
+     "max_over": -0.0006455526296535917,
+     "max_under": -0.10232006297533462,
+     "share_under_estimated": 1.0
+    },
+    "TIMBER": {
+     "n": 9,
+     "mean_signed": -0.054452643415052605,
+     "mean_abs": 0.054452643415052605,
+     "p95_abs": 0.18560732718330308,
+     "max_abs": 0.1899140009900615,
+     "max_over": -0.0006302159883775797,
+     "max_under": -0.1899140009900615,
+     "share_under_estimated": 1.0
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true
+  },
+  "AP-07b": {
+   "candidate_id": "AP-07b",
+   "title": "複合係数：質量比 5％ 未満の構成材を切り捨て、残りの比率を合計 1 に補正",
+   "replaces": "複合係数の加重和",
+   "stage": "複合品の製造排出（X-03）",
+   "units": [
+    "A13-02",
+    "X-03"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.007221278824528257,
+    "mean_abs": 0.013076590528861254,
+    "p95_abs": 0.04732252746394833,
+    "max_abs": 0.08322202807840307,
+    "max_over": 0.016649064093474466,
+    "max_under": -0.08322202807840307,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.0005112727548959367,
+    "mean_abs": 0.0011624142074865647,
+    "p95_abs": 0.004090800674136899,
+    "max_abs": 0.006418884697847553,
+    "max_over": 0.0021860046547372797,
+    "max_under": -0.006418884697847553,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.011251687930562616,
+     "mean_abs": 0.019138204383298343,
+     "p95_abs": 0.06657878708217091,
+     "max_abs": 0.08322202807840307,
+     "max_over": 0.016649064093474466,
+     "max_under": -0.08322202807840307,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.0031908697184938974,
+     "mean_abs": 0.007014976674424164,
+     "p95_abs": 0.016555340827445378,
+     "max_abs": 0.01795020877939453,
+     "max_over": 0.006274691777181417,
+     "max_under": -0.01795020877939453,
+     "share_under_estimated": 0.5
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.008176235332856368,
+     "mean_abs": 0.008472828760618098,
+     "p95_abs": 0.015831440560188828,
+     "max_abs": 0.016649064093474466,
+     "max_over": 0.016649064093474466,
+     "max_under": -0.0002965934277617286,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.0010192824300727622,
+     "mean_abs": 0.0010192824300727622,
+     "p95_abs": 0.0018149963614319095,
+     "max_abs": 0.0019034090204718148,
+     "max_over": 0.0019034090204718148,
+     "max_under": 0.0001351558396737096,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.04779638252500049,
+     "mean_abs": 0.04779638252500049,
+     "p95_abs": 0.07967946352306281,
+     "max_abs": 0.08322202807840307,
+     "max_over": -0.012370736971597924,
+     "max_under": -0.08322202807840307,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.0008364785429991984,
+     "mean_abs": 0.0071111703201806155,
+     "p95_abs": 0.007864001008879894,
+     "max_abs": 0.007947648863179814,
+     "max_over": 0.006274691777181417,
+     "max_under": -0.007947648863179814,
+     "share_under_estimated": 0.5
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.006113754571299895,
+     "mean_abs": 0.011836454208094635,
+     "p95_abs": 0.01733883332226454,
+     "max_abs": 0.01795020877939453,
+     "max_over": 0.005722699636794739,
+     "max_under": -0.01795020877939453,
+     "share_under_estimated": 0.5
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.0022234249292009192,
+     "mean_abs": 0.0022234249292009192,
+     "p95_abs": 0.003187140556043901,
+     "max_abs": 0.0032942200701375655,
+     "max_over": 0.0032942200701375655,
+     "max_under": 0.0011526297882642731,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": -0.00026091534579452286,
+     "mean_abs": 0.008996748333831569,
+     "p95_abs": 0.01672735333647761,
+     "max_abs": 0.01865660457723767,
+     "max_over": 0.015148875048583022,
+     "max_under": -0.01865660457723767,
+     "share_under_estimated": 0.4166666666666667
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": 0.003141398375195972,
+     "mean_abs": 0.018897627346751347,
+     "p95_abs": 0.05611941312963447,
+     "max_abs": 0.06355728158778298,
+     "max_over": 0.06355728158778298,
+     "max_under": -0.050033884391149336,
+     "share_under_estimated": 0.4166666666666667
+    },
+    "CONCRETE": {
+     "n": 12,
+     "mean_signed": -0.007511991107457639,
+     "mean_abs": 0.014278666588994493,
+     "p95_abs": 0.053828958972707,
+     "max_abs": 0.09659923787872372,
+     "max_over": 0.01769350433066802,
+     "max_under": -0.09659923787872372,
+     "share_under_estimated": 0.5
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": -0.017179162975767395,
+     "mean_abs": 0.0302101224088589,
+     "p95_abs": 0.10245512643590071,
+     "max_abs": 0.18833384770407408,
+     "max_over": 0.031748266278455735,
+     "max_under": -0.18833384770407408,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": 0.011868072237618875,
+     "mean_abs": 0.020521143476366913,
+     "p95_abs": 0.047693219414486565,
+     "max_abs": 0.050989727699603436,
+     "max_over": 0.050989727699603436,
+     "max_under": -0.0346620138138686,
+     "share_under_estimated": 0.25
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": -0.010875509225129297,
+     "mean_abs": 0.03281874442426345,
+     "p95_abs": 0.0763707401974497,
+     "max_abs": 0.07791155181637217,
+     "max_over": 0.04788812597218416,
+     "max_under": -0.07791155181637217,
+     "share_under_estimated": 0.4166666666666667
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": -0.0030435426245836975,
+     "mean_abs": 0.018082385604716898,
+     "p95_abs": 0.07538271326263725,
+     "max_abs": 0.12592292389948626,
+     "max_over": 0.034031631832488175,
+     "max_under": -0.12592292389948626,
+     "share_under_estimated": 0.25
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": 0.0036302431868888373,
+     "mean_abs": 0.013050151130957165,
+     "p95_abs": 0.029547291456884957,
+     "max_abs": 0.03126707525802683,
+     "max_over": 0.03126707525802683,
+     "max_under": -0.02814019561958707,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": -0.006046123180789789,
+     "mean_abs": 0.012194367397757694,
+     "p95_abs": 0.039927074152655326,
+     "max_abs": 0.06923083236593863,
+     "max_over": 0.01437759485870799,
+     "max_under": -0.06923083236593863,
+     "share_under_estimated": 0.5833333333333334
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": 0.010993485915034918,
+     "mean_abs": 0.018354673394494318,
+     "p95_abs": 0.04483579457092206,
+     "max_abs": 0.056816985162520484,
+     "max_over": 0.056816985162520484,
+     "max_under": -0.03283274972252594,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "REBAR": {
+     "n": 12,
+     "mean_signed": 0.0023043841097564253,
+     "mean_abs": 0.009854078174134915,
+     "p95_abs": 0.02845231729566569,
+     "max_abs": 0.03398356266832899,
+     "max_over": 0.02392675289985028,
+     "max_under": -0.03398356266832899,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 11,
+     "mean_signed": -0.009373026668975788,
+     "mean_abs": 0.01810541153044269,
+     "p95_abs": 0.056691424011590025,
+     "max_abs": 0.0657549616527972,
+     "max_over": 0.02057258481450807,
+     "max_under": -0.0657549616527972,
+     "share_under_estimated": 0.45454545454545453
+    },
+    "TIMBER": {
+     "n": 9,
+     "mean_signed": -0.02088742742606118,
+     "mean_abs": 0.04889706186844942,
+     "p95_abs": 0.1558289030038568,
+     "max_abs": 0.1583397989363415,
+     "max_over": 0.03581844319266351,
+     "max_under": -0.1583397989363415,
+     "share_under_estimated": 0.3333333333333333
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": true
+  },
+  "AP-08": {
+   "candidate_id": "AP-08",
+   "title": "買電排出を 平均買電量×平均係数×T で近似",
+   "replaces": "買電量×係数の年次積算",
+   "stage": "B6",
+   "units": [
+    "B6-01",
+    "B6-03",
+    "B6-04",
+    "B2-01"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.002044213106221837,
+    "mean_abs": 0.0027994502199542265,
+    "p95_abs": 0.011236984292422869,
+    "max_abs": 0.013663876808514847,
+    "max_over": 0.013663876808514847,
+    "max_under": -0.0033340733263199428,
+    "share_under_estimated": 0.16666666666666666
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.0007999674380105506,
+    "mean_abs": 0.0009163165676864507,
+    "p95_abs": 0.0039776080883602224,
+    "max_abs": 0.006183481390840248,
+    "max_over": 0.006183481390840248,
+    "max_under": -0.0005878510463758599,
+    "share_under_estimated": 0.16666666666666666
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.0015879866063941799,
+     "mean_abs": 0.002699344381834161,
+     "p95_abs": 0.007841170721708672,
+     "max_abs": 0.009251344961074891,
+     "max_over": 0.009251344961074891,
+     "max_under": -0.0033340733263199428,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.0025004396060494933,
+     "mean_abs": 0.0028995560580742912,
+     "p95_abs": 0.010881935152350263,
+     "max_abs": 0.013663876808514847,
+     "max_over": 0.013663876808514847,
+     "max_under": -0.0011973493560743936,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.0,
+     "mean_abs": 0.0,
+     "p95_abs": 0.0,
+     "max_abs": 0.0,
+     "max_over": 0.0,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.00863726240606243,
+     "mean_abs": 0.00863726240606243,
+     "p95_abs": 0.013161215368269604,
+     "max_abs": 0.013663876808514847,
+     "max_over": 0.013663876808514847,
+     "max_under": 0.0036106480036100126,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.0058937275724656995,
+     "mean_abs": 0.0058937275724656995,
+     "p95_abs": 0.00891558322221397,
+     "max_abs": 0.009251344961074891,
+     "max_over": 0.009251344961074891,
+     "max_under": 0.002536110183856507,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 5.90789299948461e-17,
+     "mean_abs": 5.90789299948461e-17,
+     "p95_abs": 1.122499669902076e-16,
+     "max_abs": 1.181578599896922e-16,
+     "max_over": 1.181578599896922e-16,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.0005986746780371968,
+     "mean_abs": 0.0005986746780371968,
+     "p95_abs": 0.001137481888270674,
+     "max_abs": 0.0011973493560743936,
+     "max_over": 0.0,
+     "max_under": -0.0011973493560743936,
+     "share_under_estimated": 0.5
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.0016670366631599714,
+     "mean_abs": 0.0016670366631599714,
+     "p95_abs": 0.0031673696600039453,
+     "max_abs": 0.0033340733263199428,
+     "max_over": 0.0,
+     "max_under": -0.0033340733263199428,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": true,
+   "within_total_target": true,
+   "under_estimates": true,
+   "by_profile_kind": {
+    "CONSTANT": {
+     "n": 5,
+     "mean_signed": 0.0,
+     "mean_abs": 0.0,
+     "p95_abs": 0.0,
+     "max_abs": 0.0,
+     "max_over": 0.0,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "LINEAR_TREND": {
+     "n": 1,
+     "mean_signed": -0.0033340733263199428,
+     "mean_abs": 0.0033340733263199428,
+     "p95_abs": 0.0033340733263199428,
+     "max_abs": 0.0033340733263199428,
+     "max_over": -0.0033340733263199428,
+     "max_under": -0.0033340733263199428,
+     "share_under_estimated": 1.0
+    },
+    "TABLE": {
+     "n": 6,
+     "mean_signed": 0.004644105100163664,
+     "mean_abs": 0.005043221552188461,
+     "p95_abs": 0.012560743846654858,
+     "max_abs": 0.013663876808514847,
+     "max_over": 0.013663876808514847,
+     "max_under": -0.0011973493560743936,
+     "share_under_estimated": 0.16666666666666666
+    }
+   }
+  },
+  "AP-09a": {
+   "candidate_id": "AP-09a",
+   "title": "電力係数を 5 年ごとの点の直線補間で持つ（全種類の系列に適用）",
+   "replaces": "年次の電力係数系列",
+   "stage": "B6",
+   "units": [
+    "X-06"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.0005135910032183548,
+    "mean_abs": 0.002171369635023156,
+    "p95_abs": 0.0072569058167621416,
+    "max_abs": 0.009779213605260255,
+    "max_over": 0.009779213605260255,
+    "max_under": -0.005193199444354599,
+    "share_under_estimated": 0.25
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 2.0724735916351922e-05,
+    "mean_abs": 0.0004313987257565591,
+    "p95_abs": 0.0014297455403615678,
+    "max_abs": 0.001522239830351294,
+    "max_over": 0.0013540683940063377,
+    "max_under": -0.001522239830351294,
+    "share_under_estimated": 0.25
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.0015788162572876604,
+     "mean_abs": 0.0017367410063219419,
+     "p95_abs": 0.004640505469482609,
+     "max_abs": 0.005193199444354599,
+     "max_over": 0.00047377424710284355,
+     "max_under": -0.005193199444354599,
+     "share_under_estimated": 0.5
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.00260599826372437,
+     "mean_abs": 0.00260599826372437,
+     "p95_abs": 0.008426645213338694,
+     "max_abs": 0.009779213605260255,
+     "max_over": 0.009779213605260255,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.0025965997221772995,
+     "mean_abs": 0.0025965997221772995,
+     "p95_abs": 0.0049335394721368685,
+     "max_abs": 0.005193199444354599,
+     "max_over": 0.0,
+     "max_under": -0.005193199444354599,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.00012681889263880335,
+     "mean_abs": 0.00012681889263880335,
+     "p95_abs": 0.00024095589601372635,
+     "max_abs": 0.0002536377852776067,
+     "max_over": 0.0002536377852776067,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.0007241441823930108,
+     "mean_abs": 0.0010469046192145602,
+     "p95_abs": 0.00169863438336827,
+     "max_abs": 0.001771048801607571,
+     "max_over": 0.00032276043682154937,
+     "max_under": -0.001771048801607571,
+     "share_under_estimated": 0.5
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.0021844700187870036,
+     "mean_abs": 0.0021844700187870036,
+     "p95_abs": 0.004150493035695307,
+     "max_abs": 0.004368940037574007,
+     "max_over": 0.004368940037574007,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.0006926059822578228,
+     "mean_abs": 0.0006926059822578228,
+     "p95_abs": 0.000889554543897304,
+     "max_abs": 0.000911437717412802,
+     "max_over": 0.000911437717412802,
+     "max_under": 0.00047377424710284355,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.0033983950301968097,
+     "mean_abs": 0.0063808185750634456,
+     "p95_abs": 0.009439374102240574,
+     "max_abs": 0.009779213605260255,
+     "max_over": 0.009779213605260255,
+     "max_under": -0.0029824235448666363,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": true,
+   "within_total_target": true,
+   "under_estimates": true,
+   "by_grid_kind": {
+    "CONSTANT": {
+     "n": 2,
+     "mean_signed": 0.0,
+     "mean_abs": 0.0,
+     "p95_abs": 0.0,
+     "max_abs": 0.0,
+     "max_over": 0.0,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "LINEAR_DECLINE_TO_FLOOR": {
+     "n": 4,
+     "mean_signed": 0.00040971243744831304,
+     "mean_abs": 0.00040971243744831304,
+     "p95_abs": 0.0008457881968663083,
+     "max_abs": 0.000911437717412802,
+     "max_over": 0.000911437717412802,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "STEPWISE": {
+     "n": 3,
+     "mean_signed": 0.0009383217864326951,
+     "mean_abs": 0.005581153950407476,
+     "p95_abs": 0.00932061218916969,
+     "max_abs": 0.009779213605260255,
+     "max_over": 0.009779213605260255,
+     "max_under": -0.005193199444354599,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "TABLE": {
+     "n": 3,
+     "mean_signed": 0.0005697589765096401,
+     "mean_abs": 0.0025580413397540643,
+     "p95_abs": 0.00423028838830327,
+     "max_abs": 0.004368940037574007,
+     "max_over": 0.004368940037574007,
+     "max_under": -0.0029824235448666363,
+     "share_under_estimated": 0.3333333333333333
+    }
+   }
+  },
+  "AP-09b": {
+   "candidate_id": "AP-09b",
+   "title": "電力係数を 10 年ごとの点の直線補間で持つ（全種類の系列に適用）",
+   "replaces": "年次の電力係数系列",
+   "stage": "B6",
+   "units": [
+    "X-06"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.005885001212927365,
+    "mean_abs": 0.006820451191866593,
+    "p95_abs": 0.03220205514236238,
+    "max_abs": 0.06461414530823802,
+    "max_over": 0.06461414530823802,
+    "max_under": -0.002727702530243917,
+    "share_under_estimated": 0.25
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.0006296236731932189,
+    "mean_abs": 0.0008646916183257886,
+    "p95_abs": 0.003691284032481381,
+    "max_abs": 0.006571497331413215,
+    "max_over": 0.006571497331413215,
+    "max_under": -0.0007995490027638106,
+    "share_under_estimated": 0.25
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.0004965224852722477,
+     "mean_abs": 0.002117546551757999,
+     "p95_abs": 0.004944229842090955,
+     "max_abs": 0.0056830722793733005,
+     "max_over": 0.0056830722793733005,
+     "max_under": -0.002727702530243917,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.011273479940582483,
+     "mean_abs": 0.011523355831975184,
+     "p95_abs": 0.04901719195472523,
+     "max_abs": 0.06461414530823802,
+     "max_over": 0.06461414530823802,
+     "max_under": -0.0007496276741781082,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.0013638512651219586,
+     "mean_abs": 0.0013638512651219586,
+     "p95_abs": 0.0025913174037317213,
+     "max_abs": 0.002727702530243917,
+     "max_over": 0.0,
+     "max_under": -0.002727702530243917,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.00028184452709556685,
+     "mean_abs": 0.00028184452709556685,
+     "p95_abs": 0.000535504601481577,
+     "max_abs": 0.0005636890541911337,
+     "max_over": 0.0005636890541911337,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.002466722302597596,
+     "mean_abs": 0.0032163499767757044,
+     "p95_abs": 0.005436400049113541,
+     "max_abs": 0.0056830722793733005,
+     "max_over": 0.0056830722793733005,
+     "max_under": -0.0007496276741781082,
+     "share_under_estimated": 0.5
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.0004931705305284916,
+     "mean_abs": 0.0004931705305284916,
+     "p95_abs": 0.000937024008004134,
+     "max_abs": 0.0009863410610569832,
+     "max_over": 0.0009863410610569832,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.002192733362952156,
+     "mean_abs": 0.002192733362952156,
+     "p95_abs": 0.0022229720410634,
+     "max_abs": 0.0022263318941868715,
+     "max_over": 0.0022263318941868715,
+     "max_under": 0.0021591348317174406,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.03123938781951234,
+     "mean_abs": 0.033374757488725676,
+     "p95_abs": 0.06149020652628678,
+     "max_abs": 0.06461414530823802,
+     "max_over": 0.06461414530823802,
+     "max_under": -0.0021353696692133373,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": true,
+   "by_grid_kind": {
+    "CONSTANT": {
+     "n": 2,
+     "mean_signed": 0.0,
+     "mean_abs": 0.0,
+     "p95_abs": 0.0,
+     "max_abs": 0.0,
+     "max_over": 0.0,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "LINEAR_DECLINE_TO_FLOOR": {
+     "n": 4,
+     "mean_signed": 0.0012372889450238615,
+     "mean_abs": 0.0012372889450238615,
+     "p95_abs": 0.002216252334816457,
+     "max_abs": 0.0022263318941868715,
+     "max_over": 0.0022263318941868715,
+     "max_under": 0.0,
+     "share_under_estimated": 0.0
+    },
+    "STEPWISE": {
+     "n": 3,
+     "mean_signed": 0.022523171685789132,
+     "mean_abs": 0.024341640039285076,
+     "p95_abs": 0.05872103800535154,
+     "max_abs": 0.06461414530823802,
+     "max_over": 0.06461414530823802,
+     "max_under": -0.002727702530243917,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "TABLE": {
+     "n": 3,
+     "mean_signed": -0.0006328854274448208,
+     "mean_abs": 0.001290446134816143,
+     "p95_abs": 0.002020466808397702,
+     "max_abs": 0.0021353696692133373,
+     "max_over": 0.0009863410610569832,
+     "max_under": -0.0021353696692133373,
+     "share_under_estimated": 0.6666666666666666
+    }
+   }
+  },
+  "AP-09c": {
+   "candidate_id": "AP-09c",
+   "title": "併用：パラメータ型の系列は厳密な閉形式、年次表の系列だけ 5 年ごとの点の直線補間",
+   "replaces": "年次の電力係数系列",
+   "stage": "B6",
+   "units": [
+    "X-06",
+    "B6-01"
+   ],
+   "step": "M6",
+   "stage_error": {
+    "n": 3,
+    "mean_signed": 0.0005697589765096401,
+    "mean_abs": 0.0025580413397540643,
+    "p95_abs": 0.00423028838830327,
+    "max_abs": 0.004368940037574007,
+    "max_over": 0.004368940037574007,
+    "max_under": -0.0029824235448666363,
+    "share_under_estimated": 0.3333333333333333
+   },
+   "total_error": {
+    "n": 3,
+    "mean_signed": 0.00030970816781230773,
+    "mean_abs": 0.0006602745031406331,
+    "p95_abs": 0.0012712465049049527,
+    "max_abs": 0.0013540683940063377,
+    "max_over": 0.0013540683940063377,
+    "max_under": -0.000525849502992488,
+    "share_under_estimated": 0.3333333333333333
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 1,
+     "mean_signed": -0.0029824235448666363,
+     "mean_abs": 0.0029824235448666363,
+     "p95_abs": 0.0029824235448666363,
+     "max_abs": 0.0029824235448666363,
+     "max_over": -0.0029824235448666363,
+     "max_under": -0.0029824235448666363,
+     "share_under_estimated": 1.0
+    },
+    "structure=S": {
+     "n": 2,
+     "mean_signed": 0.0023458502371977784,
+     "mean_abs": 0.0023458502371977784,
+     "p95_abs": 0.004166631057536384,
+     "max_abs": 0.004368940037574007,
+     "max_over": 0.004368940037574007,
+     "max_under": 0.00032276043682154937,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 1,
+     "mean_signed": 0.00032276043682154937,
+     "mean_abs": 0.00032276043682154937,
+     "p95_abs": 0.00032276043682154937,
+     "max_abs": 0.00032276043682154937,
+     "max_over": 0.00032276043682154937,
+     "max_under": 0.00032276043682154937,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 1,
+     "mean_signed": 0.004368940037574007,
+     "mean_abs": 0.004368940037574007,
+     "p95_abs": 0.004368940037574007,
+     "max_abs": 0.004368940037574007,
+     "max_over": 0.004368940037574007,
+     "max_under": 0.004368940037574007,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 1,
+     "mean_signed": -0.0029824235448666363,
+     "mean_abs": 0.0029824235448666363,
+     "p95_abs": 0.0029824235448666363,
+     "max_abs": 0.0029824235448666363,
+     "max_over": -0.0029824235448666363,
+     "max_under": -0.0029824235448666363,
+     "share_under_estimated": 1.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": true,
+   "within_total_target": true,
+   "under_estimates": true,
+   "n_scenarios_computed_exactly": 9,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-12": {
+   "candidate_id": "AP-12",
+   "title": "併用：質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う",
+   "replaces": "資材製造の全行計算",
+   "stage": "A1-A3（資材分）",
+   "units": [
+    "A13-01",
+    "A13-03"
+   ],
+   "step": "M6",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.11020828319387034,
+    "mean_abs": 0.11020828319387034,
+    "p95_abs": 0.24609913979984782,
+    "max_abs": 0.2623001530413189,
+    "max_over": -0.006652418946091251,
+    "max_under": -0.2623001530413189,
+    "share_under_estimated": 1.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.017581806368065847,
+    "mean_abs": 0.017581806368065847,
+    "p95_abs": 0.029671229363298586,
+    "max_abs": 0.030936721596268,
+    "max_over": -0.0007549181380028103,
+    "max_under": -0.030936721596268,
+    "share_under_estimated": 1.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.10860716390980867,
+     "mean_abs": 0.10860716390980867,
+     "p95_abs": 0.18090202560078916,
+     "max_abs": 0.18131490334757175,
+     "max_over": -0.006652418946091251,
+     "max_under": -0.18131490334757175,
+     "share_under_estimated": 1.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.11180940247793204,
+     "mean_abs": 0.11180940247793204,
+     "p95_abs": 0.2549360561133775,
+     "max_abs": 0.2623001530413189,
+     "max_over": -0.028031763358611718,
+     "max_under": -0.2623001530413189,
+     "share_under_estimated": 1.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.058289847890038035,
+     "mean_abs": 0.058289847890038035,
+     "p95_abs": 0.08552212396832173,
+     "max_abs": 0.08854793242146436,
+     "max_over": -0.028031763358611718,
+     "max_under": -0.08854793242146436,
+     "share_under_estimated": 1.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.1725535505657373,
+     "mean_abs": 0.1725535505657373,
+     "p95_abs": 0.22681474385317174,
+     "max_abs": 0.23284376532955336,
+     "max_over": -0.11226333580192122,
+     "max_under": -0.23284376532955336,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.1727505768113404,
+     "mean_abs": 0.1727505768113404,
+     "p95_abs": 0.253345195418321,
+     "max_abs": 0.2623001530413189,
+     "max_over": -0.08320100058136194,
+     "max_under": -0.2623001530413189,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.02665862826382112,
+     "mean_abs": 0.02665862826382112,
+     "p95_abs": 0.044664216649778,
+     "max_abs": 0.04666483758155099,
+     "max_over": -0.006652418946091251,
+     "max_under": -0.04666483758155099,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.12097401060981403,
+     "mean_abs": 0.12097401060981403,
+     "p95_abs": 0.17528081407379598,
+     "max_abs": 0.18131490334757175,
+     "max_over": -0.060633117872056316,
+     "max_under": -0.18131490334757175,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.11002308502247123,
+     "mean_abs": 0.11002308502247123,
+     "p95_abs": 0.17269936162664437,
+     "max_abs": 0.1796633923604414,
+     "max_over": -0.04038277768450104,
+     "max_under": -0.1796633923604414,
+     "share_under_estimated": 1.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-13": {
+   "candidate_id": "AP-13",
+   "title": "面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用",
+   "replaces": "買電排出の年次積算",
+   "stage": "B6",
+   "units": [
+    "X-11",
+    "B6-01"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.14156056487109334,
+    "mean_abs": 0.14156056539690717,
+    "p95_abs": 0.32108533691012786,
+    "max_abs": 0.33682868946041294,
+    "max_over": 0.33682868946041294,
+    "max_under": -3.1548829936692703e-09,
+    "share_under_estimated": 0.08333333333333333
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.04209242896272877,
+    "mean_abs": 0.04209242901620599,
+    "p95_abs": 0.10826329237361725,
+    "max_abs": 0.11299299922434818,
+    "max_over": 0.11299299922434818,
+    "max_under": -3.208632579587069e-10,
+    "share_under_estimated": 0.08333333333333333
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.17408734334019227,
+     "mean_abs": 0.17408734334019227,
+     "p95_abs": 0.2827378442929477,
+     "max_abs": 0.30820441209625826,
+     "max_over": 0.30820441209625826,
+     "max_under": 0.07529210509065319,
+     "share_under_estimated": 0.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.10903378640199439,
+     "mean_abs": 0.10903378745362204,
+     "p95_abs": 0.3139087139406489,
+     "max_abs": 0.33682868946041294,
+     "max_over": 0.33682868946041294,
+     "max_under": -3.1548829936692703e-09,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.19855575532943107,
+     "mean_abs": 0.19855575532943107,
+     "p95_abs": 0.2404894841761643,
+     "max_abs": 0.2451487873813569,
+     "max_over": 0.2451487873813569,
+     "max_under": 0.15196272327750524,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.1139143358130807,
+     "mean_abs": 0.1139143358130807,
+     "p95_abs": 0.19709576037602233,
+     "max_abs": 0.20633814088301586,
+     "max_over": 0.20633814088301586,
+     "max_under": 0.021490530743145556,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.06298725017305011,
+     "mean_abs": 0.06298725017305011,
+     "p95_abs": 0.07406161959889287,
+     "max_abs": 0.07529210509065319,
+     "max_over": 0.07529210509065319,
+     "max_under": 0.05068239525544704,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.2662540008810187,
+     "mean_abs": 0.2662540008810187,
+     "p95_abs": 0.32977122060247355,
+     "max_abs": 0.33682868946041294,
+     "max_over": 0.33682868946041294,
+     "max_under": 0.1956793123016244,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.15412836541137254,
+     "mean_abs": 0.15412836541137254,
+     "p95_abs": 0.2927968074277697,
+     "max_abs": 0.30820441209625826,
+     "max_over": 0.30820441209625826,
+     "max_under": 5.231872648681628e-05,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.05352368161860685,
+     "mean_abs": 0.053523684773489844,
+     "p95_abs": 0.101694998230236,
+     "max_abs": 0.1070473663920967,
+     "max_over": 0.1070473663920967,
+     "max_under": -3.1548829936692703e-09,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-17": {
+   "candidate_id": "AP-17",
+   "title": "輸送：輸送手段ごとに 合計質量×単純平均距離 で求める",
+   "replaces": "行ごとの質量×距離",
+   "stage": "A4",
+   "units": [
+    "A4-01",
+    "X-12"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.0091209154317987,
+    "mean_abs": 0.14022520847745848,
+    "p95_abs": 0.36919628398835397,
+    "max_abs": 0.49865609654326665,
+    "max_over": 0.49865609654326665,
+    "max_under": -0.26327461917069844,
+    "share_under_estimated": 0.6666666666666666
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.00032168374277491093,
+    "mean_abs": 0.0019215820060749982,
+    "p95_abs": 0.00907800697191791,
+    "max_abs": 0.009451531464000622,
+    "max_over": 0.008772396023850238,
+    "max_under": -0.009451531464000622,
+    "share_under_estimated": 0.6666666666666666
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.05599104260812948,
+     "mean_abs": 0.1396655737140282,
+     "p95_abs": 0.41007508343064103,
+     "max_abs": 0.49865609654326665,
+     "max_over": 0.49865609654326665,
+     "max_under": -0.14433204409276387,
+     "share_under_estimated": 0.5
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.07423287347172687,
+     "mean_abs": 0.14078484324088872,
+     "p95_abs": 0.25980655816296694,
+     "max_abs": 0.26327461917069844,
+     "max_over": 0.19965590930748556,
+     "max_under": -0.26327461917069844,
+     "share_under_estimated": 0.8333333333333334
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.10053907876773993,
+     "mean_abs": 0.1627355404029585,
+     "p95_abs": 0.2532207112939244,
+     "max_abs": 0.26327461917069844,
+     "max_over": 0.062196461635218594,
+     "max_under": -0.26327461917069844,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.044319358897538116,
+     "mean_abs": 0.044319358897538116,
+     "p95_abs": 0.04562536467726689,
+     "max_abs": 0.045770476430570084,
+     "max_over": -0.042868241364506156,
+     "max_under": -0.045770476430570084,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.1128866000477367,
+     "mean_abs": 0.1128866000477367,
+     "p95_abs": 0.19097897838151065,
+     "max_abs": 0.19965590930748556,
+     "max_over": 0.19965590930748556,
+     "max_under": 0.02611729078798784,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.04354638294687758,
+     "mean_abs": 0.04354638294687758,
+     "p95_abs": 0.06179561536907133,
+     "max_abs": 0.06382330786042618,
+     "max_over": -0.023269458033328975,
+     "max_under": -0.06382330786042618,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.1968672096162682,
+     "mean_abs": 0.1968672096162682,
+     "p95_abs": 0.24414885858742208,
+     "max_abs": 0.24940237513977254,
+     "max_over": -0.14433204409276387,
+     "max_under": -0.24940237513977254,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.21765993758989494,
+     "mean_abs": 0.2809961589533717,
+     "p95_abs": 0.4768901027842771,
+     "max_abs": 0.49865609654326665,
+     "max_over": 0.49865609654326665,
+     "max_under": -0.06333622136347679,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": true,
+   "other_targets": {
+    "X-12（積載率補正後の輸送。参考値）": {
+     "n": 12,
+     "mean_signed": -0.010824761472982336,
+     "mean_abs": 0.1458528325043566,
+     "p95_abs": 0.37997090350385265,
+     "max_abs": 0.49806603590957943,
+     "max_over": 0.49806603590957943,
+     "max_under": -0.28334761335371283,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "C2（廃棄物搬出。行ごとの搬出距離を単純平均に置換）": {
+     "n": 12,
+     "mean_signed": 0.04093359014221159,
+     "mean_abs": 0.09224853602355147,
+     "p95_abs": 0.26593504334455353,
+     "max_abs": 0.3311478052615566,
+     "max_over": 0.3311478052615566,
+     "max_under": -0.21257914723064208,
+     "share_under_estimated": 0.3333333333333333
+    }
+   },
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-18a": {
+   "candidate_id": "AP-18a",
+   "title": "区分パラメータ：資材区分ごとに代表更新周期（更新 1 回の排出で重み付けした調和平均）を 1 つ持つ",
+   "replaces": "行ごとの更新周期",
+   "stage": "B4",
+   "units": [
+    "B4-02",
+    "B4-03",
+    "X-08"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.01649366555135171,
+    "mean_abs": 0.1626852483201265,
+    "p95_abs": 0.3993081340115453,
+    "max_abs": 0.43956560344057677,
+    "max_over": 0.3402785568982503,
+    "max_under": -0.43956560344057677,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.002600294856349451,
+    "mean_abs": 0.037974251525926137,
+    "p95_abs": 0.09706639787730954,
+    "max_abs": 0.11247313947175283,
+    "max_over": 0.062048907991091404,
+    "max_under": -0.11247313947175283,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.016529603421322207,
+     "mean_abs": 0.25211566588510387,
+     "p95_abs": 0.4212667537001079,
+     "max_abs": 0.43956560344057677,
+     "max_over": 0.3402785568982503,
+     "max_under": -0.43956560344057677,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.04951693452402562,
+     "mean_abs": 0.07325483075514913,
+     "p95_abs": 0.14853917349388734,
+     "max_abs": 0.16243907865247312,
+     "max_over": 0.16243907865247312,
+     "max_under": -0.04656292008861043,
+     "share_under_estimated": 0.5
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.12976537323028567,
+     "mean_abs": 0.23660483124841578,
+     "p95_abs": 0.35339366715567283,
+     "max_abs": 0.36637020447870144,
+     "max_over": 0.10683945801813009,
+     "max_under": -0.36637020447870144,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.1069009880960465,
+     "mean_abs": 0.1069009880960465,
+     "p95_abs": 0.1139787941322594,
+     "max_abs": 0.11476521702517195,
+     "max_over": 0.11476521702517195,
+     "max_under": 0.09903675916692105,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.24306426176459361,
+     "mean_abs": 0.24306426176459361,
+     "p95_abs": 0.4199154692729784,
+     "max_abs": 0.43956560344057677,
+     "max_over": -0.04656292008861043,
+     "max_under": -0.43956560344057677,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.16803602893095143,
+     "mean_abs": 0.1722425279672989,
+     "p95_abs": 0.32347495400515514,
+     "max_abs": 0.3402785568982503,
+     "max_over": 0.3402785568982503,
+     "max_under": -0.004206499036347483,
+     "share_under_estimated": 0.5
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.1522104079181329,
+     "mean_abs": 0.1522104079181329,
+     "p95_abs": 0.1614162115790391,
+     "max_abs": 0.16243907865247312,
+     "max_over": 0.16243907865247312,
+     "max_under": 0.14198173718379267,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.04464420335785871,
+     "mean_abs": 0.06508847292627133,
+     "p95_abs": 0.10526825594834416,
+     "max_abs": 0.10973267628413004,
+     "max_over": 0.10973267628413004,
+     "max_under": -0.020444269568412617,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": {
+    "ALUMINIUM": {
+     "n": 12,
+     "mean_signed": 0.020575220310024532,
+     "mean_abs": 0.25449811053223304,
+     "p95_abs": 0.7711997851098484,
+     "max_abs": 1.0,
+     "max_over": 0.5839996092906341,
+     "max_under": -1.0,
+     "share_under_estimated": 0.4166666666666667
+    },
+    "BOARD": {
+     "n": 12,
+     "mean_signed": 0.05986264288041405,
+     "mean_abs": 0.10412705428923179,
+     "p95_abs": 0.28378854508077617,
+     "max_abs": 0.37839253554063706,
+     "max_over": 0.37839253554063706,
+     "max_under": -0.06174203766100965,
+     "share_under_estimated": 0.4166666666666667
+    },
+    "CONCRETE": {
+     "n": 4,
+     "mean_signed": -0.030977306089632395,
+     "mean_abs": 0.9690226939103677,
+     "p95_abs": 1.0676145324765922,
+     "max_abs": 1.0795465087959908,
+     "max_over": 1.0795465087959908,
+     "max_under": -1.0,
+     "share_under_estimated": 0.5
+    },
+    "EQUIPMENT": {
+     "n": 12,
+     "mean_signed": 0.061204358268360286,
+     "mean_abs": 0.1082795085916593,
+     "p95_abs": 0.29223632126812904,
+     "max_abs": 0.33458964683759856,
+     "max_over": 0.33458964683759856,
+     "max_under": -0.08967801810583594,
+     "share_under_estimated": 0.5
+    },
+    "FINISH": {
+     "n": 12,
+     "mean_signed": 0.02392655030463359,
+     "mean_abs": 0.08608422783579296,
+     "p95_abs": 0.1672002428526831,
+     "max_abs": 0.18291454179507044,
+     "max_over": 0.15434308917254805,
+     "max_under": -0.18291454179507044,
+     "share_under_estimated": 0.25
+    },
+    "GLASS": {
+     "n": 12,
+     "mean_signed": -0.04094422675484696,
+     "mean_abs": 0.2917008105015726,
+     "p95_abs": 0.9475524345693416,
+     "max_abs": 1.0,
+     "max_over": 0.9046407901260758,
+     "max_under": -1.0,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "INSULATION": {
+     "n": 12,
+     "mean_signed": 0.23815737378881832,
+     "mean_abs": 0.30361042250147346,
+     "p95_abs": 0.9340747563503129,
+     "max_abs": 1.5313066602474776,
+     "max_over": 1.5313066602474776,
+     "max_under": -0.1439351065291334,
+     "share_under_estimated": 0.25
+    },
+    "MASONRY": {
+     "n": 12,
+     "mean_signed": 0.0694983989215494,
+     "mean_abs": 0.16419879578633276,
+     "p95_abs": 0.349105704231338,
+     "max_abs": 0.4330157115598779,
+     "max_over": 0.4330157115598779,
+     "max_under": -0.26886383470653513,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "MEMBRANE": {
+     "n": 12,
+     "mean_signed": 0.6443508624997493,
+     "mean_abs": 1.0057363433700497,
+     "p95_abs": 3.147611052211798,
+     "max_abs": 5.181776422137344,
+     "max_over": 5.181776422137344,
+     "max_under": -1.0,
+     "share_under_estimated": 0.25
+    },
+    "MORTAR": {
+     "n": 12,
+     "mean_signed": 0.040880459611565605,
+     "mean_abs": 0.08395244609930347,
+     "p95_abs": 0.18732818292656597,
+     "max_abs": 0.18865140189010174,
+     "max_over": 0.18865140189010174,
+     "max_under": -0.18624554922912764,
+     "share_under_estimated": 0.25
+    },
+    "PLASTIC": {
+     "n": 12,
+     "mean_signed": 0.0318203466667744,
+     "mean_abs": 0.0991711117921371,
+     "p95_abs": 0.24538482420552796,
+     "max_abs": 0.2559404047240679,
+     "max_over": 0.2559404047240679,
+     "max_under": -0.23674844014490437,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "REBAR": {
+     "n": 4,
+     "mean_signed": -0.037550211997564656,
+     "mean_abs": 0.9624497880024353,
+     "p95_abs": 1.4301351398996411,
+     "max_abs": 1.5060413410584013,
+     "max_over": 1.5060413410584013,
+     "max_under": -1.0,
+     "share_under_estimated": 0.5
+    },
+    "STRUCTURAL_STEEL": {
+     "n": 3,
+     "mean_signed": 0.1884935801563823,
+     "mean_abs": 1.5218269134897155,
+     "p95_abs": 2.408932666422232,
+     "max_abs": 2.565480740469147,
+     "max_over": 2.565480740469147,
+     "max_under": -1.0,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "TIMBER": {
+     "n": 12,
+     "mean_signed": -0.1169742135652909,
+     "mean_abs": 0.2464589764566999,
+     "p95_abs": 1.0,
+     "max_abs": 1.0,
+     "max_over": 0.24286185264241378,
+     "max_under": -1.0,
+     "share_under_estimated": 0.3333333333333333
+    }
+   },
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-18b": {
+   "candidate_id": "AP-18b",
+   "title": "区分パラメータ：資材区分ごとに代表修繕率（初期排出で重み付けした平均）と代表更新周期を持つ",
+   "replaces": "行ごとの修繕率と更新周期",
+   "stage": "B3",
+   "units": [
+    "B3-01"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.0011409055617364547,
+    "mean_abs": 0.003203027080093233,
+    "p95_abs": 0.006576194779126315,
+    "max_abs": 0.0069978380410969905,
+    "max_over": 0.006231213928423037,
+    "max_under": -0.0069978380410969905,
+    "share_under_estimated": 0.6666666666666666
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -8.226339657360278e-05,
+    "mean_abs": 0.0005191515024740539,
+    "p95_abs": 0.001082580784330744,
+    "max_abs": 0.0015871188261737626,
+    "max_over": 0.0015871188261737626,
+    "max_under": -0.0006697769319137302,
+    "share_under_estimated": 0.6666666666666666
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.0008443143871554867,
+     "mean_abs": 0.003694235242860304,
+     "p95_abs": 0.005999220288286887,
+     "max_abs": 0.006231213928423037,
+     "max_over": 0.006231213928423037,
+     "max_under": -0.005303239367878438,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.0014374967363174225,
+     "mean_abs": 0.0027118189173261625,
+     "p95_abs": 0.006043648239505532,
+     "max_abs": 0.0069978380410969905,
+     "max_over": 0.0031810788347311587,
+     "max_under": -0.0069978380410969905,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.0018733497608478384,
+     "mean_abs": 0.004357864167575198,
+     "p95_abs": 0.0060438789523382525,
+     "max_abs": 0.006231213928423037,
+     "max_over": 0.006231213928423037,
+     "max_under": -0.00248451440672736,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.004952359647149419,
+     "mean_abs": 0.004952359647149419,
+     "p95_abs": 0.0067932902017022335,
+     "max_abs": 0.0069978380410969905,
+     "max_over": -0.002906881253201848,
+     "max_under": -0.0069978380410969905,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.002749813736711287,
+     "mean_abs": 0.002749813736711287,
+     "p95_abs": 0.0031379523249291715,
+     "max_abs": 0.0031810788347311587,
+     "max_over": 0.0031810788347311587,
+     "max_under": 0.0023185486386914154,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.00285941493670844,
+     "mean_abs": 0.00285941493670844,
+     "p95_abs": 0.005058856924761438,
+     "max_abs": 0.005303239367878438,
+     "max_over": -0.0004155905055384427,
+     "max_under": -0.005303239367878438,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.0027518638940352237,
+     "mean_abs": 0.0027518638940352237,
+     "p95_abs": 0.00293353779185576,
+     "max_abs": 0.0029537237805024865,
+     "max_over": -0.0025500040075679613,
+     "max_under": -0.0029537237805024865,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.0009049583900847696,
+     "mean_abs": 0.00154684609837983,
+     "p95_abs": 0.002361308649456123,
+     "max_abs": 0.0024518044884645996,
+     "max_over": 0.0006418877082950606,
+     "max_under": -0.0024518044884645996,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": true,
+   "within_total_target": true,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-18c": {
+   "candidate_id": "AP-18c",
+   "title": "区分パラメータ：資材区分ごとに処理経路の比率（単純平均）と経路係数（単純平均）を持ち、行は質量だけにする",
+   "replaces": "行ごとの経路比率と係数",
+   "stage": "C3＋C4",
+   "units": [
+    "C3-01",
+    "C4-01",
+    "X-09"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.00296472478422009,
+    "mean_abs": 0.06706725851040234,
+    "p95_abs": 0.12492511929944386,
+    "max_abs": 0.14464492419844532,
+    "max_over": 0.14464492419844532,
+    "max_under": -0.10879073347298815,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 5.207319889327476e-05,
+    "mean_abs": 0.0006265098871478804,
+    "p95_abs": 0.0017482198060505578,
+    "max_abs": 0.002091039051508218,
+    "max_over": 0.002091039051508218,
+    "max_under": -0.0014677313324942911,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.003563902860709211,
+     "mean_abs": 0.059587251325452915,
+     "p95_abs": 0.08976746720604828,
+     "max_abs": 0.09549991171498098,
+     "max_over": 0.05440360258837556,
+     "max_under": -0.09549991171498098,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.009493352429149391,
+     "mean_abs": 0.07454726569535176,
+     "p95_abs": 0.13568137651708104,
+     "max_abs": 0.14464492419844532,
+     "max_over": 0.14464492419844532,
+     "max_under": -0.10879073347298815,
+     "share_under_estimated": 0.5
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.018289891577009887,
+     "mean_abs": 0.07040111911181543,
+     "p95_abs": 0.08686202153112432,
+     "max_abs": 0.08869101068882532,
+     "max_over": 0.05211122753480554,
+     "max_under": -0.08869101068882532,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.06360512194547006,
+     "mean_abs": 0.06360512194547006,
+     "p95_abs": 0.07167363250587214,
+     "max_abs": 0.07257013367925014,
+     "max_over": -0.054640110211689984,
+     "max_under": -0.07257013367925014,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.04039305684828037,
+     "mean_abs": 0.04039305684828037,
+     "p95_abs": 0.04084149671795452,
+     "max_abs": 0.04089132337014054,
+     "max_over": 0.04089132337014054,
+     "max_under": 0.03989479032642021,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.032512813931058565,
+     "mean_abs": 0.032512813931058565,
+     "p95_abs": 0.05221452372264386,
+     "max_abs": 0.05440360258837556,
+     "max_over": 0.05440360258837556,
+     "max_under": 0.010622025273741571,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.10214532259398457,
+     "mean_abs": 0.10214532259398457,
+     "p95_abs": 0.10812619238508779,
+     "max_abs": 0.10879073347298815,
+     "max_over": -0.09549991171498098,
+     "max_under": -0.10879073347298815,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.09334611663180503,
+     "mean_abs": 0.09334611663180503,
+     "p95_abs": 0.13951504344178128,
+     "max_abs": 0.14464492419844532,
+     "max_over": 0.14464492419844532,
+     "max_under": 0.04204730906516475,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-18": {
+   "candidate_id": "AP-18",
+   "title": "区分パラメータによる共通近似モデル（AP-18a〜c を同時に適用）",
+   "replaces": "行ごとのライフサイクル条件",
+   "stage": "B3＋B4＋C3＋C4",
+   "units": [
+    "B3-01",
+    "B4-02",
+    "C3-01",
+    "C4-01"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.014676135066618018,
+    "mean_abs": 0.0886087674007548,
+    "p95_abs": 0.2352206869013834,
+    "max_abs": 0.24351221281465618,
+    "max_over": 0.22843671115416023,
+    "max_under": -0.24351221281465618,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.002570104658669106,
+    "mean_abs": 0.03700644961625068,
+    "p95_abs": 0.09569424475141552,
+    "max_abs": 0.11167678911761242,
+    "max_over": 0.06099432209884281,
+    "max_under": -0.11167678911761242,
+    "share_under_estimated": 0.4166666666666667
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.0015099297437504988,
+     "mean_abs": 0.1388654455592816,
+     "p95_abs": 0.23974333739953219,
+     "max_abs": 0.24351221281465618,
+     "max_over": 0.22843671115416023,
+     "max_under": -0.24351221281465618,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.027842340389485538,
+     "mean_abs": 0.03835208924222797,
+     "p95_abs": 0.07004416409849246,
+     "max_abs": 0.07099242717941716,
+     "max_over": 0.07099242717941716,
+     "max_under": -0.02592957338131837,
+     "share_under_estimated": 0.5
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.05067747988810939,
+     "mean_abs": 0.11787685474382775,
+     "p95_abs": 0.1634865866431262,
+     "max_abs": 0.16855433463193714,
+     "max_over": 0.06719937485571836,
+     "max_under": -0.16855433463193714,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.05882963409484654,
+     "mean_abs": 0.05882963409484654,
+     "p95_abs": 0.06977614787096009,
+     "max_abs": 0.07099242717941716,
+     "max_over": 0.07099242717941716,
+     "max_under": 0.04666684101027592,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.13472089309798727,
+     "mean_abs": 0.13472089309798727,
+     "p95_abs": 0.23263308084298928,
+     "max_abs": 0.24351221281465618,
+     "max_over": -0.02592957338131837,
+     "max_under": -0.24351221281465618,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.11290002296791771,
+     "mean_abs": 0.11553668818624252,
+     "p95_abs": 0.21714670885736845,
+     "max_abs": 0.22843671115416023,
+     "max_over": 0.22843671115416023,
+     "max_under": -0.0026366652183248025,
+     "share_under_estimated": 0.5
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.07618350942830462,
+     "mean_abs": 0.07618350942830462,
+     "p95_abs": 0.09039632973977425,
+     "max_abs": 0.09197553199660422,
+     "max_over": 0.09197553199660422,
+     "max_under": 0.06039148686000503,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.02554201689473591,
+     "mean_abs": 0.028505024853320043,
+     "p95_abs": 0.05149284005858236,
+     "max_abs": 0.054047041748055955,
+     "max_over": 0.054047041748055955,
+     "max_under": -0.0029630079585841293,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-19a": {
+   "candidate_id": "AP-19a",
+   "title": "未数量分：行ごとの比率の代わりに単純平均の比率 1 つを使う",
+   "replaces": "行ごとの上乗せ倍率",
+   "stage": "未数量分（A13-04）",
+   "units": [
+    "A13-04"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.044606308472833846,
+    "mean_abs": 0.18251317476528425,
+    "p95_abs": 0.42917854914912784,
+    "max_abs": 0.4680006292695169,
+    "max_over": 0.4680006292695169,
+    "max_under": -0.22113703971742985,
+    "share_under_estimated": 0.5
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -9.464073855137895e-07,
+    "mean_abs": 0.0005934851541274465,
+    "p95_abs": 0.0016873849828425932,
+    "max_abs": 0.001998990893736358,
+    "max_over": 0.001432434692111332,
+    "max_under": -0.001998990893736358,
+    "share_under_estimated": 0.5
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.1353364716178496,
+     "mean_abs": 0.2810483509133561,
+     "p95_abs": 0.4503542292147946,
+     "max_abs": 0.4680006292695169,
+     "max_over": 0.4680006292695169,
+     "max_under": -0.22113703971742985,
+     "share_under_estimated": 0.3333333333333333
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.04612385467218191,
+     "mean_abs": 0.08397799861721238,
+     "p95_abs": 0.15863985280275228,
+     "max_abs": 0.1756037063931612,
+     "max_over": 0.09168900223269935,
+     "max_under": -0.1756037063931612,
+     "share_under_estimated": 0.6666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.14748125463923525,
+     "mean_abs": 0.14748125463923525,
+     "p95_abs": 0.21377146120961038,
+     "max_abs": 0.22113703971742985,
+     "max_over": -0.07382546956104065,
+     "max_under": -0.22113703971742985,
+     "share_under_estimated": 1.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.008262851280614256,
+     "mean_abs": 0.16734085511254693,
+     "p95_abs": 0.17477742126509976,
+     "max_abs": 0.1756037063931612,
+     "max_over": 0.15907800383193269,
+     "max_under": -0.1756037063931612,
+     "share_under_estimated": 0.5
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.16187344510030766,
+     "mean_abs": 0.16187344510030766,
+     "p95_abs": 0.21058608286221153,
+     "max_abs": 0.21599859816908973,
+     "max_over": -0.10774829203152557,
+     "max_under": -0.21599859816908973,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.1821434685840862,
+     "mean_abs": 0.2152715604665416,
+     "p95_abs": 0.37920068219221925,
+     "max_abs": 0.3974150290506278,
+     "max_over": 0.3974150290506278,
+     "max_under": -0.03312809188245544,
+     "share_under_estimated": 0.5
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.24493702943595447,
+     "mean_abs": 0.24493702943595447,
+     "p95_abs": 0.4456942692861606,
+     "max_abs": 0.4680006292695169,
+     "max_over": 0.4680006292695169,
+     "max_under": 0.02187342960239203,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 0.15817490383711957,
+     "mean_abs": 0.15817490383711957,
+     "p95_abs": 0.21801221528109777,
+     "max_abs": 0.2246608054415398,
+     "max_over": 0.2246608054415398,
+     "max_under": 0.09168900223269935,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": true,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-19b": {
+   "candidate_id": "AP-19b",
+   "title": "未数量分：行ごとの比率の代わりに最大の比率 1 つを使う（安全側）",
+   "replaces": "行ごとの上乗せ倍率",
+   "stage": "未数量分（A13-04）",
+   "units": [
+    "A13-04"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 1.1673372639875046,
+    "mean_abs": 1.1673372639875046,
+    "p95_abs": 1.7994169882901263,
+    "max_abs": 1.9890633432959623,
+    "max_over": 1.9890633432959623,
+    "max_under": 0.43381681437193875,
+    "share_under_estimated": 0.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.0028109175288139523,
+    "mean_abs": 0.0028109175288139523,
+    "p95_abs": 0.005702437333725004,
+    "max_abs": 0.0065210664594402045,
+    "max_over": 0.0065210664594402045,
+    "max_under": 0.00036249443742283953,
+    "share_under_estimated": 0.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 1.226440058498779,
+     "mean_abs": 1.226440058498779,
+     "p95_abs": 1.902860454656946,
+     "max_abs": 1.9890633432959623,
+     "max_over": 1.9890633432959623,
+     "max_under": 0.43381681437193875,
+     "share_under_estimated": 0.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 1.1082344694762303,
+     "mean_abs": 1.1082344694762303,
+     "p95_abs": 1.5891580749536132,
+     "max_abs": 1.6384306802310253,
+     "max_over": 1.6384306802310253,
+     "max_under": 0.7211034052743517,
+     "share_under_estimated": 0.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": 0.5902339468569385,
+     "mean_abs": 0.5902339468569385,
+     "p95_abs": 0.7310093660934383,
+     "max_abs": 0.7466510793419383,
+     "max_over": 0.7466510793419383,
+     "max_under": 0.43381681437193875,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 1.0642113038523502,
+     "mean_abs": 1.0642113038523502,
+     "p95_abs": 1.3730084125725488,
+     "max_abs": 1.4073192024303487,
+     "max_over": 1.4073192024303487,
+     "max_under": 0.7211034052743517,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 1.0555067400878773,
+     "mean_abs": 1.0555067400878773,
+     "p95_abs": 1.4027569072180266,
+     "max_abs": 1.4413402591213764,
+     "max_over": 1.4413402591213764,
+     "max_under": 0.669673221054378,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 1.5178511751951127,
+     "mean_abs": 1.5178511751951127,
+     "p95_abs": 1.9419421264858774,
+     "max_abs": 1.9890633432959623,
+     "max_over": 1.9890633432959623,
+     "max_under": 1.046639007094263,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 1.349747087267162,
+     "mean_abs": 1.349747087267162,
+     "p95_abs": 1.6148013185926238,
+     "max_abs": 1.6442517887398973,
+     "max_over": 1.6442517887398973,
+     "max_under": 1.0552423857944266,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": 1.426473330665587,
+     "mean_abs": 1.426473330665587,
+     "p95_abs": 1.6172349452744814,
+     "max_abs": 1.6384306802310253,
+     "max_over": 1.6384306802310253,
+     "max_under": 1.2145159811001487,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": true,
+   "under_estimates": false
+  },
+  "AP-22a": {
+   "candidate_id": "AP-22a",
+   "title": "全ガスの合計を CO2 のみの合計で代用する",
+   "replaces": "ガス別の合算",
+   "stage": "対象段階の合計",
+   "units": [
+    "X-04",
+    "X-05"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": -0.13173421961856596,
+    "mean_abs": 0.13173421961856596,
+    "p95_abs": 0.18533217634127097,
+    "max_abs": 0.20438001958766008,
+    "max_over": -0.08560351195596226,
+    "max_under": -0.20438001958766008,
+    "share_under_estimated": 1.0
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": -0.13173421961856596,
+    "mean_abs": 0.13173421961856596,
+    "p95_abs": 0.18533217634127097,
+    "max_abs": 0.20438001958766008,
+    "max_over": -0.08560351195596226,
+    "max_under": -0.20438001958766008,
+    "share_under_estimated": 1.0
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": -0.12502960664924506,
+     "mean_abs": 0.12502960664924506,
+     "p95_abs": 0.16320646728862265,
+     "max_abs": 0.1697475773214981,
+     "max_over": -0.08560351195596226,
+     "max_under": -0.1697475773214981,
+     "share_under_estimated": 1.0
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": -0.13843883258788686,
+     "mean_abs": 0.13843883258788686,
+     "p95_abs": 0.19006648298344214,
+     "max_abs": 0.20438001958766008,
+     "max_over": -0.11410052744961294,
+     "max_under": -0.20438001958766008,
+     "share_under_estimated": 1.0
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.1419240523855555,
+     "mean_abs": 0.1419240523855555,
+     "p95_abs": 0.16696522482790382,
+     "max_abs": 0.1697475773214981,
+     "max_over": -0.11410052744961294,
+     "max_under": -0.1697475773214981,
+     "share_under_estimated": 1.0
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": -0.11636469256337531,
+     "mean_abs": 0.11636469256337531,
+     "p95_abs": 0.14404975511004706,
+     "max_abs": 0.14712587317078837,
+     "max_over": -0.08560351195596226,
+     "max_under": -0.14712587317078837,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": -0.10806459916881209,
+     "mean_abs": 0.10806459916881209,
+     "p95_abs": 0.11858892143628263,
+     "max_abs": 0.1197582905771127,
+     "max_over": -0.09637090776051148,
+     "max_under": -0.1197582905771127,
+     "share_under_estimated": 1.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": -0.11910266333013111,
+     "mean_abs": 0.11910266333013111,
+     "p95_abs": 0.12248890432308435,
+     "max_abs": 0.12286515332230137,
+     "max_over": -0.11534017333796086,
+     "max_under": -0.12286515332230137,
+     "share_under_estimated": 1.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": -0.13096773187469354,
+     "mean_abs": 0.13096773187469354,
+     "p95_abs": 0.1319033902981501,
+     "max_abs": 0.13200735234520083,
+     "max_over": -0.12992811140418625,
+     "max_under": -0.13200735234520083,
+     "share_under_estimated": 1.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.17398157838882822,
+     "mean_abs": 0.17398157838882822,
+     "p95_abs": 0.20134017546777688,
+     "max_abs": 0.20438001958766008,
+     "max_over": -0.14358313718999632,
+     "max_under": -0.20438001958766008,
+     "share_under_estimated": 1.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true
+  },
+  "AP-06b": {
+   "candidate_id": "AP-06b",
+   "step": "M3",
+   "stage": "X-13 の行ごとの正味発注量",
+   "units": [
+    "X-13"
+   ],
+   "title": "端材の再使用を考慮した正味発注量の線形化 1 + w(1−ρ)/(1−w) ≈ 1 + w(1−ρ)",
+   "replaces": "正味発注量の算出",
+   "row_error": {
+    "n": 3564,
+    "mean_signed": -0.0034813150258736123,
+    "mean_abs": 0.0034813150258736123,
+    "p95_abs": 0.009926325049774785,
+    "max_abs": 0.014219953950506237,
+    "max_over": -4.979250123327006e-09,
+    "max_under": -0.014219953950506237,
+    "share_under_estimated": 1.0
+   },
+   "note": "行ごとの数量は単位が行によって違うため、行ごとの相対誤差を集めた（シナリオ合計ではない）。"
+  },
+  "AP-20": {
+   "candidate_id": "AP-20",
+   "step": "M6",
+   "stage": "B4",
+   "units": [
+    "B4-02"
+   ],
+   "title": "併用：点推定の代わりに、必ず成り立つ上下限 Σu·max(0,T/c−1) ≤ B4 ≤ Σu·T/c を使う（明示の更新年一覧は厳密）",
+   "replaces": "回数関数 N(T,c)",
+   "n": 12,
+   "share_reference_inside_bracket": 1.0,
+   "bracket_width_relative_to_reference": {
+    "n": 12,
+    "mean_signed": 0.8427999386581179,
+    "mean_abs": 0.8427999386581179,
+    "p95_abs": 1.5210314030631042,
+    "max_abs": 1.76907973110455,
+    "max_over": 1.76907973110455,
+    "max_under": 0.3673727436696638,
+    "share_under_estimated": 0.0
+   },
+   "lower_bound_error": {
+    "n": 12,
+    "mean_signed": -0.19720820515751578,
+    "mean_abs": 0.19720820515751578,
+    "p95_abs": 0.4004477780808927,
+    "max_abs": 0.4230309193528228,
+    "max_over": -4.440892098500626e-16,
+    "max_under": -0.4230309193528228,
+    "share_under_estimated": 0.8333333333333334
+   },
+   "upper_bound_error": {
+    "n": 12,
+    "mean_signed": 0.6455917335006022,
+    "mean_abs": 0.6455917335006022,
+    "p95_abs": 1.2684993102220998,
+    "max_abs": 1.6134084282673924,
+    "max_over": 1.6134084282673924,
+    "max_under": 0.21352158069909088,
+    "share_under_estimated": 0.0
+   }
+  },
+  "AP-10": {
+   "candidate_id": "AP-10",
+   "title": "6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算",
+   "replaces": "資材製造の全行計算",
+   "stage": "A1-A3（資材分）",
+   "units": [
+    "X-17",
+    "A13-01",
+    "A13-03"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 0
+   },
+   "total_error": {
+    "n": 0
+   },
+   "by_group": {},
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": null,
+   "under_estimates": false,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-10b": {
+   "candidate_id": "AP-10b",
+   "title": "AP-10 に、6 区分に入らない資材の分の割増（構造×用途ごとの平均比）を掛ける",
+   "replaces": "資材製造の全行計算",
+   "stage": "A1-A3（資材分）",
+   "units": [
+    "X-17",
+    "A13-01",
+    "A13-03"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 0
+   },
+   "total_error": {
+    "n": 0
+   },
+   "by_group": {},
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": null,
+   "under_estimates": false,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-11": {
+   "candidate_id": "AP-11",
+   "title": "延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算",
+   "replaces": "全段階の計算",
+   "stage": "WLC",
+   "units": [
+    "SUM-03",
+    "SUM-04",
+    "SUM-05"
+   ],
+   "step": "M5",
+   "stage_error": {
+    "n": 0
+   },
+   "total_error": {
+    "n": 0
+   },
+   "by_group": {},
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": null,
+   "under_estimates": false,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-15": {
+   "candidate_id": "AP-15",
+   "title": "段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル",
+   "replaces": "各段階の詳細計算",
+   "stage": "WLC（段階別は by_stage）",
+   "units": [
+    "全排出単位"
+   ],
+   "step": "M4",
+   "stage_error": {
+    "n": 0
+   },
+   "total_error": {
+    "n": 0
+   },
+   "by_group": {},
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": null,
+   "under_estimates": false,
+   "by_stage": {
+    "A1-A3": {
+     "n": 0
+    },
+    "A4": {
+     "n": 0
+    },
+    "A5": {
+     "n": 0
+    },
+    "B1": {
+     "n": 0
+    },
+    "B2": {
+     "n": 0
+    },
+    "B3": {
+     "n": 0
+    },
+    "B4": {
+     "n": 0
+    },
+    "B5": {
+     "n": 0
+    },
+    "B6": {
+     "n": 0
+    },
+    "B7": {
+     "n": 0
+    },
+    "C1": {
+     "n": 0
+    },
+    "C2": {
+     "n": 0
+    },
+    "C3": {
+     "n": 0
+    },
+    "C4": {
+     "n": 0
+    }
+   },
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-16": {
+   "candidate_id": "AP-16",
+   "title": "ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途）",
+   "replaces": "全段階の計算",
+   "stage": "WLC",
+   "units": [
+    "SUM-03",
+    "SUM-04",
+    "SUM-05"
+   ],
+   "step": "M5",
+   "stage_error": {
+    "n": 6,
+    "mean_signed": 0.4524167162513666,
+    "mean_abs": 0.6864629941737315,
+    "p95_abs": 1.2127096093529335,
+    "max_abs": 1.2994558145555049,
+    "max_over": 1.2994558145555049,
+    "max_under": -0.7021388337670945,
+    "share_under_estimated": 0.16666666666666666
+   },
+   "total_error": {
+    "n": 6,
+    "mean_signed": 0.4524167162513666,
+    "mean_abs": 0.6864629941737315,
+    "p95_abs": 1.2127096093529335,
+    "max_abs": 1.2994558145555049,
+    "max_over": 1.2994558145555049,
+    "max_under": -0.7021388337670945,
+    "share_under_estimated": 0.16666666666666666
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.4524167162513666,
+     "mean_abs": 0.6864629941737315,
+     "p95_abs": 1.2127096093529335,
+     "max_abs": 1.2994558145555049,
+     "max_over": 1.2994558145555049,
+     "max_under": -0.7021388337670945,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "use=hospital": {
+     "n": 1,
+     "mean_signed": 0.9524709937452194,
+     "mean_abs": 0.9524709937452194,
+     "p95_abs": 0.9524709937452194,
+     "max_abs": 0.9524709937452194,
+     "max_over": 0.9524709937452194,
+     "max_under": 0.9524709937452194,
+     "share_under_estimated": 0.0
+    },
+    "use=office": {
+     "n": 1,
+     "mean_signed": -0.7021388337670945,
+     "mean_abs": 0.7021388337670945,
+     "p95_abs": 0.7021388337670945,
+     "max_abs": 0.7021388337670945,
+     "max_over": -0.7021388337670945,
+     "max_under": -0.7021388337670945,
+     "share_under_estimated": 1.0
+    },
+    "use=residential": {
+     "n": 1,
+     "mean_signed": 0.19416658735960338,
+     "mean_abs": 0.19416658735960338,
+     "p95_abs": 0.19416658735960338,
+     "max_abs": 0.19416658735960338,
+     "max_over": 0.19416658735960338,
+     "max_under": 0.19416658735960338,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 1,
+     "mean_signed": 0.8248528564909282,
+     "mean_abs": 0.8248528564909282,
+     "p95_abs": 0.8248528564909282,
+     "max_abs": 0.8248528564909282,
+     "max_over": 0.8248528564909282,
+     "max_under": 0.8248528564909282,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 1,
+     "mean_signed": 0.14569287912403817,
+     "mean_abs": 0.14569287912403817,
+     "p95_abs": 0.14569287912403817,
+     "max_abs": 0.14569287912403817,
+     "max_over": 0.14569287912403817,
+     "max_under": 0.14569287912403817,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 1,
+     "mean_signed": 1.2994558145555049,
+     "mean_abs": 1.2994558145555049,
+     "p95_abs": 1.2994558145555049,
+     "max_abs": 1.2994558145555049,
+     "max_over": 1.2994558145555049,
+     "max_under": 1.2994558145555049,
+     "share_under_estimated": 0.0
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "n_parameters": 9,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-14": {
+   "candidate_id": "AP-14",
+   "title": "評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める",
+   "replaces": "評価期間ごとの再計算",
+   "stage": "WLC",
+   "units": [
+    "SUM-03"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 12,
+    "mean_signed": 0.03220142766929364,
+    "mean_abs": 0.04510860792726793,
+    "p95_abs": 0.1527345406796197,
+    "max_abs": 0.2276520198067197,
+    "max_over": 0.2276520198067197,
+    "max_under": -0.05067037171082204,
+    "share_under_estimated": 0.16666666666666666
+   },
+   "total_error": {
+    "n": 12,
+    "mean_signed": 0.03220142766929364,
+    "mean_abs": 0.04510860792726793,
+    "p95_abs": 0.1527345406796197,
+    "max_abs": 0.2276520198067197,
+    "max_over": 0.2276520198067197,
+    "max_under": -0.05067037171082204,
+    "share_under_estimated": 0.16666666666666666
+   },
+   "by_group": {
+    "structure=RC": {
+     "n": 6,
+     "mean_signed": 0.0036203093333877947,
+     "mean_abs": 0.02051043323699514,
+     "p95_abs": 0.04652142861093476,
+     "max_abs": 0.05067037171082204,
+     "max_over": 0.03407459931127291,
+     "max_under": -0.05067037171082204,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "structure=S": {
+     "n": 6,
+     "mean_signed": 0.06078254600519948,
+     "mean_abs": 0.06970678261754072,
+     "p95_abs": 0.19359862020349247,
+     "max_abs": 0.2276520198067197,
+     "max_over": 0.2276520198067197,
+     "max_under": -0.02677270983702371,
+     "share_under_estimated": 0.16666666666666666
+    },
+    "use=hospital": {
+     "n": 2,
+     "mean_signed": -0.012969544745851441,
+     "mean_abs": 0.013803165091172269,
+     "p95_abs": 0.025475755362438565,
+     "max_abs": 0.02677270983702371,
+     "max_over": 0.0008336203453208282,
+     "max_under": -0.02677270983702371,
+     "share_under_estimated": 0.5
+    },
+    "use=office": {
+     "n": 2,
+     "mean_signed": 0.03242548009467331,
+     "mean_abs": 0.03242548009467331,
+     "p95_abs": 0.056912076656882325,
+     "max_abs": 0.059632809608238885,
+     "max_over": 0.059632809608238885,
+     "max_under": 0.005218150581107737,
+     "share_under_estimated": 0.0
+    },
+    "use=residential": {
+     "n": 2,
+     "mean_signed": 0.009123964431383018,
+     "mean_abs": 0.009123964431383018,
+     "p95_abs": 0.015799452381387576,
+     "max_abs": 0.016541173264721414,
+     "max_over": 0.016541173264721414,
+     "max_under": 0.0017067555980446224,
+     "share_under_estimated": 0.0
+    },
+    "use=retail": {
+     "n": 2,
+     "mean_signed": 0.06275651035254184,
+     "mean_abs": 0.06275651035254184,
+     "p95_abs": 0.08857023028968389,
+     "max_abs": 0.09143842139381078,
+     "max_over": 0.09143842139381078,
+     "max_under": 0.03407459931127291,
+     "share_under_estimated": 0.0
+    },
+    "use=school": {
+     "n": 2,
+     "mean_signed": 0.12168835200772281,
+     "mean_abs": 0.12168835200772281,
+     "p95_abs": 0.21705565302682,
+     "max_abs": 0.2276520198067197,
+     "max_over": 0.2276520198067197,
+     "max_under": 0.01572468420872592,
+     "share_under_estimated": 0.0
+    },
+    "use=warehouse": {
+     "n": 2,
+     "mean_signed": -0.01981619612470771,
+     "mean_abs": 0.030854175586114328,
+     "p95_abs": 0.048688752098351266,
+     "max_abs": 0.05067037171082204,
+     "max_over": 0.011037979461406618,
+     "max_under": -0.05067037171082204,
+     "share_under_estimated": 0.5
+    }
+   },
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": false,
+   "under_estimates": true,
+   "note": "同じ架空シナリオの評価期間だけを 50・60・75 年に変えて基準計算した結果どうしの比較。"
+  },
+  "AP-21": {
+   "candidate_id": "AP-21",
+   "title": "木材の炭素貯蔵：数量×（構造×用途ごとの平均の m3 当たり貯蔵量）",
+   "replaces": "密度×炭素含有率の入力",
+   "stage": "STO-01（参考値）",
+   "units": [
+    "STO-01"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 0
+   },
+   "total_error": {
+    "n": 0
+   },
+   "by_group": {},
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": null,
+   "under_estimates": false,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  },
+  "AP-22b": {
+   "candidate_id": "AP-22b",
+   "title": "CO2 のみの合計 = 全ガスの合計 ×（構造×用途ごとの平均の CO2 比）",
+   "replaces": "CO2 版の並行算定",
+   "stage": "CO2 のみの合計（X-05）",
+   "units": [
+    "X-05"
+   ],
+   "step": "M3",
+   "stage_error": {
+    "n": 0
+   },
+   "total_error": {
+    "n": 0
+   },
+   "by_group": {},
+   "by_material_class": null,
+   "n_reference_zero_candidate_nonzero": 0,
+   "within_stage_target": false,
+   "within_total_target": null,
+   "under_estimates": false,
+   "data_dependence": "誤差は建物ごとの資材構成・係数や条件のばらつき・使用量の分布で決まる。ここでの値は架空の母集団上のもので、実建物での精度を示さない。"
+  }
+ }
+}

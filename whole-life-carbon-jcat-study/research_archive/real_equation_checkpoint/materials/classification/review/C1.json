@@ -1,0 +1,175 @@
+{
+ "checker": "C1",
+ "rule_check": "no. 旧研究のコードは一切実行していない（試験・測定・道具・生成器の実行なし、refcalc・fastcalc・bench・synth・tools・common の読み込みなし、materials/round2_review/checker_scripts と materials/interrupted_fix のスクリプトの実行なし）。リポジトリのファイルは作成・変更・削除していない（終了時 git status --porcelain は空）。Python は自分の作業フォルダから -I で、JSON・Markdown・テキストの解析だけに使った。使った git は log、show、diff --stat、status、ls-files、rev-parse、cat-file -s、branch --list だけ。Web は使っていない。書いたのは review/C1.json と review/work_C1/ の中だけ。",
+ "findings": [
+  {
+   "id": "C1-01",
+   "severity": "MEDIUM",
+   "file": "INDEX.md（および HANDOVER.md）",
+   "where": "INDEX.md 6.1（779-786 行）、HANDOVER.md 4.2（103 行）",
+   "quoted": "基準計算の値を正として使えるのは、次の範囲である。- 入力が有限で範囲内であること（負・NaN・無限大の年次量、電力係数、係数の値、換算倍率を含まない）…この範囲の外では、基準計算の値そのものが定義文と食い違うか、印なしに一部を除いた値になる",
+   "problem": "6.1 の 4 条件は、索引自身の区分 4 の項目 CK-R7-19 が「基準値として使えない」と挙げる 6 つの入力範囲のうち (1)(2) しか覆っていない。抜けているのは、(3) 負・0・NaN・無限大の更新周期・耐用年数・建替周期（RED-3。印なしに「事象なし」、例 −16.1％）、(4) None の要素と、評価期間より短い年次表（RED-10・NUM-4・REP-17。全体が例外になる。別の評価期間の計算は表の長さまで）、(5) 係数 ID が擬似キー GRID・REFRIGERANT と同じ（NUM-5。基準計算の内部でも X-04 と合計が合わない）、(6) 係数のガス別量が係数値と合わない、値 0 でガス別量がある（RED-4・NUM-3）。さらに、範囲の内側でも定義文だけでは基準計算の値が決まらない箇所（RED-7、RED-8、RED-12(5)）があるのに、「範囲の外では定義文と食い違う」とだけ書いてあり、内側では定義文どおりと読める。HANDOVER 4.2 の括弧書きはさらに短く、4 番目の条件（生成器が作る範囲の値）も落ちている。",
+   "evidence": "index_detail/T04_reference_calculation.md の CK-R7-19「今の時点で言ってよいこと」(1)〜(6)（materials/classification/R7.json CK-R7-19 claim_that_stands）、CK-R2-09・CK-R7-29 の同欄。materials/classification/R6.json findings RED-3・RED-10・NUM-3・NUM-4・NUM-5・RED-4・REP-17 の statement。index_detail/FINDINGS_59.md 群 1・群 2。INDEX.md:781-786 に周期・None・年次表の長さ・擬似キー・ガス別量の語は無い。HANDOVER.md:103「（有限で範囲内の入力、14 段階すべてを含む境界、時間の判定の端に当たらない周期）」",
+   "suggested_fix": "6.1 の条件に (3)〜(6) を加え、「範囲の内側でも、定義文と規約一覧だけでは基準計算の値が決まらない箇所がある（CK-R7-29、CK-R2-09）。ルート B は depends_on とコードで確かめる」と書き足す。HANDOVER 4.2 の括弧書きは 6.1 と同じ一覧にするか、要約をやめて 6.1 を指すだけにする。"
+  },
+  {
+   "id": "C1-02",
+   "severity": "MEDIUM",
+   "file": "INDEX.md、index_detail/T11_interrupted_fix.md、materials/classification/R3.json・R7.json",
+   "where": "INDEX.md 6.3 の T11 の表（971 行 CK-R3-31、976 行 CK-R7-32）と、両項目の「新研究での再利用」",
+   "quoted": "CK-R3-31（ルート A・B・C）「65ff124 の未検証の修正が要る。これを採ると基準計算が変わるので、「新研究では基準計算を変えない」という条件と両立するかを先に決める必要がある。」／CK-R7-32「使うかどうかは新研究の側で明示して決め、使うなら独立の検査を先に行う必要がある。」",
+   "problem": "再利用候補の 2 項目が、中断した修正（65ff124）の版を採ることを新研究の判断に委ねる書き方になっている。HANDOVER 4.1 は差分の適用と 65ff124 の内容を戻すことを禁じ、4.2 は「中断した修正の版（65ff124）の基準計算は使わない」と書き、INDEX 1.3・6.1 は基準を公開中の版に固定している。索引の中で指示が食い違い、6.3 だけを読んだ後継者は、未検証の版の採用を認められた選択肢と受け取る。CK-R3-31 にルート A が付いている点も、6.1 のルート A の条件（総当たりで確かめられた閉形式に限る）と合わない（65ff124 の閉形式は自己申告だけ）。",
+   "evidence": "materials/classification/R3.json CK-R3-31 reuse_routes [A,B,C]・reuse_conditions、R7.json CK-R7-32 reuse_conditions（work_C1/dump.py の出力）。HANDOVER.md:82「…patch の適用、コミット 65ff124 の内容を公開中の版に戻すこと」（行わないことの一覧）、HANDOVER.md:102「中断した修正の版（65ff124）の基準計算は使わない」。INDEX.md:104、775、779。",
+   "suggested_fix": "CK-R3-31 と CK-R7-32 の使い道を「設計の記録として読むだけ。65ff124 のコード・閉形式・数値は基準にも出発点にも使わない（HANDOVER 4.1・4.2）」に改め、CK-R3-31 のルートから A を外す。採否を新研究に委ねる文は削る。"
+  },
+  {
+   "id": "C1-03",
+   "severity": "MEDIUM",
+   "file": "STOP_STATUS.md、HANDOVER.md、INDEX.md",
+   "where": "STOP_STATUS.md 4 節の 5・6（71-74 行）、HANDOVER.md 4.1（81-85 行）、INDEX.md 8.3（1063・1066 行）",
+   "quoted": "| `materials/interrupted_fix/a1_scratch/`、`a2_partial_outputs/`、`b2_output/` | 中断した修正の出力 | 未検証。a2 の分は途中の出力 |／| `materials/earlier_session_scratch/` | それ以前の段階の作業用ファイル（第1回の検査、評価者の入力など） | 古い版の出力を含む。…",
+   "problem": "「実行しない」と書かれているのは、ワークフローの定義、差分、checker_scripts だけである。保存資料にはほかにも、旧研究のコードを読み込むスクリプトと、旧研究のフォルダを書き換えるスクリプトがあるのに、3 文書のどこにも注意が無い。a1_scratch は「出力」と説明されているが、Python のスクリプト 24 本を含み、うち 12 本は refcalc・fastcalc・bench・synth を直接読み込む。earlier_session_scratch には 74 本あり、30 本が旧研究のモジュールを読み込む。wfD_fix の 3 本は 09_APPROX_STUDY/07_MATERIAL_TAXONOMY/ のファイルを絶対パスで上書きする。再開を防ぐ措置の記載として不足している。",
+   "evidence": "grep（テキスト検索のみ）：materials/interrupted_fix/a1_scratch/*.py は 24 本、行頭の from/import refcalc|fastcalc|bench|synth|tools|common を持つもの 12 本（例 run_exact.py:4-5「from bench import verify_unified as vu」「from refcalc import registry」、30 行で出力ファイルを書く）。materials/earlier_session_scratch の *.py は 74 本、同じ読み込みを持つファイル 30。wfD_fix/fix_readme.py:4・208、fix_schema.py:6・527、fix_tree.py:6・114（OUT = \".../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/\" に open(…, \"w\")）。STOP_STATUS.md:71-74、HANDOVER.md:81-85 に a1_scratch・earlier_session_scratch の語は無い。",
+   "suggested_fix": "STOP_STATUS 4 節、HANDOVER 4.1、INDEX 8.3 に「materials/interrupted_fix/a1_scratch/ と materials/earlier_session_scratch/ のスクリプトも実行しない（旧研究のコードを読み込む。wfD_fix の fix_*.py は 09_APPROX_STUDY/07_MATERIAL_TAXONOMY/ を上書きする）」を加える。INDEX 8.3 の a1_scratch の説明は「出力と、それを作ったスクリプト」に直す。"
+  },
+  {
+   "id": "C1-04",
+   "severity": "MEDIUM",
+   "file": "index_detail/T10_material_taxonomy.md、INDEX.md",
+   "where": "CK-R5-26「使ってはいけない記述」（35 行）、CK-R5-27「確かめ方」「確かめた者」（56-57 行）、INDEX.md 8.3（1066 行）",
+   "quoted": "README 6 章が述べる 3 つの案の内容（3 つの案はリポジトリに収録されておらず、読み手が確かめられない）／スクリプトは収録されておらず、リポジトリだけでは再現できない。",
+   "problem": "保存フォルダには、材料分類の 3 つの設計案と、レビューの指摘の元データ、検査用のスクリプトが入っているのに、索引は「収録されていない」と書いたままで、どの項目の所在にも挙がっていない。INDEX 8.3 はこのフォルダを「第1回の検査、評価者の入力など」とだけ説明する。後継者は 3 案を探しても索引からはたどれず、無いものと受け取る。同じフォルダにある台帳の分析担当の作業ファイル（wfA、wfA_b1b5_work）と、第1回の検査の指摘の元データ（verify/findings_audit.json、findings_numeric.json、findings_rederive.json）も、項目としては索引に無い（CK-R5-24 と NOT_COVERED.md が「開いていない」と書くだけ）。",
+   "evidence": "ls と head（読み取りのみ）：materials/earlier_session_scratch/wfD/design_taxonomy.md（833 行、題「材料分類の設計案（分類体系先行型）」）、design_normalization.md（925 行、「正規化優先」）、design_selection_effort.md（1001 行、「選択手数を最小にする観点から（独立提案）」）、critic_findings.json。旧研究 07_MATERIAL_TAXONOMY/README.md 6.1 の案 A・B・C の見出しと対応する。wfD_fix/validate.py（冒頭「4ファイルの内部整合を検査する（一時スクリプト。リポジトリには収録しない）」）、mutate_test.py。INDEX.md・index_detail で wfD・wfA・judge_na を検索して該当なし（wfB の 1 か所だけ）。",
+   "suggested_fix": "CK-R5-26・CK-R5-27 の文を「09_APPROX_STUDY には収録されていない。作業用の写しが materials/earlier_session_scratch/wfD/ と wfD_fix/ にある（分類担当は未読。未検証。スクリプトは実行しない）」に改め、INDEX 8.3 の説明に、3 つの設計案、レビューの指摘、第1回の検査の指摘の元データ、台帳の分析の作業ファイルがあることを書く。"
+  },
+  {
+   "id": "C1-05",
+   "severity": "MEDIUM",
+   "file": "INDEX.md",
+   "where": "1.1「言ってよいこと」の 4 行目（75 行）",
+   "quoted": "…補充なしの冷媒の等比、建替・指標の一次式。第2回の検査担当が、自作の逐次計算との総当たりで確かめた（…） | CK-R3-01、CK-R3-09、CK-R3-10、CK-R3-12〜16、CK-R7-23",
+   "problem": "「総当たりで確かめた」が、建替（D4、CK-R3-12）と指標（D7、CK-R3-16）にも掛かる書き方になっている。第2回の記録の検査担当は、D4 と D7 は読み比べと全体の突き合わせだけで、専用の総当たりはしていないと明記している。項目の詳細は正しく書いているのに、索引の作成者が書いた 1.1 の要約が根拠より強い。",
+   "evidence": "materials/round2_review/triage/records.md:112（COULD NOT CHECK）「D4 (rebuild) and D7 (indicators) were checked by reading and through the end-to-end comparisons only, not by a separate brute-force script.」。materials/classification/R3.json CK-R3-12 checked_by「独立検査（第2回）で再現（読み比べと全体の一致による。専用の総当たりなし）」、CK-R3-16 checked_how「専用の総当たりはしていない」。",
+   "suggested_fix": "1.1 の文を「…冷媒の等比は、第2回の検査担当が自作の逐次計算との総当たりで確かめた。建替・指標の一次式は、読み比べと 681 シナリオの一致による確認で、専用の総当たりは無い」に分ける。"
+  },
+  {
+   "id": "C1-06",
+   "severity": "LOW",
+   "file": "INDEX.md、index_detail/T12_formula_families.md",
+   "where": "3 節 T12 の表の CK-R7-07（F04）と CK-R7-08（F05）の「確かめた者」",
+   "quoted": "独立検査（第2回）で再現（値の一致。族の区分は検査なし）",
+   "problem": "F04 は X-08、F05 は X-11 を含むが、どちらも第2回で独立に書き直されていない単位である。項目の「確かめ方」には「X-08 は独立の書き直しがない」「X-11 以外の 12 単位」とあるのに、索引の表に出る「確かめた者」には但し書きが無い。F03 と F11 には但し書きがあり、書き方がそろっていない。",
+   "evidence": "materials/round2_review/triage/rederive.md:148（COULD NOT CHECK）「SYS-01, …, X-03, X-08, X-09, X-11, X-17, STO-01, STO-02 were not re-implemented independently」。R7.json CK-R7-07・CK-R7-08 の checked_how と checked_by。INDEX.md 3 節 T12 の表。",
+   "suggested_fix": "CK-R7-07 の「確かめた者」に「X-08 は作成者のみ」、CK-R7-08 に「X-11 は作成者のみ」を加える。"
+  },
+  {
+   "id": "C1-07",
+   "severity": "LOW",
+   "file": "HANDOVER.md",
+   "where": "5 節「旧研究のフォルダのファイル 75 件と、索引の項目の対応」（141 行）",
+   "quoted": "72 件は、いずれかの項目の「所在」に含まれる。残る 3 件は中身の無い初期化ファイル（`research_code/common/__init__.py`、`fastcalc/__init__.py`、`tools/__init__.py`）である",
+   "problem": "「中身の無い」は 3 件のうち 1 件にしか当てはまらない。common/__init__.py は 84 バイト、fastcalc/__init__.py は 294 バイトの説明文を持つ（後者は fastcalc に無いモジュール approx を挙げている）。また、項目の所在に正確な経路で出てこないファイルは 4 件あり（tests/__init__.py も該当）、tests/__init__.py と bench/__init__.py は 65ff124 についての項目（CK-R2-23、CK-R4-23）のフォルダ表記にだけ掛かる。",
+   "evidence": "git cat-file -s HEAD:…/research_code/{common,fastcalc,tests,tools,bench}/__init__.py → 84、294、0、0、0。git show HEAD:…/fastcalc/__init__.py（説明文に ``approx`` の行）。work_C1/cov3.py（git ls-files の 75 件と classification JSON の locations の照合）：正確な一致 67、フォルダ表記だけ 4、該当なし 4。",
+   "suggested_fix": "「残る 3 件は、実行文の無い初期化ファイル（空、または説明文だけ）」に改め、tests/__init__.py と bench/__init__.py の扱い（フォルダ表記による対応）を一言添える。"
+  },
+  {
+   "id": "C1-08",
+   "severity": "LOW",
+   "file": "HANDOVER.md（および STOP_STATUS.md）",
+   "where": "HANDOVER.md 3 節の 1 行目（65 行）、STOP_STATUS.md 3 節（54-55 行）",
+   "quoted": "38 件は中断時の編集で対応したと作業担当が申告（独立の検査なし）",
+   "problem": "登録簿では、38 件の自己申告は FIXED 19、PARTLY_FIXED 19 である（b2 は 13 件のうち 12 件が PARTLY_FIXED）。「対応したと申告」「完了を報告」だけでは、半数が一部対応の申告であることが読み取れない。",
+   "evidence": "materials/classification/R6.json findings の state_at_stop と self_report_status の集計（work_C1/v2.py）：中断時の編集で対応 38 = FIXED 19＋PARTLY_FIXED 19。段階別は a1 が FIXED 18・PARTLY_FIXED 8（NUM-10 を含む）、b2 が FIXED 1・PARTLY_FIXED 12。",
+   "suggested_fix": "「38 件は中断時の編集で対応した、または一部対応したと作業担当が申告（FIXED 19、PARTLY_FIXED 19。独立の検査なし）」に改める。"
+  },
+  {
+   "id": "C1-09",
+   "severity": "LOW",
+   "file": "INDEX.md",
+   "where": "9 節の 4 項目め（1074 行）",
+   "quoted": "分類担当の読み取りで見つかり、第2回の指摘には無い点が 3 つある。",
+   "problem": "分類担当が見つけて第2回の指摘に無い点は、索引の詳細の中に少なくともあと 2 つある。(a)「別の評価期間 4 通りで 92.1％ 減」は、統合モデルの側が合算を済ませた後の finish 4 回だけを測っている（CK-R3-21）。(b) 「無効な評価期間は 5/5 でエラー」の 5 件目は 500.0 で、無効だからではなく年次表より長いためにエラーになる（CK-R2-06）。「3 つ」は数え漏れで、(a) は 1.2 の「使ってはいけない記述」にも無い。",
+   "evidence": "index_detail/T07_exactness_load.md:135、index_detail/T04_reference_calculation.md:212・220。materials/classification/readers_summary.json の R3 の problems「第2回の指摘ではなく、この読み手の観察」、R2 の problems（fifth of the '5/5 invalid study periods refused' is 500.0）。",
+   "suggested_fix": "9 節の文を「少なくとも次の 5 つ」に改めて (a)(b) を加え、(a) を 1.2 の表にも載せる。"
+  },
+  {
+   "id": "C1-10",
+   "severity": "LOW",
+   "file": "INDEX.md",
+   "where": "6.2 の 6 項目め（795 行）",
+   "quoted": "積の和を平均の積で置き換える形（AP-17、AP-08、AP-18c。誤差は標本の共分散に等しい）",
+   "problem": "誤差が標本共分散に恒等的に等しいことを第2回が確かめたのは AP-17 だけである。AP-08 と AP-18c について、項目の詳細は「共分散が落ちる例」という分類担当の読み取りを書いているだけで、恒等式の確認は無い。3 候補をまとめて「等しい」と書くのは根拠より広い。",
+   "evidence": "materials/round2_review/triage/approx.md:45-47（APP-4 の V-EVIDENCE・CORRECTED）と 114 行（ADDITIONAL 3）は AP-17 だけを述べる。index_detail/T08_approximation.md:347（AP-08）、443（AP-18c）、556-562（AP-17）。",
+   "suggested_fix": "「（AP-17 は誤差が標本の共分散に等しいことを第2回が確かめた。AP-08・AP-18c は同じ形と読めるが未確認）」に改める。"
+  },
+  {
+   "id": "C1-11",
+   "severity": "LOW",
+   "file": "INDEX.md",
+   "where": "全体（5 節、9 節）",
+   "quoted": "（該当の記載なし）",
+   "problem": "旧研究の未完了タスク 4 件（#4、#5、#8、#9）は STOP_STATUS 3 節にあるが、INDEX.md の本文には出てこない。詳細では #5 と #9 が CK-R5-20・CK-R5-26 に出るだけで、#4 と #8 は引用の行に番号があるだけである。索引から未完了タスクと項目の対応を引けない。",
+   "evidence": "grep -c '旧タスク' INDEX.md → 0。index_detail では T09_records_reports.md:336・687・717、T10_material_taxonomy.md:29・45 だけ。STOP_STATUS.md:43-48。",
+   "suggested_fix": "INDEX の 5 節か 9 節に、未完了タスク 4 件と対応する項目（#4 → T06〜T08、#5 → CK-R5-20・CK-R5-26〜28、#8・#9 → 5.2 節と T11）を 1 つの表で示し、STOP_STATUS 3 節を指す。"
+  },
+  {
+   "id": "C1-12",
+   "severity": "LOW",
+   "file": "index_detail/T05_synthetic_data_harness.md、materials/classification/R2.json",
+   "where": "CK-R2-17「確かめ方」「確かめた者」",
+   "quoted": "コミット版で 28 件が合格したという記録は、読んだ文書には無い／確かめた者：作成者のみ",
+   "problem": "第2回の報告書の検査担当は、試験 28 件の合格を報告している。INDEX 9 節もそう書いている。CK-R2-17 の文は安全側だが、同じ索引の中で食い違っている。",
+   "evidence": "materials/round2_review/triage/reports.md:128（CHECKS PERFORMED 2）「The study's 28 unit tests pass.」。INDEX.md:1072「（第2回の報告書の検査担当は合格を報告している）」。",
+   "suggested_fix": "CK-R2-17 に「第2回の報告書の検査担当が 28 件の合格を報告している（反証検査担当の確認は無い。今の環境での合否は未確認）」と書き、「確かめた者」を合わせる。"
+  },
+  {
+   "id": "C1-13",
+   "severity": "LOW",
+   "file": "INDEX.md、index_detail/T08_approximation.md",
+   "where": "4 節 T08 の CK-R4-18（区分 3）、1.1 の 6 行目、HANDOVER.md 2.2",
+   "quoted": "AP-19b の不採用は成り立ち、AP-19a の採否は決まっていない。",
+   "problem": "旧研究が不採用にし、第2回でも不採用が成り立つとされた AP-19b が、保留の AP-19a と同じ項目で区分 3（研究途中の数式・仮説）に入っている。1.1 と HANDOVER 2.2 の「不採用が成り立つ」候補の一覧（8 件）には AP-19b も、区分 1 の CK-R4-04 に含まれる AP-20 も出てこない。AP-19b の状態を引くと「仮説」に行き着く。安全側の扱いだが、候補ごとの状態が一覧から読めない。",
+   "evidence": "R4.json CK-R4-18 state_category 3、checked_by「独立検査（第2回）で再現」、claim_that_stands。CK-R4-04 の題（AP-01・AP-02・AP-03 と上下限 AP-20）。INDEX.md:77、HANDOVER.md:54。旧研究 05_DECISIONS/README.md:36（AP-19b 不採用）、39（AP-20 不採用）。",
+   "suggested_fix": "候補 32 件の一覧（候補 id、旧研究の結論、区分、項目）を T08 の冒頭か 6.2 に 1 つ置く。AP-19b と AP-20 の扱い（区分と理由）を 1.1 の注に書く。"
+  },
+  {
+   "id": "C1-14",
+   "severity": "LOW",
+   "file": "INDEX.md、HANDOVER.md",
+   "where": "8.3（specs の行）と T11 の項目の所在",
+   "quoted": "| `materials/interrupted_fix/specs/` | 中断した修正の仕様（a1、a2、b2、b3、反証検査の手順、記録と報告書の改訂の予定） |",
+   "problem": "specs の 8 ファイルのうち、COMMON.md は INDEX.md・index_detail・HANDOVER のどこにも名前が無く、VERIFY_NUM.md は HANDOVER 3 節にしか無い。どの項目もこの 2 つを所在や根拠に挙げていない。agent_reports の candidate_lines.json、B2_REPORT_long.json も INDEX.md 本文には無い（詳細にだけある）。",
+   "evidence": "ファイル名ごとの出現数（grep -c -F）：COMMON.md は INDEX 0・詳細 0、VERIFY_NUM.md は INDEX 0・詳細 0（HANDOVER.md:66 にだけある）、candidate_lines.json は INDEX 0・詳細 4、B2_REPORT_long.json は INDEX 0・詳細 5。",
+   "suggested_fix": "INDEX 8.3 の specs の行にファイル名を列挙し、COMMON.md（各段階に共通の指示）と VERIFY_NUM.md を CK-R2-18 か CK-R5-30 の所在に加える。"
+  }
+ ],
+ "checked_ok": [
+  "(A) 近似候補：03_MODELS/candidates.json の 32 件の id（AP-01〜AP-22b）がすべて index_detail/T08 の項目（CK-R4-04〜21）の題と本文にある（JSON の id と題を照合）",
+  "(A) 統合モデル K1〜K7 → CK-R3-02〜08、導出 D1〜D8 → CK-R3-09〜17 と CK-R7-24（03_MODELS/DERIVATIONS.md の見出し、models.json の単位数 26/9/10/4/8/3/6 と統合されない 4 単位を照合）",
+  "(A) 06_OPEN_ISSUES の A〜H：CK-R5-22 が全群を行範囲つきで扱い、B は CK-R2-08・CK-R7-28・CK-R7-29、D は CK-R2-10、G-1〜G-7 は CK-R7-31・CK-R3-37、C は CK-R5-06 と T08 の保留の項目にある（06_OPEN_ISSUES/README.md 全文と照合）",
+  "(A) 必須成果物 9 点 → CK-R5-20、材料分類の草案 → CK-R5-26〜28、評価者の提案 → CK-R1-19 と CK-R5-21、README の要点 7 つ → CK-R5-11〜17（旧研究 README と照合）",
+  "(A) 反証検査担当の ADDITIONAL（approx 1〜3、numeric 1〜2、records 1〜3、rederive 1〜3）は、鍵になる数値（-9.69／+14.89、48 の年、223、5183、1e-15、-17.1％、RESTRICTED、-5e9、共分散）で検索し、すべて index_detail にあった",
+  "(A) COULD NOT CHECK：独立の書き直しが無い 14 単位 → CK-R7-18、再実装していない 5 候補（AP-06b・12・13・15・16）→ CK-R7-27 ほか、報告書の観点の未確認 → CK-R5-25 に反映されている",
+  "(B) 抜き取り 46 項目（T01〜T12 のすべて）：CK-R1-02・13・14・17・19・20、CK-R2-04・06・15・17・18・23、CK-R3-08・11・21・23・31・36・37、CK-R4-06・07・08・10・16・18・23・24、CK-R5-05・07・20・21・22・23・24・25・26・27、CK-R7-04・07・08・11・12・18・19・29・32。区分 2・3 の項目に、既知の不具合だけを内容とするものは無かった（不具合は別の区分 4 の項目に分けてある）。「確かめた者」は F04・F05（C1-06）を除き、作成者だけの部分を作成者だけと書いている",
+  "(B) 数値の照合（JSON の解析のみ）：AP-19a・AP-19b・AP-12・AP-05 の統計（approximation_study.json）、未接続の入力 53/30/14/9、シート族 198・59・41・3,818,483 と最大の族 82.39％、着手順序の 1〜3 位と 70 位、材料分類のレコード 20・不変条件 22、入力の使用 77/56、K7 の 6 単位。すべて項目の文面と合った",
+  "(B) 再利用候補のうち「使わない」等の語を含む 20 項目を機械的に抜き出して読んだ。全面的に使用を禁じる文を持つ候補は無かった（C1-02 の 2 項目を除く）",
+  "索引の件数：区分 1〜4 は 35/79/25/32（計 171）、再利用候補 133、候補にしない 38、指摘 59。INDEX の 3・4・5.1・6.3・6.4・7 節の項目の一覧、区分、ルートは classification JSON と一致した（work_C1/v3.py）",
+  "登録簿：停止時の状態 38/10/10/1、判定 33/8/18、段階 a1 26・a2 9・b2 13・b3 4・C 7 は R6.json の集計と一致。HANDOVER 3 節・STOP_STATUS 3 節の件数とも一致",
+  "Git：HANDOVER 4.2 のツリーの識別子 5 件は git rev-parse HEAD:<パス> と一致し、research_code は 43ba5d7・60e720f と同じ。65ff124 の親は 60e720f、0db5c77 は 65ff124 の逆（23 ファイル）。git diff --stat 60e720f HEAD -- 09_APPROX_STUDY は README の 9 行追加だけ、43ba5d7..60e720f は EVALUATION_PROTOCOL.md だけ。HANDOVER 1 節のコミットの一覧は git log と合う。作業ツリーは変更なし、4 文書は追跡されている",
+  "(C) 遵守：INDEX.md・HANDOVER.md・STOP_STATUS.md・index_detail・classification JSON を検索し、原版との互換・等価・一致や実建物での精度を主張する文は無かった（該当の語はすべて否定文か「使ってはいけない記述」の中）。メールアドレス、敬称つきの人名は無い。「一時停止」「後で完成」の趣旨の文は無く、3 文書とも終了と書いている。whole-life-carbon-jcat-study の下に .xlsx・.xlsm・.zip・.pdf は追跡されていない",
+  "(C) 原版に由来する数（シート数 198、数式ノード数、シート族名）は名称と件数だけで、第2章から引き継いだものと項目に明記され、公開の可否が権利者の確認によることも CK-R1-14 に書かれている。係数・耐用年数・率を原版のものとして示す箇所は無い",
+  "(D) 6 節の冒頭は「区分 2〜4 の項目を再利用しても…検証済みになるわけではない」と明記し、6.1 は基準を公開中の版の基準計算に固定して「変更しない」と書いている（条件の不足は C1-01）",
+  "セッションのタスク一覧（この点検担当に表示されたもの）：完了 5 件（#1・#2・#3・#6・#7）が残り、#4・#5・#8・#9 は無い。STOP_STATUS 2 節の記載と合う"
+ ],
+ "not_checked": [
+  "記録された数値が今の環境で再現するか（旧研究の実行が必要。実行していない）。文書は再現を主張していないので欠陥とはしない",
+  "区分 1 の 35 項目の当否（この点検の対象外）。C1-05 は 1.1 の文面を読んで気づいた 1 点だけ",
+  "INDEX 5.2 の指摘 59 件の各行と triage 本文の逐語の照合（RED・NUM の全件と REP・APP・REC の一部の statement を R6.json で読んだだけ）",
+  "旧研究の 01_LEDGER・02_RANKING・03_MODELS・04_VERIFICATION の README 本文、07_MATERIAL_TAXONOMY の本文、単位別の記録 454 件：見出しと項目の題の対応で網羅を判断した。DERIVATIONS.md「導出が当てはまらない範囲」と、材料分類の未解決事項 U-01〜U-26 の個別の対応（T10 に名前があるのは 8 件）は確かめていない",
+  "materials/interrupted_fix の仕様・報告・出力の中身、中断時の差分（723 KB）、checker_scripts の中身：ファイル名と索引での出現数だけを見た",
+  "抜き取り 46 項目のうち、一次資料の数値や triage 本文まで照合したのは約 15 項目。残りは項目の文面の内部整合（区分と本文、再利用と禁止の記述）だけを読んだ",
+  "停止の確認そのもの（プロセス、予約実行、cron、ワークフローの停止）と、リモートへの push：再確認の手段が無い（ローカルの origin の参照が HEAD と同じことだけ確かめた）",
+  "人名：メールアドレスと敬称の検索だけ。敬称なしの人名が無いことは検索では確かめきれない",
+  "予算の都合で、1.2 の各行と 6.2 の残りの文（依存の辺の数、族の件数など）の一次資料との照合は行っていない"
+ ]
+}

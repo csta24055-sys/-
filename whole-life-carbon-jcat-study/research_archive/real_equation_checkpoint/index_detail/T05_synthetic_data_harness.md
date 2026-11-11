@@ -202,8 +202,8 @@
   - [`09_APPROX_STUDY/research_code/tests/test_refcalc.py`](../../../09_APPROX_STUDY/research_code/tests/test_refcalc.py)
   - [`09_APPROX_STUDY/research_code/tests/test_closed_forms.py`](../../../09_APPROX_STUDY/research_code/tests/test_closed_forms.py)
   - [`09_APPROX_STUDY/research_code/tests/test_engine.py`](../../../09_APPROX_STUDY/research_code/tests/test_engine.py)
-- **確かめ方**：ソースを読んだだけで、今回は実行していない。コミット版で 28 件が合格したという記録は、読んだ文書には無い（A1_REPORT.json は修正前の件数を「was 28 tests」と書くだけ）。第2回で、試験が拾えなかった欠陥が見つかった。
-- **確かめた者**：作成者のみ
+- **確かめ方**：ソースを読んだだけで、今回は実行していない。第2回の報告書の検査担当は、試験 28 件の合格を報告している（反証検査担当の確認は無い。今の環境での合否は確かめていない）。第2回で、試験が拾えなかった欠陥が見つかった。
+- **確かめた者**：作成者。合格は、独立検査（第2回）の検査担当 1 者が報告
 - **言える範囲**：架空データ。試験は研究の主担当が書いたもので、独立検査の一部ではない。
 - **関係する第2回の指摘**：NUM-1、RED-1
 - **第2回の指摘の影響**：NUM-1：test_closed_forms.py 26 行が引く周期のずれは 1e-15、1e-12、1e-10、1e-8、1e-6 で、1e-9 が無く、ナイフエッジを拾えなかった。RED-1：段階の部分集合を使う試験（test_refcalc.py 88・93 行）は不備なしだけ。
@@ -221,6 +221,7 @@
   - [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](../materials/interrupted_fix/agent_reports/A1_REPORT.json)：tests（'Ran 68 tests ... OK' (was 28 tests)）
   - [`materials/round2_review/triage/numeric.md`](../materials/round2_review/triage/numeric.md):10（検証者：test_closed_forms.py 26 行は 1e-9 を引かない）、rederive.md:150（追記 3）
 - **分類した観点**：R2（基準計算・架空データ・比較・試験）
+- **停止後の点検による訂正**：点検の指摘 C1-12 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R2.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-15"></a>
 

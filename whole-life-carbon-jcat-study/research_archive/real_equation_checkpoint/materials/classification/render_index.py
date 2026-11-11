@@ -74,7 +74,7 @@ C1_NOTE = {
     "CK-R3-12": "コードとの読み比べと全体の一致による。専用の総当たりはしていない。",
     "CK-R3-16": "コードとの読み比べと全体の一致による。専用の総当たりはしていない。",
     "CK-R3-20": "数え直したのは報告書の検査担当 1 者。反証検査担当は付いていない。",
-    "CK-R5-17": "設計についての記述であり、測定の結果ではない。",
+    "CK-R3-09": "コードとの読み比べ、外からの計測、全体の一致による。専用の総当たりはしていない。",
     "CK-R7-28": "コードとの照合は第2回の検査担当 1 者。",
 }
 
@@ -88,7 +88,35 @@ def load():
             it["lens"] = L
             items.append(it)
     r6 = json.load(open(os.path.join(SRC, "R6.json"), encoding="utf-8"))
+    apply_overrides(items)
     return items, meta, r6
+
+
+def apply_overrides(items):
+    """Corrections after the independent check. The R*.json files keep the readers' original text."""
+    path = os.path.join(SRC, "overrides.json")
+    if not os.path.exists(path):
+        return
+    by = {it["id"]: it for it in items}
+    for o in json.load(open(path, encoding="utf-8"))["overrides"]:
+        it = by[o["id"]]
+        for op in o["ops"]:
+            f, kind = op["field"], op["op"]
+            if kind == "set":
+                it[f] = op["new"]
+            elif kind == "append":
+                it[f] = (it.get(f) or "") + op["new"]
+            elif kind == "replace":
+                assert op["old"] in it[f], (o["id"], f)
+                it[f] = it[f].replace(op["old"], op["new"])
+            elif kind == "extend":
+                it[f] = list(it.get(f) or []) + [x for x in op["new"] if x not in (it.get(f) or [])]
+            elif kind == "replace_item":
+                assert op["old"] in it[f], (o["id"], f)
+                it[f] = [op["new"] if x == op["old"] else x for x in it[f]]
+            else:
+                raise ValueError(kind)
+        it.setdefault("corrections", []).append(o["finding"])
 
 
 def git_lines(*args):
@@ -263,6 +291,9 @@ def main():
                 for e in ev:
                     o.append("  - %s" % loc_md(e, 1))
             o.append("- **分類した観点**：%s（%s）" % (it["lens"], LENS_NAME[it["lens"]]))
+            if it.get("corrections"):
+                o.append("- **停止後の点検による訂正**：点検の指摘 %s により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/%s.json`、"
+                         "訂正の内容は `materials/classification/overrides.json` にある。" % ("、".join(it["corrections"]), it["lens"]))
             o.append("")
         open(os.path.join(ARCH_DIR, "index_detail", fname), "w", encoding="utf-8").write("\n".join(o) + "\n")
 
@@ -275,7 +306,11 @@ def main():
     o.append("- 範囲：%s" % r6["scope_note"])
     o.append("- 判定の欄：%s" % r6["verdict_note"])
     o.append("- 公開中の版に残るかどうか：%s" % r6["basis_for_in_committed_tree"])
-    o.append("- REP の 18 件について：停止前に、主担当（研究の実行担当）が検査担当のスクリプトを再実行して再現した。その出力は保存していないので、保存資料からは確かめられない。")
+    o.append("- REP の 18 件について：反証検査担当は付いていない。うち 13 件（REP-1〜9、13、14、16、18）は、停止前に主担当（研究の実行担当）が検査担当のスクリプト 1 本"
+             "（`checker_scripts/reports/findings_repro.py`）を再実行し、同じ出力を得た（出力は保存していない）。"
+             "REP-10、REP-11、REP-12、REP-15、REP-17 の 5 件は再実行の記録が無く、検査担当 1 者の報告だけである。")
+    o.append("- 「中断時の編集で対応（自己申告・未検証）」の 38 件の内訳：作業担当の申告は、修正した（FIXED）19 件、一部だけ修正した（PARTLY_FIXED）19 件である"
+             "（a1 は 18 件と 7 件、b2 は 1 件と 12 件）。a1 の報告は、未解決の問題 10 件も挙げている。")
     o.append("- 指摘の全文と再現の手順は `materials/round2_review/triage/` の 5 ファイルにある。**`materials/round2_review/checker_scripts/` のスクリプトは旧研究のコードを読み込むので、実行しない。**")
     o.append("")
     o.append("## 件数")
@@ -448,11 +483,15 @@ def main():
     o.append("")
     o.append("| 分け方 | 件数 |")
     o.append("|---|---|")
-    o.append("| 判定 | 反証検査で確認 %d、一部確認（訂正つき）%d、反証検査なし（REP の 18 件。主担当が検査のスクリプトを再実行して再現、出力は未保存）%d |" % (
+    o.append("| 判定 | 反証検査で確認 %d、一部確認（訂正つき）%d、反証検査なし %d（REP の 18 件。うち 13 件は主担当が検査担当のスクリプトを停止前に再実行して同じ出力を得た（出力は未保存）。"
+             "REP-10・11・12・15・17 の 5 件は検査担当 1 者の報告だけ） |" % (
         c["by_verdict"]["CONFIRMED"], c["by_verdict"]["PARTLY_CONFIRMED"], c["by_verdict"]["NOT_SECOND_VERIFIED"]))
     o.append("| 検査担当が付けた重さ | 高 %d（NUM-1、RED-1、REC-1）、中 %d、低 %d |" % (
         c["by_severity"]["HIGH"], c["by_severity"]["MEDIUM"], c["by_severity"]["LOW"]))
     o.append("| 停止時点の状態 | %s |" % "、".join("%s %d" % (k, v) for k, v in c["by_state_at_stop"].items()))
+    o.append("")
+    o.append("「中断時の編集で対応（自己申告・未検証）」の 38 件は、作業担当の申告で、修正した 19 件と、**一部だけ修正した 19 件**から成る"
+             "（段階 a1 は 18 件と 7 件、段階 b2 は 1 件と 12 件）。どれも独立の検査を受けていない。")
     o.append("")
     o.append("| 群 | まとまり | 指摘 |")
     o.append("|---|---|---|")
@@ -468,8 +507,56 @@ def main():
             f.get("assigned_stage") or "—", cell(f["state_at_stop"])))
     o.append("")
 
+    o.append("### 5.3 停止時点で未完了だった旧研究のタスク")
+    o.append("")
+    o.append("旧研究のタスク一覧に残っていた未完了の 4 件（[STOP_STATUS.md](STOP_STATUS.md) の 3 節）と、この索引の項目との対応。どれも完成させない。")
+    o.append("")
+    o.append("| 旧タスク | 内容 | 停止時の状態 | 対応する項目 |")
+    o.append("|---|---|---|---|")
+    o.append("| #4 | 全評価単位の近似・統合研究（M1〜M6）と精度・性能の検証、進捗台帳の更新 | 進行中 | 主題 T06、T07、T08、T09（7 節の早見表） |")
+    o.append("| #5 | 材料分類の構造調査の仕上げ、必須成果物 9 点の整備、最終監査 | 未着手 | %s、%s、%s、%s |" % (
+        dlink("CK-R5-20"), dlink("CK-R5-26"), dlink("CK-R5-27"), dlink("CK-R5-28")))
+    o.append("| #8 | 改訂後の版に対する独立再検査（第2回）と、指摘の反映 | 進行中 | 5.2 節、主題 T11 |")
+    o.append("| #9 | 第2回の指摘の反映：記録・報告書・手書き文書の改訂と、全体の再生成 | 未着手 | %s、%s |" % (
+        dlink("CK-R5-30"), dlink("CK-R5-31")))
+    o.append("")
+
     # --- category 5
     o.append(mid5.rstrip("\n"))
+    o.append("")
+    cand = json.load(open(os.path.join(REPO, STUDY, "09_APPROX_STUDY/03_MODELS/candidates.json"), encoding="utf-8"))["candidates"]
+    CMAP = {}
+    for ids, item in [("AP-01 AP-02 AP-03 AP-20", "CK-R4-04"), ("AP-04", "CK-R4-05"), ("AP-05", "CK-R4-07"),
+                      ("AP-06 AP-06b", "CK-R4-08"), ("AP-07a AP-07b", "CK-R4-09"), ("AP-08 AP-09a AP-09b", "CK-R4-10"),
+                      ("AP-09c", "CK-R4-11"), ("AP-18a AP-18b AP-18", "CK-R4-12"), ("AP-18c", "CK-R4-13"),
+                      ("AP-10 AP-10b", "CK-R4-14"), ("AP-11 AP-15 AP-16 AP-13", "CK-R4-15"), ("AP-12", "CK-R4-16"),
+                      ("AP-17", "CK-R4-17"), ("AP-19a AP-19b", "CK-R4-18"), ("AP-14", "CK-R4-19"), ("AP-22a", "CK-R4-20"),
+                      ("AP-21 AP-22b", "CK-R4-21")]:
+        for x in ids.split():
+            CMAP[x] = item
+    CNOTE = {"AP-19b": "不採用は第2回でも成り立つとされた。保留の AP-19a と同じ項目にあるため、項目の区分は 3",
+             "AP-06b": "測定は作成者だけ。不等式の向きだけ独立に確認",
+             "AP-20": "上下限。400 件を含むのは相対 1e-12 の許容差つき",
+             "AP-12": "第2回は独自に再実装していない", "AP-13": "第2回は独自に再実装していない",
+             "AP-15": "第2回は独自に再実装していない", "AP-16": "第2回は独自に再実装していない"}
+    OUTC = {"REJECTED": "不採用", "HOLD": "保留"}
+    assert len(cand) == 32 and all(c["candidate_id"] in CMAP for c in cand)
+    o.append("### 6.3 近似候補 32 件の一覧")
+    o.append("")
+    o.append("旧研究の結論（不採用 16、保留 16）と、この索引の項目との対応。題と結論は `09_APPROX_STUDY/03_MODELS/candidates.json` の記載である。"
+             "区分 1 は「架空の母集団での測定値と不採用の結論が、第2回の検査で再現・支持された」という意味で、候補が使えるという意味ではない。")
+    o.append("")
+    o.append("| 候補 | 段階 | 旧研究の結論 | 題 | 項目（区分） | 注 |")
+    o.append("|---|---|---|---|---|---|")
+    for c in cand:
+        cid = c["candidate_id"]
+        it = by_id[CMAP[cid]]
+        o.append("| %s | %s | %s | %s | %s（%d） | %s |" % (cid, c["step"], OUTC.get(c["outcome"], c["outcome"]), cell(c["title"]),
+                                                  dlink(it["id"]), it["state_category"], CNOTE.get(cid, "")))
+    o.append("")
+    o.append("### 6.4 再利用候補の一覧（主題別）")
+    o.append("")
+    o.append("「使い道」は冒頭だけを載せた。全文と、使う条件・注意は、各項目の詳細（項目の番号から開く）にある。**条件・注意を読まずに使わないこと。**")
     o.append("")
     for t, (tname, fname) in TOPICS.items():
         sel = [by_id[i] for i in TOPIC_IDS[t] if by_id[i].get("reuse_candidate")]
@@ -485,7 +572,7 @@ def main():
                 cell(short(it.get("reuse_how"), 90))))
         o.append("")
     non = [it for it in items if not it.get("reuse_candidate")]
-    o.append("### 6.4 再利用の候補にしなかった項目（%d 件）" % len(non))
+    o.append("### 6.5 再利用の候補にしなかった項目（%d 件）" % len(non))
     o.append("")
     o.append("分類担当が候補にしなかった項目。理由は各項目の詳細にある。")
     o.append("")

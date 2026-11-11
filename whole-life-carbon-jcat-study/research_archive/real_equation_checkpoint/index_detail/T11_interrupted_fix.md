@@ -61,6 +61,8 @@
 - **所在**：
   - [`materials/interrupted_fix/specs/SPEC_A1.md`](../materials/interrupted_fix/specs/SPEC_A1.md)
   - [`materials/interrupted_fix/specs/VERIFY_DEF.md`](../materials/interrupted_fix/specs/VERIFY_DEF.md)
+  - [`materials/interrupted_fix/specs/COMMON.md`](../materials/interrupted_fix/specs/COMMON.md)（各段階に共通の指示）
+  - [`materials/interrupted_fix/specs/VERIFY_NUM.md`](../materials/interrupted_fix/specs/VERIFY_NUM.md)（修正後の反証検査の手順。未実施）
 - **確かめ方**：指示書であり、検査の対象ではない。実装は a1 が申告したが（CK-R2-19〜23）、指示書が予定した独立の検査（VERIFY_DEF.md）は開始されなかった。
 - **確かめた者**：なし
 - **言える範囲**：独立概念モデルの定義をどう閉じるかの設計。架空データでの検証を前提にした方針で、どれも確定した定義ではない。
@@ -78,6 +80,7 @@
   - [`materials/interrupted_fix/specs/VERIFY_DEF.md`](../materials/interrupted_fix/specs/VERIFY_DEF.md):1-44（予定されていた独立検査の内容）
   - [`STOP_STATUS.md`](../STOP_STATUS.md):52-60（a1 は完了を報告、独立の検査は未実施。反証検査は未着手）
 - **分類した観点**：R2（基準計算・架空データ・比較・試験）
+- **停止後の点検による訂正**：点検の指摘 C1-14 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R2.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r2-19"></a>
 
@@ -269,14 +272,15 @@
 - **使ってはいけない記述**：
   - NUM-1 は修正済み（FIXED）である、を検証済みの事実として扱うこと
   - 閉形式は「いまや証明できる形で厳密」（仕様の表現。実装の検査はない）
-- **新研究での再利用**：候補（ルート A・B・C）
+- **新研究での再利用**：候補（ルート B・C）
   - 使い道：時間の規則を丸めに依存しない形で定義する案として読む。新研究が回数関数や年の割り当てを変換で表すとき、対照にする定義の候補になる。
-  - 条件・注意：65ff124 の未検証の修正が要る。これを採ると基準計算が変わるので、「新研究では基準計算を変えない」という条件と両立するかを先に決める必要がある。採らない場合、60e720f の基準計算は周期 1.000000001 で丸めに依存したままである。
+  - 条件・注意：設計の記録として読むだけにする。65ff124 のコード・閉形式・数値は、基準にも出発点にも使わない（HANDOVER.md 4.1・4.2）。新研究の基準計算は公開中の版で、周期 1.000000001 では丸めに依存したままである。
 - **分類の根拠**：
   - [`materials/interrupted_fix/specs/SPEC_A1.md`](../materials/interrupted_fix/specs/SPEC_A1.md):39-78
   - [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](../materials/interrupted_fix/agent_reports/A1_REPORT.json): findings (NUM-1, REC-1, APP-5), decisions, interface_changes
   - [`STOP_STATUS.md`](../STOP_STATUS.md):54, 86-87, 97-99
 - **分類した観点**：R3（統合モデルとその根拠）
+- **停止後の点検による訂正**：点検の指摘 C1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R3.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r3-32"></a>
 
@@ -477,10 +481,11 @@
   - この版の基準計算を「基準計算」として、コミット済みの版の測定値（681 シナリオ、近似の誤差）と組み合わせること（定義が違う：自己申告では、時間の判定が整数の厳密な算術になり、不正値は除外して数えられ、完全性の印が依存の閉包に従う）
 - **新研究での再利用**：候補（ルート B・C）
   - 使い道：基準計算の穴（CK-R7-19、CK-R7-20）をどう埋めようとしたかの設計の記録として読む。新研究が穴のある入力範囲を扱う場合の参考になる。
-  - 条件・注意：新研究の指示は基準計算の変更を禁じている。この版を使うことは基準計算を差し替えることに当たるので、使うかどうかは新研究の側で明示して決め、使うなら独立の検査を先に行う必要がある。a2 の途中の編集（engine.py など）が同じコミットに含まれる点に注意する。
+  - 条件・注意：設計の記録として読むだけにする。この版を使うことは基準計算の差し替えに当たるので、使わない（HANDOVER.md 4.1・4.2）。a2 の途中の編集（engine.py など）が同じコミットに含まれる。
 - **分類の根拠**：
   - [`STOP_STATUS.md`](../STOP_STATUS.md):50-62（段階ごとの状態）、84-92（コミットの説明と、取り除いた理由）、96-99（実行していないこと）
   - git show --stat 65ff124（R7 が読み取り専用で確認：23 files changed, 7811 insertions(+), 1364 deletions(-)）
   - [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](../materials/interrupted_fix/agent_reports/A1_REPORT.json): files_changed（15 件）、findings[].status／what／how_checked
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
+- **停止後の点検による訂正**：点検の指摘 C1-02 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 

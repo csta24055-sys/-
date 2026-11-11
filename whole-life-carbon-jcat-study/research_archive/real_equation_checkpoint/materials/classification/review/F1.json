@@ -1,0 +1,134 @@
+{
+ "checker": "F1",
+ "rule_check": "no. 旧研究のコードは一切実行していない（試験・測定・道具・生成器の実行なし、refcalc・fastcalc・bench・synth・tools・common の import なし、checker_scripts と interrupted_fix の下のスクリプトの実行なし）。/home/user/- の下のファイルは作成・変更・削除していない（最後の git status は clean、HEAD は b2b8a6e のまま）。Python は -I を付けて JSON・Markdown・テキスト・記録の解析だけに使い、書き込みは自分の作業フォルダ work_F1 と F1.json だけ。Web は使っていない。申告する逸脱：(1) 許可された一覧に無い読み取り専用の git コマンドを最初の 2 回の呼び出しで使った（git merge-base --is-ancestor、git for-each-ref、git reflog、git stash list、git branch -r）。どれもリポジトリに書き込まない。(2) -I 付きの 1 行の Python（/root/.claude/launcher-settings.json の読み取り）を 1 回、カレントをリポジトリ最上位にしたまま実行した（書き込みなし）。(3) リポジトリ外にあるセッションの記録とワークフローの実行記録（/root/.claude/projects/…）、セッションの一時フォルダを読んだ（変更なし）。",
+ "findings": [
+  {
+   "id": "F1-01",
+   "severity": "MEDIUM",
+   "file": "HANDOVER.md",
+   "where": "5 節「作業用フォルダにあった資料」の行（142 行）。同じ趣旨：STOP_STATUS.md 6 節（98 行）、INDEX.md 8.3",
+   "quoted": "第2回の検査の指摘と再現用の資料、中断した修正の仕様・報告・出力、それ以前の段階の作業用ファイルを `materials/` に保存した",
+   "problem": "保存は選別して行われたが、3 文書のどこにも選別の条件と、保存しなかったものが書かれていない。停止前に作られた作業用フォルダのファイル 401 件のうち、materials/ に同じ内容があるのは 316 件で、85 件（約 290 MB）は保存されていない。内訳：段階 a2 の途中の作業ファイル 31 件と下位フォルダ 15 件（dry_main.py、engine_mid1.py、refactor_finish.py、lint.py、membership_check_try1〜3.json、mechanism_probe_try1・2.json、snap_*.json など）、段階 b2 の 27 件（run2〜4_400.log、make_report.py、make_report2.py、proposals.py、approx_study_monolith.py、new_12*.json、run1_400.json など）、段階 a1 の 5 件と old_tree 6 件（snap_*.pkl 3 件で約 255 MB、units_before.json、input_usage_scratch.json）、最上位の approx_old.json。これらはセッションの一時フォルダにしか無く、セッションが終わると失われる。読み手は「作業用フォルダの資料は保存済み」と受け取る。",
+   "evidence": "セッションの記録（リポジトリ外）/root/.claude/projects/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3.jsonl の 15:37:56Z の複写コマンド：`find … -not -name \"*.pkl\" … -size -300k`、a2 は `membership_check.json` と `mechanism_probe.json` の 2 件だけ、a1 は `-maxdepth 1` の `*.out`・`*.py`・`exact_*.json` だけ、b2 は名指しの 5 件だけ。自分の照合（SHA-256）：`pre-stop scratch files saved (by content hash): 316 not saved: 85 bytes not saved: 290331478`。`grep -n '作業用フォルダ' STOP_STATUS.md HANDOVER.md INDEX.md index_detail/NOT_COVERED.md` は上の 2 行と HANDOVER 83 行だけで、選別の記載は無い。",
+   "suggested_fix": "STOP_STATUS.md 6 節と HANDOVER.md 5 節に「300 KB 未満で .pkl 以外のものから選んで複写した。段階 a2・b2 の途中のスクリプト・ログ・試行の出力と、a1 のスナップショットは複写していない。それらはセッションの一時フォルダにあり、セッションの終了で消える」と書く。小さい未保存分（a2・b2 のスクリプトとログ、合計数 MB）を残すかどうかを決め、決めた内容を記録する（複写は計算の実行ではない）。"
+  },
+  {
+   "id": "F1-02",
+   "severity": "MEDIUM",
+   "file": "INDEX.md",
+   "where": "5.2 節の件数の表「判定」の行（690 行）。同じ趣旨：index_detail/FINDINGS_59.md 8 行",
+   "quoted": "反証検査なし（REP の 18 件。主担当が検査のスクリプトを再実行して再現、出力は未保存）18",
+   "problem": "「18 件を再実行して再現」は根拠より広い。停止前に主担当が再実行した報告書の観点のスクリプトは findings_repro.py の 1 本だけで、このスクリプトが扱うのは 18 件のうち 13 件（REP-1〜9、13、14、16、18）である。REP-10、REP-11、REP-12、REP-15、REP-17 の 5 件は、再実行の記録が無い。主担当自身も当時「主な項目は…再実行して確かめました」と書いており、18 件全部とは言っていない。この 5 件は、検査担当 1 者の報告だけである。",
+   "evidence": "`grep -o -E 'REP-[0-9]+' materials/round2_review/checker_scripts/reports/findings_repro.py | sort -u` → REP-1〜9、13、14、16、18 の 13 個。セッションの記録（リポジトリ外）/root/.claude/projects/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3.jsonl：11:52Z〜停止までの間に、報告書の観点のスクリプトを python で実行した Bash は 13:27:28Z の `python3 -B …/recheck/reports/findings_repro.py` の 1 回だけで、出力の行頭の標識も同じ 13 個。13:28:05Z の主担当の文「報告書の観点の 18 件は反証担当を付けておらず、主な項目は検査担当のスクリプトを私が再実行して確かめました」。materials/classification/R6.json の verdict_note「再現したという記述は BRIEF.md による。保存資料に再実行の出力は無い」。",
+   "suggested_fix": "「反証検査なし 18（REP）。うち 13 件（REP-1〜9、13、14、16、18）は、主担当が検査担当のスクリプト 1 本を停止前に再実行し、同じ出力を得た（出力は未保存）。REP-10・11・12・15・17 の 5 件は再実行の記録が無く、検査担当 1 者の報告だけ」と直す。FINDINGS_59.md の冒頭の同じ文と、この 5 件を根拠に使う項目の「確かめた者」も同じ表現にそろえる。"
+  },
+  {
+   "id": "F1-03",
+   "severity": "MEDIUM",
+   "file": "HANDOVER.md",
+   "where": "3 節の表「第2回の指摘 59 件の反映」の行（65 行）。同じ趣旨：INDEX.md 5.2 節 692 行の区分名、STOP_STATUS.md 3 節の a1・b2 の行（54・55 行）",
+   "quoted": "38 件は中断時の編集で対応したと作業担当が申告（独立の検査なし）",
+   "problem": "作業担当の申告は「対応した」ではなく、半数が「一部だけ修正」である。登録簿の 38 件の内訳は、FIXED（修正した）19 件、PARTLY_FIXED（一部だけ修正した）19 件。段階別では a1 が 18 件と 7 件、b2 が 1 件と 12 件で、b2 は 13 件のうち 12 件が一部だけである。a1 の報告には未解決の問題 10 件も載っている。この内訳は index_detail/FINDINGS_59.md の「状態の決め方」には書いてあるが、HANDOVER.md、INDEX.md 本体、STOP_STATUS.md（「作業担当は完了を報告」）には無い。読み手は 38 件に修正案があると受け取る。",
+   "evidence": "materials/classification/R6.json の findings を state_at_stop × self_report_status × assigned_stage で数えた結果：（中断時の編集で対応, FIXED, a1）18、（同, FIXED, b2）1、（同, PARTLY_FIXED, a1）7、（同, PARTLY_FIXED, b2）12。materials/interrupted_fix/agent_reports/A1_REPORT.json：findings 27 件（FIXED 18、PARTLY_FIXED 8、DOCUMENTED_ONLY 1）、open_problems 10 件。B2_REPORT.json：findings 13 件（PARTLY_FIXED 12、FIXED 1）。`grep -n 'PARTLY_FIXED\\|一部だけ対応\\|一部対応\\|部分的に対応\\|FIXED' INDEX.md` は 0 件。",
+   "suggested_fix": "「38 件は中断時の編集に含まれる。作業担当の申告は、修正した 19 件、一部だけ修正した 19 件（b2 は 13 件中 12 件が一部）。いずれも独立の検査なし」と直す。STOP_STATUS.md 3 節の a1・b2 の行にも「申告は一部修正を含む。a1 は未解決の問題 10 件を報告」と添える。"
+  },
+  {
+   "id": "F1-04",
+   "severity": "LOW",
+   "file": "HANDOVER.md",
+   "where": "5 節「旧研究のフォルダのファイル 75 件と、索引の項目の対応」の行（141 行）",
+   "quoted": "残る 3 件は中身の無い初期化ファイル（`research_code/common/__init__.py`、`fastcalc/__init__.py`、`tools/__init__.py`）である",
+   "problem": "75 件・72 件・3 件という数と、3 件の名前は合っている。ただし「中身の無い」は 3 件のうち 1 件にしか当てはまらない。common/__init__.py は 84 バイト（1 行の説明文）、fastcalc/__init__.py は 294 バイト（6 行の説明文）で、0 バイトなのは tools/__init__.py だけである。実行文は 3 件とも無い。なお、72 件のうち 5 件（axis_b_judges の 3 件、bench/__init__.py、tests/__init__.py）は、フォルダ単位の所在に含まれるだけである。",
+   "evidence": "`stat -c %s`：common/__init__.py 84、fastcalc/__init__.py 294、tools/__init__.py 0。`find 09_APPROX_STUDY -type f -size 0` → tests/__init__.py、tools/__init__.py、bench/__init__.py。R1〜R5・R7 の locations を自分で照合した結果：`study files 75 exact 67 dir-prefix only 5 uncovered 3`。",
+   "suggested_fix": "「残る 3 件は実行文の無い初期化ファイル（2 件は説明文だけ、1 件は空）」と直す。"
+  },
+  {
+   "id": "F1-05",
+   "severity": "LOW",
+   "file": "STOP_STATUS.md",
+   "where": "6 節「保存作業で行ったこと・行わなかったこと」（98〜100 行）",
+   "quoted": "**行わなかったこと**：旧研究の試験・測定・再生成の実行、未完成の修正の続き、記録や報告書の書き換え。",
+   "problem": "保存フォルダの外にある既存ファイル 2 件を変更しているが、「行ったこと」に入っていない。(1) 研究フォルダの `whole-life-carbon-jcat-study/README.md`（第9章の行に「未完成のまま終了」を追記し、保存フォルダの行を 1 つ追加）。この変更は 3 文書のどこにも書かれていない。(2) 自動生成の報告書である `09_APPROX_STUDY/README.md` の冒頭に手書きの注記 9 行を追加（4 節の 3 には書いてあるが、6 節の「報告書の書き換え」をしていないという文と並ぶと食い違って読める）。第1章〜第8章とほかの研究フォルダは変更されていない。",
+   "evidence": "`git diff --name-only 60e720f HEAD | grep -v research_archive/real_equation_checkpoint` → `09_APPROX_STUDY/README.md` と `whole-life-carbon-jcat-study/README.md`。`git show --stat 7bd1d43`：`whole-life-carbon-jcat-study/README.md | 3 +-`。`grep -n 'whole-life-carbon-jcat-study/README' STOP_STATUS.md HANDOVER.md` は 0 件、INDEX.md も 0 件。`git diff --stat 43ba5d7 HEAD -- ai-document-market-research whole-life-carbon-jcat-study/01_COMPLIANCE … 08_BUILD_PLAN scripts` は空。",
+   "suggested_fix": "6 節の「行ったこと」に「既存ファイル 2 件への追記（第9章の README 冒頭の終了の注記、研究フォルダの README の目次 2 行）」を加え、「記録や報告書の書き換え」を「記録や報告書の本文の書き換え（README 冒頭の注記の追加を除く）」に直す。"
+  },
+  {
+   "id": "F1-06",
+   "severity": "LOW",
+   "file": "STOP_STATUS.md",
+   "where": "2 節「リポジトリ内の自動再開の仕組み」の行（34 行）",
+   "quoted": "リポジトリの `.claude` 設定、自動再開用のファイル、進行管理ファイルを検索 | 該当なし",
+   "problem": "自動で再開させる仕組みが無いことは確認できた。しかし「進行管理ファイル…該当なし」は文字どおりには正しくない。旧研究の進捗台帳（`09_APPROX_STUDY/05_DECISIONS/PROGRESS.md`、`progress_ledger.json`、生成器 `research_code/tools/progress_ledger.py`）が残っており、終了の注記は README にしか無い。別の研究フォルダにも `NEXT_STEPS.md`、`RESEARCH_PROGRESS.md` がある（無関係で、変更されていない）。",
+   "evidence": "`find . -iname '*progress*' -o -iname 'NEXT*' …` → `09_APPROX_STUDY/05_DECISIONS/PROGRESS.md`、`progress_ledger.json`、`research_code/tools/progress_ledger.py`、`ai-document-market-research/research/RESEARCH_PROGRESS.md`、`NEXT_STEPS.md`。`.claude`、`CLAUDE.md`、`.mcp.json` は無し。`ls .git/hooks | grep -v sample` は空。`grep -l '終了した' -r 09_APPROX_STUDY` → `README.md` だけ。",
+   "suggested_fix": "「自動で再開させる設定・フック・予約は無い。旧研究の進捗台帳（PROGRESS.md、progress_ledger.json）は記録として残っている。自動では何も起動しない。終了の注記は README にだけある」と直す。"
+  },
+  {
+   "id": "F1-07",
+   "severity": "LOW",
+   "file": "HANDOVER.md",
+   "where": "4.2 節の 1 つ目の箇条書き（101 行）。関連：STOP_ORDER.md 5 行、HANDOVER.md 4.4 節",
+   "quoted": "新指示書の第4章がルート A に「保存した実数簡素化成果の再利用」を挙げ",
+   "problem": "かぎ括弧の中は原文どおりではない。受領した文面は「保存した実数簡素化成果を再利用する。」である。また、新指示書の全文（第1章〜第10章）はリポジトリに無い。STOP_ORDER.md にあるのは第0章と末尾の一部だけで、全文は「別に保存する」という予定のままである。HANDOVER.md の 4.2 節と 4.4 節は第2・4・5・7・9・10 章を引用しているが、後任はリポジトリだけではその引用を確かめられない。「基準計算は変更せず」が第10章にあることは、受領した文面で確認した。",
+   "evidence": "セッションの記録（リポジトリ外）/root/.claude/projects/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3.jsonl の 15:34:24Z の利用者の文面（4,451 字）：「ルートA：既存簡素化モデル利用 — 保存した実数簡素化成果を再利用する。」。「基準計算は変更せず、未検証結果を検証済みと扱わない。」は「10.【必須成果物】研究管理」の中。STOP_ORDER.md 5 行「指示書の全文は、新研究のフォルダの統制文書として別に保存する。」。`ls whole-life-carbon-jcat-study` に新研究のフォルダは無い。",
+   "suggested_fix": "引用を原文どおり「保存した実数簡素化成果を再利用する」に直す。新指示書の全文がまだリポジトリに無いことを HANDOVER.md に書くか、受領した全文を保存フォルダに置く（文書の保存であり、新研究の開始ではない）。"
+  },
+  {
+   "id": "F1-08",
+   "severity": "LOW",
+   "file": "materials/classification/README.md",
+   "where": "末尾の文（25 行）。INDEX.md 8.3 が指す資料",
+   "quoted": "`BRIEF.md` と `classification_workflow_script.js` にある `/tmp/…` の場所は、分類の作業用フォルダで、今は無い。",
+   "problem": "点検の時点では、そのフォルダは存在する（BRIEF.md、R1〜R7.json、render_index.py などがある）。「今は無い」は現在の事実と合わない。セッションが終われば消える、という意味なら、そう書く必要がある。",
+   "evidence": "`ls -la /tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/checkpoint` → BRIEF.md（15:41）、R1.json〜R7.json、render_index.py、wf_result.json など。`cmp` で、保存フォルダの R1〜R7.json は作業用フォルダのものと 7 件とも同一。",
+   "suggested_fix": "「セッションの一時フォルダで、セッションの終了とともに消える。内容はこのフォルダに複写してある」と直す。"
+  },
+  {
+   "id": "F1-09",
+   "severity": "LOW",
+   "file": "STOP_STATUS.md",
+   "where": "7 節の表の 3〜5 行目（109〜111 行）と、5 節の表の最後の行（90 行）",
+   "quoted": "`INDEX.md` の完成をもって満たす ／ 3 文書の完成をもって満たす ／ 満たす（上の 5。3 文書のコミットと push をもって完了）",
+   "problem": "条件つきの書き方が、3 文書がそろう前の時点のまま残っている。3 文書は b2b8a6e でコミットされ、push 済みである。5 節の表も、保存のコミット（7bd1d43、580d287、25f70b8、b2b8a6e）の識別子を挙げていない。最終結果は HANDOVER.md の 7 節にあると案内しているので誤りではないが、STOP_STATUS.md だけを読むと、条件が満たされたかどうかが分からない。",
+   "evidence": "`git log --oneline 0db5c77..HEAD` → 7bd1d43、580d287、25f70b8、b2b8a6e の 4 件。`git rev-parse HEAD origin/claude/jcat-formula-approximation-study-c33936` → どちらも b2b8a6e3d57ead00a031e88bb932f54682a7d62c。`git diff 25f70b8 b2b8a6e -- STOP_STATUS.md` で変わったのは 4 節の 6 と 5 節の 60e720f の行だけ。",
+   "suggested_fix": "別の担当による点検の後に、7 節を「満たす（INDEX.md と HANDOVER.md は b2b8a6e で作成、push 済み。最終確認は HANDOVER.md の 7 節）」に直し、5 節の表に保存のコミットの識別子を書く。"
+  }
+ ],
+ "checked_ok": [
+  "履歴：43ba5d7、60e720f、65ff124、0db5c77、7bd1d43、580d287、25f70b8、b2b8a6e は HEAD の一直線の履歴にある（git log）。reflog は commit だけで、reset・rebase・amend は無い。65ff124 は履歴に残っている",
+  "60e720f と 43ba5d7 の差は 00_POLICY/EVALUATION_PROTOCOL.md だけ（+16 −11）（git diff --stat 43ba5d7 60e720f）。手順書の本文に「草稿」の語は無い",
+  "65ff124 は 23 ファイル（変更 16、追加 7：units.json と research_code の .py 22 件）。0db5c77 はその逆（変更 16、削除 7）。0db5c77 と 60e720f はツリー全体が同一（3283f074…）",
+  "git diff --stat 60e720f HEAD -- 09_APPROX_STUDY は README.md だけ（+9、冒頭の注記）。git diff --diff-filter=D は 60e720f..HEAD、43ba5d7..HEAD とも空（削除なし）",
+  "HANDOVER 4.2 のツリーの識別子 5 つは、HEAD・43ba5d7・60e720f の 3 つで全部一致（git rev-parse <版>:<パス>）",
+  "push：git status は「up to date」で clean。HEAD と origin/claude/jcat-formula-approximation-study-c33936 はどちらも b2b8a6e。セッションの記録に 60e720f..65ff124 と 25f70b8..b2b8a6e の push の出力がある。origin/main（c1d0bca）ともう 1 つのブランチ（2b2fb79）に保存のコミットは入っていない",
+  "ほかのフォルダ：ai-document-market-research、第1章〜第8章（01_COMPLIANCE〜08_BUILD_PLAN）、scripts、最上位の README と .gitignore は 43ba5d7 以降の差が空",
+  "停止：指示の受領 15:34:24Z、タスク停止の操作 15:34:31.871Z（応答「Successfully stopped task: wk1bictsx」）。ワークフローの実行記録は status killed、時刻 15:34:31.879Z、作業担当 3 件。実行記録の journal は開始 3 件・完了 2 件。フォルダの最終書き込みは 15:34:31.890。a1 の完了 14:28:47、b2 の完了 15:31:57、a2 は状態 progress のまま",
+  "現在のプロセス（ps）：初期化プロセス、計測、環境管理、セッション本体、自分のシェルだけ。python・pytest・ワークフローのプロセスは無い。cron のデーモンも無い。crontab・at は導入されていない。/etc/cron.d は e2scrub_all と php だけ",
+  "自動再開：リポジトリに .claude、CLAUDE.md、.mcp.json は無い。.git/hooks は sample だけ。利用者の settings.json は無い。launcher-settings.json のフックは SessionStart（セットアップ失敗の通知）と Stop（git の確認）だけで、旧研究を起動しない",
+  "予約：セッションの記録にある結果で確認。セッション内の予約は「No scheduled jobs.」（15:34:32Z）。予約タスクの一覧（完了済みを含む）は 6 件で、このセッションに結び付くものは 0 件、有効は 1 件（別の研究・別のセッションの 1 回限りのもの）、残り 5 件は実行済みで終了。17:22:22Z の一覧も同じ。通信できる作業担当は「No reachable agents」",
+  "タスク一覧：停止時は #4 進行中、#5 未着手、#8 進行中、#9 未着手。15:38:25Z に 4 件を一覧から外した。今の一覧に残る完了済みは #1・#2・#3・#6・#7 の 5 件",
+  "停止後の実行：主担当と分類担当 7 者の、15:34:31Z 以降の Bash 252 件（python の呼び出し 174 件）を調べた。旧研究のモジュールの import、pytest、unittest、research_code のスクリプトの実行は無い。構文の確認は `python3 -B -` と ast.parse で、.py 22 件と units.json を読んだだけ。停止後の rm・git clean・git reset も無い（materials 内の .log を .log.txt に改名しただけ）",
+  "停止後の痕跡：/home/user/- の下に __pycache__、.pyc、.pytest_cache は無い。09_APPROX_STUDY の更新時刻は、16 件が 15:37:17（0db5c77 の取り消し）、README.md が 17:20:31（注記）、sheet_family_coverage.json が 14:20:12（停止前。内容は HEAD と同じ）。停止前からある作業用フォルダに、停止後に書き換えられたファイルは無い（1 件はリポジトリへのシンボリックリンク）",
+  "新研究の未着手：指示の受領後に WebSearch・WebFetch の呼び出しは無い。新研究のフォルダも無い。新研究のタスク #11〜#14 は未着手として登録されているだけ",
+  "所在：INDEX.md の相対リンク 98 件、HANDOVER.md の 4 件、3 文書のバッククォートのパスは、すべて実在する。STOP_STATUS・HANDOVER・INDEX 8 節が挙げる materials の資料は全部ある",
+  "INDEX 0.4：R1〜R5・R7 の項目は 171 件（ID の重複なし）。区分は 35／79／25／32。再利用候補 133、候補外 38。INDEX.md の 2〜5.1 節、6.3 節、6.4 節、7 節と index_detail の見出しは、この ID と過不足なく一致",
+  "INDEX 5.2：res.json の指摘は 59 件（11／12／9／9／18、ID の重複なし）。重さは 高 3・中 27・低 29。判定は 確認 33・一部確認 8・反証検査なし 18（reports は verdicts が null）。triage の 5 ファイルの見出しも 11／12／9／9／18。R6.json の状態は 38／10／10／1。INDEX の 59 行は R6.json と全行一致。8 群は 59 件を過不足なく含む",
+  "HANDOVER 5：09_APPROX_STUDY の追跡ファイルは 75 件（ファイルシステムも 75 件）。項目の所在に含まれないのは 3 件で、名前は HANDOVER の記載どおり",
+  "禁止の種類：whole-life-carbon-jcat-study の下に .xlsx・.xlsm・.xls・.xlsb・.zip・.pdf・.7z・.tar・.gz は無い。拡張子は py・md・json・out・txt・js・patch・gitignore だけ。materials に __pycache__、.pyc、.pkl は無い。保存フォルダの 349 件はすべて追跡されている",
+  "差分ファイル：working_tree_at_stop_65ff124.patch の本体は `git show 65ff124` の差分と 1 バイトも違わない（719,767 バイト、23 ファイル）。ファイル全体は 723,463 バイト",
+  "ワークフローの定義：workflow_script_DO_NOT_RUN.js は実行環境の元のスクリプトと同一。反証検査の反復は最大 2 巡。段階の名前（core＝a1、evidence＝a2、ledger＝b3、approx＝b2）は 3 文書の説明と合う",
+  "STOP_ORDER.md：第0章の 44 の文節は、受領した文面にすべてそのままある",
+  "INDEX 1.3・8.2・9：65ff124 は 50 単位の定義文（reference_semantics）を変える。単位別の記録は 454 件。評価単位は 70 件（53＋17）。試験の関数は 28 件（6＋7＋8＋7）。9 節の 3 点（X-07 のコードは B2-01 を読むが依存の一覧に無い。x_08 は B4-02 を読まない。SYS-01 は目的の欄に 42 単位と書くが feeds は空で、gated_by に SYS-01 を持つ単位が 17）は、コードと units.json の文面で確認。wfB/axis_a_run.log.txt は「69 units measured」",
+  "INDEX 0.1：分類担当は 7 者（実行記録 7 件）。申告は 7 者とも「no」。分類の後の 17:10:36Z に git status が実行されている。保存フォルダの R1〜R7.json は、分類担当が書いた元のファイルと同一"
+ ],
+ "not_checked": [
+  "リモートの実際の状態。fetch と ls-remote は使えないので、手元の追跡用の参照と、記録に残る push の出力で判断した",
+  "セッションとアカウントの予約の一覧を、自分では呼び出していない（この点検からは見えない前提）。記録に残る 15:34:32Z、15:38:17Z、17:22:22Z の結果で判断した。17:22:22Z より後に作られた予約があるかは分からない",
+  "停止したワークフローが、明示的な呼び出しなしには再開しないこと（STOP_STATUS 4 節の 1）。実行環境の動作であり、読み取りでは確かめられない",
+  "公開中の版の試験 28 件が通るか、65ff124 のコードが試験に通るか。実行しないと確かめられない（文書もそう書いている）",
+  "区分の割り当ての当否（区分 1 の 35 件が条件 (a)〜(c) を満たすか）、HANDOVER 2 節・4.3 節・4.4 節・6 節、INDEX 1.1・1.2・2〜7 節の内容。この点検（F1）の範囲外",
+  "checker_scripts の 140 件と earlier_session_scratch の 106 件の中身。件数と import の有無（.py 96 件のうち 66 件が旧研究のモジュールを import）を数えただけ。「停止前の作業用フォルダに書き出す」（HANDOVER 4.1）は、絶対パスを含むスクリプトが 2 件あることしか見ていない",
+  "停止の時点で 09_APPROX_STUDY に Git が無視するファイル（__pycache__ など）があったかどうか。停止後に削除のコマンドは無いが、停止前の状態は復元できない",
+  "今回の点検のほかの担当（同じワークフローの作業担当）の操作。記録の調査から除いた",
+  "REP の 13 件について、再実行の出力が指摘の内容を裏付けているかどうか。標識の有無だけを数えた"
+ ]
+}

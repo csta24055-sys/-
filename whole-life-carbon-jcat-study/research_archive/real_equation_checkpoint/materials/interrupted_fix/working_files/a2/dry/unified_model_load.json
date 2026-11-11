@@ -1,0 +1,348 @@
+{
+ "schema_version": "2.0",
+ "python": "3.13.18",
+ "repeats": 1,
+ "what": "Reference calculation versus the unified model on the standard benchmark (same language, same machine, pure Python on both sides). Primary metric: executed bytecode instructions. Wall time is the median with the garbage collector off; the value with it on is given beside it.",
+ "data_statement": "SYNTHETIC_FICTIONAL data only.",
+ "sizes": {
+  "S": {
+   "rows": {
+    "materials": 200,
+    "equipment": 60,
+    "refrigerants": 5,
+    "study_period": 60.0
+   },
+   "reference_without_baseline_comparison": {
+    "instructions": 3135233,
+    "time_ms": 17.578538,
+    "time_ms_min": 17.578538,
+    "time_ms_gc_on": 17.978064,
+    "time_ms_gc_on_min": 17.978064,
+    "peak_memory_kib": 730.6533203125
+   },
+   "unified_full_outputs": {
+    "instructions": 1227626,
+    "time_ms": 10.773591,
+    "time_ms_min": 10.773591,
+    "time_ms_gc_on": 11.288818,
+    "time_ms_gc_on_min": 11.288818,
+    "peak_memory_kib": 589.5439453125,
+    "compared_with": "reference_without_baseline_comparison",
+    "instruction_reduction": 0.6084418606208852,
+    "time_reduction_gc_off": 0.38711677842605574,
+    "time_reduction_gc_on": 0.3720782170983483,
+    "memory_reduction": 0.19312767228601324
+   },
+   "unified_totals_only": {
+    "instructions": 923836,
+    "time_ms": 13.141755,
+    "time_ms_min": 13.141755,
+    "time_ms_gc_on": 8.556171,
+    "time_ms_gc_on_min": 8.556171,
+    "peak_memory_kib": 457.8798828125,
+    "compared_with": "reference_without_baseline_comparison",
+    "instruction_reduction": 0.705337370460186,
+    "time_reduction_gc_off": 0.2523977249985182,
+    "time_reduction_gc_on": 0.5240771753844018,
+    "memory_reduction": 0.3733281296570786
+   },
+   "reference_with_baseline_comparison": {
+    "instructions": 4513324,
+    "time_ms": 25.973115,
+    "time_ms_min": 25.973115,
+    "time_ms_gc_on": 26.506044,
+    "time_ms_gc_on_min": 26.506044,
+    "peak_memory_kib": 1253.2734375
+   },
+   "unified_full_outputs_with_baseline_comparison": {
+    "instructions": 2151853,
+    "time_ms": 18.945579,
+    "time_ms_min": 18.945579,
+    "time_ms_gc_on": 18.830843,
+    "time_ms_gc_on_min": 18.830843,
+    "peak_memory_kib": 940.6923828125,
+    "compared_with": "reference_with_baseline_comparison",
+    "instruction_reduction": 0.5232221307400045,
+    "time_reduction_gc_off": 0.2705696255531923,
+    "time_reduction_gc_on": 0.28956418392725813,
+    "memory_reduction": 0.2494116968688248
+   },
+   "unified_full_outputs_baseline_total_held_by_caller": {
+    "instructions": 1230770,
+    "time_ms": 10.394882,
+    "time_ms_min": 10.394882,
+    "time_ms_gc_on": 11.069794,
+    "time_ms_gc_on_min": 11.069794,
+    "peak_memory_kib": 589.9111328125,
+    "compared_with": "reference_with_baseline_comparison",
+    "instruction_reduction": 0.7273029811287646,
+    "time_reduction_gc_off": 0.5997830063894916,
+    "time_reduction_gc_on": 0.5823671763315567,
+    "memory_reduction": 0.5293037296080888
+   },
+   "reference_four_more_periods": {
+    "instructions": 5654437,
+    "time_ms": 37.694082,
+    "time_ms_min": 29.932192,
+    "time_ms_gc_on": 31.066638,
+    "time_ms_gc_on_min": 30.794993,
+    "peak_memory_kib": 672.0234375
+   },
+   "unified_four_more_periods_from_one_aggregation": {
+    "instructions": 1013541,
+    "time_ms": 8.874332,
+    "time_ms_min": 8.874332,
+    "time_ms_gc_on": 8.5373,
+    "time_ms_gc_on_min": 8.5373,
+    "peak_memory_kib": 390.7763671875,
+    "compared_with": "reference_four_more_periods",
+    "instruction_reduction": 0.8207529768215651,
+    "time_reduction_gc_off": 0.7645696213002349,
+    "time_reduction_gc_on": 0.7251939524321879,
+    "memory_reduction": 0.418507829665539
+   },
+   "mechanism_counts_totals_only": {
+    "factor_records_resolved": 236,
+    "unit_pairs_resolved": 6,
+    "recipes_computed": 15
+   },
+   "mechanism_counts_full_outputs": {
+    "factor_records_resolved": 236,
+    "unit_pairs_resolved": 6,
+    "recipes_computed": 15
+   },
+   "distinct": {
+    "factor_records": 253,
+    "renewal_periods": 161,
+    "compositions": 15,
+    "explicit_event_lists": 10
+   }
+  },
+  "M": {
+   "rows": {
+    "materials": 2000,
+    "equipment": 600,
+    "refrigerants": 40,
+    "study_period": 60.0
+   },
+   "reference_without_baseline_comparison": {
+    "instructions": 30840164,
+    "time_ms": 193.350772,
+    "time_ms_min": 193.350772,
+    "time_ms_gc_on": 196.541763,
+    "time_ms_gc_on_min": 196.541763,
+    "peak_memory_kib": 6833.751953125
+   },
+   "unified_full_outputs": {
+    "instructions": 9359298,
+    "time_ms": 76.095986,
+    "time_ms_min": 76.095986,
+    "time_ms_gc_on": 76.552906,
+    "time_ms_gc_on_min": 76.552906,
+    "peak_memory_kib": 3317.826171875,
+    "compared_with": "reference_without_baseline_comparison",
+    "instruction_reduction": 0.6965224309442712,
+    "time_reduction_gc_off": 0.6064355719252055,
+    "time_reduction_gc_on": 0.6105005631805593,
+    "memory_reduction": 0.5144942054331085
+   },
+   "unified_totals_only": {
+    "instructions": 7336025,
+    "time_ms": 58.989771,
+    "time_ms_min": 58.989771,
+    "time_ms_gc_on": 61.464938,
+    "time_ms_gc_on_min": 61.464938,
+    "peak_memory_kib": 2257.935546875,
+    "compared_with": "reference_without_baseline_comparison",
+    "instruction_reduction": 0.7621275619675694,
+    "time_reduction_gc_off": 0.6949080141247121,
+    "time_reduction_gc_on": 0.687267799668613,
+    "memory_reduction": 0.6695906491246773
+   },
+   "reference_with_baseline_comparison": {
+    "instructions": 43815355,
+    "time_ms": 247.87643,
+    "time_ms_min": 247.87643,
+    "time_ms_gc_on": 251.381714,
+    "time_ms_gc_on_min": 251.381714,
+    "peak_memory_kib": 12348.41796875
+   },
+   "unified_full_outputs_with_baseline_comparison": {
+    "instructions": 16702130,
+    "time_ms": 148.432561,
+    "time_ms_min": 148.432561,
+    "time_ms_gc_on": 140.966363,
+    "time_ms_gc_on_min": 140.966363,
+    "peak_memory_kib": 5150.974609375,
+    "compared_with": "reference_with_baseline_comparison",
+    "instruction_reduction": 0.618806466363219,
+    "time_reduction_gc_off": 0.40118323876134576,
+    "time_reduction_gc_on": 0.43923382191594096,
+    "memory_reduction": 0.5828636006320395
+   },
+   "unified_full_outputs_baseline_total_held_by_caller": {
+    "instructions": 9365898,
+    "time_ms": 102.332003,
+    "time_ms_min": 102.332003,
+    "time_ms_gc_on": 79.518734,
+    "time_ms_gc_on_min": 79.518734,
+    "peak_memory_kib": 3318.193359375,
+    "compared_with": "reference_with_baseline_comparison",
+    "instruction_reduction": 0.786241649759542,
+    "time_reduction_gc_off": 0.5871652540743789,
+    "time_reduction_gc_on": 0.6836733558113937,
+    "memory_reduction": 0.7312859535713552
+   },
+   "reference_four_more_periods": {
+    "instructions": 53155505,
+    "time_ms": 351.876331,
+    "time_ms_min": 316.024239,
+    "time_ms_gc_on": 350.862375,
+    "time_ms_gc_on_min": 336.942585,
+    "peak_memory_kib": 6570.203125
+   },
+   "unified_four_more_periods_from_one_aggregation": {
+    "instructions": 4630968,
+    "time_ms": 43.370747,
+    "time_ms_min": 43.370747,
+    "time_ms_gc_on": 44.1802,
+    "time_ms_gc_on_min": 44.1802,
+    "peak_memory_kib": 1365.953125,
+    "compared_with": "reference_four_more_periods",
+    "instruction_reduction": 0.9128788636285179,
+    "time_reduction_gc_off": 0.8767443468654332,
+    "time_reduction_gc_on": 0.8740811122879732,
+    "memory_reduction": 0.7920987983153108
+   },
+   "mechanism_counts_totals_only": {
+    "factor_records_resolved": 533,
+    "unit_pairs_resolved": 8,
+    "recipes_computed": 148
+   },
+   "mechanism_counts_full_outputs": {
+    "factor_records_resolved": 533,
+    "unit_pairs_resolved": 8,
+    "recipes_computed": 148
+   },
+   "distinct": {
+    "factor_records": 541,
+    "renewal_periods": 869,
+    "compositions": 148,
+    "explicit_event_lists": 93
+   }
+  },
+  "L": {
+   "rows": {
+    "materials": 20000,
+    "equipment": 6000,
+    "refrigerants": 300,
+    "study_period": 60.0
+   },
+   "reference_without_baseline_comparison": {
+    "instructions": 303852964,
+    "time_ms": 1823.944449,
+    "time_ms_min": 1823.944449,
+    "time_ms_gc_on": 2605.022876,
+    "time_ms_gc_on_min": 2605.022876,
+    "peak_memory_kib": 66140.8818359375
+   },
+   "unified_full_outputs": {
+    "instructions": 85337797,
+    "time_ms": 779.159983,
+    "time_ms_min": 779.159983,
+    "time_ms_gc_on": 793.863405,
+    "time_ms_gc_on_min": 793.863405,
+    "peak_memory_kib": 25716.3388671875,
+    "compared_with": "reference_without_baseline_comparison",
+    "instruction_reduction": 0.7191477223832512,
+    "time_reduction_gc_off": 0.5728159465453107,
+    "time_reduction_gc_on": 0.695256647335484,
+    "memory_reduction": 0.6111884487573527
+   },
+   "unified_totals_only": {
+    "instructions": 69304690,
+    "time_ms": 633.593666,
+    "time_ms_min": 633.593666,
+    "time_ms_gc_on": 745.351297,
+    "time_ms_gc_on_min": 745.351297,
+    "peak_memory_kib": 15421.6630859375,
+    "compared_with": "reference_without_baseline_comparison",
+    "instruction_reduction": 0.771913727325036,
+    "time_reduction_gc_off": 0.6526244720076999,
+    "time_reduction_gc_on": 0.7138791740115222,
+    "memory_reduction": 0.7668361434280397
+   },
+   "reference_with_baseline_comparison": {
+    "instructions": 431582096,
+    "time_ms": 2640.37876,
+    "time_ms_min": 2640.37876,
+    "time_ms_gc_on": 3313.97625,
+    "time_ms_gc_on_min": 3313.97625,
+    "peak_memory_kib": 121028.40234375
+   },
+   "unified_full_outputs_with_baseline_comparison": {
+    "instructions": 154674342,
+    "time_ms": 1429.115687,
+    "time_ms_min": 1429.115687,
+    "time_ms_gc_on": 1507.855082,
+    "time_ms_gc_on_min": 1507.855082,
+    "peak_memory_kib": 38264.0849609375,
+    "compared_with": "reference_with_baseline_comparison",
+    "instruction_reduction": 0.6416108466186234,
+    "time_reduction_gc_off": 0.45874595393276074,
+    "time_reduction_gc_on": 0.5450012407300746,
+    "memory_reduction": 0.6838421046635135
+   },
+   "unified_full_outputs_baseline_total_held_by_caller": {
+    "instructions": 85369717,
+    "time_ms": 940.527534,
+    "time_ms_min": 940.527534,
+    "time_ms_gc_on": 1006.184349,
+    "time_ms_gc_on_min": 1006.184349,
+    "peak_memory_kib": 25716.7060546875,
+    "compared_with": "reference_with_baseline_comparison",
+    "instruction_reduction": 0.8021935622649184,
+    "time_reduction_gc_off": 0.6437906756983608,
+    "time_reduction_gc_on": 0.6963815449793884,
+    "memory_reduction": 0.7875151158184686
+   },
+   "reference_four_more_periods": {
+    "instructions": 523386652,
+    "time_ms": 3389.491197,
+    "time_ms_min": 3281.769898,
+    "time_ms_gc_on": 5528.093628,
+    "time_ms_gc_on_min": 5371.798273,
+    "peak_memory_kib": 64158.59375
+   },
+   "unified_four_more_periods_from_one_aggregation": {
+    "instructions": 34236312,
+    "time_ms": 539.433743,
+    "time_ms_min": 539.433743,
+    "time_ms_gc_on": 529.483133,
+    "time_ms_gc_on_min": 529.483133,
+    "peak_memory_kib": 8210.5166015625,
+    "compared_with": "reference_four_more_periods",
+    "instruction_reduction": 0.9345869600052391,
+    "time_reduction_gc_off": 0.840851115507411,
+    "time_reduction_gc_on": 0.9042195793649102,
+    "memory_reduction": 0.8720277967195549
+   },
+   "mechanism_counts_totals_only": {
+    "factor_records_resolved": 2643,
+    "unit_pairs_resolved": 8,
+    "recipes_computed": 1473
+   },
+   "mechanism_counts_full_outputs": {
+    "factor_records_resolved": 2643,
+    "unit_pairs_resolved": 8,
+    "recipes_computed": 1473
+   },
+   "distinct": {
+    "factor_records": 2651,
+    "renewal_periods": 5154,
+    "compositions": 1473,
+    "explicit_event_lists": 896
+   }
+  }
+ }
+}

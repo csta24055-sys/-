@@ -9,6 +9,8 @@
 | `classification_workflow_script.js` | 分類担当 7 観点を起動したワークフローの定義。記録として保存した |
 | `R1.json`〜`R5.json`、`R7.json` | 観点ごとの分類結果（項目の一覧） |
 | `R6.json` | 第2回の独立検査の指摘 59 件の登録簿 |
+| `overrides.json` | 停止後の点検の指摘により、分類担当の記述に加えた訂正の一覧。`R*.json` は分類担当の元の記述のまま残してある |
+| `review/` | 停止後の点検（別の AI 作業担当 4 者、読み取りだけ）の結果。`V1.json`・`V2.json`（検証済みとした主張の裏付け）、`F1.json`（停止と保存の事実）、`C1.json`（漏れ・誤分類・遵守事項）、`summary.json`（全体）、`check_workflow_script.js`（点検担当への指示） |
 | `readers_summary.json` | 分類担当ごとの要約、禁止事項を守ったかの申告、分類担当が挙げた問題点 |
 | `INDEX_head.md`、`INDEX_reuse_intro.md`、`INDEX_tail.md` | `INDEX.md` のうち、索引の作成者が書いた部分 |
 | `render_index.py` | 上の JSON と文章から `INDEX.md` と `index_detail/` を生成するスクリプト |
@@ -22,4 +24,4 @@ python3 -I whole-life-carbon-jcat-study/research_archive/real_equation_checkpoin
   .
 ```
 
-`BRIEF.md` と `classification_workflow_script.js` にある `/tmp/…` の場所は、分類の作業用フォルダで、今は無い。
+`BRIEF.md` と `classification_workflow_script.js` にある `/tmp/…` の場所は、セッションの一時フォルダで、セッションの終了とともに消える。必要な内容はこのフォルダに複写してある。

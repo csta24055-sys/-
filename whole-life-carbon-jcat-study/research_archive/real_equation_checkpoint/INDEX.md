@@ -2,7 +2,7 @@
 
 - 対象：`whole-life-carbon-jcat-study/09_APPROX_STUDY/`（計算式の簡略化・統合・近似の研究）と、その作業資料
 - 作成：2026-11-11。研究の停止を実施した作業担当（Claude Code のセッション）が、読み取り専用の分類担当 7 観点の結果をまとめた
-- 関連文書：[STOP_STATUS.md](STOP_STATUS.md)（停止の記録）、[HANDOVER.md](HANDOVER.md)（引継ぎ）、[STOP_ORDER.md](STOP_ORDER.md)（受領した停止指示）
+- 関連文書：[STOP_STATUS.md](STOP_STATUS.md)（停止の記録）、[HANDOVER.md](HANDOVER.md)（引継ぎ）、[STOP_ORDER.md](STOP_ORDER.md)（受領した停止指示）、[NEW_DIRECTIVE.md](NEW_DIRECTIVE.md)（受領した新指示書の全文）
 
 旧研究は 2026-11-11 に**未完成のまま終了**した。この索引は、残った成果を「何が、どこにあり、どこまで確かめてあり、新研究で使えるか」で引けるようにしたものである。
 旧研究の `09_APPROX_STUDY/` の本文（README、記録、報告書）は、第2回の独立検査の指摘 59 件を**反映していない**。旧研究の数字や文を使う前に、この索引で状態を確かめること。
@@ -14,8 +14,9 @@
 1. 停止後、旧研究のコード（基準計算、統合モデル、測定、試験、生成器）は**一度も実行していない**。分類は、コミット済みのファイルと保存した作業資料を読むことだけで行った。
 2. 分類担当は 7 観点（統制文書・台帳・順位／基準計算と架空データ／統合モデル／近似検証／記録と報告書／第2回の指摘の登録簿／再利用の下調べ）で、それぞれ別の AI 作業担当である。全員が「旧研究のコードを実行していない、リポジトリを変更していない」と申告し、分類の後に作業ツリーに変更が無いことを確かめた。
 3. したがって、この索引は**記録に何が書いてあるか**の整理である。記録された数値が今の環境で再現するかは確かめていない（確かめるには旧研究の実行が必要で、停止指示が禁じている）。
-4. 分類担当が読まなかった範囲は 9 節と [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) にある。
-5. 項目の表と詳細は、分類担当が書いた JSON（`materials/classification/`）から機械的に生成した。0 節、1 節、6.1〜6.2 節、8 節、9 節は索引の作成者が書いた。
+4. 索引と停止の記録は、作成の後に、別の AI 作業担当 4 者が読み取りだけで点検した。指摘は 57 件（重い 1、中 17、軽い 39）で、すべて反映した。分類担当の記述を改めた箇所は、各項目の詳細に「停止後の点検による訂正」と記してある。点検の結果は `materials/classification/review/` にある。
+5. 分類担当と点検担当が読まなかった範囲は 9 節と [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) にある。
+6. 項目の表と詳細は、分類担当が書いた JSON と訂正の一覧（`materials/classification/`）から機械的に生成した。0 節、1 節、6.1〜6.2 節、8 節、9 節は索引の作成者が書いた。
 
 ### 0.2 用語
 
@@ -25,7 +26,7 @@
 | 架空データ | 旧研究の生成器が作った架空の建物の入力。実在の建物や原版の係数・耐用年数・率ではない |
 | 基準計算 | 評価単位を定義文どおりに 1 つずつ計算するプログラム（`research_code/refcalc`）。誤差と負荷を測る基準 |
 | 統合モデル | 同じ結果を、共有の表と共有の関数 K1〜K7 で求めるプログラム（`research_code/fastcalc`） |
-| 第1回・第2回の独立検査 | 研究を作った作業担当とは別の AI 作業担当による検査。第2回は 5 観点の検査担当と、指摘ごとに反証を試みる反証検査担当から成る。**人や外部の機関による査読ではない** |
+| 第1回・第2回の独立検査 | 研究を作った作業担当とは別の AI 作業担当による検査。第1回は初版が対象。第2回は `43ba5d7` の版が対象で、5 観点の検査担当と、指摘ごとに反証を試みる反証検査担当から成る（報告書の観点の指摘 REP の 18 件には、反証検査担当が付いていない）。**人や外部の機関による査読ではない** |
 | 中断した修正 | 第2回の指摘を反映する作業。停止の時点で途中だった。編集はコミット `65ff124` と差分ファイルに残してあり、公開中の版には入っていない |
 | 公開中の版 | 現在の `09_APPROX_STUDY/`。コミット `60e720f` と同じ内容に、README 冒頭の終了の注記を加えたもの。コードは `43ba5d7`（第2回の検査が調べた版）と同じ |
 
@@ -41,14 +42,15 @@
 | 4 不具合・未解決事項 | 分かっている不具合、未解決の問い、限界、行っていない確認 |
 | 5 新研究への再利用候補 | 新研究のルート A（保存した簡素化成果を使う）、B（元の式から作り直す）、C（混合）のどれかで使えると分類担当が判断したもの。使う条件を併記した |
 
-迷った項目は、区分 1 ではなく区分 2 にした。区分 1 のうち根拠が比較的弱いもの（検査担当が 1 者だけ、件数の数え直しだけ、など）には「根拠の強さ」の注記を付けた。
+迷った項目は、区分 1 ではなく区分 2 にした。区分 1 のうち根拠が比較的弱いもの（検査担当が 1 者だけ、件数の数え直しだけ、読み比べだけ、など）には「根拠の強さ」の注記を付けた。
+点検の結果、1 項目（CK-R5-17。設計についての記述で、独立の再現が無い）を区分 1 から区分 2 に移した。
 
 ### 0.4 件数
 
 | 区分 | 項目数 |
 |---|---|
-| 1 検証済み成果 | 35 |
-| 2 暫定・未検証成果 | 79 |
+| 1 検証済み成果 | 34 |
+| 2 暫定・未検証成果 | 80 |
 | 3 研究途中の数式・仮説 | 25 |
 | 4 不具合・未解決事項 | 32 |
 | 5 新研究への再利用候補（1〜4 と重ねて付ける） | 133 |
@@ -67,30 +69,38 @@
 
 ### 1.1 言ってよいこと（区分 1 の要点。すべて架空データ・独立概念モデルの範囲）
 
-| 言ってよいこと | 項目 |
-|---|---|
-| 架空の 681 シナリオ（数値 7,406,182 個）で、統合モデルは基準計算と相対 1e-9 以内で一致した（実測の最大 4.8e-13）。第2回の検査担当と反証検査担当が、より厳しい比較でやり直して再現した | CK-R3-18、CK-R7-22 |
-| 基準計算の 70 単位は、台帳の定義文とコードの説明文が同じ文面である。うち 53 単位は、定義文と規約文だけから独立に書き直した計算と、119 の架空シナリオで相対 1e-9 以内で一致した（表示・件数の 4 点を除く） | CK-R2-01、CK-R1-09、CK-R7-17、CK-R7-01 |
-| 評価単位の依存関係は 183 辺で、閉路が無い | CK-R7-02 |
-| 式の変形として成り立つ構造：行から（表、係数キー）への合算と係数との積和（線形）、回数関数 N(T,c)＝ceil(T/c)−1（端の規約つき）、年重み付き和（等差級数と 2 乗和）、補充なしの冷媒の等比、建替・指標の一次式。第2回の検査担当が、自作の逐次計算との総当たりで確かめた（周期で与える修繕の除外年の閉形式は反例が 1 点あり、区分 2） | CK-R3-01、CK-R3-09、CK-R3-10、CK-R3-12〜16、CK-R7-23 |
-| 行の合算を 1 回行えば、別の評価期間の結果を乗数の計算だけで求められる（150 シナリオ×20 期間などで基準計算と一致） | CK-R3-19 |
-| 近似候補のうち、更新回数の連続近似（AP-01〜03）、修繕の更新年除外の無視（AP-04）、複合係数の構成材の切り捨て（AP-07a・b）、評価期間についての直線補間（AP-14）、CO2 のみでの代用（AP-22a）は、架空の母集団で目標（段階 2％・合計 1％）を外れた。不採用は成り立つ | CK-R4-04、CK-R4-05、CK-R4-09、CK-R4-19、CK-R4-20、CK-R4-22、CK-R7-26 |
-| 架空の標準ベンチマーク S・M で、統合モデルが実行した命令数は基準計算より少なかった（全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ の減） | CK-R3-20 |
-| 旧研究が決めた規約 B-1〜B-21 のうち 15 件は、但し書きなしでコードと合う | CK-R7-28 |
-| 台帳・記録・進捗台帳・報告書の件数と相互参照は、同じ版の JSON と合っている（内容が正しいことの確認ではない） | CK-R1-05、CK-R5-01、CK-R5-11 |
+要点だけを並べた。引用するときは、各項目の「言ってよいこと」の全文と限定に従うこと。
+
+| 言ってよいこと | 根拠の強さ | 項目 |
+|---|---|---|
+| 架空の 681 シナリオ（数値 7,406,182 個）で、統合モデルは基準計算と相対 1e-9 以内で一致した（実測の最大 4.8e-13） | 第2回の検査担当 1 者と反証検査担当 1 者が、より厳しい比較でやり直して再現 | CK-R3-18、CK-R7-22 |
+| 基準計算の 70 単位は、台帳の定義文とコードの説明文が同じ文面である。うち 53 単位は、定義文と規約文だけから独立に書き直した計算と、119 の架空シナリオで相対 1e-9 以内で一致した（表示・件数の 4 点を除く。完全性の印は比べていない） | 文面の一致は検査担当 2 者。書き直しとの一致は検査担当 1 者の報告で、反証検査担当はやり直していない | CK-R2-01、CK-R1-09、CK-R7-17、CK-R7-01 |
+| 宣言された依存関係（`depends_on`）は 183 辺で、閉路が無い。関数が実際に読む結果は、宣言と少なくとも 1 か所違う（X-07 は宣言に無い B2-01 を読む） | 宣言との一致は第2回の検査担当。辺の数と閉路が無いことは、分類担当と点検担当による JSON の解析 | CK-R7-02 |
+| 式の変形として成り立つ構造 (1)：回数関数 N(T,c)＝ceil(T/c)−1（端の規約つき）、年重み付き和（等差級数と 2 乗和）、補充なしの冷媒の等比 | 第2回の検査担当が、自作の逐次計算との総当たりで確かめた。T が整数の直上のときのモーメントと、漏洩率が 1 にごく近い冷媒には差が出る。周期で与える修繕の除外年の閉形式は反例が 1 点あり、区分 2 | CK-R3-10、CK-R3-13〜15、CK-R7-23 |
+| 式の変形として成り立つ構造 (2)：行から（表、係数キー）への合算と係数との積和（線形）、建替の一次式、指標（和と比。差を取る指標は桁落ちする） | コードとの読み比べと、681 シナリオ全体の一致による。専用の総当たりは無い | CK-R3-01、CK-R3-09、CK-R3-12、CK-R3-16 |
+| 行の合算をやり直さずに、別の評価期間の結果を求められる（150 シナリオ×20 期間などで基準計算と一致）。評価期間ごとに、冷媒機器の行と明示の更新年一覧は計算し直す。評価期間は年次表の長さ以内 | 第2回の検査担当 2 者（数値の観点、記録の観点） | CK-R3-19 |
+| 近似候補のうち、更新回数の連続近似（AP-01〜03）、修繕の更新年除外の無視（AP-04）、複合係数の構成材の切り捨て（AP-07a・b）、評価期間についての直線補間（AP-14）、CO2 のみでの代用（AP-22a）は、架空の母集団で目標（段階 2％ または合計 1％）のどちらかを外れた。不採用は成り立つ。AP-04 が外れたのは段階の目標だけ。AP-07a・b は複合品の製造排出に対する値 | 第2回の検査担当の再実装で、主な統計値が再現 | CK-R4-04、CK-R4-05、CK-R4-09、CK-R4-19、CK-R4-20、CK-R4-22、CK-R7-26 |
+| 架空の標準ベンチマーク S・M で、基準案との比較を除いた計算どうしを比べると、統合モデルが実行した命令数は基準計算より少なかった（全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ の減） | 検査担当 1 者が数え直し、約 100 命令以内の差で合った。反証検査担当なし | CK-R3-20 |
+| 旧研究が決めた規約 B-1〜B-21 のうち 18 件は、コードと合うと報告された。索引はそのうち 3 件（B-15・B-16・B-21）に限定を付けた。B-2・B-3 にも、時間の判定の端では同じ限定が付く | 検査担当 1 者の 1 文の報告。1 件ごとの照合の記録は無い | CK-R7-28 |
+| 台帳・記録・進捗台帳・報告書の件数と相互参照は、第2回が数え直した範囲で、同じ版の JSON と合っている（内容が正しいことの確認ではない。食い違いの指摘 REP-1・2・7・8・9・11・13・14・18 を除く） | 検査担当 1 者の数え直し。反証検査担当なし | CK-R1-05、CK-R5-01、CK-R5-11 |
+
+近似候補 32 件のそれぞれの状態は 6.3 節の一覧にある。
 
 ### 1.2 使ってはいけない記述（旧研究の文書に残っているもの）
+
+「関係する指摘」に REP だけが挙がる行は、反証検査担当の確認を経ていない（数は、停止後の点検担当が JSON から数え直して合った）。
 
 | 旧研究の文書にある記述 | 実際 | 関係する指摘 |
 |---|---|---|
 | 「統合モデルは、どの入力でも基準計算と同じ結果を返す」「不備のある入力でも同じ値・同じ不備を返す」 | 一致を確かめたのは 681 の架空シナリオの範囲。周期が倍精度の 1.000000001 のとき修繕（B3-01）が最大約 92％ 食い違うほか、検査のない項目の NaN・無限大などで食い違う | NUM-1〜11、REC-1 |
-| 「66 単位が 7 つの統合モデルにまとまった」「計算の定義の数 70 → 11」 | 数え方に異論があり、合意した数え直しは無い（記録の検査は約 62〜63 単位、報告書の検査はさらに少ないとする）。**数として引用しない** | REC-2、REP-4 |
-| 「不完全な結果には必ず印が付く」 | 一部の段階だけを対象にした境界では、上流の行を除いても `complete` が真のままになる（例で合計が最大 62.8％ 減っても印なし） | RED-1、RED-5 |
-| 「負の値や範囲外の値は、その行を除いて数える」 | 年次量、電力係数、係数の値、換算倍率は検査なしで使われる | RED-2、RED-3 |
+| 「66 単位が 7 つの統合モデルにまとまった」「計算の定義の数 70 → 11」 | 数え方に異論があり、合意した数え直しは無い。記録の検査は、裏付けられるのは約 62〜63 単位とした。報告書の検査は 66 単位のうち 14 単位に異論を付けた（数え直した数は示していない。反証検査なし）。**数として引用しない** | REC-2、REP-4 |
+| 「不完全な結果には必ず印が付く」 | 一部の段階だけを対象にした境界では、上流の行を除いても `complete` が真のままになる（検査担当の例で合計が 62.8％、反証検査担当の別の例で 71.0％ 減っても印なし） | RED-1、RED-5 |
+| 「負の値や範囲外の値は、その行を除いて数える」 | 年次量は検査なしで使われる（旧記述と矛盾）。電力係数・係数の値・換算倍率にも検査が無い（旧記述が挙げていない穴）。不正な周期・耐用年数は、印なしに「事象なし」になる | RED-2、RED-3 |
 | 「成功の記録は 3 つの裏付けを持つ。無ければ生成が失敗する」 | 成功 118 件のうち 3 つがそろうのは 96 件。仕組みの確認に使った計数の一部は、失敗し得ない位置に置いた集計である | REC-4、REC-5、REP-3 |
 | 「記録用の入力は 0 項目」「入力は 116 種類で同じ」 | 入力仕様 124 項目のうち 47 項目はどの計算にも読まれない。台帳の入力一覧は申告で、実際に読む入力と合わない | REP-1、REP-7 |
 | 「全単位を対象に近似を調べた」 | 近似の段階 280（単位×段階）のうち 204 は測定なしの判断。「保留あり」44 単位のうち 21 単位は建物全体の代理モデル 1 件だけによる | REP-5 |
 | 近似の誤差表の「B6 段階」「合計への影響」「厳密な式が同じ手間で使えるため不採用」 | 「B6 段階」は B6-03（B6＋B2）に対する値。「合計への影響」は下流への波及を含まない。手間は測っていない | APP-2、APP-3、REP-6 |
+| 「別の評価期間 4 通りで 92.1％ 減」 | 統合モデルの側は、合算を済ませた後の 4 回分だけを測っている（分類担当の読み取り。第2回の指摘には無い） | — |
 | 手順書 v1.4 の改訂履歴の「定めた」規則（厳密な有理数の時間規則、故障注入による所属の確認など） | 本文にも公開中のコードにも入っていない。草稿であることは文書の中に書かれていない（コミットの説明だけ） | — |
 | コミット `65ff124`（中断した修正）の数字 | 作業担当の自己申告だけで、独立の検査は無い。作業ツリー全体としての試験結果も無い | — |
 
@@ -101,7 +111,7 @@
 | 公開中の版 | `09_APPROX_STUDY/research_code/refcalc/`（`43ba5d7` と同じ） | 公開済みの測定・記録・報告書はすべてこの版に対応する。第2回の検査が調べた版。定義の穴（5.2 節の群 1・2）を持つ |
 | 中断した修正の版 | コミット `65ff124` | 時間の判定、不正な値の扱い、完全性の印、50 単位の定義文を変える。**未検証**。公開済みの測定・記録・報告書と対応しない |
 
-新研究の基準計算は**公開中の版**とし、変更しない（[HANDOVER.md](HANDOVER.md) の 4 節）。
+新研究の基準計算は**公開中の版**とし、変更しない。中断した修正の版は使わない（[HANDOVER.md](HANDOVER.md) の 4.1・4.2 節）。
 
 ## 2. 区分 1：検証済み成果
 
@@ -119,8 +129,8 @@
 
 **[CK-R1-09](index_detail/T02_ledger.md#ck-r1-09)　基準定義 reference_semantics：文面と基準計算の説明文の一致、文面からの再導出**
 
-- 言ってよいこと：70 単位すべてで、台帳の reference_semantics は 43ba5d7 の基準計算の関数の説明文と同じ文面である。53 単位は、定義文と規約の説明文だけから独立に書き直した計算が、119 の架空シナリオで基準計算と相対 1e-9 以内で合った。文面とコードの動作が合わない箇所、文面が動作を書いていない箇所は CK-R1-10 のとおりである。
-- 確かめた者：独立検査（第1回）、独立検査（第2回）で再現
+- 言ってよいこと：70 単位すべてで、台帳の reference_semantics は 43ba5d7 の基準計算の関数の説明文と同じ文面である。53 単位は、定義文と規約の説明文だけから独立に書き直した計算が、119 の架空シナリオで基準計算と相対 1e-9 以内で合った。文面とコードの動作が合わない箇所、文面が動作を書いていない箇所は CK-R1-10 のとおりである。比べたのは各単位の値・内訳・件数の欄で、X-02 と SUM-01〜03 の完全性の印（complete、incomplete_units）は比べていない。
+- 確かめた者：独立検査（第2回）で再現（第1回の検査は初版が対象で、この版は見ていない）
 - 根拠の強さ：文面の一致は検査担当 2 者。書き直しとの一致は検査担当 1 者の報告で、反証検査担当はこの一致をやり直していない。
 - 所在：[`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)、[`09_APPROX_STUDY/research_code/refcalc/`](../../09_APPROX_STUDY/research_code/refcalc)
 - 使ってはいけない記述：6 件（詳細を参照）　／　再利用：A・B・C
@@ -134,8 +144,8 @@
 
 **[CK-R7-02](index_detail/T02_ledger.md#ck-r7-02)　評価単位の依存グラフ（depends_on）**
 
-- 言ってよいこと：台帳の depends_on（183 辺）は基準計算の宣言と同じで、閉路が無い。主な流れ：A13-02→X-15、A13-05・X-15→A13-01／A13-03→A13-04；A1-A3・A4・C の行結果→B3-01・B4-02・B5-01；B6-04・X-06→B6-01→B6-03・B2-01；B7-01〜03→B7-04；B1-02→B1-03・B1-04；29 単位→X-02→SUM-01・SUM-02・SUM-03、SUM-03→SUM-04〜08；X-04→QA-01・QA-03；SYS-04→QA-04。
-- 確かめた者：独立検査（第2回）で再現
+- 言ってよいこと：台帳に宣言された依存（depends_on、183 辺）は基準計算の宣言と同じで、閉路が無い。関数が実際に読む結果は、宣言と少なくとも 1 か所違う（X-07 は宣言に無い B2-01 を読む。分類担当の読み取り）。主な流れ：A13-02→X-15、A13-05・X-15→A13-01／A13-03→A13-04；A1-A3 の行結果（A13-01・A13-03・X-01）と B4-01・B4-03→B3-01；A1-A3・A4・C の行結果と B4-01・B4-03→B4-02；A1-A3・A4・A5-04・C の行結果→B5-01；B6-04・X-06→B6-01→B6-03・B2-01；B7-01〜03→B7-04；B1-02→B1-03・B1-04；29 単位→X-02→SUM-01・SUM-02・SUM-03、SUM-03→SUM-04〜08；X-04→QA-01・QA-03；SYS-04→QA-04。
+- 確かめた者：依存の宣言との一致は独立検査（第2回）で再現。辺の数・閉路が無いこと・深さは、分類担当と停止後の点検担当が、それぞれ台帳の JSON を解析して数えた（実行なし）
 - 所在：[`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)、[`09_APPROX_STUDY/research_code/refcalc/registry.py`](../../09_APPROX_STUDY/research_code/refcalc/registry.py)、[`09_APPROX_STUDY/research_code/refcalc/units_pre_a.py`](../../09_APPROX_STUDY/research_code/refcalc/units_pre_a.py)　ほか 2
 - 使ってはいけない記述：3 件（詳細を参照）　／　再利用：A・B・C
 
@@ -143,7 +153,7 @@
 
 **[CK-R2-01](index_detail/T04_reference_calculation.md#ck-r2-01)　基準計算の本体（70 評価単位の逐次計算。誤差と負荷を測る基準）**
 
-- 言ってよいこと：コミット 60e720f の基準計算は、架空の 119 シナリオで、定義文と規約文だけから独立に書き直した 53 単位の実装と、数値と件数が相対 1e-9 以内で一致した（例外は checked_how に記した 4 点：表示 2、印 1、負の廃棄質量を入れた壊し方での C-05 の件数 1）。X-04・X-05・SUM-08 は 50 シナリオで間接的に一致した。70 単位すべてで台帳の定義文と関数の説明文は同文である。不備のない架空シナリオについて、基準計算は書かれた定義どおりに計算する、と言える範囲はここまで。
+- 言ってよいこと：公開中の版の基準計算（コードは 43ba5d7 と同じ）は、架空の 119 シナリオで、定義文と規約文だけから独立に書き直した 53 単位の実装と、数値と件数が相対 1e-9 以内で一致した（例外は「確かめ方」に記した 4 点：表示 2、印 1、負の廃棄質量を入れた壊し方での C-05 の件数 1）。X-04（ガス別内訳）・X-05・SUM-08（基準案のある 3 シナリオ）は 50 シナリオで間接的に一致した。比べたのは各単位の値・内訳・件数の欄で、X-02 と SUM-01〜03 の完全性の印（complete、incomplete_units）は比べていない。70 単位すべてで台帳の定義文と関数の説明文は同文である。不備のない架空シナリオについて、基準計算は書かれた定義どおりに計算する、と言える範囲はここまで。
 - 確かめた者：独立検査（第2回）で再現
 - 根拠の強さ：書き直しとの一致は第2回の検査担当 1 者の報告で、反証検査担当はこの一致をやり直していない。
 - 所在：[`09_APPROX_STUDY/research_code/refcalc/__init__.py`](../../09_APPROX_STUDY/research_code/refcalc/__init__.py)、[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)、[`09_APPROX_STUDY/research_code/refcalc/registry.py`](../../09_APPROX_STUDY/research_code/refcalc/registry.py)　ほか 4
@@ -159,7 +169,7 @@
 
 **[CK-R7-17](index_detail/T04_reference_calculation.md#ck-r7-17)　基準計算（refcalc）のうち、定義文からの独立した書き直しと一致した 53 単位**
 
-- 言ってよいこと：第2回の検査担当が定義文と規約の説明だけから書き直した実装と、基準計算の 53 単位（A13-01、A13-02、A13-03、A13-04、A13-05、A4-01、A4-02、A5-01、A5-02、A5-03、A5-04、B1-01、B1-02、B1-03、B1-04、B2-01、B3-01、B3-02、B4-01、B4-02、B4-03、B5-01、B6-01、B6-02、B6-03、B6-04、B7-01、B7-02、B7-03、B7-04、C-05、C1-01、C2-01、C3-01、C4-01、QA-02、SUM-01、SUM-02、SUM-03、SUM-04、SUM-05、SUM-06、SUM-07、X-01、X-02、X-06、X-07、X-10、X-12、X-13、X-14、X-15、X-16）の数値・件数は、119 架空シナリオ（境界条件、欠陥入り、入力を壊す操作 36 種、小数の境界、段階の部分集合を含む）で相対 1e-9 以内で一致した。差は 4 点だけ：X-15 が未解決の行に付ける印、B2-01 の computed（入力を壊した 4 件）、SUM-07 が未定義のときの出力、C-05 の n_mass_unchecked（負の廃棄質量）。これは「コードが定義文どおりに計算している」ことの確認で、定義そのものの穴（CK-R7-19）や、この 119 件に無い入力での挙動を覆うものではない。
+- 言ってよいこと：第2回の検査担当が定義文と規約の説明だけから書き直した実装と、基準計算の 53 単位（A13-01、A13-02、A13-03、A13-04、A13-05、A4-01、A4-02、A5-01、A5-02、A5-03、A5-04、B1-01、B1-02、B1-03、B1-04、B2-01、B3-01、B3-02、B4-01、B4-02、B4-03、B5-01、B6-01、B6-02、B6-03、B6-04、B7-01、B7-02、B7-03、B7-04、C-05、C1-01、C2-01、C3-01、C4-01、QA-02、SUM-01、SUM-02、SUM-03、SUM-04、SUM-05、SUM-06、SUM-07、X-01、X-02、X-06、X-07、X-10、X-12、X-13、X-14、X-15、X-16）の数値・件数は、119 架空シナリオ（境界条件、欠陥入り、入力を壊す操作 36 種、小数の境界、段階の部分集合を含む）で相対 1e-9 以内で一致した。差は 4 点だけ：X-15 が未解決の行に付ける印、B2-01 の computed（入力を壊した 4 件）、SUM-07 が未定義のときの出力、C-05 の n_mass_unchecked（負の廃棄質量）。これは「コードが定義文どおりに計算している」ことの確認で、定義そのものの穴（CK-R7-19）や、この 119 件に無い入力での挙動を覆うものではない。比べたのは各単位の値・内訳・件数の欄で、X-02 と SUM-01〜03 の完全性の印（complete、incomplete_units）は比べていない。
 - 確かめた者：独立検査（第2回）で再現
 - 根拠の強さ：書き直しとの一致は第2回の検査担当 1 者の報告で、反証検査担当はこの一致をやり直していない。
 - 所在：[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)、[`09_APPROX_STUDY/research_code/refcalc/registry.py`](../../09_APPROX_STUDY/research_code/refcalc/registry.py)、[`09_APPROX_STUDY/research_code/refcalc/units_pre_a.py`](../../09_APPROX_STUDY/research_code/refcalc/units_pre_a.py)　ほか 3
@@ -167,7 +177,7 @@
 
 **[CK-R7-28](index_detail/T04_reference_calculation.md#ck-r7-28)　本研究が決めた規約 B-1〜B-21 のうち、第2回でコードとの符合が確認されたもの**
 
-- 言ってよいこと：但し書きなしでコードと合うと報告されたのは 15 件：B-1（T は実数、最終年を按分）、B-2（n×周期<T だけ数える）、B-3（事象は属する年に置く）、B-4（更新が属する年は修繕なし）、B-5（冷媒の交換は年末に反映）、B-6（B1-04 は B1 段階）、B-7（建替で更新周期を初期化しない）、B-8（更新・建替も初期と同じ係数）、B-9（未数量分は r/(1−r) の上乗せ）、B-10（B2 は買電排出の定率、B2 が対象のときだけ B6 から引く）、B-12（ガスの範囲はラベル、合計は全ガス）、B-13（経路比率の合計が 1 未満は未配分）、B-14（EPD の適用条件）、B-19（質量収支は据付量と比べる）、B-20（年次量の単位は「単位/year」だけ）。影響の数字：B-7 は境界条件の例（T=60、建替周期 25、範囲比 1.0）で更新 31 回→19 回、B4 −40.6％、合計 −1.9％。B-10 は B2 が標準ベンチマーク S の SUM-02 の 7.0％。B-11 は A4 の 0.12％、A5 の 5.0％。
+- 言ってよいこと：第2回の検査担当 1 者は、B-11・B-17・B-18 の 3 件を除く 18 件がコードと合うと報告した（1 文の報告で、1 件ごとの照合の記録は無い）。分類担当は、ほかの指摘との関係から、さらに B-15・B-16・B-21 に限定を付けた。残る 15 件：B-1（T は実数、最終年を按分）、B-2（n×周期<T だけ数える）、B-3（事象は属する年に置く）、B-4（更新が属する年は修繕なし）、B-5（冷媒の交換は年末に反映）、B-6（B1-04 は B1 段階）、B-7（建替で更新周期を初期化しない）、B-8（更新・建替も初期と同じ係数）、B-9（未数量分は r/(1−r) の上乗せ）、B-10（B2 は買電排出の定率、B2 が対象のときだけ B6 から引く）、B-12（ガスの範囲はラベル、合計は全ガス）、B-13（経路比率の合計が 1 未満は未配分）、B-14（EPD の適用条件）、B-19（質量収支は据付量と比べる）、B-20（年次量の単位は「単位/year」だけ）。影響の数字：B-7 は境界条件の例（T=60、建替周期 25、範囲比 1.0）で更新 31 回→19 回、B4 −40.6％、合計 −1.9％。B-10 は B2 が標準ベンチマーク S の SUM-02 の 7.0％。B-11 は A4 の 0.12％、A5 の 5.0％。このうち B-2 と B-3 は、B-15 の許容幅（1e-9）つきで実装されており、時間の判定の端では B-15 と同じ限定が付く。
 - 確かめた者：独立検査（第2回）で再現
 - 根拠の強さ：コードとの照合は第2回の検査担当 1 者。
 - 所在：[`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md)、[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)
@@ -191,7 +201,7 @@
 
 **[CK-R3-03](index_detail/T06_unified_models.md#ck-r3-03)　統合モデル K2 回数関数とライフサイクル乗数**
 
-- 言ってよいこと：B4-02、B5-01、X-08、X-10、B3-02、B4-01（事象の件数）は、回数関数と周期別の合算から得られ、架空の 681 シナリオで基準計算と一致する。B3-01 も 681 シナリオでは一致する。B4-03 は全出力のときだけ行別の回数を出す。
+- 言ってよいこと：B4-02、B5-01、X-08、X-10、B3-02、B4-01（事象の件数）は、周期で与えられる行については回数関数と周期別の合算から得られ、架空の 681 シナリオで基準計算と一致する。明示の更新年一覧を持つ行は、行ごとに計算する（REC-7）。B3-01 も 681 シナリオでは一致する。B4-03 は全出力のときだけ行別の回数を出す。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/03_MODELS/models.json`](../../09_APPROX_STUDY/03_MODELS/models.json)、[`09_APPROX_STUDY/research_code/fastcalc/engine.py`](../../09_APPROX_STUDY/research_code/fastcalc/engine.py)、[`09_APPROX_STUDY/research_code/fastcalc/closed_forms.py`](../../09_APPROX_STUDY/research_code/fastcalc/closed_forms.py)
 - 使ってはいけない記述：5 件（詳細を参照）　／　再利用：A・C
@@ -212,8 +222,9 @@
 
 **[CK-R3-09](index_detail/T06_unified_models.md#ck-r3-09)　導出 D1 行テーブル（和の順序の入れ替え）**
 
-- 言ってよいこと：Σ_i a_i·v_{k(i)}＝Σ_k A_k·v_k は実数の演算での恒等式である。同じ A に係数の別の列を掛けると、ガス別内訳と CO2 のみの結果が得られる。
+- 言ってよいこと：Σ_i a_i·v_{k(i)}＝Σ_k A_k·v_k は実数の演算での恒等式である。同じ A に係数の別の列を掛けると、ガス別内訳と CO2 のみの結果が得られる（基準計算との一致は、不備のない係数とガスの一覧について。NUM-3、NUM-6）。
 - 確かめた者：独立検査（第2回）で再現
+- 根拠の強さ：コードとの読み比べ、外からの計測、全体の一致による。専用の総当たりはしていない。
 - 所在：[`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)、[`09_APPROX_STUDY/research_code/fastcalc/engine.py`](../../09_APPROX_STUDY/research_code/fastcalc/engine.py)
 - 使ってはいけない記述：2 件（詳細を参照）　／　再利用：A・C
 
@@ -241,21 +252,21 @@
 
 **[CK-R3-14](index_detail/T06_unified_models.md#ck-r3-14)　導出 D5 電力係数の区間とモーメント G・H、買電排出 B·G＋S·H**
 
-- 言ってよいこと：整った記述子の電力係数は年の添字について区分的に直線で、G と H は区間ごとの等差級数と 2 乗和の公式で求まる。買電量が直線で両端が 0 以上なら、買電排出＝B·G＋S·H。有限で整った記述子と通常の大きさの値では、基準計算の年ごとの計算と一致した（681 シナリオと第2回の総当たり）。
+- 言ってよいこと：整った記述子の電力係数は年の添字について区分的に直線で、G と H は区間ごとの等差級数と 2 乗和の公式で求まる。買電量が直線で両端が 0 以上なら、買電排出＝B·G＋S·H。有限で整った記述子と通常の大きさの値では、基準計算の年ごとの計算と一致した（681 シナリオと第2回の総当たり）。ただし T が整数をわずかに超える場合を除く（第2回の総当たりで 1.08e-9、作った例で 5.2e-8〜6.4e-5 の差。NUM-10）。総当たりの相手は、検査担当が自分で書いた逐次計算である。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)、[`09_APPROX_STUDY/research_code/fastcalc/closed_forms.py`](../../09_APPROX_STUDY/research_code/fastcalc/closed_forms.py)、[`09_APPROX_STUDY/research_code/fastcalc/engine.py`](../../09_APPROX_STUDY/research_code/fastcalc/engine.py)
 - 使ってはいけない記述：3 件（詳細を参照）　／　再利用：A・C
 
 **[CK-R3-15](index_detail/T06_unified_models.md#ck-r3-15)　導出 D6 冷媒の充填サイクル（等比の閉形式）**
 
-- 言ってよいこと：補充しない機器の j 年の漏洩は m·(1−(1−r)^j)、毎年補充する機器は m0·r·T。第2回の総当たり 190,000 件で、年ごとのループとの不一致は見つからなかった。
+- 言ってよいこと：補充しない機器の j 年の漏洩は m·(1−(1−r)^j)、毎年補充する機器は m0·r·T。第2回の総当たり 190,000 件（2 者の合計。うち 40,000 件は絶対差 1e-12 による判定）で、年ごとのループとの不一致は見つからなかった。漏洩率が 1 にごく近い補充なしの機器では、年次の小さい値に相対 1e-9 を超える差が出る（NUM-10）。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)、[`09_APPROX_STUDY/research_code/fastcalc/closed_forms.py`](../../09_APPROX_STUDY/research_code/fastcalc/closed_forms.py)
 - 使ってはいけない記述：2 件（詳細を参照）　／　再利用：A・C
 
 **[CK-R3-16](index_detail/T06_unified_models.md#ck-r3-16)　導出 D7 指標と残差判定**
 
-- 言ってよいこと：指標は段階ベクトルの一次式か比であり、段階の値が一致すれば指標も一致する。
+- 言ってよいこと：指標は段階ベクトルの一次式か比である。和と比の指標は、段階の値が相対 1e-9 以内で合えば同じ程度の精度で合う。差を取る指標（基準案との比較 SUM-08 の delta など）は桁落ちするので、この限りでない（NUM-10）。
 - 確かめた者：独立検査（第2回）で再現（読み比べと全体の一致による）
 - 根拠の強さ：コードとの読み比べと全体の一致による。専用の総当たりはしていない。
 - 所在：[`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)、[`09_APPROX_STUDY/research_code/fastcalc/engine.py`](../../09_APPROX_STUDY/research_code/fastcalc/engine.py)
@@ -263,7 +274,7 @@
 
 **[CK-R7-23](index_detail/T06_unified_models.md#ck-r7-23)　厳密な閉形式のうち、第2回の総当たりで基準のループと食い違わなかったもの**
 
-- 言ってよいこと：renewal_count は、基準計算と同じ判定式で前後を確かめるので、数え上げと同じ回数を返す（数学的には ceil(T/c)−1、許容幅 1e-9 を除く）。linear_weighted_sum は Σ_k w_{k+1}(b＋s·k)=b·T＋s·((Y−2)(Y−1)/2＋w_Y·(Y−1))。segment_moments は G=Σ w·g と H=Σ w·k·g を区間ごとの等差・平方和で求める。refrigerant_fractions は交換から交換までを m·(1−(1−r)^j) で求める。これらは上の件数の総当たりで、逐次ループと丸めの範囲で一致した（モーメントだけは T が整数の直上で桁落ちし、1.08e-9〜5.2e-8 の差が出る）。
+- 言ってよいこと：renewal_count は、基準計算と同じ判定式で前後を確かめるので、数え上げと同じ回数を返す（数学的には ceil(T/c)−1、許容幅 1e-9 を除く）。linear_weighted_sum は Σ_k w_{k+1}(b＋s·k)=b·T＋s·((Y−2)(Y−1)/2＋w_Y·(Y−1))。segment_moments は G=Σ w·g と H=Σ w·k·g を区間ごとの等差・平方和で求める。refrigerant_fractions は交換から交換までを m·(1−(1−r)^j) で求める。これらは総当たり（件数は「確かめ方」に記した）で、モーメントの 1 例（T=1.0000001 で 1.08e-9）を除き、逐次ループと丸めの範囲で一致した。T が整数の直上にあるとモーメントは桁落ちし、T が整数に近いほど差が大きい（記録された例で 5.2e-8〜6.4e-5。NUM-10）。漏洩率が 1 にごく近い冷媒の年次値にも 5.8e-9 の差が記録されている（NUM-10）。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/research_code/fastcalc/closed_forms.py`](../../09_APPROX_STUDY/research_code/fastcalc/closed_forms.py)、[`09_APPROX_STUDY/research_code/tests/test_closed_forms.py`](../../09_APPROX_STUDY/research_code/tests/test_closed_forms.py)、[`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)
 - 使ってはいけない記述：3 件（詳細を参照）　／　再利用：A・C
@@ -272,21 +283,21 @@
 
 **[CK-R3-18](index_detail/T07_exactness_load.md#ck-r3-18)　厳密一致の測定（681 シナリオ、数値 7,406,182 個、許容差 相対 1e-9）**
 
-- 言ってよいこと：架空の 681 シナリオ（生成器が作る整った入力、生成器の不備 60 件、壊し方 36 種、小数の端 5 組、段階の部分集合 8 通り）では、統合モデルの全出力と合計のみの出力が、基準計算と相対 1e-9 以内（実測の最大 4.8e-13）で一致する。第2回の検査担当 2 者が床なしの比較で再現した。
+- 言ってよいこと：架空の 681 シナリオ（生成器が作る整った入力、生成器の不備 60 件、壊し方 36 種、小数の端 5 組、段階の部分集合 8 通り）では、統合モデルの全出力と合計のみの出力が、基準計算と相対 1e-9 以内（実測の最大 4.8e-13）で一致する。第2回の検査担当 1 者と反証検査担当 1 者が、床なしの比較で再現した。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json)、[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)、[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)
 - 使ってはいけない記述：5 件（詳細を参照）　／　再利用：A・B・C
 
 **[CK-R3-19](index_detail/T07_exactness_load.md#ck-r3-19)　評価期間の掃引（1 回の合算から別の評価期間の結果を求める）**
 
-- 言ってよいこと：統合モデルは、行の合算を 1 回行えば、別の評価期間の結果を乗数の計算だけで求められる。第2回の検査で、150 シナリオ×20 期間と、全単位での 8 シナリオ×9 期間について、期間ごとに最初から計算した基準計算と一致した。
+- 言ってよいこと：統合モデルは、行の合算（aggregate）をやり直さずに、別の評価期間の結果を求められる。ただし評価期間ごとに、冷媒機器の行の読み直しと、明示の更新年一覧・冷媒の交換年一覧の作成は行う（REC-4）。周期が倍精度の 1.000000001 のときは、この求め方の結果も基準計算と食い違う（NUM-1）。評価期間は電力係数の年次表の長さ以内に限る（REP-17）。第2回の検査で、150 シナリオ×20 期間（判定は |SUM-03|×1e-12 の絶対差）と、全単位での 8 シナリオ×9 期間について、期間ごとに最初から計算した基準計算と一致した。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/research_code/fastcalc/engine.py`](../../09_APPROX_STUDY/research_code/fastcalc/engine.py)、[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)、[`09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json)
 - 使ってはいけない記述：2 件（詳細を参照）　／　再利用：A・C
 
 **[CK-R3-20](index_detail/T07_exactness_load.md#ck-r3-20)　負荷の測定：実行した命令数（規模 S・M、基準計算・全出力・合計のみ）**
 
-- 言ってよいこと：架空の標準ベンチマーク S・M で、統合モデルが実行した命令数は基準計算より全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ 少なかった。第2回の検査担当が命令数を数え直して一致した。
+- 言ってよいこと：架空の標準ベンチマーク S・M で、基準案との比較（SUM-08）を除いた計算どうしを比べると、統合モデルが実行した命令数は基準計算より全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ 少なかった。基準案との比較を含めると、全出力の減り方は 44.9％・54.3％ である。第2回の検査担当 1 者が命令数を数え直し、約 100 命令以内の差で合った。
 - 確かめた者：独立検査（第2回）で再現（反証担当なし）
 - 根拠の強さ：数え直したのは報告書の検査担当 1 者。反証検査担当は付いていない。
 - 所在：[`09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json)、[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)、[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)
@@ -294,7 +305,7 @@
 
 **[CK-R7-22](index_detail/T07_exactness_load.md#ck-r7-22)　681 架空シナリオでの基準計算と統合モデルの一致（記録された測定）**
 
-- 言ってよいこと：この 681 シナリオでは、統合モデルの 2 形式は基準計算と相対 1e-9 以内で一致し（記録の最大 4.77e-13）、第2回の厳密な再比較でも差は 0 だった。
+- 言ってよいこと：この 681 シナリオでは、統合モデルの 2 形式は基準計算と相対 1e-9 以内で一致し（記録の最大 4.77e-13）、第2回の床なしの再比較でも、相対 1e-9 を超える差は 0 件だった（最大 4.77e-13）。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json)、[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)、[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)
 - 使ってはいけない記述：2 件（詳細を参照）　／　再利用：A・C
@@ -303,7 +314,7 @@
 
 **[CK-R4-04](index_detail/T08_approximation.md#ck-r4-04)　更新回数の連続近似（AP-01・AP-02・AP-03）と上下限（AP-20）**
 
-- 言ってよいこと：架空の母集団では、3 つの連続近似はどれも段階 2％・合計 1％ の目標を大きく外れる（AP-01 は 77.5％ のシナリオで過小で最大 -58.5％、AP-03 は常に過大で平均 +95.6％、AP-02 は符号が定まらない）。上下限 AP-20 は母集団の 400 件すべてを含むが、幅が B4 の平均 114.2％ あり推定値の代わりにならない。不採用の結論は第2回でも支持された。
+- 言ってよいこと：架空の母集団では、3 つの連続近似はどれも段階 2％・合計 1％ の目標を大きく外れる（AP-01 は 77.5％ のシナリオで過小で最大 -58.5％、AP-03 は常に過大で平均 +95.6％、AP-02 は符号が定まらない）。上下限 AP-20 は母集団の 400 件すべてを含むが（相対 1e-12 の許容差つきの判定。許容差なしでは 394 件）、幅が B4 の平均 114.2％ あり推定値の代わりにならない。不採用の結論は第2回でも支持された。
 - 確かめた者：独立検査（第2回）で再現（B4、B5、X-10 の資源量、AP-20 の幅と上下限を 1e-15 以下の差で再現）
 - 所在：[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)、[`09_APPROX_STUDY/04_VERIFICATION/approximation_study.json`](../../09_APPROX_STUDY/04_VERIFICATION/approximation_study.json)、[`09_APPROX_STUDY/research_code/bench/approx_study.py`](../../09_APPROX_STUDY/research_code/bench/approx_study.py)　ほか 1
 - 使ってはいけない記述：3 件（詳細を参照）　／　再利用：A・B・C
@@ -311,13 +322,13 @@
 **[CK-R4-05](index_detail/T08_approximation.md#ck-r4-05)　修繕の更新年除外を無視する形（AP-04）**
 
 - 言ってよいこと：架空の母集団で AP-04 は常に過大（安全側）で、B3 段階の最大 +5.4％ は段階 2％ の目標を超える。この理由による不採用は成り立つ。
-- 確かめた者：独立検査（第2回）で再現（近似の検査担当、反証検査担当、報告書の検査担当がそれぞれ再計算し、件数・平均・95％点・最大・最小・合計の 95％点・構造別の平均が一致）
+- 確かめた者：独立検査（第2回）で再現（近似の検査担当：n・平均・95％点・最小・最大。反証検査担当：平均・最大。報告書の検査担当：左に加えて合計の 95％点と構造別の平均。用途別の内訳は再現なし）
 - 所在：[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)、[`09_APPROX_STUDY/04_VERIFICATION/approximation_study.json`](../../09_APPROX_STUDY/04_VERIFICATION/approximation_study.json)、[`09_APPROX_STUDY/research_code/bench/approx_study.py`](../../09_APPROX_STUDY/research_code/bench/approx_study.py)　ほか 1
 - 使ってはいけない記述：1 件（詳細を参照）　／　再利用：A・B・C
 
 **[CK-R4-09](index_detail/T08_approximation.md#ck-r4-09)　複合係数の構成材の切り捨て（AP-07a・AP-07b）**
 
-- 言ってよいこと：架空の母集団では、質量比 5％ 未満の構成材を落とすと複合品の製造排出が最大 -20.2％（補正なし）、-14.7％〜+7.5％（補正あり）ずれ、段階 2％ の目標を超える。補正なしは常に過小。不採用は成り立つ。
+- 言ってよいこと：架空の母集団では、質量比 5％ 未満の構成材を落とすと、複合品の製造排出（X-03。段階の値ではない）が最大 -20.2％（補正なし）、-14.7％〜+7.5％（補正あり）ずれ、2％ を超える。補正なしは常に過小。AP-07b は、下流へ波及させると合計の 95％点が 1.20％ になる（反証検査担当の測定）。AP-07a の波及後の値に、独立の測定は無い。不採用は成り立つ。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)、[`09_APPROX_STUDY/04_VERIFICATION/approximation_study.json`](../../09_APPROX_STUDY/04_VERIFICATION/approximation_study.json)、[`09_APPROX_STUDY/research_code/bench/approx_study.py`](../../09_APPROX_STUDY/research_code/bench/approx_study.py)　ほか 1
 - 使ってはいけない記述：1 件（詳細を参照）　／　再利用：A・B・C
@@ -338,14 +349,14 @@
 
 **[CK-R4-22](index_detail/T08_approximation.md#ck-r4-22)　誤差の符号が式から決まる候補（片側にしか外れない近似）の一覧**
 
-- 言ってよいこと：上の一覧の符号は、係数が非負で、端材率が 0 より大きく 1 未満で、周期が相対 1e-9 の境界の外にある入力について成り立ち、架空の母集団の測定でも例外は無かった。AP-01 と AP-20 の下限は相対 1e-9 の許容差つきで成り立つ。
+- 言ってよいこと：次の符号は、係数が非負で、端材率が 0 より大きく 1 未満、未数量分の比率が 0 以上 1 未満で、周期が相対 1e-9 の境界の外にある入力について成り立つ。常に過大：AP-03、AP-04、AP-05（2 つの変種とも）、AP-19b。常に過小：AP-06、AP-07a、AP-22a。これらは、第2回の検査担当が式の上と数値（架空の母集団）の両方で点検し、例外は無かった。AP-06b（常に過小）は、不等式の向きだけを独立に確かめたもので、測定は作成者だけである。AP-09a は、直線低下（下限つき）の系列では過小にならない。AP-01（基準以下）と AP-20 の下限は、相対 1e-9 の許容差つきで成り立つ。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)、[`09_APPROX_STUDY/04_VERIFICATION/approximation_study.json`](../../09_APPROX_STUDY/04_VERIFICATION/approximation_study.json)、[`09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md`](../../09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md)　ほか 1
 - 使ってはいけない記述：2 件（詳細を参照）　／　再利用：A・B・C
 
 **[CK-R7-26](index_detail/T08_approximation.md#ck-r7-26)　近似候補の誤差測定のうち、第2回の独立した再実装で統計値が再現した 27 件（反例として）**
 
-- 言ってよいこと：母集団 400 件（シード 20261111、規模 M まで）の架空シナリオで、27 候補（AP-01、AP-02、AP-03、AP-04、AP-05、AP-06、AP-07a、AP-07b、AP-08、AP-09a、AP-09b、AP-09c、AP-17、AP-18a、AP-18b、AP-18c、AP-18、AP-19a、AP-19b、AP-20、AP-22a、AP-10、AP-10b、AP-11、AP-21、AP-22b、AP-14）の誤差の統計値は、第2回の独立した再実装で再現した。符号についての解析的な主張のうち、AP-03・AP-04・AP-05・AP-19b が常に過大、AP-06・AP-07a・AP-22a が常に過小であることは、第2回が解析と数値の両方で確認した。
+- 言ってよいこと：母集団 400 件（シード 20261111、規模 M まで）の架空シナリオで、27 候補（AP-01、AP-02、AP-03、AP-04、AP-05、AP-06、AP-07a、AP-07b、AP-08、AP-09a、AP-09b、AP-09c、AP-17、AP-18a、AP-18b、AP-18c、AP-18、AP-19a、AP-19b、AP-20、AP-22a、AP-10、AP-10b、AP-11、AP-21、AP-22b、AP-14）について、主な対象の n・平均・95％点・最小・最大は、第2回の独立した再実装で再現した（候補により n は 80〜400。構造・用途別の内訳と副次の対象は再現していない。何を測った値かは、各候補の項目の但し書きに従う）。符号についての解析的な主張のうち、AP-03・AP-04・AP-05・AP-19b が常に過大、AP-06・AP-07a・AP-22a が常に過小であることは、第2回が解析と数値の両方で確認した。
 - 確かめた者：独立検査（第2回）で再現
 - 所在：[`09_APPROX_STUDY/04_VERIFICATION/approximation_study.json`](../../09_APPROX_STUDY/04_VERIFICATION/approximation_study.json)、[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)、[`09_APPROX_STUDY/research_code/bench/approx_study.py`](../../09_APPROX_STUDY/research_code/bench/approx_study.py)
 - 使ってはいけない記述：5 件（詳細を参照）　／　再利用：A・B・C
@@ -354,7 +365,7 @@
 
 **[CK-R5-01](index_detail/T09_records_reports.md#ck-r5-01)　記録・進捗台帳・報告書の件数と相互参照の整合（数え直しで一致した範囲）**
 
-- 言ってよいこと：09_APPROX_STUDY の自動生成の報告書は、同じ版（43ba5d7）の JSON から再生成したものと一致する（古い報告書が残っているのではない）。records/units.json と progress_ledger.json はどちらも 454 件で、候補・結論・理由・段階の結論に不一致 0。models.json・記録・進捗台帳の所属に不一致 0。research_priority.json と進捗台帳の着手順・群に不一致 0。70 単位の状態は、記録から P10 の規則どおりに求めた値（統合成功 66、簡略化成功 3、保留 1）と同じである。
+- 言ってよいこと：09_APPROX_STUDY の自動生成の報告書は、43ba5d7 の時点で、同じ版の JSON から再生成したものと一致した（古い報告書が残っているのではない）。公開中の版の README.md には、その後に手書きの終了の注記（冒頭の枠）を加えてある。records/units.json と progress_ledger.json はどちらも 454 件で、候補・結論・理由・段階の結論に不一致 0。models.json・記録・進捗台帳の所属に不一致 0。research_priority.json と進捗台帳の着手順・群に不一致 0。70 単位の状態は、記録から P10 の規則どおりに求めた値（統合成功 66、簡略化成功 3、保留 1）と同じである。
 - 確かめた者：独立検査（第2回）で再現
 - 根拠の強さ：件数と相互参照の数え直しだけである。内容が正しいことの確認ではない。
 - 所在：[`09_APPROX_STUDY/03_MODELS/records/units.json`](../../09_APPROX_STUDY/03_MODELS/records/units.json)、[`09_APPROX_STUDY/05_DECISIONS/progress_ledger.json`](../../09_APPROX_STUDY/05_DECISIONS/progress_ledger.json)、[`09_APPROX_STUDY/05_DECISIONS/PROGRESS.md`](../../09_APPROX_STUDY/05_DECISIONS/PROGRESS.md)　ほか 4
@@ -367,14 +378,6 @@
 - 根拠の強さ：件数の数え直しだけである。数え直したのは第2回の検査担当 1 者。
 - 所在：[`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)、[`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)、[`09_APPROX_STUDY/05_DECISIONS/progress_ledger.json`](../../09_APPROX_STUDY/05_DECISIONS/progress_ledger.json)
 - 使ってはいけない記述：2 件（詳細を参照）　／　再利用：A・B・C
-
-**[CK-R5-17](index_detail/T09_records_reports.md#ck-r5-17)　README の要点 7「材料・用途・構造の違いは式に現れず、データの違いとして扱う（設計上）」**
-
-- 言ってよいこと：独立概念モデルは、材料・用途・構造の違いを式ではなく行（数量と係数）というデータの違いとして表すように設計されている。評価期間と、周期で与えられる更新・修繕・建替の条件は、乗数の関数の引数になる。原版に工種別・用途別の式があるかどうかは、調べていない。
-- 確かめた者：独立検査（第1回）の指摘で表現を是正。独立検査（第2回）で否定されず
-- 根拠の強さ：設計についての記述であり、測定の結果ではない。
-- 所在：[`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)、[`09_APPROX_STUDY/03_MODELS/README.md`](../../09_APPROX_STUDY/03_MODELS/README.md)、[`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)
-- 使ってはいけない記述：3 件（詳細を参照）　／　再利用：A・B・C
 
 ## 3. 区分 2：暫定・未検証成果
 
@@ -426,7 +429,7 @@
 | [CK-R2-13](index_detail/T05_synthetic_data_harness.md#ck-r2-13) | **架空シナリオの集合（標準ベンチマーク S・M・L、検証用の母集団、境界条件 32 件、基準案の登録）**<br>standard_benchmark()：RC・office・T=60 の規模 S・M・L（シード 101・102・103）の 3 件で、それぞれに基準案の写し（電力・ガス 15％ 増、発電なし、資材 10 行に 1 行の数量 20％ 増）を付ける。 | [`09_APPROX_STUDY/research_code/synth/population.py`](../../09_APPROX_STUDY/research_code/synth/population.py)<br>[`09_APPROX_STUDY/research_code/synth/README.md`](../../09_APPROX_STUDY/research_code/synth/README.md)<br>ほか 1 | 作成者のみ | A・B・C |
 | [CK-R2-14](index_detail/T05_synthetic_data_harness.md#ck-r2-14) | **入力を壊す操作（bench/mutations.py：36 種類の壊し方、小数境界、段階の部分集合、無効な評価期間）**<br>不備のない架空シナリオを書き換えて、生成器の 8 種類の不備が覆わない欠陥や極端な値を作る 36 個の操作（記述子と年次表の食い違い、係数レコードの欠落、段階・単位の誤り、負の値、範囲外の率、一部の項目の NaN と無限大、変則的な事象一覧、段の並びの乱れ、自分自身や互いを基準案にする指定、EPD の申告の食い違いなど）。 | [`09_APPROX_STUDY/research_code/bench/mutations.py`](../../09_APPROX_STUDY/research_code/bench/mutations.py)<br>[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py) | 独立検査（第2回）で再現 | A・C |
 | [CK-R2-15](index_detail/T05_synthetic_data_harness.md#ck-r2-15) | **結果の比較の仕組み（common/compare.py）**<br>基準の結果と候補の結果を葉ごとに機械的に比べる関数群。flatten が入れ子の辞書とリストを「経路: 値」に開き、「_」で始まるキーを除く。signed_rel_error は (候補 − 基準) / max(\|基準\|, floor) で、負が過小評価。 | [`09_APPROX_STUDY/research_code/common/compare.py`](../../09_APPROX_STUDY/research_code/common/compare.py)<br>[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)<br>ほか 1 | 独立検査（第2回）で再現 | A・B・C |
-| [CK-R2-17](index_detail/T05_synthetic_data_harness.md#ck-r2-17) | **単体試験 28 件（tests/。コミット版）**<br>標準ライブラリ unittest の試験 4 ファイル・28 件（件数はソースの def test_ を数えた値）。test_synth.py 7 件：入力 124 項目の対応、同じ引数で同じシナリオ、JSON の往復、不備なしシナリオの整合、記述子と年次表の一致、不備入りの一覧、集合の規模。 | [`09_APPROX_STUDY/research_code/tests/test_synth.py`](../../09_APPROX_STUDY/research_code/tests/test_synth.py)<br>[`09_APPROX_STUDY/research_code/tests/test_refcalc.py`](../../09_APPROX_STUDY/research_code/tests/test_refcalc.py)<br>ほか 2 | 作成者のみ | A・B・C |
+| [CK-R2-17](index_detail/T05_synthetic_data_harness.md#ck-r2-17) | **単体試験 28 件（tests/。コミット版）**<br>標準ライブラリ unittest の試験 4 ファイル・28 件（件数はソースの def test_ を数えた値）。test_synth.py 7 件：入力 124 項目の対応、同じ引数で同じシナリオ、JSON の往復、不備なしシナリオの整合、記述子と年次表の一致、不備入りの一覧、集合の規模。 | [`09_APPROX_STUDY/research_code/tests/test_synth.py`](../../09_APPROX_STUDY/research_code/tests/test_synth.py)<br>[`09_APPROX_STUDY/research_code/tests/test_refcalc.py`](../../09_APPROX_STUDY/research_code/tests/test_refcalc.py)<br>ほか 2 | 作成者。合格は、独立検査（第2回）の検査担当 1 者が報告 | A・B・C |
 | [CK-R7-15](index_detail/T05_synthetic_data_harness.md#ck-r7-15) | **入力データモデル（Scenario：スカラー欄と表）**<br>基準計算と統合モデルが共通に読む入力だけのデータ構造（dataclass 29 個）。入力仕様 124 項目（12 群）を属性に対応付け、仕様に無い 73 項目を「NEW:」として加えている。 | [`09_APPROX_STUDY/research_code/synth/model.py`](../../09_APPROX_STUDY/research_code/synth/model.py)<br>[`09_APPROX_STUDY/research_code/synth/io.py`](../../09_APPROX_STUDY/research_code/synth/io.py)<br>ほか 1 | 作成者のみ | A・B・C |
 | [CK-R7-16](index_detail/T05_synthetic_data_harness.md#ck-r7-16) | **架空シナリオの生成器と母集団**<br>固定シードの乱数で建物の入力一式を作る make_scenario(seed, structure, use, size_class, study_period=60.0, dirty=False, **options) と、標準ベンチマーク（S・M・L）、検証用の母集団、境界条件 32 件、入力を壊す操作 36 種。 | [`09_APPROX_STUDY/research_code/synth/generate.py`](../../09_APPROX_STUDY/research_code/synth/generate.py)<br>[`09_APPROX_STUDY/research_code/synth/population.py`](../../09_APPROX_STUDY/research_code/synth/population.py)<br>ほか 2 | 作成者のみ（第2回は説明文との整合と値の性質だけを確認） | A・B・C |
 | [CK-R7-21](index_detail/T05_synthetic_data_harness.md#ck-r7-21) | **比較の仕組み（結果の leaf ごとの比較、検証の実行、入力を壊す操作）**<br>基準計算の結果と候補の結果を、入れ子の辞書・リストを平らにして leaf ごとに比べる compare()（符号つき相対誤差、過小側を区別）、681 シナリオと評価期間の振り直しを実行する bench/verify_unified.py、入力を壊す 36 種の操作 bench/mutations.py。 | [`09_APPROX_STUDY/research_code/common/compare.py`](../../09_APPROX_STUDY/research_code/common/compare.py)<br>[`09_APPROX_STUDY/research_code/bench/verify_unified.py`](../../09_APPROX_STUDY/research_code/bench/verify_unified.py)<br>ほか 2 | 独立検査（第2回）で再現（欠点の確認と、実際には差を隠していなかったことの確認） | A・C |
@@ -475,6 +478,7 @@
 | [CK-R5-14](index_detail/T09_records_reports.md#ck-r5-14) | **README の要点 4「計算の重さは減った」**<br>第9章 README「結果の要点」の 4。全文：「計算の重さは減った。資材 2 万行の規模で、実行した命令数は、基準計算と同じ出力をすべて出す場合に 66.3％ 減、合計・段階・指標・検査だけを求める場合に 73.6％ 減（時間は 1689 ms → 862 ms、624 ms。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/04_VERIFICATION/README.md`](../../09_APPROX_STUDY/04_VERIFICATION/README.md)<br>ほか 2 | 作成者のみ（規模 S・M の命令数だけ独立検査（第2回）で再現） | A・C |
 | [CK-R5-15](index_detail/T09_records_reports.md#ck-r5-15) | **README の要点 5「近似は 1 つも採用していない」**<br>第9章 README「結果の要点」の 5。全文：「近似は 1 つも採用していない。近似候補 32 種を測定し、不採用 16、実データ待ちの保留 16。更新回数の連続近似のように重大な過小評価を生むものがあり、それ以外の多くも、厳密な閉形式が同じ手間で使えるため近似の利点がなかった。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)<br>ほか 2 | 作成者のみ（件数と 2 候補の統計は独立検査（第2回）で再現。 | A・B・C |
 | [CK-R5-16](index_detail/T09_records_reports.md#ck-r5-16) | **README の要点 6「入力項目は減っていない」**<br>第9章 README「結果の要点」の 6。全文：「入力項目は減っていない。厳密な統合では、読む入力は基準計算と同じだった（実測）。入力を減らすには少数入力の近似モデルが必要だが、その精度は実建物のデータがなければ検証できない。」 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/04_VERIFICATION/input_usage.json`](../../09_APPROX_STUDY/04_VERIFICATION/input_usage.json)<br>ほか 2 | 作成者のみ（報告書と JSON の一致は独立検査（第2回）で再現） | A・B・C |
+| [CK-R5-17](index_detail/T09_records_reports.md#ck-r5-17) | **README の要点 7「材料・用途・構造の違いは式に現れず、データの違いとして扱う（設計上）」**<br>第9章 README「結果の要点」の 7。全文：「独立概念モデルでは（設計上）、材料・用途・構造の違いは式には現れず、行（数量と係数）というデータの違いとして扱っている。評価期間と更新・修繕の条件は、乗数の関数の引数になる。原版に工種別・用途別の式があるかどうかは、調べていない。」 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/03_MODELS/README.md`](../../09_APPROX_STUDY/03_MODELS/README.md)<br>ほか 1 | 独立検査（第1回）の指摘で表現を是正。独立検査（第2回）で否定されず | A・B・C |
 | [CK-R5-18](index_detail/T09_records_reports.md#ck-r5-18) | **05_DECISIONS/README.md の採否の理由（採用・不採用・保留・現状維持の文面）**<br>旧指示書の成果物 7 に当たる文面。 | [`09_APPROX_STUDY/05_DECISIONS/README.md`](../../09_APPROX_STUDY/05_DECISIONS/README.md)<br>[`09_APPROX_STUDY/03_MODELS/candidates.json`](../../09_APPROX_STUDY/03_MODELS/candidates.json)<br>ほか 1 | 作成者のみ（JSON との一致は独立検査（第2回）で再現。内容には第2回の指摘があり未修正） | A・C |
 | [CK-R5-19](index_detail/T09_records_reports.md#ck-r5-19) | **05_DECISIONS/README.md「統合前後の変化」の表（行ごとの状態）**<br>旧指示書の成果物 8 に当たる表。計算の定義の数、共通化できた単位、単位が参照する入力項目、読まれた入力項目、命令数（規模 L の 4 通り）、計算時間、ピークメモリ、結果の差の 13 行と、5 つの注記からなる。 | [`09_APPROX_STUDY/05_DECISIONS/README.md`](../../09_APPROX_STUDY/05_DECISIONS/README.md)<br>[`09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json`](../../09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json)<br>ほか 3 | 作成者のみ（表と JSON の一致、削減率の計算し直しは独立検査（第2回）で再現） | A・C |
 | [CK-R5-20](index_detail/T09_records_reports.md#ck-r5-20) | **旧指示書の必須成果物 9 点（有無と状態）**<br>旧指示書 第8章が求めた 9 つの記録。第9章 README の成果物の表が置き場所を示す。9 点ともファイルとして存在する。どれも 43ba5d7（第1回の検査の対応後）の版で、第2回の指摘 59 件を反映していない。 | [`09_APPROX_STUDY/README.md`](../../09_APPROX_STUDY/README.md)<br>[`09_APPROX_STUDY/00_POLICY/DIRECTIVE.md`](../../09_APPROX_STUDY/00_POLICY/DIRECTIVE.md)<br>ほか 6 | 独立検査（第2回）で存在を確認。内容には未反映の指摘がある | A・C |
@@ -485,7 +489,7 @@
 
 | 項目 | 成果と内容 | 所在（主なもの） | 確かめた者 | 再利用 |
 |---|---|---|---|---|
-| [CK-R5-27](index_detail/T10_material_taxonomy.md#ck-r5-27) | **材料分類の設計草案のレビュー記録（REVIEW_LOG.md）**<br>独立したレビュー担当（自動）が、草案の 4 ファイルの内部整合について挙げた指摘 25 件（HIGH 2、MEDIUM 18、LOW 5）と、その採否（反映 24、却下 0、先送り 1）、修正後に行った検査の一覧。 | [`09_APPROX_STUDY/07_MATERIAL_TAXONOMY/REVIEW_LOG.md`](../../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/REVIEW_LOG.md) | 作成者の記録（指摘は独立の自動レビュー。対応と修正後の検査は作成者。再現できない） | — |
+| [CK-R5-27](index_detail/T10_material_taxonomy.md#ck-r5-27) | **材料分類の設計草案のレビュー記録（REVIEW_LOG.md）**<br>独立したレビュー担当（自動）が、草案の 4 ファイルの内部整合について挙げた指摘 25 件（HIGH 2、MEDIUM 18、LOW 5）と、その採否（反映 24、却下 0、先送り 1）、修正後に行った検査の一覧。 | [`09_APPROX_STUDY/07_MATERIAL_TAXONOMY/REVIEW_LOG.md`](../../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/REVIEW_LOG.md)<br>[`materials/earlier_session_scratch/wfD_fix/`](materials/earlier_session_scratch/wfD_fix)（検査と修正に使ったスクリプトの、作業用の写し。実行しない） | 作成者の記録（指摘は独立の自動レビュー。対応と修正後の検査は作成者。再現できない） | — |
 
 ### 中断した修正（65ff124）と未実施の改訂（T11）
 
@@ -497,7 +501,7 @@
 | [CK-R2-21](index_detail/T11_interrupted_fix.md#ck-r2-21) | **中断した修正 a1：データの流れに沿った完全性の印、B2-01 の computed、SUM-08 の状態の追加**<br>a1 の自己申告によると、65ff124 で、完全性を「X-02 が段階を作るのに使う単位と、その depends_on の推移閉包」から求めるようにした（手書きの表 STAGE_UNITS を廃止）。 | [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](materials/interrupted_fix/agent_reports/A1_REPORT.json)<br>[`materials/interrupted_fix/working_tree_at_stop_65ff124.patch`](materials/interrupted_fix/working_tree_at_stop_65ff124.patch)<br>ほか 2 | 中断した修正の自己申告 | — |
 | [CK-R2-22](index_detail/T11_interrupted_fix.md#ck-r2-22) | **中断した修正 a1：ガス別内訳の検査、擬似行の番兵、ゲートと定義文の改訂**<br>a1 の自己申告によると、65ff124 で次を変えた。X-04 が matches_stage_total を返し、QA-01 に検査 (d)（違反名「gas breakdown total」）を加えた。B3-01 の「e0 = 0 なら行を捨てる」近道を外した。 | [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](materials/interrupted_fix/agent_reports/A1_REPORT.json)<br>[`materials/interrupted_fix/working_tree_at_stop_65ff124.patch`](materials/interrupted_fix/working_tree_at_stop_65ff124.patch)<br>ほか 1 | 中断した修正の自己申告 | — |
 | [CK-R2-23](index_detail/T11_interrupted_fix.md#ck-r2-23) | **中断した修正 a1：試験 68 件、壊し方 214 種類、比較の厳格化、一致確認の自己申告**<br>a1 の自己申告によると、65ff124 で、試験を 28 件から 68 件に増やした（test_closed_forms.py を fractions.Fraction のループとの比較に書き直して 14 件、test_refcalc.py に DefinitionTests 23 件、test_engine.py に 9 件追加）。 | [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](materials/interrupted_fix/agent_reports/A1_REPORT.json)<br>[`materials/interrupted_fix/working_tree_at_stop_65ff124.patch`](materials/interrupted_fix/working_tree_at_stop_65ff124.patch)<br>ほか 3 | 中断した修正の自己申告 | — |
-| [CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31) | **中断した修正 a1：時間の判定を厳密な有理数の演算にし、閉形式を作り直す**<br>第2回の指摘 NUM-1・REC-1・APP-5 への対応として決めた設計と、その実装の自己申告。 | [`materials/interrupted_fix/specs/SPEC_A1.md`](materials/interrupted_fix/specs/SPEC_A1.md)<br>[`materials/interrupted_fix/agent_reports/A1_REPORT.json`](materials/interrupted_fix/agent_reports/A1_REPORT.json)<br>ほか 1 | 中断した修正の自己申告 | A・B・C |
+| [CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31) | **中断した修正 a1：時間の判定を厳密な有理数の演算にし、閉形式を作り直す**<br>第2回の指摘 NUM-1・REC-1・APP-5 への対応として決めた設計と、その実装の自己申告。 | [`materials/interrupted_fix/specs/SPEC_A1.md`](materials/interrupted_fix/specs/SPEC_A1.md)<br>[`materials/interrupted_fix/agent_reports/A1_REPORT.json`](materials/interrupted_fix/agent_reports/A1_REPORT.json)<br>ほか 1 | 中断した修正の自己申告 | B・C |
 | [CK-R3-32](index_detail/T11_interrupted_fix.md#ck-r3-32) | **中断した修正 a1：修正後の一致確認と負荷の変化（自己申告の数字）**<br>a1 が、基準計算と統合モデルの両方を直した後のコードについて報告した数字。厳密一致は 1,490 シナリオ（壊し方を 36 種から 214 種に増やし、段階の部分集合と上流の不備の組 90 件を加えた）で、床 0 の比較で不一致 0、最大 4.775e-13（SUM-08 の delta）。 | [`materials/interrupted_fix/agent_reports/A1_REPORT.json`](materials/interrupted_fix/agent_reports/A1_REPORT.json)<br>[`materials/interrupted_fix/a1_scratch`](materials/interrupted_fix/a1_scratch) | 中断した修正の自己申告 | — |
 | [CK-R3-36](index_detail/T11_interrupted_fix.md#ck-r3-36) | **中断した段階 a2 の途中の出力 2 ファイル（未検証）**<br>a2 が停止前に書き出した JSON。(1) membership_check_UNVERIFIED.json：5 つの架空シナリオ（各 資材 60・設備 24・冷媒 8）で 35 種の故障を入れ、変わった単位を記録したもの。 | [`materials/interrupted_fix/a2_partial_outputs/membership_check_UNVERIFIED.json`](materials/interrupted_fix/a2_partial_outputs/membership_check_UNVERIFIED.json)<br>[`materials/interrupted_fix/a2_partial_outputs/mechanism_probe_UNVERIFIED.json`](materials/interrupted_fix/a2_partial_outputs/mechanism_probe_UNVERIFIED.json) | なし（中断した修正の出力。自己申告の報告もない） | — |
 | [CK-R4-23](index_detail/T11_interrupted_fix.md#ck-r4-23) | **b2 の再測定と新しい候補（中断した修正。自己申告のみ）**<br>第2回の指摘（APP-1〜9、REP-5・6・13、REC-8）を測定プログラムに反映した版と、その出力。approx_study.py を 4 つのモジュールに分け、schema 3.0 の出力（候補 40 種）を作った。 | [`materials/interrupted_fix/b2_output/approximation_study_UNVERIFIED.json`](materials/interrupted_fix/b2_output/approximation_study_UNVERIFIED.json)<br>[`materials/interrupted_fix/agent_reports/B2_REPORT.json`](materials/interrupted_fix/agent_reports/B2_REPORT.json)<br>ほか 5 | 中断した修正の自己申告（独立の検査は未実施。このリーダーも実行していない） | B・C |
@@ -510,8 +514,8 @@
 | [CK-R7-04](index_detail/T12_formula_families.md#ck-r7-04) | **式の族 F01：行の和（活動量×換算倍率×係数）**<br>行（資材・設備・燃料・廃棄物・解体活動・費用項目・機器）ごとに 活動量×換算倍率×係数値 を作って足す形の 19 単位。活動量は数量そのもの、質量×距離、質量×経路の比率、費用のいずれかで、行の乗数（未数量分 r/(1−r)、積載率 1/lf、物価の比）が付く単位がある。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 4 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
 | [CK-R7-05](index_detail/T12_formula_families.md#ck-r7-05) | **式の族 F02：行ごとの数量の比・換算（端材率・再使用率）**<br>資材の行ごとに、数量の基準と端材率から発注量と据付量を作る A13-05 と、端材の再使用を引いた正味の発注量 X-13 の 2 単位。結果は行ごとの一覧で、スカラーの合計を持たない。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 1 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
 | [CK-R7-06](index_detail/T12_formula_families.md#ck-r7-06) | **式の族 F03：加重和・行列の展開・区分別の再集計**<br>複合係数（質量比で加重した係数の和）A13-02、その構成材への展開 X-03、ガス別の内訳 X-04、CO2 だけの並行算定 X-05、資材区分×処理経路の表 X-09、6 区分の再集計 X-17 の 6 単位。同じ行の活動量に、別の列（質量比、ガス別量、区分、経路）を掛けて足し直す形である。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 3 | 独立検査（第2回）で再現（A13-02 と、間接的に X-04・X-05。残り 3 単位は作成者のみ） | B・C |
-| [CK-R7-07](index_detail/T12_formula_families.md#ck-r7-07) | **式の族 F04：事象の数え上げ（評価期間 T と周期）**<br>周期 c の倍数 n·c が評価期間の内側にある個数 N(T,c) と、それを 1 回分の排出に掛ける形の 6 単位（更新年の一覧 B4-01、交換回数 B4-03、更新負荷 B4-02、建替 B5-01、周期別の集計 X-08、資源量・廃棄物量 X-10）。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 4 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
-| [CK-R7-08](index_detail/T12_formula_families.md#ck-r7-08) | **式の族 F05：年重み付き和（年次量×年ごとの係数）**<br>評価年 y=1..Y（Y=ceil(T)）について、年次量と係数の積に年重み w_y=min(1, T−(y−1)) を掛けて足す形の 13 単位（買電と燃料の B6、施設管理分 B2、上水・下水・一般廃棄物の B7、修繕 B3、面積当たりの推定 X-11、年次・累積の系列 X-07）。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 3 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
+| [CK-R7-07](index_detail/T12_formula_families.md#ck-r7-07) | **式の族 F04：事象の数え上げ（評価期間 T と周期）**<br>周期 c の倍数 n·c が評価期間の内側にある個数 N(T,c) と、それを 1 回分の排出に掛ける形の 6 単位（更新年の一覧 B4-01、交換回数 B4-03、更新負荷 B4-02、建替 B5-01、周期別の集計 X-08、資源量・廃棄物量 X-10）。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 4 | 独立検査（第2回）で再現（値の一致。X-08 は作成者のみ。族の区分は検査なし） | B・C |
+| [CK-R7-08](index_detail/T12_formula_families.md#ck-r7-08) | **式の族 F05：年重み付き和（年次量×年ごとの係数）**<br>評価年 y=1..Y（Y=ceil(T)）について、年次量と係数の積に年重み w_y=min(1, T−(y−1)) を掛けて足す形の 13 単位（買電と燃料の B6、施設管理分 B2、上水・下水・一般廃棄物の B7、修繕 B3、面積当たりの推定 X-11、年次・累積の系列 X-07）。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 3 | 独立検査（第2回）で再現（値の一致。X-11 は作成者のみ。族の区分は検査なし） | B・C |
 | [CK-R7-09](index_detail/T12_formula_families.md#ck-r7-09) | **式の族 F06：区分的に直線・段階的な電力係数の年次系列（X-06）**<br>電力排出係数の年次系列を、記述子から作る 1 単位。一定、直線低下（下限つき：max(下限, 初期値−年低下量×k)）、段階（添字 0 から厳密に増える段）の 3 種は記述子が整っていれば記述子から、それ以外は年次表から取る。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 3 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
 | [CK-R7-10](index_detail/T12_formula_families.md#ck-r7-10) | **式の族 F07：冷媒の充填・漏洩・補充・交換（年ごとの漸化式）**<br>機器ごとに残存量を 1 年ずつ進める 3 単位（使用期間の漏洩 B1-02、交換時の損失 B1-03、廃棄時の未回収 B1-04）。その年の漏洩＝年初の残存量×年間漏洩率×年重み。補充しない機器は年末に漏洩分を引き、交換は属する年の年末に残存量を初期充填量へ戻す。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 3 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
 | [CK-R7-11](index_detail/T12_formula_families.md#ck-r7-11) | **式の族 F08：比・指標（原単位、単位換算、段階別割合）**<br>ホールライフの合計を延床面積、面積×評価年数、1000 で割る SUM-04・SUM-05・SUM-06 と、段階の値を合計で割る SUM-07 の 4 単位。 | [`09_APPROX_STUDY/01_LEDGER/units.json`](../../09_APPROX_STUDY/01_LEDGER/units.json)<br>[`09_APPROX_STUDY/research_code/refcalc/base.py`](../../09_APPROX_STUDY/research_code/refcalc/base.py)<br>ほか 1 | 独立検査（第2回）で再現（値の一致。族の区分は検査なし） | B・C |
@@ -576,13 +580,13 @@
 
 | 項目 | 成果と内容 | 所在（主なもの） | 確かめた者 | 再利用 |
 |---|---|---|---|---|
-| [CK-R5-26](index_detail/T10_material_taxonomy.md#ck-r5-26) | **材料分類の設計草案（07_MATERIAL_TAXONOMY：データ構造と手順の形だけ。データセットではない）**<br>旧指示書 第7章「次段階：材料データの分類」に向けて、データ構造と手順の形だけを先に調べた設計草案。README.md（本文）、taxonomy_schema.json（レコード定義 20 種。うち最初の作業に要る最小の組が 12 種。 | [`09_APPROX_STUDY/07_MATERIAL_TAXONOMY/README.md`](../../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/README.md)<br>[`09_APPROX_STUDY/07_MATERIAL_TAXONOMY/taxonomy_schema.json`](../../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/taxonomy_schema.json)<br>ほか 2 | 作成者と、内部整合だけの独立レビュー 1 回（実データでの検証なし）。独立検査（第2回）は件数の一致だけ | B・C |
+| [CK-R5-26](index_detail/T10_material_taxonomy.md#ck-r5-26) | **材料分類の設計草案（07_MATERIAL_TAXONOMY：データ構造と手順の形だけ。データセットではない）**<br>旧指示書 第7章「次段階：材料データの分類」に向けて、データ構造と手順の形だけを先に調べた設計草案。README.md（本文）、taxonomy_schema.json（レコード定義 20 種。うち最初の作業に要る最小の組が 12 種。 | [`09_APPROX_STUDY/07_MATERIAL_TAXONOMY/README.md`](../../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/README.md)<br>[`09_APPROX_STUDY/07_MATERIAL_TAXONOMY/taxonomy_schema.json`](../../09_APPROX_STUDY/07_MATERIAL_TAXONOMY/taxonomy_schema.json)<br>ほか 3 | 作成者と、内部整合だけの独立レビュー 1 回（実データでの検証なし）。独立検査（第2回）は件数の一致だけ | B・C |
 
 ### 中断した修正（65ff124）と未実施の改訂（T11）
 
 | 項目 | 成果と内容 | 所在（主なもの） | 確かめた者 | 再利用 |
 |---|---|---|---|---|
-| [CK-R2-18](index_detail/T11_interrupted_fix.md#ck-r2-18) | **第2回の指摘に対する基準計算の定義の修正方針（SPEC_A1.md の設計決定）**<br>中断した修正の段階 a1 に渡された指示書。一般原則は「欠損・非有限・範囲外の数値入力は演算に使わない。それを必要とする最小の単位（行、経路、年次系列、区分、単位）を除いて数え、依存する合計をすべて不完全にする。無効な評価期間以外の入力では例外を出さない」。 | [`materials/interrupted_fix/specs/SPEC_A1.md`](materials/interrupted_fix/specs/SPEC_A1.md)<br>[`materials/interrupted_fix/specs/VERIFY_DEF.md`](materials/interrupted_fix/specs/VERIFY_DEF.md) | なし | B・C |
+| [CK-R2-18](index_detail/T11_interrupted_fix.md#ck-r2-18) | **第2回の指摘に対する基準計算の定義の修正方針（SPEC_A1.md の設計決定）**<br>中断した修正の段階 a1 に渡された指示書。一般原則は「欠損・非有限・範囲外の数値入力は演算に使わない。それを必要とする最小の単位（行、経路、年次系列、区分、単位）を除いて数え、依存する合計をすべて不完全にする。無効な評価期間以外の入力では例外を出さない」。 | [`materials/interrupted_fix/specs/SPEC_A1.md`](materials/interrupted_fix/specs/SPEC_A1.md)<br>[`materials/interrupted_fix/specs/VERIFY_DEF.md`](materials/interrupted_fix/specs/VERIFY_DEF.md)<br>ほか 2 | なし | B・C |
 | [CK-R4-24](index_detail/T11_interrupted_fix.md#ck-r4-24) | **b2 の設計（SPEC_B2）と結論文の書き換え案**<br>測定の修正の仕様（SPEC_B2.md、変更 13 項目と受入条件 3 項目）と、b2 の作業担当が出した候補ごとの結論文の案（conclusion_proposals.json、41 件：書き換え 16、そのまま 16、新規 9）。 | [`materials/interrupted_fix/specs/SPEC_B2.md`](materials/interrupted_fix/specs/SPEC_B2.md)<br>[`materials/interrupted_fix/agent_reports/conclusion_proposals.json`](materials/interrupted_fix/agent_reports/conclusion_proposals.json)<br>ほか 1 | 中断した修正の自己申告 | A・C |
 | [CK-R5-30](index_detail/T11_interrupted_fix.md#ck-r5-30) | **予定だったが行われなかった改訂（Stage C）：記録・進捗台帳・報告書の生成器**<br>第2回の指摘を記録・進捗台帳・報告書に反映するための改訂の覚え書き。ワークフローの各段階（a1、a2、b3、b2、反証の検査と修正）の報告を入力にして、主担当が行う予定だった。どれも着手されていない。内容：build_records.py について 7 点。(1) 厳密な記録の裏付けを作り直す。 | [`materials/interrupted_fix/specs/STAGE_C_NOTES.md`](materials/interrupted_fix/specs/STAGE_C_NOTES.md)<br>[`materials/interrupted_fix/agent_reports/conclusion_proposals.json`](materials/interrupted_fix/agent_reports/conclusion_proposals.json)<br>ほか 2 | なし | A・C |
 | [CK-R5-31](index_detail/T11_interrupted_fix.md#ck-r5-31) | **予定だったが行われなかった改訂（Stage C）：手書きの文書と、全体の再生成**<br>第2回の指摘を手書きの文書に反映し、全体を測り直して再生成する予定の覚え書き。内容：DERIVATIONS.md（D2・D3 を厳密な演算で書き直し、事象が相異なる年に入る条件の証明を付ける。D6 の最後の行、D8 の「何を記憶するか」、「導出が当てはまらない範囲」）。 | [`materials/interrupted_fix/specs/STAGE_C_NOTES.md`](materials/interrupted_fix/specs/STAGE_C_NOTES.md)<br>[`09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md`](../../09_APPROX_STUDY/00_POLICY/EVALUATION_PROTOCOL.md)<br>ほか 3 | なし | A・C |
@@ -687,9 +691,11 @@
 
 | 分け方 | 件数 |
 |---|---|
-| 判定 | 反証検査で確認 33、一部確認（訂正つき）8、反証検査なし（REP の 18 件。主担当が検査のスクリプトを再実行して再現、出力は未保存）18 |
+| 判定 | 反証検査で確認 33、一部確認（訂正つき）8、反証検査なし 18（REP の 18 件。うち 13 件は主担当が検査担当のスクリプトを停止前に再実行して同じ出力を得た（出力は未保存）。REP-10・11・12・15・17 の 5 件は検査担当 1 者の報告だけ） |
 | 検査担当が付けた重さ | 高 3（NUM-1、RED-1、REC-1）、中 27、低 29 |
 | 停止時点の状態 | 中断時の編集で対応（自己申告・未検証） 38、対応しない（文書化のみの予定で未実施） 1、未対応 10、途中で停止 10 |
+
+「中断時の編集で対応（自己申告・未検証）」の 38 件は、作業担当の申告で、修正した 19 件と、**一部だけ修正した 19 件**から成る（段階 a1 は 18 件と 7 件、段階 b2 は 1 件と 12 件）。どれも独立の検査を受けていない。
 
 | 群 | まとまり | 指摘 |
 |---|---|---|
@@ -764,6 +770,17 @@
 | [REP-17](index_detail/FINDINGS_59.md#rep-17) | 低 | 反証検査なし | a1 | 中断時の編集で対応（自己申告・未検証） |
 | [REP-18](index_detail/FINDINGS_59.md#rep-18) | 低 | 反証検査なし | b3 | 未対応 |
 
+### 5.3 停止時点で未完了だった旧研究のタスク
+
+旧研究のタスク一覧に残っていた未完了の 4 件（[STOP_STATUS.md](STOP_STATUS.md) の 3 節）と、この索引の項目との対応。どれも完成させない。
+
+| 旧タスク | 内容 | 停止時の状態 | 対応する項目 |
+|---|---|---|---|
+| #4 | 全評価単位の近似・統合研究（M1〜M6）と精度・性能の検証、進捗台帳の更新 | 進行中 | 主題 T06、T07、T08、T09（7 節の早見表） |
+| #5 | 材料分類の構造調査の仕上げ、必須成果物 9 点の整備、最終監査 | 未着手 | [CK-R5-20](index_detail/T09_records_reports.md#ck-r5-20)、[CK-R5-26](index_detail/T10_material_taxonomy.md#ck-r5-26)、[CK-R5-27](index_detail/T10_material_taxonomy.md#ck-r5-27)、[CK-R5-28](index_detail/T10_material_taxonomy.md#ck-r5-28) |
+| #8 | 改訂後の版に対する独立再検査（第2回）と、指摘の反映 | 進行中 | 5.2 節、主題 T11 |
+| #9 | 第2回の指摘の反映：記録・報告書・手書き文書の改訂と、全体の再生成 | 未着手 | [CK-R5-30](index_detail/T11_interrupted_fix.md#ck-r5-30)、[CK-R5-31](index_detail/T11_interrupted_fix.md#ck-r5-31) |
+
 ## 6. 区分 5：新研究への再利用候補
 
 再利用の印は、区分 1〜4 に重ねて付けた。**区分 2〜4 の項目を再利用しても、その項目が検証済みになるわけではない。** 新研究で使う場合は、新研究の側で改めて確かめ、未検証のものを検証済みとして扱わない。
@@ -776,26 +793,73 @@
 | B 元の式から作り直す | 台帳の定義文（`reference_semantics`）、依存関係（`depends_on`）、基準計算を出発点にする。統合モデルには拘束されない。旧研究の式の族（6.2）は整理用の区分として参考にする |
 | C 混合 | A と B を単位や式の族ごとに使い分ける |
 
-どのルートでも、誤差を測る基準は**公開中の版の基準計算**（`09_APPROX_STUDY/research_code/refcalc/`）である。これを変更しない。基準計算の値を正として使えるのは、次の範囲である。
+どのルートでも、誤差を測る基準は**公開中の版の基準計算**（`09_APPROX_STUDY/research_code/refcalc/`）である。これを変更しない。中断した修正の版（`65ff124`）は、基準にも出発点にも使わない。
 
-- 入力が有限で範囲内であること（負・NaN・無限大の年次量、電力係数、係数の値、換算倍率を含まない）
-- 14 段階すべてを含む境界、または不備のない入力での段階の部分集合
-- 周期と評価期間が、時間の判定の端（倍精度の 1.000000001 のような値）に当たらないこと
-- 生成器が作る範囲の値であること（極端な桁の値では桁落ち・桁あふれがある）
+基準計算の値を正として使えるのは、次の条件をすべて満たす入力である。
 
-この範囲の外では、基準計算の値そのものが定義文と食い違うか、印なしに一部を除いた値になる（5.2 節の群 1・2）。新研究では、範囲の外の入力を比較から外すか、既知の例外として扱うかを、測定の前に決めて記録する。
+1. 数量、年次量、電力係数、係数の値、換算倍率が有限で範囲内である（負・NaN・無限大を含まない）。
+2. 更新周期、耐用年数、建替周期が有限の正の数である（負・0・NaN・無限大は、印なしに「事象なし」になる。RED-3）。
+3. 対象の境界が 14 段階すべてを含む。または、不備のない入力での段階の部分集合である（一部の段階だけの境界では、上流の行を除いても完全性の印が付かない。RED-1）。
+4. 周期と評価期間が、時間の判定の端（倍精度の 1.000000001 のような値）に当たらない（NUM-1）。
+5. 表や一覧に None の要素が無く、年次表が評価期間より短くない（計算全体が例外になる。RED-10、NUM-4、REP-17）。
+6. 係数の ID が、内部の擬似キー（GRID、REFRIGERANT）と同じでない（NUM-5）。
+7. 係数のガス別の量が係数の値と合っている（値が 0 でガス別の量がある、などが無い。RED-4、NUM-3）。
+8. 値が、生成器が作る範囲の大きさである（極端な桁の値では桁落ち・桁あふれがある。NUM-10）。
+
+この条件の外では、基準計算の値そのものが定義文と食い違うか、印なしに一部を除いた値になるか、計算全体が例外になる（5.2 節の群 1・2、CK-R7-19）。
+条件の内側でも、定義文と規約の一覧だけでは基準計算の値が決まらない箇所がある（未数量分の上乗せを含む段階、資材の初期の据付の扱いなど。CK-R7-29、CK-R2-09）。ルート B で式を作り直すときは、定義文だけでなく `depends_on` とコードで確かめる。
+新研究では、条件の外の入力を比較から外すか、既知の例外として扱うかを、測定の前に決めて記録する。
 
 ### 6.2 構造の棚卸しの要点（観点 R7。新研究の方程式の分類の材料）
 
-- 評価単位 70 件の依存関係は 183 辺、閉路なし、深さ 0〜7。29 単位が段階の集計（X-02）に入り、合計（SUM-03）の上流は 37 単位である（CK-R7-02、区分 1）。
+- 評価単位 70 件に宣言された依存（`depends_on`）は 183 辺、閉路なし、深さ 0〜7。29 単位が段階の集計（X-02）に入り、合計（SUM-03）の上流は 37 単位である（CK-R7-02、区分 1）。関数が実際に読む結果は宣言と少なくとも 1 か所違う（X-07 は宣言に無い B2-01 を読む）ので、新研究で依存関係の台帳を作るときは、宣言をそのまま写さない。
 - 分類担当は、定義文とコードの読み取りから、70 単位を 11 の「式の族」に整理した：行の和 19、行ごとの数量の比 2、加重和・行列の展開 6、事象の数え上げ 6、年重み付き和 13、係数の年次系列 1、冷媒の漸化式 3、比・指標 4、集約の木 5、基準案との比較 1、条件分岐・述語 10。**この族は分類担当が付けた整理用の区分で、旧研究の成果物には無く、独立の検査も受けていない**（CK-R7-04〜14、区分 2）。
 - 台帳の構造分類（`structure_class`）は、単位から数えると「活動量×係数の総和」30、「比・換算」10 である。台帳の見出しの 29・11 は古い。
 - 式の変形として確立しているもの（区分 1）と、架空データで観測しただけのもの（係数キーや周期の種類が行数より少ないこと、負荷の削減率、入力が減らないこと）を区別する。後者は構造の性質としては使えない。
 - 旧研究の近似候補 32 件に、変換（フーリエ、ラプラス、特異値分解、母関数など）に基づくものは無い（候補の題名の検索による。分類担当の読み取り）。
-- 近似候補の測定は、新研究にとっては**反例の資料**である。回数関数の滑らかな置き換え（AP-01〜03）、評価期間についての補間（AP-14）、積の和を平均の積で置き換える形（AP-17、AP-08、AP-18c。誤差は標本の共分散に等しい）、ほかの建物の代表値を使う区分パラメータ（AP-18b で −41％〜+337％）は、架空の母集団で大きく外れた。
+- 近似候補の測定は、新研究にとっては**反例の資料**である。回数関数の滑らかな置き換え（AP-01〜03）と、評価期間についての補間（AP-14）は、架空の母集団で大きく外れた。積の和を平均の積で置き換える形のうち、AP-17 は誤差が標本の共分散に等しいことを第2回が確かめた（AP-08・AP-18c も同じ形と読めるが、確かめていない）。区分パラメータ（AP-18b）は、評価する建物自身から作ると −1.9％〜+1.1％ だが、第2回の検査担当が自分で組んだ標本外の構成では −41％〜+337％ になった（旧研究の測定ではない。構成を変えれば別の数になる）。
 - 「厳密な式が同じ手間で使えるので近似の利点なし」という旧研究の不採用の理由は、変換の種類を減らすことを優先する新研究では前提が違う。そのまま引き継がない。
 
-### 6.3 再利用候補の一覧（主題別）
+### 6.3 近似候補 32 件の一覧
+
+旧研究の結論（不採用 16、保留 16）と、この索引の項目との対応。題と結論は `09_APPROX_STUDY/03_MODELS/candidates.json` の記載である。区分 1 は「架空の母集団での測定値と不採用の結論が、第2回の検査で再現・支持された」という意味で、候補が使えるという意味ではない。
+
+| 候補 | 段階 | 旧研究の結論 | 題 | 項目（区分） | 注 |
+|---|---|---|---|---|---|
+| AP-01 | M3 | 不採用 | 更新回数の連続近似 N ≈ max(0, T/c − 1) | [CK-R4-04](index_detail/T08_approximation.md#ck-r4-04)（1） |  |
+| AP-02 | M3 | 不採用 | 更新回数の中点補正 N ≈ max(0, T/c − 1/2) | [CK-R4-04](index_detail/T08_approximation.md#ck-r4-04)（1） |  |
+| AP-03 | M3 | 不採用 | 更新回数の切り捨てなし N ≈ T/c | [CK-R4-04](index_detail/T08_approximation.md#ck-r4-04)（1） |  |
+| AP-04 | M3 | 不採用 | 修繕の更新年除外を無視（B3-02 で B3-01 を代用） | [CK-R4-05](index_detail/T08_approximation.md#ck-r4-05)（1） |  |
+| AP-05 | M3 | 不採用 | 冷媒漏洩の線形近似 1−(1−r)^k ≈ r·k | [CK-R4-07](index_detail/T08_approximation.md#ck-r4-07)（2） |  |
+| AP-06 | M3 | 不採用 | 端材倍率の線形化 1/(1−w) ≈ 1+w | [CK-R4-08](index_detail/T08_approximation.md#ck-r4-08)（2） |  |
+| AP-07a | M3 | 不採用 | 複合係数：質量比 5％ 未満の構成材を切り捨てる（補正なし） | [CK-R4-09](index_detail/T08_approximation.md#ck-r4-09)（1） |  |
+| AP-07b | M3 | 不採用 | 複合係数：質量比 5％ 未満の構成材を切り捨て、残りの比率を合計 1 に補正 | [CK-R4-09](index_detail/T08_approximation.md#ck-r4-09)（1） |  |
+| AP-08 | M3 | 不採用 | 買電排出を 平均買電量×平均係数×T で近似 | [CK-R4-10](index_detail/T08_approximation.md#ck-r4-10)（2） |  |
+| AP-09a | M3 | 不採用 | 電力係数を 5 年ごとの点の直線補間で持つ（全種類の系列に適用） | [CK-R4-10](index_detail/T08_approximation.md#ck-r4-10)（2） |  |
+| AP-09b | M3 | 不採用 | 電力係数を 10 年ごとの点の直線補間で持つ（全種類の系列に適用） | [CK-R4-10](index_detail/T08_approximation.md#ck-r4-10)（2） |  |
+| AP-09c | M6 | 保留 | 併用：パラメータ型の系列は厳密な閉形式、年次表の系列だけ 5 年ごとの点の直線補間 | [CK-R4-11](index_detail/T08_approximation.md#ck-r4-11)（3） |  |
+| AP-12 | M6 | 保留 | 併用：質量上位 20％ の資材行だけ詳細計算し、残りを質量比で補う | [CK-R4-16](index_detail/T08_approximation.md#ck-r4-16)（3） | 第2回は独自に再実装していない |
+| AP-13 | M4 | 保留 | 面積当たり電力使用量による買電排出の推定（X-11）で実績計算を代用 | [CK-R4-15](index_detail/T08_approximation.md#ck-r4-15)（3） | 第2回は独自に再実装していない |
+| AP-17 | M3 | 保留 | 輸送：輸送手段ごとに 合計質量×単純平均距離 で求める | [CK-R4-17](index_detail/T08_approximation.md#ck-r4-17)（3） |  |
+| AP-18a | M4 | 保留 | 区分パラメータ：資材区分ごとに代表更新周期（更新 1 回の排出で重み付けした調和平均）を 1 つ持つ | [CK-R4-12](index_detail/T08_approximation.md#ck-r4-12)（3） |  |
+| AP-18b | M4 | 保留 | 区分パラメータ：資材区分ごとに代表修繕率（初期排出で重み付けした平均）と代表更新周期を持つ | [CK-R4-12](index_detail/T08_approximation.md#ck-r4-12)（3） |  |
+| AP-18c | M4 | 保留 | 区分パラメータ：資材区分ごとに処理経路の比率（単純平均）と経路係数（単純平均）を持ち、行は質量だけにする | [CK-R4-13](index_detail/T08_approximation.md#ck-r4-13)（3） |  |
+| AP-18 | M4 | 保留 | 区分パラメータによる共通近似モデル（AP-18a〜c を同時に適用） | [CK-R4-12](index_detail/T08_approximation.md#ck-r4-12)（3） |  |
+| AP-19a | M3 | 保留 | 未数量分：行ごとの比率の代わりに単純平均の比率 1 つを使う | [CK-R4-18](index_detail/T08_approximation.md#ck-r4-18)（3） |  |
+| AP-19b | M3 | 不採用 | 未数量分：行ごとの比率の代わりに最大の比率 1 つを使う（安全側） | [CK-R4-18](index_detail/T08_approximation.md#ck-r4-18)（3） | 不採用は第2回でも成り立つとされた。保留の AP-19a と同じ項目にあるため、項目の区分は 3 |
+| AP-22a | M3 | 不採用 | 全ガスの合計を CO2 のみの合計で代用する | [CK-R4-20](index_detail/T08_approximation.md#ck-r4-20)（1） |  |
+| AP-06b | M3 | 不採用 | 端材の再使用を考慮した正味発注量の線形化 1 + w(1−ρ)/(1−w) ≈ 1 + w(1−ρ) | [CK-R4-08](index_detail/T08_approximation.md#ck-r4-08)（2） | 測定は作成者だけ。不等式の向きだけ独立に確認 |
+| AP-20 | M6 | 不採用 | 併用：点推定の代わりに、必ず成り立つ上下限 Σu·max(0,T/c−1) ≤ B4 ≤ Σu·T/c を使う（明示の更新年一覧は厳密） | [CK-R4-04](index_detail/T08_approximation.md#ck-r4-04)（1） | 上下限。400 件を含むのは相対 1e-12 の許容差つき |
+| AP-10 | M4 | 保留 | 6 区分の要約数量×（構造×用途ごとの代表係数）で資材製造を概算 | [CK-R4-14](index_detail/T08_approximation.md#ck-r4-14)（3） |  |
+| AP-10b | M4 | 保留 | AP-10 に、6 区分に入らない資材の分の割増（構造×用途ごとの平均比）を掛ける | [CK-R4-14](index_detail/T08_approximation.md#ck-r4-14)（3） |  |
+| AP-11 | M5 | 保留 | 延床面積×評価年数×（構造×用途ごとの平均原単位）でホールライフ合計を概算 | [CK-R4-15](index_detail/T08_approximation.md#ck-r4-15)（3） |  |
+| AP-15 | M4 | 保留 | 段階ごとに 延床面積（使用段階は×評価年数）×（構造×用途ごとの平均原単位）で概算する共通近似モデル | [CK-R4-15](index_detail/T08_approximation.md#ck-r4-15)（3） | 第2回は独自に再実装していない |
+| AP-16 | M5 | 保留 | ホールライフ合計の対数線形回帰（延床面積・評価年数・構造・用途） | [CK-R4-15](index_detail/T08_approximation.md#ck-r4-15)（3） | 第2回は独自に再実装していない |
+| AP-14 | M3 | 不採用 | 評価期間 T=60 の合計を、同じ建物の T=50 と T=75 の結果からの直線補間で求める | [CK-R4-19](index_detail/T08_approximation.md#ck-r4-19)（1） |  |
+| AP-21 | M3 | 保留 | 木材の炭素貯蔵：数量×（構造×用途ごとの平均の m3 当たり貯蔵量） | [CK-R4-21](index_detail/T08_approximation.md#ck-r4-21)（3） |  |
+| AP-22b | M3 | 保留 | CO2 のみの合計 = 全ガスの合計 ×（構造×用途ごとの平均の CO2 比） | [CK-R4-21](index_detail/T08_approximation.md#ck-r4-21)（3） |  |
+
+### 6.4 再利用候補の一覧（主題別）
 
 「使い道」は冒頭だけを載せた。全文と、使う条件・注意は、各項目の詳細（項目の番号から開く）にある。**条件・注意を読まずに使わないこと。**
 
@@ -948,7 +1012,7 @@
 | [CK-R5-14](index_detail/T09_records_reports.md#ck-r5-14) | 2 | A・C | README の要点 4「計算の重さは減った」 | 新研究で計算量を比べるときの基準線（旧統合モデルの命令数）として引用する。 |
 | [CK-R5-15](index_detail/T09_records_reports.md#ck-r5-15) | 2 | A・B・C | README の要点 5「近似は 1 つも採用していない」 | 新研究で、既に試して外れた近似と、結論が出ていない近似を区別するために引用する。 |
 | [CK-R5-16](index_detail/T09_records_reports.md#ck-r5-16) | 2 | A・B・C | README の要点 6「入力項目は減っていない」 | 新研究で入力の数を比べるときの基準（基準計算が読む項目の数）として引用する。 |
-| [CK-R5-17](index_detail/T09_records_reports.md#ck-r5-17) | 1 | A・B・C | README の要点 7「材料・用途・構造の違いは式に現れず、データの違いとして扱う（設計上）」 | 新研究が計算の体系を「行（データ）×少数の乗数の関数」として表し直すときの、整理の出発点にする。 |
+| [CK-R5-17](index_detail/T09_records_reports.md#ck-r5-17) | 2 | A・B・C | README の要点 7「材料・用途・構造の違いは式に現れず、データの違いとして扱う（設計上）」 | 新研究が計算の体系を「行（データ）×少数の乗数の関数」として表し直すときの、整理の出発点にする。 |
 | [CK-R5-18](index_detail/T09_records_reports.md#ck-r5-18) | 2 | A・C | 05_DECISIONS/README.md の採否の理由（採用・不採用・保留・現状維持の文面） | 旧研究が最後に何を推奨し、何を退け、何を保留にしたかの一覧として引用する。 |
 | [CK-R5-19](index_detail/T09_records_reports.md#ck-r5-19) | 2 | A・C | 05_DECISIONS/README.md「統合前後の変化」の表（行ごとの状態） | 新研究が「統合前後」を比べる表を作るときの、項目の立て方と、旧研究の側の値として引用する。 |
 | [CK-R5-20](index_detail/T09_records_reports.md#ck-r5-20) | 2 | A・C | 旧指示書の必須成果物 9 点（有無と状態） | 旧研究の資料の置き場所の一覧として使う。 |
@@ -968,7 +1032,7 @@
 | 項目 | 区分 | ルート | 成果 | 使い道（冒頭） |
 |---|---|---|---|---|
 | [CK-R2-18](index_detail/T11_interrupted_fix.md#ck-r2-18) | 3 | B・C | 第2回の指摘に対する基準計算の定義の修正方針（SPEC_A1.md の設計決定） | ルート B・C で時間の規約を式にするときの仮説として読める：回数 N = ceil(T×c / L) − 1、年 = max(1, ceil(n×L×c))、q = L×c ≥ 1 なら事象の年はすべて異なり、q < 1 なら年 1 から最後の事象… |
-| [CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31) | 2 | A・B・C | 中断した修正 a1：時間の判定を厳密な有理数の演算にし、閉形式を作り直す | 時間の規則を丸めに依存しない形で定義する案として読む。新研究が回数関数や年の割り当てを変換で表すとき、対照にする定義の候補になる。 |
+| [CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31) | 2 | B・C | 中断した修正 a1：時間の判定を厳密な有理数の演算にし、閉形式を作り直す | 時間の規則を丸めに依存しない形で定義する案として読む。新研究が回数関数や年の割り当てを変換で表すとき、対照にする定義の候補になる。 |
 | [CK-R4-23](index_detail/T11_interrupted_fix.md#ck-r4-23) | 2 | B・C | b2 の再測定と新しい候補（中断した修正。自己申告のみ） | 欠陥を直した測定の設計（基準量を段階の値で取る、下流まで計算し直した合計、パラメータの出所の表示、基準 0 の件数、入力数と命令数、候補が単位・段階・建物のどの水準で測られたかの表示）を、新研究の誤差測定の設計の参考にする。 |
 | [CK-R4-24](index_detail/T11_interrupted_fix.md#ck-r4-24) | 3 | A・C | b2 の設計（SPEC_B2）と結論文の書き換え案 | 旧研究の候補の理由文を引用するときに、どの文を使ってはいけないか（16 候補）を確かめる対照表として使える。 |
 | [CK-R5-30](index_detail/T11_interrupted_fix.md#ck-r5-30) | 3 | A・C | 予定だったが行われなかった改訂（Stage C）：記録・進捗台帳・報告書の生成器 | 新研究が旧成果を引用したり、自分の記録を作ったりするときの、裏付けの様式の案として使える（統合の所属は故障注入で確かめる、仕組みは外からの計測で確かめる、近似の証拠の範囲を単位・段階・建物全体で区別する）。 |
@@ -992,7 +1056,7 @@
 | [CK-R7-14](index_detail/T12_formula_families.md#ck-r7-14) | 2 | B・C | 式の族 F11：条件分岐・述語（入力検査、整合の検査、係数の解決） | 連続な式の外側にある離散の分岐（使える係数の選択、択一、妥当性、許容差つきの判定）の一覧として使う。ルート A では K7（係数解決）と K6（許容差つきの残差判定）に対応する。 |
 | [CK-R7-31](index_detail/T12_formula_families.md#ck-r7-31) | 3 | B・C | 検討したが実装・検証していない式の案（06_OPEN_ISSUES の G-1〜G-7、B-8 の別の選択肢） | 旧研究が式の形について気づいていて手を付けなかった点の一覧として参照する（特に、規約 B-8 を変えると F04 の「回数×1 回分」という形が崩れる、という記述）。 |
 
-### 6.4 再利用の候補にしなかった項目（38 件）
+### 6.5 再利用の候補にしなかった項目（38 件）
 
 分類担当が候補にしなかった項目。理由は各項目の詳細にある。
 
@@ -1017,7 +1081,7 @@
 | T06 統合モデル K1〜K7 と導出 | [CK-R3-01](index_detail/T06_unified_models.md#ck-r3-01)<br>[CK-R3-02](index_detail/T06_unified_models.md#ck-r3-02)<br>[CK-R3-03](index_detail/T06_unified_models.md#ck-r3-03)<br>[CK-R3-05](index_detail/T06_unified_models.md#ck-r3-05)<br>[CK-R3-07](index_detail/T06_unified_models.md#ck-r3-07)<br>[CK-R3-09](index_detail/T06_unified_models.md#ck-r3-09)<br>[CK-R3-10](index_detail/T06_unified_models.md#ck-r3-10)<br>[CK-R3-12](index_detail/T06_unified_models.md#ck-r3-12)<br>[CK-R3-13](index_detail/T06_unified_models.md#ck-r3-13)<br>[CK-R3-14](index_detail/T06_unified_models.md#ck-r3-14)<br>[CK-R3-15](index_detail/T06_unified_models.md#ck-r3-15)<br>[CK-R3-16](index_detail/T06_unified_models.md#ck-r3-16)<br>[CK-R7-23](index_detail/T06_unified_models.md#ck-r7-23) | [CK-R3-04](index_detail/T06_unified_models.md#ck-r3-04)<br>[CK-R3-06](index_detail/T06_unified_models.md#ck-r3-06)<br>[CK-R3-08](index_detail/T06_unified_models.md#ck-r3-08)<br>[CK-R3-11](index_detail/T06_unified_models.md#ck-r3-11)<br>[CK-R3-17](index_detail/T06_unified_models.md#ck-r3-17)<br>[CK-R3-26](index_detail/T06_unified_models.md#ck-r3-26)<br>[CK-R7-24](index_detail/T06_unified_models.md#ck-r7-24)<br>[CK-R7-25](index_detail/T06_unified_models.md#ck-r7-25) | [CK-R3-33](index_detail/T06_unified_models.md#ck-r3-33)<br>[CK-R3-34](index_detail/T06_unified_models.md#ck-r3-34)<br>[CK-R3-35](index_detail/T06_unified_models.md#ck-r3-35)<br>[CK-R3-37](index_detail/T06_unified_models.md#ck-r3-37) | [CK-R3-24](index_detail/T06_unified_models.md#ck-r3-24)<br>[CK-R3-25](index_detail/T06_unified_models.md#ck-r3-25) | [T06_unified_models.md](index_detail/T06_unified_models.md) |
 | T07 厳密一致・負荷・入力の測定と反例 | [CK-R3-18](index_detail/T07_exactness_load.md#ck-r3-18)<br>[CK-R3-19](index_detail/T07_exactness_load.md#ck-r3-19)<br>[CK-R3-20](index_detail/T07_exactness_load.md#ck-r3-20)<br>[CK-R7-22](index_detail/T07_exactness_load.md#ck-r7-22) | [CK-R3-21](index_detail/T07_exactness_load.md#ck-r3-21)<br>[CK-R3-23](index_detail/T07_exactness_load.md#ck-r3-23) | — | [CK-R3-27](index_detail/T07_exactness_load.md#ck-r3-27)<br>[CK-R3-28](index_detail/T07_exactness_load.md#ck-r3-28)<br>[CK-R3-29](index_detail/T07_exactness_load.md#ck-r3-29)<br>[CK-R3-30](index_detail/T07_exactness_load.md#ck-r3-30) | [T07_exactness_load.md](index_detail/T07_exactness_load.md) |
 | T08 近似検証（M3〜M6） | [CK-R4-04](index_detail/T08_approximation.md#ck-r4-04)<br>[CK-R4-05](index_detail/T08_approximation.md#ck-r4-05)<br>[CK-R4-09](index_detail/T08_approximation.md#ck-r4-09)<br>[CK-R4-19](index_detail/T08_approximation.md#ck-r4-19)<br>[CK-R4-20](index_detail/T08_approximation.md#ck-r4-20)<br>[CK-R4-22](index_detail/T08_approximation.md#ck-r4-22)<br>[CK-R7-26](index_detail/T08_approximation.md#ck-r7-26) | [CK-R4-01](index_detail/T08_approximation.md#ck-r4-01)<br>[CK-R4-02](index_detail/T08_approximation.md#ck-r4-02)<br>[CK-R4-07](index_detail/T08_approximation.md#ck-r4-07)<br>[CK-R4-08](index_detail/T08_approximation.md#ck-r4-08)<br>[CK-R4-10](index_detail/T08_approximation.md#ck-r4-10)<br>[CK-R7-27](index_detail/T08_approximation.md#ck-r7-27) | [CK-R4-06](index_detail/T08_approximation.md#ck-r4-06)<br>[CK-R4-11](index_detail/T08_approximation.md#ck-r4-11)<br>[CK-R4-12](index_detail/T08_approximation.md#ck-r4-12)<br>[CK-R4-13](index_detail/T08_approximation.md#ck-r4-13)<br>[CK-R4-14](index_detail/T08_approximation.md#ck-r4-14)<br>[CK-R4-15](index_detail/T08_approximation.md#ck-r4-15)<br>[CK-R4-16](index_detail/T08_approximation.md#ck-r4-16)<br>[CK-R4-17](index_detail/T08_approximation.md#ck-r4-17)<br>[CK-R4-18](index_detail/T08_approximation.md#ck-r4-18)<br>[CK-R4-21](index_detail/T08_approximation.md#ck-r4-21) | [CK-R4-03](index_detail/T08_approximation.md#ck-r4-03)<br>[CK-R4-25](index_detail/T08_approximation.md#ck-r4-25)<br>[CK-R4-26](index_detail/T08_approximation.md#ck-r4-26) | [T08_approximation.md](index_detail/T08_approximation.md) |
-| T09 記録・進捗台帳・報告書・必須成果物 | [CK-R5-01](index_detail/T09_records_reports.md#ck-r5-01)<br>[CK-R5-11](index_detail/T09_records_reports.md#ck-r5-11)<br>[CK-R5-17](index_detail/T09_records_reports.md#ck-r5-17) | [CK-R5-02](index_detail/T09_records_reports.md#ck-r5-02)<br>[CK-R5-03](index_detail/T09_records_reports.md#ck-r5-03)<br>[CK-R5-05](index_detail/T09_records_reports.md#ck-r5-05)<br>[CK-R5-08](index_detail/T09_records_reports.md#ck-r5-08)<br>[CK-R5-10](index_detail/T09_records_reports.md#ck-r5-10)<br>[CK-R5-13](index_detail/T09_records_reports.md#ck-r5-13)<br>[CK-R5-14](index_detail/T09_records_reports.md#ck-r5-14)<br>[CK-R5-15](index_detail/T09_records_reports.md#ck-r5-15)<br>[CK-R5-16](index_detail/T09_records_reports.md#ck-r5-16)<br>[CK-R5-18](index_detail/T09_records_reports.md#ck-r5-18)<br>[CK-R5-19](index_detail/T09_records_reports.md#ck-r5-19)<br>[CK-R5-20](index_detail/T09_records_reports.md#ck-r5-20)<br>[CK-R5-24](index_detail/T09_records_reports.md#ck-r5-24)<br>[CK-R5-29](index_detail/T09_records_reports.md#ck-r5-29) | [CK-R5-06](index_detail/T09_records_reports.md#ck-r5-06)<br>[CK-R5-07](index_detail/T09_records_reports.md#ck-r5-07) | [CK-R5-04](index_detail/T09_records_reports.md#ck-r5-04)<br>[CK-R5-09](index_detail/T09_records_reports.md#ck-r5-09)<br>[CK-R5-12](index_detail/T09_records_reports.md#ck-r5-12)<br>[CK-R5-21](index_detail/T09_records_reports.md#ck-r5-21)<br>[CK-R5-22](index_detail/T09_records_reports.md#ck-r5-22)<br>[CK-R5-23](index_detail/T09_records_reports.md#ck-r5-23)<br>[CK-R5-25](index_detail/T09_records_reports.md#ck-r5-25) | [T09_records_reports.md](index_detail/T09_records_reports.md) |
+| T09 記録・進捗台帳・報告書・必須成果物 | [CK-R5-01](index_detail/T09_records_reports.md#ck-r5-01)<br>[CK-R5-11](index_detail/T09_records_reports.md#ck-r5-11) | [CK-R5-02](index_detail/T09_records_reports.md#ck-r5-02)<br>[CK-R5-03](index_detail/T09_records_reports.md#ck-r5-03)<br>[CK-R5-05](index_detail/T09_records_reports.md#ck-r5-05)<br>[CK-R5-08](index_detail/T09_records_reports.md#ck-r5-08)<br>[CK-R5-10](index_detail/T09_records_reports.md#ck-r5-10)<br>[CK-R5-13](index_detail/T09_records_reports.md#ck-r5-13)<br>[CK-R5-14](index_detail/T09_records_reports.md#ck-r5-14)<br>[CK-R5-15](index_detail/T09_records_reports.md#ck-r5-15)<br>[CK-R5-16](index_detail/T09_records_reports.md#ck-r5-16)<br>[CK-R5-17](index_detail/T09_records_reports.md#ck-r5-17)<br>[CK-R5-18](index_detail/T09_records_reports.md#ck-r5-18)<br>[CK-R5-19](index_detail/T09_records_reports.md#ck-r5-19)<br>[CK-R5-20](index_detail/T09_records_reports.md#ck-r5-20)<br>[CK-R5-24](index_detail/T09_records_reports.md#ck-r5-24)<br>[CK-R5-29](index_detail/T09_records_reports.md#ck-r5-29) | [CK-R5-06](index_detail/T09_records_reports.md#ck-r5-06)<br>[CK-R5-07](index_detail/T09_records_reports.md#ck-r5-07) | [CK-R5-04](index_detail/T09_records_reports.md#ck-r5-04)<br>[CK-R5-09](index_detail/T09_records_reports.md#ck-r5-09)<br>[CK-R5-12](index_detail/T09_records_reports.md#ck-r5-12)<br>[CK-R5-21](index_detail/T09_records_reports.md#ck-r5-21)<br>[CK-R5-22](index_detail/T09_records_reports.md#ck-r5-22)<br>[CK-R5-23](index_detail/T09_records_reports.md#ck-r5-23)<br>[CK-R5-25](index_detail/T09_records_reports.md#ck-r5-25) | [T09_records_reports.md](index_detail/T09_records_reports.md) |
 | T10 材料分類の設計草案 | — | [CK-R5-27](index_detail/T10_material_taxonomy.md#ck-r5-27) | [CK-R5-26](index_detail/T10_material_taxonomy.md#ck-r5-26) | [CK-R5-28](index_detail/T10_material_taxonomy.md#ck-r5-28) | [T10_material_taxonomy.md](index_detail/T10_material_taxonomy.md) |
 | T11 中断した修正（65ff124）と未実施の改訂 | — | [CK-R1-11](index_detail/T11_interrupted_fix.md#ck-r1-11)<br>[CK-R2-19](index_detail/T11_interrupted_fix.md#ck-r2-19)<br>[CK-R2-20](index_detail/T11_interrupted_fix.md#ck-r2-20)<br>[CK-R2-21](index_detail/T11_interrupted_fix.md#ck-r2-21)<br>[CK-R2-22](index_detail/T11_interrupted_fix.md#ck-r2-22)<br>[CK-R2-23](index_detail/T11_interrupted_fix.md#ck-r2-23)<br>[CK-R3-31](index_detail/T11_interrupted_fix.md#ck-r3-31)<br>[CK-R3-32](index_detail/T11_interrupted_fix.md#ck-r3-32)<br>[CK-R3-36](index_detail/T11_interrupted_fix.md#ck-r3-36)<br>[CK-R4-23](index_detail/T11_interrupted_fix.md#ck-r4-23)<br>[CK-R7-32](index_detail/T11_interrupted_fix.md#ck-r7-32) | [CK-R2-18](index_detail/T11_interrupted_fix.md#ck-r2-18)<br>[CK-R4-24](index_detail/T11_interrupted_fix.md#ck-r4-24)<br>[CK-R5-30](index_detail/T11_interrupted_fix.md#ck-r5-30)<br>[CK-R5-31](index_detail/T11_interrupted_fix.md#ck-r5-31) | [CK-R2-24](index_detail/T11_interrupted_fix.md#ck-r2-24) | [T11_interrupted_fix.md](index_detail/T11_interrupted_fix.md) |
 | T12 式の族と未実装の案（構造の棚卸し） | — | [CK-R7-04](index_detail/T12_formula_families.md#ck-r7-04)<br>[CK-R7-05](index_detail/T12_formula_families.md#ck-r7-05)<br>[CK-R7-06](index_detail/T12_formula_families.md#ck-r7-06)<br>[CK-R7-07](index_detail/T12_formula_families.md#ck-r7-07)<br>[CK-R7-08](index_detail/T12_formula_families.md#ck-r7-08)<br>[CK-R7-09](index_detail/T12_formula_families.md#ck-r7-09)<br>[CK-R7-10](index_detail/T12_formula_families.md#ck-r7-10)<br>[CK-R7-11](index_detail/T12_formula_families.md#ck-r7-11)<br>[CK-R7-12](index_detail/T12_formula_families.md#ck-r7-12)<br>[CK-R7-13](index_detail/T12_formula_families.md#ck-r7-13)<br>[CK-R7-14](index_detail/T12_formula_families.md#ck-r7-14) | [CK-R7-31](index_detail/T12_formula_families.md#ck-r7-31) | — | [T12_formula_families.md](index_detail/T12_formula_families.md) |
@@ -1032,7 +1096,9 @@
 | `60e720f` | 手順書 v1.4 の草稿を加えた版（`00_POLICY/EVALUATION_PROTOCOL.md` だけが `43ba5d7` と違う） |
 | `65ff124` | 停止の時点の作業ツリーをそのまま記録した版（中断した修正。未検証・未完成） |
 | `0db5c77` | 上の編集を作業ツリーから取り除き、`09_APPROX_STUDY/` を `60e720f` と同じ内容に戻した版 |
-| それ以降 | この保存フォルダの資料と文書 |
+| `7bd1d43`、`580d287`、`25f70b8` | 停止の記録、保存資料、受領した停止指示 |
+| `b2b8a6e` | 索引と引継ぎ文書（点検の前の版） |
+| それ以降 | 点検の指摘の反映、追加で保存した作業ファイル |
 
 ### 8.2 旧研究の本体（削除していない）
 
@@ -1050,27 +1116,36 @@
 
 ### 8.3 この保存フォルダ
 
+**`materials/` の下にある Python のスクリプトは、どれも実行しない。** 多くが旧研究のコードを読み込み、実行は旧研究の計算の再開になる。保存の目的は記録である。
+
 | 所在 | 内容 | 注意 |
 |---|---|---|
-| `STOP_ORDER.md` | 受領した停止・保存の指示（第0章） | |
+| `STOP_ORDER.md`、`NEW_DIRECTIVE.md` | 受領した停止・保存の指示（第0章）と、新指示書の全文 | |
 | `STOP_STATUS.md` | 停止した対象、確認の結果、残っていたタスク、再開を防ぐ措置 | |
 | `HANDOVER.md` | 実施内容、到達点、未完成部分、引継ぎ事項、移行条件の最終確認 | |
 | `INDEX.md`、`index_detail/` | この索引と、項目ごとの詳細、指摘 59 件の登録簿 | |
 | `materials/round2_review/triage/` | 第2回の独立検査の指摘 59 件の全文（5 観点）と、反証検査担当の判定。`res.json` は構造化した元データ | 指摘の一次資料 |
-| `materials/round2_review/checker_scripts/` | 検査担当と反証検査担当が使った再現用のスクリプトとログ | **実行しない。** 旧研究のコードを読み込むので、実行は旧研究の計算の再開になる |
-| `materials/interrupted_fix/specs/` | 中断した修正の仕様（a1、a2、b2、b3、反証検査の手順、記録と報告書の改訂の予定） | 設計の資料。実装の完了や検証を意味しない |
-| `materials/interrupted_fix/agent_reports/` | 段階 a1・b2 の作業担当の報告 | 自己申告。独立の検査なし |
-| `materials/interrupted_fix/a1_scratch/`、`a2_partial_outputs/`、`b2_output/` | 中断した修正の出力 | 未検証。a2 の分は途中の出力 |
+| `materials/round2_review/checker_scripts/` | 検査担当と反証検査担当が使った再現用のスクリプトとログ | **実行しない** |
+| `materials/interrupted_fix/specs/` | 中断した修正の仕様：`COMMON.md`（各段階に共通の指示）、`SPEC_A1.md`、`SPEC_A2.md`、`SPEC_B2.md`、`SPEC_B3.md`、`VERIFY_NUM.md` と `VERIFY_DEF.md`（修正後の反証検査の手順。未実施）、`STAGE_C_NOTES.md`（記録と報告書の改訂の予定。未実施） | 設計の資料。実装の完了や検証を意味しない |
+| `materials/interrupted_fix/agent_reports/` | 段階 a1・b2 の作業担当の報告（`A1_REPORT.json`、`B2_REPORT.json`、`B2_REPORT_long.json`）、b2 の結論文の案（`conclusion_proposals.json`、`candidate_lines.json`） | 自己申告。独立の検査なし |
+| `materials/interrupted_fix/a1_scratch/` | 段階 a1 の出力と、それを作ったスクリプト | 未検証。**スクリプトは実行しない** |
+| `materials/interrupted_fix/a2_partial_outputs/`、`b2_output/` | 段階 a2 の途中の出力、段階 b2 の出力 | 未検証 |
+| `materials/interrupted_fix/working_files/` | 点検の後に追加で保存した、段階 a2・b2 の途中のスクリプト・ログ・試行の出力（61 件と、圧縮した比較用の記録 2 件）。保存しなかったものの一覧は、同じフォルダの `README.md` にある | 未検証。**スクリプトは実行しない** |
 | `materials/interrupted_fix/working_tree_at_stop_65ff124.patch` | 中断時の編集の差分（`65ff124` と同じ内容） | 適用しない |
 | `materials/interrupted_fix/workflow_script_DO_NOT_RUN.js` | 中断した修正のワークフローの定義 | **実行しない** |
-| `materials/earlier_session_scratch/` | それ以前の段階の作業用ファイル（第1回の検査、評価者の入力など） | 古い版の出力を含む。たとえば `wfB/axis_a_run.log.txt` は初版の測定（69 単位）で、公開中の版の測定（70 単位）ではない |
-| `materials/classification/` | この索引のもとになった分類の JSON（7 観点）、分類担当への指示、索引の生成スクリプト | 生成スクリプトは JSON と文書を読むだけで、旧研究のコードを読み込まない |
+| `materials/earlier_session_scratch/` | それ以前の段階の作業用ファイル。`verify/` は第1回の検査の指摘の元データ（`findings_audit.json`、`findings_numeric.json`、`findings_rederive.json`）と検査用のスクリプト。`wfA/`、`wfA_b1b5_work/` は台帳の分析の作業ファイル。`wfB/`、`wfC/` は測定のログと比較用のスクリプト。`wfD/` は材料分類の 3 つの設計案（`design_taxonomy.md`、`design_normalization.md`、`design_selection_effort.md`）とレビューの指摘。`wfD_fix/`、`wfD_synth/` は材料分類の草案の修正と検査に使ったスクリプト。`judge_na/`、`judge_input_data_model/` と最上位のスクリプトは、評価者に渡す入力や報告書の部品を作ったもの。最上位の `approx_old.json` とログは、近似検証の古い版の出力 | 古い版の出力を含む（たとえば `wfB/axis_a_run.log.txt` は初版の測定で、公開中の版の測定ではない）。分類担当は中身を読んでいない。**スクリプトは実行しない**（`wfD_fix/` の一部は `09_APPROX_STUDY/07_MATERIAL_TAXONOMY/` を上書きする） |
+| `materials/classification/` | この索引のもとになった分類の JSON（7 観点）、分類担当への指示、点検による訂正の一覧（`overrides.json`）、索引の生成スクリプト、点検の結果（`review/`） | 生成スクリプトは JSON と文書を読むだけで、旧研究のコードを読み込まない |
 
 ## 9. この索引が扱っていない範囲
 
-- 分類担当が読まなかったファイルと、読み取りだけでは確かめられなかった点は [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) に観点ごとに載せた。主なもの：中断時の差分（723 KB）の全文、検査担当のスクリプトの中身、単位別の記録 454 件の個々の文面、評価者の理由文の大半。
+- 分類担当が読まなかったファイルと、読み取りだけでは確かめられなかった点は [index_detail/NOT_COVERED.md](index_detail/NOT_COVERED.md) に観点ごとに載せた。主なもの：中断時の差分（723 KB）の全文、検査担当のスクリプトの中身、単位別の記録 454 件の個々の文面、評価者の理由文の大半、`materials/earlier_session_scratch/` の中身。
 - 公開中の版の試験 28 件が今の環境で通るかどうかは確かめていない（第2回の報告書の検査担当は合格を報告している）。
 - `65ff124` のコードが試験に通るか、指摘の再現が消えるかは確かめていない。
-- 分類担当の読み取りで見つかり、第2回の指摘には無い点が 3 つある。いずれも実行による確認はしていない：(1) X-07 の関数は B2-01 の結果を読むが、依存の一覧に B2-01 が無い。(2) X-08 は B4-02 を依存に挙げるが、関数の中で読まない。(3) SYS-01 の目的の欄は「42 単位に渡す」と書くが、該当の欄は空で、実際の関係は別の欄（17 単位）にある。
+- 分類担当の読み取りで見つかり、第2回の指摘には無い点が、少なくとも次の 5 つある。いずれも実行による確認はしていない。
+  1. X-07 の関数は B2-01 の結果を読むが、依存の一覧に B2-01 が無い。
+  2. X-08 は B4-02 を依存に挙げるが、関数の中で読まない。
+  3. SYS-01 の目的の欄は「42 単位に渡す」と書くが、該当の欄は空で、実際の関係は別の欄（17 単位）にある。
+  4. 「別の評価期間 4 通りで 92.1％ 減」は、統合モデルの側が合算を済ませた後の 4 回分だけを測っている（CK-R3-21）。
+  5. 「無効な評価期間は 5/5 でエラー」の 5 件目（500.0）は、無効だからではなく、年次表より長いためにエラーになる（CK-R2-06）。
 - 第1章から第8章（`01_COMPLIANCE/` 〜 `08_BUILD_PLAN/`）は、旧研究より前の資料であり、この索引の対象ではない。変更していない。
 - 旧研究のフォルダのファイルと、項目の「所在」との対応は、索引の生成時に機械的に照合した。結果は [HANDOVER.md](HANDOVER.md) の 5 節に記した。

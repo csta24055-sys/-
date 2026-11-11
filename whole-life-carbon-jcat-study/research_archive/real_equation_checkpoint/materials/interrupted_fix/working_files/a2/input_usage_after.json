@@ -1,0 +1,1471 @@
+{
+ "schema_version": "1.0",
+ "what_is_measured": "Attribute reads on the scenario objects during a calculation, on fictional scenarios. A read field is an upper bound of a needed field.",
+ "scenarios": 34,
+ "inputs_in_specification": 124,
+ "inputs_added_by_this_study": 73,
+ "metadata_only_inputs": 0,
+ "summary": {
+  "reference_all_units": {
+   "existing_inputs_read": 77,
+   "added_inputs_read": 56
+  },
+  "unified_full_outputs": {
+   "existing_inputs_read": 77,
+   "added_inputs_read": 56
+  },
+  "unified_totals_only": {
+   "existing_inputs_read": 77,
+   "added_inputs_read": 56
+  }
+ },
+ "read_by_reference_but_not_by_unified_totals_only": [],
+ "read_by_reference_but_not_by_unified_full_outputs": [],
+ "not_read_by_reference": [
+  "BOUNDARY.excluded_scope_notes",
+  "BOUNDARY.functional_unit",
+  "BOUNDARY.study_start_year",
+  "CONSTRUCTION.site_duration",
+  "CONSTRUCTION.temporary_works",
+  "EQUIPMENT.equipment_id",
+  "EQUIPMENT.equipment_model",
+  "EQUIPMENT.equipment_trade",
+  "FACTOR.factor_boundary",
+  "FACTOR.factor_id",
+  "FACTOR.factor_quality_score",
+  "FACTOR.factor_region",
+  "MATERIAL.material_id",
+  "MATERIAL.material_specification",
+  "NEW:CONSTRUCTION.fuel_kind",
+  "NEW:CONSTRUCTION.waste_kind",
+  "NEW:END_OF_LIFE.demolition_activity_id",
+  "NEW:END_OF_LIFE.demolition_description",
+  "NEW:END_OF_LIFE.haul_description",
+  "NEW:END_OF_LIFE.haul_id",
+  "NEW:FACTOR.category",
+  "NEW:FACTOR.licence_basis",
+  "NEW:FACTOR.source_tag",
+  "NEW:OPERATION.grid_region",
+  "NEW:OPERATION.grid_source_tag",
+  "NEW:OPERATION.provenance_id",
+  "NEW:OPERATION.value_states",
+  "NEW:PROVENANCE.provenance_id",
+  "NEW:REFRIGERANT.device_id",
+  "NEW:WATER_WASTE.provenance_id",
+  "NEW:WATER_WASTE.value_states",
+  "OPERATION.energy_simulation_basis",
+  "OPERATION.grid_factor_scenario_id",
+  "OPERATION.new_or_existing",
+  "PROJECT.assessor",
+  "PROJECT.building_footprint",
+  "PROJECT.building_height",
+  "PROJECT.building_name",
+  "PROJECT.building_shape",
+  "PROJECT.building_use",
+  "PROJECT.climate_zone",
+  "PROJECT.completion_year",
+  "PROJECT.design_stage",
+  "PROJECT.facade_system",
+  "PROJECT.foundation_system",
+  "PROJECT.location",
+  "PROJECT.maximum_span",
+  "PROJECT.number_of_floors_above",
+  "PROJECT.number_of_floors_below",
+  "PROJECT.project_type",
+  "PROJECT.roof_system",
+  "PROJECT.structure_type",
+  "PROJECT.typical_floor_area",
+  "PROVENANCE.data_quality",
+  "PROVENANCE.last_verified_at",
+  "PROVENANCE.license_status",
+  "PROVENANCE.measurement_year",
+  "PROVENANCE.source_reference",
+  "PROVENANCE.source_type",
+  "PROVENANCE.uncertainty_distribution",
+  "PROVENANCE.user_override_reason",
+  "REFRIGERANT.application",
+  "REFRIGERANT.substance",
+  "TRANSPORT.mode"
+ ],
+ "fields": {
+  "PROJECT.building_name": {
+   "model_path": "project.building_name",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.project_type": {
+   "model_path": "project.project_type",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.location": {
+   "model_path": "project.location",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.climate_zone": {
+   "model_path": "project.climate_zone",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.building_use": {
+   "model_path": "project.building_use",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.use_area_breakdown": {
+   "model_path": "project.use_area_breakdown",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "PROJECT.structure_type": {
+   "model_path": "project.structure_type",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.number_of_floors_above": {
+   "model_path": "project.floors_above",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.number_of_floors_below": {
+   "model_path": "project.floors_below",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.gross_floor_area": {
+   "model_path": "project.gross_floor_area",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "PROJECT.building_footprint": {
+   "model_path": "project.building_footprint",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.typical_floor_area": {
+   "model_path": "project.typical_floor_area",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.building_height": {
+   "model_path": "project.building_height",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.maximum_span": {
+   "model_path": "project.maximum_span",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.building_shape": {
+   "model_path": "project.building_shape",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.roof_system": {
+   "model_path": "project.roof_system",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.facade_system": {
+   "model_path": "project.facade_system",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.foundation_system": {
+   "model_path": "project.foundation_system",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.completion_year": {
+   "model_path": "project.completion_year",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.assessment_date": {
+   "model_path": "project.assessment_date",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "PROJECT.assessor": {
+   "model_path": "project.assessor",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROJECT.design_stage": {
+   "model_path": "project.design_stage",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "BOUNDARY.study_period": {
+   "model_path": "boundary.study_period",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "BOUNDARY.replacement_cycle": {
+   "model_path": "boundary.replacement_cycle",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "BOUNDARY.study_start_year": {
+   "model_path": "boundary.study_start_year",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "BOUNDARY.included_lifecycle_stages": {
+   "model_path": "boundary.included_lifecycle_stages",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "BOUNDARY.functional_unit": {
+   "model_path": "boundary.functional_unit",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "BOUNDARY.baseline_scenario": {
+   "model_path": "boundary.baseline_scenario",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "BOUNDARY.excluded_scope_notes": {
+   "model_path": "boundary.excluded_scope_notes",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "BOUNDARY.reconstruction_scenario": {
+   "model_path": "boundary.reconstruction_scenario",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "BOUNDARY.results_gas_scope": {
+   "model_path": "boundary.results_gas_scope",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.material_id": {
+   "model_path": "materials[].material_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "MATERIAL.construction_division": {
+   "model_path": "materials[].construction_division",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.material_class": {
+   "model_path": "materials[].material_class",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.material_specification": {
+   "model_path": "materials[].specification",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "MATERIAL.quantity": {
+   "model_path": "materials[].quantity",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.quantity_unit": {
+   "model_path": "materials[].quantity_unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.quantity_basis": {
+   "model_path": "materials[].quantity_basis",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.waste_rate": {
+   "model_path": "materials[].waste_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.reuse_rate": {
+   "model_path": "materials[].reuse_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.material_life": {
+   "model_path": "materials[].material_life",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.repair_rate": {
+   "model_path": "materials[].repair_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.refresh_cycles": {
+   "model_path": "materials[].refresh_cycle",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.additional_epd_reference": {
+   "model_path": "materials[].epd.factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.unquantified_cost_ratio": {
+   "model_path": "materials[].unquantified_cost_ratio",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.reinforcement_quantity": {
+   "model_path": "summary_quantities.reinforcement_kg",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.steel_quantity": {
+   "model_path": "summary_quantities.steel_kg",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.concrete_volume": {
+   "model_path": "summary_quantities.concrete_m3",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.timber_quantity": {
+   "model_path": "summary_quantities.timber_m3",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.envelope_area": {
+   "model_path": "summary_quantities.envelope_m2",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "MATERIAL.interior_area": {
+   "model_path": "summary_quantities.interior_m2",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_id": {
+   "model_path": "factors{}.factor_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "FACTOR.factor_value": {
+   "model_path": "factors{}.value",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_unit": {
+   "model_path": "factors{}.unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_stages": {
+   "model_path": "factors{}.stages",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_source_url": {
+   "model_path": "factors{}.source_url",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_release_year": {
+   "model_path": "factors{}.release_year",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_region": {
+   "model_path": "factors{}.region",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "FACTOR.factor_license": {
+   "model_path": "factors{}.licence_status",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_boundary": {
+   "model_path": "factors{}.boundary",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "FACTOR.factor_valid_until": {
+   "model_path": "factors{}.valid_until",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "FACTOR.factor_quality_score": {
+   "model_path": "factors{}.quality_score",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "TRANSPORT.transported_mass": {
+   "model_path": "materials[].transport.mass_t",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "TRANSPORT.distance": {
+   "model_path": "materials[].transport.distance_km",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "TRANSPORT.mode": {
+   "model_path": "materials[].transport.mode",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "TRANSPORT.load_factor": {
+   "model_path": "materials[].transport.load_factor",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "TRANSPORT.transport_factor_id": {
+   "model_path": "materials[].transport.factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "CONSTRUCTION.site_diesel": {
+   "model_path": "construction.fuels[].quantity",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "CONSTRUCTION.site_electricity": {
+   "model_path": "construction.electricity_kwh",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "CONSTRUCTION.site_gas": {
+   "model_path": "construction.fuels[].quantity",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "CONSTRUCTION.site_waste_mass": {
+   "model_path": "construction.waste_streams[].mass_kg",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "CONSTRUCTION.site_duration": {
+   "model_path": "construction.duration_months",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "CONSTRUCTION.temporary_works": {
+   "model_path": "construction.temporary_works",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "EQUIPMENT.equipment_id": {
+   "model_path": "equipment[].equipment_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "EQUIPMENT.equipment_trade": {
+   "model_path": "equipment[].trade",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "EQUIPMENT.equipment_model": {
+   "model_path": "equipment[].model",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "EQUIPMENT.equipment_quantity": {
+   "model_path": "equipment[].quantity",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "EQUIPMENT.equipment_factor_id": {
+   "model_path": "equipment[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "EQUIPMENT.equipment_service_life": {
+   "model_path": "equipment[].service_life",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "EQUIPMENT.equipment_repair_rate": {
+   "model_path": "equipment[].repair_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "EQUIPMENT.replacement_event_list": {
+   "model_path": "equipment[].replacement_event_list",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "EQUIPMENT.equipment_end_of_life_mass": {
+   "model_path": "equipment[].end_of_life_mass_kg",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "REFRIGERANT.substance": {
+   "model_path": "refrigerants[].substance",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "REFRIGERANT.application": {
+   "model_path": "refrigerants[].application",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "REFRIGERANT.charge_mass": {
+   "model_path": "refrigerants[].charge_mass_kg",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "REFRIGERANT.gwp": {
+   "model_path": "refrigerants[].gwp",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "REFRIGERANT.annual_leak_rate": {
+   "model_path": "refrigerants[].annual_leak_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "REFRIGERANT.replacement_loss_rate": {
+   "model_path": "refrigerants[].replacement_loss_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "REFRIGERANT.end_of_life_recovery_rate": {
+   "model_path": "refrigerants[].end_of_life_recovery_rate",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "REFRIGERANT.refrigerant_change_years": {
+   "model_path": "refrigerants[].change_years",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.new_or_existing": {
+   "model_path": "operation.new_or_existing",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "OPERATION.electricity_per_year": {
+   "model_path": "operation.electricity",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.electricity_per_m2_per_year": {
+   "model_path": "operation.electricity_per_m2_per_year",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.gas_per_year": {
+   "model_path": "operation.gas",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.oil_per_year": {
+   "model_path": "operation.oil",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.district_heat_per_year": {
+   "model_path": "operation.district_heat",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.onsite_generation_per_year": {
+   "model_path": "operation.onsite_generation",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.onsite_export_per_year": {
+   "model_path": "operation.onsite_export",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.grid_factor_scenario_id": {
+   "model_path": "operation.grid.scenario_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "OPERATION.facility_management_ratio": {
+   "model_path": "operation.facility_management_ratio",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "OPERATION.energy_simulation_basis": {
+   "model_path": "operation.energy_simulation_basis",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "WATER_WASTE.water_per_year": {
+   "model_path": "water_waste.water",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "WATER_WASTE.sewage_per_year": {
+   "model_path": "water_waste.sewage",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "WATER_WASTE.municipal_waste_per_year": {
+   "model_path": "water_waste.municipal_waste",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "WATER_WASTE.water_factor_id": {
+   "model_path": "water_waste.water_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "WATER_WASTE.sewage_factor_id": {
+   "model_path": "water_waste.sewage_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "WATER_WASTE.waste_factor_id": {
+   "model_path": "water_waste.waste_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.demolition_activity": {
+   "model_path": "end_of_life.demolition_activities[].quantity",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.demolition_factor_id": {
+   "model_path": "end_of_life.demolition_activities[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.waste_transport_mass": {
+   "model_path": "end_of_life.waste_hauls[].mass_t",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.waste_transport_distance": {
+   "model_path": "end_of_life.waste_hauls[].distance_km",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.waste_treatment_route": {
+   "model_path": "materials[].end_of_life.routes[].route",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.waste_recycle_fraction": {
+   "model_path": "materials[].end_of_life.routes[].fraction",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.waste_reuse_fraction": {
+   "model_path": "materials[].end_of_life.routes[].fraction",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.landfill_quantity": {
+   "model_path": "materials[].end_of_life.routes[].fraction",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "END_OF_LIFE.eol_factor_ids": {
+   "model_path": "materials[].end_of_life.routes[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "PROVENANCE.source_type": {
+   "model_path": "provenance{}.source_type",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.source_reference": {
+   "model_path": "provenance{}.source_reference",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.license_status": {
+   "model_path": "provenance{}.licence_status",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.data_quality": {
+   "model_path": "provenance{}.data_quality",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.last_verified_at": {
+   "model_path": "provenance{}.last_verified_at",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.measurement_year": {
+   "model_path": "provenance{}.measurement_year",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.user_override_reason": {
+   "model_path": "provenance{}.user_override_reason",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "PROVENANCE.uncertainty_distribution": {
+   "model_path": "provenance{}.uncertainty_distribution",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:GAS.gas_list": {
+   "model_path": "gases",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:GAS.gwp_vector": {
+   "model_path": "gwp",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:UNIT.conversion_table": {
+   "model_path": "unit_conversions",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:PROVENANCE.provenance_id": {
+   "model_path": "provenance{}.provenance_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:PROVENANCE.value_state": {
+   "model_path": "provenance{}.value_state",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:FACTOR.gas_amounts": {
+   "model_path": "factors{}.gas_amounts",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:FACTOR.licence_basis": {
+   "model_path": "factors{}.licence_basis",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:FACTOR.source_tag": {
+   "model_path": "factors{}.source_tag",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:FACTOR.category": {
+   "model_path": "factors{}.category",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:PROJECT.provenance_id": {
+   "model_path": "project.provenance_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:PROJECT.value_states": {
+   "model_path": "project.states",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:BOUNDARY.reconstruction_scope_fraction": {
+   "model_path": "boundary.reconstruction_scope_fraction",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.composition": {
+   "model_path": "materials[].composition",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.factor_id": {
+   "model_path": "materials[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.epd_declared_stages": {
+   "model_path": "materials[].epd.declared_stages",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.epd_declared_unit": {
+   "model_path": "materials[].epd.declared_unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.epd_valid_until": {
+   "model_path": "materials[].epd.valid_until",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.installation_factor_id": {
+   "model_path": "materials[].installation_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.row_conversions": {
+   "model_path": "materials[].conversions",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.provenance_id": {
+   "model_path": "materials[].provenance_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:MATERIAL.value_states": {
+   "model_path": "materials[].states",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:TRANSPORT.delivery_factor_id": {
+   "model_path": "materials[].transport.delivery_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.row_mass": {
+   "model_path": "materials[].end_of_life.mass_kg",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.row_haul_distance": {
+   "model_path": "materials[].end_of_life.haul_distance_km",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.row_haul_factor_id": {
+   "model_path": "materials[].end_of_life.haul_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.demolition_activity_id": {
+   "model_path": "end_of_life.demolition_activities[].activity_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:END_OF_LIFE.demolition_description": {
+   "model_path": "end_of_life.demolition_activities[].description",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:END_OF_LIFE.demolition_unit": {
+   "model_path": "end_of_life.demolition_activities[].unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.haul_id": {
+   "model_path": "end_of_life.waste_hauls[].haul_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:END_OF_LIFE.haul_description": {
+   "model_path": "end_of_life.waste_hauls[].description",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:END_OF_LIFE.haul_factor_id": {
+   "model_path": "end_of_life.waste_hauls[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.provenance_id": {
+   "model_path": "end_of_life.provenance_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:END_OF_LIFE.value_states": {
+   "model_path": "end_of_life.states",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:SUMMARY.timber_dry_density": {
+   "model_path": "summary_quantities.timber_dry_density_kg_per_m3",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:SUMMARY.timber_carbon_fraction": {
+   "model_path": "summary_quantities.timber_carbon_fraction",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:SUMMARY.concrete_uptake_factor_id": {
+   "model_path": "summary_quantities.concrete_uptake_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:EQUIPMENT.quantity_unit": {
+   "model_path": "equipment[].quantity_unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:EQUIPMENT.eol_factor_id": {
+   "model_path": "equipment[].eol_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:EQUIPMENT.delivery_factor_id": {
+   "model_path": "equipment[].delivery_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:EQUIPMENT.installation_factor_id": {
+   "model_path": "equipment[].installation_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:EQUIPMENT.provenance_id": {
+   "model_path": "equipment[].provenance_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:EQUIPMENT.value_states": {
+   "model_path": "equipment[].states",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:REFRIGERANT.device_id": {
+   "model_path": "refrigerants[].device_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:REFRIGERANT.service_life": {
+   "model_path": "refrigerants[].service_life",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:REFRIGERANT.top_up": {
+   "model_path": "refrigerants[].top_up",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:REFRIGERANT.provenance_id": {
+   "model_path": "refrigerants[].provenance_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:REFRIGERANT.value_states": {
+   "model_path": "refrigerants[].states",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:CONSTRUCTION.fuel_kind": {
+   "model_path": "construction.fuels[].kind",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:CONSTRUCTION.fuel_unit": {
+   "model_path": "construction.fuels[].unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:CONSTRUCTION.fuel_factor_id": {
+   "model_path": "construction.fuels[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:CONSTRUCTION.fuel_conversions": {
+   "model_path": "construction.fuels[].conversions",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:CONSTRUCTION.waste_kind": {
+   "model_path": "construction.waste_streams[].kind",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:CONSTRUCTION.waste_factor_id": {
+   "model_path": "construction.waste_streams[].factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:CONSTRUCTION.provenance_id": {
+   "model_path": "construction.provenance_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:CONSTRUCTION.value_states": {
+   "model_path": "construction.states",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.gas_factor_id": {
+   "model_path": "operation.gas_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.oil_factor_id": {
+   "model_path": "operation.oil_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.district_heat_factor_id": {
+   "model_path": "operation.district_heat_factor_id",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_kind": {
+   "model_path": "operation.grid.kind",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_unit": {
+   "model_path": "operation.grid.unit",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_start": {
+   "model_path": "operation.grid.start",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_annual_decline": {
+   "model_path": "operation.grid.annual_decline",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_floor": {
+   "model_path": "operation.grid.floor",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_steps": {
+   "model_path": "operation.grid.steps",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_table": {
+   "model_path": "operation.grid.table",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_construction_value": {
+   "model_path": "operation.grid.construction_value",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_licence_status": {
+   "model_path": "operation.grid.licence_status",
+   "metadata_only": false,
+   "reference_all_units": true,
+   "unified_full_outputs": true,
+   "unified_totals_only": true
+  },
+  "NEW:OPERATION.grid_source_tag": {
+   "model_path": "operation.grid.source_tag",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:OPERATION.grid_region": {
+   "model_path": "operation.grid.region",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:OPERATION.provenance_id": {
+   "model_path": "operation.provenance_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:OPERATION.value_states": {
+   "model_path": "operation.states",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:WATER_WASTE.provenance_id": {
+   "model_path": "water_waste.provenance_id",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  },
+  "NEW:WATER_WASTE.value_states": {
+   "model_path": "water_waste.states",
+   "metadata_only": false,
+   "reference_all_units": false,
+   "unified_full_outputs": false,
+   "unified_totals_only": false
+  }
+ }
+}

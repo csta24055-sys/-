@@ -1,0 +1,201 @@
+{
+ "checker": "V1",
+ "rule_check": "no。旧研究のコード（refcalc、fastcalc、bench、synth、tools、common、試験、生成器、checker_scripts、interrupted_fix）は一切実行も import もしていない。リポジトリのファイルは作成・変更・削除していない（使った git は log、status、diff --stat、show だけ。最後の git status --short は空）。Python は -I で、自分の作業フォルダから JSON とテキストの解析だけに使った。Web は使っていない。",
+ "findings": [
+  {
+   "id": "V1-01",
+   "severity": "MEDIUM",
+   "file": "INDEX.md",
+   "where": "1.1 節の表の 4 行目（75 行。CK-R3-01、CK-R3-09、CK-R3-10、CK-R3-12〜16、CK-R7-23 を引く行）",
+   "quoted": "…建替・指標の一次式。第2回の検査担当が、自作の逐次計算との総当たりで確かめた",
+   "problem": "総当たりで確かめたのは、回数関数（D2）、年重み付き和と区間のモーメント（D5）、冷媒の閉形式（D6）だけである。行の合算と係数との積和（D1。CK-R3-09、CK-R3-01）、建替（D4。CK-R3-12）、指標（D7。CK-R3-16）は、コードとの読み比べと 681 シナリオ全体の一致によるもので、検査担当は専用の総当たりをしていないと書いている。表の文は、引いている項目自身の「根拠の強さ」の注記と合わず、根拠を実際より強く見せている。",
+   "evidence": "materials/round2_review/triage/records.md:110（CHECKS PERFORMED 4: \"D1, D2, D4, D7 match the code by reading\"）; materials/round2_review/triage/records.md:112（\"D4 (rebuild) and D7 (indicators) were checked by reading and through the end-to-end comparisons only, not by a separate brute-force script\"）; INDEX.md:230-231 と 259-260（CK-R3-12・CK-R3-16 の注記「専用の総当たりはしていない」）",
+   "suggested_fix": "表の文を 2 つに分ける。「回数関数、年重み付き和、モーメント、冷媒の等比は、第2回の検査担当が自作の逐次計算との総当たりで確かめた」「行の合算と積和、建替、指標の一次式は、コードとの読み比べと 681 シナリオの一致による（専用の総当たりなし）」。"
+  },
+  {
+   "id": "V1-02",
+   "severity": "MEDIUM",
+   "file": "INDEX.md（同文が index_detail/T06_unified_models.md の CK-R7-23 にある）",
+   "where": "2 節 CK-R7-23「言ってよいこと」（266 行）",
+   "quoted": "これらは上の件数の総当たりで、逐次ループと丸めの範囲で一致した（モーメントだけは T が整数の直上で桁落ちし、1.08e-9〜5.2e-8 の差が出る）",
+   "problem": "(1) 差の上限 5.2e-8 は誤りである。第2回の指摘 NUM-10（確認済み）は、同じ項 (b) で T=1+1e-12 のとき 6.4e-5（反証検査担当の再計算で 6.36e-5）を、ごく小さい T=1e-10 で 7.5e-7 を記録している。同じ索引の CK-R3-14 の詳細も 6.4e-5 を引いている。(2)「モーメントだけ」も合わない。NUM-10 は、漏洩率 1−1e-8 で補充なしの冷媒の年次値に 5.8e-9 の差を記録している（この項目の詳細の「第2回の指摘の影響」にも書いてある）。(3)「上の件数」が指す件数は INDEX.md には無く、詳細の「確かめ方」にしか無い。",
+   "evidence": "materials/round2_review/triage/numeric.md:112（NUM-10 (b) \"T=1.000000001 … (5.2e-08); T=1+1e-12: 6.4e-05 … T=1e-10: 7.5e-07\"、(e) \"Leak rate 1-1e-8 without top-up … (5.8e-09)\"）; materials/round2_review/triage/numeric.md:118（\"T=1+1e-12: 6.36e-5\"）; materials/round2_review/triage/numeric.md:134（CHECKS 3: \"moments worst 1.08e-9 only for H at T=1.0000001\"）; index_detail/T06_unified_models.md の CK-R3-14「第2回の指摘の影響」(1)",
+   "suggested_fix": "「総当たり（詳細の確かめ方に挙げた件数）では、モーメントの 1 例（T=1.0000001 で 1.08e-9）を除き、逐次ループと丸めの範囲で一致した。T が整数の直上にあるとモーメントは桁落ちし、T が整数に近いほど差が大きい（記録された例で 5.2e-8〜6.4e-5）。漏洩率が 1 にごく近い冷媒の年次値にも 5.8e-9 の差がある」と書き直す。"
+  },
+  {
+   "id": "V1-03",
+   "severity": "MEDIUM",
+   "file": "INDEX.md（同文が index_detail/T07_exactness_load.md の CK-R3-19 にある）",
+   "where": "2 節 CK-R3-19「言ってよいこと」（282 行）と 1.1 節の表の 5 行目（76 行）",
+   "quoted": "統合モデルは、行の合算を 1 回行えば、別の評価期間の結果を乗数の計算だけで求められる。",
+   "problem": "「乗数の計算だけで」は、確認済みの指摘 REC-4 と矛盾する。合計のみの出力でも、finish のたびに冷媒機器の行を読み直し、明示の更新年一覧 16 個と冷媒の交換年一覧 10 個を作る（評価期間 9 通りなら 9 回の読み直し）。また、周期 1.000000001 では掃引の結果も基準計算と食い違い（NUM-1）、T は電力係数の年次表の長さ以内に限る（REP-17）。詳細の「第2回の指摘の影響」には書いてあるが、「言ってよいこと」の文に限定が無いので、区分 1 の条件 (c)（指摘と矛盾しない文面）を満たしていない。「150 シナリオ×20 期間」の比較は |SUM-03|×1e-12 の絶対差で、葉ごとの相対 1e-9 ではないことも文に無い。",
+   "evidence": "materials/round2_review/triage/records.md:40, 45-47（REC-4 VERDICT CONFIRMED: \"refrigerant rows are read in aggregate AND again in finish (… with 9 study periods from one aggregate, 9 further passes and 90 GWP products)\"、\"16 filtered explicit lists and 10 refrigerant change-year lists are built\"）; materials/round2_review/triage/numeric.md:4, 10（NUM-1: \"engine.sweep is affected too\"、\"sweep: T=30 B3-01 76430.42 vs 19107.60\"）; materials/round2_review/triage/numeric.md:134（CHECKS 5: \"no disagreement (above 1e-12*|SUM-03| absolute)\"）; materials/round2_review/triage/reports.md:113-118（REP-17）",
+   "suggested_fix": "「行の合算（aggregate）をやり直さずに別の評価期間の結果を求められる。ただし評価期間ごとに、冷媒機器の行と明示の更新年一覧は計算し直す。周期 1.000000001 では掃引の結果も食い違う。T は年次表の長さ以内」とし、150×20 の比較が |SUM-03|×1e-12 の絶対差であることを添える。表の 5 行目も同じに直す。"
+  },
+  {
+   "id": "V1-04",
+   "severity": "MEDIUM",
+   "file": "INDEX.md（同文が index_detail/T06_unified_models.md の CK-R3-16 にある）",
+   "where": "2 節 CK-R3-16「言ってよいこと」（258 行）",
+   "quoted": "指標は段階ベクトルの一次式か比であり、段階の値が一致すれば指標も一致する。",
+   "problem": "差を取る指標（基準案との比較 SUM-08 の delta）では成り立たない例が、確認済みの指摘 NUM-10 (c) にある。提案と 1e-8 だけ違う基準案で、段階の値は丸めの範囲で合っているのに、delta は相対 4.2e-5 ずれる。681 シナリオでも、70 単位のうち最大の差は SUM-08 の 4.77e-13 で、SUM-03 の 6.2e-14 より 1 桁大きい。詳細の「使ってはいけない記述」には挙げてあるが、「言ってよいこと」の文は無条件で、指摘と矛盾する。このままでは区分 1 の条件 (c) を満たさない。",
+   "evidence": "materials/round2_review/triage/numeric.md:112（NUM-10 (c): \"SUM-08.delta reference -8.886680006980896e-05, unified -8.887052536010742e-05 (4.2e-05; study metric 1.1e-07)\"）; materials/round2_review/triage/numeric.md:116-119（VERDICT CONFIRMED）; 09_APPROX_STUDY/04_VERIFICATION/unified_model_exactness.json: units.SUM-08.max_abs_rel_error=4.774748148787557e-13、units.SUM-03.max_abs_rel_error=6.235533063482069e-14",
+   "suggested_fix": "「指標は段階ベクトルの一次式か比である。和と比の指標は、段階の値が相対 1e-9 以内で合えば同じ精度で合う。差を取る指標（SUM-08 の delta・saving）は桁落ちするので、この限りでない（NUM-10）」と狭める。狭めないなら区分 2 にする。"
+  },
+  {
+   "id": "V1-05",
+   "severity": "MEDIUM",
+   "file": "INDEX.md、index_detail/T02_ledger.md、materials/classification/R1.json",
+   "where": "CK-R1-09「確かめた者」（INDEX.md 123 行、T02 169 行、R1.json の checked_by）",
+   "quoted": "確かめた者：独立検査（第1回）、独立検査（第2回）で再現",
+   "problem": "「言ってよいこと」は 43ba5d7 の版についての文（70 単位の文面の一致、53 単位の書き直しとの一致）である。第1回の検査は初版が対象で、その後に台帳の定義文と基準計算は大きく書き換えられた。第1回がこの版のこの主張を確かめた事実は無い。確かめた者に第1回を並べると、2 回の検査で確かめられたように読める。",
+   "evidence": "09_APPROX_STUDY/04_VERIFICATION/INDEPENDENT_REVIEW.md:3, 6（「初版の結果…に対して、3 つの検査を別々に行った」「対応後の版に対する独立した検査は、まだ行っていない」）; git diff --stat bb9ac37 43ba5d7 -- 09_APPROX_STUDY/01_LEDGER/units.json 09_APPROX_STUDY/research_code/refcalc → 6 files changed, 853 insertions(+), 485 deletions(-); 第2回の根拠は materials/round2_review/triage/rederive.md:146 と materials/round2_review/triage/reports.md:128",
+   "suggested_fix": "確かめた者を「独立検査（第2回）で再現」だけにする。第1回については、確かめ方に「初版に対して同じ観点の再導出をした。43ba5d7 の版は見ていない」と書く。"
+  },
+  {
+   "id": "V1-06",
+   "severity": "MEDIUM",
+   "file": "INDEX.md（同文が index_detail/T02_ledger.md の CK-R7-02 にある）",
+   "where": "2 節 CK-R7-02「言ってよいこと」と「確かめた者」（137-138 行）、1.1 節の表の 3 行目（74 行）",
+   "quoted": "主な流れ：…A1-A3・A4・C の行結果→B3-01・B4-02・B5-01 ／ 確かめた者：独立検査（第2回）で再現",
+   "problem": "(1) 流れの記述が台帳と合わない。B3-01 の depends_on は A13-01、A13-03、B4-01、B4-03、X-01 の 5 つで、A4 と C の行結果は入っていない。B5-01 には A5-04 が入り、B3-01・B4-02 には B4-01・B4-03 が入るが、文に無い。(2)「183 辺」と「閉路が無い」は、第2回の検査の記録には無い。第2回の 2 つの検査が報告したのは「台帳の depends_on＝登録の宣言（差 0）」だけで、辺の数と閉路の有無は分類担当 R7 が units.json を解析して数えたものである（詳細の「確かめ方」「分類の根拠」にそう書いてある）。数そのものは正しい（この検査でも units.json を解析し、辺 183、70 単位すべてが依存順に並ぶ、feeds＝逆引き、深さ 0〜7 を確かめた）。誤っているのは確かめた者の書き方である。",
+   "evidence": "09_APPROX_STUDY/01_LEDGER/units.json: B3-01.depends_on = [\"A13-01\",\"A13-03\",\"B4-01\",\"B4-03\",\"X-01\"]、B5-01.depends_on に \"A5-04\"; materials/round2_review/triage/rederive.md:4（RED-1: \"B3 and B5 are built from upstream row results (A13-01, A13-03, X-01, and for B5 also A4/A5/C units)\"）; triage の 5 ファイルと res.json を \"183\"、acyclic、閉路 で検索して該当なし; materials/round2_review/triage/rederive.md:146（CHECKS 4）; index_detail/T02_ledger.md:474, 488",
+   "suggested_fix": "流れを「A1-A3 の行結果（A13-01・A13-03・X-01）と B4-01・B4-03→B3-01、A1-A3・A4・C の行結果と B4-01・B4-03→B4-02、A1-A3・A4・A5-04・C の行結果→B5-01」に直す。確かめた者は「依存の宣言との一致は独立検査（第2回）。辺の数と閉路なしは分類担当の JSON 解析（実行なし）」と分けて書く。"
+  },
+  {
+   "id": "V1-07",
+   "severity": "MEDIUM",
+   "file": "INDEX.md（同文が index_detail/T04_reference_calculation.md の CK-R7-28 にある）",
+   "where": "2 節 CK-R7-28「言ってよいこと」（170 行）と 1.1 節の表の 8 行目（79 行）",
+   "quoted": "但し書きなしでコードと合うと報告されたのは 15 件：B-1（T は実数、最終年を按分）、B-2（n×周期<T だけ数える）、B-3（事象は属する年に置く）、…",
+   "problem": "(1) 検査担当が報告したのは「B-1〜B-21 は、B-17・B-18・B-11 の例外を除きコードと合う」の 1 文で、但し書きなしは 18 件になる。15 件は索引側が B-15・B-16・B-21 を外して作った数で、「報告された」数ではない。(2) B-15 を「周期 1.000000001 で丸めに依存する」として外したのに、B-2 と B-3 を但し書きなしに数えている。コードでは B-2 の判定は inside()（τ < T×(1−1e-9)）、B-3 の年の割り当ては event_year()（ceil(τ×(1−1e-9))）で、どちらも B-15 の許容幅そのものである。B-2 の文（n×周期 < T）は許容幅を書いておらず、文だけではコードと一致しない。反証検査担当の追記が示した丸めへの依存は、B-3 の年の割り当てに起きている。(3) 照合の根拠は検査担当 1 者の 1 文で、1 件ごとの照合の記録は無い（注記にあるとおり）。",
+   "evidence": "materials/round2_review/triage/rederive.md:146（CHECKS 7: \"B-1..B-21 each match the code, with the exceptions reported (B-17 in RED-1, B-18 in RED-2/RED-3, B-11 in RED-8)\"）; materials/round2_review/triage/numeric.md:138（ADDITIONAL 1: \"The reference loop itself departs from the written time rule at the NUM-1 input … years 1, 2, 4, 4, 6, 7, 8, 8\"）; materials/round2_review/triage/records.md:114（ADDITIONAL 1）; 09_APPROX_STUDY/research_code/refcalc/base.py:91-93, 125-126; 09_APPROX_STUDY/06_OPEN_ISSUES/README.md:27-28, 43",
+   "suggested_fix": "「検査担当は 3 件（B-11・B-17・B-18）を除く 18 件がコードと合うと報告した。索引はさらに B-15・B-16・B-21 に限定を付けた。B-2・B-3 は B-15 の許容幅つきで実装されており、τ×(1−1e-9) が整数に近い端では B-15 と同じ限定が付く」と書く。但し書きなしの件数は 13 件とするか、件数を書かない。"
+  },
+  {
+   "id": "V1-08",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T06_unified_models.md の CK-R3-14 にある）",
+   "where": "2 節 CK-R3-14「言ってよいこと」（244 行）",
+   "quoted": "有限で整った記述子と通常の大きさの値では、基準計算の年ごとの計算と一致した（681 シナリオと第2回の総当たり）。",
+   "problem": "第2回の数値の検査担当の総当たり 30,000 件では、有限で整った入力でも T=1.0000001 のときモーメント H に 1.08e-9 の差が出ており、「総当たりで一致した」とは言い切れない。詳細の「言える範囲」には「T が整数をわずかに超え、基礎が 0 に近い場合は除く」とあるが、「言ってよいこと」の文には無い。「通常の大きさの値」という語は T の条件を表していない。また総当たりの相手は検査担当が自分で書いたループで、基準計算そのものではない。",
+   "evidence": "materials/round2_review/triage/numeric.md:134（CHECKS 3: \"grid_segments/segment_moments 30,000 cases: segment values identical to the loop, moments worst 1.08e-9 only for H at T=1.0000001 (cancellation, see NUM-10)\"）; materials/round2_review/triage/numeric.md:112（NUM-10 (b)）; index_detail/T06_unified_models.md の CK-R3-14「言える範囲」",
+   "suggested_fix": "「…一致した（681 シナリオと第2回の総当たり）。ただし T が整数をわずかに超える場合は除く（総当たりで 1.08e-9、作った例で 5.2e-8〜6.4e-5 の差）」と書き足す。"
+  },
+  {
+   "id": "V1-09",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T06_unified_models.md の CK-R3-03 にある）",
+   "where": "2 節 CK-R3-03「言ってよいこと」（194 行）",
+   "quoted": "B4-02、B5-01、X-08、X-10、B3-02、B4-01（事象の件数）は、回数関数と周期別の合算から得られ、",
+   "problem": "B4-02 は、明示の更新年一覧を持つ設備の行については周期別の合算に入らず、finish で行ごとに足している（確認済みの指摘 REC-7。仕組みのシナリオで 120 行中 16 行）。詳細の「使ってはいけない記述」には例外があるが、「言ってよいこと」の文は例外なしで書かれている。",
+   "evidence": "materials/round2_review/triage/records.md:76, 81-83（REC-7 VERDICT CONFIRMED: \"Equipment with explicit event lists (16 of 120 rows here) is added per row in finish (lines 846-864)\"）",
+   "suggested_fix": "「…は、周期で与えられる行については回数関数と周期別の合算から得られる。明示の更新年一覧を持つ行は行ごとに計算する」と書く。"
+  },
+  {
+   "id": "V1-10",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T07_exactness_load.md の CK-R7-22 にある）",
+   "where": "2 節 CK-R7-22「言ってよいこと」（297 行）",
+   "quoted": "第2回の厳密な再比較でも差は 0 だった。",
+   "problem": "差が 0 だったのではない。第2回の再比較の結果は「相対 1e-9 を超える葉が 0 件」で、最大の相対差は 4.77e-13 である。同じ文の前半（記録の最大 4.77e-13）とも食い違う読み方になる。",
+   "evidence": "materials/round2_review/triage/numeric.md:112（\"my strict comparison WITHOUT any floor found 0 leaves above 1e-9 (largest 4.77e-13, SUM-08.delta…)\"）; materials/round2_review/triage/numeric.md:118（\"7,962,996 leaf comparisons, 0 differences\"。許容差 1e-9 の下での件数）",
+   "suggested_fix": "「第2回の床なしの再比較でも、相対 1e-9 を超える差は 0 件だった（最大 4.77e-13）」と書く。"
+  },
+  {
+   "id": "V1-11",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T07_exactness_load.md の CK-R3-20 にある）",
+   "where": "2 節 CK-R3-20「言ってよいこと」（289 行）と 1.1 節の表の 7 行目（78 行）",
+   "quoted": "統合モデルが実行した命令数は基準計算より全出力で 54.2％・63.6％、合計のみで 67.6％・72.6％ 少なかった。第2回の検査担当が命令数を数え直して一致した。",
+   "problem": "(1) この削減率は「基準案との比較（SUM-08）を除いた基準計算」に対する値である。条件が文に無い。同じ JSON には、基準案との比較を含めた場合の全出力の削減率 44.9％（S）・54.3％（M）がある。(2) 数え直しは「約 100 命令以内で一致」で、完全な一致ではない（詳細には書いてある）。(3) 表の 7 行目には「検査担当 1 者、反証検査担当なし」が無い。",
+   "evidence": "09_APPROX_STUDY/04_VERIFICATION/unified_model_load.json: sizes.S.unified_full_outputs.compared_with=\"reference_without_baseline_comparison\"、instruction_reduction=0.5419; sizes.S.unified_full_outputs_with_baseline_comparison.instruction_reduction=0.4487; sizes.M の同じキー=0.5434; materials/round2_review/triage/reports.md:128（\"they agree with the published figures within about 100 instructions\"）",
+   "suggested_fix": "「基準案との比較を除いた計算どうしで」と条件を入れ、「数え直しは約 100 命令以内で一致」と書く。表の 7 行目に「検査担当 1 者、反証なし」を添える。"
+  },
+  {
+   "id": "V1-12",
+   "severity": "LOW",
+   "file": "INDEX.md、index_detail/T04_reference_calculation.md、index_detail/T02_ledger.md",
+   "where": "CK-R2-01（146 行）、CK-R7-17（162 行）、CK-R1-09（122 行）の「言ってよいこと」",
+   "quoted": "数値と件数が相対 1e-9 以内で一致した（例外は checked_how に記した 4 点…）。X-04・X-05・SUM-08 は 50 シナリオで間接的に一致した。",
+   "problem": "(1) 保存されている検査のスクリプトでは、比べた出力は単位ごとに選んだキーだけである。たとえば X-02 は by_stage だけ、SUM-01〜03 は value だけ、C-05 は ok と n_mass_unchecked だけで、X-02 の complete・incomplete_units と SUM-01〜03 の complete は比べていない。「53 単位が一致」を完全性の印まで含めて読むと誤る（印には RED-1 の穴がある）。この範囲は INDEX にも詳細にも書かれていない。(2) SUM-08 の間接の比較は、基準案を持つ 3 シナリオだけである。X-04 は by_gas だけである。「言ってよいこと」ではこの 2 つの限定が落ちている。(3)「checked_how」は分類 JSON の欄名で、INDEX と詳細の読者には「確かめ方」と書かないと通じない。(4) 版の呼び方が CK-R2-01 は 60e720f、CK-R7-17 と CK-R1-09 は 43ba5d7 で、そろっていない（コードは同じ。git diff で確認した）。",
+   "evidence": "materials/round2_review/checker_scripts/rederive/driver.py の KEYS（\"X-02\": [\"by_stage\"]、\"SUM-01\": [\"value\"]、\"C-05\": [\"ok\", \"n_mass_unchecked\"]。53 単位。X-04・X-05・SUM-08 は無い）; materials/round2_review/triage/rederive.md:146（CHECKS 2: \"X-05, X-04 (by_gas) and SUM-08 were re-derived indirectly … on 50 scenarios (12 population, 6 dirty, 32 edge cases; 3 with a baseline)\"）; git diff --stat 43ba5d7 60e720f → 00_POLICY/EVALUATION_PROTOCOL.md の 1 ファイルだけ",
+   "suggested_fix": "「比べたのは各単位の値・内訳・件数の欄で、X-02 と SUM-01〜03 の完全性の印は比べていない」「X-04 はガス別内訳、SUM-08 は基準案のある 3 シナリオ」と書き足す。「checked_how」を「確かめ方」に、版の呼び方を 43ba5d7 にそろえる。"
+  },
+  {
+   "id": "V1-13",
+   "severity": "LOW",
+   "file": "INDEX.md、index_detail/T06_unified_models.md",
+   "where": "2 節 CK-R3-09（213-218 行）",
+   "quoted": "確かめた者：独立検査（第2回）で再現（「根拠の強さ」の注記なし）／ 同じ A に係数の別の列を掛けると、ガス別内訳と CO2 のみの結果が得られる。",
+   "problem": "(1) D1 の確認は、D4・D7 と同じく、記録の検査担当 1 者によるコードとの読み比べである（加えて、行ごとの係数の乗算が 0 回という外からの計測）。D4・D7 には「読み比べと全体の一致による」の注記があるのに、D1 には無い。0.3 節の「根拠が比較的弱いものには注記を付けた」と合わない。(2) 2 つ目の文は、基準計算との一致としては限定が要る。値 0 でガス別量が 0 でない係数では修繕のガス別量が食い違い（NUM-3）、ガスの一覧に不備があると複合品で食い違う（NUM-6）。どちらも確認済みだが、この項目の「関係する第2回の指摘」に入っていない。",
+   "evidence": "materials/round2_review/triage/records.md:110（CHECKS 4: \"D1, D2, D4, D7 match the code by reading\"）; materials/round2_review/triage/numeric.md:25-35（NUM-3 CONFIRMED）、61-71（NUM-6 CONFIRMED）; INDEX.md:227-231 と 213-218 の比較; index_detail/T06_unified_models.md の CK-R3-09「関係する第2回の指摘：REP-12、REC-9、NUM-10」",
+   "suggested_fix": "CK-R3-09 に注記「コードとの読み比べと外からの計測、および全体の一致による。専用の総当たりはしていない」を付ける。関係する指摘に NUM-3・NUM-6 を足し、2 つ目の文に「不備のない係数とガスの一覧について」と添える。"
+  },
+  {
+   "id": "V1-14",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T07_exactness_load.md の CK-R3-18 にある）",
+   "where": "2 節 CK-R3-18「言ってよいこと」（275 行）",
+   "quoted": "第2回の検査担当 2 者が床なしの比較で再現した。",
+   "problem": "681 シナリオを床なしでやり直したのは、数値の検査担当 1 者と、その反証検査担当 1 者である。0.2 節は検査担当と反証検査担当を区別しているので、「検査担当 2 者」は不正確である（1.1 節の表の 1 行目は正しく書いている）。記録と報告書の検査担当が再実行したのは別の 60 シナリオと 94 シナリオで、681 件全部ではない。",
+   "evidence": "materials/round2_review/triage/numeric.md:134（CHECKS 9。検査担当）、materials/round2_review/triage/numeric.md:118（反証検査担当: \"Strict rerun: 681 scenarios, 7,962,996 leaf comparisons, 0 differences\"）; materials/round2_review/triage/records.md:110（7: 60 scenarios）; materials/round2_review/triage/reports.md:130（\"I re-ran 94 scenarios for exactness\"）",
+   "suggested_fix": "「第2回の検査担当 1 者と反証検査担当 1 者が、床なしの比較で再現した」と書く。"
+  },
+  {
+   "id": "V1-15",
+   "severity": "LOW",
+   "file": "INDEX.md（同文が index_detail/T06_unified_models.md の CK-R3-15 にある）",
+   "where": "2 節 CK-R3-15「言ってよいこと」（251 行）",
+   "quoted": "第2回の総当たり 190,000 件で、年ごとのループとの不一致は見つからなかった。",
+   "problem": "190,000 件は 2 者の件数の和（40,000＋150,000）で、40,000 件の判定は「絶対差 1e-12 を超えない」である。相対 1e-9 の判定ではない。同じ第2回の乱数の反例探しでは、漏洩率 0.999999999 の冷媒で 1e-9 を超える差が 16 件出ている（1e-5 kgCO2e 未満の値）。判定の基準と、この除外を文に入れないと、冷媒の閉形式がどの入力でも相対 1e-9 で合うと読める。",
+   "evidence": "materials/round2_review/triage/numeric.md:134（CHECKS 3: \"refrigerant_fractions 40,000 cases … no difference above 1e-12 absolute\"、CHECKS 2 (iii): \"refrigerant rounding noise on values below 1e-5 kgCO2e with leak rate 0.999999999 (16 seeds, part of NUM-10)\"）; materials/round2_review/triage/records.md:110（\"refrigerant_fractions 150,000 cases … 0 mismatches (worst 3.5e-15)\"）",
+   "suggested_fix": "「第2回の総当たり 190,000 件（2 者の合計。うち 40,000 件は絶対差 1e-12 の判定）で不一致は見つからなかった。漏洩率が 1 にごく近い補充なしの機器では、年次の小さい値に 1e-9 を超える差が出る」と書く。"
+  },
+  {
+   "id": "V1-16",
+   "severity": "LOW",
+   "file": "INDEX.md",
+   "where": "1.1 節の表の 2 行目（73 行）と 8 行目（79 行）",
+   "quoted": "うち 53 単位は、定義文と規約文だけから独立に書き直した計算と、119 の架空シナリオで相対 1e-9 以内で一致した",
+   "problem": "表の 1 行目は「検査担当と反証検査担当が…再現した」と根拠の強さを書いているが、2 行目（書き直しとの一致）と 8 行目（規約とコードの照合）は、検査担当 1 者の報告だけで反証検査担当がやり直していないことを書いていない。項目側の注記（124、148、164、172 行）を読まない限り、同じ強さに見える。",
+   "evidence": "INDEX.md:72-73, 79 と 124, 148, 164, 172 の比較; materials/round2_review/triage/rederive.md:146（検査担当の実施記録）、rederive.md:149-150（反証検査担当の追記は指摘の再現だけを述べる）",
+   "suggested_fix": "2 行目と 8 行目に「検査担当 1 者の報告。反証検査担当はやり直していない」を添える。"
+  }
+ ],
+ "checked_ok": [
+  "CK-R3-18／CK-R7-22：シナリオ 681（内訳 3・32・400・60・144・10・32）、数値 7,406,182 個、数値以外 586,280 個、最大 4.7747e-13（SUM-08）、70 単位すべて failures 0、壊し方 36 種。unified_model_exactness.json を解析して一致。小数の端 5 組・段階の部分集合 8 通りは bench/mutations.py:333-335 の定義と verify_unified.py:47-75 の読み取りで一致（5×2＝10、8×4＝32）。",
+  "CK-R3-18／CK-R7-22 の再現者：numeric.md:134（検査担当。床なし、0 leaves above 1e-9、最大 4.77e-13）と numeric.md:118（反証検査担当。7,962,996 葉、0 differences）。検査担当 1 者＋反証検査担当 1 者で合っている。",
+  "CK-R2-01／CK-R7-17／CK-R1-09：53 単位の一覧は保存スクリプト driver.py の KEYS の 53 件と完全に一致。119＝24＋32＋14＋36＋5＋8 は driver.py の構成と rederive.md:146 で一致。違いの 4 点（X-15、B2-01、SUM-07、C-05）も rederive.md:146 と一致。書き直し mine.py は math だけを import し、refcalc を import していない（独立性の主張と合う）。",
+  "CK-R2-01／CK-R7-17／CK-R1-09 の「根拠の強さ」：書き直しとの一致は検査担当 1 者の報告で、反証検査担当の追記（rederive.md:150）は指摘の再現だけを述べる。注記は正しい。文面の一致が 2 者（rederive.md:146 の 4、reports.md:128 の 3）であることも正しい。",
+  "CK-R2-02：判定式 τ < T×(1−1e-9) と年の割り当て max(1, ceil(τ×(1−1e-9))) は refcalc/base.py:91-93, 125-126 の文面と一致。小数境界 5 組は mutations.DECIMAL_BOUNDARIES（5 件）。一貫した使用は rederive.md:146 の 6 と一致。注記（検査担当 1 者）も正しい。",
+  "CK-R7-01：70 単位、既存 53・追加 17 は units.json と一致。feeds＝depends_on の逆引きは、この検査の JSON 解析でも不一致 0。",
+  "CK-R7-02 の数：辺 183、閉路なし（70 単位すべてが依存順に並ぶ）、深さ 0〜7、X-02 の入る辺 29 は、この検査の units.json の解析で一致（確かめた者の書き方と流れの文は V1-06）。",
+  "CK-R1-05：70・53・17、入力 116（NEW: 28）、198 シート・59 族・41 族・3,818,483、状態別 24・9・11・15、未接続 53＝30・14・9 は 01_LEDGER の JSON と一致。数え直しの記録は reports.md:128。注記（検査担当 1 者、内容の確認ではない）は正しい。",
+  "CK-R7-28 の影響の数字：B-7（T=60、建替周期 25、範囲比 1.0、31→19 回、B4 −40.6％、合計 −1.9％）、B-10（7.0％）、B-11（0.12％、5.0％）は 06_OPEN_ISSUES/README.md:33, 37, 39 と rederive.md:146 の 7、reports.md:128 で一致。",
+  "CK-R3-02：23 単位は records.md:110 の「Accurate」の一覧と一致。公表の K1 26 単位から A13-05・X-13・A5-01 を除いた数で、models.json と REC-2（records.md:13-23）に合う。「A5-04・B7-04・STO-02・X-17 は中身が変わっていない」は reports.md:22-27（REP-4。反証検査担当なし）による。",
+  "CK-R3-03／CK-R3-05／CK-R3-07 の所属：models.json の K2 9 単位、K4 4 単位、K6 3 単位と一致。K6 の共有関数 _within は engine.py:64, 714, 715, 1100 で SYS-04・QA-04・QA-01 が使う（読み取りで確認）。単位別の数（B4-02 470,931 個・1.5e-14 など）は JSON と一致。",
+  "CK-R3-10：回数の総当たり 702,603 組（numeric.md:134）、300,000＋200,612 件（records.md:110）で不一致 0。周期 1.000000001 でも回数は合う（records.md:4 \"B4-02 is unaffected (count is right)\"）。",
+  "CK-R3-13：120,000 件＝20,000（numeric.md:134、最大 1.7e-15）＋100,000（records.md:110、最大 1.9e-13）。式は DERIVATIONS.md:84 と一致。",
+  "CK-R3-15：190,000 件＝40,000（numeric.md:134）＋150,000（records.md:110）。式は DERIVATIONS.md:110-115 と一致（判定の基準は V1-15）。",
+  "CK-R3-12：式は DERIVATIONS.md:77 と一致。注記「専用の総当たりはしていない」は records.md:112 と一致。",
+  "CK-R3-14：式 B·G＋S·H は DERIVATIONS.md:100。両端の判定 95,100 件・不一致 0 は records.md:110。",
+  "CK-R3-19 の数：150 シナリオ×20 期間＝3,000 組（numeric.md:134 の 5）、全単位 8 シナリオ×9 期間・46,827 個・失敗 0（records.md:110 の 7）。",
+  "CK-R3-20 の数：S 2,528,394／1,158,253／819,555（54.19％・67.59％）、M 24,869,192／9,064,197／6,811,966（63.55％・72.61％）は unified_model_load.json と一致。注記（検査担当 1 者、反証なし）は reports.md に VERDICT が無いことと合う。",
+  "INDEX 1.3 節：公開中の版のコードは 43ba5d7 と同じ（git diff --stat 43ba5d7 HEAD -- 09_APPROX_STUDY は EVALUATION_PROTOCOL.md と README.md の 2 ファイルだけ）。60e720f と 0db5c77 の 09_APPROX_STUDY は差なし。65ff124 は 50 単位の定義文を変える（git show で取り出した units.json の比較で 50 件。depends_on は X-02・X-04・X-07 の 3 件が変わる）。",
+  "INDEX 0.4 節：2 節の項目は 35 件で、指定の 25 項目はすべて 2 節にある。",
+  "区分の判断：25 項目のうち、定義 (a)(b) を欠くものは見つからなかった。区分 2 に移すべきと言い切れる項目は無い。ただし CK-R3-16 と CK-R3-19 は、文面を狭めない限り条件 (c) を満たさない（V1-04、V1-03）。"
+ ],
+ "not_checked": [
+  "記録された数値（681 シナリオの一致、命令数、総当たりの件数と最大差、119 シナリオの一致）が今の環境で再現するか。旧研究の実行が要るので確かめていない（実行なしでは確認できない）。",
+  "検査担当と反証検査担当の報告が、実際の実行結果どおりか。保存された出力ファイルは numeric_verify/v6.out の 1 行しか読んでいない。triage の文面を記録として扱った。",
+  "119 シナリオのうち基準計算が例外を出して比較が飛ばされたものがあるか（driver.py は例外のシナリオを飛ばす）。実行なしでは確認できない。",
+  "反証検査担当の葉の数 7,962,996 が、コミット済みの合計 7,992,462（7,406,182＋586,280）と違う理由。記録に無い。",
+  "engine.py の行番号つきの記述（846-864 行、592・893 行など）。_within の 4 か所以外は読んでいない。",
+  "approx.md（APP-5）と res.json は全文を読んでいない。res.json と triage の .md の内容が同じかも比べていない。",
+  "回数関数の総当たりの「検証担当 1,512,126 組」（詳細の CK-R3-03・CK-R3-10 の確かめ方）。この走査は回数と除外年の重みを 1 つの条件で判定しており（numeric_verify/v6.py:20）、回数だけの不一致 0 を直接示す出力は確認できなかった。",
+  "指定の 25 項目以外の項目、INDEX.md の 3〜9 節、STOP_STATUS.md、HANDOVER.md。",
+  "CK-R1-05 (3) のシート名・数式ノード数というメタデータの扱いが、コンプライアンス上よいかどうか（この検査の対象外）。",
+  "第1回の検査の内容（報告書の数字 54 個など）。INDEPENDENT_REVIEW.md の冒頭と 4 節だけを読んだ。"
+ ]
+}

@@ -135,7 +135,7 @@
   - [`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)
   - [`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md)
 - **確かめ方**：B4-01・B4-02・B4-03・B5-01・X-10 は第2回が定義文から書き直して一致。回数の閉形式は第2回の 2 つの検査が数え上げと総当たりで比べ、不一致 0（CK-R7-23）。X-08 は独立の書き直しがない。
-- **確かめた者**：独立検査（第2回）で再現（値の一致。族の区分は検査なし）
+- **確かめた者**：独立検査（第2回）で再現（値の一致。X-08 は作成者のみ。族の区分は検査なし）
 - **言える範囲**：架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。周期が有限の正の数である行について。
 - **関係する第2回の指摘**：RED-1、RED-3、RED-7、RED-8、RED-9、RED-11、RED-12、APP-5、NUM-1
 - **第2回の指摘の影響**：負・0・NaN・無限大の周期は「事象なし」になり、件数にも不完全の印にも出ない（RED-3、一部確認）。B5 の不完全の印は上流の除外を拾わない（RED-1）。明示の一覧に同じ年が重複していれば、その回数だけ数える（RED-11）。正の周期に下限がなく、周期 1e-4・T=60 では 1 行で 599999 回になる（RED-12）。事象の属する年の判定は周期 1.000000001 で丸めに依存する（NUM-1 の検証者の追加指摘。B4-02・B5-01 の年次の置き場所にも同じ判定が使われる）。
@@ -159,6 +159,7 @@
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):25-35（RED-3）、121-143（RED-11・RED-12）；[`materials/round2_review/triage/approx.md`](../materials/round2_review/triage/approx.md):49-59（APP-5）
   - [`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md):39-59、75-78（D2・D4）；[`09_APPROX_STUDY/06_OPEN_ISSUES/README.md`](../../../09_APPROX_STUDY/06_OPEN_ISSUES/README.md):27-34,43,51
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
+- **停止後の点検による訂正**：点検の指摘 C1-06 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-08"></a>
 
@@ -173,7 +174,7 @@
   - [`09_APPROX_STUDY/research_code/refcalc/units_c_sum.py`](../../../09_APPROX_STUDY/research_code/refcalc/units_c_sum.py)
   - [`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md)
 - **確かめ方**：X-11 以外の 12 単位は第2回が定義文から書き直して一致。年和の閉形式は総当たりで不一致 0（CK-R7-23）だが、修繕の除外年の重みだけは周期 1.000000001 で基準計算と食い違う（CK-R7-20）。
-- **確かめた者**：独立検査（第2回）で再現（値の一致。族の区分は検査なし）
+- **確かめた者**：独立検査（第2回）で再現（値の一致。X-11 は作成者のみ。族の区分は検査なし）
 - **言える範囲**：架空データだけ。独立概念モデル（70 評価単位）の定義についての記述で、原版ブックの式との対応は未確認。年次量・係数が有限で 0 以上、年次表が ceil(T) 以上の長さを持つ入力について。
 - **関係する第2回の指摘**：RED-2、RED-10、RED-12、NUM-1、REC-1、NUM-3、NUM-4、NUM-10、REC-6、REP-17、APP-2
 - **第2回の指摘の影響**：年次量（ガス・石油・地域熱・上水・下水・廃棄物）は負や NaN でもそのまま使われ、規約 B-18 と食い違う（RED-2）。評価期間より短い年次表は IndexError になる（NUM-4、RED-10）。B6=B6-03−B2-01 は施設管理の比率が 1 に近く燃料が小さいと桁落ちする（NUM-10）。B2-01 は B6-01 が算出されていなくても computed=True、値 0 を返す（RED-12）。基準計算の B3-01 は 修繕率が 0 または初期排出が 0 の行のガス別の行を落とす（NUM-3）。
@@ -195,6 +196,7 @@
   - [`materials/round2_review/triage/rederive.md`](../materials/round2_review/triage/rederive.md):13-23（RED-2）；[`materials/round2_review/triage/numeric.md`](../materials/round2_review/triage/numeric.md):37-47（NUM-4）、109-119（NUM-10）；[`materials/round2_review/triage/records.md`](../materials/round2_review/triage/records.md):61-71（REC-6）；[`materials/round2_review/triage/approx.md`](../materials/round2_review/triage/approx.md):13-23（APP-2）
   - [`09_APPROX_STUDY/03_MODELS/DERIVATIONS.md`](../../../09_APPROX_STUDY/03_MODELS/DERIVATIONS.md):61-108（D3・D5）
 - **分類した観点**：R7（新研究のための再利用の下調べ（構造の棚卸し））
+- **停止後の点検による訂正**：点検の指摘 C1-06 により、上の記述の一部を改めた。分類担当の元の記述は `materials/classification/R7.json`、訂正の内容は `materials/classification/overrides.json` にある。
 
 <a id="ck-r7-09"></a>
 

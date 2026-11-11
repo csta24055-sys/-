@@ -1,0 +1,214 @@
+{
+  "checker": "V2",
+  "rule_check": "no. I ran no old-study code (no tests, benchmarks, tools, generators; no import of refcalc, fastcalc, bench, synth, tools, common; no script under materials/round2_review/checker_scripts/ or materials/interrupted_fix/) and changed no repository file. I used only Read/Grep, read-only git (log, diff, status, grep, rev-parse) and python3 -I from my own scratch folder to parse JSON/Markdown text. git status --porcelain was empty at the end (HEAD b2b8a6e). Files written: only this result file and scripts under review/work_V2/.",
+  "findings": [
+    {
+      "id": "V2-01",
+      "severity": "HIGH",
+      "file": "INDEX.md (and index_detail/T09_records_reports.md, materials/classification/R5.json, HANDOVER.md)",
+      "where": "INDEX.md 2 節 CK-R5-17（373-374 行）／T09 582-612 行／HANDOVER.md 2.1 の表 要点 7（44 行）",
+      "quoted": "確かめた者：独立検査（第1回）の指摘で表現を是正。独立検査（第2回）で否定されず ／ 独立概念モデルは、材料・用途・構造の違いを式ではなく行（数量と係数）というデータの違いとして表すように設計されている。",
+      "problem": "区分 1 の条件 (b)（作成者とは別の検査担当が独立に再現または照合）を、項目自身の「確かめた者」が満たしていない。「否定されず」は再現でも照合でもない。第2回の報告書の検査は、過大な主張を探す中でこの文を「構成上当然で開示済み」に分類しただけで、70 単位の式に材料別の式が無いことを点検した記録は無い（この検査には反証検査も付いていない）。さらに台帳には、木材だけ・コンクリートだけ・固定の 6 資材区分を対象にする単位（STO-01、STO-02、X-17）があり、「材料の違いは式に現れない」は 70 単位全体については文面が狭められていない（条件 (c) も疑わしい）。0.3 節は「迷った項目は区分 2」としているので、索引の中で規則と分類が食い違っている。HANDOVER 2.1 もこれを「区分 1」として引き継いでいる。",
+      "evidence": "INDEX.md:38（0.3 節 (b)）、INDEX.md:44（迷った項目は区分 2）、INDEX.md:374；R5.json CK-R5-17 checked_by＝「独立検査（第1回）の指摘で表現を是正。独立検査（第2回）で否定されず」；triage/reports.md:128 CHECKS 4「Results that are true by construction and disclosed as such: ... material/use/structure not appearing in formulas」；res.json の reports 観点は verdicts=null；09_APPROX_STUDY/01_LEDGER/units.json の reference_semantics：STO-01「木材数量[m3]×絶乾密度[kg/m3]×炭素含有率×44/12」、STO-02「コンクリート数量[m3]×換算倍率×吸収係数」、X-17「6 区分（鉄筋・鉄骨・コンクリート・木材・外装・内装）ごとに…」",
+      "suggested_fix": "CK-R5-17 を区分 2 に移し、HANDOVER 2.1 の要点 7 の「区分 1」も直す。区分 1 に残すなら、文面を「段階の排出合計に入る単位では」に狭め、STO-01・STO-02・X-17 を例外として書き、独立の点検が無いことを「根拠の強さ」に明記する。"
+    },
+    {
+      "id": "V2-02",
+      "severity": "MEDIUM",
+      "file": "INDEX.md (and index_detail/T08_approximation.md, materials/classification/R4.json)",
+      "where": "INDEX.md 2 節 CK-R4-22（341-342 行）／T08 685-710 行",
+      "quoted": "上の一覧の符号は、係数が非負で、端材率が 0 より大きく 1 未満で、周期が相対 1e-9 の境界の外にある入力について成り立ち、架空の母集団の測定でも例外は無かった。",
+      "problem": "一覧には AP-06b が入っているが、AP-06b の測定（行ごとの誤差 175,143 行）は第2回が再実装していない。同じ索引の CK-R4-08 と CK-R7-27 は AP-06b を「作成者のみ」・区分 2 としており、区分 1 の文面が独立に再現されていない測定を「例外は無かった」に含めている。また INDEX.md の本文には「上の一覧」が載っていない（一覧は詳細の「内容」にしか無い）ので、INDEX.md だけを読むとどの候補を指すのか分からない。成り立つ条件にも、AP-19b の比率が 0 以上 1 未満であることが入っていない。",
+      "evidence": "triage/approx.md:112 COULD NOT CHECK「Not re-implemented independently (numbers taken as published): AP-06b (row-level X-13), ...」；R4.json CK-R4-08 checked_by「AP-06b は作成者のみ（第2回は独自に再実装せず、不等式の向きだけ確かめた）」；T08:829-835（CK-R7-27 区分 2、確かめた者：作成者のみ）；T08:698「AP-06b は独自の再実装が無く、不等式だけ確かめている」；INDEX.md:339-341（一覧が無い）；approx.md:110 CHECKS 3「AP-19b always over (r/(1-r) increasing: holds)」",
+      "suggested_fix": "「言ってよいこと」に候補の一覧そのものを書き、AP-06b は「不等式の向きだけ独立に確認。測定は作成者のみ」と分けて書く。AP-19b の条件（比率 0 以上 1 未満）を加える。"
+    },
+    {
+      "id": "V2-03",
+      "severity": "MEDIUM",
+      "file": "index_detail/T09_records_reports.md (and materials/classification/R5.json)",
+      "where": "CK-R5-01「第2回の指摘の影響」（T09 55 行）",
+      "quoted": "整合しない箇所として 4 件が指摘された。…この 4 件を除き、不一致は報告されていない。",
+      "problem": "第2回の報告書の検査は、REP-1・8・9・13 のほかにも、件数や相互参照の食い違いを指摘している。REP-7（05_DECISIONS の表の隣り合う 2 行 88＋28 と 77＋56 が説明なしに食い違う）、REP-14（17 単位の M6 の理由文が、存在しない M1 の記録を参照している）、REP-11（和集合 42 件は A と B だけなら 38 件）、REP-18（シート族の状態の区分が一貫しない）、REP-2（52／20 は別の観点を数えた値）である。区分 1 の項目の限定として「4 件だけ」と書くのは事実と合わない。",
+      "evidence": "triage/reports.md:43-48（REP-7「The two adjacent rows of the 05 table (88+28 vs 77+56) contradict each other without explanation」）、92-97（REP-14「17 units carry this M6 reason while their M1 step is NOT_APPLICABLE with no record of any case split」）、71-76（REP-11）、120-125（REP-18）、8-13（REP-2）",
+      "suggested_fix": "「REP-1・8・9・13 のほか、REP-2・7・11・14・18 も報告書や記録の内部の食い違いを指摘している」と直し、関係する指摘の欄にこれらを加える。"
+    },
+    {
+      "id": "V2-04",
+      "severity": "LOW",
+      "file": "INDEX.md",
+      "where": "1.1 節の表の最終行（80 行）",
+      "quoted": "台帳・記録・進捗台帳・報告書の件数と相互参照は、同じ版の JSON と合っている（内容が正しいことの確認ではない）",
+      "problem": "例外が書かれていない。候補が付く単位の一覧は 2 つの JSON の間で 7 候補が違い（REP-13）、「検査の 4 単位」は生成器の固定文で JSON から来ていない（REP-9）。記録の理由文には存在しない M1 記録への参照がある（REP-14）。項目 CK-R5-01 の「言ってよいこと」は個別の照合に限っているのに、1.1 節の要約はそれより広い。",
+      "evidence": "triage/reports.md:85-90（REP-13）、57-62（REP-9）、92-97（REP-14）；INDEX.md:357（CK-R5-01 の文面は個別の照合の列挙）",
+      "suggested_fix": "「…合っている（第2回が数え直した範囲。REP-1・8・9・13・14 などの例外は CK-R5-01 を参照）」のように例外への参照を加える。"
+    },
+    {
+      "id": "V2-05",
+      "severity": "LOW",
+      "file": "INDEX.md",
+      "where": "1.2 節の表 3 行目（88 行）",
+      "quoted": "（例で合計が最大 62.8％ 減っても印なし）",
+      "problem": "62.8％ は検査担当の例（シード 11、B5 だけの境界）の値で、「最大」ではない。反証検査担当の別の例（シード 77）では B5 だけの境界で 71.0％ 減、B3 だけで 67.3％ 減でも complete は真のままである。実際より小さく書いている。",
+      "evidence": "triage/rederive.md:4（included=['B5']: 894813.87 -> 333032.14 (-62.8%)）；rederive.md:10 V-EVIDENCE「Seed 77 W school: ['B3'] 4567647.82 -> 1495486.70 complete True; ['B5'] 8087162.85 -> 2343456.08 complete True」（計算すると -67.3％、-71.0％）",
+      "suggested_fix": "「（検査担当の例で 62.8％、反証検査担当の別の例で 71.0％ 減っても印なし）」とするか、「最大」を削る。"
+    },
+    {
+      "id": "V2-06",
+      "severity": "LOW",
+      "file": "INDEX.md",
+      "where": "1.2 節の表 4 行目（89 行）",
+      "quoted": "年次量、電力係数、係数の値、換算倍率は検査なしで使われる | RED-2、RED-3",
+      "problem": "RED-3 は「不正な周期・耐用年数が、印なしに『事象なし』として扱われる」という指摘で、その内容が「実際」の欄に無い。反証検査担当は RED-3 について「B-18 そのものは周期を挙げていないので矛盾しない」とし、RED-2 についても、旧記述（B-18）と文字どおり矛盾するのは年次量だけで、電力係数・係数の値・換算倍率は「一覧に無い穴」だと訂正している。4 種を同列に旧記述の反例として並べるのは、訂正後の判定より強い。",
+      "evidence": "triage/rederive.md:23（RED-2 CORRECTED「...but B-18 does not name them, so this is an unlisted gap」）；rederive.md:35（RED-3 CORRECTED「B-18 itself is not contradicted (it does not name periods)」）",
+      "suggested_fix": "「年次量は検査なしで使われる（旧記述と矛盾）。電力係数・係数の値・換算倍率も検査が無い（旧記述が挙げていない穴）。不正な周期は印なしに事象なしになる（RED-3）」と分けて書く。"
+    },
+    {
+      "id": "V2-07",
+      "severity": "LOW",
+      "file": "INDEX.md (and index_detail/T08_approximation.md)",
+      "where": "2 節 CK-R4-04「言ってよいこと」（306 行）",
+      "quoted": "上下限 AP-20 は母集団の 400 件すべてを含む",
+      "problem": "400 件すべてというのは相対 1e-12 の許容差をつけた判定の結果で、許容差なしでは 394／400 である（丸めによる）。詳細には書いてあるが、引用用の文面に許容差の断りが無い。同じ項目の「使ってはいけない記述」は「必ず」を禁じているので、文面どうしの釣り合いも悪い。",
+      "evidence": "triage/approx.md:110 CHECKS 1「AP-20 (... inside 400/400 with the 1e-12 tolerance, 394/400 without any tolerance = rounding only)」；approximation_study.json candidates.AP-20.share_reference_inside_bracket=1.0、lower_bound_error.max_over=2.2e-15",
+      "suggested_fix": "「…400 件すべてを含む（相対 1e-12 の許容差つきの判定。許容差なしでは 394 件）」と書く。"
+    },
+    {
+      "id": "V2-08",
+      "severity": "LOW",
+      "file": "INDEX.md (and index_detail/T08_approximation.md)",
+      "where": "2 節 CK-R4-05「確かめた者」（314 行）／T08 181-182 行",
+      "quoted": "近似の検査担当、反証検査担当、報告書の検査担当がそれぞれ再計算し、件数・平均・95％点・最大・最小・合計の 95％点・構造別の平均が一致",
+      "problem": "この 7 項目をすべて再計算したのは報告書の検査担当だけである（この担当には反証検査が付いていない）。近似の検査担当は構造・用途別の内訳を再実装していないと明記しており、反証検査担当が示したのは平均と最大だけである。詳細の「構造別・用途別でもすべて過大側（平均 +1.57％〜+2.79％）」のうち用途別の値は、誰も再現していない。",
+      "evidence": "triage/reports.md:128 CHECKS 2「recomputed AP-04 and AP-22a ... n, mean, P95, max, min, total-P95 and per-structure means are identical to the stored values」；triage/approx.md:112「Not re-implemented independently ...: ... and the by_group (structure / use) breakdowns」；approx.md:10「AP-04 on the same scenarios mean +2.05%, max +5.42%」",
+      "suggested_fix": "「近似の検査担当（n・平均・95％点・最小・最大）、反証検査担当（平均・最大）、報告書の検査担当（左に加えて合計の 95％点と構造別の平均）がそれぞれ再計算。用途別の内訳は再現なし」と分けて書く。"
+    },
+    {
+      "id": "V2-09",
+      "severity": "LOW",
+      "file": "INDEX.md (and index_detail/T08_approximation.md)",
+      "where": "2 節 CK-R4-09「言ってよいこと」（320 行）",
+      "quoted": "複合品の製造排出が最大 -20.2％（補正なし）、-14.7％〜+7.5％（補正あり）ずれ、段階 2％ の目標を超える。",
+      "problem": "誤差を測った量は複合品の製造排出（X-03）で、段階の値ではない。段階 2％ の目標と比べたのは旧研究の測定プログラムの扱いで、段階（A1-A3）に対する誤差は測られていない。不採用そのものは、AP-07b では反証検査担当の波及つきの測定（合計の 95％点 1.20％、B3 で -12.4％〜+3.6％）が支えるが、AP-07a の波及後の値は中断した修正の自己申告しかない。",
+      "evidence": "approximation_study.json candidates.AP-07a.stage＝「複合品の製造排出（X-03）」；triage/approx.md:34-35（AP-07b: propagated total -4.34%..+2.56%, p95 1.20%; stage B3 -12.4%..+3.6%）；T08:311（AP-07a の波及後の値は b2 の自己申告だけ）",
+      "suggested_fix": "「複合品の製造排出（X-03。段階の値ではない）に対する誤差が 2％ を超える。AP-07b は下流へ波及させると合計の 95％点が 1.20％ になる（反証検査担当の測定）」と書く。"
+    },
+    {
+      "id": "V2-10",
+      "severity": "LOW",
+      "file": "INDEX.md (and index_detail/T08_approximation.md)",
+      "where": "2 節 CK-R7-26「言ってよいこと」（348 行）",
+      "quoted": "母集団 400 件（シード 20261111、規模 M まで）の架空シナリオで、27 候補（…）の誤差の統計値は、第2回の独立した再実装で再現した。",
+      "problem": "再現されたのは主な対象の n・平均・95％点・最小・最大（段階と合計）で、構造・用途別の内訳、X-10 の廃棄物量、AP-17 の X-12・C2 は再実装されていない。「誤差の統計値」とだけ書くと、JSON の全部の値が再現されたと読める。27 件のうち 7 件は n が 400 でない（AP-10・10b・11・22b は 200、AP-21 は 197、AP-09c は 98、AP-14 は 80）。「何を測った値か」の但し書き（B6-03 に対する値、標本内の値、AP-05 は題名と違う式）も、引用用の文面には入っていない。",
+      "evidence": "triage/approx.md:110 CHECKS 1（Reproduced n, mean, p95, min and max ... (stage and total)）；approx.md:112（the X-10 waste-mass target and the X-12 / C2 targets of AP-17, and the by_group breakdowns は未再実装）；approximation_study.json の stage_error.n（AP-10=200、AP-21=197、AP-09c=98、AP-14=80）",
+      "suggested_fix": "「…27 候補の主な対象の n・平均・95％点・最小・最大は再現した（候補により n は 80〜400。構造・用途別の内訳と副次の対象は除く。何を測った値かは詳細の但し書きに従う）」と書く。"
+    },
+    {
+      "id": "V2-11",
+      "severity": "LOW",
+      "file": "INDEX.md (and index_detail/T09_records_reports.md)",
+      "where": "2 節 CK-R5-01「言ってよいこと」（357 行）",
+      "quoted": "09_APPROX_STUDY の自動生成の報告書は、同じ版（43ba5d7）の JSON から再生成したものと一致する（古い報告書が残っているのではない）。",
+      "problem": "自動生成の報告書 6 点には 09_APPROX_STUDY/README.md が含まれる。公開中の版の README.md には、停止の時に手書きの注記 9 行が加えられており、43ba5d7 の JSON から再生成したものとはもう一致しない。文面は現在形で、所在も現在のファイルを指している。",
+      "evidence": "git diff --stat 43ba5d7 HEAD -- whole-life-carbon-jcat-study/09_APPROX_STUDY → README.md 9 行追加（EVALUATION_PROTOCOL.md も変更）；git grep で build_reports.py:529 write(\"README.md\", ...)；triage/reports.md:128「Regenerated all six generated READMEs in memory ... byte-identical to disk」は 43ba5d7 に対する確認",
+      "suggested_fix": "「43ba5d7 の時点で一致した。公開中の版の README.md は、その後に手書きの終了の注記（冒頭の枠）を加えてある」と書き足す。"
+    },
+    {
+      "id": "V2-12",
+      "severity": "LOW",
+      "file": "INDEX.md, HANDOVER.md",
+      "where": "INDEX.md 1.1 節の表（77 行）／HANDOVER.md 2.2（54 行）",
+      "quoted": "…修繕の更新年除外の無視（AP-04）…は、架空の母集団で目標（段階 2％・合計 1％）を外れた。",
+      "problem": "AP-04 が外れたのは段階 2％ の目標だけで、合計 1％ の目標は旧研究の測定では内側である（合計に対する差は 95％点 0.63％、最大 0.96％）。AP-07a・b は段階ではなく X-03 に対する値である（V2-09）。「目標（段階 2％・合計 1％）を外れた」と一括して書くと、両方の目標を外れたと読める。",
+      "evidence": "approximation_study.json candidates.AP-04.within_total_target=true、total_error.p95_abs=0.0063、max_abs=0.0096、within_stage_target=false",
+      "suggested_fix": "「目標（段階 2％ または合計 1％ のどちらか）を外れた。AP-04 は段階の目標だけ」と書く。"
+    },
+    {
+      "id": "V2-13",
+      "severity": "LOW",
+      "file": "INDEX.md, HANDOVER.md",
+      "where": "INDEX.md 0.2 節（28 行）、1.2 節の表（87・91・92 行）／HANDOVER.md 4.4 の表（119 行）",
+      "quoted": "第2回は 5 観点の検査担当と、指摘ごとに反証を試みる反証検査担当から成る。",
+      "problem": "REP の 18 件には反証検査が付いていない（5.2 節には書いてある）。0.2 節の用語の説明はそれと合わない。1.2 節の「実際」の欄のうち REP だけに依る行（入力 47／124 と台帳の入力一覧、近似の段階 204／280 と 21／44）と、HANDOVER 4.4 の REP-4 は、反証検査を経た指摘と同じ書き方で事実として書かれている。1.2 節 2 行目の「報告書の検査はさらに少ないとする」も、REP-4 は数を示しておらず（66 のうち 14 単位に異論、とだけ書く）、推測である。なお 47／124、204／280、21 は、この点検で JSON から数え直して合った。",
+      "evidence": "res.json：reports 観点の verdicts は null（ほかの 4 観点は 11／12／9／9 件の判定あり）；triage/reports.md に「--- VERDICT」の行は 0；INDEX.md:690「反証検査なし（REP の 18 件。主担当が検査のスクリプトを再実行して再現、出力は未保存）18」；reports.md:25（REP-4「Fourteen of the 66 'unified' units ...」）",
+      "suggested_fix": "0.2 節を「REP の 18 件を除き、指摘ごとに反証を試みた」に直す。1.2 節と HANDOVER 4.4 で REP だけに依る記述には「反証検査なし」と添える。「さらに少ないとする」は「報告書の検査は 14 単位に異論を付けた（数え直しの数は示していない）」に直す。"
+    },
+    {
+      "id": "V2-14",
+      "severity": "LOW",
+      "file": "INDEX.md",
+      "where": "6.2 節 6 番目の項目（795 行）",
+      "quoted": "積の和を平均の積で置き換える形（AP-17、AP-08、AP-18c。誤差は標本の共分散に等しい）、ほかの建物の代表値を使う区分パラメータ（AP-18b で −41％〜+337％）は、架空の母集団で大きく外れた。",
+      "problem": "「誤差は標本の共分散に等しい」を第2回が確かめたのは AP-17 だけである（反証検査担当が 400 件で恒等式を確認）。AP-08 と AP-18c については分類担当の読み取りで、AP-18c は比率の平均×係数の平均×質量の形なので、単純な共分散の恒等式にはならない。また −41％〜+337％ は旧研究の候補の測定ではなく、第2回の検査担当が自分で組んだ標本外の構成（後半 200 件）の値で、検査担当自身が「別のまとめ方なら別の数になる」と断っている。「近似候補の測定は…」で始まる文に並べると、旧研究の測定と読める。",
+      "evidence": "triage/approx.md:45-47（APP-4 の反証検査：AP-17 の恒等式を 5.4e-16 で確認）；approx.md:105「The out-of-sample constructions are the checker's and mine, not something the study claims」；approx.md:112「uses my own pooling of class parameters across buildings; a different pooling would give different numbers」；INDEX.md:916・919（AP-08、AP-18c は「共分散が落ちる例」という分類担当の説明）",
+      "suggested_fix": "「（AP-17 は誤差が標本の共分散に等しいことを第2回が確認。AP-08・AP-18c も同じ型だが未確認）」とし、AP-18b の値には「第2回の検査担当が自分で組んだ標本外の構成での値。旧研究の測定ではない」と添える。"
+    },
+    {
+      "id": "V2-15",
+      "severity": "LOW",
+      "file": "INDEX.md",
+      "where": "6.2 節 1 番目の項目（790 行）／1.1 節（74 行）",
+      "quoted": "評価単位 70 件の依存関係は 183 辺、閉路なし、深さ 0〜7。",
+      "problem": "183 辺は宣言された依存（depends_on）の数である。基準計算の X-07 は B2-01 の結果を読むが、依存の宣言に B2-01 が無い。実際の読み取りは宣言と 1 か所以上違う。詳細（CK-R7-02 の「使ってはいけない記述」）には書いてあるが、要約の文には「宣言された」の限定が無く、新研究が依存関係の台帳を作るときにそのまま写すおそれがある。数そのもの（183、深さ 0〜7、X-02 に 29、SUM-03 の上流 37）は台帳の JSON から数え直して合った。",
+      "evidence": "09_APPROX_STUDY/research_code/refcalc/units_c_sum.py:379-380（X-07 の depends_on に B2-01 が無い）、395（res[\"B2-01\"][\"computed\"] を読む）；R7.json CK-R7-02 claims_not_to_rely_on の 1 件目",
+      "suggested_fix": "「宣言された依存（depends_on）は 183 辺…。X-07 は宣言に無い B2-01 を読む（CK-R7-02）」と書く。"
+    },
+    {
+      "id": "V2-16",
+      "severity": "LOW",
+      "file": "INDEX.md, HANDOVER.md",
+      "where": "INDEX.md 6.1 節の範囲の箇条（781-784 行）／HANDOVER.md 4.2（103 行）",
+      "quoted": "入力が有限で範囲内であること（負・NaN・無限大の年次量、電力係数、係数の値、換算倍率を含まない）",
+      "problem": "基準計算の値を正として使える範囲の条件に、不正な周期・耐用年数（負、0、NaN、無限大）が挙がっていない。第2回は、これらが印なしに「事象なし」として扱われ、合計が complete のまま下がることを確認している（例で -16.1％）。3 番目の箇条は時間の判定の端だけを扱っている。",
+      "evidence": "triage/rederive.md:35（RED-3 CORRECTED「An invalid (negative, zero, NaN, infinite) cycle or service life is treated as 'no events' without any count or flag, and the total stays complete (seed 11: -16.1% with complete True)」）",
+      "suggested_fix": "括弧の中に「周期・耐用年数・建替周期」を加える（RED-3）。HANDOVER 4.2 の要約にも同じ条件を加える。"
+    },
+    {
+      "id": "V2-17",
+      "severity": "LOW",
+      "file": "HANDOVER.md",
+      "where": "2.2 の 2 番目の項目（52 行）",
+      "quoted": "基準計算が定義文どおりに計算すること：53 単位について、119 の架空シナリオで、独立の書き直しと一致。",
+      "problem": "INDEX 1.1 より広く書かれている。書き直しは定義文だけでなく規約文（refcalc/base.py の説明文）も使っており、表示・件数の 4 点は一致していない。第2回は 53 単位に含まれる B4-02・B1-02 について、定義文が計算の一部を書いていないことも指摘している（RED-9、一部確認）。「定義文どおりに計算する」が確かめられたとは言えず、言えるのは「定義文と規約文から書き直した計算と数値が一致した」までである。",
+      "evidence": "triage/rederive.md:146 CHECKS 1（「from the reference_semantics text and the convention docstring of refcalc/base.py」「The only differences were: X-15 ..., B2-01 'computed' in 4 mutation scenarios, SUM-07 ..., C-05 n_mass_unchecked 4 vs 5」）；rederive.md:107（RED-9 CORRECTED）；INDEX.md:73（「表示・件数の 4 点を除く」）",
+      "suggested_fix": "「53 単位について、定義文と規約文だけから独立に書き直した計算と、119 の架空シナリオで相対 1e-9 以内で一致（表示・件数の 4 点を除く）」と INDEX 1.1 に合わせる。"
+    },
+    {
+      "id": "V2-18",
+      "severity": "LOW",
+      "file": "HANDOVER.md",
+      "where": "2.1 の表 要点 4・要点 6（41・43 行）",
+      "quoted": "標準ベンチマーク S・M の命令数は第2回で数え直して合った（区分 1） ／ 基準計算と統合モデルが読む入力は同じ。",
+      "problem": "命令数は完全に同じではなく、約 100 命令以内の差で合った（削減率は同じ丸めになる）。数え直したのは報告書の検査担当 1 者で、反証検査は付いていない。要点 6 の「読む入力は同じ」は作成者の測定（33 の架空シナリオの読み取り記録）だけで、第2回は報告書と JSON の一致しか確かめていないのに、事実として書かれ、区分の表示も後半の文にしか掛かっていない。",
+      "evidence": "triage/reports.md:128 CHECKS 2「they agree with the published figures within about 100 instructions (54.2/67.6 % and 63.6/72.6 %)」；R3.json CK-R3-20 checked_by「独立検査（第2回）で再現（反証担当なし）」；R5.json CK-R5-16 state_category=2、checked_by「作成者のみ（報告書と JSON の一致は独立検査（第2回）で再現）」",
+      "suggested_fix": "要点 4 を「約 100 命令以内の差で合った（検査担当 1 者、反証検査なし）」に、要点 6 を「作成者の測定では読む入力は同じ（区分 2）」に直す。"
+    }
+  ],
+  "checked_ok": [
+    "CK-R4-04: AP-01 の過小 77.5％・最大 -58.5％、AP-03 の平均 +95.6％、AP-02 の符号（過小 9.25％）、AP-20 の幅 114.2％ と詳細の全数値（B5 の 89 件・128 件・133 件、X-10 資源量 -30.4％ など）を approximation_study.json と照合して一致。確かめた者の範囲（B4、B5、X-10 資源量、AP-20）は approx.md CHECKS 1 と一致",
+    "CK-R4-05: 平均 +2.05％、95％点 3.97％、+0.065％〜+5.42％、合計の 95％点 0.63％・最大 0.96％、構造別・用途別の平均 +1.57％〜+2.79％ を approximation_study.json（stage_error、total_error、by_group）と照合して一致。「常に過大」は approx.md CHECKS 3（min +0.065%）と一致",
+    "CK-R4-09: -20.2％、-14.7％〜+7.5％、平均 -4.13％／-0.16％、過小 46.75％、区分別の最大 -61.7％（ALUMINIUM）、合計の 95％点 1.12％／0.63％ を JSON と照合して一致。APP-3 の波及後の値（-4.34％〜+2.56％、1.20％、B3 -12.4％〜+3.6％）は approx.md:34-35 と一致",
+    "CK-R4-19: n=80、平均 +2.30％、95％点 11.80％、-11.9％〜+22.8％、過小 18.75％ を JSON と照合して一致。APP-8 の 46 件・34 件・11.93％・-2.68％〜+11.80％ は approx.md:88-95 と一致。検査担当と反証検査担当の両方が同じ値を得たという記述も一致",
+    "CK-R4-20: 平均 -12.2％、最大 -32.4％、95％点 17.74％、全シナリオで過小を JSON と照合して一致。近似の検査担当と報告書の検査担当の再計算は approx.md CHECKS 1 と reports.md CHECKS 2 にある",
+    "CK-R4-22: candidates.json で verification=VERIFIED_ANALYTIC_AND_SYNTHETIC は 10 件（AP-01、03、04、05、06、06b、07a、19b、20、22a）で、詳細の一覧と一致。符号の確認は approx.md CHECKS 3、APP-5・APP-6 の判定と一致",
+    "CK-R7-26: 27 候補の一覧は approx.md CHECKS 1 の一覧と一致（残り 5 件は COULD NOT CHECK の AP-06b、AP-12、AP-13、AP-15、AP-16）。詳細に書かれた 26 候補＋CK-R7-27 の 4 候補の n・平均・範囲・95％点・題名・stage 欄を approximation_study.json と機械的に照合して不一致 0。AP-20 と AP-06b の値も一致",
+    "CK-R5-01: records/units.json 454 件（SUCCESS 118、REJECTED 39、HOLD 71、NOT_APPLICABLE 226）、progress_ledger.json の候補記録 454 件、状態 66／3／1 を JSON から数え直して一致。報告書 6 点のバイト一致・不一致 0 の記述は reports.md CHECKS 1・7、records.md CHECKS 6 と一致",
+    "CK-R5-11: 台帳 70 単位（EXISTING_53 が 53、ADDITIONAL が 17）、進捗台帳の 70 単位×6 段階に空なし（420）を JSON から確認。reports.md CHECKS 1・5 と一致",
+    "INDEX 1.2 の数：約 92％（records.md:11、numeric.md:11）、約 62〜63 単位（records.md:23）、118 件中 96 件（records.md:59。records/units.json から数え直して mechanism なし 18、derivation なし 5、両方なし 1、3 つそろう 96）、124 項目中 47（reports.md:4。input_usage.json で 124−77）、280 中 204 と 44 中 21（reports.md:32。progress_ledger.json から 204／280、AP-15 だけで保留 21、M4 保留 39 のうち AP-15 だけ 26、近似候補なし 17 を数え直して一致。保留の段階を持つ単位は 45 で、検証完了の 44＋保留状態の STO-01）、B6-03（approx.md:23）",
+    "INDEX 1.2 の指摘番号：1 行目 NUM-1〜11・REC-1、2 行目 REC-2・REP-4、3 行目 RED-1・RED-5、5 行目 REC-4・REC-5・REP-3、6 行目 REP-1・REP-7、7 行目 REP-5、8 行目 APP-2・APP-3・REP-6 は、triage の各指摘の内容と対応している（4 行目の RED-3 は V2-06）",
+    "INDEX 6.2: 01_LEDGER/units.json から数え直して depends_on 183 辺、閉路なし、深さ 0〜7、X-02 の直接の入力 29、SUM-03 の上流 37、feeds 183、gated_by 38。structure_class は LINEAR_SUM_PRODUCT 30・RATIO 10（見出しは 29・11）。式の族 11 の件数（19、2、6、6、13、1、3、4、5、1、10）は R7.json の CK-R7-04〜14 の所属一覧と一致し、合計 70、重複なし、漏れなし。候補 32 件の題名に変換（フーリエなど）の語は無い（AP-16 の回帰だけ）",
+    "INDEX 0.4 と 5.2: R1〜R5・R7 の JSON の項目は 171（区分 1：35、2：79、3：25、4：32）、再利用候補 133。res.json の判定は CONFIRMED 33、PARTLY_CONFIRMED 8、判定なし 18（REP）で、5.2 節の表と一致",
+    "HANDOVER 2.1: 引用された項目の区分を分類 JSON と照合（CK-R5-11=1、R5-12=4、R3-25=4、R3-18=1、R5-13=2、R3-20=1、R3-21=2、R5-14=2、R4-01=2、R5-15=2、R5-16=2、R5-17=1、R5-09=4）。不採用 16・保留 16 は candidates.json と一致。3／66／1 は進捗台帳と一致",
+    "HANDOVER 2.2: 681 シナリオ・数値 7,406,182 個の一致は、数値の検査担当と反証検査担当が自分の比較でやり直している（numeric.md:135-138、最大 4.77e-13）。53 単位・119 シナリオは rederive.md:146 と一致。近似候補 8 件は candidates.json ですべて REJECTED",
+    "HANDOVER 4.4: REC-2・REP-4（基準計算と同じ別々の式のままの単位、共有の表・関数を使わない単位）、REC-5（VERIFIED_ANALYTIC_AND_SYNTHETIC の SUCCESS 記録のうち 17 件に仕組みの確認が無い。少なくとも 1 つ欠ける記録は 22 件）、APP-2・APP-3・APP-9、NUM-1（周期 1.000000001）は、triage の内容と合っており、強めても弱めてもいない",
+    "リポジトリは変更していない（最後の git status --porcelain は空）"
+  ],
+  "not_checked": [
+    "記録された数値が今の環境で再現するかどうか（旧研究の実行が必要。実行せずには確認できない）。第2回の検査担当の「1e-15 以内で再現」という報告そのものも、当時の作業用フォルダのログを開いて確かめてはいない",
+    "STOP_STATUS.md、INDEX.md の 3〜5 節・6.3 節以降・7〜9 節、HANDOVER.md の 1・3・4.1〜4.3・5〜7 節（担当の範囲外。ツリーの識別子や 38／10／10／1 の内訳は見ていない）",
+    "INDEX 1.2 の 1 列目（旧研究の文書からの引用）が旧文書の文面どおりかどうか、および指摘番号の無い 9・10 行目",
+    "詳細の「分類の根拠」にある行番号（approx_study.py:116-117、EVALUATION_PROTOCOL.md:179 など）と、中断した修正（b2）の自己申告の数値",
+    "REP-7 の内容（台帳の入力一覧と実際に読む入力の差）は数え直していない。X-07 以外に宣言に無い読み取りがあるかどうかも調べていない",
+    "STO-01・STO-02・X-17 以外に、材料・用途・構造に固有の式を持つ単位があるかどうか（コードの監査はしていない。台帳の定義文を 6 単位読んだだけ）",
+    "T08・T09 の、指定された 10 項目以外の項目（相互参照のために区分と「確かめた者」を見た CK-R4-08、CK-R7-27 などを除く）"
+  ]
+}
