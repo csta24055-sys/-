@@ -1,0 +1,2192 @@
+{
+  "status": "DESIGN_DRAFT",
+  "verification": "NOT_VERIFIED",
+  "schema_version": "0.1.0-draft",
+  "created": "2026-11-11",
+  "title": "材料分類・正規化・指定のためのレコード定義（設計草案）",
+  "notes": [
+    "次段階（指示書第7章）に向けた構造調査の草案であり、実装ではない。UI・画面・アプリのコードは含まない。",
+    "実在の材料データセットは未入手である。項目の過不足、件数、実データへの適合について、本ファイルは何も主張しない。",
+    "排出係数・耐用年数・修繕率・更新周期・漏洩率・倍率・価格・密度・構成比の値を入れる項目は、どのレコードにも無い。外部のパラメータ台帳への参照 ID と、その状態だけを持つ。",
+    "J-CAT その他の許諾が必要な分類表・コード表・名称一覧・値は、参照も再現もしていない。列挙値の語彙は一般的な建築用語から本研究で選んだ暫定案である。",
+    "説明文は日本語、項目名と列挙値は英語とする。"
+  ],
+  "conventions": {
+    "types": "string / integer / number / boolean / date / datetime / object / array<T> / enum:<列挙名>。末尾の |null は null を許すことを示す。",
+    "required": "true は常に必須。false で required_when があるものは、その条件のとき必須。",
+    "decimal_strings": "同一性に効く仕様値と単位定義の倍率は、浮動小数点ではなく10進文字列で持つ（指数表記なし、末尾の0なし）。",
+    "id_rule": "ID は「接頭辞-6桁以上の連番」とし、親・階層・名称・単位・出典側のコードを埋め込まない。再利用しない。レコードは物理削除しない。出典側のコードを ID に使わない。",
+    "id_prefixes": {
+      "FN": "classification_node（部位軸）",
+      "IN": "classification_node（品目軸）",
+      "MT": "material_type",
+      "CM": "canonical_material",
+      "AL": "alias",
+      "UC": "unit_conversion",
+      "AS": "assembly",
+      "PL": "placement",
+      "SL": "similarity_link",
+      "PB": "param_binding",
+      "SRC": "source",
+      "RAW": "raw_record",
+      "ME": "merge_event",
+      "REL": "release",
+      "ROW": "calc_row"
+    },
+    "fictional_ids": "例示用の架空レコードは「接頭辞-FICT-連番」とし、上の形式にわざと一致させない（実データとして読み込めないようにするため）。"
+  },
+  "enums": {
+    "license_status": [
+      "PERMITTED_PUBLIC",
+      "PERMISSION_REQUIRED",
+      "UNKNOWN",
+      "RESTRICTED"
+    ],
+    "compartment": [
+      "PUBLIC_RELEASE",
+      "PRIVATE_LICENSED"
+    ],
+    "record_status": [
+      "DRAFT",
+      "ACTIVE",
+      "DEPRECATED",
+      "MERGED",
+      "QUARANTINED",
+      "RESERVED"
+    ],
+    "origin_kind": [
+      "SELF_AUTHORED",
+      "USER_SUPPLIED",
+      "THIRD_PARTY_DATASET",
+      "SYNTHETIC_FICTIONAL"
+    ],
+    "storage_policy": [
+      "MAY_STORE_IN_PUBLIC_REPO",
+      "PRIVATE_STORE_ONLY",
+      "DO_NOT_INGEST"
+    ],
+    "content_kind": [
+      "NAMES",
+      "CLASSIFICATION_LABELS",
+      "UNITS",
+      "SPEC_ATTRIBUTES",
+      "CONVERSION_BASIS"
+    ],
+    "derivation": [
+      "COPIED",
+      "NORMALIZED",
+      "PARSED_FROM_TEXT",
+      "CURATED",
+      "MERGED",
+      "COMPUTED"
+    ],
+    "axis": [
+      "FUNCTION",
+      "ITEM"
+    ],
+    "level_kind": [
+      "DIVISION",
+      "GROUP",
+      "ELEMENT",
+      "SUBSTANCE_CLASS"
+    ],
+    "input_group": [
+      "MATERIAL",
+      "EQUIPMENT"
+    ],
+    "item_kind": [
+      "BULK_MATERIAL",
+      "FORMED_PRODUCT",
+      "EQUIPMENT_UNIT",
+      "DISTRIBUTION_LINE",
+      "COMPOSITE"
+    ],
+    "dimension": [
+      "MASS",
+      "VOLUME",
+      "AREA",
+      "LENGTH",
+      "COUNT",
+      "LUMP_SUM"
+    ],
+    "declared_unit_basis": [
+      "FACTOR_DENOMINATOR",
+      "SOURCE_DECLARATION",
+      "PROVISIONAL"
+    ],
+    "attribute_value_type": [
+      "DECIMAL",
+      "ENUM",
+      "TEXT"
+    ],
+    "attribute_role": [
+      "IDENTITY",
+      "CONVERSION_PARAM",
+      "DESCRIPTIVE"
+    ],
+    "affects": [
+      "FACTOR",
+      "MASS_PER_UNIT",
+      "SERVICE_LIFE",
+      "REPAIR_RATE",
+      "EOL_ROUTE",
+      "UNKNOWN"
+    ],
+    "axis_mode": [
+      "ENUMERATED",
+      "CONTINUOUS"
+    ],
+    "material_kind": [
+      "SPECIFIC",
+      "PRODUCT_SPECIFIC",
+      "TYPE_REPRESENTATIVE"
+    ],
+    "representative_rule": [
+      "NOT_DECIDED",
+      "MOST_COMMON",
+      "MEDIAN_OF_MEMBERS",
+      "CONSERVATIVE_UPPER",
+      "EXPERT_PICK"
+    ],
+    "spread_class": [
+      "UNKNOWN",
+      "NARROW",
+      "MODERATE",
+      "WIDE"
+    ],
+    "mass_path_status": [
+      "DIRECT",
+      "CONVERTIBLE",
+      "BLOCKED_BASIS_MISSING",
+      "NOT_REGISTERED"
+    ],
+    "dependent_requirement": [
+      "REFRIGERANT_CHARGE"
+    ],
+    "alias_type": [
+      "CANONICAL_NAME",
+      "SCRIPT_VARIANT",
+      "CHARACTER_VARIANT",
+      "ABBREVIATION",
+      "SYNONYM",
+      "GENERIC_TERM",
+      "READING_KANA",
+      "TRADE_TERM",
+      "FOREIGN_NAME",
+      "MISSPELLING",
+      "LEGACY_NAME",
+      "SOURCE_LABEL"
+    ],
+    "alias_target_kind": [
+      "FUNCTION_NODE",
+      "MATERIAL_TYPE",
+      "CANONICAL_MATERIAL",
+      "ASSEMBLY"
+    ],
+    "alias_resolution": [
+      "UNIQUE",
+      "AMBIGUOUS"
+    ],
+    "evidence_kind": [
+      "SELF_AUTHORED_GENERIC",
+      "OBSERVED_IN_PERMITTED_SOURCE",
+      "USER_CONFIRMED",
+      "SYNTHETIC_FICTIONAL"
+    ],
+    "conversion_scope_kind": [
+      "MATERIAL_TYPE",
+      "CANONICAL_MATERIAL"
+    ],
+    "conversion_kind": [
+      "DENSITY",
+      "THICKNESS",
+      "MASS_PER_AREA",
+      "MASS_PER_LENGTH",
+      "MASS_PER_PIECE",
+      "AREA_PER_PIECE",
+      "LENGTH_PER_PIECE",
+      "COUNT_NOUN_EQUIVALENCE"
+    ],
+    "basis_origin": [
+      "IDENTITY_ATTRIBUTE",
+      "ROW_PARAMETER",
+      "CURATED_EQUIVALENCE",
+      "EXTERNAL_LEDGER"
+    ],
+    "param_source": [
+      "SPEC_TOKEN",
+      "USER_INPUT"
+    ],
+    "conversion_status": [
+      "USABLE",
+      "BLOCKED_BASIS_MISSING",
+      "BLOCKED_LICENSE",
+      "RETIRED"
+    ],
+    "value_state": [
+      "MISSING",
+      "EXPLICIT_ZERO",
+      "OBSERVED",
+      "USER_ESTIMATE",
+      "LICENSED_DEFAULT",
+      "DERIVED",
+      "SYNTHETIC_FICTIONAL"
+    ],
+    "verification_status": [
+      "NOT_VERIFIED",
+      "VERIFIED_SYNTHETIC_ONLY",
+      "VERIFIED_ANALYTIC_AND_SYNTHETIC"
+    ],
+    "assembly_kind": [
+      "COMPOSITE_PRODUCT",
+      "LAYERED_ASSEMBLY",
+      "SYSTEM_KIT",
+      "STARTER_SET"
+    ],
+    "expansion_mode": [
+      "EXPAND_TO_ROWS",
+      "SINGLE_ROW_OWN_FACTOR"
+    ],
+    "component_target_kind": [
+      "MATERIAL_TYPE",
+      "CANONICAL_MATERIAL"
+    ],
+    "ratio_basis": [
+      "DRIVER_IDENTITY",
+      "GEOMETRIC_DEFINITION",
+      "ROW_PARAMETER",
+      "EXTERNAL_LEDGER",
+      "PLACEHOLDER"
+    ],
+    "similarity_target_kind": [
+      "MATERIAL_TYPE",
+      "CANONICAL_MATERIAL"
+    ],
+    "similarity_relation": [
+      "SIMILAR",
+      "DISTINCT_CONFIRMED",
+      "GENERIC_OF",
+      "PROXY_CANDIDATE"
+    ],
+    "substitution_policy": [
+      "NONE",
+      "ALLOWED_WITH_FLAG"
+    ],
+    "binding_scope_kind": [
+      "PRODUCT",
+      "CANONICAL_MATERIAL",
+      "PLACEMENT",
+      "MATERIAL_TYPE",
+      "FUNCTION_NODE"
+    ],
+    "param_kind": [
+      "FACTOR",
+      "MASS_PER_UNIT",
+      "SERVICE_LIFE",
+      "REPAIR_RATE",
+      "EOL_ROUTE",
+      "WASTE_RATE"
+    ],
+    "link_basis": [
+      "EXACT",
+      "GENERIC",
+      "PROXY"
+    ],
+    "intake_status": [
+      "ACCEPTED",
+      "DUPLICATE_RAW",
+      "REJECTED_FORMAT"
+    ],
+    "duplicate_level": [
+      "D0_RAW_EXACT",
+      "D1_IDENTITY",
+      "D2_UNIT_VARIANT",
+      "D3_NEAR",
+      "D4_CROSS_SOURCE"
+    ],
+    "merge_event_kind": [
+      "MERGE",
+      "SPLIT"
+    ],
+    "merge_target_kind": [
+      "MATERIAL_TYPE",
+      "CANONICAL_MATERIAL"
+    ],
+    "survivor_rule": [
+      "ACTIVE_OVER_DRAFT",
+      "MORE_COMPLETE_IDENTITY",
+      "OLDER_ID"
+    ],
+    "field_resolution_rule": [
+      "KEEP_SURVIVOR",
+      "FILL_FROM_MERGED_IF_NULL",
+      "MOVE_TO_ALIAS",
+      "UNION",
+      "MOST_RESTRICTIVE"
+    ],
+    "release_status": [
+      "DRAFT",
+      "PUBLISHED",
+      "WITHDRAWN"
+    ],
+    "placement_state": [
+      "PLACED",
+      "UNPLACED"
+    ],
+    "resolution_mode": [
+      "STRICT",
+      "COARSE_ALLOWED"
+    ],
+    "selection_path": [
+      "TREE",
+      "ALIAS_SEARCH",
+      "IMPORT_MAPPING",
+      "ASSEMBLY"
+    ],
+    "representativeness": [
+      "EXACT",
+      "REFINED",
+      "REPRESENTATIVE",
+      "REPRESENTATIVE_WIDE"
+    ],
+    "quantity_basis": [
+      "DESIGN",
+      "ORDERED",
+      "AS_BUILT"
+    ],
+    "bound_from": [
+      "ROW_OVERRIDE",
+      "PRODUCT",
+      "CANONICAL_MATERIAL",
+      "PLACEMENT",
+      "MATERIAL_TYPE",
+      "FUNCTION_NODE",
+      "NONE"
+    ],
+    "stop_code": [
+      "QUANTITY_MISSING",
+      "UNIT_TEXT_MISSING",
+      "UNIT_UNKNOWN",
+      "LUMP_SUM_UNIT",
+      "ALIAS_UNRESOLVED",
+      "ALIAS_AMBIGUOUS",
+      "VARIANT_UNSPECIFIED",
+      "VARIANT_NOT_REGISTERED",
+      "RECORD_NOT_ACTIVE",
+      "LICENSE_NOT_PERMITTED",
+      "MERGE_REDIRECT_NEEDS_CONFIRMATION",
+      "UNIT_DIMENSION_MISMATCH_NO_PATH",
+      "COUNT_UNIT_NOT_COMPARABLE",
+      "CONVERSION_BASIS_MISSING",
+      "CONVERSION_BASIS_NOT_PERMITTED",
+      "CONVERSION_OUT_OF_APPLICABILITY",
+      "CONVERSION_PATH_CONFLICT",
+      "FACTOR_MISSING",
+      "FACTOR_UNIT_MISMATCH",
+      "FACTOR_STAGE_MISMATCH",
+      "ASSEMBLY_RATIO_MISSING",
+      "DOUBLE_COUNT_UNRESOLVED"
+    ],
+    "warning_code": [
+      "CONVERSION_APPLIED",
+      "COUNT_EQUIVALENCE_APPLIED",
+      "SPEC_UNIT_ASSUMED",
+      "MATCHED_BY_VARIANT_KEY",
+      "REDIRECTED_BY_MERGE",
+      "REPRESENTATIVE_APPLIED",
+      "PROXY_FACTOR_APPLIED",
+      "MASS_PATH_UNAVAILABLE",
+      "BINDING_LEVEL_CONFLICT"
+    ]
+  },
+  "forbidden_value_fields": {
+    "description": "次の量の「値」を入れる項目を、カタログ側のどのレコードにも作らない（版を作るたびに項目名で検査する）。参照 ID（*_ref）と状態だけを持つ。",
+    "quantities": [
+      "排出係数",
+      "耐用年数",
+      "修繕率",
+      "更新周期",
+      "漏洩率",
+      "倍率",
+      "価格",
+      "密度・単位質量などの物性値",
+      "複合品・アセンブリの構成比"
+    ],
+    "permitted_numbers": [
+      "単位の定義で決まる倍率（unit_def.to_base_factor）",
+      "同一性に効く仕様値（canonical_material.attribute_values。厚さなどの仕様の表示であり、係数ではない）",
+      "自分で登録した数え方の等価比（unit_conversion.curated_ratio）"
+    ]
+  },
+  "common_fields": {
+    "applies_to": [
+      "classification_node",
+      "material_type",
+      "canonical_material",
+      "alias",
+      "unit_conversion",
+      "assembly",
+      "placement",
+      "similarity_link",
+      "param_binding"
+    ],
+    "fields": [
+      {
+        "name": "status",
+        "type": "enum:record_status",
+        "required": true,
+        "description": "レコードの状態。ACTIVE だけが計算に使える。RESERVED は分類ノードの予約にだけ使う。"
+      },
+      {
+        "name": "created_in_release",
+        "type": "string",
+        "required": true,
+        "description": "このレコードを追加した版（release_id）。"
+      },
+      {
+        "name": "retired_in_release",
+        "type": "string|null",
+        "required": false,
+        "description": "廃止・統合した版。有効な間は null。"
+      },
+      {
+        "name": "replaced_by",
+        "type": "array<string>",
+        "required": false,
+        "description": "廃止時の後継 ID（統合は1件、分割は複数件、単純廃止は空）。"
+      },
+      {
+        "name": "license_status",
+        "type": "enum:license_status",
+        "required": true,
+        "description": "実効ライセンス状態。来歴でつながる全出典のうち最も制限の強い状態から計算で求め、手入力しない。"
+      },
+      {
+        "name": "compartment",
+        "type": "enum:compartment",
+        "required": true,
+        "description": "置き場所の区画。PRIVATE_LICENSED は予約であり、現時点では使わない。"
+      },
+      {
+        "name": "provenance",
+        "type": "array<object>",
+        "required": true,
+        "description": "来歴。1件以上。各要素は source_id、raw_id（無ければ null）、derivation（enum:derivation）。自分で付けた名称・判断は origin_kind = SELF_AUTHORED の出典を指す。"
+      },
+      {
+        "name": "record_version",
+        "type": "integer",
+        "required": true,
+        "description": "変更のたびに1増える。"
+      },
+      {
+        "name": "reviewed_by",
+        "type": "string|null",
+        "required": false,
+        "required_when": "status = ACTIVE",
+        "description": "確認者。作成者と別人。"
+      }
+    ]
+  },
+  "records": {
+    "classification_node": {
+      "core": true,
+      "purpose": "分類体系のノード。部位軸（区分→部位グループ→部位要素）と、品目軸の第1階層（素材・品目系統）を同じ形で持つ。classification_tree.json の nodes の1要素。",
+      "primary_key": [
+        "id"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID。部位軸は FN-、品目軸は IN-。"
+        },
+        {
+          "name": "axis",
+          "type": "enum:axis",
+          "required": true,
+          "description": "FUNCTION（どこで・何の役割で使うか）／ITEM（それが何であるか）。1つの階層は1つの分類原理だけを持つ。"
+        },
+        {
+          "name": "level",
+          "type": "integer",
+          "required": true,
+          "description": "階層。部位軸は 1〜3、品目軸は 1。"
+        },
+        {
+          "name": "level_kind",
+          "type": "enum:level_kind",
+          "required": true,
+          "description": "階層の種類。level と対応する。"
+        },
+        {
+          "name": "parent",
+          "type": "string|null",
+          "required": true,
+          "description": "親ノードの id。第1階層は null。移動（親の変更）では id を変えない。"
+        },
+        {
+          "name": "code",
+          "type": "string|null",
+          "required": false,
+          "required_when": "level_kind が DIVISION / GROUP / SUBSTANCE_CLASS",
+          "description": "人が読むための英語の符号。兄弟の中で一意。集計の見出しに使う階層では、有効化後に変更しない。"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "表示名（日本語）。一般的な建築用語から自分で定める。"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "required": false,
+          "description": "補足。草案段階では境界の考え方をここに書く。"
+        },
+        {
+          "name": "definition",
+          "type": "string|null",
+          "required": false,
+          "required_when": "status = ACTIVE",
+          "description": "このノードに入るものの定義（1〜2文）。その階層の分類原理だけで書く。"
+        },
+        {
+          "name": "includes",
+          "type": "array<string>",
+          "required": false,
+          "description": "境界上で「含む」と決めたもの。"
+        },
+        {
+          "name": "excludes",
+          "type": "array<string>",
+          "required": false,
+          "description": "境界上で「含まない」と決めたものと、その行き先。"
+        },
+        {
+          "name": "default_input_group",
+          "type": "enum:input_group|null",
+          "required": false,
+          "description": "部位グループだけが持つ。既存の入力仕様草案（MATERIAL／EQUIPMENT）との対応の既定。計算行の形は品種の item_kind で決め、この項目では決めない。"
+        },
+        {
+          "name": "allowed_item_kinds",
+          "type": "array<enum:item_kind>",
+          "required": false,
+          "description": "素材・品目系統だけが持つ。配下の品種に許す item_kind。"
+        },
+        {
+          "name": "sort_key",
+          "type": "integer|null",
+          "required": false,
+          "description": "兄弟の中の並び順。ID の大小とは独立。"
+        }
+      ],
+      "constraints": [
+        "部位軸では、階層 n のノードの親は階層 n−1。配置（placement）は部位要素（階層3）だけを指す。",
+        "「未分類」「その他」という受け皿のノードを作らない。配置できない行は calc_row.placement_state = UNPLACED とする。"
+      ]
+    },
+    "material_type": {
+      "core": false,
+      "purpose": "品種（品目軸の第2階層）。宣言単位と仕様属性の定義が共通になる範囲。名称の別名は原則ここに付く。選択するとここで単位が決まる。",
+      "primary_key": [
+        "type_id"
+      ],
+      "fields": [
+        {
+          "name": "type_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（MT-）。"
+        },
+        {
+          "name": "substance_class_id",
+          "type": "string",
+          "required": true,
+          "description": "属する素材・品目系統（classification_node、axis = ITEM）。"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "正式表示名。自分で付ける一般語彙の名称。"
+        },
+        {
+          "name": "name_key",
+          "type": "string",
+          "required": true,
+          "description": "表示名を正規化したキー。"
+        },
+        {
+          "name": "item_kind",
+          "type": "enum:item_kind",
+          "required": true,
+          "description": "品目の種別。計算行の形（数量の種類、付随して必要になる入力）を決める。"
+        },
+        {
+          "name": "declared_unit",
+          "type": "string",
+          "required": true,
+          "description": "宣言単位（unit_def.unit_code）。品種ごとに1つ。配下の正規材料レコードはすべてこの単位で数量を表す。"
+        },
+        {
+          "name": "declared_unit_basis",
+          "type": "enum:declared_unit_basis",
+          "required": true,
+          "description": "宣言単位の決め方。係数の分母に合わせた／出典の宣言／暫定。係数が1件も結び付いていない現時点では、すべて PROVISIONAL になる。"
+        },
+        {
+          "name": "spec_attributes",
+          "type": "array<spec_attribute>",
+          "required": true,
+          "description": "仕様属性の定義（空配列可）。厚さ・強度区分・容量区分などは階層にせず、ここに置く。"
+        },
+        {
+          "name": "representative_material_id",
+          "type": "string|null",
+          "required": true,
+          "description": "代表レコード（同じ品種の正規材料レコード）。null のとき、この品種は粗い指定ができない。"
+        },
+        {
+          "name": "representative_rule",
+          "type": "enum:representative_rule",
+          "required": true,
+          "description": "代表の決め方。NOT_DECIDED の間は代表を計算に使えない。"
+        },
+        {
+          "name": "representative_basis_note",
+          "type": "string|null",
+          "required": false,
+          "required_when": "representative_rule ≠ NOT_DECIDED",
+          "description": "決め方の根拠（資料、判断者、日付）。"
+        },
+        {
+          "name": "spread_class",
+          "type": "enum:spread_class",
+          "required": true,
+          "description": "品種内の係数のばらつきの区分。使える係数データが得られるまで UNKNOWN。区分のしきい値は未定。"
+        },
+        {
+          "name": "dependent_requirements",
+          "type": "array<enum:dependent_requirement>",
+          "required": true,
+          "description": "この品種の行に伴って別の入力が必要になる事項（空配列可）。値は補わず、未入力の要求として行に残す。"
+        },
+        {
+          "name": "biogenic_flag",
+          "type": "boolean|null",
+          "required": false,
+          "description": "生物由来炭素の対象かどうか。不明は null。排出量との相殺には使わない。"
+        },
+        {
+          "name": "calc_class",
+          "type": "string|null",
+          "required": false,
+          "description": "材料をパラメータ化した共通近似モデル（評価プロトコル P8 の M4）で使う区分キーの置き場。現時点では未定義（null）。"
+        },
+        {
+          "name": "merged_into",
+          "type": "string|null",
+          "required": false,
+          "required_when": "status = MERGED",
+          "description": "統合先の type_id。連鎖の深さは1。統合後は配下の正規材料レコードの identity_key を計算し直す。"
+        }
+      ],
+      "constraints": [
+        "宣言単位の次元が違うものは別の品種にする。単位の表記や数え方が違うだけのレコードは別の品種にせず、単位換算として登録する。",
+        "代表レコードは同じ品種に属し、ACTIVE でなければならない。"
+      ]
+    },
+    "spec_attribute": {
+      "core": false,
+      "purpose": "material_type.spec_attributes の1要素。仕様属性の定義。",
+      "primary_key": [
+        "type_id",
+        "attribute_code"
+      ],
+      "fields": [
+        {
+          "name": "attribute_code",
+          "type": "string",
+          "required": true,
+          "description": "属性の識別子（英小文字と下線。数値は単位付きの名前。例 thickness_mm）。"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "表示名。"
+        },
+        {
+          "name": "value_type",
+          "type": "enum:attribute_value_type",
+          "required": true,
+          "description": "10進数／列挙／文字列。"
+        },
+        {
+          "name": "unit_code",
+          "type": "string|null",
+          "required": false,
+          "required_when": "value_type = DECIMAL",
+          "description": "数値の単位。"
+        },
+        {
+          "name": "canonical_format",
+          "type": "string",
+          "required": true,
+          "description": "値の正規形式（例：指数表記なし・末尾の0なしの10進文字列）。同一性キーの計算に使う。"
+        },
+        {
+          "name": "role",
+          "type": "enum:attribute_role",
+          "required": true,
+          "description": "IDENTITY＝同一性に効く（値が違えば別の正規材料レコード）。CONVERSION_PARAM＝数量の換算にだけ使い、同一性に含めない（値は行ごとに与える）。DESCRIPTIVE＝説明のみ。"
+        },
+        {
+          "name": "affects",
+          "type": "array<enum:affects>",
+          "required": true,
+          "description": "この属性で変わる計算行の項目。実データを見るまで UNKNOWN とし、UNKNOWN の属性は IDENTITY として扱う（誤統合を避ける側に倒す）。"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": true,
+          "description": "正規材料レコードを ACTIVE にするのに値が必須か。"
+        },
+        {
+          "name": "axis_mode",
+          "type": "enum:axis_mode|null",
+          "required": false,
+          "required_when": "role = IDENTITY",
+          "description": "登録済みの値だけを許すか、範囲内の任意の値を許すか。CONTINUOUS は構造だけ用意し、採否は未決定。"
+        },
+        {
+          "name": "allowed_values",
+          "type": "array<string>|null",
+          "required": false,
+          "required_when": "value_type = ENUM",
+          "description": "許容値。"
+        },
+        {
+          "name": "parse_patterns",
+          "type": "array<object>",
+          "required": false,
+          "description": "名称・仕様欄から読み取るための表記規則。各要素は prefix_tokens、suffix_tokens、assumed_unit_code。実データの表記を見てから定める。"
+        }
+      ],
+      "constraints": [
+        "IDENTITY から CONVERSION_PARAM への変更は、配下のレコードの統合を伴う破壊的変更であり、その属性が係数・質量換算・耐用年数・修繕率・廃棄経路のどれも変えないことをデータで確認してから行う。"
+      ]
+    },
+    "canonical_material": {
+      "core": true,
+      "purpose": "正規材料レコード（品目軸の第3階層）。品種＋同一性に効く仕様値。計算行が参照する最小単位。部位を持たない（部位は配置と計算行の側に持つ）。",
+      "primary_key": [
+        "canonical_id"
+      ],
+      "fields": [
+        {
+          "name": "canonical_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（CM-）。案件内の行 ID（既存入力項目の MATERIAL.material_id）とは別物。"
+        },
+        {
+          "name": "type_id",
+          "type": "string",
+          "required": true,
+          "description": "属する品種。宣言単位は品種から継承する。"
+        },
+        {
+          "name": "material_kind",
+          "type": "enum:material_kind",
+          "required": true,
+          "description": "SPECIFIC＝一般品の個別仕様／PRODUCT_SPECIFIC＝特定製品／TYPE_REPRESENTATIVE＝品種を代表するために別に作った一般レコード。"
+        },
+        {
+          "name": "attribute_values",
+          "type": "object",
+          "required": true,
+          "description": "attribute_code → 正規形式の値。role = IDENTITY の属性だけを持つ（空オブジェクト可）。"
+        },
+        {
+          "name": "product_key",
+          "type": "string|null",
+          "required": false,
+          "required_when": "material_kind = PRODUCT_SPECIFIC",
+          "description": "製品を識別する文字列。出典の許諾が認める範囲に限る。"
+        },
+        {
+          "name": "derivation_rule",
+          "type": "string|null",
+          "required": false,
+          "required_when": "material_kind = TYPE_REPRESENTATIVE",
+          "description": "代表の係数の導き方の記述（値ではない）。未定ならその旨を書く。"
+        },
+        {
+          "name": "identity_key",
+          "type": "string",
+          "required": true,
+          "description": "同一性キー。「v1|type_id|属性コード昇順の attribute_code=値 を ; でつないだもの|GENERIC または PRODUCT:product_key」の SHA-256。ACTIVE の中で一意。"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "品種名と同一性に効く仕様値から規則で生成した表示名。"
+        },
+        {
+          "name": "mass_path_status",
+          "type": "enum:mass_path_status",
+          "required": true,
+          "description": "質量への換算経路の有無（輸送・廃棄段階に必要）。計算で求める。経路が無い材料は、その段階が「0」ではなく「計算できない」になる。"
+        },
+        {
+          "name": "merged_into",
+          "type": "string|null",
+          "required": false,
+          "required_when": "status = MERGED",
+          "description": "統合先の canonical_id。連鎖の深さは1。"
+        }
+      ],
+      "constraints": [
+        "同じ identity_key のレコードが既にあれば新しく作らず、来歴を追加する。",
+        "部位が違うことを理由にレコードを複製しない。",
+        "必須の同一性属性が欠けたレコードは ACTIVE にしない。"
+      ]
+    },
+    "alias": {
+      "core": true,
+      "purpose": "別名表。取込時の名称の解決と、選択時の名称検索の両方に使う（二重管理しない）。全角半角・半角カナ・大文字小文字のように正規化規則だけで吸収できるゆれは行を増やさない。",
+      "primary_key": [
+        "alias_id"
+      ],
+      "fields": [
+        {
+          "name": "alias_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（AL-）。"
+        },
+        {
+          "name": "normalized_key",
+          "type": "string",
+          "required": true,
+          "description": "正規化後のキー。照合はこの列の完全一致（および正規化が生成する派生キーの完全一致）だけで行う。"
+        },
+        {
+          "name": "surface_form",
+          "type": "string",
+          "required": true,
+          "description": "元の表記（観測したまま、または自分で書いたもの）。"
+        },
+        {
+          "name": "alias_type",
+          "type": "enum:alias_type",
+          "required": true,
+          "description": "別名の類型。"
+        },
+        {
+          "name": "target_kind",
+          "type": "enum:alias_target_kind",
+          "required": true,
+          "description": "解決先の種類。"
+        },
+        {
+          "name": "resolution",
+          "type": "enum:alias_resolution",
+          "required": true,
+          "description": "UNIQUE＝解決先が1件／AMBIGUOUS＝2件以上（候補の一覧）。機械的に再計算する。"
+        },
+        {
+          "name": "target_ids",
+          "type": "array<string>",
+          "required": true,
+          "description": "解決先の ID。UNIQUE なら1件、AMBIGUOUS なら2件以上。どれか1つに自動で寄せない。"
+        },
+        {
+          "name": "context_node_id",
+          "type": "string|null",
+          "required": false,
+          "description": "この別名が有効な部位ノード。null は文脈を問わない。"
+        },
+        {
+          "name": "evidence_kind",
+          "type": "enum:evidence_kind",
+          "required": true,
+          "description": "根拠。自分で書いた一般語彙／許可された出典で観測／利用者が確認／架空。"
+        },
+        {
+          "name": "rights_note",
+          "type": "string|null",
+          "required": false,
+          "required_when": "第三者のコード・商標・製品名に由来する語",
+          "description": "権利の確認内容。未確認の語は登録しない。"
+        },
+        {
+          "name": "normalizer_version",
+          "type": "string",
+          "required": true,
+          "description": "キーを計算した正規化規則の版。"
+        },
+        {
+          "name": "created_by",
+          "type": "string",
+          "required": true,
+          "description": "作成者。"
+        }
+      ],
+      "constraints": [
+        "ACTIVE の中で（normalized_key、context_node_id）は一意。",
+        "制限付きの出典に載っている名称を別名として登録することは、係数の転記と同じ扱いで禁止する。"
+      ]
+    },
+    "unit_def": {
+      "core": false,
+      "purpose": "単位辞書。同じ次元の中の換算（kg と t など）は、ここにある定義値だけで行う。",
+      "primary_key": [
+        "unit_code"
+      ],
+      "fields": [
+        {
+          "name": "unit_code",
+          "type": "string",
+          "required": true,
+          "description": "単位の識別子（例 kg、t、m、m2、m3）。個数は数え方ごとに別のコード（例 ct_mai＝枚、ct_dai＝台、ct_ki＝基）。"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "表示。"
+        },
+        {
+          "name": "dimension",
+          "type": "enum:dimension",
+          "required": true,
+          "description": "次元。"
+        },
+        {
+          "name": "base_unit_code",
+          "type": "string",
+          "required": true,
+          "description": "同じ次元の基準単位。個数は自分自身。"
+        },
+        {
+          "name": "to_base_factor",
+          "type": "string|null",
+          "required": false,
+          "required_when": "dimension が COUNT・LUMP_SUM 以外",
+          "description": "基準単位への倍率（10進文字列）。定義によって決まる厳密な定数だけ。"
+        },
+        {
+          "name": "is_calculable",
+          "type": "boolean",
+          "required": true,
+          "description": "計算に使えるか。一式（LUMP_SUM）は false。"
+        },
+        {
+          "name": "text_aliases",
+          "type": "array<string>",
+          "required": true,
+          "description": "単位欄の表記（空配列可）。Unicode 互換正規化と空白除去だけを掛けた文字列で、大文字小文字は畳まない。"
+        }
+      ],
+      "constraints": [
+        "同じ次元 COUNT でも、unit_code が違えば自動では換算しない。"
+      ]
+    },
+    "unit_conversion": {
+      "core": true,
+      "purpose": "次元をまたぐ換算、および数え方の違う個数どうしの等価。品種または正規材料レコードごとに登録する。根拠の値は持たず、根拠の出所と状態を持つ。",
+      "primary_key": [
+        "conversion_id"
+      ],
+      "fields": [
+        {
+          "name": "conversion_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（UC-）。"
+        },
+        {
+          "name": "scope_kind",
+          "type": "enum:conversion_scope_kind",
+          "required": true,
+          "description": "適用範囲の種類。正規材料レコードの行が品種の行より優先する。"
+        },
+        {
+          "name": "scope_id",
+          "type": "string",
+          "required": true,
+          "description": "適用範囲の ID。"
+        },
+        {
+          "name": "conversion_kind",
+          "type": "enum:conversion_kind",
+          "required": true,
+          "description": "換算の種類。DENSITY＝体積→質量、THICKNESS＝面積→体積、MASS_PER_AREA＝面積→質量、MASS_PER_LENGTH＝長さ→質量、MASS_PER_PIECE＝個数→質量、AREA_PER_PIECE＝個数→面積、LENGTH_PER_PIECE＝個数→長さ、COUNT_NOUN_EQUIVALENCE＝個数→個数。"
+        },
+        {
+          "name": "from_unit",
+          "type": "string",
+          "required": true,
+          "description": "換算元（unit_def.unit_code）。上の標準方向で登録する。"
+        },
+        {
+          "name": "to_unit",
+          "type": "string",
+          "required": true,
+          "description": "換算先（unit_def.unit_code）。"
+        },
+        {
+          "name": "basis_parameter",
+          "type": "string",
+          "required": true,
+          "description": "根拠パラメータの名前（例 thickness_mm、density_kg_per_m3、area_per_piece_m2）。"
+        },
+        {
+          "name": "basis_origin",
+          "type": "enum:basis_origin",
+          "required": true,
+          "description": "根拠の出所。IDENTITY_ATTRIBUTE＝正規材料レコードの仕様値／ROW_PARAMETER＝行ごとに与える値／CURATED_EQUIVALENCE＝自分で登録した等価関係／EXTERNAL_LEDGER＝外部のパラメータ台帳。"
+        },
+        {
+          "name": "basis_attribute_code",
+          "type": "string|null",
+          "required": false,
+          "required_when": "basis_origin = IDENTITY_ATTRIBUTE",
+          "description": "根拠にする仕様属性。"
+        },
+        {
+          "name": "param_source_order",
+          "type": "array<enum:param_source>",
+          "required": false,
+          "required_when": "basis_origin = ROW_PARAMETER",
+          "description": "行ごとの値の取得元の優先順（名称から切り出した仕様トークン→利用者の入力）。どちらにも無ければ停止する。"
+        },
+        {
+          "name": "basis_ref",
+          "type": "string|null",
+          "required": false,
+          "required_when": "basis_origin = EXTERNAL_LEDGER",
+          "description": "外部のパラメータ台帳の ID。値・出典・許諾は台帳の側で管理する。未入手なら null のままにし、推測で埋めない。"
+        },
+        {
+          "name": "curated_ratio",
+          "type": "string|null",
+          "required": false,
+          "required_when": "basis_origin = CURATED_EQUIVALENCE",
+          "description": "数え方の等価比（10進文字列）。物性値・係数は入れない。"
+        },
+        {
+          "name": "basis_value_state",
+          "type": "enum:value_state",
+          "required": true,
+          "description": "根拠値の状態。EXTERNAL_LEDGER で参照が無ければ MISSING。IDENTITY_ATTRIBUTE は DERIVED。ROW_PARAMETER は値が行ごとに決まるのでここでは DERIVED とし、実際の値と取得元は calc_row.conversion_params に残す。"
+        },
+        {
+          "name": "basis_license_status",
+          "type": "enum:license_status",
+          "required": true,
+          "description": "根拠値のライセンス状態。"
+        },
+        {
+          "name": "applicability",
+          "type": "object|null",
+          "required": false,
+          "description": "成り立つ条件（属性の範囲など）。"
+        },
+        {
+          "name": "invertible",
+          "type": "boolean",
+          "required": true,
+          "description": "逆向きに使ってよいか。"
+        },
+        {
+          "name": "conversion_status",
+          "type": "enum:conversion_status",
+          "required": true,
+          "description": "使用可／根拠欠損で停止／ライセンスで停止／退役。計算で求める。"
+        }
+      ],
+      "constraints": [
+        "USABLE にできるのは、根拠が MISSING でなく、basis_license_status = PERMITTED_PUBLIC のときだけ。",
+        "根拠の無い換算も BLOCKED_BASIS_MISSING のまま登録する（その単位が実際に現れるという事実を残す）。",
+        "材料固有の換算は最大2段まで。使える経路が複数あり結果が許容差を超えて食い違えば停止する（許容差は未設定）。",
+        "機器の容量による按分のようなモデル計算は単位換算ではないので、この表に入れない。"
+      ]
+    },
+    "assembly": {
+      "core": true,
+      "purpose": "アセンブリ／束。1回の指定で複数の計算行を作るための定義。複合品（出典に1件として現れる製品）と、選択のための一式（層構成、機器と付属の一式、部位の出発点）を同じ形で持つ。",
+      "primary_key": [
+        "assembly_id"
+      ],
+      "fields": [
+        {
+          "name": "assembly_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（AS-）。"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "名称。"
+        },
+        {
+          "name": "assembly_kind",
+          "type": "enum:assembly_kind",
+          "required": true,
+          "description": "COMPOSITE_PRODUCT＝複合品の構成／LAYERED_ASSEMBLY＝層構成・納まりの一式／SYSTEM_KIT＝機器と付属の配管・配線などの一式／STARTER_SET＝部位と案件条件から決まる出発点の一式。"
+        },
+        {
+          "name": "function_node_id",
+          "type": "string|null",
+          "required": false,
+          "required_when": "assembly_kind ≠ COMPOSITE_PRODUCT",
+          "description": "使う部位要素（または部位グループ）。"
+        },
+        {
+          "name": "composite_material_id",
+          "type": "string|null",
+          "required": false,
+          "required_when": "assembly_kind = COMPOSITE_PRODUCT",
+          "description": "この構成が説明する複合品の正規材料レコード。"
+        },
+        {
+          "name": "driver_dimension",
+          "type": "enum:dimension",
+          "required": true,
+          "description": "基準数量の次元。"
+        },
+        {
+          "name": "driver_unit",
+          "type": "string",
+          "required": true,
+          "description": "基準数量の単位（unit_def.unit_code）。アセンブリを選ぶとこの単位に決まる。"
+        },
+        {
+          "name": "expansion_mode",
+          "type": "enum:expansion_mode",
+          "required": true,
+          "description": "EXPAND_TO_ROWS＝構成要素ごとに計算行を作る（既定）。SINGLE_ROW_OWN_FACTOR＝複合品自身に係数の参照がある場合に限り1行で計算する。同じ数量を両方で数えない。"
+        },
+        {
+          "name": "context_condition",
+          "type": "object|null",
+          "required": false,
+          "description": "この定義を候補に出す案件条件（例：主要構造）。キーは既存入力項目の PROJECT 群。"
+        },
+        {
+          "name": "stage_note",
+          "type": "string|null",
+          "required": false,
+          "description": "構成要素の係数が含む段階についての注意（算定境界の混在を避けるため）。"
+        }
+      ],
+      "constraints": [
+        "構成を1つの合成係数にまとめない。構成要素ごとに耐用年数・修繕率・廃棄経路・算定境界が違いうるため、行に展開する。",
+        "構成が得られず展開できない複合品は、展開不可として明示し、品目別集計では複合品のまま計上する。",
+        "アセンブリは循環しない。"
+      ]
+    },
+    "assembly_component": {
+      "core": true,
+      "purpose": "アセンブリの構成要素。基準数量1単位あたりの構成量の「値」は持たず、決め方と参照だけを持つ。",
+      "primary_key": [
+        "assembly_id",
+        "line_no"
+      ],
+      "fields": [
+        {
+          "name": "assembly_id",
+          "type": "string",
+          "required": true,
+          "description": "属するアセンブリ。"
+        },
+        {
+          "name": "line_no",
+          "type": "integer",
+          "required": true,
+          "description": "行番号。"
+        },
+        {
+          "name": "target_kind",
+          "type": "enum:component_target_kind",
+          "required": true,
+          "description": "MATERIAL_TYPE（代表レコードで展開し、後から絞り込める。STRICT では仕様値が要る）／CANONICAL_MATERIAL。"
+        },
+        {
+          "name": "target_id",
+          "type": "string",
+          "required": true,
+          "description": "構成要素の ID。"
+        },
+        {
+          "name": "component_unit",
+          "type": "string",
+          "required": true,
+          "description": "構成要素側の単位。対象の宣言単位と一致すること。"
+        },
+        {
+          "name": "ratio_basis",
+          "type": "enum:ratio_basis",
+          "required": true,
+          "description": "構成量の決め方。DRIVER_IDENTITY＝基準数量そのもの／GEOMETRIC_DEFINITION＝寸法から定義で決まる／ROW_PARAMETER＝利用者が行ごとに与える／EXTERNAL_LEDGER＝外部台帳の値（出典と許諾の確認が必要）／PLACEHOLDER＝未定。"
+        },
+        {
+          "name": "ratio_ref",
+          "type": "string|null",
+          "required": false,
+          "required_when": "ratio_basis = EXTERNAL_LEDGER",
+          "description": "構成量を収めた外部台帳の ID。未入手なら null（その行の数量は欠損のまま）。"
+        },
+        {
+          "name": "ratio_param_name",
+          "type": "string|null",
+          "required": false,
+          "required_when": "ratio_basis が GEOMETRIC_DEFINITION または ROW_PARAMETER",
+          "description": "必要なパラメータ名（例 thickness_m）。"
+        },
+        {
+          "name": "ratio_value_state",
+          "type": "enum:value_state",
+          "required": true,
+          "description": "構成量の状態。"
+        },
+        {
+          "name": "placement_id",
+          "type": "string|null",
+          "required": false,
+          "description": "展開した行に付ける配置。null は対象の品種の既定の配置（is_primary）。"
+        },
+        {
+          "name": "default_included",
+          "type": "boolean",
+          "required": true,
+          "description": "既定で含めるか。"
+        },
+        {
+          "name": "optional",
+          "type": "boolean",
+          "required": true,
+          "description": "利用者が外してよいか。外した構成要素は行を消さず、除外の記録を残す。"
+        },
+        {
+          "name": "substitutable",
+          "type": "boolean",
+          "required": true,
+          "description": "同じ品種の別の正規材料レコードへ差し替えてよいか。"
+        }
+      ],
+      "constraints": [
+        "アセンブリの中で同じ品種を2行に置かない（二重計上の検査を品種単位で行うため）。"
+      ]
+    },
+    "placement": {
+      "core": false,
+      "purpose": "配置。部位要素と品種の許される組合せ（多対多）。部位から品種へ辿る選択の経路を兼ねる（選択木を別に持たない）。",
+      "primary_key": [
+        "placement_id"
+      ],
+      "fields": [
+        {
+          "name": "placement_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（PL-）。"
+        },
+        {
+          "name": "function_node_id",
+          "type": "string",
+          "required": true,
+          "description": "部位要素（classification_node、level_kind = ELEMENT）。"
+        },
+        {
+          "name": "type_id",
+          "type": "string",
+          "required": true,
+          "description": "品種。"
+        },
+        {
+          "name": "material_ids_limit",
+          "type": "array<string>",
+          "required": true,
+          "description": "この配置で使える正規材料レコードの限定。空配列は「その品種のすべて」。"
+        },
+        {
+          "name": "is_primary",
+          "type": "boolean",
+          "required": true,
+          "description": "その品種の既定の配置（名称検索から入ったときの既定の部位）。品種ごとに有効な配置のうち1件だけ true。"
+        },
+        {
+          "name": "entry_unit",
+          "type": "string|null",
+          "required": false,
+          "description": "この部位で数量を入れる単位。宣言単位そのもの、または宣言単位への換算が登録されている単位に限る。"
+        },
+        {
+          "name": "representative_override_id",
+          "type": "string|null",
+          "required": false,
+          "description": "この部位で使うときの代表レコードの差し替え。無ければ品種の代表に従う。"
+        },
+        {
+          "name": "context_condition",
+          "type": "object|null",
+          "required": false,
+          "description": "案件条件による絞り込み・並び替えの条件（例：主要構造）。根拠の無いものは置かない。"
+        },
+        {
+          "name": "sort_key",
+          "type": "integer|null",
+          "required": false,
+          "description": "候補の並び順。実際の使用頻度が得られるまで null。"
+        }
+      ],
+      "constraints": [
+        "有効な配置の中で（function_node_id、type_id）は一意。",
+        "1行の数量を複数の部位へ自動で按分しない。複数の部位にまたがる数量は、数量を分けた複数行にする。"
+      ]
+    },
+    "similarity_link": {
+      "core": false,
+      "purpose": "類似関係の記録。統合ではない。「別物」と判断した組も同じ表に残し、同じ提案を繰り返さない。同じ品種の仕様違いはこの表ではなく仕様属性で表す。",
+      "primary_key": [
+        "link_id"
+      ],
+      "fields": [
+        {
+          "name": "link_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（SL-）。"
+        },
+        {
+          "name": "target_kind",
+          "type": "enum:similarity_target_kind",
+          "required": true,
+          "description": "対象の種類。"
+        },
+        {
+          "name": "left_id",
+          "type": "string",
+          "required": true,
+          "description": "組の一方。"
+        },
+        {
+          "name": "right_id",
+          "type": "string",
+          "required": true,
+          "description": "組のもう一方。"
+        },
+        {
+          "name": "relation",
+          "type": "enum:similarity_relation",
+          "required": true,
+          "description": "SIMILAR＝近縁（検索・提案に使う）／DISTINCT_CONFIRMED＝別物と判断済み／GENERIC_OF＝一般品と特定製品／PROXY_CANDIDATE＝係数の代用候補。"
+        },
+        {
+          "name": "basis",
+          "type": "string",
+          "required": true,
+          "description": "判断の根拠（何が同じで何が違うか）。"
+        },
+        {
+          "name": "substitution_policy",
+          "type": "enum:substitution_policy",
+          "required": true,
+          "description": "置き換えを許すか。既定は NONE。"
+        },
+        {
+          "name": "verification_status",
+          "type": "enum:verification_status",
+          "required": true,
+          "description": "置き換えの誤差を検証したか（評価プロトコル P7 の語彙）。既定は NOT_VERIFIED。"
+        },
+        {
+          "name": "decided_by",
+          "type": "string",
+          "required": true,
+          "description": "判断者。"
+        },
+        {
+          "name": "decided_at",
+          "type": "date",
+          "required": true,
+          "description": "判断日。"
+        }
+      ],
+      "constraints": [
+        "類似度だけを根拠に自動で統合しない。",
+        "ALLOWED_WITH_FLAG にできるのは verification_status が NOT_VERIFIED でなくなってからで、置き換えた事実を計算行に残す。",
+        "宣言単位の次元が違い換算根拠も無い組、結び付いた係数の含む段階が違う組は、置き換えの対象にしない。"
+      ]
+    },
+    "param_binding": {
+      "core": false,
+      "purpose": "係数・質量換算・耐用年数・修繕率・廃棄経路・施工端材率への参照。値は持たない。値・版・出典・許諾は外部のパラメータ台帳の側で管理する。",
+      "primary_key": [
+        "binding_id"
+      ],
+      "fields": [
+        {
+          "name": "binding_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（PB-）。"
+        },
+        {
+          "name": "scope_kind",
+          "type": "enum:binding_scope_kind",
+          "required": true,
+          "description": "束縛する水準。"
+        },
+        {
+          "name": "scope_id",
+          "type": "string",
+          "required": true,
+          "description": "対象の ID。"
+        },
+        {
+          "name": "param_kind",
+          "type": "enum:param_kind",
+          "required": true,
+          "description": "パラメータの種別。FACTOR と MASS_PER_UNIT は品目側（PRODUCT／CANONICAL_MATERIAL／MATERIAL_TYPE）にだけ束縛できる。"
+        },
+        {
+          "name": "param_ref",
+          "type": "string|null",
+          "required": true,
+          "description": "外部のパラメータ台帳の ID（係数なら既存入力項目の FACTOR.factor_id）。未束縛なら null。"
+        },
+        {
+          "name": "binding_unit",
+          "type": "string|null",
+          "required": false,
+          "required_when": "param_kind = FACTOR で、param_ref が null でないとき",
+          "description": "係数の分母単位。台帳の記載と一致すること。宣言単位と違う場合は換算が要り、無ければその単位で入力された数量にしか使えない。"
+        },
+        {
+          "name": "stages",
+          "type": "array<string>",
+          "required": false,
+          "required_when": "param_kind = FACTOR で、param_ref が null でないとき",
+          "description": "係数が含む段階（例 A1-A3）。台帳の記載と一致すること。"
+        },
+        {
+          "name": "link_basis",
+          "type": "enum:link_basis|null",
+          "required": false,
+          "required_when": "param_kind = FACTOR で、param_ref が null でないとき",
+          "description": "EXACT＝同一品目／GENERIC＝一般値／PROXY＝代用。"
+        },
+        {
+          "name": "proxy_reason",
+          "type": "string|null",
+          "required": false,
+          "required_when": "link_basis = PROXY",
+          "description": "代用の理由。"
+        },
+        {
+          "name": "context_condition",
+          "type": "object|null",
+          "required": false,
+          "description": "この束縛が効く条件（配置の限定、案件条件など）。同じ品目を部位別に別の値で提供する出典は、差の理由が出典で確認できるときに限り、ここに配置の限定を付けて表す。"
+        },
+        {
+          "name": "value_state",
+          "type": "enum:value_state",
+          "required": true,
+          "description": "参照先の値の状態。未束縛は MISSING。"
+        },
+        {
+          "name": "priority_rank",
+          "type": "integer|null",
+          "required": false,
+          "description": "同じ水準に複数の参照があるときの採用順。出典の違う参照は別の行として並べ、平均も統合もしない。"
+        }
+      ],
+      "constraints": [
+        "どの水準にも束縛が無ければ MISSING のままにし、既定値を作り出さない。",
+        "license_status が PERMITTED_PUBLIC でない束縛を使う行は計算しない。"
+      ]
+    },
+    "source": {
+      "core": false,
+      "purpose": "出典台帳。取り込みの前にライセンスを判断する関門の根拠。",
+      "primary_key": [
+        "source_id"
+      ],
+      "fields": [
+        {
+          "name": "source_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（SRC-）。"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "出典の名称。"
+        },
+        {
+          "name": "origin_kind",
+          "type": "enum:origin_kind",
+          "required": true,
+          "description": "自作／利用者提供／第三者データ／架空。"
+        },
+        {
+          "name": "source_version",
+          "type": "string",
+          "required": true,
+          "description": "版・年度。"
+        },
+        {
+          "name": "retrieved_at",
+          "type": "date",
+          "required": true,
+          "description": "取得日。"
+        },
+        {
+          "name": "content_kinds",
+          "type": "array<enum:content_kind>",
+          "required": true,
+          "description": "この出典から取り込む内容の種類。名称一覧・分類ラベルも「中身」として扱う。"
+        },
+        {
+          "name": "license_status",
+          "type": "enum:license_status",
+          "required": true,
+          "description": "権限判断の4状態（第1章 1-E の語彙）。"
+        },
+        {
+          "name": "license_evidence_ref",
+          "type": "string|null",
+          "required": false,
+          "required_when": "license_status = PERMITTED_PUBLIC",
+          "description": "許諾の証拠（規約の所在、書面の管理番号）。"
+        },
+        {
+          "name": "permitted_uses",
+          "type": "array<string>",
+          "required": true,
+          "description": "許されている利用形態。空配列は「何も許されていない」。"
+        },
+        {
+          "name": "storage_policy",
+          "type": "enum:storage_policy",
+          "required": true,
+          "description": "公開リポジトリに置けるか／非公開保管のみか／取り込み禁止か。"
+        },
+        {
+          "name": "license_reviewed_by",
+          "type": "string",
+          "required": true,
+          "description": "ライセンスを判断した人。"
+        },
+        {
+          "name": "license_reviewed_at",
+          "type": "date",
+          "required": true,
+          "description": "判断日。"
+        },
+        {
+          "name": "license_valid_until",
+          "type": "date|null",
+          "required": false,
+          "description": "再確認期限。過ぎたら UNKNOWN として扱う。"
+        }
+      ],
+      "constraints": [
+        "PERMITTED_PUBLIC（証拠あり）でない出典は取り込まず、中身を保存しない。理由だけを記録する。"
+      ]
+    },
+    "raw_record": {
+      "core": false,
+      "purpose": "受領レコード。受領した姿のまま保存し、更新・削除しない。係数などの数値列は写さない。正規化結果はここから再生成できる派生物とする。",
+      "primary_key": [
+        "raw_id"
+      ],
+      "fields": [
+        {
+          "name": "raw_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（RAW-）。"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "required": true,
+          "description": "出典。関門を通った出典だけが参照できる。"
+        },
+        {
+          "name": "source_locator",
+          "type": "string",
+          "required": true,
+          "description": "出典内の位置（ファイル・表・行）。中身ではなく所在。"
+        },
+        {
+          "name": "name_text",
+          "type": "string",
+          "required": true,
+          "description": "名称。受領したままの文字列。"
+        },
+        {
+          "name": "spec_text",
+          "type": "string|null",
+          "required": false,
+          "description": "仕様欄。受領したまま。"
+        },
+        {
+          "name": "unit_text",
+          "type": "string|null",
+          "required": false,
+          "description": "単位欄。受領したまま。名称欄とは別の解析器で扱う。"
+        },
+        {
+          "name": "class_text",
+          "type": "string|null",
+          "required": false,
+          "description": "出典側の見出し・分類ラベル。対応付けの手掛かりとしてだけ使い、そのまま分類として採用しない。出典の content_kinds が許すときだけ保存する。"
+        },
+        {
+          "name": "content_hash",
+          "type": "string",
+          "required": true,
+          "description": "出典・名称・仕様・単位・分類ラベルから計算したハッシュ（同一行の重複の判定用）。"
+        },
+        {
+          "name": "duplicate_of_raw",
+          "type": "string|null",
+          "required": false,
+          "required_when": "intake_status = DUPLICATE_RAW",
+          "description": "同一ハッシュの先行レコード。"
+        },
+        {
+          "name": "occurrence_count",
+          "type": "integer",
+          "required": true,
+          "description": "同一内容が出典内に現れた回数。"
+        },
+        {
+          "name": "intake_status",
+          "type": "enum:intake_status",
+          "required": true,
+          "description": "受理／同一行の重複／形式不備。"
+        },
+        {
+          "name": "ingested_in_release",
+          "type": "string",
+          "required": true,
+          "description": "取り込んだ版。"
+        }
+      ],
+      "constraints": []
+    },
+    "merge_event": {
+      "core": false,
+      "purpose": "統合イベント（追記専用）。重複の統合と、その取り消し（分割）を記録する。統合で行を消さない。",
+      "primary_key": [
+        "merge_event_id"
+      ],
+      "fields": [
+        {
+          "name": "merge_event_id",
+          "type": "string",
+          "required": true,
+          "description": "不変 ID（ME-）。"
+        },
+        {
+          "name": "event_kind",
+          "type": "enum:merge_event_kind",
+          "required": true,
+          "description": "統合／分割（統合の取り消し）。"
+        },
+        {
+          "name": "target_kind",
+          "type": "enum:merge_target_kind",
+          "required": true,
+          "description": "対象の種類。"
+        },
+        {
+          "name": "survivor_id",
+          "type": "string",
+          "required": true,
+          "description": "残すレコード。"
+        },
+        {
+          "name": "merged_ids",
+          "type": "array<string>",
+          "required": true,
+          "description": "統合されて退くレコード。"
+        },
+        {
+          "name": "duplicate_level",
+          "type": "enum:duplicate_level",
+          "required": true,
+          "description": "どの水準の重複として統合したか。"
+        },
+        {
+          "name": "survivor_rule_applied",
+          "type": "enum:survivor_rule",
+          "required": true,
+          "description": "残す側を決めた規則。"
+        },
+        {
+          "name": "field_resolutions",
+          "type": "array<object>",
+          "required": true,
+          "description": "項目ごとの決着。各要素は field、kept_value、discarded_values、rule（enum:field_resolution_rule）。"
+        },
+        {
+          "name": "aliases_created",
+          "type": "array<string>",
+          "required": true,
+          "description": "この統合で作った別名。退く側の名称は別名に移す。"
+        },
+        {
+          "name": "license_before",
+          "type": "enum:license_status",
+          "required": true,
+          "description": "残す側の実効ライセンス（統合前）。"
+        },
+        {
+          "name": "license_after",
+          "type": "enum:license_status",
+          "required": true,
+          "description": "残す側の実効ライセンス（統合後）。悪化する統合は成立させない。"
+        },
+        {
+          "name": "decided_by",
+          "type": "string",
+          "required": true,
+          "description": "判断者（自動統合は system）。"
+        },
+        {
+          "name": "reviewed_by",
+          "type": "string|null",
+          "required": false,
+          "required_when": "duplicate_level が D2・D3・D4",
+          "description": "確認者。判断者と別人。"
+        },
+        {
+          "name": "decided_at",
+          "type": "date",
+          "required": true,
+          "description": "判断日。"
+        },
+        {
+          "name": "reason",
+          "type": "string",
+          "required": true,
+          "description": "統合した理由。"
+        },
+        {
+          "name": "release_id",
+          "type": "string",
+          "required": true,
+          "description": "反映した版。"
+        }
+      ],
+      "constraints": [
+        "自動で統合してよいのは、正規化後に identity_key が完全一致する場合（D1）だけ。",
+        "係数参照・換算根拠などの数値に関わる参照は、平均・代表値の選択・上書きで1つにまとめず、出典ごとに別の行として残す。"
+      ]
+    },
+    "release": {
+      "core": false,
+      "purpose": "版。公開した版の内容は変えず、修正は次の版で行う。",
+      "primary_key": [
+        "release_id"
+      ],
+      "fields": [
+        {
+          "name": "release_id",
+          "type": "string",
+          "required": true,
+          "description": "版の識別子（REL-）。"
+        },
+        {
+          "name": "parent_release_id",
+          "type": "string|null",
+          "required": false,
+          "description": "1つ前の版。"
+        },
+        {
+          "name": "schema_version",
+          "type": "string",
+          "required": true,
+          "description": "レコード定義の版。"
+        },
+        {
+          "name": "normalizer_version",
+          "type": "string",
+          "required": true,
+          "description": "正規化規則の版。"
+        },
+        {
+          "name": "compartment",
+          "type": "enum:compartment",
+          "required": true,
+          "description": "この版の区画。"
+        },
+        {
+          "name": "manifest_hash",
+          "type": "string",
+          "required": true,
+          "description": "全レコードの内容ハッシュ。"
+        },
+        {
+          "name": "invariant_report",
+          "type": "object",
+          "required": true,
+          "description": "不変条件の検査結果。1件でも不合格なら公開しない。"
+        },
+        {
+          "name": "breaking_change_ids",
+          "type": "array<string>",
+          "required": true,
+          "description": "過去の計算結果を変えうる変更（宣言単位の変更、統合・分割、同一性属性の変更、ライセンスの悪化、別名の解決先の変更）で影響を受ける ID の一覧。"
+        },
+        {
+          "name": "status",
+          "type": "enum:release_status",
+          "required": true,
+          "description": "作成中／公開／取り下げ。"
+        }
+      ],
+      "constraints": []
+    },
+    "calc_row": {
+      "core": false,
+      "purpose": "計算研究へ渡す1行（案件側のレコード。カタログではない）。活動量・単位・係数参照・耐用年数・修繕率・廃棄経路を1行に持つ。項目名は仮で、計算研究側の行の定義が確定したら合わせる。",
+      "primary_key": [
+        "row_id"
+      ],
+      "fields": [
+        {
+          "name": "row_id",
+          "type": "string",
+          "required": true,
+          "description": "行 ID（ROW-。既存入力項目の MATERIAL.material_id／EQUIPMENT.equipment_id に相当）。絞り込みで材料レコードが替わっても変えない。"
+        },
+        {
+          "name": "selection_id",
+          "type": "string",
+          "required": true,
+          "description": "同じ1回の指定から生まれた行をまとめる ID。アセンブリから展開した行は同じ値を持つ。"
+        },
+        {
+          "name": "release_id",
+          "type": "string",
+          "required": true,
+          "description": "解決に使ったカタログの版。"
+        },
+        {
+          "name": "resolution_mode",
+          "type": "enum:resolution_mode",
+          "required": true,
+          "description": "STRICT＝仕様値が欠ければ止める／COARSE_ALLOWED＝代表レコードの使用を明示的に許す。案件ごとに決め、行に写して残す。"
+        },
+        {
+          "name": "canonical_id",
+          "type": "string|null",
+          "required": true,
+          "description": "解決した正規材料レコード。解決できなければ null（blocking_reasons に理由）。"
+        },
+        {
+          "name": "placement_state",
+          "type": "enum:placement_state",
+          "required": true,
+          "description": "配置の有無。UNPLACED の行は部位別集計で「未配置」として別掲し、0 にも他の部位にも寄せない。"
+        },
+        {
+          "name": "placement_id",
+          "type": "string|null",
+          "required": true,
+          "description": "配置。null は UNPLACED のときだけ。"
+        },
+        {
+          "name": "zone_id",
+          "type": "string|null",
+          "required": false,
+          "description": "同じ材料を棟・階などで分けて持つときの区分（語彙は未定義）。"
+        },
+        {
+          "name": "entry_quantity",
+          "type": "number|null",
+          "required": true,
+          "description": "入力された数量。欠損は null（0 と扱わない）。"
+        },
+        {
+          "name": "entry_unit",
+          "type": "string|null",
+          "required": true,
+          "description": "入力単位（unit_def.unit_code）。"
+        },
+        {
+          "name": "quantity_basis",
+          "type": "enum:quantity_basis",
+          "required": true,
+          "description": "設計数量／発注数量／実績数量。"
+        },
+        {
+          "name": "activity",
+          "type": "number|null",
+          "required": true,
+          "description": "宣言単位での活動量。換算できなければ null。"
+        },
+        {
+          "name": "activity_unit",
+          "type": "string",
+          "required": true,
+          "description": "品種の宣言単位。"
+        },
+        {
+          "name": "activity_state",
+          "type": "enum:value_state",
+          "required": true,
+          "description": "活動量の状態。換算やアセンブリの構成量から導いたものは DERIVED。"
+        },
+        {
+          "name": "conversion_ids",
+          "type": "array<string>",
+          "required": true,
+          "description": "使った換算（空配列可）。"
+        },
+        {
+          "name": "conversion_params",
+          "type": "object",
+          "required": true,
+          "description": "換算に使った行ごとのパラメータの値と取得元（空オブジェクト可）。"
+        },
+        {
+          "name": "factor_ref",
+          "type": "string|null",
+          "required": true,
+          "description": "係数の参照（FACTOR.factor_id）。未束縛は null。"
+        },
+        {
+          "name": "factor_stages",
+          "type": "array<string>",
+          "required": true,
+          "description": "採用した係数参照が含む段階（空配列可）。"
+        },
+        {
+          "name": "mass_per_unit_ref",
+          "type": "string|null",
+          "required": true,
+          "description": "質量換算の参照（輸送・廃棄の質量に必要）。"
+        },
+        {
+          "name": "service_life_ref",
+          "type": "string|null",
+          "required": true,
+          "description": "耐用年数の参照。"
+        },
+        {
+          "name": "repair_rate_ref",
+          "type": "string|null",
+          "required": true,
+          "description": "修繕率の参照。"
+        },
+        {
+          "name": "eol_route_ref",
+          "type": "string|null",
+          "required": true,
+          "description": "廃棄経路（経路と配分）の参照。"
+        },
+        {
+          "name": "waste_rate_ref",
+          "type": "string|null",
+          "required": false,
+          "description": "施工端材率の参照。"
+        },
+        {
+          "name": "param_states",
+          "type": "object",
+          "required": true,
+          "description": "param_kind ごとの value_state、license_status、bound_from（enum:bound_from）。"
+        },
+        {
+          "name": "representativeness",
+          "type": "enum:representativeness",
+          "required": true,
+          "description": "EXACT＝材料レコードを直接指定／REFINED＝全仕様値を指定／REPRESENTATIVE＝代表レコード／REPRESENTATIVE_WIDE＝代表で、品種のばらつきが WIDE または UNKNOWN。"
+        },
+        {
+          "name": "defaulted_fields",
+          "type": "array<string>",
+          "required": true,
+          "description": "既定・代表をそのまま採用した項目（空配列可）。黙って補わない。"
+        },
+        {
+          "name": "selection_path",
+          "type": "enum:selection_path",
+          "required": true,
+          "description": "指定の経路。"
+        },
+        {
+          "name": "operation_count",
+          "type": "object",
+          "required": true,
+          "description": "この行を生んだ指定に要した操作の回数。キーは pick、enter、search、accept、override。同じ selection_id の行には同じ値を写し、集計では指定ごとに1回だけ数える（行の件数で掛けない）。"
+        },
+        {
+          "name": "candidate_counts",
+          "type": "array<integer>",
+          "required": true,
+          "description": "各 pick の候補数（選択情報量 Σlog2 の計算用。空配列可）。"
+        },
+        {
+          "name": "assembly_id",
+          "type": "string|null",
+          "required": false,
+          "description": "アセンブリから展開した行の場合、その ID。"
+        },
+        {
+          "name": "assembly_line_no",
+          "type": "integer|null",
+          "required": false,
+          "description": "アセンブリの行番号。"
+        },
+        {
+          "name": "dependent_requirements",
+          "type": "array<object>",
+          "required": true,
+          "description": "未入力の付随要求（空配列可）。各要素は kind、state。"
+        },
+        {
+          "name": "computable",
+          "type": "boolean",
+          "required": true,
+          "description": "必要な参照と活動量がそろい、権限が許すか。"
+        },
+        {
+          "name": "blocking_reasons",
+          "type": "array<enum:stop_code>",
+          "required": true,
+          "description": "計算できない理由（空配列可）。行は消さずに残す。"
+        },
+        {
+          "name": "warnings",
+          "type": "array<enum:warning_code>",
+          "required": true,
+          "description": "警告（空配列可）。"
+        }
+      ],
+      "constraints": [
+        "絞り込みは同じ row_id の canonical_id と参照の置き換えであり、行を増やさない。",
+        "同じ案件・配置・区分で、アセンブリから来た行と個別に指定した行が同じ品種を持つときは、置き換えか追加数量かを明示させる（決まるまで DOUBLE_COUNT_UNRESOLVED）。",
+        "参照が欠けた行を、別の材料レコードへ黙って差し替えない。"
+      ]
+    }
+  },
+  "resolution_orders": {
+    "identity_attribute_value": {
+      "order": [
+        "USER_CHOSEN",
+        "SPEC_TOKEN",
+        "PLACEMENT_REPRESENTATIVE_OVERRIDE",
+        "TYPE_REPRESENTATIVE"
+      ],
+      "note": "後ろの2つは resolution_mode = COARSE_ALLOWED で、かつ代表の決め方が NOT_DECIDED でないときだけ使う。使えなければ VARIANT_UNSPECIFIED で止める。該当する正規材料レコードが無い組合せは VARIANT_NOT_REGISTERED で止め、近いものへ寄せない。"
+    },
+    "conversion_parameter": {
+      "order": [
+        "IDENTITY_ATTRIBUTE",
+        "SPEC_TOKEN",
+        "USER_INPUT",
+        "EXTERNAL_LEDGER"
+      ],
+      "note": "代表レコードや既定値からは取らない。どこにも無ければ CONVERSION_BASIS_MISSING で止める。"
+    },
+    "param_binding": {
+      "order": [
+        "ROW_OVERRIDE",
+        "PRODUCT",
+        "CANONICAL_MATERIAL",
+        "PLACEMENT",
+        "MATERIAL_TYPE",
+        "FUNCTION_NODE"
+      ],
+      "note": "暫定。耐用年数・修繕率が品目で決まるのか部位で決まるのかは実データが無いと決められない。同じ param_kind が複数の水準に束縛されているときは BINDING_LEVEL_CONFLICT の警告を出し、黙って片方を選んだことにしない。"
+    }
+  },
+  "invariants": [
+    {
+      "id": "INV-01",
+      "description": "カタログ側のすべてのレコードに来歴が1件以上ある。"
+    },
+    {
+      "id": "INV-02",
+      "description": "各レコードの license_status は、来歴でつながる全出典のうち最も制限の強い状態と一致する（順序：PERMITTED_PUBLIC ＜ PERMISSION_REQUIRED ＜ UNKNOWN ＜ RESTRICTED）。"
+    },
+    {
+      "id": "INV-03",
+      "description": "区画 PUBLIC_RELEASE の版には PERMITTED_PUBLIC 以外のレコードが無く、参照先の出典はすべて storage_policy = MAY_STORE_IN_PUBLIC_REPO で license_evidence_ref を持つ。"
+    },
+    {
+      "id": "INV-04",
+      "description": "forbidden_value_fields に挙げた量の値を入れる項目が、カタログ側のどのレコードにも存在しない。"
+    },
+    {
+      "id": "INV-05",
+      "description": "ACTIVE の canonical_material の中で identity_key が一意。"
+    },
+    {
+      "id": "INV-06",
+      "description": "ACTIVE の alias の中で（normalized_key、context_node_id）が一意。UNIQUE は解決先1件、AMBIGUOUS は2件以上。"
+    },
+    {
+      "id": "INV-07",
+      "description": "品種ごとに宣言単位は1つで、unit_def にあり is_calculable が true。"
+    },
+    {
+      "id": "INV-08",
+      "description": "conversion_status = USABLE の換算は、根拠が MISSING でなく、basis_license_status = PERMITTED_PUBLIC。"
+    },
+    {
+      "id": "INV-09",
+      "description": "部位軸の階層 n のノードの親は階層 n−1。配置は部位要素だけを指す。品種ごとに、有効な配置の is_primary = true はちょうど1件（配置が0件の品種は除く）。"
+    },
+    {
+      "id": "INV-10",
+      "description": "代表レコードは同じ品種の ACTIVE なレコードである。"
+    },
+    {
+      "id": "INV-11",
+      "description": "merged_into の連鎖に循環が無く、たどる深さは1。別名・配置・束縛・構成要素・類似関係の参照先はすべて ACTIVE。"
+    },
+    {
+      "id": "INV-12",
+      "description": "アセンブリは循環しない。構成要素の component_unit は対象の宣言単位と一致する。"
+    },
+    {
+      "id": "INV-13",
+      "description": "部位グループ別の合計（未配置の別掲分を含む）、素材・品目系統別の合計、全体合計が一致する（展開した行と元の行を二重に数えない）。架空データでも試験できる。"
+    },
+    {
+      "id": "INV-14",
+      "description": "係数の参照が無い行、license_status が PERMITTED_PUBLIC でない束縛を使う行、係数の分母単位または含む段階が合わない行は computable = false になる。"
+    },
+    {
+      "id": "INV-15",
+      "description": "正規化は冪等である。受領レコードと人の判断記録から版を作り直すと同じ manifest_hash になる。"
+    },
+    {
+      "id": "INV-16",
+      "description": "一度発行した ID は再利用されず、レコードは物理削除されない。"
+    }
+  ]
+}
