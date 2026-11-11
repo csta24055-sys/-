@@ -20,6 +20,7 @@
 | 08 | [08_BUILD_PLAN/README.md](08_BUILD_PLAN/README.md) | 何を作るか／作らないか、段階ごとの検証 |
 | 09 | [09_APPROX_STUDY/README.md](09_APPROX_STUDY/README.md) | 計算式の近似化・統合研究（独立モデルの 70 評価単位、架空データでの検証。アプリは作らない）。**2026-11-11 に未完成のまま終了** |
 | 保存 | [research_archive/real_equation_checkpoint/INDEX.md](research_archive/real_equation_checkpoint/INDEX.md) | 第9章の研究の停止記録・成果の分類・引継ぎ（`STOP_STATUS.md`、`INDEX.md`、`HANDOVER.md`） |
+| 10 | [10_TRANSFORM_STUDY/README.md](10_TRANSFORM_STUDY/README.md) | 数学的変換による計算体系の再構成の研究（独立概念モデル、架空データ。研究中。アプリは作らない） |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想
