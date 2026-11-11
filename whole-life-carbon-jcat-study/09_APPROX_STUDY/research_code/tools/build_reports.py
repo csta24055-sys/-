@@ -326,6 +326,7 @@ def decisions_report():
              ["共通化できた単位", "—", f"{unified} 単位 → {len(models)} モデル", pct(1 - len(models) / unified) + " 減"],
              ["必要な入力項目", f"{len(inputs_used)}（既存 124 項目のうち式が使うもの）", f"{len(inputs_used)}", "変化なし"],
              [f"計算時間（規模 L、全出力）", f"{L['reference_all_units']['time_ms']:.0f} ms", f"{full['time_ms']:.0f} ms", pct(full["time_reduction_vs_reference"]) + " 減"],
+             [f"同（基準案との比較を除いた部分どうし）", f"{L['reference_without_SUM-08']['time_ms']:.0f} ms", f"{full['time_ms']:.0f} ms", pct(1 - full["time_ms"] / L["reference_without_SUM-08"]["time_ms"]) + " 減"],
              [f"同（基準案も毎回計算する場合）", f"{L['reference_all_units']['time_ms']:.0f} ms", f"{cold['time_ms']:.0f} ms", pct(cold["time_reduction_vs_reference"]) + " 減"],
              [f"同（合計・段階・指標・検査のみ）", f"{L['reference_all_units']['time_ms']:.0f} ms", f"{tot['time_ms']:.0f} ms", pct(tot["time_reduction_vs_reference"]) + " 減"],
              ["実行した命令数（規模 L、全出力）", f"{L['reference_all_units']['instructions']:,}", f"{full['instructions']:,}", pct(full["instruction_reduction_vs_reference"]) + " 減"],
@@ -333,7 +334,8 @@ def decisions_report():
              ["結果の差", "—", f"相対 {ex['tolerance']:.0e} 以内で一致", "精度の低下なし"],
          ], ["---", "---:", "---:", "---:"]), "",
          "- **入力項目は減っていない。** 厳密な統合は結果を変えないので、必要な入力も変わらない。入力を減らすには少数入力の近似モデル（AP-10・11・15・16）が必要で、それは実データ待ちで保留している。",
-         "- 計算の重さが減った主な理由は、(a) 行を 1 回だけ走査する、(b) 年ごと・事象ごとのループを閉形式にする、(c) 係数を掛ける前に活動量を合算する、(d) 基準案の結果を使い回す、の 4 つ。",
+         "- 計算の重さが減った主な理由は、(a) 行を 1 回だけ走査する、(b) 年ごと・事象ごとのループを閉形式にする、(c) 係数を掛ける前に活動量を合算する、(d) 基準案の結果を使い回す、の 4 つ。"
+         "1 行目の削減率には (d) の効果が含まれる。(d) を除いた効果が 2 行目、(d) を使わない場合が 3 行目である。",
          "- 規模 S・M の値は [04_VERIFICATION](../04_VERIFICATION/README.md) にある。",
          "- これらは独立に実装した基準計算に対する値で、原版ブックの計算時間がどれだけ変わるかを示すものではない。"]
     write("05_DECISIONS/README.md", "\n".join(t))
@@ -365,8 +367,9 @@ def overview_report():
          f"1. **評価単位は {led['unit_count']} 件**（既存の概念式 {led['existing_unit_count']}＋追加で特定した計算構造 {led['additional_unit_count']}）。上位 30％ に絞らず、全件を研究対象にした。",
          f"2. **{sum(m['unit_count'] for m in models)} 単位が {len(models)} つの統合モデルに、結果を変えずにまとまった。** 全体は「活動量×係数×乗数」の 1 つの式と、数個の乗数の関数で書ける（[03_MODELS](03_MODELS/README.md)）。",
          f"3. **統合モデルは基準計算と一致した。** {ex['scenarios']} の架空シナリオ、数値 {leaves:,} 個を突き合わせて不一致なし（許容差は相対 {ex['tolerance']:.0e}）。入力検査の結果も変わらない。",
-         f"4. **計算の重さは大きく減った。** 資材 2 万行の規模で、計算時間は {ld['reference_all_units']['time_ms']:.0f} ms から {full['time_ms']:.0f} ms（{pct(full['time_reduction_vs_reference'])} 減）、"
-         f"合計と段階だけなら {tot['time_ms']:.0f} ms（{pct(tot['time_reduction_vs_reference'])} 減）。ピークメモリは {pct(full['memory_reduction_vs_reference'])} 減（同じ言語・同じ機械での比較）。",
+         f"4. **計算の重さは大きく減った。** 資材 2 万行の規模で、計算時間は {ld['reference_all_units']['time_ms']:.0f} ms から {full['time_ms']:.0f} ms（{pct(full['time_reduction_vs_reference'])} 減）。"
+         f"このうち基準案との比較を除いた部分だけで比べても {ld['reference_without_SUM-08']['time_ms']:.0f} ms から {full['time_ms']:.0f} ms（{pct(1 - full['time_ms'] / ld['reference_without_SUM-08']['time_ms'])} 減）。"
+         f"ピークメモリは {pct(full['memory_reduction_vs_reference'])} 減（同じ言語・同じ機械での比較。内訳は [05_DECISIONS](05_DECISIONS/README.md)）。",
          f"5. **近似は採用しなかった。** 近似候補 {len(cands)} 種を測定し、不採用 {oc['REJECTED']}、実データ待ちの保留 {oc['HOLD']}。更新回数の連続近似のように重大な過小評価を生むものがあり、"
          "それ以外も、厳密な閉形式が同じ手間で使えるため近似の利点がなかった。",
          "6. **入力項目は減っていない。** 入力を減らすには少数入力の近似モデルが必要だが、その精度は実建物のデータがなければ検証できない（保留）。",
