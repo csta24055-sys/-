@@ -34,7 +34,8 @@ def _build(tp: Any, value: Any) -> Any:
     if origin is dict:
         args = typing.get_args(tp)
         item = args[1] if len(args) == 2 else Any
-        return {k: _build(item, v) for k, v in value.items()}
+        key = int if args and args[0] is int else (lambda k: k)   # JSON turns int keys into strings
+        return {key(k): _build(item, v) for k, v in value.items()}
     if isinstance(tp, type) and is_dataclass(tp):
         hints = typing.get_type_hints(tp, vars(model))
         return tp(**{f.name: _build(hints[f.name], value[f.name]) for f in fields(tp) if f.name in value})

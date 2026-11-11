@@ -89,6 +89,9 @@ class Hook:
 
 def run_all(scn, ids: Iterable[str] | None = None, hook: Hook | None = None) -> dict[str, dict]:
     """Compute the requested units (default: all) in dependency order."""
+    from .base import check_period
+
+    check_period(scn)
     res: dict[str, dict] = {}
     for uid in order(ids):
         fn = UNITS[uid].fn

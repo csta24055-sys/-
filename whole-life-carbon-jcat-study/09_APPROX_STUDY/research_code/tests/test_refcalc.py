@@ -45,6 +45,8 @@ class ReferenceTests(unittest.TestCase):
                 self.check_identities(scn, res)
                 for gate in ("SYS-01", "SYS-02", "SYS-03", "SYS-04", "QA-02", "QA-03", "QA-04", "C-05"):
                     self.assertTrue(res[gate]["ok"], (gate, res[gate]))
+                self.assertTrue(res["X-02"]["complete"], res["X-02"]["incomplete_units"])
+                self.assertTrue(res["B6-04"]["descriptors_match_tables"])
 
     def test_benchmark_small(self):
         scn = population.standard_benchmark()[0]
@@ -79,6 +81,51 @@ class ReferenceTests(unittest.TestCase):
         e0 = res["A13-01"]["by_item"][0]
         # repairs skip the renewal years 4 and 7: 10.5 - 2 effective years
         self.assertTrue(close(res["B3-01"]["value"], e0 * row.repair_rate * 8.5))
+
+    def test_nothing_falls_between_b2_and_b6(self):
+        """With B2 outside the boundary the facility-management share stays in B6."""
+        scn = synth.make_scenario(7, "RC", "office", "S", 60.0, n_materials=12, n_equipment=6, n_refrigerants=4,
+                                  included_stages=["A1-A3", "A4", "A5", "B6"])
+        res = registry.run_all(scn)
+        self.assertGreater(res["B2-01"]["value"], 0.0)
+        self.assertTrue(close(res["X-02"]["by_stage"]["B6"], res["B6-03"]["value"]))
+        both = synth.make_scenario(7, "RC", "office", "S", 60.0, n_materials=12, n_equipment=6, n_refrigerants=4,
+                                   included_stages=["B2", "B6"])
+        r2 = registry.run_all(both)
+        self.assertTrue(close(r2["X-02"]["by_stage"]["B6"] + r2["X-02"]["by_stage"]["B2"], r2["B6-03"]["value"]))
+        self.assertTrue(close(r2["SUM-03"]["value"], res["X-02"]["by_stage"]["B6"]))
+
+    def test_decimal_period_boundary(self):
+        scn = synth.make_scenario(21, "S", "retail", "S", 99.9, service_life_choices=[33.3], explicit_event_share=0.0,
+                                  change_list_share=0.0, replacement_cycle=33.3, reconstruction_scenario="REBUILD_IDENTICAL",
+                                  n_materials=6, n_equipment=3, n_refrigerants=2)
+        res = registry.run_all(scn)
+        self.assertEqual(set(res["B4-03"]["by_item"]), {2})
+        self.assertEqual(res["B5-01"]["n_events"], 2)
+        self.assertTrue(all(len(ev) == 2 for ev in res["B4-01"]["events"]))
+
+    def test_wrong_unit_stage_or_range_is_skipped_and_reported(self):
+        scn = synth.make_scenario(9, "RC", "office", "S", 60.0, n_materials=12, n_equipment=6, n_refrigerants=4,
+                                  composite_share=0.0, epd_share=0.0)
+        clean = registry.run_all(scn)
+        self.assertTrue(clean["X-02"]["complete"])
+        row = scn.materials[0]
+        haul = row.end_of_life.haul_factor_id
+        scn.factors[haul].unit = "kgkm"                 # no conversion from tkm
+        scn.factors[row.transport.factor_id or row.transport.delivery_factor_id].stages = ["A1-A3"]
+        scn.materials[1].quantity = -5.0
+        scn.operation.gas.unit = "m3/month"
+        res = registry.run_all(scn)
+        self.assertFalse(res["SYS-02"]["ok"])
+        self.assertTrue(res["SYS-02"]["violations"] and res["SYS-02"]["stage_mismatches"])
+        self.assertIn("operation.gas", res["SYS-02"]["violations"])
+        self.assertGreater(res["C2-01"]["n_skipped"], 0)
+        self.assertGreater(res["A13-05"]["n_skipped"], 0)
+        self.assertEqual(res["B6-02"]["n_skipped"], 1)
+        self.assertFalse(res["X-02"]["complete"])
+        self.assertFalse(res["SUM-03"]["complete"])
+        self.assertIn("C2-01", res["X-02"]["incomplete_units"])
+        self.assertLess(res["C2-01"]["value"], clean["C2-01"]["value"])
 
     def test_defects_are_detected(self):
         scn = synth.make_scenario(3, "RC", "office", "S", dirty=True)

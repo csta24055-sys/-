@@ -2,7 +2,7 @@
 """Axis A measurement: load of each reference unit on the standard synthetic benchmark.
 
 Measures, per evaluation unit and per size class (S/M/L):
-  time_ns            exclusive wall time of the unit function (median of repeats)
+  time_ns            exclusive wall time of the unit function (median of repeats, garbage collector off)
   time_share         time_ns / sum of all unit times
   operations         executed Python bytecode instructions (sys.monitoring)
   peak_memory_bytes  peak traced allocation increase while the unit runs (tracemalloc)
@@ -91,8 +91,12 @@ def measure(scn, repeats: int) -> dict[str, dict]:
     registry.run_all(scn)  # warm-up
     for _ in range(repeats):
         gc.collect()
-        hook = TimeHook()
-        registry.run_all(scn, hook=hook)
+        gc.disable()                      # a collection that happens to start inside one unit is charged to that unit
+        try:
+            hook = TimeHook()
+            registry.run_all(scn, hook=hook)
+        finally:
+            gc.enable()
         for uid in ids:
             runs[uid].append(hook.t[uid])
     med = {uid: statistics.median(v) for uid, v in runs.items()}
@@ -155,6 +159,7 @@ def main() -> int:
         "what_is_measured": "The independent reference calculation on fictional data. Not the original workbooks.",
         "python": sys.version.split()[0],
         "repeats": args.repeats,
+        "garbage_collector": "disabled while timing",
         "size_classes": sizes,
         "benchmark_rows": {size: {"material_rows": len(bench[size].materials),
                                   "equipment_rows": len(bench[size].equipment),

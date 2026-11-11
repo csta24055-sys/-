@@ -136,7 +136,11 @@ def _grid_floor(s: Scenario) -> None:
 
 def _waste_extremes(s: Scenario) -> None:
     for i, row in enumerate(s.materials):
+        old = row.waste_rate
         row.waste_rate = (0.0, 0.5, 0.9)[i % 3]
+        if row.quantity_basis != "DESIGN" and old is not None and row.end_of_life.mass_kg is not None:
+            # an ordered quantity includes the offcuts, so the installed (and end-of-life) mass shrinks with the rate
+            row.end_of_life.mass_kg *= (1.0 - row.waste_rate) / (1.0 - old)
 
 
 def _case(name: str, mutate: Callable[[Scenario], None] | None = None, period: float = 60.0,

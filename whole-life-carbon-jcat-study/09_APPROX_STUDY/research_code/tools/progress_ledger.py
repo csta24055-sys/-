@@ -65,9 +65,13 @@ def empty_step() -> dict:
 
 
 def step_conclusion(candidates: list) -> str:
-    """One conclusion per step from its candidate records."""
+    """One conclusion per step from its candidate records.
+
+    A candidate on hold keeps the step open: a step is not closed as rejected while
+    another of its candidates still waits for data.
+    """
     outcomes = {c["outcome"] for c in candidates}
-    for value in ("SUCCESS", "REJECTED", "HOLD", "NOT_APPLICABLE"):
+    for value in ("SUCCESS", "HOLD", "REJECTED", "NOT_APPLICABLE"):
         if value in outcomes:
             return value
     return "NOT_DONE"
@@ -78,9 +82,12 @@ def roll_up(unit: dict) -> None:
     values = set(concl.values())
     unit["steps_on_hold"] = [m for m in STEPS if concl[m] == "HOLD"]
     has_success = "SUCCESS" in values
+    # a unit is verified only when at least one of its records rests on a measurement or a checked derivation
+    measured = any(c.get("verification") != "NOT_VERIFIED" for m in STEPS for c in unit["steps"][m]["candidates"])
+    unit["has_verified_record"] = measured
     if unit.get("unit_hold"):
         status = "HOLD_DATA_OR_RIGHTS"
-    elif values == {"NOT_DONE"}:
+    elif values == {"NOT_DONE"} or not measured:
         status = "NOT_VERIFIED"
     elif "NOT_DONE" in values:
         status = "IN_PROGRESS"
@@ -95,6 +102,13 @@ def roll_up(unit: dict) -> None:
         status = "DONE_APPROX_REJECTED"
     unit["status"] = status
     unit["status_label"] = STATUS_LABELS[status]
+    # the six states say nothing about the approximate steps of a unit whose exact part succeeded: say it beside the state
+    if status.startswith("DONE") and unit["steps_on_hold"]:
+        unit["status_note"] = "厳密な部分は完了。近似の段階（" + "・".join(unit["steps_on_hold"]) + "）は実データ待ちで保留"
+    elif status in ("DONE_SIMPLIFIED", "DONE_UNIFIED"):
+        unit["status_note"] = "厳密な部分は完了。近似は不採用または候補なし"
+    else:
+        unit["status_note"] = ""
 
 
 def cmd_init() -> int:
@@ -110,9 +124,9 @@ def cmd_init() -> int:
             "unit_hold_reason": "",
             "unified_models": [],
         }
-        if not u.get("computable_in_reference", True):
-            row["unit_hold"] = True
-            row["unit_hold_reason"] = u.get("not_computable_reason") or ""
+        # recomputed on every init: a unit that has since got a reference calculation is no longer on hold
+        row["unit_hold"] = not u.get("computable_in_reference", True)
+        row["unit_hold_reason"] = (u.get("not_computable_reason") or "") if row["unit_hold"] else ""
         row.update({
             "name": u["name"],
             "stage": u["stage"],
@@ -209,6 +223,8 @@ def cmd_check() -> int:
             errors.append(f"{uid}: unknown conclusion")
         if u["status"].startswith("DONE") and "NOT_DONE" in concl:
             errors.append(f"{uid}: marked done while a step is NOT_DONE")
+        if u["status"].startswith("DONE") and not any(c["verification"] != "NOT_VERIFIED" for m in STEPS for c in u["steps"][m]["candidates"]):
+            errors.append(f"{uid}: marked done without any measured or derived record")
         for m in STEPS:
             step = u["steps"][m]
             if step["conclusion"] != "NOT_DONE" and not step["candidates"]:
@@ -234,7 +250,7 @@ def cmd_report() -> int:
     ledger = load(LEDGER)
     rows = ledger["units"]
     counts = Counter(u["status"] for u in rows)
-    mark = {"SUCCESS": "成功", "REJECTED": "不採用", "NOT_APPLICABLE": "対象外", "HOLD": "保留", "NOT_DONE": "未実施"}
+    mark = {"SUCCESS": "成功", "REJECTED": "不採用", "NOT_APPLICABLE": "候補なし", "HOLD": "保留", "NOT_DONE": "未実施"}
     out = ["# 進捗台帳（全評価単位）", "",
            "`progress_ledger.json` から自動生成。手で編集しない。状態の定義は [研究プロトコル P10](../00_POLICY/EVALUATION_PROTOCOL.md) を参照。", "",
            "「検証完了」は、数学的導出と架空データによる確認が終わったことを指す。実建物データでの実用精度を保証するものではない。", "",
@@ -244,7 +260,16 @@ def cmd_report() -> int:
     out.append(f"| **合計** | **{len(rows)}** |")
     held = [u for u in rows if u["steps_on_hold"] and u["status"].startswith("DONE")]
     unit_holds = [u for u in rows if u.get("unit_hold")]
-    out += ["", f"検証完了のうち、一部の段階が保留中の単位：{len(held)} 件（下表の「保留中の段階」列）。", "",
+    out += ["", f"検証完了のうち、近似の段階が保留中の単位：{len(held)} 件（下表の「保留中の段階」列）。"
+            "「検証完了・統合成功」「検証完了・簡略化成功」は厳密な部分（M1・M2）についての状態で、近似の段階（M3〜M6）の結論は段階ごとの列を見ること。", "",
+            "## 段階別の結論の件数（単位の数）", "",
+            "| 段階 | 成功 | 不採用 | 保留 | 候補なし | 未実施 |", "|---|---:|---:|---:|---:|---:|"]
+    for m, label in STEPS.items():
+        c = Counter(u["steps"][m]["conclusion"] for u in rows)
+        out.append(f"| {m} {label} | {c.get('SUCCESS', 0)} | {c.get('REJECTED', 0)} | {c.get('HOLD', 0)} | {c.get('NOT_APPLICABLE', 0)} | {c.get('NOT_DONE', 0)} |")
+    out += ["", "「成功」は基準計算と同じ結果になることを確かめたもの（M1・M2 だけにある）。近似の段階（M3〜M6）で採用した候補はない。"
+            "「不採用」は測定のうえで採らなかったもの、「保留」は架空データでは判断できず実データが要るもの、"
+            "「候補なし」は測定をせずに理由だけで見送ったもの（理由は `progress_ledger.json` と `03_MODELS/records/units.json`）。", "",
             "## 単位別の状態", "",
             "| 着手順 | 群 | ID | 名称 | 状態 | M1 | M2 | M3 | M4 | M5 | M6 | 統合先モデル | 保留中の段階 |",
             "|---:|---:|---|---|---|---|---|---|---|---|---|---|---|"]

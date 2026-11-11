@@ -31,7 +31,7 @@ from .model import (
     EndOfLife, EolRoute, EpdReference, EquipmentRow, FactorRecord, GridFactorScenario, GridStep,
     MaterialEndOfLife, MaterialRow, Operation, Project, Provenance, RefrigerantDevice, Scenario,
     ScenarioMeta, SiteFuel, SiteWaste, SummaryQuantities, TransportLeg, UnitConversion, WasteHaul,
-    WaterWaste, base_unit_conversions, conversion_factor, used_factor_ids,
+    WaterWaste, base_unit_conversions, conversion_factor, used_factor_ids, CostItem,
 )
 
 GENERATOR_VERSION = "1.0"
@@ -152,7 +152,9 @@ FACTOR_LOG10_RANGE: dict[str, tuple[float, float]] = {
     "FUEL_L": (0.2, 0.6), "FUEL_M3": (0.1, 0.5), "FUEL_MJ": (-1.5, -1.0),
     "SITE_WASTE": (-2.0, -0.3), "WATER": (-1.0, 0.0), "SEWAGE": (-0.8, 0.2), "MSW": (-1.5, 0.0),
     "DEMOLITION_M2": (0.3, 1.5), "DEMOLITION_H": (0.8, 2.0), "UPTAKE": (0.0, 1.5),
+    "COST": (-2.5, -1.0),
 }
+COST_CURRENCY = "SYN"                     # fictional currency unit
 # FICTIONAL delivery / installation factors as a share of the class factor.
 DELIVERY_SHARE_RANGE = (0.01, 0.08)
 INSTALLATION_SHARE_RANGE = (0.01, 0.06)
@@ -830,13 +832,13 @@ def _make_materials(
         )
         eol_factors = cat.eol[name]
         end_of_life = MaterialEndOfLife(
-            mass_kg=float(f"{mass_kg * rng.uniform(0.9, 1.0):.6g}"),
+            mass_kg=mass_kg * rng.uniform(0.9, 1.0),   # scaled to the installed mass below
             routes=[EolRoute(route, fraction, eol_factors[route])
                     for route, fraction in zip(EOL_ROUTES, _route_fractions(rng))],
             haul_distance_km=round(rng.uniform(5.0, 120.0), 1),
             haul_factor_id=rng.choice(cat.haul),
         )
-        rows.append(MaterialRow(
+        row = MaterialRow(
             material_id=material_id,
             construction_division=division,
             material_class=name,
@@ -858,7 +860,12 @@ def _make_materials(
             installation_factor_id=cat.installation[name] if rng.random() < 0.50 else None,
             conversions=row_conversions,
             provenance_id=rng.choice(("PRV-DESIGN", "PRV-MEASURED", "PRV-SUPPLIER")),
-        ))
+        )
+        # mass leaving at end of life cannot exceed the installed mass: an ORDERED / AS_BUILT
+        # quantity includes offcuts, which leave the site during construction
+        installed_share = 1.0 if row.quantity_basis == "DESIGN" else 1.0 - row.waste_rate
+        row.end_of_life.mass_kg = float(f"{row.end_of_life.mass_kg * installed_share:.6g}")
+        rows.append(row)
         if name == "REBAR":
             totals["reinforcement_kg"] += canonical_quantity
         elif name == "STRUCTURAL_STEEL":
@@ -1117,6 +1124,30 @@ def _make_end_of_life(ctx: _Ctx, cat: _Catalogue, project: Project) -> EndOfLife
 # Defect injection (dirty scenarios)
 # --------------------------------------------------------------------------
 
+def _make_costs(ctx: _Ctx, cat: _Catalogue) -> tuple[list[CostItem], dict[int, float]]:
+    """FICTIONAL cost-only scopes and a FICTIONAL price index (NEW inputs of the study)."""
+    rng = ctx.rng("costs")
+    index: dict[int, float] = {}
+    level = 100.0
+    for year in range(ctx.start_year - 12, ctx.start_year + 2):
+        index[year] = round(level, 3)
+        level *= 1.0 + rng.uniform(-0.01, 0.04)
+    factor_ids = [cat.add(rng, f"F-COST-{k + 1:02d}", cat.draw(rng, "COST"), COST_CURRENCY, ["A1-A3"], "COST_BASED")
+                  for k in range(3)]
+    items = []
+    for k in range(rng.randint(3, 8)):
+        items.append(CostItem(
+            item_id=f"K{k + 1:03d}",
+            description=f"SYNTHETIC cost-only scope {k + 1}",
+            amount=round(10.0 ** rng.uniform(3.0, 6.0), 2),
+            currency=COST_CURRENCY,
+            price_year=ctx.start_year - rng.randint(0, 3),
+            factor_id=rng.choice(factor_ids),
+            factor_base_year=ctx.start_year - rng.randint(4, 12),
+        ))
+    return items, index
+
+
 def _defect(kind: str, path: str, **detail: Any) -> Defect:
     return Defect(kind, path, dict(detail), list(DEFECT_RELATED_CHECKS[kind]))
 
@@ -1347,6 +1378,7 @@ def make_scenario(
     catalogue = _build_catalogue(ctx, gwp)
     project = _make_project(ctx)
     materials, totals, epd_inapplicable = _make_materials(ctx, catalogue, project, conversions)
+    cost_items, price_index = _make_costs(ctx, catalogue)
     scenario_id = opts["scenario_id"] or (
         f"SYN-{structure}-{use}-{size_class}-T{period:g}-seed{seed}" + ("-DIRTY" if dirty else ""))
     meta = ScenarioMeta(
@@ -1381,6 +1413,8 @@ def make_scenario(
         operation=_make_operation(ctx, project),
         water_waste=_make_water_waste(ctx, project),
         end_of_life=_make_end_of_life(ctx, catalogue, project),
+        cost_items=cost_items,
+        price_index=price_index,
     )
     if dirty:
         meta.injected_defects = _inject_defects(scenario, ctx)

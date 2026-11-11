@@ -1,26 +1,25 @@
-"""Unified model: one line table, a few multiplier functions, one indicator step.
+"""Unified model of the independent conceptual calculation.
 
-The whole calculation is written as
+Two steps:
 
-    E[stage] = sum over lines  activity * factor value * multiplier(stage; T, row parameters)
+``aggregate(scn)``   one pass over the input rows, independent of the study period T.
+                     Every emission is written as a line (table, factor key, activity) and
+                     the activities are summed per table and factor key. Lines that recur
+                     with a period are summed per distinct period.
+``finish(agg, T)``   applies the multipliers that depend on T (renewal counts, repair
+                     years, charge cycles, weighted year sums) and reads every result
+                     from the tables: a value is sum over factor keys of activity * factor.
 
-with the lines accumulated per (stage, factor id) BEFORE the factor is applied, and the
-multipliers given by closed forms (``closed_forms``):
+    E[stage] = sum over lines  activity * factor * multiplier(stage; T, row parameters)
 
-    once          1                       A1-A3, A4, A5, C1-C4
-    renewals      N(T, cycle)             B4          (count function)
-    repairs       rate * (T - skipped)    B3          (count function + year weights)
-    rebuild       N(T, C) * scope         B5          (count function)
-    annual        weighted year sum       B6, B7, B2  (arithmetic series / cumulative factor)
-    decay         per charge cycle        B1          (geometric closed form)
+``evaluate(scn)`` = ``finish(aggregate(scn), T)``. Because the first step does not depend
+on T, another study period only needs ``finish`` again (``sweep``).
 
-Everything is computed in a single pass over the input rows. Gas breakdown, the CO2-only
-result, the stage vector and all indicators are read from the accumulated table.
-``evaluate(scn)`` returns results in the same shape as the reference calculation so that
-they can be compared leaf by leaf. ``detail=False`` leaves out per-row lists and yearly
-series (the totals, stage values, indicators and checks are unchanged).
+Results have the same shape as the reference calculation so that they can be compared
+leaf by leaf. With ``detail=False`` the per-row lists and yearly series are left out and
+no factor is multiplied row by row.
 
-Research tooling only: no UI, no persistence, no product engine.
+This module does not call the reference calculation. Research tooling only.
 """
 from __future__ import annotations
 
@@ -32,42 +31,102 @@ from . import closed_forms as cf
 
 ALLOWED = model.ALLOWED_LICENCE_STATES
 STAGES = model.LIFECYCLE_STAGES
-GRID = "GRID"
-REFRIGERANT = "REFRIGERANT"
+MEMO = model.STAGE_MEMO
+GRID = "GRID"                # purchased electricity: the activity is already an emission
+REFRIGERANT = "REFRIGERANT"  # refrigerant releases: likewise
 INITIAL = ("A1-A3", "A4", "A5", "C1", "C2", "C3", "C4")
 SIMPLE_CLASSES = ("REBAR", "STRUCTURAL_STEEL", "CONCRETE", "TIMBER", "ENVELOPE", "INTERIOR")
 M_FIELDS = ("quantity", "waste_rate", "reuse_rate", "material_life", "repair_rate", "refresh_cycle")
 E_FIELDS = ("quantity", "service_life", "repair_rate", "end_of_life_mass_kg")
 R_FIELDS = ("charge_mass_kg", "gwp", "annual_leak_rate", "replacement_loss_rate", "end_of_life_recovery_rate")
+# which unit tables make up each stage (B-stage tables are filled in finish)
+STAGE_TABLES = {
+    "A1-A3": ("A13-01", "A13-03", "A13-04", "X-01"), "A4": ("A4-01", "A4-02"), "A5": ("A5-01", "A5-02", "A5-03"),
+    "B1": ("B1",), "B2": ("B2-01",), "B3": ("B3-01",), "B4": ("B4-02",), "B5": ("B5-01",), "B6": ("B6",),
+    "B7": ("B7-01", "B7-02", "B7-03"), "C1": ("C1-01",), "C2": ("C2-01",), "C3": ("C3-01", "X-14"), "C4": ("C4-01",),
+}
+STAGE_UNITS = {
+    "A1-A3": ("A13-01", "A13-03", "A13-04", "X-01"), "A4": ("A4-01", "A4-02"), "A5": ("A5-01", "A5-02", "A5-03"),
+    "B1": ("B1-02", "B1-03", "B1-04"), "B2": ("B2-01", "B6-01"), "B3": ("B3-01",), "B4": ("B4-02",), "B5": ("B5-01",),
+    "B6": ("B6-01", "B6-02"), "B7": ("B7-01", "B7-02", "B7-03"), "C1": ("C1-01",), "C2": ("C2-01",),
+    "C3": ("C3-01", "X-14"), "C4": ("C4-01",),
+}
 
-_BASELINE_TOTALS: dict[str, float] = {}
+
+def _nonneg(x) -> bool:
+    return x is not None and x >= 0.0 and not math.isinf(x)
 
 
-def clear_baseline_cache() -> None:
-    _BASELINE_TOTALS.clear()
+def _ratio(x) -> bool:
+    return x is not None and 0.0 <= x <= 1.0
 
 
-def evaluate(scn, detail: bool = True) -> dict:
-    T = scn.boundary.study_period
-    Y = cf.n_years(T)
-    wl = cf.last_weight(T) if Y else 0.0
+def _within(residual, tol, scale) -> bool:
+    """The one residual test shared by the area checks and the stage reconciliation."""
+    return abs(residual) <= tol * scale
+
+
+def _annual_unit(unit):
+    head, sep, tail = unit.partition("/")
+    return head if sep and tail == "year" else None
+
+
+def _same(values, table) -> bool:
+    return all(v == t or abs(v - t) <= 1e-12 * max(abs(v), abs(t)) for v, t in zip(values, table))
+
+
+class _Group:
+    """Rows renewed with the same period: their lines, summed per factor key."""
+
+    __slots__ = ("u", "r", "resource", "waste", "incomplete", "equipment_rows")
+
+    def __init__(self):
+        self.u = {}            # one renewal: factor key -> activity
+        self.r = {}            # repairs per year: factor key -> activity * repair rate
+        self.resource = 0.0    # kg ordered per generation
+        self.waste = 0.0       # kg of waste per generation
+        self.incomplete = 0    # rows whose renewal lacks a component
+        self.equipment_rows = 0
+
+
+class Aggregate:
+    """Everything that does not depend on the study period."""
+
+    def __init__(self, scn, detail):
+        self.scn = scn
+        self.detail = detail
+        self.tables = {}       # table name -> {factor key: activity}
+        self.groups = {}       # period -> _Group
+        self.explicit = []     # equipment with an explicit event list
+        self.devices = []      # valid refrigerant devices
+        self.annual = []       # annual quantities with a factor
+        self.fval = {GRID: 1.0, REFRIGERANT: 1.0}   # factor key -> value (recipes get a derived value)
+        self.recipes = {}      # composition content -> recipe record
+        self.stats = {"factor_resolutions": 0, "unit_conversions_resolved": 0, "recipes_computed": 0,
+                      "rows_scanned": 0, "row_factor_products": 0, "year_loop_iterations": 0,
+                      "event_lists_built": 0, "table_factor_products": 0, "consistency_scan_values": 0}
+        self.out = {}          # unit id -> results that are already final
+        self.rows = {}         # per-row lists (detail only)
+
+
+def _add(table, key, activity):
+    table[key] = table.get(key, 0.0) + activity
+
+
+def aggregate(scn, detail: bool = True) -> Aggregate:
+    """One pass over the input rows. Independent of the study period."""
+    A = Aggregate(scn, detail)
     factors = scn.factors
-    inc = set(scn.boundary.included_lifecycle_stages)
+    stats = A.stats
+    T = {name: {} for name in ("A13-01", "A13-03", "A13-04", "X-01", "A4-01", "A4-02", "X-12", "A5-01", "A5-02", "A5-03",
+                               "C1-01", "C2-01", "C3-01", "C4-01", "X-14", "STO-02", "X-16")}
+    for k in SIMPLE_CLASSES:
+        T["CLASS:" + k] = {}
+    A.tables = T
+    fval = A.fval
 
-    # ---- memoised lookups (each distinct factor / unit pair is resolved once) ----
-    usable: dict = {}
-
-    def fac(fid):
-        try:
-            return usable[fid]
-        except KeyError:
-            rec = factors.get(fid) if fid is not None else None
-            if rec is not None and rec.licence_status not in ALLOWED:
-                rec = None
-            usable[fid] = rec
-            return rec
-
-    table_conv: dict = {}
+    # ---- one resolution per distinct (factor, stage, unit); one conversion per distinct unit pair ----
+    table_conv = {}
 
     def conv(u, v, extra=()):
         if u == v:
@@ -79,26 +138,73 @@ def evaluate(scn, detail: bool = True) -> dict:
         try:
             return table_conv[key]
         except KeyError:
-            r = model.conversion_factor(scn.unit_conversions, u, v)
-            table_conv[key] = r
+            stats["unit_conversions_resolved"] += 1
+            r = table_conv[key] = model.conversion_factor(scn.unit_conversions, u, v)
             return r
 
-    # ---- the line table: activity accumulated per (stage, factor id) ----
-    acc = {s: {} for s in STAGES}
+    unit_viol, stage_viol = set(), set()
+    n_uses = 0
+    memo = {}
 
-    def add(stage, fid, act):
-        d = acc[stage]
-        d[fid] = d.get(fid, 0.0) + act
+    def use(fid, stage, unit, extra, path):
+        """(factor key, conversion) when the factor may be used for this activity, else None."""
+        nonlocal n_uses
+        n_uses += 1
+        if unit is None:
+            unit_viol.add(path)
+            return None
+        if fid is None:
+            return None
+        if not extra:
+            key = (fid, stage, unit)
+            hit = memo.get(key)
+            if hit is None:
+                hit = memo[key] = _resolve(fid, stage, unit, ())
+            if hit[1]:
+                unit_viol.add(path)
+            return hit[0]
+        hit = _resolve(fid, stage, unit, extra)
+        if hit[1]:
+            unit_viol.add(path)
+        return hit[0]
 
-    refs: dict = {}            # factor id -> number of references (for the licence gate)
-    none_refs: list = []       # references without a factor id
-    recipes: dict = {}         # composition content -> [value or None, kg in A1-A3 use]
-    recipe_refs: dict = {}
+    def _resolve(fid, stage, unit, extra):
+        stats["factor_resolutions"] += 1
+        rec = factors.get(fid)
+        if rec is None:
+            return (None, False)
+        c = conv(unit, rec.unit, extra)
+        bad_stage = rec.stages != [stage]
+        if bad_stage:
+            stage_viol.add(f"factors{{{fid}}}.stages")
+        if c is None or bad_stage or rec.licence_status not in ALLOWED:
+            return (None, c is None)
+        fval[fid] = rec.value
+        return ((fid, c), False)
 
-    # ---- input states (SYS-01) ----
+    def unit_only(path, a, b, extra=()):
+        nonlocal n_uses
+        n_uses += 1
+        c = conv(a, b, extra) if a is not None and b is not None else None
+        if c is None:
+            unit_viol.add(path)
+        return c
+
+    # ---- licence gate: count references per factor id ----
+    refs = {}
+    bad_refs = {}
+
+    def ref(fid, path):
+        if fid is None:
+            key = f"{path} (no factor)"
+            bad_refs[key] = bad_refs.get(key, 0) + 1
+        else:
+            refs[fid] = refs.get(fid, 0) + 1
+
+    # ---- input states ----
     prov = scn.provenance
     counts = {s: 0 for s in model.VALUE_STATES}
-    missing: list = []
+    missing = []
     MISSING, DERIVED, ZERO = model.STATE_MISSING, model.STATE_DERIVED, model.STATE_EXPLICIT_ZERO
 
     def see(owner, name, value, path):
@@ -116,53 +222,35 @@ def evaluate(scn, detail: bool = True) -> dict:
 
     see(scn.project, "gross_floor_area", scn.project.gross_floor_area, "project.gross_floor_area")
 
-    unit_viol: list = []
-    n_unit_checks = 0
-
-    # ---- cycle groups for renewals (X-08 and the yearly series) ----
-    cyc_u: dict = {}           # cycle -> sum of per-renewal emission u
-    cyc_r: dict = {}           # cycle -> sum of e0 * repair rate (rows whose repairs skip renewal years)
-    cyc_n: dict = {}
-    repair_rate_sum = 0.0      # sum of e0 * repair rate over all rows with repairs
-    explicit_b4 = 0.0
-    b4_year = [0.0] * (Y + 1)
-    b3_year_adjust = [0.0] * (Y + 1)   # per-year repair removed for explicit event lists
-
-    val = dict.fromkeys(("A13-01", "A13-03", "A13-04", "X-01", "A4-01", "A4-02", "X-12", "C2-01", "C3-01", "C4-01",
-                         "X-14", "B4-02", "B3-01", "B3-02", "X-03"), 0.0)
-    skip = dict.fromkeys(("A13-05", "A13-01", "A13-03", "X-01", "A4-01", "A4-02", "X-12", "C2-01", "C3-01", "C4-01",
-                          "X-14"), 0)
-    n_invalid = n_unresolved = 0
-    x10_resource = x10_waste = 0.0
-    x10_excluded = 0
+    skip = dict.fromkeys(("A13-05", "A13-01", "A13-03", "A13-04", "X-01", "A4-01", "A4-02", "X-12", "C2-01", "C3-01",
+                          "C4-01", "X-14", "B3", "X-10"), 0)
+    routes_skipped = {"C3": 0, "C4": 0}
+    n_invalid = n_unresolved = n_declined = 0
     c05_viol, c05_under = [], []
     c05_unchecked = 0
     x09_mass, x09_emis = {}, {}
-    x09_total = 0.0
-    class_sum = dict.fromkeys(SIMPLE_CLASSES, 0.0)
-
-    if detail:
-        L = {k: [] for k in ("q_ord", "q_inst", "net", "disp", "a1302", "kind", "factor", "conv", "a1301", "a1303",
-                             "a1304", "a401", "a402", "x12", "c2", "c3", "c4", "n", "b4m", "x01", "x14", "b4e", "events")}
-
+    groups = A.groups
     assessment = scn.project.assessment_date
-    weights_full = None
+    if detail:
+        L = A.rows
+        for k in ("q_ord", "q_inst", "net", "disp", "a1302", "kind", "factor", "conv", "a1301", "a1303", "a1304", "a401",
+                  "a402", "x12", "c2", "c3", "c4", "mcycle", "mu", "x01", "x14", "eu", "ecycle", "eexp"):
+            L[k] = []
 
-    # =============================== materials: one pass ===============================
+    # =============================== materials ===============================
     for i, row in enumerate(scn.materials):
+        stats["rows_scanned"] += 1
         base = f"materials[{i}]"
         tr, eol = row.transport, row.end_of_life
         qu, rconv = row.quantity_unit, row.conversions
-        # input states
         for name in M_FIELDS:
             see(row, name, getattr(row, name), f"{base}.{name}")
         see(row, "transport.mass_t", tr.mass_t, f"{base}.transport.mass_t")
         see(row, "transport.distance_km", tr.distance_km, f"{base}.transport.distance_km")
         see(row, "end_of_life.mass_kg", eol.mass_kg, f"{base}.end_of_life.mass_kg")
 
-        # quantities (A13-05, X-13)
         q, w = row.quantity, row.waste_rate
-        if q is None or w is None or not 0.0 <= w < 1.0:
+        if not _nonneg(q) or w is None or not 0.0 <= w < 1.0:
             q_ord = q_inst = None
             skip["A13-05"] += 1
         elif row.quantity_basis == "DESIGN":
@@ -172,687 +260,846 @@ def evaluate(scn, detail: bool = True) -> dict:
             q_ord = q
             q_inst = q * (1.0 - w)
 
-        # factor resolution (A13-02, X-15) with unit checks (SYS-02) and reference counts (SYS-03)
-        unit_bad = False
+        # ---- which factor (EPD, composite, generic) ----
         comp = row.composition
         recipe = None
+        hit = None
+        c_kg = None
         if comp is not None:
             key = tuple([(c.factor_id, c.mass_fraction) for c in comp])
-            recipe = recipes.get(key)
+            recipe = A.recipes.get(key)
             if recipe is None:
-                total_fraction = value = 0.0
-                ok = True
-                for fid, fraction in key:
-                    rec = fac(fid)
-                    if rec is None or rec.unit != "kg" or rec.stages != ["A1-A3"]:
-                        ok = False
-                        break
-                    total_fraction += fraction
-                    value += fraction * rec.value
-                recipe = recipes[key] = [value if ok and abs(total_fraction - 1.0) <= 1e-6 else None, key]
-            recipe_refs[key] = recipe_refs.get(key, 0) + 1
-            if recipe[0] is None:
+                recipe = A.recipes[key] = _make_recipe(key, scn, stats, stage_viol, fval)
+            c_kg = unit_only(f"{base}.quantity_unit", qu, "kg", rconv)
+            n_uses += len(key)
+            if recipe["unit_bad"]:
+                unit_viol.add(f"{base}.composition")
+            recipe["rows"] += 1
+            if recipe["none_at"]:
+                for j in recipe["none_at"]:
+                    ref(None, f"{base}.composition[{j}].factor_id")
+            if recipe["value"] is None:
                 n_invalid += 1
-            c_kg = conv(qu, "kg", rconv)
-            n_unit_checks += 1
-            unit_bad = c_kg is None
         else:
-            fid = row.factor_id
-            if fid is None:
-                none_refs.append(f"{base}.factor_id (no factor)")
-            else:
-                refs[fid] = refs.get(fid, 0) + 1
-            n_unit_checks += 1
-            raw = factors.get(fid) if fid is not None else None
-            c_gen = conv(qu, raw.unit, rconv) if raw is not None else None
-            if raw is not None and c_gen is None:
-                unit_bad = True
-
-        kind = f = c = line_fid = None
+            ref(row.factor_id, f"{base}.factor_id")
+            hit = use(row.factor_id, "A1-A3", qu, rconv, f"{base}.quantity_unit")
+        kind = f = c = fkey = None
         epd = row.epd
         if epd is not None:
-            refs[epd.factor_id] = refs.get(epd.factor_id, 0) + 1
-            rec = fac(epd.factor_id)
-            if rec is not None and rec.stages == ["A1-A3"] and rec.valid_until is not None and not rec.valid_until < assessment:
+            ref(epd.factor_id, f"{base}.epd.factor_id")
+            rec = factors.get(epd.factor_id) if epd.factor_id is not None else None
+            if (rec is not None and epd.declared_stages == rec.stages and epd.declared_unit == rec.unit
+                    and epd.valid_until == rec.valid_until and rec.valid_until is not None
+                    and not rec.valid_until < assessment and rec.stages == ["A1-A3"] and rec.licence_status in ALLOWED):
                 ce = conv(qu, rec.unit, rconv)
                 if ce is not None:
-                    kind, f, c, line_fid = "EPD", rec.value, ce, epd.factor_id
+                    kind, f, c, fkey = "EPD", rec.value, ce, epd.factor_id
+                    fval[fkey] = rec.value
+            if kind is None:
+                n_declined += 1
         if kind is None:
             if comp is not None:
-                if recipe[0] is not None and c_kg is not None:
-                    kind, f, c, line_fid = "COMPOSITE", recipe[0], c_kg, recipe[1]
-            else:
-                rec = fac(row.factor_id)
-                if rec is not None and rec.stages == ["A1-A3"] and c_gen is not None:
-                    kind, f, c, line_fid = "GENERIC", rec.value, c_gen, row.factor_id
+                if recipe["value"] is not None and c_kg is not None:
+                    kind, f, c, fkey = "COMPOSITE", recipe["value"], c_kg, key
+            elif hit is not None:
+                kind, fkey, c = "GENERIC", hit[0], hit[1]
+                f = fval[fkey]
         if kind is None:
             n_unresolved += 1
 
-        # A1-A3
-        e_mfg = act_mfg = 0.0
-        has_mfg = False
+        incomplete = False
+        act_mfg = None
         if kind is None:
             skip["A13-01"] += 1
+            incomplete = True
         elif q_ord is None:
             skip["A13-03" if kind == "EPD" else "A13-01"] += 1
+            incomplete = True
         else:
             act_mfg = q_ord * c
-            e_mfg = act_mfg * f
-            has_mfg = True
-            add("A1-A3", line_fid, act_mfg)
-            val["A13-03" if kind == "EPD" else "A13-01"] += e_mfg
+            _add(T["A13-03" if kind == "EPD" else "A13-01"], fkey, act_mfg)
             if kind == "COMPOSITE":
-                rk = recipe
-                rk.append(act_mfg) if len(rk) == 2 else rk.__setitem__(2, rk[2] + act_mfg)
+                recipe["kg"] += act_mfg
+                recipe["used"] = True
         r_unq = row.unquantified_cost_ratio
-        e_unq = 0.0
-        if r_unq is not None and 0.0 < r_unq < 1.0:
-            g = r_unq / (1.0 - r_unq)
-            e_unq = e_mfg * g
-            val["A13-04"] += e_unq
-            if has_mfg:
-                add("A1-A3", line_fid, act_mfg * g)
-
-        # A4 (mass-distance or per-quantity delivery) and the load-factor variant
-        e_del = act_del = 0.0
-        del_fid = None
-        dfid = tr.delivery_factor_id
-        e_x12 = 0.0
-        if dfid is None:
-            tfid = tr.factor_id
-            if tfid is None:
-                none_refs.append(f"{base}.transport.factor_id (no factor)")
+        g = None
+        if r_unq is not None and r_unq != 0.0:
+            if 0.0 < r_unq < 1.0:
+                g = r_unq / (1.0 - r_unq)
+                if act_mfg is not None:
+                    _add(T["A13-04"], fkey, act_mfg * g)
             else:
-                refs[tfid] = refs.get(tfid, 0) + 1
-            rec = fac(tfid)
-            if rec is None or tr.mass_t is None or tr.distance_km is None:
+                skip["A13-04"] += 1
+
+        # ---- delivery: mass-distance, or per quantity ----
+        dline = None
+        x12 = None
+        dfid = tr.delivery_factor_id
+        if dfid is None:
+            ref(tr.factor_id, f"{base}.transport.factor_id")
+            hit = use(tr.factor_id, "A4", "tkm", (), f"{base}.transport")
+            if hit is None or not _nonneg(tr.mass_t) or not _nonneg(tr.distance_km):
                 skip["A4-01"] += 1
                 skip["X-12"] += 1
+                incomplete = True
             else:
-                act_del = tr.mass_t * tr.distance_km
-                e_del = act_del * rec.value
-                del_fid = tfid
-                val["A4-01"] += e_del
-                add("A4", tfid, act_del)
+                dline = (hit[0], tr.mass_t * tr.distance_km * hit[1])
+                _add(T["A4-01"], dline[0], dline[1])
                 lf = tr.load_factor
                 if lf is not None and lf > 0.0:
-                    e_x12 = act_del / lf * rec.value
-                    val["X-12"] += e_x12
+                    x12 = dline[1] / lf
+                    _add(T["X-12"], dline[0], x12)
                 else:
                     skip["X-12"] += 1
         else:
-            refs[dfid] = refs.get(dfid, 0) + 1
-            n_unit_checks += 1
-            raw = factors.get(dfid)
-            cd_raw = conv(qu, raw.unit, rconv) if raw is not None else None
-            if raw is not None and cd_raw is None:
-                unit_bad = True
-            rec = fac(dfid)
-            cd = cd_raw if rec is not None else None
-            if cd is None or q_ord is None:
+            ref(dfid, f"{base}.transport.delivery_factor_id")
+            hit = use(dfid, "A4", qu, rconv, f"{base}.quantity_unit")
+            if hit is None or q_ord is None:
                 skip["A4-02"] += 1
+                incomplete = True
             else:
-                act_del = q_ord * cd
-                e_del = act_del * rec.value
-                del_fid = dfid
-                val["A4-02"] += e_del
-                add("A4", dfid, act_del)
+                dline = (hit[0], q_ord * hit[1])
+                _add(T["A4-02"], dline[0], dline[1])
 
-        # installation at renewals
-        inst = None
+        iline = None
         ifid = row.installation_factor_id
         if ifid is not None:
-            refs[ifid] = refs.get(ifid, 0) + 1
-            n_unit_checks += 1
-            raw = factors.get(ifid)
-            ci_raw = conv(qu, raw.unit, rconv) if raw is not None else None
-            if raw is not None and ci_raw is None:
-                unit_bad = True
-            rec = fac(ifid)
-            if rec is not None and ci_raw is not None and q_ord is not None:
-                inst = (ifid, q_ord * ci_raw, q_ord * ci_raw * rec.value)
-        if unit_bad:
-            unit_viol.append(f"{base}.quantity_unit")
+            ref(ifid, f"{base}.installation_factor_id")
+            hit = use(ifid, "A5", qu, rconv, f"{base}.quantity_unit")
+            if hit is not None and q_ord is not None:
+                iline = (hit[0], q_ord * hit[1])
+            else:
+                incomplete = True
 
-        # end of life: haul (C2), routes (C3 / C4), mass balance (C-05), item x route table (X-09)
-        hfid = eol.haul_factor_id
-        if hfid is None:
-            none_refs.append(f"{base}.end_of_life.haul_factor_id (no factor)")
-        else:
-            refs[hfid] = refs.get(hfid, 0) + 1
+        # ---- end of life ----
+        ref(eol.haul_factor_id, f"{base}.end_of_life.haul_factor_id")
         mass = eol.mass_kg
-        e_c2 = act_c2 = 0.0
-        rec = fac(hfid)
-        has_c2 = False
-        if rec is None or mass is None:
+        mass_ok = _nonneg(mass)
+        hit = use(eol.haul_factor_id, "C2", "tkm", (), f"{base}.end_of_life")
+        hline = None
+        if hit is None or not mass_ok or not _nonneg(eol.haul_distance_km):
             skip["C2-01"] += 1
+            incomplete = True
         else:
-            act_c2 = mass / 1000.0 * eol.haul_distance_km
-            e_c2 = act_c2 * rec.value
-            has_c2 = True
-            val["C2-01"] += e_c2
-            add("C2", hfid, act_c2)
-        e_c3 = e_c4 = 0.0
-        route_lines = []
+            hline = (hit[0], mass / 1000.0 * eol.haul_distance_km * hit[1])
+            _add(T["C2-01"], hline[0], hline[1])
+        rlines = []
         fraction_sum = 0.0
         negative = False
-        if mass is None:
+        if not mass_ok:
             skip["C3-01"] += 1
             skip["C4-01"] += 1
+            incomplete = True
         else:
             m_row = x09_mass.get(row.material_class)
             if m_row is None:
                 m_row = x09_mass[row.material_class] = dict.fromkeys(model.EOL_ROUTES, 0.0)
-                x09_emis[row.material_class] = dict.fromkeys(model.EOL_ROUTES, 0.0)
+                x09_emis[row.material_class] = {r: {} for r in model.EOL_ROUTES}
             e_row = x09_emis[row.material_class]
-        for route in eol.routes:
-            rfid = route.factor_id
-            if rfid is None:
-                none_refs.append(f"{base}.end_of_life.routes (no factor)")
-            else:
-                refs[rfid] = refs.get(rfid, 0) + 1
+        for j, route in enumerate(eol.routes):
+            ref(route.factor_id, f"{base}.end_of_life.routes[{j}].factor_id")
             p = route.fraction
             fraction_sum += p
             negative = negative or p < 0.0
-            if mass is None:
+            stage = "C4" if route.route == "LANDFILL" else "C3"
+            hit = use(route.factor_id, stage, "kg", (), f"{base}.end_of_life")
+            if not mass_ok:
                 continue
-            m = mass * p
-            m_row[route.route] += m
-            rec = fac(rfid)
-            if rec is None:
+            p_ok = _nonneg(p)
+            if p_ok:
+                m_row[route.route] += mass * p
+            if hit is None or not p_ok:
+                routes_skipped[stage] += 1
+                incomplete = True
                 continue
-            e = m * rec.value
-            e_row[route.route] += e
-            x09_total += e
-            if route.route == "LANDFILL":
-                e_c4 += e
-                add("C4", rfid, m)
-                route_lines.append(("C4", rfid, m))
-            else:
-                e_c3 += e
-                add("C3", rfid, m)
-                route_lines.append(("C3", rfid, m))
-        val["C3-01"] += e_c3
-        val["C4-01"] += e_c4
+            act = mass * p * hit[1]
+            _add(T["C4-01" if stage == "C4" else "C3-01"], hit[0], act)
+            _add(e_row[route.route], hit[0], act)
+            rlines.append((stage, hit[0], act))
         if negative or fraction_sum > 1.0 + 1e-6:
             c05_viol.append(f"{base}.end_of_life.routes")
         elif fraction_sum < 1.0 - 1e-6:
             c05_under.append(f"{base}.end_of_life.routes")
-        c_kg_any = conv(qu, "kg", rconv) if comp is None else c_kg
-        if c_kg_any is None or q_ord is None or mass is None:
+        c_any = conv(qu, "kg", rconv) if comp is None else c_kg
+        if c_any is None or q_inst is None or mass is None:
             c05_unchecked += 1
-        elif mass > q_ord * c_kg_any * (1.0 + 1e-6):
+        elif mass > q_inst * c_any * (1.0 + 1e-6):
             c05_viol.append(f"{base}.end_of_life.mass_kg")
 
-        # renewals (B4) and repairs (B3) as multipliers of the row's own lines
-        cycle = row.refresh_cycle
-        n = cf.renewal_count(T, cycle)
-        if c_kg_any is None or q_ord is None or mass is None:
-            x10_excluded += 1
-        else:
-            x10_resource += q_ord * c_kg_any * (1 + n)
-            x10_waste += ((q_ord - q_inst) * c_kg_any + mass) * (1 + n)
-        e_b4 = 0.0
-        if n:
-            u = e_mfg + e_del + e_c2 + e_c3 + e_c4
-            if inst is not None:
-                u += inst[2]
-            e_b4 = n * u
-            val["B4-02"] += e_b4
-            if has_mfg:
-                add("B4", line_fid, act_mfg * n)
-            if del_fid is not None:
-                add("B4", del_fid, act_del * n)
-            if has_c2:
-                add("B4", hfid, act_c2 * n)
-            for _, rfid, m in route_lines:
-                add("B4", rfid, m * n)
-            if inst is not None:
-                add("B4", inst[0], inst[1] * n)
-            cyc_u[cycle] = cyc_u.get(cycle, 0.0) + u
-            cyc_n[cycle] = n
+        # ---- the row's lines go to the group of its renewal period ----
+        cycle = row.refresh_cycle if cf.valid_period(row.refresh_cycle) else None
+        grp = groups.get(cycle)
+        if grp is None:
+            grp = groups[cycle] = _Group()
+        gu = grp.u
+        if act_mfg is not None:
+            gu[fkey] = gu.get(fkey, 0.0) + act_mfg
+        if dline is not None:
+            gu[dline[0]] = gu.get(dline[0], 0.0) + dline[1]
+        if hline is not None:
+            gu[hline[0]] = gu.get(hline[0], 0.0) + hline[1]
+        for _, rk, act in rlines:
+            gu[rk] = gu.get(rk, 0.0) + act
+        if iline is not None:
+            gu[iline[0]] = gu.get(iline[0], 0.0) + iline[1]
+        if incomplete:
+            grp.incomplete += 1
         rr = row.repair_rate
-        if rr is not None:
-            val["B3-02"] += e_mfg * rr * T
-            if rr != 0.0 and e_mfg != 0.0:
-                years = T - cf.skip_weight_periodic(T, cycle, n) if n else T
-                val["B3-01"] += e_mfg * rr * years
-                add("B3", line_fid, act_mfg * rr * years)
-                repair_rate_sum += e_mfg * rr
-                if n:
-                    cyc_r[cycle] = cyc_r.get(cycle, 0.0) + e_mfg * rr
+        if not _nonneg(rr):
+            skip["B3"] += 1
+        elif act_mfg is not None and rr != 0.0:
+            grp.r[fkey] = grp.r.get(fkey, 0.0) + act_mfg * rr
+        if c_any is None or q_ord is None or not mass_ok:
+            skip["X-10"] += 1
+        else:
+            grp.resource += q_ord * c_any
+            grp.waste += (q_ord - q_inst) * c_any + mass
 
-        # simplified-estimate classes (X-17)
-        mc = row.material_class
-        if mc in ("REBAR", "STRUCTURAL_STEEL", "CONCRETE", "TIMBER"):
-            class_sum[mc] += e_mfg
-        elif qu == "m2":
-            div = row.construction_division
-            if div in ("ROOF_EXTERIOR_WALL", "OPENINGS"):
-                class_sum["ENVELOPE"] += e_mfg
-            elif div == "INTERIOR":
-                class_sum["INTERIOR"] += e_mfg
+        # ---- class table for the simplified estimate ----
+        if act_mfg is not None:
+            mc = row.material_class
+            cls = mc if mc in ("REBAR", "STRUCTURAL_STEEL", "CONCRETE", "TIMBER") else None
+            if cls is None and qu == "m2":
+                div = row.construction_division
+                cls = "ENVELOPE" if div in ("ROOF_EXTERIOR_WALL", "OPENINGS") else "INTERIOR" if div == "INTERIOR" else None
+            if cls is not None:
+                _add(T["CLASS:" + cls], fkey, act_mfg)
 
         if detail:
+            stats["row_factor_products"] += 1
+            e_mfg = act_mfg * f if act_mfg is not None else 0.0
+            v = lambda line: line[1] * fval[line[0]] if line is not None else 0.0
+            e_del, e_c2 = v(dline), v(hline)
+            e_c3 = sum(act * fval[rk] for st, rk, act in rlines if st == "C3")
+            e_c4 = sum(act * fval[rk] for st, rk, act in rlines if st == "C4")
             L["q_ord"].append(q_ord)
             L["q_inst"].append(q_inst)
-            if q_ord is None or row.reuse_rate is None:
+            rho = row.reuse_rate
+            if q_ord is None or rho is None or not 0.0 <= rho <= 1.0:
                 L["net"].append(None)
                 L["disp"].append(None)
             else:
-                d = (q_ord - q_inst) * (1.0 - row.reuse_rate)
+                d = (q_ord - q_inst) * (1.0 - rho)
                 L["disp"].append(d)
                 L["net"].append(q_inst + d)
-            L["a1302"].append(recipe[0] if recipe is not None else None)
+            L["a1302"].append(recipe["value"] if recipe is not None else None)
             L["kind"].append(kind)
             L["factor"].append(f)
             L["conv"].append(c)
             L["a1301"].append(e_mfg if kind in ("GENERIC", "COMPOSITE") else 0.0)
             L["a1303"].append(e_mfg if kind == "EPD" else 0.0)
-            L["a1304"].append(e_unq)
+            L["a1304"].append(e_mfg * g if g is not None else 0.0)
             L["a401"].append(e_del if dfid is None else 0.0)
             L["a402"].append(e_del if dfid is not None else 0.0)
-            L["x12"].append(e_x12)
+            L["x12"].append(x12 * fval[dline[0]] if x12 is not None else 0.0)
             L["c2"].append(e_c2)
             L["c3"].append(e_c3)
             L["c4"].append(e_c4)
-            L["n"].append(n)
-            L["b4m"].append(e_b4)
+            L["mcycle"].append(cycle)
+            L["mu"].append(e_mfg + e_del + e_c2 + e_c3 + e_c4 + v(iline))
 
-    # =============================== equipment: one pass ===============================
-    n_events_total = 0
+    # =============================== equipment ===============================
     for j, eq in enumerate(scn.equipment):
+        stats["rows_scanned"] += 1
         base = f"equipment[{j}]"
         for name in E_FIELDS:
             value = getattr(eq, name)
             if name == "service_life" and value is None and eq.replacement_event_list is not None:
                 continue
             see(eq, name, value, f"{base}.{name}")
-        fid = eq.factor_id
-        if fid is None:
-            none_refs.append(f"{base}.factor_id (no factor)")
-        else:
-            refs[fid] = refs.get(fid, 0) + 1
-        n_unit_checks += 1
-        raw = factors.get(fid) if fid is not None else None
-        c_raw = conv(eq.quantity_unit, raw.unit) if raw is not None else None
-        if raw is not None and c_raw is None:
-            unit_viol.append(f"{base}.quantity_unit")
-        rec = fac(fid)
         qty = eq.quantity
-        e0 = act0 = 0.0
-        has0 = False
-        if qty is None or rec is None or c_raw is None:
+        qty_ok = _nonneg(qty)
+        ref(eq.factor_id, f"{base}.factor_id")
+        hit = use(eq.factor_id, "A1-A3", eq.quantity_unit, (), f"{base}.quantity_unit")
+        lines = []
+        incomplete = False
+        mline = None
+        if not qty_ok or hit is None:
             skip["X-01"] += 1
+            incomplete = True
         else:
-            act0 = qty * c_raw
-            e0 = act0 * rec.value
-            has0 = True
-            val["X-01"] += e0
-            add("A1-A3", fid, act0)
+            mline = (hit[0], qty * hit[1])
+            _add(T["X-01"], mline[0], mline[1])
+            lines.append(mline)
+        for fid, stage in ((eq.delivery_factor_id, "A4"), (eq.installation_factor_id, "A5")):
+            if fid is None:
+                continue
+            refs[fid] = refs.get(fid, 0) + 1
+            hit = use(fid, stage, eq.quantity_unit, (), f"{base}.quantity_unit")
+            if hit is None or not qty_ok:
+                incomplete = True
+            else:
+                lines.append((hit[0], qty * hit[1]))
         efid = eq.eol_factor_id
+        eline = None
+        hit = None
         if efid is not None:
             refs[efid] = refs.get(efid, 0) + 1
-        rec = fac(efid)
-        e_eol = 0.0
-        has_eol = False
-        if rec is None or eq.end_of_life_mass_kg is None:
+            hit = use(efid, "C3", "kg", (), f"{base}.end_of_life")
+        emass_ok = _nonneg(eq.end_of_life_mass_kg)
+        if hit is None or not emass_ok:
             skip["X-14"] += 1
+            incomplete = True
         else:
-            e_eol = eq.end_of_life_mass_kg * rec.value
-            has_eol = True
-            val["X-14"] += e_eol
-            add("C3", efid, eq.end_of_life_mass_kg)
-        extra = []
-        u = e0 + e_eol
-        for xfid in (eq.delivery_factor_id, eq.installation_factor_id):
-            if xfid is None:
-                continue
-            refs[xfid] = refs.get(xfid, 0) + 1
-            rec = fac(xfid)
-            cx = conv(eq.quantity_unit, rec.unit) if rec is not None else None
-            if qty is not None and cx is not None:
-                extra.append((xfid, qty * cx))
-                u += qty * cx * rec.value
-        explicit = eq.replacement_event_list
-        if explicit is not None:
-            events = [float(t) for t in explicit if 0 < t < T]
-            n = len(events)
-        else:
-            n = cf.renewal_count(T, eq.service_life)
-            events = None
-        n_events_total += n
-        e_b4 = n * u
-        if n:
-            val["B4-02"] += e_b4
-            if has0:
-                add("B4", fid, act0 * n)
-            for xfid, act in extra:
-                add("B4", xfid, act * n)
-            if has_eol:
-                add("B4", efid, eq.end_of_life_mass_kg * n)
-            if explicit is not None:
-                explicit_b4 += e_b4
-                for t in events:
-                    b4_year[math.ceil(t)] += u
-            else:
-                cycle = eq.service_life
-                cyc_u[cycle] = cyc_u.get(cycle, 0.0) + u
-                cyc_n[cycle] = n
-        if eq.end_of_life_mass_kg is None:
-            x10_excluded += 1
-        else:
-            x10_waste += eq.end_of_life_mass_kg * (1 + n)
+            eline = (hit[0], eq.end_of_life_mass_kg * hit[1])
+            _add(T["X-14"], eline[0], eline[1])
+            lines.append(eline)
         rr = eq.repair_rate
-        if rr is not None:
-            val["B3-02"] += e0 * rr * T
-            if rr != 0.0 and e0 != 0.0:
-                if explicit is not None:
-                    years = T - cf.skip_weight_events(T, events)
-                    for y in {math.ceil(t) for t in events}:
-                        b3_year_adjust[y] += e0 * rr * (wl if y == Y else 1.0)
-                else:
-                    years = T - cf.skip_weight_periodic(T, eq.service_life, n) if n else T
-                    if n:
-                        cyc_r[eq.service_life] = cyc_r.get(eq.service_life, 0.0) + e0 * rr
-                val["B3-01"] += e0 * rr * years
-                add("B3", fid, act0 * rr * years)
-                repair_rate_sum += e0 * rr
+        rline = None
+        if not _nonneg(rr):
+            skip["B3"] += 1
+        elif mline is not None and rr != 0.0:
+            rline = (mline[0], mline[1] * rr)
+        years = eq.replacement_event_list
+        if years is not None:
+            A.explicit.append((j, years, lines, rline, eq.end_of_life_mass_kg if emass_ok else None, incomplete))
+            cycle = None
+        else:
+            cycle = eq.service_life if cf.valid_period(eq.service_life) else None
+            grp = groups.get(cycle)
+            if grp is None:
+                grp = groups[cycle] = _Group()
+            for fk, act in lines:
+                grp.u[fk] = grp.u.get(fk, 0.0) + act
+            if rline is not None:
+                grp.r[rline[0]] = grp.r.get(rline[0], 0.0) + rline[1]
+            if incomplete:
+                grp.incomplete += 1
+            grp.equipment_rows += 1
+            if emass_ok:
+                grp.waste += eq.end_of_life_mass_kg
+        if not emass_ok:
+            skip["X-10"] += 1
         if detail:
-            L["x01"].append(e0)
-            L["x14"].append(e_eol)
-            L["b4e"].append(e_b4)
-            L["events"].append(events if events is not None else [k * eq.service_life for k in range(1, n + 1)])
+            stats["row_factor_products"] += 1
+            L["x01"].append(mline[1] * fval[mline[0]] if mline is not None else 0.0)
+            L["x14"].append(eline[1] * fval[eline[0]] if eline is not None else 0.0)
+            L["eu"].append(sum(act * fval[fk] for fk, act in lines))
+            L["ecycle"].append(cycle)
+            L["eexp"].append(years is not None)
 
-    # =============================== refrigerants: closed form per charge cycle ===============================
-    b1_01 = b1_02 = b1_03 = b1_04 = 0.0
-    b1_items = []
-    b1_year = [0.0] * (Y + 1)
-    b1_event_year = [0.0] * (Y + 1)
+    # =============================== refrigerants ===============================
+    b1_01 = 0.0
+    b1_01_skip = 0
     for j, dev in enumerate(scn.refrigerants):
         base = f"refrigerants[{j}]"
         for name in R_FIELDS:
             see(dev, name, getattr(dev, name), f"{base}.{name}")
         if dev.service_life is None and dev.change_years is None:
             see(dev, "service_life", None, f"{base}.service_life")
-        m0, gwp, rate = dev.charge_mass_kg, dev.gwp, dev.annual_leak_rate
-        if m0 is not None and gwp is not None:
-            b1_01 += m0 * gwp
-        if m0 is None or gwp is None or rate is None:
-            b1_items.append(0.0)
-            continue
-        if dev.change_years is not None:
-            years = [math.ceil(t) for t in sorted(float(t) for t in dev.change_years if 0 < t < T)]
+        charge_ok = _nonneg(dev.charge_mass_kg) and _nonneg(dev.gwp)
+        if charge_ok:
+            b1_01 += dev.charge_mass_kg * dev.gwp
         else:
-            years = [math.ceil(k * dev.service_life) for k in range(1, cf.renewal_count(T, dev.service_life) + 1)]
-        leaked, before, end = cf.refrigerant_device(T, m0, rate, dev.top_up, years)
-        e = leaked * gwp
-        b1_02 += e
-        b1_items.append(e)
-        if dev.replacement_loss_rate is not None:
-            for y, m in zip(years, before):
-                loss = m * dev.replacement_loss_rate * gwp
-                b1_03 += loss
-                b1_event_year[y] += loss
-        if dev.end_of_life_recovery_rate is not None:
-            b1_04 += end * (1.0 - dev.end_of_life_recovery_rate) * gwp
-        if detail:                          # the yearly series still needs one value per year
-            m = m0
-            k = 0
-            for y in range(1, Y + 1):
-                leak = m * rate * (wl if y == Y else 1.0)
-                b1_year[y] += leak * gwp
-                if not dev.top_up:
-                    m -= leak
-                while k < len(years) and years[k] == y:
-                    m = m0
-                    k += 1
-    add("B1", REFRIGERANT, b1_02 + b1_03 + b1_04)
+            b1_01_skip += 1
+        A.devices.append((dev, charge_ok and _ratio(dev.annual_leak_rate)))
 
-    # =============================== construction site (A5) ===============================
+    # =============================== construction site ===============================
     site = scn.construction
     grid = scn.operation.grid
     grid_ok = grid.licence_status in ALLOWED
+    head, sep, tail = grid.unit.partition("/")
+    grid_u = tail if sep and head == "kgCO2e" and tail else None
     see(site, "electricity_kwh", site.electricity_kwh, "construction.electricity_kwh")
-    a5_01 = 0.0
-    a5_01_ok = site.electricity_kwh is not None and grid_ok
+    c_site = unit_only("construction.electricity", "kWh", grid_u)
+    a5_01_ok = _nonneg(site.electricity_kwh) and c_site is not None and grid_ok
     if a5_01_ok:
-        a5_01 = site.electricity_kwh * grid.construction_value
-        add("A5", GRID, a5_01)
-    a5_02 = a5_03 = 0.0
+        _add(T["A5-01"], GRID, site.electricity_kwh * c_site * grid.construction_value)
     a5_02_skip = a5_03_skip = 0
     for k, fuel in enumerate(site.fuels):
         see(site, f"fuels[{k}].quantity", fuel.quantity, f"construction.fuels[{k}].quantity")
-        fid = fuel.factor_id
-        if fid is None:
-            none_refs.append(f"construction.fuels[{k}].factor_id (no factor)")
-        else:
-            refs[fid] = refs.get(fid, 0) + 1
-        n_unit_checks += 1
-        raw = factors.get(fid) if fid is not None else None
-        c_raw = conv(fuel.unit, raw.unit, fuel.conversions) if raw is not None else None
-        if raw is not None and c_raw is None:
-            unit_viol.append(f"construction.fuels[{k}].unit")
-        rec = fac(fid)
-        if fuel.quantity is None or rec is None or c_raw is None:
+        ref(fuel.factor_id, f"construction.fuels[{k}].factor_id")
+        hit = use(fuel.factor_id, "A5", fuel.unit, fuel.conversions, f"construction.fuels[{k}].unit")
+        if not _nonneg(fuel.quantity) or hit is None:
             a5_02_skip += 1
-            continue
-        a5_02 += fuel.quantity * c_raw * rec.value
-        add("A5", fid, fuel.quantity * c_raw)
+        else:
+            _add(T["A5-02"], hit[0], fuel.quantity * hit[1])
     for k, waste in enumerate(site.waste_streams):
         see(site, f"waste_streams[{k}].mass_kg", waste.mass_kg, f"construction.waste_streams[{k}].mass_kg")
-        fid = waste.factor_id
-        if fid is None:
-            none_refs.append(f"construction.waste_streams[{k}].factor_id (no factor)")
-        else:
-            refs[fid] = refs.get(fid, 0) + 1
-        rec = fac(fid)
-        if waste.mass_kg is None or rec is None:
+        ref(waste.factor_id, f"construction.waste_streams[{k}].factor_id")
+        hit = use(waste.factor_id, "A5", "kg", (), f"construction.waste_streams[{k}]")
+        if not _nonneg(waste.mass_kg) or hit is None:
             a5_03_skip += 1
-            continue
-        a5_03 += waste.mass_kg * rec.value
-        add("A5", fid, waste.mass_kg)
-    a5_04 = a5_01 + a5_02 + a5_03
+        else:
+            _add(T["A5-03"], hit[0], waste.mass_kg * hit[1])
 
-    # =============================== operation (B6, B2, B7): weighted year sums ===============================
+    # =============================== operation: units and factors (values wait for T) ===============================
     op, ww = scn.operation, scn.water_waste
-    G = cf.grid_cumulative(T, grid)             # None for a TABLE scenario
-    profiles = (op.electricity, op.onsite_generation, op.onsite_export)
-    need_series = detail or G is None or any(p.kind != "CONSTANT" for p in profiles)
-    series = {}
-    if need_series:
-        gk = grid.table
-        net = [0.0]
-        elec = [0.0]
-        elec_w = 0.0
-        ct, gt, xt = op.electricity.table, op.onsite_generation.table, op.onsite_export.table
-        for k in range(Y):
-            nk = max(0.0, ct[k] - (gt[k] - xt[k]))
-            ek = nk * gk[k] if grid_ok else 0.0
-            net.append(nk)
-            elec.append(ek)
-            elec_w += (wl if k == Y - 1 else 1.0) * ek
-        series["net"], series["elec"] = net, elec
-        if G is None:
-            G = 0.0
-            for k in range(Y):
-                G += (wl if k == Y - 1 else 1.0) * gk[k]
-    if G is not None and all(p.kind == "CONSTANT" for p in profiles):
-        # constant demand and generation: one multiplication with the cumulative factor
-        elec_w = max(0.0, op.electricity.base - (op.onsite_generation.base - op.onsite_export.base)) * G if grid_ok else 0.0
+    eu = _annual_unit(op.electricity.unit)
+    c_elec = unit_only("operation.electricity", eu, grid_u)
+    c_gen = unit_only("operation.onsite_generation", _annual_unit(op.onsite_generation.unit), eu)
+    c_exp = unit_only("operation.onsite_export", _annual_unit(op.onsite_export.unit), eu)
+    for table, profile, fid, path, stage in (
+            ("B6-02", op.gas, op.gas_factor_id, "operation.gas", "B6"),
+            ("B6-02", op.oil, op.oil_factor_id, "operation.oil", "B6"),
+            ("B6-02", op.district_heat, op.district_heat_factor_id, "operation.district_heat", "B6"),
+            ("B7-01", ww.water, ww.water_factor_id, "water_waste.water", "B7"),
+            ("B7-02", ww.sewage, ww.sewage_factor_id, "water_waste.sewage", "B7"),
+            ("B7-03", ww.municipal_waste, ww.waste_factor_id, "water_waste.municipal_waste", "B7")):
+        ref(fid, path.replace("municipal_waste", "waste") + "_factor_id")
+        A.annual.append((table, profile, use(fid, stage, _annual_unit(profile.unit), (), path)))
 
-    def annual(profile, fid, path, stage):
-        """Weighted activity of one annual profile (closed form unless it is a table)."""
-        nonlocal n_unit_checks
-        if fid is None:
-            none_refs.append(f"{path}_factor_id (no factor)")
-        else:
-            refs[fid] = refs.get(fid, 0) + 1
-        n_unit_checks += 1
-        raw = factors.get(fid) if fid is not None else None
-        u0 = profile.unit.split("/")[0]
-        c_raw = conv(u0, raw.unit) if raw is not None else None
-        if raw is not None and c_raw is None:
-            unit_viol.append(path)
-        rec = fac(fid)
-        if rec is None or c_raw is None:
-            return None, None
-        if profile.kind == "TABLE":
-            total = 0.0
-            tb = profile.table
-            for k in range(Y):
-                total += (wl if k == Y - 1 else 1.0) * tb[k]
-        else:
-            total = cf.linear_weighted_sum(T, profile.base, profile.slope or 0.0)
-        act = total * c_raw
-        add(stage, fid, act)
-        return act * rec.value, (profile, c_raw, rec.value)
-
-    def series_of(parts):
-        out = [0.0] * (Y + 1)
-        for part in parts:
-            if part is None:
-                continue
-            profile, c_raw, value = part
-            tb = profile.table
-            for k in range(Y):
-                out[k + 1] += tb[k] * c_raw * value
-        return out
-
-    b6_parts, b6_fuel, b6_skip = [], 0.0, 0
-    for profile, fid, path in ((op.gas, op.gas_factor_id, "operation.gas"), (op.oil, op.oil_factor_id, "operation.oil"),
-                               (op.district_heat, op.district_heat_factor_id, "operation.district_heat")):
-        e, part = annual(profile, fid, path, "B6")
-        if e is None:
-            b6_skip += 1
-        else:
-            b6_fuel += e
-            b6_parts.append(part)
-    b7 = []
-    for profile, fid, path in ((ww.water, ww.water_factor_id, "water_waste.water"),
-                               (ww.sewage, ww.sewage_factor_id, "water_waste.sewage"),
-                               (ww.municipal_waste, ww.waste_factor_id, "water_waste.municipal_waste")):
-        b7.append(annual(profile, fid, path, "B7"))
-    b7_total = sum(e for e, _ in b7 if e is not None)
-    b6_03 = elec_w + b6_fuel
-    b2 = elec_w * op.facility_management_ratio
-    add("B6", GRID, elec_w - b2)
-    add("B2", GRID, b2)
-    area = scn.project.gross_floor_area
-    x11 = area * op.electricity_per_m2_per_year * G if area is not None else None
-
-    # =============================== building-level end of life (C1, C2 hauls) ===============================
-    c1 = 0.0
-    c1_skip = 0
+    # =============================== building-level end of life, memo items, cost items ===============================
     end = scn.end_of_life
+    c1_skip = 0
     for k, act in enumerate(end.demolition_activities):
         see(end, f"demolition_activities[{k}].quantity", act.quantity, f"end_of_life.demolition_activities[{k}].quantity")
-        fid = act.factor_id
-        if fid is None:
-            none_refs.append(f"end_of_life.demolition_activities[{k}].factor_id (no factor)")
-        else:
-            refs[fid] = refs.get(fid, 0) + 1
-        n_unit_checks += 1
-        raw = factors.get(fid) if fid is not None else None
-        c_raw = conv(act.unit, raw.unit) if raw is not None else None
-        if raw is not None and c_raw is None:
-            unit_viol.append(f"end_of_life.demolition_activities[{k}].unit")
-        rec = fac(fid)
-        if act.quantity is None or rec is None or c_raw is None:
+        ref(act.factor_id, f"end_of_life.demolition_activities[{k}].factor_id")
+        hit = use(act.factor_id, "C1", act.unit, (), f"end_of_life.demolition_activities[{k}].unit")
+        if not _nonneg(act.quantity) or hit is None:
             c1_skip += 1
-            continue
-        c1 += act.quantity * c_raw * rec.value
-        add("C1", fid, act.quantity * c_raw)
+        else:
+            _add(T["C1-01"], hit[0], act.quantity * hit[1])
     for k, haul in enumerate(end.waste_hauls):
         see(end, f"waste_hauls[{k}].mass_t", haul.mass_t, f"end_of_life.waste_hauls[{k}].mass_t")
         see(end, f"waste_hauls[{k}].distance_km", haul.distance_km, f"end_of_life.waste_hauls[{k}].distance_km")
-        fid = haul.factor_id
-        if fid is None:
-            none_refs.append(f"end_of_life.waste_hauls[{k}].factor_id (no factor)")
-        else:
-            refs[fid] = refs.get(fid, 0) + 1
-        rec = fac(fid)
-        if rec is None or haul.mass_t is None or haul.distance_km is None:
+        ref(haul.factor_id, f"end_of_life.waste_hauls[{k}].factor_id")
+        hit = use(haul.factor_id, "C2", "tkm", (), f"end_of_life.waste_hauls[{k}]")
+        if hit is None or not _nonneg(haul.mass_t) or not _nonneg(haul.distance_km):
             skip["C2-01"] += 1
-            continue
-        val["C2-01"] += haul.mass_t * haul.distance_km * rec.value
-        add("C2", fid, haul.mass_t * haul.distance_km)
+        else:
+            _add(T["C2-01"], hit[0], haul.mass_t * haul.distance_km * hit[1])
+    sq = scn.summary_quantities
+    sto_02_ok = False
+    if sq.concrete_uptake_factor_id is not None:
+        refs[sq.concrete_uptake_factor_id] = refs.get(sq.concrete_uptake_factor_id, 0) + 1
+        hit = use(sq.concrete_uptake_factor_id, MEMO, "m3", (), "summary_quantities.concrete_uptake")
+        if hit is not None and _nonneg(sq.concrete_m3):
+            _add(T["STO-02"], hit[0], sq.concrete_m3 * hit[1])
+            sto_02_ok = True
+    x16_skip = 0
+    x16_items = []
+    deflator = {}
+    for k, item in enumerate(scn.cost_items):
+        ref(item.factor_id, f"cost_items[{k}].factor_id")
+        hit = use(item.factor_id, "A1-A3", item.currency, (), f"cost_items[{k}]")
+        dkey = (item.factor_base_year, item.price_year)
+        if dkey not in deflator:                         # one ratio per distinct pair of years
+            pb, pc = scn.price_index.get(item.factor_base_year), scn.price_index.get(item.price_year)
+            deflator[dkey] = pb / pc if pb is not None and pc is not None and pb > 0.0 and pc > 0.0 else None
+        d = deflator[dkey]
+        if not _nonneg(item.amount) or hit is None or d is None:
+            x16_skip += 1
+            x16_items.append(None)
+        else:
+            act = item.amount * d * hit[1]
+            _add(T["X-16"], hit[0], act)
+            x16_items.append((hit[0], act))
 
-    # =============================== rebuild (B5): a multiplier on the initial stages ===============================
-    bnd = scn.boundary
-    b5_n = cf.renewal_count(T, bnd.replacement_cycle) if bnd.reconstruction_scenario != "NONE" else 0
-    k5 = b5_n * bnd.reconstruction_scope_fraction if bnd.reconstruction_scenario != "NONE" else 0.0
-    b5_base = (val["A13-01"] + val["A13-03"] + val["A13-04"] + val["X-01"] + val["A4-01"] + val["A4-02"] + a5_04 + c1
-               + val["C2-01"] + val["C3-01"] + val["C4-01"] + val["X-14"])
-    b5 = k5 * b5_base
-    if k5:
-        d5 = acc["B5"]
-        for s in INITIAL:
-            for fid, act in acc[s].items():
-                d5[fid] = d5.get(fid, 0.0) + act * k5
-
-    # =============================== composites: expand recipe lines once per recipe ===============================
-    x03_mass, x03_emis = {}, {}
-    for key, recipe in recipes.items():
-        kg = recipe[2] if len(recipe) > 2 else None
-        if kg is None:
-            continue
-        for fid, fraction in key:
-            m = kg * fraction
-            e = m * factors[fid].value
-            x03_mass[fid] = x03_mass.get(fid, 0.0) + m
-            x03_emis[fid] = x03_emis.get(fid, 0.0) + e
-            val["X-03"] += e
-    for key, count in recipe_refs.items():
+    # =============================== checks that do not depend on T ===============================
+    for key, rec in A.recipes.items():
         for fid, _ in key:
-            refs[fid] = refs.get(fid, 0) + count
-    for s in STAGES:
-        d = acc[s]
-        for key in [k for k in d if type(k) is tuple]:
-            act = d.pop(key)
-            for fid, fraction in key:
-                d[fid] = d.get(fid, 0.0) + act * fraction
+            if fid is not None:
+                refs[fid] = refs.get(fid, 0) + rec["rows"]
+    n_refs = sum(bad_refs.values())
+    for fid, count in refs.items():
+        n_refs += count
+        rec = factors.get(fid)
+        if rec is None:
+            bad_refs[f"factors{{{fid}}} (no record)"] = count
+        elif rec.licence_status not in ALLOWED or not rec.source_url:
+            bad_refs[f"factors{{{fid}}}.licence_status"] = count
+    if not grid_ok:
+        bad_refs["operation.grid"] = 1
+    area = scn.project.gross_floor_area
+    area_sum = 0.0
+    for use_name in sorted(scn.project.use_area_breakdown):
+        area_sum += scn.project.use_area_breakdown[use_name]
+    area_ok = area is not None and area > 0.0
+    if not area_ok:
+        sys_04 = {"ok": False, "status": "INVALID", "sum": area_sum, "residual": None}
+        qa_04 = {"ok": False, "status": "NOT_EVALUATED"}
+    else:
+        residual = area - area_sum
+        sys_04 = {"ok": _within(residual, 1e-9, area), "status": "EVALUATED", "sum": area_sum, "residual": residual}
+        qa_04 = {"ok": _within(residual, 1e-6, area), "status": "EVALUATED"}
 
-    # =============================== stage vector, gases, CO2-only: read from the table ===============================
+    A.out = {
+        "SYS-01": {"ok": not missing, "counts": counts, "violations": missing},
+        "SYS-02": {"ok": not unit_viol and not stage_viol, "n_checked": n_uses, "violations": sorted(unit_viol),
+                   "stage_mismatches": sorted(stage_viol)},
+        "SYS-03": {"ok": not bad_refs, "n_checked": n_refs + 1, "violations": sorted(bad_refs),
+                   "n_references_affected": sum(bad_refs.values())},
+        "SYS-04": sys_04,
+        "QA-04": qa_04,
+        "A13-05": {"n_skipped": skip["A13-05"]},
+        "A13-02": {"n_invalid": n_invalid},
+        "X-15": {"n_unresolved": n_unresolved, "n_epd_declined": n_declined},
+        "C-05": {"ok": not c05_viol, "violations": c05_viol, "under_allocated": c05_under, "n_mass_unchecked": c05_unchecked},
+    }
+    A.misc = {"skip": skip, "routes_skipped": routes_skipped, "a5_01_ok": a5_01_ok, "a5_02_skip": a5_02_skip,
+              "a5_03_skip": a5_03_skip, "c1_skip": c1_skip, "x16_skip": x16_skip, "x16_items": x16_items,
+              "sto_02_ok": sto_02_ok, "b1_01": b1_01, "b1_01_skip": b1_01_skip, "x09_mass": x09_mass,
+              "x09_emis": x09_emis, "grid_ok": grid_ok, "c_elec": c_elec, "c_gen": c_gen, "c_exp": c_exp,
+              "c_site": c_site, "area_ok": area_ok}
+    return A
+
+
+def _make_recipe(key, scn, stats, stage_viol, fval):
+    """Composite factor of one distinct composition: value per kg, computed once."""
+    stats["recipes_computed"] += 1
+    total_fraction = value = 0.0
+    ok = True
+    unit_bad = False
+    none_at = []
+    parts = []
+    for j, (fid, fraction) in enumerate(key):
+        if fid is None:
+            none_at.append(j)
+        rec = scn.factors.get(fid) if fid is not None else None
+        c = model.conversion_factor(scn.unit_conversions, "kg", rec.unit) if rec is not None else None
+        if rec is not None and c is None:
+            unit_bad = True
+        if rec is not None and rec.stages != ["A1-A3"]:
+            stage_viol.add(f"factors{{{fid}}}.stages")
+        if (rec is None or c is None or rec.stages != ["A1-A3"] or rec.licence_status not in ALLOWED
+                or not _nonneg(fraction)):
+            ok = False
+            continue
+        total_fraction += fraction
+        value += fraction * c * rec.value
+        parts.append((fid, fraction, c))
+    valid = ok and abs(total_fraction - 1.0) <= 1e-6
+    if valid:
+        fval[key] = value
+    return {"value": value if valid else None, "parts": parts if valid else None, "unit_bad": unit_bad,
+            "none_at": none_at, "rows": 0, "kg": 0.0, "used": False}
+
+
+def check_period(scn) -> float:
+    T = scn.boundary.study_period
+    if T is None or isinstance(T, bool) or not (T > 0.0) or math.isinf(T):
+        raise ValueError("study_period must be a finite positive number of years")
+    if len(scn.operation.grid.table) < math.ceil(T):
+        raise ValueError("year tables are shorter than the study period")
+    return T
+
+
+def _profile(profile, Y):
+    """(base, slope) of a parametric profile, or None when the year table is the input."""
+    if profile.kind == "CONSTANT" and profile.base is not None:
+        return profile.base, 0.0
+    if profile.kind == "LINEAR_TREND" and profile.base is not None and profile.slope is not None:
+        return profile.base, profile.slope
+    return None
+
+
+def _values(profile, Y):
+    d = _profile(profile, Y)
+    if d is None:
+        return profile.table[:Y]
+    return [d[0] + d[1] * k for k in range(Y)] if d[1] else [d[0]] * Y
+
+
+def finish(A: Aggregate, T: float | None = None, detail: bool | None = None, baseline_totals: dict | None = None,
+           _compare: bool = True) -> dict:
+    """Apply the multipliers that depend on the study period and read the results from the tables."""
+    scn = A.scn
+    if T is None:
+        T = check_period(scn)
+    detail = A.detail if detail is None else detail
+    if detail and not A.detail:
+        raise ValueError("the aggregate was built without per-row lists")
+    Y = cf.n_years(T)
+    wl = cf.last_weight(T)
+    stats = dict(A.stats)
+    factors = scn.factors
+    fval = A.fval
+    tables = dict(A.tables)
+    M = A.misc
+    inc = set(scn.boundary.included_lifecycle_stages)
+    bnd = scn.boundary
+    op, ww = scn.operation, scn.water_waste
+    grid = op.grid
+
+    def tot(table):
+        """Value of a table: one multiplication per distinct factor key."""
+        total = 0.0
+        for key, act in table.items():
+            total += act * fval[key]
+        stats["table_factor_products"] += len(table)
+        return total
+
+    # ---- renewals, repairs, masses: one multiplier per distinct period ----
+    b4, b3, b3_alt = {}, {}, {}
+    n_partial = 0
+    resource = waste = 0.0
+    counts = {}
+    for cycle, grp in A.groups.items():
+        n = cf.renewal_count(T, cycle)
+        counts[cycle] = n
+        resource += grp.resource * (1 + n)
+        waste += grp.waste * (1 + n)
+        if n:
+            n_partial += grp.incomplete
+            for key, act in grp.u.items():
+                b4[key] = b4.get(key, 0.0) + act * n
+        if grp.r:
+            years = T - cf.skip_weight_periodic(T, cycle, n) if n else T
+            for key, act in grp.r.items():
+                b3[key] = b3.get(key, 0.0) + act * years
+                b3_alt[key] = b3_alt.get(key, 0.0) + act * T
+    explicit_b4 = {}
+    explicit_events = {}
+    n_events = sum(counts[c] * g.equipment_rows for c, g in A.groups.items())
+    qa02, qa02_warn = [], []
+    for j, years, lines, rline, emass, incomplete in A.explicit:
+        if any(not (t >= 0 and cf.inside(t, T)) for t in years):
+            qa02.append(f"equipment[{j}].replacement_event_list")
+        if any(t == 0 for t in years):
+            qa02_warn.append(f"equipment[{j}].replacement_event_list")
+        events = [float(t) for t in years if t > 0 and cf.inside(t, T)]
+        explicit_events[j] = events
+        n = len(events)
+        n_events += n
+        if n:
+            for key, act in lines:
+                explicit_b4[key] = explicit_b4.get(key, 0.0) + act * n
+            if incomplete:
+                n_partial += 1
+        if rline is not None:
+            b3[rline[0]] = b3.get(rline[0], 0.0) + rline[1] * (T - cf.skip_weight_events(T, events))
+            b3_alt[rline[0]] = b3_alt.get(rline[0], 0.0) + rline[1] * T
+        if emass is not None:
+            waste += emass * (1 + n)
+    for key, act in explicit_b4.items():
+        b4[key] = b4.get(key, 0.0) + act
+    tables["B4-02"], tables["B3-01"], tables["B3-02"] = b4, b3, b3_alt
+
+    # ---- refrigerants: charge cycles ----
+    b1_02 = b1_03 = b1_04 = 0.0
+    b1_skip = [0, 0, 0]
+    b1_items = []
+    b1_year = [0.0] * (Y + 1)
+    b1_event_year = [0.0] * (Y + 1)
+    for j, (dev, ok) in enumerate(A.devices):
+        years_raw = dev.change_years
+        if years_raw is not None:
+            if any(not (t >= 0 and cf.inside(t, T)) for t in years_raw):
+                qa02.append(f"refrigerants[{j}].change_years")
+            if any(t == 0 for t in years_raw):
+                qa02_warn.append(f"refrigerants[{j}].change_years")
+        loss_ok, rec_ok = _ratio(dev.replacement_loss_rate), _ratio(dev.end_of_life_recovery_rate)
+        if not ok:
+            b1_skip[0] += 1
+            b1_skip[1] += 1
+            b1_skip[2] += 1
+            b1_items.append(0.0)
+            continue
+        if years_raw is not None:
+            ev_years = [cf.event_year(t) for t in sorted(float(t) for t in years_raw if t > 0 and cf.inside(t, T))]
+        else:
+            ev_years = [cf.event_year(k * dev.service_life) for k in range(1, cf.renewal_count(T, dev.service_life) + 1)]
+        charge = dev.charge_mass_kg * dev.gwp          # the device's charge in CO2e: the activity of all three terms
+        leaked, before, end = cf.refrigerant_fractions(T, dev.annual_leak_rate, dev.top_up, ev_years)
+        b1_02 += charge * leaked
+        b1_items.append(charge * leaked)
+        if loss_ok:
+            for y, share in zip(ev_years, before):
+                loss = charge * share * dev.replacement_loss_rate
+                b1_03 += loss
+                b1_event_year[y] += loss
+        else:
+            b1_skip[1] += 1
+        if rec_ok:
+            b1_04 += charge * end * (1.0 - dev.end_of_life_recovery_rate)
+        else:
+            b1_skip[2] += 1
+        if detail:                                      # the yearly series needs one value per year
+            m = 1.0
+            k = 0
+            for y in range(1, Y + 1):
+                stats["year_loop_iterations"] += 1
+                leak = m * dev.annual_leak_rate * (wl if y == Y else 1.0)
+                b1_year[y] += charge * leak
+                if not dev.top_up:
+                    m -= leak
+                while k < len(ev_years) and ev_years[k] == y:
+                    m = 1.0
+                    k += 1
+    tables["B1"] = {REFRIGERANT: b1_02 + b1_03 + b1_04}
+
+    # ---- grid factor: moments of a piecewise-linear series, or of the table ----
+    segments = cf.grid_segments(grid, Y)
+    G, H = cf.segment_moments(segments, T) if segments is not None else cf.table_moments(grid.table, T)
+    if segments is None:
+        stats["year_loop_iterations"] += Y
+    g_values = None
+    if segments is None:
+        g_values = grid.table[:Y]
+    else:
+        g_values = []
+        for a, b, alpha, beta in segments:
+            g_values.extend([alpha + beta * k for k in range(a, b)] if beta else [alpha] * (b - a))
+    stats["consistency_scan_values"] += Y
+    grid_matches = _same(g_values, grid.table[:Y])
+
+    # ---- purchased electricity ----
+    c_elec, c_gen, c_exp = M["c_elec"], M["c_gen"], M["c_exp"]
+    eu = _annual_unit(op.electricity.unit)
+    net_ok = eu is not None and c_gen is not None and c_exp is not None
+    elec_ok = M["grid_ok"] and net_ok and c_elec is not None
+    profiles = (op.electricity, op.onsite_generation, op.onsite_export)
+    stats["consistency_scan_values"] += 3 * Y
+    net_match = all(_same(_values(p, Y), p.table[:Y]) for p in profiles)
+    net_series = elec_series = None
+    elec_w = 0.0
+    params = [_profile(p, Y) for p in profiles]
+    linear = None
+    if net_ok and all(p is not None for p in params):
+        B = params[0][0] - (params[1][0] * c_gen - params[2][0] * c_exp)
+        S = params[0][1] - (params[1][1] * c_gen - params[2][1] * c_exp)
+        if B >= 0.0 and B + S * (Y - 1) >= 0.0:        # the clamp max(0, .) never acts
+            linear = (B, S)
+    if linear is not None and not detail:
+        if elec_ok:
+            elec_w = (linear[0] * G + linear[1] * H) * c_elec
+    elif net_ok:
+        c_v, g_v, x_v = (_values(p, Y) for p in profiles)
+        net_series = [0.0]
+        elec_series = [0.0]
+        for k in range(Y):
+            stats["year_loop_iterations"] += 1
+            nk = max(0.0, c_v[k] - (g_v[k] * c_gen - x_v[k] * c_exp))
+            ek = nk * c_elec * g_values[k] if elec_ok else 0.0
+            net_series.append(nk)
+            elec_series.append(ek)
+            elec_w += (wl if k == Y - 1 else 1.0) * ek
+        if linear is not None and elec_ok:
+            elec_w = (linear[0] * G + linear[1] * H) * c_elec
+    else:
+        net_series = [0.0] * (Y + 1)
+        elec_series = [0.0] * (Y + 1)
+    share = op.facility_management_ratio
+    b2_ok = _ratio(share)
+    b2 = elec_w * share if b2_ok else 0.0
+    tables["B2-01"] = {GRID: b2}
+    tables["B6-01"] = {GRID: elec_w}
+
+    # ---- annual quantities with a factor: weighted year sums ----
+    for name in ("B6-02", "B7-01", "B7-02", "B7-03"):
+        tables[name] = {}
+    annual_skip = dict.fromkeys(("B6-02", "B7-01", "B7-02", "B7-03"), 0)
+    annual_match = dict.fromkeys(("B6-02", "B7-01", "B7-02", "B7-03"), True)
+    annual_parts = {name: [] for name in annual_skip}
+    for name, profile, hit in A.annual:
+        stats["consistency_scan_values"] += Y
+        annual_match[name] = annual_match[name] and _same(_values(profile, Y), profile.table[:Y])
+        if hit is None:
+            annual_skip[name] += 1
+            continue
+        d = _profile(profile, Y)
+        if d is not None:
+            total = cf.linear_weighted_sum(T, d[0], d[1])
+        else:
+            total = 0.0
+            tb = profile.table
+            for k in range(Y):
+                stats["year_loop_iterations"] += 1
+                total += (wl if k == Y - 1 else 1.0) * tb[k]
+        _add(tables[name], hit[0], total * hit[1])
+        annual_parts[name].append((profile, hit))
+    b6_table = dict(tables["B6-02"])
+    _add(b6_table, GRID, elec_w - b2)
+    tables["B6"] = b6_table
+
+    # ---- unit values, read from the tables ----
+    val = {name: tot(tables[name]) for name in (
+        "A13-01", "A13-03", "A13-04", "X-01", "A4-01", "A4-02", "X-12", "A5-01", "A5-02", "A5-03", "C1-01", "C2-01",
+        "C3-01", "C4-01", "X-14", "B4-02", "B3-01", "B3-02", "B6-02", "B7-01", "B7-02", "B7-03", "X-16")}
+    a5_04 = val["A5-01"] + val["A5-02"] + val["A5-03"]
+    b6_03 = elec_w + val["B6-02"]
+    b7_04 = val["B7-01"] + val["B7-02"] + val["B7-03"]
+
+    # ---- rebuild: one multiplier on the initial stages ----
+    b5_computed = True
+    b5_n = 0
+    k5 = 0.0
+    if bnd.reconstruction_scenario != "NONE":
+        if _ratio(bnd.reconstruction_scope_fraction):
+            b5_n = cf.renewal_count(T, bnd.replacement_cycle)
+            k5 = b5_n * bnd.reconstruction_scope_fraction
+        else:
+            b5_computed = False
+    b5_table = {}
+    if k5:
+        for s in INITIAL:
+            for name in STAGE_TABLES[s]:
+                for key, act in tables[name].items():
+                    b5_table[key] = b5_table.get(key, 0.0) + act * k5
+    tables["B5-01"] = b5_table
+    b5_base = (val["A13-01"] + val["A13-03"] + val["A13-04"] + val["X-01"] + val["A4-01"] + val["A4-02"] + a5_04
+               + val["C1-01"] + val["C2-01"] + val["C3-01"] + val["C4-01"] + val["X-14"])
+    b5 = k5 * b5_base
+
+    # ---- stage vector, gas breakdown, CO2-only: the same tables with other factor columns ----
     gases = scn.gases
+    gas_cache = {}
+
+    def gas_of(key):
+        g = gas_cache.get(key)
+        if g is None:
+            if type(key) is tuple:                      # recipe: weighted gas amounts of its components
+                g = dict.fromkeys(gases, 0.0)
+                for fid, fraction, c in A.recipes[key]["parts"]:
+                    amounts = factors[fid].gas_amounts
+                    for name in gases:
+                        g[name] += fraction * c * amounts[name]
+            else:
+                g = factors[key].gas_amounts
+            gas_cache[key] = g
+        return g
+
     by_gas = dict.fromkeys(gases, 0.0)
     grid_total = refrigerant_total = 0.0
     stage_all, stage_co2 = {}, {}
     used = set()
     for s in STAGES:
+        merged = {}
+        for name in STAGE_TABLES[s]:
+            for key, act in tables[name].items():
+                merged[key] = merged.get(key, 0.0) + act
         total = co2 = 0.0
-        for fid, act in acc[s].items():
-            if fid == GRID:
+        for key, act in merged.items():
+            if key == GRID:
                 grid_total += act
                 total += act
                 co2 += act
-            elif fid == REFRIGERANT:
+            elif key == REFRIGERANT:
                 refrigerant_total += act
                 total += act
             else:
-                rec = factors[fid]
-                used.add(fid)
-                total += act * rec.value
-                amounts = rec.gas_amounts
+                total += act * fval[key]
+                amounts = gas_of(key)
                 co2 += act * amounts["CO2"]
-                for g in gases:
-                    by_gas[g] += act * amounts[g]
+                for name in gases:
+                    by_gas[name] += act * amounts[name]
+                if type(key) is tuple:
+                    used.update(fid for fid, _, _ in A.recipes[key]["parts"])
+                else:
+                    used.add(key)
+        stats["table_factor_products"] += len(merged)
         stage_all[s] = total
         stage_co2[s] = co2
     from_gases = 0.0
-    for g in gases:
-        from_gases += scn.gwp[g] * by_gas[g]
+    for name in gases:
+        from_gases += scn.gwp[name] * by_gas[name]
     by_stage = {s: stage_all[s] for s in STAGES if s in inc}
+    co2_total = sum(stage_co2[s] for s in STAGES if s in inc)
+    if "B6" in inc and "B2" not in inc:                 # nothing may fall between B2 and B6
+        by_stage["B6"] = b6_03
+        co2_total += stage_co2["B2"]
 
-    # stage values from the unit totals (a second, independent accumulation used by QA-01)
+    # stage values from the unit values: a second accumulation, compared with the first (QA-01)
     unit_stage = {
         "A1-A3": val["A13-01"] + val["A13-03"] + val["A13-04"] + val["X-01"], "A4": val["A4-01"] + val["A4-02"],
         "A5": a5_04, "B1": b1_02 + b1_03 + b1_04, "B2": b2, "B3": val["B3-01"], "B4": val["B4-02"], "B5": b5,
-        "B6": b6_03 - b2, "B7": b7_total, "C1": c1, "C2": val["C2-01"], "C3": val["C3-01"] + val["X-14"], "C4": val["C4-01"],
+        "B6": b6_03 - b2, "B7": b7_04, "C1": val["C1-01"], "C2": val["C2-01"], "C3": val["C3-01"] + val["X-14"],
+        "C4": val["C4-01"],
     }
-    qa01 = [f"stage {s}" for s in STAGES if abs(unit_stage[s] - stage_all[s]) > 1e-9 * max(abs(unit_stage[s]), 1.0)]
+    qa01 = [f"stage {s}" for s in STAGES if not _within(unit_stage[s] - stage_all[s], 1e-9, max(abs(unit_stage[s]), 1.0))]
 
-    # =============================== indicators (SUM): linear functions of the stage vector ===============================
+    # ---- indicators: linear functions of the stage vector ----
     def pick(stages):
         total = 0.0
         for s in stages:
@@ -863,224 +1110,255 @@ def evaluate(scn, detail: bool = True) -> dict:
     upfront = pick(("A1-A3", "A4", "A5"))
     embodied = pick(("A1-A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "C1", "C2", "C3", "C4"))
     wlc = pick(STAGES)
-    area_ok = area is not None and area > 0.0
+    area = scn.project.gross_floor_area
+    area_ok = M["area_ok"]
     if wlc > 0.0 and all(v >= 0.0 for v in by_stage.values()):
         sum_07 = {"defined": True, "by_stage": {s: v / wlc for s, v in by_stage.items()}}
     else:
         sum_07 = {"defined": False, "by_stage": {}}
 
-    base_scn = population.BASELINES.get(bnd.baseline_scenario)
-    if base_scn is None:
-        sum_08 = {"status": "NO_BASELINE", "delta": None, "saving": None}
-    else:
-        reasons = []
-        if base_scn.project.gross_floor_area != area:
-            reasons.append("AREA")
-        if base_scn.boundary.study_period != T:
-            reasons.append("PERIOD")
-        if set(base_scn.boundary.included_lifecycle_stages) != inc:
-            reasons.append("STAGES")
-        if base_scn.boundary.results_gas_scope != bnd.results_gas_scope:
-            reasons.append("GAS_SCOPE")
-        if {f.release_year for f in base_scn.factors.values()} != {f.release_year for f in factors.values()}:
-            reasons.append("FACTOR_VERSION")
-        if reasons:
-            sum_08 = {"status": "NOT_COMPARABLE", "reasons": reasons, "delta": None, "saving": None}
+    sum_08 = None
+    if _compare:
+        base_scn = population.BASELINES.get(bnd.baseline_scenario)
+        if base_scn is None:
+            sum_08 = {"status": "NO_BASELINE", "delta": None, "saving": None}
         else:
-            bid = base_scn.meta.scenario_id
-            b_total = _BASELINE_TOTALS.get(bid)
-            if b_total is None:                 # computed once per baseline, then reused
-                b_total = _BASELINE_TOTALS[bid] = evaluate(base_scn, detail=False)["SUM-03"]["value"]
-            sum_08 = {"status": "COMPARED", "baseline": b_total, "delta": wlc - b_total,
-                      "saving": (b_total - wlc) / b_total if b_total > 0.0 else None}
+            reasons = []
+            if base_scn.project.gross_floor_area != area:
+                reasons.append("AREA")
+            if base_scn.boundary.study_period != T:
+                reasons.append("PERIOD")
+            if set(base_scn.boundary.included_lifecycle_stages) != inc:
+                reasons.append("STAGES")
+            if base_scn.boundary.results_gas_scope != bnd.results_gas_scope:
+                reasons.append("GAS_SCOPE")
+            if {f.release_year for f in base_scn.factors.values()} != {f.release_year for f in factors.values()}:
+                reasons.append("FACTOR_VERSION")
+            if reasons:
+                sum_08 = {"status": "NOT_COMPARABLE", "reasons": reasons, "delta": None, "saving": None}
+            else:
+                bid = base_scn.meta.scenario_id
+                b_total = baseline_totals.get(bid) if baseline_totals is not None else None
+                if b_total is None:                     # the caller may keep and reuse it; nothing is kept here
+                    b_total = finish(aggregate(base_scn, False), None, False, None, _compare=False)["SUM-03"]["value"]
+                    if baseline_totals is not None:
+                        baseline_totals[bid] = b_total
+                sum_08 = {"status": "COMPARED", "baseline": b_total, "delta": wlc - b_total,
+                          "saving": (b_total - wlc) / b_total if b_total > 0.0 else None}
 
-    # =============================== checks (rule table evaluated on memoised keys) ===============================
-    bad = {}
-    n_refs = 0
-    for fid, count in refs.items():
-        n_refs += count
-        rec = factors.get(fid)
-        if rec is None or rec.licence_status not in ALLOWED or not rec.source_url:
-            bad[f"factors{{{fid}}}.licence_status" if rec is not None else f"{fid} (no factor)"] = count
-    for path in none_refs:
-        bad[path] = bad.get(path, 0) + 1
-    n_refs += len(none_refs)
-    cu = scn.summary_quantities.concrete_uptake_factor_id
-    if cu is not None:
-        n_refs += 1
-        rec = factors.get(cu)
-        if rec is None or rec.licence_status not in ALLOWED or not rec.source_url:
-            key = f"factors{{{cu}}}.licence_status"
-            bad[key] = bad.get(key, 0) + 1
-    if not grid_ok:
-        bad["operation.grid"] = 1
-    area_sum = 0.0
-    for use in sorted(scn.project.use_area_breakdown):
-        area_sum += scn.project.use_area_breakdown[use]
-    if not area_ok:
-        sys_04 = {"ok": False, "status": "INVALID", "sum": area_sum, "residual": None}
-        qa_04 = {"ok": False, "status": "NOT_EVALUATED"}
-    else:
-        residual = area - area_sum
-        sys_04 = {"ok": abs(residual) <= 1e-9 * area, "status": "EVALUATED", "sum": area_sum, "residual": residual}
-        qa_04 = {"ok": abs(residual) <= 1e-6 * area, "status": "EVALUATED"}
-    qa02 = []
-    for j, eq in enumerate(scn.equipment):
-        if eq.replacement_event_list and not all(0 <= t < T for t in eq.replacement_event_list):
-            qa02.append(f"equipment[{j}].replacement_event_list")
-    for j, dev in enumerate(scn.refrigerants):
-        if dev.change_years and not all(0 <= t < T for t in dev.change_years):
-            qa02.append(f"refrigerants[{j}].change_years")
+    # ---- remaining checks ----
     qa03 = [fid for fid in sorted(used) if factors[fid].licence_status not in ALLOWED or not factors[fid].source_url]
-
     sq = scn.summary_quantities
-    rec = fac(sq.concrete_uptake_factor_id)
-    cs = conv("m3", rec.unit) if rec is not None else None
-    sto_02 = sq.concrete_m3 * cs * rec.value if cs is not None else None
-
+    if _nonneg(sq.timber_m3) and _nonneg(sq.timber_dry_density_kg_per_m3) and _nonneg(sq.timber_carbon_fraction):
+        sto_01 = sq.timber_m3 * sq.timber_dry_density_kg_per_m3 * sq.timber_carbon_fraction * (44.0 / 12.0)
+    else:
+        sto_01 = None
+    x11 = None
+    if area_ok and not math.isinf(area) and _nonneg(op.electricity_per_m2_per_year) and M["c_site"] is not None and M["grid_ok"]:
+        x11 = area * op.electricity_per_m2_per_year * M["c_site"] * G
     x17, x17_total = {}, 0.0
     summary_q = {"REBAR": sq.reinforcement_kg, "STRUCTURAL_STEEL": sq.steel_kg, "CONCRETE": sq.concrete_m3,
                  "TIMBER": sq.timber_m3, "ENVELOPE": sq.envelope_m2, "INTERIOR": sq.interior_m2}
     for k in SIMPLE_CLASSES:
         qk = summary_q[k]
-        fbar = class_sum[k] / qk if qk else 0.0
+        fbar = tot(tables["CLASS:" + k]) / qk if qk else 0.0
         x17[k] = {"quantity": qk, "fbar": fbar, "emission": qk * fbar}
         x17_total += qk * fbar
-
-    by_cycle, x08_total = {}, explicit_b4
-    for cycle in sorted(cyc_u):
-        e = cyc_n[cycle] * cyc_u[cycle]
-        by_cycle[repr(float(cycle))] = {"count": cyc_n[cycle], "unit_emission": cyc_u[cycle], "emission": e}
+    x09_emis, x09_total = {}, 0.0
+    for cls, routes in M["x09_emis"].items():
+        x09_emis[cls] = {r: tot(t) for r, t in routes.items()}
+        x09_total += sum(x09_emis[cls].values())
+    x03_mass, x03_emis, x03_total = {}, {}, 0.0
+    for key, rec in A.recipes.items():
+        if not rec["used"]:
+            continue
+        kg = rec["kg"]                                  # the rows of one composition are expanded once
+        for fid, fraction, c in rec["parts"]:
+            m = kg * fraction
+            e = m * c * factors[fid].value
+            x03_mass[fid] = x03_mass.get(fid, 0.0) + m
+            x03_emis[fid] = x03_emis.get(fid, 0.0) + e
+            x03_total += e
+    by_cycle = {}
+    x08_total = tot(explicit_b4)
+    explicit_total = x08_total
+    group_u = {}
+    for cycle in sorted((c for c in A.groups if c is not None and counts[c]), key=float):
+        u = group_u[cycle] = tot(A.groups[cycle].u)
+        e = counts[cycle] * u
+        by_cycle[repr(float(cycle))] = {"count": counts[cycle], "unit_emission": u, "emission": e}
         x08_total += e
+    skip = M["skip"]
 
-    R = {
-        "SYS-01": {"ok": not missing, "counts": counts, "violations": missing},
-        "SYS-02": {"ok": not unit_viol, "n_checked": n_unit_checks, "violations": unit_viol},
-        "SYS-03": {"ok": not bad, "n_checked": n_refs + 1, "violations": sorted(bad), "n_references_affected": sum(bad.values())},
-        "SYS-04": sys_04,
-        "A13-05": {"n_skipped": skip["A13-05"]},
+    R = dict(A.out)
+    R.update({
         "X-13": {},
-        "A13-02": {"n_invalid": n_invalid},
-        "X-15": {"n_unresolved": n_unresolved},
         "A13-01": {"value": val["A13-01"], "n_skipped": skip["A13-01"]},
         "A13-03": {"value": val["A13-03"], "n_skipped": skip["A13-03"]},
-        "A13-04": {"value": val["A13-04"]},
+        "A13-04": {"value": val["A13-04"], "n_skipped": skip["A13-04"]},
         "X-01": {"value": val["X-01"], "n_skipped": skip["X-01"]},
-        "X-03": {"value": val["X-03"], "mass_by_component": x03_mass, "emission_by_component": x03_emis},
+        "X-03": {"value": x03_total, "mass_by_component": x03_mass, "emission_by_component": x03_emis},
         "A4-01": {"value": val["A4-01"], "n_skipped": skip["A4-01"]},
         "X-12": {"value": val["X-12"], "n_skipped": skip["X-12"]},
         "A4-02": {"value": val["A4-02"], "n_skipped": skip["A4-02"]},
-        "A5-01": {"value": a5_01, "computed": a5_01_ok},
-        "A5-02": {"value": a5_02, "n_skipped": a5_02_skip},
-        "A5-03": {"value": a5_03, "n_skipped": a5_03_skip},
-        "A5-04": {"value": a5_04, "parts": {"power": a5_01, "fuels": a5_02, "waste": a5_03}, "other_assessed": False},
+        "A5-01": {"value": val["A5-01"], "computed": M["a5_01_ok"]},
+        "A5-02": {"value": val["A5-02"], "n_skipped": M["a5_02_skip"]},
+        "A5-03": {"value": val["A5-03"], "n_skipped": M["a5_03_skip"]},
+        "A5-04": {"value": a5_04, "parts": {"power": val["A5-01"], "fuels": val["A5-02"], "waste": val["A5-03"]},
+                  "other_assessed": False},
         "X-17": {"value": x17_total, "by_class": x17},
-        "B4-01": {"n_events": n_events_total},
+        "X-16": {"value": val["X-16"], "n_skipped": M["x16_skip"]},
+        "B4-01": {"n_events": n_events},
         "B4-03": {},
-        "B4-02": {"value": val["B4-02"]},
-        "X-08": {"value": x08_total, "by_cycle": by_cycle, "explicit": explicit_b4},
-        "B3-01": {"value": val["B3-01"]},
-        "B3-02": {"value": val["B3-02"]},
-        "B1-01": {"value": b1_01},
-        "B1-02": {"value": b1_02},
-        "B1-03": {"value": b1_03},
-        "B1-04": {"value": b1_04},
-        "B5-01": {"value": b5, "n_events": b5_n},
-        "X-06": {},
-        "B6-04": {},
-        "B6-01": {"computed": grid_ok},
-        "B6-02": {"n_skipped": b6_skip},
+        "B4-02": {"value": val["B4-02"], "n_partial": n_partial},
+        "X-08": {"value": x08_total, "by_cycle": by_cycle, "explicit": explicit_total},
+        "B3-01": {"value": val["B3-01"], "n_skipped": skip["B3"]},
+        "B3-02": {"value": val["B3-02"], "n_skipped": skip["B3"]},
+        "B1-01": {"value": M["b1_01"], "n_skipped": M["b1_01_skip"]},
+        "B1-02": {"value": b1_02, "n_skipped": b1_skip[0]},
+        "B1-03": {"value": b1_03, "n_skipped": b1_skip[1]},
+        "B1-04": {"value": b1_04, "n_skipped": b1_skip[2]},
+        "B5-01": {"value": b5, "n_events": b5_n, "computed": b5_computed},
+        "X-06": {"matches_table": grid_matches, "source": "DESCRIPTOR" if segments is not None else "TABLE"},
+        "B6-04": {"computed": net_ok, "descriptors_match_tables": net_match},
+        "B6-01": {"computed": elec_ok},
+        "B6-02": {"n_skipped": annual_skip["B6-02"], "descriptors_match_tables": annual_match["B6-02"]},
         "B6-03": {"value": b6_03},
-        "B2-01": {"value": b2},
+        "B2-01": {"value": b2, "computed": b2_ok},
         "X-11": {"value": x11},
-        "B7-01": {"n_skipped": 0 if b7[0][0] is not None else 1},
-        "B7-02": {"n_skipped": 0 if b7[1][0] is not None else 1},
-        "B7-03": {"n_skipped": 0 if b7[2][0] is not None else 1},
-        "B7-04": {"value": b7_total},
-        "C1-01": {"value": c1, "n_skipped": c1_skip},
+        "B7-01": {"n_skipped": annual_skip["B7-01"], "descriptors_match_tables": annual_match["B7-01"]},
+        "B7-02": {"n_skipped": annual_skip["B7-02"], "descriptors_match_tables": annual_match["B7-02"]},
+        "B7-03": {"n_skipped": annual_skip["B7-03"], "descriptors_match_tables": annual_match["B7-03"]},
+        "B7-04": {"value": b7_04},
+        "C1-01": {"value": val["C1-01"], "n_skipped": M["c1_skip"]},
         "C2-01": {"value": val["C2-01"], "n_skipped": skip["C2-01"]},
-        "C3-01": {"value": val["C3-01"], "n_skipped": skip["C3-01"]},
-        "C4-01": {"value": val["C4-01"], "n_skipped": skip["C4-01"]},
+        "C3-01": {"value": val["C3-01"], "n_skipped": skip["C3-01"], "n_routes_skipped": M["routes_skipped"]["C3"]},
+        "C4-01": {"value": val["C4-01"], "n_skipped": skip["C4-01"], "n_routes_skipped": M["routes_skipped"]["C4"]},
         "X-14": {"value": val["X-14"], "n_skipped": skip["X-14"]},
-        "C-05": {"ok": not c05_viol, "violations": c05_viol, "under_allocated": c05_under, "n_mass_unchecked": c05_unchecked},
-        "X-09": {"value": x09_total, "mass": x09_mass, "emission": x09_emis},
-        "X-10": {"resource_kg": x10_resource, "waste_kg": x10_waste, "n_excluded": x10_excluded},
-        "STO-01": {"value": sq.timber_m3 * sq.timber_dry_density_kg_per_m3 * sq.timber_carbon_fraction * (44.0 / 12.0)},
-        "STO-02": {"value": sto_02},
-        "X-02": {"by_stage": by_stage, "by_stage_all": stage_all},
+        "X-09": {"value": x09_total, "mass": M["x09_mass"], "emission": x09_emis},
+        "X-10": {"resource_kg": resource, "waste_kg": waste, "n_excluded": skip["X-10"]},
+        "STO-01": {"value": sto_01},
+        "STO-02": {"value": tot(tables["STO-02"]) if M["sto_02_ok"] else None},
         "X-04": {"value": from_gases + grid_total + refrigerant_total, "by_gas": by_gas, "co2e_from_gases": from_gases,
                  "grid_co2e": grid_total, "refrigerant_co2e": refrigerant_total, "by_stage_recomputed": unit_stage},
-        "X-05": {"value": sum(stage_co2[s] for s in STAGES if s in inc), "by_stage_co2": stage_co2},
+        "X-05": {"value": co2_total, "by_stage_co2": stage_co2},
         "X-07": {"value": wlc},
-        "SUM-01": {"value": upfront},
-        "SUM-02": {"value": embodied},
-        "SUM-03": {"value": wlc},
         "SUM-04": {"value": wlc / area if area_ok else None},
         "SUM-05": {"value": wlc / (area * T) if area_ok and T > 0.0 else None},
         "SUM-06": {"value": wlc / 1000.0},
         "SUM-07": sum_07,
-        "SUM-08": sum_08,
         "QA-01": {"ok": not qa01, "violations": qa01},
-        "QA-02": {"ok": not qa02, "violations": qa02},
+        "QA-02": {"ok": not qa02, "violations": qa02, "warnings": qa02_warn},
         "QA-03": {"ok": not qa03, "violations": qa03, "n_used": len(used)},
-        "QA-04": qa_04,
-    }
+    })
+    if sum_08 is not None:
+        R["SUM-08"] = sum_08
+    incomplete = []
+    for s in STAGES:
+        if s in inc:
+            for uid in STAGE_UNITS[s]:
+                r = R[uid]
+                if (r.get("n_skipped") or r.get("n_routes_skipped") or r.get("n_partial") or r.get("computed") is False) \
+                        and uid not in incomplete:
+                    incomplete.append(uid)
+    complete = not incomplete
+    R["X-02"] = {"by_stage": by_stage, "by_stage_all": stage_all, "complete": complete, "incomplete_units": sorted(incomplete)}
+    R["SUM-01"] = {"value": upfront, "complete": complete}
+    R["SUM-02"] = {"value": embodied, "complete": complete}
+    R["SUM-03"] = {"value": wlc, "complete": complete}
+    R["_stats"] = stats
+    R["_tables"] = tables
+    R["_n_events_check"] = n_events
     if not detail:
-        return R
+        del R["_n_events_check"]
+    if detail:
+        _detail(A, R, T, Y, wl, counts, group_u, explicit_events, b1_items, b1_year, b1_event_year, g_values,
+                net_series, elec_series, annual_parts, b5_n, b5_base, b2_ok, stage_all, b1_04)
+    return R
 
-    # =============================== per-row lists and yearly series (detail only) ===============================
-    R["A13-05"].update(q_ord=L["q_ord"], q_inst=L["q_inst"])
-    R["X-13"].update(by_item=L["net"], waste_by_item=L["disp"])
-    R["A13-02"]["by_item"] = L["a1302"]
-    R["X-15"].update(kind=L["kind"], factor=L["factor"], conv=L["conv"])
+
+def _detail(A, R, T, Y, wl, counts, group_u, explicit_events, b1_items, b1_year, b1_event_year, g_values,
+            net_series, elec_series, annual_parts, b5_n, b5_base, b2_ok, stage_all, b1_04):
+    """Per-row lists and yearly series (the same outputs as the reference; not needed for the totals)."""
+    scn = A.scn
+    L = A.rows
+    fval = A.fval
+    stats = R["_stats"]
+    inc = set(scn.boundary.included_lifecycle_stages)
+    bnd = scn.boundary
+    R["A13-05"] = dict(R["A13-05"], q_ord=L["q_ord"], q_inst=L["q_inst"])
+    R["X-13"] = {"by_item": L["net"], "waste_by_item": L["disp"]}
+    R["A13-02"] = dict(R["A13-02"], by_item=L["a1302"])
+    R["X-15"] = dict(R["X-15"], kind=L["kind"], factor=L["factor"], conv=L["conv"])
     for uid, key in (("A13-01", "a1301"), ("A13-03", "a1303"), ("A13-04", "a1304"), ("X-01", "x01"), ("A4-01", "a401"),
                      ("A4-02", "a402"), ("X-12", "x12"), ("C2-01", "c2"), ("C3-01", "c3"), ("C4-01", "c4"), ("X-14", "x14")):
         R[uid]["by_item"] = L[key]
-    R["B4-01"]["events"] = L["events"]
-    R["B4-03"]["by_item"] = L["n"]
+    R["X-16"]["by_item"] = [it[1] * fval[it[0]] if it is not None else 0.0 for it in A.misc["x16_items"]]
+    n_mat = [counts[c] for c in L["mcycle"]]
+    R["B4-03"] = {"by_item": n_mat}
+    events_all = []
+    n_events = 0
+    for j, eq in enumerate(scn.equipment):
+        if L["eexp"][j]:
+            ev = explicit_events[j]
+        else:
+            stats["event_lists_built"] += 1
+            ev = [k * eq.service_life for k in range(1, counts[L["ecycle"][j]] + 1)]
+        events_all.append(ev)
+        n_events += len(ev)
+    R["B4-01"] = {"events": events_all, "n_events": n_events}
+    assert n_events == R["_n_events_check"]
+    del R["_n_events_check"]
     R["B1-02"]["by_item"] = b1_items
 
     w = [0.0] + [1.0] * (Y - 1) + ([wl] if Y else [])
-    # renewals and repairs per year from the cycle groups (one entry per distinct cycle, not per row)
-    b3_year = [repair_rate_sum * w[y] - b3_year_adjust[y] for y in range(Y + 1)]
-    for cycle, n in cyc_n.items():
-        u = cyc_u[cycle]
-        rsum = cyc_r.get(cycle, 0.0)
-        seen = set()
-        for k in range(1, n + 1):
-            y = math.ceil(k * cycle)
+    b4_year = [0.0] * (Y + 1)
+    b3_year = [0.0] * (Y + 1)
+    for cycle, grp in A.groups.items():
+        n = counts[cycle]
+        skip_years = set()
+        if n:
+            u = group_u[cycle] if cycle in group_u else sum(act * fval[key] for key, act in grp.u.items())
+            for k in range(1, n + 1):
+                y = cf.event_year(k * cycle)
+                b4_year[y] += u
+                skip_years.add(y)
+        if grp.r:
+            rate = sum(act * fval[key] for key, act in grp.r.items())
+            for y in range(1, Y + 1):               # added year by year, never by subtraction
+                if y not in skip_years:
+                    b3_year[y] += rate * w[y]
+    for j, years, lines, rline, emass, incomplete in A.explicit:
+        events = explicit_events[j]
+        u = sum(act * fval[key] for key, act in lines)
+        skip_years = set()
+        for t in events:
+            y = cf.event_year(t)
             b4_year[y] += u
-            if y not in seen:
-                seen.add(y)
-                b3_year[y] -= rsum * w[y]
+            skip_years.add(y)
+        if rline is not None:
+            rate = rline[1] * fval[rline[0]]
+            for y in range(1, Y + 1):
+                if y not in skip_years:
+                    b3_year[y] += rate * w[y]
     b5_year = [0.0] * (Y + 1)
     for k in range(1, b5_n + 1):
-        b5_year[math.ceil(k * bnd.replacement_cycle)] += bnd.reconstruction_scope_fraction * b5_base
-    g_series = [0.0]
-    for k in range(Y):
-        if grid.kind == "CONSTANT":
-            g_series.append(grid.start)
-        elif grid.kind == "LINEAR_DECLINE_TO_FLOOR":
-            g_series.append(max(grid.floor, grid.start - grid.annual_decline * k))
-        elif grid.kind == "STEPWISE":
-            v = None
-            for step in grid.steps:
-                if step.from_index <= k:
-                    v = step.value
-            g_series.append(v)
-        else:
-            g_series.append(grid.table[k])
-    tb = grid.table
-    R["X-06"].update(by_year=g_series,
-                     matches_table=all(g_series[k + 1] == tb[k] or abs(g_series[k + 1] - tb[k]) <= 1e-12 * abs(tb[k]) for k in range(Y)))
-    fuel_series = series_of(b6_parts)
-    b7_series = [series_of([part]) for _, part in b7]
-    R["B6-04"]["by_year"] = series["net"]
-    R["B6-01"]["by_year"] = series["elec"]
-    R["B6-02"]["by_year"] = fuel_series
-    for uid, s in zip(("B7-01", "B7-02", "B7-03"), b7_series):
-        R[uid]["by_year"] = s
-    R["B4-02"].update(by_item_material=L["b4m"], by_item_equipment=L["b4e"], by_year=b4_year)
+        b5_year[cf.event_year(k * bnd.replacement_cycle)] += bnd.reconstruction_scope_fraction * b5_base
+    R["X-06"]["by_year"] = [0.0] + list(g_values)
+    R["B6-04"]["by_year"] = net_series
+    R["B6-01"]["by_year"] = elec_series
+    series = {}
+    for name, parts in annual_parts.items():
+        out = [0.0] * (Y + 1)
+        for profile, hit in parts:
+            values = _values(profile, Y)
+            value = fval[hit[0]]
+            for k in range(Y):
+                out[k + 1] += values[k] * hit[1] * value
+        series[name] = out
+        R[name]["by_year"] = out
+    R["B4-02"].update(by_item_material=[n * u for n, u in zip(n_mat, L["mu"])],
+                      by_item_equipment=[len(ev) * u for ev, u in zip(events_all, L["eu"])], by_year=b4_year)
     R["B3-01"]["by_year"] = b3_year
     R["B1-02"]["by_year"] = b1_year
     R["B1-03"]["by_year"] = b1_event_year
@@ -1090,17 +1368,16 @@ def evaluate(scn, detail: bool = True) -> dict:
     for s in ("A1-A3", "A4", "A5"):
         if s in inc:
             out[0] += stage_all[s]
-    share = op.facility_management_ratio
-    elec = series["elec"]
+    share = scn.operation.facility_management_ratio if b2_ok else 0.0
     for y in range(1, Y + 1):
         e = 0.0
-        ew = w[y] * elec[y]
+        ew = w[y] * elec_series[y]
         if "B6" in inc:
-            e += ew * (1.0 - share) + w[y] * fuel_series[y]
+            e += (ew * (1.0 - share) if "B2" in inc else ew) + w[y] * series["B6-02"][y]
         if "B2" in inc:
             e += ew * share
         if "B7" in inc:
-            e += w[y] * (b7_series[0][y] + b7_series[1][y] + b7_series[2][y])
+            e += w[y] * (series["B7-01"][y] + series["B7-02"][y] + series["B7-03"][y])
         if "B1" in inc:
             e += b1_year[y] + b1_event_year[y]
         if "B3" in inc:
@@ -1121,4 +1398,21 @@ def evaluate(scn, detail: bool = True) -> dict:
         running += v
         cumulative.append(running)
     R["X-07"] = {"by_year": out, "cumulative": cumulative, "value": running}
-    return R
+
+
+def evaluate(scn, detail: bool = True, baseline_totals: dict | None = None) -> dict:
+    """All results of one scenario. ``baseline_totals`` is an optional dict the caller keeps to reuse baseline totals."""
+    T = check_period(scn)
+    return finish(aggregate(scn, detail), T, detail, baseline_totals)
+
+
+def sweep(scn, periods) -> dict:
+    """Totals for several study periods from ONE pass over the rows."""
+    check_period(scn)
+    A = aggregate(scn, False)
+    out = {}
+    for T in periods:
+        if not (T > 0.0) or math.isinf(T) or len(scn.operation.grid.table) < math.ceil(T):
+            raise ValueError("invalid study period")
+        out[T] = finish(A, T, False, None, _compare=False)
+    return out

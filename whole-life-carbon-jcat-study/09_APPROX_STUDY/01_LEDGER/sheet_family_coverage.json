@@ -23,8 +23,11 @@
    "share_of_all_nodes": 0.823884,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
+    "A13-01",
+    "A13-02",
     "X-03",
-    "A13-02"
+    "X-05",
+    "X-17"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "全数式ノードの 82.4％。名称から複合品の構成展開と推定したが、式の内容は確認していない。"
@@ -36,8 +39,10 @@
    "share_of_all_nodes": 0.021899,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-07",
-    "X-06"
+    "B6-03",
+    "B7-04",
+    "X-06",
+    "X-07"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "年次・累積の系列と推定。詳細版には係数固定と係数変化の 2 種がある。"
@@ -49,6 +54,9 @@
    "share_of_all_nodes": 0.019474,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
+    "A5-03",
+    "C2-01",
+    "C3-01",
     "X-09"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -61,9 +69,10 @@
    "share_of_all_nodes": 0.018687,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-01",
+    "A13-01",
     "B4-01",
     "B4-02",
+    "X-01",
     "X-14"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -76,9 +85,10 @@
    "share_of_all_nodes": 0.018151,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-01",
+    "A13-01",
     "B4-01",
     "B4-02",
+    "X-01",
     "X-14"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -91,8 +101,13 @@
    "share_of_all_nodes": 0.01726,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-08",
-    "B4-03"
+    "B3-01",
+    "B3-02",
+    "B4-01",
+    "B4-02",
+    "B4-03",
+    "B5-01",
+    "X-08"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "更新周期別の集計と推定。"
@@ -104,9 +119,10 @@
    "share_of_all_nodes": 0.015612,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-01",
+    "A13-01",
     "B4-01",
     "B4-02",
+    "X-01",
     "X-14"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -119,9 +135,14 @@
    "share_of_all_nodes": 0.015439,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-09",
+    "A5-03",
+    "C1-01",
+    "C2-01",
     "C3-01",
-    "C4-01"
+    "C4-01",
+    "C-05",
+    "X-09",
+    "X-14"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "処理経路別の集計と推定。"
@@ -133,7 +154,8 @@
    "share_of_all_nodes": 0.011348,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-10"
+    "X-10",
+    "X-14"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "LCW を廃棄物量と解釈した推定。"
@@ -144,13 +166,10 @@
    "formula_xml_nodes": 26805,
    "share_of_all_nodes": 0.00702,
    "status": "NOT_INSPECTED",
-   "related_units": [
-    "SYS-01",
-    "SYS-02",
-    "X-15"
-   ],
+   "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "入力シート内の数式（検査・検索・既定値などの可能性）は名称から特定できない。"
+   "note": "入力シート内の数式（検査・検索・既定値などの可能性）は名称から特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-11",
@@ -160,7 +179,8 @@
    "status": "NOT_INSPECTED",
    "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "名称から計算構造を特定できない。"
+   "note": "名称から計算構造を特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-12",
@@ -168,11 +188,10 @@
    "formula_xml_nodes": 18820,
    "share_of_all_nodes": 0.004929,
    "status": "NOT_INSPECTED",
-   "related_units": [
-    "SUM-07"
-   ],
+   "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "報告用の副シート。詳細版で 17,178 ノードあるが構造は特定できない。"
+   "note": "報告用の副シート。詳細版で 17,178 ノードあるが構造は特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-13",
@@ -182,6 +201,8 @@
    "status": "COVERED_BY_EXISTING",
    "related_units": [
     "A13-02",
+    "X-03",
+    "X-05",
     "X-15"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -194,8 +215,11 @@
    "share_of_all_nodes": 0.002442,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-15",
-    "X-04"
+    "A13-01",
+    "A4-02",
+    "X-04",
+    "X-05",
+    "X-15"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "係数表とその参照と推定。値は流用禁止。"
@@ -206,12 +230,10 @@
    "formula_xml_nodes": 8173,
    "share_of_all_nodes": 0.00214,
    "status": "NOT_INSPECTED",
-   "related_units": [
-    "X-02",
-    "SUM-03"
-   ],
+   "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "集計表ブックの集計。合計の構造と推定されるが、内容は特定できない。"
+   "note": "集計表ブックの集計。合計の構造と推定されるが、内容は特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-16",
@@ -232,9 +254,10 @@
    "share_of_all_nodes": 0.001612,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-01",
+    "A13-01",
     "B4-01",
     "B4-02",
+    "X-01",
     "X-14"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -247,6 +270,10 @@
    "share_of_all_nodes": 0.001453,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
+    "A5-01",
+    "A5-02",
+    "B6-01",
+    "X-05",
     "X-06"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -259,7 +286,8 @@
    "share_of_all_nodes": 0.001043,
    "status": "COVERED_BY_EXISTING",
    "related_units": [
-    "A13-04"
+    "A13-04",
+    "A5-04"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "未数量分の上乗せに関する表と推定。倍率の値は流用禁止（RULES R03）で、本研究の A13-04 は独立に設計した式。"
@@ -325,7 +353,9 @@
    "related_units": [
     "SUM-03",
     "SUM-04",
-    "SUM-05"
+    "SUM-05",
+    "SUM-06",
+    "SUM-07"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "ホールライフの合計と原単位と推定。"
@@ -373,7 +403,10 @@
    "share_of_all_nodes": 0.000206,
    "status": "COVERED_BY_EXISTING",
    "related_units": [
-    "SUM-01"
+    "A5-04",
+    "SUM-01",
+    "SUM-04",
+    "SUM-06"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "アップフロントの合計と推定。"
@@ -397,8 +430,9 @@
    "share_of_all_nodes": 0.000131,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
-    "X-02",
-    "SUM-07"
+    "SUM-02",
+    "SUM-07",
+    "X-02"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "段階別の結果表と推定。"
@@ -411,7 +445,8 @@
    "status": "NOT_INSPECTED",
    "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "名称から計算構造を特定できない。"
+   "note": "名称から計算構造を特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-32",
@@ -420,6 +455,7 @@
    "share_of_all_nodes": 0.000115,
    "status": "COVERED_BY_EXISTING",
    "related_units": [
+    "SUM-03",
     "SUM-04",
     "SUM-05",
     "SUM-06",
@@ -435,6 +471,7 @@
    "share_of_all_nodes": 9e-05,
    "status": "COVERED_BY_EXISTING",
    "related_units": [
+    "B2-01",
     "B6-01",
     "B6-02",
     "B6-03",
@@ -454,9 +491,11 @@
    "share_of_all_nodes": 7.1e-05,
    "status": "COVERED_BY_EXISTING",
    "related_units": [
+    "SUM-02",
     "SUM-03",
     "SUM-06",
-    "SUM-07"
+    "SUM-07",
+    "X-02"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "結果の要約と推定。"
@@ -469,7 +508,8 @@
    "status": "NOT_INSPECTED",
    "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "パラメータの保管と推定されるが、数式（216 ノード）の内容は特定できない。"
+   "note": "パラメータの保管と推定されるが、数式（216 ノード）の内容は特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-36",
@@ -478,6 +518,7 @@
    "share_of_all_nodes": 5.5e-05,
    "status": "COVERED_BY_ADDITIONAL",
    "related_units": [
+    "B6-02",
     "X-11"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -491,7 +532,8 @@
    "status": "NOT_INSPECTED",
    "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "詳細版の入力シート。外部ツールとの連携が前提で、構造を特定できない。"
+   "note": "詳細版の入力シート。外部ツールとの連携が前提で、構造を特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-38",
@@ -501,7 +543,8 @@
    "status": "NOT_INSPECTED",
    "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "名称から計算構造を特定できない。"
+   "note": "名称から計算構造を特定できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-39",
@@ -510,6 +553,7 @@
    "share_of_all_nodes": 1.9e-05,
    "status": "COVERED_BY_EXISTING",
    "related_units": [
+    "A13-02",
     "STO-02"
    ],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
@@ -536,7 +580,8 @@
    "status": "NOT_INSPECTED",
    "related_units": [],
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
-   "note": "外部の計算ツールを参照するためのシートと推定。内容は確認できない。"
+   "note": "外部の計算ツールを参照するためのシートと推定。内容は確認できない。",
+   "status_label": "名称から対応を推定できない（原版の式は未調査）"
   },
   {
    "family_id": "SF-42",
@@ -747,5 +792,6 @@
    "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
    "note": "機器の一覧（数式 0 件）。"
   }
- ]
+ ],
+ "correspondence_source_note": "シート族と評価単位の対応はこのファイルが唯一の出所。units.json の sheet_family_links はここから tools/sync_ledger.py が機械的に作る。名称から計算構造を推定できない族（NOT_INSPECTED）はどの単位にも対応させない。"
 }

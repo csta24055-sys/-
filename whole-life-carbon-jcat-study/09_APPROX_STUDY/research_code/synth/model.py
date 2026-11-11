@@ -517,7 +517,11 @@ class AnnualProfile:
     CONSTANT      table[k] == base
     LINEAR_TREND  table[k] == base + slope * k
     TABLE         no closed form; ``base`` and ``slope`` are None
-    The table is authoritative; the descriptor states its structure exactly.
+    Which one counts: for CONSTANT and LINEAR_TREND the descriptor (``base``,
+    ``slope``) is the input and the table is a redundant copy that must agree with
+    it; for TABLE the table is the input. A disagreement between descriptor and
+    table is an input defect that calculations report (they do not silently pick).
+    ``unit`` is "<unit>/year"; no other time base is accepted.
     """
 
     kind: str                              # one of PROFILE_KINDS
@@ -543,6 +547,11 @@ class GridFactorScenario:
     TABLE                    no closed form
     ``construction_value`` is the factor of the construction period, before
     table index 0.
+    Which one counts: for a well-formed CONSTANT, LINEAR_DECLINE_TO_FLOOR
+    (annual_decline >= 0, start >= floor) or STEPWISE (steps sorted by strictly
+    increasing ``from_index``, the first at 0) scenario the descriptor is the input
+    and the table a redundant copy that must agree; otherwise the table is the input.
+    ``unit`` is "kgCO2e/<electricity unit>".
     """
 
     scenario_id: str
@@ -642,6 +651,24 @@ class EndOfLife:
 # --------------------------------------------------------------------------
 
 @dataclass(slots=True)
+class CostItem:
+    """A scope known only by its cost (fictional), for the cost-based estimate with price correction.
+
+    Not among the 124 input fields: these are NEW inputs introduced by the study.
+    ``amount`` is in ``currency`` at the price level of ``price_year``; the factor is
+    per currency unit at the price level of ``factor_base_year``.
+    """
+
+    item_id: str
+    description: str
+    amount: Optional[float]
+    currency: str                          # fictional currency label, also the factor unit
+    price_year: int
+    factor_id: Optional[str]
+    factor_base_year: int
+
+
+@dataclass(slots=True)
 class Scenario:
     """One complete fictional input set."""
 
@@ -661,6 +688,8 @@ class Scenario:
     operation: Operation
     water_waste: WaterWaste
     end_of_life: EndOfLife
+    cost_items: list[CostItem] = field(default_factory=list)      # NEW inputs (see CostItem)
+    price_index: dict[int, float] = field(default_factory=dict)   # calendar year -> fictional price index
 
 
 # --------------------------------------------------------------------------
@@ -731,6 +760,8 @@ def factor_references(scenario: Scenario) -> Iterator[tuple[str, Optional[str]]]
         yield f"end_of_life.waste_hauls[{i}].factor_id", haul.factor_id
     if scenario.summary_quantities.concrete_uptake_factor_id is not None:
         yield "summary_quantities.concrete_uptake_factor_id", scenario.summary_quantities.concrete_uptake_factor_id
+    for i, item in enumerate(scenario.cost_items):
+        yield f"cost_items[{i}].factor_id", item.factor_id
 
 
 def used_factor_ids(scenario: Scenario) -> list[str]:
