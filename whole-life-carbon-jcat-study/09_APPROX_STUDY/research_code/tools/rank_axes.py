@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Axis A / Axis B ranking and top-30% selection (protocol P4-P6).
+"""Axis A / Axis B ranking and research priority order (protocol P4-P6, version 1.1).
+
+Since directive amendment 01 the rankings no longer limit the research scope:
+EVERY evaluation unit is a research target. The two axes only decide the order
+in which units are taken up. The former top-30% sets are kept as reference
+information (`reference_top30`).
 
 Inputs
   01_LEDGER/units.json                     classification ledger
@@ -8,7 +13,7 @@ Inputs
   02_RANKING/axis_b_judges/*.json          independent judge score sheets
 
 Outputs
-  02_RANKING/axis_a.json, axis_b.json, selected_targets.json
+  02_RANKING/axis_a.json, axis_b.json, research_priority.json
 
 Research tooling only. Standard library only. No product code.
 """
@@ -32,7 +37,10 @@ A_VARIANTS = {
     "no_proxy": {k: v for k, v in A_WEIGHTS.items() if k != "a7"},
 }
 B_CRITERIA = ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8"]
-SHARE = 0.30
+B_UNIFICATION = ["b2", "b3", "b4", "b8"]  # criteria about merging different formulas
+PRIORITY_WEIGHTS = {"axis_b": 0.35, "unification": 0.30, "axis_a": 0.35}
+N_WAVES = 3
+SHARE = 0.30  # reference only; does not limit the research scope
 OPERATOR_RE = re.compile(r"sum|max|min|count|ceil|floor|\*\*|[-+*/^]")
 
 
@@ -79,6 +87,12 @@ def top_share(scores: dict, share: float = SHARE):
         return k, None, []
     cutoff = ordered[min(k, len(ordered)) - 1][1]
     return k, cutoff, [uid for uid, s in ordered if s >= cutoff - 1e-12]
+
+
+def _positions(scores: dict) -> dict:
+    """1-based rank position per unit (None scores go last)."""
+    order = sorted(scores, key=lambda uid: (-(scores[uid] if scores[uid] is not None else -1), uid))
+    return {uid: pos for pos, uid in enumerate(order, 1)}
 
 
 def static_metrics(units: list, families: dict) -> dict:
@@ -162,21 +176,27 @@ def rank_axis_a(units: list, families: dict, meas: dict) -> dict:
             "peak_memory_bytes": rec.get("peak_memory_bytes"),
             "static": stat[uid],
             "percentile_ranks": {key: (round(ranks[key][uid], 4) if ranks[key][uid] is not None else None) for key in ranks},
-            "in_top30_main": uid in selected,
-            "in_top30_variants": [name for name, v in variants.items() if uid in v["selected"]],
+            "reference_top30_main": uid in selected,
+            "reference_top30_variants": [name for name, v in variants.items() if uid in v["selected"]],
         })
     return {
         "schema_version": "1.0",
         "axis": "A",
         "definition": "Computational load and complexity. Measured on the independent reference calculation with synthetic data; the original workbooks were not executed.",
+        "use": "Decides the order of work only. All units are research targets (directive amendment 01).",
         "unit_count": len(ids),
-        "share": SHARE,
-        "k": k,
         "weights": A_WEIGHTS,
-        "cutoff_score": cutoff,
-        "selected_main": selected,
-        "selected_sensitivity_only": sensitivity_only,
-        "variants": {name: {"weights": v["weights"], "cutoff": v["cutoff"], "selected": v["selected"]} for name, v in variants.items()},
+        "scores": {uid: main[uid] for uid in ids},
+        "reference_top30": {
+            "note": "Former selection rule, kept for reference. It does not limit the research scope.",
+            "share": SHARE,
+            "k": k,
+            "cutoff_score": cutoff,
+            "main": selected,
+            "sensitivity_only": sensitivity_only,
+            "variants": {name: {"weights": v["weights"], "cutoff": v["cutoff"], "members": v["selected"]} for name, v in variants.items()},
+        },
+        "rank_by_variant": {name: _positions(v["scores"]) for name, v in variants.items()},
         "measurement_source": meas.get("source"),
         "size_classes": sizes,
         "ranking": rows,
@@ -201,6 +221,7 @@ def rank_axis_b(units: list, judge_files: list) -> dict:
         totals = {name: sum(sheet[uid][c] for c in B_CRITERIA) for name, sheet in sheets.items()}
         scores[uid] = sum(med.values())
         detail[uid] = {
+            "unification_subscore": sum(med[c] for c in B_UNIFICATION),
             "median_by_criterion": med,
             "judge_totals": totals,
             "judge_spread": max(totals.values()) - min(totals.values()),
@@ -218,18 +239,25 @@ def rank_axis_b(units: list, judge_files: list) -> dict:
             "b_score": scores[uid],
             "disputed": d["judge_spread"] >= 6,
             **d,
-            "in_top30": uid in selected,
+            "reference_top30": uid in selected,
         })
     return {
         "schema_version": "1.0",
         "axis": "B",
         "definition": "Room for simplification, approximation and unification. Eight criteria scored 0-3 by three independent judges; the score is the sum of per-criterion medians (0-24).",
+        "use": "Decides the order of work only. All units are research targets (directive amendment 01).",
         "unit_count": len(ids),
-        "share": SHARE,
-        "k": k,
-        "cutoff_score": cutoff,
         "judges": sorted(sheets),
-        "selected": selected,
+        "scores": scores,
+        "unification_subscores": {uid: detail[uid]["unification_subscore"] for uid in ids},
+        "unification_criteria": B_UNIFICATION,
+        "reference_top30": {
+            "note": "Former selection rule, kept for reference. It does not limit the research scope.",
+            "share": SHARE,
+            "k": k,
+            "cutoff_score": cutoff,
+            "members": selected,
+        },
         "disputed_units": [r["id"] for r in rows if r["disputed"]],
         "ranking": rows,
     }
@@ -247,48 +275,66 @@ def main() -> int:
     b = rank_axis_b(units, judge_files)
     names = {u["id"]: u["name"] for u in units}
     stages = {u["id"]: u["stage"] for u in units}
-    sel_a, sel_as, sel_b = set(a["selected_main"]), set(a["selected_sensitivity_only"]), set(b["selected"])
+    ids = [u["id"] for u in units]
     arank = {r["id"]: r for r in a["ranking"]}
     brank = {r["id"]: r for r in b["ranking"]}
-    targets = []
-    for uid in [u["id"] for u in units]:
-        basis = []
-        if uid in sel_a:
-            basis.append("A_TOP30")
-        if uid in sel_as:
-            basis.append("A_SENSITIVITY")
-        if uid in sel_b:
-            basis.append("B_TOP30")
-        if not basis:
-            continue
-        targets.append({
+    pa = pct_rank(a["scores"])
+    pb = pct_rank(b["scores"])
+    pu = pct_rank(b["unification_subscores"])
+    priority = {}
+    for uid in ids:
+        parts = {"axis_b": pb[uid], "unification": pu[uid], "axis_a": pa[uid]}
+        num = sum(PRIORITY_WEIGHTS[key] * val for key, val in parts.items() if val is not None)
+        den = sum(PRIORITY_WEIGHTS[key] for key, val in parts.items() if val is not None)
+        priority[uid] = num / den if den else 0.0
+    order = sorted(ids, key=lambda uid: (-priority[uid], uid))
+    wave_size = math.ceil(len(order) / N_WAVES)
+    rows = []
+    for pos, uid in enumerate(order, 1):
+        rows.append({
+            "order": pos,
+            "wave": min(N_WAVES, (pos - 1) // wave_size + 1),
             "id": uid,
             "name": names[uid],
             "stage": stages[uid],
-            "selection_basis": basis,
+            "priority_score": round(priority[uid], 4),
             "a_rank": arank[uid]["rank"],
             "a_score": arank[uid]["a_score"],
             "a_measured": arank[uid]["measured"],
             "b_rank": brank[uid]["rank"],
             "b_score": brank[uid]["b_score"],
+            "b_unification_subscore": brank[uid]["unification_subscore"],
             "b_disputed": brank[uid]["disputed"],
+            "reference_top30": [tag for tag, hit in (
+                ("A", arank[uid]["reference_top30_main"]),
+                ("A_SENSITIVITY", bool(arank[uid]["reference_top30_variants"]) and not arank[uid]["reference_top30_main"]),
+                ("B", brank[uid]["reference_top30"]),
+            ) if hit],
         })
-    selected = {
-        "schema_version": "1.0",
-        "scope_statement": "Top 30 percent of the evaluation units that could be established for the independent conceptual model. This is NOT the top 30 percent of the original workbooks, whose formula bodies were not inspected.",
-        "unit_count": len(units),
-        "k_per_axis": a["k"],
-        "count_a_top30": len(sel_a),
-        "count_a_sensitivity_only": len(sel_as),
-        "count_b_top30": len(sel_b),
-        "count_both_axes": len((sel_a | sel_as) & sel_b),
-        "count_targets": len(targets),
-        "targets": targets,
+    plan = {
+        "schema_version": "1.1",
+        "scope_statement": "Every evaluation unit established for the independent conceptual model is a research target (directive amendment 01). The order below only says which units are taken up first. It is not a ranking of the original workbooks, whose formula bodies were not inspected.",
+        "unit_count": len(ids),
+        "research_target_count": len(ids),
+        "priority_formula": "0.35 * pct(axis B) + 0.30 * pct(unification criteria b2+b3+b4+b8) + 0.35 * pct(axis A)",
+        "priority_weights": PRIORITY_WEIGHTS,
+        "waves": {str(w): [r["id"] for r in rows if r["wave"] == w] for w in range(1, N_WAVES + 1)},
+        "reference_top30_counts": {
+            "k_per_axis": a["reference_top30"]["k"],
+            "A": len(a["reference_top30"]["main"]),
+            "A_sensitivity_only": len(a["reference_top30"]["sensitivity_only"]),
+            "B": len(b["reference_top30"]["members"]),
+            "union": len(set(a["reference_top30"]["main"]) | set(a["reference_top30"]["sensitivity_only"]) | set(b["reference_top30"]["members"])),
+        },
+        "units": rows,
     }
-    for name, obj in (("axis_a.json", a), ("axis_b.json", b), ("selected_targets.json", selected)):
+    for name, obj in (("axis_a.json", a), ("axis_b.json", b), ("research_priority.json", plan)):
         (RANK / name).write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"units={len(units)} k={a['k']} A={len(sel_a)} A_sens_only={len(sel_as)} B={len(sel_b)} "
-          f"both={selected['count_both_axes']} targets={len(targets)}")
+    stale = RANK / "selected_targets.json"
+    if stale.exists():
+        stale.unlink()
+    print(f"units={len(ids)} research_targets={len(ids)} waves={[len(v) for v in plan['waves'].values()]} "
+          f"reference_top30={plan['reference_top30_counts']}")
     return 0
 
 
