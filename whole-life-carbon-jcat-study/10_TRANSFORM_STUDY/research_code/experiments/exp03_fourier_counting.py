@@ -9,6 +9,7 @@ Fourier series of the floor function (x not an integer):
     floor(x) = x - 1/2 + (1/pi) * sum_{m>=1} sin(2 pi m x) / m
 Variants measured here (all are APPROXIMATIONS unless stated):
     smooth       N ~ max(0, x - 1/2)                      (no oscillatory term)
+    smooth_unclipped  N ~ x - 1/2                         (unbiased for a uniformly distributed phase, may be negative)
     old_minus1   N ~ max(0, x - 1)                        (the continuous form of the earlier study, for comparison)
     dirichlet_M  x - 1/2 + (1/pi) sum_{m<=M} sin(2 pi m x)/m
     fejer_M      the same with Fejer factors (1 - m/(M+1))      (no Gibbs overshoot)
@@ -32,6 +33,8 @@ import sys
 import time
 
 sys.dont_write_bytecode = True
+
+import numpy as np
 
 from tstudy import baseline, metrics, rampstep as rs, scenarios
 
@@ -66,18 +69,18 @@ def n_exact(T: float, c: float) -> int:
     return len(rs.periodic_times(T, c))
 
 
-def series(x: float, M: int, kind: str) -> float:
-    s = 0.0
-    for m in range(1, M + 1):
-        if kind == "dirichlet":
-            sigma = 1.0
-        elif kind == "fejer":
-            sigma = 1.0 - m / (M + 1.0)
-        else:
-            z = math.pi * m / (M + 1.0)
-            sigma = math.sin(z) / z
-        s += sigma * math.sin(2.0 * math.pi * m * x) / m
-    return x - 0.5 + s / math.pi
+def series(x: np.ndarray, M: int, kind: str) -> np.ndarray:
+    """Partial Fourier sum of floor(x) for an array of arguments."""
+    m = np.arange(1, M + 1, dtype=float)
+    if kind == "dirichlet":
+        sigma = np.ones(M)
+    elif kind == "fejer":
+        sigma = 1.0 - m / (M + 1.0)
+    else:
+        z = np.pi * m / (M + 1.0)
+        sigma = np.sin(z) / z
+    s = (np.sin(2.0 * np.pi * np.outer(x, m)) * (sigma / m)).sum(axis=1)
+    return x - 0.5 + s / np.pi
 
 
 def n_lattice(T: int, c: int) -> float:
@@ -94,25 +97,27 @@ def n_lattice(T: int, c: int) -> float:
 
 
 def variants() -> list[str]:
-    out = ["smooth", "old_minus1"]
+    out = ["smooth", "smooth_unclipped", "old_minus1"]
     for M in HARMONICS:
         for kind in ("dirichlet", "fejer", "lanczos"):
             out += [f"{kind}_{M}", f"shifted_{kind}_{M}"]
     return out
 
 
-def approx_n(name: str, T: float, c: float) -> float:
+def approx_n(name: str, T: float, c: np.ndarray) -> np.ndarray:
     x = T / c
     if name == "smooth":
-        return max(0.0, x - 0.5)
+        return np.maximum(0.0, x - 0.5)
+    if name == "smooth_unclipped":
+        return x - 0.5
     if name == "old_minus1":
-        return max(0.0, x - 1.0)
+        return np.maximum(0.0, x - 1.0)
     shifted = name.startswith("shifted_")
     kind, M = name.replace("shifted_", "").rsplit("_", 1)
     M = int(M)
     if shifted:
         x = x - 0.5 / (M + 1.0)
-    return max(0.0, series(x, M, kind)) if x > 0.0 else 0.0
+    return np.where(x > 0.0, np.maximum(0.0, series(x, M, kind)), 0.0)
 
 
 def main(argv) -> int:
@@ -149,8 +154,10 @@ def main(argv) -> int:
                 ex = math.fsum(u for u, tau in explicit if tau < T * (1.0 - rs.EPS))
                 exact = ex + math.fsum(U * n_exact(T, c) for c, U in per.items())
                 exact_check.add(exact, b4_ref, sid)
+                c_arr = np.array(list(per.keys()), dtype=float)
+                u_arr = np.array(list(per.values()), dtype=float)
                 for name in names:
-                    b4 = ex + math.fsum(U * approx_n(name, T, c) for c, U in per.items())
+                    b4 = ex + (float(u_arr @ approx_n(name, T, c_arr)) if len(c_arr) else 0.0)
                     tot = metrics.propagate_stage_change(stage, inc, {"B4": b4})["SUM-03"]
                     stats.setdefault(f"{set_name}|B4|{name}", metrics.ErrorStats(name)).add(b4, b4_ref, sid)
                     stats.setdefault(f"{set_name}|SUM-03|{name}", metrics.ErrorStats(name)).add(tot, ref["SUM-03"]["value"], sid)
