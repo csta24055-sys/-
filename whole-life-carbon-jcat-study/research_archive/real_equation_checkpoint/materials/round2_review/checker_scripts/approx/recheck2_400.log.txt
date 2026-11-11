@@ -1,0 +1,40 @@
+AP-01:X-10 resource                                                                      400 mean -0.07087 p95 0.19350 min -0.30372 max +0.00000 under  77.5%
+AP-02:X-10 resource                                                                      400 mean +0.11137 p95 0.35359 min -0.09085 max +0.44343 under   6.2%
+AP-03:X-10 resource                                                                      400 mean +0.41008 p95 0.70877 min +0.13110 max +0.88686 under   0.0%
+AP-07b:local total (study definition)                                                    400 mean +0.00004 p95 0.00682 min -0.01784 max +0.01697 under  47.0%
+AP-07b:propagated stage A1-A3                                                            400 mean -0.00027 p95 0.02694 min -0.06954 max +0.03638 under  47.0%
+AP-07b:propagated stage B3                                                               400 mean -0.00082 p95 0.02766 min -0.12389 max +0.03624 under  45.2%
+AP-07b:propagated stage B4                                                               400 mean +0.00007 p95 0.01432 min -0.06536 max +0.02242 under  45.5%
+AP-07b:propagated total                                                                  400 mean -0.00012 p95 0.01203 min -0.04338 max +0.02560 under  47.0%
+AP-17:local total (study definition)                                                     400 mean -0.00003 p95 0.00455 min -0.01467 max +0.01251 under  52.8%
+AP-17:propagated stage B4                                                                400 mean -0.00020 p95 0.00887 min -0.03471 max +0.02172 under  52.0%
+AP-17:propagated total                                                                   400 mean -0.00010 p95 0.00574 min -0.01968 max +0.01932 under  52.5%
+AP-17:stage A4 (rerun)                                                                   400 mean +0.03137 p95 0.43293 min -0.37229 max +1.16635 under  52.8%
+AP-18c:C3+C4 materials (rerun)                                                           400 mean +0.00088 p95 0.15589 min -0.29209 max +0.40225 under  50.7%
+AP-18c:local total (study definition)                                                    400 mean -0.00005 p95 0.00228 min -0.00687 max +0.00618 under  50.7%
+AP-18c:propagated total                                                                  400 mean -0.00009 p95 0.00270 min -0.00680 max +0.00774 under  52.5%
+AP-18c:stage C3                                                                          400 mean +0.00800 p95 0.21111 min -0.34920 max +0.42762 under  49.0%
+AP-18c:stage C4                                                                          400 mean +0.01320 p95 0.33366 min -0.38628 max +1.18158 under  52.5%
+AP-19a:local total (study definition)                                                    400 mean -0.00016 p95 0.00247 min -0.02425 max +0.00704 under  52.8%
+AP-19a:propagated total                                                                  400 mean -0.00020 p95 0.00264 min -0.02425 max +0.00704 under  52.8%
+NEW-B3 clamped: skip=max(0,T/c-1) | stage                                                400 mean +0.00297 p95 0.00715 min -0.00000 max +0.01438 under   0.0%
+NEW-B3 clamped: skip=max(0,T/c-1) | total                                                400 mean +0.00047 p95 0.00126 min -0.00000 max +0.00229 under   0.0%
+NEW-B3 class parameters (E0r, harmonic mean cycle), skip=max(0,T/cbar-1) | stage         400 mean +0.00330 p95 0.00834 min -0.00000 max +0.01455 under   0.0%
+NEW-B3 class parameters | total                                                          400 mean +0.00051 p95 0.00139 min -0.00000 max +0.00244 under   0.0%
+NEW-B3 two sums: skip=T/c-1 unclamped | stage                                            400 mean +0.00673 p95 0.02020 min -0.00000 max +0.02505 under   0.0%
+NEW-B3 two sums: skip=T/c-1 unclamped | total                                            400 mean +0.00104 p95 0.00293 min -0.00000 max +0.00524 under   0.0%
+NEW-B3 two sums: skip=T/c-1/2 unclamped | stage                                          400 mean -0.00231 p95 0.01022 min -0.01708 max +0.00804 under  75.8%
+by_material_class: (scenario,class) pairs 5195 | reference 0 but AP-02 > 0: 694 | reference 0 but AP-03 > 0: 850
+corr(log mass, distance/mode mean) per scenario: mean 0.0028 min -0.3015 max 0.2705
+corr(log eol mass, haul distance) per scenario: mean 0.0002 min -0.1934 max 0.2301
+train/test: shared seeds 0 shared ids 0 | groups in test not in train 0
+AP-10    own n=200 mean +0.09376 p95 0.93831 min -0.70468 max +2.39174 | study n=200 mean +0.09376 p95 0.93831 min -0.70468 max +2.39174
+AP-10b   own n=200 mean +0.16684 p95 1.04925 min -0.69179 max +2.55754 | study n=200 mean +0.16684 p95 1.04925 min -0.69179 max +2.55754
+AP-11    own n=200 mean +0.10347 p95 0.84057 min -0.70269 max +1.98981 | study n=200 mean +0.10347 p95 0.84057 min -0.70269 max +1.98981
+AP-21    own n=197 mean +0.07177 p95 0.82081 min -0.44249 max +1.21136 | study n=197 mean +0.07177 p95 0.82081 min -0.44249 max +1.21136
+AP-22b   own n=200 mean -0.00155 p95 0.08407 min -0.08695 max +0.27435 | study n=200 mean -0.00155 p95 0.08407 min -0.08695 max +0.27435
+class factor CONCRETE: max/min inside one (structure,use) group of the training half: median 5.0, max 18.2
+class factor REBAR: max/min inside one (structure,use) group of the training half: median 9.7, max 31.9
+AP-21 analytic range from the generator's uniform ranges (density 300-700, carbon 0.30-0.60, group mean near 500*0.45): -0.464 .. +1.500
+AP-14 own n=80 mean +0.02302 p95 0.11804 min -0.11926 max +0.22765 | study mean +0.02302 p95 0.11804 min -0.11926 max +0.22765
+AP-14 scenarios whose own study period is below 75: {'T<75': 46, 'T<75 with explicit lists': 46, 'T<60': 20} | error where explicit lists are cut at the original period: {'n': 46, 'mean': 0.028276551560531837, 'p95': 0.14115107897677284, 'min': -0.11926210849914043, 'max': 0.22765201980671979, 'share_under': 0.17391304347826086} | others: {'n': 34, 'mean': 0.015910150973669046, 'p95': 0.06953688412846412, 'min': -0.026772709837023734, 'max': 0.11797925883515692, 'share_under': 0.20588235294117646}

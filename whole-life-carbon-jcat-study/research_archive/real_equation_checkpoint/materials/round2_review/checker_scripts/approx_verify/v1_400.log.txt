@@ -1,0 +1,100 @@
+elapsed 337s, scenarios 400
+B3 rebuilt from own row data: worst relative difference 2.78e-13
+cycles below one year among repair rows: 0 ; min over rows of (true excluded weight - min(T,max(0,T/c-1))) = 0.000e+00
+AP-17 covariance identity worst relative residual: 5.38e-16
+AP-05 B1 variant A (consistent linearisation)                                  n=400 mean +0.23894 p95 0.93633 min -0.00000 max +1.64349 under 0.0% n>|2%| 305
+AP-05 B1 variant B (full charge everywhere)                                    n=400 mean +0.28023 p95 1.09773 min -0.00000 max +1.80713 under 0.0% n>|2%| 318
+AP-05 device A(consistent) 0.05<rk<=0.2                                        n=146 mean +0.03401 p95 0.06265 min +0.00621 max +0.07413 under 0.0% n>|2%| 107
+AP-05 device A(consistent) rk<=0.05                                            n=3 mean +0.00569 p95 0.00643 min +0.00437 max +0.00644 under 0.0% n>|2%| 0
+AP-05 device A(consistent) rk>0.2                                              n=2285 mean +0.78885 p95 2.07813 min +0.02830 max +3.35307 under 0.0% n>|2%| 2285
+AP-05 device B(full charge) 0.05<rk<=0.2                                       n=146 mean +0.08503 p95 0.13306 min +0.01475 max +0.17010 under 0.0% n>|2%| 145
+AP-05 device B(full charge) rk<=0.05                                           n=3 mean +0.03703 p95 0.04071 min +0.03170 max +0.04097 under 0.0% n>|2%| 3
+AP-05 device B(full charge) rk>0.2                                             n=2285 mean +0.93460 p95 2.24391 min +0.09638 max +3.70240 under 0.0% n>|2%| 2285
+AP-06 local total (A1-A3 diff / WLC)                                           n=400 mean -0.00059 p95 0.00128 min -0.00384 max -0.00007 under 100.0% n>|2%| 0
+AP-06 propagated stage A1-A3                                                   n=400 mean -0.00260 p95 0.00476 min -0.01062 max -0.00049 under 100.0% n>|2%| 0
+AP-06 propagated stage A4                                                      n=400 mean -0.00026 p95 0.00077 min -0.00481 max -0.00000 under 100.0% n>|2%| 0
+AP-06 propagated stage A5                                                      n=400 mean +0.00000 p95 0.00000 min +0.00000 max +0.00000 under 0.0% n>|2%| 0
+AP-06 propagated stage B3                                                      n=400 mean -0.00243 p95 0.00478 min -0.01179 max -0.00033 under 100.0% n>|2%| 0
+AP-06 propagated stage B4                                                      n=400 mean -0.00184 p95 0.00356 min -0.00664 max -0.00013 under 100.0% n>|2%| 0
+AP-06 propagated stage B5                                                      n=89 mean -0.00225 p95 0.00366 min -0.00531 max -0.00057 under 100.0% n>|2%| 0
+AP-06 propagated stage C2                                                      n=400 mean +0.00000 p95 0.00000 min +0.00000 max +0.00000 under 0.0% n>|2%| 0
+AP-06 propagated stage C3                                                      n=400 mean +0.00000 p95 0.00000 min +0.00000 max +0.00000 under 0.0% n>|2%| 0
+AP-06 propagated stage C4                                                      n=400 mean +0.00000 p95 0.00000 min +0.00000 max +0.00000 under 0.0% n>|2%| 0
+AP-06 propagated total                                                         n=400 mean -0.00149 p95 0.00284 min -0.00655 max -0.00030 under 100.0% n>|2%| 0
+AP-07b local total (A1-A3 diff / WLC)                                          n=400 mean +0.00004 p95 0.00682 min -0.01784 max +0.01697 under 47.0% n>|2%| 0
+AP-07b propagated stage B3                                                     n=400 mean -0.00082 p95 0.02766 min -0.12389 max +0.03624 under 45.2% n>|2%| 37
+AP-07b propagated total                                                        n=400 mean -0.00012 p95 0.01203 min -0.04338 max +0.02560 under 47.0% n>|2%| 7
+AP-08 on B6-03 (study)                                                         n=400 mean +0.00224 p95 0.03239 min -0.08126 max +0.11806 under 22.2% n>|2%| 39
+AP-08 on electricity only                                                      n=400 mean +0.00327 p95 0.05752 min -0.09694 max +0.14887 under 22.2% n>|2%| 76
+AP-08 on stage B2                                                              n=400 mean +0.00327 p95 0.05752 min -0.09694 max +0.14887 under 22.2% n>|2%| 76
+AP-08 on stage B6                                                              n=400 mean +0.00214 p95 0.03147 min -0.07999 max +0.11637 under 22.2% n>|2%| 37
+AP-08 total                                                                    n=400 mean +0.00058 p95 0.00861 min -0.02167 max +0.04249 under 22.2% n>|2%| 4
+AP-09a on B6-03 (study)                                                        n=400 mean +0.00011 p95 0.01560 min -0.03950 max +0.03817 under 23.8% n>|2%| 14
+AP-09a on electricity only                                                     n=400 mean +0.00015 p95 0.02600 min -0.05555 max +0.05296 under 23.8% n>|2%| 31
+AP-09a on stage B2                                                             n=400 mean +0.00015 p95 0.02600 min -0.05555 max +0.05296 under 23.8% n>|2%| 31
+AP-09a on stage B6                                                             n=400 mean +0.00011 p95 0.01520 min -0.03923 max +0.03619 under 23.8% n>|2%| 14
+AP-09a total                                                                   n=400 mean +0.00004 p95 0.00446 min -0.00976 max +0.01082 under 23.8% n>|2%| 0
+AP-09b on B6-03 (study)                                                        n=400 mean +0.00064 p95 0.02761 min -0.05368 max +0.07490 under 23.8% n>|2%| 30
+AP-09b on electricity only                                                     n=400 mean +0.00116 p95 0.04009 min -0.07608 max +0.12666 under 23.8% n>|2%| 71
+AP-09b on stage B2                                                             n=400 mean +0.00116 p95 0.04009 min -0.07608 max +0.12666 under 23.8% n>|2%| 71
+AP-09b on stage B6                                                             n=400 mean +0.00062 p95 0.02724 min -0.05206 max +0.07411 under 23.8% n>|2%| 29
+AP-09b total                                                                   n=400 mean +0.00025 p95 0.00751 min -0.01837 max +0.02778 under 23.8% n>|2%| 1
+AP-09c on B6-03 (study)                                                        n=98 mean +0.00143 p95 0.01270 min -0.01349 max +0.01735 under 40.8% n>|2%| 0
+AP-09c on electricity only                                                     n=98 mean +0.00217 p95 0.01717 min -0.01855 max +0.02027 under 40.8% n>|2%| 1
+AP-09c on stage B2                                                             n=98 mean +0.00217 p95 0.01717 min -0.01855 max +0.02027 under 40.8% n>|2%| 1
+AP-09c on stage B6                                                             n=98 mean +0.00136 p95 0.01221 min -0.01313 max +0.01719 under 40.8% n>|2%| 0
+AP-09c total                                                                   n=98 mean +0.00040 p95 0.00402 min -0.00464 max +0.00722 under 40.8% n>|2%| 0
+AP-17 -(sum f*Sxy)/A4 (covariance identity)                                    n=400 mean +0.03137 p95 0.43293 min -0.37229 max +1.16635 under 52.8% n>|2%| 343
+AP-17 local total (A4 diff / WLC)                                              n=400 mean -0.00003 p95 0.00455 min -0.01467 max +0.01251 under 52.8% n>|2%| 0
+AP-17 own stage A4                                                             n=400 mean +0.03137 p95 0.43293 min -0.37229 max +1.16635 under 52.8% n>|2%| 343
+AP-17 propagated stage B4                                                      n=400 mean -0.00020 p95 0.00887 min -0.03471 max +0.02172 under 52.0% n>|2%| 4
+AP-17 propagated stage B5                                                      n=89 mean +0.00038 p95 0.01498 min -0.06239 max +0.03686 under 50.6% n>|2%| 4
+AP-17 propagated total                                                         n=400 mean -0.00010 p95 0.00574 min -0.01968 max +0.01932 under 52.5% n>|2%| 0
+AP-17 raw Pearson r(mass,distance) within mode, emission-weighted mean per scenario n=400 mean +0.02474 p95 0.30087 min -0.40721 max +0.54088 under 41.0% n>|2%| 334
+AP-17 stage A4 (rerun)                                                         n=400 mean +0.03137 p95 0.43293 min -0.37229 max +1.16635 under 52.8% n>|2%| 343
+AP-18c on C3-01 only                                                           n=400 mean +0.00849 p95 0.21885 min -0.35702 max +0.43872 under 49.0% n>|2%| 296
+AP-18c on C3-01+C4-01 (study)                                                  n=400 mean +0.00088 p95 0.15589 min -0.29209 max +0.40225 under 50.8% n>|2%| 284
+AP-18c on stage C3 (C3-01+X-14)                                                n=400 mean +0.00800 p95 0.21111 min -0.34920 max +0.42762 under 49.0% n>|2%| 293
+AP-18c on stage C3+C4 (incl X-14)                                              n=400 mean +0.00083 p95 0.15026 min -0.28660 max +0.39255 under 50.8% n>|2%| 279
+AP-18c on stage C4                                                             n=400 mean +0.01320 p95 0.33366 min -0.38628 max +1.18158 under 52.5% n>|2%| 338
+APP1 AP-04 stage                                                               n=400 mean +0.02051 p95 0.03968 min +0.00065 max +0.05424 under 0.0% n>|2%| 184
+APP1 class-level stage                                                         n=400 mean +0.00330 p95 0.00834 min -0.00000 max +0.01455 under 0.0% n>|2%| 0
+APP1 class-level total                                                         n=400 mean +0.00051 p95 0.00139 min -0.00000 max +0.00244 under 0.0% n>|2%| 0
+APP1 row-level stage                                                           n=400 mean +0.00297 p95 0.00715 min -0.00000 max +0.01438 under 0.0% n>|2%| 0
+APP1 row-level stage | T=100                                                   n=77 mean +0.00285 p95 0.00509 min -0.00000 max +0.00782 under 0.0% n>|2%| 0
+APP1 row-level stage | T=30                                                    n=73 mean +0.00417 p95 0.00967 min -0.00000 max +0.01438 under 0.0% n>|2%| 0
+APP1 row-level stage | T=42.5                                                  n=18 mean +0.00315 p95 0.00740 min -0.00000 max +0.00835 under 0.0% n>|2%| 0
+APP1 row-level stage | T=50                                                    n=61 mean +0.00265 p95 0.00715 min -0.00000 max +0.00908 under 0.0% n>|2%| 0
+APP1 row-level stage | T=60                                                    n=67 mean +0.00188 p95 0.00441 min -0.00000 max +0.00576 under 0.0% n>|2%| 0
+APP1 row-level stage | T=62.5                                                  n=18 mean +0.00268 p95 0.00570 min -0.00000 max +0.00600 under 0.0% n>|2%| 0
+APP1 row-level stage | T=75                                                    n=65 mean +0.00331 p95 0.00701 min -0.00000 max +0.00947 under 0.0% n>|2%| 0
+APP1 row-level stage | T=99.9                                                  n=21 mean +0.00275 p95 0.00625 min -0.00000 max +0.00657 under 0.0% n>|2%| 0
+APP1 row-level total                                                           n=400 mean +0.00047 p95 0.00126 min -0.00000 max +0.00229 under 0.0% n>|2%| 0
+X-14 share of stage C3                                                         n=400 mean +0.03650 p95 0.10048 min +0.00179 max +0.28510 under 0.0% n>|2%| 235
+chk B2 == share*elec                                                           n=400 mean +0.00000 p95 0.00000 min +0.00000 max +0.00000 under 0.0% n>|2%| 0
+chk B6 == B603 - B2                                                            n=400 mean +0.00000 p95 0.00000 min +0.00000 max +0.00000 under 0.0% n>|2%| 0
+APP-7 pairs: {'all': 5195, 'ref_nonzero': 4345, 'drop_AP02': 694, 'drop_AP03': 850, 'drop_AP01': 0} | sum of n in study JSON by_material_class AP-03: 4745 AP-02: 4745
+APP-7 B5 reference zero & candidate nonzero: {'AP-02': 128, 'AP-03': 133} | JSON: {'AP-02': 128, 'AP-03': 133} | B5 n in JSON AP-03: 89
+APP-4: across scenarios, corr(A4-01 row error, emission-weighted realised Pearson r) = -0.822 ; mean realised r = +0.0247, range -0.407..+0.541 ; sign agreement 92.2%
+AP-14 all 80                           study-definition: n=80 mean +0.02302 p95 0.11804 min -0.11926 max +0.22765 under 18.8% n>|2%| 39
+AP-14 all 80                           lists continued to 75 years: n=80 mean +0.02331 p95 0.11933 min -0.11922 max +0.22973 under 17.5% n>|2%| 39
+AP-14 own T >= 75                      study-definition: n=34 mean +0.01591 p95 0.06954 min -0.02677 max +0.11798 under 20.6% n>|2%| 12
+AP-14 own T >= 75                      lists continued to 75 years: n=34 mean +0.01591 p95 0.06954 min -0.02677 max +0.11798 under 20.6% n>|2%| 12
+AP-14 own T < 75                       study-definition: n=46 mean +0.02828 p95 0.14115 min -0.11926 max +0.22765 under 17.4% n>|2%| 27
+AP-14 own T < 75                       lists continued to 75 years: n=46 mean +0.02878 p95 0.14199 min -0.11922 max +0.22973 under 15.2% n>|2%| 27
+AP-14 own T < 60                       study-definition: n=20 mean +0.00318 p95 0.10389 min -0.11926 max +0.08082 under 25.0% n>|2%| 8
+AP-14 own T < 60                       lists continued to 75 years: n=20 mean +0.00266 p95 0.10379 min -0.11922 max +0.08040 under 20.0% n>|2%| 8
+AP-14 own T < 75 with explicit lists   study-definition: n=46 mean +0.02828 p95 0.14115 min -0.11926 max +0.22765 under 17.4% n>|2%| 27
+AP-14 own T < 75 with explicit lists   lists continued to 75 years: n=46 mean +0.02878 p95 0.14199 min -0.11922 max +0.22973 under 15.2% n>|2%| 27
+AP-14: scenarios where some list could not be continued (empty list, no life): 2
+AP-14 study JSON: {'n': 80, 'mean_signed': 0.023020831311115153, 'p95_abs': 0.1180434013183562, 'max_over': 0.2276520198067197, 'max_under': -0.11926210849914044}
+STUDY AP-04   stage n=400 mean +0.02051 p95 0.03968 min +0.00065 max +0.05424 | total mean +0.00312 p95 0.00628 min +0.00021 max +0.00964
+STUDY AP-05   stage n=400 mean +0.28023 p95 1.09773 min -0.00000 max +1.80713 | total mean +0.00517 p95 0.02348 min -0.00000 max +0.09738
+STUDY AP-06   stage n=400 mean -0.00260 p95 0.00476 min -0.01062 max -0.00049 | total mean -0.00059 p95 0.00128 min -0.00384 max -0.00007
+STUDY AP-07b  stage n=400 mean -0.00156 p95 0.05065 min -0.14716 max +0.07473 | total mean +0.00004 p95 0.00628 min -0.01780 max +0.01690
+STUDY AP-08   stage n=400 mean +0.00224 p95 0.03239 min -0.08126 max +0.11806 | total mean +0.00058 p95 0.00861 min -0.02167 max +0.04249
+STUDY AP-09a  stage n=400 mean +0.00011 p95 0.01560 min -0.03950 max +0.03817 | total mean +0.00004 p95 0.00446 min -0.00976 max +0.01082
+STUDY AP-09c  stage n=98 mean +0.00143 p95 0.01270 min -0.01349 max +0.01735 | total mean +0.00040 p95 0.00402 min -0.00464 max +0.00722
+STUDY AP-17   stage n=400 mean +0.03137 p95 0.43293 min -0.37229 max +1.16635 | total mean -0.00003 p95 0.00455 min -0.01467 max +0.01251
+STUDY AP-18b  stage n=400 mean -0.00097 p95 0.00684 min -0.01883 max +0.01131 | total mean -0.00013 p95 0.00102 min -0.00232 max +0.00172
+STUDY AP-18c  stage n=400 mean +0.00088 p95 0.15589 min -0.29209 max +0.40225 | total mean -0.00005 p95 0.00228 min -0.00687 max +0.00618

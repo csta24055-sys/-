@@ -1,0 +1,33 @@
+== APP-5: reference count vs T/c - 1 near the boundary
+  T=60.0 c=T(1-5e-10)/3=19.99999999: reference N=2  T/c-1=2.000000001500  lower>N: True  N<=T/c: True
+  T=60.0 c=T(1-9e-10)/3=19.999999982000002: reference N=2  T/c-1=2.000000002700  lower>N: True  N<=T/c: True
+  T=60.0 c=T(1-2e-09)/3=19.99999996: reference N=3  T/c-1=2.000000006000  lower>N: False  N<=T/c: True
+  T=60.0 c=T(1-5e-10)/1=59.99999997: reference N=0  T/c-1=0.000000000500  lower>N: True  N<=T/c: True
+  T=60.0 c=T(1-9e-10)/1=59.999999946: reference N=0  T/c-1=0.000000000900  lower>N: True  N<=T/c: True
+  T=60.0 c=T(1-2e-09)/1=59.99999988: reference N=1  T/c-1=0.000000002000  lower>N: False  N<=T/c: True
+  T=100.0 c=T(1-5e-10)/4=24.999999987499997: reference N=3  T/c-1=3.000000002000  lower>N: True  N<=T/c: True
+  T=100.0 c=T(1-9e-10)/4=24.9999999775: reference N=3  T/c-1=3.000000003600  lower>N: True  N<=T/c: True
+  T=100.0 c=T(1-2e-09)/4=24.99999995: reference N=4  T/c-1=3.000000008000  lower>N: False  N<=T/c: True
+  T=30.0 c=T(1-5e-10)/2=14.9999999925: reference N=1  T/c-1=1.000000001000  lower>N: True  N<=T/c: True
+  T=30.0 c=T(1-9e-10)/2=14.9999999865: reference N=1  T/c-1=1.000000001800  lower>N: True  N<=T/c: True
+  T=30.0 c=T(1-2e-09)/2=14.99999997: reference N=2  T/c-1=1.000000004000  lower>N: False  N<=T/c: True
+  scenario: cycles {19.99999999}, reference counts {2}, B4=864789.9342628843, lower bound=864789.9349114768, (lo-B4)/B4=7.500e-10, study test lo <= B4*(1+1e-12): False
+  study's own row data: lower bound=864789.9349114769  inside test: False  AP-01 error=7.500e-10
+== APP-1: sign of true excluded weight - (T/c - 1), random (T, c), c >= 1
+  400000 pairs: min(true - approx) = -4.441e-16 at (T, c, N) = (99.9, 33.3, 2)
+  cycles below one year: min(true - approx) = -9.760e-01 at (T, c, N) = (67.976, 0.985174692527008, 68)  (negative = candidate would under-estimate)
+== APP-1: is 'inside the 2% stage target' a property of the candidate or of the generator's life mix?
+   (synthetic scenarios from the study's own generator, option service_life_choices; all lives >= 1 year)
+   T=30.0 lives=[29.0]: row-level stage error +0.0333..+0.0333, class-level +0.0333..+0.0333, AP-04 +0.0345..+0.0345, total (row-level) max +0.0055
+   T=30.0 lives=[14.5, 29.0]: row-level stage error +0.0333..+0.0333, class-level +0.0333..+0.0333, AP-04 +0.0367..+0.0669, total (row-level) max +0.0045
+   T=30.0 lives=[9.9, 14.9, 29.0]: row-level stage error +0.0338..+0.0353, class-level +0.0338..+0.0353, AP-04 +0.0460..+0.0901, total (row-level) max +0.0042
+   T=50.0 lives=[49.0, 24.5]: row-level stage error +0.0200..+0.0200, class-level +0.0200..+0.0200, AP-04 +0.0229..+0.0403, total (row-level) max +0.0040
+   T=60.0 lives=[59.0, 29.5, 19.6]: row-level stage error +0.0165..+0.0166, class-level +0.0165..+0.0166, AP-04 +0.0260..+0.0468, total (row-level) max +0.0030
+   T=30.0 lives=[7.0, 11.0, 13.0, 17.0, 23.0]: row-level stage error +0.0114..+0.0233, class-level +0.0114..+0.0233, AP-04 +0.0502..+0.0997, total (row-level) max +0.0020
+   T=60.0 lives=[7.0, 11.0, 13.0, 17.0, 23.0, 37.0]: row-level stage error +0.0069..+0.0082, class-level +0.0069..+0.0082, AP-04 +0.0332..+0.1038, total (row-level) max +0.0011
+   T=100.0 lives=[99.0, 49.5, 33.0]: row-level stage error +0.0100..+0.0100, class-level +0.0100..+0.0100, AP-04 +0.0154..+0.0275, total (row-level) max +0.0026
+   service_life_mode NON_DIVISOR / CONTINUOUS, T=30 (default generator ranges):
+   mode NON_DIVISOR: row-level +0.0006..+0.0139, class-level +0.0007..+0.0145
+   mode CONTINUOUS: row-level +0.0006..+0.0139, class-level +0.0007..+0.0145
+   mode INTEGER: row-level +0.0010..+0.0115, class-level +0.0014..+0.0135
+   mode EXACT_DIVISOR: row-level -0.0000..+0.0000, class-level -0.0000..+0.0000

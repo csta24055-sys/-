@@ -1,0 +1,62 @@
+== 1. count rule
+T=60.0 c=19.99999999: reference N=2, T/c-1=2.0000000015, max(0,T/c-1) > N: True, T/c=3.0000000015
+T=60.0 c=59.99999997: reference N=0, T/c-1=5.000000413701855e-10, max(0,T/c-1) > N: True, T/c=1.0000000005
+T=100.0 c=24.999999987499997: reference N=3, T/c-1=3.000000002, max(0,T/c-1) > N: True, T/c=4.000000002
+scenario with every life = 19.99999999: B4=864789.9342628843 lower bound=864789.934911477  (lower-B4)/B4=7.500e-10  study's inside test lo <= B4*(1+1e-12): False; AP-01 max_over <= 1e-12: False
+scenario with every life = 59.99999997: reference B4 = 0.0; AP-01 count per row = 5.000000413701855e-10 (> 0 while reference count is 0)
+== 3. safe-side repair approximation
+-- study population (400, seed 20261111, max M): reference 0 with candidate nonzero: 0
+   row level  skip=min(T,max(0,T/c-1))        stage: n=400 mean +0.00297 p95 0.00715 min -1.621e-13 max +0.01438 under 0.0% | total: n=400 mean +0.00047 p95 0.00126 min -3.946e-14 max +0.00229 under 0.0%
+   class parameters (E0r, harmonic mean cycle)  stage: n=400 mean +0.00330 p95 0.00834 min -1.629e-13 max +0.01455 under 0.0% | total: n=400 mean +0.00051 p95 0.00139 min -3.967e-14 max +0.00244 under 0.0%
+   AP-04 (no exclusion) for comparison          stage: n=400 mean +0.02051 p95 0.03968 min +6.452e-04 max +0.05424 under 0.0%
+-- other population (240, seed 777, max M): reference 0 with candidate nonzero: 0
+   row level  skip=min(T,max(0,T/c-1))        stage: n=240 mean +0.00291 p95 0.00672 min -2.587e-13 max +0.01179 under 0.0% | total: n=240 mean +0.00044 p95 0.00105 min -6.168e-14 max +0.00196 under 0.0%
+   class parameters (E0r, harmonic mean cycle)  stage: n=240 mean +0.00321 p95 0.00757 min -2.589e-13 max +0.01514 under 0.0% | total: n=240 mean +0.00048 p95 0.00110 min -6.175e-14 max +0.00203 under 0.0%
+   AP-04 (no exclusion) for comparison          stage: n=240 mean +0.01984 p95 0.03942 min +1.485e-03 max +0.05876 under 0.0%
+-- other population (48, seed 4242, max L): reference 0 with candidate nonzero: 0
+   row level  skip=min(T,max(0,T/c-1))        stage: n=48 mean +0.00290 p95 0.00847 min -1.115e-13 max +0.01127 under 0.0% | total: n=48 mean +0.00042 p95 0.00110 min -2.105e-14 max +0.00142 under 0.0%
+   class parameters (E0r, harmonic mean cycle)  stage: n=48 mean +0.00326 p95 0.01030 min -1.145e-13 max +0.01317 under 0.0% | total: n=48 mean +0.00047 p95 0.00133 min -2.162e-14 max +0.00161 under 0.0%
+   AP-04 (no exclusion) for comparison          stage: n=48 mean +0.02178 p95 0.04745 min +2.190e-03 max +0.05716 under 0.0%
+-- edge cases (reference B3, row-level error, class-level error; absolute difference when reference is 0):
+    exact_multiple_lives +1.22375e+06 +5.77316e-15 +5.55112e-15
+    life_equals_period +1.85599e+07 +1.22125e-14 +1.22125e-14
+    life_longer_than_period +1.85599e+07 +1.22125e-14 +1.22125e-14
+    life_near_divisor +1.79397e+07 +1.59919e-02 +1.59919e-02
+    life_shorter_than_one_year +0.00000e+00 +0.00000e+00 +0.00000e+00
+    zero_quantities +1.15945e+06 +2.95986e-03 +2.95986e-03
+    single_row +9.82889e+04 +1.99456e-03 +1.99456e-03
+    empty_lists +0.00000e+00 +0.00000e+00 +0.00000e+00
+    full_recycling +2.77628e+06 +1.27341e-03 +1.27341e-03
+    leak_rate_extremes +2.77628e+06 +1.27341e-03 +1.27341e-03
+    recovery_extremes +2.77628e+06 +1.27341e-03 +1.27341e-03
+    generation_exceeds_consumption +2.77628e+06 +1.27341e-03 +1.27341e-03
+    grid_floor_mid_period +2.77628e+06 +1.27341e-03 +1.27341e-03
+    period_shorter_than_one_year +2.32905e+04 +0.00000e+00 -1.11022e-16
+    period_non_integer +2.89102e+06 +1.51606e-03 +1.51606e-03
+    period_just_above_integer +2.89864e+06 +1.21267e-03 +1.21267e-03
+    rebuild_within_period +2.77628e+06 +1.27341e-03 +1.27341e-03
+    refurbishment_divides_period +2.77628e+06 +1.27341e-03 +1.27341e-03
+    linear_trend_profiles +2.77628e+06 +1.27341e-03 +1.27341e-03
+    table_profiles +2.77628e+06 +1.27341e-03 +1.27341e-03
+    constant_profiles +2.77628e+06 +1.27341e-03 +1.27341e-03
+    co2_only_scope +2.77628e+06 +1.27341e-03 +1.27341e-03
+    stage_subset +2.77628e+06 +1.27341e-03 +1.27341e-03
+    waste_rate_extremes +4.58626e+06 +4.51171e-03 +4.51171e-03
+    all_composite +1.26054e+06 +8.85932e-04 +8.85932e-04
+    no_composite +1.59299e+06 +1.85971e-03 +1.85971e-03
+    all_epd +2.07324e+06 +6.32268e-04 +6.32268e-04
+    multi_use +2.77628e+06 +1.27341e-03 +1.27341e-03
+    explicit_event_lists +2.63189e+06 +9.53851e-04 +9.53851e-04
+    top_up_all +2.77628e+06 +1.27341e-03 +1.27341e-03
+    top_up_none +2.77628e+06 +1.27341e-03 +1.27341e-03
+    with_baseline +2.77628e+06 +1.27341e-03 +1.27341e-03
+== 2. AP-09c per stage, AP-05 guard
+AP-09c measured on B6-03 (study's quantity): n=98 mean +0.00143 p95 0.01270 min -1.349e-02 max +0.01735 under 40.8%
+AP-09c on stage B6 (= B6-03 - B2-01):       n=98 mean +0.00136 p95 0.01221 min -1.313e-02 max +0.01719 under 40.8%
+AP-09c on stage B2 (= B2-01):               n=98 mean +0.00217 p95 0.01717 min -1.855e-02 max +0.02027 under 40.8% | scenarios with |error| > 2%: 1 max abs 0.020266129129822952
+AP-05 per device, variant B (full charge everywhere), r*k <=0.05: n=3 mean +0.03703 p95 0.04071 min +3.170e-02 max +0.04097 under 0.0%
+AP-05 per device, variant B (full charge everywhere), r*k <=0.2: n=146 mean +0.08503 p95 0.13306 min +1.475e-02 max +0.17010 under 0.0%
+AP-05 per device, variant B (full charge everywhere), r*k >0.2: n=2285 mean +0.93460 p95 2.24391 min +9.638e-02 max +3.70240 under 0.0%
+AP-05 per device, variant A (remaining m0*(1-rk)), r*k <=0.05: n=3 mean +0.00569 p95 0.00643 min +4.368e-03 max +0.00644 under 0.0%
+AP-05 per device, variant A (remaining m0*(1-rk)), r*k <=0.2: n=146 mean +0.03401 p95 0.06265 min +6.206e-03 max +0.07413 under 0.0%
+AP-05 per device, variant A (remaining m0*(1-rk)), r*k >0.2: n=2285 mean +0.78885 p95 2.07813 min +2.830e-02 max +3.35307 under 0.0%
