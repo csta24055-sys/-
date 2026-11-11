@@ -1,0 +1,751 @@
+{
+ "schema_version": "1.0",
+ "generated": "2026-11-11",
+ "warning": "対応はシート名だけからの推定で、原版の式の内容は確認していない。「対応あり」は、その名称が示す計算構造を独立モデルの評価単位が表しているという意味であり、原版の式を調査・再現したという意味ではない。",
+ "family_count": 59,
+ "families_by_status": {
+  "COVERED_BY_ADDITIONAL": 24,
+  "NOT_INSPECTED": 9,
+  "COVERED_BY_EXISTING": 11,
+  "NON_CALCULATION": 15
+ },
+ "node_share_by_status": {
+  "COVERED_BY_ADDITIONAL": 0.971112,
+  "NOT_INSPECTED": 0.020757,
+  "COVERED_BY_EXISTING": 0.008131,
+  "NON_CALCULATION": 0.0
+ },
+ "families": [
+  {
+   "family_id": "SF-01",
+   "family": "資材構成",
+   "formula_xml_nodes": 3145987,
+   "share_of_all_nodes": 0.823884,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-03",
+    "A13-02"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "全数式ノードの 82.4％。名称から複合品の構成展開と推定したが、式の内容は確認していない。"
+  },
+  {
+   "family_id": "SF-02",
+   "family": "経年表記",
+   "formula_xml_nodes": 83620,
+   "share_of_all_nodes": 0.021899,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-07",
+    "X-06"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "年次・累積の系列と推定。詳細版には係数固定と係数変化の 2 種がある。"
+  },
+  {
+   "family_id": "SF-03",
+   "family": "発生品目別分析",
+   "formula_xml_nodes": 74360,
+   "share_of_all_nodes": 0.019474,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-09"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "廃棄物の品目別集計と推定。"
+  },
+  {
+   "family_id": "SF-04",
+   "family": "空",
+   "formula_xml_nodes": 71356,
+   "share_of_all_nodes": 0.018687,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-01",
+    "B4-01",
+    "B4-02",
+    "X-14"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "空調設備の工種別シートと推定。分類表・集計表ブックの同名シートは数式 0 件。"
+  },
+  {
+   "family_id": "SF-05",
+   "family": "衛",
+   "formula_xml_nodes": 69308,
+   "share_of_all_nodes": 0.018151,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-01",
+    "B4-01",
+    "B4-02",
+    "X-14"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "衛生設備の工種別シートと推定。"
+  },
+  {
+   "family_id": "SF-06",
+   "family": "更新周期集計",
+   "formula_xml_nodes": 65907,
+   "share_of_all_nodes": 0.01726,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-08",
+    "B4-03"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "更新周期別の集計と推定。"
+  },
+  {
+   "family_id": "SF-07",
+   "family": "電",
+   "formula_xml_nodes": 59614,
+   "share_of_all_nodes": 0.015612,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-01",
+    "B4-01",
+    "B4-02",
+    "X-14"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "電気設備の工種別シートと推定。"
+  },
+  {
+   "family_id": "SF-08",
+   "family": "処理別分析",
+   "formula_xml_nodes": 58954,
+   "share_of_all_nodes": 0.015439,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-09",
+    "C3-01",
+    "C4-01"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "処理経路別の集計と推定。"
+  },
+  {
+   "family_id": "SF-09",
+   "family": "設備LCW分析",
+   "formula_xml_nodes": 43334,
+   "share_of_all_nodes": 0.011348,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-10"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "LCW を廃棄物量と解釈した推定。"
+  },
+  {
+   "family_id": "SF-10",
+   "family": "入力シート(A1～5,B2～5,C1～4)",
+   "formula_xml_nodes": 26805,
+   "share_of_all_nodes": 0.00702,
+   "status": "NOT_INSPECTED",
+   "related_units": [
+    "SYS-01",
+    "SYS-02",
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "入力シート内の数式（検査・検索・既定値などの可能性）は名称から特定できない。"
+  },
+  {
+   "family_id": "SF-11",
+   "family": "入力-2",
+   "formula_xml_nodes": 24438,
+   "share_of_all_nodes": 0.0064,
+   "status": "NOT_INSPECTED",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "名称から計算構造を特定できない。"
+  },
+  {
+   "family_id": "SF-12",
+   "family": "算定結果報告用シート(副)",
+   "formula_xml_nodes": 18820,
+   "share_of_all_nodes": 0.004929,
+   "status": "NOT_INSPECTED",
+   "related_units": [
+    "SUM-07"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "報告用の副シート。詳細版で 17,178 ノードあるが構造は特定できない。"
+  },
+  {
+   "family_id": "SF-13",
+   "family": "複合原単位",
+   "formula_xml_nodes": 15942,
+   "share_of_all_nodes": 0.004175,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "A13-02",
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "複合係数の算出と推定。"
+  },
+  {
+   "family_id": "SF-14",
+   "family": "原単位",
+   "formula_xml_nodes": 9326,
+   "share_of_all_nodes": 0.002442,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-15",
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "係数表とその参照と推定。値は流用禁止。"
+  },
+  {
+   "family_id": "SF-15",
+   "family": "排出量計算集計表",
+   "formula_xml_nodes": 8173,
+   "share_of_all_nodes": 0.00214,
+   "status": "NOT_INSPECTED",
+   "related_units": [
+    "X-02",
+    "SUM-03"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "集計表ブックの集計。合計の構造と推定されるが、内容は特定できない。"
+  },
+  {
+   "family_id": "SF-16",
+   "family": "LCR･LCW集計",
+   "formula_xml_nodes": 6713,
+   "share_of_all_nodes": 0.001758,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-10"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "資源量・廃棄物量の集計と推定。"
+  },
+  {
+   "family_id": "SF-17",
+   "family": "昇",
+   "formula_xml_nodes": 6155,
+   "share_of_all_nodes": 0.001612,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-01",
+    "B4-01",
+    "B4-02",
+    "X-14"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "昇降機設備の工種別シートと推定。"
+  },
+  {
+   "family_id": "SF-18",
+   "family": "排出係数",
+   "formula_xml_nodes": 5550,
+   "share_of_all_nodes": 0.001453,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-06"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "係数の年次系列と推定。"
+  },
+  {
+   "family_id": "SF-19",
+   "family": "工事分倍率内訳_2015",
+   "formula_xml_nodes": 3981,
+   "share_of_all_nodes": 0.001043,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "A13-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "未数量分の上乗せに関する表と推定。倍率の値は流用禁止（RULES R03）で、本研究の A13-04 は独立に設計した式。"
+  },
+  {
+   "family_id": "SF-20",
+   "family": "EPD組込",
+   "formula_xml_nodes": 3173,
+   "share_of_all_nodes": 0.000831,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "A13-03",
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "製品固有値の組込みと推定。"
+  },
+  {
+   "family_id": "SF-21",
+   "family": "NF3",
+   "formula_xml_nodes": 2596,
+   "share_of_all_nodes": 0.00068,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート。"
+  },
+  {
+   "family_id": "SF-22",
+   "family": "木材_炭素貯蔵",
+   "formula_xml_nodes": 2237,
+   "share_of_all_nodes": 0.000586,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "STO-01"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "木材の炭素貯蔵量と推定。"
+  },
+  {
+   "family_id": "SF-23",
+   "family": "入力シート(B1)",
+   "formula_xml_nodes": 2084,
+   "share_of_all_nodes": 0.000546,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "B1-01",
+    "B1-02",
+    "B1-03",
+    "B1-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "冷媒等の入力と計算と推定。"
+  },
+  {
+   "family_id": "SF-24",
+   "family": "WLC算定結果",
+   "formula_xml_nodes": 1717,
+   "share_of_all_nodes": 0.00045,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "SUM-03",
+    "SUM-04",
+    "SUM-05"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ホールライフの合計と原単位と推定。"
+  },
+  {
+   "family_id": "SF-25",
+   "family": "HFCs",
+   "formula_xml_nodes": 1298,
+   "share_of_all_nodes": 0.00034,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート。"
+  },
+  {
+   "family_id": "SF-26",
+   "family": "PFCs",
+   "formula_xml_nodes": 1298,
+   "share_of_all_nodes": 0.00034,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート。"
+  },
+  {
+   "family_id": "SF-27",
+   "family": "SF6",
+   "formula_xml_nodes": 1298,
+   "share_of_all_nodes": 0.00034,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート。"
+  },
+  {
+   "family_id": "SF-28",
+   "family": "UpfrontCarbon算定結果",
+   "formula_xml_nodes": 785,
+   "share_of_all_nodes": 0.000206,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "SUM-01"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "アップフロントの合計と推定。"
+  },
+  {
+   "family_id": "SF-29",
+   "family": "標準値管理シート",
+   "formula_xml_nodes": 752,
+   "share_of_all_nodes": 0.000197,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-11"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "標準値の保管と推定。値は流用禁止。"
+  },
+  {
+   "family_id": "SF-30",
+   "family": "詳細算定結果",
+   "formula_xml_nodes": 502,
+   "share_of_all_nodes": 0.000131,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-02",
+    "SUM-07"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "段階別の結果表と推定。"
+  },
+  {
+   "family_id": "SF-31",
+   "family": "入力-1",
+   "formula_xml_nodes": 500,
+   "share_of_all_nodes": 0.000131,
+   "status": "NOT_INSPECTED",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "名称から計算構造を特定できない。"
+  },
+  {
+   "family_id": "SF-32",
+   "family": "算定結果報告用シート",
+   "formula_xml_nodes": 438,
+   "share_of_all_nodes": 0.000115,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "報告用の指標と推定。"
+  },
+  {
+   "family_id": "SF-33",
+   "family": "入力シート(B6,7)",
+   "formula_xml_nodes": 345,
+   "share_of_all_nodes": 9e-05,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "B6-01",
+    "B6-02",
+    "B6-03",
+    "B6-04",
+    "B7-01",
+    "B7-02",
+    "B7-03",
+    "B7-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "運用段階の入力と計算と推定。"
+  },
+  {
+   "family_id": "SF-34",
+   "family": "算定結果",
+   "formula_xml_nodes": 273,
+   "share_of_all_nodes": 7.1e-05,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "SUM-03",
+    "SUM-06",
+    "SUM-07"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "結果の要約と推定。"
+  },
+  {
+   "family_id": "SF-35",
+   "family": "各種パラメータ(算定法)",
+   "formula_xml_nodes": 216,
+   "share_of_all_nodes": 5.7e-05,
+   "status": "NOT_INSPECTED",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "パラメータの保管と推定されるが、数式（216 ノード）の内容は特定できない。"
+  },
+  {
+   "family_id": "SF-36",
+   "family": "エネルギー統計値",
+   "formula_xml_nodes": 211,
+   "share_of_all_nodes": 5.5e-05,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-11"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "エネルギーの統計値と推定。値は流用禁止。"
+  },
+  {
+   "family_id": "SF-37",
+   "family": "入力シート",
+   "formula_xml_nodes": 159,
+   "share_of_all_nodes": 4.2e-05,
+   "status": "NOT_INSPECTED",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "詳細版の入力シート。外部ツールとの連携が前提で、構造を特定できない。"
+  },
+  {
+   "family_id": "SF-38",
+   "family": "SHASE",
+   "formula_xml_nodes": 120,
+   "share_of_all_nodes": 3.1e-05,
+   "status": "NOT_INSPECTED",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "名称から計算構造を特定できない。"
+  },
+  {
+   "family_id": "SF-39",
+   "family": "コンクリート",
+   "formula_xml_nodes": 72,
+   "share_of_all_nodes": 1.9e-05,
+   "status": "COVERED_BY_EXISTING",
+   "related_units": [
+    "STO-02"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "コンクリートの CO2 固定に関するシートと推定。"
+  },
+  {
+   "family_id": "SF-40",
+   "family": "GHG",
+   "formula_xml_nodes": 37,
+   "share_of_all_nodes": 1e-05,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04",
+    "X-05"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス合算シートと推定。"
+  },
+  {
+   "family_id": "SF-41",
+   "family": "LCA参照シート（名称変更不可）",
+   "formula_xml_nodes": 29,
+   "share_of_all_nodes": 8e-06,
+   "status": "NOT_INSPECTED",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "外部の計算ツールを参照するためのシートと推定。内容は確認できない。"
+  },
+  {
+   "family_id": "SF-42",
+   "family": "CH4",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-43",
+   "family": "CO2",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04",
+    "X-05"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-44",
+   "family": "N2O",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "COVERED_BY_ADDITIONAL",
+   "related_units": [
+    "X-04"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "ガス別シート（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-45",
+   "family": "コード表昇",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "コード表（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-46",
+   "family": "コード表空",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "コード表（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-47",
+   "family": "コード表衛",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "コード表（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-48",
+   "family": "コード表電",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "コード表（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-49",
+   "family": "チェックリスト",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "チェックリスト（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-50",
+   "family": "修正更新履歴",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "更新履歴。"
+  },
+  {
+   "family_id": "SF-51",
+   "family": "建",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "分類表（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-52",
+   "family": "排出原単位",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "係数表（数式 0 件）。値は流用禁止。"
+  },
+  {
+   "family_id": "SF-53",
+   "family": "注意事項",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "注意事項。"
+  },
+  {
+   "family_id": "SF-54",
+   "family": "物価",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-16"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "数式 0 件。物価指数の表と推定。"
+  },
+  {
+   "family_id": "SF-55",
+   "family": "物価補正",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-16"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "数式 0 件。物価補正の表と推定。"
+  },
+  {
+   "family_id": "SF-56",
+   "family": "算出分類",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "分類表（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-57",
+   "family": "表紙",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "表紙。"
+  },
+  {
+   "family_id": "SF-58",
+   "family": "配管・ケーブル",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "一覧（数式 0 件）。"
+  },
+  {
+   "family_id": "SF-59",
+   "family": "電気主要設備機器",
+   "formula_xml_nodes": 0,
+   "share_of_all_nodes": 0.0,
+   "status": "NON_CALCULATION",
+   "related_units": [
+    "X-15"
+   ],
+   "correspondence_evidence": "INFERRED_FROM_NAME_ONLY",
+   "note": "機器の一覧（数式 0 件）。"
+  }
+ ]
+}

@@ -1,0 +1,396 @@
+{
+ "schema_version": "1.0",
+ "generated": "2026-11-11",
+ "input_count": 53,
+ "counts": {
+  "METADATA_ONLY": 30,
+  "NEEDS_NEW_UNIT": 14,
+  "IMPLICIT_IN_EXISTING": 9
+ },
+ "inputs": [
+  {
+   "input_id": "PROJECT.building_name",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "名称。計算に使わない。"
+  },
+  {
+   "input_id": "PROJECT.project_type",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "区分の記録。対象段階の初期設定に使う余地はある。"
+  },
+  {
+   "input_id": "PROJECT.location",
+   "disposition": "METADATA_ONLY",
+   "related_units": [
+    "X-15"
+   ],
+   "note": "係数の地域選択の手がかり。"
+  },
+  {
+   "input_id": "PROJECT.climate_zone",
+   "disposition": "METADATA_ONLY",
+   "related_units": [
+    "X-11"
+   ],
+   "note": "統計値の選択の手がかり。"
+  },
+  {
+   "input_id": "PROJECT.building_use",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-11",
+    "X-17"
+   ],
+   "note": "用途別の統計値・代表係数の選択。"
+  },
+  {
+   "input_id": "PROJECT.structure_type",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-17"
+   ],
+   "note": "構造別の代表係数の選択。"
+  },
+  {
+   "input_id": "PROJECT.number_of_floors_above",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "代理モデル（M5）の説明変数の候補。"
+  },
+  {
+   "input_id": "PROJECT.number_of_floors_below",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "代理モデル（M5）の説明変数の候補。"
+  },
+  {
+   "input_id": "PROJECT.building_footprint",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "代理モデル（M5）の説明変数の候補。"
+  },
+  {
+   "input_id": "PROJECT.typical_floor_area",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "代理モデル（M5）の説明変数の候補。"
+  },
+  {
+   "input_id": "PROJECT.building_height",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "代理モデル（M5）の説明変数の候補。"
+  },
+  {
+   "input_id": "PROJECT.maximum_span",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "代理モデル（M5）の説明変数の候補。"
+  },
+  {
+   "input_id": "PROJECT.building_shape",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記述項目。"
+  },
+  {
+   "input_id": "PROJECT.roof_system",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記述項目。"
+  },
+  {
+   "input_id": "PROJECT.facade_system",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記述項目。"
+  },
+  {
+   "input_id": "PROJECT.foundation_system",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記述項目。"
+  },
+  {
+   "input_id": "PROJECT.completion_year",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "A5-01"
+   ],
+   "note": "工事段階の電力係数の年。"
+  },
+  {
+   "input_id": "PROJECT.assessment_date",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "A13-03"
+   ],
+   "note": "EPD の有効期限の判定。"
+  },
+  {
+   "input_id": "PROJECT.assessor",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記録。"
+  },
+  {
+   "input_id": "PROJECT.design_stage",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記録。"
+  },
+  {
+   "input_id": "BOUNDARY.functional_unit",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "SUM-04",
+    "SUM-05"
+   ],
+   "note": "原単位の選択。"
+  },
+  {
+   "input_id": "BOUNDARY.excluded_scope_notes",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記録。"
+  },
+  {
+   "input_id": "MATERIAL.material_id",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "X-15",
+    "QA-01"
+   ],
+   "note": "行の識別子。"
+  },
+  {
+   "input_id": "MATERIAL.construction_division",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-17",
+    "X-09"
+   ],
+   "note": "集計の区分。"
+  },
+  {
+   "input_id": "MATERIAL.material_class",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-15",
+    "X-09",
+    "X-17"
+   ],
+   "note": "係数の検索と集計の区分。"
+  },
+  {
+   "input_id": "MATERIAL.reuse_rate",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-13"
+   ],
+   "note": "端材の再使用。"
+  },
+  {
+   "input_id": "MATERIAL.reinforcement_quantity",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-17"
+   ],
+   "note": "要約数量。"
+  },
+  {
+   "input_id": "MATERIAL.steel_quantity",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-17"
+   ],
+   "note": "要約数量。"
+  },
+  {
+   "input_id": "MATERIAL.envelope_area",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-17"
+   ],
+   "note": "要約数量。"
+  },
+  {
+   "input_id": "MATERIAL.interior_area",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-17"
+   ],
+   "note": "要約数量。"
+  },
+  {
+   "input_id": "FACTOR.factor_release_year",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "SUM-08"
+   ],
+   "note": "比較可能性の判定（係数版）。"
+  },
+  {
+   "input_id": "FACTOR.factor_region",
+   "disposition": "METADATA_ONLY",
+   "related_units": [
+    "X-15"
+   ],
+   "note": "係数の選択の手がかり。"
+  },
+  {
+   "input_id": "FACTOR.factor_valid_until",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "A13-03"
+   ],
+   "note": "有効期限の判定。"
+  },
+  {
+   "input_id": "FACTOR.factor_quality_score",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "品質の記録。"
+  },
+  {
+   "input_id": "TRANSPORT.load_factor",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-12"
+   ],
+   "note": "積載率の補正。"
+  },
+  {
+   "input_id": "CONSTRUCTION.site_duration",
+   "disposition": "METADATA_ONLY",
+   "related_units": [
+    "A5-01"
+   ],
+   "note": "工期を年に按分する拡張の手がかり。"
+  },
+  {
+   "input_id": "CONSTRUCTION.temporary_works",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記述項目。"
+  },
+  {
+   "input_id": "EQUIPMENT.equipment_id",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "B4-01",
+    "X-15"
+   ],
+   "note": "行の識別子。"
+  },
+  {
+   "input_id": "EQUIPMENT.equipment_trade",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-01",
+    "X-15"
+   ],
+   "note": "設備工種の区分。"
+  },
+  {
+   "input_id": "EQUIPMENT.equipment_model",
+   "disposition": "METADATA_ONLY",
+   "related_units": [
+    "X-15"
+   ],
+   "note": "仕様の記録。"
+  },
+  {
+   "input_id": "EQUIPMENT.equipment_factor_id",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-01"
+   ],
+   "note": "設備の初期製造。"
+  },
+  {
+   "input_id": "EQUIPMENT.equipment_end_of_life_mass",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-14",
+    "X-10"
+   ],
+   "note": "設備の廃棄。"
+  },
+  {
+   "input_id": "REFRIGERANT.substance",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "B1-01"
+   ],
+   "note": "物質別の集計の区分。"
+  },
+  {
+   "input_id": "REFRIGERANT.application",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "用途の記録。"
+  },
+  {
+   "input_id": "OPERATION.new_or_existing",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "区分の記録。"
+  },
+  {
+   "input_id": "OPERATION.electricity_per_m2_per_year",
+   "disposition": "NEEDS_NEW_UNIT",
+   "related_units": [
+    "X-11"
+   ],
+   "note": "面積当たりの電力使用量による推定。"
+  },
+  {
+   "input_id": "OPERATION.energy_simulation_basis",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "根拠の記録。"
+  },
+  {
+   "input_id": "PROVENANCE.source_reference",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "根拠の記録。"
+  },
+  {
+   "input_id": "PROVENANCE.license_status",
+   "disposition": "IMPLICIT_IN_EXISTING",
+   "related_units": [
+    "SYS-03",
+    "QA-03"
+   ],
+   "note": "使用許諾の判定。"
+  },
+  {
+   "input_id": "PROVENANCE.last_verified_at",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記録。"
+  },
+  {
+   "input_id": "PROVENANCE.measurement_year",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記録。"
+  },
+  {
+   "input_id": "PROVENANCE.user_override_reason",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "記録。"
+  },
+  {
+   "input_id": "PROVENANCE.uncertainty_distribution",
+   "disposition": "METADATA_ONLY",
+   "related_units": [],
+   "note": "不確実性の記録（伝播の計算は未採用）。"
+  }
+ ]
+}
