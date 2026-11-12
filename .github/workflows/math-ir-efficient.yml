@@ -54,6 +54,11 @@ jobs:
             python math_interop_v0/phase5.py prepare math_ir_io
           else
             python math_tools_v2/portable.py prepare "$MATH_INPUT_FILE" math_ir_io
+            if [ "$MATH_MODE" = portable-full ]; then
+              # Test all five Python engines BEFORE SageMath/MATLAB are started.
+              python math_tools_v2/portable.py verify-python math_ir_io
+              python math_tools_v2/portable.py audit-python math_ir_io
+            fi
           fi
       - name: Run SageMath 10.10 (only when requested)
         if: ${{ env.MATH_MODE != 'portable-python' }}
