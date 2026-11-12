@@ -241,6 +241,31 @@ def self_test():
     print("PASS negative tests: denominator, unknown op, noncanonical integer")
 
 
+def tamper_test(input_path, output_path):
+    """Confirm verifier detects semantic, metadata and lineage corruption."""
+    import copy
+    import tempfile
+    obj = json.loads(Path(output_path).read_text(encoding="utf-8"))
+    mutations = {
+        "unit": lambda r: r["source"]["cases"][0].update(unit="1"),
+        "assumptions": lambda r: r["source"]["cases"][2]["symbols"][0].update(constraints=[]),
+        "rational_result": lambda r: r["results"][0]["result"].update(numerator="2"),
+        "sha256": lambda r: r.update(source_sha256="0" * 64),
+    }
+    with tempfile.TemporaryDirectory() as folder:
+        candidate = Path(folder) / "tampered.json"
+        for label, mutate in mutations.items():
+            bad = copy.deepcopy(obj)
+            mutate(bad)
+            candidate.write_text(canonical(bad), encoding="utf-8")
+            try:
+                verify(input_path, candidate)
+            except (ValueError, KeyError, TypeError):
+                print(f"PASS tamper detected: {label}")
+            else:
+                raise AssertionError(f"Tampering was accepted: {label}")
+
+
 if __name__ == "__main__":
     try:
         mode = sys.argv[1]
@@ -252,6 +277,8 @@ if __name__ == "__main__":
             verify(sys.argv[2], sys.argv[3])
         elif mode == "self-test" and len(sys.argv) == 2:
             self_test()
+        elif mode == "tamper-test" and len(sys.argv) == 4:
+            tamper_test(sys.argv[2], sys.argv[3])
         else:
             raise ValueError("Usage: phase1.py {produce PATH|sage|verify IN OUT|self-test}")
     except (ValueError, KeyError, TypeError) as exc:
