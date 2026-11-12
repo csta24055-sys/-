@@ -224,6 +224,17 @@ def verify(folder, full, save_output=True):
     check({u: phase2.fraction_of(row["exact_sum"])
            for u, row in warm["groups"].items()} == exact_groups,
           "Independent exact group sum changed")
+    # Compare saved approximate records to freshly recomputed mathematical inputs.
+    # A cache entry with a forged, recomputed SHA-256 must not pass verification.
+    for c in cases:
+        key = warm["cache_keys"]["validated_" + c["case_id"]]
+        saved = read(p / "cache" / (key + ".json"))["payload"]
+        check(saved == phase2.case_record(c),
+              "Cached numerical record disagrees with independent recomputation")
+    scipy_key = warm["cache_keys"]["scipy_reference"]
+    scipy_saved = read(p / "cache" / (scipy_key + ".json"))["payload"]
+    check(scipy_saved == phase2.scipy_record(),
+          "Cached SciPy reference disagrees with independent recomputation")
     if full:
         check_remote(bundle, manifest, read(p / "sage_result.json"),
                      read(p / "matlab_result.json"))
@@ -259,6 +270,25 @@ def audit(folder, full):
     expected = verify(folder, full, False)
     check(read(p / "result.json") == expected,
           "Saved result differs from independently rebuilt source")
+    # Modify a cache payload AND recompute its self-hash: verification must
+    # still catch the forged value using independent mathematics.
+    case_id = read(p / "input.json")["cases"][0]["case_id"]
+    key = read(p / "python_graph.json")["cache_keys"]["validated_" + case_id]
+    target = p / "cache" / (key + ".json")
+    original = target.read_bytes()
+    try:
+        altered = read(target)
+        altered["payload"]["numpy"]["hex"] = "0x0.0p+0"
+        altered["payload_sha256"] = phase1.digest(altered["payload"])
+        save(target, altered)
+        try:
+            verify(folder, full, False)
+        except (ValueError, KeyError, TypeError):
+            print("PASS tamper rejected: rehashed cached approximation")
+        else:
+            raise AssertionError("Rehashed numerical corruption accepted")
+    finally:
+        target.write_bytes(original)
     if full:
         for label, filename, modify in [
             ("sage_value", "sage_result.json",
