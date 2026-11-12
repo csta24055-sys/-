@@ -1,0 +1,110 @@
+name: Math IR Efficient - One Job and Variable Cases
+
+on:
+  pull_request:
+    paths:
+      - 'math_tools_v2/**'
+      - '.github/workflows/math-ir-efficient.yml'
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        description: "Run full 7 engines, Python only, or legacy 43-node verification"
+        required: true
+        default: portable-full
+        options:
+          - portable-full
+          - portable-python
+          - baseline-compact
+      case_file:
+        type: string
+        description: "Public fixture in math_tools_v2/examples/ for portable modes"
+        required: true
+        default: 'math_tools_v2/examples/six_cases.json'
+
+permissions:
+  contents: read
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      MATH_MODE: ${{ inputs.mode || 'portable-full' }}
+      MATH_INPUT_FILE: ${{ inputs.case_file || 'math_tools_v2/examples/six_cases.json' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'math_tools_v2/requirements.txt'
+      - name: Install pinned Python libraries once
+        run: python -m pip install --disable-pip-version-check -r math_tools_v2/requirements.txt
+      - name: Validate selected input and prepare Python DAG
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$MATH_MODE" in portable-full|portable-python|baseline-compact) ;; *) echo 'Invalid mode'; exit 2 ;; esac
+          case "$MATH_INPUT_FILE" in math_tools_v2/examples/*.json) ;; *) echo 'Only public checked-in fixtures allowed'; exit 2 ;; esac
+          test -f "$MATH_INPUT_FILE"
+          if [ "$MATH_MODE" = baseline-compact ]; then
+            python math_interop_v0/phase5.py prepare math_ir_io
+          else
+            python math_tools_v2/portable.py prepare "$MATH_INPUT_FILE" math_ir_io
+          fi
+      - name: Run SageMath 10.10 (only when requested)
+        if: ${{ env.MATH_MODE != 'portable-python' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -i \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/work,readonly" \
+            --entrypoint /bin/bash \
+            sagemath/sagemath:10.10 \
+            -lc 'export PATH="/home/sage/sage/local/bin:$PATH"; exec sage -python /work/math_interop_v0/phase1.py sage' \
+            < math_ir_io/input.json > math_ir_io/sage_result.json
+      - name: Install MATLAB and Symbolic Math Toolbox (only when requested)
+        if: ${{ env.MATH_MODE != 'portable-python' }}
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          products: Symbolic_Math_Toolbox
+      - name: Independently evaluate in MATLAB, reading SageMath JSON
+        if: ${{ env.MATH_MODE != 'portable-python' }}
+        uses: matlab-actions/run-command@v3
+        with:
+          command: "addpath(fullfile(getenv('GITHUB_WORKSPACE'),'math_interop_v0')); phase3_matlab"
+      - name: Finalize and audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$MATH_MODE" in
+            baseline-compact)
+              python math_interop_v0/phase5.py finalize math_ir_io
+              python math_interop_v0/phase5.py audit math_ir_io
+              ;;
+            portable-full)
+              python math_tools_v2/portable.py verify-full math_ir_io
+              python math_tools_v2/portable.py audit-full math_ir_io
+              ;;
+            portable-python)
+              python math_tools_v2/portable.py verify-python math_ir_io
+              python math_tools_v2/portable.py audit-python math_ir_io
+              ;;
+          esac
+          {
+            echo '### Math IR efficient run'
+            echo "Mode: $MATH_MODE"
+            echo "Case fixture: $MATH_INPUT_FILE"
+            echo 'All required tests passed; only compact result JSON is uploaded.'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload only the small final result (one-day retention)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-efficient-result
+          path: |
+            math_ir_io/result.json
+            math_ir_io/unified_graph.json
+          if-no-files-found: error
+          retention-days: 1
