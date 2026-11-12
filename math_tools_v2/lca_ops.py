@@ -353,8 +353,8 @@ def do_spectrum(task, computed):
     nodes = []
     components = []
     def inside(x):
-        return (x > a or (x == a and task["include_start"])) and (
-            x < b or (x == b and task["include_end"]))
+        return bool((x > a or (x == a and task["include_start"])) and (
+            x < b or (x == b and task["include_end"])))
     need(type(task["events"]) is list and len(task["events"]) <= 100,
          "Invalid event list")
     for event in task["events"]:
