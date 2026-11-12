@@ -1,0 +1,116 @@
+name: Math IR Phase 3 - Structured SageMath MATLAB Transfer
+
+on:
+  pull_request:
+    paths:
+      - 'math_interop_v0/**'
+      - '.github/workflows/math-ir-phase3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'sympy==1.14.0'
+      - name: Prepare restricted exact mathematical data and manifest
+        run: python math_interop_v0/phase3.py prepare math_ir_io
+      - uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-phase3-input
+          path: math_ir_io/
+          retention-days: 7
+
+  sage:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: math-ir-phase3-input
+          path: math_ir_io
+      - name: Compute exact results from canonical JSON in SageMath 10.10
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -i \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/work,readonly" \
+            --entrypoint /bin/bash \
+            sagemath/sagemath:10.10 \
+            -lc 'export PATH="/home/sage/sage/local/bin:$PATH"; exec sage -python /work/math_interop_v0/phase1.py sage' \
+            < math_ir_io/input.json > math_ir_io/sage_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-phase3-sage
+          path: math_ir_io/sage_result.json
+          retention-days: 7
+
+  matlab:
+    needs: [prepare, sage]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: math-ir-phase3-input
+          path: math_ir_io
+      - uses: actions/download-artifact@v4
+        with:
+          name: math-ir-phase3-sage
+          path: math_ir_io
+      - name: Set up MATLAB and Symbolic Math Toolbox
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          products: Symbolic_Math_Toolbox
+      - name: Independently evaluate and import SageMath exact results
+        uses: matlab-actions/run-command@v3
+        with:
+          command: "addpath(fullfile(getenv('GITHUB_WORKSPACE'),'math_interop_v0')); phase3_matlab"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-phase3-matlab
+          path: math_ir_io/matlab_result.json
+          if-no-files-found: error
+          retention-days: 7
+
+  verify:
+    needs: [prepare, sage, matlab]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'sympy==1.14.0'
+      - uses: actions/download-artifact@v4
+        with:
+          name: math-ir-phase3-input
+          path: math_ir_io
+      - uses: actions/download-artifact@v4
+        with:
+          name: math-ir-phase3-sage
+          path: math_ir_io
+      - uses: actions/download-artifact@v4
+        with:
+          name: math-ir-phase3-matlab
+          path: math_ir_io
+      - name: Verify typed exact roundtrip and both mathematical computations
+        run: python math_interop_v0/phase3.py verify math_ir_io
+      - name: Negative tests for altered source, result, metadata and lineage
+        run: python math_interop_v0/phase3.py negative math_ir_io
+      - uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-phase3-verified
+          path: math_ir_io/
+          retention-days: 7
