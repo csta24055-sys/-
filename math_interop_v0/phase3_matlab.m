@@ -70,8 +70,16 @@ function result = eval_ast(node, substitution)
             result = eval_ast(substitution.(name), struct());
         case {'add', 'mul', 'pow'}
             if numel(node.args) ~= 2, error('Nonbinary operation'); end
-            first = eval_ast(node.args(1), substitution);
-            second = eval_ast(node.args(2), substitution);
+            % MATLAB jsondecode produces cell arrays for mixed AST node shapes.
+            if iscell(node.args)
+                firstNode = node.args{1};
+                secondNode = node.args{2};
+            else
+                firstNode = node.args(1);
+                secondNode = node.args(2);
+            end
+            first = eval_ast(firstNode, substitution);
+            second = eval_ast(secondNode, substitution);
             switch char(node.op)
                 case 'add'
                     result = first + second;
