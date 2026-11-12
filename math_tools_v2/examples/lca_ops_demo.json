@@ -74,6 +74,21 @@
       "result_unit": "kgCO2e"
     },
     {
+      "id": "integral_indefinite",
+      "operation": "integral",
+      "expression": {
+        "op": "sin",
+        "arg": {
+          "op": "symbol",
+          "name": "t"
+        }
+      },
+      "bounds": null,
+      "integrand_unit": "kgCO2e/year",
+      "variable_unit": "year",
+      "result_unit": "kgCO2e"
+    },
+    {
       "id": "time_piecewise",
       "operation": "time_function",
       "segments": [
