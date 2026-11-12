@@ -20,7 +20,7 @@ The script scripts/dropbox_actions_store.py uses Python stdlib, refreshes OAuth 
 
 GitHub Actions in public repositories can use standard hosted runners for free even when the artifact storage allowance is exhausted, provided the workflow does not rely on artifact uploads/downloads and no account-level suspension applies.
 
-This branch changes the single-job workflows so they do not create artifacts. The multi-job Math IR Phase 3 and Math IR Unified workflows need inter-job artifact migration or conversion to a sequential job before every old workflow is artifact-free. They are not yet migrated by the first batch.
+This branch changes all nine existing workflows to avoid GitHub artifact upload and download. The former multi-job Math IR Phase 3 and Math IR Unified workflows have also been converted to single-job sequential pipelines for their original prepare, SageMath, MATLAB and verification stages. The mathematical engines remain separate, but the previous four-runner job-isolation property is no longer identical and needs regression testing. They upload generated files to Dropbox when configured.
 
 No GitHub artifacts are deleted. Existing GitHub artifacts remain and must be reviewed before deletion. Do not publish proprietary J-CAT source data or sensitive data through a public workflow.
 
