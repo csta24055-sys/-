@@ -35,6 +35,7 @@ class LcaOperatorTests(unittest.TestCase):
                          "exact_symbolic")
         self.assertEqual(self.result["integral_nonlinear"]["result"]["kind"],
                          "exact_symbolic")
+        self.assertEqual(self.result["integral_indefinite"]["antiderivative"], "-cos(t)")
 
     def test_time_piecewise_and_boundary(self):
         self.assertEqual(exact(self.result["time_piecewise"]["integral"]), (50, 1))
