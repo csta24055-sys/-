@@ -11,6 +11,7 @@ from decimal import Decimal
 from fractions import Fraction
 import json
 import math
+import shutil
 from pathlib import Path
 import sys
 import tempfile
@@ -229,6 +230,8 @@ def database_roundtrip(document, path):
     con = duckdb.connect(str(path))
     try:
         con.execute("CREATE TABLE records (case_id VARCHAR PRIMARY KEY, numerator VARCHAR NOT NULL, denominator VARCHAR NOT NULL, unit VARCHAR NOT NULL, source_hash VARCHAR NOT NULL, record_json VARCHAR NOT NULL, record_hash VARCHAR NOT NULL)")
+        con.execute("CREATE TABLE bundle_meta (document_sha256 VARCHAR NOT NULL)")
+        con.execute("INSERT INTO bundle_meta VALUES (?)", [digest(document)])
         for record in document["records"]:
             val = record["exact"]
             con.execute("INSERT INTO records VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -247,6 +250,52 @@ def database_roundtrip(document, path):
         print(f"PASS DuckDB VARCHAR exact storage and retrieval: {len(stored)} rows; groups={by_unit}")
     finally:
         con.close()
+
+
+def verify_saved(document_path, database_path):
+    """Read both artifacts anew; detect source, exact values and metadata changes."""
+    document = json.loads(Path(document_path).read_text(encoding="utf-8"))
+    n = verify_document(document)
+    con = duckdb.connect(str(database_path), read_only=True)
+    try:
+        digest_rows = con.execute("SELECT document_sha256 FROM bundle_meta").fetchall()
+        require(digest_rows == [(digest(document),)], "Stored document digest mismatch")
+        data = con.execute("SELECT case_id,numerator,denominator,unit,source_hash,record_json,record_hash FROM records ORDER BY case_id").fetchall()
+        require(len(data) == n, "Stored case count mismatch")
+        expected = {r["case_id"]: r for r in document["records"]}
+        for ident, numerator, denominator, unit, source_hash, payload, hash_value in data:
+            require(ident in expected, "Unknown DuckDB case")
+            record = expected[ident]
+            require((numerator, denominator) == (record["exact"]["numerator"], record["exact"]["denominator"]), "Database exact rational altered")
+            require(unit == record["unit"] and source_hash == record["source_sha256"], "Database metadata altered")
+            require(json.loads(payload) == record and hash_value == digest(record), "Database JSON/hash altered")
+    finally:
+        con.close()
+    print(f"PASS independently reopened DuckDB and JSON: {n} exact records")
+    return document
+
+
+def database_tamper_test(document_path, database_path):
+    """Ensure a separately reopened database cannot silently change data."""
+    with tempfile.TemporaryDirectory() as d:
+        candidate = Path(d) / "tampered.duckdb"
+        for label, sql in {
+            "db_exact_value": "UPDATE records SET numerator='888' WHERE case_id='third_exact'",
+            "db_unit": "UPDATE records SET unit='1' WHERE case_id='third_exact'",
+            "db_bundle_digest": "UPDATE bundle_meta SET document_sha256='bad'",
+        }.items():
+            shutil.copyfile(database_path, candidate)
+            con = duckdb.connect(str(candidate))
+            try:
+                con.execute(sql)
+            finally:
+                con.close()
+            try:
+                verify_saved(document_path, candidate)
+            except (ValueError, KeyError, TypeError):
+                print(f"PASS database tamper detected: {label}")
+            else:
+                raise AssertionError(f"Database tamper accepted: {label}")
 
 
 def tamper_test(original):
@@ -273,18 +322,23 @@ def tamper_test(original):
 
 
 def main():
-    if len(sys.argv) != 4 or sys.argv[1] != "run":
-        raise ValueError("Usage: phase2.py run OUTPUT_JSON OUTPUT_DUCKDB")
-    out_json, out_database = map(Path, sys.argv[2:])
-    require(not out_json.exists() and not out_database.exists(), "Outputs must be new files")
-    doc = produce_document()
-    passed = verify_document(doc)
-    database_roundtrip(doc, out_database)
-    tamper_test(doc)
-    out_json.write_text(canonical(doc) + "\n", encoding="utf-8")
-    loaded = json.loads(out_json.read_text(encoding="utf-8"))
-    require(verify_document(loaded) == passed, "JSON roundtrip failed")
-    print(f"PHASE 2: PASS {passed} exact->NumPy/mpmath cases, SciPy quad, NumPy cancellation, DuckDB, 9 tamper tests")
+    if len(sys.argv) == 4 and sys.argv[1] == "run":
+        out_json, out_database = map(Path, sys.argv[2:])
+        require(not out_json.exists() and not out_database.exists(), "Outputs must be new files")
+        doc = produce_document()
+        passed = verify_document(doc)
+        database_roundtrip(doc, out_database)
+        tamper_test(doc)
+        out_json.write_text(canonical(doc) + "\n", encoding="utf-8")
+        loaded = verify_saved(out_json, out_database)
+        require(verify_document(loaded) == passed, "JSON roundtrip failed")
+        print(f"PHASE 2: PASS {passed} exact->NumPy/mpmath cases, SciPy quad, NumPy cancellation, DuckDB, 9 tamper tests")
+    elif len(sys.argv) == 4 and sys.argv[1] == "verify":
+        verify_saved(sys.argv[2], sys.argv[3])
+        database_tamper_test(sys.argv[2], sys.argv[3])
+        print("PHASE 2 INDEPENDENT PROCESS: PASS with 3 database tamper tests")
+    else:
+        raise ValueError("Usage: phase2.py {run|verify} OUTPUT_JSON OUTPUT_DUCKDB")
 
 
 if __name__ == "__main__":
