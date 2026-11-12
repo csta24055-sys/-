@@ -7,6 +7,15 @@
 - 旧研究（第9章、計算式の簡略化・統合・近似）は終了した。成果の索引と引継ぎは [../research_archive/real_equation_checkpoint/](../research_archive/real_equation_checkpoint/INDEX.md) にある。
 - 誤差を測る基準は、旧研究の公開中の版の基準計算で、変更していない（[00_POLICY/RESEARCH_PROTOCOL.md](00_POLICY/RESEARCH_PROTOCOL.md) の 2 節）。
 
+## 2026-11-13 の更新：全 70 単位の統合系
+
+[11_UNIFIED_SYSTEM/](11_UNIFIED_SYSTEM/README.md) に、全 70 評価単位を**マスク付き積和**と**節点スペクトル**の 2 構造だけで元の入力から計算する統合系をまとめた。
+
+- 70 単位の公開出力（190 キー）を、1,293 組（シナリオ×評価期間）・約 2,270 万個の値で基準計算と比べ、不一致 0。数値の最大相対差は 2.2e-12。
+- 2026-11-12 に「保存しない」条件で行った 2 回の限定検証（代表値検証、残り 3 課題）のコードは、記録から復元して保存し、調整に使っていなかった 693 組を同じ条件で再計算した。
+- 証拠の水準は数値の一致（N）で、確認者は実装者のみ。独立の検査、先行研究の残りの観点、ルート A・C、アドバイザーのレビューは未実施のままである。
+- 下の「現在の状態（2026-11-11）」は当時の記録として残す。そこにある「残りの 52 単位」は、この統合系で扱った。
+
 ## 現在の状態（2026-11-11）
 
 **途中である。** 独立の検査を受けた結果は、まだ無い。下の数値は、架空データで、実行担当と実装した作業担当だけが確かめたものである。
@@ -34,10 +43,11 @@
 | [01_PRIOR_RESEARCH/](01_PRIOR_RESEARCH/README.md) | 先行研究・数学的変換の調査台帳（成果物 2） | 6 観点のうち 2 観点（29 項目） |
 | [02_EQUATION_GROUPS/](02_EQUATION_GROUPS/README.md) | 方程式グループ・依存関係の分類台帳（成果物 3） | 70 単位のうち 22 単位、8 グループ（暫定） |
 | [03_ROUTES/](03_ROUTES/README.md) | 研究ルート別の数式・実装・誤差・性能比較（成果物 4） | ルート B の 4 候補を測定。ルート A は測定中、ルート C は未着手 |
-| [04_HYPOTHESES/](04_HYPOTHESES/README.md) | 挑戦的仮説・成立条件・反例・未解決事項（成果物 5） | 仮説 7、反例 6 |
-| [05_HISTORY/](05_HISTORY/README.md) | 方程式・変換・分類の改良履歴（成果物 6） | 14 件 |
+| [04_HYPOTHESES/](04_HYPOTHESES/README.md) | 挑戦的仮説・成立条件・反例・未解決事項（成果物 5） | 仮説 10、反例 6 |
+| [05_HISTORY/](05_HISTORY/README.md) | 方程式・変換・分類の改良履歴（成果物 6） | 24 件 |
 | [06_ADVISORS/](06_ADVISORS/README.md) | アドバイザーの提案と検証結果（成果物 7） | 未実施（依頼の内容と制約を記載） |
-| [07_DECISIONS/](07_DECISIONS/README.md) | 候補の昇格・降格・資源配分の判断履歴（成果物 8） | 7 件 |
+| [07_DECISIONS/](07_DECISIONS/README.md) | 候補の昇格・降格・資源配分の判断履歴（成果物 8） | 12 件 |
+| [11_UNIFIED_SYSTEM/](11_UNIFIED_SYSTEM/README.md) | 全 70 単位の統合系：定義、導出、仕様、検証、限界、再実行手順（2026-11-13） | 全 70 単位の全出力が一致（N、実装者のみ） |
 | [research_code/](research_code/README.md) | 研究用のコード（基準計算の読み取り専用の呼び出し、演算子、仕様、検査、実験） | — |
 
 成果物 1（旧研究の停止・保存・引継ぎ・停止確認）は [../research_archive/real_equation_checkpoint/](../research_archive/real_equation_checkpoint/STOP_STATUS.md) にある。
