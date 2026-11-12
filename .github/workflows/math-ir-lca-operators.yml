@@ -34,11 +34,27 @@ jobs:
           python math_tools_v2/lca_ops.py verify \
             math_tools_v2/examples/lca_ops_demo.json \
             "$RUNNER_TEMP/lca_ops_result.json"
-      - name: Upload only tiny public synthetic result
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lca-math-four-operators-demo
-          path: ${{ runner.temp }}/lca_ops_result.json
-          if-no-files-found: error
-          retention-days: 1
+      - name: Copy computation outputs to Dropbox (no GitHub artifact quota)
+        if: ${{ always() && github.event_name != 'pull_request' }}
+        shell: bash
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$DROPBOX_APP_KEY" || -z "$DROPBOX_APP_SECRET" || -z "$DROPBOX_REFRESH_TOKEN" ]]; then
+            echo '::warning::Dropbox secrets not configured; outputs were NOT archived. No GitHub artifact storage used.'
+            exit 0
+          fi
+          remote_base="/GitHubActions/$GITHUB_REPOSITORY/$GITHUB_WORKFLOW/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/$GITHUB_JOB"
+          count=0
+          for file in \
+            $RUNNER_TEMP/lca_ops_result.json; do
+            if [[ -f "$file" ]]; then
+              python scripts/dropbox_actions_store.py --file "$file" --remote "$remote_base/$(basename "$file")"
+              count=$((count+1))
+            fi
+          done
+          echo "Dropbox copies verified: $count" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$count" -eq 0 ]]; then echo '::warning::No result files found to copy'; fi
