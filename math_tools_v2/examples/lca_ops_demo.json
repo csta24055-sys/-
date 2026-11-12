@@ -1,0 +1,300 @@
+{
+  "schema": "lca-math-operators/0.2",
+  "tasks": [
+    {
+      "id": "integral_polynomial",
+      "operation": "integral",
+      "expression": {
+        "op": "pow",
+        "args": [
+          {
+            "op": "symbol",
+            "name": "t"
+          },
+          {
+            "op": "integer",
+            "value": "2"
+          }
+        ]
+      },
+      "bounds": {
+        "start": "0",
+        "end": "3"
+      },
+      "integrand_unit": "kgCO2e/year",
+      "variable_unit": "year",
+      "result_unit": "kgCO2e"
+    },
+    {
+      "id": "integral_trigonometric",
+      "operation": "integral",
+      "expression": {
+        "op": "sin",
+        "arg": {
+          "op": "symbol",
+          "name": "t"
+        }
+      },
+      "bounds": {
+        "start": "0",
+        "end": "1"
+      },
+      "integrand_unit": "kgCO2e/year",
+      "variable_unit": "year",
+      "result_unit": "kgCO2e"
+    },
+    {
+      "id": "integral_nonlinear",
+      "operation": "integral",
+      "expression": {
+        "op": "exp",
+        "arg": {
+          "op": "neg",
+          "arg": {
+            "op": "pow",
+            "args": [
+              {
+                "op": "symbol",
+                "name": "t"
+              },
+              {
+                "op": "integer",
+                "value": "2"
+              }
+            ]
+          }
+        }
+      },
+      "bounds": {
+        "start": "0",
+        "end": "1"
+      },
+      "integrand_unit": "kgCO2e/year",
+      "variable_unit": "year",
+      "result_unit": "kgCO2e"
+    },
+    {
+      "id": "integral_indefinite",
+      "operation": "integral",
+      "expression": {
+        "op": "sin",
+        "arg": {
+          "op": "symbol",
+          "name": "t"
+        }
+      },
+      "bounds": null,
+      "integrand_unit": "kgCO2e/year",
+      "variable_unit": "year",
+      "result_unit": "kgCO2e"
+    },
+    {
+      "id": "time_piecewise",
+      "operation": "time_function",
+      "segments": [
+        {
+          "start": "0",
+          "end": "10",
+          "expression": {
+            "op": "integer",
+            "value": "2"
+          }
+        },
+        {
+          "start": "10",
+          "end": "20",
+          "expression": {
+            "op": "integer",
+            "value": "3"
+          }
+        }
+      ],
+      "interval": {
+        "start": "0",
+        "end": "20"
+      },
+      "samples": [
+        "0",
+        "10",
+        "20"
+      ],
+      "rate_unit": "kgCO2e/year",
+      "time_unit": "year",
+      "result_unit": "kgCO2e"
+    },
+    {
+      "id": "inputs",
+      "operation": "masked_sum_product",
+      "groups": [
+        {
+          "id": "initial",
+          "output_unit": "kgCO2e",
+          "terms": [
+            {
+              "id": "material",
+              "mask": 1,
+              "factors": [
+                {
+                  "value": "12",
+                  "unit": "kg"
+                },
+                {
+                  "value": "1/3",
+                  "unit": "kgCO2e/kg"
+                }
+              ]
+            },
+            {
+              "id": "excluded",
+              "mask": 0,
+              "factors": [
+                {
+                  "value": "99",
+                  "unit": "kgCO2e"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "replacement",
+          "output_unit": "kgCO2e",
+          "terms": [
+            {
+              "id": "component",
+              "mask": 1,
+              "factors": [
+                {
+                  "value": "2",
+                  "unit": "kg"
+                },
+                {
+                  "value": "2",
+                  "unit": "kgCO2e/kg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "operation_rate",
+          "output_unit": "kgCO2e/year",
+          "terms": [
+            {
+              "id": "annual",
+              "mask": 1,
+              "factors": [
+                {
+                  "value": "2",
+                  "unit": "kgCO2e/year"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spectrum_open",
+      "operation": "node_spectrum",
+      "interval": {
+        "start": "0",
+        "end": "20"
+      },
+      "include_start": true,
+      "include_end": false,
+      "events": [
+        {
+          "id": "construction",
+          "at": "0",
+          "coefficient": {
+            "task": "inputs",
+            "group": "initial"
+          }
+        }
+      ],
+      "periodic": [
+        {
+          "id": "replacement",
+          "first": "10",
+          "period": "10",
+          "coefficient": {
+            "task": "inputs",
+            "group": "replacement"
+          }
+        }
+      ],
+      "rates": [
+        {
+          "id": "operation",
+          "coefficient": {
+            "task": "inputs",
+            "group": "operation_rate"
+          },
+          "profile": [
+            {
+              "start": "0",
+              "end": "20",
+              "expression": {
+                "op": "integer",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      ],
+      "result_unit": "kgCO2e"
+    },
+    {
+      "id": "spectrum_closed",
+      "operation": "node_spectrum",
+      "interval": {
+        "start": "0",
+        "end": "20"
+      },
+      "include_start": true,
+      "include_end": true,
+      "events": [
+        {
+          "id": "construction",
+          "at": "0",
+          "coefficient": {
+            "task": "inputs",
+            "group": "initial"
+          }
+        }
+      ],
+      "periodic": [
+        {
+          "id": "replacement",
+          "first": "10",
+          "period": "10",
+          "coefficient": {
+            "task": "inputs",
+            "group": "replacement"
+          }
+        }
+      ],
+      "rates": [
+        {
+          "id": "operation",
+          "coefficient": {
+            "task": "inputs",
+            "group": "operation_rate"
+          },
+          "profile": [
+            {
+              "start": "0",
+              "end": "20",
+              "expression": {
+                "op": "integer",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      ],
+      "result_unit": "kgCO2e"
+    }
+  ]
+}
