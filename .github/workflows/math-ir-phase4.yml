@@ -1,0 +1,52 @@
+name: Math IR Phase 4 - Dependency DAG and Cache Audit
+
+on:
+  pull_request:
+    paths:
+      - 'math_interop_v0/**'
+      - '.github/workflows/math-ir-phase4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-dag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned five Python math/data engines
+        run: |
+          python -m pip install 'sympy==1.14.0' 'numpy==2.2.6' 'scipy==1.15.3' 'mpmath==1.3.0' 'duckdb==1.4.1'
+      - name: Generate cold-cache baseline
+        run: python math_interop_v0/phase4.py run "$RUNNER_TEMP/mathcache" "$RUNNER_TEMP/base1.json" base default
+      - name: Re-run unchanged inputs in a NEW process (all cache hits)
+        run: python math_interop_v0/phase4.py run "$RUNNER_TEMP/mathcache" "$RUNNER_TEMP/base2.json" base default
+      - name: Change one exact source rational and test selective invalidation
+        run: python math_interop_v0/phase4.py run "$RUNNER_TEMP/mathcache" "$RUNNER_TEMP/shifted.json" shifted default
+      - name: Change NumPy version tag and test selective invalidation
+        run: python math_interop_v0/phase4.py run "$RUNNER_TEMP/mathcache" "$RUNNER_TEMP/v2.json" base v2
+      - name: Independently audit lineage, precise values, cache, DAG and tampering
+        run: |
+          python math_interop_v0/phase4.py audit \
+            "$RUNNER_TEMP/mathcache" \
+            "$RUNNER_TEMP/base1.json" \
+            "$RUNNER_TEMP/base2.json" \
+            "$RUNNER_TEMP/shifted.json" \
+            "$RUNNER_TEMP/v2.json"
+      - name: Upload only synthetic summary records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-phase4-audit
+          path: |
+            ${{ runner.temp }}/base1.json
+            ${{ runner.temp }}/base2.json
+            ${{ runner.temp }}/shifted.json
+            ${{ runner.temp }}/v2.json
+          if-no-files-found: ignore
+          retention-days: 7
