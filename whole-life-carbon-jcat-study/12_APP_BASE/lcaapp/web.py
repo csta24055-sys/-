@@ -81,7 +81,7 @@ class App:
         seed = _int(form, "seed")
         if seed is None:
             return Response(400, self.index("シードは整数で指定する。").body)
-        doc, refset, _ = sample.fictional_building(seed=seed, rows=None)
+        doc, refset, _ = sample.fictional_building(seed=seed, rows=None, binding=self.service.binding)
         self.service.register_refset(refset)
         out = self.service.import_document(doc)
         return Response(303, location="/project/%d" % out["project_id"])

@@ -54,7 +54,7 @@ def _rows(node: dict, value: Any, path: str, binding: Binding) -> list[dict]:
 def document_from_model(model_dict: dict, binding: Binding, title: str, data_kind: str = "fictional",
                         refset: dict | None = None) -> dict:
     """Input document that says the same as a scenario dict (inverse of the conversion)."""
-    categories: dict[str, dict] = {}
+    categories: dict[str, dict] = {cat: {"items": {}, "tables": {}, "others": []} for cat in binding.categories}   # in the order of the classification
 
     def bucket(path: str) -> dict:
         cat = binding.category_for(path) or "未分類"
@@ -100,7 +100,7 @@ def fictional_building(seed: int = 4201, structure: str = "RC", use: str = "offi
         model_dict["materials"] = model_dict["materials"][:rows]
         model_dict["equipment"] = model_dict["equipment"][:max(2, rows // 3)]
         model_dict["refrigerants"] = model_dict["refrigerants"][:max(1, rows // 6)]
-    binding = binding or binding_mod.provisional()
+    binding = binding or binding_mod.default()
     note = "架空データ。凍結済みの生成器 synth.generate.make_scenario(seed=%d, %s, %s, %s) の出力。実在の建物・原単位ではない。" % (
         seed, structure, use, size)
     refset = refdata.from_model(model_dict, REFSET_NAME, "seed-%d" % seed, note)

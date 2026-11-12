@@ -3,15 +3,16 @@
  "data_kind": "fictional",
  "title": "架空の建物（RC・office・seed 4201）",
  "classification": {
-  "id": "provisional-engine-model",
-  "version": "1",
-  "note": "仮の分類。エンジンの入力モデルの区分をそのまま使う開発用の代用であり、アプリの入力分類ではない。"
+  "id": "jcat-input-tree",
+  "name": "J-CAT入力分類ツリー（完全分類・構造のみ）",
+  "version": "1.0",
+  "note": "大分類・小分類・詳細分類は受領した入力分類による。項目の ID はエンジンの入力モデルの名前。"
  },
  "conditions": {
   "study_period": 60.0
  },
  "categories": {
-  "project": {
+  "building": {
    "items": {
     "project.building_name": "SYNTHETIC BUILDING 4201",
     "project.project_type": "NEW_BUILD",
@@ -38,87 +39,19 @@
     "project.assessor": "SYNTHETIC_GENERATOR",
     "project.design_stage": "AS_BUILT",
     "project.provenance_id": "PRV-DESIGN",
-    "project.states": {}
-   },
-   "tables": {},
-   "others": []
-  },
-  "boundary": {
-   "items": {
+    "project.states": {},
     "boundary.study_period": 60.0,
     "boundary.study_start_year": 2033,
     "boundary.replacement_cycle": 79.0,
     "boundary.reconstruction_scenario": "NONE",
     "boundary.reconstruction_scope_fraction": 0.0,
-    "boundary.included_lifecycle_stages": [
-     "A1-A3",
-     "A4",
-     "A5",
-     "B1",
-     "B2",
-     "B3",
-     "B4",
-     "B5",
-     "B6",
-     "B7",
-     "C1",
-     "C2",
-     "C3",
-     "C4"
-    ],
-    "boundary.functional_unit": "WHOLE_BUILDING",
-    "boundary.baseline_scenario": null,
     "boundary.excluded_scope_notes": "SYNTHETIC: external works and loose furniture are outside the scope",
-    "boundary.results_gas_scope": "CO2E_ALL_GASES"
+    "operation.new_or_existing": "NEW"
    },
    "tables": {},
    "others": []
   },
-  "provenance": {
-   "items": {},
-   "tables": {
-    "provenance": [
-     {
-      "provenance_id": "PRV-DESIGN",
-      "source_type": "DESIGN_DOCUMENT",
-      "value_state": "OBSERVED",
-      "source_reference": "synthetic://source/PRV-DESIGN",
-      "licence_status": "PERMITTED_PUBLIC",
-      "data_quality": "HIGH",
-      "last_verified_at": "2032-01-15",
-      "measurement_year": 2032,
-      "user_override_reason": null,
-      "uncertainty_distribution": null
-     },
-     {
-      "provenance_id": "PRV-MEASURED",
-      "source_type": "MEASURED",
-      "value_state": "OBSERVED",
-      "source_reference": "synthetic://source/PRV-MEASURED",
-      "licence_status": "PERMITTED_PUBLIC",
-      "data_quality": "HIGH",
-      "last_verified_at": "2032-01-15",
-      "measurement_year": 2032,
-      "user_override_reason": null,
-      "uncertainty_distribution": null
-     },
-     {
-      "provenance_id": "PRV-SUPPLIER",
-      "source_type": "MEASURED",
-      "value_state": "OBSERVED",
-      "source_reference": "synthetic://source/PRV-SUPPLIER",
-      "licence_status": "PERMITTED_PUBLIC",
-      "data_quality": "MEDIUM",
-      "last_verified_at": "2032-01-15",
-      "measurement_year": 2032,
-      "user_override_reason": null,
-      "uncertainty_distribution": null
-     }
-    ]
-   },
-   "others": []
-  },
-  "summary_quantities": {
+  "construction": {
    "items": {
     "summary_quantities.reinforcement_kg": 445922.45999999996,
     "summary_quantities.steel_kg": 78598.91,
@@ -126,15 +59,10 @@
     "summary_quantities.timber_m3": 17.10124,
     "summary_quantities.envelope_m2": 4986.29742,
     "summary_quantities.interior_m2": 8549.301110000002,
-    "summary_quantities.timber_dry_density_kg_per_m3": 371.7,
-    "summary_quantities.timber_carbon_fraction": 0.4365,
-    "summary_quantities.concrete_uptake_factor_id": "F-UPTAKE-CONCRETE"
+    "construction.electricity_kwh": 65681.0,
+    "construction.duration_months": 8.9,
+    "construction.temporary_works": "SYNTHETIC: scaffolding and site cabins, quantities not itemised"
    },
-   "tables": {},
-   "others": []
-  },
-  "materials": {
-   "items": {},
    "tables": {
     "materials": [
      {
@@ -956,6 +884,105 @@
        "conversions": []
       }
      }
+    ],
+    "construction.fuels": [
+     {
+      "kind": "DIESEL",
+      "quantity": 26508.6,
+      "unit": "L",
+      "factor_id": "F-SITE-DIESEL",
+      "@tables": {
+       "conversions": []
+      }
+     },
+     {
+      "kind": "GAS",
+      "quantity": 1223.2,
+      "unit": "m3",
+      "factor_id": "F-SITE-GAS",
+      "@tables": {
+       "conversions": []
+      }
+     },
+     {
+      "kind": "KEROSENE",
+      "quantity": 2510.3,
+      "unit": "L",
+      "factor_id": "F-SITE-KEROSENE",
+      "@tables": {
+       "conversions": []
+      }
+     }
+    ],
+    "construction.waste_streams": [
+     {
+      "kind": "PLASTIC",
+      "mass_kg": 15336.52,
+      "factor_id": "F-SITEWASTE-PLASTIC"
+     },
+     {
+      "kind": "CONCRETE_RUBBLE",
+      "mass_kg": 14583.7,
+      "factor_id": "F-SITEWASTE-CONCRETE_RUBBLE"
+     },
+     {
+      "kind": "BOARD",
+      "mass_kg": 9268.07,
+      "factor_id": "F-SITEWASTE-BOARD"
+     },
+     {
+      "kind": "METAL",
+      "mass_kg": 11430.38,
+      "factor_id": "F-SITEWASTE-METAL"
+     },
+     {
+      "kind": "MIXED",
+      "mass_kg": 15852.46,
+      "factor_id": "F-SITEWASTE-MIXED"
+     },
+     {
+      "kind": "WOOD",
+      "mass_kg": 10434.33,
+      "factor_id": "F-SITEWASTE-WOOD"
+     }
+    ],
+    "cost_items": [
+     {
+      "item_id": "K001",
+      "description": "SYNTHETIC cost-only scope 1",
+      "amount": 5656.25,
+      "currency": "SYN",
+      "price_year": 2031,
+      "factor_id": "F-COST-01",
+      "factor_base_year": 2027
+     },
+     {
+      "item_id": "K002",
+      "description": "SYNTHETIC cost-only scope 2",
+      "amount": 20558.69,
+      "currency": "SYN",
+      "price_year": 2032,
+      "factor_id": "F-COST-01",
+      "factor_base_year": 2023
+     },
+     {
+      "item_id": "K003",
+      "description": "SYNTHETIC cost-only scope 3",
+      "amount": 255668.57,
+      "currency": "SYN",
+      "price_year": 2030,
+      "factor_id": "F-COST-03",
+      "factor_base_year": 2024
+     },
+     {
+      "item_id": "K004",
+      "description": "SYNTHETIC cost-only scope 4",
+      "amount": 2043.68,
+      "currency": "SYN",
+      "price_year": 2033,
+      "factor_id": "F-COST-03",
+      "factor_base_year": 2028
+     }
     ]
    },
    "others": []
@@ -1032,13 +1059,7 @@
       "provenance_id": "PRV-DESIGN",
       "states": {}
      }
-    ]
-   },
-   "others": []
-  },
-  "refrigerants": {
-   "items": {},
-   "tables": {
+    ],
     "refrigerants": [
      {
       "device_id": "R00001",
@@ -1074,82 +1095,8 @@
    },
    "others": []
   },
-  "construction": {
-   "items": {
-    "construction.electricity_kwh": 65681.0,
-    "construction.duration_months": 8.9,
-    "construction.temporary_works": "SYNTHETIC: scaffolding and site cabins, quantities not itemised",
-    "construction.provenance_id": "PRV-MEASURED",
-    "construction.states": {}
-   },
-   "tables": {
-    "construction.fuels": [
-     {
-      "kind": "DIESEL",
-      "quantity": 26508.6,
-      "unit": "L",
-      "factor_id": "F-SITE-DIESEL",
-      "@tables": {
-       "conversions": []
-      }
-     },
-     {
-      "kind": "GAS",
-      "quantity": 1223.2,
-      "unit": "m3",
-      "factor_id": "F-SITE-GAS",
-      "@tables": {
-       "conversions": []
-      }
-     },
-     {
-      "kind": "KEROSENE",
-      "quantity": 2510.3,
-      "unit": "L",
-      "factor_id": "F-SITE-KEROSENE",
-      "@tables": {
-       "conversions": []
-      }
-     }
-    ],
-    "construction.waste_streams": [
-     {
-      "kind": "PLASTIC",
-      "mass_kg": 15336.52,
-      "factor_id": "F-SITEWASTE-PLASTIC"
-     },
-     {
-      "kind": "CONCRETE_RUBBLE",
-      "mass_kg": 14583.7,
-      "factor_id": "F-SITEWASTE-CONCRETE_RUBBLE"
-     },
-     {
-      "kind": "BOARD",
-      "mass_kg": 9268.07,
-      "factor_id": "F-SITEWASTE-BOARD"
-     },
-     {
-      "kind": "METAL",
-      "mass_kg": 11430.38,
-      "factor_id": "F-SITEWASTE-METAL"
-     },
-     {
-      "kind": "MIXED",
-      "mass_kg": 15852.46,
-      "factor_id": "F-SITEWASTE-MIXED"
-     },
-     {
-      "kind": "WOOD",
-      "mass_kg": 10434.33,
-      "factor_id": "F-SITEWASTE-WOOD"
-     }
-    ]
-   },
-   "others": []
-  },
   "operation": {
    "items": {
-    "operation.new_or_existing": "NEW",
     "operation.electricity.kind": "CONSTANT",
     "operation.electricity.unit": "kWh/year",
     "operation.electricity.base": 288364.381,
@@ -1423,7 +1370,6 @@
      16234.732,
      16234.732
     ],
-    "operation.gas_factor_id": "F-OP-GAS",
     "operation.oil.kind": "CONSTANT",
     "operation.oil.unit": "L/year",
     "operation.oil.base": 0.0,
@@ -1560,7 +1506,6 @@
      0.0,
      0.0
     ],
-    "operation.oil_factor_id": "F-OP-OIL",
     "operation.district_heat.kind": "LINEAR_TREND",
     "operation.district_heat.unit": "MJ/year",
     "operation.district_heat.base": 212643.266,
@@ -1697,7 +1642,6 @@
      206647.36852636954,
      206600.52557735678
     ],
-    "operation.district_heat_factor_id": "F-OP-DHEAT",
     "operation.onsite_generation.kind": "CONSTANT",
     "operation.onsite_generation.unit": "kWh/year",
     "operation.onsite_generation.base": 49385.699,
@@ -1970,209 +1914,7 @@
      13798.364300599998,
      13798.364300599998
     ],
-    "operation.grid.scenario_id": "GRID-STEPWISE-4201",
-    "operation.grid.kind": "STEPWISE",
-    "operation.grid.unit": "kgCO2e/kWh",
-    "operation.grid.start": null,
-    "operation.grid.annual_decline": null,
-    "operation.grid.floor": null,
-    "operation.grid.table": [
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.2641,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.22816,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.166696,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.131506,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.107362,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.091063,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.070005,
-     0.060806,
-     0.060806,
-     0.060806,
-     0.060806,
-     0.060806,
-     0.060806,
-     0.060806,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.044158,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.03058,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.027763,
-     0.026258,
-     0.026258
-    ],
-    "operation.grid.construction_value": 0.2895,
-    "operation.grid.licence_status": "PERMITTED_PUBLIC",
-    "operation.grid.source_tag": "SYNTHETIC_FICTIONAL",
-    "operation.grid.region": "SYNTH-REGION",
     "operation.facility_management_ratio": 0.197,
-    "operation.energy_simulation_basis": "SYNTHETIC_DESIGN_CALCULATION",
-    "operation.provenance_id": "PRV-DESIGN",
-    "operation.states": {}
-   },
-   "tables": {
-    "operation.grid.steps": [
-     {
-      "from_index": 0,
-      "value": 0.2641
-     },
-     {
-      "from_index": 14,
-      "value": 0.22816
-     },
-     {
-      "from_index": 29,
-      "value": 0.166696
-     },
-     {
-      "from_index": 38,
-      "value": 0.131506
-     },
-     {
-      "from_index": 48,
-      "value": 0.107362
-     },
-     {
-      "from_index": 63,
-      "value": 0.091063
-     },
-     {
-      "from_index": 76,
-      "value": 0.070005
-     },
-     {
-      "from_index": 91,
-      "value": 0.060806
-     },
-     {
-      "from_index": 98,
-      "value": 0.044158
-     },
-     {
-      "from_index": 107,
-      "value": 0.03058
-     },
-     {
-      "from_index": 117,
-      "value": 0.027763
-     },
-     {
-      "from_index": 128,
-      "value": 0.026258
-     }
-    ]
-   },
-   "others": []
-  },
-  "water_waste": {
-   "items": {
     "water_waste.water.kind": "TABLE",
     "water_waste.water.unit": "m3/year",
     "water_waste.water.base": null,
@@ -2580,20 +2322,7 @@
      50952.608085181906,
      54995.0404050334,
      51769.668981916264
-    ],
-    "water_waste.water_factor_id": "F-WATER",
-    "water_waste.sewage_factor_id": "F-SEWAGE",
-    "water_waste.waste_factor_id": "F-MSW",
-    "water_waste.provenance_id": "PRV-DESIGN",
-    "water_waste.states": {}
-   },
-   "tables": {},
-   "others": []
-  },
-  "end_of_life": {
-   "items": {
-    "end_of_life.provenance_id": "PRV-DESIGN",
-    "end_of_life.states": {}
+    ]
    },
    "tables": {
     "end_of_life.demolition_activities": [
@@ -2652,45 +2381,275 @@
    },
    "others": []
   },
-  "cost_items": {
-   "items": {},
+  "assessment": {
+   "items": {
+    "boundary.included_lifecycle_stages": [
+     "A1-A3",
+     "A4",
+     "A5",
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B5",
+     "B6",
+     "B7",
+     "C1",
+     "C2",
+     "C3",
+     "C4"
+    ],
+    "boundary.functional_unit": "WHOLE_BUILDING",
+    "boundary.baseline_scenario": null,
+    "boundary.results_gas_scope": "CO2E_ALL_GASES",
+    "summary_quantities.timber_dry_density_kg_per_m3": 371.7,
+    "summary_quantities.timber_carbon_fraction": 0.4365,
+    "summary_quantities.concrete_uptake_factor_id": "F-UPTAKE-CONCRETE",
+    "construction.provenance_id": "PRV-MEASURED",
+    "construction.states": {},
+    "operation.gas_factor_id": "F-OP-GAS",
+    "operation.oil_factor_id": "F-OP-OIL",
+    "operation.district_heat_factor_id": "F-OP-DHEAT",
+    "operation.grid.scenario_id": "GRID-STEPWISE-4201",
+    "operation.grid.kind": "STEPWISE",
+    "operation.grid.unit": "kgCO2e/kWh",
+    "operation.grid.start": null,
+    "operation.grid.annual_decline": null,
+    "operation.grid.floor": null,
+    "operation.grid.table": [
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.2641,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.22816,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.166696,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.131506,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.107362,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.091063,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.070005,
+     0.060806,
+     0.060806,
+     0.060806,
+     0.060806,
+     0.060806,
+     0.060806,
+     0.060806,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.044158,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.03058,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.027763,
+     0.026258,
+     0.026258
+    ],
+    "operation.grid.construction_value": 0.2895,
+    "operation.grid.licence_status": "PERMITTED_PUBLIC",
+    "operation.grid.source_tag": "SYNTHETIC_FICTIONAL",
+    "operation.grid.region": "SYNTH-REGION",
+    "operation.energy_simulation_basis": "SYNTHETIC_DESIGN_CALCULATION",
+    "operation.provenance_id": "PRV-DESIGN",
+    "operation.states": {},
+    "water_waste.water_factor_id": "F-WATER",
+    "water_waste.sewage_factor_id": "F-SEWAGE",
+    "water_waste.waste_factor_id": "F-MSW",
+    "water_waste.provenance_id": "PRV-DESIGN",
+    "water_waste.states": {},
+    "end_of_life.provenance_id": "PRV-DESIGN",
+    "end_of_life.states": {}
+   },
    "tables": {
-    "cost_items": [
+    "provenance": [
      {
-      "item_id": "K001",
-      "description": "SYNTHETIC cost-only scope 1",
-      "amount": 5656.25,
-      "currency": "SYN",
-      "price_year": 2031,
-      "factor_id": "F-COST-01",
-      "factor_base_year": 2027
+      "provenance_id": "PRV-DESIGN",
+      "source_type": "DESIGN_DOCUMENT",
+      "value_state": "OBSERVED",
+      "source_reference": "synthetic://source/PRV-DESIGN",
+      "licence_status": "PERMITTED_PUBLIC",
+      "data_quality": "HIGH",
+      "last_verified_at": "2032-01-15",
+      "measurement_year": 2032,
+      "user_override_reason": null,
+      "uncertainty_distribution": null
      },
      {
-      "item_id": "K002",
-      "description": "SYNTHETIC cost-only scope 2",
-      "amount": 20558.69,
-      "currency": "SYN",
-      "price_year": 2032,
-      "factor_id": "F-COST-01",
-      "factor_base_year": 2023
+      "provenance_id": "PRV-MEASURED",
+      "source_type": "MEASURED",
+      "value_state": "OBSERVED",
+      "source_reference": "synthetic://source/PRV-MEASURED",
+      "licence_status": "PERMITTED_PUBLIC",
+      "data_quality": "HIGH",
+      "last_verified_at": "2032-01-15",
+      "measurement_year": 2032,
+      "user_override_reason": null,
+      "uncertainty_distribution": null
      },
      {
-      "item_id": "K003",
-      "description": "SYNTHETIC cost-only scope 3",
-      "amount": 255668.57,
-      "currency": "SYN",
-      "price_year": 2030,
-      "factor_id": "F-COST-03",
-      "factor_base_year": 2024
+      "provenance_id": "PRV-SUPPLIER",
+      "source_type": "MEASURED",
+      "value_state": "OBSERVED",
+      "source_reference": "synthetic://source/PRV-SUPPLIER",
+      "licence_status": "PERMITTED_PUBLIC",
+      "data_quality": "MEDIUM",
+      "last_verified_at": "2032-01-15",
+      "measurement_year": 2032,
+      "user_override_reason": null,
+      "uncertainty_distribution": null
+     }
+    ],
+    "operation.grid.steps": [
+     {
+      "from_index": 0,
+      "value": 0.2641
      },
      {
-      "item_id": "K004",
-      "description": "SYNTHETIC cost-only scope 4",
-      "amount": 2043.68,
-      "currency": "SYN",
-      "price_year": 2033,
-      "factor_id": "F-COST-03",
-      "factor_base_year": 2028
+      "from_index": 14,
+      "value": 0.22816
+     },
+     {
+      "from_index": 29,
+      "value": 0.166696
+     },
+     {
+      "from_index": 38,
+      "value": 0.131506
+     },
+     {
+      "from_index": 48,
+      "value": 0.107362
+     },
+     {
+      "from_index": 63,
+      "value": 0.091063
+     },
+     {
+      "from_index": 76,
+      "value": 0.070005
+     },
+     {
+      "from_index": 91,
+      "value": 0.060806
+     },
+     {
+      "from_index": 98,
+      "value": 0.044158
+     },
+     {
+      "from_index": 107,
+      "value": 0.03058
+     },
+     {
+      "from_index": 117,
+      "value": 0.027763
+     },
+     {
+      "from_index": 128,
+      "value": 0.026258
      }
     ]
    },

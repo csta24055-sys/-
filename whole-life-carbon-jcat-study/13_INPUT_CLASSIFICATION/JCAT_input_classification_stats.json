@@ -1,0 +1,429 @@
+{
+ "summary": {
+  "generated": "2026-11-12",
+  "originals": [
+   {
+    "file": "1_J-CAT_Software_Simplified Calculation_v2.3.xlsx",
+    "bytes": 22434709,
+    "sha256": "e7bc52a5973baa528d82efab0139e649dcd06b9c8e2b00d6f74c0172df6c07ad",
+    "sheets": 73
+   },
+   {
+    "file": "2_J-CAT_Software_Standard Calculation_v2.3.2.xlsx",
+    "bytes": 32312990,
+    "sha256": "6a288f32bc503825c0eb869a69a9aa97c3a4a273182bf0dcf1033cb58cc9b99f",
+    "sheets": 77
+   },
+   {
+    "file": "3_J-CAT_Classfication Table_v2.0.xlsx",
+    "bytes": 89092,
+    "sha256": "d491f68152017556ae0a45f95fce1dccdfdf9232c8a3dd8fe4a0152dfd88c684",
+    "sheets": 13
+   },
+   {
+    "file": "4_J-CAT_Summary Table_v2.0.xlsx",
+    "bytes": 297552,
+    "sha256": "268f94e28db7f6d72eff7c1483afb9313f072a6e45a1d6042119b77a90496b53",
+    "sheets": 11
+   },
+   {
+    "file": "5_J-CAT_Software_Detailed Calculation_v2.3.xlsm",
+    "bytes": 2006726,
+    "sha256": "0546d7fa3391347633ba3903c625e56ff8ae037c27296594ca36a71756516c98",
+    "sheets": 24
+   }
+  ],
+  "inventory_rows": 14652,
+  "rows_by_status": {
+   "分類済み": 12248,
+   "空欄等": 879,
+   "その他": 3,
+   "不明・未分類": 1522
+  },
+  "cells_by_status": {
+   "分類済み": 4460580,
+   "空欄等": 16922,
+   "その他": 10,
+   "不明・未分類": 0
+  },
+  "rows_by_role": {
+   "L": 197,
+   "C": 5035,
+   "TD": 2627,
+   "I": 1929,
+   "F": 3020,
+   "DV": 102,
+   "CM": 54,
+   "DVX": 12,
+   "FX": 7,
+   "CT": 11,
+   "NM": 1657,
+   "VB": 1
+  },
+  "editable_blank_cells": 88406,
+  "duplicate_rows": 4706,
+  "values_published": false
+ },
+ "by_category": {
+  "building": {
+   "rows": 159,
+   "cells": 239
+  },
+  "construction": {
+   "rows": 432,
+   "cells": 46642
+  },
+  "equipment": {
+   "rows": 2138,
+   "cells": 317195
+  },
+  "operation": {
+   "rows": 2821,
+   "cells": 392036
+  },
+  "assessment": {
+   "rows": 7572,
+   "cells": 3721391
+  },
+  "review": {
+   "rows": 1530,
+   "cells": 9
+  }
+ },
+ "by_kind": {
+  "内部処理・参照用の値": 5475,
+  "標準値・デフォルト値": 2465,
+  "入力可能な空欄": 879,
+  "利用者が直接入力する値": 254,
+  "他の入力から自動計算される値": 3027,
+  "選択式の入力項目": 137,
+  "排出原単位・各種係数": 2415
+ },
+ "cells_by_kind": {
+  "入力可能な空欄": 16922,
+  "利用者が直接入力する値": 1267,
+  "選択式の入力項目": 58,
+  "内部処理・参照用の値": 185079,
+  "標準値・デフォルト値": 318055,
+  "排出原単位・各種係数": 137648,
+  "他の入力から自動計算される値": 3818483
+ },
+ "review": {
+  "空欄・未入力": 9,
+  "参照不明・参照切れ": 1504,
+  "用途不明": 17,
+  "不明・未分類": 1
+ },
+ "other_rows": 22,
+ "item_rows": 11361,
+ "item_rows_by_status": {
+  "分類済み": 8977,
+  "空欄等": 879,
+  "その他": 3,
+  "不明・未分類": 1502
+ },
+ "role_cells": {
+  "I": 222836,
+  "C": 294757,
+  "TD": 97131,
+  "L": 44305,
+  "F": 3818483
+ },
+ "role_rows": {
+  "L": 197,
+  "C": 5035,
+  "TD": 2627,
+  "I": 1929,
+  "F": 3020,
+  "DV": 102,
+  "CM": 54,
+  "DVX": 12,
+  "FX": 7,
+  "CT": 11,
+  "NM": 1657,
+  "VB": 1
+ },
+ "scan": {
+  "formulas": 3818483,
+  "numbers": 394569,
+  "strings": 176063,
+  "sheets": [
+   198,
+   120,
+   109
+  ],
+  "validations": 102,
+  "names": [
+   1657,
+   1485
+  ],
+  "controls": 178,
+  "comments": 1507,
+  "dv_outside": [
+   75709,
+   12
+  ],
+  "ref_formulas": 182,
+  "cond_formats": 294,
+  "blank_styled_skipped": 839130
+ },
+ "manual": {
+  "pages": 183,
+  "pages_without_text": 15,
+  "terms": [
+   {
+    "term": "評価期間",
+    "pages": 13,
+    "node": "building.boundary.study_period",
+    "rows": 2
+   },
+   {
+    "term": "建替周期",
+    "pages": 14,
+    "node": "building.boundary.replacement_cycle",
+    "rows": 0
+   },
+   {
+    "term": "延べ床面積",
+    "pages": 5,
+    "node": "building.geometry.gross_floor_area",
+    "rows": 4
+   },
+   {
+    "term": "主要構造",
+    "pages": 13,
+    "node": "building.structure.main_structure",
+    "rows": 17
+   },
+   {
+    "term": "更新周期",
+    "pages": 24,
+    "node": "operation.maintenance.material_cycle",
+    "rows": 110
+   },
+   {
+    "term": "修繕率",
+    "pages": 16,
+    "node": "operation.maintenance.repair_rate",
+    "rows": 34
+   },
+   {
+    "term": "漏洩率",
+    "pages": 11,
+    "node": "operation.leakage.leak_rate",
+    "rows": 20
+   },
+   {
+    "term": "回収率",
+    "pages": 9,
+    "node": "operation.leakage.recovery_rate",
+    "rows": 20
+   },
+   {
+    "term": "端材率",
+    "pages": 9,
+    "node": "construction.transport.offcut_waste",
+    "rows": 1
+   },
+   {
+    "term": "リユース率",
+    "pages": 10,
+    "node": "construction.transport.reuse_recycle",
+    "rows": 0
+   },
+   {
+    "term": "排出係数",
+    "pages": 18,
+    "node": "assessment.factors.energy_factor",
+    "rows": 69
+   },
+   {
+    "term": "EPD",
+    "pages": 21,
+    "node": "assessment.factors.epd",
+    "rows": 115
+   },
+   {
+    "term": "複合原単位",
+    "pages": 21,
+    "node": "assessment.factors.composite_factor",
+    "rows": 231
+   },
+   {
+    "term": "工事分倍率",
+    "pages": 19,
+    "node": "assessment.conversions.work_multiplier",
+    "rows": 400
+   },
+   {
+    "term": "炭素貯蔵",
+    "pages": 18,
+    "node": "assessment.assumptions.carbon_coefficients",
+    "rows": 109
+   },
+   {
+    "term": "物価補正",
+    "pages": 4,
+    "node": "assessment.conversions.price_correction",
+    "rows": 115
+   },
+   {
+    "term": "創エネ",
+    "pages": 6,
+    "node": "operation.generation.generation",
+    "rows": 2
+   },
+   {
+    "term": "冷媒",
+    "pages": 17,
+    "node": "equipment.refrigerant_equipment.charge",
+    "rows": 40
+   },
+   {
+    "term": "上水",
+    "pages": 15,
+    "node": "operation.utility.water",
+    "rows": 4
+   },
+   {
+    "term": "チェックリスト",
+    "pages": 0,
+    "node": "assessment.check.checklist",
+    "rows": 33
+   },
+   {
+    "term": "システム境界",
+    "pages": 4,
+    "node": "assessment.method.system_boundary",
+    "rows": 112
+   },
+   {
+    "term": "樹種",
+    "pages": 8,
+    "node": "construction.item_details.timber_carbon",
+    "rows": 8
+   }
+  ],
+  "visible_sheets": 32,
+  "visible_sheets_named_in_manual": 23,
+  "not_named": [
+   "Upfront Carbon 算定結果",
+   "コード表 昇",
+   "コード表 空",
+   "コード表 衛",
+   "コード表 電",
+   "チェックリスト",
+   "修正更新履歴",
+   "入力シート (B1)",
+   "入力シート (B6, 7)"
+  ]
+ },
+ "per_book": {
+  "簡易算定": {
+   "分類済み": 5512,
+   "空欄等": 358,
+   "不明・未分類": 52
+  },
+  "標準算定": {
+   "分類済み": 5154,
+   "空欄等": 403,
+   "不明・未分類": 36
+  },
+  "分類表": {
+   "分類済み": 132,
+   "空欄等": 15,
+   "不明・未分類": 1018
+  },
+  "集計表": {
+   "分類済み": 357,
+   "空欄等": 13,
+   "不明・未分類": 280
+  },
+  "詳細算定": {
+   "分類済み": 1093,
+   "空欄等": 90,
+   "その他": 3,
+   "不明・未分類": 136
+  }
+ },
+ "unclassified_rows": 2404,
+ "input_entries": 218,
+ "nodes": {
+  "categories": 6,
+  "branches": 39,
+  "details": 175,
+  "details_added": 36,
+  "details_with_rows": 106,
+  "details_without_rows": [
+   "building.boundary.replacement_cycle",
+   "building.boundary.stages",
+   "building.boundary.site_scope",
+   "construction.ground.earthwork",
+   "construction.ground.ground_improvement",
+   "construction.ground.formwork",
+   "construction.external.exterior_insulation",
+   "construction.external.exterior_misc",
+   "construction.internal.interior_insulation",
+   "construction.temporary.direct_temporary",
+   "construction.temporary.testing",
+   "construction.temporary.site_transport",
+   "construction.transport.delivery",
+   "construction.transport.waste_hauling",
+   "construction.transport.reuse_recycle",
+   "construction.item_details.quantity_unit",
+   "construction.item_details.physical",
+   "construction.item_details.cost",
+   "equipment.electrical.substation",
+   "equipment.electrical.wiring",
+   "equipment.electrical.lighting",
+   "equipment.electrical.low_voltage",
+   "equipment.electrical.cost",
+   "equipment.hvac.heat_source",
+   "equipment.hvac.air_handling",
+   "equipment.hvac.piping",
+   "equipment.hvac.duct",
+   "equipment.hvac.insulation_control",
+   "equipment.hvac.cost",
+   "equipment.plumbing.water_supply",
+   "equipment.plumbing.drainage",
+   "equipment.plumbing.hot_water",
+   "equipment.plumbing.fixtures_fire",
+   "equipment.plumbing.piping",
+   "equipment.plumbing.cost",
+   "equipment.elevator.elevator",
+   "equipment.elevator.escalator",
+   "equipment.elevator.cost",
+   "equipment.eq_details.spec",
+   "equipment.eq_details.count",
+   "equipment.eq_details.weight",
+   "equipment.eq_details.capacity",
+   "equipment.eq_details.duct_spec",
+   "equipment.eq_details.cost",
+   "equipment.eq_details.usage_location",
+   "equipment.refrigerant_equipment.device_link",
+   "operation.energy.yearly_table",
+   "operation.generation.self_use_export",
+   "operation.maintenance.replacement_timing",
+   "operation.maintenance.repair_conditions",
+   "operation.leakage.top_up",
+   "operation.leakage.service_period",
+   "operation.end_of_life.demolition",
+   "operation.end_of_life.end_timing",
+   "assessment.method.method_level",
+   "assessment.method.stages",
+   "assessment.method.module_d",
+   "assessment.method.purpose",
+   "assessment.factors.factor_scope",
+   "assessment.factors.factor_source",
+   "assessment.conversions.dimension_density",
+   "assessment.assumptions.standard_cycle",
+   "assessment.assumptions.standard_repair_rate",
+   "assessment.assumptions.standard_leak_rate",
+   "assessment.assumptions.grid_future",
+   "assessment.check.duplicate_check",
+   "assessment.check.unit_check",
+   "assessment.check.scope_check",
+   "assessment.check.missing_check"
+  ]
+ }
+}

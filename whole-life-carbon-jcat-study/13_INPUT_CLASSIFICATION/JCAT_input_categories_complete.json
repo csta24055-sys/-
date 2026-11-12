@@ -1,0 +1,8795 @@
+{
+ "name": "J-CAT入力分類ツリー（完全分類・構造のみ）",
+ "version": "1.0",
+ "based_on": {
+  "name": "J-CAT入力分類ツリー（研究用・分類のみ）",
+  "version": "0.1"
+ },
+ "source_scope": {
+  "manual": "0_J-CAT_Manual_v2.3.pdf",
+  "simple": "1_J-CAT_Software_Simplified Calculation_v2.3(1).xlsx",
+  "standard": "2_J-CAT_Software_Standard Calculation_v2.3.2(1).xlsx",
+  "class": "3_J-CAT_Classfication Table_v2.0(2).xlsx",
+  "summary": "4_J-CAT_Summary Table_v2.0(2).xlsx",
+  "detail": "5_J-CAT_Software_Detailed Calculation_v2.3(3).xlsm"
+ },
+ "rules": [
+  "大分類→小分類→対象品目・入力項目の枝分かれ。",
+  "各大分類および各小分類に収まらない場合は「その他」を使用。",
+  "「存在しない」「未入力」「ゼロ」は同一視しない。",
+  "原単位や標準値を必ず利用者に手入力させる設計ではない。分類のみにとどめ、アプリ実装・デフォルト値決定・係数収録・計算ロジックを行わない。",
+  "詳細法に含まれる個別の資材・設備コードは品目データとして後日紐づけ、分類構造に直接数百の品目を並べない。"
+ ],
+ "categories": [
+  {
+   "id": "building",
+   "label": "1 建物・案件の基本情報",
+   "branches": [
+    {
+     "id": "building.identity",
+     "label": "物件・算定者",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "建物名称",
+      "算定者・事業者",
+      "所在地",
+      "算定日",
+      "竣工年",
+      "算定段階（計画・設計・着工・竣工など）"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "building.identity.name",
+       "label": "建物名称",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 7,
+        "n_blank": 4,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [
+         "階数"
+        ],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.identity.name#1",
+          "row_group": "",
+          "label": "建物名称",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "階数",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 5
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.identity.assessor",
+       "label": "算定者・事業者",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 8,
+        "n_blank": 5,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.identity.assessor#1",
+          "row_group": "",
+          "label": "算定者",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 6
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.identity.location",
+       "label": "所在地",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 7,
+        "n_blank": 4,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.identity.location#1",
+          "row_group": "",
+          "label": "所在地",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 5
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.identity.calc_date",
+       "label": "算定日",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 8,
+        "n_blank": 5,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.identity.calc_date#1",
+          "row_group": "",
+          "label": "算定日",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 6
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.identity.completion_year",
+       "label": "竣工年",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 6,
+        "n_blank": 3,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "整数": 3,
+         "未設定": 2
+        },
+        "units": [
+         "年度",
+         " m2"
+        ],
+        "requirement": {
+         "必須": 2,
+         "任意": 3
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.identity.completion_year#1",
+          "row_group": "",
+          "label": "竣工年度",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "年度",
+          "requirement": "必須",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "building.identity.completion_year#2",
+          "row_group": "",
+          "label": "竣工年度",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "年度",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "building.identity.completion_year#3",
+          "row_group": "",
+          "label": "竣工年度",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": " m2",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.identity.design_stage",
+       "label": "算定段階（計画・設計・着工・竣工など）",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 9,
+        "n_cells": 10,
+        "n_blank": 7,
+        "data_kinds": {
+         "選択式の入力項目": 7,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2,
+         "選択リスト": 4
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5,
+         "参照用": 4
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 4,
+         "標準算定": 3,
+         "詳細算定": 2
+        },
+        "status": {
+         "分類済み": 7,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.identity.design_stage#1",
+          "row_group": "",
+          "label": "算定段階",
+          "data_kind": "選択式の入力項目",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 7
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "building.geometry",
+     "label": "用途・形状・規模",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "主用途",
+      "用途別床面積",
+      "延床面積",
+      "地上・地下階数",
+      "建物高さ",
+      "基準階面積",
+      "形状・セットバック",
+      "最大スパン"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "building.geometry.main_use",
+       "label": "主用途",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 17,
+        "n_cells": 8,
+        "n_blank": 8,
+        "data_kinds": {
+         "入力可能な空欄": 8,
+         "選択式の入力項目": 9
+        },
+        "data_types": {
+         "未設定": 8,
+         "選択リスト": 9
+        },
+        "units": [],
+        "requirement": {
+         "任意": 4,
+         "参照用": 13
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 8,
+         "標準算定": 8,
+         "詳細算定": 1
+        },
+        "status": {
+         "空欄等": 8,
+         "分類済み": 9
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.main_use#1",
+          "row_group": "",
+          "label": "用途",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.use_floor_areas",
+       "label": "用途別床面積",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 42,
+        "n_cells": 42,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 42
+        },
+        "data_types": {
+         "数値": 2,
+         "整数": 40
+        },
+        "units": [
+         "m2",
+         "建替回数"
+        ],
+        "requirement": {
+         "必須": 42
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 14,
+         "標準算定": 14,
+         "詳細算定": 14
+        },
+        "status": {
+         "分類済み": 42
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.use_floor_areas#1",
+          "row_group": "",
+          "label": "事務所",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "building.geometry.use_floor_areas#2",
+          "row_group": "",
+          "label": "学校（大学高専）",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#3",
+          "row_group": "",
+          "label": "工場",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#4",
+          "row_group": "",
+          "label": "ホテル・旅館",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#5",
+          "row_group": "",
+          "label": "飲食店",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#6",
+          "row_group": "",
+          "label": "集合住宅",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#7",
+          "row_group": "",
+          "label": "病院・診療所",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#8",
+          "row_group": "",
+          "label": "集会施設",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#9",
+          "row_group": "",
+          "label": "共用部",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "建替回数",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "building.geometry.use_floor_areas#10",
+          "row_group": "",
+          "label": "物販店舗",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#11",
+          "row_group": "",
+          "label": "独身寮",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#12",
+          "row_group": "",
+          "label": "駐車場",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#13",
+          "row_group": "",
+          "label": "学校（小中高）",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#14",
+          "row_group": "",
+          "label": "流通施設",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.use_floor_areas#15",
+          "row_group": "",
+          "label": "事務所",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "building.geometry.use_floor_areas#16",
+          "row_group": "",
+          "label": "共用部",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.gross_floor_area",
+       "label": "延床面積",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 4,
+        "n_cells": 4,
+        "n_blank": 4,
+        "data_kinds": {
+         "入力可能な空欄": 4
+        },
+        "data_types": {
+         "未設定": 4
+        },
+        "units": [
+         " m2"
+        ],
+        "requirement": {
+         "任意": 4
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2
+        },
+        "status": {
+         "空欄等": 4
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.gross_floor_area#1",
+          "row_group": "",
+          "label": "延べ床面積",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": " m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.floors",
+       "label": "地上・地下階数",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 15,
+        "n_blank": 12,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.floors#1",
+          "row_group": "",
+          "label": "階数",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 11
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.height",
+       "label": "建物高さ",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 15,
+        "n_blank": 10,
+        "data_kinds": {
+         "利用者が直接入力する値": 4,
+         "入力可能な空欄": 1
+        },
+        "data_types": {
+         "整数": 2,
+         "未設定": 1,
+         "混在": 1,
+         "文字列": 1
+        },
+        "units": [
+         "m"
+        ],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 4,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.height#1",
+          "row_group": "",
+          "label": "高さ",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m",
+          "requirement": "必須",
+          "workbooks": [
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 8
+         },
+         {
+          "id": "building.geometry.height#2",
+          "row_group": "",
+          "label": "高さ",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "混在",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 3
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.typical_floor_area",
+       "label": "基準階面積",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 15,
+        "n_blank": 10,
+        "data_kinds": {
+         "利用者が直接入力する値": 4,
+         "入力可能な空欄": 1
+        },
+        "data_types": {
+         "整数": 2,
+         "未設定": 1,
+         "混在": 1,
+         "文字列": 1
+        },
+        "units": [
+         "m2"
+        ],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 4,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.typical_floor_area#1",
+          "row_group": "",
+          "label": "基準階面積",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "m2",
+          "requirement": "必須",
+          "workbooks": [
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 8
+         },
+         {
+          "id": "building.geometry.typical_floor_area#2",
+          "row_group": "",
+          "label": "基準階面積",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "混在",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 3
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.shape",
+       "label": "形状・セットバック",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 15,
+        "n_blank": 12,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.shape#1",
+          "row_group": "",
+          "label": "建物形状",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 11
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.geometry.max_span",
+       "label": "最大スパン",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 15,
+        "n_blank": 10,
+        "data_kinds": {
+         "利用者が直接入力する値": 4,
+         "入力可能な空欄": 1
+        },
+        "data_types": {
+         "数値": 1,
+         "未設定": 1,
+         "混在": 1,
+         "文字列": 1,
+         "整数": 1
+        },
+        "units": [
+         "m"
+        ],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 4,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "building.geometry.max_span#1",
+          "row_group": "",
+          "label": "最大スパン",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "m",
+          "requirement": "必須",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.max_span#2",
+          "row_group": "",
+          "label": "最大スパン",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "混在",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "building.geometry.max_span#3",
+          "row_group": "",
+          "label": "最大スパン",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 5
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "building.structure",
+     "label": "構造・基礎条件",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "主要構造（RC・S・SRC・木造等）",
+      "基礎・杭の方式",
+      "主要屋根仕様",
+      "主要外壁仕様"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "building.structure.main_structure",
+       "label": "主要構造（RC・S・SRC・木造等）",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 17,
+        "n_cells": 10,
+        "n_blank": 7,
+        "data_kinds": {
+         "選択式の入力項目": 9,
+         "入力可能な空欄": 6,
+         "利用者が直接入力する値": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 6,
+         "選択リスト": 8
+        },
+        "units": [
+         "基準階面積",
+         "年度",
+         " m2"
+        ],
+        "requirement": {
+         "必須": 2,
+         "参照用": 12,
+         "任意": 3
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 7,
+         "標準算定": 7,
+         "詳細算定": 3
+        },
+        "status": {
+         "分類済み": 11,
+         "空欄等": 6
+        },
+        "input_entries": [
+         {
+          "id": "building.structure.main_structure#1",
+          "row_group": "",
+          "label": "主要構造",
+          "data_kind": "選択式の入力項目",
+          "data_type": "文字列",
+          "unit": "基準階面積",
+          "requirement": "必須",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "building.structure.main_structure#2",
+          "row_group": "",
+          "label": "主要構造",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "年度",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "building.structure.main_structure#3",
+          "row_group": "",
+          "label": "主要構造",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": " m2",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.structure.foundation",
+       "label": "基礎・杭の方式",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 24,
+        "n_blank": 21,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 3
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 3
+        },
+        "units": [
+         "算定段階"
+        ],
+        "requirement": {
+         "必須": 5,
+         "任意": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 2
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 3
+        },
+        "input_entries": [
+         {
+          "id": "building.structure.foundation#1",
+          "row_group": "",
+          "label": "杭・基礎",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "算定段階",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 11
+         },
+         {
+          "id": "building.structure.foundation#2",
+          "row_group": "",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 9
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.structure.roof_spec",
+       "label": "主要屋根仕様",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 13,
+        "n_blank": 10,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.structure.roof_spec#1",
+          "row_group": "",
+          "label": "屋根",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 9
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.structure.facade_spec",
+       "label": "主要外壁仕様",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 13,
+        "n_blank": 10,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "文字列": 3,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 5
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.structure.facade_spec#1",
+          "row_group": "",
+          "label": "外壁",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 9
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "building.boundary",
+     "label": "評価対象と期間",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "新築・既存・改修の区別",
+      "評価期間",
+      "建替周期",
+      "計上する工事とライフサイクル段階",
+      "敷地・工事負担の算定範囲"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "building.boundary.project_type",
+       "label": "新築・既存・改修の区別",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 2,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 2
+        },
+        "data_types": {
+         "文字列": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 2
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1
+        },
+        "status": {
+         "分類済み": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.boundary.project_type#1",
+          "row_group": "",
+          "label": "新築または既存：",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.boundary.study_period",
+       "label": "評価期間",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 2,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 2
+        },
+        "data_types": {
+         "整数": 2
+        },
+        "units": [
+         " 年"
+        ],
+        "requirement": {
+         "必須": 2
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1
+        },
+        "status": {
+         "分類済み": 2
+        },
+        "input_entries": [
+         {
+          "id": "building.boundary.study_period#1",
+          "row_group": "",
+          "label": "評価期間",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": " 年",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "building.boundary.replacement_cycle",
+       "label": "建替周期",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "building.boundary.stages",
+       "label": "計上する工事とライフサイクル段階",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "building.boundary.site_scope",
+       "label": "敷地・工事負担の算定範囲",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "building.other",
+     "label": "その他（分類未確定）",
+     "handling": "fallback",
+     "from_v01": true,
+     "v01_items": [
+      "元の項目名",
+      "入力値または説明",
+      "単位（ある場合）",
+      "利用者による仮分類・メモ"
+     ],
+     "notes": "既存の枝に当てはまらない項目をここへ収容。勝手に似た分類へ強制割当しない。",
+     "details": [],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "construction",
+   "label": "2 建材・建築工事・施工",
+   "branches": [
+    {
+     "id": "construction.ground",
+     "label": "土工・地業・基礎",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "土工事",
+      "地業・砕石・地盤改良",
+      "杭・基礎",
+      "型枠"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "construction.ground.earthwork",
+       "label": "土工事",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.ground.ground_improvement",
+       "label": "地業・砕石・地盤改良",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.ground.pile_foundation",
+       "label": "杭・基礎",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 9,
+        "n_cells": 307,
+        "n_blank": 107,
+        "data_kinds": {
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 2,
+         "入力可能な空欄": 2,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "数値": 6,
+         "未設定": 2,
+         "選択リスト": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 4,
+         "必須": 2,
+         "任意": 2,
+         "参照用": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 4
+        },
+        "status": {
+         "分類済み": 7,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "construction.ground.pile_foundation#1",
+          "row_group": "2.2 杭・基礎",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 99
+         },
+         {
+          "id": "construction.ground.pile_foundation#2",
+          "row_group": "2.2 杭・基礎",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 99
+         },
+         {
+          "id": "construction.ground.pile_foundation#3",
+          "row_group": "2.2 杭・基礎",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.ground.formwork",
+       "label": "型枠",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "construction.frame",
+     "label": "躯体",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "コンクリート",
+      "鉄筋",
+      "鉄骨",
+      "木材",
+      "デッキプレート・その他躯体"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "construction.frame.concrete",
+       "label": "コンクリート",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 10,
+        "n_cells": 575,
+        "n_blank": 149,
+        "data_kinds": {
+         "標準値・デフォルト値": 6,
+         "利用者が直接入力する値": 2,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "数値": 8,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 6,
+         "必須": 2,
+         "任意": 2
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 5
+        },
+        "status": {
+         "分類済み": 8,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "construction.frame.concrete#1",
+          "row_group": "3.1 コンクリート",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 275
+         },
+         {
+          "id": "construction.frame.concrete#2",
+          "row_group": "3.1 コンクリート",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 145
+         },
+         {
+          "id": "construction.frame.concrete#3",
+          "row_group": "3.1 コンクリート",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.frame.rebar",
+       "label": "鉄筋",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 10,
+        "n_cells": 79,
+        "n_blank": 29,
+        "data_kinds": {
+         "標準値・デフォルト値": 6,
+         "利用者が直接入力する値": 2,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "数値": 8,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 6,
+         "必須": 2,
+         "任意": 2
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 5
+        },
+        "status": {
+         "分類済み": 8,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "construction.frame.rebar#1",
+          "row_group": "3.4 鉄筋",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 27
+         },
+         {
+          "id": "construction.frame.rebar#2",
+          "row_group": "3.4 鉄筋",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 21
+         },
+         {
+          "id": "construction.frame.rebar#3",
+          "row_group": "3.4 鉄筋",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.frame.steel",
+       "label": "鉄骨",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 10,
+        "n_cells": 111,
+        "n_blank": 37,
+        "data_kinds": {
+         "標準値・デフォルト値": 6,
+         "利用者が直接入力する値": 2,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "数値": 8,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 6,
+         "必須": 2,
+         "任意": 2
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 5
+        },
+        "status": {
+         "分類済み": 8,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "construction.frame.steel#1",
+          "row_group": "3.3 鉄骨",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 43
+         },
+         {
+          "id": "construction.frame.steel#2",
+          "row_group": "3.3 鉄骨",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 29
+         },
+         {
+          "id": "construction.frame.steel#3",
+          "row_group": "3.3 鉄骨",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.frame.timber",
+       "label": "木材",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 10,
+        "n_cells": 285,
+        "n_blank": 117,
+        "data_kinds": {
+         "標準値・デフォルト値": 6,
+         "入力可能な空欄": 4
+        },
+        "data_types": {
+         "数値": 6,
+         "未設定": 4
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 6,
+         "必須": 2,
+         "任意": 2
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 5
+        },
+        "status": {
+         "分類済み": 6,
+         "空欄等": 4
+        },
+        "input_entries": [
+         {
+          "id": "construction.frame.timber#1",
+          "row_group": "新_木材",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 107
+         },
+         {
+          "id": "construction.frame.timber#2",
+          "row_group": "新_木材",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 61
+         },
+         {
+          "id": "construction.frame.timber#3",
+          "row_group": "新_木材",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 56
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.frame.other_frame",
+       "label": "デッキプレート・その他躯体",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 10,
+        "n_cells": 87,
+        "n_blank": 31,
+        "data_kinds": {
+         "標準値・デフォルト値": 6,
+         "利用者が直接入力する値": 2,
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "数値": 8,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 6,
+         "必須": 2,
+         "任意": 2
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 5
+        },
+        "status": {
+         "分類済み": 8,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "construction.frame.other_frame#1",
+          "row_group": "3.9 その他",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 31
+         },
+         {
+          "id": "construction.frame.other_frame#2",
+          "row_group": "3.9 その他",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 23
+         },
+         {
+          "id": "construction.frame.other_frame#3",
+          "row_group": "3.9 その他",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "construction.external",
+     "label": "屋根・外部仕上げ",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "屋根・防水",
+      "外壁",
+      "外部開口部",
+      "外部断熱",
+      "外部雑・外構"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "construction.external.roof",
+       "label": "屋根・防水",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 105,
+        "n_blank": 24,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.external.roof#1",
+          "row_group": "4.1 屋根",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.external.roof#2",
+          "row_group": "4.1 屋根",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 52
+         },
+         {
+          "id": "construction.external.roof#3",
+          "row_group": "4.1 屋根",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 24
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.external.exterior_wall",
+       "label": "外壁",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 200,
+        "n_blank": 44,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.external.exterior_wall#1",
+          "row_group": "4.2 外壁",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.external.exterior_wall#2",
+          "row_group": "4.2 外壁",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 109
+         },
+         {
+          "id": "construction.external.exterior_wall#3",
+          "row_group": "4.2 外壁",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 43
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.external.exterior_opening",
+       "label": "外部開口部",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 265,
+        "n_blank": 60,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.external.exterior_opening#1",
+          "row_group": "4.3 外部開口部",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.external.exterior_opening#2",
+          "row_group": "4.3 外部開口部",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 148
+         },
+         {
+          "id": "construction.external.exterior_opening#3",
+          "row_group": "4.3 外部開口部",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 56
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.external.exterior_insulation",
+       "label": "外部断熱",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.external.exterior_misc",
+       "label": "外部雑・外構",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "construction.internal",
+     "label": "内部仕上げ",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "内部床",
+      "内壁・間仕切り",
+      "内部開口部",
+      "天井",
+      "内部断熱・吸音",
+      "内部雑・ユニットバス"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "construction.internal.floor",
+       "label": "内部床",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 145,
+        "n_blank": 29,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.internal.floor#1",
+          "row_group": "5.1 内部床",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.internal.floor#2",
+          "row_group": "5.1 内部床",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 76
+         },
+         {
+          "id": "construction.internal.floor#3",
+          "row_group": "5.1 内部床",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 32
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.internal.partition",
+       "label": "内壁・間仕切り",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 215,
+        "n_blank": 40,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.internal.partition#1",
+          "row_group": "5.2 内壁",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.internal.partition#2",
+          "row_group": "5.2 内壁",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 118
+         },
+         {
+          "id": "construction.internal.partition#3",
+          "row_group": "5.2 内壁",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 46
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.internal.interior_opening",
+       "label": "内部開口部",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 70,
+        "n_blank": 20,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.internal.interior_opening#1",
+          "row_group": "5.3 内部開口部",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.internal.interior_opening#2",
+          "row_group": "5.3 内部開口部",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 31
+         },
+         {
+          "id": "construction.internal.interior_opening#3",
+          "row_group": "5.3 内部開口部",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 17
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.internal.ceiling",
+       "label": "天井",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 105,
+        "n_blank": 26,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 4,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "数値": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "construction.internal.ceiling#1",
+          "row_group": "5.4 天井",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.internal.ceiling#2",
+          "row_group": "5.4 天井",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 52
+         },
+         {
+          "id": "construction.internal.ceiling#3",
+          "row_group": "5.4 天井",
+          "label": "数量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 24
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.internal.interior_insulation",
+       "label": "内部断熱・吸音",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.internal.interior_misc",
+       "label": "内部雑・ユニットバス",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 55,
+        "n_blank": 19,
+        "data_kinds": {
+         "入力可能な空欄": 2,
+         "標準値・デフォルト値": 4
+        },
+        "data_types": {
+         "未設定": 2,
+         "数値": 4
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1,
+         "任意（既定値あり）": 4,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 6
+        },
+        "status": {
+         "空欄等": 2,
+         "分類済み": 4
+        },
+        "input_entries": [
+         {
+          "id": "construction.internal.interior_misc#1",
+          "row_group": "5.9 内部雑",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 5
+         },
+         {
+          "id": "construction.internal.interior_misc#2",
+          "row_group": "5.9 内部雑",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 22
+         },
+         {
+          "id": "construction.internal.interior_misc#3",
+          "row_group": "5.9 内部雑",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 14
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "construction.temporary",
+     "label": "仮設・施工",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "直接仮設",
+      "共通仮設・現場経費",
+      "施工燃料",
+      "施工電力・ガス",
+      "試験・調整",
+      "現場内運搬"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "construction.temporary.direct_temporary",
+       "label": "直接仮設",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.temporary.common_cost",
+       "label": "共通仮設・現場経費",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 17,
+        "n_blank": 15,
+        "data_kinds": {
+         "入力可能な空欄": 1,
+         "利用者が直接入力する値": 1
+        },
+        "data_types": {
+         "未設定": 1,
+         "文字列": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意": 2
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "詳細算定": 2
+        },
+        "status": {
+         "空欄等": 1,
+         "分類済み": 1
+        },
+        "input_entries": [
+         {
+          "id": "construction.temporary.common_cost#1",
+          "row_group": "",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 13
+         },
+         {
+          "id": "construction.temporary.common_cost#2",
+          "row_group": "",
+          "label": "共通費(共通仮設+現場経費+一般管理費等)",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 4
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.temporary.site_fuel",
+       "label": "施工燃料",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 17,
+        "n_cells": 19,
+        "n_blank": 17,
+        "data_kinds": {
+         "入力可能な空欄": 16,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "未設定": 16,
+         "数値": 1
+        },
+        "units": [
+         "kg"
+        ],
+        "requirement": {
+         "任意": 16,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 8,
+         "標準算定": 7,
+         "詳細算定": 2
+        },
+        "status": {
+         "空欄等": 16,
+         "分類済み": 1
+        },
+        "input_entries": [
+         {
+          "id": "construction.temporary.site_fuel#1",
+          "row_group": "ガソリン★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#2",
+          "row_group": "軽油★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#3",
+          "row_group": "灯油★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#4",
+          "row_group": "A重油★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#5",
+          "row_group": "B・C重油★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#6",
+          "row_group": "液化石油ガス★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#7",
+          "row_group": "その他石油製品★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#8",
+          "row_group": "工事燃料",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "construction.temporary.site_fuel#9",
+          "row_group": "",
+          "label": "消費重油量",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_fuel#10",
+          "row_group": "",
+          "label": "工事用 エネルギー",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.temporary.site_power_gas",
+       "label": "施工電力・ガス",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 24,
+        "n_cells": 76,
+        "n_blank": 62,
+        "data_kinds": {
+         "入力可能な空欄": 17,
+         "利用者が直接入力する値": 7
+        },
+        "data_types": {
+         "未設定": 17,
+         "文字列": 7
+        },
+        "units": [
+         "kg-CO2e/",
+         "kg"
+        ],
+        "requirement": {
+         "任意": 24
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 12,
+         "標準算定": 11,
+         "詳細算定": 1
+        },
+        "status": {
+         "空欄等": 17,
+         "分類済み": 7
+        },
+        "input_entries": [
+         {
+          "id": "construction.temporary.site_power_gas#1",
+          "row_group": "電気★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_power_gas#2",
+          "row_group": "都市ガス★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_power_gas#3",
+          "row_group": "代替★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 6
+         },
+         {
+          "id": "construction.temporary.site_power_gas#4",
+          "row_group": "代替★",
+          "label": "内訳参考",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 6
+         },
+         {
+          "id": "construction.temporary.site_power_gas#5",
+          "row_group": "代替★",
+          "label": "工事燃料",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_power_gas#6",
+          "row_group": "代替★",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 6
+         },
+         {
+          "id": "construction.temporary.site_power_gas#7",
+          "row_group": "代替★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_power_gas#8",
+          "row_group": "代替★",
+          "label": "代替★",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 12
+         },
+         {
+          "id": "construction.temporary.site_power_gas#9",
+          "row_group": "代替★",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 4
+         },
+         {
+          "id": "construction.temporary.site_power_gas#10",
+          "row_group": "代替★",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg-CO2e/",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_power_gas#11",
+          "row_group": "代替★",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 6
+         },
+         {
+          "id": "construction.temporary.site_power_gas#12",
+          "row_group": "代替★",
+          "label": "/m2",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg-CO2e/",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_power_gas#13",
+          "row_group": "",
+          "label": "代替★",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 4
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.temporary.testing",
+       "label": "試験・調整",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.temporary.site_transport",
+       "label": "現場内運搬",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.temporary.site_water",
+       "label": "施工時の上水・下水",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 5,
+        "n_blank": 4,
+        "data_kinds": {
+         "入力可能な空欄": 4,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "未設定": 4,
+         "数値": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意": 4,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "空欄等": 4,
+         "分類済み": 1
+        },
+        "input_entries": [
+         {
+          "id": "construction.temporary.site_water#1",
+          "row_group": "上水★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_water#2",
+          "row_group": "下水★",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "construction.temporary.site_water#3",
+          "row_group": "",
+          "label": "上水消費量",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "construction.transport",
+     "label": "運搬・端材・廃材",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "資機材の現場輸送",
+      "廃材の搬出",
+      "端材・廃棄物の数量",
+      "リユース・リサイクル・埋立区分"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "construction.transport.delivery",
+       "label": "資機材の現場輸送",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.transport.waste_hauling",
+       "label": "廃材の搬出",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.transport.offcut_waste",
+       "label": "端材・廃棄物の数量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 1,
+        "n_cells": 1,
+        "n_blank": 1,
+        "data_kinds": {
+         "入力可能な空欄": 1
+        },
+        "data_types": {
+         "未設定": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 1
+        },
+        "status": {
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "construction.transport.offcut_waste#1",
+          "row_group": "廃棄物",
+          "label": "-",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.transport.reuse_recycle",
+       "label": "リユース・リサイクル・埋立区分",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "construction.item_details",
+     "label": "資材・工事の各明細に共通",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "名称・仕様・寸法",
+      "材料コード・工事分類",
+      "数量",
+      "数量単位",
+      "必要な場合の重量・体積・面積・長さ",
+      "必要な場合の単価・工事金額",
+      "木材の樹種・炭素貯蔵関連",
+      "コンクリートのCO2固定関連"
+     ],
+     "notes": "明細ごとに必要な項目だけ表示。細目分類と明細入力は重複登録しない。",
+     "details": [
+      {
+       "id": "construction.item_details.spec",
+       "label": "名称・仕様・寸法",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 113,
+        "n_cells": 14110,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 113
+        },
+        "data_types": {
+         "文字列": 113
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 113
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 37,
+         "標準算定": 72,
+         "詳細算定": 4
+        },
+        "status": {
+         "分類済み": 113
+        }
+       }
+      },
+      {
+       "id": "construction.item_details.code",
+       "label": "材料コード・工事分類",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 16,
+        "n_cells": 2047,
+        "n_blank": 1,
+        "data_kinds": {
+         "内部処理・参照用の値": 12,
+         "入力可能な空欄": 1,
+         "選択式の入力項目": 3
+        },
+        "data_types": {
+         "文字列": 11,
+         "未設定": 1,
+         "選択リスト": 3,
+         "名前定義": 1
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 16
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 5,
+         "標準算定": 7,
+         "分類表": 4
+        },
+        "status": {
+         "分類済み": 15,
+         "空欄等": 1
+        }
+       }
+      },
+      {
+       "id": "construction.item_details.quantity",
+       "label": "数量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 5,
+        "n_blank": 5,
+        "data_kinds": {
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "未設定": 2
+        },
+        "units": [
+         "kg"
+        ],
+        "requirement": {
+         "任意": 2
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "詳細算定": 2
+        },
+        "status": {
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "construction.item_details.quantity#1",
+          "row_group": "",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "construction.item_details.quantity#2",
+          "row_group": "",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.item_details.quantity_unit",
+       "label": "数量単位",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.item_details.physical",
+       "label": "必要な場合の重量・体積・面積・長さ",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.item_details.cost",
+       "label": "必要な場合の単価・工事金額",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "construction.item_details.timber_carbon",
+       "label": "木材の樹種・炭素貯蔵関連",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 8,
+        "n_cells": 74,
+        "n_blank": 9,
+        "data_kinds": {
+         "内部処理・参照用の値": 6,
+         "入力可能な空欄": 1,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "文字列": 6,
+         "未設定": 1,
+         "選択リスト": 1
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 7,
+         "任意": 1
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "詳細算定": 8
+        },
+        "status": {
+         "分類済み": 7,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "construction.item_details.timber_carbon#1",
+          "row_group": "",
+          "label": "樹種",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 9
+         }
+        ]
+       }
+      },
+      {
+       "id": "construction.item_details.concrete_fixation",
+       "label": "コンクリートのCO2固定関連",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 62,
+        "n_blank": 9,
+        "data_kinds": {
+         "内部処理・参照用の値": 5,
+         "入力可能な空欄": 1
+        },
+        "data_types": {
+         "文字列": 5,
+         "未設定": 1
+        },
+        "units": [
+         "kg-CO2e/m3"
+        ],
+        "requirement": {
+         "参照用": 5,
+         "任意": 1
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "詳細算定": 6
+        },
+        "status": {
+         "分類済み": 5,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "construction.item_details.concrete_fixation#1",
+          "row_group": "",
+          "label": "数量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg-CO2e/m3",
+          "requirement": "任意",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 9
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 117,
+      "n_cells": 27608,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 5,
+       "他の入力から自動計算される値": 112
+      },
+      "data_types": {
+       "文字列": 5,
+       "数式": 112
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 5,
+       "自動算出": 112
+      },
+      "lifecycle_stages": [
+       "A1-A5",
+       "B2-B5",
+       "C1-C4"
+      ],
+      "workbooks": {
+       "簡易算定": 49,
+       "標準算定": 52,
+       "詳細算定": 16
+      },
+      "status": {
+       "分類済み": 117
+      }
+     }
+    },
+    {
+     "id": "construction.other",
+     "label": "その他（分類未確定）",
+     "handling": "fallback",
+     "from_v01": true,
+     "v01_items": [
+      "元の項目名",
+      "入力値または説明",
+      "単位（ある場合）",
+      "利用者による仮分類・メモ"
+     ],
+     "notes": "既存の枝に当てはまらない項目をここへ収容。勝手に似た分類へ強制割当しない。",
+     "details": [],
+     "inventory": {
+      "n_rows": 14,
+      "n_cells": 14,
+      "n_blank": 4,
+      "data_kinds": {
+       "入力可能な空欄": 3,
+       "標準値・デフォルト値": 3,
+       "選択式の入力項目": 2,
+       "内部処理・参照用の値": 6
+      },
+      "data_types": {
+       "未設定": 3,
+       "数値": 3,
+       "選択リスト": 2,
+       "名前定義": 6
+      },
+      "units": [
+       "年度",
+       "kg-CO2e/"
+      ],
+      "requirement": {
+       "任意": 3,
+       "任意（既定値あり）": 3,
+       "参照用": 8
+      },
+      "lifecycle_stages": [
+       "A1-A5",
+       "B2-B5",
+       "C1-C4"
+      ],
+      "workbooks": {
+       "標準算定": 6,
+       "詳細算定": 6,
+       "簡易算定": 2
+      },
+      "status": {
+       "空欄等": 3,
+       "その他": 3,
+       "分類済み": 8
+      },
+      "input_entries": [
+       {
+        "id": "construction.other#1",
+        "row_group": "",
+        "label": "",
+        "data_kind": "入力可能な空欄",
+        "data_type": "未設定",
+        "unit": "年度",
+        "requirement": "任意",
+        "workbooks": [
+         "標準算定"
+        ],
+        "n_cells": 1
+       },
+       {
+        "id": "construction.other#2",
+        "row_group": "",
+        "label": "消費LPG量",
+        "data_kind": "標準値・デフォルト値",
+        "data_type": "数値",
+        "unit": "",
+        "requirement": "任意（既定値あり）",
+        "workbooks": [
+         "詳細算定"
+        ],
+        "n_cells": 4
+       },
+       {
+        "id": "construction.other#3",
+        "row_group": "",
+        "label": "GHG",
+        "data_kind": "標準値・デフォルト値",
+        "data_type": "数値",
+        "unit": "",
+        "requirement": "任意（既定値あり）",
+        "workbooks": [
+         "詳細算定"
+        ],
+        "n_cells": 6
+       },
+       {
+        "id": "construction.other#4",
+        "row_group": "",
+        "label": "／m2",
+        "data_kind": "入力可能な空欄",
+        "data_type": "未設定",
+        "unit": "kg-CO2e/",
+        "requirement": "任意",
+        "workbooks": [
+         "詳細算定"
+        ],
+        "n_cells": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "equipment",
+   "label": "3 建築設備・冷媒を使う機器",
+   "branches": [
+    {
+     "id": "equipment.electrical",
+     "label": "電気設備",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "受変電・変圧器・配電盤",
+      "電力配線・ケーブル",
+      "照明",
+      "弱電・通信・防災",
+      "太陽光発電などの設備"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "equipment.electrical.substation",
+       "label": "受変電・変圧器・配電盤",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.electrical.wiring",
+       "label": "電力配線・ケーブル",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.electrical.lighting",
+       "label": "照明",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.electrical.low_voltage",
+       "label": "弱電・通信・防災",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.electrical.pv",
+       "label": "太陽光発電などの設備",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 3,
+        "n_cells": 18,
+        "n_blank": 6,
+        "data_kinds": {
+         "標準値・デフォルト値": 2,
+         "入力可能な空欄": 1
+        },
+        "data_types": {
+         "数値": 2,
+         "未設定": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意（既定値あり）": 2,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 3
+        },
+        "status": {
+         "分類済み": 2,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "equipment.electrical.pv#1",
+          "row_group": "太陽光発電設備 共通費を除く",
+          "label": "",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 12
+         },
+         {
+          "id": "equipment.electrical.pv#2",
+          "row_group": "太陽光発電設備 共通費を除く",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 6
+         }
+        ]
+       }
+      },
+      {
+       "id": "equipment.electrical.cost",
+       "label": "電気設備の工事費",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.electrical.standard_table",
+       "label": "電気設備の用途別・規模別の標準値表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 541,
+        "n_cells": 86837,
+        "n_blank": 1475,
+        "data_kinds": {
+         "内部処理・参照用の値": 87,
+         "標準値・デフォルト値": 162,
+         "他の入力から自動計算される値": 211,
+         "入力可能な空欄": 80,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "文字列": 56,
+         "整数": 83,
+         "数式": 211,
+         "数値": 100,
+         "未設定": 80,
+         "選択リスト": 1,
+         "名前定義": 10
+        },
+        "units": [
+         "千円/㎡",
+         "円/kg",
+         "kg",
+         "円/t・km",
+         "t・km"
+        ],
+        "requirement": {
+         "参照用": 330,
+         "自動算出": 211
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 244,
+         "標準算定": 256,
+         "分類表": 6,
+         "集計表": 35
+        },
+        "status": {
+         "分類済み": 461,
+         "空欄等": 80
+        }
+       }
+      },
+      {
+       "id": "equipment.electrical.code_table",
+       "label": "電気設備のコード表・主要機器表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 24,
+        "n_cells": 567,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 14,
+         "標準値・デフォルト値": 10
+        },
+        "data_types": {
+         "文字列": 12,
+         "整数": 12
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 24
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "分類表": 24
+        },
+        "status": {
+         "分類済み": 24
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "equipment.hvac",
+     "label": "空調設備",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "熱源・冷凍機・ボイラ",
+      "空気調和機・ファン・ポンプ",
+      "配管・継手・バルブ",
+      "ダクト・制気口・ダンパー",
+      "保温・塗装・自動制御"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "equipment.hvac.heat_source",
+       "label": "熱源・冷凍機・ボイラ",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.hvac.air_handling",
+       "label": "空気調和機・ファン・ポンプ",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.hvac.piping",
+       "label": "配管・継手・バルブ",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.hvac.duct",
+       "label": "ダクト・制気口・ダンパー",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.hvac.insulation_control",
+       "label": "保温・塗装・自動制御",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.hvac.cost",
+       "label": "空調設備の工事費",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.hvac.standard_table",
+       "label": "空調設備の用途別・規模別の標準値表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 520,
+        "n_cells": 107582,
+        "n_blank": 2930,
+        "data_kinds": {
+         "内部処理・参照用の値": 109,
+         "標準値・デフォルト値": 124,
+         "他の入力から自動計算される値": 201,
+         "入力可能な空欄": 85,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "文字列": 79,
+         "整数": 59,
+         "数式": 201,
+         "数値": 86,
+         "未設定": 85,
+         "選択リスト": 1,
+         "名前定義": 9
+        },
+        "units": [
+         "円/kg",
+         "kg",
+         "千円/㎡",
+         "kg/㎡",
+         "円/t・km",
+         "t・km"
+        ],
+        "requirement": {
+         "参照用": 319,
+         "自動算出": 201
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 232,
+         "標準算定": 225,
+         "分類表": 5,
+         "集計表": 58
+        },
+        "status": {
+         "分類済み": 435,
+         "空欄等": 85
+        }
+       }
+      },
+      {
+       "id": "equipment.hvac.code_table",
+       "label": "空調設備のコード表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 25,
+        "n_cells": 186,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 13,
+         "標準値・デフォルト値": 12
+        },
+        "data_types": {
+         "文字列": 12,
+         "整数": 13
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 25
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "分類表": 25
+        },
+        "status": {
+         "分類済み": 25
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "equipment.plumbing",
+     "label": "給排水衛生設備",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "受水槽・給水設備",
+      "排水・通気・ポンプ",
+      "給湯",
+      "衛生器具・消火設備",
+      "配管・継手・弁類"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "equipment.plumbing.water_supply",
+       "label": "受水槽・給水設備",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.plumbing.drainage",
+       "label": "排水・通気・ポンプ",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.plumbing.hot_water",
+       "label": "給湯",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.plumbing.fixtures_fire",
+       "label": "衛生器具・消火設備",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.plumbing.piping",
+       "label": "配管・継手・弁類",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.plumbing.cost",
+       "label": "衛生設備の工事費",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.plumbing.standard_table",
+       "label": "衛生設備の用途別・規模別の標準値表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 515,
+        "n_cells": 104728,
+        "n_blank": 3084,
+        "data_kinds": {
+         "内部処理・参照用の値": 83,
+         "標準値・デフォルト値": 116,
+         "他の入力から自動計算される値": 201,
+         "入力可能な空欄": 114,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "文字列": 56,
+         "整数": 55,
+         "数式": 201,
+         "数値": 79,
+         "未設定": 114,
+         "選択リスト": 1,
+         "名前定義": 9
+        },
+        "units": [
+         "円/kg",
+         "kg",
+         "千円/㎡",
+         "kg/㎡",
+         "円/t・km",
+         "t・km"
+        ],
+        "requirement": {
+         "参照用": 314,
+         "自動算出": 201
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 236,
+         "標準算定": 229,
+         "分類表": 5,
+         "集計表": 45
+        },
+        "status": {
+         "分類済み": 401,
+         "空欄等": 114
+        }
+       }
+      },
+      {
+       "id": "equipment.plumbing.code_table",
+       "label": "衛生設備のコード表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 12,
+        "n_cells": 179,
+        "n_blank": 0,
+        "data_kinds": {
+         "標準値・デフォルト値": 1,
+         "内部処理・参照用の値": 11
+        },
+        "data_types": {
+         "数値": 1,
+         "文字列": 11
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 12
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "分類表": 12
+        },
+        "status": {
+         "分類済み": 12
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "equipment.elevator",
+     "label": "昇降・搬送設備",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "エレベーター",
+      "エスカレーター・搬送設備"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "equipment.elevator.elevator",
+       "label": "エレベーター",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.elevator.escalator",
+       "label": "エスカレーター・搬送設備",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.elevator.cost",
+       "label": "昇降機設備の工事費",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.elevator.standard_table",
+       "label": "昇降機設備の用途別・規模別の標準値表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 334,
+        "n_cells": 13371,
+        "n_blank": 264,
+        "data_kinds": {
+         "内部処理・参照用の値": 59,
+         "標準値・デフォルト値": 42,
+         "他の入力から自動計算される値": 197,
+         "入力可能な空欄": 35,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "文字列": 39,
+         "整数": 24,
+         "数式": 197,
+         "数値": 34,
+         "未設定": 35,
+         "選択リスト": 1,
+         "名前定義": 4
+        },
+        "units": [
+         "千円/㎡",
+         "kg/㎡",
+         "円/kg",
+         "kg",
+         "円/t・km",
+         "t・km"
+        ],
+        "requirement": {
+         "参照用": 137,
+         "自動算出": 197
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 162,
+         "標準算定": 161,
+         "分類表": 4,
+         "集計表": 7
+        },
+        "status": {
+         "分類済み": 299,
+         "空欄等": 35
+        }
+       }
+      },
+      {
+       "id": "equipment.elevator.code_table",
+       "label": "昇降機設備のコード表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 2,
+        "n_blank": 0,
+        "data_kinds": {
+         "標準値・デフォルト値": 2
+        },
+        "data_types": {
+         "整数": 2
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 2
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "分類表": 2
+        },
+        "status": {
+         "分類済み": 2
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "equipment.eq_details",
+     "label": "設備の各明細に共通",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "設備名称・型式・仕様",
+      "台数",
+      "機器重量",
+      "能力・容量",
+      "配管・ケーブル長",
+      "ダクト面積・板厚・比重",
+      "必要に応じた工事費",
+      "設備の用途・設置箇所"
+     ],
+     "notes": "詳細算定法の算出分類にある重量・能力・金額・台数等の代替入力経路を分類として保持。",
+     "details": [
+      {
+       "id": "equipment.eq_details.spec",
+       "label": "設備名称・型式・仕様",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.eq_details.count",
+       "label": "台数",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.eq_details.weight",
+       "label": "機器重量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.eq_details.capacity",
+       "label": "能力・容量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.eq_details.pipe_cable_length",
+       "label": "配管・ケーブル長",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 14,
+        "n_cells": 214,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 2,
+         "標準値・デフォルト値": 12
+        },
+        "data_types": {
+         "文字列": 2,
+         "整数": 4,
+         "数値": 8
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 14
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "分類表": 7,
+         "集計表": 7
+        },
+        "status": {
+         "分類済み": 14
+        }
+       }
+      },
+      {
+       "id": "equipment.eq_details.duct_spec",
+       "label": "ダクト面積・板厚・比重",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.eq_details.cost",
+       "label": "必要に応じた工事費",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.eq_details.usage_location",
+       "label": "設備の用途・設置箇所",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "equipment.refrigerant_equipment",
+     "label": "冷媒・温室効果ガス使用機器",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "冷媒・温室効果ガスの種類",
+      "充填・使用量",
+      "用途（空調・断熱・消火など）",
+      "冷媒を使う機器との対応"
+     ],
+     "notes": "漏洩率・回収率・更新などの時間条件は4へ。",
+     "details": [
+      {
+       "id": "equipment.refrigerant_equipment.substance",
+       "label": "冷媒・温室効果ガスの種類",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 61,
+        "n_cells": 417,
+        "n_blank": 69,
+        "data_kinds": {
+         "入力可能な空欄": 28,
+         "内部処理・参照用の値": 27,
+         "利用者が直接入力する値": 5,
+         "選択式の入力項目": 1
+        },
+        "data_types": {
+         "未設定": 28,
+         "文字列": 31,
+         "整数": 1,
+         "混在": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意": 34,
+         "参照用": 27
+        },
+        "lifecycle_stages": [
+         "B1",
+         "C2",
+         "C4"
+        ],
+        "workbooks": {
+         "簡易算定": 26,
+         "標準算定": 22,
+         "詳細算定": 13
+        },
+        "status": {
+         "空欄等": 28,
+         "分類済み": 33
+        },
+        "input_entries": [
+         {
+          "id": "equipment.refrigerant_equipment.substance#1",
+          "row_group": "",
+          "label": "CFC-11",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#2",
+          "row_group": "",
+          "label": "CFCl3",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#3",
+          "row_group": "",
+          "label": "Halon1301",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#4",
+          "row_group": "",
+          "label": "CF3Br",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#5",
+          "row_group": "",
+          "label": "HCFC-142b",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 8
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#6",
+          "row_group": "",
+          "label": "C2F2H3Cl",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 8
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#7",
+          "row_group": "",
+          "label": "パーフルオロブタン",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 4
+         },
+         {
+          "id": "equipment.refrigerant_equipment.substance#8",
+          "row_group": "",
+          "label": "C4F10",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 4
+         }
+        ]
+       }
+      },
+      {
+       "id": "equipment.refrigerant_equipment.charge",
+       "label": "充填・使用量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 40,
+        "n_cells": 585,
+        "n_blank": 581,
+        "data_kinds": {
+         "入力可能な空欄": 36,
+         "利用者が直接入力する値": 4
+        },
+        "data_types": {
+         "未設定": 36,
+         "数値": 4
+        },
+        "units": [
+         "kg/m2",
+         "kg/㎡"
+        ],
+        "requirement": {
+         "任意": 14,
+         "必須": 26
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 12,
+         "標準算定": 11,
+         "詳細算定": 17
+        },
+        "status": {
+         "空欄等": 36,
+         "分類済み": 4
+        },
+        "input_entries": [
+         {
+          "id": "equipment.refrigerant_equipment.charge#1",
+          "row_group": "",
+          "label": "発泡断熱材 （工場成形板）-1",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#2",
+          "row_group": "",
+          "label": "発泡断熱材 （工場成形板）-2",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#3",
+          "row_group": "",
+          "label": "発泡断熱材 （現場発泡）-1",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#4",
+          "row_group": "",
+          "label": "発泡断熱材 （現場発泡）-2",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#5",
+          "row_group": "",
+          "label": "空調冷媒-1",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "kg/m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#6",
+          "row_group": "",
+          "label": "空調冷媒-2",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#7",
+          "row_group": "",
+          "label": "空調冷媒-3",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#8",
+          "row_group": "",
+          "label": "空調冷媒-4",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#9",
+          "row_group": "",
+          "label": "消火剤",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kg/m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 54
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#10",
+          "row_group": "",
+          "label": "FC-3110消火剤",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 4
+         },
+         {
+          "id": "equipment.refrigerant_equipment.charge#11",
+          "row_group": "",
+          "label": "SF6",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "equipment.refrigerant_equipment.application",
+       "label": "用途（空調・断熱・消火など）",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 12,
+        "n_cells": 26,
+        "n_blank": 26,
+        "data_kinds": {
+         "入力可能な空欄": 12
+        },
+        "data_types": {
+         "未設定": 12
+        },
+        "units": [
+         "N2・CO2消火等を除く"
+        ],
+        "requirement": {
+         "任意": 12
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 6,
+         "標準算定": 3,
+         "詳細算定": 3
+        },
+        "status": {
+         "空欄等": 12
+        },
+        "input_entries": [
+         {
+          "id": "equipment.refrigerant_equipment.application#1",
+          "row_group": "",
+          "label": "遠心冷凍機冷媒,発泡断熱材",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "equipment.refrigerant_equipment.application#2",
+          "row_group": "",
+          "label": "ハロン1301消火剤 (N2・CO2消火等を除…",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "N2・CO2消火等を除く",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "equipment.refrigerant_equipment.application#3",
+          "row_group": "",
+          "label": "押出法ポリスチレンフォーム ポリエチレンフォー…",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 8
+         }
+        ]
+       }
+      },
+      {
+       "id": "equipment.refrigerant_equipment.device_link",
+       "label": "冷媒を使う機器との対応",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "equipment.refrigerant_equipment.recovery_cost",
+       "label": "回収・処理の費用",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 48,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 5
+        },
+        "data_types": {
+         "整数": 5
+        },
+        "units": [],
+        "requirement": {
+         "任意": 5
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "標準算定": 2,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 5
+        },
+        "input_entries": [
+         {
+          "id": "equipment.refrigerant_equipment.recovery_cost#1",
+          "row_group": "",
+          "label": "フロンなどの回収・処理費用",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 20
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 29,
+      "n_cells": 2435,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 5,
+       "他の入力から自動計算される値": 24
+      },
+      "data_types": {
+       "文字列": 5,
+       "数式": 24
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 5,
+       "自動算出": 24
+      },
+      "lifecycle_stages": [
+       "B1"
+      ],
+      "workbooks": {
+       "簡易算定": 11,
+       "標準算定": 12,
+       "詳細算定": 6
+      },
+      "status": {
+       "分類済み": 29
+      }
+     }
+    },
+    {
+     "id": "equipment.other",
+     "label": "その他（分類未確定）",
+     "handling": "fallback",
+     "from_v01": true,
+     "v01_items": [
+      "元の項目名",
+      "入力値または説明",
+      "単位（ある場合）",
+      "利用者による仮分類・メモ"
+     ],
+     "notes": "既存の枝に当てはまらない項目をここへ収容。勝手に似た分類へ強制割当しない。",
+     "details": [],
+     "inventory": {
+      "n_rows": 1,
+      "n_cells": 0,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 1
+      },
+      "data_types": {
+       "名前定義": 1
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 1
+      },
+      "lifecycle_stages": [],
+      "workbooks": {
+       "詳細算定": 1
+      },
+      "status": {
+       "分類済み": 1
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "operation",
+   "label": "4 運用・維持管理・時間条件",
+   "branches": [
+    {
+     "id": "operation.energy",
+     "label": "年間エネルギー使用",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "電力使用量",
+      "都市ガス使用量",
+      "石油・燃料使用量",
+      "その他エネルギー使用量",
+      "年間推移・年次テーブル"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "operation.energy.electricity",
+       "label": "電力使用量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 13,
+        "n_blank": 4,
+        "data_kinds": {
+         "利用者が直接入力する値": 4,
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "数値": 4,
+         "整数": 1,
+         "未設定": 1
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 4,
+         "必須": 1,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1,
+         "詳細算定": 4
+        },
+        "status": {
+         "分類済み": 5,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "operation.energy.electricity#1",
+          "row_group": "",
+          "label": "（既存）消費電力量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "operation.energy.electricity#2",
+          "row_group": "",
+          "label": "（既存）消費電力量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.energy.city_gas",
+       "label": "都市ガス使用量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 11,
+        "n_blank": 2,
+        "data_kinds": {
+         "利用者が直接入力する値": 4,
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "数値": 4,
+         "整数": 1,
+         "未設定": 1
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 4,
+         "必須": 1,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1,
+         "詳細算定": 4
+        },
+        "status": {
+         "分類済み": 5,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "operation.energy.city_gas#1",
+          "row_group": "",
+          "label": "（既存）消費ガス量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.energy.city_gas#2",
+          "row_group": "",
+          "label": "（既存）消費ガス量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.energy.oil_fuel",
+       "label": "石油・燃料使用量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 15,
+        "n_blank": 4,
+        "data_kinds": {
+         "利用者が直接入力する値": 4,
+         "入力可能な空欄": 1,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "数値": 4,
+         "整数": 1,
+         "未設定": 1
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 4,
+         "必須": 1,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1,
+         "詳細算定": 4
+        },
+        "status": {
+         "分類済み": 5,
+         "空欄等": 1
+        },
+        "input_entries": [
+         {
+          "id": "operation.energy.oil_fuel#1",
+          "row_group": "",
+          "label": "（既存）消費石油量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.energy.oil_fuel#2",
+          "row_group": "",
+          "label": "（既存）消費石油量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.energy.other_energy",
+       "label": "その他エネルギー使用量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 14,
+        "n_blank": 5,
+        "data_kinds": {
+         "入力可能な空欄": 3,
+         "利用者が直接入力する値": 2,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "未設定": 3,
+         "数値": 3
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 5,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 2,
+         "詳細算定": 4
+        },
+        "status": {
+         "空欄等": 3,
+         "分類済み": 3
+        },
+        "input_entries": [
+         {
+          "id": "operation.energy.other_energy#1",
+          "row_group": "",
+          "label": "(2) 発熱量/換算値：(1)→(3)☆当たり…",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.energy.yearly_table",
+       "label": "年間推移・年次テーブル",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "operation.energy.annual_use",
+       "label": "年間消費エネルギー量（種類別の表）",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 36,
+        "n_cells": 296,
+        "n_blank": 3,
+        "data_kinds": {
+         "内部処理・参照用の値": 33,
+         "利用者が直接入力する値": 2,
+         "標準値・デフォルト値": 1
+        },
+        "data_types": {
+         "文字列": 35,
+         "数値": 1
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 33,
+         "任意": 2,
+         "任意（既定値あり）": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 14,
+         "標準算定": 12,
+         "詳細算定": 10
+        },
+        "status": {
+         "分類済み": 36
+        },
+        "input_entries": [
+         {
+          "id": "operation.energy.annual_use#1",
+          "row_group": "",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 3
+         },
+         {
+          "id": "operation.energy.annual_use#2",
+          "row_group": "",
+          "label": "消費ガス量(空調、ｺｰｼﾞｪﾈ契約）",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.energy.fm_ratio",
+       "label": "施設管理諸室の消費割合",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 39,
+        "n_blank": 12,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "入力可能な空欄": 3
+        },
+        "data_types": {
+         "数値": 3,
+         "未設定": 3
+        },
+        "units": [],
+        "requirement": {
+         "任意": 6
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 4,
+         "標準算定": 1,
+         "詳細算定": 1
+        },
+        "status": {
+         "分類済み": 3,
+         "空欄等": 3
+        },
+        "input_entries": [
+         {
+          "id": "operation.energy.fm_ratio#1",
+          "row_group": "",
+          "label": "施設管理諸室の消費割合",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定",
+           "詳細算定"
+          ],
+          "n_cells": 28
+         },
+         {
+          "id": "operation.energy.fm_ratio#2",
+          "row_group": "",
+          "label": "年間創エネルギー量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 5
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 34,
+      "n_cells": 515,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 5,
+       "他の入力から自動計算される値": 29
+      },
+      "data_types": {
+       "文字列": 5,
+       "数式": 29
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 5,
+       "自動算出": 29
+      },
+      "lifecycle_stages": [
+       "B6",
+       "B7"
+      ],
+      "workbooks": {
+       "簡易算定": 15,
+       "標準算定": 15,
+       "詳細算定": 4
+      },
+      "status": {
+       "分類済み": 34
+      }
+     }
+    },
+    {
+     "id": "operation.utility",
+     "label": "水・排水・一般廃棄物",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "上水使用量",
+      "下水排水量",
+      "一般廃棄物量"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "operation.utility.water",
+       "label": "上水使用量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 4,
+        "n_cells": 5,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 4
+        },
+        "data_types": {
+         "数値": 3,
+         "整数": 1
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 3,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1,
+         "詳細算定": 2
+        },
+        "status": {
+         "分類済み": 4
+        },
+        "input_entries": [
+         {
+          "id": "operation.utility.water#1",
+          "row_group": "",
+          "label": "上水消費量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.utility.water#2",
+          "row_group": "",
+          "label": "上水消費量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.utility.sewage",
+       "label": "下水排水量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 4,
+        "n_cells": 5,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 4
+        },
+        "data_types": {
+         "数値": 3,
+         "整数": 1
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 3,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1,
+         "詳細算定": 2
+        },
+        "status": {
+         "分類済み": 4
+        },
+        "input_entries": [
+         {
+          "id": "operation.utility.sewage#1",
+          "row_group": "",
+          "label": "下水排水量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.utility.sewage#2",
+          "row_group": "",
+          "label": "下水排水量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.utility.municipal_waste",
+       "label": "一般廃棄物量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 4,
+        "n_cells": 5,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 4
+        },
+        "data_types": {
+         "数値": 3,
+         "整数": 1
+        },
+        "units": [
+         "kWh/年㎡"
+        ],
+        "requirement": {
+         "任意": 3,
+         "必須": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1,
+         "詳細算定": 2
+        },
+        "status": {
+         "分類済み": 4
+        },
+        "input_entries": [
+         {
+          "id": "operation.utility.municipal_waste#1",
+          "row_group": "",
+          "label": "一般廃棄物量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.utility.municipal_waste#2",
+          "row_group": "",
+          "label": "一般廃棄物量",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "operation.generation",
+     "label": "創エネルギー・売電",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "発電量",
+      "自家消費・外部供給などの区分"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "operation.generation.generation",
+       "label": "発電量",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 2,
+        "n_blank": 2,
+        "data_kinds": {
+         "入力可能な空欄": 2
+        },
+        "data_types": {
+         "未設定": 2
+        },
+        "units": [
+         "kWh/年m2"
+        ],
+        "requirement": {
+         "任意": 2
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 1,
+         "標準算定": 1
+        },
+        "status": {
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "operation.generation.generation#1",
+          "row_group": "",
+          "label": "発電量",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "kWh/年m2",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.generation.self_use_export",
+       "label": "自家消費・外部供給などの区分",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "operation.maintenance",
+     "label": "修繕・更新",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "材料の更新周期",
+      "設備の耐用年数・更新周期",
+      "修繕率",
+      "予定・実際の更新時期",
+      "対象に応じた補修・交換条件"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "operation.maintenance.material_cycle",
+       "label": "材料の更新周期",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 110,
+        "n_cells": 7271,
+        "n_blank": 8,
+        "data_kinds": {
+         "内部処理・参照用の値": 42,
+         "標準値・デフォルト値": 64,
+         "入力可能な空欄": 2,
+         "排出原単位・各種係数": 2
+        },
+        "data_types": {
+         "文字列": 15,
+         "数値": 56,
+         "整数": 37,
+         "未設定": 2
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 54,
+         "任意（既定値あり）": 56
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 43,
+         "標準算定": 50,
+         "詳細算定": 17
+        },
+        "status": {
+         "分類済み": 108,
+         "空欄等": 2
+        },
+        "input_entries": [
+         {
+          "id": "operation.maintenance.material_cycle#1",
+          "row_group": "A重油★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#2",
+          "row_group": "B・C重油★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#3",
+          "row_group": "液化石油ガス★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#4",
+          "row_group": "その他石油製品★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#5",
+          "row_group": "電気★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#6",
+          "row_group": "都市ガス★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#7",
+          "row_group": "代替★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 8
+         },
+         {
+          "id": "operation.maintenance.material_cycle#8",
+          "row_group": "上水★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#9",
+          "row_group": "下水★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#10",
+          "row_group": "産業廃棄物★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#11",
+          "row_group": "工事燃料",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "operation.maintenance.material_cycle#12",
+          "row_group": "現場分★",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "operation.maintenance.material_cycle#13",
+          "row_group": "その他",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 4
+         },
+         {
+          "id": "operation.maintenance.material_cycle#14",
+          "row_group": "総計",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 166
+         },
+         {
+          "id": "operation.maintenance.material_cycle#15",
+          "row_group": "廃棄物",
+          "label": "更新周期",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.maintenance.equipment_life",
+       "label": "設備の耐用年数・更新周期",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 32,
+        "n_cells": 2268,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 16,
+         "標準値・デフォルト値": 16
+        },
+        "data_types": {
+         "整数": 32
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 32
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 16,
+         "標準算定": 16
+        },
+        "status": {
+         "分類済み": 32
+        }
+       }
+      },
+      {
+       "id": "operation.maintenance.repair_rate",
+       "label": "修繕率",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 34,
+        "n_cells": 363,
+        "n_blank": 0,
+        "data_kinds": {
+         "標準値・デフォルト値": 30,
+         "内部処理・参照用の値": 4
+        },
+        "data_types": {
+         "整数": 15,
+         "数値": 19
+        },
+        "units": [
+         "%"
+        ],
+        "requirement": {
+         "任意（既定値あり）": 2,
+         "参照用": 32
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 19,
+         "標準算定": 11,
+         "詳細算定": 4
+        },
+        "status": {
+         "分類済み": 34
+        },
+        "input_entries": [
+         {
+          "id": "operation.maintenance.repair_rate#1",
+          "row_group": "2.2 杭・基礎",
+          "label": "修繕率",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 84
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.maintenance.replacement_timing",
+       "label": "予定・実際の更新時期",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "operation.maintenance.repair_conditions",
+       "label": "対象に応じた補修・交換条件",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "operation.maintenance.cycle_summary",
+       "label": "更新周期の集計表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 67,
+        "n_cells": 67443,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 32,
+         "他の入力から自動計算される値": 35
+        },
+        "data_types": {
+         "文字列": 16,
+         "数式": 35,
+         "整数": 16
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 32,
+         "自動算出": 35
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 34,
+         "標準算定": 33
+        },
+        "status": {
+         "分類済み": 67
+        }
+       }
+      },
+      {
+       "id": "operation.maintenance.yearly_series",
+       "label": "経年の排出系列の表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 291,
+        "n_cells": 90685,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 188,
+         "他の入力から自動計算される値": 103
+        },
+        "data_types": {
+         "文字列": 62,
+         "数式": 103,
+         "整数": 77,
+         "数値": 49
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 188,
+         "自動算出": 103
+        },
+        "lifecycle_stages": [
+         "A1-A3",
+         "A1-A5",
+         "A4-A5",
+         "B1",
+         "B6-B7",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 40,
+         "標準算定": 40,
+         "詳細算定": 211
+        },
+        "status": {
+         "分類済み": 291
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "operation.leakage",
+     "label": "冷媒の時間変化",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "漏洩率",
+      "補充条件",
+      "廃棄時回収率",
+      "交換時期",
+      "機器の使用期間"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "operation.leakage.leak_rate",
+       "label": "漏洩率",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 20,
+        "n_cells": 60,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 20
+        },
+        "data_types": {
+         "整数": 10,
+         "数値": 10
+        },
+        "units": [
+         "%"
+        ],
+        "requirement": {
+         "任意": 10,
+         "必須": 10
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 10,
+         "標準算定": 10
+        },
+        "status": {
+         "分類済み": 20
+        },
+        "input_entries": [
+         {
+          "id": "operation.leakage.leak_rate#1",
+          "row_group": "",
+          "label": "年平均漏洩率（％/年）",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 30
+         },
+         {
+          "id": "operation.leakage.leak_rate#2",
+          "row_group": "",
+          "label": "年平均漏洩率（％/年）",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 30
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.leakage.top_up",
+       "label": "補充条件",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "operation.leakage.recovery_rate",
+       "label": "廃棄時回収率",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 20,
+        "n_cells": 20,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 20
+        },
+        "data_types": {
+         "数値": 10,
+         "整数": 10
+        },
+        "units": [
+         "%"
+        ],
+        "requirement": {
+         "任意": 10,
+         "必須": 10
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 10,
+         "標準算定": 10
+        },
+        "status": {
+         "分類済み": 20
+        },
+        "input_entries": [
+         {
+          "id": "operation.leakage.recovery_rate#1",
+          "row_group": "",
+          "label": "廃棄時フロン回収率(％)",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "%",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         },
+         {
+          "id": "operation.leakage.recovery_rate#2",
+          "row_group": "",
+          "label": "廃棄時フロン回収率(％)",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.leakage.change_timing",
+       "label": "交換時期",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 20,
+        "n_cells": 20,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 20
+        },
+        "data_types": {
+         "数値": 10,
+         "整数": 10
+        },
+        "units": [
+         "%"
+        ],
+        "requirement": {
+         "任意": 10,
+         "必須": 10
+        },
+        "lifecycle_stages": [
+         "B1"
+        ],
+        "workbooks": {
+         "簡易算定": 10,
+         "標準算定": 10
+        },
+        "status": {
+         "分類済み": 20
+        },
+        "input_entries": [
+         {
+          "id": "operation.leakage.change_timing#1",
+          "row_group": "",
+          "label": "更新周期(年）",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "%",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         },
+         {
+          "id": "operation.leakage.change_timing#2",
+          "row_group": "",
+          "label": "更新周期(年）",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 10
+         }
+        ]
+       }
+      },
+      {
+       "id": "operation.leakage.service_period",
+       "label": "機器の使用期間",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "operation.end_of_life",
+     "label": "解体・廃棄シナリオ",
+     "handling": "user",
+     "from_v01": true,
+     "v01_items": [
+      "解体・撤去",
+      "廃棄物輸送",
+      "処理・再利用・最終処分の割合",
+      "解体時点・評価期間末の扱い"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "operation.end_of_life.demolition",
+       "label": "解体・撤去",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "operation.end_of_life.waste_transport",
+       "label": "廃棄物輸送",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 40,
+        "n_cells": 980,
+        "n_blank": 350,
+        "data_kinds": {
+         "標準値・デフォルト値": 40
+        },
+        "data_types": {
+         "整数": 30,
+         "数値": 10
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 40
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 16,
+         "標準算定": 16,
+         "詳細算定": 8
+        },
+        "status": {
+         "分類済み": 40
+        }
+       }
+      },
+      {
+       "id": "operation.end_of_life.treatment_share",
+       "label": "処理・再利用・最終処分の割合",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 121,
+        "n_cells": 6214,
+        "n_blank": 1618,
+        "data_kinds": {
+         "標準値・デフォルト値": 33,
+         "入力可能な空欄": 12,
+         "内部処理・参照用の値": 76
+        },
+        "data_types": {
+         "数値": 57,
+         "未設定": 12,
+         "整数": 42,
+         "文字列": 10
+        },
+        "units": [
+         "%",
+         "kg/㎡"
+        ],
+        "requirement": {
+         "参照用": 121
+        },
+        "lifecycle_stages": [
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 48,
+         "標準算定": 52,
+         "詳細算定": 21
+        },
+        "status": {
+         "分類済み": 109,
+         "空欄等": 12
+        }
+       }
+      },
+      {
+       "id": "operation.end_of_life.end_timing",
+       "label": "解体時点・評価期間末の扱い",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "operation.end_of_life.waste_analysis",
+       "label": "廃棄物・資源量の分析表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 1945,
+        "n_cells": 215792,
+        "n_blank": 20,
+        "data_kinds": {
+         "内部処理・参照用の値": 1008,
+         "他の入力から自動計算される値": 884,
+         "標準値・デフォルト値": 38,
+         "選択式の入力項目": 15
+        },
+        "data_types": {
+         "文字列": 596,
+         "数式": 884,
+         "数値": 197,
+         "整数": 234,
+         "選択リスト": 10,
+         "名前定義": 24
+        },
+        "units": [
+         "tCO2e/t",
+         "%",
+         "kg/㎡",
+         "kWh",
+         "千円/㎡",
+         "CO2"
+        ],
+        "requirement": {
+         "参照用": 1061,
+         "自動算出": 884
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 843,
+         "標準算定": 867,
+         "詳細算定": 235
+        },
+        "status": {
+         "分類済み": 1945
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "operation.other",
+     "label": "その他（分類未確定）",
+     "handling": "fallback",
+     "from_v01": true,
+     "v01_items": [
+      "元の項目名",
+      "入力値または説明",
+      "単位（ある場合）",
+      "利用者による仮分類・メモ"
+     ],
+     "notes": "既存の枝に当てはまらない項目をここへ収容。勝手に似た分類へ強制割当しない。",
+     "details": [],
+     "inventory": {
+      "n_rows": 7,
+      "n_cells": 0,
+      "n_blank": 0,
+      "data_kinds": {
+       "選択式の入力項目": 3,
+       "内部処理・参照用の値": 4
+      },
+      "data_types": {
+       "選択リスト": 3,
+       "名前定義": 4
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 7
+      },
+      "lifecycle_stages": [],
+      "workbooks": {
+       "簡易算定": 3,
+       "標準算定": 4
+      },
+      "status": {
+       "分類済み": 7
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "assessment",
+   "label": "5 算定条件・原単位・補完",
+   "branches": [
+    {
+     "id": "assessment.method",
+     "label": "算定方式・対象",
+     "handling": "selection",
+     "from_v01": true,
+     "v01_items": [
+      "簡易／標準／詳細の区分",
+      "対象段階（A1～C4等）",
+      "CO2とGHGの評価範囲",
+      "補足D区分の扱い",
+      "算定用途・目的"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "assessment.method.method_level",
+       "label": "簡易／標準／詳細の区分",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.method.stages",
+       "label": "対象段階（A1～C4等）",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.method.gas_scope",
+       "label": "CO2とGHGの評価範囲",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 2,
+        "n_cells": 1,
+        "n_blank": 0,
+        "data_kinds": {
+         "選択式の入力項目": 2
+        },
+        "data_types": {
+         "文字列": 1,
+         "選択リスト": 1
+        },
+        "units": [],
+        "requirement": {
+         "必須": 1,
+         "参照用": 1
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "詳細算定": 2
+        },
+        "status": {
+         "分類済み": 2
+        },
+        "input_entries": [
+         {
+          "id": "assessment.method.gas_scope#1",
+          "row_group": "",
+          "label": "使用する単位",
+          "data_kind": "選択式の入力項目",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "assessment.method.module_d",
+       "label": "補足D区分の扱い",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.method.purpose",
+       "label": "算定用途・目的",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.method.system_boundary",
+       "label": "システム境界の選択",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 112,
+        "n_cells": 574,
+        "n_blank": 0,
+        "data_kinds": {
+         "選択式の入力項目": 16,
+         "標準値・デフォルト値": 40,
+         "内部処理・参照用の値": 56
+        },
+        "data_types": {
+         "文字列": 40,
+         "整数": 56,
+         "数値": 4,
+         "選択リスト": 12
+        },
+        "units": [
+         "kg"
+        ],
+        "requirement": {
+         "参照用": 112
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 54,
+         "標準算定": 54,
+         "集計表": 4
+        },
+        "status": {
+         "分類済み": 112
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "assessment.factors",
+     "label": "原単位・EPD",
+     "handling": "reference",
+     "from_v01": true,
+     "v01_items": [
+      "材料の排出原単位",
+      "電力・ガスなどの排出係数",
+      "EPD製品の選択",
+      "原単位の単位・適用範囲",
+      "原単位の参照元・版"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "assessment.factors.material_factor",
+       "label": "材料の排出原単位",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 957,
+        "n_cells": 27862,
+        "n_blank": 2048,
+        "data_kinds": {
+         "内部処理・参照用の値": 132,
+         "排出原単位・各種係数": 670,
+         "他の入力から自動計算される値": 54,
+         "入力可能な空欄": 101
+        },
+        "data_types": {
+         "文字列": 143,
+         "整数": 191,
+         "数式": 54,
+         "数値": 466,
+         "未設定": 101,
+         "名前定義": 2
+        },
+        "units": [
+         "円/kg",
+         "kg-CO２/ｋWh",
+         "温対法2015年実績 代替値",
+         "円／kg"
+        ],
+        "requirement": {
+         "参照用": 903,
+         "自動算出": 54
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 435,
+         "標準算定": 443,
+         "集計表": 39,
+         "詳細算定": 40
+        },
+        "status": {
+         "分類済み": 856,
+         "空欄等": 101
+        }
+       }
+      },
+      {
+       "id": "assessment.factors.energy_factor",
+       "label": "電力・ガスなどの排出係数",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 69,
+        "n_cells": 7730,
+        "n_blank": 0,
+        "data_kinds": {
+         "利用者が直接入力する値": 3,
+         "選択式の入力項目": 4,
+         "内部処理・参照用の値": 10,
+         "排出原単位・各種係数": 25,
+         "他の入力から自動計算される値": 25,
+         "標準値・デフォルト値": 2
+        },
+        "data_types": {
+         "混在": 4,
+         "文字列": 10,
+         "数値": 22,
+         "数式": 25,
+         "整数": 6,
+         "選択リスト": 2
+        },
+        "units": [],
+        "requirement": {
+         "必須": 4,
+         "参照用": 37,
+         "自動算出": 25,
+         "任意（既定値あり）": 2,
+         "任意": 1
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "簡易算定": 27,
+         "標準算定": 27,
+         "詳細算定": 15
+        },
+        "status": {
+         "分類済み": 69
+        },
+        "input_entries": [
+         {
+          "id": "assessment.factors.energy_factor#1",
+          "row_group": "",
+          "label": "【新築の場合CASBEEより転記】事業者名：",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "混在",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 4
+         },
+         {
+          "id": "assessment.factors.energy_factor#2",
+          "row_group": "",
+          "label": "行コード",
+          "data_kind": "選択式の入力項目",
+          "data_type": "混在",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 12
+         },
+         {
+          "id": "assessment.factors.energy_factor#3",
+          "row_group": "",
+          "label": "CO2+HFCs",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "詳細算定"
+          ],
+          "n_cells": 9
+         }
+        ]
+       }
+      },
+      {
+       "id": "assessment.factors.epd",
+       "label": "EPD製品の選択",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 115,
+        "n_cells": 26999,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 82,
+         "排出原単位・各種係数": 29,
+         "他の入力から自動計算される値": 4
+        },
+        "data_types": {
+         "文字列": 78,
+         "整数": 18,
+         "数値": 13,
+         "数式": 4,
+         "名前定義": 2
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 111,
+         "自動算出": 4
+        },
+        "lifecycle_stages": [
+         "A1-A3",
+         "A4"
+        ],
+        "workbooks": {
+         "標準算定": 115
+        },
+        "status": {
+         "分類済み": 115
+        }
+       }
+      },
+      {
+       "id": "assessment.factors.factor_scope",
+       "label": "原単位の単位・適用範囲",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.factors.factor_source",
+       "label": "原単位の参照元・版",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.factors.composite_factor",
+       "label": "複合原単位",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 231,
+        "n_cells": 28963,
+        "n_blank": 4852,
+        "data_kinds": {
+         "内部処理・参照用の値": 82,
+         "他の入力から自動計算される値": 38,
+         "入力可能な空欄": 48,
+         "排出原単位・各種係数": 63
+        },
+        "data_types": {
+         "文字列": 92,
+         "数式": 38,
+         "未設定": 48,
+         "整数": 21,
+         "数値": 30,
+         "名前定義": 2
+        },
+        "units": [
+         "kg/単位",
+         "千円/m3",
+         "千円/",
+         "千円/㎡"
+        ],
+        "requirement": {
+         "参照用": 193,
+         "自動算出": 38
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 64,
+         "標準算定": 71,
+         "分類表": 48,
+         "集計表": 48
+        },
+        "status": {
+         "分類済み": 183,
+         "空欄等": 48
+        }
+       }
+      },
+      {
+       "id": "assessment.factors.gas_factor_db",
+       "label": "ガス別の排出原単位データベース",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 2022,
+        "n_cells": 146950,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 378,
+         "排出原単位・各種係数": 1626,
+         "他の入力から自動計算される値": 18
+        },
+        "data_types": {
+         "文字列": 360,
+         "整数": 416,
+         "数値": 1228,
+         "数式": 18
+        },
+        "units": [
+         "kg-CO2eq/千円",
+         "2015年産業連関表",
+         "kg-CO2/千円",
+         "kg-CO2/☆",
+         "kg-CO2eq/☆",
+         "g-CH4/☆",
+         "kg-CO2/MJ",
+         "g-CH4/千円"
+        ],
+        "requirement": {
+         "参照用": 2004,
+         "自動算出": 18
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 1035,
+         "標準算定": 987
+        },
+        "status": {
+         "分類済み": 2022
+        }
+       }
+      },
+      {
+       "id": "assessment.factors.gwp",
+       "label": "地球温暖化係数・オゾン層破壊係数",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 60,
+        "n_cells": 383,
+        "n_blank": 90,
+        "data_kinds": {
+         "利用者が直接入力する値": 16,
+         "標準値・デフォルト値": 39,
+         "入力可能な空欄": 5
+        },
+        "data_types": {
+         "数値": 13,
+         "整数": 42,
+         "未設定": 5
+        },
+        "units": [
+         "kg-CO2/㎡",
+         "g-CFC11/㎡"
+        ],
+        "requirement": {
+         "任意": 20,
+         "任意（既定値あり）": 25,
+         "参照用": 15
+        },
+        "lifecycle_stages": [
+         "B1",
+         "C1",
+         "C4"
+        ],
+        "workbooks": {
+         "簡易算定": 22,
+         "標準算定": 22,
+         "詳細算定": 16
+        },
+        "status": {
+         "分類済み": 55,
+         "空欄等": 5
+        },
+        "input_entries": [
+         {
+          "id": "assessment.factors.gwp#1",
+          "row_group": "",
+          "label": "地球 温暖化 係数",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 56
+         },
+         {
+          "id": "assessment.factors.gwp#2",
+          "row_group": "",
+          "label": "CFCl3",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "assessment.factors.gwp#3",
+          "row_group": "",
+          "label": "オゾン層 破壊 係数",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 7
+         },
+         {
+          "id": "assessment.factors.gwp#4",
+          "row_group": "",
+          "label": "CF3Br",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "assessment.factors.gwp#5",
+          "row_group": "",
+          "label": "オゾン層 破壊 係数",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 24
+         },
+         {
+          "id": "assessment.factors.gwp#6",
+          "row_group": "",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 9
+         },
+         {
+          "id": "assessment.factors.gwp#7",
+          "row_group": "",
+          "label": "C4F10",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "assessment.factors.gwp#8",
+          "row_group": "",
+          "label": "SF6",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         },
+         {
+          "id": "assessment.factors.gwp#9",
+          "row_group": "",
+          "label": "SF6",
+          "data_kind": "標準値・デフォルト値",
+          "data_type": "整数",
+          "unit": "",
+          "requirement": "任意（既定値あり）",
+          "workbooks": [
+           "標準算定",
+           "簡易算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "assessment.conversions",
+     "label": "数量換算・代替算定",
+     "handling": "reference",
+     "from_v01": true,
+     "v01_items": [
+      "重量・体積・面積・長さ・能力・金額の換算方式",
+      "材料寸法や比重による換算",
+      "工事金額比率・工事分倍率",
+      "設備標準値",
+      "未数量化工事の補完方法"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "assessment.conversions.conversion_method",
+       "label": "重量・体積・面積・長さ・能力・金額の換算方式",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 6,
+        "n_cells": 56,
+        "n_blank": 40,
+        "data_kinds": {
+         "利用者が直接入力する値": 2,
+         "入力可能な空欄": 4
+        },
+        "data_types": {
+         "数値": 1,
+         "文字列": 1,
+         "未設定": 4
+        },
+        "units": [],
+        "requirement": {
+         "必須": 1,
+         "任意": 5
+        },
+        "lifecycle_stages": [
+         "B6",
+         "B7"
+        ],
+        "workbooks": {
+         "標準算定": 1,
+         "詳細算定": 5
+        },
+        "status": {
+         "分類済み": 2,
+         "空欄等": 4
+        },
+        "input_entries": [
+         {
+          "id": "assessment.conversions.conversion_method#1",
+          "row_group": "",
+          "label": "換算係数",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 6
+         }
+        ]
+       }
+      },
+      {
+       "id": "assessment.conversions.dimension_density",
+       "label": "材料寸法や比重による換算",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.conversions.work_multiplier",
+       "label": "工事金額比率・工事分倍率",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 400,
+        "n_cells": 9017,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 70,
+         "他の入力から自動計算される値": 80,
+         "標準値・デフォルト値": 250
+        },
+        "data_types": {
+         "文字列": 45,
+         "数式": 80,
+         "整数": 35,
+         "数値": 240
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 320,
+         "自動算出": 80
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 160,
+         "標準算定": 160,
+         "詳細算定": 80
+        },
+        "status": {
+         "分類済み": 400
+        }
+       }
+      },
+      {
+       "id": "assessment.conversions.equipment_standard",
+       "label": "設備標準値",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 12,
+        "n_cells": 260,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 8,
+         "標準値・デフォルト値": 3,
+         "他の入力から自動計算される値": 1
+        },
+        "data_types": {
+         "文字列": 8,
+         "数値": 2,
+         "整数": 1,
+         "数式": 1
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 11,
+         "自動算出": 1
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "集計表": 12
+        },
+        "status": {
+         "分類済み": 12
+        }
+       }
+      },
+      {
+       "id": "assessment.conversions.unquantified",
+       "label": "未数量化工事の補完方法",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 20,
+        "n_cells": 20,
+        "n_blank": 8,
+        "data_kinds": {
+         "利用者が直接入力する値": 12,
+         "入力可能な空欄": 8
+        },
+        "data_types": {
+         "文字列": 8,
+         "未設定": 8,
+         "整数": 4
+        },
+        "units": [
+         "%"
+        ],
+        "requirement": {
+         "必須": 20
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "標準算定": 20
+        },
+        "status": {
+         "分類済み": 12,
+         "空欄等": 8
+        },
+        "input_entries": [
+         {
+          "id": "assessment.conversions.unquantified#1",
+          "row_group": "基礎 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#2",
+          "row_group": "躯体 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#3",
+          "row_group": "外装 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#4",
+          "row_group": "内装 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "文字列",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#5",
+          "row_group": "基礎 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#6",
+          "row_group": "躯体 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#7",
+          "row_group": "外装 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#8",
+          "row_group": "内装 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#9",
+          "row_group": "基礎 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#10",
+          "row_group": "躯体 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#11",
+          "row_group": "外装 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         },
+         {
+          "id": "assessment.conversions.unquantified#12",
+          "row_group": "内装 一式工事分(上記に含まれない数量…",
+          "label": "",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "整数",
+          "unit": "%",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定"
+          ],
+          "n_cells": 1
+         }
+        ]
+       }
+      },
+      {
+       "id": "assessment.conversions.composite_definition",
+       "label": "複合原単位の資材構成",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 1436,
+        "n_cells": 3377948,
+        "n_blank": 65741,
+        "data_kinds": {
+         "内部処理・参照用の値": 456,
+         "標準値・デフォルト値": 597,
+         "他の入力から自動計算される値": 328,
+         "入力可能な空欄": 55
+        },
+        "data_types": {
+         "文字列": 394,
+         "数値": 227,
+         "数式": 328,
+         "整数": 352,
+         "混在": 22,
+         "未設定": 55,
+         "名前定義": 58
+        },
+        "units": [
+         "%",
+         "個あたり",
+         "kg/単位"
+        ],
+        "requirement": {
+         "参照用": 1108,
+         "自動算出": 328
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 999,
+         "標準算定": 437
+        },
+        "status": {
+         "分類済み": 1381,
+         "空欄等": 55
+        }
+       }
+      },
+      {
+       "id": "assessment.conversions.price_correction",
+       "label": "物価補正",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 115,
+        "n_cells": 6679,
+        "n_blank": 0,
+        "data_kinds": {
+         "標準値・デフォルト値": 14,
+         "選択式の入力項目": 8,
+         "内部処理・参照用の値": 93
+        },
+        "data_types": {
+         "整数": 13,
+         "文字列": 91,
+         "数値": 6,
+         "選択リスト": 4,
+         "名前定義": 1
+        },
+        "units": [
+         "%/年"
+        ],
+        "requirement": {
+         "参照用": 115
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 14,
+         "標準算定": 14,
+         "集計表": 87
+        },
+        "status": {
+         "分類済み": 115
+        }
+       }
+      },
+      {
+       "id": "assessment.conversions.quantity_per_area",
+       "label": "延床面積あたりの標準物量",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 26,
+        "n_cells": 170,
+        "n_blank": 0,
+        "data_kinds": {
+         "標準値・デフォルト値": 26
+        },
+        "data_types": {
+         "数値": 22,
+         "整数": 4
+        },
+        "units": [
+         "k\\/㎡",
+         "m3/㎡"
+        ],
+        "requirement": {
+         "参照用": 26
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 16,
+         "標準算定": 10
+        },
+        "status": {
+         "分類済み": 26
+        }
+       }
+      },
+      {
+       "id": "assessment.conversions.calc_class",
+       "label": "算出分類",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 5,
+        "n_cells": 121,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 5
+        },
+        "data_types": {
+         "文字列": 5
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 5
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "分類表": 5
+        },
+        "status": {
+         "分類済み": 5
+        }
+       }
+      },
+      {
+       "id": "assessment.conversions.external_lca_reference",
+       "label": "外部の計算結果の参照欄",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 171,
+        "n_cells": 4266,
+        "n_blank": 2185,
+        "data_kinds": {
+         "内部処理・参照用の値": 16,
+         "標準値・デフォルト値": 125,
+         "入力可能な空欄": 27,
+         "他の入力から自動計算される値": 3
+        },
+        "data_types": {
+         "文字列": 24,
+         "数値": 58,
+         "整数": 58,
+         "混在": 1,
+         "未設定": 27,
+         "数式": 3
+        },
+        "units": [
+         "kg/㎡",
+         "kg-CO2/m2",
+         "%",
+         "kg/年m2",
+         "m2"
+        ],
+        "requirement": {
+         "参照用": 168,
+         "自動算出": 3
+        },
+        "lifecycle_stages": [
+         "A1-A3",
+         "A4-A5",
+         "B1-B5",
+         "B6-B7",
+         "C2",
+         "C4"
+        ],
+        "workbooks": {
+         "詳細算定": 171
+        },
+        "status": {
+         "分類済み": 144,
+         "空欄等": 27
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "assessment.assumptions",
+     "label": "基準値・評価仮定",
+     "handling": "reference",
+     "from_v01": true,
+     "v01_items": [
+      "設備・資材の標準更新周期",
+      "標準修繕率",
+      "標準漏洩率",
+      "炭素固定・炭素貯蔵の係数",
+      "電力排出係数の将来変化"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "assessment.assumptions.standard_cycle",
+       "label": "設備・資材の標準更新周期",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.assumptions.standard_repair_rate",
+       "label": "標準修繕率",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.assumptions.standard_leak_rate",
+       "label": "標準漏洩率",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.assumptions.carbon_coefficients",
+       "label": "炭素固定・炭素貯蔵の係数",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 109,
+        "n_cells": 9008,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 70,
+         "標準値・デフォルト値": 19,
+         "他の入力から自動計算される値": 20
+        },
+        "data_types": {
+         "文字列": 62,
+         "数値": 19,
+         "数式": 20,
+         "名前定義": 8
+        },
+        "units": [
+         "t/㎥"
+        ],
+        "requirement": {
+         "参照用": 89,
+         "自動算出": 20
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 48,
+         "標準算定": 48,
+         "詳細算定": 13
+        },
+        "status": {
+         "分類済み": 109
+        }
+       }
+      },
+      {
+       "id": "assessment.assumptions.grid_future",
+       "label": "電力排出係数の将来変化",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.assumptions.standard_values",
+       "label": "標準値の管理表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 68,
+        "n_cells": 1176,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 12,
+         "標準値・デフォルト値": 24,
+         "他の入力から自動計算される値": 32
+        },
+        "data_types": {
+         "文字列": 16,
+         "数値": 8,
+         "数式": 32,
+         "整数": 12
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 36,
+         "自動算出": 32
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 34,
+         "標準算定": 34
+        },
+        "status": {
+         "分類済み": 68
+        }
+       }
+      },
+      {
+       "id": "assessment.assumptions.parameters",
+       "label": "各種パラメータ",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 239,
+        "n_cells": 2733,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 94,
+         "他の入力から自動計算される値": 42,
+         "標準値・デフォルト値": 103
+        },
+        "data_types": {
+         "文字列": 80,
+         "数式": 42,
+         "整数": 113,
+         "数値": 4
+        },
+        "units": [
+         "年度"
+        ],
+        "requirement": {
+         "参照用": 197,
+         "自動算出": 42
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 98,
+         "標準算定": 98,
+         "詳細算定": 43
+        },
+        "status": {
+         "分類済み": 239
+        }
+       }
+      },
+      {
+       "id": "assessment.assumptions.energy_statistics",
+       "label": "エネルギー統計値",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 67,
+        "n_cells": 837,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 25,
+         "標準値・デフォルト値": 22,
+         "他の入力から自動計算される値": 20
+        },
+        "data_types": {
+         "文字列": 25,
+         "数値": 17,
+         "数式": 20,
+         "整数": 5
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 47,
+         "自動算出": 20
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 26,
+         "標準算定": 26,
+         "詳細算定": 15
+        },
+        "status": {
+         "分類済み": 67
+        }
+       }
+      },
+      {
+       "id": "assessment.assumptions.internal_parameter_tables",
+       "label": "内部パラメータ表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 713,
+        "n_cells": 33526,
+        "n_blank": 1924,
+        "data_kinds": {
+         "内部処理・参照用の値": 117,
+         "他の入力から自動計算される値": 94,
+         "入力可能な空欄": 72,
+         "標準値・デフォルト値": 406,
+         "選択式の入力項目": 24
+        },
+        "data_types": {
+         "文字列": 124,
+         "数式": 94,
+         "未設定": 72,
+         "整数": 122,
+         "数値": 276,
+         "選択リスト": 20,
+         "名前定義": 5
+        },
+        "units": [
+         "kg-C/年㎡",
+         "千円/年㎡",
+         "㎡/㎡",
+         "年",
+         "kg/㎡",
+         "kW",
+         "㎡",
+         "％　←"
+        ],
+        "requirement": {
+         "参照用": 619,
+         "自動算出": 94
+        },
+        "lifecycle_stages": [
+         "C4"
+        ],
+        "workbooks": {
+         "簡易算定": 362,
+         "標準算定": 351
+        },
+        "status": {
+         "分類済み": 641,
+         "空欄等": 72
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "assessment.check",
+     "label": "入力確認・範囲外の扱い",
+     "handling": "review",
+     "from_v01": true,
+     "v01_items": [
+      "数量の重複・漏れ確認",
+      "単位換算の妥当性",
+      "使用する算定範囲の確認",
+      "不足入力の確認",
+      "元の算定根拠・注記"
+     ],
+     "notes": null,
+     "details": [
+      {
+       "id": "assessment.check.duplicate_check",
+       "label": "数量の重複・漏れ確認",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.check.unit_check",
+       "label": "単位換算の妥当性",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.check.scope_check",
+       "label": "使用する算定範囲の確認",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.check.missing_check",
+       "label": "不足入力の確認",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 0,
+        "n_cells": 0
+       }
+      },
+      {
+       "id": "assessment.check.basis_notes",
+       "label": "元の算定根拠・注記",
+       "from_v01": true,
+       "inventory": {
+        "n_rows": 66,
+        "n_cells": 1283,
+        "n_blank": 13,
+        "data_kinds": {
+         "内部処理・参照用の値": 58,
+         "利用者が直接入力する値": 1,
+         "入力可能な空欄": 7
+        },
+        "data_types": {
+         "文字列": 58,
+         "数値": 1,
+         "未設定": 7
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 58,
+         "必須": 8
+        },
+        "lifecycle_stages": [
+         "A1-A5",
+         "B2-B5",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 27,
+         "標準算定": 33,
+         "詳細算定": 6
+        },
+        "status": {
+         "分類済み": 59,
+         "空欄等": 7
+        },
+        "input_entries": [
+         {
+          "id": "assessment.check.basis_notes#1",
+          "row_group": "基礎 一式工事分(上記に含まれない数量…",
+          "label": "根拠：",
+          "data_kind": "利用者が直接入力する値",
+          "data_type": "数値",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "簡易算定"
+          ],
+          "n_cells": 8
+         },
+         {
+          "id": "assessment.check.basis_notes#2",
+          "row_group": "",
+          "label": "必須入力項目",
+          "data_kind": "入力可能な空欄",
+          "data_type": "未設定",
+          "unit": "",
+          "requirement": "必須",
+          "workbooks": [
+           "標準算定",
+           "詳細算定"
+          ],
+          "n_cells": 2
+         }
+        ]
+       }
+      },
+      {
+       "id": "assessment.check.checklist",
+       "label": "チェックリスト",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 33,
+        "n_cells": 231,
+        "n_blank": 3,
+        "data_kinds": {
+         "内部処理・参照用の値": 12,
+         "標準値・デフォルト値": 15,
+         "入力可能な空欄": 3,
+         "選択式の入力項目": 3
+        },
+        "data_types": {
+         "文字列": 3,
+         "整数": 24,
+         "未設定": 3,
+         "選択リスト": 3
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 30,
+         "任意": 3
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 11,
+         "標準算定": 11,
+         "詳細算定": 11
+        },
+        "status": {
+         "分類済み": 30,
+         "空欄等": 3
+        }
+       }
+      },
+      {
+       "id": "assessment.check.tool_info",
+       "label": "ツールの版・更新履歴・注意書き",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 34,
+        "n_cells": 242,
+        "n_blank": 0,
+        "data_kinds": {
+         "内部処理・参照用の値": 34
+        },
+        "data_types": {
+         "文字列": 18,
+         "整数": 16
+        },
+        "units": [],
+        "requirement": {
+         "参照用": 34
+        },
+        "lifecycle_stages": [
+         "A1～5",
+         "A1～A3",
+         "B2～5",
+         "B6",
+         "C1～4"
+        ],
+        "workbooks": {
+         "簡易算定": 10,
+         "標準算定": 17,
+         "詳細算定": 7
+        },
+        "status": {
+         "分類済み": 34
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "assessment.display",
+     "label": "結果表示・報告の設定",
+     "handling": "selection",
+     "from_v01": false,
+     "v01_items": [],
+     "notes": "算定結果のシートにある表示の切替えと、結果の表。入力ではないが、設定値として存在する。",
+     "details": [
+      {
+       "id": "assessment.display.display_options",
+       "label": "結果の表示の選択",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 11,
+        "n_cells": 0,
+        "n_blank": 0,
+        "data_kinds": {
+         "選択式の入力項目": 10,
+         "内部処理・参照用の値": 1
+        },
+        "data_types": {
+         "真偽": 10,
+         "ボタン": 1
+        },
+        "units": [],
+        "requirement": {
+         "任意": 11
+        },
+        "lifecycle_stages": [],
+        "workbooks": {
+         "簡易算定": 4,
+         "標準算定": 4,
+         "詳細算定": 3
+        },
+        "status": {
+         "分類済み": 11
+        }
+       }
+      },
+      {
+       "id": "assessment.display.result_tables",
+       "label": "算定結果の表",
+       "from_v01": false,
+       "inventory": {
+        "n_rows": 473,
+        "n_cells": 34356,
+        "n_blank": 29,
+        "data_kinds": {
+         "内部処理・参照用の値": 183,
+         "他の入力から自動計算される値": 264,
+         "入力可能な空欄": 13,
+         "選択式の入力項目": 13
+        },
+        "data_types": {
+         "文字列": 166,
+         "数式": 264,
+         "未設定": 13,
+         "整数": 7,
+         "数値": 1,
+         "選択リスト": 13,
+         "名前定義": 9
+        },
+        "units": [
+         "㎡"
+        ],
+        "requirement": {
+         "参照用": 209,
+         "自動算出": 264
+        },
+        "lifecycle_stages": [
+         "A1-3",
+         "A1-A3",
+         "B1",
+         "B6-7",
+         "C1-C4"
+        ],
+        "workbooks": {
+         "簡易算定": 150,
+         "標準算定": 196,
+         "集計表": 28,
+         "詳細算定": 99
+        },
+        "status": {
+         "分類済み": 460,
+         "空欄等": 13
+        }
+       }
+      }
+     ],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    },
+    {
+     "id": "assessment.other",
+     "label": "その他（分類未確定）",
+     "handling": "fallback",
+     "from_v01": true,
+     "v01_items": [
+      "元の項目名",
+      "入力値または説明",
+      "単位（ある場合）",
+      "利用者による仮分類・メモ"
+     ],
+     "notes": "既存の枝に当てはまらない項目をここへ収容。勝手に似た分類へ強制割当しない。",
+     "details": [],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "review",
+   "label": "要確認・未分類",
+   "branches": [
+    {
+     "id": "review.unknown",
+     "label": "不明・未分類",
+     "handling": "review",
+     "from_v01": false,
+     "v01_items": [],
+     "notes": "値はあるが、意味や適切な分類が分からない",
+     "details": [],
+     "inventory": {
+      "n_rows": 1,
+      "n_cells": 0,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 1
+      },
+      "data_types": {
+       "マクロ": 1
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 1
+      },
+      "lifecycle_stages": [],
+      "workbooks": {
+       "詳細算定": 1
+      },
+      "status": {
+       "不明・未分類": 1
+      }
+     }
+    },
+    {
+     "id": "review.blank",
+     "label": "空欄・未入力",
+     "handling": "review",
+     "from_v01": false,
+     "v01_items": [],
+     "notes": "入力欄はあるが値がなく、見出しからも分類できない",
+     "details": [],
+     "inventory": {
+      "n_rows": 8,
+      "n_cells": 9,
+      "n_blank": 9,
+      "data_kinds": {
+       "入力可能な空欄": 6,
+       "選択式の入力項目": 2
+      },
+      "data_types": {
+       "未設定": 6,
+       "選択リスト": 2
+      },
+      "units": [
+       " m2"
+      ],
+      "requirement": {
+       "任意": 6,
+       "参照用": 2
+      },
+      "lifecycle_stages": [
+       "A1-A5",
+       "B2-B5",
+       "B6",
+       "B7",
+       "C1-C4"
+      ],
+      "workbooks": {
+       "簡易算定": 1,
+       "標準算定": 3,
+       "詳細算定": 4
+      },
+      "status": {
+       "空欄等": 6,
+       "分類済み": 2
+      },
+      "input_entries": [
+       {
+        "id": "review.blank#1",
+        "row_group": "",
+        "label": "",
+        "data_kind": "入力可能な空欄",
+        "data_type": "未設定",
+        "unit": "",
+        "requirement": "任意",
+        "workbooks": [
+         "標準算定",
+         "詳細算定"
+        ],
+        "n_cells": 6
+       },
+       {
+        "id": "review.blank#2",
+        "row_group": "",
+        "label": "",
+        "data_kind": "入力可能な空欄",
+        "data_type": "未設定",
+        "unit": " m2",
+        "requirement": "任意",
+        "workbooks": [
+         "詳細算定"
+        ],
+        "n_cells": 1
+       }
+      ]
+     }
+    },
+    {
+     "id": "review.purpose_unknown",
+     "label": "用途不明",
+     "handling": "review",
+     "from_v01": false,
+     "v01_items": [],
+     "notes": "何の計算に使う値か分からない",
+     "details": [],
+     "inventory": {
+      "n_rows": 17,
+      "n_cells": 0,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 17
+      },
+      "data_types": {
+       "名前定義": 17
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 17
+      },
+      "lifecycle_stages": [],
+      "workbooks": {
+       "簡易算定": 3,
+       "標準算定": 3,
+       "分類表": 5,
+       "集計表": 3,
+       "詳細算定": 3
+      },
+      "status": {
+       "不明・未分類": 17
+      }
+     }
+    },
+    {
+     "id": "review.broken_ref",
+     "label": "参照不明・参照切れ",
+     "handling": "review",
+     "from_v01": false,
+     "v01_items": [],
+     "notes": "参照先を追跡できない",
+     "details": [],
+     "inventory": {
+      "n_rows": 1504,
+      "n_cells": 0,
+      "n_blank": 0,
+      "data_kinds": {
+       "内部処理・参照用の値": 1497,
+       "他の入力から自動計算される値": 7
+      },
+      "data_types": {
+       "範囲指定": 12,
+       "数式": 7,
+       "名前定義": 1485
+      },
+      "units": [],
+      "requirement": {
+       "参照用": 1497,
+       "自動算出": 7
+      },
+      "lifecycle_stages": [],
+      "workbooks": {
+       "簡易算定": 49,
+       "標準算定": 33,
+       "詳細算定": 132,
+       "分類表": 1013,
+       "集計表": 277
+      },
+      "status": {
+       "不明・未分類": 1504
+      }
+     }
+    },
+    {
+     "id": "review.duplicate",
+     "label": "重複・統合候補",
+     "handling": "review",
+     "from_v01": false,
+     "v01_items": [],
+     "notes": "別の項目と実質的に同じ可能性がある",
+     "details": [],
+     "inventory": {
+      "n_rows": 0,
+      "n_cells": 0
+     }
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "generated": "2026-11-12",
+  "originals": [
+   {
+    "file": "1_J-CAT_Software_Simplified Calculation_v2.3.xlsx",
+    "bytes": 22434709,
+    "sha256": "e7bc52a5973baa528d82efab0139e649dcd06b9c8e2b00d6f74c0172df6c07ad",
+    "sheets": 73
+   },
+   {
+    "file": "2_J-CAT_Software_Standard Calculation_v2.3.2.xlsx",
+    "bytes": 32312990,
+    "sha256": "6a288f32bc503825c0eb869a69a9aa97c3a4a273182bf0dcf1033cb58cc9b99f",
+    "sheets": 77
+   },
+   {
+    "file": "3_J-CAT_Classfication Table_v2.0.xlsx",
+    "bytes": 89092,
+    "sha256": "d491f68152017556ae0a45f95fce1dccdfdf9232c8a3dd8fe4a0152dfd88c684",
+    "sheets": 13
+   },
+   {
+    "file": "4_J-CAT_Summary Table_v2.0.xlsx",
+    "bytes": 297552,
+    "sha256": "268f94e28db7f6d72eff7c1483afb9313f072a6e45a1d6042119b77a90496b53",
+    "sheets": 11
+   },
+   {
+    "file": "5_J-CAT_Software_Detailed Calculation_v2.3.xlsm",
+    "bytes": 2006726,
+    "sha256": "0546d7fa3391347633ba3903c625e56ff8ae037c27296594ca36a71756516c98",
+    "sheets": 24
+   }
+  ],
+  "inventory_rows": 14652,
+  "rows_by_status": {
+   "分類済み": 12248,
+   "空欄等": 879,
+   "その他": 3,
+   "不明・未分類": 1522
+  },
+  "cells_by_status": {
+   "分類済み": 4460580,
+   "空欄等": 16922,
+   "その他": 10,
+   "不明・未分類": 0
+  },
+  "rows_by_role": {
+   "L": 197,
+   "C": 5035,
+   "TD": 2627,
+   "I": 1929,
+   "F": 3020,
+   "DV": 102,
+   "CM": 54,
+   "DVX": 12,
+   "FX": 7,
+   "CT": 11,
+   "NM": 1657,
+   "VB": 1
+  },
+  "editable_blank_cells": 88406,
+  "duplicate_rows": 4706,
+  "values_published": false
+ },
+ "notes": [
+  "この木は分類の構造だけを持つ。原版の数値・係数・選択肢・コード表・データ表の見出しは含まない。",
+  "input_entries は、表示されている入力シートにある入力欄を、行区分と見出しごとにまとめたもの。",
+  "v0.1 の大分類・小分類の ID は変えていない。from_v01 が false の節は今回追加したもの。"
+ ]
+}

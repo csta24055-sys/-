@@ -1,0 +1,1225 @@
+{
+ "format": "lca-binding/1",
+ "id": "jcat-input-tree-engine-model",
+ "version": "1",
+ "classification": {
+  "id": "jcat-input-tree",
+  "name": "J-CAT入力分類ツリー（完全分類・構造のみ）",
+  "version": "1.0",
+  "note": "大分類・小分類・詳細分類は受領した入力分類による。項目の ID はエンジンの入力モデルの名前。"
+ },
+ "categories": {
+  "building": "1 建物・案件の基本情報",
+  "construction": "2 建材・建築工事・施工",
+  "equipment": "3 建築設備・冷媒を使う機器",
+  "operation": "4 運用・維持管理・時間条件",
+  "assessment": "5 算定条件・原単位・補完"
+ },
+ "map": {
+  "project.building_name": {
+   "id": "project.building_name",
+   "category": "building",
+   "node": "building.identity.name"
+  },
+  "project.project_type": {
+   "id": "project.project_type",
+   "category": "building",
+   "node": "building.boundary.project_type"
+  },
+  "project.location": {
+   "id": "project.location",
+   "category": "building",
+   "node": "building.identity.location"
+  },
+  "project.climate_zone": {
+   "id": "project.climate_zone",
+   "category": "building",
+   "node": "building.identity.location"
+  },
+  "project.building_use": {
+   "id": "project.building_use",
+   "category": "building",
+   "node": "building.geometry.main_use"
+  },
+  "project.use_area_breakdown": {
+   "id": "project.use_area_breakdown",
+   "category": "building",
+   "node": "building.geometry.use_floor_areas"
+  },
+  "project.structure_type": {
+   "id": "project.structure_type",
+   "category": "building",
+   "node": "building.structure.main_structure"
+  },
+  "project.floors_above": {
+   "id": "project.floors_above",
+   "category": "building",
+   "node": "building.geometry.floors"
+  },
+  "project.floors_below": {
+   "id": "project.floors_below",
+   "category": "building",
+   "node": "building.geometry.floors"
+  },
+  "project.gross_floor_area": {
+   "id": "project.gross_floor_area",
+   "category": "building",
+   "node": "building.geometry.gross_floor_area"
+  },
+  "project.building_footprint": {
+   "id": "project.building_footprint",
+   "category": "building",
+   "node": "building.geometry.shape"
+  },
+  "project.typical_floor_area": {
+   "id": "project.typical_floor_area",
+   "category": "building",
+   "node": "building.geometry.typical_floor_area"
+  },
+  "project.building_height": {
+   "id": "project.building_height",
+   "category": "building",
+   "node": "building.geometry.height"
+  },
+  "project.maximum_span": {
+   "id": "project.maximum_span",
+   "category": "building",
+   "node": "building.geometry.max_span"
+  },
+  "project.building_shape": {
+   "id": "project.building_shape",
+   "category": "building",
+   "node": "building.geometry.shape"
+  },
+  "project.roof_system": {
+   "id": "project.roof_system",
+   "category": "building",
+   "node": "building.structure.roof_spec"
+  },
+  "project.facade_system": {
+   "id": "project.facade_system",
+   "category": "building",
+   "node": "building.structure.facade_spec"
+  },
+  "project.foundation_system": {
+   "id": "project.foundation_system",
+   "category": "building",
+   "node": "building.structure.foundation"
+  },
+  "project.completion_year": {
+   "id": "project.completion_year",
+   "category": "building",
+   "node": "building.identity.completion_year"
+  },
+  "project.assessment_date": {
+   "id": "project.assessment_date",
+   "category": "building",
+   "node": "building.identity.calc_date"
+  },
+  "project.assessor": {
+   "id": "project.assessor",
+   "category": "building",
+   "node": "building.identity.assessor"
+  },
+  "project.design_stage": {
+   "id": "project.design_stage",
+   "category": "building",
+   "node": "building.identity.design_stage"
+  },
+  "project.provenance_id": {
+   "id": "project.provenance_id",
+   "category": "building",
+   "node": "building.other"
+  },
+  "project.states": {
+   "id": "project.states",
+   "category": "building",
+   "node": "building.other"
+  },
+  "boundary.study_period": {
+   "id": "boundary.study_period",
+   "category": "building",
+   "node": "building.boundary.study_period"
+  },
+  "boundary.study_start_year": {
+   "id": "boundary.study_start_year",
+   "category": "building",
+   "node": "building.boundary.study_period"
+  },
+  "boundary.replacement_cycle": {
+   "id": "boundary.replacement_cycle",
+   "category": "building",
+   "node": "building.boundary.replacement_cycle"
+  },
+  "boundary.reconstruction_scenario": {
+   "id": "boundary.reconstruction_scenario",
+   "category": "building",
+   "node": "building.boundary.replacement_cycle"
+  },
+  "boundary.reconstruction_scope_fraction": {
+   "id": "boundary.reconstruction_scope_fraction",
+   "category": "building",
+   "node": "building.boundary.replacement_cycle"
+  },
+  "boundary.included_lifecycle_stages": {
+   "id": "boundary.included_lifecycle_stages",
+   "category": "assessment",
+   "node": "assessment.method.stages"
+  },
+  "boundary.functional_unit": {
+   "id": "boundary.functional_unit",
+   "category": "assessment",
+   "node": "assessment.method.purpose"
+  },
+  "boundary.baseline_scenario": {
+   "id": "boundary.baseline_scenario",
+   "category": "assessment",
+   "node": "assessment.method.purpose"
+  },
+  "boundary.excluded_scope_notes": {
+   "id": "boundary.excluded_scope_notes",
+   "category": "building",
+   "node": "building.boundary.site_scope"
+  },
+  "boundary.results_gas_scope": {
+   "id": "boundary.results_gas_scope",
+   "category": "assessment",
+   "node": "assessment.method.gas_scope"
+  },
+  "provenance{}.provenance_id": {
+   "id": "provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.source_type": {
+   "id": "source_type",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.value_state": {
+   "id": "value_state",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.source_reference": {
+   "id": "source_reference",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.licence_status": {
+   "id": "licence_status",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.data_quality": {
+   "id": "data_quality",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.last_verified_at": {
+   "id": "last_verified_at",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.measurement_year": {
+   "id": "measurement_year",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.user_override_reason": {
+   "id": "user_override_reason",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "provenance{}.uncertainty_distribution": {
+   "id": "uncertainty_distribution",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "summary_quantities.reinforcement_kg": {
+   "id": "summary_quantities.reinforcement_kg",
+   "category": "construction",
+   "node": "construction.item_details.physical"
+  },
+  "summary_quantities.steel_kg": {
+   "id": "summary_quantities.steel_kg",
+   "category": "construction",
+   "node": "construction.item_details.physical"
+  },
+  "summary_quantities.concrete_m3": {
+   "id": "summary_quantities.concrete_m3",
+   "category": "construction",
+   "node": "construction.item_details.physical"
+  },
+  "summary_quantities.timber_m3": {
+   "id": "summary_quantities.timber_m3",
+   "category": "construction",
+   "node": "construction.item_details.physical"
+  },
+  "summary_quantities.envelope_m2": {
+   "id": "summary_quantities.envelope_m2",
+   "category": "construction",
+   "node": "construction.item_details.physical"
+  },
+  "summary_quantities.interior_m2": {
+   "id": "summary_quantities.interior_m2",
+   "category": "construction",
+   "node": "construction.item_details.physical"
+  },
+  "summary_quantities.timber_dry_density_kg_per_m3": {
+   "id": "summary_quantities.timber_dry_density_kg_per_m3",
+   "category": "assessment",
+   "node": "assessment.assumptions.carbon_coefficients"
+  },
+  "summary_quantities.timber_carbon_fraction": {
+   "id": "summary_quantities.timber_carbon_fraction",
+   "category": "assessment",
+   "node": "assessment.assumptions.carbon_coefficients"
+  },
+  "summary_quantities.concrete_uptake_factor_id": {
+   "id": "summary_quantities.concrete_uptake_factor_id",
+   "category": "assessment",
+   "node": "assessment.assumptions.carbon_coefficients"
+  },
+  "materials[].material_id": {
+   "id": "material_id",
+   "category": "construction",
+   "node": "construction.item_details.spec"
+  },
+  "materials[].construction_division": {
+   "id": "construction_division",
+   "category": "construction",
+   "node": "construction.item_details.code"
+  },
+  "materials[].material_class": {
+   "id": "material_class",
+   "category": "construction",
+   "node": "construction.item_details.code"
+  },
+  "materials[].specification": {
+   "id": "specification",
+   "category": "construction",
+   "node": "construction.item_details.spec"
+  },
+  "materials[].quantity": {
+   "id": "quantity",
+   "category": "construction",
+   "node": "construction.item_details.quantity"
+  },
+  "materials[].quantity_unit": {
+   "id": "quantity_unit",
+   "category": "construction",
+   "node": "construction.item_details.quantity_unit"
+  },
+  "materials[].quantity_basis": {
+   "id": "quantity_basis",
+   "category": "construction",
+   "node": "construction.item_details.quantity"
+  },
+  "materials[].waste_rate": {
+   "id": "waste_rate",
+   "category": "construction",
+   "node": "construction.transport.offcut_waste"
+  },
+  "materials[].reuse_rate": {
+   "id": "reuse_rate",
+   "category": "construction",
+   "node": "construction.transport.reuse_recycle"
+  },
+  "materials[].material_life": {
+   "id": "material_life",
+   "category": "operation",
+   "node": "operation.maintenance.material_cycle"
+  },
+  "materials[].repair_rate": {
+   "id": "repair_rate",
+   "category": "operation",
+   "node": "operation.maintenance.repair_rate"
+  },
+  "materials[].refresh_cycle": {
+   "id": "refresh_cycle",
+   "category": "operation",
+   "node": "operation.maintenance.material_cycle"
+  },
+  "materials[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "materials[].transport.mass_t": {
+   "id": "transport.mass_t",
+   "category": "construction",
+   "node": "construction.transport.delivery"
+  },
+  "materials[].transport.distance_km": {
+   "id": "transport.distance_km",
+   "category": "construction",
+   "node": "construction.transport.delivery"
+  },
+  "materials[].transport.mode": {
+   "id": "transport.mode",
+   "category": "construction",
+   "node": "construction.transport.delivery"
+  },
+  "materials[].transport.load_factor": {
+   "id": "transport.load_factor",
+   "category": "construction",
+   "node": "construction.transport.delivery"
+  },
+  "materials[].transport.factor_id": {
+   "id": "transport.factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "materials[].transport.delivery_factor_id": {
+   "id": "transport.delivery_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "materials[].end_of_life.mass_kg": {
+   "id": "end_of_life.mass_kg",
+   "category": "operation",
+   "node": "operation.end_of_life.treatment_share"
+  },
+  "materials[].end_of_life.routes[].route": {
+   "id": "route",
+   "category": "operation",
+   "node": "operation.end_of_life.treatment_share"
+  },
+  "materials[].end_of_life.routes[].fraction": {
+   "id": "fraction",
+   "category": "operation",
+   "node": "operation.end_of_life.treatment_share"
+  },
+  "materials[].end_of_life.routes[].factor_id": {
+   "id": "factor_id",
+   "category": "operation",
+   "node": "operation.end_of_life.treatment_share"
+  },
+  "materials[].end_of_life.haul_distance_km": {
+   "id": "end_of_life.haul_distance_km",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "materials[].end_of_life.haul_factor_id": {
+   "id": "end_of_life.haul_factor_id",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "materials[].epd.factor_id": {
+   "id": "epd.factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.epd"
+  },
+  "materials[].epd.declared_stages": {
+   "id": "epd.declared_stages",
+   "category": "assessment",
+   "node": "assessment.factors.epd"
+  },
+  "materials[].epd.declared_unit": {
+   "id": "epd.declared_unit",
+   "category": "assessment",
+   "node": "assessment.factors.epd"
+  },
+  "materials[].epd.valid_until": {
+   "id": "epd.valid_until",
+   "category": "assessment",
+   "node": "assessment.factors.epd"
+  },
+  "materials[].composition[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.composite_factor"
+  },
+  "materials[].composition[].mass_fraction": {
+   "id": "mass_fraction",
+   "category": "assessment",
+   "node": "assessment.factors.composite_factor"
+  },
+  "materials[].unquantified_cost_ratio": {
+   "id": "unquantified_cost_ratio",
+   "category": "assessment",
+   "node": "assessment.conversions.unquantified"
+  },
+  "materials[].installation_factor_id": {
+   "id": "installation_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "materials[].conversions[].from_unit": {
+   "id": "from_unit",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "materials[].conversions[].to_unit": {
+   "id": "to_unit",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "materials[].conversions[].factor": {
+   "id": "factor",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "materials[].conversions[].basis": {
+   "id": "basis",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "materials[].provenance_id": {
+   "id": "provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "materials[].states": {
+   "id": "states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "equipment[].equipment_id": {
+   "id": "equipment_id",
+   "category": "equipment",
+   "node": "equipment.eq_details.spec"
+  },
+  "equipment[].trade": {
+   "id": "trade",
+   "category": "equipment",
+   "node": "equipment.eq_details.usage_location"
+  },
+  "equipment[].model": {
+   "id": "model",
+   "category": "equipment",
+   "node": "equipment.eq_details.spec"
+  },
+  "equipment[].quantity": {
+   "id": "quantity",
+   "category": "equipment",
+   "node": "equipment.eq_details.count"
+  },
+  "equipment[].quantity_unit": {
+   "id": "quantity_unit",
+   "category": "equipment",
+   "node": "equipment.eq_details.count"
+  },
+  "equipment[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "equipment[].service_life": {
+   "id": "service_life",
+   "category": "operation",
+   "node": "operation.maintenance.equipment_life"
+  },
+  "equipment[].repair_rate": {
+   "id": "repair_rate",
+   "category": "operation",
+   "node": "operation.maintenance.repair_rate"
+  },
+  "equipment[].replacement_event_list": {
+   "id": "replacement_event_list",
+   "category": "operation",
+   "node": "operation.maintenance.replacement_timing"
+  },
+  "equipment[].end_of_life_mass_kg": {
+   "id": "end_of_life_mass_kg",
+   "category": "equipment",
+   "node": "equipment.eq_details.weight"
+  },
+  "equipment[].eol_factor_id": {
+   "id": "eol_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "equipment[].delivery_factor_id": {
+   "id": "delivery_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "equipment[].installation_factor_id": {
+   "id": "installation_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "equipment[].provenance_id": {
+   "id": "provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "equipment[].states": {
+   "id": "states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "refrigerants[].device_id": {
+   "id": "device_id",
+   "category": "equipment",
+   "node": "equipment.refrigerant_equipment.device_link"
+  },
+  "refrigerants[].substance": {
+   "id": "substance",
+   "category": "equipment",
+   "node": "equipment.refrigerant_equipment.substance"
+  },
+  "refrigerants[].application": {
+   "id": "application",
+   "category": "equipment",
+   "node": "equipment.refrigerant_equipment.application"
+  },
+  "refrigerants[].charge_mass_kg": {
+   "id": "charge_mass_kg",
+   "category": "equipment",
+   "node": "equipment.refrigerant_equipment.charge"
+  },
+  "refrigerants[].gwp": {
+   "id": "gwp",
+   "category": "assessment",
+   "node": "assessment.factors.gwp"
+  },
+  "refrigerants[].annual_leak_rate": {
+   "id": "annual_leak_rate",
+   "category": "operation",
+   "node": "operation.leakage.leak_rate"
+  },
+  "refrigerants[].replacement_loss_rate": {
+   "id": "replacement_loss_rate",
+   "category": "operation",
+   "node": "operation.leakage.leak_rate"
+  },
+  "refrigerants[].end_of_life_recovery_rate": {
+   "id": "end_of_life_recovery_rate",
+   "category": "operation",
+   "node": "operation.leakage.recovery_rate"
+  },
+  "refrigerants[].change_years": {
+   "id": "change_years",
+   "category": "operation",
+   "node": "operation.leakage.change_timing"
+  },
+  "refrigerants[].service_life": {
+   "id": "service_life",
+   "category": "operation",
+   "node": "operation.leakage.service_period"
+  },
+  "refrigerants[].top_up": {
+   "id": "top_up",
+   "category": "operation",
+   "node": "operation.leakage.top_up"
+  },
+  "refrigerants[].provenance_id": {
+   "id": "provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "refrigerants[].states": {
+   "id": "states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "construction.electricity_kwh": {
+   "id": "construction.electricity_kwh",
+   "category": "construction",
+   "node": "construction.temporary.site_power_gas"
+  },
+  "construction.fuels[].kind": {
+   "id": "kind",
+   "category": "construction",
+   "node": "construction.temporary.site_fuel"
+  },
+  "construction.fuels[].quantity": {
+   "id": "quantity",
+   "category": "construction",
+   "node": "construction.temporary.site_fuel"
+  },
+  "construction.fuels[].unit": {
+   "id": "unit",
+   "category": "construction",
+   "node": "construction.temporary.site_fuel"
+  },
+  "construction.fuels[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "construction.fuels[].conversions[].from_unit": {
+   "id": "from_unit",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "construction.fuels[].conversions[].to_unit": {
+   "id": "to_unit",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "construction.fuels[].conversions[].factor": {
+   "id": "factor",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "construction.fuels[].conversions[].basis": {
+   "id": "basis",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "construction.waste_streams[].kind": {
+   "id": "kind",
+   "category": "construction",
+   "node": "construction.transport.offcut_waste"
+  },
+  "construction.waste_streams[].mass_kg": {
+   "id": "mass_kg",
+   "category": "construction",
+   "node": "construction.transport.offcut_waste"
+  },
+  "construction.waste_streams[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "construction.duration_months": {
+   "id": "construction.duration_months",
+   "category": "construction",
+   "node": "construction.temporary.direct_temporary"
+  },
+  "construction.temporary_works": {
+   "id": "construction.temporary_works",
+   "category": "construction",
+   "node": "construction.temporary.direct_temporary"
+  },
+  "construction.provenance_id": {
+   "id": "construction.provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "construction.states": {
+   "id": "construction.states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "operation.new_or_existing": {
+   "id": "operation.new_or_existing",
+   "category": "building",
+   "node": "building.boundary.project_type"
+  },
+  "operation.electricity.kind": {
+   "id": "operation.electricity.kind",
+   "category": "operation",
+   "node": "operation.energy.electricity"
+  },
+  "operation.electricity.unit": {
+   "id": "operation.electricity.unit",
+   "category": "operation",
+   "node": "operation.energy.electricity"
+  },
+  "operation.electricity.base": {
+   "id": "operation.electricity.base",
+   "category": "operation",
+   "node": "operation.energy.electricity"
+  },
+  "operation.electricity.slope": {
+   "id": "operation.electricity.slope",
+   "category": "operation",
+   "node": "operation.energy.electricity"
+  },
+  "operation.electricity.table": {
+   "id": "operation.electricity.table",
+   "category": "operation",
+   "node": "operation.energy.electricity"
+  },
+  "operation.electricity_per_m2_per_year": {
+   "id": "operation.electricity_per_m2_per_year",
+   "category": "operation",
+   "node": "operation.energy.electricity"
+  },
+  "operation.gas.kind": {
+   "id": "operation.gas.kind",
+   "category": "operation",
+   "node": "operation.energy.city_gas"
+  },
+  "operation.gas.unit": {
+   "id": "operation.gas.unit",
+   "category": "operation",
+   "node": "operation.energy.city_gas"
+  },
+  "operation.gas.base": {
+   "id": "operation.gas.base",
+   "category": "operation",
+   "node": "operation.energy.city_gas"
+  },
+  "operation.gas.slope": {
+   "id": "operation.gas.slope",
+   "category": "operation",
+   "node": "operation.energy.city_gas"
+  },
+  "operation.gas.table": {
+   "id": "operation.gas.table",
+   "category": "operation",
+   "node": "operation.energy.city_gas"
+  },
+  "operation.gas_factor_id": {
+   "id": "operation.gas_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "operation.oil.kind": {
+   "id": "operation.oil.kind",
+   "category": "operation",
+   "node": "operation.energy.oil_fuel"
+  },
+  "operation.oil.unit": {
+   "id": "operation.oil.unit",
+   "category": "operation",
+   "node": "operation.energy.oil_fuel"
+  },
+  "operation.oil.base": {
+   "id": "operation.oil.base",
+   "category": "operation",
+   "node": "operation.energy.oil_fuel"
+  },
+  "operation.oil.slope": {
+   "id": "operation.oil.slope",
+   "category": "operation",
+   "node": "operation.energy.oil_fuel"
+  },
+  "operation.oil.table": {
+   "id": "operation.oil.table",
+   "category": "operation",
+   "node": "operation.energy.oil_fuel"
+  },
+  "operation.oil_factor_id": {
+   "id": "operation.oil_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "operation.district_heat.kind": {
+   "id": "operation.district_heat.kind",
+   "category": "operation",
+   "node": "operation.energy.other_energy"
+  },
+  "operation.district_heat.unit": {
+   "id": "operation.district_heat.unit",
+   "category": "operation",
+   "node": "operation.energy.other_energy"
+  },
+  "operation.district_heat.base": {
+   "id": "operation.district_heat.base",
+   "category": "operation",
+   "node": "operation.energy.other_energy"
+  },
+  "operation.district_heat.slope": {
+   "id": "operation.district_heat.slope",
+   "category": "operation",
+   "node": "operation.energy.other_energy"
+  },
+  "operation.district_heat.table": {
+   "id": "operation.district_heat.table",
+   "category": "operation",
+   "node": "operation.energy.other_energy"
+  },
+  "operation.district_heat_factor_id": {
+   "id": "operation.district_heat_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "operation.onsite_generation.kind": {
+   "id": "operation.onsite_generation.kind",
+   "category": "operation",
+   "node": "operation.generation.generation"
+  },
+  "operation.onsite_generation.unit": {
+   "id": "operation.onsite_generation.unit",
+   "category": "operation",
+   "node": "operation.generation.generation"
+  },
+  "operation.onsite_generation.base": {
+   "id": "operation.onsite_generation.base",
+   "category": "operation",
+   "node": "operation.generation.generation"
+  },
+  "operation.onsite_generation.slope": {
+   "id": "operation.onsite_generation.slope",
+   "category": "operation",
+   "node": "operation.generation.generation"
+  },
+  "operation.onsite_generation.table": {
+   "id": "operation.onsite_generation.table",
+   "category": "operation",
+   "node": "operation.generation.generation"
+  },
+  "operation.onsite_export.kind": {
+   "id": "operation.onsite_export.kind",
+   "category": "operation",
+   "node": "operation.generation.self_use_export"
+  },
+  "operation.onsite_export.unit": {
+   "id": "operation.onsite_export.unit",
+   "category": "operation",
+   "node": "operation.generation.self_use_export"
+  },
+  "operation.onsite_export.base": {
+   "id": "operation.onsite_export.base",
+   "category": "operation",
+   "node": "operation.generation.self_use_export"
+  },
+  "operation.onsite_export.slope": {
+   "id": "operation.onsite_export.slope",
+   "category": "operation",
+   "node": "operation.generation.self_use_export"
+  },
+  "operation.onsite_export.table": {
+   "id": "operation.onsite_export.table",
+   "category": "operation",
+   "node": "operation.generation.self_use_export"
+  },
+  "operation.grid.scenario_id": {
+   "id": "operation.grid.scenario_id",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.kind": {
+   "id": "operation.grid.kind",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.unit": {
+   "id": "operation.grid.unit",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.start": {
+   "id": "operation.grid.start",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.annual_decline": {
+   "id": "operation.grid.annual_decline",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.floor": {
+   "id": "operation.grid.floor",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.steps[].from_index": {
+   "id": "from_index",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.steps[].value": {
+   "id": "value",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.table": {
+   "id": "operation.grid.table",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.construction_value": {
+   "id": "operation.grid.construction_value",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.licence_status": {
+   "id": "operation.grid.licence_status",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.source_tag": {
+   "id": "operation.grid.source_tag",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.grid.region": {
+   "id": "operation.grid.region",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "operation.facility_management_ratio": {
+   "id": "operation.facility_management_ratio",
+   "category": "operation",
+   "node": "operation.energy.fm_ratio"
+  },
+  "operation.energy_simulation_basis": {
+   "id": "operation.energy_simulation_basis",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "operation.provenance_id": {
+   "id": "operation.provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "operation.states": {
+   "id": "operation.states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "water_waste.water.kind": {
+   "id": "water_waste.water.kind",
+   "category": "operation",
+   "node": "operation.utility.water"
+  },
+  "water_waste.water.unit": {
+   "id": "water_waste.water.unit",
+   "category": "operation",
+   "node": "operation.utility.water"
+  },
+  "water_waste.water.base": {
+   "id": "water_waste.water.base",
+   "category": "operation",
+   "node": "operation.utility.water"
+  },
+  "water_waste.water.slope": {
+   "id": "water_waste.water.slope",
+   "category": "operation",
+   "node": "operation.utility.water"
+  },
+  "water_waste.water.table": {
+   "id": "water_waste.water.table",
+   "category": "operation",
+   "node": "operation.utility.water"
+  },
+  "water_waste.sewage.kind": {
+   "id": "water_waste.sewage.kind",
+   "category": "operation",
+   "node": "operation.utility.sewage"
+  },
+  "water_waste.sewage.unit": {
+   "id": "water_waste.sewage.unit",
+   "category": "operation",
+   "node": "operation.utility.sewage"
+  },
+  "water_waste.sewage.base": {
+   "id": "water_waste.sewage.base",
+   "category": "operation",
+   "node": "operation.utility.sewage"
+  },
+  "water_waste.sewage.slope": {
+   "id": "water_waste.sewage.slope",
+   "category": "operation",
+   "node": "operation.utility.sewage"
+  },
+  "water_waste.sewage.table": {
+   "id": "water_waste.sewage.table",
+   "category": "operation",
+   "node": "operation.utility.sewage"
+  },
+  "water_waste.municipal_waste.kind": {
+   "id": "water_waste.municipal_waste.kind",
+   "category": "operation",
+   "node": "operation.utility.municipal_waste"
+  },
+  "water_waste.municipal_waste.unit": {
+   "id": "water_waste.municipal_waste.unit",
+   "category": "operation",
+   "node": "operation.utility.municipal_waste"
+  },
+  "water_waste.municipal_waste.base": {
+   "id": "water_waste.municipal_waste.base",
+   "category": "operation",
+   "node": "operation.utility.municipal_waste"
+  },
+  "water_waste.municipal_waste.slope": {
+   "id": "water_waste.municipal_waste.slope",
+   "category": "operation",
+   "node": "operation.utility.municipal_waste"
+  },
+  "water_waste.municipal_waste.table": {
+   "id": "water_waste.municipal_waste.table",
+   "category": "operation",
+   "node": "operation.utility.municipal_waste"
+  },
+  "water_waste.water_factor_id": {
+   "id": "water_waste.water_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "water_waste.sewage_factor_id": {
+   "id": "water_waste.sewage_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "water_waste.waste_factor_id": {
+   "id": "water_waste.waste_factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.energy_factor"
+  },
+  "water_waste.provenance_id": {
+   "id": "water_waste.provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "water_waste.states": {
+   "id": "water_waste.states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "end_of_life.demolition_activities[].activity_id": {
+   "id": "activity_id",
+   "category": "operation",
+   "node": "operation.end_of_life.demolition"
+  },
+  "end_of_life.demolition_activities[].description": {
+   "id": "description",
+   "category": "operation",
+   "node": "operation.end_of_life.demolition"
+  },
+  "end_of_life.demolition_activities[].quantity": {
+   "id": "quantity",
+   "category": "operation",
+   "node": "operation.end_of_life.demolition"
+  },
+  "end_of_life.demolition_activities[].unit": {
+   "id": "unit",
+   "category": "operation",
+   "node": "operation.end_of_life.demolition"
+  },
+  "end_of_life.demolition_activities[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "end_of_life.waste_hauls[].haul_id": {
+   "id": "haul_id",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "end_of_life.waste_hauls[].description": {
+   "id": "description",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "end_of_life.waste_hauls[].mass_t": {
+   "id": "mass_t",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "end_of_life.waste_hauls[].distance_km": {
+   "id": "distance_km",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "end_of_life.waste_hauls[].factor_id": {
+   "id": "factor_id",
+   "category": "assessment",
+   "node": "assessment.factors.material_factor"
+  },
+  "end_of_life.provenance_id": {
+   "id": "end_of_life.provenance_id",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "end_of_life.states": {
+   "id": "end_of_life.states",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "cost_items[].item_id": {
+   "id": "item_id",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "cost_items[].description": {
+   "id": "description",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "cost_items[].amount": {
+   "id": "amount",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "cost_items[].currency": {
+   "id": "currency",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "cost_items[].price_year": {
+   "id": "price_year",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "cost_items[].factor_id": {
+   "id": "factor_id",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "cost_items[].factor_base_year": {
+   "id": "factor_base_year",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  },
+  "provenance{}": {
+   "id": "provenance",
+   "category": "assessment",
+   "node": "assessment.check.basis_notes"
+  },
+  "materials[]": {
+   "id": "materials",
+   "category": "construction",
+   "node": "construction.item_details"
+  },
+  "materials[].end_of_life.routes[]": {
+   "id": "end_of_life.routes",
+   "category": "operation",
+   "node": "operation.end_of_life.treatment_share"
+  },
+  "materials[].composition[]": {
+   "id": "composition",
+   "category": "assessment",
+   "node": "assessment.factors.composite_factor"
+  },
+  "materials[].conversions[]": {
+   "id": "conversions",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "equipment[]": {
+   "id": "equipment",
+   "category": "equipment",
+   "node": "equipment.eq_details"
+  },
+  "refrigerants[]": {
+   "id": "refrigerants",
+   "category": "equipment",
+   "node": "equipment.refrigerant_equipment"
+  },
+  "construction.fuels[]": {
+   "id": "construction.fuels",
+   "category": "construction",
+   "node": "construction.temporary.site_fuel"
+  },
+  "construction.fuels[].conversions[]": {
+   "id": "conversions",
+   "category": "assessment",
+   "node": "assessment.conversions.conversion_method"
+  },
+  "construction.waste_streams[]": {
+   "id": "construction.waste_streams",
+   "category": "construction",
+   "node": "construction.transport.offcut_waste"
+  },
+  "operation.grid.steps[]": {
+   "id": "operation.grid.steps",
+   "category": "assessment",
+   "node": "assessment.assumptions.grid_future"
+  },
+  "end_of_life.demolition_activities[]": {
+   "id": "end_of_life.demolition_activities",
+   "category": "operation",
+   "node": "operation.end_of_life.demolition"
+  },
+  "end_of_life.waste_hauls[]": {
+   "id": "end_of_life.waste_hauls",
+   "category": "operation",
+   "node": "operation.end_of_life.waste_transport"
+  },
+  "cost_items[]": {
+   "id": "cost_items",
+   "category": "construction",
+   "node": "construction.item_details.cost"
+  }
+ }
+}

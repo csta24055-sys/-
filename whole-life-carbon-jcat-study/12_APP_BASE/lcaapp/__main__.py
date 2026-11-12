@@ -58,13 +58,23 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--input-version", type=int); p.add_argument("--refset", type=int); p.add_argument("--baseline", type=int)
     p = sub.add_parser("show"); p.add_argument("run", type=int); p.add_argument("--html"); p.add_argument("--json")
     p = sub.add_parser("serve"); p.add_argument("--host", default="127.0.0.1"); p.add_argument("--port", type=int, default=8765)
-    p = sub.add_parser("binding"); p.add_argument("--dump")
+    p = sub.add_parser("binding"); p.add_argument("--dump"); p.add_argument("--tree", help="完全分類ツリーから結び付けを作る")
     p = sub.add_parser("tree"); p.add_argument("file")
     args = parser.parse_args(argv)
 
-    binding = binding_mod.load(args.binding) if args.binding else binding_mod.provisional()
+    if args.binding == "provisional":
+        binding = binding_mod.provisional()
+    else:
+        binding = binding_mod.load(args.binding) if args.binding else binding_mod.default()
     if args.command == "binding":
-        print(json.dumps(dict(binding.describe(), coverage=binding.coverage()), ensure_ascii=False, indent=1))
+        extra = {}
+        if args.tree:
+            tree = _load(args.tree)
+            binding = binding_mod.for_tree(tree)
+            cover = binding_mod.tree_coverage_by_node(tree, binding)
+            extra = {"tree_details": cover["details"], "details_with_engine_input": len(cover["with_engine_input"]),
+                     "details_without_engine_input": len(cover["without_engine_input"])}
+        print(json.dumps(dict(binding.describe(), coverage=binding.coverage(), **extra), ensure_ascii=False, indent=1))
         if args.dump:
             with open(args.dump, "w", encoding="utf-8") as fh:
                 json.dump(binding.to_json(), fh, ensure_ascii=False, indent=1)
@@ -88,7 +98,7 @@ def main(argv: list[str] | None = None) -> int:
     service = Service(store, binding)
     try:
         if args.command == "demo":
-            doc, refset, _ = sample.fictional_building(seed=args.seed, rows=args.rows)
+            doc, refset, _ = sample.fictional_building(seed=args.seed, rows=args.rows, binding=binding)
             print(json.dumps(service.register_refset(refset), ensure_ascii=False))
             out = service.import_document(doc)
             print("建物プロジェクト %d、入力の版 %d を保存した（架空データ）。" % (out["project_id"], out["input_version_id"]))

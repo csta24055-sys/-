@@ -22,6 +22,7 @@
 | 保存 | [research_archive/real_equation_checkpoint/INDEX.md](research_archive/real_equation_checkpoint/INDEX.md) | 第9章の研究の停止記録・成果の分類・引継ぎ（`STOP_STATUS.md`、`INDEX.md`、`HANDOVER.md`） |
 | 10 | [10_TRANSFORM_STUDY/README.md](10_TRANSFORM_STUDY/README.md) | 数学的変換による計算体系の再構成の研究（独立概念モデル、架空データ。研究中。アプリは作らない） |
 | 12 | [12_APP_BASE/README.md](12_APP_BASE/README.md) | 建築 LCA アプリの基礎システム（②共通入力データ・変換、④結果表示、⑤保存）。計算は第10章の 2 構造エンジンを呼ぶ。独立概念モデル・架空データ。入力画面と実データは含まない。 |
+| 13 | [13_INPUT_CLASSIFICATION/README.md](13_INPUT_CLASSIFICATION/README.md) | 入力分類（5 大分類）と、原版 6 ファイルの入力項目・数値・設定値の分類台帳。構造だけを記録し、原版の値は含まない。 |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想

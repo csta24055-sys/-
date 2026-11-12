@@ -15,7 +15,7 @@ def building(seed: int = 4201, rows: int | None = 12, **kw):
     """(input document, reference set, scenario dict) of a small fictional building (deep copies)."""
     key = (seed, rows, tuple(sorted(kw.items())))
     if key not in _cache:
-        _cache[key] = sample.fictional_building(seed=seed, rows=rows, **kw)
+        _cache[key] = sample.fictional_building(seed=seed, rows=rows, binding=binding.provisional(), **kw)
     return copy.deepcopy(_cache[key])
 
 
@@ -44,13 +44,13 @@ class TempStore:
         self.dir = tempfile.TemporaryDirectory()
         self.path = os.path.join(self.dir.name, "test.sqlite3")
         self.store = store.Store(self.path)
-        self.service = service.Service(self.store)
+        self.service = service.Service(self.store, binding.provisional())
         return self
 
     def reopen(self):
         self.store.close()
         self.store = store.Store(self.path)
-        self.service = service.Service(self.store)
+        self.service = service.Service(self.store, binding.provisional())
         return self
 
     def __exit__(self, *exc):

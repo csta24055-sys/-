@@ -34,7 +34,7 @@ def plain(doc: Any) -> Any:
 class Service:
     def __init__(self, store: Store, binding: binding_mod.Binding | None = None):
         self.store = store
-        self.binding = binding or binding_mod.provisional()
+        self.binding = binding or binding_mod.default()
         self._systems: collections.OrderedDict = collections.OrderedDict()      # prepared engines, reused
         self.prepared = 0                                                        # how many were built
 
