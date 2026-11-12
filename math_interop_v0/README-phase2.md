@@ -18,8 +18,9 @@
 - mpmath 95桁で計算し80有効桁を記録。既知の厳密値との差を算出。誤差保証は主張しない。
 - SciPyで区間[0,1]のx²を積分し、厳密な1/3との誤差を測定。
 - NumPyの桁落ち例 `[1e20, 1, -1e20]` の和で、実際の誤差を明示し、数値誤差を隠蔽しない。
-- DuckDBへの保存・読み出し・SQL集計とJSONの完全な往復。
+- DuckDBへの保存・読み出し・SQL集計とJSONの完全な往復。**別プロセスでDuckDBとJSONを開き直し、計算結果・来歴・ハッシュを再検証する。**
 - 単位・分子・仮定・NumPy丸め誤差・Infinity・mpmath精度・10進出力・精度ポリシー・ハッシュの**9種類の改ざん検出**。
+- 保存したDuckDBの厳密値、単位、文書ハッシュを意図的に変更して**3種類のDB改ざん検出**を確認する。
 
 ## 合格ゲート
 
@@ -33,6 +34,7 @@ Python 3.12で `math-ir-phase2.yml` の固定バージョンをインストー�
 
 ```bash
 python math_interop_v0/phase2.py run /tmp/phase2-report.json /tmp/phase2.duckdb
+python math_interop_v0/phase2.py verify /tmp/phase2-report.json /tmp/phase2.duckdb
 ```
 
 結果はGitHub Actionsの成果物に7日間保存する。公開リポジトリなので架空のデータだけを使用する。
