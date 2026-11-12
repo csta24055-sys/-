@@ -195,6 +195,8 @@ def main() -> None:
 
     seen_exec = {(r.get('executor', ''), r.get('searched_at', ''), r.get('query', ''), r.get('unit_id', '')) for r in log}
     seen_fetch = {(r.get('executor', ''), r.get('query', ''), r.get('unit_id', '')) for r in log if r.get('query', '').startswith('GET ')}
+    row_by_key = {(r.get('executor', ''), r.get('searched_at', ''), r.get('query', ''), r.get('unit_id', '')): r for r in log}
+    fetch_row = {(r.get('executor', ''), r.get('query', ''), r.get('unit_id', '')): r for r in log if r.get('query', '').startswith('GET ')}
     src_by_norm = {norm_url(s['url']): s for s in src}
     dom_group = {}
     for s in src:
@@ -245,15 +247,23 @@ def main() -> None:
         for s in report.get('searches', []) if isinstance(report.get('searches'), list) else []:
             if isinstance(s, dict) and isinstance(s.get('query'), str):
                 reported[s['query']] = s
+        reported_norm = {squash(k): v for k, v in reported.items()}
         legacy = legacy_by_topic.get(uid, {}) if kind == 'TOPIC' else {}
         for run in runs:
             executor = f"worker:{run['run']}:{run['agent_id']}"
             for s in run['searches']:
                 key = (executor, s['ts'], s['query'], uid)
+                rep = reported.get(s['query']) or reported_norm.get(squash(s['query']), {})
                 if key in seen_exec:
+                    # the row may have been logged while the worker was still running (before its report existed): attach the label now
+                    row = row_by_key.get(key)
+                    if row is not None and rep and row.get('route') in ('', 'UNREPORTED'):
+                        row['route'] = str(rep.get('route') or 'UNREPORTED').upper()
+                        row['followup_for'] = str(rep.get('followup_for') or '')
+                        row['notes'] = row.get('notes') or str(rep.get('note', ''))[:300]
+                        stats['labels_attached_later'] += 1
                     continue
                 seen_exec.add(key)
-                rep = reported.get(s['query'], {})
                 sid = legacy.get(s['query'], '')
                 route = 'LEGACY' if sid else str(rep.get('route') or 'UNREPORTED').upper()
                 country, language = lang(s['query'])
@@ -271,6 +281,12 @@ def main() -> None:
                 nu = norm_url(f['url'])
                 key = (executor, 'GET ' + f['url'], uid)  # one row per worker run and URL, however often the cached page is re-read
                 if key in seen_fetch or nu in done_urls:
+                    old = fetch_row.get(key)
+                    late = freport.get(nu)
+                    if old is not None and late and not old.get('route'):
+                        old['route'] = str(late.get('route') or '').upper()
+                        if not old.get('notes'):
+                            old['notes'] = str(late.get('note', ''))[:200]
                     continue
                 seen_fetch.add(key)
                 done_urls.add(nu)
