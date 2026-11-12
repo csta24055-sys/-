@@ -18,6 +18,7 @@ python3 -B -m checks.check_unified --quick          # 約 5 秒：ベンチマ�
 python3 -B -m checks.check_unified                  # 約 6 分：全 10 集合（1,293 組）
 python3 -B -m checks.check_unified rep_evaluation   # 集合を名前で選ぶこともできる
 python3 -B -m checks.check_unified_controls         # 約 3 分：誤り検出 24 件、QA-01 の故障注入 4 件、構造の確認
+python3 -B -m experiments.expU3_intermediate_state  # 中間係数（冷媒の年初残存量）と基準計算の内部状態
 python3 -B tools_unit_map.py                        # UNIT_MAP.md、results/unit_map.json
 python3 -B tools_units_doc.py                       # UNITS_70.md
 python3 -B tools_verification_report.py             # VERIFICATION.md
@@ -56,5 +57,7 @@ print(res["SUM-03"], res["B1-04"], res["QA-02"])
 
 ## 4. 保存したコードからの再生成の確認
 
-コミットした内容だけを別の場所に取り出して（`git worktree add`）、`check_unified --quick`、`check_unified rep_boundary rep_scale_L new_special`、
-`check_unified_controls` を実行し、結果の JSON が作業フォルダのものと（実行時間を除いて）同じであることを確かめた。確認の記録は `results/reproduction_check.json`。
+コミット `bd45157`（コード・文書・結果を保存した時点）だけを別の場所に取り出し（`git worktree add --detach`）、結果の JSON を消してから、
+`check_unified`（全 10 集合）、`check_unified --quick`、`check_unified_controls`、`tools_unit_map.py`、`tools_example.py` を最初から実行した。
+生成された 14 個の JSON は、保存済みのものと、実行時間の項目を除いて完全に同じだった（`checks/compare_results.py`、記録は `results/reproduction_check.json`）。
+EXP-U3 と、その記載を足した文書は、この確認の後のコミットに入っている（EXP-U3 は作業フォルダで 1 回実行した結果）。

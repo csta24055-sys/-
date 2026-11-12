@@ -130,7 +130,13 @@ def main():
               "。エンジンの語彙の外の要素：%s。" % (st["vocabulary_outside_the_engine"] or "なし"), ""]
     # ---- experiments
     u1, u2, ext = load("expU1_b14_forms.json"), load("expU2_cross_engines.json"), load("external_engines.json")
-    L += ["## 6. 別エンジンによる照合", ""]
+    u3 = load("expU3_intermediate_state.json")
+    L += ["## 6. 別エンジンによる照合と中間係数", ""]
+    if u3:
+        L += ["EXP-U3（中間係数。冷媒の年初残存量 `b1.u8` から作った「交換直前の量」と「期末の量」を、基準計算の内部状態と機器ごとに比較。"
+              "%d シナリオ、機器×期間 %d 組）：交換直前 %d 個で最大相対差 %s、期末 %d 個で %s、基準が 0 のところで 0 でない値 %d 個。" % (
+                  u3["scenarios"], u3["device_period_pairs"], u3["masses_before_an_event_compared"], e(u3["max_rel_difference_before_event"]),
+                  u3["end_masses_compared"], e(u3["max_rel_difference_end"]), u3["non_zero_where_reference_is_zero"]), ""]
     if u1:
         L += ["EXP-U1（mpmath 60 桁を真値とする B1-04 の 3 表現、%d 条件）：最大相対誤差は 基準計算 %s、跳び形 %s、区間形 %s、局所形（積和）%s。" % (
             len(u1["rows"]), e(u1["max"]["rel_err_reference"]), e(u1["max"]["rel_err_jump"]), e(u1["max"]["rel_err_interval"]), e(u1["max"]["rel_err_local"])), ""]

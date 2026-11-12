@@ -55,7 +55,7 @@ python3 -B -m experiments.exp04_pod_time_curves 100 M
 | `specs/system.py` | 全体の組み立て：共通表の計画、積和①、節点への受け渡し、静的な表 |
 | `checks/sets_unified.py`、`checks/check_unified.py` | 検証の集合と、全 70 単位・全出力の比較 |
 | `checks/check_unified_controls.py` | 誤り検出の確認、QA-01 の故障注入、構造の確認 |
-| `experiments/expU1_b14_forms.py`、`expU2_cross_engines.py` | B1-04 の 3 表現（mpmath）、別エンジンでの照合（SymPy、SciPy、DuckDB、lca_ops） |
+| `experiments/expU1_b14_forms.py`、`expU2_cross_engines.py`、`expU3_intermediate_state.py` | B1-04 の 3 表現（mpmath）、別エンジンでの照合（SymPy、SciPy、DuckDB、lca_ops）、中間係数（冷媒の状態）と基準計算の内部状態の比較 |
 | `tools_unit_map.py`、`tools_units_doc.py`、`tools_verification_report.py`、`tools_example.py` | 追跡表・定義表・検証報告・全出力の実例の生成 |
 | `recovered_2026-11-12/` | 2026-11-12 の一時スクリプト（記録から復元。実行用ではない） |
 
