@@ -2,6 +2,18 @@
 
 **目的：既存の7エンジン検証コードを壊さず、準備と出力を減らし、固定5件以外の安全な数学問題でも利用できるようにする。** 建築LCA本業の解析コードには一切手を加えない。
 
+## 追加：建築LCA向け4演算モード（2026-11-12）
+
+従来のMath IR 0.1は保ったまま、**積分、区分的な時間関数、マスク付き積和、節点スペクトル候補**を実行できる専用モジュールを追加した。
+
+- GitHub Actions：Math IR Efficient - One Job and Variable Cases の mode で **lca-operators** を選択する。case_file が既定のsix_cases.jsonなら、自動的に lca_ops_demo.jsonへ切り替える。
+- 独立テスト：Math IR LCA Operators - Integral Time Mask Spectrum。
+- 数式処理本体：math_tools_v2/lca_ops.py。
+- 入力例：math_tools_v2/examples/lca_ops_demo.json。
+- 操作方法と数学的限界：[README-operators.md](README-operators.md)。
+
+**注意：** 新しい4演算はPython側で直接実行する機能である。旧7エンジン統合基盤は維持されているが、新しい時間・マスクASTをMATLAB/SageMathへ自動受け渡しする汎用アダプターまでは未実装。節点スペクトルの研究上の一般的同値性も未証明。
+
 ## 大幅な効率化が期待できる3点
 
 | 変更 | 以前 | 新方式 |
