@@ -1,0 +1,80 @@
+"""Temporary scratch: negative controls - a deliberately wrong specification must be detected by the comparison."""
+import sys, json, copy
+sys.dont_write_bytecode = True
+from tstudy import baseline, scenarios, msp
+baseline.assert_frozen(); baseline.load()
+import u3, cmp3
+from synth import generate
+
+GOOD = u3.P1
+
+def find(spec, out):
+    for u in spec["units"]:
+        for st in u["steps"]:
+            if st.get("out") == out:
+                return st
+    raise KeyError(out)
+
+def control(title, mutate, scns, periods, check_domain=True, text_swap=None):
+    spec = copy.deepcopy(u3.SPEC1)
+    if text_swap:
+        spec = json.loads(json.dumps(spec).replace(*text_swap))
+    if mutate:
+        mutate(spec)
+    u3.P1 = msp.Program(spec)
+    t = cmp3.Tally()
+    try:
+        cmp3.run(scns, periods, t, "control", check_domain=check_domain)
+    finally:
+        u3.P1 = GOOD
+    worst = sorted(((d["max"], n) for n, d in t.num.items() if d["max"] > 1e-9), reverse=True)[:4]
+    bad = [(n, d["bad"], d["n"]) for n, d in t.ex.items() if d["bad"]][:5]
+    print("CONTROL %s\n   numeric quantities off: %s\n   exact quantities off: %s" % (
+        title, ", ".join("%s %.2e" % (n, e) for e, n in worst) or "none", ", ".join("%s %d/%d" % b for b in bad) or "none"))
+
+design = [(s.meta.scenario_id, s) for s in scenarios.design_set(24)]
+pick = lambda f: [(n, s) for n, s in design if f(s)][:4]
+own = lambda s: [s.boundary.study_period, 62.5]
+
+def truncate(spec):
+    for out in ("b1.a2", "b1.y4", "b1.e4a", "b1.e4g", "b1.a3", "b1.g3"):
+        st = find(spec, out)
+        st["terms"] = json.loads(json.dumps(st["terms"]).replace('"b1.u8"', '"b1.u3"'))
+control("A  resolvent truncated to 3 factors (ages >= 8 years lost)", truncate,
+        pick(lambda s: any(not d.top_up for d in s.refrigerants)), own)
+def no_reset(spec):
+    find(spec, "b1.p")["terms"] = [[u3.PR("b1.ev1"), u3.EQ("k", -1)]]
+control("B  refrigerant resets ignored", no_reset, pick(lambda s: any(not d.top_up for d in s.refrigerants)), own)
+def no_first(spec):
+    st = find(spec, "b1.first")
+    st["terms"] = [[u3.EQ("b1.act", 1)]]
+control("C  every event treated as the first of its year", no_first, [("edge " + n, s) for n, s in scenarios.edge_set() if n == "life_shorter_than_one_year"], own)
+def no_floor(spec):
+    st = find(spec, "x06.g")
+    st["terms"][1] = [u3.EQ(u3.OF("x06.wfL", u3.OP), 1), "x06.dl"]
+    del st["terms"][2]
+control("D  grid factor: floor of the linear decline dropped", no_floor, pick(lambda s: s.operation.grid.kind == "LINEAR_DECLINE_TO_FLOOR"), own)
+def no_upper(spec):
+    st = find(spec, "x06.sv")
+    st["terms"] = [[u3.LE(u3.VIA("from_index", "x06.sref"), u3.VIA("_pos", "_parent")), u3.VIA("value", "x06.sref")]]
+control("E  grid factor: stepwise without the upper bound of a step", no_upper, pick(lambda s: s.operation.grid.kind == "STEPWISE"), own)
+def no_netting(spec):
+    st = find(spec, "b64.net")
+    st["terms"] = [[u3.EQ(u3.B64, 1), "b64.d"]]
+control("F  purchased electricity without max(0, .)", no_netting, [("edge " + n, s) for n, s in scenarios.edge_set() if n == "generation_exceeds_consumption"], own)
+def linear_as_const(spec):
+    for u in spec["units"]:
+        pass
+    t = spec["templates"]["PROFILE"][2]["terms"]
+    del t[2]
+control("G  linear trend of annual profiles dropped", linear_as_const, design[:3], own)
+dirty = [("dirty %d" % sd, generate.make_scenario(sd, st, use, "S", 60.0, dirty=True)) for sd, st, use in ((515101, "RC", "office"), (515102, "S", "school"), (515103, "W", "retail"))]
+def weak_partial(spec):
+    st = find(spec, "np.cnt")
+    st["terms"] = [tm for tm in st["terms"] if tm not in (["c31.npart"], ["c41.npart"], ["np.a01"])]
+control("H  incomplete-renewal flag without three of its conditions (defect-injected scenarios)", weak_partial, dirty, lambda s: [60.0], check_domain=False)
+def loose_mass(spec):
+    find(spec, "c05.v1")["terms"] = [[u3.RNG("c05.nneg", 1, "inf")]]
+control("I  C-05 without the sum-of-fractions test (defect-injected scenarios)", loose_mass, dirty, lambda s: [60.0], check_domain=False)
+def strict_gate(spec):
+    pass

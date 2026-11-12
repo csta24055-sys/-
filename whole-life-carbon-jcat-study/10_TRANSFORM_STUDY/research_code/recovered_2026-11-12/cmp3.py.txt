@@ -1,0 +1,248 @@
+"""Temporary scratch: comparison of the candidate (u3) with the frozen reference. Writes nothing."""
+import sys, math, collections
+sys.dont_write_bytecode = True
+import numpy as np
+import u3
+from u3 import cv, one, S1, CAL, OP, WW, D, STAGES, T_UNITS
+from tstudy import baseline, scenarios
+
+COV = collections.Counter()
+
+class Tally:
+    def __init__(self):
+        self.num = collections.OrderedDict()
+        self.ex = collections.OrderedDict()
+    def n(self, name, c, r, case):
+        if c is None or r is None:
+            return self.x(name + " [is None]", c is None, r is None, case)
+        d = self.num.setdefault(name, {"n": 0, "max": 0.0, "where": None, "n0": 0, "max0": 0.0, "where0": None})
+        d["n"] += 1
+        if r == 0.0:
+            d["n0"] += 1
+            if abs(c) > d["max0"]:
+                d["max0"], d["where0"] = abs(c), case
+        else:
+            e = abs(c - r) / abs(r)
+            if not e <= d["max"]:
+                d["max"], d["where"] = e, case
+    def arr(self, name, c, r, case):
+        c, r = np.asarray(c, dtype=float), np.asarray(r, dtype=float)
+        if c.shape != r.shape:
+            return self.x(name + " [length]", c.shape, r.shape, case)
+        d = self.num.setdefault(name, {"n": 0, "max": 0.0, "where": None, "n0": 0, "max0": 0.0, "where0": None})
+        d["n"] += c.size
+        z = r == 0.0
+        d["n0"] += int(z.sum())
+        if z.any():
+            m0 = float(np.abs(c[z]).max())
+            if m0 > d["max0"]:
+                d["max0"], d["where0"] = m0, case
+        if (~z).any():
+            e = float((np.abs(c[~z] - r[~z]) / np.abs(r[~z])).max())
+            if not e <= d["max"]:
+                d["max"], d["where"] = e, case
+    def x(self, name, c, r, case):
+        d = self.ex.setdefault(name, {"n": 0, "bad": 0, "ex": []})
+        d["n"] += 1
+        if c != r:
+            d["bad"] += 1
+            if len(d["ex"]) < 3:
+                d["ex"].append((case, repr(c)[:160], repr(r)[:160]))
+    def count(self, name, c, r, case):
+        ci = int(round(c))
+        if abs(c - ci) > 1e-9:
+            return self.x(name + " [not an integer]", c, r, case)
+        self.x(name, ci, r, case)
+    def report(self, title, only_bad=False):
+        print("\n=== " + title)
+        worst = 0.0
+        for name, d in self.num.items():
+            worst = max(worst, d["max"])
+            flag = "" if d["max"] <= 1e-9 and d["max0"] == 0.0 else "   <-- CHECK"
+            if only_bad and not flag:
+                continue
+            print("  num  %-28s n=%8d  max_rel=%.3e  ref0=%7d  max_abs_at_ref0=%.3e%s%s" % (
+                name, d["n"], d["max"], d["n0"], d["max0"], flag, ("  at " + str(d["where"] or d["where0"])) if flag else ""))
+        nbad = 0
+        for name, d in self.ex.items():
+            nbad += d["bad"]
+            if only_bad and not d["bad"]:
+                continue
+            print("  exact %-34s n=%6d  mismatches=%d" % (name, d["n"], d["bad"]))
+            for ex in d["ex"]:
+                print("        ", ex)
+        print("  -> worst relative difference %.3e ; exact mismatches %d ; numeric quantities %d (values %d) ; exact quantities %d (values %d)" % (
+            worst, nbad, len(self.num), sum(d["n"] for d in self.num.values()), len(self.ex), sum(d["n"] for d in self.ex.values())))
+        return worst, nbad
+
+def compare(prep, T, ref, t, case, static=True):
+    o = prep.at(T)
+    e = prep.eng
+    Y = math.ceil(T)
+    for u in T_UNITS:
+        t.n("unit " + u, o["units"][u], ref[u]["value"], case)
+    t.n("unit B1-04 (knot form, for comparison)", prep.b14_knot, ref["B1-04"]["value"], case)
+    x2 = ref["X-02"]
+    t.x("X-02 stage keys", sorted(o["by_stage"]), sorted(x2["by_stage"]), case)
+    for s_, r in x2["by_stage"].items():
+        t.n("X-02 by_stage " + s_, o["by_stage"].get(s_), r, case)
+    for s_, r in x2["by_stage_all"].items():
+        t.n("X-02 by_stage_all", o["by_stage_all"][s_], r, case)
+    t.x("X-02 complete", o["complete"], x2["complete"], case)
+    t.x("X-02 incomplete_units", o["incomplete_units"], x2["incomplete_units"], case)
+    for i in (1, 2, 3):
+        t.n("SUM-0%d value" % i, o["sum%d" % i], ref["SUM-0%d" % i]["value"], case)
+        t.x("SUM-0%d complete" % i, o["complete"], ref["SUM-0%d" % i]["complete"], case)
+    t.n("SUM-04 value", o["sum4"], ref["SUM-04"]["value"], case)
+    t.n("SUM-05 value", o["sum5"], ref["SUM-05"]["value"], case)
+    t.n("SUM-06 value", o["sum6"], ref["SUM-06"]["value"], case)
+    t.x("SUM-07 defined", o["sum7_defined"], ref["SUM-07"]["defined"], case)
+    t.x("SUM-07 keys", sorted(o["sum7"]), sorted(ref["SUM-07"]["by_stage"]), case)
+    for s_, r in ref["SUM-07"]["by_stage"].items():
+        t.n("SUM-07 share", o["sum7"].get(s_), r, case)
+    r8, c8 = ref["SUM-08"], o["sum8"]
+    t.x("SUM-08 status", c8["status"], r8["status"], case)
+    if r8["status"] == "NOT_COMPARABLE":
+        t.x("SUM-08 reasons", c8.get("reasons"), r8["reasons"], case)
+    if r8["status"] == "COMPARED" and c8["status"] == "COMPARED":
+        t.n("SUM-08 baseline", c8["baseline"], r8["baseline"], case)
+        t.n("SUM-08 delta", c8["delta"], r8["delta"], case)
+        t.n("SUM-08 saving", c8["saving"], r8["saving"], case)
+    # ---- operation
+    yr = lambda col: cv(e, CAL, col)[:Y]
+    t.arr("X-06 by_year", yr("x06.g"), ref["X-06"]["by_year"][1:], case)
+    t.x("X-06 source", "DESCRIPTOR" if one(e, OP, "x06.wf") else "TABLE", ref["X-06"]["source"], case)
+    t.x("X-06 matches_table", o["dmt"]["x06"], ref["X-06"]["matches_table"], case)
+    t.arr("B6-04 by_year", yr("b64.net"), ref["B6-04"]["by_year"][1:], case)
+    t.x("B6-04 computed", bool(one(e, OP, "b64.computed")), ref["B6-04"]["computed"], case)
+    t.x("B6-04 descriptors_match", o["dmt"]["b64"], ref["B6-04"]["descriptors_match_tables"], case)
+    t.arr("B6-01 by_year", yr("b61.e"), ref["B6-01"]["by_year"][1:], case)
+    t.x("B6-01 computed", bool(one(e, OP, "b61.ok")), ref["B6-01"]["computed"], case)
+    t.arr("B6-02 by_year", yr("b62.e"), ref["B6-02"]["by_year"][1:], case)
+    t.x("B6-02 n_skipped", int(one(e, OP, "b62.nsk")), ref["B6-02"]["n_skipped"], case)
+    t.x("B6-02 descriptors_match", o["dmt"]["b62"], ref["B6-02"]["descriptors_match_tables"], case)
+    for uid, tag in (("B7-01", "b71"), ("B7-02", "b72"), ("B7-03", "b73")):
+        t.arr("B7-0x by_year", yr(tag + ".e"), ref[uid]["by_year"][1:], case)
+        t.x("B7-0x n_skipped", int(one(e, WW, tag + ".nsk")), ref[uid]["n_skipped"], case)
+        t.x("B7-0x descriptors_match", o["dmt"][tag], ref[uid]["descriptors_match_tables"], case)
+    t.x("B2-01 computed", bool(one(e, OP, "b21.ok")), ref["B2-01"]["computed"], case)
+    t.n("X-11 value", prep.K_("X-11").value(T) if one(e, OP, "x11.ok") else None, ref["X-11"]["value"], case)
+    # ---- counts and indicators that depend on T
+    t.count("B4-02 n_partial", o["bad"]["B4-02"], ref["B4-02"]["n_partial"], case)
+    t.count("B4-01 n_events", prep.K_("B4-01n").value(T), ref["B4-01"]["n_events"], case)
+    t.n("B3-02 value", prep.K_("B3-02").value(T), ref["B3-02"]["value"], case)
+    t.n("X-10 resource_kg", prep.K_("X-10r").value(T), ref["X-10"]["resource_kg"], case)
+    t.n("X-10 waste_kg", prep.K_("X-10w").value(T), ref["X-10"]["waste_kg"], case)
+    q = ref["QA-02"]
+    t.x("QA-02 ok", o["qa2"]["ok"], q["ok"], case)
+    t.x("QA-02 violations", o["qa2"]["violations"], q["violations"], case)
+    t.x("QA-02 warnings", o["qa2"]["warnings"], q["warnings"], case)
+    COV["pairs"] += 1
+    COV["X-02 not complete"] += (not x2["complete"])
+    COV["X-02 stage subset"] += (len(x2["by_stage"]) != 14)
+    COV["SUM-08 " + r8["status"]] += 1
+    COV["SUM-07 not defined"] += (not ref["SUM-07"]["defined"])
+    COV["X-06 source " + ref["X-06"]["source"] + " / " + prep.scn.operation.grid.kind] += 1
+    COV["a descriptor differs from its year table"] += (not all([ref["X-06"]["matches_table"], ref["B6-04"]["descriptors_match_tables"],
+        ref["B6-02"]["descriptors_match_tables"], ref["B7-01"]["descriptors_match_tables"], ref["B7-02"]["descriptors_match_tables"],
+        ref["B7-03"]["descriptors_match_tables"]]))
+    COV["B6-04 or B6-01 not computed"] += (not (ref["B6-04"]["computed"] and ref["B6-01"]["computed"]))
+    COV["B6-02 / B7 with skipped items"] += bool(ref["B6-02"]["n_skipped"] or ref["B7-01"]["n_skipped"] or ref["B7-02"]["n_skipped"] or ref["B7-03"]["n_skipped"])
+    COV["B4-02 n_partial > 0"] += bool(ref["B4-02"]["n_partial"])
+    COV["QA-02 with violations"] += bool(q["violations"])
+    COV["QA-02 with warnings"] += bool(q["warnings"])
+    COV["B1 units with skipped devices"] += bool(ref["B1-02"]["n_skipped"] or ref["B1-03"]["n_skipped"] or ref["B1-04"]["n_skipped"])
+    COV["B1-03 non-zero"] += bool(ref["B1-03"]["value"])
+    COV["purchased electricity clipped at 0 in some year"] += any(v == 0.0 for v in ref["B6-04"]["by_year"][1:]) and ref["B6-04"]["computed"]
+    if not static:
+        return o
+    COV["scenarios"] += 1
+    COV["scenario: C-05 with violations"] += bool(ref["C-05"]["violations"])
+    COV["scenario: C-05 with under-allocated rows"] += bool(ref["C-05"]["under_allocated"])
+    COV["scenario: QA-01 with violations"] += bool(ref["QA-01"]["violations"])
+    COV["scenario: devices without top-up"] += sum(1 for d in prep.scn.refrigerants if not d.top_up)
+    COV["scenario: devices with top-up"] += sum(1 for d in prep.scn.refrigerants if d.top_up)
+    COV["scenario: devices with an explicit list"] += sum(1 for d in prep.scn.refrigerants if d.change_years is not None)
+    COV["scenario: SYS-04 not ok"] += (not ref["SYS-04"]["ok"])
+    # ---- independent of T (compared once per scenario)
+    bc = prep.bad_const
+    t.n("B1-01 value", S1(e, "b11.v"), ref["B1-01"]["value"], case)
+    t.x("B1-01 n_skipped", int(S1(e, "b11.nsk")), ref["B1-01"]["n_skipped"], case)
+    for uid in ("B1-02", "B1-03", "B1-04", "B3-01", "C1-01", "C2-01", "X-14"):
+        t.x("n_skipped " + uid, int(bc[uid]), ref[uid]["n_skipped"], case)
+    t.x("B3-02 n_skipped", int(bc["B3-01"]), ref["B3-02"]["n_skipped"], case)
+    t.x("B5-01 computed", bool(S1(e, "b5.computed")), ref["B5-01"]["computed"], case)
+    for uid, tag in (("C3-01", "c31"), ("C4-01", "c41")):
+        t.x("C3/C4 n_skipped", int(S1(e, tag + ".nsk")), ref[uid]["n_skipped"], case)
+        t.x("C3/C4 n_routes_skipped", int(S1(e, tag + ".nrsk")), ref[uid]["n_routes_skipped"], case)
+    t.x("X-10 n_excluded", int(S1(e, "x10.nm") + S1(e, "x10.ne")), ref["X-10"]["n_excluded"], case)
+    nm = len(prep.scn.materials)
+    v1, v2, un = (cv(e, "materials", c) if nm else [] for c in ("c05.v1", "c05.v2", "c05.under"))
+    viol = []
+    for i in range(nm):
+        if v1[i]: viol.append("materials[%d].end_of_life.routes" % i)
+        if v2[i]: viol.append("materials[%d].end_of_life.mass_kg" % i)
+    c5 = ref["C-05"]
+    t.x("C-05 ok", S1(e, "c05.nv") == 0, c5["ok"], case)
+    t.x("C-05 violations", viol, c5["violations"], case)
+    t.x("C-05 under_allocated", ["materials[%d].end_of_life.routes" % i for i in range(nm) if un[i]], c5["under_allocated"], case)
+    t.x("C-05 n_mass_unchecked", int(S1(e, "c05.nun")), c5["n_mass_unchecked"], case)
+    qb, qc = (cv(e, "materials", c) if nm else [] for c in ("qa1.b", "qa1.c"))
+    viol = []
+    for i in range(nm):
+        if qb[i]: viol.append("materials[%d] A13-01/A13-03" % i)
+        if qc[i]: viol.append("materials[%d] A4-01/A4-02" % i)
+    q1 = ref["QA-01"]
+    t.x("QA-01 (b)(c) violations", viol, [v for v in q1["violations"] if not v.startswith("stage ")], case)
+    t.x("QA-01 (a) entries in the reference [not reproduced]", 0, sum(1 for v in q1["violations"] if v.startswith("stage ")), case)
+    valid = bool(one(e, "project", "sys4.valid"))
+    s4 = ref["SYS-04"]
+    t.x("SYS-04 status", "EVALUATED" if valid else "INVALID", s4["status"], case)
+    t.x("SYS-04 ok", bool(one(e, "project", "sys4.ok")), s4["ok"], case)
+    t.n("SYS-04 sum", one(e, "project", "sys4.sum"), s4["sum"], case)
+    if valid and s4["residual"] is not None:
+        r, c = s4["residual"], one(e, "project", "sys4.res")
+        area = prep.scn.project.gross_floor_area
+        t.x("SYS-04 residual within 1e-12 of the area", abs(c - r) <= 1e-12 * area, True, case)
+    t.x("QA-04 ok", bool(one(e, "project", "qa4.ok")), ref["QA-04"]["ok"], case)
+    t.x("QA-04 status", "EVALUATED" if valid else "NOT_EVALUATED", ref["QA-04"]["status"], case)
+    t.n("STO-01 value", one(e, u3.SQ, "sto1.v") if one(e, u3.SQ, "sto1.ok") else None, ref["STO-01"]["value"], case)
+    t.n("STO-02 value", one(e, u3.SQ, "sto2.v") if one(e, u3.SQ, "sto2.ok") else None, ref["STO-02"]["value"], case)
+    return o
+
+def run(scns, periods, t, label, check_domain=True, verbose=False):
+    """scns: list of (name, scenario); periods: function scenario -> list of T."""
+    n_ok = n_excl = n_fail = 0
+    for name, scn in scns:
+        try:
+            prep = u3.Prepared(scn)
+        except Exception as ex:
+            n_fail += 1
+            print("  PREPARE FAILED %s: %s %s" % (name, type(ex).__name__, str(ex)[:300]))
+            continue
+        first = True
+        for T in periods(scn):
+            cur = scenarios.with_period(scn, T)
+            why = scenarios.valid_domain(cur) if check_domain else []
+            if why:
+                n_excl += 1
+                if verbose: print("  excluded %s T=%r: %s" % (name, T, why[0]))
+                continue
+            try:
+                ref = baseline.run_reference(cur)
+            except Exception as ex:
+                n_excl += 1
+                print("  reference raised for %s T=%r: %s %s" % (name, T, type(ex).__name__, str(ex)[:120]))
+                continue
+            try:
+                compare(prep, T, ref, t, "%s|%s|T=%r" % (label, name, T), static=first)
+            except Exception as ex:
+                n_fail += 1
+                import traceback
+                print("  COMPARE FAILED %s T=%r: %s %s" % (name, T, type(ex).__name__, str(ex)[:300]))
+                traceback.print_exc(limit=3)
+                continue
+            first = False
+            n_ok += 1
+    print("[%s] compared %d (scenario, T) pairs; excluded %d; failed %d" % (label, n_ok, n_excl, n_fail))
+    return n_ok, n_excl, n_fail

@@ -1,0 +1,374 @@
+"""Representative-value check (in memory only): masked sum-product amplitudes + knot spectrum vs the frozen reference.
+Temporary scratch script; writes nothing."""
+import sys, copy, math, time, statistics, collections
+sys.dont_write_bytecode = True
+RC = "/home/user/-/whole-life-carbon-jcat-study/10_TRANSFORM_STUDY/research_code"
+sys.path.insert(0, RC)
+from tstudy import baseline, scenarios, metrics, rampstep as rs, msp, tables
+from tstudy.knots import KnotSpectrum
+from specs import pre_a
+
+H = 130.0
+STAGES = ("A1-A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "C1", "C2", "C3", "C4")
+
+# ---------------------------------------------------------------- extended specification (data only, in memory)
+def F(as_, T, fid, gate, unit, extra="_none"):
+    return {"use": "FACTOR", "as": as_, "with": {"T": T, "fid": fid, "gate": gate, "unit": unit, "extra": extra}}
+NN = lambda a: {"pred": "range", "a": a, "lo": 0, "hi": "inf", "hi_open": True}
+EQ = lambda a, v=1: {"pred": "eq", "a": a, "b": {"const": v}}
+PR = lambda a: {"pred": "present", "a": a}
+VAL = lambda ref: {"col": "value", "via": ref}
+def sp(table, out, group, terms):
+    return {"op": "sp", "table": table, "out": out, "group": group, "terms": terms}
+def scalar(col, as_="float"):
+    return {"read": "scalar", "col": col, "as": as_}
+DEM, HAUL, RT = "end_of_life.demolition_activities", "end_of_life.waste_hauls", "materials.end_of_life.routes"
+PM = {"col": "end_of_life.mass_kg", "via": "_parent"}
+def routes(uid, tag, stage, landfill):
+    is_lf = {"pred": "eq", "a": "route", "b": {"const": "LANDFILL"}}
+    if not landfill:
+        is_lf = dict(is_lf, **{"not": True})
+    return {"id": uid, "doc": "end-of-life routes", "steps": [
+        F(tag + ".f", RT, "factor_id", "stage.%s.is" % stage, {"const": "kg"}),
+        sp(RT, tag + ".ok", "none", [[is_lf, EQ(tag + ".f.ok"), NN("fraction"), NN(PM)]]),
+        sp(RT, tag + ".by_item", {"by": "_parent"}, [[EQ(tag + ".ok"), PM, "fraction", tag + ".f.c.f", VAL(tag + ".f.ref")]]),
+        sp("materials", tag + ".value", "total", [[tag + ".by_item"]]),
+    ], "outputs": {"value": scalar(tag + ".value"), "by_item": {"read": "rows", "table": "materials", "col": tag + ".by_item"}}}
+EXT_UNITS = [
+    {"id": "C1-01", "doc": "demolition", "steps": [
+        F("c11.f", DEM, "factor_id", "stage.C1.is", "unit"),
+        sp(DEM, "c11.ok", "none", [[NN("quantity"), EQ("c11.f.ok")]]),
+        sp(DEM, "c11.value", "total", [[EQ("c11.ok"), "quantity", "c11.f.c.f", VAL("c11.f.ref")]]),
+        sp(DEM, "c11.n_skipped", "total", [[EQ("c11.ok", 0)]]),
+    ], "outputs": {"value": scalar("c11.value"), "n_skipped": scalar("c11.n_skipped", "int")}},
+    {"id": "C2-01", "doc": "waste haulage", "steps": [
+        F("c21.f", "materials", "end_of_life.haul_factor_id", "stage.C2.is", {"const": "tkm"}),
+        sp("materials", "c21.ok", "none", [[EQ("c21.f.ok"), NN("end_of_life.mass_kg"), NN("end_of_life.haul_distance_km")]]),
+        sp("materials", "c21.by_item", "none", [[EQ("c21.ok"), "end_of_life.mass_kg", {"const": 0.001},
+                                                 "end_of_life.haul_distance_km", "c21.f.c.f", VAL("c21.f.ref")]]),
+        sp("materials", "c21.mat", "total", [["c21.by_item"]]),
+        sp("materials", "c21.nm", "total", [[EQ("c21.ok", 0)]]),
+        F("c21.h", HAUL, "factor_id", "stage.C2.is", {"const": "tkm"}),
+        sp(HAUL, "c21.hok", "none", [[EQ("c21.h.ok"), NN("mass_t"), NN("distance_km")]]),
+        sp(HAUL, "c21.haul", "total", [[EQ("c21.hok"), "mass_t", "distance_km", "c21.h.c.f", VAL("c21.h.ref")]]),
+        sp(HAUL, "c21.nh", "total", [[EQ("c21.hok", 0)]]),
+        sp("S", "c21.value", "none", [["c21.mat"], ["c21.haul"]]),
+        sp("S", "c21.n_skipped", "none", [["c21.nm"], ["c21.nh"]]),
+    ], "outputs": {"value": scalar("c21.value"), "n_skipped": scalar("c21.n_skipped", "int"),
+                   "by_item": {"read": "rows", "table": "materials", "col": "c21.by_item"}}},
+    routes("C3-01", "c31", "C3", False),
+    routes("C4-01", "c41", "C4", True),
+    {"id": "X-14", "doc": "equipment end of life", "steps": [
+        F("x14.f", "equipment", "eol_factor_id", "stage.C3.is", {"const": "kg"}),
+        sp("equipment", "x14.ok", "none", [[EQ("x14.f.ok"), NN("end_of_life_mass_kg")]]),
+        sp("equipment", "x14.by_item", "none", [[EQ("x14.ok"), "end_of_life_mass_kg", "x14.f.c.f", VAL("x14.f.ref")]]),
+        sp("equipment", "x14.value", "total", [["x14.by_item"]]),
+        sp("equipment", "x14.n_skipped", "total", [[EQ("x14.ok", 0)]]),
+    ], "outputs": {"value": scalar("x14.value"), "n_skipped": scalar("x14.n_skipped", "int"),
+                   "by_item": {"read": "rows", "table": "equipment", "col": "x14.by_item"}}},
+    {"id": "AMP", "doc": "T-independent amplitudes of the use stage (renewal, repair, rebuild)", "steps": [
+        F("b4.inst.f", "materials", "installation_factor_id", "stage.A5.is", "quantity_unit", "materials.conversions"),
+        sp("materials", "b4.inst", "none", [[PR("installation_factor_id"), EQ("b4.inst.f.ok"), EQ("a05.ok"),
+                                              "a05.q_ord", "b4.inst.f.c.f", VAL("b4.inst.f.ref")]]),
+        sp("materials", "b4.u_mat", "none", [["a01.by_item"], ["a03.by_item"], ["a41.by_item"], ["a42.by_item"],
+                                              ["c21.by_item"], ["c31.by_item"], ["c41.by_item"], ["b4.inst"]]),
+        F("b4.dlv.f", "equipment", "delivery_factor_id", "stage.A4.is", "quantity_unit"),
+        sp("equipment", "b4.dlv", "none", [[PR("delivery_factor_id"), EQ("b4.dlv.f.ok"), NN("quantity"),
+                                             "quantity", "b4.dlv.f.c.f", VAL("b4.dlv.f.ref")]]),
+        F("b4.ins.f", "equipment", "installation_factor_id", "stage.A5.is", "quantity_unit"),
+        sp("equipment", "b4.ins", "none", [[PR("installation_factor_id"), EQ("b4.ins.f.ok"), NN("quantity"),
+                                             "quantity", "b4.ins.f.c.f", VAL("b4.ins.f.ref")]]),
+        sp("equipment", "b4.u_eq", "none", [["x01.by_item"], ["b4.dlv"], ["b4.ins"], ["x14.by_item"]]),
+        sp("materials", "b3.a_mat", "none", [[NN("repair_rate"), "a01.by_item", "repair_rate"],
+                                              [NN("repair_rate"), "a03.by_item", "repair_rate"]]),
+        sp("equipment", "b3.a_eq", "none", [[NN("repair_rate"), "x01.by_item", "repair_rate"]]),
+        sp("S", "b5.base", "none", [[c] for c in ("a01.value", "a03.value", "a04.value", "x01.value", "a41.value", "a42.value",
+                                                  "a54.value", "c11.value", "c21.value", "c31.value", "c41.value", "x14.value")]),
+        sp("S", "b5.u", "none", [[{"pred": "range", "a": {"col": "reconstruction_scope_fraction", "of": "boundary"}, "lo": 0, "hi": 1},
+                                  {"pred": "eq", "a": {"col": "reconstruction_scenario", "of": "boundary"}, "b": {"const": "NONE"}, "not": True},
+                                  {"col": "reconstruction_scope_fraction", "of": "boundary"}, "b5.base"]]),
+    ], "outputs": {"b5_u": scalar("b5.u")}},
+]
+SPEC = copy.deepcopy(pre_a.SPEC)
+SPEC["shared"] = SPEC["shared"] + [{"use": "STAGE", "as": "stage.%s" % s, "with": {"stage": s}} for s in ("C1", "C2", "C3", "C4")]
+SPEC["units"] = SPEC["units"] + EXT_UNITS
+PROGRAM = msp.Program(SPEC)
+
+def colv(eng, table, name):
+    c = eng.col(table, name)
+    assert bool(c.m.all()), (table, name, "missing values")
+    return c.v
+
+def nonneg(x): return x is not None and x >= 0.0 and not math.isinf(x)
+def ratio(x): return x is not None and 0.0 <= x <= 1.0
+
+def assemble(scn, eng, res, op_ref):
+    """Pieces per unit. Independent of the reference: B4-02, B3-01, B5-01 (amplitudes from the sum-product engine),
+    B1-02/03/04 (straight from inputs). Hybrid: B6-03, B2-01, B7-04 (year values from ONE reference run at the horizon)."""
+    Y = math.ceil(H)
+    P = {u: [] for u in ("B1-02", "B1-03", "B1-04", "B2-01", "B3-01", "B4-02", "B5-01", "B6-03", "B7-04")}
+    u_mat, u_eq = colv(eng, "materials", "b4.u_mat") if scn.materials else [], colv(eng, "equipment", "b4.u_eq") if scn.equipment else []
+    a_mat, a_eq = colv(eng, "materials", "b3.a_mat") if scn.materials else [], colv(eng, "equipment", "b3.a_eq") if scn.equipment else []
+    events = {"m": [], "e": []}
+    def skip_cells(a, ev):
+        if a == 0.0:
+            return
+        P["B3-01"].append(rs.density(a, float(Y)))
+        first = {}
+        for tau in ev:
+            y = rs.event_year(tau)
+            if y not in first or tau < first[y]:
+                first[y] = tau
+        for y, tau in first.items():
+            P["B3-01"].append(rs.year_cell(-a, y, gate=tau))
+    for i, row in enumerate(scn.materials):
+        ev = rs.periodic_times(H, row.refresh_cycle)
+        events["m"].append(ev)
+        P["B4-02"] += [rs.atom(float(u_mat[i]), tau) for tau in ev]
+        skip_cells(float(a_mat[i]), ev)
+    for j, eq in enumerate(scn.equipment):
+        ev = rs.explicit_times(H, eq.replacement_event_list) if eq.replacement_event_list is not None else rs.periodic_times(H, eq.service_life)
+        events["e"].append(ev)
+        P["B4-02"] += [rs.atom(float(u_eq[j]), tau) for tau in ev]
+        skip_cells(float(a_eq[j]), ev)
+    b5u = res["AMP"]["b5_u"]
+    if b5u:
+        P["B5-01"] += [rs.atom(b5u, tau) for tau in rs.periodic_times(H, scn.boundary.replacement_cycle)]
+    for dev in scn.refrigerants:
+        if not (nonneg(dev.charge_mass_kg) and nonneg(dev.gwp) and ratio(dev.annual_leak_rate)):
+            continue
+        ev = sorted(rs.explicit_times(H, dev.change_years)) if dev.change_years is not None else rs.periodic_times(H, dev.service_life)
+        by_year = {}
+        for tau in ev:
+            by_year.setdefault(rs.event_year(tau), []).append(tau)
+        m0, r, gwp = dev.charge_mass_kg, dev.annual_leak_rate, dev.gwp
+        loss_ok, rec_ok = ratio(dev.replacement_loss_rate), ratio(dev.end_of_life_recovery_rate)
+        k4 = (1.0 - dev.end_of_life_recovery_rate) * gwp if rec_ok else 0.0
+        if rec_ok:
+            P["B1-04"].append(rs.constant(k4 * m0))
+        m = m0
+        for y in range(1, Y + 1):
+            P["B1-02"].append(rs.year_cell(m * r * gwp, y))
+            if not dev.top_up and rec_ok:
+                P["B1-04"].append(rs.year_cell(-k4 * m * r, y))
+            taus = sorted(by_year.get(y, []))
+            for n, tau in enumerate(taus):
+                if n == 0:
+                    if loss_ok:
+                        P["B1-03"].append(rs.atom(dev.replacement_loss_rate * gwp * m, tau))
+                        if not dev.top_up:
+                            P["B1-03"].append(rs.year_cell(-dev.replacement_loss_rate * gwp * m * r, y, gate=tau))
+                    if not dev.top_up and rec_ok:
+                        P["B1-04"].append(rs.atom(k4 * (m0 - m), tau))
+                        P["B1-04"].append(rs.year_cell(k4 * m * r, y, gate=tau))
+                elif loss_ok:
+                    P["B1-03"].append(rs.atom(dev.replacement_loss_rate * gwp * m0, tau))
+            if taus:
+                m = m0
+            elif not dev.top_up:
+                m = m - m * r
+    # hybrid part: operation
+    elec, fuel = op_ref["B6-01"]["by_year"], op_ref["B6-02"]["by_year"]
+    share = scn.operation.facility_management_ratio
+    for y in range(1, Y + 1):
+        P["B6-03"].append(rs.year_cell(elec[y] + fuel[y], y))
+        if ratio(share):
+            P["B2-01"].append(rs.year_cell(elec[y] * share, y))
+        P["B7-04"].append(rs.year_cell(op_ref["B7-01"]["by_year"][y] + op_ref["B7-02"]["by_year"][y] + op_ref["B7-03"]["by_year"][y], y))
+    return P, events, (u_mat, u_eq)
+
+INDEP_UNITS = ("B1-02", "B1-03", "B1-04", "B3-01", "B4-02", "B5-01")
+HYBRID_UNITS = ("B6-03", "B2-01", "B7-04")
+INDEP_STAGES = ("A1-A3", "A4", "A5", "B1", "B3", "B4", "B5", "C1", "C2", "C3", "C4")
+
+class Prepared:
+    def __init__(self, scn):
+        self.scn = scn
+        t = time.perf_counter()
+        self.tabs = tables.from_scenario(scn)
+        self.res, self.eng = msp.evaluate(PROGRAM, self.tabs)
+        self.t_msp = time.perf_counter() - t
+        top = scenarios.with_period(scn, H)
+        self.op_ref = baseline.run_reference(top, ["B6-01", "B6-02", "B7-01", "B7-02", "B7-03"])
+        self.P, self.events, self.u = assemble(scn, self.eng, self.res, self.op_ref)
+        self.K = {u: KnotSpectrum(p) for u, p in self.P.items()}
+        v = lambda uid: self.res[uid]["value"]
+        self.const = {"A1-A3": v("A13-01") + v("A13-03") + v("A13-04") + v("X-01"), "A4": v("A4-01") + v("A4-02"), "A5": v("A5-04"),
+                      "C1": v("C1-01"), "C2": v("C2-01"), "C3": v("C3-01") + v("X-14"), "C4": v("C4-01")}
+        self.n_knots = sum(k.n_knots for k in self.K.values())
+
+    def at(self, T, included):
+        v = {u: k.value(T) for u, k in self.K.items()}
+        full = dict(self.const)
+        full.update({"B1": v["B1-02"] + v["B1-03"] + v["B1-04"], "B2": v["B2-01"], "B3": v["B3-01"], "B4": v["B4-02"],
+                     "B5": v["B5-01"], "B6": v["B6-03"] - v["B2-01"], "B7": v["B7-04"]})
+        inc = set(included)
+        by_stage = {s: full[s] for s in STAGES if s in inc}
+        if "B6" in inc and "B2" not in inc:
+            by_stage["B6"] = v["B6-03"]
+        return v, by_stage, metrics.propagate_stage_change(by_stage, list(inc), {})
+
+STATS = collections.OrderedDict()
+ROWS = []
+EXCL = []
+def record(group, name, cand, ref, case):
+    st = STATS.setdefault((group, name), metrics.ErrorStats(name))
+    st.add(cand, ref, case)
+
+def run_case(category, label, scn, periods, prep=None):
+    prep = prep or Prepared(scn)
+    for T in periods:
+        cur = scenarios.with_period(scn, T)
+        why = scenarios.valid_domain(cur)
+        case = "%s|%s|T=%r" % (category, label, T)
+        if why:
+            EXCL.append((case, why[0]))
+            continue
+        ref = baseline.run_reference(cur)
+        v, by_stage, tot = prep.at(T, cur.boundary.included_lifecycle_stages)
+        worst = 0.0
+        def cmp(group, name, c, r):
+            nonlocal worst
+            record(group, name, c, r, case)
+            if r != 0.0:
+                worst = max(worst, abs(c - r) / abs(r))
+            elif c != 0.0:
+                worst = max(worst, float("inf") if abs(c) > 1e-6 else 0.0)
+        for u in INDEP_UNITS:
+            cmp("independent unit", u, v[u], ref[u]["value"])
+        for u in HYBRID_UNITS:
+            cmp("hybrid unit", u, v[u], ref[u]["value"])
+        for s, x in ref["X-02"]["by_stage"].items():
+            cmp("independent stage" if s in INDEP_STAGES else "hybrid stage", s, by_stage[s], x)
+        cmp("independent total", "SUM-01", tot["SUM-01"], ref["SUM-01"]["value"])
+        cmp("hybrid total", "SUM-02", tot["SUM-02"], ref["SUM-02"]["value"])
+        cmp("hybrid total", "SUM-03", tot["SUM-03"], ref["SUM-03"]["value"])
+        # per-row renewal emission: amplitude x number of events inside T
+        rb = ref["B4-02"]
+        for i, ev in enumerate(prep.events["m"]):
+            n = sum(1 for tau in ev if tau < T * (1.0 - rs.EPS))
+            cmp("independent per row", "B4-02 by_item_material", float(prep.u[0][i]) * n, rb["by_item_material"][i])
+        for j, ev in enumerate(prep.events["e"]):
+            n = sum(1 for tau in ev if tau < T * (1.0 - rs.EPS))
+            cmp("independent per row", "B4-02 by_item_equipment", float(prep.u[1][j]) * n, rb["by_item_equipment"][j])
+        ROWS.append((category, label, T, worst, len(scn.materials) + len(scn.equipment) + len(scn.refrigerants), prep.n_knots))
+    return prep
+
+def cycles_of(scn):
+    c = [r.refresh_cycle for r in scn.materials if r.refresh_cycle and r.refresh_cycle > 0]
+    c += [e.service_life for e in scn.equipment if e.service_life and e.service_life > 0 and e.replacement_event_list is None]
+    return [x for x in c if x <= H]
+
+def scale_factors(scn, k):
+    s = copy.deepcopy(scn)
+    for f in s.factors.values():
+        if f.value is not None:
+            f.value *= k
+            if f.gas_amounts:
+                for g in list(f.gas_amounts):
+                    f.gas_amounts[g] *= k
+    s.meta.scenario_id += "*f%g" % k
+    return s
+
+def scale_quantities(scn, k):
+    s = copy.deepcopy(scn)
+    for r in s.materials:
+        if r.quantity is not None: r.quantity *= k
+        if r.transport.mass_t is not None: r.transport.mass_t *= k
+        if r.end_of_life.mass_kg is not None: r.end_of_life.mass_kg *= k
+    for e in s.equipment:
+        if e.quantity is not None: e.quantity *= k
+        if e.end_of_life_mass_kg is not None: e.end_of_life_mass_kg *= k
+    for d in s.refrigerants:
+        if d.charge_mass_kg is not None: d.charge_mass_kg *= k
+    s.meta.scenario_id += "*q%g" % k
+    return s
+
+def main():
+    baseline.assert_frozen(); baseline.load()
+    from synth import generate
+    bench = scenarios.benchmark()
+    S, M, L = bench
+    edge = dict(scenarios.edge_set())
+    cs, cm = cycles_of(S), cycles_of(M)
+    print("benchmark S cycles: n=%d min=%.4g max=%.4g mean=%.6g median=%.6g" % (len(cs), min(cs), max(cs), statistics.mean(cs), statistics.median(cs)))
+    print("benchmark M cycles: n=%d min=%.4g max=%.4g mean=%.6g median=%.6g" % (len(cm), min(cm), max(cm), statistics.mean(cm), statistics.median(cm)))
+    pS = Prepared(S)
+    # 5 typical / 1 min / 2 max / 3 mean / 4 median
+    run_case("5 typical", "benchmark S", S, [60.0, 50.0, 30.0, 100.0], pS)
+    run_case("1 minimum", "benchmark S", S, [0.001, 0.5, 1.0, min(cs)], pS)
+    run_case("2 maximum", "benchmark S", S, [120.0, 130.0, max(cs)], pS)
+    run_case("3 mean", "benchmark S", S, [statistics.mean(cs), 61.0], pS)
+    run_case("4 median", "benchmark S", S, [statistics.median(cs)], pS)
+    pM = Prepared(M)
+    run_case("5 typical", "benchmark M", M, [60.0], pM)
+    run_case("3 mean", "benchmark M", M, [statistics.mean(cm)], pM)
+    run_case("4 median", "benchmark M", M, [statistics.median(cm)], pM)
+    run_case("2 maximum", "benchmark M", M, [130.0], pM)
+    run_case("2 maximum", "benchmark L (26,300 rows)", L, [60.0, 130.0])
+    run_case("1 minimum", "edge single_row", edge["single_row"], [60.0, 0.5])
+    run_case("1 minimum", "edge empty_lists", edge["empty_lists"], [60.0])
+    # 7 discontinuities / 8 cycle equals period
+    ex = edge["exact_multiple_lives"]
+    run_case("7 discontinuity", "edge exact_multiple_lives (5,10,12,15,20,30)", ex, [59.999999, 60.0, 60.000001, 29.999999, 30.000001, 119.999999, 120.000001])
+    run_case("8 cycle = period", "edge exact_multiple_lives", ex, [5.0, 10.0, 12.0, 15.0, 20.0, 30.0, 60.0, 120.0])
+    le = edge["life_equals_period"]
+    run_case("8 cycle = period", "edge life_equals_period (60)", le, [60.0, 59.999999, 60.000001, 120.0, 120.000001])
+    run_case("8 cycle = period", "edge life_longer_than_period", edge["life_longer_than_period"], [60.0, 80.0, 80.000001])
+    run_case("8 cycle = period", "edge rebuild_within_period (25)", edge["rebuild_within_period"], [25.0, 25.000001, 50.0, 60.0, 75.000001])
+    run_case("8 cycle = period", "edge refurbishment_divides_period (30)", edge["refurbishment_divides_period"], [30.0, 60.0, 90.0, 90.000001])
+    run_case("7 discontinuity", "edge life_near_divisor", edge["life_near_divisor"], [60.0])
+    run_case("7 discontinuity", "edge period_just_above_integer", edge["period_just_above_integer"], [60.000001])
+    # 9 decimal periods and cycles
+    run_case("9 decimal", "benchmark S", S, [62.5, 42.5, 33.3, 99.9, 7.25], pS)
+    cont = generate.make_scenario(424201, "S", "school", "S", 62.5, service_life_mode="CONTINUOUS")
+    run_case("9 decimal", "continuous service lives", cont, [62.5, 60.0, 33.3, 99.9])
+    nond = generate.make_scenario(424202, "W", "residential", "S", 99.9, service_life_mode="NON_DIVISOR")
+    run_case("9 decimal", "non-divisor service lives", nond, [99.9, 42.5])
+    run_case("9 decimal", "edge life_shorter_than_one_year (0.5, 0.75)", edge["life_shorter_than_one_year"], [10.0, 0.75, 1.5, 9.999999, 0.4])
+    run_case("9 decimal", "edge period_non_integer", edge["period_non_integer"], [62.5])
+    run_case("9 decimal", "edge period_shorter_than_one_year", edge["period_shorter_than_one_year"], [0.5])
+    # 10 special values
+    run_case("10 special", "edge zero_quantities", edge["zero_quantities"], [60.0])
+    run_case("10 special", "edge leak_rate_extremes (0 and 1)", edge["leak_rate_extremes"], [60.0, 62.5])
+    run_case("10 special", "edge recovery_extremes (0 and 1)", edge["recovery_extremes"], [60.0, 62.5])
+    run_case("10 special", "factors x 1e9", scale_factors(S, 1e9), [60.0, 62.5])
+    run_case("10 special", "factors x 1e-9", scale_factors(S, 1e-9), [60.0, 62.5])
+    run_case("10 special", "quantities x 1e12", scale_quantities(S, 1e12), [60.0])
+    run_case("10 special", "quantities x 1e-12", scale_quantities(S, 1e-12), [60.0])
+    # 6 conditions where an error could grow
+    run_case("6 error-prone", "edge explicit_event_lists", edge["explicit_event_lists"], [60.0, 42.5, 120.0])
+    run_case("6 error-prone", "edge top_up_all", edge["top_up_all"], [60.0, 99.9])
+    run_case("6 error-prone", "edge top_up_none", edge["top_up_none"], [60.0, 99.9])
+    run_case("6 error-prone", "edge stage_subset", edge["stage_subset"], [60.0])
+    run_case("6 error-prone", "edge waste_rate_extremes", edge["waste_rate_extremes"], [60.0])
+    run_case("6 error-prone", "edge all_composite", edge["all_composite"], [60.0])
+    run_case("6 error-prone", "edge all_epd (half inapplicable)", edge["all_epd"], [60.0])
+    run_case("6 error-prone", "edge full_recycling", edge["full_recycling"], [60.0])
+    run_case("6 error-prone", "edge co2_only_scope", edge["co2_only_scope"], [60.0])
+    run_case("6 error-prone", "edge grid_floor_mid_period (operation, hybrid)", edge["grid_floor_mid_period"], [60.0, 20.5])
+    dirty = generate.make_scenario(424203, "RC", "office", "S", 60.0, dirty=True)
+    DIRTY.append(dirty)
+
+    print("\n=== cases: %d compared, %d excluded" % (len(ROWS), len(EXCL)))
+    for e in EXCL: print("  excluded:", e)
+    bycat = collections.OrderedDict()
+    for cat, label, T, worst, rows, knots in ROWS:
+        d = bycat.setdefault(cat, [0, 0.0, None])
+        d[0] += 1
+        if worst > d[1]: d[1], d[2] = worst, (label, T)
+    print("\n=== by category (worst relative difference over all compared quantities of a case)")
+    for cat, (n, w, where) in sorted(bycat.items(), key=lambda kv: int(kv[0].split()[0])):
+        print("  %-18s n=%3d  worst=%.3e  at %s" % (cat, n, w, where))
+    print("\n=== by quantity")
+    for (group, name), st in STATS.items():
+        s = st.summary()
+        print("  %-20s %-24s n=%7d max_rel=%-10s worst=%s  ref0=%d max_abs_at_ref0=%.3e nonfinite=%d" % (
+            group, name, s["n"], ("%.3e" % s["max_abs"]) if s["max_abs"] is not None else "-",
+            (s["worst"]["scenario"] if s["worst"] else "-"), s["n_ref_zero"], s["max_abs_when_ref_zero"], s["n_nonfinite"]))
+    print("\n=== sizes: rows and knots of the prepared scenarios (max)", max(r[4] for r in ROWS), max(r[5] for r in ROWS))
+    print("MSP+flatten seconds: S %.3f M %.3f" % (pS.t_msp, pM.t_msp))
+
+DIRTY = []
+if __name__ == "__main__":
+    main()

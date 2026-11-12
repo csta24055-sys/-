@@ -38,3 +38,29 @@ python3 -B -m experiments.exp02_knot_spectrum 30 M L
 python3 -B -m experiments.exp03_fourier_counting 40 M
 python3 -B -m experiments.exp04_pod_time_curves 100 M
 ```
+
+## 統合系（2026-11-13）
+
+全 70 単位を、共通表 → 積和① → 節点スペクトル → 積和② で計算する。説明と結果は [../11_UNIFIED_SYSTEM/](../11_UNIFIED_SYSTEM/README.md)。
+
+| 所在 | 役割 |
+|---|---|
+| `tstudy/index.py` | 共通表：文字列の分割、添字集合、節点の格子（評価単位の知識を持たない一般の操作） |
+| `tstudy/interval.py` | 節点スペクトルの区間形（冷媒の期末残存量） |
+| `tstudy/unified.py` | 統合系の本体 `System`。基準計算を読まない |
+| `specs/lib.py` | 仕様を書くための短縮記法と共通テンプレート |
+| `specs/physical.py` | 解体・廃棄、使用段階の振幅、事象の表、運用、冷媒、排出の行（データだけ） |
+| `specs/gates.py` | 検査・状態・単位と権限のゲート、集計表（データだけ） |
+| `specs/at_t.py` | 時刻 T での 2 つのプログラム（TIME、AGG） |
+| `specs/system.py` | 全体の組み立て：共通表の計画、積和①、節点への受け渡し、静的な表 |
+| `checks/sets_unified.py`、`checks/check_unified.py` | 検証の集合と、全 70 単位・全出力の比較 |
+| `checks/check_unified_controls.py` | 誤り検出の確認、QA-01 の故障注入、構造の確認 |
+| `experiments/expU1_b14_forms.py`、`expU2_cross_engines.py` | B1-04 の 3 表現（mpmath）、別エンジンでの照合（SymPy、SciPy、DuckDB、lca_ops） |
+| `tools_unit_map.py`、`tools_units_doc.py`、`tools_verification_report.py`、`tools_example.py` | 追跡表・定義表・検証報告・全出力の実例の生成 |
+| `recovered_2026-11-12/` | 2026-11-12 の一時スクリプト（記録から復元。実行用ではない） |
+
+```
+python3 -B -m checks.check_unified --quick
+python3 -B -m checks.check_unified
+python3 -B -m checks.check_unified_controls
+```

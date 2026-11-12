@@ -1,0 +1,652 @@
+"""Temporary scratch (in memory only, deleted after the run): the three remaining groups
+(operation, refrigerants, checks/indicators) in the two structures  masked sum-product + knot spectrum.
+Fictional data, independent concept model. Writes nothing."""
+import sys, copy, math, time, collections
+sys.dont_write_bytecode = True
+RC = "/home/user/-/whole-life-carbon-jcat-study/10_TRANSFORM_STUDY/research_code"
+W3 = "/tmp/claude-0/-home-user--/49c0bd7e-a786-5ae4-9a1e-e89e7996ede3/scratchpad/w3"
+sys.path.insert(0, RC); sys.path.insert(0, W3)
+import numpy as np
+from tstudy import baseline, scenarios, rampstep as rs, msp, tables
+from tstudy.knots import KnotSpectrum
+import repcheck_old as R0          # earlier in-memory specification: pre_a + C1..C4, X-14, amplitudes of B3/B4/B5
+
+F, NN, EQ, PR, VAL, sp, scalar = R0.F, R0.NN, R0.EQ, R0.PR, R0.VAL, R0.sp, R0.scalar
+NOT = lambda p: dict(p, **{"not": True})
+C = lambda v: {"const": v}
+OF = lambda c, t: {"col": c, "of": t}
+VIA = lambda c, r: {"col": c, "via": r}
+LE = lambda a, b: {"pred": "le", "a": a, "b": b}
+RATIO = lambda a: {"pred": "range", "a": a, "lo": 0, "hi": 1}
+def RNG(a, lo, hi, lo_open=False, hi_open=False):
+    return {"pred": "range", "a": a, "lo": lo, "hi": hi, "lo_open": lo_open, "hi_open": hi_open}
+def MATCH(table, out, keys, into, on):
+    return {"op": "match", "table": table, "out": out, "keys": keys, "into": into, "on": on}
+
+STAGES = ("A1-A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "C1", "C2", "C3", "C4")
+OP, WW, CAL, GS = "operation", "water_waste", "operation.grid.table", "operation.grid.steps"
+XS = CAL + ".xsteps"
+D, DY, E = "refrigerants", "refrigerants.years", "refrigerants.events"
+RT, SQ, UA = "materials.end_of_life.routes", "summary_quantities", "project.use_area_breakdown"
+PM = {"col": "end_of_life.mass_kg", "via": "_parent"}
+
+# =============================================================================================
+# generic index-set constructions (no unit knowledge, no arithmetic on input values)
+# =============================================================================================
+def put_table(tabs, name, cols):
+    n = 0
+    d = {}
+    for k, arr in cols.items():
+        n = len(arr)
+        d[k] = arr
+        d[k + "?"] = np.ones(len(arr), dtype=bool)
+    tabs.data[name] = d
+    tabs.rows[name] = n
+
+def tokenise(tabs):
+    """Every text column gets two companions: <name>~h (text before the first "/") and <name>~t (text after it)."""
+    for tname, cols in tabs.data.items():
+        for name in [c for c in cols if not c.endswith("?")]:
+            arr = cols[name]
+            if arr.dtype != object:
+                continue
+            ok = cols[name + "?"]
+            n = len(arr)
+            h = np.empty(n, dtype=object); t = np.empty(n, dtype=object)
+            hm = np.zeros(n, dtype=bool); tm = np.zeros(n, dtype=bool)
+            for i in range(n):
+                v = arr[i]
+                if ok[i] and isinstance(v, str):
+                    a, sep, b = v.partition("/")
+                    h[i] = a; hm[i] = True
+                    if sep:
+                        t[i] = b; tm[i] = True
+            cols[name + "~h"], cols[name + "~h?"] = h, hm
+            cols[name + "~t"], cols[name + "~t?"] = t, tm
+
+def add_product(tabs, name, parent, n_other, col):
+    """All pairs (row of parent, 0..n_other-1): the index set of a two-index sum."""
+    n = tabs.rows.get(parent, 0)
+    put_table(tabs, name, {"_parent": np.repeat(np.arange(n, dtype=float), n_other),
+                           col: np.tile(np.arange(n_other, dtype=float), n)})
+
+def add_events(tabs, name, parent, horizon, cycle=None, lists=None):
+    """Knot lattices of every parent row: n*cycle (source CYCLE) and the listed times (source LIST), sorted,
+    0 < t < horizon*(1-eps), each located in the year grid (cell = index of the year that holds it)."""
+    par, tau, src = [], [], []
+    n = tabs.rows.get(parent, 0)
+    pdata = tabs.data.get(parent, {})
+    if cycle and cycle in pdata and pdata[cycle].dtype != object:
+        cyc, ok = pdata[cycle], pdata[cycle + "?"]
+        for i in range(n):
+            if ok[i]:
+                for t in rs.periodic_times(horizon, float(cyc[i])):
+                    par.append(i); tau.append(t); src.append("CYCLE")
+    if lists and lists in tabs.data and tabs.rows[lists]:
+        lt = tabs.data[lists]
+        by = {}
+        for p, v, okv in zip(lt["_parent"], lt["value"], lt["value?"]):
+            if okv:
+                by.setdefault(int(p), []).append(float(v))
+        for i in sorted(by):
+            for t in sorted(rs.explicit_times(horizon, by[i])):
+                par.append(i); tau.append(t); src.append("LIST")
+    s = np.empty(len(src), dtype=object)
+    for i, v in enumerate(src):
+        s[i] = v
+    put_table(tabs, name, {"_parent": np.array(par, dtype=float), "tau": np.array(tau, dtype=float),
+                           "cell": np.array([rs.event_year(t) - 1 for t in tau], dtype=float), "src": s})
+
+def strs(xs):
+    a = np.empty(len(xs), dtype=object)
+    for i, v in enumerate(xs):
+        a[i] = v
+    return a
+
+# =============================================================================================
+# specification 1 (data only): amplitudes and row-level checks, independent of the study period
+# =============================================================================================
+TEMPLATES = {
+    # agreement of two year series: 1 where they differ by more than 1e-12 relative (and are not equal)
+    "CLOSE": [
+        sp(CAL, "@av", "none", [[RNG("$v", 0, "inf"), "$v"], [RNG("$v", "-inf", 0, hi_open=True), C(-1), "$v"]]),
+        sp(CAL, "@at", "none", [[RNG("$t", 0, "inf"), "$t"], [RNG("$t", "-inf", 0, hi_open=True), C(-1), "$t"]]),
+        sp(CAL, "@mx", "none", [[LE("@at", "@av"), "@av"], [NOT(LE("@at", "@av")), "@at"]]),
+        sp(CAL, "@tol", "none", [[C(1e-12), "@mx"]]),
+        sp(CAL, "@d", "none", [[PR("$t"), "$v"], [PR("$t"), C(-1), "$t"]]),
+        sp(CAL, "@nd", "none", [[C(-1), "@d"]]),
+        sp(CAL, "@mis", "none", [
+            [PR("$t"), NOT({"pred": "eq", "a": "$v", "b": "$t"}), NOT(LE("@d", "@tol"))],
+            [PR("$t"), NOT({"pred": "eq", "a": "$v", "b": "$t"}), LE("@d", "@tol"), NOT(LE("@nd", "@tol"))]]),
+    ],
+    # yearly values of an annual profile on the calendar (rows k of the grid table)
+    "PROFILE": [
+        sp("$O", "@d", "none", [[EQ("$kind", "CONSTANT"), PR("$base")],
+                                [EQ("$kind", "LINEAR_TREND"), PR("$base"), PR("$slope")]]),
+        MATCH(CAL, "@ref", ["_pos"], "$tab", ["_pos"]),
+        sp(CAL, "@v", "none", [
+            [EQ(OF("$kind", "$O"), "CONSTANT"), PR(OF("$base", "$O")), OF("$base", "$O")],
+            [EQ(OF("$kind", "$O"), "LINEAR_TREND"), PR(OF("$base", "$O")), PR(OF("$slope", "$O")), OF("$base", "$O")],
+            [EQ(OF("$kind", "$O"), "LINEAR_TREND"), PR(OF("$base", "$O")), PR(OF("$slope", "$O")), OF("$slope", "$O"), "_pos"],
+            [EQ(OF("@d", "$O"), 0), VIA("value", "@ref")]]),
+        sp(CAL, "@t", "none", [[VIA("value", "@ref")]]),
+        {"use": "CLOSE", "as": "@m", "with": {"v": "@v", "t": "@t"}},
+    ],
+    # yearly emission of an annual quantity with a factor: value * multiplier * factor
+    "ANNUALF": [
+        {"use": "FACTOR", "as": "@f", "with": {"T": "$O", "fid": "$fid", "gate": "$gate", "unit": "$uh", "extra": "_none"}},
+        sp("$O", "@ok", "none", [[EQ("@f.ok", 1), EQ("$ut", "year")]]),
+        sp("$O", "@fv", "none", [[EQ("@ok", 1), VAL("@f.ref")]]),
+        sp(CAL, "@e", "none", [[EQ(OF("@ok", "$O"), 1), "$v", OF("@f.c.f", "$O"), OF("@fv", "$O")]]),
+    ],
+    # one factor (I + N^s) of the resolvent of the masked shift N on the device-year table
+    "DOUBLE": [
+        sp(DY, "@ks", "none", [["k"], [C("$neg")]]),
+        MATCH(DY, "@pv", ["_parent", "@ks"], DY, ["_parent", "k"]),
+        sp(DY, "$uout", "none", [["$uin"], [PR("@pv"), "$cin", VIA("$uin", "@pv")]]),
+        sp(DY, "$cout", "none", [[PR("@pv"), "$cin", VIA("$cin", "@pv")]]),
+    ],
+}
+
+def prof(as_, O, p):
+    return {"use": "PROFILE", "as": as_, "with": {"O": O, "kind": p + ".kind", "base": p + ".base", "slope": p + ".slope",
+                                                  "tab": O + "." + p + ".table"}}
+def annualf(as_, O, fid, gate, p, v):
+    return {"use": "ANNUALF", "as": as_, "with": {"O": O, "fid": fid, "gate": gate, "uh": p + ".unit~h", "ut": p + ".unit~t", "v": v}}
+def conv(as_, T, frm, to, extra="_none"):
+    return {"use": "CONV", "as": as_, "with": {"T": T, "from": frm, "to": to, "extra": extra}}
+
+B64 = OF("b64.computed", OP)
+OPERATION = {"id": "OPERATION", "doc": "X-06, B6-04, B6-01, B6-02, B6-03, B2-01, B7-01..04, X-11: yearly coefficients", "steps": [
+    # ---- X-06 grid factor series
+    sp(OP, "x06.wfC", "none", [[EQ("grid.kind", "CONSTANT"), PR("grid.start")]]),
+    sp(OP, "x06.wfL", "none", [[EQ("grid.kind", "LINEAR_DECLINE_TO_FLOOR"), PR("grid.start"), PR("grid.floor"), PR("grid.annual_decline"),
+                                RNG("grid.annual_decline", 0, "inf"), LE("grid.floor", "grid.start")]]),
+    sp(GS, "x06.pm1", "none", [["_pos"], [C(-1)]]),
+    MATCH(GS, "x06.prev", ["_parent", "x06.pm1"], GS, ["_parent", "_pos"]),
+    sp(GS, "x06.pp1", "none", [["_pos"], [C(1)]]),
+    MATCH(GS, "x06.next", ["_parent", "x06.pp1"], GS, ["_parent", "_pos"]),
+    sp(GS, "x06.next_from", "none", [[VIA("from_index", "x06.next")]]),
+    sp(GS, "x06.first0", {"by": "_parent"}, [[EQ("_pos", 0), EQ("from_index", 0)]]),
+    sp(GS, "x06.nbad", {"by": "_parent"}, [[PR("x06.prev"), LE("from_index", VIA("from_index", "x06.prev"))]]),
+    sp(OP, "x06.wfS", "none", [[EQ("grid.kind", "STEPWISE"), RNG("grid.steps#", 1, "inf"), EQ("x06.first0", 1), EQ("x06.nbad", 0)]]),
+    sp(OP, "x06.wf", "none", [[EQ("x06.wfC", 1)], [EQ("x06.wfL", 1)], [EQ("x06.wfS", 1)]]),
+    MATCH(XS, "x06.sref", ["s"], GS, ["_row"]),
+    sp(XS, "x06.sv", {"by": "_parent"}, [
+        [LE(VIA("from_index", "x06.sref"), VIA("_pos", "_parent")), NOT(PR(VIA("x06.next_from", "x06.sref"))), VIA("value", "x06.sref")],
+        [LE(VIA("from_index", "x06.sref"), VIA("_pos", "_parent")), PR(VIA("x06.next_from", "x06.sref")),
+         NOT(LE(VIA("x06.next_from", "x06.sref"), VIA("_pos", "_parent"))), VIA("value", "x06.sref")]]),
+    sp(CAL, "x06.dl", "none", [[EQ(OF("x06.wfL", OP), 1), OF("grid.start", OP)],
+                               [EQ(OF("x06.wfL", OP), 1), C(-1), OF("grid.annual_decline", OP), "_pos"]]),
+    sp(CAL, "x06.g", "none", [
+        [EQ(OF("x06.wfC", OP), 1), OF("grid.start", OP)],
+        [EQ(OF("x06.wfL", OP), 1), LE(OF("grid.floor", OP), "x06.dl"), "x06.dl"],
+        [EQ(OF("x06.wfL", OP), 1), NOT(LE(OF("grid.floor", OP), "x06.dl")), OF("grid.floor", OP)],
+        [EQ(OF("x06.wfS", OP), 1), "x06.sv"],
+        [EQ(OF("x06.wf", OP), 0), "value"]]),
+    {"use": "CLOSE", "as": "x06.m", "with": {"v": "x06.g", "t": "value"}},
+    # ---- B6-04 purchased electricity
+    prof("p.el", OP, "electricity"), prof("p.gen", OP, "onsite_generation"), prof("p.exp", OP, "onsite_export"),
+    conv("b64.cg", OP, "onsite_generation.unit~h", "electricity.unit~h"),
+    conv("b64.cx", OP, "onsite_export.unit~h", "electricity.unit~h"),
+    sp(OP, "b64.computed", "none", [[EQ("electricity.unit~t", "year"), EQ("onsite_generation.unit~t", "year"),
+                                     EQ("onsite_export.unit~t", "year"), EQ("b64.cg.ok", 1), EQ("b64.cx.ok", 1)]]),
+    sp(CAL, "b64.inner", "none", [[EQ(B64, 1), "p.gen.v", OF("b64.cg.f", OP)], [EQ(B64, 1), C(-1), "p.exp.v", OF("b64.cx.f", OP)]]),
+    sp(CAL, "b64.d", "none", [[EQ(B64, 1), "p.el.v"], [EQ(B64, 1), C(-1), "b64.inner"]]),
+    sp(CAL, "b64.net", "none", [[EQ(B64, 1), RNG("b64.d", 0, "inf"), "b64.d"]]),
+    sp(CAL, "b64.mis", "none", [["p.el.m.mis"], ["p.gen.m.mis"], ["p.exp.m.mis"]]),
+    # ---- B6-01 purchased electricity emission
+    sp(OP, "x06.gu_ok", "none", [[EQ("grid.unit~h", "kgCO2e"), PR("grid.unit~t"), NOT(EQ("grid.unit~t", ""))]]),
+    conv("b61.c", OP, "electricity.unit~h", "grid.unit~t"),
+    sp(OP, "b61.ok", "none", [[EQ("grid.licence_status", "PERMITTED_PUBLIC"), EQ("b64.computed", 1), EQ("x06.gu_ok", 1), EQ("b61.c.ok", 1)]]),
+    sp(CAL, "b61.e", "none", [[EQ(OF("b61.ok", OP), 1), "b64.net", OF("b61.c.f", OP), "x06.g"]]),
+    # ---- B6-02 fuels
+    prof("p.gas", OP, "gas"), prof("p.oil", OP, "oil"), prof("p.dh", OP, "district_heat"),
+    annualf("b62.gas", OP, "gas_factor_id", "stage.B6.is", "gas", "p.gas.v"),
+    annualf("b62.oil", OP, "oil_factor_id", "stage.B6.is", "oil", "p.oil.v"),
+    annualf("b62.dh", OP, "district_heat_factor_id", "stage.B6.is", "district_heat", "p.dh.v"),
+    sp(CAL, "b62.e", "none", [["b62.gas.e"], ["b62.oil.e"], ["b62.dh.e"]]),
+    sp(OP, "b62.nsk", "none", [[EQ("b62.gas.ok", 0)], [EQ("b62.oil.ok", 0)], [EQ("b62.dh.ok", 0)]]),
+    sp(CAL, "b62.mis", "none", [["p.gas.m.mis"], ["p.oil.m.mis"], ["p.dh.m.mis"]]),
+    # ---- B6-03, B2-01 amplitudes per year cell
+    sp(CAL, "b63.a", "none", [["b61.e"], ["b62.e"]]),
+    sp(OP, "b21.ok", "none", [[RATIO("facility_management_ratio")]]),
+    sp(CAL, "b21.a", "none", [[EQ(OF("b21.ok", OP), 1), "b61.e", OF("facility_management_ratio", OP)]]),
+    # ---- B7
+    prof("p.wat", WW, "water"), prof("p.sew", WW, "sewage"), prof("p.msw", WW, "municipal_waste"),
+    annualf("b71", WW, "water_factor_id", "stage.B7.is", "water", "p.wat.v"),
+    annualf("b72", WW, "sewage_factor_id", "stage.B7.is", "sewage", "p.sew.v"),
+    annualf("b73", WW, "waste_factor_id", "stage.B7.is", "municipal_waste", "p.msw.v"),
+    sp(CAL, "b74.a", "none", [["b71.e"], ["b72.e"], ["b73.e"]]),
+    sp(WW, "b71.nsk", "none", [[EQ("b71.ok", 0)]]), sp(WW, "b72.nsk", "none", [[EQ("b72.ok", 0)]]), sp(WW, "b73.nsk", "none", [[EQ("b73.ok", 0)]]),
+    # ---- X-11 estimate from the floor area
+    conv("x11.c", OP, C("kWh"), "grid.unit~t"),
+    sp(OP, "x11.ok", "none", [[RNG(OF("gross_floor_area", "project"), 0, "inf", lo_open=True, hi_open=True), NN("electricity_per_m2_per_year"),
+                               EQ("x06.gu_ok", 1), EQ("x11.c.ok", 1), EQ("grid.licence_status", "PERMITTED_PUBLIC")]]),
+    sp(CAL, "x11.a", "none", [[EQ(OF("x11.ok", OP), 1), OF("gross_floor_area", "project"), OF("electricity_per_m2_per_year", OP),
+                               OF("x11.c.f", OP), "x06.g"]]),
+], "outputs": {}}
+
+OKP, TOP0 = EQ(VIA("b1.ok", "_parent"), 1), EQ(VIA("top_up", "_parent"), 0)
+M0, RL, K4, L3 = VIA("charge_mass_kg", "_parent"), VIA("annual_leak_rate", "_parent"), VIA("b1.k4", "_parent"), VIA("b1.l3", "_parent")
+def doubling(n):
+    out = []
+    for b in range(n):
+        out.append({"use": "DOUBLE", "as": "b1.dbl%d" % b, "with": {"neg": -(2 ** b), "uin": "b1.u%d" % b, "cin": "b1.c%d" % b,
+                                                                   "uout": "b1.u%d" % (b + 1), "cout": "b1.c%d" % (b + 1)}})
+    return out
+NDBL = 8
+UF = "b1.u%d" % NDBL
+REFRIGERANT = {"id": "REFRIGERANT", "doc": "B1-01..04: start-of-year mass by the resolvent of the masked shift; amplitudes", "steps": [
+    sp(D, "b1.ok", "none", [[NN("charge_mass_kg"), NN("gwp"), RATIO("annual_leak_rate")]]),
+    sp(D, "b1.q", "none", [[EQ("b1.ok", 1), EQ("top_up", 1)], [EQ("b1.ok", 1), EQ("top_up", 0), {"fn": "one_minus", "a": "annual_leak_rate"}]]),
+    sp(D, "b1.lok", "none", [[EQ("b1.ok", 1), RATIO("replacement_loss_rate")]]),
+    sp(D, "b1.rok", "none", [[EQ("b1.ok", 1), RATIO("end_of_life_recovery_rate")]]),
+    sp(D, "b1.k4", "none", [[EQ("b1.rok", 1), {"fn": "one_minus", "a": "end_of_life_recovery_rate"}, "gwp"]]),
+    sp(D, "b1.k4m0", "none", [[EQ("b1.rok", 1), "b1.k4", "charge_mass_kg"]]),
+    sp(D, "b1.l3", "none", [[EQ("b1.lok", 1), "replacement_loss_rate", "gwp"]]),
+    sp(D, "b11.ok", "none", [[NN("charge_mass_kg"), NN("gwp")]]),
+    sp(D, "b11.v", "total", [[EQ("b11.ok", 1), "charge_mass_kg", "gwp"]]),
+    sp(D, "b11.nsk", "total", [[EQ("b11.ok", 0)]]),
+    sp(D, "b12.nsk", "total", [[EQ("b1.ok", 0)]]), sp(D, "b13.nsk", "total", [[EQ("b1.lok", 0)]]), sp(D, "b14.nsk", "total", [[EQ("b1.rok", 0)]]),
+    # events: which lattice counts (explicit list when given, else multiples of the service life)
+    sp(E, "b1.act", "none", [[EQ("src", "LIST"), PR(VIA("change_years#", "_parent"))],
+                             [EQ("src", "CYCLE"), NOT(PR(VIA("change_years#", "_parent")))]]),
+    MATCH(DY, "b1.ev1", ["_parent", "k", C(1)], E, ["_parent", "cell", "b1.act"]),        # first event of the year cell
+    sp(DY, "b1.p", "none", [[PR("b1.ev1")]]),                                              # reset indicator
+    sp(DY, "b1.km1", "none", [["k"], [C(-1)]]),
+    MATCH(DY, "b1.pv1", ["_parent", "b1.km1"], DY, ["_parent", "k"]),
+    # u = b + N u :  b = m0 at k = 0 and after a reset;  (N u)[k] = (1 - p[k-1]) * q * u[k-1]
+    sp(DY, "b1.c0", "none", [[OKP, PR("b1.pv1"), EQ(VIA("b1.p", "b1.pv1"), 0), VIA("b1.q", "_parent")]]),
+    sp(DY, "b1.u0", "none", [[OKP, EQ("k", 0), M0], [OKP, PR("b1.pv1"), EQ(VIA("b1.p", "b1.pv1"), 1), M0]]),
+    *doubling(NDBL),
+    # amplitudes
+    sp(DY, "b1.a2", "none", [[OKP, UF, RL, VIA("gwp", "_parent")]]),
+    sp(DY, "b1.y4", "none", [[EQ(VIA("b1.rok", "_parent"), 1), TOP0, C(-1), K4, UF, RL]]),
+    sp(DY, "b1.e4a", "none", [[EQ(VIA("b1.rok", "_parent"), 1), TOP0, EQ("b1.p", 1), K4, M0],
+                              [EQ(VIA("b1.rok", "_parent"), 1), TOP0, EQ("b1.p", 1), C(-1), K4, UF]]),
+    sp(DY, "b1.e4g", "none", [[EQ(VIA("b1.rok", "_parent"), 1), TOP0, EQ("b1.p", 1), K4, UF, RL]]),
+    sp(DY, "b1.tau1", "none", [[VIA("tau", "b1.ev1")]]),
+    sp(DY, "b14.kp1", "none", [["k"], [C(1)]]),
+    MATCH(E, "b1.dy", ["_parent", "cell"], DY, ["_parent", "k"]),
+    sp(E, "b1.first", "none", [[EQ("b1.act", 1), {"pred": "eq", "a": VIA("b1.ev1", "b1.dy"), "b": "_row"}]]),
+    sp(E, "b1.a3", "none", [[EQ(VIA("b1.lok", "_parent"), 1), EQ("b1.act", 1), EQ("b1.first", 1), L3, VIA(UF, "b1.dy")],
+                            [EQ(VIA("b1.lok", "_parent"), 1), EQ("b1.act", 1), EQ("b1.first", 0), L3, M0]]),
+    sp(E, "b1.g3", "none", [[EQ(VIA("b1.lok", "_parent"), 1), EQ("b1.act", 1), EQ("b1.first", 1), TOP0, C(-1), L3, VIA(UF, "b1.dy"), RL]]),
+], "outputs": {}}
+
+def _terms_of(out):
+    for u in R0.SPEC["units"]:
+        for st in u["steps"]:
+            if st.get("out") == out:
+                return copy.deepcopy(st["terms"])
+    raise KeyError(out)
+
+def routes_check(tag, landfill):
+    is_lf = EQ("route", "LANDFILL") if landfill else NOT(EQ("route", "LANDFILL"))
+    return [sp(RT, tag + ".rsk", "none", [[is_lf, NN(PM), EQ(tag + ".f.ok", 0)], [is_lf, NN(PM), EQ(tag + ".f.ok", 1), NOT(NN("fraction"))]]),
+            sp(RT, tag + ".npart", {"by": "_parent"}, [[tag + ".rsk"]]),
+            sp(RT, tag + ".nrsk", "total", [[tag + ".rsk"]]),
+            sp("materials", tag + ".nsk", "total", [[NOT(NN("end_of_life.mass_kg"))]])]
+
+CHECKS1 = {"id": "CHECKS1", "doc": "row-level checks and indicators that do not depend on the study period", "steps": [
+    *routes_check("c31", False), *routes_check("c41", True),
+    # ---- flags behind n_partial of B4-02 (a renewal whose components are incomplete)
+    sp("materials", "np.a01", "none", _terms_of("a01.n_skipped")),
+    sp("materials", "np.a03", "none", _terms_of("a03.n_skipped")),
+    sp("materials", "np.a41", "none", _terms_of("a41.n_skipped")),
+    sp("materials", "np.a42", "none", _terms_of("a42.n_skipped")),
+    sp("materials", "b4.inst.ok", "none", [[PR("installation_factor_id"), EQ("b4.inst.f.ok", 1), EQ("a05.ok", 1)]]),
+    sp("materials", "np.cnt", "none", [["np.a01"], ["np.a03"], ["np.a41"], ["np.a42"], [EQ("c21.ok", 0)], [NOT(NN("end_of_life.mass_kg"))],
+                                       ["c31.npart"], ["c41.npart"], [PR("installation_factor_id"), EQ("b4.inst.ok", 0)]]),
+    sp("materials", "np.m", "none", [[RNG("np.cnt", 1, "inf")]]),
+    sp("equipment", "np.cnt_e", "none", [[EQ("x01.ok", 0)], [EQ("x14.ok", 0)],
+                                         [PR("delivery_factor_id"), EQ("b4.dlv.f.ok", 0)],
+                                         [PR("delivery_factor_id"), EQ("b4.dlv.f.ok", 1), NOT(NN("quantity"))],
+                                         [PR("installation_factor_id"), EQ("b4.ins.f.ok", 0)],
+                                         [PR("installation_factor_id"), EQ("b4.ins.f.ok", 1), NOT(NN("quantity"))]]),
+    sp("equipment", "np.e", "none", [[RNG("np.cnt_e", 1, "inf")]]),
+    sp("materials", "b3.nsm", "total", [[NOT(NN("repair_rate"))]]),
+    sp("equipment", "b3.nse", "total", [[NOT(NN("repair_rate"))]]),
+    sp("S", "b5.computed", "none", [[EQ(OF("reconstruction_scenario", "boundary"), "NONE")],
+                                    [NOT(EQ(OF("reconstruction_scenario", "boundary"), "NONE")), RATIO(OF("reconstruction_scope_fraction", "boundary"))]]),
+    # ---- C-05 mass balance of the material rows
+    sp(RT, "c05.tot", {"by": "_parent"}, [["fraction"]]),
+    sp(RT, "c05.nneg", {"by": "_parent"}, [[RNG("fraction", "-inf", 0, hi_open=True)]]),
+    sp("materials", "c05.v1", "none", [[RNG("c05.nneg", 1, "inf")], [EQ("c05.nneg", 0), NOT(RNG("c05.tot", "-inf", 1.0 + 1e-6))]]),
+    sp("materials", "c05.under", "none", [[EQ("c05.v1", 0), RNG("c05.tot", "-inf", 1.0 - 1e-6, hi_open=True)]]),
+    conv("c05.c", "materials", "quantity_unit", C("kg"), "materials.conversions"),
+    sp("materials", "c05.chk", "none", [[EQ("c05.c.ok", 1), EQ("a05.ok", 1), PR("end_of_life.mass_kg")]]),
+    sp("materials", "c05.rhs", "none", [[EQ("c05.chk", 1), "a05.q_inst", "c05.c.f", C(1.0 + 1e-6)]]),
+    sp("materials", "c05.v2", "none", [[EQ("c05.chk", 1), NOT(LE("end_of_life.mass_kg", "c05.rhs"))]]),
+    sp("materials", "c05.nv", "total", [["c05.v1"], ["c05.v2"]]),
+    sp("materials", "c05.nun", "total", [[EQ("c05.chk", 0)]]),
+    # ---- QA-01 (b), (c): mutually exclusive row results
+    sp("materials", "qa1.b", "none", [[NOT(EQ("a01.by_item", 0)), NOT(EQ("a03.by_item", 0))]]),
+    sp("materials", "qa1.c", "none", [[NOT(EQ("a41.by_item", 0)), NOT(EQ("a42.by_item", 0))]]),
+    sp("materials", "qa1.n", "total", [["qa1.b"], ["qa1.c"]]),
+    # ---- SYS-04 / QA-04 floor-area residual
+    sp(UA, "sys4.sum", {"by": "_parent"}, [["value"]]),
+    sp("project", "sys4.valid", "none", [[RNG("gross_floor_area", 0, "inf", lo_open=True)]]),
+    sp("project", "sys4.res", "none", [[EQ("sys4.valid", 1), "gross_floor_area"], [EQ("sys4.valid", 1), C(-1), "sys4.sum"]]),
+    sp("project", "sys4.nres", "none", [[C(-1), "sys4.res"]]),
+    sp("project", "sys4.tol9", "none", [[EQ("sys4.valid", 1), C(1e-9), "gross_floor_area"]]),
+    sp("project", "sys4.tol6", "none", [[EQ("sys4.valid", 1), C(1e-6), "gross_floor_area"]]),
+    sp("project", "sys4.ok", "none", [[EQ("sys4.valid", 1), LE("sys4.res", "sys4.tol9"), LE("sys4.nres", "sys4.tol9")]]),
+    sp("project", "qa4.ok", "none", [[EQ("sys4.valid", 1), LE("sys4.res", "sys4.tol6"), LE("sys4.nres", "sys4.tol6")]]),
+    # ---- memo items
+    sp(SQ, "sto1.ok", "none", [[NN("timber_m3"), NN("timber_dry_density_kg_per_m3"), NN("timber_carbon_fraction")]]),
+    sp(SQ, "sto1.v", "none", [[EQ("sto1.ok", 1), "timber_m3", "timber_dry_density_kg_per_m3", "timber_carbon_fraction", C(44.0 / 12.0)]]),
+    F("sto2.f", SQ, "concrete_uptake_factor_id", "stage.MEMO.is", C("m3")),
+    sp(SQ, "sto2.ok", "none", [[EQ("sto2.f.ok", 1), NN("concrete_m3")]]),
+    sp(SQ, "sto2.v", "none", [[EQ("sto2.ok", 1), "concrete_m3", "sto2.f.c.f", VAL("sto2.f.ref")]]),
+    # ---- X-10 life-cycle resource and waste mass per row (multiplied by 1 + number of renewals in the knot stage)
+    sp("materials", "x10.ok", "none", [[EQ("c05.c.ok", 1), EQ("a05.ok", 1), NN("end_of_life.mass_kg")]]),
+    sp("materials", "x10.r", "none", [[EQ("x10.ok", 1), "a05.q_ord", "c05.c.f"]]),
+    sp("materials", "x10.dq", "none", [[EQ("x10.ok", 1), "a05.q_ord"], [EQ("x10.ok", 1), C(-1), "a05.q_inst"]]),
+    sp("materials", "x10.w", "none", [[EQ("x10.ok", 1), "x10.dq", "c05.c.f"], [EQ("x10.ok", 1), "end_of_life.mass_kg"]]),
+    sp("equipment", "x10.we", "none", [[NN("end_of_life_mass_kg"), "end_of_life_mass_kg"]]),
+    sp("materials", "x10.nm", "total", [[EQ("x10.ok", 0)]]),
+    sp("equipment", "x10.ne", "total", [[NOT(NN("end_of_life_mass_kg"))]]),
+], "outputs": {}}
+
+SPEC1 = copy.deepcopy(R0.SPEC)
+SPEC1["templates"] = dict(SPEC1["templates"], **TEMPLATES)
+SPEC1["shared"] = SPEC1["shared"] + [{"use": "STAGE", "as": "stage.%s" % s, "with": {"stage": s}} for s in ("B6", "B7", "MEMO")]
+SPEC1["units"] = SPEC1["units"] + [OPERATION, REFRIGERANT, CHECKS1]
+P1 = msp.Program(SPEC1)
+
+# =============================================================================================
+# specification 2 (data only): at one study period T - stage vector, totals, indicators, flags, comparison
+# =============================================================================================
+IS, BIS = "boundary.included_lifecycle_stages", "base:boundary.included_lifecycle_stages"
+HAS = EQ(OF("s8.has", "boundary"), 1)
+AREA, BAREA = OF("gross_floor_area", "project"), OF("gross_floor_area", "base:project")
+def qa2(pre, tab, child):
+    return [sp(child, pre + ".bad", {"by": "_parent"}, [[NOT(RNG("value", 0, "inf"))], [RNG("value", 0, "inf"), LE(OF("Tin", "TT"), "value")]]),
+            sp(child, pre + ".z", {"by": "_parent"}, [[EQ("value", 0)]]),
+            sp(tab, pre + ".v", "none", [[RNG(pre + ".bad", 1, "inf")]]),
+            sp(tab, pre + ".w", "none", [[RNG(pre + ".z", 1, "inf")]]),
+            sp(tab, pre + ".nv", "total", [[pre + ".v"]])]
+AT_T = {"id": "AT_T", "doc": "X-02, SUM-01..08, QA-02, flags that depend on the study period", "steps": [
+    sp("TT", "Tin", "none", [["T", C(1.0 - 1e-9)]]),
+    # ---- X-02 stage vector
+    MATCH("STG", "x02.iref", ["name"], IS, ["value"]),
+    sp("STG", "x02.inc", "none", [[PR("x02.iref")]]),
+    sp("STG", "x02.b2in", "total", [[EQ("name", "B2"), EQ("x02.inc", 1)]]),
+    MATCH("COMP", "x02.s", ["stage"], "STG", ["name"]), MATCH("COMP", "x02.u", ["unit"], "U", ["id"]),
+    sp("COMP", "x02.full", {"by": "x02.s"}, [["sign", VIA("value", "x02.u")]]),
+    sp("COMP", "x02.bsraw", {"by": "x02.s"}, [[EQ("needs_b2", 0), "sign", VIA("value", "x02.u")],
+                                               [EQ("needs_b2", 1), EQ(OF("x02.b2in", "S"), 1), "sign", VIA("value", "x02.u")]]),
+    sp("STG", "x02.bs", "none", [[EQ("x02.inc", 1), "x02.bsraw"]]),
+    MATCH("CHK", "x02.cs", ["stage"], "STG", ["name"]), MATCH("CHK", "x02.cu", ["unit"], "U", ["id"]),
+    sp("CHK", "x02.ninc", {"by": "x02.cu"}, [[EQ(VIA("x02.inc", "x02.cs"), 1), RNG(VIA("bad", "x02.cu"), 1, "inf")]]),
+    sp("U", "x02.uinc", "none", [[RNG("x02.ninc", 1, "inf")]]),
+    sp("U", "x02.n", "total", [["x02.uinc"]]),
+    sp("S", "x02.complete", "none", [[EQ("x02.n", 0)]]),
+    # ---- SUM-01..07
+    sp("STG", "sum1", "total", [[EQ("x02.inc", 1), EQ("up", 1), "x02.bs"]]),
+    sp("STG", "sum2", "total", [[EQ("x02.inc", 1), EQ("emb", 1), "x02.bs"]]),
+    sp("STG", "sum3", "total", [[EQ("x02.inc", 1), "x02.bs"]]),
+    sp("S", "sum4.ok", "none", [[RNG(AREA, 0, "inf", lo_open=True)]]),
+    sp("S", "sum4", "none", [[EQ("sum4.ok", 1), "sum3", {"fn": "inv", "a": AREA}]]),
+    sp("S", "sum5.den", "none", [[EQ("sum4.ok", 1), AREA, OF("T", "TT")]]),
+    sp("S", "sum5", "none", [[EQ("sum4.ok", 1), "sum3", {"fn": "inv", "a": "sum5.den"}]]),
+    sp("S", "sum6", "none", [["sum3", C(0.001)]]),
+    sp("STG", "sum7.neg", "total", [[EQ("x02.inc", 1), RNG("x02.bs", "-inf", 0, hi_open=True)]]),
+    sp("S", "sum7.def", "none", [[RNG("sum3", 0, "inf", lo_open=True), EQ("sum7.neg", 0)]]),
+    sp("STG", "sum7.share", "none", [[EQ("x02.inc", 1), EQ(OF("sum7.def", "S"), 1), "x02.bs", {"fn": "inv", "a": OF("sum3", "S")}]]),
+    # ---- SUM-08 comparison with the baseline scenario
+    MATCH("boundary", "s8.b", ["baseline_scenario"], "base:meta", ["scenario_id"]),
+    sp("boundary", "s8.has", "none", [[PR("s8.b")]]),
+    sp("boundary", "s8.eqA", "none", [[{"pred": "eq", "a": AREA, "b": BAREA}], [NOT(PR(AREA)), NOT(PR(BAREA))]]),
+    sp("boundary", "s8.eqT", "none", [[{"pred": "eq", "a": OF("T", "TT"), "b": OF("study_period", "base:boundary")}]]),
+    MATCH(IS, "s8.m1", ["value"], BIS, ["value"]), sp(IS, "s8.d1", "total", [[NOT(PR("s8.m1"))]]),
+    MATCH(BIS, "s8.m2", ["value"], IS, ["value"]), sp(BIS, "s8.d2", "total", [[NOT(PR("s8.m2"))]]),
+    sp("boundary", "s8.eqG", "none", [[{"pred": "eq", "a": "results_gas_scope", "b": OF("results_gas_scope", "base:boundary")}]]),
+    MATCH("factors", "s8.f1", ["release_year"], "base:factors", ["release_year"]), sp("factors", "s8.e1", "total", [[NOT(PR("s8.f1"))]]),
+    MATCH("base:factors", "s8.f2", ["release_year"], "factors", ["release_year"]), sp("base:factors", "s8.e2", "total", [[NOT(PR("s8.f2"))]]),
+    sp("S", "s8.rA", "none", [[HAS, EQ(OF("s8.eqA", "boundary"), 0)]]),
+    sp("S", "s8.rT", "none", [[HAS, EQ(OF("s8.eqT", "boundary"), 0)]]),
+    sp("S", "s8.rS", "none", [[HAS, NOT(EQ("s8.d1", 0))], [HAS, EQ("s8.d1", 0), NOT(EQ("s8.d2", 0))]]),
+    sp("S", "s8.rG", "none", [[HAS, EQ(OF("s8.eqG", "boundary"), 0)]]),
+    sp("S", "s8.rF", "none", [[HAS, NOT(EQ("s8.e1", 0))], [HAS, EQ("s8.e1", 0), NOT(EQ("s8.e2", 0))]]),
+    sp("S", "s8.nr", "none", [["s8.rA"], ["s8.rT"], ["s8.rS"], ["s8.rG"], ["s8.rF"]]),
+    sp("S", "s8.cmp", "none", [[HAS, EQ("s8.nr", 0)]]),
+    sp("S", "s8.delta", "none", [[EQ("s8.cmp", 1), "sum3"], [EQ("s8.cmp", 1), C(-1), OF("base_sum3", "TT")]]),
+    sp("S", "s8.bp", "none", [[EQ("s8.cmp", 1), OF("base_sum3", "TT")], [EQ("s8.cmp", 1), C(-1), "sum3"]]),
+    sp("S", "s8.sav", "none", [[EQ("s8.cmp", 1), RNG(OF("base_sum3", "TT"), 0, "inf", lo_open=True), "s8.bp", {"fn": "inv", "a": OF("base_sum3", "TT")}]]),
+    # ---- QA-02 explicit event years inside the study period
+    *qa2("qa2.e", "equipment", "equipment.replacement_event_list"),
+    *qa2("qa2.r", "refrigerants", "refrigerants.change_years"),
+    sp("S", "qa2.ok", "none", [[EQ("qa2.e.nv", 0), EQ("qa2.r.nv", 0)]]),
+    # ---- agreement flags of descriptors and year tables: [number of differing years before T == 0]
+    *[sp("S", "dmt." + n, "none", [[EQ(OF("mis_" + n, "TT"), 0)]]) for n in ("b64", "b62", "b71", "b72", "b73", "x06")],
+], "outputs": {}}
+P2 = msp.Program({"templates": {}, "shared": [], "units": [AT_T]})
+TT_T, TT_IN = OF("T", "TT"), OF("Tin", "TT")
+ROKP = EQ(VIA("b1.rok", "_parent"), 1)
+WIN = [ROKP, NOT(LE(TT_T, "k")), LE(TT_T, "b14.kp1")]                      # the year cell that holds T:  k < T <= k+1
+B14_LOCAL = {"id": "B1-04-local", "doc": "end residual without the subtraction from the initial charge", "steps": [
+    sp("TT", "Tin", "none", [["T", C(1.0 - 1e-9)]]),
+    sp(DY, "b14.w", "none", [[TT_T], [C(-1), "k"]]),
+    sp(DY, "b14.loc", "total", [
+        WIN + [EQ("b1.p", 0), K4, UF],
+        WIN + [EQ("b1.p", 1), LE(TT_IN, "b1.tau1"), K4, UF],
+        WIN + [TOP0, EQ("b1.p", 0), C(-1), K4, UF, RL, "b14.w"],
+        WIN + [TOP0, EQ("b1.p", 1), LE(TT_IN, "b1.tau1"), C(-1), K4, UF, RL, "b14.w"],
+        WIN + [EQ("b1.p", 1), NOT(LE(TT_IN, "b1.tau1")), K4, M0]]),
+], "outputs": {}}
+P2A = msp.Program({"templates": {}, "shared": [], "units": [B14_LOCAL]})
+LOCAL_B14 = True
+
+COMP_ROWS = [("A1-A3", "A13-01", 1), ("A1-A3", "A13-03", 1), ("A1-A3", "A13-04", 1), ("A1-A3", "X-01", 1), ("A4", "A4-01", 1), ("A4", "A4-02", 1),
+             ("A5", "A5-04", 1), ("B1", "B1-02", 1), ("B1", "B1-03", 1), ("B1", "B1-04", 1), ("B2", "B2-01", 1), ("B3", "B3-01", 1),
+             ("B4", "B4-02", 1), ("B5", "B5-01", 1), ("B6", "B6-03", 1), ("B6", "B2-01", -1), ("B7", "B7-04", 1), ("C1", "C1-01", 1),
+             ("C2", "C2-01", 1), ("C3", "C3-01", 1), ("C3", "X-14", 1), ("C4", "C4-01", 1)]
+STAGE_UNITS = {"A1-A3": ("A13-01", "A13-03", "A13-04", "X-01"), "A4": ("A4-01", "A4-02"), "A5": ("A5-01", "A5-02", "A5-03"),
+               "B1": ("B1-02", "B1-03", "B1-04"), "B2": ("B2-01", "B6-01"), "B3": ("B3-01",), "B4": ("B4-02",), "B5": ("B5-01",),
+               "B6": ("B6-01", "B6-02"), "B7": ("B7-01", "B7-02", "B7-03"), "C1": ("C1-01",), "C2": ("C2-01",), "C3": ("C3-01", "X-14"), "C4": ("C4-01",)}
+CONST_VALUE = {"A13-01": "a01.value", "A13-03": "a03.value", "A13-04": "a04.value", "X-01": "x01.value", "A4-01": "a41.value", "A4-02": "a42.value",
+               "A5-04": "a54.value", "C1-01": "c11.value", "C2-01": "c21.value", "C3-01": "c31.value", "X-14": "x14.value", "C4-01": "c41.value"}
+T_UNITS = ("B1-02", "B1-03", "B1-04", "B2-01", "B3-01", "B4-02", "B5-01", "B6-03", "B7-04")
+U_IDS = sorted(set(CONST_VALUE) | set(T_UNITS) | {u for us in STAGE_UNITS.values() for u in us})
+
+def static_tables(tabs):
+    put_table(tabs, "STG", {"name": strs(STAGES), "up": np.array([1.0 if s in ("A1-A3", "A4", "A5") else 0.0 for s in STAGES]),
+                            "emb": np.array([0.0 if s in ("B6", "B7") else 1.0 for s in STAGES])})
+    put_table(tabs, "COMP", {"stage": strs([r[0] for r in COMP_ROWS]), "unit": strs([r[1] for r in COMP_ROWS]),
+                             "sign": np.array([float(r[2]) for r in COMP_ROWS]),
+                             "needs_b2": np.array([1.0 if (r[0], r[1]) == ("B6", "B2-01") else 0.0 for r in COMP_ROWS])})
+    chk = [(s, u) for s in STAGES for u in STAGE_UNITS[s]]
+    put_table(tabs, "CHK", {"stage": strs([c[0] for c in chk]), "unit": strs([c[1] for c in chk])})
+
+# =============================================================================================
+# preparation of one scenario (once), evaluation at any study period
+# =============================================================================================
+def S1(eng, name):
+    c = eng.col("S", name)
+    assert bool(c.m[0]), ("S", name, "missing")
+    return float(c.v[0])
+def one(eng, table, name):
+    c = eng.col(table, name)
+    return float(c.v[0]) if c.m[0] else None
+def cv(eng, table, name):
+    c = eng.col(table, name)
+    assert bool(c.m.all()), (table, name, "missing values")
+    return c.v
+
+class Prepared:
+    def __init__(self, scn, with_base=True):
+        self.scn = scn
+        t0 = time.perf_counter()
+        tabs = tables.from_scenario(scn)
+        tokenise(tabs)
+        self.H = H = float(tabs.rows[CAL])
+        add_product(tabs, XS, CAL, tabs.rows.get(GS, 0), "s")
+        add_product(tabs, DY, D, int(H), "k")
+        add_events(tabs, E, D, H, cycle="service_life", lists="refrigerants.change_years")
+        static_tables(tabs)
+        self.base = None
+        base = None
+        if with_base:
+            from synth import population
+            base = population.BASELINES.get(scn.boundary.baseline_scenario)
+        for name in ("project", "boundary", IS, "factors", "meta"):
+            if base is not None:
+                bt = self.base_tabs = getattr(self, "base_tabs", None) or tables.from_scenario(base)
+                tabs.data["base:" + name], tabs.rows["base:" + name] = bt.data[name], bt.rows[name]
+            else:
+                tabs.data["base:" + name], tabs.rows["base:" + name] = {}, (1 if name in ("project", "boundary", "meta") else 0)
+        self.base_sum3 = None
+        if base is not None:
+            pb = Prepared(base, with_base=False)
+            self.base_sum3 = pb.at(base.boundary.study_period)["sum3"]
+        put_table(tabs, "TT", {"T": np.array([1.0])})
+        put_table(tabs, "U", {"id": strs(U_IDS), "value": np.zeros(len(U_IDS)), "bad": np.zeros(len(U_IDS))})
+        self.tabs = tabs
+        self.eng = msp.Engine(tabs).run(P1)
+        self.t_msp = time.perf_counter() - t0
+        t1 = time.perf_counter()
+        self.P = self.assemble()
+        self.K = {u: KnotSpectrum(p) for u, p in self.P.items()}
+        self.t_knots = time.perf_counter() - t1
+        self.n_knots = sum(k.n_knots for k in self.K.values())
+        e = self.eng
+        self.const = {u: S1(e, c) for u, c in CONST_VALUE.items()}
+        self.bad_const = {
+            "A13-01": S1(e, "a01.n_skipped"), "A13-03": S1(e, "a03.n_skipped"), "A13-04": S1(e, "a04.n_skipped"), "X-01": S1(e, "x01.n_skipped"),
+            "A4-01": S1(e, "a41.n_skipped"), "A4-02": S1(e, "a42.n_skipped"), "A5-01": 1.0 - one(e, OP, "a51.ok"), "A5-02": S1(e, "a52.n_skipped"),
+            "A5-03": S1(e, "a53.n_skipped"), "B1-02": S1(e, "b12.nsk"), "B1-03": S1(e, "b13.nsk"), "B1-04": S1(e, "b14.nsk"),
+            "B2-01": 1.0 - one(e, OP, "b21.ok"), "B6-01": 1.0 - one(e, OP, "b61.ok"), "B3-01": S1(e, "b3.nsm") + S1(e, "b3.nse"),
+            "B5-01": 1.0 - S1(e, "b5.computed"), "B6-02": one(e, OP, "b62.nsk"), "B7-01": one(e, WW, "b71.nsk"), "B7-02": one(e, WW, "b72.nsk"),
+            "B7-03": one(e, WW, "b73.nsk"), "C1-01": S1(e, "c11.n_skipped"), "C2-01": S1(e, "c21.n_skipped"),
+            "C3-01": S1(e, "c31.nsk") + S1(e, "c31.nrsk"), "X-14": S1(e, "x14.n_skipped"), "C4-01": S1(e, "c41.nsk") + S1(e, "c41.nrsk")}
+
+    def K_(self, name):
+        return self.K[name] if name in self.K else KnotSpectrum([])
+
+    def assemble(self):
+        scn, eng, H = self.scn, self.eng, self.H
+        Y = int(H)
+        P = collections.defaultdict(list)
+        nm, ne = len(scn.materials), len(scn.equipment)
+        g = lambda t, c, n: cv(eng, t, c) if n else []
+        u_mat, a_mat, np_m, xr, xw = (g("materials", c, nm) for c in ("b4.u_mat", "b3.a_mat", "np.m", "x10.r", "x10.w"))
+        u_eq, a_eq, np_e, xwe = (g("equipment", c, ne) for c in ("b4.u_eq", "b3.a_eq", "np.e", "x10.we"))
+        self.events = {"m": [], "e": []}
+        def skip_cells(a, ev):
+            if a == 0.0:
+                return
+            P["B3-01"].append(rs.density(a, float(Y)))
+            P["B3-02"].append(rs.density(a, float(Y)))
+            first = {}
+            for tau in ev:
+                y = rs.event_year(tau)
+                if y not in first or tau < first[y]:
+                    first[y] = tau
+            for y, tau in first.items():
+                P["B3-01"].append(rs.year_cell(-a, y, gate=tau))
+        def counted(name, a, ev):
+            if a != 0.0:
+                P[name].append(rs.constant(a))
+                P[name] += [rs.atom(a, tau) for tau in ev]
+        for i, row in enumerate(scn.materials):
+            ev = rs.periodic_times(H, row.refresh_cycle)
+            self.events["m"].append(ev)
+            P["B4-02"] += [rs.atom(float(u_mat[i]), tau) for tau in ev]
+            skip_cells(float(a_mat[i]), ev)
+            if ev and np_m[i]:
+                P["N:b42"].append(rs.atom(1.0, ev[0]))
+            counted("X-10r", float(xr[i]), ev); counted("X-10w", float(xw[i]), ev)
+        for j, eq in enumerate(scn.equipment):
+            ev = rs.explicit_times(H, eq.replacement_event_list) if eq.replacement_event_list is not None else rs.periodic_times(H, eq.service_life)
+            self.events["e"].append(ev)
+            P["B4-02"] += [rs.atom(float(u_eq[j]), tau) for tau in ev]
+            skip_cells(float(a_eq[j]), ev)
+            if ev and np_e[j]:
+                P["N:b42"].append(rs.atom(1.0, min(ev)))
+            P["B4-01n"] += [rs.atom(1.0, tau) for tau in ev]
+            counted("X-10w", float(xwe[j]), ev)
+        b5u = S1(eng, "b5.u")
+        if b5u:
+            P["B5-01"] += [rs.atom(b5u, tau) for tau in rs.periodic_times(H, scn.boundary.replacement_cycle)]
+        # refrigerants: every amplitude comes from the sum-product columns on the device-year and event tables
+        if eng.nrows(DY):
+            k, a2, y4, e4a, e4g = (cv(eng, DY, c) for c in ("k", "b1.a2", "b1.y4", "b1.e4a", "b1.e4g"))
+            tau1 = eng.col(DY, "b1.tau1").v
+            for i in np.nonzero(a2)[0]: P["B1-02"].append(rs.year_cell(float(a2[i]), int(k[i]) + 1))
+            for i in np.nonzero(y4)[0]: P["B1-04"].append(rs.year_cell(float(y4[i]), int(k[i]) + 1))
+            for i in np.nonzero(e4a)[0]: P["B1-04"].append(rs.atom(float(e4a[i]), float(tau1[i])))
+            for i in np.nonzero(e4g)[0]: P["B1-04"].append(rs.year_cell(float(e4g[i]), int(k[i]) + 1, gate=float(tau1[i])))
+            P["B1-04"] += [rs.constant(float(c)) for c in cv(eng, D, "b1.k4m0") if c]
+        if eng.nrows(E):
+            tau, cell, a3, g3 = (cv(eng, E, c) for c in ("tau", "cell", "b1.a3", "b1.g3"))
+            for i in np.nonzero(a3)[0]: P["B1-03"].append(rs.atom(float(a3[i]), float(tau[i])))
+            for i in np.nonzero(g3)[0]: P["B1-03"].append(rs.year_cell(float(g3[i]), int(cell[i]) + 1, gate=float(tau[i])))
+        # operation: year cells with the yearly coefficients of the sum-product; counts of differing years
+        kc = cv(eng, CAL, "_pos")
+        for name, col in (("B6-03", "b63.a"), ("B2-01", "b21.a"), ("B7-04", "b74.a"), ("X-11", "x11.a")):
+            a = cv(eng, CAL, col)
+            for i in np.nonzero(a)[0]: P[name].append(rs.year_cell(float(a[i]), int(kc[i]) + 1))
+        for name, col in (("N:b64", "b64.mis"), ("N:b62", "b62.mis"), ("N:b71", "p.wat.m.mis"), ("N:b72", "p.sew.m.mis"),
+                          ("N:b73", "p.msw.m.mis"), ("N:x06", "x06.m.mis")):
+            a = cv(eng, CAL, col)
+            for i in np.nonzero(a)[0]: P[name].append(rs.atom(float(a[i]), float(kc[i])))
+        return P
+
+    def at(self, T):
+        eng, tabs = self.eng, self.tabs
+        v = dict(self.const)
+        v.update({u: self.K_(u).value(T) for u in T_UNITS})
+        self.b14_knot = v["B1-04"]
+        if LOCAL_B14:
+            put_table(tabs, "TT", {"T": np.array([float(T)])})
+            for key in [k for k in eng.cols if k[0] == "TT"]:
+                del eng.cols[key]
+            eng.run(P2A)
+            v["B1-04"] = float(eng.col("S", "b14.loc").v[0]) if eng.nrows(DY) else 0.0
+        bad = dict(self.bad_const)
+        bad["B4-02"] = self.K_("N:b42").value(T)
+        mis = {n: self.K_("N:" + n).value(T) for n in ("b64", "b62", "b71", "b72", "b73", "x06")}
+        tt = {"T": np.array([float(T)])}
+        tt.update({"mis_" + n: np.array([x]) for n, x in mis.items()})
+        if self.base_sum3 is not None:
+            tt["base_sum3"] = np.array([self.base_sum3])
+        put_table(tabs, "TT", tt)
+        put_table(tabs, "U", {"id": strs(U_IDS), "value": np.array([v.get(u, 0.0) for u in U_IDS]),
+                              "bad": np.array([bad.get(u, 0.0) for u in U_IDS])})
+        for key in [k for k in eng.cols if k[0] in ("TT", "U")]:
+            del eng.cols[key]
+        eng.run(P2)
+        s = lambda n: one(eng, "S", n)
+        inc = cv(eng, "STG", "x02.inc")
+        bs, full, share = cv(eng, "STG", "x02.bs"), cv(eng, "STG", "x02.full"), cv(eng, "STG", "sum7.share")
+        uinc = cv(eng, "U", "x02.uinc")
+        out = {"units": v, "bad": bad, "mis": mis,
+               "by_stage": {st: float(bs[i]) for i, st in enumerate(STAGES) if inc[i]},
+               "by_stage_all": {st: float(full[i]) for i, st in enumerate(STAGES)},
+               "complete": bool(s("x02.complete")), "incomplete_units": sorted(u for u, f in zip(U_IDS, uinc) if f),
+               "sum1": s("sum1"), "sum2": s("sum2"), "sum3": s("sum3"),
+               "sum4": s("sum4") if s("sum4.ok") else None, "sum5": s("sum5") if s("sum4.ok") else None, "sum6": s("sum6"),
+               "sum7_defined": bool(s("sum7.def")),
+               "sum7": {st: float(share[i]) for i, st in enumerate(STAGES) if inc[i]} if s("sum7.def") else {}}
+        has = one(eng, "boundary", "s8.has")
+        if not has:
+            out["sum8"] = {"status": "NO_BASELINE"}
+        elif not s("s8.cmp"):
+            out["sum8"] = {"status": "NOT_COMPARABLE", "reasons": [n for n, c in (("AREA", "s8.rA"), ("PERIOD", "s8.rT"), ("STAGES", "s8.rS"),
+                                                                                  ("GAS_SCOPE", "s8.rG"), ("FACTOR_VERSION", "s8.rF")) if s(c)]}
+        else:
+            b = self.base_sum3
+            out["sum8"] = {"status": "COMPARED", "baseline": b, "delta": s("s8.delta"), "saving": s("s8.sav") if b > 0.0 else None}
+        q = {"violations": [], "warnings": []}
+        for name, tab, pre, attr in (("equipment", "equipment", "qa2.e", "replacement_event_list"), ("refrigerants", D, "qa2.r", "change_years")):
+            if eng.nrows(tab):
+                vv, ww = cv(eng, tab, pre + ".v"), cv(eng, tab, pre + ".w")
+                q["violations"] += ["%s[%d].%s" % (name, i, attr) for i in np.nonzero(vv)[0]]
+                q["warnings"] += ["%s[%d].%s" % (name, i, attr) for i in np.nonzero(ww)[0]]
+        q["ok"] = bool(s("qa2.ok"))
+        out["qa2"] = q
+        out["dmt"] = {n: bool(s("dmt." + n)) for n in ("b64", "b62", "b71", "b72", "b73", "x06")}
+        return out
