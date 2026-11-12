@@ -1,0 +1,42 @@
+name: Dropbox storage smoke test
+
+on:
+  push:
+    branches:
+      - claude/dropbox-artifact-free
+    paths:
+      - .github/workflows/dropbox-smoke-test.yml
+      - scripts/dropbox_actions_store.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upload-small-test-file:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Upload synthetic smoke-test file to Dropbox
+        shell: bash
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$DROPBOX_APP_KEY" || -z "$DROPBOX_APP_SECRET" || -z "$DROPBOX_REFRESH_TOKEN" ]]; then
+            echo '::error::One or more Dropbox OAuth repository secrets are missing. Configure them in this repo.'
+            exit 1
+          fi
+          printf 'Synthetic Dropbox smoke test\nrepo=%s\ncommit=%s\nrun=%s\n' \
+            "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" \
+            > "$RUNNER_TEMP/dropbox_smoke.txt"
+          python -B scripts/dropbox_actions_store.py \
+            --file "$RUNNER_TEMP/dropbox_smoke.txt" \
+            --remote "/GitHubActions/smoke-test/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/dropbox_smoke.txt"
+          echo "Dropbox smoke upload and hash verification succeeded." >> "$GITHUB_STEP_SUMMARY"
