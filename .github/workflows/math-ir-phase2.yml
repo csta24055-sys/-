@@ -38,6 +38,14 @@ jobs:
             "$RUNNER_TEMP/math-ir-phase2-report.json" \
             "$RUNNER_TEMP/math-ir-phase2.duckdb"
 
+      - name: Independently reopen saved artifacts and detect database tampering
+        shell: bash
+        run: |
+          set -euo pipefail
+          python math_interop_v0/phase2.py verify \
+            "$RUNNER_TEMP/math-ir-phase2-report.json" \
+            "$RUNNER_TEMP/math-ir-phase2.duckdb"
+
       - name: Upload synthetic audit files
         if: always()
         uses: actions/upload-artifact@v4
