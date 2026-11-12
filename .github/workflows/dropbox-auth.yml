@@ -1,11 +1,6 @@
 name: Dropbox OAuth auto-registration
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/dropbox-auth.yml
   workflow_dispatch:
     inputs:
       mode:
@@ -41,4 +36,4 @@ jobs:
           DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
           DROPBOX_AUTH_CODE: ${{ secrets.DROPBOX_AUTH_CODE }}
           GH_SECRETS_TOKEN: ${{ secrets.GH_SECRETS_TOKEN }}
-        run: python -B scripts/dropbox_auth_manage.py "${{ inputs.mode || 'exchange' }}"
+        run: python -B scripts/dropbox_auth_manage.py "${{ inputs.mode || 'preflight' }}"
