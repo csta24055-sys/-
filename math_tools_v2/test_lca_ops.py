@@ -84,12 +84,12 @@ class LcaOperatorTests(unittest.TestCase):
         reject(lambda d: d["tasks"][0]["expression"].update(op="div", args=[
             {"op":"integer","value":"1"},{"op":"integer","value":"0"}]))
         reject(lambda d: d["tasks"][0].update(result_unit="kg"))
-        reject(lambda d: d["tasks"][3]["segments"][1].update(start="11"))
-        reject(lambda d: d["tasks"][4]["groups"][0]["terms"][0].update(mask=2))
-        reject(lambda d: d["tasks"][4]["groups"][0]["terms"][0]["factors"][0].update(unit="year"))
-        reject(lambda d: d["tasks"][5]["periodic"][0].update(period="0"))
-        reject(lambda d: d["tasks"][5]["events"][0]["coefficient"].update(group="not_found"))
-        reject(lambda d: d["tasks"][5].update(include_end="yes"))
+        reject(lambda d: d["tasks"][4]["segments"][1].update(start="11"))
+        reject(lambda d: d["tasks"][5]["groups"][0]["terms"][0].update(mask=2))
+        reject(lambda d: d["tasks"][5]["groups"][0]["terms"][0]["factors"][0].update(unit="year"))
+        reject(lambda d: d["tasks"][6]["periodic"][0].update(period="0"))
+        reject(lambda d: d["tasks"][6]["events"][0]["coefficient"].update(group="not_found"))
+        reject(lambda d: d["tasks"][6].update(include_end="yes"))
         reject(lambda d: d["tasks"][0]["bounds"].update(end="0"))
         reject(lambda d: d["tasks"][0].update(untrusted_command="print(123)"))
 
@@ -105,7 +105,7 @@ class LcaOperatorTests(unittest.TestCase):
 
     def test_masked_coefficients_not_back_fitted(self):
         changed = copy.deepcopy(FIXTURE_DOC)
-        changed["tasks"][4]["groups"][0]["terms"][0]["factors"][0]["value"] = "15"
+        changed["tasks"][5]["groups"][0]["terms"][0]["factors"][0]["value"] = "15"
         result = byid(op.execute(changed))
         self.assertEqual(result["inputs"]["coefficients"]["initial"]["value"],
                          {"numerator":"5","denominator":"1"})
