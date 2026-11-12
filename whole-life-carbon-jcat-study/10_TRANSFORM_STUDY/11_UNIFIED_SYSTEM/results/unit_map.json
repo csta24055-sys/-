@@ -1,0 +1,7136 @@
+{
+ "A13-01": {
+  "read_from": [
+   "S.a01.n_skipped",
+   "S.a01.value",
+   "materials.a01.by_item"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 36
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A13-02": {
+  "read_from": [
+   "S.a02.n_invalid",
+   "materials.a02.ok",
+   "materials.a02.value"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 13
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A13-03": {
+  "read_from": [
+   "S.a03.n_skipped",
+   "S.a03.value",
+   "materials.a03.by_item"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 34
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A13-04": {
+  "read_from": [
+   "S.a04.n_skipped",
+   "S.a04.value",
+   "materials.a04.by_item"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 40
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A13-05": {
+  "read_from": [
+   "S.a05.n_skipped",
+   "materials.a05.ok",
+   "materials.a05.q_inst",
+   "materials.a05.q_ord"
+  ],
+  "steps": {
+   "P1:sp": 4
+  },
+  "spectra": [],
+  "inputs": {
+   "materials": [
+    "quantity",
+    "quantity_basis",
+    "waste_rate"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "A4-01": {
+  "read_from": [
+   "S.a41.n_skipped",
+   "S.a41.value",
+   "materials.a41.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 10
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A4-02": {
+  "read_from": [
+   "S.a42.n_skipped",
+   "S.a42.value",
+   "materials.a42.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 12
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "transport.delivery_factor_id",
+    "waste_rate"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "A5-01": {
+  "read_from": [
+   "S.a51.value",
+   "operation.a51.ok"
+  ],
+  "steps": {
+   "P1:match": 2,
+   "P1:sp": 5
+  },
+  "spectra": [],
+  "inputs": {
+   "construction": [
+    "electricity_kwh"
+   ],
+   "operation": [
+    "grid.construction_value",
+    "grid.licence_status"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "grid.unit~h",
+    "grid.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A5-02": {
+  "read_from": [
+   "S.a52.n_skipped",
+   "S.a52.value"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 9
+  },
+  "spectra": [],
+  "inputs": {
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A5-03": {
+  "read_from": [
+   "S.a53.n_skipped",
+   "S.a53.value"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 9
+  },
+  "spectra": [],
+  "inputs": {
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "A5-04": {
+  "read_from": [
+   "S.a51.value",
+   "S.a52.value",
+   "S.a53.value",
+   "S.a54.value"
+  ],
+  "steps": {
+   "P1:match": 8,
+   "P1:sp": 20
+  },
+  "spectra": [],
+  "inputs": {
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "operation": [
+    "grid.construction_value",
+    "grid.licence_status"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "grid.unit~h",
+    "grid.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B1-01": {
+  "read_from": [
+   "S.b11.nsk",
+   "S.b11.v"
+  ],
+  "steps": {
+   "P1:sp": 3
+  },
+  "spectra": [],
+  "inputs": {
+   "refrigerants": [
+    "charge_mass_kg",
+    "gwp"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "B1-02": {
+  "read_from": [
+   "S.b12.nsk",
+   "TT.V.B1-02",
+   "operation.grid.table.t.b12_y",
+   "operation.grid.table.t.in",
+   "refrigerants.t.b12_i"
+  ],
+  "steps": {
+   "P1:match": 11,
+   "P1:sp": 33,
+   "TIME:sp": 6
+  },
+  "spectra": [
+   "B1-02"
+  ],
+  "inputs": {
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "gwp",
+    "top_up"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "B1-03": {
+  "read_from": [
+   "S.b13.nsk",
+   "TT.V.B1-03",
+   "operation.grid.table.t.b13_y",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 37,
+   "TIME:sp": 7
+  },
+  "spectra": [
+   "B1-03"
+  ],
+  "inputs": {
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "B1-04": {
+  "read_from": [
+   "S.b14.nsk",
+   "TT.V.B1-04"
+  ],
+  "steps": {
+   "P1:match": 11,
+   "P1:sp": 38
+  },
+  "spectra": [
+   "B1-04 (interval form)"
+  ],
+  "inputs": {
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "top_up"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "B2-01": {
+  "read_from": [
+   "TT.V.B2-01",
+   "operation.b21.ok"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 32,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "EL"
+  ],
+  "inputs": {
+   "operation": [
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "grid.annual_decline",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ]
+  }
+ },
+ "B3-01": {
+  "read_from": [
+   "S.b3.n_skipped",
+   "TT.V.B3-01",
+   "operation.grid.table.t.b3_y",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "P1:match": 19,
+   "P1:sp": 54,
+   "TIME:sp": 11
+  },
+  "spectra": [
+   "B3-01"
+  ],
+  "inputs": {
+   "equipment": [
+    "factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ]
+  }
+ },
+ "B3-02": {
+  "read_from": [
+   "S.b3.n_skipped",
+   "S.t.b32"
+  ],
+  "steps": {
+   "P1:match": 15,
+   "P1:sp": 46,
+   "TIME:sp": 3
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment": [
+    "factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B4-01": {
+  "read_from": [
+   "S.t.b41_n",
+   "equipment.events._parent",
+   "equipment.events.ord",
+   "equipment.events.t.in_e",
+   "equipment.events.tau"
+  ],
+  "steps": {
+   "P1:sp": 1,
+   "TIME:sp": 3
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment": [
+    "replacement_event_list#"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "equipment.events": [
+    "ord",
+    "src",
+    "tau"
+   ]
+  }
+ },
+ "B4-02": {
+  "read_from": [
+   "S.t.np",
+   "TT.K.N.b42",
+   "TT.V.B4-02",
+   "equipment.t.b42_ie",
+   "materials.t.b42_im",
+   "operation.grid.table.t.b42_y",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "P1:match": 45,
+   "P1:sp": 125,
+   "TIME:sp": 14
+  },
+  "spectra": [
+   "B4-02",
+   "N.b42"
+  ],
+  "inputs": {
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "ord",
+    "tau"
+   ]
+  }
+ },
+ "B4-03": {
+  "read_from": [
+   "materials.t.cnt_m"
+  ],
+  "steps": {
+   "TIME:sp": 3
+  },
+  "spectra": [],
+  "inputs": {},
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "materials.events": [
+    "tau"
+   ]
+  }
+ },
+ "B5-01": {
+  "read_from": [
+   "S.b5.computed",
+   "S.t.b5_n",
+   "TT.V.B5-01",
+   "operation.grid.table.t.b5_y",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "P1:match": 48,
+   "P1:sp": 139,
+   "TIME:sp": 5
+  },
+  "spectra": [
+   "B5-01"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "quantity",
+    "quantity_unit"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "grid.construction_value",
+    "grid.licence_status"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "grid.unit~h",
+    "grid.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "cell",
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B6-01": {
+  "read_from": [
+   "operation.b61.ok",
+   "operation.grid.table.b61.e",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 31,
+   "TIME:sp": 1
+  },
+  "spectra": [],
+  "inputs": {
+   "operation": [
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "grid.annual_decline",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ]
+  }
+ },
+ "B6-02": {
+  "read_from": [
+   "S.dmt.b62",
+   "operation.b62.nsk",
+   "operation.grid.table.b62.e",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "AGG:sp": 1,
+   "P1:match": 12,
+   "P1:sp": 56,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "mis.b62"
+  ],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "oil.unit~h",
+    "oil.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B6-03": {
+  "read_from": [
+   "TT.V.B6-03"
+  ],
+  "steps": {
+   "P1:match": 24,
+   "P1:sp": 62
+  },
+  "spectra": [
+   "B6-03"
+  ],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ]
+  }
+ },
+ "B6-04": {
+  "read_from": [
+   "S.dmt.b64",
+   "operation.b64.computed",
+   "operation.grid.table.b64.net",
+   "operation.grid.table.t.in"
+  ],
+  "steps": {
+   "AGG:sp": 1,
+   "P1:match": 7,
+   "P1:sp": 39,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "mis.b64"
+  ],
+  "inputs": {
+   "operation": [
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B7-01": {
+  "read_from": [
+   "S.dmt.b71",
+   "operation.grid.table.b71.e",
+   "operation.grid.table.t.in",
+   "water_waste.b71.nsk"
+  ],
+  "steps": {
+   "AGG:sp": 1,
+   "P1:match": 4,
+   "P1:sp": 20,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "mis.b71"
+  ],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "water_waste": [
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B7-02": {
+  "read_from": [
+   "S.dmt.b72",
+   "operation.grid.table.b72.e",
+   "operation.grid.table.t.in",
+   "water_waste.b72.nsk"
+  ],
+  "steps": {
+   "AGG:sp": 1,
+   "P1:match": 4,
+   "P1:sp": 20,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "mis.b72"
+  ],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "water_waste": [
+    "sewage.unit~h",
+    "sewage.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B7-03": {
+  "read_from": [
+   "S.dmt.b73",
+   "operation.grid.table.b73.e",
+   "operation.grid.table.t.in",
+   "water_waste.b73.nsk"
+  ],
+  "steps": {
+   "AGG:sp": 1,
+   "P1:match": 4,
+   "P1:sp": 20,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "mis.b73"
+  ],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "waste_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "B7-04": {
+  "read_from": [
+   "TT.V.B7-04"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 30
+  },
+  "spectra": [
+   "B7-04"
+  ],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "C-05": {
+  "read_from": [
+   "S.c05.nun",
+   "S.c05.ok",
+   "materials.c05.under",
+   "materials.c05.v1",
+   "materials.c05.v2"
+  ],
+  "steps": {
+   "P1:match": 2,
+   "P1:sp": 14
+  },
+  "spectra": [],
+  "inputs": {
+   "materials": [
+    "end_of_life.mass_kg",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "waste_rate"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "fraction"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "C1-01": {
+  "read_from": [
+   "S.c11.n_skipped",
+   "S.c11.value"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 9
+  },
+  "spectra": [],
+  "inputs": {
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "C2-01": {
+  "read_from": [
+   "S.c21.n_skipped",
+   "S.c21.value",
+   "materials.c21.by_item"
+  ],
+  "steps": {
+   "P1:match": 6,
+   "P1:sp": 19
+  },
+  "spectra": [],
+  "inputs": {
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "C3-01": {
+  "read_from": [
+   "S.c31.nrsk",
+   "S.c31.nsk",
+   "S.c31.value",
+   "materials.c31.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 12
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "end_of_life.mass_kg"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "C4-01": {
+  "read_from": [
+   "S.c41.nrsk",
+   "S.c41.nsk",
+   "S.c41.value",
+   "materials.c41.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 12
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "end_of_life.mass_kg"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "QA-01": {
+  "read_from": [
+   "S.qa1.ok",
+   "STG.qa1.a",
+   "materials.qa1.b",
+   "materials.qa1.c"
+  ],
+  "steps": {
+   "AGG:match": 2,
+   "AGG:sp": 35,
+   "P1:match": 108,
+   "P1:sp": 341,
+   "TIME:sp": 44
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL",
+   "act.dh",
+   "act.gas",
+   "act.msw",
+   "act.oil",
+   "act.sew",
+   "act.wat"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "QA-02": {
+  "read_from": [
+   "S.qa2.ok",
+   "equipment.qa2.e.v",
+   "equipment.qa2.e.w",
+   "refrigerants.qa2.r.v",
+   "refrigerants.qa2.r.w"
+  ],
+  "steps": {
+   "AGG:sp": 11,
+   "TIME:sp": 1
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment.replacement_event_list": [
+    "value"
+   ],
+   "refrigerants.change_years": [
+    "value"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ]
+  }
+ },
+ "QA-03": {
+  "read_from": [
+   "S.t.qa3_n",
+   "S.t.qa3_ok",
+   "factors.t.qa3_v"
+  ],
+  "steps": {
+   "P1:match": 72,
+   "P1:sp": 148,
+   "TIME:sp": 14
+  },
+  "spectra": [],
+  "inputs": {
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "source_url",
+    "stages#",
+    "unit",
+    "valid_until"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat_factor_id",
+    "gas_factor_id",
+    "oil_factor_id"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water_factor_id"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "oil.unit~h",
+    "oil.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "from_unit",
+    "to_unit"
+   ],
+   "construction.fuels.conversions": [
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "tau"
+   ]
+  }
+ },
+ "QA-04": {
+  "read_from": [
+   "project.qa4.ok"
+  ],
+  "steps": {
+   "P1:sp": 6
+  },
+  "spectra": [],
+  "inputs": {
+   "project": [
+    "gross_floor_area"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "project.use_area_sorted": [
+    "value"
+   ]
+  }
+ },
+ "STO-01": {
+  "read_from": [
+   "summary_quantities.sto1.ok",
+   "summary_quantities.sto1.v"
+  ],
+  "steps": {
+   "P1:sp": 2
+  },
+  "spectra": [],
+  "inputs": {
+   "summary_quantities": [
+    "timber_carbon_fraction",
+    "timber_dry_density_kg_per_m3",
+    "timber_m3"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "STO-02": {
+  "read_from": [
+   "summary_quantities.sto2.ok",
+   "summary_quantities.sto2.v"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 8
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "summary_quantities": [
+    "concrete_m3",
+    "concrete_uptake_factor_id"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "SUM-01": {
+  "read_from": [
+   "S.sum1",
+   "S.x02.complete"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 7,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name",
+    "up"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-02": {
+  "read_from": [
+   "S.sum2",
+   "S.x02.complete"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 7,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "emb",
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-03": {
+  "read_from": [
+   "S.sum3",
+   "S.x02.complete"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 7,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-04": {
+  "read_from": [
+   "S.sum4",
+   "S.sum4.ok"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 7,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date",
+    "gross_floor_area"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-05": {
+  "read_from": [
+   "S.sum5"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 8,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date",
+    "gross_floor_area"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-06": {
+  "read_from": [
+   "S.sum6"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 6,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-07": {
+  "read_from": [
+   "S.sum7.def",
+   "STG.sum7.share",
+   "STG.x02.inc"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 8,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SUM-08": {
+  "read_from": [
+   "S.s8.cmp",
+   "S.s8.delta",
+   "S.s8.pos",
+   "S.s8.sav",
+   "boundary.s8.has"
+  ],
+  "steps": {
+   "AGG:match": 8,
+   "AGG:sp": 24,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "baseline_scenario",
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction",
+    "results_gas_scope"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "release_year",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date",
+    "gross_floor_area"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "TT": [
+    "T",
+    "base_sum3"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "base:boundary": [
+    "results_gas_scope",
+    "study_period"
+   ],
+   "base:boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "base:factors": [
+    "release_year"
+   ],
+   "base:meta": [
+    "scenario_id"
+   ],
+   "base:project": [
+    "gross_floor_area"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "SYS-01": {
+  "read_from": [
+   "S.sys1.DERIVED",
+   "S.sys1.ESTIMATE",
+   "S.sys1.EXPLICIT_ZERO",
+   "S.sys1.MISSING",
+   "S.sys1.OBSERVED",
+   "S.sys1.ok",
+   "construction.s1.c.elec.s.MISSING",
+   "construction.fuels.s1.c.fuel.s.MISSING",
+   "construction.waste_streams.s1.c.waste.s.MISSING",
+   "end_of_life.demolition_activities.s1.d.dem.s.MISSING",
+   "end_of_life.waste_hauls.s1.d.haul_d.s.MISSING",
+   "end_of_life.waste_hauls.s1.d.haul_m.s.MISSING",
+   "equipment.s1.e.end_of_life_mass_kg.s.MISSING",
+   "equipment.s1.e.quantity.s.MISSING",
+   "equipment.s1.e.repair_rate.s.MISSING",
+   "equipment.s1.e.service_life.s.MISSING",
+   "materials.s1.m.end_of_life.mass_kg.s.MISSING",
+   "materials.s1.m.material_life.s.MISSING",
+   "materials.s1.m.quantity.s.MISSING",
+   "materials.s1.m.refresh_cycle.s.MISSING",
+   "materials.s1.m.repair_rate.s.MISSING",
+   "materials.s1.m.reuse_rate.s.MISSING",
+   "materials.s1.m.transport.distance_km.s.MISSING",
+   "materials.s1.m.transport.mass_t.s.MISSING",
+   "materials.s1.m.waste_rate.s.MISSING",
+   "project.s1.p.area.s.MISSING",
+   "refrigerants.s1.r.annual_leak_rate.s.MISSING",
+   "refrigerants.s1.r.charge_mass_kg.s.MISSING",
+   "refrigerants.s1.r.end_of_life_recovery_rate.s.MISSING",
+   "refrigerants.s1.r.gwp.s.MISSING",
+   "refrigerants.s1.r.nolife.s.MISSING",
+   "refrigerants.s1.r.replacement_loss_rate.s.MISSING"
+  ],
+  "steps": {
+   "P1:match": 35,
+   "P1:sp": 433
+  },
+  "spectra": [],
+  "inputs": {
+   "construction": [
+    "electricity_kwh",
+    "provenance_id"
+   ],
+   "construction.fuels": [
+    "quantity"
+   ],
+   "construction.waste_streams": [
+    "mass_kg"
+   ],
+   "end_of_life": [
+    "provenance_id"
+   ],
+   "end_of_life.demolition_activities": [
+    "quantity"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "mass_t"
+   ],
+   "equipment": [
+    "end_of_life_mass_kg",
+    "provenance_id",
+    "quantity",
+    "repair_rate",
+    "replacement_event_list#",
+    "service_life"
+   ],
+   "materials": [
+    "end_of_life.mass_kg",
+    "material_life",
+    "provenance_id",
+    "quantity",
+    "refresh_cycle",
+    "repair_rate",
+    "reuse_rate",
+    "transport.distance_km",
+    "transport.mass_t",
+    "waste_rate"
+   ],
+   "project": [
+    "gross_floor_area",
+    "provenance_id"
+   ],
+   "provenance": [
+    "key",
+    "value_state"
+   ],
+   "refrigerants": [
+    "__no_value__",
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "provenance_id",
+    "replacement_loss_rate",
+    "service_life"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "construction.states": [
+    "key",
+    "key~i",
+    "key~p",
+    "key~s",
+    "value"
+   ],
+   "end_of_life.states": [
+    "key~i",
+    "key~p",
+    "key~s",
+    "value"
+   ],
+   "equipment.states": [
+    "key",
+    "value"
+   ],
+   "materials.states": [
+    "key",
+    "value"
+   ],
+   "project.states": [
+    "key",
+    "value"
+   ],
+   "refrigerants.states": [
+    "key",
+    "value"
+   ]
+  }
+ },
+ "SYS-02": {
+  "read_from": [
+   "S.sys2.n",
+   "S.sys2.ok",
+   "construction.fuels.s2.p.c.fuel",
+   "construction.waste_streams.s2.p.c.waste",
+   "cost_items.s2.p.x.cost",
+   "end_of_life.demolition_activities.s2.p.d.dem",
+   "end_of_life.waste_hauls.s2.p.d.haul",
+   "equipment.s2.p.e.eol",
+   "equipment.s2.p.e.qu",
+   "factors.s2.sm",
+   "materials.s2.p.m.comp",
+   "materials.s2.p.m.eol",
+   "materials.s2.p.m.eolr",
+   "materials.s2.p.m.qu",
+   "materials.s2.p.m.tr",
+   "operation.s2.p.c.elec",
+   "operation.s2.p.o.dh",
+   "operation.s2.p.o.elec",
+   "operation.s2.p.o.exp",
+   "operation.s2.p.o.gas",
+   "operation.s2.p.o.gen",
+   "operation.s2.p.o.oil",
+   "summary_quantities.s2.p.q.cu",
+   "water_waste.s2.p.w.msw",
+   "water_waste.s2.p.w.sew",
+   "water_waste.s2.p.w.wat"
+  ],
+  "steps": {
+   "P1:match": 82,
+   "P1:sp": 208
+  },
+  "spectra": [],
+  "inputs": {
+   "construction.fuels": [
+    "factor_id",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id"
+   ],
+   "cost_items": [
+    "currency",
+    "factor_id"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "factor_id"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity_unit"
+   ],
+   "factors": [
+    "key",
+    "stages#",
+    "unit"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity_unit",
+    "transport.delivery_factor_id",
+    "transport.factor_id"
+   ],
+   "materials.composition": [
+    "factor_id"
+   ],
+   "materials.conversions": [
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "route"
+   ],
+   "operation": [
+    "district_heat_factor_id",
+    "gas_factor_id",
+    "oil_factor_id"
+   ],
+   "summary_quantities": [
+    "concrete_uptake_factor_id"
+   ],
+   "unit_conversions": [
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water_factor_id"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "from_unit",
+    "to_unit"
+   ],
+   "construction.fuels.conversions": [
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "SYS-03": {
+  "read_from": [
+   "S.sys3.aff",
+   "S.sys3.n",
+   "S.sys3.ok",
+   "construction.fuels.s3.nf.c.fuel",
+   "construction.fuels.s3.nr.c.fuel",
+   "construction.waste_streams.s3.nf.c.waste",
+   "construction.waste_streams.s3.nr.c.waste",
+   "cost_items.s3.nf.x.cost",
+   "cost_items.s3.nr.x.cost",
+   "end_of_life.demolition_activities.s3.nf.d.dem",
+   "end_of_life.demolition_activities.s3.nr.d.dem",
+   "end_of_life.waste_hauls.s3.nf.d.haul",
+   "end_of_life.waste_hauls.s3.nr.d.haul",
+   "equipment.s3.nf.e.dlv",
+   "equipment.s3.nf.e.eol",
+   "equipment.s3.nf.e.fac",
+   "equipment.s3.nf.e.ins",
+   "equipment.s3.nr.e.dlv",
+   "equipment.s3.nr.e.eol",
+   "equipment.s3.nr.e.fac",
+   "equipment.s3.nr.e.ins",
+   "factors.s3.lic",
+   "materials.s3.nf.m.dlv",
+   "materials.s3.nf.m.epd",
+   "materials.s3.nf.m.fac",
+   "materials.s3.nf.m.haul",
+   "materials.s3.nf.m.inst",
+   "materials.s3.nf.m.tr",
+   "materials.s3.nr.m.dlv",
+   "materials.s3.nr.m.epd",
+   "materials.s3.nr.m.fac",
+   "materials.s3.nr.m.haul",
+   "materials.s3.nr.m.inst",
+   "materials.s3.nr.m.tr",
+   "materials.composition.s3.nf.m.part",
+   "materials.composition.s3.nr.m.part",
+   "materials.end_of_life.routes.s3.nf.m.rt",
+   "materials.end_of_life.routes.s3.nr.m.rt",
+   "operation.s3.grid",
+   "operation.s3.nf.o.dh",
+   "operation.s3.nf.o.gas",
+   "operation.s3.nf.o.oil",
+   "operation.s3.nr.o.dh",
+   "operation.s3.nr.o.gas",
+   "operation.s3.nr.o.oil",
+   "summary_quantities.s3.nf.q.cu",
+   "summary_quantities.s3.nr.q.cu",
+   "water_waste.s3.nf.w.msw",
+   "water_waste.s3.nf.w.sew",
+   "water_waste.s3.nf.w.wat",
+   "water_waste.s3.nr.w.msw",
+   "water_waste.s3.nr.w.sew",
+   "water_waste.s3.nr.w.wat"
+  ],
+  "steps": {
+   "P1:match": 24,
+   "P1:sp": 152
+  },
+  "spectra": [],
+  "inputs": {
+   "construction.fuels": [
+    "factor_id"
+   ],
+   "construction.waste_streams": [
+    "factor_id"
+   ],
+   "cost_items": [
+    "factor_id"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id"
+   ],
+   "end_of_life.waste_hauls": [
+    "factor_id"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "source_url"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_factor_id",
+    "epd#",
+    "epd.factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "transport.delivery_factor_id",
+    "transport.factor_id"
+   ],
+   "materials.composition": [
+    "factor_id"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id"
+   ],
+   "operation": [
+    "district_heat_factor_id",
+    "gas_factor_id",
+    "grid.licence_status",
+    "oil_factor_id"
+   ],
+   "summary_quantities": [
+    "concrete_uptake_factor_id"
+   ],
+   "water_waste": [
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water_factor_id"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "SYS-04": {
+  "read_from": [
+   "project.sys4.ok",
+   "project.sys4.res",
+   "project.sys4.sum",
+   "project.sys4.valid"
+  ],
+  "steps": {
+   "P1:sp": 6
+  },
+  "spectra": [],
+  "inputs": {
+   "project": [
+    "gross_floor_area"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "project.use_area_sorted": [
+    "value"
+   ]
+  }
+ },
+ "X-01": {
+  "read_from": [
+   "S.x01.n_skipped",
+   "S.x01.value",
+   "equipment.x01.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 10
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment": [
+    "factor_id",
+    "quantity",
+    "quantity_unit"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-02": {
+  "read_from": [
+   "S.x02.complete",
+   "STG.x02.bs",
+   "STG.x02.full",
+   "STG.x02.inc",
+   "U.x02.uinc"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 7,
+   "P1:match": 106,
+   "P1:sp": 303,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "needs_b2",
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "X-03": {
+  "read_from": [
+   "S.x03.value",
+   "factors.key",
+   "factors.x03.emission",
+   "factors.x03.mass",
+   "factors.x03.n"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 36
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-04": {
+  "read_from": [
+   "S.x04.fg",
+   "S.x04.grid",
+   "S.x04.refr",
+   "S.x04.value",
+   "STG.x04.rec",
+   "STG.x05.co2",
+   "gases.value",
+   "gases.x04.bygas"
+  ],
+  "steps": {
+   "AGG:sp": 60,
+   "P1:match": 110,
+   "P1:sp": 286,
+   "TIME:sp": 44
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "EL",
+   "act.dh",
+   "act.gas",
+   "act.msw",
+   "act.oil",
+   "act.sew",
+   "act.wat"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.gas_amounts": [
+    "key",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "gases": [
+    "value"
+   ],
+   "gwp": [
+    "key",
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "STG": [
+    "name"
+   ],
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "X-05": {
+  "read_from": [
+   "S.x05.value"
+  ],
+  "steps": {
+   "AGG:match": 1,
+   "AGG:sp": 32,
+   "P1:match": 96,
+   "P1:sp": 243,
+   "TIME:sp": 44
+  },
+  "spectra": [
+   "EL",
+   "act.dh",
+   "act.gas",
+   "act.msw",
+   "act.oil",
+   "act.sew",
+   "act.wat"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.gas_amounts": [
+    "key",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "STG": [
+    "name"
+   ],
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ]
+  }
+ },
+ "X-06": {
+  "read_from": [
+   "S.dmt.x06",
+   "operation.x06.wf",
+   "operation.grid.table.t.in",
+   "operation.grid.table.x06.g"
+  ],
+  "steps": {
+   "AGG:sp": 1,
+   "P1:match": 3,
+   "P1:sp": 19,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "mis.x06"
+  ],
+  "inputs": {
+   "operation": [
+    "grid.annual_decline",
+    "grid.floor",
+    "grid.kind",
+    "grid.start",
+    "grid.steps#"
+   ],
+   "operation.grid.table": [
+    "value"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ]
+  }
+ },
+ "X-07": {
+  "read_from": [
+   "S.x07.value",
+   "Y0.x07.c",
+   "Y0.x07.s"
+  ],
+  "steps": {
+   "AGG:match": 3,
+   "AGG:sp": 26,
+   "P1:match": 112,
+   "P1:sp": 308,
+   "TIME:sp": 24
+  },
+  "spectra": [
+   "B1-02",
+   "B1-03",
+   "B1-04 (interval form)",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "EL"
+  ],
+  "inputs": {
+   "boundary": [
+    "reconstruction_scenario",
+    "reconstruction_scope_fraction"
+   ],
+   "boundary.included_lifecycle_stages": [
+    "value"
+   ],
+   "construction": [
+    "electricity_kwh"
+   ],
+   "construction.fuels": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "construction.waste_streams": [
+    "factor_id",
+    "mass_kg"
+   ],
+   "end_of_life.demolition_activities": [
+    "factor_id",
+    "quantity",
+    "unit"
+   ],
+   "end_of_life.waste_hauls": [
+    "distance_km",
+    "factor_id",
+    "mass_t"
+   ],
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "repair_rate",
+    "replacement_event_list#"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "repair_rate",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "unquantified_cost_ratio",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "operation": [
+    "district_heat.base",
+    "district_heat.kind",
+    "district_heat.slope",
+    "district_heat_factor_id",
+    "electricity.base",
+    "electricity.kind",
+    "electricity.slope",
+    "facility_management_ratio",
+    "gas.base",
+    "gas.kind",
+    "gas.slope",
+    "gas_factor_id",
+    "grid.annual_decline",
+    "grid.construction_value",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#",
+    "oil.base",
+    "oil.kind",
+    "oil.slope",
+    "oil_factor_id",
+    "onsite_export.base",
+    "onsite_export.kind",
+    "onsite_export.slope",
+    "onsite_generation.base",
+    "onsite_generation.kind",
+    "onsite_generation.slope"
+   ],
+   "operation.district_heat.table": [
+    "value"
+   ],
+   "operation.electricity.table": [
+    "value"
+   ],
+   "operation.gas.table": [
+    "value"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "operation.oil.table": [
+    "value"
+   ],
+   "operation.onsite_export.table": [
+    "value"
+   ],
+   "operation.onsite_generation.table": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "refrigerants": [
+    "annual_leak_rate",
+    "change_years#",
+    "charge_mass_kg",
+    "end_of_life_recovery_rate",
+    "gwp",
+    "replacement_loss_rate",
+    "top_up"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "water_waste": [
+    "municipal_waste.base",
+    "municipal_waste.kind",
+    "municipal_waste.slope",
+    "sewage.base",
+    "sewage.kind",
+    "sewage.slope",
+    "sewage_factor_id",
+    "waste_factor_id",
+    "water.base",
+    "water.kind",
+    "water.slope",
+    "water_factor_id"
+   ],
+   "water_waste.municipal_waste.table": [
+    "value"
+   ],
+   "water_waste.sewage.table": [
+    "value"
+   ],
+   "water_waste.water.table": [
+    "value"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "district_heat.unit~h",
+    "district_heat.unit~t",
+    "electricity.unit~h",
+    "electricity.unit~t",
+    "gas.unit~h",
+    "gas.unit~t",
+    "grid.unit~h",
+    "grid.unit~t",
+    "oil.unit~h",
+    "oil.unit~t",
+    "onsite_export.unit~h",
+    "onsite_export.unit~t",
+    "onsite_generation.unit~h",
+    "onsite_generation.unit~t"
+   ],
+   "water_waste": [
+    "municipal_waste.unit~h",
+    "municipal_waste.unit~t",
+    "sewage.unit~h",
+    "sewage.unit~t",
+    "water.unit~h",
+    "water.unit~t"
+   ]
+  },
+  "index_tables": {
+   "COMP": [
+    "sign",
+    "stage",
+    "unit"
+   ],
+   "STG": [
+    "name"
+   ],
+   "TT": [
+    "T"
+   ],
+   "Y0": [
+    "i"
+   ],
+   "Y0.x": [
+    "j"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "boundary.events": [
+    "cell",
+    "tau"
+   ],
+   "construction.fuels.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "cell",
+    "tau"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ],
+   "refrigerants.events": [
+    "cell",
+    "src",
+    "tau"
+   ],
+   "refrigerants.years": [
+    "k"
+   ]
+  }
+ },
+ "X-08": {
+  "read_from": [
+   "CYC.t.cnt_c",
+   "CYC.t.x08_e",
+   "CYC.t.x08_on",
+   "CYC.x08.U",
+   "S.t.x08_v",
+   "S.t.x08_x"
+  ],
+  "steps": {
+   "P1:match": 44,
+   "P1:sp": 115,
+   "TIME:sp": 10
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment": [
+    "delivery_factor_id",
+    "end_of_life_mass_kg",
+    "eol_factor_id",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_unit",
+    "replacement_event_list#",
+    "service_life"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "end_of_life.haul_distance_km",
+    "end_of_life.haul_factor_id",
+    "end_of_life.mass_kg",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "installation_factor_id",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "refresh_cycle",
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.mass_t",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "CYC": [
+    "value"
+   ],
+   "CYC.events": [
+    "tau"
+   ],
+   "TT": [
+    "T"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "equipment.events": [
+    "src",
+    "tau"
+   ]
+  }
+ },
+ "X-09": {
+  "read_from": [
+   "CLS.value",
+   "CLS.x09.nc",
+   "CLS.x.x09.e",
+   "CLS.x.x09.m",
+   "S.x09.value"
+  ],
+  "steps": {
+   "P1:match": 9,
+   "P1:sp": 18
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "end_of_life.mass_kg",
+    "material_class"
+   ],
+   "materials.end_of_life.routes": [
+    "factor_id",
+    "fraction",
+    "route"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "CLS": [
+    "value"
+   ],
+   "CLS.x": [
+    "r"
+   ],
+   "ROUTES": [
+    "name"
+   ],
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-10": {
+  "read_from": [
+   "S.t.x10r",
+   "S.t.x10w",
+   "S.x10.n_excluded"
+  ],
+  "steps": {
+   "P1:match": 2,
+   "P1:sp": 14,
+   "TIME:sp": 11
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment": [
+    "end_of_life_mass_kg",
+    "replacement_event_list#"
+   ],
+   "materials": [
+    "end_of_life.mass_kg",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "waste_rate"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "TT": [
+    "T"
+   ],
+   "equipment.events": [
+    "src",
+    "tau"
+   ],
+   "materials.events": [
+    "tau"
+   ]
+  }
+ },
+ "X-11": {
+  "read_from": [
+   "operation.t.x11",
+   "operation.x11.ok"
+  ],
+  "steps": {
+   "P1:match": 5,
+   "P1:sp": 16,
+   "TIME:sp": 1
+  },
+  "spectra": [
+   "G"
+  ],
+  "inputs": {
+   "operation": [
+    "electricity_per_m2_per_year",
+    "grid.annual_decline",
+    "grid.floor",
+    "grid.kind",
+    "grid.licence_status",
+    "grid.start",
+    "grid.steps#"
+   ],
+   "operation.grid.table": [
+    "value"
+   ],
+   "project": [
+    "gross_floor_area"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {
+   "operation": [
+    "grid.unit~h",
+    "grid.unit~t"
+   ]
+  },
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "operation.grid.steps": [
+    "from_index",
+    "value"
+   ],
+   "operation.grid.table.xsteps": [
+    "s"
+   ]
+  }
+ },
+ "X-12": {
+  "read_from": [
+   "S.x12.n_skipped",
+   "S.x12.value",
+   "materials.x12.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 10
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "transport.delivery_factor_id",
+    "transport.distance_km",
+    "transport.factor_id",
+    "transport.load_factor",
+    "transport.mass_t"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-13": {
+  "read_from": [
+   "materials.x13.disposed",
+   "materials.x13.net",
+   "materials.x13.ok"
+  ],
+  "steps": {
+   "P1:sp": 7
+  },
+  "spectra": [],
+  "inputs": {
+   "materials": [
+    "quantity",
+    "quantity_basis",
+    "reuse_rate",
+    "waste_rate"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {}
+ },
+ "X-14": {
+  "read_from": [
+   "S.x14.n_skipped",
+   "S.x14.value",
+   "equipment.x14.by_item"
+  ],
+  "steps": {
+   "P1:match": 3,
+   "P1:sp": 10
+  },
+  "spectra": [],
+  "inputs": {
+   "equipment": [
+    "end_of_life_mass_kg",
+    "eol_factor_id"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-15": {
+  "read_from": [
+   "S.x15.n_epd_declined",
+   "S.x15.n_unresolved",
+   "materials.x15.conv",
+   "materials.x15.factor",
+   "materials.x15.is_comp",
+   "materials.x15.is_epd",
+   "materials.x15.is_gen",
+   "materials.x15.resolved"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 32
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "quantity_unit"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-16": {
+  "read_from": [
+   "S.x16.n_skipped",
+   "S.x16.value",
+   "cost_items.x16.by_item"
+  ],
+  "steps": {
+   "P1:match": 5,
+   "P1:sp": 10
+  },
+  "spectra": [],
+  "inputs": {
+   "cost_items": [
+    "amount",
+    "currency",
+    "factor_base_year",
+    "factor_id",
+    "price_year"
+   ],
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "price_index": [
+    "key",
+    "value"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ },
+ "X-17": {
+  "read_from": [
+   "S.x17.CONCRETE.e",
+   "S.x17.CONCRETE.fbar",
+   "S.x17.ENVELOPE.e",
+   "S.x17.ENVELOPE.fbar",
+   "S.x17.INTERIOR.e",
+   "S.x17.INTERIOR.fbar",
+   "S.x17.REBAR.e",
+   "S.x17.REBAR.fbar",
+   "S.x17.STRUCTURAL_STEEL.e",
+   "S.x17.STRUCTURAL_STEEL.fbar",
+   "S.x17.TIMBER.e",
+   "S.x17.TIMBER.fbar",
+   "S.x17.value",
+   "summary_quantities.concrete_m3",
+   "summary_quantities.envelope_m2",
+   "summary_quantities.interior_m2",
+   "summary_quantities.reinforcement_kg",
+   "summary_quantities.steel_kg",
+   "summary_quantities.timber_m3"
+  ],
+  "steps": {
+   "P1:match": 12,
+   "P1:sp": 60
+  },
+  "spectra": [],
+  "inputs": {
+   "factors": [
+    "key",
+    "licence_status",
+    "stages#",
+    "unit",
+    "valid_until",
+    "value"
+   ],
+   "factors.stages": [
+    "value"
+   ],
+   "materials": [
+    "composition#",
+    "construction_division",
+    "epd#",
+    "epd.declared_stages#",
+    "epd.declared_unit",
+    "epd.factor_id",
+    "epd.valid_until",
+    "factor_id",
+    "material_class",
+    "quantity",
+    "quantity_basis",
+    "quantity_unit",
+    "waste_rate"
+   ],
+   "materials.composition": [
+    "factor_id",
+    "mass_fraction"
+   ],
+   "materials.conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ],
+   "materials.epd.declared_stages": [
+    "value"
+   ],
+   "project": [
+    "assessment_date"
+   ],
+   "summary_quantities": [
+    "concrete_m3",
+    "envelope_m2",
+    "interior_m2",
+    "reinforcement_kg",
+    "steel_kg",
+    "timber_m3"
+   ],
+   "unit_conversions": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  "tokens": {},
+  "index_tables": {
+   "_none": [
+    "factor",
+    "from_unit",
+    "to_unit"
+   ]
+  }
+ }
+}

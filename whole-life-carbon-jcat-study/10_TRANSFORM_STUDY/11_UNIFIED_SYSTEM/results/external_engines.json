@@ -1,0 +1,18 @@
+{
+ "note": "Independent checks run on the GitHub Actions of the main branch (workflow_dispatch, input 'command'). Synthetic numbers only; no research data was sent. Results copied from the job logs.",
+ "sagemath": {
+  "workflow": ".github/workflows/sagemath-run.yml", "image": "sagemath/sagemath:10.10", "run_id": 43199948838, "job_id": 131120452747,
+  "head_sha": "c3b0fb396251227fb9c609c38718b99c90dfafbd", "conclusion": "success", "started_at": "2026-11-12T10:23:32Z",
+  "command": "set_random_seed(20261113); n=64; q=QQ(87)/100; p=[1 if random()<0.1 else 0 for k in range(n)]; N=matrix(QQ,n,n,lambda i,j: (1-p[j])*q if i==j+1 else 0); I=identity_matrix(QQ,n); P=prod([I+N^(2^j) for j in range(6)]); print('resets', sum(p)); print('product_times_I_minus_N_is_identity', P*(I-N)==I); print('N_nilpotent', N^n==0); print('inverse_equals_product', (I-N).inverse()==P); b=vector(QQ,[QQ(75)/2]+[p[k-1]*QQ(75)/2 for k in range(1,n)]); u=[b[0]]; [u.append(b[k] if p[k-1] else q*u[k-1]) for k in range(1,n)]; print('recurrence_equals_product', vector(QQ,u)==P*b)",
+  "output": {"resets": 6, "product_times_I_minus_N_is_identity": true, "N_nilpotent": true, "inverse_equals_product": true, "recurrence_equals_product": true},
+  "meaning": "exact arithmetic over the rationals, 64 years, 6 factors: the product of (I + N^(2^j)) is the inverse of I - N and reproduces the recurrence with resets"
+ },
+ "matlab": {
+  "workflow": ".github/workflows/matlab-run.yml", "run_id": 43199960240, "job_id": 131120489232,
+  "head_sha": "c3b0fb396251227fb9c609c38718b99c90dfafbd", "conclusion": "success", "started_at": "2026-11-12T10:23:36Z",
+  "command": "rng(20261113); n=130; q=0.88; m0=37.5; p=double(rand(n,1)<0.08); N=zeros(n); b=zeros(n,1); b(1)=m0; for k=2:n, N(k,k-1)=(1-p(k-1))*q; b(k)=p(k-1)*m0; end; u1=(eye(n)-N)\\b; P=eye(n); for j=0:7, P=P*(eye(n)+N^(2^j)); end; u2=P*b; u3=zeros(n,1); u3(1)=m0; for k=2:n, if p(k-1), u3(k)=m0; else, u3(k)=q*u3(k-1); end; end; fprintf('resets %d\\n', sum(p)); fprintf('max_rel_solve_vs_product %.3e\\n', max(abs(u1-u2)./abs(u1))); fprintf('max_rel_recurrence_vs_product %.3e\\n', max(abs(u3-u2)./abs(u3))); fprintf('norm_N_pow_256 %.3e\\n', norm(N^256)); T=62.5; a=rand(n,1); w=min(1,max(0,T-(0:n-1)')); fprintf('year_weight_sum %.15g trapezoid_free_integral %.15g\\n', sum(a.*w), sum(a(1:62))+0.5*a(63))",
+  "output": {"resets": 10, "max_rel_solve_vs_product": 2.285e-16, "max_rel_recurrence_vs_product": 2.285e-16, "norm_N_pow_256": 0.0,
+             "year_weight_sum": 31.7421417979727, "closed_form_of_the_same_sum": 31.7421417979727},
+  "meaning": "double precision, 130 years, 8 factors: product = backslash solve = recurrence within 2.3e-16; the clip weight of the year cells gives the closed-form sum at T = 62.5"
+ }
+}

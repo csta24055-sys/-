@@ -1,0 +1,62 @@
+{
+ "experiment": "EXP-U2",
+ "1_sympy": {
+  "n=8, 3 factors, symbolic weights": true,
+  "n=16, 4 factors, symbolic weights": true,
+  "exact rationals: 40 random devices (40, 130, 200 years), entries that differ": 0
+ },
+ "2_scipy_benchmark_M": {
+  "n_unknowns": 5200,
+  "max_rel_difference": 1.9007190863451597e-15,
+  "max_abs_where_zero": 0.0
+ },
+ "3_duckdb_benchmark_M": {
+  "X-09 mass by class and route": {
+   "cells": 52,
+   "max_rel_difference": 0.0
+  },
+  "B4-03 renewals per row at T=62.5": {
+   "rows": 2000,
+   "rows_that_differ": 0
+  },
+  "year-weighted purchased-electricity emission at T=62.5": {
+   "sql": 33896824.93951324,
+   "knot_spectrum": 33896824.93951324,
+   "rel_difference": 0.0
+  }
+ },
+ "4_lca_ops": [
+  {
+   "T": "4",
+   "lca_ops_exact": "608/15",
+   "knot_spectrum": 40.53333333333334,
+   "rel_difference": 1.7529837230923525e-16
+  },
+  {
+   "T": "15/4",
+   "lca_ops_exact": "4819/120",
+   "knot_spectrum": 40.15833333333334,
+   "rel_difference": 1.7693531498487658e-16
+  },
+  {
+   "T": "5/2",
+   "lca_ops_exact": "97/20",
+   "knot_spectrum": 4.85,
+   "rel_difference": 0.0
+  },
+  {
+   "T": "1/2",
+   "lca_ops_exact": "21/20",
+   "knot_spectrum": 1.05,
+   "rel_difference": 0.0
+  }
+ ],
+ "versions": {
+  "numpy": "2.5.4",
+  "sympy": "1.14.0",
+  "scipy": "1.18.1",
+  "mpmath": "1.3.0",
+  "duckdb": "2.0.0",
+  "python": "3.13.18"
+ }
+}

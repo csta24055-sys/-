@@ -1,0 +1,564 @@
+{
+ "structure": {
+  "SPEC1 is JSON-serialisable (data only)": true,
+  "SPEC_TIME is JSON-serialisable (data only)": true,
+  "SPEC_AGG is JSON-serialisable (data only)": true,
+  "index plan, emitters and static tables are JSON-serialisable": true,
+  "engine, flattening, knot spectrum, kernel and the 18-unit specification are the committed files": true,
+  "tstudy/unified.py does not mention the reference calculation in code": true,
+  "steps": {
+   "P1": {
+    "sp": 1358,
+    "match": 170
+   },
+   "TIME": {
+    "sp": 95
+   },
+   "AGG": {
+    "match": 10,
+    "sp": 156
+   }
+  },
+  "vocabulary_in_use": {
+   "factor:column": 1770,
+   "factor:const": 152,
+   "fn:inv": 12,
+   "fn:inv_one_minus": 1,
+   "fn:one_minus": 5,
+   "fn:ratio_one_minus": 4,
+   "group:by": 177,
+   "group:none": 1033,
+   "group:total": 399,
+   "operand:const": 1782,
+   "operand:of": 395,
+   "operand:own": 4194,
+   "operand:via": 985,
+   "pred.not": 689,
+   "pred:eq": 1856,
+   "pred:le": 91,
+   "pred:present": 1195,
+   "pred:range": 145,
+   "step:match": 180,
+   "step:sp": 1609
+  },
+  "vocabulary_outside_the_engine": [],
+  "functions_in_use": [
+   "fn:inv",
+   "fn:inv_one_minus",
+   "fn:one_minus",
+   "fn:ratio_one_minus"
+  ]
+ },
+ "qa01_fault_injection": [
+  {
+   "case": "(b) A13-01 and A13-03 both counted on three rows",
+   "agree_and_fail": true,
+   "reference": {
+    "ok": false,
+    "violations": [
+     "materials[0] A13-01/A13-03",
+     "materials[1] A13-01/A13-03",
+     "materials[2] A13-01/A13-03"
+    ]
+   },
+   "candidate": {
+    "ok": false,
+    "violations": [
+     "materials[0] A13-01/A13-03",
+     "materials[1] A13-01/A13-03",
+     "materials[2] A13-01/A13-03"
+    ]
+   }
+  },
+  {
+   "case": "(c) A4-01 and A4-02 both counted on two rows",
+   "agree_and_fail": true,
+   "reference": {
+    "ok": false,
+    "violations": [
+     "materials[2] A4-01/A4-02",
+     "materials[3] A4-01/A4-02"
+    ]
+   },
+   "candidate": {
+    "ok": false,
+    "violations": [
+     "materials[2] A4-01/A4-02",
+     "materials[3] A4-01/A4-02"
+    ]
+   }
+  },
+  {
+   "case": "(a) stage values of B4 and C2 falsified",
+   "agree_and_fail": true,
+   "reference": {
+    "ok": false,
+    "violations": [
+     "stage B4",
+     "stage C2"
+    ]
+   },
+   "candidate": {
+    "ok": false,
+    "violations": [
+     "stage B4",
+     "stage C2"
+    ]
+   }
+  },
+  {
+   "case": "(a), (b) and (c) together",
+   "agree_and_fail": true,
+   "reference": {
+    "ok": false,
+    "violations": [
+     "stage B4",
+     "stage C2",
+     "materials[0] A13-01/A13-03",
+     "materials[1] A13-01/A13-03",
+     "materials[2] A13-01/A13-03",
+     "materials[2] A4-01/A4-02",
+     "materials[3] A4-01/A4-02"
+    ]
+   },
+   "candidate": {
+    "ok": false,
+    "violations": [
+     "stage B4",
+     "stage C2",
+     "materials[0] A13-01/A13-03",
+     "materials[1] A13-01/A13-03",
+     "materials[2] A13-01/A13-03",
+     "materials[2] A4-01/A4-02",
+     "materials[3] A4-01/A4-02"
+    ]
+   }
+  }
+ ],
+ "negative_controls": [
+  {
+   "control": "SYS-01: a derived value counted only when it is zero",
+   "expected_units": [
+    "SYS-01"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "SYS-01"
+   ],
+   "n_mismatch": 2,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "SYS-02: a wrong stage of a factor does not fail the check",
+   "expected_units": [
+    "SYS-02"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "SYS-02"
+   ],
+   "n_mismatch": 2,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "SYS-02: stage mismatches of the generic material factors not listed",
+   "expected_units": [
+    "SYS-02"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "SYS-02"
+   ],
+   "n_mismatch": 2,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "SYS-03 / QA-03: an empty source accepted",
+   "expected_units": [
+    "SYS-03",
+    "QA-03"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "QA-03",
+    "SYS-03"
+   ],
+   "n_mismatch": 8,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "QA-03: lines of a renewal counted before any renewal",
+   "expected_units": [
+    "QA-03"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "QA-03"
+   ],
+   "n_mismatch": 3,
+   "n_pairs": 3,
+   "n_failed": 0
+  },
+  {
+   "control": "X-04 / X-05: rebuild lines of the end-of-life stages dropped",
+   "expected_units": [
+    "X-04",
+    "X-05"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "QA-01",
+    "X-04",
+    "X-05"
+   ],
+   "n_mismatch": 28,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "X-05: CO2e value instead of the CO2 amount in stage B4",
+   "expected_units": [
+    "X-05"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "X-05"
+   ],
+   "n_mismatch": 12,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "X-07: end-of-life stages and end residual not placed in the last year",
+   "expected_units": [
+    "X-07"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "X-07"
+   ],
+   "n_mismatch": 18,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "X-08: cycle values without a contributing row listed",
+   "expected_units": [
+    "X-08"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "X-08"
+   ],
+   "n_mismatch": 16,
+   "n_pairs": 4,
+   "n_failed": 0
+  },
+  {
+   "control": "X-09: negative route fractions summed",
+   "expected_units": [
+    "X-09"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "X-09"
+   ],
+   "n_mismatch": 2,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "B4-03: a renewal exactly at the end of the period counted",
+   "expected_units": [
+    "B4-03"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B3-01",
+    "B4-02",
+    "B4-03",
+    "QA-01",
+    "X-04",
+    "X-05",
+    "X-07",
+    "X-10"
+   ],
+   "n_mismatch": 47,
+   "n_pairs": 1,
+   "n_failed": 0
+  },
+  {
+   "control": "B3-01 per year: repairs not skipped in a renewal year",
+   "expected_units": [
+    "B3-01"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B3-01",
+    "X-07"
+   ],
+   "n_mismatch": 647,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "X-04: gas amounts replaced by 1",
+   "expected_units": [
+    "X-04"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "X-04"
+   ],
+   "n_mismatch": 54,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "SUM-05: not divided by the study period",
+   "expected_units": [
+    "SUM-05"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "SUM-05"
+   ],
+   "n_mismatch": 6,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "B1-04 in the jump form under 35 % leak without replacement (known limit, EXP-U1)",
+   "expected_units": [
+    "B1-04"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B1-04"
+   ],
+   "n_mismatch": 1,
+   "n_pairs": 3,
+   "n_failed": 0
+  },
+  {
+   "control": "refrigerant: resolvent truncated to 3 factors",
+   "expected_units": [
+    "B1-02"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "SUM-08",
+    "X-02",
+    "X-04",
+    "X-07"
+   ],
+   "n_mismatch": 179,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "refrigerant: resets ignored",
+   "expected_units": [
+    "B1-02",
+    "B1-04"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "SUM-08",
+    "X-02",
+    "X-04",
+    "X-07"
+   ],
+   "n_mismatch": 1217,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "refrigerant: every event treated as the first of its year",
+   "expected_units": [
+    "B1-03"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B1-03",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "X-02",
+    "X-04",
+    "X-07"
+   ],
+   "n_mismatch": 164,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "grid factor: floor of the linear decline dropped",
+   "expected_units": [
+    "X-06"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B2-01",
+    "B6-01",
+    "B6-03",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "X-02",
+    "X-04",
+    "X-05",
+    "X-06",
+    "X-07",
+    "X-11"
+   ],
+   "n_mismatch": 192,
+   "n_pairs": 1,
+   "n_failed": 0
+  },
+  {
+   "control": "grid factor: stepwise without the upper bound of a step",
+   "expected_units": [
+    "X-06"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B2-01",
+    "B6-01",
+    "B6-03",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "X-02",
+    "X-04",
+    "X-05",
+    "X-06",
+    "X-07",
+    "X-11"
+   ],
+   "n_mismatch": 280,
+   "n_pairs": 2,
+   "n_failed": 0
+  },
+  {
+   "control": "purchased electricity without max(0, .)",
+   "expected_units": [
+    "B6-04"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B2-01",
+    "B6-01",
+    "B6-03",
+    "B6-04",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "X-02",
+    "X-04",
+    "X-05",
+    "X-07"
+   ],
+   "n_mismatch": 274,
+   "n_pairs": 1,
+   "n_failed": 0
+  },
+  {
+   "control": "annual profiles: linear trend dropped",
+   "expected_units": [
+    "B6-04"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B2-01",
+    "B6-01",
+    "B6-02",
+    "B6-03",
+    "B6-04",
+    "B7-01",
+    "B7-02",
+    "B7-03",
+    "B7-04",
+    "SUM-02",
+    "SUM-03",
+    "SUM-04",
+    "SUM-05",
+    "SUM-06",
+    "SUM-07",
+    "X-02",
+    "X-04",
+    "X-05",
+    "X-07"
+   ],
+   "n_mismatch": 1514,
+   "n_pairs": 6,
+   "n_failed": 0
+  },
+  {
+   "control": "incomplete-renewal flag without three of its conditions",
+   "expected_units": [
+    "B4-02"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "B4-02"
+   ],
+   "n_mismatch": 3,
+   "n_pairs": 3,
+   "n_failed": 0
+  },
+  {
+   "control": "C-05 without the sum-of-fractions test",
+   "expected_units": [
+    "C-05"
+   ],
+   "detected": true,
+   "units_with_mismatch": [
+    "C-05"
+   ],
+   "n_mismatch": 6,
+   "n_pairs": 3,
+   "n_failed": 0
+  }
+ ],
+ "summary": {
+  "controls": 24,
+  "controls_detected": 24,
+  "qa01_cases": 4,
+  "qa01_agree_and_fail": 4
+ }
+}
