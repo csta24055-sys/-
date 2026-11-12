@@ -46,7 +46,9 @@ jobs:
         run: |
           set -euo pipefail
           case "$MATH_MODE" in portable-full|portable-python|baseline-compact) ;; *) echo 'Invalid mode'; exit 2 ;; esac
-          case "$MATH_INPUT_FILE" in math_tools_v2/examples/*.json) ;; *) echo 'Only public checked-in fixtures allowed'; exit 2 ;; esac
+          if ! [[ "$MATH_INPUT_FILE" =~ ^math_tools_v2/examples/[A-Za-z0-9_-]+\.json$ ]]; then
+            echo 'Only a direct public fixture in math_tools_v2/examples/ is allowed (no traversal)'; exit 2
+          fi
           test -f "$MATH_INPUT_FILE"
           if [ "$MATH_MODE" = baseline-compact ]; then
             python math_interop_v0/phase5.py prepare math_ir_io
