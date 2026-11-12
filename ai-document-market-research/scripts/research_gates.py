@@ -194,7 +194,8 @@ def assess(root: Path, scope: dict | None = None) -> dict:
                     dangling += [f'{uid}->{i}' for i in u.get('source_ids', []) if i not in all_src]
                     dangling += [f'{uid}.{k}->{a.get("source_id")}' for k, a in (u.get('profile') or {}).items() if isinstance(a, dict) and a.get('source_id') and a.get('source_id') not in all_src]
     gate('S1', not dangling, f'no reference points to a source that is missing from the ledger: {len(dangling)} dangling', dangling, 'restore the deleted source rows or re-collect the evidence')
-    actions = len([x for x in log if 'same_action_as=' not in x.get('notes', '')])
+    # executed actions: refused searches (per-turn budget) and same-action/cache rows are attempts or bookkeeping, not executions
+    actions = len([x for x in log if 'same_action_as=' not in x.get('notes', '') and x.get('retrieval_status') != 'REFUSED_BUDGET'])
     cov = text_at(research / 'COLLECTION_COVERAGE_AUDIT.md')
     gate('S1', has_substance(research / 'COLLECTION_COVERAGE_AUDIT.md', 500) and stated_int(cov, 'EXECUTED_ACTIONS') == actions,
          f'coverage audit is current (EXECUTED_ACTIONS = {actions})', action='regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge')
