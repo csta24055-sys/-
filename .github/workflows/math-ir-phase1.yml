@@ -53,6 +53,14 @@ jobs:
             "$RUNNER_TEMP/math-ir-input.json" \
             "$RUNNER_TEMP/math-ir-output.json"
 
+      - name: Reject tampered results and metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python math_interop_v0/phase1.py tamper-test \
+            "$RUNNER_TEMP/math-ir-input.json" \
+            "$RUNNER_TEMP/math-ir-output.json"
+
       - name: Save synthetic test data for audit
         if: always()
         uses: actions/upload-artifact@v4
