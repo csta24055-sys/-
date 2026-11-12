@@ -17,23 +17,23 @@
   "steps": {
     "S0": {
       "state": "PASS",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": []
     },
     "S1": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "topics with a complete research-unit collection: 16/325",
         "legacy queries handled: executed 48, attempted-but-blocked 0, not executed 848 (of 896)",
         "competitor candidates explored: 4/80",
         "additional-hypothesis topics (outside the 325) explored: 0/7",
-        "coverage audit is current (EXECUTED_ACTIONS = 772)"
+        "coverage audit is current (EXECUTED_ACTIONS = 619)"
       ]
     },
     "S2": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "every accepted source reviewed: verified 0, pending 152",
         "verified sources carry quote, location, kind, origin and date: 0/0",
@@ -44,7 +44,7 @@
     },
     "S3": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "representativeness graded for every measured source: 0/0",
         "axis relation model covers all axes: 0/32",
@@ -54,7 +54,7 @@
     },
     "S4": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "every confirmed competitor attribute is backed by a verified source: 40 unbacked",
         "highest-priority candidates confirmed from vendor-written material: 19/21",
@@ -63,7 +63,7 @@
     },
     "S5": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "every topic has at least one calculation id: 0/325",
         "every calculation id is in a justified terminal state: 0/0",
@@ -74,7 +74,7 @@
     },
     "S6": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "axis syntheses exist for every axis: 0/32",
         "integrated model refers to every axis"
@@ -82,7 +82,7 @@
     },
     "S7": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "options A-G and the added hypotheses compared on the verified evidence set",
         "decision analysis is conditional, covers downside and regret, and cites only verified sources"
@@ -90,7 +90,7 @@
     },
     "S8": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "final audit records that no application code was changed",
         "every user requirement and added hypothesis is traced to evidence or to a stated unknown: 0/20",
@@ -99,14 +99,14 @@
     },
     "S9": {
       "state": "FAIL",
-      "evaluated_at": "2026-11-12T14:43:54.150819+00:00",
+      "evaluated_at": "2026-11-12T14:49:37.597720+00:00",
       "failure_reasons": [
         "formal deliverables present: 0/5",
         "final report cites verified sources and covers the fixed requirements"
       ]
     }
   },
-  "last_evaluated": "2026-11-12T14:43:54.150819+00:00",
+  "last_evaluated": "2026-11-12T14:49:37.597720+00:00",
   "notes": [
     "S1は325テーマ中162が未着手のため未通過。",
     "S2〜S9は文書を作成済みだが、S1（およびS4のP0競合2件）が通るまで機械判定はBLOCKEDのまま。成果物は暫定版。",

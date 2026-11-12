@@ -194,6 +194,7 @@ def main() -> None:
                 cunits[u['competitor_id']] = u
 
     seen_exec = {(r.get('executor', ''), r.get('searched_at', ''), r.get('query', ''), r.get('unit_id', '')) for r in log}
+    seen_fetch = {(r.get('executor', ''), r.get('query', ''), r.get('unit_id', '')) for r in log if r.get('query', '').startswith('GET ')}
     src_by_norm = {norm_url(s['url']): s for s in src}
     dom_group = {}
     for s in src:
@@ -268,10 +269,10 @@ def main() -> None:
             done_urls = set()
             for f in run['fetches']:
                 nu = norm_url(f['url'])
-                key = (executor, 'FETCH', 'GET ' + f['url'], uid)
-                if key in seen_exec or nu in done_urls:
+                key = (executor, 'GET ' + f['url'], uid)  # one row per worker run and URL, however often the cached page is re-read
+                if key in seen_fetch or nu in done_urls:
                     continue
-                seen_exec.add(key)
+                seen_fetch.add(key)
                 done_urls.add(nu)
                 meta = cache.get(f['url']) or {}
                 status, chars = int(meta.get('status', f['status']) or 0), int(meta.get('chars', f['chars']) or 0)

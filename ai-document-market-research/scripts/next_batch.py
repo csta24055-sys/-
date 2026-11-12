@@ -14,7 +14,9 @@ It rewrites the task file of every selected unit with a `todo` block:
   previous_search_results  links returned by earlier real searches for this unit (so they need not be repeated)
   previous_unit         the unit record merged so far, if any
 
-Usage: python3 scripts/next_batch.py TASK_DIR STAGING_DIR BUDGET GROUPS  -> prints JSON {groups: [[kind:id,...],...]}
+Usage: python3 scripts/next_batch.py TASK_DIR STAGING_DIR BUDGET GROUPS [INFLIGHT_DIR TAG]  -> prints JSON {groups: [[kind:id,...],...]}
+With INFLIGHT_DIR, units that already have a marker there (assigned to a running batch) are skipped and the
+picked units get a marker `<kind>_<id>` containing `TAG.g<group>`; remove the markers when that group has finished.
 """
 from __future__ import annotations
 import csv
@@ -41,6 +43,9 @@ def rows(n):
 
 def main() -> None:
     tdir, sdir, budget, groups = Path(sys.argv[1]), Path(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
+    inflight = Path(sys.argv[5]) if len(sys.argv) > 5 else None
+    tag = sys.argv[6] if len(sys.argv) > 6 else 'B'
+    busy = {p.name for p in inflight.iterdir()} if inflight and inflight.exists() else set()
     st = build_status.compute(REG, write_files=False)
     qstate = defaultdict(list)
     for q in st['qrows']:
@@ -88,6 +93,7 @@ def main() -> None:
         allowance = 2 if (has_profile and c['official_confirmed'] == 'YES') else (3 if has_profile else 4)
         cand.append({'kind': 'COMPETITOR', 'id': c['competitor_id'], 'priority': c['research_priority'], 'allowance': allowance, 'legacy': [],
                      'routes': ['COUNTER'] if has_profile else ['PRIMARY', 'COUNTER'], 'need_unit': not has_profile, 'need_open': True})
+    cand = [c for c in cand if f"{c['kind']}_{c['id']}" not in busy]
     tops = sorted([c for c in cand if c['kind'] == 'TOPIC'], key=lambda c: (c['priority'], c['id']))
     cmps = sorted([c for c in cand if c['kind'] == 'COMPETITOR'], key=lambda c: (c['priority'], c['id']))
     order = []
@@ -117,9 +123,13 @@ def main() -> None:
             task['previous_unit'] = {'profile_status': {k: (v or {}).get('status') for k, v in (cunits[c['id']].get('profile') or {}).items()}}
         p.write_text(json.dumps(task, ensure_ascii=False, indent=1), encoding='utf-8')
     out = [[] for _ in range(groups)]
+    if inflight:
+        inflight.mkdir(parents=True, exist_ok=True)
     for i, c in enumerate(picked):
         out[i % groups].append(f"{c['kind']}:{c['id']}")
-    print(json.dumps({'planned_searches': total, 'units': len(picked), 'remaining_units_after': len(order) - len(picked),
+        if inflight:
+            (inflight / f"{c['kind']}_{c['id']}").write_text(f'{tag}.g{i % groups}', encoding='utf-8')
+    print(json.dumps({'planned_searches': total, 'units': len(picked), 'in_flight_skipped': len(busy), 'remaining_units_after': len(order) - len(picked),
                       'remaining_search_estimate': sum(c['allowance'] for c in order) - total, 'groups': out}, ensure_ascii=False))
 
 
