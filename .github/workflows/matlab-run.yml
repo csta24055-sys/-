@@ -1,0 +1,37 @@
+name: MATLAB Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "MATLAB command to run"
+        required: true
+        default: "syms x; f = int(x^2*sin(x),x); disp(f);"
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          products: Symbolic_Math_Toolbox
+
+      - name: Run MATLAB command
+        uses: matlab-actions/run-command@v3
+        env:
+          MLM_LICENSE_TOKEN: ${{ secrets.MLM_LICENSE_TOKEN }}
+        with:
+          command: "diary('matlab_output.txt'); disp('=== RESULT BEGIN ==='); ${{ inputs.command }}; disp('=== RESULT END ==='); diary off"
+
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: matlab-output
+          path: matlab_output.txt
+          if-no-files-found: ignore
