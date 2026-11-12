@@ -1,0 +1,13 @@
+calc_id,topic_id,metric,formula,value,state,limitations,checked_at
+"1A01-C01","AXIS_01_T01","PPTX real editability","editable-elements / all elements","","NON_IDENTIFIABLE","Need same-source PPTX real file and object-level audit","2026-11-13"
+"1A01-C02","AXIS_01_T01","content evidence correctness","supported-claims / all slide-claims","","NON_IDENTIFIABLE","Need manually verified test deck claim set","2026-11-13"
+"1A01-C03","AXIS_01_T02","PDF summary citation validity","true source page references / all generated references","","NON_IDENTIFIABLE","Need reference-annotated PDF summary trial","2026-11-13"
+"1A01-C04","AXIS_01_T03","net writing time saved","manual create+QA minutes minus AI create+QA+revision minutes","","NON_IDENTIFIABLE","NBER measured email time, not deck/report creation","2026-11-13"
+"1A01-C05","AXIS_01_T04","average evaluation tasks per PowerPoint file in PPT-Eval","120 tasks / 12 benchmark files","10","DESCRIPTIVE_BENCHMARK_AVERAGE","Not actual identical count per file, not product performance","2026-11-13"
+"1A01-C06","AXIS_01_T05","OCR character error rate","edit_distance(predicted, truth)/characters_in_ground_truth","","NON_IDENTIFIABLE","No paired Japanese OCR ground truth / prediction","2026-11-13"
+"1A01-C07","AXIS_01_T06","student AI-use fraction converted into slide-use","not statistically identified from general AI-use survey","","REJECTED_INVALID_METHOD","Do not infer slide-specific paid demand from AI-usage percent","2026-11-13"
+"1A01-C08","AXIS_01_T07","approx benchmark checklist observations","238 instances × 54.1 average rubrics","12875.8","MODEL_BASED_APPROXIMATION","Average is rounded: not exact count, not model score","2026-11-13"
+"1A01-C09","AXIS_01_T08","human vs AI net time saved","mean_manual_total_time - mean_AI_total_time","","NON_IDENTIFIABLE","No randomized task matched comparison of this product","2026-11-13"
+"1A01-C10","AXIS_01_T09","true market substitute share","same-need successful competing plans / all directly comparable plans","","NON_IDENTIFIABLE","Competitor plans, cohorts, and use cases not fully comparable","2026-11-13"
+"1A01-C11","AXIS_01_T10","SlideSpeak 20 slides AI4 credits","20 slides × 1 credit/slide","20","OFFICIAL_TARIFF_CONDITIONAL","Illustration only. Does not include export plan fee.","2026-11-13"
+"1A01-C12","AXIS_01_T10","SlideSpeak 20 slides AI5 credits","20 slides × 5 credits/slide","100","OFFICIAL_TARIFF_CONDITIONAL","Illustration only. Does not include export plan fee.","2026-11-13"
