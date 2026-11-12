@@ -192,7 +192,8 @@ def integrate(expr, a, b):
         need(math.isfinite(q) and math.isfinite(error), "Nonfinite SciPy integral")
         mp.mp.dps = 55
         mp_fun = sp.lambdify(T, expr, modules=["mpmath"])
-        mp_result = mp.quad(mp_fun, [mp.mpf(str(a)), mp.mpf(str(b))])
+        mp_result = mp.quad(mp_fun, [mp.mpf(int(a.p))/mp.mpf(int(a.q)),
+                                     mp.mpf(int(b.p))/mp.mpf(int(b.q))])
         need(abs(mp.im(mp_result)) < mp.mpf("1e-35"),
              "Complex mpmath result")
         mp_value = float(mp.re(mp_result))
@@ -240,11 +241,20 @@ def do_integral(task):
     exact_keys(task, {"id", "operation", "expression", "bounds",
                       "integrand_unit", "variable_unit", "result_unit"},
                "integral task")
-    need(unit_dims(task["integrand_unit"]) | {} is not None, "Unexpected unit")
     need(mul_dims(task["integrand_unit"], task["variable_unit"]) ==
          unit_dims(task["result_unit"]), "Integral unit mismatch")
-    a, b = bounds(task["bounds"])
     f = expression(task["expression"])
+    if task["bounds"] is None:
+        antiderivative = sp.integrate(f, T)
+        need(not antiderivative.has(sp.Integral), "No supported symbolic antiderivative")
+        need(sp.simplify(sp.diff(antiderivative, T) - f) == 0,
+             "Antiderivative failed symbolic differentiation")
+        return {"antiderivative": str(antiderivative),
+                "integration_constant": "C",
+                "result_unit": task["result_unit"],
+                "verification": "derivative exactly equals original integrand",
+                "interval": None}
+    a, b = bounds(task["bounds"])
     v, approx, details = integrate(f, a, b)
     return {"result": result_value(v, task["result_unit"], approx),
             "crosscheck": details, "interval": task["bounds"]}
