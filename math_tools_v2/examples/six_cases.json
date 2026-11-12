@@ -1,0 +1,176 @@
+{
+  "schema": "math-ir/0.1",
+  "cases": [
+    {
+      "schema": "math-ir/0.1",
+      "case_id": "third",
+      "expression": {
+        "op": "rational",
+        "numerator": "1",
+        "denominator": "3"
+      },
+      "symbols": [],
+      "substitution": {},
+      "unit": "kgCO2e",
+      "exact": true
+    },
+    {
+      "schema": "math-ir/0.1",
+      "case_id": "negative",
+      "expression": {
+        "op": "add",
+        "args": [
+          {
+            "op": "rational",
+            "numerator": "2",
+            "denominator": "7"
+          },
+          {
+            "op": "rational",
+            "numerator": "-5",
+            "denominator": "3"
+          }
+        ]
+      },
+      "symbols": [],
+      "substitution": {},
+      "unit": "1",
+      "exact": true
+    },
+    {
+      "schema": "math-ir/0.1",
+      "case_id": "multiply",
+      "expression": {
+        "op": "mul",
+        "args": [
+          {
+            "op": "rational",
+            "numerator": "9",
+            "denominator": "11"
+          },
+          {
+            "op": "rational",
+            "numerator": "7",
+            "denominator": "13"
+          }
+        ]
+      },
+      "symbols": [],
+      "substitution": {},
+      "unit": "1",
+      "exact": true
+    },
+    {
+      "schema": "math-ir/0.1",
+      "case_id": "positive_power",
+      "expression": {
+        "op": "pow",
+        "args": [
+          {
+            "op": "rational",
+            "numerator": "3",
+            "denominator": "5"
+          },
+          {
+            "op": "integer",
+            "value": "3"
+          }
+        ]
+      },
+      "symbols": [],
+      "substitution": {},
+      "unit": "1",
+      "exact": true
+    },
+    {
+      "schema": "math-ir/0.1",
+      "case_id": "polynomial",
+      "expression": {
+        "op": "pow",
+        "args": [
+          {
+            "op": "add",
+            "args": [
+              {
+                "op": "symbol",
+                "name": "x"
+              },
+              {
+                "op": "rational",
+                "numerator": "1",
+                "denominator": "3"
+              }
+            ]
+          },
+          {
+            "op": "integer",
+            "value": "2"
+          }
+        ]
+      },
+      "symbols": [
+        {
+          "name": "x",
+          "domain": "rational",
+          "constraints": [
+            "nonnegative"
+          ]
+        }
+      ],
+      "substitution": {
+        "x": {
+          "op": "rational",
+          "numerator": "2",
+          "denominator": "7"
+        }
+      },
+      "unit": "1",
+      "exact": true
+    },
+    {
+      "schema": "math-ir/0.1",
+      "case_id": "huge_integer",
+      "expression": {
+        "op": "add",
+        "args": [
+          {
+            "op": "mul",
+            "args": [
+              {
+                "op": "integer",
+                "value": "10000000000000000000000000000000000000000000000000000000000"
+              },
+              {
+                "op": "symbol",
+                "name": "y"
+              }
+            ]
+          },
+          {
+            "op": "rational",
+            "numerator": "1",
+            "denominator": "19"
+          }
+        ]
+      },
+      "symbols": [
+        {
+          "name": "y",
+          "domain": "rational",
+          "constraints": [
+            "nonnegative"
+          ]
+        }
+      ],
+      "substitution": {
+        "y": {
+          "op": "rational",
+          "numerator": "1",
+          "denominator": "17"
+        }
+      },
+      "unit": "kgCO2e",
+      "exact": true
+    }
+  ]
+}
