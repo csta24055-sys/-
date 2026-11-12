@@ -1,3 +1,18 @@
+# 入力資料（著作権・個人情報を含むためコミットしない）
+inputs/**
+!inputs/**/.gitkeep
+# 元PDFを埋め込んだ完成答案・解析画像は権利確認まで公開しない
+output/**/*完成演習課題.pdf
+output/analysis/
+output/**/verify/
+output/demo/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+output/yamadome_20261021/verify/
+
+# ---- Python 標準（main の初期 .gitignore）----
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -218,3 +233,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# 手書き見本・ガイドも課題用紙（著作権物）を下地に含むためコミットしない
+output/**/handwriting/
