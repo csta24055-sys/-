@@ -16,6 +16,7 @@ on:
           - portable-full
           - portable-python
           - baseline-compact
+          - lca-operators
       case_file:
         type: string
         description: "Public fixture in math_tools_v2/examples/ for portable modes"
@@ -43,12 +44,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          case "$MATH_MODE" in portable-full|portable-python|baseline-compact) ;; *) echo 'Invalid mode'; exit 2 ;; esac
+          case "$MATH_MODE" in portable-full|portable-python|baseline-compact|lca-operators) ;; *) echo 'Invalid mode'; exit 2 ;; esac
+          if [ "$MATH_MODE" = lca-operators ] && [ "$MATH_INPUT_FILE" = math_tools_v2/examples/six_cases.json ]; then
+            MATH_INPUT_FILE=math_tools_v2/examples/lca_ops_demo.json
+            echo "MATH_INPUT_FILE=$MATH_INPUT_FILE" >> "$GITHUB_ENV"
+          fi
           if ! [[ "$MATH_INPUT_FILE" =~ ^math_tools_v2/examples/[A-Za-z0-9_-]+\.json$ ]]; then
             echo 'Only a direct public fixture in math_tools_v2/examples/ is allowed (no traversal)'; exit 2
           fi
           test -f "$MATH_INPUT_FILE"
-          if [ "$MATH_MODE" = baseline-compact ]; then
+          if [ "$MATH_MODE" = lca-operators ]; then
+            mkdir -p math_ir_io
+            python -m unittest discover -s math_tools_v2 -p 'test_lca_ops.py' -v
+            python math_tools_v2/lca_ops.py run "$MATH_INPUT_FILE" math_ir_io/result.json
+            python math_tools_v2/lca_ops.py verify "$MATH_INPUT_FILE" math_ir_io/result.json
+          elif [ "$MATH_MODE" = baseline-compact ]; then
             python math_interop_v0/phase5.py prepare math_ir_io
           else
             python math_tools_v2/portable.py prepare "$MATH_INPUT_FILE" math_ir_io
@@ -59,7 +69,7 @@ jobs:
             fi
           fi
       - name: Run SageMath 10.10 (only when requested)
-        if: ${{ env.MATH_MODE != 'portable-python' }}
+        if: ${{ env.MATH_MODE != 'portable-python' && env.MATH_MODE != 'lca-operators' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -70,12 +80,12 @@ jobs:
             -lc 'export PATH="/home/sage/sage/local/bin:$PATH"; exec sage -python /work/math_interop_v0/phase1.py sage' \
             < math_ir_io/input.json > math_ir_io/sage_result.json
       - name: Install MATLAB and Symbolic Math Toolbox (only when requested)
-        if: ${{ env.MATH_MODE != 'portable-python' }}
+        if: ${{ env.MATH_MODE != 'portable-python' && env.MATH_MODE != 'lca-operators' }}
         uses: matlab-actions/setup-matlab@v3
         with:
           products: Symbolic_Math_Toolbox
       - name: Independently evaluate in MATLAB, reading SageMath JSON
-        if: ${{ env.MATH_MODE != 'portable-python' }}
+        if: ${{ env.MATH_MODE != 'portable-python' && env.MATH_MODE != 'lca-operators' }}
         uses: matlab-actions/run-command@v3
         with:
           command: "addpath(fullfile(getenv('GITHUB_WORKSPACE'),'math_interop_v0')); phase3_matlab"
@@ -84,6 +94,9 @@ jobs:
         run: |
           set -euo pipefail
           case "$MATH_MODE" in
+            lca-operators)
+              python math_tools_v2/lca_ops.py verify "$MATH_INPUT_FILE" math_ir_io/result.json
+              ;;
             baseline-compact)
               python math_interop_v0/phase5.py finalize math_ir_io
               python math_interop_v0/phase5.py audit math_ir_io
