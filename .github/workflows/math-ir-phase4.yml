@@ -53,11 +53,13 @@ jobs:
           fi
           remote_base="/GitHubActions/$GITHUB_REPOSITORY/$GITHUB_WORKFLOW/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/$GITHUB_JOB"
           count=0
-          for file in \
-            $RUNNER_TEMP/base1.json \\
-            $RUNNER_TEMP/base2.json \\
-            $RUNNER_TEMP/shifted.json \\
-            $RUNNER_TEMP/v2.json; do
+          files=(
+            "$RUNNER_TEMP/base1.json"
+            "$RUNNER_TEMP/base2.json"
+            "$RUNNER_TEMP/shifted.json"
+            "$RUNNER_TEMP/v2.json"
+          )
+          for file in "${files[@]}"; do
             if [[ -f "$file" ]]; then
               python scripts/dropbox_actions_store.py --file "$file" --remote "$remote_base/$(basename "$file")"
               count=$((count+1))
