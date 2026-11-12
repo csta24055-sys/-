@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@v4
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
@@ -28,10 +29,27 @@ jobs:
         with:
           command: "diary('matlab_output.txt'); disp('=== RESULT BEGIN ==='); ${{ inputs.command }}; disp('=== RESULT END ==='); diary off"
 
-      - name: Upload result
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: matlab-output
-          path: matlab_output.txt
-          if-no-files-found: ignore
+      - name: Copy computation outputs to Dropbox (no GitHub artifact quota)
+        if: ${{ always() && github.event_name != 'pull_request' }}
+        shell: bash
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$DROPBOX_APP_KEY" || -z "$DROPBOX_APP_SECRET" || -z "$DROPBOX_REFRESH_TOKEN" ]]; then
+            echo '::warning::Dropbox secrets not configured; outputs were NOT archived. No GitHub artifact storage used.'
+            exit 0
+          fi
+          remote_base="/GitHubActions/$GITHUB_REPOSITORY/$GITHUB_WORKFLOW/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/$GITHUB_JOB"
+          count=0
+          for file in \
+            matlab_output.txt; do
+            if [[ -f "$file" ]]; then
+              python scripts/dropbox_actions_store.py --file "$file" --remote "$remote_base/$(basename "$file")"
+              count=$((count+1))
+            fi
+          done
+          echo "Dropbox copies verified: $count" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$count" -eq 0 ]]; then echo '::warning::No result files found to copy'; fi
