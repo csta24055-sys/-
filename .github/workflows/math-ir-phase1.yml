@@ -1,0 +1,65 @@
+name: Math IR Phase 1 - SymPy SageMath Exact Transfer
+
+on:
+  pull_request:
+    paths:
+      - "math_interop_v0/**"
+      - ".github/workflows/math-ir-phase1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-exact-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out independent math-interop files
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned SymPy for test
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+
+      - name: Validate schema fail-closed cases and create exact input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python math_interop_v0/phase1.py self-test
+          python math_interop_v0/phase1.py produce "$RUNNER_TEMP/math-ir-input.json"
+
+      - name: Execute exact rational tests in SageMath 10.10 Docker
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -i \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/work,readonly" \
+            --entrypoint /bin/bash \
+            sagemath/sagemath:10.10 \
+            -lc 'export PATH="/home/sage/sage/local/bin:$PATH"; exec sage -python /work/math_interop_v0/phase1.py sage' \
+            < "$RUNNER_TEMP/math-ir-input.json" \
+            > "$RUNNER_TEMP/math-ir-output.json"
+
+      - name: Verify SymPy-SageMath roundtrip and exact metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python math_interop_v0/phase1.py verify \
+            "$RUNNER_TEMP/math-ir-input.json" \
+            "$RUNNER_TEMP/math-ir-output.json"
+
+      - name: Save synthetic test data for audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: math-ir-stage1-synthetic-data
+          path: |
+            ${{ runner.temp }}/math-ir-input.json
+            ${{ runner.temp }}/math-ir-output.json
+          if-no-files-found: ignore
+          retention-days: 7
