@@ -17,60 +17,96 @@
   "steps": {
     "S0": {
       "state": "PASS",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
       "failure_reasons": []
     },
     "S1": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
       "failure_reasons": [
-        "every registered topic has an actual logged source-search/access attempt; planned queries alone do not count"
+        "topics with a complete research-unit collection: 13/325",
+        "legacy queries handled: executed 92, attempted-but-blocked 0, not executed 804 (of 896)",
+        "competitor candidates explored: 4/80",
+        "additional-hypothesis topics (outside the 325) explored: 0/7",
+        "coverage audit is current (EXECUTED_ACTIONS = 617)"
       ]
     },
     "S2": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "every accepted source reviewed: verified 0, pending 138",
+        "verified sources carry quote, location, kind, origin and date: 0/0",
+        "every source-to-unit mapping reviewed: 0/370",
+        "dependency ledger covers every verified source and the stated independent-origin count (None) equals the recomputation (0)",
+        "contradictions reviewed for the current evidence set"
+      ]
     },
     "S3": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "representativeness graded for every measured source: 0/0",
+        "axis relation model covers all axes: 0/32",
+        "unidentifiable quantities are listed with reason and required data: 0",
+        "segment analysis rewritten on the verified evidence set"
+      ]
     },
     "S4": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
       "failure_reasons": [
-        "all 21 highest-priority candidate companies have evidence-backed official verification"
+        "every confirmed competitor attribute is backed by a verified source: 30 unbacked",
+        "highest-priority candidates confirmed from vendor-written material: 19/21",
+        "competitor comparison rewritten on the verified evidence set"
       ]
     },
     "S5": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "every topic has at least one calculation id: 0/325",
+        "every calculation id is in a justified terminal state: 0/0",
+        "reported numbers are classified and traceable to verified sources: 6/22",
+        "recalculation output matches the current calculation inventory",
+        "quantitative report and reproducibility notes rewritten"
+      ]
     },
     "S6": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "axis syntheses exist for every axis: 0/32",
+        "integrated model refers to every axis"
+      ]
     },
     "S7": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "options A-G and the added hypotheses compared on the verified evidence set",
+        "decision analysis is conditional, covers downside and regret, and cites only verified sources"
+      ]
     },
     "S8": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "final audit records that no application code was changed",
+        "every user requirement and added hypothesis is traced to evidence or to a stated unknown: 0/20",
+        "product claims cite only verified sources: 0/12"
+      ]
     },
     "S9": {
-      "state": "BLOCKED",
-      "evaluated_at": "2026-11-10T03:27:49.808246+00:00",
-      "failure_reasons": []
+      "state": "FAIL",
+      "evaluated_at": "2026-11-12T14:36:20.995922+00:00",
+      "failure_reasons": [
+        "formal deliverables present: 0/5",
+        "final report cites verified sources and covers the fixed requirements"
+      ]
     }
   },
-  "last_evaluated": "2026-11-10T03:27:49.808246+00:00",
+  "last_evaluated": "2026-11-12T14:36:20.995922+00:00",
   "notes": [
     "S1は325テーマ中162が未着手のため未通過。",
     "S2〜S9は文書を作成済みだが、S1（およびS4のP0競合2件）が通るまで機械判定はBLOCKEDのまま。成果物は暫定版。",
