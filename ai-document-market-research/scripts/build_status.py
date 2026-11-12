@@ -75,12 +75,14 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
     for q in legacy:
         rs = [r for r in by_sid.get(q['suggestion_id'], []) if r.get('verified_by', '').startswith('TRANSCRIPT') and r['query'] == q['sample_query']]
         ok = [r for r in rs if r['retrieval_status'] == 'SNIPPET_ONLY']
-        state = 'EXECUTED' if ok else ('ATTEMPTED_BLOCKED' if rs else 'NOT_EXECUTED')
-        first = (ok or rs or [{}])[0]
+        err = [r for r in rs if r['retrieval_status'] == 'ERROR']  # a refusal for budget reasons is not an execution and not a permanent block: it must be retried
+        state = 'EXECUTED' if ok else ('ATTEMPTED_BLOCKED' if err else 'NOT_EXECUTED')
+        first = (ok or err or rs or [{}])[0]
         qrows.append({'suggestion_id': q['suggestion_id'], 'axis_id': q['axis_id'], 'topic_id': q['topic_id'], 'target': q['target'], 'query_verbatim': q['sample_query'],
                       'state': state, 'executed_at': first.get('searched_at', ''), 'platform': first.get('platform', ''), 'results_found': first.get('results_found', ''),
                       'search_log_query_id': first.get('query_id', ''), 'executions': len(rs), 'candidate_urls': first.get('candidate_urls', ''),
-                      'failure_reason': '' if ok else (first.get('blocked_reason', '') if rs else 'not executed yet'), 'verified_by': first.get('verified_by', '')})
+                      'failure_reason': '' if ok else (first.get('blocked_reason', '') if rs else 'not executed yet'), 'refused_attempts': sum(r['retrieval_status'] == 'REFUSED_BUDGET' for r in rs),
+                      'verified_by': first.get('verified_by', '')})
     if write_files:
         write('query_execution_status.csv', list(qrows[0].keys()) if qrows else ['suggestion_id'], qrows)
     qstate = defaultdict(Counter)
@@ -106,7 +108,7 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
         searches = [r for r in rows if r['platform'] == 'web_search_engine' and 'same_action_as=' not in r.get('notes', '')]
         route = Counter()
         for r in searches:
-            if r['retrieval_status'] == 'ERROR':
+            if r['retrieval_status'] in ('ERROR', 'REFUSED_BUDGET'):
                 continue
             rt = r.get('route', '')
             if rt == 'LEGACY':
@@ -189,7 +191,7 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
     for c in comps:
         cid = c['competitor_id']
         rows = clog.get(cid, [])
-        searches = [r for r in rows if r['platform'] == 'web_search_engine' and r['retrieval_status'] != 'ERROR']
+        searches = [r for r in rows if r['platform'] == 'web_search_engine' and r['retrieval_status'] not in ('ERROR', 'REFUSED_BUDGET')]
         fetches = [r for r in rows if r['query'].startswith('GET ')]
         u = cunits.get(cid, {})
         prof = u.get('profile') or {}

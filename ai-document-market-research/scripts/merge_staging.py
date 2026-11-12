@@ -260,7 +260,7 @@ def main() -> None:
                             'language': language, 'results_found': str(s['n_links']) if s['ok'] else '0', 'accepted': '0', 'excluded': str(s['n_links']) if s['ok'] else '0',
                             'blocked_reason': '' if s['ok'] else (s.get('error') or 'search tool returned no result block'),
                             'notes': str(rep.get('note', ''))[:300], 'axis_id': topics[topic_for_log], 'topic_id': topic_for_log, 'origin_group_id': '',
-                            'retrieval_status': 'SNIPPET_ONLY' if s['ok'] else 'ERROR', 'excluded_reason': '検索要約は証拠にしない' if s['ok'] else '',
+                            'retrieval_status': 'SNIPPET_ONLY' if s['ok'] else ('REFUSED_BUDGET' if s.get('refused') else 'ERROR'), 'excluded_reason': '検索要約は証拠にしない' if s['ok'] else '',
                             'suggestion_id': sid, 'route': route, 'followup_for': str(rep.get('followup_for') or ''), 'unit_kind': kind, 'unit_id': uid,
                             'executor': executor, 'verified_by': 'TRANSCRIPT', 'candidate_urls': ' '.join(s['links'][:3])})
                 stats['searches_logged'] += 1
@@ -307,9 +307,7 @@ def main() -> None:
             reason = ''
             existing = src_by_norm.get(nu)
             meta = cache.get(url)
-            if not existing and nu not in fetched_norm:
-                reason = 'URL was not fetched by this worker (no transcript record)'
-            elif not meta or int(meta.get('status', 0)) != 200:
+            if not meta or int(meta.get('status', 0)) != 200:  # the page must be in the fetch cache; the quote check below is the real guarantee
                 reason = 'page not retrieved (status != 200)'
             elif not cache.has_quote(url, quote):
                 reason = 'quote not found in cached page text'

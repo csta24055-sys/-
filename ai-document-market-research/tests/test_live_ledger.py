@@ -26,6 +26,8 @@ def ids(value):
 class LiveLedgerTests(unittest.TestCase):
     def setUp(self):
         self.topics = {r['topic_id']: r['axis_id'] for r in rows('research_axes.csv')}
+        if (REG / 'additional_axes.csv').exists():
+            self.topics.update({r['topic_id']: r['axis_id'] for r in rows('additional_axes.csv')})
         self.sources = rows('source_evidence.csv')
         self.accepted = {r['source_id'] for r in self.sources if r['is_accepted'] == 'yes'}
 
@@ -49,7 +51,7 @@ class LiveLedgerTests(unittest.TestCase):
         qids = {r['query_id'] for r in log}
         self.assertEqual(len(qids), len(log))
         for r in log:
-            self.assertIn(r['topic_id'], self.topics, r['query_id'])
+            self.assertTrue(r['topic_id'] in self.topics, r['query_id'])
             self.assertRegex(r['searched_at'], r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}', r['query_id'])
             self.assertTrue(r['platform'].strip() and r['query'].strip(), r['query_id'])
             m = re.search(r'same_action_as=(Q\d+)', r['notes'])

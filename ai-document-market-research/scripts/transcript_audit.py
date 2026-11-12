@@ -18,7 +18,7 @@ UNIT_RX = [('TOPIC', re.compile(r'TOPIC_UNIT_ID=((?:AXIS_\d\d|ADD_[A-Z0-9]+)_T\d
            ('TOPIC', re.compile(r'exactly ONE registered topic: ((?:AXIS_\d\d|ADD_[A-Z0-9]+)_T\d\d)')),
            ('COMPETITOR', re.compile(r'COMPETITOR_UNIT_ID=(C\d{3})')),
            ('SOURCE_REVIEW', re.compile(r'SOURCE_REVIEW_BATCH=([A-Za-z0-9_\-]+)'))]
-URL_RX = re.compile(r'fetch_text\.py\s+["\']?(https?://[^"\'\s]+)')
+URL_RX = re.compile(r'["\'](https?://[^"\'\s]+)["\']|(?<=\s)(https?://[^"\'\s;|&)]+)')
 
 
 def text_of(content) -> str:
@@ -72,13 +72,19 @@ def audit(path: Path) -> dict | None:
                 err = bool(b.get('is_error'))
                 if u['name'] == 'WebSearch':
                     ls = links(res)
+                    refused = 'was not performed' in res  # the tool answers in the normal format when the per-turn search budget is used up
+                    ok = (not err) and (not refused) and 'Links: [' in res
                     searches.append({'ts': u['ts'], 'query': u['input'].get('query', ''), 'mode': u['input'].get('mode', ''),
-                                     'ok': (not err) and res.startswith('Web search results'), 'n_links': len(ls), 'links': ls[:10],
-                                     'error': res[:200] if err else ''})
+                                     'ok': ok, 'refused': refused, 'n_links': len(ls) if ok else 0, 'links': ls[:10] if ok else [],
+                                     'error': '' if ok else ('REFUSED_BUDGET: per-turn web search budget used up' if refused else res[:200])})
                 elif u['name'] == 'Bash':
-                    for url in URL_RX.findall(u['input'].get('command', '')):
-                        m = re.search(r'## status=(\d+) chars=(\d+)', res)
-                        fetches.append({'ts': u['ts'], 'url': url, 'status': int(m.group(1)) if m else 0, 'chars': int(m.group(2)) if m else 0})
+                    cmd = u['input'].get('command', '')
+                    if 'fetch_text.py' in cmd:  # the tool may be called through a shell variable or in a loop
+                        urls = list(dict.fromkeys(a or b for a, b in URL_RX.findall(cmd)))
+                        marks = re.findall(r'## status=(\d+) chars=(\d+)', res)
+                        for i, url in enumerate(urls):
+                            st = marks[i] if len(marks) == len(urls) else ('0', '0')  # merge step reads the real status from the fetch cache
+                            fetches.append({'ts': u['ts'], 'url': url, 'status': int(st[0]), 'chars': int(st[1])})
                 elif u['name'] == 'Write':
                     wrote.append(u['input'].get('file_path', ''))
     if unit_id is None:
