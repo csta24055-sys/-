@@ -129,23 +129,34 @@ def make_graph(folder):
     check(set(warm["reused"]) == set(cold["cache_keys"]), "Cache did not persist between jobs")
 
     nodes, index = [], {}
-    for name, key in cold["cache_keys"].items():
-        row = load(p / "cache" / (key + ".json"))
-        exact_fields(row, {"descriptor", "key", "payload", "payload_sha256"}, "DAG cache")
-        desc = row["descriptor"]
-        check(row["key"] == key and phase1.digest(desc) == key, "Cache key invalid")
-        check(row["payload_sha256"] == phase1.digest(row["payload"]), "Cache payload corrupted")
-        check(desc["schema"] == phase4.SCHEMA and desc["name"] == name,
-              "Cache descriptor invalid")
-        check(desc["engine"] in PYTHON_ENGINES, "Unknown cached engine")
-        check(desc["engine_version"] == phase4.version(desc["engine"], "default"),
-              "Python engine version mismatch")
-        check(desc["dependencies"] == {dep: index[dep]["key"]
-              for dep in desc["dependencies"]}, "Stale/inconsistent DAG dependency")
-        entry = {"name": name, "descriptor": desc, "key": key,
-                 "payload": row["payload"], "payload_sha256": row["payload_sha256"]}
-        nodes.append(entry)
-        index[name] = entry
+    # Serialized canonical JSON sorts dictionary keys alphabetically. Reconstruct
+    # execution order from actual dependencies, never from JSON object ordering.
+    pending = dict(cold["cache_keys"])
+    while pending:
+        progressed = False
+        for name, key in list(pending.items()):
+            row = load(p / "cache" / (key + ".json"))
+            exact_fields(row, {"descriptor", "key", "payload", "payload_sha256"}, "DAG cache")
+            desc = row["descriptor"]
+            check(row["key"] == key and phase1.digest(desc) == key, "Cache key invalid")
+            check(row["payload_sha256"] == phase1.digest(row["payload"]), "Cache payload corrupted")
+            check(desc["schema"] == phase4.SCHEMA and desc["name"] == name,
+                  "Cache descriptor invalid")
+            check(desc["engine"] in PYTHON_ENGINES, "Unknown cached engine")
+            check(desc["engine_version"] == phase4.version(desc["engine"], "default"),
+                  "Python engine version mismatch")
+            check(type(desc["dependencies"]) is dict, "Invalid DAG dependencies")
+            if not set(desc["dependencies"]).issubset(index):
+                continue
+            check(desc["dependencies"] == {dep: index[dep]["key"]
+                  for dep in desc["dependencies"]}, "Stale/inconsistent DAG dependency")
+            entry = {"name": name, "descriptor": desc, "key": key,
+                     "payload": row["payload"], "payload_sha256": row["payload_sha256"]}
+            nodes.append(entry)
+            index[name] = entry
+            del pending[name]
+            progressed = True
+        check(progressed, "DAG has a cycle, unresolved dependency, or invalid cache node")
 
     # Critical distinction: SageMath independently computes from source; MATLAB
     # consumes SageMath *actual JSON* and independently computes from source.
