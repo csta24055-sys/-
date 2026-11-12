@@ -7,7 +7,7 @@
 | 変更 | 以前 | 新方式 |
 |---|---|---|
 | 実行ジョブ | 4ジョブ（Python→SageMath→MATLAB→照合） | **1ジョブ**。同じランナーで引き継ぐ |
-| Pythonインストール | 別ジョブにて複数回 | **1回**。依存ファイルを1か所に集約＋pipキャッシュ |
+| Pythonインストール | 別ジョブにて複数回 | **1回**。依存ファイルを一元化し、容量の大きいpipキャッシュを保存しない |
 | 中間データ | 複数のGitHub Artifactsをアップロード・ダウンロード | **中間Artifactsなし**。最後の小さなJSONのみ1日保存 |
 
 これらは**構造的な削減**であり、所要時間・料金の改善率は実測して判断する。SageMathのDocker取得とMATLABのセットアップは従来どおり必要で、それらの時間が必ず大幅に短縮するとは限らない。
@@ -42,7 +42,7 @@ GitHub Actions：`.github/workflows/math-ir-efficient.yml`
 ## 実装コードと再利用関係
 
 - `math_tools_v2/portable.py`：可変ケース数の共通入力検証、DAG生成、厳密計算・近似値の整合確認、SageMath/MATLAB照合、改ざん検出
-- `math_tools_v2/requirements.txt`：5ライブラリのバージョンを一元管理
+- `math_tools_v2/requirements.txt`：5ライブラリのバージョンを一元管理（大容量キャッシュは作成しない）
 - `math_tools_v2/examples/six_cases.json`：既存5式とは異なる6件のテスト
 - `.github/workflows/math-ir-efficient.yml`：選択モード付き・1ジョブの実行
 
