@@ -85,3 +85,24 @@ git show origin/main:.github/workflows/math-ir-efficient.yml
 - 原ZIPの統計方法規定 `03_RESEARCH_METHOD_AND_STATS.md` の「偽口コミ・架空の百分率・同一起源の二重計上・未較正の成功確率禁止」を引き続き厳守。
 
 **完了と宣言できるのは、対象ID全件の分類・原文入力の検証・適切な演算の実行/適正な不実施理由・独立検算・ゲートの全条件が整合した時のみ。**
+
+## 7. 既存DAGを実際に呼ぶ接続器（新規追加）
+
+`scripts/market_math_dag_adapter.py` は `main` の `math_interop_v0/phase4.CalcDAG` を**コピーせずimport**し、現在の22集計結果について内容アドレス付きノードとDuckDBの出典ID別集計を構築する。計算内容が不変であれば、同じキャッシュディレクトリの結果を再利用できる。これは**7エンジンの一括実行ではない**。この接続器で実行する数学ライブラリはDuckDBのみで、sourceノードと分類はPython標準ライブラリによる。
+
+```bash
+# 研究ブランチ上で実行する。mainは別ワークツリーから読み取り専用で使用。
+git fetch origin main
+git worktree add --detach /tmp/market-math-main origin/main
+python3 -m pip install -r /tmp/market-math-main/math_tools_v2/requirements.txt
+cd ai-document-market-research
+python3 scripts/market_math_dag_adapter.py registry/quant_results.csv \
+  --math-core /tmp/market-math-main/math_interop_v0 \
+  --cache /tmp/market-stat-cache \
+  --output research/market_dag_summary.json
+# 同一入力でもう一度実行し computed_nodes と reused_nodes を比較。
+```
+
+**現時点では実行用コードをGitHubへ追加した段階**。この研究ブランチ上でのmainワークツリーの依存パッケージ準備と、実際の初回/再利用DAG実行は未実施。実行成功や処理時間短縮を実測済みとは記載しない。今後のClaude Code作業で、入力22行のカウント一致・初回の計算・2回目のキャッシュ再利用・1行変更時の部分再計算・破損キャッシュの拒否を必ず検査する。
+
+数学IRと市場調査統計をフル統合するには、次に**個票データ→集計モデル→正式な統計IR→各エンジンの有効な入力**への橋渡しが必要。既存`Math IR 0.1`が未対応の中央値/階層ベイズ等を、既に実装済みかのように扱わない。
