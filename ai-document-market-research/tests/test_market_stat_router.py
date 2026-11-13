@@ -50,7 +50,7 @@ class TestRouter(unittest.TestCase):
 
     def test_invalid_rates_never_classify_valid(self):
         r = router.classify(row("R6", "127", "%", "OBSERVED", "100", "M_WILSON95"))
-        self.assertEqual(r["route_state"], "OBSERVED_POINT_OR_SUMMARY")
+        self.assertEqual(r["route_state"], "INVALID_PERCENT_REVIEW")
         self.assertNotIn("SciPy", r["candidate_engines"])
 
     def test_duplicate_id_fails_closed_and_shared_source_is_marked(self):
