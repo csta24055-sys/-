@@ -40,7 +40,10 @@ def classify(row):
         blocked.extend(["present_as_observed", "present_as_success_probability"])
         engines.append("SymPy")
     elif category == "OBSERVED":
-        if unit == "%" and value is not None and 0 <= value <= 100:
+        if unit == "%" and value is not None and not 0 <= value <= 100:
+            state = "INVALID_PERCENT_REVIEW"
+            blocked.extend(["invalid_percentage_out_of_range", "automatic_quantitative_inference"])
+        elif unit == "%" and value is not None and 0 <= value <= 100:
             state = "OBSERVED_RATE_NOT_RAW_SAMPLE"
             allowed.extend(["describe_reported_proportion", "stratify_only_by_compatible_sources"])
             if n and n.is_integer() and n > 0 and (row.get("model_id") or "").startswith("M_WILSON95"):
