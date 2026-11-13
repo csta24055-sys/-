@@ -1,0 +1,593 @@
+{
+  "schema": "market-evidence-index/1",
+  "date": "2026-11-13",
+  "status": "INCOMPLETE",
+  "first_unmet_gate": "S1",
+  "complete_scope_index_only": true,
+  "input_github_blobs": {
+    "registry/topic_execution_status.csv": "eb1090ea51a32a1905d4d3fb1c05374870658785",
+    "registry/query_execution_status.csv": "24887aa6f036ff9c2ed67f446259dab14995771c",
+    "registry/competitor_execution_status.csv": "579f1877dfc723faed0ea7cca5ca86e42086f635",
+    "registry/additional_topic_status.csv": "257e15d0b09df9569dd5e652f52fef3defbe7888",
+    "registry/source_evidence.csv": "b960ced92a6237a44719912f78236d068f93b852",
+    "registry/quant_results.csv": "d1c8d0145d4fa608453ef90bebcd6aeac2851374"
+  },
+  "counts": {
+    "topics_by_gate": {
+      "S1_INCOMPLETE": 286,
+      "S1_DONE": 39
+    },
+    "queries_by_state": {
+      "NOT_EXECUTED": 745,
+      "EXECUTED": 151
+    },
+    "competitors_by_gate": {
+      "S1_DONE": 12,
+      "S1_INCOMPLETE": 68
+    },
+    "added_topics_by_gate": {
+      "S1_INCOMPLETE": 7
+    },
+    "source_records": 464,
+    "source_origin_groups_not_independence_verified": 203,
+    "quant_summary_records": 22
+  },
+  "axes": {
+    "AXIS_01": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_01_T01",
+        "AXIS_01_T02",
+        "AXIS_01_T03",
+        "AXIS_01_T04",
+        "AXIS_01_T05",
+        "AXIS_01_T06",
+        "AXIS_01_T07",
+        "AXIS_01_T08",
+        "AXIS_01_T09",
+        "AXIS_01_T10"
+      ]
+    },
+    "AXIS_02": {
+      "total": 10,
+      "s1_done": 10,
+      "unresolved": []
+    },
+    "AXIS_03": {
+      "total": 9,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_03_T01",
+        "AXIS_03_T02",
+        "AXIS_03_T03",
+        "AXIS_03_T04",
+        "AXIS_03_T05",
+        "AXIS_03_T06",
+        "AXIS_03_T07",
+        "AXIS_03_T08",
+        "AXIS_03_T09"
+      ]
+    },
+    "AXIS_04": {
+      "total": 10,
+      "s1_done": 9,
+      "unresolved": [
+        "AXIS_04_T10"
+      ]
+    },
+    "AXIS_05": {
+      "total": 10,
+      "s1_done": 1,
+      "unresolved": [
+        "AXIS_05_T02",
+        "AXIS_05_T03",
+        "AXIS_05_T04",
+        "AXIS_05_T05",
+        "AXIS_05_T06",
+        "AXIS_05_T07",
+        "AXIS_05_T08",
+        "AXIS_05_T09",
+        "AXIS_05_T10"
+      ]
+    },
+    "AXIS_06": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_06_T01",
+        "AXIS_06_T02",
+        "AXIS_06_T03",
+        "AXIS_06_T04",
+        "AXIS_06_T05",
+        "AXIS_06_T06",
+        "AXIS_06_T07",
+        "AXIS_06_T08",
+        "AXIS_06_T09",
+        "AXIS_06_T10"
+      ]
+    },
+    "AXIS_07": {
+      "total": 10,
+      "s1_done": 10,
+      "unresolved": []
+    },
+    "AXIS_08": {
+      "total": 9,
+      "s1_done": 6,
+      "unresolved": [
+        "AXIS_08_T07",
+        "AXIS_08_T08",
+        "AXIS_08_T09"
+      ]
+    },
+    "AXIS_09": {
+      "total": 11,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_09_T01",
+        "AXIS_09_T02",
+        "AXIS_09_T03",
+        "AXIS_09_T04",
+        "AXIS_09_T05",
+        "AXIS_09_T06",
+        "AXIS_09_T07",
+        "AXIS_09_T08",
+        "AXIS_09_T09",
+        "AXIS_09_T10",
+        "AXIS_09_T11"
+      ]
+    },
+    "AXIS_10": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_10_T01",
+        "AXIS_10_T02",
+        "AXIS_10_T03",
+        "AXIS_10_T04",
+        "AXIS_10_T05",
+        "AXIS_10_T06",
+        "AXIS_10_T07",
+        "AXIS_10_T08",
+        "AXIS_10_T09",
+        "AXIS_10_T10"
+      ]
+    },
+    "AXIS_11": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_11_T01",
+        "AXIS_11_T02",
+        "AXIS_11_T03",
+        "AXIS_11_T04",
+        "AXIS_11_T05",
+        "AXIS_11_T06",
+        "AXIS_11_T07",
+        "AXIS_11_T08",
+        "AXIS_11_T09",
+        "AXIS_11_T10"
+      ]
+    },
+    "AXIS_12": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_12_T01",
+        "AXIS_12_T02",
+        "AXIS_12_T03",
+        "AXIS_12_T04",
+        "AXIS_12_T05",
+        "AXIS_12_T06",
+        "AXIS_12_T07",
+        "AXIS_12_T08",
+        "AXIS_12_T09",
+        "AXIS_12_T10"
+      ]
+    },
+    "AXIS_13": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_13_T01",
+        "AXIS_13_T02",
+        "AXIS_13_T03",
+        "AXIS_13_T04",
+        "AXIS_13_T05",
+        "AXIS_13_T06",
+        "AXIS_13_T07",
+        "AXIS_13_T08",
+        "AXIS_13_T09",
+        "AXIS_13_T10"
+      ]
+    },
+    "AXIS_14": {
+      "total": 11,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_14_T01",
+        "AXIS_14_T02",
+        "AXIS_14_T03",
+        "AXIS_14_T04",
+        "AXIS_14_T05",
+        "AXIS_14_T06",
+        "AXIS_14_T07",
+        "AXIS_14_T08",
+        "AXIS_14_T09",
+        "AXIS_14_T10",
+        "AXIS_14_T11"
+      ]
+    },
+    "AXIS_15": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_15_T01",
+        "AXIS_15_T02",
+        "AXIS_15_T03",
+        "AXIS_15_T04",
+        "AXIS_15_T05",
+        "AXIS_15_T06",
+        "AXIS_15_T07",
+        "AXIS_15_T08",
+        "AXIS_15_T09",
+        "AXIS_15_T10"
+      ]
+    },
+    "AXIS_16": {
+      "total": 9,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_16_T01",
+        "AXIS_16_T02",
+        "AXIS_16_T03",
+        "AXIS_16_T04",
+        "AXIS_16_T05",
+        "AXIS_16_T06",
+        "AXIS_16_T07",
+        "AXIS_16_T08",
+        "AXIS_16_T09"
+      ]
+    },
+    "AXIS_17": {
+      "total": 9,
+      "s1_done": 1,
+      "unresolved": [
+        "AXIS_17_T02",
+        "AXIS_17_T03",
+        "AXIS_17_T04",
+        "AXIS_17_T05",
+        "AXIS_17_T06",
+        "AXIS_17_T07",
+        "AXIS_17_T08",
+        "AXIS_17_T09"
+      ]
+    },
+    "AXIS_18": {
+      "total": 9,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_18_T01",
+        "AXIS_18_T02",
+        "AXIS_18_T03",
+        "AXIS_18_T04",
+        "AXIS_18_T05",
+        "AXIS_18_T06",
+        "AXIS_18_T07",
+        "AXIS_18_T08",
+        "AXIS_18_T09"
+      ]
+    },
+    "AXIS_19": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_19_T01",
+        "AXIS_19_T02",
+        "AXIS_19_T03",
+        "AXIS_19_T04",
+        "AXIS_19_T05",
+        "AXIS_19_T06",
+        "AXIS_19_T07",
+        "AXIS_19_T08",
+        "AXIS_19_T09",
+        "AXIS_19_T10"
+      ]
+    },
+    "AXIS_20": {
+      "total": 9,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_20_T01",
+        "AXIS_20_T02",
+        "AXIS_20_T03",
+        "AXIS_20_T04",
+        "AXIS_20_T05",
+        "AXIS_20_T06",
+        "AXIS_20_T07",
+        "AXIS_20_T08",
+        "AXIS_20_T09"
+      ]
+    },
+    "AXIS_21": {
+      "total": 11,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_21_T01",
+        "AXIS_21_T02",
+        "AXIS_21_T03",
+        "AXIS_21_T04",
+        "AXIS_21_T05",
+        "AXIS_21_T06",
+        "AXIS_21_T07",
+        "AXIS_21_T08",
+        "AXIS_21_T09",
+        "AXIS_21_T10",
+        "AXIS_21_T11"
+      ]
+    },
+    "AXIS_22": {
+      "total": 9,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_22_T01",
+        "AXIS_22_T02",
+        "AXIS_22_T03",
+        "AXIS_22_T04",
+        "AXIS_22_T05",
+        "AXIS_22_T06",
+        "AXIS_22_T07",
+        "AXIS_22_T08",
+        "AXIS_22_T09"
+      ]
+    },
+    "AXIS_23": {
+      "total": 12,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_23_T01",
+        "AXIS_23_T02",
+        "AXIS_23_T03",
+        "AXIS_23_T04",
+        "AXIS_23_T05",
+        "AXIS_23_T06",
+        "AXIS_23_T07",
+        "AXIS_23_T08",
+        "AXIS_23_T09",
+        "AXIS_23_T10",
+        "AXIS_23_T11",
+        "AXIS_23_T12"
+      ]
+    },
+    "AXIS_24": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_24_T01",
+        "AXIS_24_T02",
+        "AXIS_24_T03",
+        "AXIS_24_T04",
+        "AXIS_24_T05",
+        "AXIS_24_T06",
+        "AXIS_24_T07",
+        "AXIS_24_T08",
+        "AXIS_24_T09",
+        "AXIS_24_T10"
+      ]
+    },
+    "AXIS_25": {
+      "total": 11,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_25_T01",
+        "AXIS_25_T02",
+        "AXIS_25_T03",
+        "AXIS_25_T04",
+        "AXIS_25_T05",
+        "AXIS_25_T06",
+        "AXIS_25_T07",
+        "AXIS_25_T08",
+        "AXIS_25_T09",
+        "AXIS_25_T10",
+        "AXIS_25_T11"
+      ]
+    },
+    "AXIS_26": {
+      "total": 10,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_26_T01",
+        "AXIS_26_T02",
+        "AXIS_26_T03",
+        "AXIS_26_T04",
+        "AXIS_26_T05",
+        "AXIS_26_T06",
+        "AXIS_26_T07",
+        "AXIS_26_T08",
+        "AXIS_26_T09",
+        "AXIS_26_T10"
+      ]
+    },
+    "AXIS_27": {
+      "total": 9,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_27_T01",
+        "AXIS_27_T02",
+        "AXIS_27_T03",
+        "AXIS_27_T04",
+        "AXIS_27_T05",
+        "AXIS_27_T06",
+        "AXIS_27_T07",
+        "AXIS_27_T08",
+        "AXIS_27_T09"
+      ]
+    },
+    "AXIS_28": {
+      "total": 11,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_28_T01",
+        "AXIS_28_T02",
+        "AXIS_28_T03",
+        "AXIS_28_T04",
+        "AXIS_28_T05",
+        "AXIS_28_T06",
+        "AXIS_28_T07",
+        "AXIS_28_T08",
+        "AXIS_28_T09",
+        "AXIS_28_T10",
+        "AXIS_28_T11"
+      ]
+    },
+    "AXIS_29": {
+      "total": 12,
+      "s1_done": 1,
+      "unresolved": [
+        "AXIS_29_T01",
+        "AXIS_29_T02",
+        "AXIS_29_T04",
+        "AXIS_29_T05",
+        "AXIS_29_T06",
+        "AXIS_29_T07",
+        "AXIS_29_T08",
+        "AXIS_29_T09",
+        "AXIS_29_T10",
+        "AXIS_29_T11",
+        "AXIS_29_T12"
+      ]
+    },
+    "AXIS_30": {
+      "total": 12,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_30_T01",
+        "AXIS_30_T02",
+        "AXIS_30_T03",
+        "AXIS_30_T04",
+        "AXIS_30_T05",
+        "AXIS_30_T06",
+        "AXIS_30_T07",
+        "AXIS_30_T08",
+        "AXIS_30_T09",
+        "AXIS_30_T10",
+        "AXIS_30_T11",
+        "AXIS_30_T12"
+      ]
+    },
+    "AXIS_31": {
+      "total": 11,
+      "s1_done": 1,
+      "unresolved": [
+        "AXIS_31_T01",
+        "AXIS_31_T02",
+        "AXIS_31_T03",
+        "AXIS_31_T04",
+        "AXIS_31_T06",
+        "AXIS_31_T07",
+        "AXIS_31_T08",
+        "AXIS_31_T09",
+        "AXIS_31_T10",
+        "AXIS_31_T11"
+      ]
+    },
+    "AXIS_32": {
+      "total": 11,
+      "s1_done": 0,
+      "unresolved": [
+        "AXIS_32_T01",
+        "AXIS_32_T02",
+        "AXIS_32_T03",
+        "AXIS_32_T04",
+        "AXIS_32_T05",
+        "AXIS_32_T06",
+        "AXIS_32_T07",
+        "AXIS_32_T08",
+        "AXIS_32_T09",
+        "AXIS_32_T10",
+        "AXIS_32_T11"
+      ]
+    }
+  },
+  "unresolved_competitors": [
+    "C008",
+    "C009",
+    "C010",
+    "C012",
+    "C013",
+    "C014",
+    "C015",
+    "C017",
+    "C018",
+    "C019",
+    "C020",
+    "C021",
+    "C022",
+    "C023",
+    "C024",
+    "C025",
+    "C028",
+    "C029",
+    "C030",
+    "C032",
+    "C033",
+    "C034",
+    "C035",
+    "C036",
+    "C037",
+    "C038",
+    "C039",
+    "C040",
+    "C041",
+    "C042",
+    "C043",
+    "C044",
+    "C045",
+    "C046",
+    "C047",
+    "C048",
+    "C049",
+    "C050",
+    "C051",
+    "C052",
+    "C053",
+    "C054",
+    "C055",
+    "C056",
+    "C057",
+    "C058",
+    "C059",
+    "C060",
+    "C061",
+    "C062",
+    "C063",
+    "C064",
+    "C065",
+    "C066",
+    "C067",
+    "C068",
+    "C069",
+    "C070",
+    "C071",
+    "C072",
+    "C073",
+    "C074",
+    "C075",
+    "C076",
+    "C077",
+    "C078",
+    "C079",
+    "C080"
+  ],
+  "unresolved_additional": [
+    "ADD_N01_T01",
+    "ADD_N01_T02",
+    "ADD_N01_T03",
+    "ADD_N01_T04",
+    "ADD_N02_T01",
+    "ADD_N03_T01",
+    "ADD_SPD_T01"
+  ],
+  "caution": "Exact indexed records retained in original CSV. No source S2 verification or estimation implied. External handoff query evidence not merged into canonical status; it must be reconciled separately."
+}
