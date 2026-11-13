@@ -1,0 +1,290 @@
+{
+  "status": "PREVIEW_ROUTING_NOT_FORMAL_STATISTICAL_ANALYSIS",
+  "generated_at": "2026-11-13",
+  "source_path": "registry/quant_results.csv",
+  "source_git_blob_sha": "d1c8d0145d4fa608453ef90bebcd6aeac2851374",
+  "rows": 22,
+  "classification_counts": {
+    "OBSERVED_RATE_NOT_RAW_SAMPLE": 13,
+    "OBSERVED_POINT_OR_SUMMARY": 1,
+    "OBSERVED_RANGE_OR_TEXT": 2,
+    "NON_IDENTIFIABLE": 5,
+    "ASSUMPTION_ONLY": 1
+  },
+  "source_dependency_groups": {
+    "S032": [
+      "QR02",
+      "QR03"
+    ],
+    "S027": [
+      "QR04",
+      "QR05"
+    ],
+    "S038": [
+      "QR06",
+      "QR07"
+    ],
+    "S040": [
+      "QR12",
+      "QR13"
+    ]
+  },
+  "all_Bayesian_requests_require_raw_counts_prior_and_sampling_model": true,
+  "engine_execution": false,
+  "source_data_review_S2": "PENDING",
+  "routed_rows": [
+    {
+      "result_id": "QR01",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S026"
+      ]
+    },
+    {
+      "result_id": "QR02",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S032"
+      ]
+    },
+    {
+      "result_id": "QR03",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S032"
+      ]
+    },
+    {
+      "result_id": "QR04",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S027"
+      ]
+    },
+    {
+      "result_id": "QR05",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S027"
+      ]
+    },
+    {
+      "result_id": "QR06",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S038"
+      ]
+    },
+    {
+      "result_id": "QR07",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S038"
+      ]
+    },
+    {
+      "result_id": "QR08",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S036"
+      ]
+    },
+    {
+      "result_id": "QR09",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": [
+        "S021"
+      ]
+    },
+    {
+      "result_id": "QR10",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": [
+        "S023"
+      ]
+    },
+    {
+      "result_id": "QR11",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": [
+        "S025"
+      ]
+    },
+    {
+      "result_id": "QR12",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S040"
+      ]
+    },
+    {
+      "result_id": "QR13",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RATE_NOT_RAW_SAMPLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S040"
+      ]
+    },
+    {
+      "result_id": "QR14",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_POINT_OR_SUMMARY",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S046"
+      ]
+    },
+    {
+      "result_id": "QR15",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RANGE_OR_TEXT",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": true,
+      "source_ids": [
+        "S049"
+      ]
+    },
+    {
+      "result_id": "QR16",
+      "category": "OBSERVED",
+      "method_class": "OBSERVED_RANGE_OR_TEXT",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": [
+        "S009",
+        "S041"
+      ]
+    },
+    {
+      "result_id": "QR17",
+      "category": "NON_IDENTIFIABLE",
+      "method_class": "NON_IDENTIFIABLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": []
+    },
+    {
+      "result_id": "QR18",
+      "category": "NON_IDENTIFIABLE",
+      "method_class": "NON_IDENTIFIABLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": []
+    },
+    {
+      "result_id": "QR19",
+      "category": "NON_IDENTIFIABLE",
+      "method_class": "NON_IDENTIFIABLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": []
+    },
+    {
+      "result_id": "QR20",
+      "category": "NON_IDENTIFIABLE",
+      "method_class": "NON_IDENTIFIABLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": []
+    },
+    {
+      "result_id": "QR21",
+      "category": "NON_IDENTIFIABLE",
+      "method_class": "NON_IDENTIFIABLE",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": []
+    },
+    {
+      "result_id": "QR22",
+      "category": "ASSUMPTION_ONLY",
+      "method_class": "ASSUMPTION_ONLY",
+      "raw_available": false,
+      "automatic_median_or_mean_allowed": false,
+      "Bayesian_allowed": false,
+      "has_known_sample_n": false,
+      "source_ids": []
+    }
+  ]
+}
