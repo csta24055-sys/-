@@ -179,8 +179,13 @@ def main(outp, names, max_scn):
                 out["counts"]["b401_n_bad"] += ref["B4-01"]["n_events"] != tot
             for off in (0, 1):
                 r = ratios[off]
-                ok = bool(r) and all(rel(x, r[0]) <= 1e-12 for x in r)
+                if not r:
+                    out["x11"].setdefault("no_defined_ratio", [0, 0])[off] += 1     # X-11 undefined (None) or G = 0 at every T
+                    continue
+                ok = all(rel(x, r[0]) <= 1e-12 for x in r)
                 out["x11"]["alignment"].setdefault(str(off), [0, 0])[0 if ok else 1] += 1
+                if not ok and off == 1 and len(out["x11"]["examples"]) < 10:
+                    out["x11"]["examples"].append(dict(label=label, ratios=r[:8], Ts=Ts[:8]))
             print("[%-14s] %-44s x07 bad %d  x08 bad %d  b401 bad %d  %.0f s" % (name, label[:44], out["x07"]["series_bad"],
                   out["counts"]["x08_bad"], out["counts"]["b401_bad"], time.time() - t0), flush=True)
     json.dump(out, open(outp, "w"), indent=1, default=str)

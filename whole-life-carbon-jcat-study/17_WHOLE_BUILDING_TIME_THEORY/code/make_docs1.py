@@ -197,8 +197,9 @@ def doc07(s):
         L.append("| 出力 | 照合の内容 | 件数 | 不一致 |")
         L.append("|---|---|---|---|")
         al = x11["alignment"].get("1", [0, 0])
-        L.append("| X-11 | $\\mathrm{X11}(T)/G(T)$ が各シナリオで一定（相対 1e-12）、$\\gamma_k$ = X-06 の `by_year[k+1]` | %d シナリオ、%d 点 | %d（`by_year[k]` と読むと %d シナリオすべてで一定にならない） |"
-                 % (x11["n_scn"], x11["n_T"], al[1], x11["alignment"].get("0", [0, 0])[1]))
+        nd = x11.get("no_defined_ratio", [0, 0])[1]
+        L.append("| X-11 | $\\mathrm{X11}(T)/G(T)$ が各シナリオで一定（相対 1e-12）、$\\gamma_k$ = X-06 の `by_year[k+1]` | %d シナリオ（比が定義される %d、X-11 が未定義か $G=0$ の %d）、%d 点 | %d（`by_year[k]` と読むと %d シナリオすべてで一定にならない） |"
+                 % (x11["n_scn"], al[0] + al[1], nd, x11["n_T"], al[1], x11["alignment"].get("0", [0, 0])[1]))
         L.append("| X-07 `by_year` | 核の項を年セルで分けた式（相対 1e-9、$C$ に対して） | %d 点 | %d（最大 %s） |" % (x7["n_T"], x7["series_bad"], e(x7["max_rel"])))
         L.append("| X-07 `cumulative`・`value` | 累積が列の和、値が $C(T)$ | %d 点 | %d、%d |" % (x7["n_T"], x7["cum_bad"], x7["value_vs_C_bad"]))
         L.append("| X-07 と TH-4 の年ごとの分解 | 実時間の測度を $(y-1,y]$ で区切ったものと異なる点 | %d 点 | 異なる %d（すべて整数時刻の事象が数えられている点：%d、整数時刻の事象なしで異なる点：%d） |"

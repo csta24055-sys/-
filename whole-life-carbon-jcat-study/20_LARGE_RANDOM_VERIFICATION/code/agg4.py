@@ -34,6 +34,24 @@ def bound(n, k=0):
     return hi
 
 
+def sliver_of(i, T):
+    """For a failing pair of the random strata: is T inside a band (K, sw(K)] after an integer-time event K (the domain
+    hole of chapter 17, D minus D')?  The scenario is regenerated (gen4 is deterministic in i)."""
+    for p in (os.path.join(HERE, "..", "..", "17_WHOLE_BUILDING_TIME_THEORY", "code"), HERE):
+        if p not in sys.path:
+            sys.path.insert(0, p)
+    import canon
+    import timechar as tc
+    import gen4
+    from tstudy import baseline
+    baseline.load()
+    from synth import population
+    scn = gen4.make(gen4.plan(i))
+    can = canon.build(canon.make_system(scn, population.BASELINES))
+    ks = sorted({t.gate for t in can.terms if t.kind in ("atom", "gcell", "wev0", "wev1") and float(t.gate).is_integer()})
+    return [K for K in ks if K < T <= tc.tswitch(K)]
+
+
 def q(xs, p):
     xs = sorted(xs)
     return xs[min(len(xs) - 1, max(0, int(math.ceil(p * len(xs))) - 1))] if xs else None
@@ -115,6 +133,32 @@ def main(cdir):
     out["total"]["in_domain_pairs"] = in_dom
     out["total"]["in_domain_failures"] = fail_in
     out["total"]["upper95_failure_probability_in_domain"] = bound(in_dom, fail_in)
+    # scenario level (the 5 periods of one scenario are not independent): a scenario fails if any in-domain pair fails
+    scn_n = scn_f = 0
+    for r in recs:
+        if str(r.get("stratum", "")).startswith("R:") or r.get("scenario_error") or r.get("stratum") == "D":
+            continue
+        ps = [p for p in r.get("pairs", []) if p.get("in_domain") and "ref_error" not in p]
+        if not ps:
+            continue
+        scn_n += 1
+        scn_f += any((not p["v1"]) or p["v2_bad"] or p["v3_bad"] or (not p["v4"]) or (p.get("v5") is False) for p in ps)
+    out["total"]["scenarios_with_in_domain_pairs"] = scn_n
+    out["total"]["scenarios_failing"] = scn_f
+    out["total"]["upper95_failure_probability_per_scenario"] = bound(scn_n, scn_f)
+    # failures inside the band (K, sw(K)] after an integer-time event (D minus D', chapter 17) are reported apart
+    sl = []
+    for r in recs:
+        if str(r.get("stratum", "")).startswith("R:"):
+            continue
+        for p in r.get("pairs", []):
+            if p.get("in_domain") and "ref_error" not in p and ((not p["v1"]) or p["v2_bad"] or p["v3_bad"] or (not p["v4"]) or (p.get("v5") is False)):
+                sl.append(dict(i=r["i"], stratum=r.get("stratum"), T=p["T"], integer_events_with_T_in_band=sliver_of(r["i"], p["T"])))
+    n_band = sum(1 for x in sl if x["integer_events_with_T_in_band"])
+    out["total"]["in_domain_failures_in_band"] = n_band
+    out["total"]["in_domain_failures_outside_band"] = len(sl) - n_band
+    out["total"]["failures_band_detail"] = sl[:50]
+    out["total"]["upper95_failure_probability_D_prime"] = bound(in_dom - n_band, len(sl) - n_band)
     out["total"]["nc"] = {k: dict(applicable=sum(nc_app[s][k] for s in nc_app), detected=sum(nc_det[s][k] for s in nc_det)) for k in NCS}
     out["laplace_max_rel"] = max(lap) if lap else None
     out["fourier_conjugate_max"] = max(conj) if conj else None

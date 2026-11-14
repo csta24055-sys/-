@@ -1,0 +1,221 @@
+{
+ "note": "Static consumers: every formula cell whose references contain a cell of the equation, transitively, by levels. Substitution: the cells take method A's values and the closure is re-evaluated by the reference evaluator, compared with Excel's cached values (number of consumer cells that changed). Perturbation: every numeric cell of the equation moved by +-1 ulp; consumer cells that change are classified (proportional <= 8 ulp, or larger: a rounding, threshold or look-up that flips). Counts only.",
+ "equations": {
+  "EQ-0090": {
+   "cells_of_equation": 1504,
+   "consumer_closure": 1487052,
+   "levels": [
+    7056,
+    86047,
+    188288,
+    249150,
+    144728,
+    738686,
+    11464,
+    23618,
+    14016,
+    17979,
+    3670,
+    962,
+    962,
+    322,
+    40,
+    8,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+   ],
+   "downstream_equations": 169,
+   "substitution_A": {
+    "changed_cells": 0,
+    "by_class": {}
+   },
+   "perturbation": {
+    "perturbed_cells": 1504,
+    "changed_cells": 16,
+    "by_class": {
+     "proportional (<= 8 ulp)": 16
+    }
+   }
+  },
+  "EQ-0181": {
+   "cells_of_equation": 326,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": {
+    "changed_cells": 0,
+    "by_class": {}
+   },
+   "perturbation": {
+    "perturbed_cells": 326,
+    "changed_cells": 0,
+    "by_class": {}
+   }
+  },
+  "EQ-0185": {
+   "cells_of_equation": 319,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": {
+    "changed_cells": 0,
+    "by_class": {}
+   },
+   "perturbation": {
+    "perturbed_cells": 319,
+    "changed_cells": 0,
+    "by_class": {}
+   }
+  },
+  "EQ-0317": {
+   "cells_of_equation": 36,
+   "consumer_closure": 8,
+   "levels": [
+    4,
+    4
+   ],
+   "downstream_equations": 4,
+   "substitution_A": {
+    "changed_cells": 0,
+    "by_class": {}
+   },
+   "perturbation": {
+    "perturbed_cells": 36,
+    "changed_cells": 0,
+    "by_class": {}
+   }
+  },
+  "EQ-0373": {
+   "cells_of_equation": 19,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": {
+    "changed_cells": 0,
+    "by_class": {}
+   },
+   "perturbation": {
+    "perturbed_cells": 19,
+    "changed_cells": 0,
+    "by_class": {}
+   }
+  },
+  "EQ-0377": {
+   "cells_of_equation": 17,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": {
+    "changed_cells": 0,
+    "by_class": {}
+   },
+   "perturbation": {
+    "perturbed_cells": 17,
+    "changed_cells": 0,
+    "by_class": {}
+   }
+  },
+  "EQ-0417": {
+   "cells_of_equation": 14,
+   "consumer_closure": 1486444,
+   "levels": [
+    6856,
+    85347,
+    187962,
+    231333,
+    126844,
+    774196,
+    11919,
+    23880,
+    14100,
+    17987,
+    3670,
+    962,
+    962,
+    322,
+    40,
+    8,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+   ],
+   "downstream_equations": 163,
+   "substitution_A": "not run",
+   "perturbation": "not run"
+  },
+  "EQ-0471": {
+   "cells_of_equation": 5,
+   "consumer_closure": 264616,
+   "levels": [
+    35072,
+    87680,
+    140426,
+    444,
+    446,
+    330,
+    194,
+    16,
+    6,
+    2
+   ],
+   "downstream_equations": 21,
+   "substitution_A": "not run",
+   "perturbation": "not run"
+  },
+  "EQ-0553": {
+   "cells_of_equation": 3,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": "not run",
+   "perturbation": "not run"
+  },
+  "EQ-0587": {
+   "cells_of_equation": 2,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": "not run",
+   "perturbation": "not run"
+  },
+  "EQ-0621": {
+   "cells_of_equation": 1,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": "not run",
+   "perturbation": "not run"
+  },
+  "EQ-0643": {
+   "cells_of_equation": 1,
+   "consumer_closure": 0,
+   "levels": [],
+   "downstream_equations": 0,
+   "substitution_A": "not run",
+   "perturbation": "not run"
+  }
+ }
+}

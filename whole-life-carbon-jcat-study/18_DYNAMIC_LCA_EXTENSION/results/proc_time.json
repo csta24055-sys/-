@@ -1,0 +1,570 @@
+{
+ "n_scenarios": 45,
+ "families": {
+  "P01": {
+   "name": "資材の製造",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 1.0,
+   "atoms_max": 1,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0.0,
+   "only_atom_at_t0": 44,
+   "decay_e_median": -5.685425073749614e-16,
+   "decay_e_range": [
+    -1.6891064174681367e-15,
+    3.0364695052154855e-17
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 44,
+   "laplace_rel_max": 0.0,
+   "recurrence_order_median": 1.0,
+   "recurrence_order_dist": {
+    "1": 44
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P02": {
+   "name": "設備機器の製造",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 1.0,
+   "atoms_max": 1,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0.0,
+   "only_atom_at_t0": 44,
+   "decay_e_median": -2.3752220075341804e-16,
+   "decay_e_range": [
+    -1.2844303203082874e-15,
+    1.0231102078457095e-16
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 44,
+   "laplace_rel_max": 0.0,
+   "recurrence_order_median": 1.0,
+   "recurrence_order_dist": {
+    "1": 44
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P03": {
+   "name": "現場への輸送",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 1.0,
+   "atoms_max": 1,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0.0,
+   "only_atom_at_t0": 44,
+   "decay_e_median": -4.2326117682662536e-16,
+   "decay_e_range": [
+    -1.325163764536311e-15,
+    4.392202426241693e-16
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 44,
+   "laplace_rel_max": 0.0,
+   "recurrence_order_median": 1.0,
+   "recurrence_order_dist": {
+    "1": 44
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P04": {
+   "name": "施工",
+   "present": 45,
+   "empty": 0,
+   "terminal_terms_median": 0,
+   "atoms_median": 1,
+   "atoms_max": 1,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0,
+   "only_atom_at_t0": 45,
+   "decay_e_median": -2.5973063253797933e-16,
+   "decay_e_range": [
+    -8.801394997452055e-16,
+    6.314864014501308e-17
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 45,
+   "laplace_rel_max": 0.0,
+   "recurrence_order_median": 1,
+   "recurrence_order_dist": {
+    "1": 45
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P05": {
+   "name": "冷媒の漏洩",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 0.0,
+   "atoms_max": 0,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 131.0,
+   "only_atom_at_t0": 44,
+   "decay_e_median": -0.7599180045593005,
+   "decay_e_range": [
+    -0.9754331805527761,
+    4.165174393288742
+   ],
+   "decay_e_zero": 9,
+   "decay_E_median": -0.9999751744959393,
+   "decay_E_range": [
+    -1.0018213553769089,
+    -0.983791877337214
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 1.606114017756663e-15,
+   "recurrence_order_median": 26.0,
+   "recurrence_order_dist": {
+    "65": 18,
+    "1": 9,
+    "17": 6,
+    "10": 2,
+    "16": 2,
+    "25": 1,
+    "27": 1,
+    "60": 1
+   },
+   "instances": {
+    "single_or_none": 558
+   },
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P06": {
+   "name": "冷媒の交換時の損失",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 31.5,
+   "atoms_max": 346,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0.0,
+   "only_atom_at_t0": 0,
+   "decay_e_median": 0.3026621310570544,
+   "decay_e_range": [
+    -0.003218714115428194,
+    1.5913111461107614
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": -0.9816256811321677,
+   "decay_E_range": [
+    -1.0075879566074988,
+    -0.9137322263155628
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 9.577895662301568e-16,
+   "recurrence_order_median": 65.0,
+   "recurrence_order_dist": {
+    "65": 33,
+    "31": 2,
+    "61": 2,
+    "45": 2,
+    "59": 1,
+    "21": 1,
+    "81": 1,
+    "4": 1
+   },
+   "instances": {
+    "lattice": 429,
+    "not_lattice": 108,
+    "single_or_none": 19
+   },
+   "periods_top": {
+    "10.0": 27,
+    "25.0": 19,
+    "30.0": 16,
+    "22.0": 16,
+    "23.0": 16,
+    "17.0": 15,
+    "12.0": 14,
+    "11.0": 14,
+    "12.5": 13,
+    "16.0": 12
+   },
+   "n_distinct_periods": 141
+  },
+  "P07": {
+   "name": "施設管理のエネルギー",
+   "present": 42,
+   "empty": 3,
+   "terminal_terms_median": 0,
+   "atoms_median": 0.0,
+   "atoms_max": 0,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 131.0,
+   "only_atom_at_t0": 42,
+   "decay_e_median": -0.9698533934507367,
+   "decay_e_range": [
+    -1.0000000000000022,
+    -0.5925187341982844
+   ],
+   "decay_e_zero": 5,
+   "decay_E_median": -1.0000115907136387,
+   "decay_E_range": [
+    -1.003339581356116,
+    -0.9951330467835661
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 1.4478661971175132e-15,
+   "recurrence_order_median": 65.0,
+   "recurrence_order_dist": {
+    "65": 35,
+    "1": 5,
+    "19": 2
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P08": {
+   "name": "修繕",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 110.0,
+   "atoms_max": 5967,
+   "negative_atoms_total": 42149,
+   "rate_breaks_median": 32.0,
+   "only_atom_at_t0": 0,
+   "decay_e_median": 0.32720233996322134,
+   "decay_e_range": [
+    -0.18340968601155824,
+    2.641418438119283
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": -0.9998273218339034,
+   "decay_E_range": [
+    -1.0012850341760058,
+    1.7954815523376022
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 5.10047358563166e-14,
+   "recurrence_order_median": 65,
+   "recurrence_order_dist": {
+    "65": 37,
+    "60": 1,
+    "45": 1,
+    "61": 1,
+    "80": 1,
+    "41": 1,
+    "82": 1
+   },
+   "instances": {
+    "lattice": 20706,
+    "single_or_none": 6254,
+    "not_lattice": 676
+   },
+   "periods_top": {
+    "50.0": 933,
+    "25.0": 871,
+    "30.0": 714,
+    "10.0": 518,
+    "20.0": 371,
+    "15.0": 360,
+    "12.5": 260,
+    "21.0": 247,
+    "26.0": 242,
+    "38.0": 237
+   },
+   "n_distinct_periods": 3584
+  },
+  "P09": {
+   "name": "更新",
+   "present": 44,
+   "empty": 1,
+   "terminal_terms_median": 0,
+   "atoms_median": 117.0,
+   "atoms_max": 6528,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0.0,
+   "only_atom_at_t0": 0,
+   "decay_e_median": 0.29472528781570106,
+   "decay_e_range": [
+    1.1404935009062702e-17,
+    1.0782611452702988
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": -0.9762791829178591,
+   "decay_E_range": [
+    -1.000574557459716,
+    -0.8733067068059355
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 0.0,
+   "recurrence_order_median": 65.0,
+   "recurrence_order_dist": {
+    "65": 37,
+    "60": 1,
+    "45": 1,
+    "61": 1,
+    "81": 1,
+    "41": 1,
+    "4": 1,
+    "82": 1
+   },
+   "instances": {
+    "lattice": 24194,
+    "single_or_none": 5984,
+    "not_lattice": 658
+   },
+   "periods_top": {
+    "50.0": 1168,
+    "25.0": 1011,
+    "30.0": 861,
+    "10.0": 570,
+    "20.0": 417,
+    "15.0": 411,
+    "12.5": 293,
+    "26.0": 285,
+    "60.0": 279,
+    "38.0": 277
+   },
+   "n_distinct_periods": 3865
+  },
+  "P10": {
+   "name": "大型改修・建替",
+   "present": 19,
+   "empty": 26,
+   "terminal_terms_median": 0,
+   "atoms_median": 1,
+   "atoms_max": 6,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 0,
+   "only_atom_at_t0": 0,
+   "decay_e_median": 4.2525622310292385e-16,
+   "decay_e_range": [
+    -1.3241875301051054e-16,
+    0.05705428163243585
+   ],
+   "decay_e_zero": 0,
+   "decay_E_median": -0.9683511651693872,
+   "decay_E_range": [
+    -0.9963650812782029,
+    -0.9405415577677255
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 0.0,
+   "recurrence_order_median": 76,
+   "recurrence_order_dist": {
+    "83": 6,
+    "62": 3,
+    "41": 2,
+    "107": 2,
+    "21": 1,
+    "31": 1,
+    "79": 1,
+    "48": 1
+   },
+   "instances": {
+    "single_or_none": 36
+   },
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P11": {
+   "name": "運用エネルギー",
+   "present": 45,
+   "empty": 0,
+   "terminal_terms_median": 0,
+   "atoms_median": 0,
+   "atoms_max": 0,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 131,
+   "only_atom_at_t0": 45,
+   "decay_e_median": -0.8997244173848982,
+   "decay_e_range": [
+    -1.0000000000000024,
+    -0.4683838158432762
+   ],
+   "decay_e_zero": 7,
+   "decay_E_median": -1.0000000000000009,
+   "decay_E_range": [
+    -1.0010610245062022,
+    -0.9951343063881456
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 1.902561112651227e-15,
+   "recurrence_order_median": 65,
+   "recurrence_order_dist": {
+    "65": 36,
+    "1": 7,
+    "19": 2
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P12": {
+   "name": "水・一般廃棄物",
+   "present": 45,
+   "empty": 0,
+   "terminal_terms_median": 0,
+   "atoms_median": 0,
+   "atoms_max": 0,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": 2,
+   "only_atom_at_t0": 45,
+   "decay_e_median": -1.0000000000000013,
+   "decay_e_range": [
+    -1.0000000000000027,
+    -0.31665840726348227
+   ],
+   "decay_e_zero": 24,
+   "decay_E_median": -1.0000000000000007,
+   "decay_E_range": [
+    -1.0005758844365382,
+    -0.9993487379348879
+   ],
+   "decay_E_zero": 0,
+   "laplace_rel_max": 9.750372460905646e-16,
+   "recurrence_order_median": 1,
+   "recurrence_order_dist": {
+    "1": 24,
+    "65": 21
+   },
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P13": {
+   "name": "解体",
+   "present": 0,
+   "empty": 45,
+   "terminal_terms_median": 1,
+   "atoms_median": null,
+   "atoms_max": null,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": null,
+   "only_atom_at_t0": 0,
+   "decay_e_median": null,
+   "decay_e_range": null,
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 0,
+   "laplace_rel_max": null,
+   "recurrence_order_median": null,
+   "recurrence_order_dist": {},
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P14": {
+   "name": "廃棄物の輸送",
+   "present": 0,
+   "empty": 45,
+   "terminal_terms_median": 1,
+   "atoms_median": null,
+   "atoms_max": null,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": null,
+   "only_atom_at_t0": 0,
+   "decay_e_median": null,
+   "decay_e_range": null,
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 0,
+   "laplace_rel_max": null,
+   "recurrence_order_median": null,
+   "recurrence_order_dist": {},
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P15": {
+   "name": "廃棄物の処理",
+   "present": 0,
+   "empty": 45,
+   "terminal_terms_median": 2,
+   "atoms_median": null,
+   "atoms_max": null,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": null,
+   "only_atom_at_t0": 0,
+   "decay_e_median": null,
+   "decay_e_range": null,
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 0,
+   "laplace_rel_max": null,
+   "recurrence_order_median": null,
+   "recurrence_order_dist": {},
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P16": {
+   "name": "最終処分",
+   "present": 0,
+   "empty": 45,
+   "terminal_terms_median": 1,
+   "atoms_median": null,
+   "atoms_max": null,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": null,
+   "only_atom_at_t0": 0,
+   "decay_e_median": null,
+   "decay_e_range": null,
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 0,
+   "laplace_rel_max": null,
+   "recurrence_order_median": null,
+   "recurrence_order_dist": {},
+   "instances": {},
+   "periods_top": {},
+   "n_distinct_periods": 0
+  },
+  "P17": {
+   "name": "冷媒の廃棄時の放出",
+   "present": 0,
+   "empty": 45,
+   "terminal_terms_median": 276,
+   "atoms_median": null,
+   "atoms_max": null,
+   "negative_atoms_total": 0,
+   "rate_breaks_median": null,
+   "only_atom_at_t0": 0,
+   "decay_e_median": null,
+   "decay_e_range": null,
+   "decay_e_zero": 0,
+   "decay_E_median": null,
+   "decay_E_range": null,
+   "decay_E_zero": 0,
+   "laplace_rel_max": null,
+   "recurrence_order_median": null,
+   "recurrence_order_dist": {},
+   "instances": {
+    "single_or_none": 217
+   },
+   "periods_top": {},
+   "n_distinct_periods": 0
+  }
+ }
+}

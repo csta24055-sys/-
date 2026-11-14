@@ -26,6 +26,11 @@
 | 14 | [14_EQUATION_DISCLOSURE/08_全方程式索引.md](14_EQUATION_DISCLOSURE/08_全方程式索引.md) | 原版の全数式セルの件数と、研究側の統一系（節点スペクトル＋マスク付き積和）の全方程式の開示。原版の式本文は非公開。 |
 | 15 | [15_JCAT_CONVERSION/README.md](15_JCAT_CONVERSION/README.md) | 原版の独立方程式 667 件の分類と、2 構造（変更なしの研究エンジン）への変換・検証（全セル・境界条件・無作為 2,000 ケース・建物全体の連鎖）。原版の式本文・値は非公開。 |
 | 16 | [16_UNRESOLVED8_EXACT_APPROX/README.md](16_UNRESOLVED8_EXACT_APPROX/README.md) | 15 章で未解決の 8 件（文字列連結 3、ROUND 1、非整数乗 2、常用対数 1、VALUE(LEFT()) 1）を、既存の 2 構造の範囲だけで方式 A（厳密）・方式 B（高精度近似）の両方で研究・実装・照合。非整数乗・常用対数の実数としての厳密表現の不可能性の証明を含む。原版の式本文・係数・値は非公開。 |
+| 17 | [17_WHOLE_BUILDING_TIME_THEORY/README.md](17_WHOLE_BUILDING_TIME_THEORY/README.md) | 統一理論 第 1 段階：70 評価単位の建物全体の完全理想方程式 $C(T)$、係数表、時間特性の定理と証明（区分一次・跳び・実時間の分解・ラプラス・フーリエ・漸化式など）、解析手法の比較、最良の表現、基準計算との照合。独立概念モデル・架空データ。 |
+| 18 | [18_DYNAMIC_LCA_EXTENSION/README.md](18_DYNAMIC_LCA_EXTENSION/README.md) | 統一理論 第 2 段階：動的 LCA の文献調査、70 単位の骨格を保った 17 の工程関数、工程間の関係（比例・ゲート・二時刻の核）、再構成と整合、導けない時間分布の仮定と非一意性、動的な特性化、工程ごとの時間特性。 |
+| 19 | [19_JCAT_REMAINING12/README.md](19_JCAT_REMAINING12/README.md) | 統一理論 第 3 段階：原版の残り 12 式の依存関係と、2 構造による厳密な変換（除外 0）。原版の式本文・値は非公開。 |
+| 20 | [20_LARGE_RANDOM_VERIFICATION/README.md](20_LARGE_RANDOM_VERIFICATION/README.md) | 統一理論 第 4 段階：宣言した抽出分布による 10 万ケース規模の無作為検証、負の対照、統計的な成立範囲。 |
+| 21 | [21_UNIFIED_THEORY_REPORT/README.md](21_UNIFIED_THEORY_REPORT/README.md) | 統一理論の研究報告書：最終成果物 14 項目の所在、証明・数値検証・統計的確認・追加データが必要なこと・未解決の区別、終了条件 A〜D の判定。 |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想
