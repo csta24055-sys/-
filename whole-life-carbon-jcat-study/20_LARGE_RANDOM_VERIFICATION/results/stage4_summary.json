@@ -1,333 +1,884 @@
 {
- "n_scenarios": 1900,
+ "n_scenarios": 9447,
  "strata": {
   "B": {
-   "scenarios": 374,
-   "terms": 3195339,
+   "scenarios": 1824,
+   "terms": 16535535,
    "P07_rho_bad": 0,
-   "pairs": 1870,
-   "pairs_in": 1870,
-   "checked": 1870,
+   "pairs": 9120,
+   "pairs_in": 9120,
+   "checked": 9120,
    "fail": 0,
    "v1_fail": 0,
    "v2_fail": 0,
    "v3_fail": 0,
    "v4_fail": 0,
    "v5_fail": 0,
-   "v5_checked": 1555,
-   "stage_values": 26180,
-   "unit_values": 39270,
-   "rel_median": 1.959484286655974e-15,
-   "rel_p99": 3.565610831775346e-14,
-   "rel_max": 8.884111756821335e-14,
-   "upper95_failure_probability": 0.0016007133577800037,
+   "v5_checked": 7415,
+   "stage_values": 127680,
+   "unit_values": 191520,
+   "rel_median": 1.937698826793899e-15,
+   "rel_p99": 3.775411795603336e-14,
+   "rel_max": 9.702206191245287e-14,
+   "upper95_failure_probability": 0.00032842547250311327,
    "nc": {
     "NC1": {
-     "applicable": 485,
-     "detected": 485
+     "applicable": 2314,
+     "detected": 2314
     },
     "NC2": {
-     "applicable": 1870,
-     "detected": 1870
+     "applicable": 9120,
+     "detected": 9120
     },
     "NC3": {
      "applicable": 0,
      "detected": 0
     },
     "NC4": {
-     "applicable": 1579,
-     "detected": 1579
+     "applicable": 7666,
+     "detected": 7666
     },
     "NC5": {
      "applicable": 0,
      "detected": 0
     },
     "NC6": {
-     "applicable": 1870,
-     "detected": 1870
+     "applicable": 9120,
+     "detected": 9120
     },
     "NC7": {
-     "applicable": 1870,
-     "detected": 1870
+     "applicable": 9120,
+     "detected": 9120
     },
     "NC8": {
-     "applicable": 1870,
-     "detected": 1870
+     "applicable": 9120,
+     "detected": 9120
     }
    }
   },
   "D": {
-   "scenarios": 168,
-   "terms": 1052486,
+   "scenarios": 875,
+   "terms": 5489447,
    "P07_rho_bad": 0,
-   "pairs": 840,
-   "pairs_outside_compared": 840,
-   "checked": 840,
+   "pairs": 4375,
+   "pairs_outside_compared": 4375,
+   "checked": 4375,
    "fail": 0,
    "v1_fail": 0,
    "v2_fail": 0,
    "v3_fail": 0,
    "v4_fail": 0,
    "v5_fail": 0,
-   "v5_checked": 755,
-   "stage_values": 11760,
-   "unit_values": 17640,
-   "rel_median": 1.428071743769409e-15,
-   "rel_p99": 3.304124579835976e-14,
+   "v5_checked": 3945,
+   "stage_values": 61250,
+   "unit_values": 91875,
+   "rel_median": 1.3479343467437816e-15,
+   "rel_p99": 2.540958601826263e-14,
    "rel_max": 9.69741568955322e-14,
-   "upper95_failure_probability": 0.003559996079106953,
+   "upper95_failure_probability": 0.0006845044252674626,
+   "nc": {
+    "NC1": {
+     "applicable": 998,
+     "detected": 998
+    },
+    "NC2": {
+     "applicable": 4375,
+     "detected": 4375
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 3655,
+     "detected": 3655
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 4375,
+     "detected": 4375
+    },
+    "NC7": {
+     "applicable": 4375,
+     "detected": 4375
+    },
+    "NC8": {
+     "applicable": 4375,
+     "detected": 4375
+    }
+   }
+  },
+  "E": {
+   "scenarios": 924,
+   "terms": 7859647,
+   "P07_rho_bad": 0,
+   "pairs": 4620,
+   "pairs_in": 4620,
+   "checked": 4620,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 4180,
+   "stage_values": 64680,
+   "unit_values": 97020,
+   "rel_median": 1.0422279085316513e-15,
+   "rel_p99": 1.3944988022198347e-14,
+   "rel_max": 3.9522458455428684e-14,
+   "upper95_failure_probability": 0.0006482167157478846,
+   "nc": {
+    "NC1": {
+     "applicable": 1155,
+     "detected": 1155
+    },
+    "NC2": {
+     "applicable": 4620,
+     "detected": 4620
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 3651,
+     "detected": 3650
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 4620,
+     "detected": 4620
+    },
+    "NC7": {
+     "applicable": 4620,
+     "detected": 4620
+    },
+    "NC8": {
+     "applicable": 4620,
+     "detected": 4620
+    }
+   }
+  },
+  "G": {
+   "scenarios": 944,
+   "terms": 6548847,
+   "P07_rho_bad": 0,
+   "pairs": 4720,
+   "pairs_in": 4720,
+   "checked": 4720,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 4225,
+   "stage_values": 66080,
+   "unit_values": 99120,
+   "rel_median": 4.974290141722717e-16,
+   "rel_p99": 2.7174194492387046e-14,
+   "rel_max": 8.822769836186547e-14,
+   "upper95_failure_probability": 0.0006344876685230316,
+   "nc": {
+    "NC1": {
+     "applicable": 1142,
+     "detected": 1139
+    },
+    "NC2": {
+     "applicable": 4720,
+     "detected": 4720
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 3973,
+     "detected": 3970
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 4720,
+     "detected": 4720
+    },
+    "NC7": {
+     "applicable": 4720,
+     "detected": 4720
+    },
+    "NC8": {
+     "applicable": 4720,
+     "detected": 4720
+    }
+   }
+  },
+  "N": {
+   "scenarios": 3622,
+   "terms": 33244335,
+   "P07_rho_bad": 0,
+   "pairs": 18110,
+   "pairs_in": 18110,
+   "checked": 18110,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 14700,
+   "stage_values": 253540,
+   "unit_values": 380310,
+   "rel_median": 1.6454396235230156e-15,
+   "rel_p99": 3.087702408343073e-14,
+   "rel_max": 1.4695606081092017e-13,
+   "upper95_failure_probability": 0.0001654049979115113,
+   "nc": {
+    "NC1": {
+     "applicable": 4345,
+     "detected": 4345
+    },
+    "NC2": {
+     "applicable": 18110,
+     "detected": 18110
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 15268,
+     "detected": 15268
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 18110,
+     "detected": 18110
+    },
+    "NC7": {
+     "applicable": 18110,
+     "detected": 18110
+    },
+    "NC8": {
+     "applicable": 18110,
+     "detected": 18110
+    }
+   }
+  },
+  "R:dev_design": {
+   "scenarios": 40,
+   "terms": 569447,
+   "P07_rho_bad": 0,
+   "pairs": 160,
+   "pairs_in": 160,
+   "checked": 160,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 96,
+   "stage_values": 2240,
+   "unit_values": 3360,
+   "rel_median": 2.848178762462079e-15,
+   "rel_p99": 3.048623801147198e-14,
+   "rel_max": 3.3172407506462466e-14,
+   "upper95_failure_probability": 0.018549134077503804,
+   "nc": {
+    "NC1": {
+     "applicable": 85,
+     "detected": 85
+    },
+    "NC2": {
+     "applicable": 160,
+     "detected": 160
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 160,
+     "detected": 160
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 160,
+     "detected": 160
+    },
+    "NC7": {
+     "applicable": 160,
+     "detected": 160
+    },
+    "NC8": {
+     "applicable": 160,
+     "detected": 160
+    }
+   }
+  },
+  "R:dev_edge": {
+   "scenarios": 32,
+   "terms": 55281,
+   "P07_rho_bad": 0,
+   "pairs": 64,
+   "pairs_in": 62,
+   "checked": 62,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 60,
+   "stage_values": 848,
+   "unit_values": 1302,
+   "pairs_excluded": 2,
+   "rel_median": 8.628471204035147e-16,
+   "rel_p99": 4.957172912890401e-15,
+   "rel_max": 4.957172912890401e-15,
+   "upper95_failure_probability": 0.047169511375356854,
+   "nc": {
+    "NC1": {
+     "applicable": 29,
+     "detected": 29
+    },
+    "NC2": {
+     "applicable": 58,
+     "detected": 58
+    },
+    "NC3": {
+     "applicable": 2,
+     "detected": 2
+    },
+    "NC4": {
+     "applicable": 53,
+     "detected": 53
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 62,
+     "detected": 62
+    },
+    "NC7": {
+     "applicable": 62,
+     "detected": 62
+    },
+    "NC8": {
+     "applicable": 60,
+     "detected": 60
+    }
+   }
+  },
+  "R:new_defects:outside": {
+   "scenarios": 12,
+   "terms": 148732,
+   "P07_rho_bad": 0,
+   "pairs": 24,
+   "pairs_outside_compared": 24,
+   "checked": 24,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 16,
+   "stage_values": 336,
+   "unit_values": 504,
+   "rel_median": 2.410211427926079e-15,
+   "rel_p99": 1.308795161933326e-14,
+   "rel_max": 1.308795161933326e-14,
+   "upper95_failure_probability": 0.11734615615494881,
+   "nc": {
+    "NC1": {
+     "applicable": 13,
+     "detected": 13
+    },
+    "NC2": {
+     "applicable": 24,
+     "detected": 24
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 24,
+     "detected": 24
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 24,
+     "detected": 24
+    },
+    "NC7": {
+     "applicable": 24,
+     "detected": 24
+    },
+    "NC8": {
+     "applicable": 24,
+     "detected": 24
+    }
+   }
+  },
+  "R:new_population": {
+   "scenarios": 40,
+   "terms": 383775,
+   "P07_rho_bad": 0,
+   "pairs": 240,
+   "pairs_in": 240,
+   "checked": 240,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 192,
+   "stage_values": 3360,
+   "unit_values": 5040,
+   "rel_median": 1.5863643717172433e-15,
+   "rel_p99": 2.4184713185849493e-14,
+   "rel_max": 3.795385674156992e-14,
+   "upper95_failure_probability": 0.012404638050409034,
+   "nc": {
+    "NC1": {
+     "applicable": 90,
+     "detected": 90
+    },
+    "NC2": {
+     "applicable": 240,
+     "detected": 240
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 240,
+     "detected": 240
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 240,
+     "detected": 240
+    },
+    "NC7": {
+     "applicable": 240,
+     "detected": 240
+    },
+    "NC8": {
+     "applicable": 240,
+     "detected": 240
+    }
+   }
+  },
+  "R:new_special:outside": {
+   "scenarios": 30,
+   "terms": 360551,
+   "P07_rho_bad": 0,
+   "pairs": 90,
+   "pairs_in": 90,
+   "checked": 90,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 60,
+   "stage_values": 1242,
+   "unit_values": 1890,
+   "rel_median": 9.814349509759229e-16,
+   "rel_p99": 8.35042155968544e-15,
+   "rel_max": 8.35042155968544e-15,
+   "upper95_failure_probability": 0.032738033833534574,
+   "nc": {
+    "NC1": {
+     "applicable": 37,
+     "detected": 37
+    },
+    "NC2": {
+     "applicable": 90,
+     "detected": 90
+    },
+    "NC3": {
+     "applicable": 9,
+     "detected": 9
+    },
+    "NC4": {
+     "applicable": 90,
+     "detected": 90
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 90,
+     "detected": 90
+    },
+    "NC7": {
+     "applicable": 90,
+     "detected": 90
+    },
+    "NC8": {
+     "applicable": 90,
+     "detected": 90
+    }
+   }
+  },
+  "R:rep_boundary": {
+   "scenarios": 5,
+   "terms": 44693,
+   "P07_rho_bad": 0,
+   "pairs": 46,
+   "pairs_in": 46,
+   "checked": 46,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 38,
+   "stage_values": 644,
+   "unit_values": 966,
+   "rel_median": 1.31784821893225e-15,
+   "rel_p99": 2.4147530203365138e-14,
+   "rel_max": 2.4147530203365138e-14,
+   "upper95_failure_probability": 0.06304930167405454,
+   "nc": {
+    "NC1": {
+     "applicable": 7,
+     "detected": 7
+    },
+    "NC2": {
+     "applicable": 46,
+     "detected": 46
+    },
+    "NC3": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC4": {
+     "applicable": 35,
+     "detected": 35
+    },
+    "NC5": {
+     "applicable": 0,
+     "detected": 0
+    },
+    "NC6": {
+     "applicable": 46,
+     "detected": 46
+    },
+    "NC7": {
+     "applicable": 46,
+     "detected": 46
+    },
+    "NC8": {
+     "applicable": 46,
+     "detected": 46
+    }
+   }
+  },
+  "R:rep_constructed": {
+   "scenarios": 115,
+   "terms": 1526359,
+   "P07_rho_bad": 0,
+   "pairs": 345,
+   "pairs_in": 345,
+   "checked": 345,
+   "fail": 0,
+   "v1_fail": 0,
+   "v2_fail": 0,
+   "v3_fail": 0,
+   "v4_fail": 0,
+   "v5_fail": 0,
+   "v5_checked": 225,
+   "stage_values": 4650,
+   "unit_values": 7245,
+   "rel_median": 2.231468808377787e-15,
+   "rel_p99": 4.242311583493785e-14,
+   "rel_max": 4.3264429026947224e-14,
+   "upper95_failure_probability": 0.008645691142152079,
    "nc": {
     "NC1": {
      "applicable": 188,
      "detected": 188
     },
     "NC2": {
-     "applicable": 840,
-     "detected": 840
+     "applicable": 333,
+     "detected": 333
     },
     "NC3": {
-     "applicable": 0,
-     "detected": 0
+     "applicable": 12,
+     "detected": 12
     },
     "NC4": {
-     "applicable": 702,
-     "detected": 702
+     "applicable": 338,
+     "detected": 338
     },
     "NC5": {
      "applicable": 0,
      "detected": 0
     },
     "NC6": {
-     "applicable": 840,
-     "detected": 840
+     "applicable": 339,
+     "detected": 339
     },
     "NC7": {
-     "applicable": 840,
-     "detected": 840
+     "applicable": 342,
+     "detected": 342
     },
     "NC8": {
-     "applicable": 840,
-     "detected": 840
+     "applicable": 339,
+     "detected": 339
     }
    }
   },
-  "E": {
-   "scenarios": 200,
-   "terms": 2067068,
+  "R:rep_defects:outside": {
+   "scenarios": 12,
+   "terms": 148395,
    "P07_rho_bad": 0,
-   "pairs": 1000,
-   "pairs_in": 1000,
-   "checked": 1000,
+   "pairs": 24,
+   "pairs_outside_compared": 24,
+   "checked": 24,
    "fail": 0,
    "v1_fail": 0,
    "v2_fail": 0,
    "v3_fail": 0,
    "v4_fail": 0,
    "v5_fail": 0,
-   "v5_checked": 850,
-   "stage_values": 14000,
-   "unit_values": 21000,
-   "rel_median": 1.1899998912779602e-15,
-   "rel_p99": 1.346691715646963e-14,
-   "rel_max": 2.4884159815018835e-14,
-   "upper95_failure_probability": 0.0029912495450953314,
+   "v5_checked": 16,
+   "stage_values": 336,
+   "unit_values": 504,
+   "rel_median": 1.959212097479363e-15,
+   "rel_p99": 8.732285795320437e-15,
+   "rel_max": 8.732285795320437e-15,
+   "upper95_failure_probability": 0.11734615615494881,
    "nc": {
     "NC1": {
-     "applicable": 257,
-     "detected": 257
+     "applicable": 15,
+     "detected": 15
     },
     "NC2": {
-     "applicable": 1000,
-     "detected": 1000
+     "applicable": 24,
+     "detected": 24
     },
     "NC3": {
      "applicable": 0,
      "detected": 0
     },
     "NC4": {
-     "applicable": 783,
-     "detected": 783
+     "applicable": 24,
+     "detected": 24
     },
     "NC5": {
      "applicable": 0,
      "detected": 0
     },
     "NC6": {
-     "applicable": 1000,
-     "detected": 1000
+     "applicable": 24,
+     "detected": 24
     },
     "NC7": {
-     "applicable": 1000,
-     "detected": 1000
+     "applicable": 24,
+     "detected": 24
     },
     "NC8": {
-     "applicable": 1000,
-     "detected": 1000
+     "applicable": 24,
+     "detected": 24
     }
    }
   },
-  "G": {
-   "scenarios": 185,
-   "terms": 1333885,
+  "R:rep_evaluation": {
+   "scenarios": 60,
+   "terms": 756194,
    "P07_rho_bad": 0,
-   "pairs": 925,
-   "pairs_in": 925,
-   "checked": 925,
+   "pairs": 300,
+   "pairs_in": 300,
+   "checked": 300,
    "fail": 0,
    "v1_fail": 0,
    "v2_fail": 0,
    "v3_fail": 0,
    "v4_fail": 0,
    "v5_fail": 0,
-   "v5_checked": 820,
-   "stage_values": 12950,
-   "unit_values": 19425,
-   "rel_median": 5.736448796619918e-16,
-   "rel_p99": 2.3586345181040286e-14,
-   "rel_max": 4.2997104209871626e-14,
-   "upper95_failure_probability": 0.0032333907813855145,
+   "v5_checked": 205,
+   "stage_values": 4200,
+   "unit_values": 6300,
+   "rel_median": 3.1319519640485292e-15,
+   "rel_p99": 4.780095953950902e-14,
+   "rel_max": 8.270165004803332e-14,
+   "upper95_failure_probability": 0.00993608194445772,
    "nc": {
     "NC1": {
-     "applicable": 215,
-     "detected": 214
+     "applicable": 168,
+     "detected": 168
     },
     "NC2": {
-     "applicable": 925,
-     "detected": 925
+     "applicable": 300,
+     "detected": 300
     },
     "NC3": {
      "applicable": 0,
      "detected": 0
     },
     "NC4": {
-     "applicable": 780,
-     "detected": 780
+     "applicable": 300,
+     "detected": 300
     },
     "NC5": {
      "applicable": 0,
      "detected": 0
     },
     "NC6": {
-     "applicable": 925,
-     "detected": 925
+     "applicable": 300,
+     "detected": 300
     },
     "NC7": {
-     "applicable": 925,
-     "detected": 925
+     "applicable": 300,
+     "detected": 300
     },
     "NC8": {
-     "applicable": 925,
-     "detected": 925
+     "applicable": 300,
+     "detected": 300
     }
    }
   },
-  "N": {
-   "scenarios": 792,
-   "terms": 7047718,
+  "R:rep_scale_L": {
+   "scenarios": 1,
+   "terms": 281032,
    "P07_rho_bad": 0,
-   "pairs": 3960,
-   "pairs_in": 3960,
-   "checked": 3960,
+   "pairs": 2,
+   "pairs_in": 2,
+   "checked": 2,
    "fail": 0,
    "v1_fail": 0,
    "v2_fail": 0,
    "v3_fail": 0,
    "v4_fail": 0,
    "v5_fail": 0,
-   "v5_checked": 3270,
-   "stage_values": 55440,
-   "unit_values": 83160,
-   "rel_median": 1.5634545026043564e-15,
-   "rel_p99": 3.247968681203818e-14,
-   "rel_max": 8.582269873542729e-14,
-   "upper95_failure_probability": 0.0007562119763706576,
+   "v5_checked": 0,
+   "stage_values": 28,
+   "unit_values": 42,
+   "rel_median": 6.503591244063545e-14,
+   "rel_p99": 9.964990708739074e-14,
+   "rel_max": 9.964990708739074e-14,
+   "upper95_failure_probability": 0.7763932022500211,
    "nc": {
     "NC1": {
-     "applicable": 937,
-     "detected": 937
+     "applicable": 2,
+     "detected": 2
     },
     "NC2": {
-     "applicable": 3960,
-     "detected": 3960
+     "applicable": 2,
+     "detected": 2
     },
     "NC3": {
      "applicable": 0,
      "detected": 0
     },
     "NC4": {
-     "applicable": 3314,
-     "detected": 3314
+     "applicable": 2,
+     "detected": 2
     },
     "NC5": {
      "applicable": 0,
      "detected": 0
     },
     "NC6": {
-     "applicable": 3960,
-     "detected": 3960
+     "applicable": 2,
+     "detected": 2
     },
     "NC7": {
-     "applicable": 3960,
-     "detected": 3960
+     "applicable": 2,
+     "detected": 2
     },
     "NC8": {
-     "applicable": 3960,
-     "detected": 3960
+     "applicable": 2,
+     "detected": 2
     }
    }
   },
   "S": {
-   "scenarios": 181,
-   "terms": 724595,
+   "scenarios": 911,
+   "terms": 3907102,
    "P07_rho_bad": 0,
-   "pairs": 905,
-   "pairs_in": 905,
-   "checked": 905,
+   "pairs": 4555,
+   "pairs_in": 4555,
+   "checked": 4555,
    "fail": 0,
    "v1_fail": 0,
    "v2_fail": 0,
    "v3_fail": 0,
    "v4_fail": 0,
    "v5_fail": 0,
-   "v5_checked": 845,
-   "stage_values": 8695,
-   "unit_values": 19005,
-   "rel_median": 4.028774128767897e-16,
-   "rel_p99": 3.1295035289849125e-14,
-   "rel_max": 5.636263291824858e-14,
-   "upper95_failure_probability": 0.003304728730782913,
+   "v5_checked": 4150,
+   "stage_values": 44435,
+   "unit_values": 95655,
+   "rel_median": 5.571942050632036e-16,
+   "rel_p99": 3.550961123438778e-14,
+   "rel_max": 1.3330730511055477e-13,
+   "upper95_failure_probability": 0.0006574637481718826,
    "nc": {
     "NC1": {
-     "applicable": 200,
-     "detected": 200
+     "applicable": 1002,
+     "detected": 1002
     },
     "NC2": {
-     "applicable": 600,
-     "detected": 600
+     "applicable": 3125,
+     "detected": 3125
     },
     "NC3": {
-     "applicable": 140,
-     "detected": 140
+     "applicable": 900,
+     "detected": 900
     },
     "NC4": {
-     "applicable": 625,
-     "detected": 625
+     "applicable": 3177,
+     "detected": 3174
     },
     "NC5": {
      "applicable": 0,
      "detected": 0
     },
     "NC6": {
-     "applicable": 890,
-     "detected": 890
+     "applicable": 4515,
+     "detected": 4515
     },
     "NC7": {
-     "applicable": 900,
-     "detected": 900
+     "applicable": 4550,
+     "detected": 4550
     },
     "NC8": {
-     "applicable": 905,
-     "detected": 905
+     "applicable": 4530,
+     "detected": 4530
     }
    }
   }
@@ -335,24 +886,25 @@
  "errors": {},
  "examples": [],
  "total": {
-  "scenarios": 1900,
-  "terms": 15421091,
+  "scenarios": 9447,
+  "terms": 77859372,
   "P07_rho_bad": 0,
-  "pairs": 9500,
-  "pairs_in": 8660,
-  "checked": 9500,
+  "pairs": 46795,
+  "pairs_in": 42370,
+  "checked": 46793,
   "fail": 0,
   "v1_fail": 0,
   "v2_fail": 0,
   "v3_fail": 0,
   "v4_fail": 0,
   "v5_fail": 0,
-  "v5_checked": 8095,
-  "stage_values": 129025,
-  "unit_values": 199500,
-  "pairs_outside_compared": 840,
-  "rel_max": 9.69741568955322e-14,
-  "rel_p99": 3.151537925881644e-14,
+  "v5_checked": 39523,
+  "stage_values": 635549,
+  "unit_values": 982653,
+  "pairs_outside_compared": 4423,
+  "pairs_excluded": 2,
+  "rel_max": 1.4695606081092017e-13,
+  "rel_p99": 3.115148264790847e-14,
   "random_strata": [
    "N",
    "G",
@@ -361,71 +913,71 @@
    "E",
    "D"
   ],
-  "in_domain_pairs": 8660,
+  "in_domain_pairs": 41125,
   "in_domain_failures": 0,
-  "upper95_failure_probability_in_domain": 0.0003458676882432954,
-  "scenarios_with_in_domain_pairs": 1732,
+  "upper95_failure_probability_in_domain": 7.284190066414453e-05,
+  "scenarios_with_in_domain_pairs": 8225,
   "scenarios_failing": 0,
-  "upper95_failure_probability_per_scenario": 0.0017281426103097353,
+  "upper95_failure_probability_per_scenario": 0.00036415644776066625,
   "in_domain_failures_in_band": 0,
   "in_domain_failures_outside_band": 0,
   "failures_band_detail": [],
-  "upper95_failure_probability_D_prime": 0.0003458676882432954,
+  "upper95_failure_probability_D_prime": 7.284190066414453e-05,
   "nc": {
    "NC1": {
-    "applicable": 2282,
-    "detected": 2281
+    "applicable": 11590,
+    "detected": 11587
    },
    "NC2": {
-    "applicable": 9195,
-    "detected": 9195
+    "applicable": 45347,
+    "detected": 45347
    },
    "NC3": {
-    "applicable": 140,
-    "detected": 140
+    "applicable": 923,
+    "detected": 923
    },
    "NC4": {
-    "applicable": 7783,
-    "detected": 7783
+    "applicable": 38656,
+    "detected": 38649
    },
    "NC5": {
     "applicable": 0,
     "detected": 0
    },
    "NC6": {
-    "applicable": 9485,
-    "detected": 9485
+    "applicable": 46747,
+    "detected": 46747
    },
    "NC7": {
-    "applicable": 9495,
-    "detected": 9495
+    "applicable": 46785,
+    "detected": 46785
    },
    "NC8": {
-    "applicable": 9500,
-    "detected": 9500
+    "applicable": 46760,
+    "detected": 46760
    }
   }
  },
- "laplace_max_rel": 1.791533680199186e-14,
+ "laplace_max_rel": 2.4677606309819454e-14,
  "fourier_conjugate_max": 0.0,
  "fourier64_rel": {
   "T>=10": {
-   "n": 7700,
-   "median": 0.00471632760073476,
-   "p95": 0.13005316523402094,
-   "max": 0.4855685036039143
+   "n": 38261,
+   "median": 0.00488089481027418,
+   "p95": 0.12846892597706291,
+   "max": 9.266243351336154e+305
   },
   "T<1": {
-   "n": 1017,
-   "median": 2.30993188437627,
-   "p95": 7.057029460895298,
-   "max": 103.93181900491606
+   "n": 4998,
+   "median": 2.281252333863014,
+   "p95": 7.014929380310857,
+   "max": 266.28933224971445
   },
   "1<=T<10": {
-   "n": 783,
-   "median": 0.12009935294491328,
-   "p95": 0.8216171589699,
-   "max": 2.437671819523489
+   "n": 3534,
+   "median": 0.11361837722731671,
+   "p95": 0.7182718668138838,
+   "max": 9.266242988169303
   }
  }
 }
