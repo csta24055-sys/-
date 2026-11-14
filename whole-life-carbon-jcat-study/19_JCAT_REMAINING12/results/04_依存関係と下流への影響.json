@@ -49,6 +49,52 @@
     "changed_cells": 16,
     "within_8_ulp": 16,
     "larger": 0
+   },
+   "full_closure": {
+    "consumer_closure": 1487323,
+    "levels": 98,
+    "cells_beyond_level_30": 271,
+    "downstream_equations": 169,
+    "cells_per_level_after_30": [
+     [
+      3,
+      1
+     ],
+     [
+      4,
+      67
+     ]
+    ]
+   },
+   "full_closure_reevaluation": {
+    "identity": {
+     "substituted": 0,
+     "closure": 1487323,
+     "passes": [
+      1487323,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 16,
+     "larger": 0
+    },
+    "necessity_test": {
+     "substituted": 1504,
+     "closure": 1487323,
+     "passes": [
+      1487323,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 16,
+     "larger": 0
+    },
+    "within_8_ulp_sets": {
+     "both": 16,
+     "identity_only": 0,
+     "necessity_only": 0,
+     "larger_in_necessity_not_in_identity": 0
+    }
    }
   },
   "EQ-0181": {
@@ -116,6 +162,36 @@
     "cells_beyond_level_30": 0,
     "downstream_equations": 4,
     "cells_per_level_after_30": []
+   },
+   "full_closure_reevaluation": {
+    "identity": {
+     "substituted": 0,
+     "closure": 8,
+     "passes": [
+      8,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 0,
+     "larger": 0
+    },
+    "necessity_test": {
+     "substituted": 36,
+     "closure": 8,
+     "passes": [
+      8,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 0,
+     "larger": 0
+    },
+    "within_8_ulp_sets": {
+     "both": 0,
+     "identity_only": 0,
+     "necessity_only": 0,
+     "larger_in_necessity_not_in_identity": 0
+    }
    }
   },
   "EQ-0373": {
@@ -204,6 +280,53 @@
     "changed_cells": 48,
     "within_8_ulp": 48,
     "larger": 0
+   },
+   "full_closure": {
+    "consumer_closure": 1486715,
+    "levels": 98,
+    "cells_beyond_level_30": 271,
+    "downstream_equations": 163,
+    "cells_per_level_after_30": [
+     [
+      3,
+      1
+     ],
+     [
+      4,
+      67
+     ]
+    ]
+   },
+   "full_closure_reevaluation": {
+    "identity": {
+     "substituted": 0,
+     "closure": 1486715,
+     "passes": [
+      1486715,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 16,
+     "larger": 0
+    },
+    "necessity_test": {
+     "substituted": 14,
+     "closure": 1486715,
+     "passes": [
+      1486715,
+      3,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 48,
+     "larger": 0
+    },
+    "within_8_ulp_sets": {
+     "both": 16,
+     "identity_only": 0,
+     "necessity_only": 32,
+     "larger_in_necessity_not_in_identity": 0
+    }
    }
   },
   "EQ-0471": {
@@ -241,6 +364,36 @@
     "cells_beyond_level_30": 0,
     "downstream_equations": 21,
     "cells_per_level_after_30": []
+   },
+   "full_closure_reevaluation": {
+    "identity": {
+     "substituted": 0,
+     "closure": 264616,
+     "passes": [
+      264616,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 12,
+     "larger": 0
+    },
+    "necessity_test": {
+     "substituted": 5,
+     "closure": 264616,
+     "passes": [
+      264616,
+      0
+     ],
+     "converged": true,
+     "within_8_ulp": 12,
+     "larger": 0
+    },
+    "within_8_ulp_sets": {
+     "both": 12,
+     "identity_only": 0,
+     "necessity_only": 0,
+     "larger_in_necessity_not_in_identity": 0
+    }
    }
   },
   "EQ-0553": {
