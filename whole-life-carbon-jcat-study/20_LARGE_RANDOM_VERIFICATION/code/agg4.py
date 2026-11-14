@@ -142,7 +142,15 @@ def main(cdir):
         d = dict(c)
         rs = rels[st]
         d["rel_median"], d["rel_p99"], d["rel_max"] = statistics.median(rs) if rs else None, q(rs, 0.99), max(rs) if rs else None
-        d["upper95_failure_probability"] = None if st.startswith("R:") else bound(c["checked"], c["fail"])
+        d["upper95_failure_probability"] = None if (st.startswith("R:") or st == "D") else bound(c["checked"], c["fail"])   # cases as if independent
+        if not (st.startswith("R:") or st == "D"):     # per stratum, scenario level (holds without independence of the periods)
+            scn = [r for r in recs if r.get("stratum") == st and not r.get("scenario_error")
+                   and any(p.get("in_domain") and "ref_error" not in p for p in r.get("pairs", []))]
+            nf = sum(1 for r in scn if any(p.get("in_domain") and "ref_error" not in p and
+                                           ((not p["v1"]) or p["v2_bad"] or p["v3_bad"] or (not p["v4"]) or (p.get("v5") is False))
+                                           for p in r["pairs"]))
+            d["scenarios_in_domain"], d["scenarios_failing"] = len(scn), nf
+            d["upper95_failure_probability_per_scenario"] = bound(len(scn), nf)
         d["nc"] = {k: dict(applicable=nc_app[st][k], detected=nc_det[st][k]) for k in NCS}
         out["strata"][st] = d
         tot.update(c)

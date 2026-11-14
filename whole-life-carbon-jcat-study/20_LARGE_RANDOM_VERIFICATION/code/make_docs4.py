@@ -50,20 +50,21 @@ def main():
     L.append("| シナリオの準備・評価の失敗（例外） | %d |" % t.get("scenario_errors", 0))
     L.append("")
     L.append("## 2. 層ごと\n")
-    L.append("| 層 | シナリオ | ケース | 比べたケース | 失敗 | V1 | V2 | V3 | V4 | V5（照合したケース） | 相対差 中央値 | 99％点 | 最大 | 95％ 上限 |")
-    L.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+    L.append("| 層 | シナリオ | ケース | 比べたケース | 失敗 | V1 | V2 | V3 | V4 | V5（照合したケース） | 相対差 中央値 | 99％点 | 最大 | 95％ 上限（シナリオあたり） | 参考：ケースを独立とみなした値 |")
+    L.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     for k in ["N", "B", "G", "E", "S", "D"] + sorted(x for x in s["strata"] if x.startswith("R:")):
         if k not in s["strata"]:
             continue
         v = s["strata"][k]
-        L.append("| %s | %d | %d | %d | %d | %d | %d | %d | %d | %d（%d） | %s | %s | %s | %s |" % (
+        L.append("| %s | %d | %d | %d | %d | %d | %d | %d | %d | %d（%d） | %s | %s | %s | %s | %s |" % (
             (k + " " + NAMES.get(k, "")) if k in NAMES else k, v["scenarios"], v.get("pairs", 0), v.get("checked", 0), v.get("fail", 0), v.get("v1_fail", 0), v.get("v2_fail", 0),
             v.get("v3_fail", 0), v.get("v4_fail", 0), v.get("v5_fail", 0), v.get("v5_checked", 0), e(v.get("rel_median")), e(v.get("rel_p99")), e(v.get("rel_max")),
-            e(v.get("upper95_failure_probability"))))
+            e(v.get("upper95_failure_probability_per_scenario")), e(v.get("upper95_failure_probability"))))
     L.append("")
     L.append("- D 層は基準計算の定義域の外（欠損・異常値）で、定義域の絞り込みなしで比べた（第 11 章の欠陥集合と同じ扱い）。上限の計算からは除いた。")
-    L.append("- `R:` の行は継承した第 11 章の 10 集合を同じ照合で再実行したもの（定義域の外として除いた 2 組を含めて %d ケース）。宣言した分布の標本ではない（開発に使った集合、作った特別な条件）ので、上限は計算しない（—）。`:outside` は定義域の外の集合。" % sum(s["strata"][k].get("pairs", 0) for k in s["strata"] if k.startswith("R:")))
-    L.append("- 層ごとの上限は、その層のケースを独立とみなした値（1 節の注意と同じ）。")
+    L.append("- `R:` の行は継承した第 11 章の 10 集合を同じ照合で再実行したもの（定義域の外として除いた %d 組を含めて %d ケース）。宣言した分布の標本ではない（開発に使った集合、作った特別な条件）ので、上限は計算しない（—）。`:outside` は定義域の外の集合。" % (
+        sum(s["strata"][k].get("pairs_excluded", 0) for k in s["strata"] if k.startswith("R:")), sum(s["strata"][k].get("pairs", 0) for k in s["strata"] if k.startswith("R:"))))
+    L.append("- 層ごとの上限は、シナリオあたりの値（成り立つ上限）と、ケースを独立とみなした参考の値（1 節の注意と同じ。成り立つ上限ではない）。D 層は上限を計算しない。")
     L.append("")
     L.append("## 3. 負の対照（意図的に誤った式）\n")
     L.append("宣言した分布の定義域の内側のケース（D 層と `R:` を除く）。カッコ内は D 層と `R:` を含めた全ケース。\n")

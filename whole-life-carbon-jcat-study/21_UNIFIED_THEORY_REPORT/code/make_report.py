@@ -53,7 +53,9 @@ def main():
     n_sets_pairs = sum(s4["strata"][k].get("pairs", 0) for k in sets_r)
     n_sets_fail = sum(s4["strata"][k].get("fail", 0) for k in sets_r)
     n_sets_excl = sum(s4["strata"][k].get("pairs_excluded", 0) for k in sets_r)
-    s1_bad = sum((s1.get("exact_failures") or {}).values())
+    exf = s1.get("exact_failures") or {}
+    s1_bad = sum(exf.get(k, 0) for k in ("th0_bad", "th2_terms_bad", "th2_left_continuity_bad", "th4_decomp_bad", "th4_rate_bad",
+                                         "th4_direct_sum_bad", "th4_terminal_form_bad", "th5_increment_bad"))
     s2_bad = sum(s2.get(k, 0) for k in ("R1_partition_bad", "R2_recomposition_bad", "R1_instances_bad", "R3_annual_bad", "P07_bad"))
     r_bad = (cells - cells_ok) + (bnd - bnd_ok) + (rnd - rnd_ok)
     sl_pairs = {(x["label"], x["K"]) for x in sl}
@@ -75,9 +77,9 @@ def main():
     A("2. **時間特性.** $C(T)$ は評価期間 $T$ の区分一次関数で、跳びは事象の切り替え点、年の境では連続（丸めの大きさと、切り替え点が年セルの終わりを越える事象による初期化を除く）。$C(T) = M([0,T]) + Z(T)$（実時間の測度＋終わりの項）で、$dC/dT$ は排出率ではない。ラプラス変換と有限の台のフーリエ変換は厳密、フーリエ級数の部分和は近似（512 項でも最大誤差の中央値 %.1f％）。DMD の前提（時不変の線形系）は成り立たない（17 章 03〜05）。" % (100 * s1["fourier_partial_sums"]["512"]["max_rel_all_median"]))
     A("3. **動的 LCA.** 70 単位の骨格を保ったまま 17 の工程関数 $e_i(t)$ に分け、$C_{\\mathrm{dyn}}(T) = \\int_{[0,T]}e_{\\mathrm{total}} + Z(T) = C_{70}(T)$ を証明し、%s シナリオ・%s 点で有理数として照合した（不一致 %s）。施工・製造・解体の時期は 70 単位から導けず、仮定の変種でだけ扱う。工程間の関係は比例・ゲート・二時刻の核で、時不変の畳み込みは比例の場合だけ（18 章）。" % (e(s2.get("n_scenarios")), e(s2.get("periods_checked")), e(s2_bad)))
     A("4. **原版の残り 12 式.** すべて 2 構造で厳密に変換し、除外は 0（「変換できなかったから不要」とした式はない）。全セル %s／%s、境界条件 %s／%s、無作為ケース %s／%s 値が一致（19 章）。" % (e(cells_ok), e(cells), e(bnd_ok), e(bnd), e(rnd_ok), e(rnd)))
-    A("5. **大規模ランダム検証.** 宣言した分布から %s シナリオ・%s ケース。定義域の内側の %s ケース（%s シナリオ）で失敗 %s。失敗の確率の 95％ 片側上限は、シナリオあたり（したがってケースあたりにも成り立つ）%s。ケースを独立とみなした値 %s は、同じシナリオの 5 ケースが独立でないので参考にとどめる。帯 $(K,\\mathrm{sw}(\\tau)]$ に入りうる %s ケースを除いた $\\mathcal{D}'$ では、シナリオあたり %s。継承した第 11 章の 10 集合の再実行（%s ケース。定義域の外 %s を含む）で失敗 %s（上限は付けない：宣言した分布の標本ではない。20 章）。" % (
+    A("5. **大規模ランダム検証.** 宣言した分布から %s シナリオ・%s ケース。定義域の内側の %s ケース（%s シナリオ）で失敗 %s。失敗の確率の 95％ 片側上限は、シナリオあたり（したがってケースあたりにも成り立つ）%s。ケースを独立とみなした値 %s は、同じシナリオの 5 ケースが独立でないので参考にとどめる。帯 $(K,\\mathrm{sw}(\\tau)]$ に入りうる %s ケースを除いた $\\mathcal{D}'$ では、シナリオあたり %s。継承した第 11 章の 10 集合の再実行：%s ケースのうち定義域の外として除いた %s を除く %s ケース（定義域の外の欠陥集合のケースは絞り込みなしで比べた）で失敗 %s（上限は付けない：宣言した分布の標本ではない。20 章）。" % (
         e(n4s), e(n4p), e(t4.get("in_domain_pairs")), e(t4.get("scenarios_with_in_domain_pairs")), e(t4.get("in_domain_failures")), e(t4.get("upper95_failure_probability_per_scenario")),
-        e(t4.get("upper95_failure_probability_in_domain")), e(t4.get("in_domain_pairs_maybe_in_band")), e(t4.get("upper95_failure_probability_D_prime_per_scenario")), e(n_sets_pairs), e(n_sets_excl), e(n_sets_fail)))
+        e(t4.get("upper95_failure_probability_in_domain")), e(t4.get("in_domain_pairs_maybe_in_band")), e(t4.get("upper95_failure_probability_D_prime_per_scenario")), e(n_sets_pairs), e(n_sets_excl), e(n_sets_pairs - n_sets_excl), e(n_sets_fail)))
     A("6. **見つかった限界.** 第 11 章の定義域 `valid_domain` は、切り替え点が年セルの終わり $K$ を越える事象（整数の時刻と、整数の相対 1e-9 程度の近く（すぐ下・すぐ上）の浮動小数の時刻）の直後の細い帯 $(K,\\mathrm{sw}(\\tau)]$ を除かない。その帯で正準形と統一系は基準計算と異なりうる（整数の時刻での実測：（シナリオ、$K$）の %d 組のうち %d 組で異なった。17 章 07 の 6 節）。主張はこの帯を除いた $\\mathcal{D}'$ に限る。" % (len(sl_pairs), len(sl_badp)))
     A("")
     A("## 2. 最終成果物 14 項目")
@@ -98,7 +100,7 @@ def main():
         ("11", "原版残り 12 式の処理・除外判断", "[19](../19_JCAT_REMAINING12/README.md)", "12 式すべて厳密に変換、除外 0、依存関係と必要性（静的な範囲）"),
         ("12", "大規模ランダム検証結果", "[20/02](../20_LARGE_RANDOM_VERIFICATION/02_結果.md)", "層ごとの結果、負の対照、近似の誤差"),
         ("13", "数学的証明と統計的な成立範囲", "17/03、18/04・05、[20/01](../20_LARGE_RANDOM_VERIFICATION/01_抽出分布と方法.md)、本書 3 節", "証明・数値検証・統計的確認の区別"),
-        ("14", "再現可能なコード・グラフ・研究報告書", "各章の `code/`、`figures/`、本書", "すべて `python3 -B` で再実行できる。図は SVG と数値の CSV"),
+        ("14", "再現可能なコード・グラフ・研究報告書", "各章の `code/`、`figures/`、本書", "`python3 -B` で再実行できる（19 章の原版を使う照合・依存関係は非公開の資料の手順で。公開分は `tools/test12.py` と件数の集計）。図は SVG と数値の CSV"),
     ]
     for r in rows:
         A("| %s | %s | %s | %s |" % r)
@@ -124,7 +126,8 @@ def main():
     A("| 検証 | 件数 | 不一致 | 水準 |")
     A("|---|---|---|---|")
     A("| 正準形 vs 基準計算（SUM-03、段階 %s 値、単位 %s 値） | %s 組 | %s | F（相対 1e-9） |" % (e(vc.get("n_stage")), e(vc.get("n_unit")), e(vc.get("n_pairs")), e(vc.get("total_vs_ref_bad"))))
-    A("| 定理の厳密な照合（区切り区間 %s、事象の節点 %s） | %s シナリオ | %s | E |" % (e(cnt.get("pieces")), e(cnt.get("event_knots")), e(s1.get("n_analysed")), e(s1_bad)))
+    A("| 定理の照合（節点形と、別に作った核の和・実時間の測度との比較：TH-0 の中点 %s 点、TH-2 の事象の前後 %s 事象、TH-4・TH-5 は全区間・全年。節点形どうしの TH-1〜TH-3 は実装の確認で、ここに数えない：17 章 07 の 2.2） | %s シナリオ | %s | E |" % (
+        e(cnt.get("th0_points")), e(cnt.get("th2_events_with_terms")), e(s1.get("n_analysed")), e(s1_bad)))
     if sup:
         A("| 核の和そのものに対する照合（補足） | %s 関数 | %s | E |" % (e(sup.get("n_distinct_functions")), e(sum(v for k, v in (sup.get("counts") or {}).items() if k.endswith("bad")))))
     if ue:
@@ -141,7 +144,7 @@ def main():
             e(sum(v["necessity_test"]["within_8_ulp"] for v in d19r.values())), e(sum(v["within_8_ulp_sets"]["both"] for v in d19r.values()))))
     lj = s1.get("lattice_jumps")
     if lj:
-        A("| 格子の節点の跳びの分類（丸め／窓の中で数えられない交換による初期化） | %s シナリオ、%s 跳び | 説明のつかない跳び %s | E（大きさは F） |" % (
+        A("| 格子の節点の跳びの分類（丸め／窓の中で数えられない交換による初期化） | %s シナリオ、%s 跳び | 説明のつかない跳び %s | 測定（跳びは有理数で厳密に計算） |" % (
             e(lj["n_analysed"]), e(lj["rounding_near_event"] + lj["rounding_away"] + lj["reset"] + lj["unexplained"]), e(lj["unexplained"])))
     A("")
     A("### 3.3 統計的に高い信頼度で確認できたこと（S）")
@@ -171,7 +174,7 @@ def main():
         "TH-11 の傾向の傾き $\\beta$ は数値で求めていない。X-04 の `by_gas`・X-05 の内訳は区分一次であることだけを確かめ、重みごとの式は照合していない。X-10 は照合していない。",
         "節点形は保存した係数のままでは最小でない。$C$ が定める量の数は、区切りの位置を別にして $2+\\sum([\\text{傾きの変化}\\ne0]+[\\text{跳び}\\ne0])$（17 章 05 の 3 節）。これが最小であることは、節点ごとに係数を持つ表現の中でも、周期ブロック形を含めても、証明していない。",
         "冷媒の補充なしの減衰は、モデルの浮動小数の状態では低い次数の漸化式にならない（17 章 04 の 2.5）。",
-        "12 式の必要性の解析は静的な参照の範囲で、`OFFSET` の動的な参照・マクロは扱っていない。8 式を表示専用とは証明していない（除外もしていない）。必要性の検査は基準の入力（原版の雛形の値）での結果。EQ-0417 では 32 セルがテキストの変更でだけ 8 ulp 以内で変わり、その仕組みは特定していない（19 章 01 の 3 節）。",
+        "12 式の必要性の解析は静的な参照の範囲で、`OFFSET` の動的な参照・マクロ・グラフ・条件付き書式・入力の検証規則は扱っていない。8 式を表示専用とは証明していない（除外もしていない）。必要性の検査は基準の入力（原版の雛形の値）での結果。EQ-0417 では 32 セルがテキストの変更でだけ 8 ulp 以内で変わり、その仕組みは特定していない（19 章 01 の 3 節）。",
         "大規模検証で、同じシナリオの 5 つの評価期間のケースは独立でない（成り立つ上限はシナリオ単位）。負の対照 NC5 は検出の力を持たない。G 層は数量の一部だけに倍率を掛けた（20 章 01・02）。",
         "大規模検証の基準計算と理想方程式は別のコードだが、理想方程式の振幅は第 11 章の仕様から取るので、仕様と基準計算に共通の誤解があれば照合では見つからない。",
         "冷媒の結合は二時刻の核で書けるが、交換の列について非線形（18 章 03）。",
