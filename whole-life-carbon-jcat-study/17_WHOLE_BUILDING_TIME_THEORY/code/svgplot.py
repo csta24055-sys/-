@@ -37,8 +37,10 @@ def fmt(v):
 
 
 class Chart:
-    def __init__(self, w=760, h=420, title="", xlabel="", ylabel="", logx=False, logy=False):
+    def __init__(self, w=760, h=420, title="", xlabel="", ylabel="", logx=False, logy=False, xcats=None):
+        """xcats: category labels for x = 1..n (categorical axis: ticks at the integers, half a step of padding)."""
         self.w, self.h, self.title, self.xlabel, self.ylabel = w, h, title, xlabel, ylabel
+        self.xcats = xcats
         self.logx, self.logy = logx, logy
         self.ml, self.mr, self.mt, self.mb = 78, 150, 52, 56
         self.items = []
@@ -49,8 +51,9 @@ class Chart:
     def _ty(self, v):
         return math.log10(v) if self.logy else v
 
-    def line(self, xs, ys, label, color=None, step=False, width=2):
-        self.items.append(("line", xs, ys, label, color, step, width))
+    def line(self, xs, ys, label, color=None, step=False, width=2, dots=False):
+        """dots=True: markers only (no connecting line), for categorical x."""
+        self.items.append(("line", xs, ys, label, color, step, width, dots))
 
     def bars(self, xs, stacks, labels, width=0.8):
         """stacks: list of series (same length as xs), stacked in order."""
@@ -69,6 +72,8 @@ class Chart:
                 neg = [sum(min(s[i], 0) for s in stacks) for i in range(len(xs))]
                 ys_all += pos + neg + [0]
         x0, x1 = min(xs_all), max(xs_all)
+        if self.xcats:
+            x0, x1 = 0.5, len(self.xcats) + 0.5
         y0, y1 = min(ys_all), max(ys_all)
         if not self.logy:
             y0 = min(y0, 0)
@@ -94,6 +99,9 @@ class Chart:
         if self.logx:
             xt = [math.log10(m * 10 ** k) for k in range(math.floor(x0) - 1, math.ceil(x1) + 1) for m in (1, 2, 5) if x0 - 1e-9 <= math.log10(m * 10 ** k) <= x1 + 1e-9]
             xlab = ["%g" % round(10 ** t, 6) for t in xt]
+        elif self.xcats:
+            xt = list(range(1, len(self.xcats) + 1))
+            xlab = list(self.xcats)
         else:
             xt = [t for t in nice_ticks(x0, x1, 8) if x0 <= t <= x1]
             xlab = [fmt(t) for t in xt]
@@ -130,7 +138,7 @@ class Chart:
         for it in self.items:
             if it[0] != "line":
                 continue
-            _, xs, ys, lab, color, step, width = it
+            _, xs, ys, lab, color, step, width, dots = it
             color = color or SERIES[ci]
             ci += 1
             legend.append((lab, color))
@@ -140,7 +148,11 @@ class Chart:
                 if step and pts:
                     pts.append("%.2f,%.2f" % (px, float(pts[-1].split(",")[1])))
                 pts.append("%.2f,%.2f" % (px, py))
-            o.append("<polyline points='%s' fill='none' stroke='%s' stroke-width='%g' stroke-linejoin='round'/>" % (" ".join(pts), color, width))
+            if dots:                                       # markers with a 2 px surface ring
+                for x, y in zip(xs, ys):
+                    o.append("<circle cx='%.2f' cy='%.2f' r='5' fill='%s' stroke='%s' stroke-width='2'/>" % (X(self._tx(x)), Y(self._ty(y)), color, SURFACE))
+            else:
+                o.append("<polyline points='%s' fill='none' stroke='%s' stroke-width='%g' stroke-linejoin='round'/>" % (" ".join(pts), color, width))
             ends.append([Y(self._ty(ys[-1])), lab, color])
         # direct labels at line ends (de-overlapped), legend at the right
         ends.sort()

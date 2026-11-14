@@ -1,8 +1,16 @@
 """Stage 4: aggregate the chunk files into results/stage4_summary.json (and print the headline numbers).
 
-Statistical statement (only for the DECLARED sampling distribution of gen4.py): if N independent pairs show no
-failure, the one-sided 95 % upper confidence bound of the failure probability per pair is p <= 1 - 0.05^(1/N)
+Statistical statement (only for the DECLARED sampling distribution of gen4.py): if N independent trials show no
+failure, the one-sided 95 % upper confidence bound of the failure probability per trial is p <= 1 - 0.05^(1/N)
 (exact binomial / Clopper-Pearson with 0 failures; about 3/N). It says nothing about inputs outside the distribution.
+The scenarios are independent draws; the 5 periods of one scenario are NOT independent.  The bound that holds without
+any assumption on that dependence is the scenario-level one (a scenario fails if any of its cases fails; the per-case
+failure probability is at most the per-scenario one).  The per-case bound over all cases is reported only as the value
+an independence assumption would give.  No bound is computed for the inherited sets of chapter 11 (R:), which are not
+samples of the declared distribution.
+Cases whose T could lie in a band (K, sw(tau)] (chapter 17, D minus D') are counted from T alone: a band lies inside
+(K, K(1 + 3e-9)] for an integer K >= 1, so a case with T outside every such interval is in D'.  The D' bounds leave
+those cases out (conservative: some of them are not in a band).
 
 Usage (from this folder): python3 -B agg4.py [chunk dir]
 """
@@ -59,6 +67,13 @@ def sliver_of(i, T):
     return out
 
 
+def maybe_band(T):
+    """Necessary condition for T to lie in a band (K, sw(tau)] after an event whose switch point passes the end K of its
+    year cell: K < T <= K (1 + 3e-9) for an integer K >= 1 (sw(tau) <= K / fl(1 - eps)^2 for such events)."""
+    K = math.floor(T)
+    return K >= 1 and T > K and T <= K * (1.0 + 3e-9)
+
+
 def q(xs, p):
     xs = sorted(xs)
     return xs[min(len(xs) - 1, max(0, int(math.ceil(p * len(xs))) - 1))] if xs else None
@@ -110,7 +125,11 @@ def main(cdir):
             if fail and len(examples) < 30:
                 examples.append(dict(i=r["i"], stratum=st, T=p["T"], v1=p["v1"], rel=p["rel"], v2=p["v2_bad"], v3=p["v3_bad"], v4=p["v4"], v5=p.get("v5")))
             rels[st].append(p["rel"])
-            if p.get("fourier64_rel") is not None:
+            if st.startswith("R:") or st == "D":
+                pass                                   # Fourier statistics: declared random strata in the domain only
+            elif p.get("fourier64_rel") is not None and p["fourier64_rel"] > 1e100:
+                c["fourier_C_zero"] += 1               # C(T) = 0: the relative error is undefined (run4 divides by 1e-300)
+            elif p.get("fourier64_rel") is not None:
                 band = "T<1" if p["T"] < 1 else "1<=T<10" if p["T"] < 10 else "T>=10"
                 four[band].append(p["fourier64_rel"])
             for k in NCS:
@@ -123,7 +142,7 @@ def main(cdir):
         d = dict(c)
         rs = rels[st]
         d["rel_median"], d["rel_p99"], d["rel_max"] = statistics.median(rs) if rs else None, q(rs, 0.99), max(rs) if rs else None
-        d["upper95_failure_probability"] = bound(c["checked"], c["fail"])
+        d["upper95_failure_probability"] = None if st.startswith("R:") else bound(c["checked"], c["fail"])
         d["nc"] = {k: dict(applicable=nc_app[st][k], detected=nc_det[st][k]) for k in NCS}
         out["strata"][st] = d
         tot.update(c)
@@ -139,7 +158,30 @@ def main(cdir):
     out["total"]["random_strata"] = rand
     out["total"]["in_domain_pairs"] = in_dom
     out["total"]["in_domain_failures"] = fail_in
-    out["total"]["upper95_failure_probability_in_domain"] = bound(in_dom, fail_in)
+    out["total"]["upper95_failure_probability_in_domain"] = bound(in_dom, fail_in)        # only if cases were independent
+    # D': cases whose T cannot lie in a band (necessary condition from T alone)
+    isfail = lambda p: (not p["v1"]) or p["v2_bad"] or p["v3_bad"] or (not p["v4"]) or (p.get("v5") is False)
+    mb = [(r, p) for r in recs if not str(r.get("stratum", "")).startswith("R:") for p in r.get("pairs", [])
+          if p.get("in_domain") and "ref_error" not in p and maybe_band(p["T"])]
+    out["total"]["in_domain_pairs_maybe_in_band"] = len(mb)
+    out["total"]["in_domain_failures_maybe_in_band"] = sum(1 for r, p in mb if isfail(p))
+    out["total"]["maybe_in_band_by_stratum"] = dict(collections.Counter(r.get("stratum") for r, p in mb))
+    dp_n = in_dom - len(mb)
+    dp_f = fail_in - out["total"]["in_domain_failures_maybe_in_band"]
+    out["total"]["D_prime_pairs"] = dp_n
+    out["total"]["D_prime_failures"] = dp_f
+    out["total"]["upper95_failure_probability_D_prime_if_independent"] = bound(dp_n, dp_f)
+    sn = sf = 0
+    for r in recs:
+        if str(r.get("stratum", "")).startswith("R:") or r.get("scenario_error") or r.get("stratum") == "D":
+            continue
+        ps = [p for p in r.get("pairs", []) if p.get("in_domain") and "ref_error" not in p and not maybe_band(p["T"])]
+        if ps:
+            sn += 1
+            sf += any(isfail(p) for p in ps)
+    out["total"]["D_prime_scenarios"] = sn
+    out["total"]["D_prime_scenarios_failing"] = sf
+    out["total"]["upper95_failure_probability_D_prime_per_scenario"] = bound(sn, sf)
     # scenario level (the 5 periods of one scenario are not independent): a scenario fails if any in-domain pair fails
     scn_n = scn_f = 0
     for r in recs:
@@ -153,7 +195,7 @@ def main(cdir):
     out["total"]["scenarios_with_in_domain_pairs"] = scn_n
     out["total"]["scenarios_failing"] = scn_f
     out["total"]["upper95_failure_probability_per_scenario"] = bound(scn_n, scn_f)
-    # failures inside the band (K, sw(K)] after an integer-time event (D minus D', chapter 17) are reported apart
+    # failures inside a band (K, sw(tau)] (D minus D', chapter 17) are reported apart (exact test, scenario regenerated)
     sl = []
     for r in recs:
         if str(r.get("stratum", "")).startswith("R:"):
@@ -165,8 +207,10 @@ def main(cdir):
     out["total"]["in_domain_failures_in_band"] = n_band
     out["total"]["in_domain_failures_outside_band"] = len(sl) - n_band
     out["total"]["failures_band_detail"] = sl[:50]
-    out["total"]["upper95_failure_probability_D_prime"] = bound(in_dom - n_band, len(sl) - n_band)
+    out["total"]["fourier_C_zero_random"] = sum(by[s]["fourier_C_zero"] for s in rand)
     out["total"]["nc"] = {k: dict(applicable=sum(nc_app[s][k] for s in nc_app), detected=sum(nc_det[s][k] for s in nc_det)) for k in NCS}
+    rin = [s for s in rand if s != "D"]
+    out["total"]["nc_random_in_domain"] = {k: dict(applicable=sum(nc_app[s][k] for s in rin), detected=sum(nc_det[s][k] for s in rin)) for k in NCS}
     out["laplace_max_rel"] = max(lap) if lap else None
     out["fourier_conjugate_max"] = max(conj) if conj else None
     out["fourier64_rel"] = {b: dict(n=len(v), median=statistics.median(v), p95=q(v, 0.95), max=max(v)) for b, v in four.items()}

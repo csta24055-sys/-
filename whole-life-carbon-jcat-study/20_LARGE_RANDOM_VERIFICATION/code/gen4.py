@@ -7,7 +7,10 @@ from random.Random(SEED4 * 1_000_003 + i) (deterministic, independent of the ord
 Strata (probabilities):
   N  normal               0.40   valid scenarios like the verification population (size S 0.8 / M 0.2)
   B  boundary-heavy       0.20   valid scenarios; periods at and next to integers, event times, 0+ and H
-  G  magnitudes           0.10   valid scenarios with every quantity and annual profile scaled by 10^U(-6, 6)
+  G  magnitudes           0.10   valid scenarios with material / equipment quantities, transport and end-of-life masses,
+                                 refrigerant charges and the operation and water / waste annual profiles scaled by
+                                 10^U(-6, 6) (NOT scaled: construction-site energy / fuels / waste (A5), demolition
+                                 activities (C1), waste hauls, summary quantities, floor areas, costs)
   E  coincident events    0.10   integer / divisor service lives from {10, 20, 30}, rebuild cycle 30, explicit lists
   S  special options      0.10   random subsets of the life-cycle stages in scope, CO2-only, explicit event lists,
                                  refrigerant change lists, top-up on/off, profile and grid kinds
@@ -108,7 +111,9 @@ def period_recipe(r: random.Random, st: str) -> list:
 
 
 def scale_scenario(scn, s: float):
-    """Every quantity and annual profile multiplied by s (non-negative scaling keeps all physical constraints)."""
+    """Material / equipment quantities, transport and end-of-life masses, refrigerant charges and the operation and
+    water / waste profiles multiplied by s (non-negative scaling keeps all physical constraints).  Construction-site
+    inputs (A5), demolition activities (C1), waste hauls, summary quantities, floor areas and costs are not scaled."""
     c = copy.deepcopy(scn)
     for row in c.materials:
         if row.quantity is not None:
