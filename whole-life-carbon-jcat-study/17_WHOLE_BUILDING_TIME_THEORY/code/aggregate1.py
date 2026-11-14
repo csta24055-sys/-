@@ -25,8 +25,8 @@ def q(xs, p):
 
 def main():
     runs = []
-    for f in sorted(glob.glob(os.path.join(RES, "tc_*.json"))):
-        runs += [r for r in json.load(open(f))]
+    for f in ("tc_constructed.json", "tc_edge_special.json", "tc_population.json"):    # timechar.py runs (not tc_terms.json)
+        runs += [r for r in json.load(open(os.path.join(RES, f)))]
     ok = [r for r in runs if "th0123" in r]
     out = dict(n_scenarios=len(runs), n_analysed=len(ok), prepare_errors=[r for r in runs if "th0123" not in r])
     # exact identities
