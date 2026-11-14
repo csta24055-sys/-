@@ -23,6 +23,8 @@
 | 10 | [10_TRANSFORM_STUDY/README.md](10_TRANSFORM_STUDY/README.md) | 数学的変換による計算体系の再構成の研究（独立概念モデル、架空データ。研究中。アプリは作らない） |
 | 12 | [12_APP_BASE/README.md](12_APP_BASE/README.md) | 建築 LCA アプリの基礎システム（②共通入力データ・変換、④結果表示、⑤保存）。計算は第10章の 2 構造エンジンを呼ぶ。独立概念モデル・架空データ。入力画面と実データは含まない。 |
 | 13 | [13_INPUT_CLASSIFICATION/README.md](13_INPUT_CLASSIFICATION/README.md) | 入力分類（5 大分類）と、原版 6 ファイルの入力項目・数値・設定値の分類台帳。構造だけを記録し、原版の値は含まない。 |
+| 14 | [14_EQUATION_DISCLOSURE/08_全方程式索引.md](14_EQUATION_DISCLOSURE/08_全方程式索引.md) | 原版の全数式セルの件数と、研究側の統一系（節点スペクトル＋マスク付き積和）の全方程式の開示。原版の式本文は非公開。 |
+| 15 | [15_JCAT_CONVERSION/README.md](15_JCAT_CONVERSION/README.md) | 原版の独立方程式 667 件の分類と、2 構造（変更なしの研究エンジン）への変換・検証（全セル・境界条件・無作為 2,000 ケース・建物全体の連鎖）。原版の式本文・値は非公開。 |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想

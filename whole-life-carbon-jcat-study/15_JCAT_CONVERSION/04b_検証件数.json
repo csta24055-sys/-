@@ -1,0 +1,263 @@
+{
+ "totals": {
+  "eq": 667,
+  "cat2": 299,
+  "essential": 592,
+  "base:成功": 619,
+  "essential base:成功": 556,
+  "base:l1_n": 3796693,
+  "base:l1_ok": 3796693,
+  "base:vb_n": 1564800,
+  "base:vb_ok": 1564754,
+  "base:rc_n": 1264298,
+  "base:rc_ok_ref": 1264297,
+  "base:rc_ok_lo": 1253698,
+  "base:rc_ref_eq_lo": 1253697,
+  "improved:成功": 647,
+  "essential improved:成功": 584,
+  "improved:l1_n": 3796874,
+  "improved:l1_ok": 3796874,
+  "improved:vb_n": 1568040,
+  "improved:vb_ok": 1567414,
+  "improved:rc_n": 1536772,
+  "improved:rc_ok_ref": 1536771,
+  "improved:rc_ok_lo": 1526069,
+  "improved:rc_ref_eq_lo": 1526068,
+  "chain_ok": 113566,
+  "chain_bad": 0,
+  "cat4": 101,
+  "cat3": 121,
+  "cat1": 141,
+  "base:失敗": 48,
+  "essential base:失敗": 36,
+  "improved:失敗": 16,
+  "essential improved:失敗": 4,
+  "cat5": 5,
+  "improved:定義域付きで変換": 1,
+  "essential improved:定義域付きで変換": 1,
+  "improved:近似で変換": 3,
+  "essential improved:近似で変換": 3,
+  "random_cases": {
+   "DET": 1100,
+   "SIM": 200,
+   "STD": 200,
+   "SUM": 500
+  },
+  "random_cases_total": 2000
+ },
+ "random": {
+  "improved:n": 1536772,
+  "improved:ok_lo": 1526069,
+  "improved:ok_ref": 1536771,
+  "improved:ref_eq_lo": 1526068,
+  "improved:unsupported": 948,
+  "base:n": 272335,
+  "base:ok_lo": 272226,
+  "base:ok_ref": 272334,
+  "base:ref_eq_lo": 272225,
+  "improved:conv=ref, LO differs": 10703,
+  "improved:conv=LO, ref differs": 1,
+  "base:conv=LO, ref differs": 1,
+  "base:conv=ref, LO differs": 109
+ },
+ "random_cases": {
+  "DET": 1100,
+  "SIM": 200,
+  "STD": 200,
+  "SUM": 500
+ },
+ "inputs_changed": {
+  "DET": 121239,
+  "SIM": 3037,
+  "STD": 3772,
+  "SUM": 40432
+ },
+ "cells_changed": {
+  "DET": 3880730,
+  "SIM": 2319742,
+  "STD": 3429116,
+  "SUM": 0
+ },
+ "boundary": {
+  "base": {
+   "n": 429880,
+   "ok": 429834,
+   "bad": 46,
+   "missing": 0,
+   "variants": 95080,
+   "unsupported": 56
+  },
+  "improved": {
+   "n": 1568040,
+   "ok": 1567414,
+   "bad": 626,
+   "missing": 626,
+   "variants": 388040,
+   "unsupported": 29
+  }
+ },
+ "boundary_bad_by_kind": {
+  "base": {
+   "thresh": 33,
+   "mixed": 5,
+   "real": 3,
+   "lookup": 5
+  },
+  "improved": {
+   "real": 137,
+   "thresh": 119,
+   "half": 96,
+   "text": 56,
+   "lookup": 133,
+   "mixed": 85
+  }
+ },
+ "chain": {
+  "converted:n": 112362,
+  "converted:ok": 112362,
+  "external:n": 1204,
+  "external:ok": 1204
+ },
+ "chain_books": {
+  "SUM": {
+   "converted:n": 7098,
+   "converted:ok": 7098,
+   "external:n": 1195,
+   "external:ok": 1195,
+   "components": 71,
+   "largest": 1,
+   "iters_max": 5,
+   "evaluations": 68,
+   "nonconv": 0
+  },
+  "DET": {
+   "converted:n": 105264,
+   "converted:ok": 105264,
+   "external:n": 9,
+   "external:ok": 9,
+   "components": 625,
+   "largest": 49,
+   "iters_max": 151,
+   "evaluations": 2154,
+   "nonconv": 0
+  }
+ },
+ "conditions_total": 11512956,
+ "mismatch_conv_vs_ref": 674,
+ "mismatch_vs_libreoffice": 10812,
+ "approximation": {
+  "wide 1e-6..1e12 pow 0.05416": {
+   "points": 20000,
+   "max_rel": 1.6540834613805555e-15,
+   "median_rel": 1.9066918939124043e-16,
+   "steps": 10
+  },
+  "wide 1e-6..1e12 pow -0.06254": {
+   "points": 20000,
+   "max_rel": 1.2397014806036834e-15,
+   "median_rel": 1.435132553831189e-16,
+   "steps": 13
+  },
+  "wide 1e-6..1e12 log None": {
+   "points": 20000,
+   "max_rel": 2.6010555094907303e-12,
+   "median_rel": 0.0,
+   "steps": 5
+  },
+  "domain 3e4..5e6 pow 0.05416": {
+   "points": 20000,
+   "max_rel": 1.6126925723755534e-15,
+   "median_rel": 1.983090403564282e-16,
+   "steps": 10
+  },
+  "domain 3e4..5e6 pow -0.06254": {
+   "points": 20000,
+   "max_rel": 1.5064470231864644e-15,
+   "median_rel": 1.363871498426892e-16,
+   "steps": 13
+  },
+  "domain 3e4..5e6 log None": {
+   "points": 20000,
+   "max_rel": 1.9744411437099153e-16,
+   "median_rel": 0.0,
+   "steps": 5
+  },
+  "domain 5e3..3e6 pow 0.05416": {
+   "points": 20000,
+   "max_rel": 1.6127047454709822e-15,
+   "median_rel": 2.0354471267685208e-16,
+   "steps": 10
+  },
+  "domain 5e3..3e6 pow -0.06254": {
+   "points": 20000,
+   "max_rel": 1.3410011593974523e-15,
+   "median_rel": 1.333523721653204e-16,
+   "steps": 13
+  },
+  "domain 5e3..3e6 log None": {
+   "points": 20000,
+   "max_rel": 2.165836546602487e-16,
+   "median_rel": 0.0,
+   "steps": 5
+  }
+ },
+ "libreoffice_baseline": {
+  "SIM": {
+   "n": 1433467,
+   "ok": 1433446,
+   "bad": 21,
+   "bad:text": 21
+  },
+  "STD": {
+   "n": 2271450,
+   "ok": 1745771,
+   "bad": 525679,
+   "bad:error": 522216,
+   "bad:num": 3438,
+   "bad:text": 25
+  },
+  "SUM": {
+   "n": 8293,
+   "ok": 8293
+  },
+  "DET": {
+   "n": 105273,
+   "ok": 103738,
+   "bad": 1535,
+   "bad:error": 1120,
+   "bad:num": 221,
+   "bad:text": 194
+  }
+ },
+ "libreoffice_roots": {
+  "cells": 246,
+  "patterns": 23
+ },
+ "failure_causes": {
+  "base": {
+   "境界条件で不一致 1 / 1280（うち範囲外の欠損 0）": 2,
+   "テキストの連結": 13,
+   "境界条件で不一致 1 / 640（うち範囲外の欠損 0）": 4,
+   "境界条件で不一致 2 / 640（うち範囲外の欠損 0）": 2,
+   "境界条件で不一致 3 / 640（うち範囲外の欠損 0）": 2,
+   "境界条件で不一致 1 / 320（うち範囲外の欠損 0）": 4,
+   "境界条件で不一致 2 / 320（うち範囲外の欠損 0）": 1,
+   "境界条件で不一致 4 / 640（うち範囲外の欠損 0）": 1,
+   "境界条件で不一致 3 / 1280（うち範囲外の欠損 0）": 1,
+   "境界条件で不一致 1 / 160（うち範囲外の欠損 0）": 1,
+   "テキストの置換": 2,
+   "テキストの部分取り出し": 1,
+   "無作為ケースで参照評価器と不一致 1 / 2728": 1,
+   "整数でない指数の実数べき": 2,
+   "常用対数": 1,
+   "境界条件で不一致 1 / 40（うち範囲外の欠損 0）": 1,
+   "境界条件で不一致 1 / 80（うち範囲外の欠損 0）": 1,
+   "ワイルドカードによる照合": 17
+  },
+  "improved": {
+   "テキストの連結": 13,
+   "テキストの置換": 2,
+   "無作為ケースで参照評価器と不一致 1 / 5568": 1
+  }
+ }
+}
