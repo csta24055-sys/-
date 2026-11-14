@@ -25,6 +25,7 @@
 | 13 | [13_INPUT_CLASSIFICATION/README.md](13_INPUT_CLASSIFICATION/README.md) | 入力分類（5 大分類）と、原版 6 ファイルの入力項目・数値・設定値の分類台帳。構造だけを記録し、原版の値は含まない。 |
 | 14 | [14_EQUATION_DISCLOSURE/08_全方程式索引.md](14_EQUATION_DISCLOSURE/08_全方程式索引.md) | 原版の全数式セルの件数と、研究側の統一系（節点スペクトル＋マスク付き積和）の全方程式の開示。原版の式本文は非公開。 |
 | 15 | [15_JCAT_CONVERSION/README.md](15_JCAT_CONVERSION/README.md) | 原版の独立方程式 667 件の分類と、2 構造（変更なしの研究エンジン）への変換・検証（全セル・境界条件・無作為 2,000 ケース・建物全体の連鎖）。原版の式本文・値は非公開。 |
+| 16 | [16_UNRESOLVED8_EXACT_APPROX/README.md](16_UNRESOLVED8_EXACT_APPROX/README.md) | 15 章で未解決の 8 件（文字列連結 3、ROUND 1、非整数乗 2、常用対数 1、VALUE(LEFT()) 1）を、既存の 2 構造の範囲だけで方式 A（厳密）・方式 B（高精度近似）の両方で研究・実装・照合。非整数乗・常用対数の実数としての厳密表現の不可能性の証明を含む。原版の式本文・係数・値は非公開。 |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想
