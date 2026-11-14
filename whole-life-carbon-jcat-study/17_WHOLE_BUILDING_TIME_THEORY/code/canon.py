@@ -6,7 +6,7 @@ end residual B1-04 is the same function in interval form, B2-01 = [ok] rho EL(T)
 bs_s(T) = [inc_s] sum_c sigma_c beta_c v_u(c)(T).
 
 This module assembles, for one scenario, the WHOLE-BUILDING function and every stage function as ONE list of
-kernel terms and as the minimal truncated-power ("knot") form
+kernel terms and as the truncated-power ("knot") form (not minimal as stored: see 05 section 3)
 
     C(T) = A0 + sum_k B_k w_k(T) + sum_j G_j theta(T - tau_j) + sum_m D_m theta(T - tau_m) w_{k_m}(T)
          = A0 + sum_{knots kappa, rule(kappa) < T} (p_kappa + q_kappa T)
@@ -112,7 +112,7 @@ class Canon:
     def stage_values(self, T: float) -> dict:
         return {s: self.value(T, s) for s in STAGES}
 
-    # ---- the minimal truncated-power form ---------------------------------------------------------
+    # ---- the truncated-power (knot) form ---------------------------------------------------------
     def knot_form(self, stage: str | None = None):
         """(A0, event knots {tau: [p, q]}, lattice knots {t: [p, q]}) with C(T) = A0 + sum_ev[tau < T(1-eps)](p + qT)
         + sum_la[t < T](p + qT); coefficients as exact Fractions, merged per knot."""

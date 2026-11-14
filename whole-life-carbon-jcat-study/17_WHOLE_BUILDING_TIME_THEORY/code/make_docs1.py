@@ -30,7 +30,7 @@ def doc07(s):
     L.append("| 項目 | 件数 | 不一致 | 最大相対差 |")
     L.append("|---|---|---|---|")
     L.append("| 組（シナリオ×評価期間） | %s（定義域の外で除外 %s、基準計算の例外 %s、失敗 %s） | — | — |"
-             % (cv.get("n_pairs"), cv.get("n_excluded"), cv.get("n_ref_raised", 0), cv.get("n_failed")))
+             % (cv.get("n_pairs"), cv.get("n_excluded"), cv["n_ref_raised"], cv.get("n_failed")))
     L.append("| ホールライフ合計 SUM-03（正準形 vs 基準計算） | %s | %s | %s |" % (cv.get("n_pairs"), cv.get("total_vs_ref_bad"), e(cv.get("max_rel_total_vs_ref"))))
     L.append("| 同（正準形 vs 統一系、相対 1e-12） | %s | %s | — |" % (cv.get("n_pairs"), cv.get("total_vs_sys_bad")))
     L.append("| 節点形 ＝ 核の和（照合の評価期間で、有理数として） | %s | %s | — |" % (cv.get("knot_vs_terms_exact_checked"), cv.get("knot_vs_terms_exact_bad")))
@@ -47,9 +47,9 @@ def doc07(s):
     L.append("")
     dc = s.get("density_check", {})
     ex = (dc.get("examples") or [{}])[0]
-    L.append("**1.2 密度の振幅を率で持つ理由**（`code/density_check.py`、`results/density_check.json`）。dev_edge の %s 組のうち、基準計算の B3 の値が厳密に 0 の組は %s。"
+    L.append("**1.2 密度の振幅を率で持つ理由**（`code/density_check.py`、`results/density_check.json`）。dev_edge の定義域の内側の %s 組のうち、基準計算の by_stage に B3 が出る %s 組で、B3 の値が厳密に 0 の組は %s。"
              "第 11 章と同じく密度の振幅を浮動小数の積 $\\mathrm{fl}(aH)$ で持って厳密に評価すると、そのうち %s 組で 0 にならない（例：`%s`、T = %s で %s）。率 $a$ で持つと %s 組。\n"
-             % (dc.get("n"), dc.get("n_reference_zero"), dc.get("product_form_nonzero_where_reference_zero"), ex.get("label"), ex.get("T"),
+             % (cv["by_set"]["dev_edge"]["n_pairs"], dc.get("n"), dc.get("n_reference_zero"), dc.get("product_form_nonzero_where_reference_zero"), ex.get("label"), ex.get("T"),
                 e(ex.get("product_form")), dc.get("rate_form_nonzero_where_reference_zero")))
     jf = []
     for k, v in cv.get("by_set", {}).items():
@@ -76,34 +76,40 @@ def doc07(s):
         L.append("| %s | %s | %s |" % (lab, sc.get(k1, 0), sc.get(k2, 0)))
     L.append("")
     L.append("- S4 で比べた整数時刻の事象のうち、冷媒の初期化があったもの %s。区間形と跳び形の跳びの差の最大は残存量の相対 %s。" % (sc.get("s4_b14_resets", 0), e(sup.get("s4_max_rel"))))
-    L.append("- 区間の内側に浮動小数がない（幅が数 ulp の）区間は S1・S2 から外した（S1 で %s、S2 で %s 件）。" % (sc.get("s1_skipped_no_interior_floats", 0), sc.get("s2_skipped_no_interior_floats", 0)))
+    L.append("- 区間の内側の相異なる浮動小数が 1 つ以下の（幅が 2 ulp 以下の）区間は S1・S2 から外した（S1 で %s、S2 で %s 件）。" % (sc.get("s1_skipped_no_interior_floats", 0), sc.get("s2_skipped_no_interior_floats", 0)))
     L.append("")
     L.append("### 2.2 節点形の上での検査（timechar.py）\n")
     L.append("シナリオ %s 件（全 10 集合。同じ関数の重複を含む）。TH-1〜TH-3 の「節点形の区間・係数・跳び」は、節点形が作り方から区分一次なので**実装の確認**であり、"
-             "核の和の性質の照合ではない（それは 2.1）。TH-0 の中点の照合、TH-2 の事象の前後の照合、TH-4〜TH-6 は、節点形とは別に作った量（核の和、実時間の測度、積分）と比べている。\n"
+             "核の和の性質の照合ではない（それは 2.1）。TH-0 の中点の照合、TH-2 の事象の前後の照合、TH-4・TH-5 は、節点形とは別に作った量（核の和、実時間の測度）と比べている。TH-6 は、閉じた形の積分と、同じ節点の累積和から作った区間ごとの積分の比較で、節点形の代数の確認である。\n"
              % s["n_analysed"])
     L.append("| 照合 | 標本 | 不一致 | 種類 |")
     L.append("|---|---|---|---|")
     exf = s["exact_failures"]
+    lj = s["lattice_jumps"]                        # code/lattice_jumps.py (after the final review)
     rows = [("TH-0 核の和 ＝ 節点形（各シナリオ最大 60 区間の中点）", c["th0_points"], exf.get("th0_bad"), "独立な照合"),
             ("TH-2 事象の前後の跳び（核の和で。各シナリオ最大 12 事象）", c["th2_events_with_terms"], exf.get("th2_terms_bad"), "独立な照合"),
             ("TH-2 切り替えの直前の値が左の区間に乗る（核の和）", c["th2_events_with_terms"], exf.get("th2_left_continuity_bad"), "独立な照合"),
-            ("TH-4 $C = M([0,T]) + Z(T)$（節点形と、項から作った測度）", "全区間（内側に浮動小数がある区間）", exf.get("th4_decomp_bad"), "独立な照合"),
+            ("TH-4 $C = M([0,T]) + Z(T)$（節点形と、項から作った測度）", "全区間（内側に相異なる浮動小数が 2 つ以上ある区間）", exf.get("th4_decomp_bad"), "独立な照合"),
             ("TH-4 $C' = \\rho + Z'$", "同上", exf.get("th4_rate_bad"), "独立な照合"),
             ("TH-4 測度の累積和 ＝ 項ごとの和", "各シナリオ 40 区間", exf.get("th4_direct_sum_bad"), "独立な照合"),
             ("TH-5 年増分の分解", "全年", exf.get("th5_increment_bad"), "独立な照合"),
             ("TH-6 積分の閉じた形 ＝ 区間ごとの積分", c["th6_points"], exf.get("th6_integral_bad"), "代数の確認"),
             ("TH-1 節点形の区間が一次式、係数が累積和", "全区間", exf.get("th1_affine_bad"), "実装の確認"),
             ("TH-2・TH-3 節点形の跳び・傾きの変化", "全隣接区間", exf.get("th2_jump_bad"), "実装の確認"),
-            ("TH-2 格子の丸めの跳びが係数の相対 1e-12 以下", c["lattice_rounding_jumps"], exf.get("lattice_jumps_above_1em12"), "測定")]
+            ("TH-2 格子の節点（$(0,H)$ の内側、事象の切り替え点でない）の 0 でない跳び：丸め（窓の係数の大きさ $w$ の相対 1e-12 以下）か、近くの事象による初期化のどちらか（`code/lattice_jumps.py`）",
+             "%s" % (lj["rounding_near_event"] + lj["rounding_away"] + lj["reset"] + lj["unexplained"]), lj["unexplained"], "測定")]
     for a, b, d_, kd in rows:
         L.append("| %s | %s | %s | %s |" % (a, b, d_, kd))
     L.append("")
     sz = s.get("size", {})
     L.append("- 大きさ：核の項はシナリオの中央値 %s（最大 %s）、節点（格子＋事象）は中央値 %s（最大 %s）、項／節点の比の中央値 %.1f。年次表の長さ $H$：%s。"
              % (sz.get("terms_median"), sz.get("terms_max"), sz.get("knots_median"), sz.get("knots_max"), sz.get("ratio_terms_per_knot_median") or 0, sz.get("H_values")))
-    L.append("- 節点の数：区間 %s、事象の節点 %s、格子の節点 %s、跳び %s（うち整数時刻の事象による区間形の初期化 %s、格子の丸めの跳び %s、その最大は係数の大きさの相対 %s）。"
-             % (c["pieces"], c["event_knots"], c["lattice_knots"], c["jumps"], c["integer_event_reset_jumps"], c["lattice_rounding_jumps"], e(s["max_rel_lattice_rounding_jump"])))
+    L.append("- 節点の数：区間 %s、事象の節点 %s、格子の節点 %s、隣り合う区間の間の跳び %s。" % (c["pieces"], c["event_knots"], c["lattice_knots"], c["jumps"]))
+    L.append("- 格子の節点の跳び（`code/lattice_jumps.py`、%s シナリオ。初版の timechar.py は事象の近くの跳びをすべて初期化と数え、丸めの検査から外していた：独立レビューの指摘）："
+             "丸めの大きさ %s（うち事象の時刻が相対 1e-9 以内にある節点 %s）、その最大は $w$ の相対 %s；切り替え点が年セルの終わりを越える事象による区間形の初期化 %s（%s シナリオ。$w$ の相対 %s〜%s）；説明のつかない跳び %s。"
+             "丸めの跳びの最大と初期化の跳びの最小は 9 桁以上離れている。事象から離れた節点の丸めの跳び %s（最大 $w$ の相対 %s）は timechar.py の数と同じ。"
+             % (lj["n_analysed"], lj["rounding_near_event"] + lj["rounding_away"], lj["rounding_near_event"], e(lj["max_rounding_rel"]), lj["reset"], lj["scenarios_with_reset"],
+                e(lj["min_reset_rel"]), e(lj["max_reset_rel"]), lj["unexplained"], lj["rounding_away"], e(lj["max_rounding_rel_away"])))
     L.append("- 補題 L-2：浮動小数の切り替え点 $\\mathrm{sw}(g)$ と $g/\\mathrm{fl}(1-\\varepsilon)$ の差は最大 %.2f ulp。" % s["switch_offset_ulp_max"])
     ts = s["terminal_slope"]
     L.append("- TH-4(a)：終わりの項の傾き $Z'\\ne0$ を持つシナリオ %s / %s。区間のうち $Z'\\ne0$ の割合の中央値 %.2f。$|Z'|/|C'|$ の最大 %s、95 パーセンタイル %s。"
@@ -161,16 +167,17 @@ def doc07(s):
     L.append("- 合計で次数 0 のシナリオは、年増分がすべて 0（評価範囲に $T$ によって変わる段階がない）もの。")
     L.append("")
     L.append("## 5. FRI（フーリエ係数からの切り替え点）\n")
-    L.append("跳びだけの段階（B4・B5）で、事象の数 $K\\le 30$ のもの。回収するのは切り替え点 $\\mathrm{sw}(\\tau)$（$\\tau$ との差は $\\tau\\cdot10^{-9}$ 程度）。$K$ が大きいとトエプリッツ系の条件数が急に悪くなり、回収は失敗する（表の最後の行）。\n")
+    L.append("跳びだけの段階（B4・B5）で、事象の数 $K\\le 30$ のもの。回収するのは切り替え点 $\\mathrm{sw}(\\tau)$（$\\tau$ との差は $\\tau\\cdot10^{-9}$ 程度）。浮動小数での成否は $K$ だけでなく、切り替え点の最小の間隔と分解能 $H/(2K)$ の比で決まる。表の最後の行（$K=20$）の失敗は、2 つの切り替え点の間隔が $2\\times10^{-7}$ 年で、分解能 $H/(2K)\\approx3.25$ 年よりはるかに小さかったためで、$K$ の大きさによるものではない（03 の TH-10、04 の 2.4 節）。\n")
     fri = s["fri"]["by_K"]
     byK = collections.defaultdict(list)
     for x in fri:
         byK[x["K"]].append(x)
-    L.append("| 事象の数 K | 件数 | 切り替え点の誤差の最大（年） | 条件数の最大 |")
-    L.append("|---|---|---|---|")
+    L.append("| 事象の数 K | 件数 | 切り替え点の誤差の最大（年） | 条件数の最大 | 切り替え点の最小の間隔（年） |")
+    L.append("|---|---|---|---|---|")
     for K in sorted(byK):
         xs = byK[K]
-        L.append("| %d | %d | %s | %s |" % (K, len(xs), e(max(x["err"] for x in xs)), e(max(x["cond"] for x in xs))))
+        L.append("| %d | %d | %s | %s | %s |" % (K, len(xs), e(max(x["err"] for x in xs)), e(max(x["cond"] for x in xs)),
+                                            e(min(x["sep"] for x in xs)) if K >= 2 and all(x.get("sep") is not None for x in xs) else "—"))
     L.append("")
     sl = s.get("sliver_test", [])
     if sl:
@@ -189,7 +196,7 @@ def doc07(s):
                                                           e(max(x["B1-04"]["rel_canon"] for x in xs)), e(max(x["SUM-03"]["rel_canon"] for x in xs))))
         L.append("")
         L.append("帯の中では、正準形と統一系はどちらも基準計算と異なりうる（交換の初期化を $T>K$ で効かせるため）。`valid_domain` は一覧の事象を調べないので、"
-                 "帯のうち $K$ に相対 1e-10 より近い部分が定義域 $\\mathcal{D}$ に残る。同じ帯は、浮動小数で整数のすぐ下にある事象（例 $\\mathrm{fl}(90\\times0.7)=62.99999999999999$：切り替え点が年セルの終わりを越える）の後にもできる（独立レビューの指摘）。この照合は整数の時刻だけで、その場合は確かめていない。第 1 段階の主張は、これらの帯を除いた $\\mathcal{D}'$ に限る（03 の 0 節）。"
+                 "帯は定義域 $\\mathcal{D}$ に残る：$K$ が周期の事象の時刻 $nc$ でもあるときだけ $K$ から相対 1e-10〜1e-8 の $T$ が除かれ、帯のうち $K$ に相対 1e-10 より近い部分が残る。そうでないときは帯の全体が残る（表の「3e-10・はい・はい」の 2 組）。同じ帯は、整数の相対 1e-9 程度の近くにある浮動小数の事象（すぐ下の例 $\\mathrm{fl}(90\\times0.7)=62.99999999999999$、すぐ上の例 $\\mathrm{fl}(25\\times0.56)=14.000000000000002$：どちらも切り替え点が年セルの終わりを越える）の後にもできる（独立レビューの指摘）。この照合は整数の時刻だけで、その場合は確かめていない。第 1 段階の主張は、これらの帯を除いた $\\mathcal{D}'$ に限る（03 の 0 節）。"
                  "第 11 章（完成済み）は変更していない。\n")
     ue = s.get("units_eq")
     if ue:
@@ -219,7 +226,7 @@ def doc07(s):
         if x4:
             L.append("| X-04 `by_stage_recomputed` | 全 14 段階で $\\sum_{(s,u,\\sigma)}\\sigma V_u(T)$（段階の述語なし。相対 1e-9、$\\max(|x|,|C|,1)$ に対して） | %d 段階値（%d 点） | %d（最大 %s） |" % (x4["stages_checked"], x4["n_T"], x4["bad"], e(x4["max_rel"])))
         L.append("")
-        txt = "B4-01 の一覧（$T=H$）のうち、等差（$\\tau_n = \\mathrm{fl}(n\\tau_1)$）は %d、等差でない（明示の一覧）は %d。" % (cn["arithmetic"], cn["non_arithmetic"])
+        txt = "B4-01 の一覧（$T=H$）のうち事象が 2 件以上のものでは、等差（$\\tau_n = \\mathrm{fl}(n\\tau_1)$）は %d、等差でない（明示の一覧）は %d（0 件・1 件の一覧は分類していない）。" % (cn["arithmetic"], cn["non_arithmetic"])
         if "b401_times_not_knots_of_C" in cn:
             txt += "B4-01 の一覧の相異なる時刻 %d のうち、$C$ の（全段階をまとめた）節点形の事象の節点にならない時刻は %d（振幅が 0 の行だけの時刻など）。" % (cn["b401_distinct_times"], cn["b401_times_not_knots_of_C"])
         txt += "回数はこれらも数える（03 の TH-14）。X-10（質量の重みつき）と X-04 の `by_gas`、X-05 は照合していない。\n"
@@ -235,7 +242,7 @@ def doc07(s):
         L.append("## 9. 節点の係数から単位・入力の行への展開表（`code/expand.py --all-sets`）\n")
         L.append("各集合の先頭のシナリオについて、すべての節点の係数を、寄与した項（単位・段階・核の形）と積和①の出所の行（項ごとの $(p,q)$）に分けて保存した（`results/expansion/<集合>.json.gz`）。"
                  "節点ごとの寄与の和と、まとめた係数の一致は作り方からの帳簿の確認であり、独立の検証ではない。\n")
-        L.append("| 集合 | シナリオ | 項 | 節点 | 出所の行の数 | 寄与の和とまとめた係数の不一致 | 保存した評価期間での $C$ と基準計算の最大相対差 |")
+        L.append("| 集合 | シナリオ | 項 | 行（$A_0$＋節点） | 出所の行の数 | 寄与の和とまとめた係数の不一致 | 保存した評価期間での $C$ と基準計算の最大相対差 |")
         L.append("|---|---|---|---|---|---|---|")
         for k, v in ex.items():
             L.append("| %s | %s | %d | %d | %d | %d | %s |" % (k, v["label"].replace("|", "／"), v["n_terms"], v["n_knots"], v["n_provenance_entries"], v["contributions_vs_merged_bad"], e(v["values_vs_reference_max_rel"])))
@@ -275,7 +282,7 @@ def doc06(u):
          "分類：**一定**（すべての $T$ で同じ）、**階段**（区間ごとに一定。回数・判定・欠損の数・事象の一覧の要素）、**区分一次**（区間ごとに一次式、跳びを含む）、"
          "**双曲**（$T\\cdot$値が区間ごとに一次：年平均）、**比**（$C(T)\\cdot$値が区間ごとに一次：段階の割合）、**その他**、"
          "**期間で現れる**（出力のキーが一部の $T$ にだけある：年次の列の要素など）。列の長さが $T$ で変わる出力は別に数えた。\n",
-         "各欄はその分類になった（シナリオ×出力の葉）の数。理論の欄は第 11 章 UNITS_70 の「使う構造」（① 積和①だけ＝$T$ によらない、K 節点スペクトル、②a・②b 評価期間の積和）。\n",
+         "各欄はその分類になった（シナリオ×出力の葉）の数（「長さが変わる列」は、長さが $T$ で変わった（シナリオ×一覧の出力）の数）。理論の欄は第 11 章 UNITS_70 の「使う構造」（① 積和①だけ＝$T$ によらない、K 節点スペクトル、②a・②b 評価期間の積和）。\n",
          "標本：%d シナリオ（%s）。\n" % (len([x for x in u["scenarios"] if "error" not in x]), ", ".join(sorted({x["set"] for x in u["scenarios"]}))),
          "| 単位 | 理論（使う構造） | 一定 | 階段 | 区分一次 | 双曲 | 比 | その他 | 期間で現れる | 長さが変わる列 | 理論との関係 |",
          "|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -292,7 +299,7 @@ def doc06(u):
                 tot[k] += v
                 if k == "other":
                     others.append((uid, p, v))
-        nlist = len(paths.get("__list_length_varies__", {}))
+        nlist = sum(paths.get("__list_length_varies__", {}).values())
         s = st.get(uid, "?")
         t_indep = ("K" not in s) and ("②" not in s)
         varying = sum(v for k, v in tot.items() if k != "const")

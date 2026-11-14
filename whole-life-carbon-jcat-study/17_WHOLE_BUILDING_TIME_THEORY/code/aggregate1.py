@@ -138,13 +138,16 @@ def main():
         v = json.load(open(vf))
         keys = ("n_pairs", "n_excluded", "n_failed", "total_vs_ref_bad", "total_vs_sys_bad", "knot_vs_terms_bad", "n_stage",
                 "stage_vs_ref_bad", "n_unit", "unit_vs_ref_bad", "n_jumpform", "jumpform_vs_ref_bad",
-                "knot_vs_terms_exact_checked", "knot_vs_terms_exact_bad")
+                "knot_vs_terms_exact_checked", "knot_vs_terms_exact_bad", "n_ref_raised")
         out["canonical_verification"] = {k: sum(s.get(k, 0) for s in v.values()) for k in keys}
         out["canonical_verification"]["max_rel_total_vs_ref"] = max(s["max_rel_ref"] for s in v.values())
         out["canonical_verification"]["max_rel_stage_vs_ref"] = max(s["max_rel_stage"] for s in v.values())
         out["canonical_verification"]["max_rel_unit_vs_ref"] = max(s["max_rel_unit"] for s in v.values())
         out["canonical_verification"]["by_set"] = {k: {kk: s.get(kk) for kk in keys} for k, s in v.items()}
     # supplement after the review: checks against the kernel sum (timechar_terms.py)
+    lp = os.path.join(RES, "lattice_jumps.json")
+    if os.path.exists(lp):
+        out["lattice_jumps"] = json.load(open(lp))["summary"]
     tp = os.path.join(RES, "tc_terms.json")
     if os.path.exists(tp):
         tt = json.load(open(tp))
