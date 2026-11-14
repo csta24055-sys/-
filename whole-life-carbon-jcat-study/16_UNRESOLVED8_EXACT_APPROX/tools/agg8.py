@@ -23,6 +23,7 @@ def main(pub, priv):
         d = load(p)
         RC[d["book"]] = d
     DN = load(os.path.join(HERE, "down8.pkl")) or {}
+    DB = load(os.path.join(HERE, "down8b.pkl")) or {}
     out = {}
     lines = []
     for eq, pids in TARGETS.items():
@@ -60,6 +61,11 @@ def main(pub, priv):
         dn = DN.get(eq) or {}
         rec["consumers"] = dict(closure=(dn.get("rec") or {}).get("closure"), levels=(dn.get("rec") or {}).get("levels"))
         rec["sensitivity_ulp"] = {m: (dn.get("impact") or {}).get(m, {}).get("changed") for m in ("ulp+", "ulp-")}
+        db = DB.get(eq)
+        if db:
+            rec["downstream_variants"] = dict(variants=db["variants"], closure=db["closure"],
+                                              counts={m: {k: v for k, v in c.items() if not k.startswith("EQ-")} for m, c in db["counts"].items()},
+                                              discontinuous_in_eqs={m: sorted(k for k in c if k.startswith("EQ-")) for m, c in db["counts"].items()})
         out[eq] = rec
     json.dump(out, open(pub, "w"), ensure_ascii=False, indent=1)
     # private detail: examples with values, consumer lists by equation
@@ -80,6 +86,9 @@ def main(pub, priv):
                         ex = d["examples"].get((eq, mode))
                         if ex:
                             fh.write("  - 無作為ケース %s 方式%s の例: %s\n" % (book, mode, ex[:6]))
+            db = DB.get(eq)
+            if db:
+                fh.write("- 下流（入力変種 %d）: %s; 例 %s\n" % (db["variants"], db["counts"], {m: v[:3] for m, v in db["examples"].items()}))
             dn = DN.get(eq)
             if dn:
                 fh.write("- 消費セル（段ごと）: %s; 方程式別: %s\n" % (dn["rec"]["levels"], dict(dn["rec"]["by_eq"])))

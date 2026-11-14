@@ -128,6 +128,72 @@ class Exact8(K.Builder):
         terms.append([LE(C(2.0 ** -1022), aq, True), C(2.0 ** -1074)])
         return self.sp(terms, hint="ulf")
 
+    def dd_round(self, Nb, ph, pl):
+        """fl(N (ph + pl)) for an integer N and a double-double constant, with the certificate
+        ulp/2 - |error part| > 2^-100 |value| (the error of the double-double product is below 2^-102 |value|)."""
+        hh, ll = self.two_prod(Nb, ph)
+        ll = self.sp([[ll], [Nb, pl]], hint="ll")
+        sb, eb = self.fast_two_sum(hh, ll)
+        ub = self.ulp_full(sb)
+        asb = self.absv(sb, "asb")
+        p2 = self.sp([[EQ(self.sp([[ub, C(2.0 ** 52)]], hint="u52"), asb)]], hint="p2b")     # |sb| is a power of two
+        tz = self.sp([[LE(C(0.0), sb), LE(C(0.0), eb, True)], [LE(C(0.0), sb, True), LE(C(0.0), eb)]], hint="tz")  # toward 0
+        half = self.sp([[EQ(p2, C(1.0)), EQ(tz, C(1.0)), ub, C(0.25)], [EQ(p2, C(1.0)), EQ(tz, C(1.0), True), ub, C(0.5)],
+                        [EQ(p2, C(1.0), True), ub, C(0.5)]], hint="hlf")
+        gap = self.sp([[half], [LE(C(0.0), eb), C(-1.0), eb], [LE(C(0.0), eb, True), eb]], hint="gap")
+        bound = self.sp([[asb, C(2.0 ** -100)]], hint="bd")
+        return sb, self.sp([[LE(gap, bound, True)]], hint="ct")
+
+    def dec_to_double(self, N, kk):
+        """The double nearest to N 10^k (ties to even), N an integer 0 <= N < 2^53, k an integer column.
+        Returns (value, uncertified flag). Exact single IEEE operations for |k| <= 22; certified double-double
+        otherwise (k = 23 is exact: 10^23 = ph + pl and every product is exact); subnormal results by
+        rounding N 10^k 2^1074 to an integer; 0 for k < -340; inf (flagged) for k > 308 and N > 0."""
+        rng = lambda a, b_: [LE(C(float(a)), kk), LE(kk, C(float(b_)))]
+        p10 = self.sel(kk, {k: 10.0 ** k for k in range(0, 23)}, "p10")
+        q10 = self.sel(kk, {k: 10.0 ** (-k) for k in range(-22, 0)}, "q10")
+        v1 = self.sp([rng(0, 22) + [N, p10]], hint="v1")
+        v2 = self.divide(N, self.sp([rng(-22, -1) + [q10], [LE(C(-22.0), kk, True), C(1.0)], [LE(C(0.0), kk), C(1.0)]], hint="qd"), rng(-22, -1))
+        # 23 <= k <= 308: constants scaled by 2^-600 (no overflow in the splitting), result scaled back exactly
+        ph = self.sel(kk, {k: dd_const(Fraction(10) ** k / Fraction(2) ** 600)[0] for k in range(23, 309)}, "bh")
+        pl = self.sel(kk, {k: dd_const(Fraction(10) ** k / Fraction(2) ** 600)[1] for k in range(23, 309)}, "bl")
+        s3, c3 = self.dd_round(self.sp([rng(23, 308) + [N]], hint="N3"), ph, pl)
+        v3 = self.sp([rng(23, 308) + [s3, C(2.0 ** 300), C(2.0 ** 300)]], hint="v3")
+        # -290 <= k <= -23: unscaled double-double (every partial product stays normal)
+        ph = self.sel(kk, {k: dd_const(Fraction(10) ** k)[0] for k in range(-290, -22)}, "ch")
+        pl = self.sel(kk, {k: dd_const(Fraction(10) ** k)[1] for k in range(-290, -22)}, "cl")
+        s4, c4 = self.dd_round(self.sp([rng(-290, -23) + [N]], hint="N4"), ph, pl)
+        # -340 <= k <= -291: y = N 10^k 2^1074; y >= 2^52: normal result fl(y) 2^-1074; else round(y) 2^-1074
+        ph = self.sel(kk, {k: dd_const(Fraction(10) ** k * Fraction(2) ** 1074)[0] for k in range(-340, -290)}, "eh")
+        pl = self.sel(kk, {k: dd_const(Fraction(10) ** k * Fraction(2) ** 1074)[1] for k in range(-340, -290)}, "el")
+        N5 = self.sp([rng(-340, -291) + [N]], hint="N5")
+        yh, yl = self.two_prod(N5, ph)
+        yl = self.sp([[yl], [N5, pl]], hint="yl5")
+        yh, yl = self.fast_two_sum(yh, yl)
+        s5n, c5n = self.dd_round(N5, ph, pl)
+        # subnormal result: round y = yh + yl to an integer, ties impossible (5^291 does not divide N 2^...)
+        f5 = self.floor_nonneg(self.sp([[LE(C(2.0 ** 52), yh, True), yh]], hint="y5"))
+        a5 = self.sp([[yh], [C(-1.0), f5]], hint="a5")                     # exact, in [0, 1)
+        nb5 = self.sp([[C(-1.0), yl]], hint="nb5")
+        dn5 = self.sp([[EQ(a5, C(0.0)), LE(C(0.0), yl, True)]], hint="dn5")   # a + b < 0
+        up5 = self.sp([[LE(nb5, self.sp([[a5], [C(-1.0)]], hint="am5"))]], hint="up5")   # a + b >= 1
+        f5 = self.sp([[f5], [EQ(dn5, C(1.0)), C(-1.0)], [EQ(up5, C(1.0)), C(1.0)]], hint="f5b")
+        a5 = self.sp([[a5], [EQ(dn5, C(1.0)), C(1.0)], [EQ(up5, C(1.0)), C(-1.0)]], hint="a5b")
+        ah5 = self.sp([[a5], [C(-0.5)]], hint="ah5")                        # exact
+        gt5 = self.sp([[LE(ah5, nb5, True)]], hint="gt5")                   # frac > 1/2
+        sub = self.sp([[f5], [EQ(gt5, C(1.0)), C(1.0)]], hint="sub")
+        c5s = self.sp([[LE(self.absv(self.sp([[ah5], [yl]], hint="d5"), "a5d"), C(2.0 ** -40))]], hint="c5s")
+        normal5 = LE(C(2.0 ** 52), yh)
+        v5 = self.sp([rng(-340, -291) + [normal5, s5n, C(2.0 ** -537), C(2.0 ** -537)],
+                      rng(-340, -291) + [LE(C(2.0 ** 52), yh, True), sub, C(2.0 ** -537), C(2.0 ** -537)]], hint="v5")
+        val = self.sp([rng(0, 22) + [v1], rng(-22, -1) + [v2], rng(23, 308) + [v3], rng(-290, -23) + [s4], rng(-340, -291) + [v5]], hint="val")
+        nz = EQ(N, C(0.0), True)                                            # N = 0: the value 0 is exact
+        unc = self.sp([rng(23, 308) + [nz, EQ(c3, C(1.0), True), EQ(kk, C(23.0), True)], rng(-290, -23) + [nz, EQ(c4, C(1.0), True)],
+                       rng(-340, -291) + [nz, normal5, EQ(c5n, C(1.0), True)], rng(-340, -291) + [nz, LE(C(2.0 ** 52), yh, True), EQ(c5s, C(1.0))],
+                       [LE(kk, C(308.0), True), LE(N, C(0.0), True)]], hint="unc")
+        self.notes["decimal to double: exact single operations for |k| <= 22, certified double-double beyond"] += 1
+        return val, unc
+
     # ---- comparisons on exact values -----------------------------------------------------------------
     def absv(self, x, hint="av"):
         return self.sp([[LE(C(0.0), x), x], [LE(C(0.0), x, True), C(-1.0), x]], hint=hint)
@@ -255,15 +321,19 @@ class Exact8(K.Builder):
         """Exactly the model  float(Decimal("%.15g" % x).quantize(10^-d, HALF_UP | DOWN | UP))  for d >= 0."""
         neg, M, E, bad = self.mant15(x)
         self.flag(bad)
-        # stated domain of method A: |x| < 10^37 (and the powers of ten 10^E, E >= 37, reached by the 15-digit rounding)
-        self.flag(self.sp([[LE(C(37.0), E), EQ(M, C(1e14), True)]], hint="rbig"))
+        # |x| >= 10^37 (j <= 0 for every d >= 0): the value is the double nearest to M 10^(E-14), formed by the
+        # certified decimal-to-double conversion (k = E - 14 >= 23); flagged only where it is not certified
+        bigE = LE(C(37.0), E)
+        Mb = self.sp([[bigE, M]], hint="Mb")
+        kb = self.sp([[bigE, E], [bigE, C(-14.0)]], hint="kb")
+        vbig, uncb = self.dec_to_double(Mb, kb)
+        self.flag(self.sp([[bigE, EQ(uncb, C(1.0))]], hint="rbig"))
         j = self.sp([[C(float(14 - d))], [C(-1.0), E]], hint="j")         # digits of M below 10^-d
         # j <= 0: the 15-digit value has no digit below 10^-d: value = M 10^(E-14), correctly rounded
         pE = self.sel(E, {k: 10.0 ** (k - 14) for k in range(14, 37)}, "pE")
         dE = self.sel(E, {k: 10.0 ** (14 - k) for k in range(-8, 14)}, "dE")
         nolow = LE(j, C(0.0))
-        p10 = self.sel(E, {k: float(10 ** k) for k in range(37, 309)}, "p10")      # correctly rounded 10^E
-        v_hi = self.sp([[nolow, LE(C(14.0), E), LE(E, C(36.0)), M, pE], [nolow, LE(C(37.0), E), p10]], hint="vh")
+        v_hi = self.sp([[nolow, LE(C(14.0), E), LE(E, C(36.0)), M, pE], [nolow, LE(C(37.0), E), vbig]], hint="vh")
         v_lo = self.divide(M, self.sp([[nolow, LE(C(14.0), E, True), dE], [LE(j, C(0.0), True), C(1.0)], [LE(C(14.0), E), C(1.0)]], hint="dd"),
                            [nolow, LE(C(14.0), E, True)])
         # 1 <= j <= 15: q = floor(M / 10^j), rem = M - q 10^j (exact integers)
@@ -299,8 +369,25 @@ class Exact8(K.Builder):
         if d < 0 or d > 22:
             raise K.Unsupported("ROUND method A: digits outside 0..22")
         x, ef, ec = self.to_num(self.val(args[0]))
+        # a non-finite argument (an overflow to inf, or nan) gives #NUM! as in the reference
+        # nan (x != x), +-inf (not |x| <= DBL_MAX), or a value the engine could not form (missing: an overflow of
+        # 1/x in the argument) -> one 0/1 indicator (the two conditions can both be 1, so count and compare)
+        nfs = self.sp([[EQ(ef, C(1.0), True), EQ(x, x, True)],
+                       [EQ(ef, C(1.0), True), LE(self.absv(x, "rxa"), C(1.7976931348623157e308), True)]], hint="nfs")
+        nfin = self.sp([[LE(C(1.0), nfs)]], hint="nfin")
+        ef, ec = self.first_error([(ef, ec), (nfin, C(E_NUM))])
+        n0 = len(self.__dict__.get("fail_flags", []))
         r = self.round_exact(self.sp([[EQ(ef, C(1.0), True), x]], hint="xr"), d, mode)
+        self.gate_flags(n0, ef)
         return self.num_or_err(self.sp([[EQ(ef, C(1.0), True), r]], hint="rr"), ef, ec, d <= 0)
+
+    def gate_flags(self, n0, ef):
+        """Flags raised after position n0 matter only where the error flag ef is not 1."""
+        fl = self.__dict__.get("fail_flags", [])
+        if isc(ef, 0.0) or len(fl) <= n0:
+            return
+        for i in range(n0, len(fl)):
+            fl[i] = self.sp([[EQ(ef, C(1.0), True), fl[i]]], hint="gf")
 
 
 # ============================================================================================================
@@ -377,6 +464,27 @@ def coefficients(kind, a, deg):
 
 
 BIN_ALL = range(-1074, 1024)
+POW_TARGET = 2.0 ** -100          # required bound of the piece-polynomial approximation error (relative)
+_DEG_CACHE = {}
+
+
+def pow_bound(a, n):
+    """Rigorous relative bound of the interpolation error of f^a on every piece (degree n, Chebyshev-like nodes):
+    |g - p| / g <= |a (a-1) ... (a-n)| / (n+1)! * f_min^-(n+1) * max_t |prod (t - t_j)| * h^(n+1), h = P_W / 2,
+    with max_t |prod (t - t_j)| <= 1.001 * 2^-n for the (rounded) Chebyshev nodes of T_(n+1)."""
+    c = _D(1)
+    for j in range(n + 1):
+        c *= abs(_D(a) - j)
+    fmin = _D(P_LO)
+    r = c / _D(math.factorial(n + 1)) * fmin ** (-(n + 1)) * _D("1.001") * _D(2) ** (-n) * (_D(P_W) / 2) ** (n + 1)
+    return float(r)
+
+
+def pow_degree(a):
+    """Smallest degree 13..40 whose rigorous bound is <= POW_TARGET; None when no degree up to 40 suffices."""
+    if a not in _DEG_CACHE:
+        _DEG_CACHE[a] = next((n for n in range(DEG_A, 41) if pow_bound(a, n) <= POW_TARGET), None)
+    return _DEG_CACHE[a]
 
 
 class Exact8Pow(Exact8):
@@ -441,19 +549,55 @@ class Exact8Pow(Exact8):
         return bad
 
     def pow_core(self, ax, a):
+        """x^a for ax > 0. Method A returns (y, overflow indicator); method B returns y."""
         e, f = self.bin_reduce(ax)
         i, t = self.piece(f)
         if self.mode8 == "A":
-            g = self.poly_dd(coefficients("pow", a, DEG_A), i, t)
-            ks = [k for k in range(-1075, 1025) if abs(k * a) <= 1000]           # 2^(k a) stays far inside the range
-            self.flag(self.sp([[EQ(self.cert_mask, C(1.0)), EQ(self.sp([[EQ(e, C(float(k)))] for k in ks], hint="ein"), C(1.0), True)]], hint="pr"))
-            tab = {k: dd_const(_frac_pow2(k, a)) for k in ks}
+            deg = pow_degree(a)
+            if deg is None:
+                raise K.Unsupported("x^a method A: no degree <= 40 meets the certified error bound for this exponent")
+            co = coefficients("pow", a, deg)
+            # arithmetic error of the double-double Horner scheme: <= (2 deg + 8) * cond * 2^-104 with
+            # cond = sum |c_k| / min g on the piece; together with the approximation bound it must stay below ERR_A
+            fn = fn_pow(a)
+            cond = max(sum(abs(_D(str(x))) for x in co[p]) /
+                       min(fn(_D(P_LO) + _D(p) * _D(P_W)), fn(_D(P_LO) + (_D(p) + 1) * _D(P_W))) for p in range(PIECES))
+            total = pow_bound(a, deg) + float((2 * deg + 8) * cond) * 2.0 ** -104
+            if total > ERR_A / 2:
+                raise K.Unsupported("x^a method A: certified error bound not met for this exponent")
+            g = self.poly_dd(co, i, t)
+            # 2^(k a) = 2^(k a - 600 n) * 2^(600 n): the scaled double-double constant lies in [2^-300, 2^300], so
+            # every partial product of the certified evaluation is a normal number; the scale is applied at the end
+            tab, nsc = {}, {}
+            for k in range(-1075, 1025):
+                ka = k * a
+                n = int(round(ka / 600.0)) if abs(ka) > 280 else 0
+                tab[k] = dd_const(_frac_pow2_scaled(k, a, -600 * n))
+                nsc[k] = n
             th = self.sel(e, {k: v[0] for k, v in tab.items()}, "th")
             tl = self.sel(e, {k: v[1] for k, v in tab.items()}, "tl")
             yh, yl = self.dd_mul((th, tl), g)
-            self.flag(self.sp([[EQ(self.cert_mask, C(1.0)), self.certify(yh, yl)]], hint="pf"))
-            return yh
-        g = self.poly_d(coefficients("pow", a, DEG_B), i, t)
+            pf = self.certify(yh, yl)
+            nmax = max(abs(v) for v in nsc.values())
+            ns = self.sel(e, {k: float(v) for k, v in nsc.items()}, "ns") if nmax else C(0.0)
+            # a certain overflow (|y| >= 2^1025 whatever the last bit) needs no certificate: the result is #NUM!
+            ays = self.absv(yh, "pys")
+            bigovf = self.sp([[EQ(ns, C(float(n))), LE(C(2.0 ** (1025 - 600 * n)), ays)]
+                              for n in range(-nmax, nmax + 1) if 1025 - 600 * n <= 1023], hint="bovf")
+            self.flag(self.sp([[EQ(self.cert_mask, C(1.0)), EQ(pf, C(1.0)), EQ(bigovf, C(1.0), True)]], hint="pf"))
+            if nmax:
+                for jj in range(1, nmax + 1):
+                    yh = self.sp([[LE(C(float(jj)), ns), yh, C(2.0 ** 600)], [LE(ns, C(-float(jj))), yh, C(2.0 ** -600)],
+                                  [LE(C(float(jj)), ns, True), LE(ns, C(-float(jj)), True), yh]], hint="ysc")
+            ay = self.absv(yh, "pya")
+            ovf = self.sp([[EQ(self.cert_mask, C(1.0)), LE(ay, C(1.7976931348623157e308), True)]], hint="ovf")   # inf -> #NUM!
+            self.flag(self.sp([[EQ(self.cert_mask, C(1.0)), LE(C(2.0 ** -1022), ay, True)]], hint="psub"))     # subnormal / 0
+            self.notes["x^a method A: degree %d (bound <= 2^-100), scaled constants" % deg] += 1
+            return yh, ovf
+        degb = next((n for n in range(DEG_B, 41) if pow_bound(a, n) <= 2.0 ** -60), None)
+        if degb is None:
+            raise K.Unsupported("x^a method B: no degree <= 40 keeps the approximation below 2^-60 for this exponent")
+        g = self.poly_d(coefficients("pow", a, degb), i, t)
         ks = [k for k in range(-1075, 1025) if abs(k * a) <= 1000]
         self.flag(self.sp([[EQ(self.cert_mask, C(1.0)), EQ(self.sp([[EQ(e, C(float(k)))] for k in ks], hint="ein"), C(1.0), True)]], hint="pr"))
         tab = {k: float(_frac_pow2(k, a)) for k in ks}
@@ -477,8 +621,59 @@ class Exact8Pow(Exact8):
         q = self.poly_d(coefficients("q", None, DEG_B), i, t)
         return self.sp([[e, C(L2h)], [u, q]], hint="lg")
 
+    # ---- division over the whole binary range (method A) ------------------------------------------------------
+    def divide_full(self, a, b, ok):
+        """The correctly rounded IEEE quotient a / b (as Python's a / b) for every pair of doubles with b != 0
+        (under the mask ok): normalised mantissas a = 2^ea fa, b = 2^eb fb (exact), q1 = fa / fb by the inherited
+        correctly rounded division (operands near 1), q = q1 2^(ea - eb) (exact, or the IEEE overflow to inf);
+        a subnormal quotient is rounded on the 2^-1074 grid from the exact residual of fa 2^t / fb (integer
+        quotient, two-product, Sterbenz); inf / nan operands follow IEEE arithmetic (a times 1/b)."""
+        MAXD = 1.7976931348623157e308
+        aa, ab = self.absv(a, "qa"), self.absv(b, "qb")
+        fin = [LE(aa, C(MAXD)), LE(ab, C(MAXD)), LE(C(0.0), ab, False)]
+        okc = self.sp([ok + fin + [LE(aa, C(0.0), True)]], hint="okq")          # finite, a != 0
+        ok1 = EQ(okc, C(1.0))
+        # zero numerator: 0; non-finite operands as IEEE: inf / finite = +-inf, finite / inf = 0, otherwise nan
+        ainf, binf = LE(aa, C(MAXD), True), LE(ab, C(MAXD), True)
+        sgb = self.sp([[LE(C(0.0), b), C(1.0)], [LE(C(0.0), b, True), C(-1.0)]], hint="sgb")
+        isn = self.sp([[EQ(a, a, True)], [EQ(b, b, True)], [ainf, binf]], hint="isn")
+        nf = self.sp([ok + [EQ(isn, C(1.0)), C(math.nan)],
+                      ok + [EQ(isn, C(1.0), True), ainf, LE(ab, C(MAXD)), a, sgb]], hint="qnf")
+        neg = self.sp([[LE(C(0.0), a, True), LE(C(0.0), b)], [LE(C(0.0), a), LE(C(0.0), b, True)]], hint="qng")
+        ea, fa = self.bin_reduce(self.sp([[ok1, aa], [EQ(okc, C(1.0), True), C(1.0)]], hint="qaa"))
+        eb, fb = self.bin_reduce(self.sp([[ok1, ab], [EQ(okc, C(1.0), True), C(1.0)]], hint="qbb"))
+        q1 = K.Builder.divide(self, fa, fb, [ok1])
+        sh = self.sp([[ea], [C(-1.0), eb]], hint="qs")
+        p2 = self.sel(sh, {k: 2.0 ** (k - 2) for k in range(-1072, 1026)}, "qp2")
+        qn = self.sp([[ok1, LE(C(-1072.0), sh), LE(sh, C(1025.0)), q1, p2, C(4.0)], [ok1, LE(C(1026.0), sh), C(math.inf)]], hint="qn")
+        subq = self.sp([[ok1, LE(qn, C(2.0 ** -1022))]], hint="qsub")        # subnormal (or the boundary) quotient
+        sb = EQ(subq, C(1.0))
+        t = self.sp([[sh], [C(1074.0)]], hint="qt")
+        p2t = self.sel(t, {k: 2.0 ** k for k in range(-2, 55)}, "qp2t")
+        num = self.sp([[sb, LE(C(-2.0), t), fa, p2t]], hint="qnum")           # exact
+        q0 = self.floor_nonneg(K.Builder.divide(self, num, fb, [sb, LE(C(-2.0), t)]), bits=57)
+        ph, pe = self.two_prod(q0, fb)
+        r = self.sp([[self.sub(num, ph, "qd")], [C(-1.0), pe]], hint="qr")    # exact residual
+        q0 = self.sp([[q0], [LE(C(0.0), r, True), C(-1.0)], [LE(fb, r), C(1.0)]], hint="q0b")
+        r = self.sp([[r], [LE(C(0.0), r, True), fb], [LE(fb, r), C(-1.0), fb]], hint="qrb")
+        r2 = self.sp([[r, C(2.0)]], hint="qr2")
+        hq = self.floor_nonneg(self.sp([[q0, C(0.5)]], hint="qh"), bits=57)
+        odd = self.sp([[q0], [C(-2.0), hq]], hint="qo")
+        inc = self.sp([[LE(r2, fb, True)], [EQ(r2, fb), EQ(odd, C(1.0))]], hint="qi")
+        qsv = self.sp([[sb, LE(C(-2.0), t), q0, C(2.0 ** -537), C(2.0 ** -537)], [sb, LE(C(-2.0), t), inc, C(2.0 ** -537), C(2.0 ** -537)]], hint="qsv")
+        mag = self.sp([[ok1, EQ(subq, C(1.0), True), qn], [sb, qsv]], hint="qm")
+        q = self.sp([[ok1, EQ(neg, C(1.0), True), mag], [ok1, EQ(neg, C(1.0)), C(-1.0), mag], [nf]], hint="qf")
+        self.notes["method A: correctly rounded division over the whole binary range"] += 1
+        return q
+
     # ---- the Excel functions --------------------------------------------------------------------------------
     def arith(self, op, av, bv, node=None):
+        if op == "/" and self.mode8 == "A":
+            a, ea, ca = self.to_num(av)
+            b, eb, cb = self.to_num(bv)
+            z = self.sp([[EQ(b, C(0.0))]], hint="z")
+            ef, ec = self.first_error([(ea, ca), (eb, cb), (z, C(E_DIV0))])
+            return self.num_or_err(self.divide_full(a, b, [EQ(ef, C(1), True)]), ef, ec)
         if op == "^" and node is not None and not self.has_cell(node[3]) and bv.types == {T1} and isc(bv.op("n")):
             m = bv.op("n")["const"]
             if m != int(m):
@@ -489,6 +684,11 @@ class Exact8Pow(Exact8):
                 ax = self.sp([[EQ(ef, C(1.0), True), LE(a, C(0.0), True), a], [LE(a, C(0.0)), C(1.0)], [EQ(ef, C(1.0)), C(1.0)]], hint="pa")
                 self.cert_mask = self.sp([[EQ(ef, C(1.0), True), LE(a, C(0.0), True)]], hint="cm")
                 y = self.pow_core(ax, m)
+                if isinstance(y, tuple):
+                    y, ovf = y
+                else:                                        # method B: an overflow to inf is #NUM! as well
+                    ovf = self.sp([[EQ(self.cert_mask, C(1.0)), LE(self.absv(y, "pyb"), C(1.7976931348623157e308), True)]], hint="ovb")
+                ef, ec = self.first_error([(ef, ec), (ovf, C(E_NUM))])
                 r = self.sp([[EQ(ef, C(1.0), True), LE(a, C(0.0), True), y]], hint="pw")
                 self.notes["x^a (a not an integer), method %s" % self.mode8] += 1
                 return self.num_or_err(r, ef, ec)
@@ -508,6 +708,14 @@ class Exact8Pow(Exact8):
 def _frac_pow2(k, a):
     """2^(k a) as an exact-enough Fraction (from 60-digit decimal)."""
     v = (_D(k) * _D(a) * _D(2).ln()).exp()
+    return Fraction(str(v))
+
+
+def _frac_pow2_scaled(k, a, s):
+    """2^(k a + s) (s an integer) as an exact-enough Fraction: 60-digit decimal of 2^(k a + s)."""
+    with _dec.localcontext() as c:
+        c.prec = 60
+        v = ((_D(k) * _D(a) + _D(s)) * _D(2).ln()).exp()
     return Fraction(str(v))
 
 
@@ -834,15 +1042,6 @@ class Exact8All(Exact8Pow):
         ef, ec = self.first_error(errs)
         return out, offset, (ef, ec)
 
-    def gate_flags(self, n0, ef):
-        """Flags raised after position n0 matter only where the error flag ef is not 1 (an error result does not
-        depend on the texts of the numbers)."""
-        fl = self.__dict__.get("fail_flags", [])
-        if isc(ef, 0.0) or len(fl) <= n0:
-            return
-        for i in range(n0, len(fl)):
-            fl[i] = self.sp([[EQ(ef, C(1.0), True), fl[i]]], hint="gf")
-
     def binary(self, op, a, b):
         if op != "&" or self.mode8 not in ("A", "B"):
             return K.Builder.binary(self, op, a, b)
@@ -939,15 +1138,19 @@ OPS = {"EQ": 0.0, "NE": 1.0, "LT": 2.0, "GT": 3.0, "LE": 4.0, "GE": 5.0}
 
 
 def _cannot_end_number(text):
-    """True when every string ending with `text` is rejected by store.to_float_text and is not empty."""
-    t = text.rstrip()
-    if not t or t != text and not t:
+    """True when for EVERY text t the criterion t + text has a NON-EMPTY rest (after the operator prefix) that
+    store.to_float_text REJECTS. Sufficient conditions used:
+      non-empty : `text` has a character outside < > = (the prefix ^(<=|>=|<>|=|<|>)? only takes leading
+                  characters among < > =, so that character always stays in the rest);
+      not a number: the last non-white-space character c of `text` exists and cannot end a number after the
+                  strip and the full-width translation (not a decimal digit, not '.', not '%')."""
+    if not any(ch not in "<>=" for ch in text):
         return False
-    if len(t) != len(text):            # trailing white space would be stripped: decide on the stripped text
-        pass
-    c = t[-1]
-    c = chr(_FW.get(ord(c), ord(c)))
-    return not (c.isspace() or c == "%" or c == "." or _ud.decimal(c, -1) >= 0 or c.isdigit())
+    t = text.rstrip()
+    if not t:
+        return False
+    c = chr(_FW.get(ord(t[-1]), ord(t[-1])))
+    return not (c.isspace() or c in "%." or _ud.decimal(c, -1) >= 0 or c.isdigit())
 
 
 class Exact8Text(Exact8All):
@@ -1264,81 +1467,38 @@ ACCEPT = NUM_ACC + (S_SP, S_PCT)
 
 class Exact8Value(Exact8Text):
 
-    def dd_round(self, Nb, ph, pl):
-        """fl(N (ph + pl)) for an integer N and a double-double constant, with the certificate
-        ulp/2 - |error part| > 2^-100 |value| (the error of the double-double product is below 2^-102 |value|)."""
-        hh, ll = self.two_prod(Nb, ph)
-        ll = self.sp([[ll], [Nb, pl]], hint="ll")
-        sb, eb = self.fast_two_sum(hh, ll)
-        ub = self.ulp_full(sb)
-        gap = self.sp([[ub, C(0.5)], [LE(C(0.0), eb), C(-1.0), eb], [LE(C(0.0), eb, True), eb]], hint="gap")
-        bound = self.sp([[sb, C(2.0 ** -100)]], hint="bd")
-        return sb, self.sp([[LE(gap, bound, True)]], hint="ct")
-
     def div100(self, v, mask):
-        """Correctly rounded v / 100 for every double v: the inherited correctly rounded division is valid for
-        |v| in [2^-290, 2^290]; outside, v is scaled by an exact power of two (2^-600 or 2^600), divided and
-        scaled back (exact while the quotient is a normal number). A subnormal quotient is flagged."""
+        """Correctly rounded v / 100 for EVERY double v (as Python's v / 100.0).
+        Normal quotient: v = 2^e f exactly (binary-lattice reduction, f in [0.6875, 1.4375)), f / 100 by the
+        inherited correctly rounded division (operands far inside its range), times 2^e (exact for a normal
+        result). Subnormal quotient (|v| < 100 2^-1022): m = |v| 2^1074 is an integer < 2^59; the result is
+        round_half_even(m / 100) 2^-1074, the quotient corrected by the exact residual (two-product, Sterbenz).
+        Returns (quotient, flag) with flag = 0 (kept for the interface)."""
         av = self.absv(v, "dv")
-        mid = [mask, LE(C(2.0 ** -290), av), LE(av, C(2.0 ** 290))]
-        big = [mask, LE(av, C(2.0 ** 290), True)]
-        tin = [mask, LE(C(2.0 ** -290), av, True), LE(C(100.0 * 2.0 ** -1022), av)]
-        q1 = self.divide(v, C(100.0), mid)
-        q2 = self.divide(self.sp([big + [v, C(2.0 ** -600)]], hint="vb"), C(100.0), big)
-        q3 = self.divide(self.sp([tin + [v, C(2.0 ** 600)]], hint="vt"), C(100.0), tin)
-        q = self.sp([mid + [q1], big + [q2, C(2.0 ** 300), C(2.0 ** 300)], tin + [q3, C(2.0 ** -300), C(2.0 ** -300)]], hint="q100")
-        subn = self.sp([[mask, LE(C(100.0 * 2.0 ** -1022), av, True), LE(av, C(0.0), True)]], hint="sbn")
-        return q, subn
-
-    def dec_to_double(self, N, kk):
-        """The double nearest to N 10^k (ties to even), N an integer 0 <= N < 2^53, k an integer column.
-        Returns (value, uncertified flag). Exact single IEEE operations for |k| <= 22; certified double-double
-        otherwise (k = 23 is exact: 10^23 = ph + pl and every product is exact); subnormal results by
-        rounding N 10^k 2^1074 to an integer; 0 for k < -340; inf (flagged) for k > 308 and N > 0."""
-        rng = lambda a, b_: [LE(C(float(a)), kk), LE(kk, C(float(b_)))]
-        p10 = self.sel(kk, {k: 10.0 ** k for k in range(0, 23)}, "p10")
-        q10 = self.sel(kk, {k: 10.0 ** (-k) for k in range(-22, 0)}, "q10")
-        v1 = self.sp([rng(0, 22) + [N, p10]], hint="v1")
-        v2 = self.divide(N, self.sp([rng(-22, -1) + [q10], [LE(C(-22.0), kk, True), C(1.0)], [LE(C(0.0), kk), C(1.0)]], hint="qd"), rng(-22, -1))
-        # 23 <= k <= 308: constants scaled by 2^-600 (no overflow in the splitting), result scaled back exactly
-        ph = self.sel(kk, {k: dd_const(Fraction(10) ** k / Fraction(2) ** 600)[0] for k in range(23, 309)}, "bh")
-        pl = self.sel(kk, {k: dd_const(Fraction(10) ** k / Fraction(2) ** 600)[1] for k in range(23, 309)}, "bl")
-        s3, c3 = self.dd_round(self.sp([rng(23, 308) + [N]], hint="N3"), ph, pl)
-        v3 = self.sp([rng(23, 308) + [s3, C(2.0 ** 300), C(2.0 ** 300)]], hint="v3")
-        # -290 <= k <= -23: unscaled double-double (every partial product stays normal)
-        ph = self.sel(kk, {k: dd_const(Fraction(10) ** k)[0] for k in range(-290, -22)}, "ch")
-        pl = self.sel(kk, {k: dd_const(Fraction(10) ** k)[1] for k in range(-290, -22)}, "cl")
-        s4, c4 = self.dd_round(self.sp([rng(-290, -23) + [N]], hint="N4"), ph, pl)
-        # -340 <= k <= -291: y = N 10^k 2^1074; y >= 2^52: normal result fl(y) 2^-1074; else round(y) 2^-1074
-        ph = self.sel(kk, {k: dd_const(Fraction(10) ** k * Fraction(2) ** 1074)[0] for k in range(-340, -290)}, "eh")
-        pl = self.sel(kk, {k: dd_const(Fraction(10) ** k * Fraction(2) ** 1074)[1] for k in range(-340, -290)}, "el")
-        N5 = self.sp([rng(-340, -291) + [N]], hint="N5")
-        yh, yl = self.two_prod(N5, ph)
-        yl = self.sp([[yl], [N5, pl]], hint="yl5")
-        yh, yl = self.fast_two_sum(yh, yl)
-        s5n, c5n = self.dd_round(N5, ph, pl)
-        # subnormal result: round y = yh + yl to an integer, ties impossible (5^291 does not divide N 2^...)
-        f5 = self.floor_nonneg(self.sp([[LE(C(2.0 ** 52), yh, True), yh]], hint="y5"))
-        a5 = self.sp([[yh], [C(-1.0), f5]], hint="a5")                     # exact, in [0, 1)
-        nb5 = self.sp([[C(-1.0), yl]], hint="nb5")
-        dn5 = self.sp([[EQ(a5, C(0.0)), LE(C(0.0), yl, True)]], hint="dn5")   # a + b < 0
-        up5 = self.sp([[LE(nb5, self.sp([[a5], [C(-1.0)]], hint="am5"))]], hint="up5")   # a + b >= 1
-        f5 = self.sp([[f5], [EQ(dn5, C(1.0)), C(-1.0)], [EQ(up5, C(1.0)), C(1.0)]], hint="f5b")
-        a5 = self.sp([[a5], [EQ(dn5, C(1.0)), C(1.0)], [EQ(up5, C(1.0)), C(-1.0)]], hint="a5b")
-        ah5 = self.sp([[a5], [C(-0.5)]], hint="ah5")                        # exact
-        gt5 = self.sp([[LE(ah5, nb5, True)]], hint="gt5")                   # frac > 1/2
-        sub = self.sp([[f5], [EQ(gt5, C(1.0)), C(1.0)]], hint="sub")
-        c5s = self.sp([[LE(self.absv(self.sp([[ah5], [yl]], hint="d5"), "a5d"), C(2.0 ** -40))]], hint="c5s")
-        normal5 = LE(C(2.0 ** 52), yh)
-        v5 = self.sp([rng(-340, -291) + [normal5, s5n, C(2.0 ** -537), C(2.0 ** -537)],
-                      rng(-340, -291) + [LE(C(2.0 ** 52), yh, True), sub, C(2.0 ** -537), C(2.0 ** -537)]], hint="v5")
-        val = self.sp([rng(0, 22) + [v1], rng(-22, -1) + [v2], rng(23, 308) + [v3], rng(-290, -23) + [s4], rng(-340, -291) + [v5]], hint="val")
-        nz = EQ(N, C(0.0), True)                                            # N = 0: the value 0 is exact
-        unc = self.sp([rng(23, 308) + [nz, EQ(c3, C(1.0), True), EQ(kk, C(23.0), True)], rng(-290, -23) + [nz, EQ(c4, C(1.0), True)],
-                       rng(-340, -291) + [nz, normal5, EQ(c5n, C(1.0), True)], rng(-340, -291) + [nz, LE(C(2.0 ** 52), yh, True), EQ(c5s, C(1.0))],
-                       [LE(kk, C(308.0), True), LE(N, C(0.0), True)]], hint="unc")
-        self.notes["decimal to double: exact single operations for |k| <= 22, certified double-double beyond"] += 1
-        return val, unc
+        neg = LE(C(0.0), v, True)
+        lim = C(100.0 * 2.0 ** -1022)                                       # exact double
+        nrm = [mask, LE(lim, av)]
+        sub = [mask, LE(lim, av, True), LE(av, C(0.0), True)]
+        ax = self.sp([nrm + [av], [EQ(self.sp([nrm + [C(1.0)]], hint="nr"), C(1.0), True), C(1.0)]], hint="dax")
+        e, f = self.bin_reduce(ax)
+        qf = self.divide(f, C(100.0), nrm)
+        p2 = self.sel(e, {k: 2.0 ** (k - 1) for k in range(-1073, 1025)}, "p2e")     # 2^(e-1): e reaches 1024
+        qn = self.sp([nrm + [qf, p2, C(2.0)]], hint="qn")                 # exact scaling (normal result)
+        m = self.sp([sub + [av, C(2.0 ** 600), C(2.0 ** 474)]], hint="m")      # exact: an integer < 2^59
+        q0 = self.floor_nonneg(self.sp([sub + [m, C(0.01)]], hint="m01"))
+        ph, pe = self.two_prod(q0, C(100.0))
+        r = self.sp([[self.sub(m, ph, "md")], [C(-1.0), pe]], hint="rr")    # m - 100 q0 exactly (small integer)
+        q0 = self.sp([[q0], [LE(C(0.0), r, True), C(-1.0)], [LE(C(100.0), r), C(1.0)]], hint="q0b")
+        r = self.sp([[r], [LE(C(0.0), r, True), C(100.0)], [LE(C(100.0), r), C(-100.0)]], hint="r0b")
+        hq = self.floor_nonneg(self.sp([[q0, C(0.5)]], hint="hq"))
+        odd = self.sp([[q0], [C(-2.0), hq]], hint="oq")
+        inc = self.sp([[LE(r, C(50.0), True)], [EQ(r, C(50.0)), EQ(odd, C(1.0))]], hint="iq")
+        qs = self.sp([sub + [self.sp([[q0], [inc]], hint="qi"), C(2.0 ** -600), C(2.0 ** -474)]], hint="qs")
+        q = self.sp([nrm + [qn], sub + [qs]], hint="q100")
+        ng = self.sp([[neg]], hint="ngf")
+        q = self.sp([[EQ(ng, C(1.0), True), q], [EQ(ng, C(1.0)), C(-1.0), q]], hint="q100s")
+        self.notes["correctly rounded division by 100 over the whole binary range"] += 1
+        return q, C(0.0)
 
     def f_VALUE(self, args):
         a0 = args[0]
@@ -1347,12 +1507,25 @@ class Exact8Value(Exact8Text):
         return Exact8Text.f_VALUE(self, args)
 
     def value_left_exact(self, largs):
-        if len(largs) < 2 or self.has_cell(largs[1]):
+        if len(largs) >= 2 and self.has_cell(largs[1]):
             raise K.Unsupported("LEFT with a computed length")
-        n = int(K.X.to_num(K.X.ev(largs[1], K.X.Ctx(self.store, self.book, self.sheet_name, 1, 1))))
+        n = 1 if len(largs) < 2 else int(K.X.to_num(K.X.ev(largs[1], K.X.Ctx(self.store, self.book, self.sheet_name, 1, 1))))
         if n < 0 or n > VL_MAX:
             raise K.Unsupported("LEFT length outside 0..%d (method A)" % VL_MAX)
-        segs, (ef, ec) = self.to_text_segs(largs[0])
+        a0 = largs[0]
+        if a0[0] == "bin" and a0[1] == "&":
+            parts = []
+            def flat(nd):
+                if nd[0] == "bin" and nd[1] == "&":
+                    flat(nd[2]); flat(nd[3])
+                else:
+                    parts.append(nd)
+            flat(a0)
+            nf0 = len(self.__dict__.get("fail_flags", []))
+            segs, _L, (ef, ec) = self.concat_segs([self.to_text_segs(p) for p in parts])
+            self.gate_flags(nf0, ef)
+        else:
+            segs, (ef, ec) = self.to_text_segs(a0)
         segs = [s_ for s_ in segs]
         if not segs:
             raise K.Unsupported("VALUE(LEFT) of a constant")

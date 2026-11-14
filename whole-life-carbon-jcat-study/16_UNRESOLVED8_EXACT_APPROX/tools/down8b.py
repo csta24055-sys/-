@@ -17,6 +17,7 @@ from overlay import OverlayStore
 from store import KEY_SHIFT, Err
 from synth import same
 from run8 import TARGETS, builder
+import crref
 
 NUMERIC = ["EQ-0469", "EQ-0298", "EQ-0450", "EQ-0451", "EQ-0452", "EQ-0229"]
 KINDS = ["real", "real", "int", "thresh", "half", "real", "lookup", "int"]
@@ -28,8 +29,9 @@ def main(dp, outp, nv):
     idx = DN.build_index()
     trees = {(pid, sheet): tree for b, lst in idx.items() for pid, sheet, arr, tree, rl in lst}
     D = pickle.load(open(dp, "rb"))
-    out = {}
-    for eq in NUMERIC:
+    only = sys.argv[4:] or NUMERIC
+    out = pickle.load(open(outp, "rb")) if (sys.argv[4:] and os.path.exists(outp)) else {}
+    for eq in only:
         closure = sorted(D[eq]["closure"].items(), key=lambda kv: kv[1])
         units = []
         for pid in TARGETS[eq]:
@@ -74,6 +76,13 @@ def main(dp, outp, nv):
                     except Exception:
                         w = Err(15)
                     target_vals["ref"][(sh.sid, rr * KEY_SHIFT + cc)] = w
+                    X._INDEX_CACHE.clear(); X._SUMIF_CACHE.clear()
+                    with crref.correctly_rounded():
+                        try:
+                            wc = X.evaluate(u["tree"], ost0, u["book"], u["sheet"], rr, cc)
+                        except Exception:
+                            wc = Err(15)
+                    target_vals.setdefault("ref_cr", {})[(sh.sid, rr * KEY_SHIFT + cc)] = wc
             scen = {"ref": target_vals["ref"], "A": target_vals["A"], "B": target_vals["B"]}
             for sgn in ("ulp+", "ulp-"):
                 scen[sgn] = {k: (math.nextafter(w, math.inf if sgn == "ulp+" else -math.inf)
@@ -100,6 +109,11 @@ def main(dp, outp, nv):
                         vals[(book, pid, sheet, r_, c_)] = val
                 results[sname] = vals
             base = results["ref"]
+            for sname in ("A", "B"):
+                cnt[sname]["targets_differing_from_correctly_rounded_ref"] += sum(
+                    1 for k in scen[sname] if not same(scen[sname][k], target_vals["ref_cr"][k])[0])
+            cnt["A"]["reference_libm_not_correctly_rounded"] += sum(
+                1 for k in target_vals["ref"] if not same(target_vals["ref"][k], target_vals["ref_cr"][k])[0])
             for sname in ("A", "B", "ulp+", "ulp-"):
                 c = cnt[sname]
                 tdiff = sum(1 for k in scen[sname] if not same(scen[sname][k], scen["ref"][k])[0])

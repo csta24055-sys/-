@@ -65,7 +65,7 @@ def powlog():
     xs += [1 + rng.uniform(-1e-6, 1e-6) for _ in range(int(1000 * SC))]
     xs += [float(2 ** k) for k in range(-1074, 1024, 7)] + [10.0 ** k for k in range(-300, 300, 13)]
     xs += [1.0, 5e-324, 2.2250738585072014e-308, 1.7976931348623157e308, 0.0, -1.0, -0.0]
-    for kind, a in (("pow", 0.05), ("pow", -0.06), ("pow", 0.37), ("pow", 2.5), ("log", None)):
+    for kind, a in (("pow", 0.05), ("pow", -0.06), ("pow", 0.37), ("pow", 2.5), ("pow", -10.5), ("pow", 100.5), ("log", None)):
         f = "POWER(A1,%r)" % a if kind == "pow" else "LOG10(A1)"
         tv = []
         for x in xs:
@@ -80,14 +80,35 @@ def powlog():
         for mode in ("A", "B"):
             res = synth.run(f, {1: xs}, len(xs), 2, E8.Exact8Final, mode8=mode)
             got = res["got"]
-            pos = [(g, t) for g, t in zip(got, tv) if t is not None]
             rec = dict(n=len(xs), steps=res["steps"], run_s=round(res["run_s"], 3), table_MB=round(res["table_bytes"] / 1e6, 2),
-                       flagged=sum(1 for g in got if g == "<missing>"),
-                       n_pos=len(pos), eq_truth=sum(1 for g, t in pos if g == t),
-                       max_rel=max((abs(g - t) / abs(t) for g, t in pos if isinstance(g, float) and t != 0.0 and math.isfinite(t)), default=0.0),
-                       max_abs_near1=max((abs(g - t) for (g, t), x in zip(zip(got, tv), xs) if t is not None and isinstance(g, float) and abs(x - 1) < 1e-5), default=0.0),
-                       eq_libm=sum(1 for g, w in zip(got, res["ref"]) if g == w),
-                       libm_correct=sum(1 for w, t in zip(res["ref"], tv) if t is not None and w == t))
+                       n_pos=0, eq_truth=0, wrong=0, flagged=0, max_rel=0.0, max_abs_near1=0.0, eq_libm=0, libm_correct=0,
+                       overflow=0, overflow_num=0, subnormal=0, subnormal_missing=0, subnormal_equal=0)
+            for x, g, t, w in zip(xs, got, tv, res["ref"]):
+                if t is None:
+                    continue
+                if not math.isfinite(t):                                  # overflow: the reference gives #NUM!
+                    rec["overflow"] += 1
+                    rec["overflow_num"] += isinstance(g, E8.K.X.Err)
+                    continue
+                if t == 0.0 or abs(t) < 2.0 ** -1022:                     # outside the normal range (declared)
+                    rec["subnormal"] += 1
+                    rec["subnormal_missing"] += g == "<missing>"
+                    rec["subnormal_equal"] += isinstance(g, float) and g == t
+                    continue
+                rec["n_pos"] += 1
+                rec["libm_correct"] += w == t
+                if g == "<missing>":
+                    rec["flagged"] += 1
+                    continue
+                if isinstance(g, float) and g == t:
+                    rec["eq_truth"] += 1
+                else:
+                    rec["wrong"] += 1
+                if isinstance(g, float):
+                    rec["max_rel"] = max(rec["max_rel"], abs(g - t) / abs(t))
+                    if abs(x - 1) < 1e-5:
+                        rec["max_abs_near1"] = max(rec["max_abs_near1"], abs(g - t))
+                rec["eq_libm"] += g == w
             OUT[("powlog", kind, a, mode)] = rec
             print("powlog", kind, a, mode, rec, flush=True)
 
@@ -129,7 +150,11 @@ def sumif():
 
 if __name__ == "__main__":
     t0 = time.time()
-    for part in (concat, rounding, powlog, value, sumif):
+    parts = [globals()[p] for p in sys.argv[3:]] or [concat, rounding, powlog, value, sumif]
+    if sys.argv[3:] and os.path.exists(sys.argv[1]):
+        old = json.load(open(sys.argv[1], encoding="utf-8"))
+        OUT.update({tuple(k.split("|")): v for k, v in old.items() if not any(k.startswith(p.__name__ if p.__name__ != "rounding" else "round") for p in parts)})
+    for part in parts:
         part()
         json.dump({"|".join(map(str, k)): v for k, v in OUT.items()}, open(sys.argv[1], "w"), ensure_ascii=False, indent=1)
     print("total s", round(time.time() - t0), "peak RSS MB", resource.getrusage(resource.RUSAGE_SELF).ru_maxrss // 1024)

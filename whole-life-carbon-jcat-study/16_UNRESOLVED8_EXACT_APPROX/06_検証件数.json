@@ -1,0 +1,1051 @@
+{
+ "EQ-0023": {
+  "kind": "文字列連結（セル・定数・セル）",
+  "A": {
+   "L1": {
+    "n": 18812,
+    "ok_cached": 18812,
+    "ok_ref": 18812,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 2560,
+    "ok": 2560,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 320
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 1040,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 2730,
+    "compile_ms": 5785.7,
+    "run_ms_L1": 4666.5,
+    "table_bytes_max": 13575348,
+    "engine_bytes_max": 184940955,
+    "rows_max": 133440,
+    "instances": 18812,
+    "vb_run_ms": 79119.1,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 18812,
+    "ok_cached": 18812,
+    "ok_ref": 18812,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 2560,
+    "ok": 201,
+    "missing": 2359,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 320
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 1040,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 2766,
+    "compile_ms": 1678.1,
+    "run_ms_L1": 4342.1,
+    "table_bytes_max": 14422284,
+    "engine_bytes_max": 190970658,
+    "rows_max": 133440,
+    "instances": 18812,
+    "vb_run_ms": 80560.2,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 1406957,
+   "levels": [
+    70151,
+    175356,
+    228106,
+    123196,
+    736958,
+    10248,
+    22886,
+    13902,
+    17962,
+    3690,
+    1070,
+    1436,
+    1420,
+    416,
+    160,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  }
+ },
+ "EQ-0144": {
+  "kind": "文字列連結（セル・セル）",
+  "A": {
+   "L1": {
+    "n": 544,
+    "ok_cached": 544,
+    "ok_ref": 544,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 320,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 40
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 300,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 2727,
+    "compile_ms": 48.0,
+    "run_ms_L1": 328.1,
+    "table_bytes_max": 1227816,
+    "engine_bytes_max": 17958402,
+    "rows_max": 13056,
+    "instances": 544,
+    "vb_run_ms": 9852.0,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 544,
+    "ok_cached": 544,
+    "ok_ref": 544,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 26,
+    "missing": 294,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 40
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 300,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 2760,
+    "compile_ms": 189.6,
+    "run_ms_L1": 338.7,
+    "table_bytes_max": 2074752,
+    "engine_bytes_max": 19276308,
+    "rows_max": 13056,
+    "instances": 544,
+    "vb_run_ms": 9899.3,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 11,
+   "levels": [
+    6,
+    5,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  }
+ },
+ "EQ-0469": {
+  "kind": "条件が連結で作られる条件付き合計",
+  "A": {
+   "L1": {
+    "n": 6,
+    "ok_cached": 6,
+    "ok_ref": 6,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 240,
+    "ok": 240,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 40
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 300,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 4270,
+    "compile_ms": 1115.9,
+    "run_ms_L1": 1258.8,
+    "table_bytes_max": 1916910,
+    "engine_bytes_max": 74759841,
+    "rows_max": 20346,
+    "instances": 6,
+    "vb_run_ms": 52934.7,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 6,
+    "ok_cached": 6,
+    "ok_ref": 6,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 240,
+    "ok": 240,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 40
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 300,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 1411,
+    "compile_ms": 16.8,
+    "run_ms_L1": 129.8,
+    "table_bytes_max": 1239750,
+    "engine_bytes_max": 801387,
+    "rows_max": 12774,
+    "instances": 6,
+    "vb_run_ms": 5383.6,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 5,
+   "levels": [
+    5,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  },
+  "downstream_variants": {
+   "variants": 40,
+   "closure": 5,
+   "counts": {
+    "A": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "reference_libm_not_correctly_rounded": 0,
+     "targets_differing": 0,
+     "consumer_evals": 200
+    },
+    "B": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "targets_differing": 0,
+     "consumer_evals": 200
+    },
+    "ulp+": {
+     "targets_differing": 0,
+     "consumer_evals": 200
+    },
+    "ulp-": {
+     "targets_differing": 0,
+     "consumer_evals": 200
+    }
+   },
+   "discontinuous_in_eqs": {
+    "A": [],
+    "B": [],
+    "ulp+": [],
+    "ulp-": []
+   }
+  }
+ },
+ "EQ-0298": {
+  "kind": "ROUND（丸めの境界）",
+  "A": {
+   "L1": {
+    "n": 48,
+    "ok_cached": 48,
+    "ok_ref": 48,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 1600,
+    "ok": 1600,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 200
+   },
+   "random_cases": {
+    "n": 5660,
+    "ok_lo": 5658,
+    "ok_ref": 5660,
+    "ref_eq_lo": 5658,
+    "missing": 0,
+    "conv=ref, LO differs": 2,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 630,
+    "cases_hit": 588
+   },
+   "performance": {
+    "steps_max": 2173,
+    "compile_ms": 816.4,
+    "run_ms_L1": 6192.1,
+    "table_bytes_max": 11520,
+    "engine_bytes_max": 201780,
+    "rows_max": 10,
+    "instances": 48,
+    "vb_run_ms": 248386.8,
+    "rc_run_ms": 723484.5
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 48,
+    "ok_cached": 48,
+    "ok_ref": 48,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 1600,
+    "ok": 1600,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 200
+   },
+   "random_cases": {
+    "n": 5660,
+    "ok_lo": 5660,
+    "ok_ref": 5658,
+    "ref_eq_lo": 5658,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 2,
+    "conv differs from both": 0,
+    "cases": 630,
+    "cases_hit": 588
+   },
+   "performance": {
+    "steps_max": 646,
+    "compile_ms": 84.7,
+    "run_ms_L1": 1104.2,
+    "table_bytes_max": 11520,
+    "engine_bytes_max": 64260,
+    "rows_max": 10,
+    "instances": 48,
+    "vb_run_ms": 43569.8,
+    "rc_run_ms": 132194.6
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 58,
+   "levels": [
+    53,
+    5,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  },
+  "downstream_variants": {
+   "variants": 40,
+   "closure": 58,
+   "counts": {
+    "A": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "reference_libm_not_correctly_rounded": 0,
+     "targets_differing": 0,
+     "consumer_evals": 2320
+    },
+    "B": {
+     "targets_differing_from_correctly_rounded_ref": 1,
+     "targets_differing": 1,
+     "consumer_evals": 2320,
+     "proportional": 1
+    },
+    "ulp+": {
+     "targets_differing": 1406,
+     "consumer_evals": 2320,
+     "proportional": 109,
+     "discontinuous": 8
+    },
+    "ulp-": {
+     "targets_differing": 1406,
+     "consumer_evals": 2320,
+     "proportional": 110,
+     "discontinuous": 5
+    }
+   },
+   "discontinuous_in_eqs": {
+    "A": [],
+    "B": [],
+    "ulp+": [
+     "EQ-0288",
+     "EQ-0308"
+    ],
+    "ulp-": [
+     "EQ-0288",
+     "EQ-0308"
+    ]
+   }
+  }
+ },
+ "EQ-0450": {
+  "kind": "非整数乗（正の指数）",
+  "A": {
+   "L1": {
+    "n": 8,
+    "ok_cached": 8,
+    "ok_ref": 8,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 320,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 606,
+    "compile_ms": 926.4,
+    "run_ms_L1": 944.9,
+    "table_bytes_max": 1008,
+    "engine_bytes_max": 11430,
+    "rows_max": 2,
+    "instances": 8,
+    "vb_run_ms": 38146.1,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 8,
+    "ok_cached": 8,
+    "ok_ref": 8,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 307,
+    "missing": 0,
+    "wrong": 13,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 131,
+    "compile_ms": 733.0,
+    "run_ms_L1": 574.9,
+    "table_bytes_max": 1008,
+    "engine_bytes_max": 2880,
+    "rows_max": 2,
+    "instances": 8,
+    "vb_run_ms": 23760.8,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 32,
+   "levels": [
+    24,
+    8,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  },
+  "downstream_variants": {
+   "variants": 40,
+   "closure": 32,
+   "counts": {
+    "A": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "reference_libm_not_correctly_rounded": 0,
+     "targets_differing": 0,
+     "consumer_evals": 1280
+    },
+    "B": {
+     "targets_differing_from_correctly_rounded_ref": 8,
+     "targets_differing": 8,
+     "consumer_evals": 1280,
+     "proportional": 4
+    },
+    "ulp+": {
+     "targets_differing": 298,
+     "consumer_evals": 1280,
+     "proportional": 82
+    },
+    "ulp-": {
+     "targets_differing": 298,
+     "consumer_evals": 1280,
+     "proportional": 107
+    }
+   },
+   "discontinuous_in_eqs": {
+    "A": [],
+    "B": [],
+    "ulp+": [],
+    "ulp-": []
+   }
+  }
+ },
+ "EQ-0451": {
+  "kind": "非整数乗（負の指数）",
+  "A": {
+   "L1": {
+    "n": 8,
+    "ok_cached": 8,
+    "ok_ref": 8,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 320,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 679,
+    "compile_ms": 936.4,
+    "run_ms_L1": 943.5,
+    "table_bytes_max": 1980,
+    "engine_bytes_max": 13320,
+    "rows_max": 2,
+    "instances": 8,
+    "vb_run_ms": 38607.9,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 8,
+    "ok_cached": 8,
+    "ok_ref": 8,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 302,
+    "missing": 0,
+    "wrong": 18,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 204,
+    "compile_ms": 732.4,
+    "run_ms_L1": 584.5,
+    "table_bytes_max": 1980,
+    "engine_bytes_max": 4770,
+    "rows_max": 2,
+    "instances": 8,
+    "vb_run_ms": 23817.6,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 24,
+   "levels": [
+    16,
+    8,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  },
+  "downstream_variants": {
+   "variants": 40,
+   "closure": 24,
+   "counts": {
+    "A": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "reference_libm_not_correctly_rounded": 0,
+     "targets_differing": 0,
+     "consumer_evals": 960
+    },
+    "B": {
+     "targets_differing_from_correctly_rounded_ref": 15,
+     "targets_differing": 15,
+     "consumer_evals": 960,
+     "proportional": 2
+    },
+    "ulp+": {
+     "targets_differing": 316,
+     "consumer_evals": 960,
+     "proportional": 100
+    },
+    "ulp-": {
+     "targets_differing": 316,
+     "consumer_evals": 960,
+     "proportional": 132
+    }
+   },
+   "discontinuous_in_eqs": {
+    "A": [],
+    "B": [],
+    "ulp+": [],
+    "ulp-": []
+   }
+  }
+ },
+ "EQ-0452": {
+  "kind": "常用対数",
+  "A": {
+   "L1": {
+    "n": 8,
+    "ok_cached": 8,
+    "ok_ref": 8,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 320,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 692,
+    "compile_ms": 129.5,
+    "run_ms_L1": 736.8,
+    "table_bytes_max": 1404,
+    "engine_bytes_max": 12942,
+    "rows_max": 12,
+    "instances": 8,
+    "vb_run_ms": 26612.8,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 8,
+    "ok_cached": 8,
+    "ok_ref": 8,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 320,
+    "ok": 317,
+    "missing": 0,
+    "wrong": 3,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 182,
+    "compile_ms": 81.3,
+    "run_ms_L1": 361.4,
+    "table_bytes_max": 1404,
+    "engine_bytes_max": 3744,
+    "rows_max": 12,
+    "instances": 8,
+    "vb_run_ms": 13803.4,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 16,
+   "levels": [
+    8,
+    8,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {},
+   "ulp-": {}
+  },
+  "downstream_variants": {
+   "variants": 40,
+   "closure": 16,
+   "counts": {
+    "A": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "reference_libm_not_correctly_rounded": 1,
+     "targets_differing": 1,
+     "consumer_evals": 640,
+     "proportional": 1
+    },
+    "B": {
+     "targets_differing_from_correctly_rounded_ref": 9,
+     "targets_differing": 8,
+     "consumer_evals": 640,
+     "proportional": 7
+    },
+    "ulp+": {
+     "targets_differing": 300,
+     "consumer_evals": 640,
+     "proportional": 144
+    },
+    "ulp-": {
+     "targets_differing": 300,
+     "consumer_evals": 640,
+     "proportional": 145
+    }
+   },
+   "discontinuous_in_eqs": {
+    "A": [],
+    "B": [],
+    "ulp+": [],
+    "ulp-": []
+   }
+  }
+ },
+ "EQ-0229": {
+  "kind": "VALUE(LEFT())",
+  "A": {
+   "L1": {
+    "n": 132,
+    "ok_cached": 132,
+    "ok_ref": 132,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 1280,
+    "ok": 1280,
+    "missing": 0,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 1812,
+    "compile_ms": 250.7,
+    "run_ms_L1": 1950.6,
+    "table_bytes_max": 1005615,
+    "engine_bytes_max": 1294488,
+    "rows_max": 12774,
+    "instances": 132,
+    "vb_run_ms": 79406.6,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "B": {
+   "L1": {
+    "n": 132,
+    "ok_cached": 132,
+    "ok_ref": 132,
+    "missing": 0,
+    "unsupported": 0
+   },
+   "boundary": {
+    "n": 1280,
+    "ok": 654,
+    "missing": 626,
+    "wrong": 0,
+    "ref_exc": 0,
+    "variants": 160
+   },
+   "random_cases": {
+    "n": 0,
+    "ok_lo": 0,
+    "ok_ref": 0,
+    "ref_eq_lo": 0,
+    "missing": 0,
+    "conv=ref, LO differs": 0,
+    "conv=LO, ref differs": 0,
+    "conv differs from both": 0,
+    "cases": 520,
+    "cases_hit": 0
+   },
+   "performance": {
+    "steps_max": 1426,
+    "compile_ms": 11.8,
+    "run_ms_L1": 224.2,
+    "table_bytes_max": 4752,
+    "engine_bytes_max": 426195,
+    "rows_max": 33,
+    "instances": 132,
+    "vb_run_ms": 8549.5,
+    "rc_run_ms": 0
+   },
+   "downstream": {
+    "substituted": 0,
+    "changed": {}
+   }
+  },
+  "consumers": {
+   "closure": 16,
+   "levels": [
+    16,
+    0
+   ]
+  },
+  "sensitivity_ulp": {
+   "ulp+": {
+    "changed": 4,
+    "EQ-0455": 4
+   },
+   "ulp-": {}
+  },
+  "downstream_variants": {
+   "variants": 40,
+   "closure": 16,
+   "counts": {
+    "A": {
+     "targets_differing_from_correctly_rounded_ref": 0,
+     "reference_libm_not_correctly_rounded": 0,
+     "targets_differing": 0,
+     "consumer_evals": 640
+    },
+    "B": {
+     "targets_differing_from_correctly_rounded_ref": 2970,
+     "targets_differing": 2970,
+     "consumer_evals": 640,
+     "discontinuous": 256
+    },
+    "ulp+": {
+     "targets_differing": 4852,
+     "consumer_evals": 640
+    },
+    "ulp-": {
+     "targets_differing": 4852,
+     "consumer_evals": 640
+    }
+   },
+   "discontinuous_in_eqs": {
+    "A": [],
+    "B": [
+     "EQ-0455",
+     "EQ-0456"
+    ],
+    "ulp+": [],
+    "ulp-": []
+   }
+  }
+ }
+}
