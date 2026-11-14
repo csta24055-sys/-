@@ -1,16 +1,23 @@
 {
+ "sets": [
+  "dev_design",
+  "dev_edge",
+  "rep_evaluation",
+  "rep_boundary",
+  "rep_constructed"
+ ],
+ "max_scenarios": 30,
  "x11": {
-  "n_scn": 105,
-  "n_T": 672,
-  "const_bad": 0,
+  "n_scn": 125,
+  "n_T": 799,
   "zero_G": 13,
   "alignment": {
    "0": [
     0,
-    100
+    120
    ],
    "1": [
-    100,
+    120,
     0
    ]
   },
@@ -21,29 +28,48 @@
   ]
  },
  "x07": {
-  "n_T": 696,
+  "n_T": 823,
   "value_vs_C_bad": 0,
-  "len_ok": 696,
+  "len_ok": 823,
   "len_bad": 0,
   "cum_bad": 0,
   "series_bad": 0,
   "series_bad_examples": [],
   "max_rel": 2.78907263125306e-16,
-  "th4_binning_differs": 649,
-  "th4_differs_with_integer_events": 649,
-  "th4_differs_without_integer_events": 0
+  "th4_binning_differs": 776,
+  "th4_differs_with_integer_events": 776,
+  "th4_differs_without_integer_events": 0,
+  "year_mismatch_events_counted": 1163501,
+  "differs_with_year_mismatch": 776,
+  "differs_without_year_mismatch": 0,
+  "year_mismatch_without_difference": 0
+ },
+ "x04": {
+  "n_T": 823,
+  "stages_checked": 11522,
+  "bad": 0,
+  "max_rel": 6.240326628034358e-15,
+  "examples": []
  },
  "counts": {
-  "n_T": 696,
-  "x08_cycles": 234019,
+  "n_T": 823,
+  "x08_cycles": 295953,
   "x08_bad": 0,
-  "b401_lists": 165905,
+  "b401_lists": 199715,
   "b401_bad": 0,
   "b401_n_bad": 0,
-  "arithmetic": 21262,
-  "non_arithmetic": 2047,
-  "zero_amplitude_event_times": 39,
-  "b4_knot_times": 191361,
+  "arithmetic": 25874,
+  "non_arithmetic": 2421,
+  "zero_amplitude_event_times": 5563,
+  "b4_knot_times": 228872,
+  "b401_times_not_knots_of_C": 5442,
+  "b401_distinct_times": 100823,
+  "b403_items": 664625,
+  "b403_bad": 0,
+  "b403_examples": [],
+  "b5_n": 823,
+  "b5_bad": 0,
+  "b5_examples": [],
   "examples": []
  }
 }

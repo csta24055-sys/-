@@ -1,10 +1,10 @@
 {
- "note": "Static consumers: every formula cell whose references contain a cell of the equation, transitively, by levels. Substitution: the cells take method A's values and the closure is re-evaluated by the reference evaluator, compared with Excel's cached values (number of consumer cells that changed). Perturbation: every numeric cell of the equation moved by +-1 ulp; consumer cells that change are classified (proportional <= 8 ulp, or larger: a rounding, threshold or look-up that flips). Counts only.",
+ "note": "Static consumers: every formula cell whose references contain a cell of the equation, transitively, by levels (down12.py stops at 30 levels; the closure without that cap is under full_closure). Substitution: the cells take method A's values; only cells whose method-A value differs from Excel's cached value are substituted (substituted = 0 means nothing to re-evaluate). Necessity test: every cell of the equation takes a different text (the old text with a sign before and after it); the closure is re-evaluated by the reference evaluator in level order (2 passes in down12.py; to a fixed point in closure_full.py) and compared with Excel's cached values. Changed consumer cells are classified: within a proportional 8 ulp, or larger. Identity: the same re-evaluation with no change at all, to see which differences the re-evaluation itself makes. Counts only.",
  "equations": {
   "EQ-0090": {
    "cells_of_equation": 1504,
-   "consumer_closure": 1487052,
-   "levels": [
+   "consumer_closure_30_levels": 1487052,
+   "levels_30": [
     7056,
     86047,
     188288,
@@ -36,101 +36,130 @@
     4,
     4
    ],
-   "downstream_equations": 169,
+   "level_cap_reached": true,
+   "downstream_equations_30_levels": 169,
    "substitution_A": {
+    "substituted": 0,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    },
-   "perturbation": {
-    "perturbed_cells": 1504,
+   "necessity_test_30_levels": {
+    "substituted": 1504,
     "changed_cells": 16,
-    "by_class": {
-     "proportional (<= 8 ulp)": 16
-    }
+    "within_8_ulp": 16,
+    "larger": 0
    }
   },
   "EQ-0181": {
    "cells_of_equation": 326,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
    "substitution_A": {
+    "substituted": 0,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    },
-   "perturbation": {
-    "perturbed_cells": 326,
+   "necessity_test_30_levels": {
+    "substituted": 326,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    }
   },
   "EQ-0185": {
    "cells_of_equation": 319,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
    "substitution_A": {
+    "substituted": 0,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    },
-   "perturbation": {
-    "perturbed_cells": 319,
+   "necessity_test_30_levels": {
+    "substituted": 319,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    }
   },
   "EQ-0317": {
    "cells_of_equation": 36,
-   "consumer_closure": 8,
-   "levels": [
+   "consumer_closure_30_levels": 8,
+   "levels_30": [
     4,
     4
    ],
-   "downstream_equations": 4,
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 4,
    "substitution_A": {
+    "substituted": 0,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    },
-   "perturbation": {
-    "perturbed_cells": 36,
+   "necessity_test_30_levels": {
+    "substituted": 36,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "full_closure": {
+    "consumer_closure": 8,
+    "levels": 2,
+    "cells_beyond_level_30": 0,
+    "downstream_equations": 4,
+    "cells_per_level_after_30": []
    }
   },
   "EQ-0373": {
    "cells_of_equation": 19,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
    "substitution_A": {
+    "substituted": 0,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    },
-   "perturbation": {
-    "perturbed_cells": 19,
+   "necessity_test_30_levels": {
+    "substituted": 19,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    }
   },
   "EQ-0377": {
    "cells_of_equation": 17,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
    "substitution_A": {
+    "substituted": 0,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    },
-   "perturbation": {
-    "perturbed_cells": 17,
+   "necessity_test_30_levels": {
+    "substituted": 17,
     "changed_cells": 0,
-    "by_class": {}
+    "within_8_ulp": 0,
+    "larger": 0
    }
   },
   "EQ-0417": {
    "cells_of_equation": 14,
-   "consumer_closure": 1486444,
-   "levels": [
+   "consumer_closure_30_levels": 1486444,
+   "levels_30": [
     6856,
     85347,
     187962,
@@ -162,14 +191,25 @@
     4,
     4
    ],
-   "downstream_equations": 163,
-   "substitution_A": "not run",
-   "perturbation": "not run"
+   "level_cap_reached": true,
+   "downstream_equations_30_levels": 163,
+   "substitution_A": {
+    "substituted": 0,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "necessity_test_30_levels": {
+    "substituted": 14,
+    "changed_cells": 48,
+    "within_8_ulp": 48,
+    "larger": 0
+   }
   },
   "EQ-0471": {
    "cells_of_equation": 5,
-   "consumer_closure": 264616,
-   "levels": [
+   "consumer_closure_30_levels": 264616,
+   "levels_30": [
     35072,
     87680,
     140426,
@@ -181,41 +221,103 @@
     6,
     2
    ],
-   "downstream_equations": 21,
-   "substitution_A": "not run",
-   "perturbation": "not run"
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 21,
+   "substitution_A": {
+    "substituted": 0,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "necessity_test_30_levels": {
+    "substituted": 5,
+    "changed_cells": 12,
+    "within_8_ulp": 12,
+    "larger": 0
+   },
+   "full_closure": {
+    "consumer_closure": 264616,
+    "levels": 10,
+    "cells_beyond_level_30": 0,
+    "downstream_equations": 21,
+    "cells_per_level_after_30": []
+   }
   },
   "EQ-0553": {
    "cells_of_equation": 3,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
-   "substitution_A": "not run",
-   "perturbation": "not run"
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
+   "substitution_A": {
+    "substituted": 0,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "necessity_test_30_levels": {
+    "substituted": 3,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   }
   },
   "EQ-0587": {
    "cells_of_equation": 2,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
-   "substitution_A": "not run",
-   "perturbation": "not run"
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
+   "substitution_A": {
+    "substituted": 0,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "necessity_test_30_levels": {
+    "substituted": 2,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   }
   },
   "EQ-0621": {
    "cells_of_equation": 1,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
-   "substitution_A": "not run",
-   "perturbation": "not run"
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
+   "substitution_A": {
+    "substituted": 0,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "necessity_test_30_levels": {
+    "substituted": 1,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   }
   },
   "EQ-0643": {
    "cells_of_equation": 1,
-   "consumer_closure": 0,
-   "levels": [],
-   "downstream_equations": 0,
-   "substitution_A": "not run",
-   "perturbation": "not run"
+   "consumer_closure_30_levels": 0,
+   "levels_30": [],
+   "level_cap_reached": false,
+   "downstream_equations_30_levels": 0,
+   "substitution_A": {
+    "substituted": 0,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   },
+   "necessity_test_30_levels": {
+    "substituted": 1,
+    "changed_cells": 0,
+    "within_8_ulp": 0,
+    "larger": 0
+   }
   }
  }
 }

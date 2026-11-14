@@ -238,7 +238,7 @@ def doc07(s):
         L.append("| 集合 | シナリオ | 項 | 節点 | 出所の行の数 | 寄与の和とまとめた係数の不一致 | 保存した評価期間での $C$ と基準計算の最大相対差 |")
         L.append("|---|---|---|---|---|---|---|")
         for k, v in ex.items():
-            L.append("| %s | %s | %d | %d | %d | %d | %s |" % (k, v["label"], v["n_terms"], v["n_knots"], v["n_provenance_entries"], v["contributions_vs_merged_bad"], e(v["values_vs_reference_max_rel"])))
+            L.append("| %s | %s | %d | %d | %d | %d | %s |" % (k, v["label"].replace("|", "／"), v["n_terms"], v["n_knots"], v["n_provenance_entries"], v["contributions_vs_merged_bad"], e(v["values_vs_reference_max_rel"])))
         L.append("")
     return "\n".join(L)
 
