@@ -42,6 +42,7 @@
 | `units_eq.py <out> [集合…]` | 合計に入らない出力（X-11、回数、X-07）の式の照合 | `results/units_eq.json` |
 | `sliver_test.py`、`density_check.py`、`h_test.py` | 帯 $(K,\mathrm{sw}(K))$ の照合、密度の持ち方、$H$ への非依存 | `results/sliver_test.json`、`density_check.json`、`h_test.json` |
 | `aggregate1.py`、`make_docs1.py` | 集計と 06・07 の書き出し | `results/stage1_summary.json` |
+| `figures1.py` | 図 F1-1（$C(T)$ と実時間の分解）、F1-2（フーリエ部分和の誤差）。SVG と数値の CSV | `figures/` |
 
 ## 4. 未解決・制約（隠さない）
 

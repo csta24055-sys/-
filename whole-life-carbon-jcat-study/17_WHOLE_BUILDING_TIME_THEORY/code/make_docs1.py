@@ -213,9 +213,9 @@ def doc07(s):
     ht = s.get("h_test")
     if ht:
         L.append("## 8. 年次表の長さ $H$ への非依存（03 の TH-13、`code/h_test.py`）\n")
-        L.append("生成器で $H=160$ の入力を作り、すべての年次表を最初の 130 年で切った入力（$H=130$）と比べた。%d シナリオ×7 点（$T\\le130$）で、正準形の相対差の最大 %s、基準計算の相対差の最大 %s。"
+        L.append("生成器で $H=160$ の入力を作り、長さ 160 のすべての年次表を最初の 130 年で切った入力（$H=130$）と比べた。正準形は %d シナリオ×7 点（$T\\le130$）で有理数として一致したシナリオ %d（相対差の最大 %s）、基準計算の SUM-03 は 2 点ずつで相対差の最大 %s。"
                  "生成器は年ごとに乱数を引くので、同じ種で長さだけを変えると入力そのものが変わる（最初の試行では 8 シナリオ中 6 で年次表が異なった）。そのため切り詰めで同じ入力を作った。\n"
-                 % (len(ht), e(max(x["canonical_rel_diff"] for x in ht)), e(max(x["reference_rel_diff"] for x in ht))))
+                 % (len(ht), sum(1 for x in ht if x.get("canonical_exactly_equal")), e(max(x["canonical_rel_diff"] for x in ht)), e(max(x["reference_rel_diff"] for x in ht))))
     ex = s.get("expansion")
     if ex:
         L.append("## 9. 節点の係数から単位・入力の行への展開表（`code/expand.py --all-sets`）\n")

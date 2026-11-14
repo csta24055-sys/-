@@ -29,6 +29,7 @@
 | `altdecomp.py <out> [集合…]` | `results/altdecomp.json` |
 | `proc_time.py <out> [集合…] [--max-scenarios N]` | `results/proc_time.json` |
 | `make_docs2.py` | `results/stage2_summary.json`、07、08 |
+| `figures2.py` | 図 F2-1（工程関数の年ごとの実現量、SVG と CSV） |
 
 ## 3. 未解決・制約（隠さない）
 

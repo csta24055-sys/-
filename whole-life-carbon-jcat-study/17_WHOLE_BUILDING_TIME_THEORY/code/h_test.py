@@ -64,12 +64,13 @@ def main(outp):
         ka, kb = tc.KF(ca), tc.KF(cb)
         Ts = [0.5, 10.0, 33.3, 60.0, 99.9, 129.5, 130.0]
         diff = [float(abs(ka(T) - kb(T)) / max(abs(ka(T)), 1)) for T in Ts]
+        exact_equal = all(ka(T) == kb(T) for T in Ts)          # Fractions compared exactly
         refd = []
         for T in (33.3, 129.5):
             ra = baseline.run_reference(scenarios.with_period(a, T))["SUM-03"]["value"]
             rb = baseline.run_reference(scenarios.with_period(b, T))["SUM-03"]["value"]
             refd.append(abs(ra - rb) / max(abs(ra), 1))
-        r = dict(args=list(args), H=(ca.H, cb.H), same_first_130_years_of_tables=same_inputs, canonical_rel_diff=max(diff), reference_rel_diff=max(refd))
+        r = dict(args=list(args), H=(ca.H, cb.H), same_first_130_years_of_tables=same_inputs, canonical_rel_diff=max(diff), canonical_exactly_equal=exact_equal, n_points_canonical=len(Ts), reference_rel_diff=max(refd), n_points_reference=len(refd))
         res.append(r)
         print(r, flush=True)
     json.dump(res, open(outp, "w"), indent=1)
