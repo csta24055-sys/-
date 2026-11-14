@@ -29,6 +29,8 @@ def main():
     rand = [k for k in s["strata"] if not k.startswith("R:")]
     nscn = sum(s["strata"][k]["scenarios"] for k in rand)
     npairs = sum(s["strata"][k].get("pairs", 0) for k in rand)
+    if nscn < 20000:
+        L.append("**途中の集計**：目標 20,000 シナリオ × 5 評価期間のうち、保存された塊の %d シナリオまで（実行中）。最終の集計で書き換える。\n" % nscn)
     L.append("## 1. 全体\n")
     L.append("| 項目 | 値 |")
     L.append("|---|---|")

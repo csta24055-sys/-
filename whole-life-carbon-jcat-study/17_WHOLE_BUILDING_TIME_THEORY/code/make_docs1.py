@@ -4,6 +4,7 @@ results/units_time.json (both generated; numbers are never typed by hand).
 Usage (from this folder): python3 -B make_docs1.py
 """
 import collections
+import math
 import json
 import os
 import sys
@@ -96,7 +97,7 @@ def doc07(s):
             ("TH-6 積分の閉じた形 ＝ 区間ごとの積分", c["th6_points"], exf.get("th6_integral_bad"), "代数の確認"),
             ("TH-1 節点形の区間が一次式、係数が累積和", "全区間", exf.get("th1_affine_bad"), "実装の確認"),
             ("TH-2・TH-3 節点形の跳び・傾きの変化", "全隣接区間", exf.get("th2_jump_bad"), "実装の確認"),
-            ("TH-2 格子の節点（$(0,H)$ の内側、事象の切り替え点でない）の 0 でない跳び：丸め（窓の係数の大きさ $w$ の相対 1e-12 以下）か、近くの事象による初期化のどちらか（`code/lattice_jumps.py`）",
+            ("TH-2 格子の節点（$(0,H)$ の内側、事象の切り替え点でない）の 0 でない跳び：丸め（窓の係数の大きさ $w$ の相対 1e-12 以下）か、切り替え点が年セルの終わりを越える窓の事象による初期化のどちらか（`code/lattice_jumps.py`）",
              "%s" % (lj["rounding_near_event"] + lj["rounding_away"] + lj["reset"] + lj["unexplained"]), lj["unexplained"], "測定")]
     for a, b, d_, kd in rows:
         L.append("| %s | %s | %s | %s |" % (a, b, d_, kd))
@@ -106,10 +107,12 @@ def doc07(s):
              % (sz.get("terms_median"), sz.get("terms_max"), sz.get("knots_median"), sz.get("knots_max"), sz.get("ratio_terms_per_knot_median") or 0, sz.get("H_values")))
     L.append("- 節点の数：区間 %s、事象の節点 %s、格子の節点 %s、隣り合う区間の間の跳び %s。" % (c["pieces"], c["event_knots"], c["lattice_knots"], c["jumps"]))
     L.append("- 格子の節点の跳び（`code/lattice_jumps.py`、%s シナリオ。初版の timechar.py は事象の近くの跳びをすべて初期化と数え、丸めの検査から外していた：独立レビューの指摘）："
-             "丸めの大きさ %s（うち事象の時刻が相対 1e-9 以内にある節点 %s）、その最大は $w$ の相対 %s；切り替え点が年セルの終わりを越える事象による区間形の初期化 %s（%s シナリオ。$w$ の相対 %s〜%s）；説明のつかない跳び %s。"
-             "丸めの跳びの最大と初期化の跳びの最小は 9 桁以上離れている。事象から離れた節点の丸めの跳び %s（最大 $w$ の相対 %s）は timechar.py の数と同じ。"
-             % (lj["n_analysed"], lj["rounding_near_event"] + lj["rounding_away"], lj["rounding_near_event"], e(lj["max_rounding_rel"]), lj["reset"], lj["scenarios_with_reset"],
-                e(lj["min_reset_rel"]), e(lj["max_reset_rel"]), lj["unexplained"], lj["rounding_away"], e(lj["max_rounding_rel_away"])))
+             "丸めの大きさ（$w$ の相対 1e-12 以下）%s（うち事象の時刻が相対 1e-9 以内にある節点 %s）、その最大は $w$ の相対 %s；"
+             "丸めより大きい跳び %s は、すべて、切り替え点が年セルの終わりを越える B1-04 の窓の事象（窓の中で数えられない交換）を持つセルの終わりにあり（そのような位置は %s、%s シナリオ）、区間形の初期化である（$w$ の相対 %s〜%s）；それ以外の位置の丸めより大きい跳び（説明のつかない跳び）%s。"
+             "丸めの跳びの最大と初期化の跳びの最小は %d 桁離れている。事象から離れた節点の丸めの跳び %s（最大 $w$ の相対 %s）は timechar.py の数と同じ。"
+             % (lj["n_analysed"], lj["rounding_near_event"] + lj["rounding_away"], lj["rounding_near_event"], e(lj["max_rounding_rel"]), lj["reset"], lj["cross_positions"], lj["scenarios_with_reset"],
+                e(lj["min_reset_rel"]), e(lj["max_reset_rel"]), lj["unexplained"], int(math.floor(math.log10(lj["min_reset_rel"] / lj["max_rounding_rel"]))),
+                lj["rounding_away"], e(lj["max_rounding_rel_away"])))
     L.append("- 補題 L-2：浮動小数の切り替え点 $\\mathrm{sw}(g)$ と $g/\\mathrm{fl}(1-\\varepsilon)$ の差は最大 %.2f ulp。" % s["switch_offset_ulp_max"])
     ts = s["terminal_slope"]
     L.append("- TH-4(a)：終わりの項の傾き $Z'\\ne0$ を持つシナリオ %s / %s。区間のうち $Z'\\ne0$ の割合の中央値 %.2f。$|Z'|/|C'|$ の最大 %s、95 パーセンタイル %s。"
@@ -167,8 +170,12 @@ def doc07(s):
     L.append("- 合計で次数 0 のシナリオは、年増分がすべて 0（評価範囲に $T$ によって変わる段階がない）もの。")
     L.append("")
     L.append("## 5. FRI（フーリエ係数からの切り替え点）\n")
-    L.append("跳びだけの段階（B4・B5）で、事象の数 $K\\le 30$ のもの。回収するのは切り替え点 $\\mathrm{sw}(\\tau)$（$\\tau$ との差は $\\tau\\cdot10^{-9}$ 程度）。浮動小数での成否は $K$ だけでなく、切り替え点の最小の間隔と分解能 $H/(2K)$ の比で決まる。表の最後の行（$K=20$）の失敗は、2 つの切り替え点の間隔が $2\\times10^{-7}$ 年で、分解能 $H/(2K)\\approx3.25$ 年よりはるかに小さかったためで、$K$ の大きさによるものではない（03 の TH-10、04 の 2.4 節）。\n")
     fri = s["fri"]["by_K"]
+    worst = max(fri, key=lambda x: x["err"])
+    Hs = (s.get("size", {}).get("H_values") or [130])[0]
+    L.append("跳びだけの段階（B4・B5）で、事象の数 $K\\le 30$ のもの。回収するのは切り替え点 $\\mathrm{sw}(\\tau)$（$\\tau$ との差は $\\tau\\cdot10^{-9}$ 程度）。浮動小数での成否は $K$ だけでなく、切り替え点の最小の間隔と分解能 $H/(2K)$ の比で決まる。"
+             "誤差が最大の 1 件（$K=%d$、誤差 %s 年）は、2 つの切り替え点の間隔が %s 年で、分解能 $H/(2K)=%.2f$ 年よりはるかに小さかった（03 の TH-10、04 の 2.4 節。$K$ と間隔を分けて変えた比較は 03 の TH-10 の独立レビューの再計算）。\n"
+             % (worst["K"], e(worst["err"]), e(worst.get("sep")), Hs / (2 * worst["K"])))
     byK = collections.defaultdict(list)
     for x in fri:
         byK[x["K"]].append(x)
@@ -196,8 +203,8 @@ def doc07(s):
                                                           e(max(x["B1-04"]["rel_canon"] for x in xs)), e(max(x["SUM-03"]["rel_canon"] for x in xs))))
         L.append("")
         L.append("帯の中では、正準形と統一系はどちらも基準計算と異なりうる（交換の初期化を $T>K$ で効かせるため）。`valid_domain` は一覧の事象を調べないので、"
-                 "帯は定義域 $\\mathcal{D}$ に残る：$K$ が周期の事象の時刻 $nc$ でもあるときだけ $K$ から相対 1e-10〜1e-8 の $T$ が除かれ、帯のうち $K$ に相対 1e-10 より近い部分が残る。そうでないときは帯の全体が残る（表の「3e-10・はい・はい」の 2 組）。同じ帯は、整数の相対 1e-9 程度の近くにある浮動小数の事象（すぐ下の例 $\\mathrm{fl}(90\\times0.7)=62.99999999999999$、すぐ上の例 $\\mathrm{fl}(25\\times0.56)=14.000000000000002$：どちらも切り替え点が年セルの終わりを越える）の後にもできる（独立レビューの指摘）。この照合は整数の時刻だけで、その場合は確かめていない。第 1 段階の主張は、これらの帯を除いた $\\mathcal{D}'$ に限る（03 の 0 節）。"
-                 "第 11 章（完成済み）は変更していない。\n")
+                 "帯は定義域 $\\mathcal{D}$ に残る：$K$ が周期の事象の時刻 $nc$ でもあるときだけ $K$ から相対 1e-10〜1e-8 の $T$ が除かれ、帯のうち $K$ に相対 1e-10 より近い部分が残る。そうでないときは帯の全体が残る（表の「3e-10・はい・はい」の %d 組）。同じ帯は、整数の相対 1e-9 程度の近くにある浮動小数の事象（すぐ下の例 $\\mathrm{fl}(90\\times0.7)=62.99999999999999$、すぐ上の例 $\\mathrm{fl}(25\\times0.56)=14.000000000000002$：どちらも切り替え点が年セルの終わりを越える）の後にもできる（独立レビューの指摘）。この照合は整数の時刻だけで、その場合は確かめていない。第 1 段階の主張は、これらの帯を除いた $\\mathcal{D}'$ に限る（03 の 0 節）。"
+                 "第 11 章（完成済み）は変更していない。\n" % len(grp.get(("3e-10", True, True), [])))
     ue = s.get("units_eq")
     if ue:
         x11, x7, cn = ue["x11"], ue["x07"], ue["counts"]

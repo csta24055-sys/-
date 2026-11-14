@@ -1,5 +1,5 @@
 """Stage 1 verification: the canonical whole-building equation C(T) (exact evaluation of the kernel terms and of the
-minimal knot form) against (a) the unified system of chapter 11 and (b) the frozen reference calculation (refcalc),
+knot form (not minimal as stored: see 05 section 3)) against (a) the unified system of chapter 11 and (b) the frozen reference calculation (refcalc),
 for every scenario x study period of the named verification sets of chapter 11 (1,293 pairs), whole-life total
 (SUM-03) and every stage value (X-02 by_stage).
 

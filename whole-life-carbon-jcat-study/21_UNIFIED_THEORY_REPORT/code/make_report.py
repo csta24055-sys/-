@@ -67,7 +67,7 @@ def main():
     A("2. **時間特性.** $C(T)$ は評価期間 $T$ の区分一次関数で、跳びは事象の切り替え点、年の境では連続（丸めの大きさと、切り替え点が年セルの終わりを越える事象による初期化を除く）。$C(T) = M([0,T]) + Z(T)$（実時間の測度＋終わりの項）で、$dC/dT$ は排出率ではない。ラプラス変換と有限の台のフーリエ変換は厳密、フーリエ級数の部分和は近似（512 項でも最大誤差の中央値 %.1f％）。DMD の前提（時不変の線形系）は成り立たない（17 章 03〜05）。" % (100 * s1["fourier_partial_sums"]["512"]["max_rel_all_median"]))
     A("3. **動的 LCA.** 70 単位の骨格を保ったまま 17 の工程関数 $e_i(t)$ に分け、$C_{\\mathrm{dyn}}(T) = \\int_{[0,T]}e_{\\mathrm{total}} + Z(T) = C_{70}(T)$ を証明し、%s シナリオ・%s 点で有理数として照合した（不一致 0）。施工・製造・解体の時期は 70 単位から導けず、仮定の変種でだけ扱う。工程間の関係は比例・ゲート・二時刻の核で、時不変の畳み込みは比例の場合だけ（18 章）。" % (e(s2.get("n_scenarios")), e(s2.get("periods_checked"))))
     A("4. **原版の残り 12 式.** すべて 2 構造で厳密に変換し、除外は 0（「変換できなかったから不要」とした式はない）。全セル %s／%s、境界条件 %s／%s、無作為ケース %s／%s 値が一致（19 章）。" % (e(cells_ok), e(cells), e(bnd_ok), e(bnd), e(rnd_ok), e(rnd)))
-    A("5. **大規模ランダム検証.** 宣言した分布から %s シナリオ・%s ケース。定義域の内側の %s ケースで失敗 %s、95％ 上限 %s（ケースあたり）、%s（シナリオあたり）。継承した 1,293 組の再実行（%s ケース）で失敗 %s（20 章）。" % (
+    A("5. **大規模ランダム検証.** 宣言した分布から %s シナリオ・%s ケース。定義域の内側の %s ケースで失敗 %s、95％ 上限 %s（ケースあたり）、%s（シナリオあたり）。継承した第 11 章の 10 集合の再実行（%s ケース。定義域の外 2 を含む）で失敗 %s（20 章）。" % (
         e(n4s), e(n4p), e(t4.get("in_domain_pairs")), e(t4.get("in_domain_failures")), e(t4.get("upper95_failure_probability_in_domain")), e(t4.get("upper95_failure_probability_per_scenario")), e(n_sets_pairs), e(n_sets_fail)))
     A("6. **見つかった限界.** 第 11 章の定義域 `valid_domain` は、切り替え点が年セルの終わり $K$ を越える事象（整数の時刻と、整数の相対 1e-9 程度の近く（すぐ下・すぐ上）の浮動小数の時刻）の直後の細い帯 $(K,\\mathrm{sw}(\\tau)]$ を除かない。その帯で正準形と統一系は基準計算と異なりうる（整数の時刻での実測で %d 件。17 章 07 の 6 節）。主張はこの帯を除いた $\\mathcal{D}'$ に限る。" % sl_bad)
     A("")
@@ -177,7 +177,7 @@ def main():
     A("")
     A("## 6. 再現の順序")
     A("")
-    A("1. 17 章 `code/`：`verify_canon.py`、`timechar.py`、`timechar_terms.py`、`units_time.py`、`units_eq.py`、`sliver_test.py`、`density_check.py`、`h_test.py`、`expand.py --all-sets`、`aggregate1.py`、`make_docs1.py`、`figures1.py`")
+    A("1. 17 章 `code/`：`verify_canon.py`、`timechar.py`、`timechar_terms.py`、`units_time.py`、`units_eq.py`、`sliver_test.py`、`density_check.py`、`h_test.py`、`lattice_jumps.py`、`expand.py --all-sets`、`aggregate1.py`、`make_docs1.py`、`figures1.py`")
     A("2. 18 章 `code/`：`dynlca.py`、`altdecomp.py`、`proc_time.py`、`make_docs2.py`")
     A("3. 19 章 `tools/`：`test12.py`（公開の合成データ）。原版を使う部分は非公開の資料の手順で")
     A("4. 20 章 `code/`：`run4.py`（範囲を分けて並列に）、`run4.py --sets`、`agg4.py`、`make_docs4.py`")

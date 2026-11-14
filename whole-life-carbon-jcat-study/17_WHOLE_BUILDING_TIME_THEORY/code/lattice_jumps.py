@@ -8,9 +8,13 @@ to the scale of the window (interval-form) coefficients, wscale = max |amp| * le
 timechar.py):
 
   rounding        |J| <= 1e-12 * wscale                      (TH-2 (2): rounding of separately rounded coefficients)
-  reset           |J| >  1e-12 * wscale and an event time g with |g - t| <= 1e-9 t exists (TH-2 (3): an exchange whose
-                  switch point passes the end of its year cell; its reset enters the next cell's coefficients)
-  unexplained     |J| >  1e-12 * wscale and no such event    (would contradict TH-2)
+  reset           |J| >  1e-12 * wscale at the end t = hi of a window cell that holds an event never counted inside
+                  the cell (a window term of B1-04 with amplitude != 0 and not gate < hi*(1-eps), and t < sw(gate)):
+                  TH-2 (3), an exchange whose switch point passes the end of its year cell; its reset enters the next
+                  cell's coefficients
+  unexplained     |J| >  1e-12 * wscale anywhere else        (would contradict TH-2)
+(The first version counted every above-threshold jump with ANY event knot of C within relative 1e-9 as a reset; the
+final review asked for the specific test above.)
 
 Both the rounding jumps near events and away from events are reported, and the smallest relative size of a reset jump
 (the gap to the rounding jumps shows that the threshold separates two populations).
@@ -34,7 +38,10 @@ import timechar as tc                                  # noqa: E402
 def classify(can, kf):
     wscale = max((abs(float(t.amp)) * (t.length or 1.0) for t in can.terms if t.hi != math.inf), default=0.0)
     ev_pos = {tc.tswitch(g) for g in kf.eg}
-    out = dict(rounding_near_event=0, rounding_away=0, reset=0, unexplained=0, max_rounding_rel=0.0,
+    cross = {t.hi for t in can.terms                   # ends of window cells holding an event never counted in the cell
+             if t.hi != math.inf and t.amp != 0 and t.gate != canon.NEG_INF
+             and not t.gate < t.hi * (1.0 - canon.EPS) and t.hi < tc.tswitch(t.gate)}
+    out = dict(rounding_near_event=0, rounding_away=0, reset=0, unexplained=0, cross_positions=0, above_threshold_near_other_event=0, max_rounding_rel=0.0,
                max_rounding_rel_away=0.0, min_reset_rel=None, max_reset_rel=0.0, wscale=wscale, examples=[])
     H = can.H
     for t in kf.lt:
@@ -55,14 +62,16 @@ def classify(can, kf):
             out["max_rounding_rel"] = max(out["max_rounding_rel"], rel)
             if not near:
                 out["max_rounding_rel_away"] = max(out["max_rounding_rel_away"], rel)
-        elif near:
+        elif t in cross:
             out["reset"] += 1
             out["min_reset_rel"] = rel if out["min_reset_rel"] is None else min(out["min_reset_rel"], rel)
             out["max_reset_rel"] = max(out["max_reset_rel"], rel)
         else:
             out["unexplained"] += 1
+            out["above_threshold_near_other_event"] += near
             if len(out["examples"]) < 5:
                 out["examples"].append(dict(t=t, rel=rel))
+    out["cross_positions"] = len({t for t in cross if 0 < t < H})
     return out
 
 
@@ -93,7 +102,8 @@ def main(outp, names):
                 max_rounding_rel=max((r["max_rounding_rel"] for r in ok), default=0.0),
                 max_rounding_rel_away=max((r["max_rounding_rel_away"] for r in ok), default=0.0),
                 min_reset_rel=min(resets) if resets else None, max_reset_rel=max((r["max_reset_rel"] for r in ok), default=0.0),
-                scenarios_with_reset=sum(1 for r in ok if r["reset"]))
+                scenarios_with_reset=sum(1 for r in ok if r["reset"]), cross_positions=sum(r["cross_positions"] for r in ok),
+                above_threshold_near_other_event=sum(r["above_threshold_near_other_event"] for r in ok))
     json.dump(dict(summary=summ, scenarios=res), open(outp, "w"), indent=1, default=str)
     print(json.dumps(summ, indent=1))
 
