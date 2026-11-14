@@ -92,7 +92,13 @@ def main():
     for r in ok:
         n = r["th9"].get("n")
         L = r["th9"].get("order")
-        rec["full (L = ceil(n/2))" if L is not None and n is not None and L >= (n + 1) // 2 else "low order L=%s" % L] += 1
+        g = (n + 1) // 2 if n is not None else None
+        if L is not None and g is not None and L == g:
+            rec["一般の次数 ⌈n/2⌉"] += 1
+        elif L is not None and g is not None and L > g:
+            rec["一般の次数を超える（一意でない）L=%s" % L] += 1
+        else:
+            rec["低い次数 L=%s" % L] += 1
     out["recurrence_total"] = dict(rec)
     role_rec = collections.defaultdict(collections.Counter)
     role_max = collections.defaultdict(collections.Counter)
@@ -102,7 +108,7 @@ def main():
         for role, d in r["role_recurrence"].items():
             L = d.get("order")
             role_rec[role][str(L)] += 1
-            role_max[role]["maximal (= ceil(n/2))" if L == nmax else ("above ceil(n/2): not unique" if L is not None and L > nmax else "below maximal")] += 1
+            role_max[role]["一般の次数 ⌈n/2⌉" if L == nmax else ("一般の次数を超える（一意でない）" if L is not None and L > nmax else ("0（T で変わらない）" if L == 0 else "低い次数"))] += 1
             if L and L <= 24 and d.get("certified_unique") and len(low_examples[role]) < 6:
                 low_examples[role].append(dict(label=r["label"][:60], order=L, eigenvalues=d.get("eigenvalues")))
     out["recurrence_by_role"] = {k: dict(sorted(v.items(), key=lambda kv: int(kv[0]) if kv[0].lstrip("-").isdigit() else 999)) for k, v in role_rec.items()}

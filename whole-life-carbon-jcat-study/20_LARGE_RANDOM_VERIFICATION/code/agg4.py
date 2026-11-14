@@ -35,8 +35,9 @@ def bound(n, k=0):
 
 
 def sliver_of(i, T):
-    """For a failing pair of the random strata: is T inside a band (K, sw(K)] after an integer-time event K (the domain
-    hole of chapter 17, D minus D')?  The scenario is regenerated (gen4 is deterministic in i)."""
+    """For a failing pair of the random strata: is T inside a band (K, sw(tau)] after an event tau whose switch point lies
+    beyond the end K of its year cell (integer times and times just below an integer; the domain hole of chapter 17,
+    D minus D')?  The scenario is regenerated (gen4 is deterministic in i)."""
     for p in (os.path.join(HERE, "..", "..", "17_WHOLE_BUILDING_TIME_THEORY", "code"), HERE):
         if p not in sys.path:
             sys.path.insert(0, p)
@@ -48,8 +49,14 @@ def sliver_of(i, T):
     from synth import population
     scn = gen4.make(gen4.plan(i))
     can = canon.build(canon.make_system(scn, population.BASELINES))
-    ks = sorted({t.gate for t in can.terms if t.kind in ("atom", "gcell", "wev0", "wev1") and float(t.gate).is_integer()})
-    return [K for K in ks if K < T <= tc.tswitch(K)]
+    D = 1.0 - canon.EPS
+    out = []
+    for g in sorted({t.gate for t in can.terms if t.kind in ("atom", "gcell", "wev0", "wev1")}):
+        K = math.ceil(g * D)                      # end of the event's year cell
+        sw = tc.tswitch(g)
+        if K < sw and K < T <= sw:                # switch point beyond the cell end (integer or just below an integer)
+            out.append(g)
+    return out
 
 
 def q(xs, p):

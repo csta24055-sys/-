@@ -137,7 +137,8 @@ def doc07(s):
         L.append("| %s | %s | %s | %s | %s |" % (M, e(d["max_rel_all_median"], "%.3g"), e(d["max_rel_all_max"], "%.3g"), e(d["max_rel_far_median"], "%.3g"), e(d["median_rel_median"], "%.2e")))
     L.append("")
     L.append("## 4. 線形漸化式（厳密な次数）と特性根\n")
-    L.append("年増分 $d_y$（$y=2..H$）の最小の線形漸化式の次数（バーレカンプ・マッシー法、有理数）。固有値は特性多項式の根。ハンケル行列の DMD は、合計の次数が 40 以下で一意に決まるシナリオが無かったので実行していない。\n")
+    L.append("年増分 $d_y$（$y=2..H$）の最小の線形漸化式の次数（バーレカンプ・マッシー法、有理数）。固有値は特性多項式の根。ハンケル行列の DMD は、合計の次数が 40 以下で一意に決まるシナリオが無かったので実行していない。"
+             "$\\lceil n/2\\rceil$（長さ $n$ の列で 65）は一般の列の次数で、最大ではない（次数は $n$ まで取りうる。$\\lceil n/2\\rceil$ を超える次数の漸化式は一意でない）。\n")
     L.append("- 合計：%s" % ", ".join("%s：%s 件" % (k, v) for k, v in s["recurrence_total"].items()))
     for role, d in sorted(s["recurrence_by_role_maximality"].items()):
         L.append("- 役割 %s：%s" % (role, ", ".join("%s：%s 件" % (k, v) for k, v in sorted(d.items()))))
@@ -188,28 +189,41 @@ def doc07(s):
                                                           e(max(x["B1-04"]["rel_canon"] for x in xs)), e(max(x["SUM-03"]["rel_canon"] for x in xs))))
         L.append("")
         L.append("帯の中では、正準形と統一系はどちらも基準計算と異なりうる（交換の初期化を $T>K$ で効かせるため）。`valid_domain` は一覧の事象を調べないので、"
-                 "帯のうち $K$ に相対 1e-10 より近い部分が定義域 $\\mathcal{D}$ に残る。第 1 段階の主張は、この帯を除いた $\\mathcal{D}'$ に限る（03 の 0 節）。"
+                 "帯のうち $K$ に相対 1e-10 より近い部分が定義域 $\\mathcal{D}$ に残る。同じ帯は、浮動小数で整数のすぐ下にある事象（例 $\\mathrm{fl}(90\\times0.7)=62.99999999999999$：切り替え点が年セルの終わりを越える）の後にもできる（独立レビューの指摘）。この照合は整数の時刻だけで、その場合は確かめていない。第 1 段階の主張は、これらの帯を除いた $\\mathcal{D}'$ に限る（03 の 0 節）。"
                  "第 11 章（完成済み）は変更していない。\n")
     ue = s.get("units_eq")
     if ue:
         x11, x7, cn = ue["x11"], ue["x07"], ue["counts"]
+        x4 = ue.get("x04", {})
         L.append("## 7. 合計に入らない $T$ 依存の出力の式（01 の 7 節、`code/units_eq.py`）\n")
+        L.append("標本：%s の各集合の先頭 %s シナリオまで（定義域の外の集合を除く）、各シナリオで保存した評価期間と無作為の 3 点（定義域の内側）。\n"
+                 % (", ".join(ue.get("sets", [])), ue.get("max_scenarios", "?")))
         L.append("| 出力 | 照合の内容 | 件数 | 不一致 |")
         L.append("|---|---|---|---|")
         al = x11["alignment"].get("1", [0, 0])
+        al0 = x11["alignment"].get("0", [0, 0])
         nd = x11.get("no_defined_ratio", [0, 0])[1]
-        L.append("| X-11 | $\\mathrm{X11}(T)/G(T)$ が各シナリオで一定（相対 1e-12）、$\\gamma_k$ = X-06 の `by_year[k+1]` | %d シナリオ（比が定義される %d、X-11 が未定義か $G=0$ の %d）、%d 点 | %d（`by_year[k]` と読むと %d シナリオすべてで一定にならない） |"
-                 % (x11["n_scn"], al[0] + al[1], nd, x11["n_T"], al[1], x11["alignment"].get("0", [0, 0])[1]))
+        L.append("| X-11 | $\\mathrm{X11}(T)/G(T)$ が各シナリオで一定（相対 1e-12）、$\\gamma_k$ = X-06 の `by_year[k+1]` | %d シナリオ（比が定義される %d、X-11 が未定義か $G=0$ の %d）、%d 点 | %d（`by_year[k]` と読むと一定になるのは %d／%d シナリオ） |"
+                 % (x11["n_scn"], al[0] + al[1], nd, x11["n_T"], al[1], al0[0], al0[0] + al0[1]))
         L.append("| X-07 `by_year` | 核の項を年セルで分けた式（相対 1e-9、$C$ に対して） | %d 点 | %d（最大 %s） |" % (x7["n_T"], x7["series_bad"], e(x7["max_rel"])))
         L.append("| X-07 `cumulative`・`value` | 累積が列の和、値が $C(T)$ | %d 点 | %d、%d |" % (x7["n_T"], x7["cum_bad"], x7["value_vs_C_bad"]))
-        L.append("| X-07 と TH-4 の年ごとの分解 | 実時間の測度を $(y-1,y]$ で区切ったものと異なる点 | %d 点 | 異なる %d（すべて整数時刻の事象が数えられている点：%d、整数時刻の事象なしで異なる点：%d） |"
-                 % (x7["n_T"], x7["th4_binning_differs"], x7["th4_differs_with_integer_events"], x7["th4_differs_without_integer_events"]))
-        L.append("| X-08 `count` | $\\#\\{n:\\mathrm{fl}(nc)<\\mathrm{fl}(T\\,\\mathrm{fl}(1-\\varepsilon))\\}$ | %d（周期×点） | %d |" % (cn["x08_cycles"], cn["x08_bad"]))
-        L.append("| B4-01 `events`・`n_events` | $T$ での一覧が $T=H$ の一覧の $\\tau<\\mathrm{fl}(T\\,\\mathrm{fl}(1-\\varepsilon))$ の部分、件数がその和 | %d 一覧 | %d、%d |" % (cn["b401_lists"], cn["b401_bad"], cn["b401_n_bad"]))
+        if "year_mismatch_without_difference" in x7:
+            L.append("| X-07 と TH-4 の年ごとの分解の違い | 違いがある点 %d。条件（年セルの年と切り替え点の年が違う、数えられた事象がある）：違い＆条件 %d、違い＆条件なし %d、条件＆違いなし %d | %d 点 | 条件と違いの不一致 %d |"
+                     % (x7["th4_binning_differs"], x7["differs_with_year_mismatch"], x7["differs_without_year_mismatch"], x7["year_mismatch_without_difference"], x7["n_T"],
+                        x7["differs_without_year_mismatch"] + x7["year_mismatch_without_difference"]))
+        L.append("| X-08 `count` | $\\#\\{n\\ge1:\\mathrm{fl}(nc)<\\mathrm{fl}(T\\,\\mathrm{fl}(1-\\varepsilon))\\}$ | %d（周期×点） | %d |" % (cn["x08_cycles"], cn["x08_bad"]))
+        L.append("| B4-01 `events`・`n_events` | $T$ での一覧が $T=H$ の一覧の $\\tau<\\mathrm{fl}(T\\,\\mathrm{fl}(1-\\varepsilon))$ の部分、件数がその和（行ごとの多重集合） | %d 一覧 | %d、%d |" % (cn["b401_lists"], cn["b401_bad"], cn["b401_n_bad"]))
+        if "b403_items" in cn:
+            L.append("| B4-03 `by_item` | 資材の行ごとに $\\#\\{n\\ge1:\\mathrm{fl}(nc_i)<\\mathrm{fl}(T\\,\\mathrm{fl}(1-\\varepsilon))\\}$（周期が欠損・非正・無限なら 0） | %d（行×点） | %d |" % (cn["b403_items"], cn["b403_bad"]))
+            L.append("| B5-01 `n_events` | $[\\text{NONE でない}][0\\le\\varphi\\le1]\\cdot\\#\\{n\\ge1:\\mathrm{fl}(nC_{\\mathrm{ren}})<\\mathrm{fl}(T\\,\\mathrm{fl}(1-\\varepsilon))\\}$ | %d 点 | %d |" % (cn["b5_n"], cn["b5_bad"]))
+        if x4:
+            L.append("| X-04 `by_stage_recomputed` | 全 14 段階で $\\sum_{(s,u,\\sigma)}\\sigma V_u(T)$（段階の述語なし。相対 1e-9、$\\max(|x|,|C|,1)$ に対して） | %d 段階値（%d 点） | %d（最大 %s） |" % (x4["stages_checked"], x4["n_T"], x4["bad"], e(x4["max_rel"])))
         L.append("")
-        L.append("B4-01 の一覧（$T=H$）のうち、等差（$\\tau_n = \\mathrm{fl}(n\\tau_1)$）は %d、等差でない（明示の一覧）は %d。B4 の一覧の時刻のうち $C$ の節点にならない（振幅 0 の品目だけの）時刻は %d 個（B4 の節点の時刻は %d 個）。"
-                 "回数はこれらも数える（03 の TH-14）。標本：%s の各集合の先頭 25 シナリオまで、各シナリオで保存した評価期間と無作為の 3 点（定義域の内側）。\n"
-                 % (cn["arithmetic"], cn["non_arithmetic"], cn["zero_amplitude_event_times"], cn["b4_knot_times"], "dev_design, dev_edge, rep_boundary, rep_evaluation, rep_constructed"))
+        txt = "B4-01 の一覧（$T=H$）のうち、等差（$\\tau_n = \\mathrm{fl}(n\\tau_1)$）は %d、等差でない（明示の一覧）は %d。" % (cn["arithmetic"], cn["non_arithmetic"])
+        if "b401_times_not_knots_of_C" in cn:
+            txt += "B4-01 の一覧の相異なる時刻 %d のうち、$C$ の（全段階をまとめた）節点形の事象の節点にならない時刻は %d（振幅が 0 の行だけの時刻など）。" % (cn["b401_distinct_times"], cn["b401_times_not_knots_of_C"])
+        txt += "回数はこれらも数える（03 の TH-14）。X-10（質量の重みつき）と X-04 の `by_gas`、X-05 は照合していない。\n"
+        L.append(txt)
     ht = s.get("h_test")
     if ht:
         L.append("## 8. 年次表の長さ $H$ への非依存（03 の TH-13、`code/h_test.py`）\n")

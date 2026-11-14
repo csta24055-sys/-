@@ -36,7 +36,7 @@ def main():
     L.append("| ケース（シナリオ × 評価期間） | %d |" % npairs)
     L.append("| 定義域の内側のケース（D 層を除く） | %d |" % t["in_domain_pairs"])
     L.append("| うち失敗（V1〜V5 のどれかが不一致） | **%d** |" % t["in_domain_failures"])
-    L.append("| 失敗のうち、整数時刻の事象の直後の帯 $(K,\\mathrm{sw}(K)]$ にあるもの／ないもの | %d／%d |" % (t.get("in_domain_failures_in_band", 0), t.get("in_domain_failures_outside_band", 0)))
+    L.append("| 失敗のうち、切り替え点が年セルの終わりを越える事象の直後の帯 $(K,\\mathrm{sw}(\\tau)]$ にあるもの／ないもの | %d／%d |" % (t.get("in_domain_failures_in_band", 0), t.get("in_domain_failures_outside_band", 0)))
     L.append("| 95％ 片側上限（ケースあたりの失敗の確率、宣言した分布） | %s |" % e(t["upper95_failure_probability_in_domain"]))
     L.append("| シナリオ単位：定義域の内側のケースを持つシナリオ／失敗したシナリオ／95％ 上限 | %d／%d／%s |" % (t["scenarios_with_in_domain_pairs"], t["scenarios_failing"], e(t["upper95_failure_probability_per_scenario"])))
     L.append("| 照合した段階の値・単位の値 | %d・%d |" % (t.get("stage_values", 0), t.get("unit_values", 0)))
@@ -83,7 +83,7 @@ def main():
     L.append("## 5. 読み方（主張の範囲）\n")
     L.append("- 失敗 0 件は、**宣言した抽出分布で**ケースあたりの失敗の確率が上の上限以下であることを、95％ の信頼で言う。全入力についての数学的な一致の主張ではない。")
     L.append("- 同じシナリオの 5 つのケースは独立でないので、シナリオ単位の上限（1 節）がより保守的な読み方になる。")
-    L.append("- 抽出分布は、整数時刻の事象の直後の帯 $(K,\\mathrm{sw}(K)]$ に確率を置かない（01 の 1 節）。第 17 章の帯の中の不一致は、この検証の対象外で、別の検査（第 17 章 07 の 6 節）で記録した。")
+    L.append("- 抽出分布は、切り替え点が年セルの終わりを越える事象の直後の帯 $(K,\\mathrm{sw}(\\tau)]$ に確率を置かない（01 の 1 節）。第 17 章の帯の中の不一致は、この検証の対象外で、別の検査（第 17 章 07 の 6 節）で記録した。")
     open(os.path.join(ROOT, "02_結果.md"), "w").write("\n".join(L) + "\n")
     # figure: relative difference distribution is not stored per pair in the summary; plot the per-stratum quantiles
     ks = [k for k in ["N", "B", "G", "E", "S", "D"] if k in s["strata"] and s["strata"][k].get("rel_max")]

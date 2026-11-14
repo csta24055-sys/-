@@ -8,8 +8,12 @@ against the reference calculation (floating point, relative 1e-9 unless stated).
          Also compared with the real-time measure of TH-4 binned by (y-1, y] (events at sw(tau)): the two allocations
          differ exactly when an integer-time event tau = K is counted (cell year K versus sw(K) in year K+1).
   counts X-08 by_cycle[c].count = #{n >= 1 : fl(n c) < fl(T fl(1 - eps))};  B4-01 events_j(T) = the elements of
-         events_j(H) with tau < fl(T fl(1 - eps)), n_events = sum_j len;  arithmetic lists events_j(H)[n-1] = fl(n tau_1);
-         zero-amplitude events (in the lists but not knots of C) are counted.
+         events_j(H) with tau < fl(T fl(1 - eps)), n_events = sum_j len (a multiset over rows);  B4-03 by_item[i] =
+         #{n >= 1 : fl(n c_i) < fl(T fl(1 - eps))} with c_i the refresh cycle of material row i (0 if missing/non-positive);
+         B5-01 n_events = [scenario != NONE][0 <= phi <= 1] #{n >= 1 : fl(n C_ren) < fl(T fl(1 - eps))};
+         times in the B4-01 lists that are NOT event knots of the merged knot form of C are counted.
+  X-04   by_stage_recomputed[s] = sum over the composition rows (s, u, sigma) of sigma V_u(T) (UNMASKED: every stage, B6
+         always with -B2-01, as the reference walks all 14 stages);  X-05 is not checked (needs the CO2 share per factor).
 
 Usage (from this folder): python3 -B units_eq.py <out.json> [set ...] [--max-scenarios N]
 """
@@ -73,6 +77,33 @@ def bins(can, T, Y):
     return cb, sb
 
 
+def count_periodic(c, thr):
+    """#{n >= 1 : fl(n c) < thr} for a positive finite period (0 otherwise), as the reference counts up."""
+    if c is None or not (c > 0.0) or math.isinf(c):
+        return 0
+    n = 0
+    while (n + 1) * c < thr:
+        n += 1
+    return n
+
+
+def year_mismatch(can, T, Y):
+    """Number of counted non-terminal atoms / gated cells (nonzero value at T) whose year cell (k + 1) differs from the
+    year of their switch point ceil(sw) (both capped to [1, Y]): the exact condition for X-07 and the TH-4 binning to put
+    the term in different years."""
+    n = 0
+    for t in can.terms:
+        if t.kind not in ("atom", "gcell") or t.unit in tc.TERMINAL_UNITS:
+            continue
+        if t.amp * t.h(T) == 0:
+            continue
+        yc = (cell_of(t.gate) + 1) if t.kind == "atom" else int(t.start) + 1
+        sw = tc.tswitch(t.gate)
+        ys = int(t.start) + 1 if (t.kind == "gcell" and sw < t.start + t.length) else max(1, math.ceil(sw))
+        n += min(Y, yc) != min(Y, ys)
+    return n
+
+
 def n_integer_events(can, T):
     return sum(1 for t in can.terms if t.kind in ("atom", "gcell") and t.unit not in tc.TERMINAL_UNITS
                and float(t.gate).is_integer() and t.amp * t.h(T) != 0)
@@ -84,11 +115,16 @@ def main(outp, names, max_scn):
     from synth import population
     sets = sets_unified.build(names or ["dev_design", "dev_edge", "rep_boundary", "rep_evaluation", "rep_constructed"])
     rng = random.Random(1711)
-    out = dict(x11=dict(n_scn=0, n_T=0, const_bad=0, zero_G=0, alignment={}, examples=[]),
+    set_names = [n for n in sets if n not in sets_unified.OUTSIDE_DOMAIN]
+    out = dict(sets=set_names, max_scenarios=max_scn, x11=dict(n_scn=0, n_T=0, zero_G=0, alignment={}, examples=[]),
                x07=dict(n_T=0, value_vs_C_bad=0, len_ok=0, len_bad=0, cum_bad=0, series_bad=0, series_bad_examples=[], max_rel=0.0,
-                        th4_binning_differs=0, th4_differs_with_integer_events=0, th4_differs_without_integer_events=0),
+                        th4_binning_differs=0, th4_differs_with_integer_events=0, th4_differs_without_integer_events=0,
+                        year_mismatch_events_counted=0, differs_with_year_mismatch=0, differs_without_year_mismatch=0,
+                        year_mismatch_without_difference=0),
+               x04=dict(n_T=0, stages_checked=0, bad=0, max_rel=0.0, examples=[]),
                counts=dict(n_T=0, x08_cycles=0, x08_bad=0, b401_lists=0, b401_bad=0, b401_n_bad=0, arithmetic=0, non_arithmetic=0,
-                           zero_amplitude_event_times=0, b4_knot_times=0, examples=[]))
+                           zero_amplitude_event_times=0, b4_knot_times=0, b401_times_not_knots_of_C=0, b401_distinct_times=0,
+                           b403_items=0, b403_bad=0, b403_examples=[], b5_n=0, b5_bad=0, b5_examples=[], examples=[]))
     t0 = time.time()
     for name, cases in sets.items():
         if name in sets_unified.OUTSIDE_DOMAIN:
@@ -106,7 +142,10 @@ def main(outp, names, max_scn):
             b4_gates = {t.gate for t in can.terms if t.stage == "B4"}
             out["counts"]["b4_knot_times"] += len(b4_gates)
             allH = {x for lst in evH for x in lst}
-            out["counts"]["zero_amplitude_event_times"] += len(allH - b4_gates)
+            out["counts"]["zero_amplitude_event_times"] += len(allH - b4_gates)      # times that are not gates of B4-stage terms
+            _A0, ev_knots, _la = can.knot_form()
+            out["counts"]["b401_distinct_times"] += len(allH)
+            out["counts"]["b401_times_not_knots_of_C"] += len(allH - set(ev_knots))
             for lst in evH:
                 if len(lst) >= 2:
                     ar = all(lst[n] == (n + 1) * lst[0] for n in range(len(lst)))
@@ -148,6 +187,11 @@ def main(outp, names, max_scn):
                 ni = n_integer_events(can, T)
                 out["x07"]["th4_differs_with_integer_events"] += bool(bad_sw) and ni > 0
                 out["x07"]["th4_differs_without_integer_events"] += bool(bad_sw) and ni == 0
+                ym = year_mismatch(can, T, Y)
+                out["x07"]["year_mismatch_events_counted"] += ym
+                out["x07"]["differs_with_year_mismatch"] += bool(bad_sw) and ym > 0
+                out["x07"]["differs_without_year_mismatch"] += bool(bad_sw) and ym == 0
+                out["x07"]["year_mismatch_without_difference"] += (not bad_sw) and ym > 0
                 if bad_cell and len(out["x07"]["series_bad_examples"]) < 12:
                     y = bad_cell[0]
                     out["x07"]["series_bad_examples"].append(dict(label=label, T=T, years=bad_cell[:6], ref=by[y], cell=float(cellb[y])))
@@ -177,6 +221,32 @@ def main(outp, names, max_scn):
                         if len(out["counts"]["examples"]) < 8:
                             out["counts"]["examples"].append(("B4-01", label, T, j, lst[:4], want[:4]))
                 out["counts"]["b401_n_bad"] += ref["B4-01"]["n_events"] != tot
+                for i, row in enumerate(cur.materials):
+                    want = count_periodic(row.refresh_cycle, thr)
+                    out["counts"]["b403_items"] += 1
+                    if ref["B4-03"]["by_item"][i] != want:
+                        out["counts"]["b403_bad"] += 1
+                        if len(out["counts"]["b403_examples"]) < 6:
+                            out["counts"]["b403_examples"].append((label, T, i, ref["B4-03"]["by_item"][i], want))
+                b = cur.boundary
+                live = b.reconstruction_scenario != "NONE" and b.reconstruction_scope_fraction is not None and 0.0 <= b.reconstruction_scope_fraction <= 1.0
+                want5 = count_periodic(b.replacement_cycle, thr) if live else 0
+                out["counts"]["b5_n"] += 1
+                if ref["B5-01"]["n_events"] != want5:
+                    out["counts"]["b5_bad"] += 1
+                    if len(out["counts"]["b5_examples"]) < 6:
+                        out["counts"]["b5_examples"].append((label, T, ref["B5-01"]["n_events"], want5))
+                rec4 = ref["X-04"]["by_stage_recomputed"]
+                out["x04"]["n_T"] += 1
+                for st, val in rec4.items():
+                    mine = sum(sg * can.unit_value(T, u) for (s_, u, sg) in canon.COMP_ROWS if s_ == st)
+                    out["x04"]["stages_checked"] += 1
+                    r_ = abs(val - mine) / max(abs(val), abs(C), 1.0)
+                    out["x04"]["max_rel"] = max(out["x04"]["max_rel"], r_)
+                    if r_ > 1e-9:
+                        out["x04"]["bad"] += 1
+                        if len(out["x04"]["examples"]) < 6:
+                            out["x04"]["examples"].append((label, T, st, val, mine))
             for off in (0, 1):
                 r = ratios[off]
                 if not r:
