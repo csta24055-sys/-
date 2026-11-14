@@ -467,7 +467,7 @@ def th78(kf, H, pieces, n_max=(8, 32, 128, 512)):
     nn = np.arange(16, N + 1)
     mag = np.array([abs(cs[n]) for n in nn])
     out["fourier_decay_loglog_slope"] = float(np.polyfit(np.log(nn), np.log(np.maximum(mag, 1e-300)), 1)[0])
-    c0, cH = float(kf.A0), float(kf(Hf))
+    c0, cH = float(kf(math.ulp(0.0))), float(kf(Hf))          # C(0+): the knot form just above 0 (not A0)
     S0 = float(np.real(sum(cs[n] for n in range(-N, N + 1))))
     out["boundary_midpoint"] = dict(C0plus=c0, CH=cH, partial_sum_at_0=S0, midpoint=(c0 + cH) / 2,
                                     rel_to_midpoint=abs(S0 - (c0 + cH) / 2) / max(abs(cH), 1e-300))

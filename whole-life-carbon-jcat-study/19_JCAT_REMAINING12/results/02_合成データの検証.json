@@ -1,0 +1,395 @@
+{
+ "seed": 20261126,
+ "rows": [
+  {
+   "formula": "SUBSTITUTE(B1,\"ab\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 2,
+   "steps": 1411,
+   "missing_examples": [
+    {
+     "row": 390,
+     "result_length": "87"
+    },
+    {
+     "row": 1258,
+     "result_length": "89"
+    }
+   ]
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"ab\",\"-+\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 2,
+   "steps": 1414,
+   "missing_examples": [
+    {
+     "row": 390,
+     "result_length": "261"
+    },
+    {
+     "row": 1258,
+     "result_length": "267"
+    }
+   ]
+  },
+  {
+   "formula": "SUBSTITUTE(\"<\"&B1&\">\",\"ab\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 2,
+   "steps": 1420,
+   "missing_examples": [
+    {
+     "row": 390,
+     "result_length": "89"
+    },
+    {
+     "row": 1258,
+     "result_length": "91"
+    }
+   ]
+  },
+  {
+   "formula": "IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,2,),\"ab\",\"\"),\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1459,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(A1=\"\",\"\",IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,3,),\"ab\",\"\"),\"\"))",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1482,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(A1=\"k1\",\"p[\"&B1&\"]\",\"q[\"&B1&\"]\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 2771,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(B1=\"\",\"\",B1&\"ab\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1395,
+   "missing_examples": []
+  },
+  {
+   "formula": "IFERROR(\"v\"&B1,\"err\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1383,
+   "missing_examples": []
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"x/\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 4,
+   "steps": 1411,
+   "missing_examples": [
+    {
+     "row": 115,
+     "result_length": "86"
+    },
+    {
+     "row": 296,
+     "result_length": "88"
+    },
+    {
+     "row": 1055,
+     "result_length": "88"
+    }
+   ]
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"x/\",\"-+\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 4,
+   "steps": 1414,
+   "missing_examples": [
+    {
+     "row": 115,
+     "result_length": "258"
+    },
+    {
+     "row": 296,
+     "result_length": "264"
+    },
+    {
+     "row": 1055,
+     "result_length": "264"
+    }
+   ]
+  },
+  {
+   "formula": "SUBSTITUTE(\"<\"&B1&\">\",\"x/\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 5,
+   "steps": 1420,
+   "missing_examples": [
+    {
+     "row": 115,
+     "result_length": "88"
+    },
+    {
+     "row": 296,
+     "result_length": "90"
+    },
+    {
+     "row": 1055,
+     "result_length": "90"
+    }
+   ]
+  },
+  {
+   "formula": "IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,2,),\"x/\",\"\"),\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 35,
+   "steps": 1459,
+   "missing_examples": [
+    {
+     "row": 88,
+     "result_length": "86"
+    },
+    {
+     "row": 105,
+     "result_length": "86"
+    },
+    {
+     "row": 127,
+     "result_length": "86"
+    }
+   ]
+  },
+  {
+   "formula": "IF(A1=\"\",\"\",IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,3,),\"x/\",\"\"),\"\"))",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1482,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(A1=\"k1\",\"p[\"&B1&\"]\",\"q[\"&B1&\"]\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 2771,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(B1=\"\",\"\",B1&\"x/\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1395,
+   "missing_examples": []
+  },
+  {
+   "formula": "IFERROR(\"v\"&B1,\"err\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1383,
+   "missing_examples": []
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"全/\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 5,
+   "steps": 1411,
+   "missing_examples": [
+    {
+     "row": 257,
+     "result_length": "88"
+    },
+    {
+     "row": 264,
+     "result_length": "86"
+    },
+    {
+     "row": 554,
+     "result_length": "89"
+    }
+   ]
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"全/\",\"-+\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 5,
+   "steps": 1414,
+   "missing_examples": [
+    {
+     "row": 257,
+     "result_length": "264"
+    },
+    {
+     "row": 264,
+     "result_length": "258"
+    },
+    {
+     "row": 554,
+     "result_length": "267"
+    }
+   ]
+  },
+  {
+   "formula": "SUBSTITUTE(\"<\"&B1&\">\",\"全/\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 7,
+   "steps": 1420,
+   "missing_examples": [
+    {
+     "row": 257,
+     "result_length": "90"
+    },
+    {
+     "row": 264,
+     "result_length": "88"
+    },
+    {
+     "row": 554,
+     "result_length": "91"
+    }
+   ]
+  },
+  {
+   "formula": "IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,2,),\"全/\",\"\"),\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1459,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(A1=\"\",\"\",IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,3,),\"全/\",\"\"),\"\"))",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 36,
+   "steps": 1482,
+   "missing_examples": [
+    {
+     "row": 50,
+     "result_length": "90"
+    },
+    {
+     "row": 53,
+     "result_length": "90"
+    },
+    {
+     "row": 144,
+     "result_length": "90"
+    }
+   ]
+  },
+  {
+   "formula": "IF(A1=\"k1\",\"p[\"&B1&\"]\",\"q[\"&B1&\"]\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 2771,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(B1=\"\",\"\",B1&\"全/\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1395,
+   "missing_examples": []
+  },
+  {
+   "formula": "IFERROR(\"v\"&B1,\"err\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1383,
+   "missing_examples": []
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"Q\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1407,
+   "missing_examples": []
+  },
+  {
+   "formula": "SUBSTITUTE(B1,\"Q\",\"-+\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1410,
+   "missing_examples": []
+  },
+  {
+   "formula": "SUBSTITUTE(\"<\"&B1&\">\",\"Q\",\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1416,
+   "missing_examples": []
+  },
+  {
+   "formula": "IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,2,),\"Q\",\"\"),\"\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1455,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(A1=\"\",\"\",IFERROR(SUBSTITUTE(VLOOKUP(A1,$C$1:$E$40,3,),\"Q\",\"\"),\"\"))",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1478,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(A1=\"k1\",\"p[\"&B1&\"]\",\"q[\"&B1&\"]\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 2771,
+   "missing_examples": []
+  },
+  {
+   "formula": "IF(B1=\"\",\"\",B1&\"Q\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1395,
+   "missing_examples": []
+  },
+  {
+   "formula": "IFERROR(\"v\"&B1,\"err\")",
+   "n": 1500,
+   "wrong": 0,
+   "missing": 0,
+   "steps": 1383,
+   "missing_examples": []
+  }
+ ],
+ "total_cases": 48000,
+ "total_wrong": 0,
+ "total_missing": 107
+}

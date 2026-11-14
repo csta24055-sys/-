@@ -95,14 +95,18 @@ def main():
         rec["full (L = ceil(n/2))" if L is not None and n is not None and L >= (n + 1) // 2 else "low order L=%s" % L] += 1
     out["recurrence_total"] = dict(rec)
     role_rec = collections.defaultdict(collections.Counter)
+    role_max = collections.defaultdict(collections.Counter)
     low_examples = collections.defaultdict(list)
     for r in ok:
+        nmax = (r["th9"].get("n", 129) + 1) // 2
         for role, d in r["role_recurrence"].items():
             L = d.get("order")
-            role_rec[role][str(L) if L is not None and L <= 24 else ">24"] += 1
+            role_rec[role][str(L)] += 1
+            role_max[role]["maximal (= ceil(n/2))" if L == nmax else ("above ceil(n/2): not unique" if L is not None and L > nmax else "below maximal")] += 1
             if L and L <= 24 and d.get("certified_unique") and len(low_examples[role]) < 6:
                 low_examples[role].append(dict(label=r["label"][:60], order=L, eigenvalues=d.get("eigenvalues")))
-    out["recurrence_by_role"] = {k: dict(v) for k, v in role_rec.items()}
+    out["recurrence_by_role"] = {k: dict(sorted(v.items(), key=lambda kv: int(kv[0]) if kv[0].lstrip("-").isdigit() else 999)) for k, v in role_rec.items()}
+    out["recurrence_by_role_maximality"] = {k: dict(v) for k, v in role_max.items()}
     out["recurrence_low_order_examples"] = dict(low_examples)
     dmd = [r["th9"].get("recurrence_float_max_rel") for r in ok if r["th9"].get("recurrence_float_max_rel") is not None]
     out["recurrence_float_replay_max_rel"] = max(dmd, default=None)
@@ -133,6 +137,27 @@ def main():
         out["canonical_verification"]["max_rel_stage_vs_ref"] = max(s["max_rel_stage"] for s in v.values())
         out["canonical_verification"]["max_rel_unit_vs_ref"] = max(s["max_rel_unit"] for s in v.values())
         out["canonical_verification"]["by_set"] = {k: {kk: s.get(kk) for kk in keys} for k, s in v.items()}
+    # supplement after the review: checks against the kernel sum (timechar_terms.py)
+    tp = os.path.join(RES, "tc_terms.json")
+    if os.path.exists(tp):
+        tt = json.load(open(tp))
+        an = [x for x in tt if "counts" in x]
+        cnt = collections.Counter()
+        for x in an:
+            cnt.update(x["counts"])
+        out["supplement"] = dict(n_entries=len(tt), n_distinct_functions=len(an), n_duplicates=sum(1 for x in tt if "duplicate_of" in x),
+                                 counts=dict(cnt), s4_max_rel=max((x["s4_max_rel"] for x in an), default=None),
+                                 boundary_rel_to_midpoint_max=max((x["boundary_rel_to_midpoint"] for x in an), default=None),
+                                 boundary_rel_to_midpoint_median=statistics.median([x["boundary_rel_to_midpoint"] for x in an]) if an else None,
+                                 C0plus_differs_from_A0=sum(1 for x in an if x["C0plus"] != x["A0"]),
+                                 fourier_negative_n_max_rel=max((x["fourier_negative_n_max_rel"] for x in an), default=None))
+    for name in ("sliver_test", "density_check", "units_eq", "h_test"):
+        p = os.path.join(RES, name + ".json")
+        if os.path.exists(p):
+            out[name] = json.load(open(p))
+    ep = os.path.join(RES, "expansion", "summary.json")
+    if os.path.exists(ep):
+        out["expansion"] = json.load(open(ep))
     json.dump(out, open(os.path.join(RES, "stage1_summary.json"), "w"), indent=1, ensure_ascii=False)
     print(json.dumps({k: out[k] for k in ("n_scenarios", "n_analysed", "exact_failures", "counts")}, indent=1))
 

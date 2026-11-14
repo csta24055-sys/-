@@ -96,11 +96,13 @@ def classify_scenario(sysm, can, max_pieces, rng):
         if any(v is ABSENT for v in flatv):
             cls[key] = "shape"                       # the output key exists only for some periods
             continue
-        if any(v is None for v in flatv):
-            cls[key] = "const" if all(v is None for v in flatv) else "step"     # None = an undefined (missing) result
-            continue
-        if not all(is_num(v) for v in flatv):
-            cls[key] = "const" if len({repr(v) for v in flatv}) == 1 else "step"
+        if any(v is None for v in flatv) or not all(is_num(v) for v in flatv):
+            if len({repr(v) for v in flatv}) == 1:
+                cls[key] = "const"
+            elif all(len({repr(v) for (_, v, _) in pv}) == 1 for pv in vals):
+                cls[key] = "step"                        # constant on every sampled piece, different between pieces
+            else:
+                cls[key] = "other"                       # changes inside a sampled piece
             continue
         if any(isinstance(v, float) and (math.isnan(v) or math.isinf(v)) for v in flatv):
             cls[key] = "const" if len({repr(v) for v in flatv}) == 1 else "other"

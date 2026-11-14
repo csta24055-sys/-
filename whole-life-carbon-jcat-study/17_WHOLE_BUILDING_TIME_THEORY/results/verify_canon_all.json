@@ -299,7 +299,9 @@
     "n_event_knots": 81,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 160,
+  "knot_vs_terms_exact_bad": 0
  },
  "dev_edge": {
   "n_pairs": 62,
@@ -545,6 +547,24 @@
     "n_event_knots": 73,
     "n_lattice_knots": 131
    }
+  ],
+  "knot_vs_terms_exact_checked": 62,
+  "knot_vs_terms_exact_bad": 0,
+  "excluded": [
+   [
+    "edge life_near_divisor",
+    60.0,
+    [
+     "material M000002.material_life: an event time lies on a knife edge of the time rule"
+    ]
+   ],
+   [
+    "edge life_near_divisor",
+    42.5,
+    [
+     "material M000002.material_life: an event time lies on a knife edge of the time rule"
+    ]
+   ]
   ]
  },
  "rep_evaluation": {
@@ -987,7 +1007,9 @@
     "n_event_knots": 360,
     "n_lattice_knots": 110
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 300,
+  "knot_vs_terms_exact_bad": 0
  },
  "rep_boundary": {
   "n_pairs": 46,
@@ -1044,7 +1066,9 @@
     "n_event_knots": 2776,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 46,
+  "knot_vs_terms_exact_bad": 0
  },
  "rep_constructed": {
   "n_pairs": 345,
@@ -1935,7 +1959,9 @@
     "n_event_knots": 74,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 345,
+  "knot_vs_terms_exact_bad": 0
  },
  "rep_scale_L": {
   "n_pairs": 2,
@@ -1964,7 +1990,9 @@
     "n_event_knots": 10837,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 2,
+  "knot_vs_terms_exact_bad": 0
  },
  "rep_defects": {
   "n_pairs": 24,
@@ -2070,7 +2098,9 @@
     "n_event_knots": 380,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 24,
+  "knot_vs_terms_exact_bad": 0
  },
  "new_population": {
   "n_pairs": 240,
@@ -2372,7 +2402,9 @@
     "n_event_knots": 59,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 240,
+  "knot_vs_terms_exact_bad": 0
  },
  "new_defects": {
   "n_pairs": 24,
@@ -2478,7 +2510,9 @@
     "n_event_knots": 452,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 24,
+  "knot_vs_terms_exact_bad": 0
  },
  "new_special": {
   "n_pairs": 90,
@@ -2710,6 +2744,8 @@
     "n_event_knots": 6543,
     "n_lattice_knots": 131
    }
-  ]
+  ],
+  "knot_vs_terms_exact_checked": 90,
+  "knot_vs_terms_exact_bad": 0
  }
 }

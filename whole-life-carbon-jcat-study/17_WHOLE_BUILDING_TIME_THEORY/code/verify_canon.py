@@ -12,6 +12,7 @@ import time
 
 sys.dont_write_bytecode = True
 import canon                                            # noqa: E402  (sets the import path)
+import timechar as tc                                   # noqa: E402
 from checks import sets_unified                         # noqa: E402
 from tstudy import baseline, scenarios                  # noqa: E402
 
@@ -52,13 +53,16 @@ def main(outp, names):
             r["knots"].append(dict(label=label, H=can.H, n_terms=len(can.terms), n_event_knots=len(ev), n_lattice_knots=len(la)))
             for T in periods:
                 cur = scenarios.with_period(scn, T)
-                if check_domain and scenarios.valid_domain(cur):
+                why = scenarios.valid_domain(cur) if check_domain else []
+                if why:
                     r["n_excluded"] += 1
+                    r.setdefault("excluded", []).append((label, T, why[:3]))
                     continue
                 try:
                     ref = baseline.run_reference(cur)
                 except Exception as ex:
-                    r["n_excluded"] += 1
+                    r["n_ref_raised"] = r.get("n_ref_raised", 0) + 1
+                    r.setdefault("ref_raised", []).append((label, T, "%s %s" % (type(ex).__name__, str(ex)[:120])))
                     continue
                 try:
                     got = sysm.at(T)
@@ -69,6 +73,9 @@ def main(outp, names):
                 r["n_pairs"] += 1
                 c = can.value(T)
                 ck = can.knot_value(T)
+                cx_exact, kf_exact = tc.cx(can, T), tc.KF(can)(T)              # exact rationals at the verification period
+                r["knot_vs_terms_exact_checked"] = r.get("knot_vs_terms_exact_checked", 0) + 1
+                r["knot_vs_terms_exact_bad"] = r.get("knot_vs_terms_exact_bad", 0) + (cx_exact != kf_exact)
                 want, have = ref["SUM-03"]["value"], got["SUM-03"]["value"]
                 if not same(c, want):
                     r["total_vs_ref_bad"] += 1
@@ -116,6 +123,7 @@ def main(outp, names):
         json.dump(res, open(outp, "w"), indent=1)
     tot = {k: sum(v[k] for v in res.values()) for k in ("n_pairs", "n_excluded", "n_failed", "total_vs_ref_bad", "total_vs_sys_bad",
                                                        "knot_vs_terms_bad", "n_stage", "stage_vs_ref_bad", "n_unit", "unit_vs_ref_bad", "n_jumpform", "jumpform_vs_ref_bad")}
+    tot.update({k: sum(v.get(k, 0) for v in res.values()) for k in ("n_ref_raised", "knot_vs_terms_exact_checked", "knot_vs_terms_exact_bad")})
     print("TOTAL", tot)
 
 

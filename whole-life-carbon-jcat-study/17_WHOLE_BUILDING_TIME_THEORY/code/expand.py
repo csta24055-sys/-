@@ -2,11 +2,17 @@
 model, fictional data).
 
 For one scenario: every knot of the merged knot form (L5) with its contributions grouped by (unit, stage, kernel
-shape), the provenance rows of the masked sum-product (P1), and an exact check that the contributions add up to the
-merged coefficients; and C(T) at chosen periods split by stage, unit and role (exact).
+shape) and the provenance rows of the masked sum-product (P1) (the per-term contributions are accumulated by the same
+rules as Canon.knot_form, so their sum equals the merged coefficient by construction: a bookkeeping check, not an
+independent verification); and C(T) at chosen periods split by stage, unit and role (exact), next to the value of the
+unified system (chapter 11) and of the frozen reference calculation.
 
 Usage (from this folder): python3 -B expand.py <out.json> <set name> <scenario index> [T ...]
+                          python3 -B expand.py --all-sets <out folder>     (scenario 0 of every set, gzip JSON per set)
+Every contributing term is listed with its provenance row and its own (p, q) (earlier versions kept 3 per group).
 """
+import gzip
+import os
 import collections
 import json
 import math
@@ -17,7 +23,7 @@ sys.dont_write_bytecode = True
 import canon                                            # noqa: E402
 import timechar as tc                                   # noqa: E402
 from checks import sets_unified                         # noqa: E402
-from tstudy import baseline                             # noqa: E402
+from tstudy import baseline, scenarios                  # noqa: E402
 
 EPS, NEG_INF = canon.EPS, canon.NEG_INF
 
@@ -40,8 +46,7 @@ def expansion(can):
         for kind, pos, p, q in term_knots(t):
             g = groups[(kind, pos)][(t.unit, t.stage, t.kind)]
             g[0] += p; g[1] += q; g[2] += 1
-            if len(g[3]) < 3:
-                g[3].append(t.src)
+            g[3].append((t.src, float(p), float(q)))         # every contributing term (no truncation)
     A0, ev, la = can.knot_form()
     merged = {("A0", None): (A0, Fraction(0))}
     merged.update({("lattice", x): tuple(v) for x, v in la.items()})
@@ -78,22 +83,53 @@ def split(can, T):
                 by_unit={k: float(v) for k, v in sorted(by_unit.items())}, by_role={k: float(v) for k, v in sorted(by_role.items())})
 
 
-def main(outp, set_name, index, Ts):
-    baseline.assert_frozen()
-    baseline.load()
+def one(set_name, index, Ts, sets=None):
     from synth import population
-    label, scn, periods = sets_unified.build([set_name])[set_name][index]
+    sets = sets or sets_unified.build([set_name])
+    label, scn, periods = sets[set_name][index]
     sysm = canon.make_system(scn, population.BASELINES)
     can = canon.build(sysm)
     rows, n_bad = expansion(can)
     Ts = Ts or [float(p) for p in periods]
     res = dict(label=label, H=can.H, n_terms=len(can.terms), n_knots=len(rows), contributions_vs_merged_bad=n_bad,
-               values=[split(can, T) for T in Ts], reference={str(T): sysm.at(T)["SUM-03"]["value"] for T in Ts}, knots=rows)
+               values=[split(can, T) for T in Ts], unified_system={str(T): sysm.at(T)["SUM-03"]["value"] for T in Ts},
+               reference={str(T): baseline.run_reference(scenarios.with_period(scn, T))["SUM-03"]["value"] for T in Ts}, knots=rows)
+    res["values_vs_reference_max_rel"] = max(abs(v["C"] - res["reference"][str(v["T"])]) / max(abs(res["reference"][str(v["T"])]), 1.0)
+                                             for v in res["values"])
+    res["n_provenance_entries"] = sum(len(c["provenance"]) for r in rows for c in r["contributions"])
+    print(set_name, label, "terms", len(can.terms), "knots", len(rows), "provenance entries", res["n_provenance_entries"],
+          "contributions vs merged bad", n_bad, "C vs reference max rel %.1e" % res["values_vs_reference_max_rel"], flush=True)
+    return res
+
+
+def main(outp, set_name, index, Ts):
+    baseline.assert_frozen()
+    baseline.load()
+    res = one(set_name, index, Ts)
     json.dump(res, open(outp, "w"), indent=1, ensure_ascii=False)
-    print(label, "terms", len(can.terms), "knots", len(rows), "contributions vs merged bad", n_bad,
-          [(v["T"], v["C"], res["reference"][str(v["T"])]) for v in res["values"]])
+
+
+def main_all(folder):
+    baseline.assert_frozen()
+    baseline.load()
+    os.makedirs(folder, exist_ok=True)
+    sets = sets_unified.build(sets_unified.ALL_SETS)
+    summary = {}
+    for name in sets:
+        if not sets[name]:
+            continue
+        res = one(name, 0, [], sets)
+        with gzip.open(os.path.join(folder, name + ".json.gz"), "wt", encoding="utf-8") as f:
+            json.dump(res, f, ensure_ascii=False)
+        summary[name] = {k: res[k] for k in ("label", "H", "n_terms", "n_knots", "n_provenance_entries", "contributions_vs_merged_bad",
+                                             "values_vs_reference_max_rel")}
+        summary[name]["periods"] = [v["T"] for v in res["values"]]
+    json.dump(summary, open(os.path.join(folder, "summary.json"), "w"), indent=1, ensure_ascii=False)
 
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    main(a[0], a[1], int(a[2]), [float(x) for x in a[3:]])
+    if a[0] == "--all-sets":
+        main_all(a[1])
+    else:
+        main(a[0], a[1], int(a[2]), [float(x) for x in a[3:]])

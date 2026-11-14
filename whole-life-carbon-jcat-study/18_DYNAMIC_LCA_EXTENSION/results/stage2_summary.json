@@ -1,0 +1,448 @@
+{
+ "n_scenarios": 79,
+ "n_ok": 79,
+ "errors": [],
+ "R1_partition_bad": 0,
+ "R2_recomposition_bad": 0,
+ "R1_instances_bad": 0,
+ "R3_annual_bad": 0,
+ "periods_checked": 4248,
+ "instances_total": 65948,
+ "terminal_share_max": 0.32256395407098604,
+ "P07_bad": 0,
+ "families_without_instances_in_scenarios": {
+  "P01": 78,
+  "P02": 78,
+  "P03": 78,
+  "P04": 79,
+  "P17": 77,
+  "P07": 74,
+  "P11": 79,
+  "P12": 78,
+  "P13": 78,
+  "P14": 78,
+  "P15": 77,
+  "P16": 76
+ },
+ "families": {
+  "P01": {
+   "name": "資材の製造",
+   "kind": "initial",
+   "scenarios_active": 78,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.10022548112932707
+  },
+  "P02": {
+   "name": "設備機器の製造",
+   "kind": "initial",
+   "scenarios_active": 78,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.005568908249972996
+  },
+  "P03": {
+   "name": "現場への輸送",
+   "kind": "initial",
+   "scenarios_active": 78,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.003359265771510631
+  },
+  "P04": {
+   "name": "施工",
+   "kind": "initial",
+   "scenarios_active": 79,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.00215275981893951
+  },
+  "P05": {
+   "name": "冷媒の漏洩",
+   "kind": "flow",
+   "scenarios_active": 77,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.019652125121524047
+  },
+  "P06": {
+   "name": "冷媒の交換時の損失",
+   "kind": "event",
+   "scenarios_active": 77,
+   "negative_masses": 1714,
+   "negative_densities": 712,
+   "negative_net_rate_intervals": 692,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.0008481082893028852
+  },
+  "P07": {
+   "name": "施設管理のエネルギー",
+   "kind": "flow",
+   "scenarios_active": 74,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.017116383765866255
+  },
+  "P08": {
+   "name": "修繕",
+   "kind": "flow+event",
+   "scenarios_active": 77,
+   "negative_masses": 139534,
+   "negative_densities": 56163,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 44518,
+   "share_at_H_median": 0.17975982390749928
+  },
+  "P09": {
+   "name": "更新",
+   "kind": "event",
+   "scenarios_active": 77,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.2747188578756316
+  },
+  "P10": {
+   "name": "大型改修・建替",
+   "kind": "event",
+   "scenarios_active": 32,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.0
+  },
+  "P11": {
+   "name": "運用エネルギー",
+   "kind": "flow",
+   "scenarios_active": 79,
+   "negative_masses": 0,
+   "negative_densities": 9620,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.2836514015226997
+  },
+  "P12": {
+   "name": "水・一般廃棄物",
+   "kind": "flow",
+   "scenarios_active": 78,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.031937982232930796
+  },
+  "P13": {
+   "name": "解体",
+   "kind": "terminal",
+   "scenarios_active": 78,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.0016353184517667394
+  },
+  "P14": {
+   "name": "廃棄物の輸送",
+   "kind": "terminal",
+   "scenarios_active": 78,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.0005152666510225877
+  },
+  "P15": {
+   "name": "廃棄物の処理",
+   "kind": "terminal",
+   "scenarios_active": 77,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.004071327602895843
+  },
+  "P16": {
+   "name": "最終処分",
+   "kind": "terminal",
+   "scenarios_active": 76,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.0003063807841727154
+  },
+  "P17": {
+   "name": "冷媒の廃棄時の放出",
+   "kind": "terminal",
+   "scenarios_active": 77,
+   "negative_masses": 0,
+   "negative_densities": 0,
+   "negative_net_rate_intervals": 0,
+   "negative_net_masses": 0,
+   "share_at_H_median": 0.0013679231217347907
+  }
+ },
+ "coincident_event_times": {
+  "P06-P08": 2213,
+  "P06-P09": 2393,
+  "P08-P09": 44518,
+  "P06-P10": 24,
+  "P08-P10": 42,
+  "P09-P10": 42
+ },
+ "event_times_per_family": {
+  "P06": 3370,
+  "P08": 44518,
+  "P09": 49994,
+  "P10": 60
+ },
+ "P10_ratio": {
+  "n": 50,
+  "min": 0.20100000000000004,
+  "max": 1.0000000000000002
+ },
+ "lti_residual": {
+  "P07<-P11": {
+   "n": 74,
+   "median": 0.0557786117608633,
+   "min": 1.2787070038857212e-14,
+   "max": 0.5218437638477077
+  },
+  "P08<-P09": {
+   "n": 76,
+   "median": 0.5038479811300969,
+   "min": 0.3249715948743517,
+   "max": 0.9532758611878392
+  },
+  "P06<-P09": {
+   "n": 77,
+   "median": 0.9094086905567732,
+   "min": 0.0,
+   "max": 0.9981144049368693
+  },
+  "P06<-P05": {
+   "n": 77,
+   "median": 0.8911778344310595,
+   "min": 0.3108382019738268,
+   "max": 0.9957896857110766
+  },
+  "P11<-P12": {
+   "n": 78,
+   "median": 0.07732499246893593,
+   "min": 1.3455968611158378e-14,
+   "max": 0.537998314660321
+  },
+  "P11<-P05": {
+   "n": 77,
+   "median": 0.1122206691066303,
+   "min": 0.001485477287934084,
+   "max": 0.5559417845255079
+  },
+  "P10<-P09": {
+   "n": 32,
+   "median": 0.9724040906499114,
+   "min": 0.8036783386778673,
+   "max": 0.9963190783254019
+  }
+ },
+ "annual_correlation_median": {
+  "P01-P02": 0.999999999999996,
+  "P01-P03": 1.0,
+  "P01-P04": 0.9999999999999982,
+  "P01-P05": 0.19157012067725823,
+  "P01-P06": -0.025986871036051618,
+  "P01-P07": 0.15132998169159506,
+  "P01-P08": 0.044383769394455805,
+  "P01-P09": -0.04814018957586802,
+  "P01-P11": 0.11117911483593446,
+  "P02-P03": 1.0,
+  "P02-P04": 0.9999999999999951,
+  "P02-P05": 0.19157012067725732,
+  "P02-P06": -0.02598687103605146,
+  "P02-P07": 0.15132998169159498,
+  "P02-P08": 0.04438376939445573,
+  "P02-P09": -0.04814018957586804,
+  "P02-P11": 0.11117911483593415,
+  "P03-P04": 0.9999999999999986,
+  "P03-P05": 0.19157012067725834,
+  "P03-P06": -0.025986871036051663,
+  "P03-P07": 0.15132998169159514,
+  "P03-P08": 0.04438376939445586,
+  "P03-P09": -0.04814018957586815,
+  "P03-P11": 0.11117911483593458,
+  "P04-P05": 0.19157012067725776,
+  "P04-P06": -0.025986871036051726,
+  "P04-P07": 0.15132998169159506,
+  "P04-P08": 0.044383769394455534,
+  "P04-P09": -0.048140189575868145,
+  "P04-P11": 0.11117911483593428,
+  "P05-P06": 0.008725398228225899,
+  "P05-P07": 0.0713493245897783,
+  "P05-P08": 0.0655993812974516,
+  "P05-P09": -0.04664586619243147,
+  "P05-P11": 0.09349320728561124,
+  "P06-P07": -0.030912520222568306,
+  "P06-P08": 0.01868609451502337,
+  "P06-P09": 0.05445670703208425,
+  "P06-P11": -0.019155362553478876,
+  "P07-P08": 0.10151505629294032,
+  "P07-P09": -0.11512707226273673,
+  "P07-P11": 0.9903969150313181,
+  "P08-P09": -0.8672866084763295,
+  "P08-P11": 0.06075799354643763,
+  "P09-P11": -0.05551080762404549,
+  "P01-P10": -0.0077519379844961465,
+  "P02-P10": -0.007751937984496126,
+  "P03-P10": -0.007751937984496152,
+  "P04-P10": -0.007751937984496126,
+  "P05-P10": -0.007820929704966667,
+  "P06-P10": -0.015520273325300244,
+  "P07-P10": -0.04304276215450389,
+  "P08-P10": -0.015027237794046109,
+  "P09-P10": 0.005738051796419619,
+  "P10-P11": -0.0290367955956324,
+  "P01-P12": -0.09234304369586739,
+  "P02-P12": -0.09234304369586713,
+  "P03-P12": -0.09234304369586745,
+  "P04-P12": -0.0923430436958672,
+  "P05-P12": -0.005269268588397908,
+  "P06-P12": 3.8518425857253317e-17,
+  "P07-P12": -0.6774648406375774,
+  "P08-P12": -0.08278452240910703,
+  "P09-P12": 0.049778306570825236,
+  "P11-P12": -0.6632150941671042,
+  "P10-P12": 0.04340472343092279
+ },
+ "variants_total_equal": {
+  "M0": 108,
+  "M0_n": 108,
+  "X1": 108,
+  "X1_n": 108,
+  "X2": 108,
+  "X2_n": 108,
+  "X3": 108,
+  "X3_n": 108,
+  "X4": 108,
+  "X4_n": 108
+ },
+ "variants_weighted_rel": {
+  "M0": {
+   "t_end=T": {
+    "n": 108,
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "t_end=100": {
+    "n": 104,
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "t_end=T+100": {
+    "n": 108,
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "X1": {
+   "t_end=T": {
+    "n": 108,
+    "median": 0.0023769234034619613,
+    "min": 0.00010283557944568145,
+    "max": 0.9196391175006116
+   },
+   "t_end=100": {
+    "n": 104,
+    "median": 0.0011141812891253267,
+    "min": 4.4674380989429e-05,
+    "max": 0.0044356449938967035
+   },
+   "t_end=T+100": {
+    "n": 108,
+    "median": 0.0006359563942697211,
+    "min": 2.478869343125467e-05,
+    "max": 0.003357202732354514
+   }
+  },
+  "X2": {
+   "t_end=T": {
+    "n": 108,
+    "median": 0.004647796001553628,
+    "min": 0.0002044446017190893,
+    "max": 1.7612657781676413
+   },
+   "t_end=100": {
+    "n": 104,
+    "median": 0.0021609503522406204,
+    "min": 8.853197519353984e-05,
+    "max": 0.008583699062374217
+   },
+   "t_end=T+100": {
+    "n": 108,
+    "median": 0.0012274010711108563,
+    "min": 4.909179145085041e-05,
+    "max": 0.0064982358557761355
+   }
+  },
+  "X3": {
+   "t_end=T": {
+    "n": 108,
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "t_end=100": {
+    "n": 104,
+    "median": -0.00011264145004591386,
+    "min": -0.00039751604775362104,
+    "max": 0.0
+   },
+   "t_end=T+100": {
+    "n": 108,
+    "median": -5.8584250778870306e-05,
+    "min": -0.00039550926662390573,
+    "max": 0.0
+   }
+  },
+  "X4": {
+   "t_end=T": {
+    "n": 108,
+    "median": 0.0023769234034619613,
+    "min": 0.00010283557944568145,
+    "max": 0.9196391175006116
+   },
+   "t_end=100": {
+    "n": 104,
+    "median": 0.0009798996152681205,
+    "min": -1.3826860248866701e-05,
+    "max": 0.004250846077157311
+   },
+   "t_end=T+100": {
+    "n": 108,
+    "median": 0.0005672395215288173,
+    "min": -8.194953159401663e-07,
+    "max": 0.0032215039633720632
+   }
+  }
+ },
+ "terminal_share_at_T": {
+  "median": 0.017217245585872287,
+  "max": 0.10492297992727906
+ }
+}
