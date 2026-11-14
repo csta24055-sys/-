@@ -1,0 +1,2715 @@
+{
+ "dev_design": {
+  "n_pairs": 160,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 2240,
+  "n_unit": 3360,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 2.4188501901147873e-13,
+  "n_jumpform": 160,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 3.214165191741235e-15,
+  "max_rel_ref": 3.3172407506462466e-14,
+  "max_rel_sys": 4.980957001266544e-16,
+  "max_rel_stage": 2.4188501901147873e-13,
+  "examples": [],
+  "knots": [
+   {
+    "label": "SYN-S-office-M-T50-seed558748445",
+    "H": 130,
+    "n_terms": 27812,
+    "n_event_knots": 6605,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-M-T75-seed96415934",
+    "H": 130,
+    "n_terms": 28235,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T30-seed571601989",
+    "H": 130,
+    "n_terms": 5124,
+    "n_event_knots": 60,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-S-T30-seed503115590",
+    "H": 130,
+    "n_terms": 3566,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-S-T100-seed762563037",
+    "H": 130,
+    "n_terms": 4257,
+    "n_event_knots": 81,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T60-seed786715397",
+    "H": 130,
+    "n_terms": 3793,
+    "n_event_knots": 1070,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-M-T50-seed81472687",
+    "H": 130,
+    "n_terms": 27656,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-S-T30-seed276512137",
+    "H": 130,
+    "n_terms": 4004,
+    "n_event_knots": 436,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T75-seed253333422",
+    "H": 130,
+    "n_terms": 3541,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-M-T62.5-seed371615511",
+    "H": 130,
+    "n_terms": 28172,
+    "n_event_knots": 6466,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-M-T100-seed891814782",
+    "H": 130,
+    "n_terms": 30462,
+    "n_event_knots": 2705,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T99.9-seed155538107",
+    "H": 130,
+    "n_terms": 3618,
+    "n_event_knots": 961,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-office-S-T99.9-seed261840143",
+    "H": 130,
+    "n_terms": 3599,
+    "n_event_knots": 970,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-residential-M-T62.5-seed414135772",
+    "H": 130,
+    "n_terms": 26956,
+    "n_event_knots": 6195,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-school-S-T30-seed221112921",
+    "H": 130,
+    "n_terms": 5405,
+    "n_event_knots": 57,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-hospital-S-T100-seed548827238",
+    "H": 130,
+    "n_terms": 3603,
+    "n_event_knots": 396,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-retail-M-T50-seed722828142",
+    "H": 130,
+    "n_terms": 27793,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-warehouse-S-T100-seed365324769",
+    "H": 130,
+    "n_terms": 3834,
+    "n_event_knots": 414,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-office-S-T50-seed519845512",
+    "H": 130,
+    "n_terms": 4072,
+    "n_event_knots": 494,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-residential-S-T30-seed261836129",
+    "H": 130,
+    "n_terms": 3832,
+    "n_event_knots": 1116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-school-S-T30-seed689074125",
+    "H": 130,
+    "n_terms": 4123,
+    "n_event_knots": 434,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-hospital-M-T60-seed955182853",
+    "H": 130,
+    "n_terms": 30950,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-retail-M-T30-seed474906877",
+    "H": 130,
+    "n_terms": 45468,
+    "n_event_knots": 68,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-warehouse-M-T50-seed394585760",
+    "H": 130,
+    "n_terms": 30797,
+    "n_event_knots": 6985,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-office-M-T50-seed206295846",
+    "H": 130,
+    "n_terms": 28231,
+    "n_event_knots": 6520,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T30-seed149337051",
+    "H": 130,
+    "n_terms": 3594,
+    "n_event_knots": 975,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T60-seed948171797",
+    "H": 130,
+    "n_terms": 3959,
+    "n_event_knots": 484,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-M-T50-seed143723039",
+    "H": 130,
+    "n_terms": 27916,
+    "n_event_knots": 6505,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-M-T30-seed559603816",
+    "H": 130,
+    "n_terms": 28241,
+    "n_event_knots": 6634,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T60-seed97393719",
+    "H": 130,
+    "n_terms": 3621,
+    "n_event_knots": 115,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-M-T60-seed710643062",
+    "H": 130,
+    "n_terms": 28198,
+    "n_event_knots": 6569,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-S-T60-seed695659980",
+    "H": 130,
+    "n_terms": 4927,
+    "n_event_knots": 66,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T99.9-seed388957539",
+    "H": 130,
+    "n_terms": 3881,
+    "n_event_knots": 441,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-S-T30-seed553800978",
+    "H": 130,
+    "n_terms": 3627,
+    "n_event_knots": 980,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-S-T100-seed383135401",
+    "H": 130,
+    "n_terms": 3821,
+    "n_event_knots": 1034,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T100-seed987708726",
+    "H": 130,
+    "n_terms": 3794,
+    "n_event_knots": 1049,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-office-M-T100-seed543960764",
+    "H": 130,
+    "n_terms": 27436,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-residential-S-T100-seed763527484",
+    "H": 130,
+    "n_terms": 3588,
+    "n_event_knots": 965,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-school-M-T75-seed396532500",
+    "H": 130,
+    "n_terms": 29707,
+    "n_event_knots": 2675,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-hospital-S-T75-seed752181318",
+    "H": 130,
+    "n_terms": 4234,
+    "n_event_knots": 81,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "dev_edge": {
+  "n_pairs": 62,
+  "n_excluded": 2,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 848,
+  "n_unit": 1302,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 2.133922377898028e-14,
+  "n_jumpform": 62,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 2.706744407451887e-15,
+  "max_rel_ref": 4.957172912890401e-15,
+  "max_rel_sys": 2.982466490780346e-16,
+  "max_rel_stage": 2.133922377898028e-14,
+  "examples": [],
+  "knots": [
+   {
+    "label": "edge exact_multiple_lives",
+    "H": 130,
+    "n_terms": 1735,
+    "n_event_knots": 33,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge life_equals_period",
+    "H": 130,
+    "n_terms": 1416,
+    "n_event_knots": 2,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge life_longer_than_period",
+    "H": 130,
+    "n_terms": 1351,
+    "n_event_knots": 1,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge life_near_divisor",
+    "H": 130,
+    "n_terms": 1544,
+    "n_event_knots": 20,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge life_shorter_than_one_year",
+    "H": 130,
+    "n_terms": 8768,
+    "n_event_knots": 346,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge zero_quantities",
+    "H": 130,
+    "n_terms": 1446,
+    "n_event_knots": 46,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge single_row",
+    "H": 130,
+    "n_terms": 809,
+    "n_event_knots": 9,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge empty_lists",
+    "H": 130,
+    "n_terms": 523,
+    "n_event_knots": 0,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge full_recycling",
+    "H": 130,
+    "n_terms": 1550,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge leak_rate_extremes",
+    "H": 130,
+    "n_terms": 1189,
+    "n_event_knots": 85,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge recovery_extremes",
+    "H": 130,
+    "n_terms": 2048,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge generation_exceeds_consumption",
+    "H": 130,
+    "n_terms": 1291,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge grid_floor_mid_period",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge period_shorter_than_one_year",
+    "H": 130,
+    "n_terms": 2670,
+    "n_event_knots": 285,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge period_non_integer",
+    "H": 130,
+    "n_terms": 1547,
+    "n_event_knots": 85,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge period_just_above_integer",
+    "H": 130,
+    "n_terms": 1540,
+    "n_event_knots": 77,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge rebuild_within_period",
+    "H": 130,
+    "n_terms": 1556,
+    "n_event_knots": 76,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge refurbishment_divides_period",
+    "H": 130,
+    "n_terms": 1555,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge linear_trend_profiles",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge table_profiles",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge constant_profiles",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge co2_only_scope",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge stage_subset",
+    "H": 130,
+    "n_terms": 136,
+    "n_event_knots": 0,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge waste_rate_extremes",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge all_composite",
+    "H": 130,
+    "n_terms": 1504,
+    "n_event_knots": 53,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge no_composite",
+    "H": 130,
+    "n_terms": 1509,
+    "n_event_knots": 58,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge all_epd",
+    "H": 130,
+    "n_terms": 1521,
+    "n_event_knots": 60,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge multi_use",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge explicit_event_lists",
+    "H": 130,
+    "n_terms": 1490,
+    "n_event_knots": 65,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge top_up_all",
+    "H": 130,
+    "n_terms": 1940,
+    "n_event_knots": 85,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge top_up_none",
+    "H": 130,
+    "n_terms": 2235,
+    "n_event_knots": 85,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "edge with_baseline",
+    "H": 130,
+    "n_terms": 1551,
+    "n_event_knots": 73,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "rep_evaluation": {
+  "n_pairs": 300,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 4200,
+  "n_unit": 6300,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 4.793730581150764e-13,
+  "n_jumpform": 300,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 1.466745078337763e-14,
+  "max_rel_ref": 8.270165004803332e-14,
+  "max_rel_sys": 5.576990554465402e-16,
+  "max_rel_stage": 4.793730581150764e-13,
+  "examples": [],
+  "knots": [
+   {
+    "label": "SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3758,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T60-seed207512442",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T100-seed990107243",
+    "H": 130,
+    "n_terms": 3841,
+    "n_event_knots": 1088,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T30-seed728212773",
+    "H": 130,
+    "n_terms": 3913,
+    "n_event_knots": 477,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39784,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-S-T75-seed106550363",
+    "H": 130,
+    "n_terms": 3877,
+    "n_event_knots": 415,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T99.9-seed419353453",
+    "H": 130,
+    "n_terms": 3744,
+    "n_event_knots": 390,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-M-T30-seed571520556",
+    "H": 130,
+    "n_terms": 30706,
+    "n_event_knots": 2804,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-S-T100-seed169387912",
+    "H": 130,
+    "n_terms": 3892,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T75-seed697085186",
+    "H": 130,
+    "n_terms": 3807,
+    "n_event_knots": 1073,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-office-S-T75-seed226261886",
+    "H": 130,
+    "n_terms": 4420,
+    "n_event_knots": 85,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-residential-S-T100-seed679080648",
+    "H": 130,
+    "n_terms": 3908,
+    "n_event_knots": 391,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-school-M-T75-seed928408348",
+    "H": 130,
+    "n_terms": 35636,
+    "n_event_knots": 107,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-hospital-S-T50-seed867542985",
+    "H": 130,
+    "n_terms": 3698,
+    "n_event_knots": 1036,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-retail-S-T60-seed353325326",
+    "H": 130,
+    "n_terms": 3600,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-warehouse-S-T99.9-seed842624192",
+    "H": 130,
+    "n_terms": 3341,
+    "n_event_knots": 921,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-office-S-T62.5-seed88034460",
+    "H": 130,
+    "n_terms": 3888,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-residential-S-T100-seed519279288",
+    "H": 130,
+    "n_terms": 4011,
+    "n_event_knots": 1192,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-school-M-T50-seed205149138",
+    "H": 130,
+    "n_terms": 30712,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-hospital-S-T60-seed298523104",
+    "H": 130,
+    "n_terms": 3850,
+    "n_event_knots": 1056,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-retail-S-T75-seed252271714",
+    "H": 130,
+    "n_terms": 4923,
+    "n_event_knots": 89,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-warehouse-M-T50-seed260124470",
+    "H": 130,
+    "n_terms": 30245,
+    "n_event_knots": 6951,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-office-M-T50-seed709897396",
+    "H": 130,
+    "n_terms": 28486,
+    "n_event_knots": 6700,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T30-seed766381197",
+    "H": 130,
+    "n_terms": 3767,
+    "n_event_knots": 1006,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T75-seed345396703",
+    "H": 130,
+    "n_terms": 3799,
+    "n_event_knots": 1046,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-S-T30-seed202235562",
+    "H": 130,
+    "n_terms": 4027,
+    "n_event_knots": 346,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-M-T60-seed522439826",
+    "H": 130,
+    "n_terms": 39691,
+    "n_event_knots": 86,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T50-seed248580905",
+    "H": 130,
+    "n_terms": 3357,
+    "n_event_knots": 928,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-S-T99.9-seed129503898",
+    "H": 130,
+    "n_terms": 3804,
+    "n_event_knots": 1039,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-M-T30-seed570594503",
+    "H": 130,
+    "n_terms": 28171,
+    "n_event_knots": 6578,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T50-seed642396844",
+    "H": 130,
+    "n_terms": 3535,
+    "n_event_knots": 119,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-S-T60-seed489235967",
+    "H": 130,
+    "n_terms": 3614,
+    "n_event_knots": 1034,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-M-T62.5-seed780709944",
+    "H": 130,
+    "n_terms": 38010,
+    "n_event_knots": 76,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T60-seed966319112",
+    "H": 130,
+    "n_terms": 3460,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-office-S-T60-seed988302934",
+    "H": 130,
+    "n_terms": 4708,
+    "n_event_knots": 72,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-residential-M-T75-seed189860655",
+    "H": 130,
+    "n_terms": 27519,
+    "n_event_knots": 6379,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-school-M-T42.5-seed975332268",
+    "H": 130,
+    "n_terms": 30699,
+    "n_event_knots": 2489,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-hospital-M-T99.9-seed79415947",
+    "H": 130,
+    "n_terms": 28965,
+    "n_event_knots": 2721,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-retail-M-T50-seed976361459",
+    "H": 130,
+    "n_terms": 28248,
+    "n_event_knots": 6556,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-warehouse-S-T30-seed545838907",
+    "H": 130,
+    "n_terms": 3599,
+    "n_event_knots": 112,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-office-S-T100-seed519697887",
+    "H": 130,
+    "n_terms": 5267,
+    "n_event_knots": 80,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-residential-M-T75-seed978595461",
+    "H": 130,
+    "n_terms": 30446,
+    "n_event_knots": 6836,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-school-S-T30-seed427387072",
+    "H": 130,
+    "n_terms": 4206,
+    "n_event_knots": 520,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-hospital-S-T50-seed505448474",
+    "H": 130,
+    "n_terms": 5125,
+    "n_event_knots": 50,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-retail-M-T100-seed543541100",
+    "H": 130,
+    "n_terms": 33075,
+    "n_event_knots": 2968,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-warehouse-M-T30-seed114616452",
+    "H": 130,
+    "n_terms": 29061,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-office-S-T30-seed12966110",
+    "H": 130,
+    "n_terms": 3838,
+    "n_event_knots": 1059,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T50-seed562678993",
+    "H": 130,
+    "n_terms": 3990,
+    "n_event_knots": 391,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T100-seed389667433",
+    "H": 130,
+    "n_terms": 4546,
+    "n_event_knots": 69,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-S-T100-seed243555376",
+    "H": 130,
+    "n_terms": 3650,
+    "n_event_knots": 1014,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-S-T75-seed114631539",
+    "H": 130,
+    "n_terms": 3640,
+    "n_event_knots": 119,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T30-seed453538185",
+    "H": 130,
+    "n_terms": 3652,
+    "n_event_knots": 118,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-S-T50-seed345311600",
+    "H": 130,
+    "n_terms": 3704,
+    "n_event_knots": 1058,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-M-T100-seed710431778",
+    "H": 130,
+    "n_terms": 28095,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T42.5-seed622050772",
+    "H": 130,
+    "n_terms": 5024,
+    "n_event_knots": 55,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-S-T60-seed858396889",
+    "H": 130,
+    "n_terms": 4070,
+    "n_event_knots": 378,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-M-T60-seed188161173",
+    "H": 130,
+    "n_terms": 27709,
+    "n_event_knots": 6391,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T62.5-seed591221899",
+    "H": 130,
+    "n_terms": 3791,
+    "n_event_knots": 360,
+    "n_lattice_knots": 110
+   }
+  ]
+ },
+ "rep_boundary": {
+  "n_pairs": 46,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 644,
+  "n_unit": 966,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 1.184565416587473e-13,
+  "n_jumpform": 46,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 1.1647151730100826e-15,
+  "max_rel_ref": 2.4147530203365138e-14,
+  "max_rel_sys": 4.3278925370323945e-16,
+  "max_rel_stage": 1.184565416587473e-13,
+  "examples": [],
+  "knots": [
+   {
+    "label": "benchmark S",
+    "H": 130,
+    "n_terms": 3838,
+    "n_event_knots": 483,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3758,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T60-seed207512442",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T100-seed990107243",
+    "H": 130,
+    "n_terms": 3841,
+    "n_event_knots": 1088,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "benchmark M",
+    "H": 130,
+    "n_terms": 29594,
+    "n_event_knots": 2776,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "rep_constructed": {
+  "n_pairs": 345,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 4650,
+  "n_unit": 7245,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 1.9570076121239452e-13,
+  "n_jumpform": 345,
+  "jumpform_vs_ref_bad": 9,
+  "max_rel_jumpform": 1.0000001271349133,
+  "max_rel_ref": 4.3264429026947224e-14,
+  "max_rel_sys": 8.00998061932051e-16,
+  "max_rel_stage": 1.9570076121239452e-13,
+  "examples": [
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 35% | SYN-S-office-S-T60-seed378919968",
+    60.0,
+    1.7285385126331155e-08,
+    1.7285430907208885e-08
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 60% | SYN-S-office-S-T60-seed378919968",
+    60.0,
+    -8.7967586498384e-14,
+    3.859031215886878e-21
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 60% | SYN-S-office-S-T60-seed378919968",
+    33.3,
+    1.7557183006326084e-10,
+    1.7565979765361793e-10
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 35% | SYN-S-residential-S-T60-seed207512",
+    60.0,
+    5.2575729905596603e-08,
+    5.257588488612703e-08
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 60% | SYN-S-residential-S-T60-seed207512",
+    60.0,
+    -3.580055531985305e-13,
+    1.1737745044806672e-20
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 60% | SYN-S-residential-S-T60-seed207512",
+    33.3,
+    5.339341014779576e-10,
+    5.34292107042893e-10
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 35% | SYN-S-hospital-M-T60-seed659283900",
+    60.0,
+    1.0738153880278154e-06,
+    1.0738142585172045e-06
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 60% | SYN-S-hospital-M-T60-seed659283900",
+    60.0,
+    -1.885655779500288e-12,
+    2.3973268389589915e-19
+   ],
+   [
+    "B1-04 jump form vs ref (not used)",
+    "no events, leak 60% | SYN-S-hospital-M-T60-seed659283900",
+    33.3,
+    1.0910540906053673e-08,
+    1.0912426562072888e-08
+   ]
+  ],
+  "knots": [
+   {
+    "label": "gas table differs at year 40 | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3758,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid table differs at year 25 | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3758,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "water within 1e-12 of the table | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3758,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity descriptor replaces table | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3498,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "gas table differs at year 40 | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid table differs at year 25 | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "water within 1e-12 of the table | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity descriptor replaces table | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3402,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity MWh/year | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity kWh/month | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity kWh (no time base) | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "generation in MJ/year | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "export unit unknown | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid kgCO2e/MWh | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid unit without denominator | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid gCO2e/kWh | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid licence unknown | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "gas in L/year | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "gas per day | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "oil factor missing | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "water factor unknown id | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "fm ratio 1.5 | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "fm ratio missing | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "intensity negative | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "constant without base | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages without B2 | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages without B6 | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28466,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages B5 only | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 2,
+    "n_event_knots": 2,
+    "n_lattice_knots": 0
+   },
+   {
+    "label": "stages B1 B6 only | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 6285,
+    "n_event_knots": 264,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild every 25 years, scope 0.3 | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28729,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild scope invalid | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28724,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity MWh/year | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity kWh/month | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "electricity kWh (no time base) | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "generation in MJ/year | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "export unit unknown | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid kgCO2e/MWh | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid unit without denominator | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid gCO2e/kWh | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "grid licence unknown | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "gas in L/year | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "gas per day | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "oil factor missing | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "water factor unknown id | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "fm ratio 1.5 | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "fm ratio missing | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "intensity negative | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "constant without base | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages without B2 | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages without B6 | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3644,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages B5 only | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 0,
+    "n_event_knots": 0,
+    "n_lattice_knots": 0
+   },
+   {
+    "label": "stages B1 B6 only | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 1104,
+    "n_event_knots": 19,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild every 25 years, scope 0.3 | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3909,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild scope invalid | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steps do not start at 0 | SYN-RC-residential-S-T75-seed10655",
+    "H": 130,
+    "n_terms": 3877,
+    "n_event_knots": 415,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steps not increasing | SYN-RC-residential-S-T75-seed10655",
+    "H": 130,
+    "n_terms": 3877,
+    "n_event_knots": 415,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steps empty | SYN-RC-residential-S-T75-seed10655",
+    "H": 130,
+    "n_terms": 3877,
+    "n_event_knots": 415,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steps do not start at 0 | SYN-RC-retail-S-T100-seed169387912",
+    "H": 130,
+    "n_terms": 3892,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steps not increasing | SYN-RC-retail-S-T100-seed169387912",
+    "H": 130,
+    "n_terms": 3892,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steps empty | SYN-RC-retail-S-T100-seed169387912",
+    "H": 130,
+    "n_terms": 3892,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "start below floor | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steep decline (floor from year 3) | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28726,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "start below floor | SYN-RC-school-S-T99.9-seed41935345",
+    "H": 130,
+    "n_terms": 3744,
+    "n_event_knots": 390,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "steep decline (floor from year 3) | SYN-RC-school-S-T99.9-seed41935345",
+    "H": 130,
+    "n_terms": 3744,
+    "n_event_knots": 390,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "list with 0 and three events in one year | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3898,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "list with negative and far value | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3889,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "all devices life 0.4, no top-up | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 6773,
+    "n_event_knots": 379,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "all devices life 7.3, no top-up | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 4193,
+    "n_event_knots": 134,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no change events at all, no top-up | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3853,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "life 25, leak 30%, no top-up | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3953,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no events, leak 35% | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3853,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no events, leak 60% | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3853,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "invalid loss / recovery / gwp | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3609,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "equipment list with 0 | SYN-S-office-S-T60-seed378919968",
+    "H": 130,
+    "n_terms": 3744,
+    "n_event_knots": 118,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "list with 0 and three events in one year | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3673,
+    "n_event_knots": 113,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "list with negative and far value | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3664,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "all devices life 0.4, no top-up | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 6517,
+    "n_event_knots": 374,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "all devices life 7.3, no top-up | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3937,
+    "n_event_knots": 127,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no change events at all, no top-up | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3597,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "life 25, leak 30%, no top-up | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3697,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no events, leak 35% | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3597,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no events, leak 60% | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3597,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "invalid loss / recovery / gwp | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3519,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "equipment list with 0 | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3640,
+    "n_event_knots": 111,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "list with 0 and three events in one year | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28731,
+    "n_event_knots": 6561,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "list with negative and far value | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28722,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "all devices life 0.4, no top-up | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 51391,
+    "n_event_knots": 6610,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "all devices life 7.3, no top-up | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 30751,
+    "n_event_knots": 6472,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no change events at all, no top-up | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28031,
+    "n_event_knots": 6464,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "life 25, leak 30%, no top-up | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28831,
+    "n_event_knots": 6464,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no events, leak 35% | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28031,
+    "n_event_knots": 6464,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "no events, leak 60% | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28031,
+    "n_event_knots": 6464,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "invalid loss / recovery / gwp | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28556,
+    "n_event_knots": 6552,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "equipment list with 0 | SYN-S-hospital-M-T60-seed659283900",
+    "H": 130,
+    "n_terms": 28724,
+    "n_event_knots": 6560,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: area differs | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: stages differ | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3532,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: gas scope differs | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: factor version differs | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: three reasons | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3532,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: unknown id | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: unchanged | SYN-S-residential-S-T60-seed207512",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 110,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: area differs | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: stages differ | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3774,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: gas scope differs | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: factor version differs | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: three reasons | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3774,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: unknown id | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: unchanged | SYN-S-retail-S-T42.5-seed61614489",
+    "H": 130,
+    "n_terms": 3904,
+    "n_event_knots": 509,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: area differs | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39784,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: stages differ | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39654,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: gas scope differs | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39784,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: factor version differs | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39784,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: three reasons | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39654,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: unknown id | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39784,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "baseline: unchanged | SYN-RC-office-M-T50-seed389633541",
+    "H": 130,
+    "n_terms": 39784,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "rep_scale_L": {
+  "n_pairs": 2,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 28,
+  "n_unit": 42,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 5.714641426089622e-13,
+  "n_jumpform": 2,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 4.0972608900427454e-16,
+  "max_rel_ref": 9.964990708739074e-14,
+  "max_rel_sys": 1.6525689400893983e-16,
+  "max_rel_stage": 5.714641426089622e-13,
+  "examples": [],
+  "knots": [
+   {
+    "label": "benchmark L",
+    "H": 130,
+    "n_terms": 281032,
+    "n_event_knots": 10837,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "rep_defects": {
+  "n_pairs": 24,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 336,
+  "n_unit": 504,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 3.5422590678544384e-14,
+  "n_jumpform": 24,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 5.702744601644519e-15,
+  "max_rel_ref": 8.732285795320437e-15,
+  "max_rel_sys": 5.453437931439719e-16,
+  "max_rel_stage": 3.5422590678544384e-14,
+  "examples": [],
+  "knots": [
+   {
+    "label": "dirty 616201",
+    "H": 130,
+    "n_terms": 28707,
+    "n_event_knots": 2813,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616202",
+    "H": 130,
+    "n_terms": 3619,
+    "n_event_knots": 407,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616203",
+    "H": 130,
+    "n_terms": 4055,
+    "n_event_knots": 390,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616204",
+    "H": 130,
+    "n_terms": 29191,
+    "n_event_knots": 2832,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616205",
+    "H": 130,
+    "n_terms": 3710,
+    "n_event_knots": 368,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616206",
+    "H": 130,
+    "n_terms": 3513,
+    "n_event_knots": 423,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616207",
+    "H": 130,
+    "n_terms": 31336,
+    "n_event_knots": 2781,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616208",
+    "H": 130,
+    "n_terms": 3643,
+    "n_event_knots": 311,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616209",
+    "H": 130,
+    "n_terms": 3504,
+    "n_event_knots": 474,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616210",
+    "H": 130,
+    "n_terms": 29704,
+    "n_event_knots": 2744,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616211",
+    "H": 130,
+    "n_terms": 3961,
+    "n_event_knots": 428,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 616212",
+    "H": 130,
+    "n_terms": 3452,
+    "n_event_knots": 380,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "new_population": {
+  "n_pairs": 240,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 3360,
+  "n_unit": 5040,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 2.4859361678623766e-13,
+  "n_jumpform": 240,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 5.021565485158151e-15,
+  "max_rel_ref": 3.795385674156992e-14,
+  "max_rel_sys": 4.428913207043367e-16,
+  "max_rel_stage": 2.4859361678623766e-13,
+  "examples": [],
+  "knots": [
+   {
+    "label": "SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3667,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T30-seed860730318",
+    "H": 130,
+    "n_terms": 3795,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 28003,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-S-T75-seed17495347",
+    "H": 130,
+    "n_terms": 3728,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-S-T30-seed271039347",
+    "H": 130,
+    "n_terms": 5134,
+    "n_event_knots": 59,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T50-seed481082978",
+    "H": 130,
+    "n_terms": 4104,
+    "n_event_knots": 453,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-S-T100-seed720245966",
+    "H": 130,
+    "n_terms": 3947,
+    "n_event_knots": 1133,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-M-T60-seed823716704",
+    "H": 130,
+    "n_terms": 30530,
+    "n_event_knots": 2805,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T30-seed404807128",
+    "H": 130,
+    "n_terms": 3702,
+    "n_event_knots": 118,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-S-T100-seed897539325",
+    "H": 130,
+    "n_terms": 4449,
+    "n_event_knots": 84,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-S-T50-seed731677092",
+    "H": 130,
+    "n_terms": 3483,
+    "n_event_knots": 942,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T100-seed7044538",
+    "H": 130,
+    "n_terms": 3463,
+    "n_event_knots": 120,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-office-M-T30-seed270119839",
+    "H": 130,
+    "n_terms": 42819,
+    "n_event_knots": 66,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-residential-S-T30-seed437115340",
+    "H": 130,
+    "n_terms": 3783,
+    "n_event_knots": 1102,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-school-S-T30-seed172967678",
+    "H": 130,
+    "n_terms": 3471,
+    "n_event_knots": 907,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-hospital-S-T75-seed806172438",
+    "H": 130,
+    "n_terms": 4564,
+    "n_event_knots": 74,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-retail-S-T62.5-seed927097521",
+    "H": 130,
+    "n_terms": 3548,
+    "n_event_knots": 118,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-warehouse-M-T100-seed435393632",
+    "H": 130,
+    "n_terms": 36792,
+    "n_event_knots": 113,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-office-M-T62.5-seed529785973",
+    "H": 130,
+    "n_terms": 30804,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-residential-S-T75-seed518660646",
+    "H": 130,
+    "n_terms": 3707,
+    "n_event_knots": 1035,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-school-M-T100-seed68120848",
+    "H": 130,
+    "n_terms": 32921,
+    "n_event_knots": 2947,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-hospital-S-T42.5-seed46196113",
+    "H": 130,
+    "n_terms": 4628,
+    "n_event_knots": 467,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-retail-S-T62.5-seed586946886",
+    "H": 130,
+    "n_terms": 3662,
+    "n_event_knots": 1144,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-W-warehouse-S-T50-seed449307198",
+    "H": 130,
+    "n_terms": 3639,
+    "n_event_knots": 1012,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-office-S-T30-seed790807451",
+    "H": 130,
+    "n_terms": 3696,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-residential-S-T30-seed255620881",
+    "H": 130,
+    "n_terms": 3761,
+    "n_event_knots": 1014,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-school-S-T50-seed193709563",
+    "H": 130,
+    "n_terms": 5022,
+    "n_event_knots": 55,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-hospital-S-T75-seed903977477",
+    "H": 130,
+    "n_terms": 3458,
+    "n_event_knots": 978,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-retail-S-T50-seed441752343",
+    "H": 130,
+    "n_terms": 3781,
+    "n_event_knots": 386,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-S-warehouse-S-T62.5-seed643170932",
+    "H": 130,
+    "n_terms": 4734,
+    "n_event_knots": 47,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-office-S-T30-seed687080549",
+    "H": 130,
+    "n_terms": 3566,
+    "n_event_knots": 956,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-residential-S-T50-seed709054672",
+    "H": 130,
+    "n_terms": 3517,
+    "n_event_knots": 113,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-school-S-T100-seed583681078",
+    "H": 130,
+    "n_terms": 4516,
+    "n_event_knots": 77,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-hospital-M-T50-seed910041703",
+    "H": 130,
+    "n_terms": 28005,
+    "n_event_knots": 6608,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-retail-M-T50-seed647320663",
+    "H": 130,
+    "n_terms": 27279,
+    "n_event_knots": 125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-RC-warehouse-S-T100-seed66726082",
+    "H": 130,
+    "n_terms": 3977,
+    "n_event_knots": 499,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-office-S-T75-seed200178937",
+    "H": 130,
+    "n_terms": 3713,
+    "n_event_knots": 424,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-residential-S-T62.5-seed264759009",
+    "H": 130,
+    "n_terms": 3553,
+    "n_event_knots": 911,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-school-S-T30-seed340411029",
+    "H": 130,
+    "n_terms": 3910,
+    "n_event_knots": 1125,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "SYN-SRC-hospital-S-T50-seed672740942",
+    "H": 130,
+    "n_terms": 4944,
+    "n_event_knots": 59,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "new_defects": {
+  "n_pairs": 24,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 336,
+  "n_unit": 504,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 1.1316883150243774e-13,
+  "n_jumpform": 24,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 2.649591949025542e-15,
+  "max_rel_ref": 1.308795161933326e-14,
+  "max_rel_sys": 2.490631944808033e-16,
+  "max_rel_stage": 1.1316883150243774e-13,
+  "examples": [],
+  "knots": [
+   {
+    "label": "dirty 760001",
+    "H": 130,
+    "n_terms": 29509,
+    "n_event_knots": 2665,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760002",
+    "H": 130,
+    "n_terms": 3696,
+    "n_event_knots": 448,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760003",
+    "H": 130,
+    "n_terms": 3900,
+    "n_event_knots": 508,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760004",
+    "H": 130,
+    "n_terms": 28939,
+    "n_event_knots": 2542,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760005",
+    "H": 130,
+    "n_terms": 3574,
+    "n_event_knots": 436,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760006",
+    "H": 130,
+    "n_terms": 3798,
+    "n_event_knots": 384,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760007",
+    "H": 130,
+    "n_terms": 31491,
+    "n_event_knots": 2946,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760008",
+    "H": 130,
+    "n_terms": 3399,
+    "n_event_knots": 411,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760009",
+    "H": 130,
+    "n_terms": 3359,
+    "n_event_knots": 464,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760010",
+    "H": 130,
+    "n_terms": 29610,
+    "n_event_knots": 2826,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760011",
+    "H": 130,
+    "n_terms": 3850,
+    "n_event_knots": 414,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "dirty 760012",
+    "H": 130,
+    "n_terms": 3607,
+    "n_event_knots": 452,
+    "n_lattice_knots": 131
+   }
+  ]
+ },
+ "new_special": {
+  "n_pairs": 90,
+  "n_excluded": 0,
+  "n_failed": 0,
+  "total_vs_ref_bad": 0,
+  "total_vs_sys_bad": 0,
+  "knot_vs_terms_bad": 0,
+  "stage_vs_ref_bad": 0,
+  "n_stage": 1242,
+  "n_unit": 1890,
+  "unit_vs_ref_bad": 0,
+  "max_rel_unit": 5.036467293488994e-14,
+  "n_jumpform": 90,
+  "jumpform_vs_ref_bad": 0,
+  "max_rel_jumpform": 3.435710284007306e-16,
+  "max_rel_ref": 8.35042155968544e-15,
+  "max_rel_sys": 2.7994732017764204e-16,
+  "max_rel_stage": 5.036467293488994e-14,
+  "examples": [],
+  "knots": [
+   {
+    "label": "states: overrides and missing values | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3649,
+    "n_event_knots": 970,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "states: unknown provenance record | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3667,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "units: not convertible, stage of a factor | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3389,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages: two factors with a wrong stage only | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3658,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "references: missing, no record, licence, source | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3374,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "lines: zero quantities, shared cycles, unsorted lists | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3618,
+    "n_event_knots": 952,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild 20 years, repair rates 0 / invalid | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3657,
+    "n_event_knots": 985,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "cycles of 0.5, 0.75 and 1 year | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 6805,
+    "n_event_knots": 1259,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "routes: no mass, negative fraction, unknown factor | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3667,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "CO2 only, stages without B2 and C4 | SYN-S-office-S-T50-seed220811088",
+    "H": 130,
+    "n_terms": 3406,
+    "n_event_knots": 979,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "states: overrides and missing values | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3777,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "states: unknown provenance record | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3795,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "units: not convertible, stage of a factor | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3387,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages: two factors with a wrong stage only | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3782,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "references: missing, no record, licence, source | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3360,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "lines: zero quantities, shared cycles, unsorted lists | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3717,
+    "n_event_knots": 117,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild 20 years, repair rates 0 / invalid | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3783,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "cycles of 0.5, 0.75 and 1 year | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 6775,
+    "n_event_knots": 346,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "routes: no mass, negative fraction, unknown factor | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3795,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "CO2 only, stages without B2 and C4 | SYN-S-residential-S-T30-seed860730",
+    "H": 130,
+    "n_terms": 3534,
+    "n_event_knots": 116,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "states: overrides and missing values | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27976,
+    "n_event_knots": 6536,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "states: unknown provenance record | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 28003,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "units: not convertible, stage of a factor | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27589,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "stages: two factors with a wrong stage only | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27981,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "references: missing, no record, licence, source | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27719,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "lines: zero quantities, shared cycles, unsorted lists | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27941,
+    "n_event_knots": 6533,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "rebuild 20 years, repair rates 0 / invalid | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27996,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "cycles of 0.5, 0.75 and 1 year | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 31006,
+    "n_event_knots": 6650,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "routes: no mass, negative fraction, unknown factor | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 28003,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   },
+   {
+    "label": "CO2 only, stages without B2 and C4 | SYN-S-school-M-T30-seed237420088",
+    "H": 130,
+    "n_terms": 27742,
+    "n_event_knots": 6543,
+    "n_lattice_knots": 131
+   }
+  ]
+ }
+}

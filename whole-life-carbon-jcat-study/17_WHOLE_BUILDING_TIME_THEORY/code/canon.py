@@ -60,6 +60,7 @@ class Term:
     kind: str          # const | cell | atom | gcell | density | win0 | win1 | wev0 | wev1  (win*: interval form of B1-04)
     lo: float = NEG_INF        # window [lo < T <= hi] (lattice rule); only the interval form of B1-04 uses it
     hi: float = math.inf
+    src: str = ""              # provenance: "<table>:<column>[<row>]" of the masked sum-product (P1)
 
     def h(self, T: float) -> Fraction:
         if not (self.lo < T and T <= self.hi):
@@ -187,22 +188,23 @@ def rate_pieces(sysm) -> dict:
         tau = eng.col(t, e["tau"]).v if "tau" in e else None
         for i in idx:
             amp = float(a[i])
+            src = "%s:%s[%d]" % (t, e["amp"], i)
             if shape == "const":
-                out.append((amp, 0.0, 0.0, NEG_INF, "const"))
+                out.append((amp, 0.0, 0.0, NEG_INF, "const", NEG_INF, math.inf, src))
             elif shape == "density":
-                out.append((amp, 0.0, float(H), NEG_INF, "density"))
+                out.append((amp, 0.0, float(H), NEG_INF, "density", NEG_INF, math.inf, src))
             elif shape == "cell":
-                out.append((amp, float(int(k[i])), 1.0, NEG_INF, "cell"))
+                out.append((amp, float(int(k[i])), 1.0, NEG_INF, "cell", NEG_INF, math.inf, src))
             elif shape == "atom":
-                out.append((amp, float(tau[i]), 0.0, float(tau[i]), "atom"))
+                out.append((amp, float(tau[i]), 0.0, float(tau[i]), "atom", NEG_INF, math.inf, src))
             elif shape == "gcell":
-                out.append((amp, float(int(k[i])), 1.0, float(tau[i]), "gcell"))
+                out.append((amp, float(int(k[i])), 1.0, float(tau[i]), "gcell", NEG_INF, math.inf, src))
             else:
                 raise ValueError(shape)
     return P
 
 
-def interval_pieces(sysm) -> list:
+def interval_pieces(sysm) -> list:  # noqa: C901
     """B1-04 in interval form (D-09): for K < T <= K+1,  A_K + B_K (T - K) + sum_{events j of cell K, tau_j < T(1-eps)} (a_j + g_j (T - K)).
     The same columns as unified.System._interval; each coefficient becomes a windowed kernel term."""
     import numpy as np
@@ -213,9 +215,9 @@ def interval_pieces(sysm) -> list:
     out = []
     for K in range(len(A)):
         if A[K] != 0.0:
-            out.append((Fraction(float(A[K])), 0.0, 0.0, NEG_INF, "win0", float(K), float(K + 1)))
+            out.append((Fraction(float(A[K])), 0.0, 0.0, NEG_INF, "win0", float(K), float(K + 1), "%s:b1.iA[%d]" % (CAL, K)))
         if B[K] != 0.0:
-            out.append((Fraction(float(B[K])), float(K), 1.0, NEG_INF, "win1", float(K), float(K + 1)))
+            out.append((Fraction(float(B[K])), float(K), 1.0, NEG_INF, "win1", float(K), float(K + 1), "%s:b1.iB[%d]" % (CAL, K)))
     if eng.nrows(DY):
         k, p = sysm.v(DY, "k"), sysm.v(DY, "b1.p")
         ea, eg = sysm.v(DY, "b1.e4a"), sysm.v(DY, "b1.e4g")
@@ -223,9 +225,9 @@ def interval_pieces(sysm) -> list:
         for i in np.nonzero(p)[0]:
             K, t = int(k[i]), float(tau[i])
             if ea[i] != 0.0:
-                out.append((Fraction(float(ea[i])), 0.0, 0.0, t, "wev0", float(K), float(K + 1)))
+                out.append((Fraction(float(ea[i])), 0.0, 0.0, t, "wev0", float(K), float(K + 1), "%s:b1.e4a[%d]" % (DY, i)))
             if eg[i] != 0.0:
-                out.append((Fraction(float(eg[i])), float(K), 1.0, t, "wev1", float(K), float(K + 1)))
+                out.append((Fraction(float(eg[i])), float(K), 1.0, t, "wev1", float(K), float(K + 1), "%s:b1.e4g[%d]" % (DY, i)))
     return out
 
 
@@ -234,13 +236,13 @@ def unit_pieces(sysm) -> dict:
     P = rate_pieces(sysm)
     out = {}
     for u in CONST_UNITS:
-        out[u] = [(Fraction(sysm.s(S_.CONST_VALUE[u])), 0.0, 0.0, NEG_INF, "const")]
+        out[u] = [(Fraction(sysm.s(S_.CONST_VALUE[u])), 0.0, 0.0, NEG_INF, "const", NEG_INF, math.inf, "S:" + S_.CONST_VALUE[u])]
     for u in SPECTRUM_UNITS:
-        out[u] = [(Fraction(a), s, l, g, kd) for a, s, l, g, kd in P.get(u, [])]
+        out[u] = [(Fraction(pc[0]),) + tuple(pc[1:]) for pc in P.get(u, [])]
     out["B1-04"] = interval_pieces(sysm)                          # the interval form, as the unified system uses
-    out["B1-04J"] = [(Fraction(a), s, l, g, kd) for a, s, l, g, kd in P.get("B1-04", [])]   # jump form (comparison only)
+    out["B1-04J"] = [(Fraction(pc[0]),) + tuple(pc[1:]) for pc in P.get("B1-04", [])]   # jump form (comparison only)
     q = Fraction(b21_share(sysm))
-    out["B2-01"] = [(Fraction(a) * q, s, l, g, kd) for a, s, l, g, kd in P.get("EL", [])] if q else []
+    out["B2-01"] = [(Fraction(pc[0]) * q,) + tuple(pc[1:7]) + (pc[7] + " x S:b21.share",) for pc in P.get("EL", [])] if q else []
     return out
 
 
@@ -264,8 +266,7 @@ def build(sysm, T_probe: float | None = None) -> Canon:
         assert got == inc, ("stage inclusion differs", got, inc)
     can = Canon(H=int(sysm.H), inc=inc, b2_included=b2)
     for u in sorted({r[1] for r in COMP_ROWS}) + ["B1-04J"]:
-        can.unit_terms[u] = [Term(pc[0], pc[1], pc[2], pc[3], u, "", pc[4], *(pc[5:7] if len(pc) > 5 else (NEG_INF, math.inf)))
-                             for pc in pieces.get(u, []) if pc[0] != 0]
+        can.unit_terms[u] = [Term(pc[0], pc[1], pc[2], pc[3], u, "", pc[4], pc[5], pc[6], pc[7]) for pc in pieces.get(u, []) if pc[0] != 0]
     for stage, unit, sign in COMP_ROWS:
         if not inc[stage]:
             continue
@@ -277,9 +278,8 @@ def build(sysm, T_probe: float | None = None) -> Canon:
         for pc in pieces.get(unit, []):
             if pc[0] == 0:
                 continue
-            a, s, l, g, kd = pc[:5]
-            lo, hi = (pc[5], pc[6]) if len(pc) > 5 else (NEG_INF, math.inf)
-            can.terms.append(Term(a * sign, s, l, g, unit, stage, kd, lo, hi))
+            a, s, l, g, kd, lo, hi, src = pc
+            can.terms.append(Term(a * sign, s, l, g, unit, stage, kd, lo, hi, src))
     return can
 
 

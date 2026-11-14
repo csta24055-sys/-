@@ -89,11 +89,15 @@ def classify_scenario(sysm, can, max_pieces, rng):
         for T, f, s, C in pts:
             keys |= set(f)
     cls = {}
+    ABSENT = object()
     for key in keys:
-        vals = [[(T, f.get(key), C) for T, f, s, C in pts] for pts in samples]
+        vals = [[(T, f.get(key, ABSENT), C) for T, f, s, C in pts] for pts in samples]
         flatv = [v for pv in vals for (_, v, _) in pv]
+        if any(v is ABSENT for v in flatv):
+            cls[key] = "shape"                       # the output key exists only for some periods
+            continue
         if any(v is None for v in flatv):
-            cls[key] = "shape"
+            cls[key] = "const" if all(v is None for v in flatv) else "step"     # None = an undefined (missing) result
             continue
         if not all(is_num(v) for v in flatv):
             cls[key] = "const" if len({repr(v) for v in flatv}) == 1 else "step"

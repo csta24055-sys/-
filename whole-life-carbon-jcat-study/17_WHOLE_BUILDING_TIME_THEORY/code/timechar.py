@@ -371,21 +371,24 @@ def integral_closed(kf, T: Fraction) -> Fraction:
     return v
 
 
-def th6(kf, pieces):
-    n_bad, acc = 0, Fraction(0)
-    prefix = [Fraction(0)]
-    for a, b, al, be in pieces:
-        acc += al * (b - a) + be * (b * b - a * a) / 2
-        prefix.append(acc)
-    total = integral_closed(kf, pieces[-1][1]) if pieces else Fraction(0)
-    n_bad += (total != acc)
-    contiguous = all(p1[1] == p2[0] for p1, p2 in zip(pieces, pieces[1:])) and (not pieces or pieces[0][0] == 0)
-    if contiguous:
-        for i in range(0, len(pieces), max(1, len(pieces) // 10)):
-            a, b, al, be = pieces[i]
+def th6(kf, pieces, H):
+    """Integral of the knot form: piece by piece (coefficients of EVERY breakpoint interval from the prefix sums of the
+    knots, including intervals too short to hold a float) against the closed form; also at interior points."""
+    bp = breakpoints(kf, H)
+    ks = kf.knots()
+    cumP, cumQ, k = kf.A0, Fraction(0), 0
+    acc, n_bad, checked = Fraction(0), 0, 0
+    step = max(1, len(bp) // 12)
+    for i, (a, b) in enumerate(zip(bp, bp[1:])):
+        while k < len(ks) and ks[k][0] <= a:
+            cumP += ks[k][1]; cumQ += ks[k][2]; k += 1
+        if i % step == 0:
             m = (a + b) / 2
-            n_bad += (integral_closed(kf, m) != prefix[i] + al * (m - a) + be * (m * m - a * a) / 2)
-    return dict(th6_integral_bad=n_bad, integral_0_H=float(acc), pieces_contiguous=contiguous)
+            n_bad += (integral_closed(kf, m) != acc + cumP * (m - a) + cumQ * (m * m - a * a) / 2)
+            checked += 1
+        acc += cumP * (b - a) + cumQ * (b * b - a * a) / 2
+    n_bad += (integral_closed(kf, bp[-1]) != acc)
+    return dict(th6_integral_bad=n_bad, th6_points=checked + 1, integral_0_H=float(acc))
 
 
 def prim(p: float, q: float, c: float, H: float, s: complex) -> complex:
@@ -578,6 +581,30 @@ def role_of(t) -> str:
     return {"cell": "B", "density": "B", "atom": "Gamma", "gcell": "Delta"}[t.kind]
 
 
+def role_recurrences(can, H):
+    """Minimal recurrence order (exact) of the annual increments of each role separately, and of the float switch
+    offsets sw(g) - g/(1-eps) in ulps (lemma L-2)."""
+    by = collections.defaultdict(list)
+    for t in can.terms:
+        by[role_of(t)].append(t)
+    out = {}
+    for r, ts in sorted(by.items()):
+        kf = KF(canon.Canon(H=can.H, terms=ts))
+        inc = [kf(float(y)) - kf(float(y - 1)) for y in range(2, H + 1)]
+        if all(x == 0 for x in inc):
+            out[r] = dict(order=0)
+            continue
+        L, Cp = berlekamp_massey(inc)
+        d = dict(order=L, certified_unique=2 * L <= len(inc))
+        if 0 < L <= 24 and 2 * L <= len(inc):
+            roots = np.roots([float(c) for c in Cp])
+            d["eigenvalues"] = sorted([[round(z.real, 8), round(z.imag, 8)] for z in roots])
+        out[r] = d
+    gs = sorted({t.gate for t in can.terms if t.gate != NEG_INF})
+    offs = [abs(Fraction(tswitch(g)) - tstar(g)) / Fraction(math.ulp(float(tstar(g)))) for g in gs]
+    return out, dict(n_event_times=len(gs), max_switch_offset_ulp=float(max(offs, default=0)))
+
+
 def roles(can, H):
     """Value and slope of every role at T = 1, 10, 30, 60, H (where <= H): exact, from per-role knot forms."""
     by = collections.defaultdict(list)
@@ -614,11 +641,12 @@ def analyse(can, label, rng):
     r = dict(label=label, H=H, n_terms=len(can.terms))
     r["th0123"], pieces = th0123(can, kf, H, rng)
     r["th45"], rt, Z = th45(can, kf, H, pieces, rng)
-    r["th6"] = th6(kf, pieces)
+    r["th6"] = th6(kf, pieces, H)
     r["th78"] = th78(kf, H, pieces)
     r["th9"] = th9(kf, H)
     r["th10"] = {st: th10(can, H, st) for st in ("B4", "B5")}
     r["roles"] = roles(can, H)
+    r["role_recurrence"], r["switch_points"] = role_recurrences(can, H)
     return r
 
 
