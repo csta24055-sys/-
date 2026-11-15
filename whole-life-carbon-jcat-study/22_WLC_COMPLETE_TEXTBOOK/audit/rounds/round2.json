@@ -1,0 +1,501 @@
+{
+ "solve": [
+  {
+   "id": "1.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The parenthetical in (c), 「部分的な補修と見て B3 としても、エンボディドであることは同じ」, accepts B3 as a defensible label. That contradicts the statement (「全面的な更新」) and textbook 1.3, which settles this exact case: 「定期的に行うかどうかでは分けない（20 年ごとの防水の全面的な更新は B4）」. Only B4 should be accepted. The embodied/operational result is unaffected. Rubric gap: the two rubric items cover the general split and (c) only. No item credits the stage codes for (a) A1–A3, (b) B6 and (d) C2, so an answer that labels (d) as A4 would lose nothing.",
+   "problem_defect": "Small tension in the textbook that a careful student may notice in (b). Textbook 2.5 and 1.3 say the research model moves the facility-management share ρ_B2 of purchased electricity to B2, and B2 is grouped as embodied (B1–B5, defined as 「材料と工事に由来するもの」). So under the research convention part of 'lighting and air-conditioning electricity' could sit in an embodied stage. The intended answer (B6, operational) is the standard one, but the statement does not say which convention applies. The listed principle P1 is not really what the problem uses (it is a stage-classification task, 1.3).",
+   "external_knowledge": ""
+  },
+  {
+   "id": "1.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "No numerical error: 5,600 kgCO2e (stock, not an emission) and 0.4 kg × 700 = 280 kgCO2e/年 agree with my solution. Rubric gap: no rubric item for (3), and none asking for units (kgCO2e, dimensionless GWP). (3) is covered only by the automated check.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "1.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The content is correct and consistent with (4.4), (4.5), the 4.8 table and 4.9. Rubric gap: the problem explicitly asks for 「互いの関係を一文でまとめよ」, but none of the three rubric items credits that sentence. Nor does any item credit the meaning of the kernel parameters s, ℓ, g or the five kernel shapes.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "2.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "(1) 20 × 75 = 1,500 t·km, × 0.12 = 180 kgCO2e: correct. Minor point in (2): the answer states 「排出は活動量に比例する」 as a fact. Textbook 2.5 presents proportionality (a constant factor, no thresholds or volume discounts) as the premise of P1. A strict answer would say the form holds under that assumption.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "2.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Correct. (1) [A]+[B] gives 2 when both hold; the fix is [A]+[¬A][B] or 1−(1−[A])(1−[B]). (2) [B]=0 at 300 km, so computing with [A]=0 and [A]=1 gives 0 vs e, and the result is unknown. (3) 60 vs 30. Minor: the answer calls the unknown result 「0〜e の範囲」, but only the two values 0 and e are possible (textbook 3.5: 「二つの値の範囲」). The advice 「確認するか仮定を明示する」 goes slightly beyond 3.5. Check gap: the six checks cover only the OR identity and (3). Nothing checks (2), the both-values evaluation.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "2.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "「他の項は変わらないとする」 is slightly ambiguous: it could be read as 'the other terms contribute the same yearly increment' rather than 'contribute no increment'. The intended reading is that they add nothing between T=30 and 31, which is unrealistic if operational energy exists. 'The building has no other T-dependent terms' would be clearer. The data are physically consistent with textbook 6.5: if R(T)=(1−ρ_rec)·GWP·u(T), a 4 tCO2e leak lowers Z by 1, which implies ρ_rec = 0.75. The unique answer is 3 tCO2e.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "3.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Correct: N(36)=2, N(36.5)=3, N(11)=0. The proof in (1) is the same argument as textbook 4.3. It relies on T>0 (so ⌈x⌉−1 ≥ 0) without saying so explicitly. The rubric does not cover (2), but the checks do.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "3.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "3.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "Nothing strictly missing, but two steps are left implicit. The 4.8 jump-form table has no row for the constant or for a slope that starts at T=0 (the density/linear term). And 8.2 says the transform of C is 'the sum over nodes of (8.1)' without mentioning that the initial constant A_0 contributes a/s. The student must write a+bT as [0<T](a+bT), or as A_0=a plus node 0 with (0,b), and transform the constant alone. This is easy with the declared integrals; a row for the constant and the linear term in the 4.8 table would close the gap.",
+   "matches_official": "yes",
+   "official_answer_error": "The results are correct: (8.1), and L[C]=a/s+b/s²+R e^{−Ls}/s. Rubric defect: item (1) prescribes the method (「置き換え T = u + x と 2 つの積分で (8.1) を導く」), while textbook 8.2 introduces (8.1) via 「部分積分」. A correct derivation by direct integration by parts would wrongly lose credit, so the rubric should accept any valid derivation. Rubric gap: no item credits the result of (2). Check transparency: the (2) checks do not state which a, b, R, L were used, and the (1) checks report differences (e.g. 1.2e-06) without a stated tolerance, unlike the (2) checks (<1e-5).",
+   "problem_defect": "In (3), 「傾き」 is loose: c1 is the slope change at the node, not the slope. The official answer correctly says 傾きの変化, and textbook 4.9 does too, but 8.2 also says only 「傾き c1」. The wording should be 「傾きの変化」.",
+   "external_knowledge": "The basic integrals ∫_0^∞ e^{−sx}dx = 1/s and ∫_0^∞ x e^{−sx}dx = 1/s², plus substitution or integration by parts. The problem declares these as prerequisites, so they do not count as missing."
+  },
+  {
+   "id": "4.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The numbers are correct: C(60)=3,100, C(62.5)=3,225, slope 30+50/12+120/25 = 1169/30 ≈ 38.97 tCO2e/年. I verified them with exact arithmetic. The independent checks (the LCM-300 periodicity and C(6000)/6000) are valid.",
+   "problem_defect": "The convention needed for (2), that operation counts at 30 tCO2e/年 within a fractional year (so 30 × 62.5 = 1,875), appears only as a parenthetical under (3). (3), the long-term slope, does not depend on it. A student doing (2) first may wonder whether to count 62 or 63 years. The default from textbook 4.2 and 4.6 (C = a + bT, last year pro rata) gives the intended answer, but the clarification belongs in the statement or in (2). Minor: the letter C is used both for the stage 解体・処理（C） and for the total C(T).",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Minor: '製造と運搬の合計を求めよ' could ask for one grand total (17,900 kgCO2e) or for each subtotal (製造 17,100, 運搬 800). The official answer gives only the grand total. Also, the statement already supplies the masked-sum form, so 'write it in that form first' tests nothing, and there is no rubric for that step.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.5",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The 考え方 cites §2.5 for '各列の和が 1 なら重複も漏れも無い'. That statement is in §2.7; §2.5 only discusses double counting in words. Part (2) is a written answer but has no rubric, although the solutions header says written parts get one.",
+   "problem_defect": "Minor: the condition in (2) is complete only if the entries are stated to be 0/1 and every item is assumed in scope. A column sum of 1 equals 'exactly one 1' only for 0/1 entries, and an out-of-scope item would correctly have a zero column, handled by μ in §3.7.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Minor: (1) solves only the N = 2 and N = 3 intervals explicitly and then says '他の区間も同様に解が無い'. The general argument is missing: T = 50 − 2n must lie in (15n, 15n+15], which needs both n ≤ 2 and n ≥ 3. The checks are grid or interval scans up to 120 or 600 years, not a proof.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "(3) adds '（研究の第 9 章で見つかって直された誤り）'. The textbook never says this. Chapter 9, the B2 passages in §2.5 and §5.3, and 付録 D do not mention such a bug being found or fixed, so the student cannot verify the claim and no check covers it.",
+   "problem_defect": "",
+   "external_knowledge": "The historical claim that the always-subtract-B2 error was found and fixed in research chapter 9."
+  },
+  {
+   "id": "6.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Minor: (c) 再塗装 could be filed under B3 (partial repair, which the research holds as a density B_*) or under B4. Its time form is still event/原子 because the statement says '12 年ごと', so the answer is unique. (b) and (e) can be 年セル or 密度, and the rubric correctly accepts both.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "6.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The reason given for (b), '掛け算の 0/1 が出来事で決まる', does not on its own rule out a convolution. B4 replacement atoms are also 0/1 set by events, yet they are proportional (a convolution with h = R·δ) to the event train. The textbook's reasons (§6.4) are different: the effect depends on which year τ falls in, not on the elapsed time t − τ, and two renewals in one year cancel the repair only once, so the effect is not additive. Rubric item (2) should accept either reason.",
+   "problem_defect": "(b) 'その年の残りの修繕をしない' (only the rest of that year) conflicts with the textbook convention in §4.7, §6.4 and 付録 D, where the gated year cell cancels that year's repair from the start of the year. (b) is also underdetermined. With an annual discrete series, at most one renewal per year and x_t = renewal indicator, y_t = −B·x_t is proportional, i.e. a convolution with h_0 = −B. The answer 'cannot' depends on continuous event times, several renewals per year, or renewal amounts as the input, and the statement specifies none of these, so 'yes, under annual discretisation' is defensible.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "6.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Minor: (3) states 'T ≤ 30 では O ≤ 1,050 < 1,370', but for T ≤ 15, E = 1,280, not 1,370. The correct bound is E ≥ 1,280 > 1,050 ≥ O, so the conclusion still holds.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "6.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "Strictly nothing, but the textbook's notation misleads. Eq. (7.1) and (7.2), §7.8 and the chapter summary write the closed interval M([0,T]). Read literally at an event time (T = 24), it includes the atom at t = 24: M([0,24]) + Z = 1,610 + 50 = 1,660 ≠ C(24) = 1,615. The correct reading, M over t < T, i.e. [0,T), appears only in ch08 ('M([0, T]) = ∫[t<T] dM(t)'), in the last remark of §4.10 and in the [k, k+1) row of the §7.3 table. It should be stated in §7.3 next to (7.1).",
+   "matches_official": "yes",
+   "official_answer_error": "The checks are weak. (2): the automated check only recomputes C(25) − C(24) = 75 from the closed form; it never computes 'the amount actually emitted in year 25' from the real-time distribution, so the comparison is unchecked. (3): the check '75 + (55.5 − 56) = 74.5' restates the answer and verifies nothing. The statement '実際の排出は 75 のまま' rests on an assumption the problem never states.",
+   "problem_defect": "(3) adds a refrigerant end-of-period term whose unrecovered residual falls from 6 to 5.5 over year 25. Physically that means refrigerant leaked during year 25, which is B1 leakage, part of M (a year cell r·GWP·u_k in §6.5 and §5.4). The problem does not say whether this leakage is in scope, so both '74.5' and 'actual emission stays 75' hold only if M is assumed unchanged; the statement should say so. (2) also works only if '25 年目' is read as the real-time interval [24,25). Under the textbook's literal closed M([0,T]), the year-25 increment would be M((24,25]) = 30, not 75.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Minor: '傾きはどこでも 12' should say 'between the nodes'. At T = 10 and T = 20 there is no ordinary derivative (§4.9). The check's node form puts (300, 12) at node 0, which implies C(0) = 0, whereas the given formula gives C(0) = 300. This does not affect any T > 0.",
+   "problem_defect": "Minor: the statement does not say whether T = 0 counts as a node or jump. In node form, C(0+) = 300 enters as a jump at u = 0 (§8.2). The expected answer lists only T = 10 and T = 20.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "10.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": "Only school arithmetic (sum of an arithmetic series, 1 MWh = 1000 kWh). My own solution: b_y = 200,000 kWh x f_y = 100 - 2(y-1) tCO2e. (1) T=30: 3000 - 2x435 = 2,130 t, compared with 3,000 t at a constant 0.50 (870 t or 29% lower). (2) T=30.5: w_31 = 0.5 and f_31 = 0.20, so +20 t gives 2,150 t (constant factor: 3,050 t). This uses eq. 2.2 and the year weight in 4.6. It matches the official answer and its checks exactly."
+  },
+  {
+   "id": "10.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "Nothing is needed for the computation. The assumption that renovations do not restart Z's replacement cycle is stated only in Appendix D (「大規模改修で部材の交換の周期を数え直さない」), not in 4.4/4.10, which the problem cites.",
+   "matches_official": "yes",
+   "official_answer_error": "The values are correct: C(45)=980 (Z at 7.5, 15, 22.5, 30, 37.5; 45 is excluded) and C(45.5)=997 (45 is included); the Z increments repeat every 15 years from year 2, with year 1 as the exception (d_1=0 but d_16=12). I checked this by enumeration. However, the answer silently assumes that the renovations at 18 and 33.3 years neither restart nor replace component Z, and does not say so.",
+   "problem_defect": "The problem does not say whether a renovation (18 y, 33.3 y) restarts Z's 7.5-year cycle or itself replaces Z. If it does, both C(45)/C(45.5) and the 15-year period in (2) change. It should state the Appendix D convention, or cite Appendix D, explicitly. In (2) the question 「何年ごとに繰り返すか」 has the answer '15 years from year 2 on'. The year-1 exception is in the textbook (4.10), so this is fine, but the question could ask for it explicitly.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "10.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The answer to (2) explains the meaning through 「評価の終わりに置く解体など…終点を評価の終わりにすると」. That implicitly takes t_end = T, but the problem defines no evaluation period T, so the link to end-of-evaluation items is the answer's own addition.",
+   "problem_defect": "(2) 「この性質は何を意味するか」 is open-ended. Other answers can also be defended from 7.7: an emission at the endpoint gets zero weight whatever its size; a fixed endpoint makes later emissions weigh less, so delaying looks favourable; the result depends strongly on the choice of endpoint. Rubric (2) requires specifically 「終点の選び方を明示する必要」 and may not credit these. The rubric should accept any of them.",
+   "external_knowledge": "Checks 2-4 use the Joos et al. 2013 IRF parameters, which are not in the textbook. They are only consistency checks, since R(80)/R(100) = 0.840 is given; I reproduced 0.8396, 0.5781 and R(100) = 52.36. The student needs nothing beyond 7.7: W = 100x1 + 60x0.840 = 150.4 t vs 160 t static; with t_end = 20 the weight is R(0)/R(100) = 0."
+  },
+  {
+   "id": "10.5",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Error in the textbook section the problem relies on (ch04, 4.3 box): it says the pro-rata rule (c) is 「(a) 以下になり、T ちょうど交換の直前で差が大きい」. This is wrong. With x = T/L, (a)-(c) = ceil(x) - x: this is 0 at T = nL, near 0 just before an exchange time, and close to 1 just after it. Against (b), the difference is largest at T = nL itself and just after. In neither comparison is it largest 'just before'. The numbers asked for are not affected: (a) 120/120, (b) 160/120, (c) 120/100 at T = 60/52.5. The interpretive part of the topic, however, is taught wrongly.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The parenthetical 「補うには仕様を別の人が読み直す」 is phrased as though it were the remedy the research applied. Textbook 9.3 only says this is what would be needed. What the research did is in 9.3 (it stated the limitation explicitly) and 9.7 (later chapters received independent refutation reviews).",
+   "problem_defect": "The rubric gives no point for the explicit sub-question 「研究はそれをどう扱ったか」 (the limitation was stated explicitly; independent reviews were done), although the problem asks it. The rubric covers only the shared misunderstanding and the negative control.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Rubric (3) accepts only two specific items: the bound is not a proof, and it says nothing about inputs the distribution rarely draws. Other items can be defended from the textbook and should also be accepted: a misunderstanding of the specification shared by both codes is never detected (9.3); nothing is said about J-CAT, real buildings, or inputs outside the declared distribution (9.2, 9.6); the bound itself holds only with 95% confidence. My result: N = 6000 gives 1 - 0.05^(1/6000) = 4.99e-4 vs 3/N = 5.0e-4. Treating the 30,000 cases as independent would give about 1.0e-4, about five times too optimistic.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "The textbook never says explicitly why relative error is chosen over absolute error. The reason is that floating-point rounding error scales with the magnitude of the value (relative precision of about 1 ulp, roughly 2.2e-16). 8.8 and 9.4 only define both errors and give the ulp near 1, so the student has to infer it, for example from cases (c) and (d). This belongs in 9.4 or 8.8.",
+   "matches_official": "yes",
+   "official_answer_error": "The second reason given for treating 0 separately (「小さな残りが『数えないはずの量』を表すこともある」) is not in the textbook. It is plausible but unsupported by the textbook, and the rubric does not need it. The verdicts are correct: (a) relative 4.8e-14, agree; (b) baseline 0 but result not 0, disagree; (c) relative 2e-7, disagree; (d) relative 8e-10 <= 1e-9, agree.",
+   "problem_defect": "",
+   "external_knowledge": "The official explanation that relative error measures 「何桁合っているか」 is general numerical-analysis knowledge, not stated in the textbook."
+  },
+  {
+   "id": "12.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Statement (c) says 「100,000 ケース（そのうち定義域の 90,055 ケースを比べた）」, which implies that only 90,055 cases were compared. Textbook 9.6 says the remaining 9,945 cases were also compared, without the domain check, with 0 discrepancies, and were only excluded from the statistical bound. The rubric also gives no point for recognising (a) as correct, although the problem asks the student to select the correct statements.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "12.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "In (3) a second reason can also be defended from 7.7: the characterisation assumes that the atmospheric response is linear and time-invariant for small perturbations (「小さな擾乱では大気の応答が線形かつ時不変だと仮定している」). Rubric (3) credits only the CO2e-treated-as-CO2 reason. That is the main reason, but the rubric could also accept this one.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "12.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "At the level the rubric asks for, the student can reproduce the answer from 9.5. As a reasoned justification, two proof steps are missing. (i) The 9.5 argument for log10 x uses behaviour as x -> infinity. If log10 x = p/q held only on a small interval, that says nothing about infinity unless the identity is first extended to all of (0, infinity) by the identity theorem for analytic functions. An alternative is that the derivative of a rational function has zero residue at every pole, while 1/x has residue 1. The sqrt argument is complete because it reduces to a polynomial identity. (ii) The step from 'piecewise rational on finitely many pieces' to 'rational on some interval' needs the pieces to be sets defined by inequalities, so that one piece contains an interval. 9.5 leaves this implicit. Both belong in 9.5.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "(2) presents 「倍精度の入出力としては正確に実現できる」 without qualification. Textbook 9.5 says this holds for 「ほとんどの入力で」: method A returns a missing value for about a 2^-37 fraction of inputs. The official answer adds this caveat; the statement should include it. (3) depends on the band's definition and width (about 1e-9 x K; about 6e-8 years for K=60), which are given in 5.7, and 5.7 is not among the cited sections (9.4, 9.5, 9.6, 9.8).",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Answer is correct: nodes 2:(-60,30), 3:(90,-30), 4.5:(10,10), 5:(50,-10), initial value 100; Phi = 115, 130, 187.5, 190; jump 55; slope changes +30, -30, +10, -10. The automated check '4.5 での跳び 55' is one-sided and cannot catch an error: it tests `direct(4.5+1e-12) - direct(4.5) - 55 < 1e-9` with no abs(), so any jump of 55 or less passes. A wrong model that gives jump 50 (gate cell started at tau) would still pass. The second half `10 + 10*9/2 == 55` is plain arithmetic. Fix: use abs(...) < 1e-9.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Values are correct (-40 at T=45; -2/75 at T=45.01). Rigour gap in (1): the answer shows only R·Pi(T) ∈ [-R,0). 'とる値の範囲を示せ' asks for the range, so it should also show that -R is attained (T a multiple of L) and that every value up to 0 occurs (on T/L ∈ (m-1,m], Pi = m-1-T/L sweeps [-1,0)), with 0 approached but never reached. Item (1) is a '示せ' item, but the problem has no rubric, although solutions.md says descriptive or proof parts get one.",
+   "problem_defect": "T > 0 is not stated (textbook 4.10 and the official answer assume it). This is harmless: the bound holds for every real T by x ≤ ⌈x⌉ < x+1. Still, N(T) means a count only for T > 0.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "8.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The only automated check is that section 2.5 exists, which proves nothing. A numeric spot check (random f, m, lambda, random partition) would be cheap. The proof and rubric are fine.",
+   "problem_defect": "",
+   "external_knowledge": "Distributive, commutative and associative laws of finite sums (school algebra)."
+  },
+  {
+   "id": "8.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": "Limits as T→∞ and the squeeze theorem. The problem declares these as a prerequisite, and textbook 4.10 shows how they are used."
+  },
+  {
+   "id": "8.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Minor rigour gap: the answer stops at 'jump c0 + c1·k = 0' and never says why that means continuity. In form (4.6), Phi(k) equals the left limit, because the sum is over u < k only, and the right limit adds J(k). The rubric accepts it as written. The check tests only right-continuity, which is enough here.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "8.4",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "(1) concludes 'すべての T で C(T) は等しい', but the statement restricts to T > 0. With the M((-∞,T]) reading the two placements differ for T in (-2,0), though those are not evaluation periods; it should say 'すべての T > 0'. (1) also mostly repeats the given premise instead of evaluating M1((-∞,T]) = 600 and M2((-∞,T]) = ∫_{-2}^{0} 300 dt = 600 for T > 0. (3) is correct; W2 > W1 in fact holds for every t_end > -2, so the condition 't_end > 0' is sufficient but not tight. The check values W1 = 600.00 and W2 = 604.68 (Joos 2013, t_end = 100) are verified.",
+   "problem_defect": "The statement cites textbook 7.3 for M((-∞,T]), but the listed sections are only 7.6 and 7.7, so 7.3 is missing from the 教材 list.",
+   "external_knowledge": "Only the check uses the Joos et al. 2013 IRF parameters, which the textbook does not give. The student needs only the qualitative fact from 7.7 that IRF > 0, so R increases."
+  },
+  {
+   "id": "8.5",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "Minor, not blocking: textbook 8.5 says the roots are 'roots of the characteristic polynomial' (特性多項式) and that the solution is a sum of lambda^y, but it never shows the step of substituting d_y = lambda^y. The problem says '特性方程式' (high-school 数学B term) where the textbook says '特性多項式'. A student can still quote the result in 8.5.",
+   "matches_official": "yes",
+   "official_answer_error": "(1) silently uses the count definition N(T) = #{n≥1 : nL < T}, which gives N(0) = 0. The closed form in the problem gives N(0) = ⌈0⌉-1 = -1, and that is why C(0) = a is stipulated. The answer should say so when it treats y = 1. Results (d = 10,10,10,10,17,10,10,10,17,10; lambda^L = 1; the y = L+1 exception because there is no event at t = 0) are correct.",
+   "problem_defect": "The 教材 list (4.10, 8.5) omits 4.3, where the count definition used in (1) is given. There is also the terminology mismatch 特性方程式 vs 特性多項式.",
+   "external_knowledge": "High-school characteristic equation of linear recurrences (数学B) and complex L-th roots of unity (数学C). Textbook 8.5 states the result."
+  },
+  {
+   "id": "8.6",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "(2) argues '他の項は連続なので'. This is imprecise: the other terms are not continuous in general. A grid node t with non-zero jump P_t + Q_t·t (the refrigerant window, 5.5/5.7) at the same point would add to the jump. The right argument is that no other 0/1 switches there, or that coinciding nodes are merged. The hedge '(εによる判定のずれを除く)' admits that the literal claim is off. The checks evaluate C with exact [nL < T], i.e. ε = 0 (verify.n_events), so they test a different function from the stated θ_ε: with ε = 1e-9, the check C(45+1e-9) - C(45) would show no jump at all. Check (2) uses q_g = 0, so it cannot tell p_g + q_g·g from p_g. A gated year cell such as 7.3's (-40,10) at 4.5 would make a real test. Numbers in (3) are verified: (a) second difference ≈ 0, yearly increments 97.04/94.18/91.39; (b) second difference ≈ -0.3669.",
+   "problem_defect": "The problem mixes θ_ε with exact node times. θ_ε(T;g) = [g < T(1-ε)] switches at T = g/(1-ε), not at g. So (1), read literally with event nodes at g, fails on (g, g/(1-ε)), and (2) is not exact: the jump is p_g + q_g·g/(1-ε) at T = g/(1-ε), and there is no jump at T = g. Fix: state 'ε→0 (θ = [g<T])' or define the event node as sw(g) = g/(1-ε). Textbook 5.2/5.5 share this imprecision. In (3)(b), the weight e^{-0.03(T-y)} exceeds 1 for the unfinished year y > T (T-y < 0), which is odd for something called a '割引'. The point about T-dependent amplitudes still holds. The 教材 list omits 4.7, where 'amplitudes independent of T' is stated as the premise the answer relies on.",
+   "external_knowledge": "Evaluation of the exponential e^x (calculator, high school)."
+  },
+  {
+   "id": "9.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The part '誤りを指摘し' is descriptive, but there is no rubric, contrary to the policy stated in solutions.md. Answer: 100 kgCO2e, factor 1000.",
+   "problem_defect": "",
+   "external_knowledge": "kg→t conversion (also in appendix B)."
+  },
+  {
+   "id": "9.2",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The part '理由を述べよ' has no rubric. The values (correct formula 3, 3, 4; T/L = 10/3, 4, 61/15; floor 3, 4, 4) are correct. The answer could add that the floor formula is wrong exactly when T is a multiple of L, and that it matches convention (b) of the box in 4.3.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "9.3",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Values are correct: 0.531441 kg vs 0.9 kg. The answer never states the comparison explicitly: the convolution understates by a factor 0.9^5 = 0.59049, i.e. 0.368559 kg too low. The rubric is labelled (1)/(2), but both items concern part (2) (state, time-invariance); the numeric part (1) has no rubric item and is covered only by the checks. The answer could add a point that settles the matter: adding the refill as a second input (x_5 = m0) still fails (1.431 kg), so the error is time-variance, not just a missing input.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "10.1",
+   "solvable_from_textbook": "yes",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Part (2) 'そのまま比べてよいか' is descriptive but has no rubric. The remark '60 年ちょうどの交換を数えないことで結果が変わっている' is vague: changed relative to what? It means relative to counting the replacement at year 60. Values are correct: 2440 t, 24.4; 2720 t, 22.67 kgCO2e/(m²·年).",
+   "problem_defect": "Minor: the only expected answer is 'no'. Comparing the two values is legitimate as a sensitivity study of T, though not as a comparison of building performance; the problem does not say which purpose it means.",
+   "external_knowledge": ""
+  }
+ ],
+ "fact": {
+  "errors": [
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch01.md (line 66; same idea in ch02.md line 73, which this commit rewrote)",
+    "quote": "係数が**どの段階まで含むか**（工場までの輸送を含むなら A4 で二重に数えない）／ch02: 材料の係数がすでに工場までの輸送を含むのに A4 でも数える",
+    "problem": "The example of double counting is wrong. Transport up to the factory is A2. Every A1–A3 factor already includes it, and it does not overlap A4. The textbook's own table defines A4 as 工場から現場への運搬. A4 is counted twice only when the factor also covers delivery to the site (a cradle-to-site, A1–A4 factor).",
+    "evidence": "ch01.md lines 27–28 (the textbook's own stage table): 'A1–A3 製品 | 原材料の採取・工場までの運搬・製造' and 'A4 運搬 | 工場から現場への運搬'. This matches the general EN 15978 module definitions (A2 = transport to the manufacturer, A4 = transport to the site).",
+    "fix": "Write「現場までの輸送（A4）まで含む係数（現場渡しの値）なら A4 で二重に数えない」in ch01, and「材料の係数がすでに現場までの輸送を含むのに A4 でも数える」in ch02."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch07.md (line 139, horizon table)",
+    "quote": "| (c) 排出ごとに同じ長さの窓 | 各排出から 100 年など | どの時刻でも重み 1 になり、静的な GWP と同じ |",
+    "problem": "The text uses the research's lettering ((b) and (d) match), but row (c) gives the research's convention (a). The research's (c) is Ventura (2022). In it, each emission's numerator runs over THI, while the CO2 reference pulse runs from t=0 to t_i+THI. The CO2 weight is then R(100)/R(t_i+100). This is less than 1 and falls for later emissions, so it is not static GWP. As written, rows (a) and (c) say the same thing.",
+    "evidence": "18_DYNAMIC_LCA_EXTENSION/01_文献調査.md line 48: '(a) 排出ごとの窓（静的 GWP と同じ）…(c) 排出ごとに同じ長さの窓と基準（Ventura 2022）'. 18_DYNAMIC_LCA_EXTENSION/results/literature_survey.json line 1474: '(c) Fixed horizon after each emission (Ventura 2022 …): the numerator runs over exactly THI and the reference over t_i + THI … Under (c) the weight per event is AGWP_g(THI)/AGWP_CO2(t_k + THI)'.",
+    "fix": "Change row (c) to: 各排出を同じ長さ（100 年など）で数えるが、基準の CO2 は t=0 から t_i+100 年まで（Ventura 2022） | CO2 の重みは R(100)/R(t_i+100) で 1 より小さく、遅い排出ほど小さい. Alternatively, drop (c) and keep (a) as the per-emission/static convention, as 18/06 does."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch09.md (line 84); also code/problems.py problem 12.1 (c) in commit e095a4b",
+    "quote": "100,000 ケース（比べたのは定義域の 90,055 ケース・18,011 建物）／problems.py 12.1: 100,000 ケース（そのうち定義域の 90,055 ケースを比べた）",
+    "problem": "All 100,000 cases were compared. 90,055 is only the in-domain set used for the statistical bound. The 9,945 stratum-D cases were also compared (without the domain filter) and had 0 discrepancies. The statement also contradicts the textbook's own 9.6 bullet.",
+    "evidence": "20_LARGE_RANDOM_VERIFICATION/02_結果.md, layer table: 'D 欠損・異常（定義域の外） | 1989 | 9945 | 9945（比べたケース） | 0 …'. Same file, note: 'D 層は…定義域の絞り込みなしで比べた…上限の計算からは除いた'.",
+    "fix": "ch09.md: write「100,000 ケースすべてを比べ（食い違い 0）、上限は定義域の内側の 90,055 ケース・18,011 建物から計算」. problems.py 12.1 (c) is already reworded this way at HEAD (line 919)."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch09.md (line 88)",
+    "quote": "第 15 章以降と第 17〜21 章は、独立のレビュー（反証を試みる読み手）を受けて修正した。",
+    "problem": "Nothing in the research supports this for chapter 15. Chapter 15 had two independent groups that classified the formulas, and LibreOffice as an independent recalculator, but no review that tried to falsify the results. The phrase is also redundant, because '15 章以降' already includes 17–21. The chapters with documented falsification reviews are 16 and 17–21.",
+    "evidence": "15_JCAT_CONVERSION/06_分類の手順.md line 4 (two reader groups classified the 667 formulas independently), and its only commit 7df1fdd has no review step. 16_UNRESOLVED8_EXACT_APPROX/09_独立レビューと修正.md ('実装者と別の 5 つのエージェントが独立に検査'). Commits b7f07ea '第17〜21章：独立レビューの指摘の反映', e207eff, 3a30103 '第19〜21章：最終確認（独立の 2 名）'.",
+    "fix": "Write「第 16 章と第 17〜21 章は、独立のレビュー（反証を試みる読み手）を受けて修正した（第 15 章は、分類を 2 組の読み手が独立に行い、数値は LibreOffice で独立に再計算した）」."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch10_appendix.md (line 94, appendix D)",
+    "quote": "| 不明な入力 | 0 にしない（欠損として結果を不明にする） | 合計が「不明」になる |",
+    "problem": "Appendix D calls this a convention of the research model. That model does not make the total unknown. It leaves unusable, missing or invalid rows out of the total, counts them, and flags the total as incomplete (complete = 偽). The total is still a number. The missing-value propagation rule belongs to the msp engine, not to the model's convention for totals.",
+    "evidence": "09_APPROX_STUDY/06_OPEN_ISSUES/README.md lines 45–46: B-17 '使えない行・経路・項目は合計に入れず、件数を報告し、合計に「不完全」の印を付ける'; B-18 'その行を計算から除いて数える。0 や上限に丸めない'. 09_APPROX_STUDY/research_code/refcalc/units_c_sum.py lines 452–454: SUM-03 returns a numeric value together with complete. The engine rule is in 10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_MSP.md lines 24–25.",
+    "fix": "Change the row to: 使えない・欠けた・範囲外の入力の行 | 0 や上限に丸めず合計から除き、件数を数える（B-17・B-18） | 合計は数値のまま「不完全」の印が付く（計算エンジンの積和では、条件がすべて 1 なのに値が欠けた項は欠損になる）."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch02.md (line 87)",
+    "quote": "（初期の排出 $\\alpha$ を年数で割るので、短い期間ほど大きく、長い期間では $\\beta/A$ に近づく。$T \\to 0$ では限りなく大きくなる）",
+    "problem": "α is the intercept of the current linear interval, not the initial emissions. It includes every earlier jump and the intercepts of the year-cell kernels, and it can be negative. C/(AT) falls with T only when α > 0. The research says the sign of α decides whether it rises or falls, and T→0 gives +∞ only if C(0+) > 0. When replacements occur, the long-run value is the long-term slope divided by A, for example (b + R/L)/A, not the β/A of one interval.",
+    "evidence": "17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md line 169 (TH-14): 'd SUM05/dT = −α/(AT²) なので、区間の切片 α の符号で増減が決まる。T→0+ で C(0+)>0 なら +∞'. The textbook's own 4.10 gives the long-run per-year value as b + R/L.",
+    "fix": "Write「α は区間の切片（初期・期末の定数に、それまでの跳びなどが加わったもの）で、α > 0 の区間では T とともに減る。T → 0 では C(0+) > 0 なら限りなく大きくなる。長い期間の極限は区間の β/A ではなく、長期の傾き（例：b + R/L）を A で割った値」."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch04.md (line 29 as committed in e095a4b; already corrected at HEAD)",
+    "quote": "(c) 按分（端数の交換も割合で数えて $\\max(0, T/L - 1)$ 回。(a) 以下になり、$T$ ちょうど交換の直前で差が大きい）",
+    "problem": "The direction is backwards. The gap (a)−(c) = ⌈T/L⌉ − T/L, for T ≥ L, is 0 at T = nL and near 0 just before. It is close to 1 just after T passes nL. Example with L=15: T=44.9 gives a gap of 0.007; T=45.1 gives 0.993.",
+    "evidence": "Direct calculation from the textbook's own formulas. The research's AP-01 (09_APPROX_STUDY/03_MODELS/README.md line 93) says max(0, T/c−1) ≤ ceil(T/c)−1 and is exact only when the period divides T.",
+    "fix": "Write「(a) との差は ⌈T/L⌉ − T/L で、交換の時刻ちょうどでは 0、交換の時刻を過ぎた直後にほぼ 1 回分になる」. HEAD already has this wording, so no further change is needed if HEAD is the target."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch10_appendix.md (line 88, appendix D)",
+    "quote": "| 冷媒の交換の時期 | 交換は年の終わりに行い、翌年の初めに満タン | 漏洩の年の割り当て |",
+    "problem": "The convention is misstated. In the model, the replacement event and its loss (B1-03) sit at the event time τ and are counted once T > τ. Only the reset of the remaining amount takes effect at the end of that year. Saying the replacement itself happens at year end contradicts ch07's P06 row (交換の時刻の原子).",
+    "evidence": "09_APPROX_STUDY/06_OPEN_ISSUES/README.md line 30: B-5 '冷媒機器の交換は、属する年の年末に残存量へ反映する'. 10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md D-08 (f): B1-03 = Σ [τ < T(1−ε)]·λ·GWP·…. 18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md P06: '交換の時刻の原子＋交換後の負の率'.",
+    "fix": "Write「交換の損失は交換の時刻 τ に数え、残存量はその年の終わりに初期量へ戻す（翌年の初めから満タン）」."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch06.md (line 83)",
+    "quote": "（$\\mathbf{b}$ は交換の年に $m_0$、$N$ は 1 年ずらして $(1-\\chi)q$ を掛ける行列）",
+    "problem": "Off by one year, and the initial entry is missing. In the research, b_0 = m0 and b_k = χ_{k−1}·m0. So b holds m0 in year 0 and in the year after each replacement year, not in the replacement year itself. This also follows from the textbook's own eq. 6.2.",
+    "evidence": "10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md line 394 (D-08 (b)): 'b_0 = m0,  b_k = p_{k−1}·m0'. Textbook eq. 6.2: u_k = χ_{k−1} m_0 + (1−χ_{k−1}) q u_{k−1}, u_0 = m_0.",
+    "fix": "Write「$\\mathbf{b}$ は最初の年（$b_0 = m_0$）と、交換のあった年の翌年（$\\chi_{k-1} = 1$ の年 $k$）に $m_0$」."
+   },
+   {
+    "file": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK/textbook/ch09.md (line 116, rejected-methods table)",
+    "quote": "| モデルの縮約（Krylov、平衡打ち切り）、数値のラプラス逆変換 | 周期成分の固有値が単位円の上にあり誤差が残る／傾向の部分しか再現しない |",
+    "problem": "The research never tested these methods. These reasons come only from the prior-research survey: the surveyor's own hypotheses and a few hand checks (a Stehfest check at two points, a remark on flat Hankel singular values). The table presents them as findings, alongside measured rejections such as EXP-03 and AP-14.",
+    "evidence": "10_TRANSFORM_STUDY/01_PRIOR_RESEARCH/S3_linear_systems_reduction.md lines 262 and 274 (【独自仮説】: '周期成分の固有値が単位円上に均等に並ぶので、少数の補間点では合わない'). 01_PRIOR_RESEARCH/README.md line 84 ('調査担当の予備計算では、周期成分のハンケル特異値が平らだった'). S1_time_axis_transforms.md line 188 (Stehfest check at T=60, c=7 and c=15 'だけを再現した').",
+    "fix": "Add a qualifier: 「（先行研究の調査段階の見通しと予備計算。研究の実験では測っていない）」, or move the row out of the list of measured rejections."
+   }
+  ]
+ }
+}
