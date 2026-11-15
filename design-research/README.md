@@ -51,7 +51,7 @@
 | GitHub | このリポジトリのコード・文書を読み、ユーザーのリポジトリ一覧を検索 | 他リポジトリ（`structural-experiment-ai`, `architecture-exam-ai` ほか）は**中身を読めていません**。このセッションのアクセス範囲外で、追加は権限設定により拒否されました |
 | Canva | 4分類の設計思想を比較するインフォグラフィックを AI 生成し、候補1をアカウントに保存 | 「インフォグラフィック - UI・UX設計思想マップ」 https://www.canva.com/d/f74bQrdDPIK6NfC （編集用・非公開） |
 | Picsart Media Studio | 12案の加重評価スコアをアニメーション棒グラフとして描画し、PNG と MP4 を書き出し | [assets/concepts-weighted-score.png](assets/concepts-weighted-score.png)、[assets/concepts-weighted-score.mp4](assets/concepts-weighted-score.mp4)（Picsart Drive にも自動保存）。日本語フォントが無かったためラベルは英語 |
-| Figma | 新規デザインファイルを作成 | https://www.figma.com/design/rioC98xeuRVf34PkEFFzC6 <!--FIGMA--> |
+| Figma | 新規デザインファイルを作成し、4分類の採用案のトークン（ローカル変数 103個：A 25 / B 28 / C 22 / D 28）を登録。変数にバインドした色見本、文字サイズ、4画面×デスクトップ/モバイルの編集可能なワイヤーフレーム（`wf/block` コンポーネントのインスタンス）を1枚のボードに作成 | https://www.figma.com/design/rioC98xeuRVf34PkEFFzC6?node-id=1-4 （生成スクリプト: [tools/build_figma_board.py](tools/build_figma_board.py)）。Figma の席種が View・Starter プランのため、MCP 呼び出しは最小限（作成・セッション・書き込み各1回）に抑えた。Figma 上のクリック可能なプロトタイプ（画面遷移）は未作成で、動く試作は HTML 版 |
 | 「ピクスタ」「メディカルスタジオ」 | 接続一覧を確認 | 該当名のサービスは接続されていません。ユーザー指定の「Picsart Media Studio」が接続されていたため、それを使いました |
 
 ## 工程の完了状況
