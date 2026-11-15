@@ -1,0 +1,695 @@
+{
+ "solve": [
+  {
+   "id": "1.1",
+   "my_answer": "Embodied = A1-A5 + B1-B5 + C1-C4 (emissions from materials and works: production, transport, construction, use-phase material emissions, maintenance, repair, replacement, refurbishment, demolition, transport, processing, disposal). Operational = B6 + B7 (operational energy and water). (a) wall panel manufacture: A1-A3, embodied. (b) lighting and air-conditioning electricity: B6, operational. (c) roof waterproofing renewed every 20 years: B4 replacement (B3 periodic repair is also defensible), embodied either way. (d) transport of demolished material: C2, embodied.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "1.3 (stage table and the groupings upfront/embodied/operational), 2.5",
+   "missing_knowledge": "Minor: the 1.3 table gives no rule for telling B3 (修繕, '毎年（または定期）') apart from B4 (交換, '耐用年数ごと') when a component is renewed periodically, as waterproofing is. A one-line criterion in 1.3 would help.",
+   "matches_official": "yes",
+   "official_answer_error": "Minor: the gloss 'B1–B5（使用中の材料・修繕・交換・改修）' leaves out B2 (維持管理). The only automated check is that section 1.3 exists, so the classification itself is never checked.",
+   "problem_defect": "(c) '20 年ごとの更新' can be read as B4 or as periodic B3 under the textbook's own table, but the official answer gives only B4. It should accept B3 or B4, since both are embodied, which is what the rubric tests. (a) quietly assumes initial construction: the manufacture of replacement panels would be B4.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "1.2",
+   "my_answer": "(1) GWP is the warming effect of a unit mass of a gas relative to CO2 (GWP_CO2 = 1), usually over 100 years (GWP100), and the IPCC version must be recorded. CO2e is the CO2-equivalent amount, sum of m_k*GWP_k. (2) 8 kg * 700 = 5600 kgCO2e (5.6 tCO2e). This is the stock held in the equipment, not an emission. (3) 0.05 * 8 = 0.4 kg leaked per year; 0.4 * 700 = 280 kgCO2e per year.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "1.6 (incl. note 充填量は排出ではない), 2.4, 2.9, 6.5",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "1.3",
+   "my_answer": "Kernel: the fixed T-dependent shape kappa(T;s,l,g) = [g<T]*r, with r = min(l, max(0, T-s)) for l>0 and r = 1 for l=0. Here s is the start, l the length and g the gate. Its special cases are constant, atom, year cell, gated year cell and density. Amplitude a_j: the T-independent multiplier of a kernel, computed by masked sum-of-products (Ch.3). Node: a point where the value or slope changes, i.e. an event time or a year boundary. Jump form (c0,c1): each kernel split into pieces [u<T](c0 + c1*T) placed at nodes u; the jump at u is c0 + c1*u and the slope change is c1. Relation: Phi(T) = sum_j a_j*kappa_j(T); splitting every kernel into node pieces and summing (c0,c1) per node gives Phi(T) = initial value + sum over u<T of (c0(u) + c1(u)*T).",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.5, 4.7, 4.8, 4.9, 5.1",
+   "missing_knowledge": "The term '跳び形' is never defined in a sentence. It appears only as the parenthetical heading of 4.8 and in '式 (4.6) の跳び形' in 5.1. Appendix A (ch10, line 24) describes (c0, c1) as '節点での値の跳びの係数と傾きの跳び', which can lead a student to call c0 the jump, but the jump is c0 + c1*u (4.9). 4.8 should define 跳び形 explicitly, and the appendix entry should say that the jump is c0 + c1*u.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "2.1",
+   "my_answer": "(1) Activity 20 t * 75 km = 1500 t·km; 0.12 kgCO2e/(t·km) * 1500 t·km = 180 kgCO2e. (2) In every stage the emission is an activity amount m (t, t·km, kWh, ...) times an emission factor f, the emission per unit of that activity. Because the factor is per unit, the emission is proportional to the activity and the units cancel to kgCO2e. Summing such products gives C = sum f_i*m_i. Only the meaning and units of m and f change between stages.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "1.4, 2.2, 2.4, 2.8 (例題 2.1)",
+   "missing_knowledge": "Minor: the textbook never says outright that P1 assumes emissions are proportional to activity (a constant per-unit factor that does not depend on quantity: no thresholds, no economies of scale). The official 'why' rests on this assumption. 1.4 or 2.4 shows the form but does not name the assumption behind it.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "2.2",
+   "my_answer": "(1) [import] + [long] equals 2 when both hold, so e is counted twice. Correct form: [A] + [not A][B] = [A] + (1-[A])[B], equivalently 1-(1-[A])(1-[B]). (2) A blank means unknown, not 'not imported'. A mask 0 means 'do not count', so writing 0 asserts a fact. If the item was imported, e is silently dropped and the result is underestimated. Under 3.5 the unknown must be carried as missing, unless the long-distance branch already makes the OR equal 1. (3) Wrong form: (1+1)*30 = 60 kgCO2e; correct form: (1 + 0*1)*30 = 30 kgCO2e.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "3.3 (table and note on または), 3.5, 3.8, 3.9",
+   "missing_knowledge": "3.5 gives rules only for missing values (活動量). It has no rule for an unknown condition flag, which is the case here. It does not say that the result is settled when another OR branch is surely 1. It also does not mention that the two equivalent OR forms behave differently under term-wise missing propagation: with B = 1, 1-(1-[A])(1-[B]) contains a factor that is exactly 0, whereas both terms of [A]+[not A][B] contain the unknown factor. 3.5 should state how an unknown condition propagates.",
+   "matches_official": "yes",
+   "official_answer_error": "(2) The official answer says that setting the flag to 0 'drops the import share silently' (輸入だった場合の分を黙って落とす) without any condition. That holds only if the row is not long-distance, or its distance is also unknown. If the row is over 500 km, the correct OR is 1 whatever the import status, and nothing is dropped. The answer should state this condition.",
+   "problem_defect": "(2) does not say whether the row with the blank import field is long-distance. That fact decides whether treating the blank as 0 changes the result at all.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "2.3",
+   "my_answer": "(1) C(31)-C(30) = [M([0,31]) - M([0,30])] + [Z(31) - Z(30)] = 4 + (8 - 9) = 3 tCO2e. (2) Between events, dC/dT = rho(T) + Z'(T). The increase of C includes the change of the end-of-assessment term. Reading the slope (3 per year) as the year-31 emission rate understates the actual 4 tCO2e by 1, which is the fall of the unrecovered terminal refrigerant term. The increment equals the actual emission only when Z does not change.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.9 (注意), 7.3 (eq. 7.1 and dC/dT = rho + Z'), 7.9, 6.5",
+   "missing_knowledge": "Minor notation clash in the textbook: the refrigerant terminal residual is R(T) in 5.2, 6.5 and 7.3, Z(T) is the sum of all terminal terms (A^term + R(T)), and R also stands for the per-replacement emission (4.3) and the IRF integral R(h) (7.7). Readers have to keep these meanings apart.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Minor: the problem calls the refrigerant residual alone Z(T), but in the textbook Z(T) (7.1) also contains the demolition term A^term. This does not affect the answer because the other terms are said to be unchanged. The data are internally consistent (they imply recovery 75% and r = 1/9).",
+   "external_knowledge": ""
+  },
+  {
+   "id": "3.1",
+   "my_answer": "(1) The counted replacements are the integers n >= 1 with nL < T, i.e. n < x where x = T/L > 0. Since ceil(x) - 1 < x <= ceil(x), the integers 1, ..., ceil(x)-1 satisfy n < x and ceil(x) does not. Hence N(T) = ceil(T/L) - 1. (2) N(36) = ceil(3) - 1 = 2 (the replacement at 36 is not counted); N(36.5) = ceil(73/24) - 1 = 3; N(11) = ceil(11/12) - 1 = 0.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.3 (eq. 4.2 and the convention box), 4.4, 4.12",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Minor: the official derivation states that the number of positive integers below T/L is ceil(T/L)-1 without justifying it (that ceil(x)-1 is the largest integer strictly below x). It claims the formula holds 'whether T/L is an integer or not' without restricting to T > 0; at T = 0 the formula gives -1, but the count is 0.",
+   "problem_defect": "The domain T > 0 is never stated. The formula is wrong for T <= 0. Minor.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "3.2",
+   "my_answer": "(1) If T <= k, both indicators are 0, so the right side is 0, and the left side is a*max(0, T-k) = 0. If k < T <= k+1, the right side is -ak + aT = a(T-k), which equals the left side. If T > k+1, the right side is -ak + aT + a(k+1) - aT = a, which equals the left side. (2) At node k: jump c0 + c1*k = -ak + ak = 0, slope change +a. At node k+1: jump a(k+1) - a(k+1) = 0, slope change -a. Both jumps are 0, so the year cell is continuous; only the slope changes. (3) With a = 30, k = 2: T = 2.4 gives 30*0.4 = 12 from the min form and (-60 + 72) + 0 = 12 from the jump form. T = 5 gives 30 from the min form and (-60 + 150) + (90 - 150) = 30 from the jump form.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.6, 4.7 (year-cell row), 4.8 (table and check), 4.9 (J = c0 + c1*u), 5.2",
+   "missing_knowledge": "Notation is inconsistent across the textbook. 4.6 defines w_y(T) = min(1, max(0, T-(y-1))) for year y on (y-1, y]. The problem, 5.2 and 7.6 instead use w_k(T) = min(1, max(0, T-k)) for year k+1. Appendix A lists 'w_y(T)、w_k(T)' as one entry pointing to 4.6 and never states the index shift w_k = w_{y=k+1}. Also, 7.3 places the year-(k+1) rate on [k, k+1), while 4.6 and this problem use (k, k+1]. This is harmless for a uniform rate but should be unified.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "3.3",
+   "my_answer": "(1) The indicator removes T<u, so the integral is int_u^inf (c0+c1T)e^{-sT}dT. Substitute T=u+x: e^{-us}[(c0+c1u) int_0^inf e^{-sx}dx + c1 int_0^inf x e^{-sx}dx] = e^{-us}((c0+c1u)/s + c1/s^2), which is (8.1). (2) Node form: the constant a, the slope b at u=0 as (0,b) (the year cells collapse as in ex. 5.1), and (R,0) at u=L. The constant gives a/s (the same as putting (a,0) at u=0, because T=0 has measure zero). So L[C](s) = a/s + b/s^2 + R e^{-Ls}/s. (3) The node time u is in the exponent e^{-us}. The coefficient of e^{-us}/s is the jump c0+c1u. The coefficient of e^{-us}/s^2 is the slope change c1. Here: jump a and slope b at 0, jump R and no slope change at L.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "8.2 (eq. 8.1), 4.8, 4.9 (jump c0+c1u, slope change c1), 5.6 (node form of a+bT), appendix A",
+   "missing_knowledge": "Minor. 8.2 states (8.1) with only the word 部分積分 and no derivation, but the problem supplies the needed integrals as a prerequisite. The 4.8 table has no row for the constant kernel or the density kernel, so the student must work out alone how a constant enters the node form (keep it as 初期値/A_0, ex. 5.1, and use L[a]=a/s). The symbol s is overloaded: Laplace variable in 8.2, kernel start in 4.7, stage index in 2.5/5.3, maintenance share in 2.5. Appendix A lists ℒ but not the Laplace variable s.",
+   "matches_official": "yes",
+   "official_answer_error": "The checks are weak. Part (1), the general formula, is never checked. The only numeric checks are for (2), where node 0 has u=0 and node L has c1=0, so the c1·u/s term of (8.1) is never exercised. A wrong formula such as e^{-us}(c0/s + c1/s^2) would give the same (2) and pass every check. The official node form puts (a,b) at node 0, so C(0)=0 and 'jump a at 0'. The textbook instead keeps the constant outside the node sum (4.6 初期値, 5.1 A_0, ex. 5.1 node 0 = (0,25)). This does not change the transform, but it is not the textbook's convention. Also 'coefficient of 1/s' should be 'coefficient of e^{-us}/s'.",
+   "problem_defect": "Principle tag P5 does not seem relevant to this problem. (2) is only well posed because '交換 1 回' is stated; this is fine.",
+   "external_knowledge": "Improper integrals ∫_0^∞ e^{-sx}dx = 1/s and ∫_0^∞ x e^{-sx}dx = 1/s^2 (declared prerequisite)."
+  },
+  {
+   "id": "4.1",
+   "my_answer": "300×280 = 84,000; 40×1,500 = 60,000; 5,000×1.2 = 6,000 kgCO2e. Total 150,000 kgCO2e = 150 tCO2e.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.2, 2.3 (eq. 2.1), appendix B",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.2",
+   "my_answer": "(1) 18,000 MJ / 3.6 = 5,000 kWh; 0.5×5,000 = 2,500 kgCO2e (2.5 t). (2) C_A4 = 0.1×2,400 = 240 kgCO2e. A4 and A5 both included (μ=1,1): 2,740 kgCO2e. A5 only (μ_A4=0, μ_A5=1): 2,500 kgCO2e.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.2, 2.4, 2.8, 3.2, appendix B (1 kWh = 3.6 MJ)",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.3",
+   "my_answer": "(1) N_X(60) = ⌈60/12⌉−1 = 4 (12, 24, 36, 48); N_Y(60) = ⌈60/25⌉−1 = 2 (25, 50). C = 800+1,800+200+240+60 = 3,100 tCO2e. (2) N_X(62.5) = 5 (the 60-year replacement now counts); N_Y = 2. C = 800+1,875+250+240+60 = 3,225 tCO2e. (3) 30 + 50/12 + 120/25 = 1169/30 ≈ 38.967 tCO2e/yr.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.2, 4.3 (N(T), exact-T convention), 4.6 (fractional last year), 4.10 (long-term slope b+R/L), 2.5 (linearity), 5.4 (A^term constant)",
+   "missing_knowledge": "Small. 4.10 gives the long-term slope b+R/L for one period only. The sum b+Σ_i R_i/L_i for several periods is not written out; the student must combine it with linearity (2.5). 4.10 mentions mixed periods only for the repetition length (LCM). 4.6 states the proportional last-year rule conditionally (約束にすると), but for a constant rate C = a+bT (4.2) settles part (2).",
+   "matches_official": "yes",
+   "official_answer_error": "The slope check slope == 2338/60 just recomputes the answer's own expression, so it is not independent. The only independent slope check, |C(6000)/6000 − slope| < 0.2, is loose: the actual difference is 0.115, so a slope error of about 0.08 tCO2e/yr would still pass.",
+   "problem_defect": "The fractional-year rule for operation at T=62.5 is not stated in the problem. It is implied by '30 tCO2e/年' and C = a+bT, so this is minor.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "4.4",
+   "my_answer": "Row 1: 10×1,000×0.7 + 0 = 7,000. Row 2: 4×2,000×1 + 4×800×0.1 = 8,000+320 = 8,320. Row 3: 6×500×0.7 + 6×800×0.1 = 2,100+480 = 2,580. Total 17,900 kgCO2e (manufacturing 17,100 + transport 800) = 17.9 tCO2e.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.4, 3.3, 3.4 (eq. 3.1), 3.2",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Minor. The official answer calls this a masked product sum with two product terms. 3.6 says the research used only four one-column functions (1/a, 1−a, 1/(1−a), a/(1−a)), and 1−0.3[再生] is not among them. Strictly in the form of (3.1) it expands to three product terms: m f, −0.3[再生] m f, and [輸入] m·800·0.1. This is defensible because 3.4 says 'など'.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.1",
+   "my_answer": "f m ≤ 90,000 kgCO2e, so m ≤ 90,000/300 = 300 m³. Check: 300×300 = 90,000 kgCO2e = 90 tCO2e.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.2, appendix B",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.2",
+   "my_answer": "On (15n, 15(n+1)], C = 500+40n+20T. Setting C = 1500 gives T = 50−2n. This lies in the interval only if 35/17 ≤ n < 50/17, and no integer satisfies that. (1) No T: C(45) = 1,480 and for T > 45, C = 620+20T > 1,520, so 1,500 is skipped by the jump of 40 at T=45. (2) C is nondecreasing, so C ≥ 1500 ⇔ T > 45 (open at 45, no upper bound).",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.3 (N(T) and exact-T convention), 4.5 (piecewise linear, jumps), fig. 4.1",
+   "missing_knowledge": "The textbook never states how to invert a piecewise-linear function with jumps: solve on each interval, check that the root lies in it, and note that a jump can skip a value (no intermediate-value property). The official 考え方 attributes this to 4.5, but 4.5 only defines 区分一次関数/節点/跳び. It belongs in 4.5 or 4.11. Separately, 4.3 writes N(T) = #{n: nL<T} = ⌈T/L⌉−1 with no domain. The closed form gives −1 at T=0 while the count is 0, so 'T > 0' should be stated. This does not affect this answer.",
+   "matches_official": "yes",
+   "official_answer_error": "The check 'no point with C(T)=1,500 on the 0.01 grid' is vacuous as evidence of nonexistence: a root at a non-grid T (e.g. 45.505) would also pass. Monotonicity is not checked either. The nonexistence claim rests only on the analytic argument, not on the automated checks.",
+   "problem_defect": "The domain of T is not stated (T > 0; N(0) = −1 by the given formula), and there is no horizon H. Neither affects the answer.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "5.3",
+   "my_answer": "(1) D(T) = −300 + 7T − 60N(T), N(T) = ⌈T/20⌉−1. (2) On (20k, 20(k+1)], D = 7T−300−60k. For k = 0, 1, 2 the maximum at the right end is −160, −80, 0, so D ≤ 0. For k=3, D > 0 ⇔ T > 480/7. For k ≥ 4, D at the left end is 80k−300 > 0 and D increases (also D > −300+4T because N < T/20). So D > 0 ⇔ T > 480/7 ≈ 68.57 yr. (3) N(60) = 2, so D(60) = 420−300−120 = 0: tie, both 2,500. Just after 60 the 60-year replacement drops D to about −60; D then rises at slope 7 and crosses 0 at 480/7.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.2, 4.3, 4.5, 4.10 (N = T/L + Π, −1 ≤ Π < 0; long-term slope), 2.5/2.6 (difference of designs)",
+   "missing_knowledge": "Same gap as 5.2: no explicit method in the textbook for solving inequalities and inverse problems on piecewise-linear functions with jumps (per-interval solving). Elementary, but not taught in 4.5, which the official answer cites.",
+   "matches_official": "yes",
+   "official_answer_error": "(3) is worded wrongly: '60 年の交換が数えられる T > 60 では D = −60 に下がる'. D only jumps to the right-limit −60 at 60+ and then equals 7T−480 on (60, 80] (e.g. D(70) = 10). As written, it says D = −60 for all T > 60, which contradicts (2). Checks: D is computed only by the closed form, with no independent year-by-year count unlike 4.3/5.2. The grid check stops at 200 years while the claim is for all T > 480/7; the unbounded part rests on the analytic argument.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "6.1",
+   "my_answer": "(a) Structural material manufacturing (A1-A3): once at construction -> constant kernel (0,0,-inf) (in real time an atom at t=0). (b) Annual water (B7): every year -> year cell (k,1,-inf), one per year (a density (0,H,-inf) is also defensible if the yearly amount is constant). (c) Repainting every 12 years: periodic event -> atom (tau,0,tau) at tau = 12, 24, 36, ..., counted only if tau < T. (d) Disposal of demolition material (C4): at the end of the assessment -> constant kernel (T-independent; placed at t = T in real time). (e) Annual lighting electricity (B6): every year -> year cell.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "1.3 (stage table, time character), 4.7 (kernel table), 5.4 (A^term is a constant kernel; B6/B7 are year cells), 7.3 (real-time placement t=0 / t=T)",
+   "missing_knowledge": "Sections 1.3 and 4.7, the ones the problem cites, are not enough for (d). In 4.7 the constant kernel's only example is the emission before construction. In 1.3 the time character of C2-C4 is just 一度, and only C1 is 最後に一度. The fact that an end-of-assessment item is the constant kernel (and the atom at T is not used) appears only in 5.4 (A^term → 定数) and 7.3. Section 4.7 should say that C-stage terms are T-independent constants. It should also say when an annual item is a year cell and when it is a density: 5.4 puts B6/B7 in year cells and B3 in density, but 4.7 gives no rule.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "(b) and (e) have two defensible answers. The statement does not say whether the yearly amount changes. 4.7 lists density (一定の率, example 毎年一定の修繕) beside the year cell, so a student could answer 密度 for a constant annual water or lighting amount. The official answer accepts only 年セル and has no rubric to cover this. The cited sections (1.3, 4.7) leave out 5.4 and 7.3, which (d) needs.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "6.2",
+   "my_answer": "(a) Yes. y_t = rho x_t is a convolution with response h_0 = rho and h_k = 0 for k >= 1. It is linear and time-invariant (proportional relation). (b) No. This is a gate: the renewal time tau switches off the repair rate and cancels that year's portion. A 0/1 factor fixed by the event time multiplies the repair, so the relation is nonlinear in the event time and is not a fixed response shape that superposes. (c) No. This is a state (memory) relation. The response h(t,s) = r GWP m0 q^(t-s) [no replacement between s and t] depends on whether a replacement happened in between, not only on t - s, so it is not time-invariant. A later replacement cuts the effect of an earlier fill, so effects do not add over the replacement sequence. It must be written as the recurrence (6.2).",
+   "solvable_from_textbook": "yes",
+   "sections_used": "6.3 (linear + time-invariant conditions), 6.4 (table of four relation types), 6.6 (why refrigerant is not a convolution)",
+   "missing_knowledge": "The 6.4 table only asserts that the gate is 時刻について非線形. It never shows why: for example, that two renewals in one year do not cancel twice, or that the cancelled amount depends nonlinearly on tau. A one-line argument should be added to 6.4. There is also a notation clash: the B2 share is s in 2.5 but rho in 6.4, and rho is also used for the emission rate rho(T) in 7.3 and the recovery rate rho_rec in 6.5.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "6.3",
+   "my_answer": "(1) N(T) = ceil(T/15) - 1 (an event exactly at T is not counted). E(T) = 1200 + 80 + 90 N(T) = 1280 + 90 N(T). O(T) = 35T. (2) T = 30: N = 1, E = 1370, O = 1050, total 2420, E share 137/242 ≈ 56.6 %, O share 105/242 ≈ 43.4 %. T = 60: N = 3, E = 1550, O = 2100, total 3650, E share 31/73 ≈ 42.5 %, O share 42/73 ≈ 57.5 %. (3) Interval by interval. On (0,15]: 35T > 1280 needs T > 36.6, impossible. On (15,30]: needs T > 39.1, impossible. On (30,45], E = 1460: T > 292/7 ≈ 41.71. Just after each jump at 15n, O - E = 525n - (1280 + 90n) = 435n - 1280, which is > 0 for n ≥ 3 and increasing, and between jumps O rises while E is constant. So O > E exactly for T > 292/7 ≈ 41.71 years. At T = 292/7 they are equal.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "1.3 (embodied = A1-A5 + B1-B5 + C1-C4, operational = B6, B7), 2.6 (shares), 4.3 (N(T) and the exact-T convention), 4.5, 4.10",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The official step that rules out any later reversal (E は平均で年 6 しか増えないので逆転しない) is an averaging argument, not a proof, because E rises in jumps of 90. A rigorous version checks each jump: 435n - 1280 > 0 for n ≥ 3. The conclusion is still correct. The check 格子（0.02 刻み、300 年まで）で O > E ⇔ T > 292/7 tests only grid points: it cannot hit 292/7 itself and says nothing beyond 300 years, so it supports the boundary but does not confirm it. The official answer gives only the E share and omits the O share, although the problem asks for それぞれと割合.",
+   "problem_defect": "割合 is ambiguous. It could mean each part's share of the total E + O (the official reading) or the ratio O/E. 2.6 defines share as C_s/C, which supports the official reading, but the problem does not name the denominator.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.1",
+   "my_answer": "(1) There are jumps at T = 10 and T = 20, each of size 25 (the value rises just after the node because [tau < T] is strict). The slope is 12 tCO2e/yr on every interval, and the slope change at each node is 0. (2) C(20) = 300 + 240 + 25 + 0 = 565, since [20 < 20] = 0. C(20.5) = 300 + 246 + 25 + 25 = 596.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "3.3 (Iverson bracket), 4.4 (step function [tau < T]), 4.5 (jump and slope at nodes)",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.2",
+   "my_answer": "b_1..b_4 = 40, 38, 36, 34. (1) w_1 = w_2 = w_3 = 1 and w_4 = 0.25, so Phi(3.25) = 40 + 38 + 36 + 0.25·34 = 122.5 tCO2e. (2) T = 3.5 lies in year 4, the interval (3,4], so Phi'(3.5) = b_4 = 34 tCO2e/yr. (3) Phi is continuous at T = 3, with Phi(3) = 114 from both sides. The slope changes from b_3 = 36 to b_4 = 34, a change of -2.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.6 (year weight w_y(T), continuity, slope b_y), 4.8-4.9 (slope change at nodes)",
+   "missing_knowledge": "This does not block the problem, but there is a textbook inconsistency. 4.6 defines w_y(T) = min(1, max(0, T-(y-1))) for year y. 5.4 defines w_k(T) = min(1, max(0, T-k)) for year k+1. Appendix A lists both as the same symbol. Read with the 5.4 indexing, w_4(3.25) would be 0 instead of 0.25. Appendix A or 4.6 should state the index shift (w_y in 4.6 equals w_{k=y-1} in 5.4).",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.3",
+   "my_answer": "Using the 4.8 table with the kernel as defined in 4.7, kappa = [g < T]·min(1, max(0, T-k)). (1) Initial value 100. Node 2: (-60, 30). Node 3: (90, -30). Node 4.5: atom (50, 0) + gated year cell (-ak, a) = (-40, 10), summed to (10, 10). Node 5: (50, -10). (2) Phi(2.5) = 100 + (-60 + 75) = 115. Phi(4.5) = 100 + 30 = 130 (nodes at 4.5 not counted). Phi(4.75) = 130 + (10 + 47.5) = 187.5. Phi(6) = 130 + (10 + 60) + (50 - 60) = 190. Direct sums agree: 100 + 30 + 50 + 10·0.75 = 187.5 and 100 + 30 + 50 + 10 = 190. (3) Jump at 4.5: J = 10 + 10·4.5 = 55 (atom 50 plus gated cell 10·(4.5-4) = 5). Slope changes: +30 at 2, -30 at 3, +10 at 4.5, -10 at 5. Jumps at 2, 3 and 5 are 0.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.7 (kernel definition [4.4], kernel table, Fig. 4.2), 4.8 (node decomposition table, [4.6]), 4.9 (jump J = c0 + c1 u, slope change c1)",
+   "missing_knowledge": "The verbal meaning of the gated year cell is unclear and partly contradicts the formula. 4.7 describes it as 事象 τ の後だけ数える年の量, and the Fig. 4.2 caption says 事象の後の坂. 6.4 uses the example その年の残りの修繕をしない. All of these suggest that only the part of the year after tau is counted. The formula, the 4.8 table and the plotted curve in Fig. 4.2 instead count the year from its start k once the gate opens, giving a jump a(tau-k) at tau. 6.4's own math column (その年の分を取り消す) and 7.3 (事象の時刻に一度の補正と、その年の残りの率の補正) agree with the formula. 4.7 should state explicitly that once the gate opens, the cell counts from k, so the value jumps by a(tau-k) at tau, and 6.4's wording 残りの should be made consistent with that.",
+   "matches_official": "yes",
+   "official_answer_error": "The official answer conflicts with the problem's own parenthetical. Its part (3) adds ゲート付き年セルの 4〜4.5 年の分 10 × 0.5 = 5, which counts the 4 to 4.5 part of year 5. The statement says 5 年目の残りの分だけ数える, meaning only the remainder after 4.5. The numbers are right for the textbook kernel, but the answer does not resolve or mention this conflict.",
+   "problem_defect": "The parenthetical (4.5 年の事象の後、5 年目の残りの分だけ数える) contradicts the gated year cell (k=4, tau=4.5) as the textbook defines it, so two answers are defensible. Read literally, as a ramp a·min(0.5, max(0, T-4.5)), node 4.5 becomes (5, 10), Phi(4.75) = 182.5, Phi(6) = 185 and the jump at 4.5 is 50, not 187.5, 190 and 55. The parenthetical should be reworded (for example: once the event has occurred, count the whole of year 5 up to T, from its start at 4), or dropped.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "7.4",
+   "my_answer": "(1) C - a - (b + R/L)T = R(N(T) - T/L) = R·Pi(T). For x = T/L > 0, x ≤ ceil(x) < x + 1, so -1 ≤ ceil(x) - 1 - x < 0, with -1 reached exactly when T is a multiple of L. The range is therefore [-R, 0): -R is attained and 0 is approached but never reached. (2) T = 45: N = 2, C = 1480, (68/3)·45 = 1020, so the quantity is 1480 - 500 - 1020 = -40 = -R, exactly the lower end. T = 45.01: N = 3, quantity = 40(3 - 45.01/15) = -2/75 ≈ -0.0267, just below the upper end 0.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.3 (N(T) = ceil(T/L) - 1, exact-T convention, ceiling definition), 4.10 (N = T/L + Pi, -1 ≤ Pi < 0)",
+   "missing_knowledge": "4.10 states -1 ≤ Pi(T) < 0 without proof and without saying where each end is reached. The two-line ceiling argument and the fact that -1 is reached at T = nL belong there. [4.2] equates #{n ≥ 1 : nL < T} with ceil(T/L) - 1, but at T = 0 the count is 0 while the formula gives -1, and then Pi(0) = 0 breaks Pi < 0. 4.3 and 4.10 should restrict both to T > 0.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Small wording issue: the problem asks to show the values are 両端に近い (near both ends), but at T = 45 the value equals the lower end -R exactly, and the official answer itself says 下端. The domain T > 0 is not stated, and the formula N(T) = ceil(T/L) - 1 fails as a count at T = 0 (the grid check starts at T = 0.01, avoiding this).",
+   "external_knowledge": ""
+  },
+  {
+   "id": "8.1",
+   "my_answer": "(1) C(lambda m) = sum_i f_i (lambda m_i) = lambda · sum_i f_i m_i = lambda C, by taking the common factor lambda out of the finite sum (distributive law). (2) G1 and G2 do not overlap and together cover {1..n}, so [i∈G1] + [i∈G2] = 1 for every i. Then sum_{G1} f_i m_i + sum_{G2} f_i m_i = sum_i f_i m_i ([i∈G1] + [i∈G2]) = sum_i f_i m_i = C: by commutativity and associativity of finite addition, each term appears exactly once. With an overlap a term is counted twice, and with a gap a term is lost.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.5 (sums can be regrouped freely; no double counting), 2.3 ([2.1])",
+   "missing_knowledge": "Minor: 2.5 covers regrouping (part 2) but never states the scaling property of part 1. The word 線形性 is not defined in chapter 2; the closest is the informal 2× and additivity description in 6.3. School algebra is enough, so this does not block the problem.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "8.2",
+   "my_answer": "(1) By definition, ceil(x) is the smallest integer >= x, so x <= ceil(x). It is also < x+1: if ceil(x) >= x+1, then ceil(x)-1 would be a smaller integer >= x, a contradiction. With x = T/L and subtracting 1: T/L - 1 <= N(T) < T/L. (2) For T > 0, |N(T)/T - 1/L| <= 1/T. So N(T)/T -> 1/L (squeeze), and a/T -> 0. Then C(T)/T = a/T + b + R*N(T)/T -> b + R/L. Using |R N/T - R/L| <= |R|/T avoids any sign assumption on R.",
+   "solvable_from_textbook": "partly",
+   "sections_used": "4.3 (definition of ceil, eq. 4.2), 4.10 (sawtooth bound -1 <= Pi(T) < 0 and C/T -> b+R/L, both stated without proof), appendix A",
+   "missing_knowledge": "The textbook only defines ceil(x) as 'x 以上の最小の整数' (4.3, appendix A). It never states the two-sided bound x <= ceil(x) < x+1. Section 4.10 asserts -1 <= Pi(T) < 0 and C/T -> b+R/L without any derivation. The concept of a limit and the squeeze argument appear nowhere in the textbook, and the problem does not declare them as a prerequisite. Suggest adding the ceil inequality next to the definition in 4.3 or appendix A, and either a one-line proof in 4.10 or a stated prerequisite (limits).",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Minor: the automated check covers only part (1), on the sample T = k/7, L = 3. Part (2) has no check. The problem does not say whether R may be negative. The official answer's squeeze works either way, but a student who multiplies the inequality by R must handle the sign or use absolute values.",
+   "external_knowledge": "Limits as T -> infinity and the squeeze theorem (high-school calculus), not declared as a prerequisite."
+  },
+  {
+   "id": "8.3",
+   "my_answer": "The year-y weight w_y(T) = min(1, max(0, T-(y-1))) is the year-cell kernel (s, l, g) = (y-1, 1, -inf) with amplitude b_y. By the table in 4.8 it puts (c0, c1) = (-b_y (y-1), b_y) at node u = y-1 and (b_y y, -b_y) at node u = y. At a boundary u = k (k >= 1), exactly two contributions meet: the end of year k, (b_k k, -b_k), and the start of year k+1, (-b_{k+1} k, b_{k+1}). Their sum is c0(k) = k(b_k - b_{k+1}) and c1(k) = b_{k+1} - b_k. (1) The jump is J(k) = c0 + c1 k = k(b_k - b_{k+1}) + k(b_{k+1} - b_k) = 0, so Phi is continuous at every k. Between nodes Phi is linear, so it is continuous everywhere. (2) The change of slope at k is c1(k) = b_{k+1} - b_k.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.6 (w_y), 4.7 (year cell (k,1,-inf) = year k+1), 4.8 (jump-form table), 4.9 (J = c0 + c1 u, slope change c1), 5.5/5.6 (same remark Q_t = b_t - b_{t-1})",
+   "missing_knowledge": "No essential gap, but the textbook mixes index conventions for year cells, which makes the mapping w_y -> table row error-prone. Sections 4.6 and 4.7 say 'y 年目 = (y-1, y]' and '年セル k = k+1 年目'. Example 5.1 in 5.6 says '運用の年セル（k 年目の振幅 25）は、節点 k に (-25k, 25)', which calls the cell starting at k 'k 年目' and contradicts 4.7. Section 5.6 also writes Q_t = b_t - b_{t-1} with b indexed by the cell's start, while 8.3 indexes b by year number (b_{k+1} - b_k). Section 5.6 should say 'k+1 年目' and state the index convention.",
+   "matches_official": "yes",
+   "official_answer_error": "The mathematics is correct. Notation issue: the official answer says '年セル y（区間 (y-1, y]）' and '年セル k の後ろの節点', using '年セル k' for the cell (k-1, k]. In the textbook table of 4.8, '年セル k' is the cell starting at u = k, i.e. (k, k+1]. So the official answer's '年セル k' is the textbook's '年セル k-1', an inconsistency that can mislead a student checking against the table. The continuity check (difference at k+1e-12 < 1e-10) is a weak numerical test, though adequate for integer b_y.",
+   "problem_defect": "Minor: Phi = sum over y of b_y w_y over an infinite sequence is fine, since only finitely many terms are nonzero for each T. If the student models a finite annual table (as in 5.6, length H), the boundary k = H needs b_{H+1} = 0. Not stated, but harmless.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "8.4",
+   "my_answer": "(1) Placement 1 has total 600 at t = 0. Placement 2 has total integral from -2 to 0 of 300 dt = 600. The static total uses only the process total: the construction emission is the T-independent constant A^init (5.4, 7.6: 'A 段階は t = 0 の定数'). So for every T > 0 both give a contribution of 600, and the other terms are identical, hence C(T) is the same. This is an instance of Theorem 1 in 7.6. (2) Two different time distributions give the same function C(T) for all T > 0. The map from time distribution to C(.) is therefore not injective, and C cannot be inverted to a unique timing. (3) No. W1 = 600 R(t_end)/R(100). W2 = (300/R(100)) * integral from t_end to t_end+2 of R(s) ds. R is strictly increasing (IRF > 0, the fraction still in the atmosphere), so W2 > 2*300*R(t_end)/R(100) = W1. The earlier emission gets a larger weight, so they differ for any t_end > -2.",
+   "solvable_from_textbook": "partly",
+   "sections_used": "5.4 (A^init is a T-independent constant), 7.2 (real time t), 7.3 (C = M([0,T]) + Z(T)), 7.6 (Theorem 1, non-derivable timing of construction, variants X1/X2), 7.7 (W with weight R(t_end - t)/R(100), rate parts integrated)",
+   "missing_knowledge": "The textbook defines real time t as '建物の使用開始からの経過時間' and C(T) = M([0,T]) + Z(T), with M taken over [0,T] (7.3, 7.5 eq. 7.2). It never says how emissions at t < 0 (before use starts, e.g. a construction period) enter C(T). Taken literally, placement 2's mass on [-2, 0) lies outside [0, T]. The variants X1/X2 (7.6) imply such shifts but do not state the convention. Sections 7.3 and 7.6 should state that the integration starts at -infinity (M((-inf, T])), or that the A-stage total is always counted in full regardless of its placement. Section 7.7 should also say explicitly that R(h) is strictly increasing (IRF > 0), which is needed to conclude W1 != W2.",
+   "matches_official": "yes",
+   "official_answer_error": "No wrong result. The official (1) asserts '建てるときの排出は評価期間に関係なく全額を数える定数' and integrates from -2, without addressing that the textbook's M([0,T]) excludes t < 0. The checks are trivial: only 300 x 2 = 600 is verified, and nothing verifies (3), e.g. W2 > W1 for a sample IRF.",
+   "problem_defect": "'評価期間 T > 0 の合計 C(T)' is not well defined for placement 2 under the textbook's own formula C(T) = M([0,T]) + Z(T), because the emission lies in [-2, 0]. The problem should state that C(T) counts the construction total (or M((-inf, T])). In (3), '一般に同じか' understates the result: with IRF > 0 the two values differ for every t_end > -2.",
+   "external_knowledge": "Positivity of the CO2 impulse response, so that R(h) is strictly increasing. This is implied by the textbook's wording '大気に残る割合' but not stated."
+  },
+  {
+   "id": "9.1",
+   "my_answer": "The factor is per t·km, but the mass was entered in kg. The units do not cancel: kg·km x kgCO2e/(t·km) leaves an extra kg/t, so the result is 1000 times too large. Correct: 20,000 kg = 20 t, activity = 20 t x 50 km = 1,000 t·km, C = 0.1 x 1,000 = 100 kgCO2e (= 0.1 tCO2e).",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.2 (unit cancellation), 2.4 (A4 activity t·km), 2.8 step 2 and Example 2.1, 2.9, appendix B",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "9.2",
+   "my_answer": "L = 15. The correct formula is N(T) = ceil(T/L) - 1 = #{n >= 1 : nL < T}, which gives N(50) = 3 (15, 30, 45), N(60) = 3 (60 not counted), N(61) = 4. T/L gives 10/3, 4, 61/15. It is not an integer at T = 50 and 61, and at T = 60 it gives 4, wrongly counting the replacement exactly at T. So it is wrong at all three values. floor(T/L) gives 3, 4, 4: correct at 50 and 61, but at T = 60 it counts the event at exactly T. floor corresponds to the '<=' convention #{n : nL <= T}.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.3 (eq. 4.2 and the convention box), 4.12",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Incomplete rather than wrong. The official answer says T/L '回数が整数にならない（T = 50）', naming only T = 50. T/L is also non-integer at T = 61 (61/15). At T = 60 it gives 4 instead of 3, so it also violates the convention exactly where floor does. The checks do not test the T/L values at all.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "9.3",
+   "my_answer": "(1) Wrong formula: y_6 = 0.1 x 10 x 0.9^6 = 531441/1000000 = 0.531441 kg. Recurrence with q = 0.9 and chi_4 = 1 gives u_0..u_6 = 10, 9, 8.1, 7.29, 6.561, 10, 9. The leak in cell [6,7) is r u_6 = 0.1 x 9 = 0.9 kg. The wrong formula underestimates by 0.368559 kg (ratio 0.9^5 = 0.59049). (2) The leak is proportional to the stock u_k, which is a state carrying memory. The replacement resets the state to m0 and cuts the response to the first fill. The response h(t,s) = r m0 q^(t-s) [no replacement between s and t] depends on whether a replacement occurred, not only on the elapsed time t-s, so the process is not time-invariant. Adding the second fill as a convolution input would double count (0.531441 + 0.9), showing non-additivity in the replacement sequence. The correct method is to write the state recurrence.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "6.3 (convolution conditions: linear and time-invariant), 6.5 (recurrence 6.2, leak in year k+1 = r u_k, Example 6.2), 6.6",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Minor wording risk: '年 4 の終わり' (index k = 4, i.e. t = 5) can be confused with '4 年目の終わり' (t = 4) because the textbook uses both '年 k' (cell [k,k+1)) and 'y 年目' ((y-1,y]). The '(u_5)' in the statement resolves it.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "10.1",
+   "my_answer": "(1) N(50) = ceil(50/20) - 1 = 2 (replacements at 20 and 40). C(50) = 900 + 28x50 + 70x2 = 2,440 tCO2e. Per area-year: 2,440,000 / (2,000 x 50) = 122/5 = 24.4 kgCO2e/(m²·yr). (2) N(60) = ceil(3) - 1 = 2 (the replacement at 60 is not counted). C(60) = 900 + 1,680 + 140 = 2,720 tCO2e. Per area-year: 2,720,000 / 120,000 = 68/3 ≈ 22.67 kgCO2e/(m²·yr). They should not be compared directly. The value per area-year depends on T itself: the initial 900 is spread over 50 vs 60 years (a/T falls), and the replacement total 140 is spread over different T. At T = 60 the sawtooth is at its low point, because the replacement due at 60 is excluded. The long-term value tends to 28 + 70/20 = 31.5 t/yr, i.e. 15.75 kgCO2e/(m²·yr). The evaluation period must be the same before comparing.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "1.5, 2.6, 4.3 (eqs. 4.2-4.3 and convention), 4.10, appendix B",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The justification '期間が違うと初期の排出の割り振りや交換の回数が違うので' is factually wrong for this data. The official answer itself computes N = 2 at both T = 50 and T = 60, so the number of replacements does not differ. The difference comes from dividing the initial 900 and the same 140 by different T, plus the excluded replacement at exactly T = 60. The numbers 2,440, 24.4, 2,720 and 68/3 are correct.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "10.2",
+   "my_answer": "200 MWh = 200,000 kWh, so the annual emission is b_y = 200,000 x f_y kg = 100 - 2(y-1) tCO2e. (1) Sum over y = 1..30 = 3000 - 2 x 435 = 2,130 tCO2e (equivalently 200,000 x (15 - 0.01 x 435) = 2,130,000 kg). With a constant factor 0.50: 100 x 30 = 3,000 tCO2e, so declining factors give 870 t less (-29%). (2) T = 30.5: w_31 = 0.5 and f_31 = 0.20, so b_31 = 40 t. C = 2,130 + 0.5 x 40 = 2,150 tCO2e (constant-factor case: 3,050 t).",
+   "solvable_from_textbook": "yes",
+   "sections_used": "2.4 (eq. 2.2, year-dependent factors), 4.6 (w_y and Example 4.1), appendix B",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "Minor: the official (2) gives no constant-factor comparison, though (1) asked for one and (2) asks 'どうなるか'. The check labelled '等差数列の公式でも 2,130' hard-codes 435 rather than computing it from n(n-1)/2, so it is not fully independent.",
+   "external_knowledge": "Sum of an arithmetic series (school arithmetic)."
+  },
+  {
+   "id": "10.3",
+   "my_answer": "(1) Z is replaced at n*7.5 for n >= 1, and only events with time < T are counted. For T=45 that is 7.5, 15, 22.5, 30, 37.5, so N = ceil(6)-1 = 5 (45 itself is not counted). For T=45.5 it is N = ceil(6.0667)-1 = 6. Both renovations (18 and 33.3) fall before 45. C(45) = 400 + 10*45 + 12*5 + 35*2 = 980 tCO2e. C(45.5) = 400 + 455 + 72 + 70 = 997 tCO2e. (2) 7.5 = 15/2, so the sequence repeats every 15 years (2 replacements per 15 years). This holds from year 2 onward. Year 1 has 0, but year 16 has 1, because there is no replacement at t=0. The year-y increment counts events in [y-1, y): years 8, 16, 23, 31, 38, 46, ... I checked this exactly with fractions.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.3 (N(T)=ceil(T/L)-1 and the rule that an event exactly at T is not counted), 4.4 (a listed event as [tau<T]), 4.10 (period of the annual increments for integer and fractional L)",
+   "missing_knowledge": "Minor. Section 4.10 states the 'year 1 differs from year L+1' exception only for integer L. For a fractional period it just says the sequence repeats every 'numerator' years. It should say that the fraction must be in lowest terms (7.5 = 15/2, not 30/4) and that the year-1 exception also applies to fractional periods and to mixtures of periods. Section 4.6 also uses the year interval (y-1, y], while 7.3 uses [k, k+1). An event exactly at an integer time (t=15) therefore shows up in the year-16 increment C(16)-C(15), which a beginner may find confusing. The answer to the period question is not affected.",
+   "matches_official": "yes",
+   "official_answer_error": "",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "10.4",
+   "my_answer": "(1) W = 100*R(100)/R(100) + 60*R(80)/R(100) = 100 + 60*0.840 = 150.4 t. The static total is 160 t, so W is 9.6 t (6%) smaller, because the later emission has less time to warm the atmosphere before the endpoint. (2) With t_end = 20 the weight is R(0)/R(100) = 0, since R(0) is the integral of IRF from 0 to 0. An emission placed exactly at the endpoint contributes nothing, and the result depends on the chosen endpoint. With t_end = T, terms placed at t = T (demolition, end-of-period refrigerant) get weight 0. This is a property of the metric, not a defect of the model, so the endpoint must be stated.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "7.7 (formula for W, definition R(h) = integral of IRF from 0 to h, Example 7.2, remark on t_end = T)",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Not an error, but part (2) is descriptive ('何を意味するか') and has no grading rubric (rubric: []). The solutions header promises one for descriptive answers.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.1",
+   "my_answer": "(1) A deterministic program run twice repeats exactly the same errors, in its code and in its reading of the formulas. The two results always agree, so the comparison carries no information. Code written independently, without reading the reference computation, is unlikely to contain the same error, so agreement lowers the chance that both are wrong. (2) Errors that come from the same misunderstanding of the specification shared by both implementations are not found. The research stated this limit explicitly. It also ran negative controls: it deliberately broke formulas (counting events with <=, flipping signs, etc.) and checked that the comparison detected the discrepancy (7 types detected, 1 type undetectable by construction). Exact rational checks and proofs (9.7) add support.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "9.3, 9.6 (negative-control types), 9.7",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "The official answer, like the textbook, presents the negative control as how the research 'compensated' for a shared spec misunderstanding. A negative control only shows that the comparison is sensitive to injected errors. It cannot reveal an error both codes share by construction. So the answer slightly overstates what the negative control achieves.",
+   "problem_defect": "Part (2) asks '研究はそれをどう補ったか', which assumes the research had a remedy for shared spec misunderstandings. The textbook only says the limit was stated and negative controls were done, and those address a different failure mode. A strict student could fairly answer 'it was not compensated, only stated'.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.2",
+   "my_answer": "Choose (c), the node form. C(T) is proven to be piecewise linear with nodes only at events and year boundaries. The amplitudes do not depend on T. With the (c0, c1) per node summed and kept as cumulative sums, each T needs one binary search, with no recomputation. The result is exact, and jumps, slopes, integrals and the Laplace transform come straight from the table. (a) Fourier series: the jumps make the coefficients decay only like 1/n. This causes Gibbs overshoot, convergence to the midpoint at jumps, and errors at the ends from periodic extension. With 512 terms the median max relative error was still about 2.8%, so it is an approximation. (b) POD: jump positions differ between buildings, so many modes are needed. With 32 modes the 95th-percentile error was 9.5% (out of sample), and it was not adopted. Caveat: in floating point the research kept the end-of-period refrigerant R(T) in interval form (5.7) to avoid cancellation, and excluded the thin band.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "4.8, 5.5, 5.7, 8.1, 8.3, 8.6, 8.8",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Incomplete rather than wrong. The answer says the node form gives C(T) 'exactly' with no caveat. The textbook (5.7, 8.1 table '節点形・区間形') says the research held the refrigerant term R(T) in interval form because the node form loses digits in floating point, and that the thin band near integer years is outside the claim. 'Exact' holds in exact arithmetic only.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "11.3",
+   "my_answer": "(1) Count per building, N = 6000. (1-p)^N >= 0.05 gives p <= 1 - 0.05^(1/6000) = 4.9916e-4, about 4.99e-4. The approximation 3/N = 5.0e-4 is almost the same, slightly larger by about 0.17%, so it is slightly conservative (because -ln 0.05 = 2.996 is about 3). (2) The 5 evaluation periods of one building share the same inputs, so their outcomes are correlated (a faulty building tends to fail at several T). The independence behind (1-p)^N does not hold. Using N = 30000 would give about 1.0e-4, which overstates confidence about 5 times. The unit of sampling is the building. (3) It does not guarantee (i) agreement for all inputs, since zero failures is not a proof, and (ii) anything about inputs the declared distribution almost never picks (the thin band after a near-integer-year replacement, other distributions, real buildings or the J-CAT original). It also cannot reveal errors both codes share.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "9.6, 9.7, 9.11, 9.3, 5.7",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "Parts (2) and (3) are descriptive but have no grading rubric (rubric: []). The solutions header promises rubrics for descriptive answers.",
+   "problem_defect": "",
+   "external_knowledge": "Calculator logs/exponentials, which the problem declares as a prerequisite."
+  },
+  {
+   "id": "12.1",
+   "my_answer": "(a) Correct: it is a sampled agreement within the verified domain (D'), not a proof. (b) Wrong. The mathematical results concern the independent conceptual model with fictitious data. For the J-CAT original the research only showed that its 667 independent equations can be rewritten in the 2 structures and checked against the original's rules ('can be represented'). That does not mean a product or compatibility that gives the same results as J-CAT. Fix: 'The equations are about the independent conceptual model; they do not give J-CAT's results.' (c) Wrong. Zero discrepancies in a sample is statistical confirmation, not proof. Also, the zero-discrepancy result is for the 90,055 in-domain cases (18,011 scenarios), not all 100,000. Fix: 'For buildings drawn from the declared distribution, the probability of a failure is at most 1.7e-4 with 95% confidence (counted per building, N = 18,011). Nothing is said about regions the distribution almost never samples, such as the thin band.'",
+   "solvable_from_textbook": "yes",
+   "sections_used": "0.3, 9.2, 9.6, 9.7, 9.11",
+   "missing_knowledge": "The textbook is internally inconsistent. The 9.6 bullet says zero discrepancies over the 90,055 in-domain cases (18,011 scenarios). The 9.6 note ('100,000 ケースで食い違いが 0 でも') and the 9.7 table ('100,000 ケース') speak as if all 100,000 cases had zero discrepancies. Section 9.6 should state clearly that about 9,945 cases were excluded from the comparison.",
+   "matches_official": "yes",
+   "official_answer_error": "The corrected sentence for (c), '失敗の確率は 95％ の信頼で上限以下', is circular. It gives no value (1.7e-4) and does not say the count is per building (N = 18,011 in-domain scenarios). It also does not point out that the 100,000 premise itself is inaccurate (zero failures were for 90,055 in-domain cases).",
+   "problem_defect": "Statement (c) repeats the textbook's loose '100,000 ケースで食い違いが 0 件' wording. Per 9.6, only the 90,055 in-domain cases had zero discrepancies, so (c) has a second, factual error that the official answer ignores. A student who points it out should get credit.",
+   "external_knowledge": ""
+  },
+  {
+   "id": "12.2",
+   "my_answer": "(1) Can be derived (any 2): the uniform spread of annual quantities within each year (because the year weight w_k(T) is linear in T within the year); the times of renewals, replacements and renovations; the time evolution of the refrigerant state. Cannot be derived (any 2): the spread over the construction period and the timing of manufacturing (A stages are a constant at t=0); the timing of the manufacturing, transport and removal breakdown of renewals; the demolition and waste-treatment period (C stages are a constant at t=T); seasonal variation; a gas-by-gas time inventory. (2) Supply them from data or treat them only as explicit assumptions. Examples are literature-based variants: X1 uniform over construction, X2 manufacturing at the start of construction, X3 waste spread after the evaluation. Report that these leave the static C(T) unchanged (Theorem 1, non-uniqueness) and change only the dynamic metrics, so compare variants. (3) The 70-unit inventory holds only CO2e aggregated with GWP100. Applying the CO2 response function (Joos 2013) to it treats CO2e as CO2, and the time responses of methane and refrigerants are not represented. It also assumes a linear, time-invariant atmospheric response for small perturbations.",
+   "solvable_from_textbook": "yes",
+   "sections_used": "7.6, 7.7, 9.8",
+   "missing_knowledge": "",
+   "matches_official": "yes",
+   "official_answer_error": "This is a descriptive problem but it has no grading rubric (rubric: []), contrary to the solutions header.",
+   "problem_defect": "",
+   "external_knowledge": ""
+  },
+  {
+   "id": "12.3",
+   "my_answer": "(1) Every function computed by a finite combination of the 2 structures is piecewise rational. Masked sums of products use column values, 0/1 comparisons and the 1-column functions 1/a, 1-a, 1/(1-a), a/(1-a). Node spectra are piecewise linear in T. So the input space splits into finitely many pieces, and on each piece the function is a ratio of polynomials. x^0.5 and log10 x are not rational on any interval, however small, so no such function can equal them on an interval as a real function. (2) The goal is different. For each double-precision input (a finite set), return the double nearest the true value. With finitely many inputs, a finite partition into pieces (masks or thresholds), or in principle a finite table, achieves this. This does not contradict (1): (1) is about equality of real functions on intervals, which is impossible; (2) is about identical outputs at finite precision, which is possible. (3) The bound is about failure probability under the declared distribution. The band has relative width of about 1e-9, so the distribution gives it almost zero probability and samples practically never land there (and only integer T were checked, 9.8). Failures concentrated there would not change the bound. The research therefore restricted its claim to D', which excludes the band.",
+   "solvable_from_textbook": "partly",
+   "sections_used": "3.4, 5.7, 9.4, 9.5, 9.6, 9.8",
+   "missing_knowledge": "Section 9.5 only asserts that the 2 structures can return 'the double nearest the true value' (exact realization at finite precision) and that this does not contradict the impossibility proof. It never says why. The key idea is missing: there are finitely many double inputs, so any map from doubles to doubles (for example the correctly rounded result) can be built with a finite partition or table using masks, or with a rational approximation plus threshold corrections. That is still piecewise rational with finitely many pieces. Without it a beginner can only repeat the claim. It should be added to 9.5, ideally with a small example. Section 9.5 also asserts without even a sketch that x^a and log10 x are not rational on any interval.",
+   "matches_official": "yes",
+   "official_answer_error": "The official (2) relies on the argument that 'there are finitely many double inputs, so a finite table or partition can be built', but problems.json marks external: null. The argument is not in the textbook, so it should be listed as external knowledge or added to 9.5. The problem also has no grading rubric (rubric: []), although it is descriptive.",
+   "problem_defect": "Part (2) asks why the research 'can say' the function is realized exactly at double precision, but the textbook gives no mechanism. A student can only restate 9.5 or bring in outside reasoning, so it is not answerable from the textbook alone.",
+   "external_knowledge": "Doubles form a finite set, so any function on them can be realized by a finite table or piecewise construction (for example, correct rounding by enumeration or by a rational approximation with an error below half an ulp, corrected by comparisons)."
+  }
+ ],
+ "critic": {
+  "missing_topics": [
+   {
+    "topic": "How the state recurrence (P4) is computed inside the two structures: rewriting the refrigerant reset recurrence as a linear system (I−N)u=b with a nilpotent shift N, the finite Neumann series, the doubling product (I+N)(I+N²)…(I+N^128) as 8 masked-sum-product steps (each a match to row k−s), and the H<256 limit that follows",
+    "why_needed": "The textbook says all 70 units are computed with masked sum-products plus node spectra (3.6, 5.3), but it presents P4 only as a recurrence u_k=χm0+(1−χ)q u_{k−1}. A learner cannot see how a stateful recurrence fits a stateless sum of products, which is central to goal (B). D-08 is one of the five identities the research actually proved.",
+    "source": "survey_ch10-theory.json concepts 'Nilpotent shift and resolvent doubling', findings 'D-08, refrigerant recurrence'; survey_ch10-code.json teaching_notes (doubling c^(2s)=c^(s)_k·c^(s)_{k−s}), limitations (H<256)",
+    "suggested_place": "ch06 new 6.5b after the recurrence; one-line pointer in 3.6 and 5.3",
+    "priority": "high"
+   },
+   {
+    "topic": "The full table of the 17 process families P01–P17 and the time characteristics of each: unit-to-family map (including B2-01 split into P07 and the P11 deduction, and C stages P13–P16 plus P17), instance vs family, real-time measure form, knots, Laplace transform, Fourier decay (atoms do not decay, rate jumps O(1/n)), periods and recurrence orders, common modes of P06/P08/P09, and the best representation per family",
+    "why_needed": "Goal (D) asks for the time characteristics of all processes. Table 7.4 is labelled an excerpt (抜粋): it has no P numbers and no per-process analysis, so a learner cannot list or justify the time shape of every process.",
+    "source": "survey_ch18.json concepts 'The 17 process families P01–P17', 'Process family vs instance', 'Measure-valued Fourier decay'; findings 'Best representation per family', 'Every process has an exact Laplace transform', 'Common modes'",
+    "suggested_place": "ch07 7.4 (complete table) plus a short new subsection in ch08 on per-process transforms and recurrences",
+    "priority": "high"
+   },
+   {
+    "topic": "Who checked what, and the limits of the two-structure claim: chapters 10–11 are numerical agreement (N) checked by the implementer only, with no independent checker (DEC-12); only five identities are proven (D-01, D-03(1)(4), D-08, D-09); common-table operations (tokenise, sort, distinct, products, event grids) sit outside the two structures; counting first-match as part of the form is unresolved; the documents were transcribed from the specs by hand",
+    "why_needed": "Goal (E). The 9.7 evidence table separates proof, exact, float and statistical, but not implementer-only from independently reviewed, and it omits these open scope questions. Learners may overstate the 'two structures only' result.",
+    "source": "survey_ch10-theory.json limitations 1–4, findings 'TC-B-01: transform-method count'; survey_ch10-code.json limitations; survey_branches-storage.json teaching_notes (4)",
+    "suggested_place": "ch09 9.3 and 9.7; ch03 3.6",
+    "priority": "medium"
+   },
+   {
+    "topic": "Distributional derivative of C(T) (TH-3): δ at jump knots, δ′ in the second derivative, the C(0+)δ and C′(0+)δ terms of the causal extension, and the signed-measure view",
+    "why_needed": "Section 4.9 promises '第 8 章で超関数として扱う', but chapter 8 never treats distributions. The cross-reference is broken, and the exact derivative statement of the research is missing.",
+    "source": "survey_ch17.json equations 'TH-3 distributional derivatives', teaching_notes (distributions: delta, delta′)",
+    "suggested_place": "ch08 new short section after 8.2, or fix 4.9",
+    "priority": "medium"
+   },
+   {
+    "topic": "Complete long-term slope and periodicity (TH-11, TH-5): β = flow + ΣΓ_i/c_i + Σδ_i·min(1,1/c_i) + O(ε), with event-year corrections attached only to the first event in a year cell; the B3 cancellation for cycles under 1 year; sufficient conditions for periodicity (no list events, tables constant from year Y0, periodic refrigerant, rational periods p/q with L = lcm of the numerators; the fl(0.1) example); the annual-increment identity C(y)−C(y−1)=M((y−1,y])+Z(y)−Z(y−1) for y≥2; β never computed numerically (unresolved)",
+    "why_needed": "The textbook gives only b+R/L and states periodicity without its conditions. Typical problems with repair corrections, varying tables or sub-year cycles cannot be solved correctly.",
+    "source": "survey_ch17.json equations 'TH-11 long-term slope', 'TH-11 gated-cell sum bound', 'TH-5 annual increments', examples 'Cancellation of the long-term slope for B3-01', 'Period from a rational cycle'",
+    "suggested_place": "ch04 4.10 and ch05 (after 5.6)",
+    "priority": "medium"
+   },
+   {
+    "topic": "How the derived indicators depend on time (TH-14): SUM-05 = C/(AT) = β/A + α/(AT) is a hyperbola on each piece, its direction set by the sign of the intercept α, and it goes to +∞ as T→0+; shares are linear-fractional and defined only if C>0 and no stage is negative; counts are step functions on a finer partition that includes zero-amplitude rows",
+    "why_needed": "A typical problem asks how kgCO2e/(m²·年) or stage shares change with T. The textbook covers only C/T → b+R/L and one numerical example (10.1).",
+    "source": "survey_ch17.json equations 'TH-14 derived units', findings on counts including zero-amplitude rows",
+    "suggested_place": "ch02 2.6 plus a short paragraph in ch04 4.10 or ch05",
+    "priority": "medium"
+   },
+   {
+    "topic": "Replacement-count conventions used in practice: the EN 15978-style rounded-up count Roundup(T/L−1) vs a pro-rata count (always ≤ the rounded-up one, with large gaps just before the end of the period); tools that ignore replacements in the last years of service life; open vs closed end point (lca_ops demo 48 vs 52); base year 0 vs 1; integer years vs monthly proration",
+    "why_needed": "Section 4.3 teaches only the research convention. A learner given a pro-rata or closed-end problem (common in other tools and guidance) cannot solve it, although the textbook itself says conventions change numbers.",
+    "source": "survey_ch10-theory.json concept 'Replacement count in building LCA literature'; survey_branches-storage.json concept 'Endpoint inclusion policy', equation 'Demo: open vs closed end'; survey_ch01-08.json limitations (time conventions)",
+    "suggested_place": "ch04 4.3 (the 約束 box) and 4.12",
+    "priority": "medium"
+   },
+   {
+    "topic": "The model's study-defined conventions B-1..B-21 and their effect sizes: rebuild does not reset component cycles (a reset would cut renewals 31→19, B4 −40.6%); same factor at renewal as initially; refrigerant change applied at year end; B1-04 counted in B1, not C; no initial delivery or installation of equipment; A13-04 uplift r/(1−r); event year max(1,⌈τ(1−ε)⌉); duplicate list years counted twice",
+    "why_needed": "Goal (E), the 'assumed' class. Many textbook results depend on these conventions, but only a few appear (no repair in a renewal year, B2/B6). Learners cannot tell which numbers are artefacts of a convention.",
+    "source": "survey_ch09-archive.json concepts 'Study-defined conventions B-1..B-21', 'Time conventions of the study'; findings 'Effect sizes of definition choices'",
+    "suggested_place": "ch09 9.9 or a new appendix table, with cross-references from 1.3 and 4.3",
+    "priority": "medium"
+   },
+   {
+    "topic": "Approximations the old study measured and rejected, with numbers: smooth counts max(0,T/c−1/2) and T/c−1 (B4 p95 102.9% and 69.3%; total max 19.5% and 17.9%); AP-01..03 biases; linear interpolation of C over T (AP-14: −11.9% to +22.8%); CO2-only in place of CO2e (AP-22a: mean −12.2%); a common model that looks good in sample but gives −41.2% to +336.8% out of sample",
+    "why_needed": "Section 9.10 says only '32 候補, 0 採用'. These numbers show why the P3 step structure matters and why CO2 ≠ CO2e. They are notable rejected methods and useful exam material.",
+    "source": "survey_ch09-archive.json findings 'Continuous renewal-count approximations fail', 'Linear interpolation over the study period (AP-14)', 'AP-22a', 'No M4 common approximate model'; survey_ch10-code.json rejected 'Smooth count approximations'",
+    "suggested_place": "ch04 4.12 and ch09 9.10",
+    "priority": "medium"
+   },
+   {
+    "topic": "Other analysis methods that were considered and rejected but are missing from 8.1 and 9.10: Haar/Faber–Schauder wavelets (exact in finite terms but about 50–60 coefficients per event vs 2 in the knot form); the periodic block form Γ_i N_{c_i}(T) (possibly fewer degrees of freedom, not adopted); model reduction (Krylov, balanced truncation; flat Hankel singular values leave O(1) error); numerical Laplace inversion; Fejér smoothing; finite DFT on the integer lattice (exact but no reduction); the time-lifted lattice operator TC-B-05 (on hold); density amplitudes stored as fl(aH)",
+    "why_needed": "Medium criterion (rejected methods missing). Goal (B/C): knowing why each tool fails reinforces the premises-first rule of ch08.",
+    "source": "survey_ch17.json rejected (wavelets, periodic block form, density product); survey_ch10-theory.json rejected (model reduction, Laplace inversion, Fejér, TC-B-05, lattice DFT)",
+    "suggested_place": "ch08 8.1 table and ch09 9.10",
+    "priority": "medium"
+   },
+   {
+    "topic": "Product-specific (EPD) vs generic vs composite factors: priority EPD > composite > generic, per-row exclusivity (A13-01 vs A13-03, A4-01 vs A4-02), which stages a factor covers (does it already include transport?), licence and validity; grid factor basis (market vs location) and descriptor types (constant, linear decline to a floor, stepwise)",
+    "why_needed": "Goal (A), general WLC basics. Choosing factors is a central practical step, and the textbook never mentions EPDs or factor scope beyond one double-counting warning.",
+    "source": "survey_ch09-archive.json concept 'The 70 units by group' (A13-02/03, X-15, X-06), concept 'GWP, CO2e, gas breakdown; EPD'; survey_ch01-08.json concepts 'Factor licence gate', 'Grid factor: annual scenario and market vs location basis'",
+    "suggested_place": "ch01 1.4 and ch02 2.4",
+    "priority": "medium"
+   },
+   {
+    "topic": "Biogenic carbon storage (STO-01: dry mass × carbon fraction × 44/12) and concrete carbonation (STO-02) as memo items that are never deducted from the total; how module D is handled",
+    "why_needed": "Section 1.3 says only that storage and D are shown separately. A typical problem (compute the stored CO2 of timber and explain why it is not netted) cannot be solved.",
+    "source": "survey_ch01-08.json equations 'STO-01 Timber biogenic carbon (memo)', 'STO-02'; rejected 'Offsetting timber carbon storage', 'Adding module D'",
+    "suggested_place": "ch01 1.3 or 1.6",
+    "priority": "medium"
+   },
+   {
+    "topic": "Dynamic characterisation conventions and the dynamic-LCA landscape: horizon conventions (a)–(d) (a fixed end point favours delay; a per-emission window equals static GWP; Levasseur, TAWP, RE2020, Ventura, François; names reversed between sources); AGWP and CRF; three families of dynamic LCA (calendar-time static sums, process-local temporal distributions convolved along the supply chain as in ESPA/DyPLCA/Temporalis, response-function characterisation); integral normalisation as the consistency check; lack of time-distribution data as the main barrier; size of the timing effects (X1/X2 change W by about 1e-3, up to 0.92 and 1.76 when t_end≈T; X4 = X1+X3)",
+    "why_needed": "Section 7.7 presents only one fixed-end-point formula. A learner cannot judge alternatives or interpret dynamic results (goals A and D).",
+    "source": "survey_ch18.json concepts 'Time-horizon conventions (a)–(d)', 'Three types of time treatment in dynamic LCA', 'Temporal distribution (TD)'; findings 'Timing assumptions change dynamic metrics', 'Literature: integral normalisation', 'largest barrier'",
+    "suggested_place": "ch07 7.7",
+    "priority": "medium"
+   },
+   {
+    "topic": "Real-time decomposition details: atoms placed at sw(τ) and counted when sw(τ)≤T (closed interval); the gated cell split into an atom a(sw−k) plus a rate; lattice knots left-continuous vs events at sw(g); X-07 by_year puts an integer-time event in year K while the process functions put it in year K+1; size of Z (median 1.7% of C, max 10.5%, 0.32 at short T); Z′≠0 in 319/347 scenarios with |Z′|/|C′| up to 0.36; C(0+)≠A0 in 286/290 functions because R's window sits at knot 0",
+    "why_needed": "Goal (D). These explain when 'annual emissions' from different outputs disagree and how large the dC/dT ≠ rate effect is in practice.",
+    "source": "survey_ch17.json findings (TH-4, C(0+), Z′ statistics), equation 'X-07 by_year'; survey_ch18.json concepts 'Year attribution of X-07 vs process functions', findings on terminal share",
+    "suggested_place": "ch07 7.3 and 7.9",
+    "priority": "low"
+   },
+   {
+    "topic": "Floating-point switch point (Lemma L-2: sw(g) lies within about 2 ulp of g/fl(1−ε); all floats are dyadic) with concrete band examples: fl(90×0.7)=62.99999999999999, fl(25×0.56)=14.000000000000002; sliver test: 2 of 9 pairs differ (B1-04 up to 5.5e-3, SUM-03 1.1e-5); band test T∈(K, K(1+3e-9)]",
+    "why_needed": "Section 5.7 asserts the band exists but gives no mechanism or example. The D′ restriction is a central limitation (goal E).",
+    "source": "survey_ch17.json equation 'Lemma L-2', examples (fl values, sliver mismatch); survey_ch19-21.json equation 'Band necessary condition'",
+    "suggested_place": "ch05 5.7 and ch09 9.4",
+    "priority": "low"
+   },
+   {
+    "topic": "Sensitivity of C to its coefficients (TH-12): ∂C/∂a_j = (Σ_s ι_s σ β) κ_j(T); B2-01 has zero influence when both B2 and B6 are counted; sensitivity to an event time τ only where T crosses sw(τ) or τ(1−ε) crosses an integer",
+    "why_needed": "A short and useful result for unseen 'what if a factor changes' problems (goal C); it follows directly from linearity in the amplitudes.",
+    "source": "survey_ch17.json equation 'TH-12 coefficient influence and time sensitivity'",
+    "suggested_place": "ch05 after 5.5",
+    "priority": "low"
+   },
+   {
+    "topic": "Input-state model: five states (entered, zero, missing, absent, invalid); ⊥ propagation (a predicate applied to ⊥ gives 0, its negation gives 1); the completeness flag and its known hole (RED-1: with stage subsets, dropped upstream rows leave complete=true, e.g. SUM-03 −55.6% unflagged); SUM-08 comparability also requires the same gas scope and factor version",
+    "why_needed": "Section 3.5 gives only 'unknown ≠ 0'. These rules settle edge cases in masked-sum problems and show a documented limitation.",
+    "source": "survey_ch12-16.json concepts 'Five input states', 'Mask and unknown value ⊥'; survey_ch09-archive.json findings 'Holes in the baseline definition'",
+    "suggested_place": "ch03 3.5 and ch02 2.6",
+    "priority": "low"
+   },
+   {
+    "topic": "Exact vs float equivalence examples: Q/(1−w) written as Q·(1/(1−w)) amplifies the last bit by about 1/w (X-13 max 2.2e-12; exceeds 1e-9 for w ≲ 1e-8); bit-identical agreement is only about 4% for SUM-02..07; the B3-01 error grows with the number of rows; the knife-edge period 1.000000001 changes B3-01 by up to 92%",
+    "why_needed": "Goal (E). It shows concretely why the 1e-9 tolerance and the domain D exist, and why 'exact in rationals' does not mean 'same floats'.",
+    "source": "survey_ch10-code.json findings (X-13, bit-identity); survey_ch10-theory.json findings (B3-01, X-13); survey_ch09-archive.json findings (1.000000001 counterexample)",
+    "suggested_place": "ch09 9.4",
+    "priority": "low"
+   },
+   {
+    "topic": "J-CAT conversion details at count level: 5 categories (141/299/121/101/5); base method 619/667 → improved 647/667; the a·(1/b) last-bit error in 26% of random pairs, fixed by correctly rounded division; Shift_JIS collation; ch16 method A (certified rounding or missing) vs method B; ch19 character index sets for text operations (border-free SUBSTITUTE, ≤255 characters, missing outside the domain); necessity analysis static and at baseline input only; numerical completeness vs full functionality",
+    "why_needed": "Section 9.5 compresses ch15/16/19 into four lines. The difference between 'all 667 converted' and 'agrees with the original software' needs these details (goal E). Low priority for WLC itself.",
+    "source": "survey_ch12-16.json findings (conversion success, root cause, Shift_JIS, method A/B); survey_ch19-21.json concepts 'Method A (character index set)', 'Numerical completeness vs full functionality'",
+    "suggested_place": "ch09 9.5",
+    "priority": "low"
+   },
+   {
+    "topic": "Design of the large random verification: strata N/B/G/E/S/D and their weights; D = injected missing or abnormal inputs (outside the domain, compared without the filter); G scales only part of the quantities; per-stratum scenario bounds (3.8e-4 … 1.5e-3); checks V1–V8; negative controls NC1–NC8 with the applicability rule (NC3 applies only in stratum S, NC5 has no power); 64-term Fourier errors by T (median 2.17 for T<1)",
+    "why_needed": "Section 9.6 gives the headline numbers only. Reading what the bound covers needs the strata and the control design (goal E).",
+    "source": "survey_ch19-21.json concepts 'Case, scenario, stratum', 'Checks V1-V8', 'Negative controls NC1-NC8'; findings (per stratum, NC results, Fourier S64)",
+    "suggested_place": "ch09 9.6",
+    "priority": "low"
+   },
+   {
+    "topic": "The old study (ch09) as a case history: K1–K7 multiplier form (aggregate once, then apply T-dependent multipliers); 681-scenario agreement; the disputed '66 units into 7 models' count; load measurements; 47 of 124 inputs unread; stopped by a new directive, not by failure; 59 review findings never applied",
+    "why_needed": "Context for where the two structures came from and a lesson in correcting claims. The textbook cites only 2.5 and 9.10 briefly.",
+    "source": "survey_ch09-archive.json concepts 'Unified models K1–K7', 'Overall multiplier form'; findings (681 scenarios, disputed count, inputs, reason for stopping); survey_branches-storage.json fixes",
+    "suggested_place": "ch09 9.10 or appendix C",
+    "priority": "low"
+   },
+   {
+    "topic": "Matrix LCA and supply-chain background: g = BA^{-1}f and its power series; the ESPA temporal convolution series; Temporalis relative vs absolute temporal distributions; dynamic MFA cohort models",
+    "why_needed": "Goal (A), the whole picture of LCA: where emission factors come from and how dynamic LCA is built upstream of a building inventory.",
+    "source": "survey_ch18.json concepts 'Static matrix LCA and series', equations 'Literature: static and LTI convolution forms'; survey_ch10-theory.json concept 'Matrix LCA and dynamic MFA (literature)'",
+    "suggested_place": "ch01 1.2 (short box) and ch07 7.7",
+    "priority": "low"
+   },
+   {
+    "topic": "Which processes dominate a long horizon: family shares of C(H) (P11 0.284, P09 0.275, P08 0.180, P01 0.100, P12 0.032, …) and the stage-level sign structure (negative atoms remain only in P08/B3)",
+    "why_needed": "It complements the role-share table in 5.8 for the whole picture (goal A); fictitious data, so it must be labelled as illustrative.",
+    "source": "survey_ch18.json findings 'Median shares of C(H) by family', 'Sign structure'",
+    "suggested_place": "ch07 7.4 or ch05 5.8",
+    "priority": "low"
+   }
+  ],
+  "factual_conflicts": [
+   {
+    "textbook_location": "ch03 3.6 研究では box, first paragraph",
+    "textbook_says": "「1 列の関数は … 4 種類だけで、最初の 18 単位を書いた段階から、単位を増やしても語彙は増え続けなかった。〔照合〕」 (〔照合〕 is defined in 0.3 as an exact rational check at sample points)",
+    "research_says": "The two-structure results of ch10/11 are numerical agreement (N) on fictitious data at relative 1e-9, checked by the implementer only. 'No vocabulary added' is N, and common-table operations were introduced (DEC-10). Within TC-B-01 the vocabulary still grew (6 → 14 → 21, then 5 more over 13 units). The label should be 〔測定〕, not 〔照合〕. This also contradicts the textbook's own 9.7, which puts the 1,293-pair agreement under float.",
+    "source": "survey_ch10-theory.json findings 1 and the 2026-11-13 update; 10_TRANSFORM_STUDY/04_HYPOTHESES/README.md line 43; survey_ch10-code.json findings 'TC-B-01, 18 units' and teaching_notes STATUS VOCABULARY"
+   },
+   {
+    "textbook_location": "ch03 3.6 研究では box, end of second paragraph",
+    "textbook_says": "「また、計算の速さは基準計算より遅かった（第 9 章）。」",
+    "research_says": "Only TC-B-01 was consistently slower (1.1–12.6×; 7.8–32.6× with flattening). The unified system TC-U-01 had only single-run reference timings: about 17 s vs 24 s for the reference on the evaluation set (faster) and 6 s vs 3 s at the largest scale (slower), with more periods favouring it. 'Faster' or 'slower' is not established, and there was no systematic timing. Textbook chapter 9 does not discuss speed at all, so the cross-reference is broken.",
+    "source": "10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/LIMITS.md §6; survey_ch10-code.json findings (TC-B-01 timing, unified timing) and teaching_notes ('Faster' is not established)"
+   },
+   {
+    "textbook_location": "ch03 3.4, paragraph on lookup",
+    "textbook_says": "「研究ではこれを専用の手順（match）で実装したが、意味はマスク付き積和の中にある。」",
+    "research_says": "Whether first-match counts as part of the one form is an open decision. Counted strictly there are 2 primitives, because ordered first-match is a (min,·) semiring operation. It reduces to a pure sum-product only if keys are unique.",
+    "source": "survey_ch10-theory.json concept 'match', findings 'TC-B-01: transform-method count' (unresolved); survey_ch10-code.json findings ('Counted strictly ... 2')"
+   },
+   {
+    "textbook_location": "ch04 4.7, after equation (4.5)",
+    "textbook_says": "「評価期間に依存するどの量も、T によらない振幅 a_j を持つ核の和で書ける。… これが研究の第 2 の構造節点スペクトルの考え方である。〔照合〕」",
+    "research_says": "This is shown by construction for each unit and checked by float agreement with the reference (N). It is not a general theorem: the conditional theorem that amplitudes are T-independent is listed as unresolved, and 'T-independent amplitudes' is classed as assumed. Only 'knot form = kernel sum' was checked rationally.",
+    "source": "survey_ch10-theory.json findings 'Every dependence on the study period T is a superposition ...' (float N; P not reached), limitations; survey_ch10-code.json teaching_notes (assumed: T-independent amplitudes)"
+   },
+   {
+    "textbook_location": "ch05 5.8 table, row 3",
+    "textbook_says": "「節点形がモデルの基準計算と一致する | 〔照合〕 1,293 組で不一致 0（相対 10^{-9} の基準。最大の相対差 1.0 × 10^{-13}）」",
+    "research_says": "TH-0(ii), the model agreement within relative 1e-9 (max 1.0e-13), is a floating-point result (status 'float'), not an exact rational check. It should be 〔測定〕.",
+    "source": "survey_ch17.json findings 'Model agreement: in D' ...' (status float); limitations 'TH-0(ii) is float agreement within 1e-9, not equality'"
+   },
+   {
+    "textbook_location": "ch05 5.8 table, last row; ch09 9.7 table, row 有理数での照合",
+    "textbook_says": "「節点の係数から、どの単位・どの入力の行が効いたかに戻れる | 〔照合〕（10 の集合で展開表を作成）」 and 「有理数での照合 | 節点形 ＝ 核の和、再構成、展開表」",
+    "research_says": "For the expansion tables, the match between per-knot contributions and merged coefficients is bookkeeping by construction, not an independent verification (「作り方からの帳簿の確認であり、独立の検証ではない」).",
+    "source": "17_WHOLE_BUILDING_TIME_THEORY/07 §9; survey_ch17.json methods 'Expansion table', limitations 'The expansion tables are bookkeeping checks by construction'"
+   },
+   {
+    "textbook_location": "ch05 5.7 box 研究で見つかった限界",
+    "textbook_says": "「T ∈ (K, sw(τ)) という幅 10^{-9} 程度の細い帯」",
+    "research_says": "The band width is about 1e-9 × K, a relative width (about 6e-8 at K = 60). The counting test used T ∈ (K, K(1+3e-9)].",
+    "source": "survey_ch17.json concept 'Reduced domain D′ and the band' ('width about 1e-9 x K'); survey_ch19-21.json concept 'Band (K, sw(τ)] and domain D′', equation 'Band necessary condition'"
+   },
+   {
+    "textbook_location": "ch08 8.3 研究では box",
+    "textbook_says": "「更新の回数を連続のフーリエ級数で表す試みでは、256 項でも合計の最大誤差が 3.8％ 残り、周期が評価期間を割り切る点では項数によらず半回分ずれた」",
+    "research_says": "These are two different series. The unshifted series is half an event off where the period divides T at any number of terms (whole-life max 19.5%). Shifting the argument by half the resolution removes that bias and leaves 3.8% whole-life max (B4 max 23%) at 256 terms.",
+    "source": "survey_ch10-code.json findings EXP-03 and rejected 'Continuous Fourier series of the renewal count'; survey_ch10-theory.json findings 'A continuous Fourier series of the renewal count ...', fixes (H-06 shift)"
+   },
+   {
+    "textbook_location": "ch09 9.5, opening sentence and table",
+    "textbook_says": "「…すべてを 2 構造…に書き直して照合した。〔照合〕」; table row 「無作為の建物 | 現実的な建物 2,000 ケースを別のソフト（LibreOffice）で再計算し、3 者で照合」",
+    "research_says": "Every verification count in ch15–16 is a floating-point measurement against Excel cached values and an Excel-semantics reference evaluator (bitwise in ch16), not an exact rational check. There were 674 mismatches with the original rule (48 value mismatches, including 46 base-method boundary counterexamples and 2 ROUND-tie cases; 626 out-of-domain missing values). LibreOffice disagreed in 10,812 random cases, all of which agree with the reference evaluator. Agreement of ROUND with the original software is unresolved.",
+    "source": "15_JCAT_CONVERSION/README.md lines 20–21, 39–41, 50; survey_ch12-16.json teaching_notes (status labels), findings 'Mismatches ...', 'Method A equals the reference evaluator ... agreement with the original software is NOT claimed'"
+   },
+   {
+    "textbook_location": "ch09 9.5, 表せないことの証明 and the new なぜ両立するのか paragraph; solutions.md 解答 12.3 (2)",
+    "textbook_says": "「コンピュータの倍精度の入出力としては「真の値に最も近い倍精度数」を返せる」; 「…対応は、有限個の区間に分けて 0/1 のマスクで切り替える…ことで作れる」; solution: 「有限の表や区分で作れる」",
+    "research_says": "Method A returns the correctly rounded value only when its certificate decides, and otherwise returns missing (table-maker's dilemma; about 2^-37 of inputs). Exponents with no feasible degree are refused (|a| = 300.5). It was tested on 23 synthetic exponents. A full lookup table (about 2^64 entries) is noted as infeasible. So the realisation is 'correct or missing', not 'always correct'.",
+    "source": "survey_ch12-16.json concepts 'Certified correct rounding', 'Table-maker's dilemma'; findings 'Finite-precision realization', 'Non-integer powers and log10 cannot be represented ... lookup table ... not feasible'"
+   },
+   {
+    "textbook_location": "ch09 9.6, first bullet (text added in the current uncommitted edit); problems.md/problems.json 問題 12.1 (c)",
+    "textbook_says": "「残りの 9,945 ケースは、判定の境目に近い入力などで定義域の外として、統計の対象から除いた」; problem 12.1(c): 「100,000 ケース（そのうち定義域の 90,055 ケースを比べた）」",
+    "research_says": "The 9,945 cases are exactly stratum D (1,989 scenarios with injected missing or abnormal values, dirty=True), which lies outside the reference's domain. They were compared without the domain filter (0 failures) and only excluded from the bound. No case fell near the band (0 band candidates), so none was excluded for being near a decision boundary. All 100,000 cases were compared.",
+    "source": "20_LARGE_RANDOM_VERIFICATION/01_抽出分布と方法.md line 16, 35; 02_結果.md lines 11, 32, 44; survey_ch19-21.json findings 'Cases that could lie in a band: 0', per-stratum line for D"
+   },
+   {
+    "textbook_location": "ch02 2.5 note on double counting (also ch01 1.3 研究では)",
+    "textbook_says": "「運用エネルギーのうち維持管理の分（割合 ρ_B2）を B2 に移し、そのぶん B6 から引いている：C_B2 = ρ_B2 E、C_B6 = E − ρ_B2 E」",
+    "research_says": "B2-01 is ρ_B2 × the year-weighted purchased-electricity emissions only. B6 = B6-03 (electricity + fuel) − ι_B2·B2-01, i.e. the per-cell rate is e_k + f_k − β ρ_B2 e_k. The share does not apply to fuel, so C_B6 = E − ρE holds only if E means purchased electricity. Textbook 6.4 correctly says 買電.",
+    "source": "survey_ch18.json equation 'Shared electricity (P07 and P11)'; survey_ch09-archive.json concept 'The 70 units by group' (B2, B6)"
+   },
+   {
+    "textbook_location": "ch04 4.10, paragraph after 例題 4.2",
+    "textbook_says": "「年ごとの増加量 C(y) − C(y−1) は、周期 L が整数なら、2 年目から先は L 年ごとに同じ並びを繰り返す（t = 0 には交換が無いので、1 年目だけは L+1 年目と違う）。… いくつもの周期が混ざれば、その最小公倍数の年数で繰り返す。」",
+    "research_says": "In the research, the annual increment is defined only for y ≥ 2 because C(0) is undefined (C(0+) ≠ A0 in general). Periodicity holds only after the year Y0 from which tables are constant, with no list events and with refilled or periodically replaced refrigerant. The statement is true for the toy model a + bT + RN(T) but is phrased as a general rule.",
+    "source": "survey_ch17.json equations 'TH-5 annual increments', 'TH-11 long-term slope' (conditions), 'TH-4(b) limit at zero'"
+   }
+  ],
+  "private_content_risks": [
+   "No non-public J-CAT material found. I scanned textbook/ch00–ch10_appendix.md, problems/problems.md, problems/solutions.md and problems/problems.json: there are no formula texts, cell addresses, sheet names, EQ-xxxx IDs, coefficients or original values. Every 'セル' hit is 年セル or 数式セル, and the J-CAT mentions are disclaimers or the public count table in 9.2.",
+   "Counts that appear are all already public in the repository README or chapter READMEs: 3,818,483 formula cells, 4,241 patterns, 667 equations, 592/75, 647+8+12, 40 boundary conditions, 2,000 random cases. Figure F0-2_research_map.png also shows '198 シート' and '構造だけの台帳 14,652 行'; these are aggregate counts from ch02/ch13 and contain no sheet names. The research surveys advise citing only aggregate counts here, never the list of sheet names (02_SOURCES/ALL_198_SHEETS.json) or sheet-family names; the textbook complies.",
+   "9.5 describes the kinds of counterexample found in the original conversion (text-producing operations; division last-bit errors amplified by floor and comparison). This wording is public in 15_JCAT_CONVERSION/README.md and is not a risk. Do not add per-equation details (EQ IDs with their operations, exponents or domains from 15/04b, 04c and ch16 tools), which the surveys mark as restricted.",
+   "Note: the textbook and problems files were being edited by another process during this review (uncommitted changes in ch01–07, ch09, appendix and problems at 00:48–00:52). The conflicts above are against that latest version; 9.6 and problem 12.1(c) come from the new edits."
+  ]
+ }
+}

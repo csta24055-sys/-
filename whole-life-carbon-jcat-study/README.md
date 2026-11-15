@@ -31,6 +31,7 @@
 | 19 | [19_JCAT_REMAINING12/README.md](19_JCAT_REMAINING12/README.md) | 統一理論 第 3 段階：原版の残り 12 式の依存関係と、2 構造による厳密な変換（除外 0）。原版の式本文・値は非公開。 |
 | 20 | [20_LARGE_RANDOM_VERIFICATION/README.md](20_LARGE_RANDOM_VERIFICATION/README.md) | 統一理論 第 4 段階：宣言した抽出分布による 10 万ケース規模の無作為検証、負の対照、統計的な成立範囲。 |
 | 21 | [21_UNIFIED_THEORY_REPORT/README.md](21_UNIFIED_THEORY_REPORT/README.md) | 統一理論の研究報告書：最終成果物 14 項目の所在、証明・数値検証・統計的確認・追加データが必要なこと・未解決の区別、終了条件 A〜D の判定。 |
+| 22 | [22_WLC_COMPLETE_TEXTBOOK/README.md](22_WLC_COMPLETE_TEXTBOOK/README.md) | 教材：研究全体を五つの原理（量 × 係数の和、0/1 の条件、時間の節点、状態の漸化式、評価期間と実時間）と主張の強さの区別で学ぶ完全理解教材、原理シート、導出の図、問題と検算、研究の全工程の記録、監査表。 |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想
