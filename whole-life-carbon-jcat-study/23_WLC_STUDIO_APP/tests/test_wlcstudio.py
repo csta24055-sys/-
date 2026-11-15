@@ -826,7 +826,7 @@ class SecondRoundTests(unittest.TestCase):
         self.assertEqual(v["unit"], "kg")
 
     def test_stage_propagation_and_basis(self):
-        _, rep = bridge.build(self.full(o_pv_kwh=None), REFSET)
+        _, rep = bridge.build(self.full(o_elec_kwh=None), REFSET)      # the purchase is the gap (round 6: not PV)
         st = {s_ for m in rep["missing_inputs"] for s_ in m["stages"]}
         self.assertTrue({"B6", "B2"} <= st)
         _, rep = bridge.build(self.full(m_quantity_basis=None, m_waste_rate=V("m_waste_rate", 0.05)), REFSET)
@@ -1241,13 +1241,14 @@ class FifthRoundTests(unittest.TestCase):
         row = {x["field"]: x for x in bridge.reflection_table(rep)}["o_elec_kwh"]
         self.assertIn("自家消費", row["detail"])
 
-    def test_export_above_generation_blocks_only_when_b6_counts(self):
+    def test_export_above_generation_is_reported_not_blocking(self):
+        # round 6: with the purchase known, generation and export cannot act; the contradiction is reported
         vals = self.full(o_pv_kwh=V("o_pv_kwh", 1000.0), o_export_kwh=V("o_export_kwh", 5000.0))
-        _, rep = bridge.build(vals, REFSET)
-        self.assertTrue(any("より多い" in m for m in rep["missing_required"]))
-        vals["a_stages"] = V("a_stages", "EMBODIED")
-        _, rep = bridge.build(vals, REFSET)
-        self.assertFalse(any("より多い" in m for m in rep["missing_required"]))
+        doc, rep = bridge.build(vals, REFSET)
+        self.assertEqual(rep["missing_required"], [])
+        self.assertTrue(any("より多い" in m for m in rep["inconsistent_inputs"]))
+        self.assertEqual(items(doc)["operation.electricity.base"], 100000.0)
+        self.assertEqual(items(doc)["operation.onsite_export.base"], 0.0)
 
     def test_no_purchase_makes_b2_and_grid_moot(self):
         vals = self.full(o_elec_kwh=V("o_elec_kwh", 0.0))
@@ -1450,6 +1451,205 @@ class FifthRoundTests(unittest.TestCase):
         self.assertEqual(json.loads(parts[3])["value"], 123)
         self.assertTrue(json.loads(parts[4])["bad"])
         self.assertEqual(json.loads(parts[5])["value"], 1000)
+
+
+class SixthRoundTests(unittest.TestCase):
+    """Regression tests for the sixth verification round (docs/review_fixes.md, round 6)."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+    summary = FourthRoundTests.summary
+    xlsx = FifthRoundTests.xlsx
+    HEAD = FifthRoundTests.HEAD
+
+    # --- electricity: the purchase decides B6/B2; generation/export never drop it
+    def test_unknown_pv_does_not_drop_known_purchase(self):
+        base, _, _ = self.run_vals(self.full())
+        for over in ({"o_pv_kwh": None}, {"o_export_kwh": None}, {"o_pv_kwh": None, "o_export_kwh": None},
+                     {"o_pv_kwh": V("o_pv_kwh", 30000.0), "o_export_kwh": None}):
+            vals = self.full()
+            for k, x in over.items():
+                if x is None:
+                    vals.pop(k)
+                else:
+                    vals[k] = x
+            r, doc, rep = self.run_vals(vals)
+            self.assertEqual(items(doc)["operation.electricity.base"], 100000.0, over)
+            self.assertAlmostEqual(r["results"]["SUM-03"]["value"], base["results"]["SUM-03"]["value"], 3)
+            self.assertNotIn("B6-01", r["results"]["X-02"]["incomplete_units"])
+            self.assertFalse({"o_pv_kwh", "o_export_kwh"} & {m["field"] for m in rep["missing_inputs"]})
+            row = {x["field"]: x for x in bridge.reflection_table(rep)}["o_pv_kwh"]
+            self.assertIn("効かない" if "o_pv_kwh" in over and over["o_pv_kwh"] is None else "", row["detail"])
+
+    def test_zero_purchase_with_unknown_pv_needs_no_grid_factor(self):
+        vals = self.full(o_elec_kwh=V("o_elec_kwh", None, "not_applicable"))
+        for f in ("o_pv_kwh", "o_export_kwh", "o_fm_ratio", "o_grid_value"):
+            vals.pop(f)
+        _, rep = bridge.build(vals, REFSET)
+        self.assertEqual(rep["missing_required"], [])
+        self.assertTrue(rep["expand"]["b2_moot"])
+        out, st = self.summary(vals)
+        self.assertTrue(st["B2"] and st["B6"])
+
+    def test_assumed_zero_with_a_range_keeps_the_factor_required(self):
+        unc = Uncertainty("interval", 0.0, 150000.0, 0.8)
+        vals = self.full(o_elec_kwh=V("o_elec_kwh", 0.0, "assumption", uncertainty=unc))
+        vals.pop("o_grid_value")
+        _, rep = bridge.build(vals, REFSET)
+        self.assertIn(FL.FIELDS["o_grid_value"]["label"], rep["missing_required"])
+        pid = self.app.projects.create("r6r", "RC")
+        rng = self.app._range(vals, 60.0, None, pid)
+        self.assertIsNotNone(rng)                                          # said, not silently dropped
+        self.assertIsNone(rng["low_t"])
+        self.assertIn("計算できない", rng["note"])
+
+    def test_unknown_fm_share_is_a_split_not_an_omission(self):
+        vals = self.full()
+        vals.pop("o_fm_ratio")
+        _, rep = bridge.build(vals, REFSET)
+        m = {x["field"]: x for x in rep["missing_inputs"]}["o_fm_ratio"]
+        self.assertEqual(m["gap"], "split")
+        self.assertNotIn("o_fm_ratio", [x["field"] for x in rep["omitted_inputs"]])
+        self.assertEqual(rep["split_stages"], ["B2", "B6"])
+        out, st = self.summary(vals)
+        self.assertTrue(st["B6"] and st["B2"])
+        self.assertTrue([x for x in out["summary"]["stages"] if x["stage"] == "B6"][0]["split"])
+        self.assertIn("o_fm_ratio", [x["field"] for x in out["assumed_inputs"]])
+
+    # --- zeros, B5, B3
+    def test_zero_volume_material_makes_no_row(self):
+        doc, rep = bridge.build(self.full(m_concrete=V("m_concrete", 0.0, unit="m3")), REFSET)
+        self.assertNotIn("M-m_concrete", [r["material_id"] for r in tables(doc)["materials"]])
+        self.assertNotIn("a4_delivery_fallback", [m["field"] for m in rep["missing_inputs"]])
+        self.assertNotIn("C2", rep["incomplete_stages"])
+
+    def test_unknown_scenario_with_zero_share_leaves_b5_complete(self):
+        vals = self.full(a_replacement_cycle=V("a_replacement_cycle", 40.0), a_recon_fraction=V("a_recon_fraction", 0.0))
+        vals.pop("a_reconstruction")
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertNotIn("a_reconstruction", [m["field"] for m in rep["missing_inputs"]])
+
+    def test_missing_cycle_marks_b3_as_not_determined_not_short(self):
+        vals = self.full()
+        vals.pop("m_refresh_cycle")
+        _, rep = bridge.build(vals, REFSET, period=60)
+        m = {x["field"]: x for x in rep["missing_inputs"]}
+        self.assertNotIn("B3", m["m_refresh_cycle"]["stages"])
+        self.assertEqual(m["m_refresh_cycle@B3"]["gap"], "assumed")
+        self.assertNotIn("B3", rep["incomplete_stages"])
+
+    def test_double_count_note_names_a_typed_whole_value(self):
+        vals = self.full(m_concrete=V("m_concrete", 900.0, "assumption", "t", scope="whole_building"),
+                         m_concrete_fdn=V("m_concrete_fdn", 100.0, unit="t"))
+        _, rep = bridge.build(vals, REFSET)
+        self.assertTrue(rep["double_count"])
+        self.assertNotIn("統計", " ".join(rep["double_count"]))
+
+    # --- saving keeps provenance; bad requests are 400
+    def test_hand_corrected_estimate_keeps_its_provenance(self):
+        pid = self.app.projects.create("r6p", "RC")
+        unc = Uncertainty("interval", 800.0, 1200.0, 0.8)
+        self.app.projects.put(pid, V("m_rebar", 1000.0, "statistical", "t", method="rasmi_mi_x_gfa", source_id="rasmi",
+                                     factor_version="v1", source_detail="detail", permission="CC-BY-4.0",
+                                     retrieved_at="2026-11-15", uncertainty=unc))
+        url = "/api/projects/%d/fields/m_rebar" % pid
+        self.app.handle("PUT", url, {"value": 950, "unit": "t", "state": "assumption", "from_estimate": True})
+        v = self.app.projects.current(pid, "m_rebar")
+        self.assertEqual((v.factor_version, v.source_detail, v.permission), ("v1", "detail", "CC-BY-4.0"))
+        self.app.handle("PUT", url, {"value": 950, "unit": "t", "state": "confirmed"})
+        v = self.app.projects.current(pid, "m_rebar")
+        self.assertIn("手で直した", v.note)
+        self.assertEqual(v.factor_version, "v1")
+
+    def test_bad_values_and_requests_are_refused_not_500(self):
+        pid = self.app.projects.create("r6b", "RC")
+        url = "/api/projects/%d/fields/b_gfa" % pid
+        for bad in (10 ** 400, "1 5", "1e309", True):
+            with self.assertRaises((ApiError, ProjectError)):
+                self.app.handle("PUT", url, {"value": bad, "unit": "m2", "state": "confirmed"})
+        with self.assertRaises(ApiError):
+            self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"field": ["m_concrete"]})
+
+    def test_whole_candidates_withdrawn_when_the_other_field_has_a_value(self):
+        pid = self.app.projects.create("r6w", "RC")
+        self.app.projects.propose(pid, V("m_concrete", 2000.0, "statistical", "m3", method="mlit_area_unit_x_gfa", source_id="m",
+                                         factor_version="v", uncertainty=Uncertainty("interval", 1000.0, 3000.0, 0.9),
+                                         scope="whole_building", depends={"b_gfa": 1.0, "b_structure": "RC"}), "estimate")
+        self.app.projects.put(pid, V("m_concrete_fdn", 300.0, unit="m3"))
+        self.assertEqual(self.app.projects.withdraw_whole_candidates(pid), ["m_concrete"])
+        self.assertEqual(self.app.projects.candidates(pid, "m_concrete"), [])
+
+    # --- documents
+    def test_src_names_bars_and_repeat_rows(self):
+        f = documents._field_for
+        for n in ("Steel reinforced concrete (SRC) columns", "Steel-reinforced concrete slab", "Steel mesh reinforced concrete topping",
+                  "Concrete, Reinforced"):
+            self.assertEqual(f(n), "m_concrete", n)
+        for n in ("Reinforced concrete bars", "Reinforcing steel", "Reinforcement for concrete", "Welded mesh", "鉄筋 D13"):
+            self.assertEqual(f(n), "m_rebar", n)
+        self.assertIsNone(f("Grab bar"))
+        csv = "名称,数量,単位\nコンクリート,500,m3\nコンクリート（再掲）,120,m3\nうち基礎コンクリート,120,m3\n".encode()
+        r = documents.read("r.csv", base64.b64encode(csv).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got, {("m_concrete", "m3"): 500.0})
+        self.assertEqual(sum("再掲" in u["reason"] for u in r["unused"]), 2)
+
+    def test_classification_is_linear_on_hostile_names(self):
+        import time
+        for name in ("()" * 16000 + "x", "reinforc" * 4096, "コンクリート用" * 5000, "(" * 30000 + ")"):
+            t0 = time.perf_counter()
+            documents._field_for(name + " " + name)
+            documents._is_total(name)
+            documents._not_added(name)
+            self.assertLess(time.perf_counter() - t0, 0.5)
+
+    def test_document_numbers_follow_the_screen_rule(self):
+        csv = '名称,数量,単位\n鉄筋,"1,5",t\nアルミ,"12,500",kg\n鉄骨,1 5,t\n'.encode()
+        r = documents.read("n.csv", base64.b64encode(csv).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got, {("m_aluminium", "t"): 12.5})            # 12,500 kg (masses are summed in t)
+        reasons = " ".join(u["reason"] for u in r["unused"])
+        self.assertIn("カンマ", reasons)
+        self.assertIn("空白", reasons)
+
+    def test_shared_formula_copies_are_shifted_and_masterless_copies_refused(self):
+        H = ('<row r="1"><c r="A1" t="inlineStr"><is><t>名称</t></is></c><c r="B1" t="inlineStr"><is><t>備考</t></is></c>'
+             '<c r="C1" t="inlineStr"><is><t>数量</t></is></c><c r="D1" t="inlineStr"><is><t>単位</t></is></c></row>')
+        def row(r, name, b, c, unit="m3"):
+            return ('<row r="%d"><c r="A%d" t="inlineStr"><is><t>%s</t></is></c>%s%s<c r="D%d" t="inlineStr"><is><t>%s</t></is></c></row>'
+                    % (r, r, name, b, c, r, unit))
+        rows = (H + row(2, "コンクリート", '<c r="B2"><v>100</v></c>', '<c r="C2"><v>100</v></c>')
+                + row(3, "コンクリート 割増", '<c r="B3"><f t="shared" ref="B3:C3" si="0">B2*1.1</f><v>110</v></c>',
+                      '<c r="C3"><f t="shared" si="0"/><v>110</v></c>')
+                + row(4, "コンクリート", '', '<c r="C4"><f t="shared" si="7"/><v>100</v></c>')
+                + row(5, "コンクリート", '', '<c r="C5"><f>IF(A1="%s",0,SUM(C2:C3))</f><v>150</v></c>' % ("x" * 2100)))
+        r = documents.read("s.xlsx", base64.b64encode(self.xlsx(rows)).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got, {("m_concrete", "m3"): 100.0})
+        reasons = " ".join(u["reason"] for u in r["unused"])
+        self.assertIn("同じ列", reasons)
+        self.assertIn("共有の数式の元が無い", reasons)
+        self.assertIn("SUM", reasons)
+
+    # --- the screen
+    def test_ui_has_the_round6_guards(self):
+        js = (HERE / "web" / "app.js").read_text(encoding="utf-8")
+        for needle in ("function ask(", "やめる", "saveField.reason", "inputValue(f).bad", "valueLabel", "inconsistent_inputs",
+                       "h.also", "x.split", "locked", "dialog(\"自動概算の説明\""):
+            self.assertIn(needle, js, needle)
+        proc = subprocess.run(["node", "-e", """
+            const src = require('fs').readFileSync(process.argv[1], 'utf8');
+            const m = src.match(/function parseNumber[\\s\\S]*?\\n}\\n/);
+            eval(m[0]);
+            console.log(['1 5', ' 15 ', '12 500'].map((x) => JSON.stringify(parseNumber(x))).join('|'));""",
+                               str(HERE / "web" / "app.js")], capture_output=True, text=True)
+        if proc.returncode != 0 and "not found" in (proc.stderr or ""):
+            self.skipTest("node is not installed")
+        parts = proc.stdout.strip().split("|")
+        self.assertTrue(json.loads(parts[0])["bad"])
+        self.assertEqual(json.loads(parts[1])["value"], 15)
+        self.assertTrue(json.loads(parts[2])["bad"])
 
 
 class RegressionTests(unittest.TestCase):

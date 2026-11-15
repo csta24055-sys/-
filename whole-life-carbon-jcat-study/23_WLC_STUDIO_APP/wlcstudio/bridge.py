@@ -110,6 +110,7 @@ class _Doc:
         self.missing: list[str] = []
         self.assumed: list[str] = []
         self.double_count: list[str] = []
+        self.inconsistent: list[str] = []          # inputs that contradict each other (reported, not blocking)
         self.today = today
 
     def item(self, cat, key, value):
@@ -180,6 +181,25 @@ def _num(v: Value | None):
     if v.state == "not_applicable":
         return "NA", None, "適用外"
     return None, None, LABEL[v.state]
+
+
+def _surely_zero(v: Value | None) -> bool:
+    """適用外 of a na=zero field, or a value of 0 whose stated range does not reach above 0 (an assumed 0 with a range up
+    to 150000 kWh is not a reason to drop the factor that the upper end needs)."""
+    if v is None:
+        return False
+    if v.state == "not_applicable":
+        return FL.FIELDS[v.field_id].get("na") == "zero"
+    if v.state in HAS_VALUE and isinstance(v.value, (int, float)) and not isinstance(v.value, bool) and v.value == 0:
+        u = v.uncertainty
+        return not (u.kind in ("interval", "scenario") and isinstance(u.high, (int, float)) and u.high > 0)
+    return False
+
+
+def _whole_word(v: Value) -> str:
+    """How a whole-building / all-steel value is named in the double-counting notes: only a statistical value is a
+    「統計量」."""
+    return "統計量" if v.state == "statistical" else "値（全体の量として入れたもの）"
 
 
 def _has(v: Value | None) -> bool:
@@ -297,7 +317,8 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
 
     def missing(fid, stage_list, reason, kind=None, label=None, gap="omitted"):
         """Record a gap whose stages are inside the boundary. gap="omitted": not in the total (the total is a lower bound);
-        gap="assumed": in the total, but computed with an assumption instead of the inputs (the stage is not determined)."""
+        gap="assumed": in the total, but computed with an assumption instead of the inputs (the stage is not determined);
+        gap="split": the total is right but how it splits between stages is not determined (B2 counted inside B6)."""
         hit = [s for s in expand_stages(stage_list, ctx, kind) if s in st_set]
         if hit and not any(m["field"] == fid for m in missing_inputs):
             missing_inputs.append({"field": fid, "label": label or FL.FIELDS[fid]["label"], "stages": hit, "reason": reason,
@@ -328,8 +349,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     else:
         for f in ("a_replacement_cycle", "a_recon_fraction"):
             d.skip(f, V(f), "改修・建替えを想定していない（または想定が未取得）ので渡さない")
-        if _unknown(rec) and cyc_in:
+        if _unknown(rec) and cyc_in and not fra0:
             missing("a_reconstruction", ("B5",), "大規模改修・建替えの想定が未取得（B5 は計算できない）")
+        elif _unknown(rec) and fra0:
+            d.skip("a_reconstruction", rec, "改修の範囲の割合が 0 なので、想定がどれでも B5 は 0（想定は問わない）")
 
     # ------------------------------------------------------------------ materials
     common = {k: V(k) for k in ("m_waste_rate", "m_reuse_rate", "m_repair_rate", "m_refresh_cycle", "m_transport_km",
@@ -345,19 +368,19 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     whole_c, fdn = V("m_concrete"), V("m_concrete_fdn")
     if _is_whole(whole_c, "whole_building"):
         if _has(fdn):
-            skip["m_concrete_fdn"] = "上部構造の欄に基礎を含む建物全体の統計量が入っているので、基礎の行は作らない（二重計上を防ぐ）"
-            d.double_count.append("コンクリート：統計の全体量（基礎を含む）と基礎の値が両方ある。基礎の行は使っていない")
+            skip["m_concrete_fdn"] = "上部構造の欄に基礎を含む建物全体の%sが入っているので、基礎の行は作らない（二重計上を防ぐ）" % _whole_word(whole_c)
+            d.double_count.append("コンクリート：建物全体（基礎を含む）の%sと基礎の値が両方ある。基礎の行は使っていない" % _whole_word(whole_c))
         elif _unknown(fdn):
-            covered["m_concrete_fdn"] = "上部構造の欄の建物全体の統計量に含まれている（行は作らない）"
+            covered["m_concrete_fdn"] = "上部構造の欄の建物全体の%sに含まれている（行は作らない）" % _whole_word(whole_c)
     rb, stl = V("m_rebar"), V("m_steel")
     for whole, other, wname, oname in ((rb, stl, "鉄筋", "鉄骨"), (stl, rb, "鉄骨", "鉄筋")):
         ofid = "m_steel" if oname == "鉄骨" else "m_rebar"
         if _is_whole(whole, "all_steel") and ofid not in skip and ("m_rebar" if ofid == "m_steel" else "m_steel") not in skip:
             if _has(other):
-                skip[ofid] = "%sの欄に鉄の全量（鉄筋＋鉄骨）の統計量が入っているので、%sの行は作らない（二重計上を防ぐ）" % (wname, oname)
-                d.double_count.append("鉄：統計の鉄の全量（%sの欄）と%sの値が両方ある。%sの行は使っていない" % (wname, oname, oname))
+                skip[ofid] = "%sの欄に鉄の全量（鉄筋＋鉄骨）の%sが入っているので、%sの行は作らない（二重計上を防ぐ）" % (wname, _whole_word(whole), oname)
+                d.double_count.append("鉄：鉄の全量（%sの欄）の%sと%sの値が両方ある。%sの行は使っていない" % (wname, _whole_word(whole), oname, oname))
             elif _unknown(other):
-                covered[ofid] = "%sの欄の鉄の全量（鉄筋＋鉄骨）の統計量に含まれている（行は作らない）" % wname
+                covered[ofid] = "%sの欄の鉄の全量（鉄筋＋鉄骨）の%sに含まれている（行は作らない）" % (wname, _whole_word(whole))
     rc_v = common["m_refresh_cycle"]
     rcx, _, _ = _num(rc_v)
     # can a material renewal fall inside the study period? (unknown cycle: maybe; 適用外 = no renewal)
@@ -396,6 +419,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             continue
         if fid in skip:
             d.skip(fid, v, skip[fid])
+            continue
+        if _surely_zero(v):
+            # like 0 台 and a 0 kg charge: no row, so that a nil quantity cannot leave masses or transport undetermined
+            d.use(fid, v, "数量 0：この材料の行は作らない", ["materials"])
             continue
         q, qu = float(v.value), v.unit or unit
         fac = P["material"].get(cls, {})
@@ -502,10 +529,13 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         w_stages = ("A1-A3",) + (("A4",) if basis == "DESIGN" else ("C2",) + route_st)
         for cf, stg, why in (("m_waste_rate", w_stages, "施工時の廃棄率が未取得（発注量・施工後の質量が決まらない）"),
                              ("m_repair_rate", ("B3",), "修繕率が未取得"),
-                             ("m_refresh_cycle", ("B4", "B3"), "更新周期が未取得（エンジンは周期が無いと更新を数えないが、不完全とは示さない）"),
+                             ("m_refresh_cycle", ("B4",), "更新周期が未取得（エンジンは周期が無いと更新を数えないが、不完全とは示さない）"),
                              ("a_eol_haul_km", ("C2",), "解体材の運搬距離が未取得")):
             if _never(cf, common[cf]):
                 missing(cf, stg, why, kind="material")
+                if cf == "m_refresh_cycle" and "B3" in st_set:
+                    missing("m_refresh_cycle@B3", ("B3",), "更新周期が未取得：更新の年の修繕を除けないので、B3 は多めになりうる（合計には入っている）",
+                            label="更新周期（修繕 B3 への影響）", gap="assumed")
         if fallback_rows:
             # the per-quantity delivery factor of the reference set replaces distance × mode × mass: an assumption, so A4
             # (and what repeats it) is marked as not determined from the inputs
@@ -610,8 +640,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         elif lx == "NA":
             d.use("e_%s_life" % t, lv, "適用外：交換しない（交換は数えない）", ["equipment[E-%s].service_life" % trade])
         elif not zero:
-            missing("e_%s_life" % t, ("B4", "B3"), "%s機器の耐用年数が未取得（エンジンは交換を数えないが、不完全とは示さない）" % tl,
+            missing("e_%s_life" % t, ("B4",), "%s機器の耐用年数が未取得（エンジンは交換を数えないが、不完全とは示さない）" % tl,
                     kind="equipment")
+            missing("e_life@B3", ("B3",), "設備の耐用年数が未取得：交換の年の修繕を除けないので、B3 は多めになりうる（合計には入っている）",
+                    label="設備の耐用年数（修繕 B3 への影響）", gap="assumed")
             d.skip("e_%s_life" % t, lv, lhow + "：交換を数えられない（B4 のこの行は不完全）")
         else:
             d.skip("e_%s_life" % t, lv, "台数が 0 なので使われない")
@@ -732,25 +764,35 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
 
     # ------------------------------------------------------------------ operation and water
     # The engine reads operation.electricity as CONSUMPTION and nets it: purchase = max(0, c − (generation − export)).
-    # The screen asks for PURCHASED electricity (the bills already exclude self-consumed generation), so the
-    # consumption passed is purchase + self-consumption, max(0, g − x); otherwise self-consumed PV is subtracted twice.
+    # The screen asks for PURCHASED electricity (the bills already exclude self-consumed generation). So:
+    #  - generation and export both known and consistent: c = purchase + self-consumption max(0, g − x) (else the
+    #    self-consumed part would be subtracted twice); the engine then gets back exactly the purchase;
+    #  - otherwise, with the purchase known: generation and export cannot change B6/B2 (the purchase is what the bills
+    #    say) → c = purchase, generation = export = 0 (filled, they do not act); unknown generation never drops B6;
+    #  - purchase unknown: B6/B2 electricity cannot be computed whatever generation is (the purchase is the gap).
     pe, pe_st, _ = _num(V("o_elec_kwh"))
     g_, g_st, _ = _num(V("o_pv_kwh"))
     x_, x_st, _ = _num(V("o_export_kwh"))
     g0 = 0.0 if g_ == "NA" else g_
     x0 = 0.0 if x_ == "NA" else x_
-    elec_override = None
-    if isinstance(g0, (int, float)) and isinstance(x0, (int, float)) and x0 > g0:
-        if stages is None or st_set & {"B6", "B2"}:
-            d.missing.append("自家発電のうち外へ売った電力（%s kWh/年）が自家発電（%s kWh/年）より多い（入力の見直しが要る）"
-                             % (x0, g0))
-    elif isinstance(pe, (int, float)) and isinstance(g0, (int, float)) and isinstance(x0, (int, float)):
+    gx_known = isinstance(g0, (int, float)) and isinstance(x0, (int, float))
+    pe_known = pe == "NA" or isinstance(pe, (int, float))
+    inconsistent = gx_known and x0 > g0
+    if inconsistent:
+        d.inconsistent.append("自家発電のうち外へ売った電力（%s kWh/年）が自家発電（%s kWh/年）より多い：入力が矛盾している。%s"
+                              % (x0, g0, "購入電力が分かっているので計算には効かない（購入電力をそのまま使った）" if pe_known
+                                 else "購入電力も未取得"))
+    elec_override, pv_fill = None, None
+    if pe_known and gx_known and not inconsistent:
         selfc = max(0.0, g0 - x0)
-        elec_override = (float(pe) + selfc, _derived(pe_st, g_st, x_st) if selfc > 0 else pe_st,
-                         "購入電力 %s ＋ 自家消費 %s ＝ 電力の使用量 %s kWh/年として渡した" % (pe, selfc, float(pe) + selfc))
-    # net purchased electricity provably 0 → the grid factor and the facility-management share cannot act
-    pe0 = pe == "NA" or (isinstance(pe, (int, float)) and pe == 0)
-    ctx["b2_moot"] = bool(pe0 and isinstance(g0, (int, float)) and isinstance(x0, (int, float)) and g0 >= x0)
+        if isinstance(pe, (int, float)):
+            elec_override = (float(pe) + selfc, _derived(pe_st, g_st, x_st) if selfc > 0 else pe_st,
+                             "購入電力 %s ＋ 自家消費 %s ＝ 電力の使用量 %s kWh/年として渡した" % (pe, selfc, float(pe) + selfc))
+    elif pe_known:
+        pv_fill = ("購入電力が分かっているので、自家発電・売電は B6・B2 に効かない（エンジンの買電量＝購入電力）："
+                   "0 で満たした（計算には入らない）")
+    # net purchased electricity surely 0 → the grid factor and the facility-management share cannot act
+    ctx["b2_moot"] = _surely_zero(V("o_elec_kwh"))
     for fid, F in FL.FIELDS.items():
         if F["role"] != "profile":
             continue
@@ -758,6 +800,18 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         x, st, how = _num(v)
         if fid == "o_elec_kwh" and elec_override is not None and x not in (None, "NA"):
             x, st, how = elec_override
+        if fid in ("o_pv_kwh", "o_export_kwh"):
+            if pv_fill:
+                d.item("operation", F["profile"] + ".kind", "CONSTANT")
+                d.item("operation", F["profile"] + ".unit", PROFILE_UNIT[F["profile"]])
+                d.item("operation", F["profile"] + ".base", 0.0)
+                d.state("operation", F["profile"].split(".", 1)[1], "EXPLICIT_ZERO")
+                d.skip(fid, v, pv_fill)
+                continue
+            if x is None:
+                # never a gap of its own: with the purchase unknown the purchase is the gap (B6/B2 are flagged by it)
+                d.skip(fid, v, how + "：渡していない（購入電力が未取得なので、どちらにしても電力の B6・B2 は計算できない）")
+                continue
         name = F["profile"]
         stage = "B7" if name.startswith("water_waste") else "B6"
         cat, owner = "operation", name.split(".")[0]
@@ -789,7 +843,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.item("operation", "water_waste.%s_factor_id" % ("waste" if name == "municipal_waste" else name), fid)
     scalar("o_fm_ratio", "operation", "operation.facility_management_ratio")
     if _unknown(V("o_fm_ratio")) and not ctx["b2_moot"]:
-        missing("o_fm_ratio", ("B2", "B6"), "施設管理（B2）分の割合が未取得（B6 から差し引く分も決まらない）")
+        # the engine then counts the whole purchase in B6 and 0 in B2: the total is right, the split is not determined
+        missing("o_fm_ratio", ("B2", "B6"), "施設管理（B2）分の割合が未取得：B2 の分は B6 に入っている（合計は変わらない。B2 と B6 の内訳が決まらない）",
+                gap="split")
     scalar("o_source", "operation", "operation.energy_simulation_basis")
     gv, gc = V("o_grid_value"), V("o_grid_construction")
     gx, gst, ghow = _num(gv)
@@ -819,11 +875,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.use("o_grid_value", gv, ghow + "・評価期間中一定", ["operation.grid"])
     cx, cst, chow = _num(gc)
     c_filled = False
-    se, _, _ = _num(V("c_site_electricity"))
     if cx in (None, "NA") and stages is not None and "A5" not in st_set:
         cx, cst, chow = 0.0, "EXPLICIT_ZERO", "A5 を評価範囲から外したので 0 で満たした（計算には入らない）"
         c_filled = True
-    elif cx in (None, "NA") and (se == "NA" or (isinstance(se, (int, float)) and se == 0)):
+    elif cx in (None, "NA") and _surely_zero(V("c_site_electricity")):
         cx, cst, chow = 0.0, "EXPLICIT_ZERO", "工事中の電力が 0 なので係数は効かない：0 で満たした（計算には入らない）"
         c_filled = True
     if cx in (None, "NA"):
@@ -910,6 +965,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     # stages with something left out (the total is short there) and stages computed partly with an assumption
     incomplete_stages = sorted({s for m in omitted for s in m["stages"]})
     assumed_stages = sorted({s for m in missing_inputs if m.get("gap") == "assumed" for s in m["stages"]})
+    split_stages = sorted({s for m in missing_inputs if m.get("gap") == "split" for s in m["stages"]})
     report = {
         "factor_profile": {"kind": fp["kind"], "name": fp["name"], "version": fp["version"], "notes": fp["notes"]},
         "fields": sorted(d.reflect.values(), key=lambda r: list(FL.FIELDS).index(r["field"])),
@@ -924,6 +980,8 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         "expand": dict(ctx),
         "incomplete_stages": incomplete_stages,
         "assumed_stages": assumed_stages,
+        "split_stages": split_stages,
+        "inconsistent_inputs": d.inconsistent,
         "unconnected": d.unconnected,
         "notes": d.assumed,
         "double_count": d.double_count,

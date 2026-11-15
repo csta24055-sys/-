@@ -13,6 +13,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from ..numbers import number_or_reason
+
 UNITS = r"(m3|㎥|m³|m2|㎡|m²|t|kg|本|台|基|個|箇所|m|ｍ|ｔ)"
 LINE = re.compile(r"^(?P<name>[^\d\s][^\d]{0,40}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*(?P<u>" + UNITS + r")\b")
 
@@ -32,7 +34,7 @@ def read(data: bytes, doc_id: str, max_pages: int = 200) -> dict:
         if not m:
             return {"format": "pdf", "pages": [], "error": "PDF として開けない"}
         n = min(int(m.group(1)), max_pages)
-        pages, cands = [], []
+        pages, cands, refused = [], [], []
         for i in range(1, n + 1):
             t = subprocess.run(["pdftotext", "-layout", "-f", str(i), "-l", str(i), str(p), "-"],
                                capture_output=True, text=True).stdout
@@ -41,10 +43,14 @@ def read(data: bytes, doc_id: str, max_pages: int = 200) -> dict:
             for k, ln in enumerate(t.splitlines(), 1):
                 mm = LINE.search(ln.strip())
                 if mm:
-                    q = float(mm.group("q").replace(",", ""))
+                    q, why = number_or_reason(mm.group("q"))
+                    if q is None:            # e.g. "1,5": refused like on the screen, and said
+                        refused.append({"name": mm.group("name").strip(), "trace": "%s:p%d/L%d" % (doc_id, i, k),
+                                        "reason": "数量 %r を読めない（%s）" % (mm.group("q"), why)})
+                        continue
                     cands.append({"name": mm.group("name").strip(), "quantity": q, "unit": mm.group("u"),
                                   "trace": "%s:p%d/L%d" % (doc_id, i, k), "line": ln.strip()[:120], "needs_review": True})
     no_text = [pg["page"] for pg in pages if not pg["has_text"]]
-    return {"format": "pdf", "n_pages": n, "pages": pages, "candidates": cands, "pages_without_text": no_text,
+    return {"format": "pdf", "n_pages": n, "pages": pages, "candidates": cands, "refused": refused, "pages_without_text": no_text,
             "note": "PDF の文字から読んだ候補。寸法・合計・参照番号を拾うことがあるので、必ず原本で確認して採用する。"
                     + ("文字の無いページ（スキャン画像）は読んでいない：%s" % no_text[:20] if no_text else "")}

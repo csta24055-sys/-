@@ -18,7 +18,7 @@ from .provenance import Value
 
 KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular expressions on the normalised name
     ("m_masonry", ("re:(^|[^a-z])alc([^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
-    # rebar: see REBAR_PRODUCT / REBAR_GENERIC below (a reinforced-concrete name is concrete)
+    # rebar: decided by _is_rebar() below (a reinforced-concrete name is concrete; product words make it rebar)
     ("m_rebar", ()),
     ("m_concrete", ("コンクリート", "生コン", "concrete")),
     ("m_steel", ("鉄骨", "鋼材", "形鋼", "鋼管", "デッキ", "structural steel", "steel")),
@@ -32,14 +32,39 @@ KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular e
     ("m_plastic", ("塩ビ", "樹脂", "pvc", "plastic", "ポリ")),
     ("m_finish", ("仕上", "塗装", "クロス", "タイル", "床材", "finish", "tile", "paint", "flooring")),
 ]
-# words that name a reinforcement PRODUCT, also when the name mentions concrete (JIS: 鉄筋コンクリート用棒鋼;
-# "reinforcement for concrete"; welded mesh; grades SD295…SD685). Bar sizes (D13) alone are not used: "board d10".
-REBAR_PRODUCT = ("棒鋼", "異形鉄筋", "鉄筋コンクリート用", "re:コンクリート用.*鉄筋", "溶接金網", "ワイヤーメッシュ", "rebar",
-                 "re:deformed bars?", "re:(welded|wire|steel) (wire )?mesh", "re:(^|[^a-z])sd ?[2-6]\\d{2}",
-                 "re:reinforc[a-z]* (steel|bars?|mesh)", "re:steel reinforc", "re:reinforc[a-z]* for concrete")
-# words that may mean the reinforcement or the reinforced concrete: rebar only when the name does not name concrete
+# Rebar or reinforced concrete? Decided by words, never by a backtracking pattern (names come from uploaded files):
+# - a reinforcement PRODUCT word makes it rebar even when concrete is named: 棒鋼, 異形鉄筋, 鉄筋コンクリート用 (JIS bar
+#   name), コンクリート用…鉄筋, 溶接金網, ワイヤーメッシュ, rebar, SD295…SD685, "reinforcing steel / bar / mesh",
+#   "reinforcement for concrete", "welded / wire mesh", "deformed bar", and "bar(s)" next to a reinforcement or concrete
+#   word ("reinforced concrete bars");
+# - otherwise 鉄筋 / reinforc… is rebar only when no concrete word is in the name ("steel reinforced concrete" = SRC
+#   concrete, "Concrete, Reinforced" = concrete).
+REBAR_SUBSTR = ("棒鋼", "異形鉄筋", "異形棒", "鉄筋コンクリート用", "溶接金網", "ワイヤーメッシュ", "rebar")
 REBAR_GENERIC = ("鉄筋", "reinforc")
 CONCRETE_WORDS = ("コンクリート", "生コン", "concrete")
+_SD = re.compile(r"(?:^|[^a-z])sd ?[2-6][0-9]{2}")
+MAX_NAME = 300                     # characters of a name that are classified (no material name is longer)
+
+
+def _is_rebar(low: str) -> bool:
+    toks = low.split()
+    concrete = any(w in low for w in CONCRETE_WORDS)
+    generic = any(w in low for w in REBAR_GENERIC)
+    if any(w in low for w in REBAR_SUBSTR) or _SD.search(low):
+        return True
+    k = low.find("コンクリート用")
+    if k >= 0 and "鉄筋" in low[k:]:
+        return True
+    for a, b, c in zip(toks, toks[1:] + [""], toks[2:] + ["", ""]):
+        if a.startswith("reinforc") and (b in ("steel", "bar", "bars", "mesh") or (b == "for" and c == "concrete")):
+            return True
+        if (a == "deformed" and b in ("bar", "bars")) or (a in ("welded", "wire") and b in ("mesh", "wire")):
+            return True
+    if (generic or concrete) and any(t in ("bar", "bars") for t in toks):
+        return True
+    return generic and not concrete
+
+
 FOUNDATION_WORDS = ("基礎", "杭", "フーチング", "地中梁", "footing", "pile", "foundation")
 TOTAL_WORDS = ("合計", "小計", "総計", "計", "total", "subtotal", "sum")
 UNIT_ALIASES = {"m3": "m3", "㎥": "m3", "m³": "m3", "立米": "m3", "t": "t", "ｔ": "t", "トン": "t", "ton": "t",
@@ -48,8 +73,9 @@ _PUNCT = re.compile(r"[\s,，、。・/／_\-‐－–—:：;；()（）\[\]［
 
 
 def normalise_name(name: str) -> str:
-    """NFKC (full-width letters and digits, ㎥ …), lower case, punctuation as single spaces."""
-    n = unicodedata.normalize("NFKC", name or "").lower()
+    """NFKC (full-width letters and digits, ㎥ …), lower case, punctuation as single spaces; at most MAX_NAME characters
+    (cut before and after NFKC, which can lengthen a string)."""
+    n = unicodedata.normalize("NFKC", (name or "")[:MAX_NAME]).lower()[:MAX_NAME]
     return _PUNCT.sub(" ", n).strip()
 
 
@@ -62,7 +88,7 @@ def _field_for(name: str, division: str = "") -> str | None:
     div = normalise_name(division)
     for fid, words in KEYWORDS:
         if fid == "m_rebar":
-            if _hit(REBAR_PRODUCT, low) or (_hit(REBAR_GENERIC, low) and not _hit(CONCRETE_WORDS, low)):
+            if _is_rebar(low):
                 return fid
             continue
         if _hit(words, low):
@@ -74,20 +100,40 @@ def _field_for(name: str, division: str = "") -> str | None:
 
 NOT_TOTAL_ENDINGS = ("設計", "統計", "会計", "時計", "家計", "余計", "生計", "温度計", "湿度計", "圧力計", "流量計", "水位計",
                      "電力計", "電流計", "電圧計", "風速計", "照度計")
-_TRAIL = re.compile(r"(\([^()]*\)|\[[^\[\]]*\])+$")
+
+
+def _strip_groups(tok: str) -> str:
+    """鉄筋計(SD345)[t] -> 鉄筋計: trailing bracket groups removed by a loop (linear; no regular expression)."""
+    while tok and tok[-1] in ")]":
+        k = tok.rfind("(" if tok[-1] == ")" else "[")
+        if k < 0:
+            break
+        tok = tok[:k]
+    return tok
 
 
 def _is_total(name: str) -> bool:
     """A total / subtotal row: a word ending in 計 (鉄筋計, コンクリート 計, 鉄筋計（SD345）, 合計 t …) unless 計 is not a
     total there (設計, 統計, 温度計 …); 合計・小計・総計 anywhere; or total/subtotal/sum/totals as English whole words."""
-    n = unicodedata.normalize("NFKC", name or "")
+    n = unicodedata.normalize("NFKC", (name or "")[:MAX_NAME])[:MAX_NAME]
     if any(w in n for w in ("合計", "小計", "総計")):
         return True
     for tok in re.split(r"[\s　,、・/]+", n):
-        tok = _TRAIL.sub("", tok)                       # 鉄筋計(SD345) -> 鉄筋計
+        tok = _strip_groups(tok)
         if tok.endswith("計") and not tok.endswith(NOT_TOTAL_ENDINGS):
             return True
-    return re.search(r"(^|[^a-z])(total|totals|subtotal|sum)($|[^a-z])", n.lower()) is not None
+    return re.search(r"(?:^|[^a-z])(?:total|totals|subtotal|sum)(?:$|[^a-z])", n.lower()) is not None
+
+
+def _not_added(name: str) -> str | None:
+    """A row that repeats or breaks down quantities listed elsewhere (再掲, 内数, うち…, 内訳…, "of which"): not added."""
+    n = unicodedata.normalize("NFKC", (name or "")[:MAX_NAME])[:MAX_NAME]
+    low = n.lower()
+    toks = [t.lstrip("([") for t in re.split(r"[\s　,、・/]+", n) if t]
+    if "再掲" in n or "内数" in n or "(内)" in n or any(t.startswith(("うち", "内訳")) for t in toks) \
+            or "of which" in low or "included above" in low or "already included" in low:
+        return "再掲・内数（うち・内訳）の行は足さない（ほかの行に含まれている。二重計上を防ぐ）"
+    return None
 
 
 def _unit(u: str) -> str | None:
@@ -125,7 +171,11 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 unused.append({"trace": s["trace"], "name": s["name"], "reason": s["reason"]})
             for r in sh["rows"]:
                 if _is_total(r["name"]):
-                    unused.append({"trace": r["trace"], "name": r["name"], "reason": "合計・小計の行は足さない（二重計上を防ぐ）"})
+                    unused.append({"trace": r["trace"], "name": r["name"][:80], "reason": "合計・小計の行は足さない（二重計上を防ぐ）"})
+                    continue
+                why = _not_added(r["name"])
+                if why:
+                    unused.append({"trace": r["trace"], "name": r["name"][:80], "reason": why})
                     continue
                 if r["quantity"] < 0:
                     unused.append({"trace": r["trace"], "name": r["name"], "reason": "負の数量は読まない（差し引きにしない）"})
@@ -185,6 +235,8 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         if parsed["pages_without_text"]:
             warnings.append("文字の無いページ（スキャン画像）は読んでいない：%s" % parsed["pages_without_text"][:20])
         per_field = {}
+        for c in parsed.get("refused", []):
+            unused.append({"trace": c["trace"], "name": c["name"], "reason": c["reason"]})
         for c in parsed["candidates"]:
             if c["quantity"] < 0:
                 unused.append({"trace": c["trace"], "name": c["name"], "reason": "負の数量は読まない"})
@@ -196,6 +248,9 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 continue
             if _is_total(c["name"]):
                 unused.append({"trace": c["trace"], "name": c["name"], "reason": "合計の行は候補にしない"})
+                continue
+            if _not_added(c["name"]):
+                unused.append({"trace": c["trace"], "name": c["name"], "reason": _not_added(c["name"])})
                 continue
             per_field.setdefault(fid, []).append((c, u))
         proposals = []

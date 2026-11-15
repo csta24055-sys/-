@@ -13,7 +13,27 @@ async function api(path, opts = {}) {
   return j;
 }
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600); }
-function dialog(title, html) { $("#dlg-title").textContent = title; $("#dlg-content").innerHTML = html; $("#dlg").showModal(); }
+/* an information dialog; focus goes back to `returnTo` (or the element that had it) when it closes */
+function dialog(title, html, returnTo) {
+  const d = $("#dlg"), back = returnTo || document.activeElement;
+  $("#dlg-title").textContent = title; $("#dlg-content").innerHTML = html;
+  d.addEventListener("close", () => { if (back && document.contains(back)) back.focus(); }, { once: true });
+  d.showModal();
+}
+/* a question with explicit choices; resolves to the chosen value, or null when cancelled (やめる, Escape) */
+function ask(title, text, choices) {
+  return new Promise((resolve) => {
+    let d = $("#ask");
+    if (!d) { d = document.createElement("dialog"); d.id = "ask"; d.setAttribute("aria-labelledby", "ask-title"); document.body.appendChild(d); }
+    const back = document.activeElement;
+    d.innerHTML = `<form method="dialog" class="dlg-body"><h2 id="ask-title">${esc(title)}</h2><p>${esc(text)}</p>
+      <div class="dlg-actions">${choices.map((c) => `<button class="btn${c.primary ? " primary" : ""}" value="${esc(c.value)}">${esc(c.label)}</button>`).join(" ")}
+      <button class="btn" value="">やめる</button></div></form>`;
+    d.returnValue = "";
+    d.addEventListener("close", () => { if (back && document.contains(back)) back.focus(); resolve(d.returnValue || null); }, { once: true });
+    d.showModal();
+  });
+}
 function fmt(v, unit) {
   if (v === null || v === undefined || v === "") return "—";
   if (typeof v === "number") return (Math.abs(v) >= 1000 ? v.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) : String(+v.toPrecision(6))) + (unit ? " " + unit : "");
@@ -114,7 +134,8 @@ function fieldHtml(fid) {
     ? `<select id="unit-${fid}" aria-label="${esc(F.label)}の単位">${F.units.map((u) => `<option ${u === curUnit ? "selected" : ""}>${esc(u)}</option>`).join("")}</select>`
     : (F.unit ? `<span class="muted unit">${esc(curUnit)}</span>` : "");
   const estimated = v && (v.state === "assumption" || v.state === "statistical");
-  const stateSel = `<select id="st-${fid}" aria-label="${esc(F.label)}の状態"><option value="confirmed" ${estimated ? "" : "selected"}>確認済み</option><option value="assumption" ${estimated ? "selected" : ""}>仮定</option></select>`;
+  const locked = v && v.value !== null && v.value !== undefined && !ownValue(v);
+  const stateSel = `<select id="st-${fid}" aria-label="${esc(F.label)}の状態" ${locked ? `disabled title="${esc(state.meta.states[v.state])}の値の状態は、値を入れ直したときだけ変わります"` : ""}><option value="confirmed" ${estimated ? "" : "selected"}>確認済み</option><option value="assumption" ${estimated ? "selected" : ""}>仮定</option></select>`;
   const naLabel = F.na_note ? `適用外（${F.na_note}）` : F.na === "zero" ? "適用外（0 として計算）" : F.na === "absent" ? "適用外（無い）" : "適用外（渡さない）";
   const unc = v && v.uncertainty && v.uncertainty.kind === "unknown" ? `<div class="muted">範囲は不明（根拠のある幅を付けられない推定）</div>`
     : v && v.uncertainty && v.uncertainty.kind !== "none"
@@ -146,10 +167,12 @@ function fieldHtml(fid) {
 function dependsHtml(dep) {
   if (!dep || !Object.keys(dep).length) return "";
   const name = { b_use_group: "用途の区分" };
+  const valueLabel = { residential: "住宅", non_residential: "住宅以外" };
   const parts = Object.entries(dep).map(([k, x]) => {
     const F = state.meta.fields[k];
     const label = name[k] || (F ? F.label : k);
-    const shown = F && F.type === "enum" ? ((F.enum.find((e) => e.value === x) || {}).label || x) : (typeof x === "number" ? fmt(x, F ? F.unit : "") : x);
+    const shown = F && F.type === "enum" ? ((F.enum.find((e) => e.value === x) || {}).label || x)
+      : (typeof x === "number" ? fmt(x, F ? F.unit : "") : (valueLabel[x] || x));
     return `${esc(label)} ${typeof shown === "string" && typeof x !== "number" ? esc(shown) : shown}`;
   });
   return `<div class="muted">前提：${parts.join("・")}</div>`;
@@ -182,7 +205,8 @@ function renderScreen(m, sid) {
 /* a typed number: full-width digits allowed; a comma only as a thousands separator ("12,500"), never as a decimal
    point ("1,5" is refused instead of becoming 15) */
 function parseNumber(raw) {
-  let t = raw.normalize("NFKC").replace(/\s/g, "");
+  let t = raw.normalize("NFKC").trim().replace(/\u2212/g, "-");
+  if (/\s/.test(t)) return { bad: true, why: "数の中に空白があります（3 桁の区切りはカンマ）" };
   if (t.includes(",")) { if (!/^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(t)) return { bad: true, why: "カンマは 3 桁ごとの区切りだけに使ってください（小数点はピリオド）" }; t = t.replace(/,/g, ""); }
   if (!/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/.test(t)) return { bad: true };
   const v = Number(t); return Number.isFinite(v) ? { value: v } : { bad: true };
@@ -215,16 +239,22 @@ function isDirty(fid) {
   if (F.type === "number" && us && cur.unit && us.value !== cur.unit) return true;
   return ownValue(cur) && st && st.value !== cur.state;          // a state-only change of one's own value
 }
-/* save one row: "saved" | "unchanged" | "refused" */
-async function saveField(fid, quiet = false) {
+/* save one row: "saved" | "unchanged" | "refused" | "cancelled". With batch=true nothing is re-rendered (the other rows
+   keep what was typed) and a refusal's reason is returned in saveField.reason */
+async function saveField(fid, quiet = false, batch = false) {
+  saveField.reason = "";
+  const refuse = async (msg, reload = true) => {
+    saveField.reason = msg;
+    if (!batch) { toast(msg); if (reload) await refresh("screen", fid); }
+    return "refused";
+  };
   const F = state.meta.fields[fid], iv = inputValue(fid);
   if (iv.empty && clearedInput(fid)) {
     restoreInput(fid);
-    toast(`「${F.label}」の空欄は保存していません（値は消えていません）。値を消すときは「未取得に戻す」を押してください`);
-    return "refused";
+    return refuse(`「${F.label}」の空欄は保存していません（値は消えていません）。値を消すときは「未取得に戻す」を押してください`, false);
   }
   if (iv.empty) { if (!quiet) toast("空欄は保存しません（未取得のまま。0 にはしません）"); return "unchanged"; }
-  if (iv.bad) { toast("「" + F.label + "」は数値で入力してください" + (iv.why ? "（" + iv.why + "）" : "")); return "refused"; }
+  if (iv.bad) return refuse("「" + F.label + "」は数値で入力してください" + (iv.why ? "（" + iv.why + "）" : ""), false);
   const value = iv.value;
   const cur = (state.project.fields[fid] || {}).value;
   const us = $("#unit-" + fid), unit = us ? us.value : ((cur && cur.unit) || F.unit);
@@ -233,29 +263,39 @@ async function saveField(fid, quiet = false) {
   if (cur && cur.value === value) {
     const sameUnit = F.type !== "number" || !cur.unit || cur.unit === unit;
     if (!ownValue(cur)) {
-      if (!sameUnit) { toast(`${state.meta.states[cur.state]}の値の単位は付け直せません（候補を採用し直すか、「未取得に戻す」のあと入れ直す）`); await refresh("screen", fid); return "refused"; }
+      if (!sameUnit) return refuse(`${state.meta.states[cur.state]}の値の単位は付け直せません（候補を採用し直すか、「未取得に戻す」のあと入れ直す）`);
       if (!quiet) toast(`値が変わっていないので保存しません（${state.meta.states[cur.state]}の出典・範囲を残します）`);
       return "unchanged";
     }
     if (sameUnit && cur.state === st) { if (!quiet) toast("変更はありません"); return "unchanged"; }
     if (!sameUnit) {
-      if (!confirm(`数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（自分で入れた値の単位の付け間違いを直すとき）。よろしいですか？換算したいときは、換算した数値を入れてください。`)) return "refused";
+      const a = await ask("単位の付け直し", `数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（自分で入れた値の単位の付け間違いを直すとき）。換算したいときは、換算した数値を入れてください。`,
+        [{ value: "yes", label: "付け直す", primary: true }]);
+      if (!a) return "cancelled";
       body.relabel = true;
     }
     if (cur.scope) body.scope = cur.scope;                       // what the value covers stays with it
   } else {
-    if (cur && cur.state === "statistical" &&
-        confirm(`今の値は統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）でした。新しい値は、その推定を手で直したものですか？\n（はい＝同じ範囲・前提を引き継ぐ。統計の範囲は使わず「範囲は不明」になる／いいえ＝別に調べた値）`)) body.from_estimate = true;
+    if (cur && cur.state === "statistical") {
+      const a = await ask("推定を直した値ですか", `今の値は統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）でした。新しい値は、その推定を手で直したものですか？`,
+        [{ value: "fix", label: "推定を手で直した（範囲・前提を引き継ぐ。範囲は「不明」になる）", primary: true },
+         { value: "new", label: "別に調べた値" }]);
+      if (!a) return "cancelled";
+      if (a === "fix") body.from_estimate = true;
+    }
     if (cur && cur.scope && !body.from_estimate) {
       // what the new value covers must be said: the server refuses to guess (it decides the double-counting guard)
       const what = cur.scope === "whole_building" ? "基礎・杭を含む建物全体の量" : "鉄筋と鉄骨を合わせた鉄の全量";
-      body.scope = confirm(`今の値は「${what}」でした。新しい値も${what}ですか？（はい＝もう一方の欄と二重に数えない／いいえ＝この欄だけの量）`) ? cur.scope : "field_only";
+      const a = await ask("新しい値の範囲", `今の値は「${what}」でした。新しい値も${what}ですか？`,
+        [{ value: "same", label: `${what}（もう一方の欄と二重に数えない）`, primary: true }, { value: "field", label: "この欄だけの量" }]);
+      if (!a) return "cancelled";
+      body.scope = a === "same" ? cur.scope : "field_only";
     }
   }
   try {
     await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body });
     return "saved";
-  } catch (e) { toast(e.message); await refresh("screen", fid); return "refused"; }
+  } catch (e) { return refuse(`「${F.label}」：${e.message}`); }
 }
 
 function bindScreen(m, sid) {
@@ -269,14 +309,28 @@ function bindScreen(m, sid) {
       toast(`空欄にした${cleared.map((f) => "「" + state.meta.fields[f].label + "」").join("")}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`);
       return;
     }
-    const dirty = rows.filter(isDirty);
-    let saved = 0;
-    for (const fid of dirty) {
-      const r = await saveField(fid, true);
-      if (r === "refused") { toast("「" + state.meta.fields[fid].label + "」を保存できなかったので戻りません"); return; }
-      if (r === "saved") saved++;
+    // a number that cannot be read is said before anything is saved (it is never silently dropped)
+    const bad = rows.filter((f) => inputValue(f).bad);
+    if (bad.length) {
+      const iv = inputValue(bad[0]);
+      toast(`「${state.meta.fields[bad[0]].label}」は数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}。保存していません`);
+      $("#in-" + bad[0]).focus();
+      return;
     }
-    await loadProject(state.project.id); toast(saved ? `${saved} 項目を保存しました` : "保存する変更はありませんでした"); back();
+    const dirty = rows.filter(isDirty);
+    const saved = [];
+    for (const fid of dirty) {
+      const r = await saveField(fid, true, true);
+      if (r === "refused" || r === "cancelled") {
+        await loadProject(state.project.id);                    // the data only: what was typed stays on the screen
+        const done = saved.length ? `（${saved.map((f) => "「" + state.meta.fields[f].label + "」").join("")}は保存しました）` : "";
+        toast((r === "refused" ? saveField.reason : `「${state.meta.fields[fid].label}」の保存をやめました`) + "。戻りません" + done);
+        $("#in-" + fid)?.focus();
+        return;
+      }
+      if (r === "saved") saved.push(fid);
+    }
+    await loadProject(state.project.id); toast(saved.length ? `${saved.length} 項目を保存しました` : "保存する変更はありませんでした"); back();
   };
   $("#bb-est").onclick = () => estimate(sid, null);
   m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = async () => { if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save); }));
@@ -305,6 +359,11 @@ function bindScreen(m, sid) {
     await refresh(sid, b.dataset.accept);
   }));
   m.querySelectorAll("[data-est]").forEach((b) => (b.onclick = () => estimate(sid, b.dataset.est)));
+  // the state select of an estimate / drawing value opens once a new value is typed
+  m.querySelectorAll("select[id^='st-'][disabled]").forEach((sel) => {
+    const inp = $("#in-" + sel.id.slice(3));
+    if (inp) inp.addEventListener("input", () => { sel.disabled = false; sel.removeAttribute("title"); });
+  });
   m.querySelectorAll("[data-why]").forEach((b) => (b.onclick = () => why(b.dataset.why)));
   const geo = $("#btn-geo");
   if (geo) geo.onclick = async () => {
@@ -354,7 +413,9 @@ async function estimate(sid, fid) {
     await refresh(sid, fid);
     if (r.messages && r.messages.length && state.view === "screen") {
       await new Promise((res) => setTimeout(res, 40));          // after refresh() has placed its focus
-      dialog("自動概算の説明", r.messages.map((x) => `<p>${esc(x)}</p>`).join(""));
+      const opener = fid ? $(`[data-est="${fid}"]`) : $("#bb-est");
+      opener?.focus({ preventScroll: true });
+      dialog("自動概算の説明", r.messages.map((x) => `<p>${esc(x)}</p>`).join(""), opener);
     }
   } catch (e) { toast(e.message); }
 }
@@ -424,15 +485,16 @@ function showResult(r) {
     ${s.lower_bound ? `<div class="notice bad">この合計は<strong>下限</strong>です。次の分は合計に入っていません：
       <ul>${miss.slice(0, 12).map((x) => `<li>${esc(x.label)}（${esc(x.stages.join("・"))}）：${esc(x.reason)}</li>`).join("")}${miss.length > 12 ? `<li>ほか ${miss.length - 12} 件</li>` : ""}
       ${(s.incomplete_units || []).length ? `<li>エンジンが合計できなかった単位：${esc(s.incomplete_units.join("、"))}</li>` : ""}</ul></div>` : ""}
-    ${assumed.length ? `<div class="notice">次の分は、入力の代わりに<strong>仮定で計算した</strong>ものです（合計には入っていますが、決まった値ではありません）：
+    ${(r.inconsistent_inputs || []).map((x) => `<div class="notice bad">入力の矛盾：${esc(x)}</div>`).join("")}
+    ${assumed.length ? `<div class="notice">次の分は、合計には入っていますが<strong>決まった値ではありません</strong>（仮定で計算した分・段階の内訳が決まらない分）：
       <ul>${assumed.map((x) => `<li>${esc(x.label)}（${esc(x.stages.join("・"))}）：${esc(x.reason)}</li>`).join("")}</ul></div>` : ""}
     ${(r.double_count || []).map((x) => `<div class="notice">二重計上の防止：${esc(x)}</div>`).join("")}
     ${(r.stale_estimates || []).map((x) => `<div class="notice bad">「${esc(x.label)}」の推定は、前提が変わっています（${esc(x.changes.join("、"))}）。材料の画面で概算し直してください。</div>`).join("")}</div>
   <div class="card"><h3 style="margin-top:0">推定値の影響</h3><p>${esc(r.reflection.summary)}</p>
     <table class="t"><tr><th>状態</th><th>計算に入った入力</th></tr>${Object.entries(r.reflection.by_state).map(([k, n]) => `<tr><td>${badge(k)}</td><td class="num">${n}</td></tr>`).join("")}</table></div>
   <div class="card"><h3 style="margin-top:0">段階別</h3><table class="t">${s.stages.map((x) => `<tr><td>${esc(x.stage)}</td>
-    <td style="width:45%"><div class="bar" style="width:${Math.max(1, Math.abs(x.value || 0) / maxStage * 100)}%"></div></td><td class="num">${fmt(x.value, "")}${x.complete ? "" : ' <span class="badge st-not_computable">不完全</span>'}${x.assumed ? ' <span class="badge st-assumption">一部は仮定</span>' : ""}</td></tr>`).join("")}</table>
-    ${(s.hints || []).length ? `<h4>不完全な段階を埋めるには</h4><ul>${s.hints.map((h) => `<li><strong>${esc(h.stage)}</strong>（${esc(h.unit)}）：${esc(h.note)}</li>`).join("")}</ul>` : ""}
+    <td style="width:45%"><div class="bar" style="width:${Math.max(1, Math.abs(x.value || 0) / maxStage * 100)}%"></div></td><td class="num">${fmt(x.value, "")}${x.complete ? "" : ' <span class="badge st-not_computable">不完全</span>'}${x.assumed ? ' <span class="badge st-assumption">一部は仮定</span>' : ""}${x.split ? ' <span class="badge st-assumption">内訳が未定</span>' : ""}</td></tr>`).join("")}</table>
+    ${(s.hints || []).length ? `<h4>不完全な段階を埋めるには</h4><ul>${s.hints.map((h) => `<li><strong>${esc(h.stage)}</strong>（${esc(h.unit)}）：${esc(h.note)}${(h.also || []).length ? `<div class="muted">別に：${esc(h.also.join("。"))}</div>` : ""}</li>`).join("")}</ul>` : ""}
     <p class="muted">単位 kgCO2e。出所：エンジンの結果のキー（${esc(s.source_keys)}）。</p></div>
   <div class="card"><h3 style="margin-top:0">時間の変化</h3>${curve(s.by_year)}<p class="muted">年ごとの排出（研究のモデルの X-07）。評価期間の関数 C(T) の傾きを、そのまま実際の排出率と読まないでください。</p></div>
   ${missingHtml(r)}

@@ -22,6 +22,7 @@ import time
 from pathlib import Path
 
 from . import fields as FL
+from .numbers import parse_number  # noqa: F401  (re-exported: the server imports it from here)
 from .provenance import HAS_VALUE, PRIORITY, ProvenanceError, Uncertainty, Value
 
 SCHEMA_VERSION = 1
@@ -245,6 +246,23 @@ class Projects:
         self.db.commit()
         return n
 
+    def withdraw_whole_candidates(self, pid: int) -> list[str]:
+        """Open whole-building / all-steel candidates whose other field now has a value: adopting one would only make the
+        bridge drop that other row (or double count if it did not), so they are withdrawn with the estimator's refusal."""
+        vals = self.values(pid)
+        out = []
+        for fid, scope, other in (("m_concrete", "whole_building", "m_concrete_fdn"), ("m_rebar", "all_steel", "m_steel"),
+                                  ("m_steel", "all_steel", "m_rebar")):
+            ov = vals.get(other)
+            if ov is None or ov.state not in HAS_VALUE:
+                continue
+            for c in self.candidates(pid, fid):
+                if c.get("scope") == scope:
+                    self.db.execute("UPDATE candidates SET status='dismissed' WHERE id=? AND project_id=?", (c["id"], pid))
+                    out.append(fid)
+        self.db.commit()
+        return out
+
     # ------------------------------------------------------------------ flags, documents, log, runs
     def set_later(self, pid: int, fid: str, later: bool) -> None:
         if fid not in FL.FIELDS:
@@ -323,24 +341,6 @@ class Projects:
                 "note": "入力が埋まった割合であって、精度ではない。"}
 
 
-_THOUSANDS = re.compile(r"^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$")
-
-
-def parse_number(x) -> float:
-    """A typed number. A comma is accepted only as a thousands separator ("12,500" or "1,234.5"); "1,5" (a decimal
-    comma) or "12,50" is refused instead of silently becoming 15 or 1250."""
-    if isinstance(x, (int, float)) and not isinstance(x, bool):
-        return float(x)
-    t = str(x).strip().replace("\u3000", "").replace(" ", "")
-    if "," in t:
-        if not _THOUSANDS.match(t):
-            raise ValueError("カンマは 3 桁ごとの区切りだけに使う（小数点はピリオド）")
-        t = t.replace(",", "")
-    if not re.match(r"^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$", t):
-        raise ValueError("数値として読めない")
-    return float(t)
-
-
 def _normalise(F: dict, v: Value) -> Value:
     """Type/unit/range checks of a value against its field (no coercion of a missing value into 0)."""
     if v.state not in HAS_VALUE:
@@ -348,13 +348,10 @@ def _normalise(F: dict, v: Value) -> Value:
         return v
     t = F["type"]
     if t in ("number", "integer"):
-        if isinstance(v.value, bool) or not isinstance(v.value, (int, float)):
-            try:
-                v.value = parse_number(v.value)
-            except ValueError as e:
-                raise ProjectError("「%s」は数値で入れる（%s）" % (F["label"], e)) from None
-        if not math.isfinite(v.value):
-            raise ProjectError("「%s」は有限の数値で入れる" % F["label"])
+        try:
+            v.value = parse_number(v.value)        # also ints (a huge int is refused, not an OverflowError) and bools
+        except ValueError as e:
+            raise ProjectError("「%s」は数値で入れる（%s）" % (F["label"], e)) from None
         if t == "integer":
             if abs(v.value - round(v.value)) > 1e-9:
                 raise ProjectError("「%s」は整数で入れる" % F["label"])

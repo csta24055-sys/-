@@ -8,10 +8,13 @@ user maps to materials and accepts (state 図面から計算 with the trace as s
 from __future__ import annotations
 
 import csv
+import functools
 import io
 import re
 import zipfile
 from xml.etree import ElementTree as ET
+
+from ..numbers import number_or_reason
 
 HEADERS = {
     "name": ("品目", "名称", "材料", "品名", "項目", "item", "material", "name", "description"),
@@ -34,15 +37,8 @@ class ImportError_(ValueError):
 
 
 def _num(s):
-    if s is None:
-        return None
-    if isinstance(s, (int, float)):
-        return float(s)
-    t = str(s).strip().replace(",", "").replace("，", "")
-    t = t.translate(str.maketrans("０１２３４５６７８９．－", "0123456789.-"))
-    if not re.fullmatch(r"-?\d+(\.\d+)?([eE]-?\d+)?", t):
-        return None
-    return float(t)
+    """A quantity cell: the same rule as the screen (a comma only as a thousands separator, no inner spaces)."""
+    return number_or_reason(s)[0]
 
 
 def _header_map(row: list) -> dict:
@@ -56,20 +52,54 @@ def _header_map(row: list) -> dict:
     return out
 
 
-_FUNC_TOTAL = re.compile(r"\b(SUM|SUMIF|SUMIFS|SUMPRODUCT|SUBTOTAL|AGGREGATE)\s*\(", re.I)
-_REF = re.compile(r"(?:(?:'[^']+'|[A-Za-z0-9_.]+)!)?\$?([A-Z]{1,3})\$?(\d+)(?![\d(])")
+MAX_FORMULA = 8192                                 # Excel's limit for the text of one formula
+_FTOK = re.compile(r'"[^"]*"|\'[^\']*\'|[A-Za-z0-9_.$]+|.', re.S)   # linear: strings, words, single characters
+_CELL = re.compile(r"(\$?)([A-Za-z]{1,3})(\$?)(\d+)")
+_TOTAL_FUNCS = {"SUM", "SUMIF", "SUMIFS", "SUMPRODUCT", "SUBTOTAL", "AGGREGATE"}
 
 
-def formula_reason(formula: str | None, col: int) -> str | None:
+@functools.lru_cache(maxsize=4096)
+def _formula_parts(f: str) -> tuple[frozenset, tuple]:
+    """(function names, cell references) of a formula, by one linear scan. A reference is (column absolute?, column
+    index, qualified by a sheet name?). Text inside quotes is skipped."""
+    funcs, refs = set(), []
+    last = ""
+    for m in _FTOK.finditer(f):
+        tok = m.group(0)
+        nxt = f[m.end():m.end() + 1]
+        if tok[0] in "\"'":
+            last = tok
+            continue
+        if tok[0].isalnum() or tok[0] in "_.$":
+            if nxt == "(":
+                funcs.add(re.sub(r"^_XL(FN|WS)\.", "", tok.upper()))
+            elif nxt != "!":
+                c = _CELL.fullmatch(tok)
+                if c:
+                    refs.append((c.group(1) == "$", _col_index(c.group(2).upper()), last == "!"))
+        last = tok
+    return frozenset(funcs), tuple(refs)
+
+
+def formula_reason(formula, col: int) -> str | None:
     """Why a quantity cell computed by a formula must not be added: a SUM-like function, or a reference to another row of
-    the same column (a total, a 再掲 repeat or an allowance on another row). None for e.g. volume × density."""
+    the same column of this sheet (a total, a 再掲 repeat or an allowance on another row). None for e.g. volume ×
+    density. `formula` is (text, column shift of a shared-formula copy, master missing?) or plain text."""
     if not formula:
         return None
-    f = re.sub(r'"[^"]*"', '""', formula)                 # text inside quotes is not a reference
-    if _FUNC_TOTAL.search(f):
-        return "数式の合計（%s）の行は足さない（二重計上を防ぐ）" % _FUNC_TOTAL.search(f).group(1).upper()
-    letters = {m.group(1) for m in _REF.finditer(f)}
-    if any(_col_index(L) == col for L in letters if len(L) <= 3):
+    if isinstance(formula, str):
+        formula = (formula, 0, False)
+    text, dcol, no_master = formula
+    if no_master:
+        return "数式の中身が分からない（共有の数式の元が無い）。必要なら手で入れる"
+    if len(text) > MAX_FORMULA:
+        return "数式が長すぎて確かめられない（%d 文字まで）" % MAX_FORMULA
+    funcs, refs = _formula_parts(text)
+    tot = sorted(funcs & _TOTAL_FUNCS)
+    if tot:
+        return "数式の合計（%s）の行は足さない（二重計上を防ぐ）" % tot[0]
+    # a shared-formula copy: relative columns move with the cell (absolute $ columns stay)
+    if any(not sheet and (c if absolute else c + dcol) == col for absolute, c, sheet in refs):
         return "同じ列の別の行から計算した数量（合計・再掲・割増のおそれ）は足さない。必要なら手で入れる"
     return None
 
@@ -97,7 +127,9 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
         rn = row_numbers[i] if row_numbers else i + 1          # the sheet's own row number (gaps kept)
         trace = "%s:%s!R%dC%d" % (doc_id, sheet, rn, (hmap["quantity"] or 0) + 1)
         if q is None:
-            skipped.append({"row": rn, "name": name, "reason": "数量が数値でない（0 として読まない）", "trace": trace})
+            why = number_or_reason(col("quantity"))[1]
+            skipped.append({"row": rn, "name": name, "reason": "数量が数値でない（0 として読まない）" + ("：" + why if why else ""),
+                            "trace": trace})
             continue
         why = formula_reason((formulas[i] if formulas else {}).get(hmap["quantity"]), hmap["quantity"])
         if why:
@@ -272,12 +304,20 @@ def xlsx_workbook(data: bytes) -> list[tuple[str, list[list], list[int], list[di
                 cells["chars"] += len(val) if isinstance(val, str) else 0
                 if f is not None:
                     text = f.text or ""
-                    if f.get("t") == "shared" and f.get("si") is not None:
+                    if len(text) > MAX_FORMULA:
+                        text = text[:MAX_FORMULA + 1]        # kept only to say "too long" (formula_reason)
+                    dcol, no_master = 0, False
+                    si = f.get("si")
+                    if f.get("t") == "shared" and si is not None:
                         if text:
-                            shared_f[f.get("si")] = text[:2000]
-                        text = text or shared_f.get(f.get("si"), "")
-                    fs[ci] = text[:2000]
-                    cells["chars"] += len(fs[ci])
+                            shared_f[si] = (text, ci)         # the master cell: its text and column
+                        elif si in shared_f:
+                            text, mcol = shared_f[si]
+                            dcol = ci - mcol                  # relative columns of the copy move by this much
+                        else:
+                            no_master = True
+                    fs[ci] = (text, dcol, no_master)
+                    cells["chars"] += len(text)
             if cells["chars"] > MAX_CHARS:
                 raise ImportError_("セルの文字が多すぎる（合計 %d 文字まで）" % MAX_CHARS)
             cells["n"] += max(max(vals) + 1 if vals else 0, 1)
