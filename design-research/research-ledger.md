@@ -1,8 +1,8 @@
 # 成果物1：世界の優良UI・UX事例 調査台帳
 
-調査件数: **42 件**（A: 12件 / B: 12件 / C: 12件 / D: 6件）
+調査件数: **48 件**（A: 12件 / B: 12件 / C: 12件 / D: 12件）
 
-確認レベル（正直な記録）: 公式ページを本セッションで取得: 39件 / 検索結果のみで確認: 3件
+確認レベル（正直な記録）: 公式ページを本セッションで取得: 44件 / 検索結果のみで確認: 4件
 
 > 各項目の「確認レベル」は、調査エージェントがこのセッション中に実際に公式ページを開いたかどうかを示します。「検索結果のみ」「事前知識のみ」の項目は、画面の細部について未確認の記述を含む可能性があります。既存製品の画面は複製せず、設計原則の抽出にのみ利用しています。
 
@@ -52,6 +52,12 @@
 | D-1-4 | D | Atlassian Design System | https://atlassian.design/ | 公式ページを本セッションで取得 |
 | D-1-5 | D | IBM Carbon Design System | https://carbondesignsystem.com/ | 公式ページを本セッションで取得 |
 | D-1-6 | D | Salesforce Lightning Design System 2（SLDS 2） | https://www.lightningdesignsystem.com/ | 検索結果のみで確認 |
+| D-2-1 | D | SAP Fiori Design Guidelines | https://www.sap.com/design-system/fiori-design-web/ | 検索結果のみで確認 |
+| D-2-2 | D | Shopify Polaris | https://shopify.dev/docs/api/polaris | 公式ページを本セッションで取得 |
+| D-2-3 | D | GitHub Primer | https://primer.style/ | 公式ページを本セッションで取得 |
+| D-2-4 | D | Adobe Spectrum | https://spectrum.adobe.com/ | 公式ページを本セッションで取得 |
+| D-2-5 | D | Ant Design | https://ant.design/ | 公式ページを本セッションで取得 |
+| D-2-6 | D | AWS Cloudscape Design System | https://cloudscape.design/ | 公式ページを本セッションで取得 |
 
 ## A：大学・研究室内部で利用する研究支援アプリ（12件）
 
@@ -563,7 +569,7 @@
 - **参考資料**: https://miro.com/ / https://miro.com/pricing/ / https://miro.com/aura/ / https://miro.com/blog/introducing-aura/
 - **確認レベル**: 公式ページを本セッションで取得 — 公式料金ページ（/pricing/）と Aura デザイン言語ページ（/aura/）を取得。Aura 紹介ブログ記事は検索結果のみで確認し本文は未取得。製品キャンバス画面の構成・黄色ブランド色は事前知識による推測。トライアル終了後の課金挙動は未確認。
 
-## D：大企業品質のアプリ（6件）
+## D：大企業品質のアプリ（12件）
 
 ### D-1-1 Microsoft Fluent 2 Design System
 
@@ -648,3 +654,87 @@
 - **採用すべきでない要素**: 移行途中で層（グローバル／コンポーネント）のサポート状況が食い違う状態を利用者に強いること。Salesforce 固有の見た目や Lightning 専用パターンの模倣。
 - **参考資料**: https://www.lightningdesignsystem.com/ / https://www.salesforce.com/blog/what-is-slds-2/ / https://developer.salesforce.com/docs/platform/lwc/guide/create-components-css-slds1-slds2.html / https://trailhead.salesforce.com/content/learn/modules/salesforce-lightning-design-system-2-for-developers/explore-salesforce-lightning-design-system-2
 - **確認レベル**: 検索結果のみで確認 — 公式トップを WebFetch で開いたがタイトル『Lightning Design System 2』のみ取得（JS 描画で本文なし）。開発者ドキュメント（SLDS 1 と SLDS 2 の比較ページ）は HTTP 403 で取得不可。グローバルスタイリングフック、Cosmos、--slds-c-* 未サポート、フォールバック、Linter / Validator の記述は WebSearch の結果要約（Salesforce 公式ブログ・開発者ドキュメント・Trailhead の検索結果）に基づく。reference_links のブログ・比較ページ・Trailhead は検索結果に出現したことで存在を確認したのみで、内容は直接読んでいない。画面構成・見た目は推測。
+
+### D-2-1 SAP Fiori Design Guidelines
+
+- **公式URL**: https://www.sap.com/design-system/fiori-design-web/
+- **何をするアプリか**: SAP の業務アプリ（S/4HANA、SAP BTP 上のアプリ等）向け UX デザインガイドライン。フロアプラン（Object Page など）、ページレイアウト（Dynamic Page、Flexible Column Layout、Page Header）、グローバルパターン（オブジェクト操作、データ損失メッセージ等）を、ガイドラインのバージョンごとに提供する。
+- **主な利用者**: SAP 社内および SAP パートナーの UX デザイナー・アプリ開発者（SAPUI5 / UI5 Web Components / SAP Fiori elements の利用者）。最終利用者は財務・調達・製造などの業務担当者。
+- **画面構成とナビゲーション**: 【検索結果で確認】Flexible Column Layout（FCL）は最大3ページを列に並べ、ページ遷移なしでマスター→詳細→詳細の詳細へドリルダウンする方式。利用者は注目したい列を拡大でき、「閉じる」「全画面」操作は列の右端に置く。Object Page はレスポンシブなレイアウトと動的ヘッダーを持ち、画面幅に応じて列数が変わる。FCL 内の Object Page はナビゲーション操作も持てる。ワークベンチ用途には使わず、Overview Page は FCL に入れない（代わりに Responsive Splitter）。【事前知識・未確認】SAP Fiori launchpad（タイル／スペース＆ページ）とシェルバーを入口に、List Report → Object Page のフロアプランで遷移する構成。
+- **配色・文字・余白・アイコン**: 【事前知識・未確認】現行テーマは Horizon。SAP 独自書体「72」、青系アクセント、positive / critical / negative / information のセマンティックカラー、SAP アイコンフォント、Compact / Cozy の2段階密度。今回の調査では公式ページの見た目を確認できていない。
+- **優れている操作体験**: フロアプランを使うことで、多数の業務アプリが同じ画面骨格になり、利用者がアプリ間で学び直さずに済む。FCL と Dynamic Page では未保存変更に対するデータ損失メッセージが必須とされている（検索結果で確認）。ガイドラインに v1.38〜v1.148 のようなバージョンがあり、「What's New」で差分が公開されるため、長期運用中のアプリがどの基準に準拠しているかを追跡できる。
+- **使いにくい点・制約**: 規約の量が多く、構造も深いため学習コストが高い。SAPUI5 / Fiori elements / OData を前提とした記述が多く、他の技術スタックへはそのまま移せない。旧バージョンのページが検索上位に大量に残っていて、最新の Horizon 版を見分けにくい（検索結果で確認）。公式サイトは自動取得に 403 を返した。
+- **採用できる要素**: 一覧 → 詳細のフロアプランを先に決めて画面骨格を標準化する（例: LCA の材料一覧 → 材料詳細 → 排出係数の出典）。FCL のような列分割ドリルダウン。未保存変更があるときの離脱確認を必須にする。セマンティックカラーを状態表示だけに使う。ガイドライン自体にバージョンを付け、変更履歴を公開する運用。
+- **採用すべきでない要素**: SAP 固有のシェルバーやランチパッドのタイル外観の模倣。独自書体「72」など他社ブランド資産の使用。狭い画面で3列を常に表示すること。特定ベンダーのフレームワークに縛られた設計。
+- **参考資料**: https://www.sap.com/design-system/fiori-design-web/ / https://www.sap.com/design-system/fiori-design-web/v1-148/page-types/page-layouts/dynamic-page-web-component/usage / https://www.sap.com/design-system/fiori-design-web/v1-148/page-types/page-layouts/page-header/usage / https://www.sap.com/design-system/btp/dna-design/floorplans/flexible-column-layout/usage
+- **確認レベル**: 検索結果のみで確認 — experience.sap.com/fiori-design-web/ が www.sap.com/design-system/fiori-design-web/ へ 301 リダイレクトすることは確認したが、リダイレクト先は HTTP 403 で本文を取得できなかった。FCL・Object Page・データ損失メッセージの記述は WebSearch の検索結果（要約）に基づく。reference_links のうちトップ以外の3件は検索結果に出た URL で、個別には開いていない。Horizon テーマ、72書体、密度、ランチパッドなどの見た目に関する記述は事前知識による推測で、未検証。
+
+### D-2-2 Shopify Polaris
+
+- **公式URL**: https://shopify.dev/docs/api/polaris
+- **何をするアプリか**: Shopify の統合 UI フレームワーク。Web Components で作られ、Shopify 管理画面の App Home、管理画面拡張、チェックアウト、顧客アカウント、POS など、Shopify 上のすべてのアプリ面で一貫した体験を提供する。
+- **主な利用者**: Shopify アプリ開発者（サードパーティを含む）と Shopify 社内チーム。最終利用者はストアを運営するマーチャントと、その店の購入者。
+- **画面構成とナビゲーション**: 【公式で確認】App Home はアプリの管理画面上のメインページで、App Bridge と Polaris を使う iframe、または Preact ベースの UI 拡張として作る。レイアウトは s-stack / s-grid / s-box で組み、gap を指定するまで子要素の間に余白は入らない。インラインのスタックは幅が足りないと折り返す。レスポンシブは s-query-container によるコンテナクエリで行う。【事前知識・未確認】管理画面本体は左サイドバー、上部の検索バー、リソースの一覧／詳細ページという構成。
+- **配色・文字・余白・アイコン**: 【公式で確認】padding / size / gap は base を中心に small-500〜large-500 まで伸びる「middle-out」スケールで指定する（small / large は 100 段の別名）。tone で色トークンのまとまりを、color で強度を、variant で描画方法を切り替える。アイコンは s-icon（type / tone / size）で、使えるアイコンは画面面ごとに異なる。チェックアウトなどではマーチャントのブランド設定がスタイルを決め、独自 CSS では上書きできない。【未確認】具体的な色値・書体。
+- **優れている操作体験**: セマンティック HTML、キーボード操作、ARIA、フォーカス管理をコンポーネントが持つ。フォーム項目は label と error を設定する前提で、必須プロパティが欠けると警告を出す。name と defaultValue を基準に dirty-state（未保存変更）を追跡する。--show / --hide / --toggle コマンドで JavaScript なしに表示を制御できる。onInput（変更ごと）と onChange（値の確定時）を区別している。
+- **使いにくい点・制約**: Shopify プラットフォームと強く結びついており、外では使いにくい。カスタマイズ（独自 CSS）が強く制限される。アイコンの可否が画面面によって変わる。旧 polaris.shopify.com は shopify.dev へ 301 リダイレクトされており、過去に公開されたリンクやドキュメントの所在が変わっている。【事前知識・未確認】旧 React 版 Polaris から Web Components 版への移行に伴うコストがある。
+- **採用できる要素**: base を中心とした middle-out の余白スケールと命名。生の色値ではなく tone（意味）で色を指定する API。フォームの dirty-state 追跡と、未保存変更の明示。アクセシビリティ必須プロパティが欠けたときの開発時警告。コンテナクエリによる部品単位のレスポンシブ。
+- **採用すべきでない要素**: 研究用途で必要なデータ可視化や独自表現まで禁じるほどの強いスタイル固定。コマース特有の画面構成（商品・注文中心）。iframe 埋め込みを前提とした構成の模倣。
+- **参考資料**: https://shopify.dev/docs/api/polaris / https://shopify.dev/docs/api/polaris/using-polaris-web-components
+- **確認レベル**: 公式ページを本セッションで取得 — polaris.shopify.com が shopify.dev/docs/api/polaris へ 301 リダイレクトすることを確認したうえで、Polaris トップと「Using Polaris web components」ページを取得した。レイアウト部品、スペーシングスケール、tone / variant、アクセシビリティ、イベント、dirty-state はこの2ページの記述に基づく。管理画面本体のナビゲーション構成、具体的な配色・書体、React 版からの移行については取得ページに記述がなく、事前知識による推測。画面の見た目は確認していない。
+
+### D-2-3 GitHub Primer
+
+- **公式URL**: https://primer.style/
+- **何をするアプリか**: GitHub のデザインシステム。プロダクト UI 向けの Primer Product UI（コンポーネント、UI パターン、シナリオパターン、CSS ユーティリティ）、マーケティング向けの Brand UI、共通基盤（Accessibility、Octicons、Primitives＝色・サイズ・文字のデザイントークン）からなる。
+- **主な利用者**: GitHub 社内のデザイナー・エンジニア。Primer React や Rails 向け実装を使う外部の開発者。最終利用者は GitHub を使うソフトウェア開発者や組織管理者。
+- **画面構成とナビゲーション**: 【公式で確認】Foundations に layout と responsive があり、UI Patterns に navigation と progressive disclosure がある。Scenario Patterns で copy / create / edit / delete / filter / search / view という操作単位のガイドを提供している。【事前知識・未確認】GitHub 本体はグローバルヘッダー、リポジトリ単位のタブ（下線ナビ）、左右のサイドペインを持つページレイアウトで構成される。
+- **配色・文字・余白・アイコン**: 【公式で確認】Primitives が色・サイズ・文字のトークンを提供し、トークン命名規則と CSS 変数への移行ガイドがある。アイコンは独自 SVG セットの Octicons。サイトにダークモード切替がある。【事前知識・未確認】システムフォントスタック、fg / bg / border といった機能別の色トークン、高コントラストテーマや色覚多様性向けテーマ。今回取得したページではテーマの詳細を確認できていない。
+- **優れている操作体験**: UI Patterns に degraded experiences（一部の機能が使えないときの体験）、empty states、loading、saving、notification messaging、forms、data visualization が揃っており、異常系や中間状態まで設計対象にしている。Scenario Patterns は CRUD を操作単位で標準化している。component status（成熟度表示）、Figma ライブラリ、Rails / React の両実装、Contribute ガイドにより、長期運用と多チームでの拡張に向く体制になっている。
+- **使いにくい点・制約**: GitHub という開発者向け製品に最適化されていて、非開発者には情報密度と用語が重い。Rails と React の2系統の実装を保守する負荷がある。トップページからはアクセシビリティやテーマの具体的な仕様に直接たどり着きにくい（今回の取得範囲では未記載）。
+- **採用できる要素**: degraded experiences パターン（外部数学エンジンの SymPy / SageMath / MATLAB が一部停止しても画面全体を落とさない設計に直結）。CRUD のシナリオパターン化。コンポーネントの成熟度ラベル（alpha / beta / stable 等）を公開すること。トークン命名規則と移行ガイドを用意すること。単一のアイコンセットで統一すること。saving パターン（保存状態の明示）。
+- **採用すべきでない要素**: GitHub ブランド資産（Mona のイラスト、Octicons そのもの）の流用。開発者専用の用語や記法をそのまま利用者向け UI に持ち込むこと。GitHub のヘッダーやタブ配置をそのまま模倣すること。
+- **参考資料**: https://primer.style/ / https://primer.style/product/ / https://primer.style/product/ui-patterns/ / https://primer.style/product/scenario-patterns/ / https://primer.style/product/primitives/ / https://primer.style/accessibility/
+- **確認レベル**: 公式ページを本セッションで取得 — primer.style トップと /product/（Product UI のハブ）を取得した。UI Patterns・Scenario Patterns・Primitives・Accessibility の URL は、取得した公式ページ内のリンクとして存在を確認したもので、個別には開いていない。GitHub 本体の画面構成、書体、高コントラストや色覚多様性向けテーマは事前知識による推測で、未検証。
+
+### D-2-4 Adobe Spectrum
+
+- **公式URL**: https://spectrum.adobe.com/
+- **何をするアプリか**: Adobe 製品群の体験を支えるデザインシステム。Foundations（基本原則）、トークン、パターン、コンポーネントのガイダンスを1つにつながった体系として提供する。2026年9月30日付で中央ドキュメント「Spectrum Hub Release 1.0」を公開。実装は React（React Spectrum）と Web Components がベータで、iOS / Android などは予定段階。
+- **主な利用者**: Adobe の各製品チーム、Adobe 製品向けの拡張や連携を作る外部開発者。最終利用者はクリエイティブ職と、企業のマーケティング・ドキュメント業務の担当者。
+- **画面構成とナビゲーション**: 【公式で確認】各コンポーネントのページに、リポジトリと連動したインタラクティブなプレイグラウンドがあり、props や属性を変えて実際の挙動を確認できる。Attention hierarchy の例では、選択中のナビゲーション状態が主要アクション（+ボタン）と注意を奪い合わないよう、ナビ側を控えめにすべきとしている。【未確認】製品画面のナビゲーション方式の全体像。
+- **配色・文字・余白・アイコン**: 【公式で確認】Attention hierarchy は、タイポグラフィの階層（スケール・サイズ・組み合わせ）の考え方を UI 全体の伝達に広げたもの。高コントラストの色や elevation（高さ）といった高注意の表現は控えめに使い、原則として「1ページで高い注意を持つ要素（群）は1つだけ」とする。【事前知識・未確認】書体 Adobe Clean、デスクトップ／モバイルのプラットフォームスケール、ライト／ダークテーマ、Spectrum 2 の角丸の強化。
+- **優れている操作体験**: 画面内の注意配分を原則として定めているため、主要操作が明確になる。プレイグラウンドでドキュメントと実装の乖離を減らしている。フィードバックやバグ報告の窓口が Hub に統合されている。【事前知識・未確認】React Spectrum の土台にある React Aria によって、アクセシビリティと国際化が強い。
+- **使いにくい点・制約**: 移行期の最中にある。Web Components / React 実装はベータで、モバイル向けドキュメント、パターンと原則、統一体験ガイダンスは「今後公開」とされている（公式で確認）。長期運用の基盤として採用するには、成熟度のばらつきに注意が要る。クリエイティブツール向けの最適化が強く、表形式の業務データ中心の画面にはそのまま当てはまらない部分がある。
+- **採用できる要素**: 「1画面で高注意の要素は1つ」という注意階層の原則（例: LCA 計算画面での「計算を実行」）。注意レベルを色だけでなく elevation や強弱で段階化すること。コンポーネントのドキュメントにライブプレイグラウンドを置くこと。ドキュメント上で成熟度（beta 等）を明示すること。
+- **採用すべきでない要素**: Adobe Clean など Adobe 独自のブランド資産の使用。クリエイティブツール風の暗い作業画面の模倣。ベータ段階の実装に長期運用の基盤を依存させること。
+- **参考資料**: https://spectrum.adobe.com/ / https://spectrum.adobe.com/foundations/attention-hierarchy / https://spectrum.adobe.com/getting-started/whats-new
+- **確認レベル**: 公式ページを本セッションで取得 — Spectrum トップ、Foundations の Attention hierarchy ページ、What's new（Spectrum Hub Release 1.0、2026-09-30付）の3ページを取得した。Adobe Clean 書体、プラットフォームスケール、テーマ、Spectrum 2 の見た目の変化、React Aria については取得ページに記述がなく、事前知識による推測で、未検証。製品画面そのものは見ていない。
+
+### D-2-5 Ant Design
+
+- **公式URL**: https://ant.design/
+- **何をするアプリか**: 企業向け（エンタープライズ）製品のためのデザイン言語と React 実装。Natural / Certain / Meaningful / Growing の4つのデザイン価値、10のデザイン原則、グローバルルール、ページテンプレートを提供する。
+- **主な利用者**: 企業向けの業務・管理系製品を作るデザイナーとフロントエンド開発者（公式は Ant Financial の多数の企業向け製品を背景に挙げている）。最終利用者は業務担当者やオペレーター。
+- **画面構成とナビゲーション**: 【公式で確認】グローバルルールに Navigation、Feedback、Data Entry、Data Display、Copywriting、Data Format、Buttons、Data List がある。テンプレートとして Visualization Page と Detail Page、リサーチテンプレートとして Form、Workbench、List、Result、Exception の各ページがある。【事前知識・未確認】ヘッダー＋サイドメニュー＋コンテンツのレイアウトと、パンくずリストによる階層ナビゲーション。
+- **配色・文字・余白・アイコン**: 【公式で確認】Colors、Layout、Font、Icons、Dark Mode、Shadow、Visualization、Motion、Illustrations の各仕様ページがある。Certain の価値として、色値の変換やスペーシングの組版といったデザインルールを「オブジェクト」として扱い、主観的な判断を減らすとしている。【事前知識・未確認】8px グリッド、青系のプライマリカラー、14px の基本文字サイズ、アルゴリズムで派生させるトークン体系。
+- **優れている操作体験**: 【公式で確認】Meaningful の価値として、明確な目標をサブ目標に分解し、すべての操作に即時フィードバックを返して結果を見えるようにする。難易度を利用者の習熟に合わせ、不要な要素を取り除いて作業に集中させる。原則として Stay on the Page（ページ内で完結させる）、React Immediately、Make it Direct、Keep it Lightweight、Provide an Invitation、Use Transition を掲げる。Result / Exception ページのテンプレートで、完了・失敗・権限なしの状態まで設計範囲に含めている。
+- **使いにくい点・制約**: 価値（特に Natural や Growing）の記述は抽象度が高く、実装上の判断基準にそのまま落としにくい。導入ページは索引中心で、詳細は個別ページを読む必要がある。【事前知識・未確認】既定テーマのまま使うと、どの管理画面も同じに見える「Ant らしさ」が強く出る。コンポーネントが多く、依存とバンドルサイズが重くなりやすい。
+- **採用できる要素**: Data Format ルール（数値・日付・単位の表記統一。LCA の CO2 換算値や単位表記に必須）。Result / Exception ページの標準化（計算完了・失敗・権限不足）。Stay on the Page に基づくインライン編集。すべての操作への即時フィードバック。色やスペーシングをルール（関数）として定義し、主観を減らすこと。
+- **採用すべきでない要素**: 既定テーマをそのまま使った没個性な管理画面。トースト通知やモーダルの多用。抽象的な価値の文言だけを掲げて、具体的な判断基準に落とさないこと。
+- **参考資料**: https://ant.design/docs/spec/introduce / https://ant.design/docs/spec/values / https://ant.design/docs/spec/colors / https://ant.design/docs/spec/layout / https://ant.design/docs/spec/navigation / https://ant.design/docs/spec/detail-page / https://ant.design/docs/spec/research-workbench
+- **確認レベル**: 公式ページを本セッションで取得 — Design 仕様の Introduction（/docs/spec/introduce）と Design Values（/docs/spec/values）を取得した。colors / layout / navigation / detail-page / research-workbench の URL は、取得ページ内のリンクとして存在を確認したもので、個別には開いていない。具体的な配色値、グリッド、文字サイズ、レイアウト構造、「Ant らしさ」の評価は事前知識による推測で、未検証。
+
+### D-2-6 AWS Cloudscape Design System
+
+- **公式URL**: https://cloudscape.design/
+- **何をするアプリか**: AWS が 2016 年に作ったオープンソースのデザインシステム。UI ガイドライン、React コンポーネント（122 個）、パターン（59 件）、デモ（33 件）、デザインリソース、開発ツールを提供し、Gen AI のセクションもある。
+- **主な利用者**: AWS の各サービスチーム、および Cloudscape で業務・運用系の Web アプリを作る外部の開発者・デザイナー。最終利用者はクラウドエンジニアや運用管理者。
+- **画面構成とナビゲーション**: 【公式で確認】Service navigation として、構造的なナビゲーションを担うサイドナビゲーションと、グローバルな操作を分けて置くトップナビゲーションがある。一覧と詳細の表示には Table view、Card view、Split view（一覧と分割パネル）、入れ子やグループ化された表がある。詳細ページには Details page、タブ付き、関連リソースのプレビューを並べるハブ型がある。ほかに Secondary panels、Service dashboard（固定型と、利用者が項目の表示・移動・サイズ変更をできる設定型）がある。
+- **配色・文字・余白・アイコン**: 【公式で確認】Foundation に Colors、Spacing、Iconography、Visual modes（ライト／ダーク）、Theming、Accessibility、Responsive design がある。パターンに Density settings（利用者が表示密度を選べる）がある。【事前知識・未確認】具体的な書体、配色、visual refresh 後の角丸や余白の値。
+- **優れている操作体験**: 削除をリスクに応じて3段階に分けている（低リスクは1クリック、作り直しにくいものは簡易確認、重大なものは追加確認）。未保存変更の警告、フィルタを URL に保持してビューを共有できること、保存済みフィルタセット、タイムスタンプ（相対／絶対）の指針、読み込みと再読み込み、空状態（リソースが無い場合と、フィルタに一致しない場合）、エラーメッセージと入力検証、作業中に開ける文脈ヘルプ、ベータ／プレビュー機能の告知、無効状態と読み取り専用状態の区別まで、パターンとして体系化している。「ブラウザ・画面サイズ・能力に関わらずすべての顧客のために設計」と明言している。
+- **使いにくい点・制約**: AWS コンソールの外観と強く結びついていて、そのまま使うと AWS 製品に見えやすい。実装は React 中心。表やパネルが多い高密度の画面は、初めての利用者には負担が大きい。【事前知識・未確認】テーマのカスタマイズ範囲には制約がある。
+- **採用できる要素**: リスク段階に応じた削除確認（LCA のプロジェクト、データセット、排出係数ライブラリの削除）。フィルタ状態の URL 保持と共有。表示密度の設定。Split view による一覧＋詳細。無効状態と読み取り専用状態の区別（権限・承認フローとの整合）。監査ログ向けのタイムスタンプ表記指針。設定型ダッシュボード。ベータ機能の明示。空状態を「データ無し」と「該当無し」で分けること。
+- **採用すべきでない要素**: AWS コンソール特有のヘッダー配色や画面のつくりの模倣。すべての画面を表中心にすること。補助パネルを多用して主作業の領域を圧迫すること。
+- **参考資料**: https://cloudscape.design/ / https://cloudscape.design/patterns/ / https://cloudscape.design/patterns/resource-management/delete/ / https://cloudscape.design/patterns/general/empty-states/ / https://cloudscape.design/patterns/general/density-settings/ / https://cloudscape.design/patterns/general/unsaved-changes/ / https://cloudscape.design/patterns/general/filter-patterns/filter-persistence-in-collection-views/ / https://cloudscape.design/patterns/resource-management/view/split-view/
+- **確認レベル**: 公式ページを本セッションで取得 — Cloudscape トップ（コンポーネント・パターン・デモの件数、Foundation の項目）とパターン一覧（/patterns/）を取得した。個別パターンの URL は、パターン一覧ページ内のリンクとして存在を確認したもので、個別には開いていない。各パターンの内容は一覧ページの説明文に基づく。具体的な書体・配色・visual refresh・テーマの制約は事前知識による推測で、未検証。画面の見た目は確認していない。
