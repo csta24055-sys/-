@@ -10,7 +10,7 @@
 |---|---:|---:|---|
 | 325テーマ | 113 | 212 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
 | 追加7テーマ（ZIP外） | 0 | 7 | N01〜N03・速度 |
-| 旧896検索ID | 実行 368 | 未実行 528 | 実行不能確定 0。ログの再索引だけでは実行にしない |
+| 旧896検索ID | 実行 376 | 未実行 520 | 実行不能確定 0。ログの再索引だけでは実行にしない |
 | 80競合 | 28 | 52 | 公式資料の確認 55 社 |
 
 ## 2. 不足の種類と数
@@ -20,16 +20,16 @@
 | 不足の種類 | テーマ数 |
 |---|---:|
 | 研究ユニット記録（定義・計算/識別不能）が未完 | 215 |
-| 一次資料ルートの検索なし | 191 |
-| 独立資料が未確定（NO） | 172 |
-| 反証資料が未確定（NO） | 172 |
-| 旧検索IDの未実行が残る | 132 |
-| 一次資料が未確定（NO） | 112 |
-| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 43 |
-| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 43 |
-| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 9 |
+| 一次資料ルートの検索なし | 189 |
+| 独立資料が未確定（NO） | 170 |
+| 反証資料が未確定（NO） | 170 |
+| 旧検索IDの未実行が残る | 130 |
+| 一次資料が未確定（NO） | 111 |
+| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 45 |
+| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 45 |
+| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 10 |
 
-- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1630** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
+- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1622** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
 - 必要なページ読了：未判定のチャット候補の割当て 941 件（重複を除くURL 710 件）。読了は検索上限を消費しない。
 - 462件（旧予定タスクの未達数）は採用証拠の必要件数ではない。上の不足（ルート・旧ID・競合項目）を満たす分だけ新規に調査し、必要ならそれ以上集める。
 
@@ -77,7 +77,7 @@
 | AXIS_04_T04 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 37/41 | YES | 15/4 |
 | AXIS_04_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 8/13 | YES | 10/0 |
 | AXIS_04_T06 | 完了 | — | FOUND | FOUND | FOUND | 2/1/2 | 12/16 | YES | 19/0 |
-| AXIS_04_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 23/25 | YES | 17/0 |
+| AXIS_04_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 24/26 | YES | 17/0 |
 | AXIS_04_T08 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 22/25 | YES | 14/6 |
 | AXIS_05_T01 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 17/18 | YES | 12/4 |
 | AXIS_05_T02 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -197,8 +197,8 @@
 | AXIS_19_T04 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 10/14 | YES | 0/0 |
 | AXIS_19_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 9/10 | YES | 0/0 |
 | AXIS_19_T06 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
-| AXIS_19_T07 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_19_T08 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
+| AXIS_19_T07 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/0 | NO | 0/0 |
+| AXIS_19_T08 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/1 | NO | 0/0 |
 | AXIS_20_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 2/2 | NO | 2/0 |
 | AXIS_20_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 2/2 | NO | 0/0 |
 | AXIS_20_T03 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 2/2 | NO | 1/0 |
@@ -277,7 +277,7 @@
 | AXIS_02_T10 | 完了 | — | FOUND | FOUND | FOUND | 2/3/2 | 4/6 | YES | 12/0 |
 | AXIS_03_T09 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
 | AXIS_04_T09 | 完了 | — | FOUND | FOUND | FOUND | 2/1/2 | 7/9 | YES | 11/0 |
-| AXIS_04_T10 | 未完 | — | FOUND | FOUND | FOUND | 0/2/1 | 26/36 | YES | 0/2 |
+| AXIS_04_T10 | 未完 | — | FOUND | FOUND | FOUND | 0/2/1 | 32/46 | YES | 0/2 |
 | AXIS_05_T09 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_05_T10 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_06_T09 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -291,7 +291,7 @@
 | AXIS_10_T09 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 5/6 | YES | 0/0 |
 | AXIS_10_T10 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 9/12 | YES | 0/0 |
 | AXIS_11_T09 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 5/7 | YES | 0/0 |
-| AXIS_11_T10 | 未完 | — | FOUND | FOUND | FOUND | 0/2/2 | 22/31 | YES | 0/0 |
+| AXIS_11_T10 | 未完 | — | FOUND | FOUND | FOUND | 0/2/2 | 26/35 | YES | 0/0 |
 | AXIS_12_T09 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 7/8 | YES | 0/0 |
 | AXIS_12_T10 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 10/13 | YES | 0/0 |
 | AXIS_13_T09 | 完了 | — | FOUND | FOUND | FOUND | 1/3/1 | 8/9 | YES | 0/0 |
@@ -302,9 +302,9 @@
 | AXIS_15_T09 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/1 | NO | 0/0 |
 | AXIS_15_T10 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_16_T09 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 2/0 |
-| AXIS_17_T09 | 未完 | — | FOUND | FOUND | FOUND | 0/2/2 | 6/10 | YES | 0/0 |
+| AXIS_17_T09 | 未完 | — | FOUND | FOUND | FOUND | 0/2/2 | 8/12 | YES | 0/0 |
 | AXIS_18_T09 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
-| AXIS_19_T09 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/1 | NO | 0/0 |
+| AXIS_19_T09 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/4 | NO | 0/0 |
 | AXIS_19_T10 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_20_T09 | 未完 | — | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_21_T09 | 未完 | — | ATTEMPTED_INSUFFICIENT | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |

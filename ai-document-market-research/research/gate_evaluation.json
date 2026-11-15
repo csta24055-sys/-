@@ -1,16 +1,16 @@
 {
  "research_status": "INCOMPLETE",
- "checked_at": "2026-11-15T15:58:16.583843+00:00",
+ "checked_at": "2026-11-15T15:58:39.447462+00:00",
  "first_unmet_stage": "S1",
  "source_rows": 1140,
  "accepted_rows": 1140,
  "verified_rows": 0,
  "independent_origins": 0,
  "verified_competitors": 55,
- "executed_actions": 3082,
+ "executed_actions": 3100,
  "legacy_queries": {
-  "NOT_EXECUTED": 528,
-  "EXECUTED": 368
+  "NOT_EXECUTED": 520,
+  "EXECUTED": 376
  },
  "topics_s1_done": 113,
  "competitors_s1_done": 28,
@@ -182,8 +182,8 @@
       "AXIS_18_T07: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_18_T08: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_19_T06: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); research unit record missing or incomplete",
-      "AXIS_19_T07: legacy queries not executed: 4; no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
-      "AXIS_19_T08: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
+      "AXIS_19_T07: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); research unit record missing or incomplete",
+      "AXIS_19_T08: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_20_T01: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
       "AXIS_20_T02: legacy queries not executed: 4; no primary-route search; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
       "AXIS_20_T03: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
@@ -270,7 +270,7 @@
       "AXIS_16_T09: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_17_T09: no primary-route search",
       "AXIS_18_T09: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
-      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); research unit record missing or incomplete",
+      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
       "AXIS_19_T10: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_20_T09: no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_21_T09: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -341,7 +341,7 @@
     },
     {
      "pass": false,
-     "detail": "legacy queries handled: executed 368, attempted-but-blocked 0, not executed 528 (of 896)",
+     "detail": "legacy queries handled: executed 376, attempted-but-blocked 0, not executed 520 (of 896)",
      "unmet": [
       "AXIS_01_T01_Q1",
       "AXIS_01_T01_Q2",
@@ -575,14 +575,6 @@
       "AXIS_19_T06_Q2",
       "AXIS_19_T06_Q3",
       "AXIS_19_T06_Q4",
-      "AXIS_19_T07_Q1",
-      "AXIS_19_T07_Q2",
-      "AXIS_19_T07_Q3",
-      "AXIS_19_T07_Q4",
-      "AXIS_19_T08_Q1",
-      "AXIS_19_T08_Q2",
-      "AXIS_19_T08_Q3",
-      "AXIS_19_T08_Q4",
       "AXIS_20_T01_Q1",
       "AXIS_20_T01_Q2",
       "AXIS_20_T01_Q3",
@@ -742,7 +734,15 @@
       "AXIS_24_T08_Q1",
       "AXIS_24_T08_Q2",
       "AXIS_24_T08_Q3",
-      "AXIS_24_T08_Q4"
+      "AXIS_24_T08_Q4",
+      "AXIS_25_T01_Q1",
+      "AXIS_25_T01_Q2",
+      "AXIS_25_T01_Q3",
+      "AXIS_25_T01_Q4",
+      "AXIS_25_T02_Q1",
+      "AXIS_25_T02_Q2",
+      "AXIS_25_T02_Q3",
+      "AXIS_25_T02_Q4"
      ],
      "action": "execute each listed legacy query verbatim once"
     },
@@ -821,13 +821,13 @@
     },
     {
      "pass": true,
-     "detail": "search log integrity (dated, unique ids, valid same-action references): 4075 rows",
+     "detail": "search log integrity (dated, unique ids, valid same-action references): 4110 rows",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3765)",
+     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3800)",
      "unmet": [],
      "action": ""
     },
@@ -845,7 +845,7 @@
     },
     {
      "pass": false,
-     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3082)",
+     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3100)",
      "unmet": [],
      "action": "regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge"
     }
