@@ -18,7 +18,7 @@ python3 -B -m wlcstudio demo                  # 架空デモを作って計算�
 python3 -B -m wlcstudio validate              # 材料の統計概算の精度検証 → docs/accuracy_report.md
 python3 -B -m wlcstudio ledger --md docs/unconnected_inputs.md
 python3 -B -m wlcstudio sources --md docs/sources_rights.md
-WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 41 件（約 4 秒、外部に出ない）
+WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 59 件（約 7 秒、外部に出ない）
 ```
 
 保存先は `var/`（Git に入れない）。外部から取ったデータのキャッシュは `cache/`（同じく Git に入れない）。赤べこの写真は利用者のものを
@@ -34,7 +34,7 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 4
 | 資料の読み込み | CSV・XLSX（数式は計算しない、マクロは読まない）・IFC（数量セット、形状は測らない）・PDF（文字のあるページだけ、1 行ずつ要確認）。読んだ数は「図面から計算」の候補で、場所（シート!行列、#部材、ページ/行）を残す。合計行を足さない、同じ資料を二度読まない | 実装・試験済み |
 | 統計概算 | 材料：国交省「建設資材・労働力需要実態調査」の面積原単位（構造別：生コン・鋼材・木材）と RASMI（kg/m2 の範囲、CC BY 4.0）。範囲は「仮の範囲」で、検証での当たり率を候補に書く。運用：経産省「エネルギー消費統計調査」の参考値だけ（電力・ガスに分けられないので入力にしない）。設備の台数・水の量は出典が無いので概算しない | 実データで動作 |
 | 計算 | 既存の `lcaapp.service.Service` を呼ぶ。評価範囲を必ず渡す、SYS-01 用の状態を渡す、同じ入力の版を再利用して評価期間だけの再計算を速くする。範囲のある値を下端・上端にした合計の幅も出す | 実装・試験済み |
-| 結果 | 合計・段階別（不完全な段階に印と埋め方の案内）・年ごとの排出・「少なめ（下限）」の警告・推定の影響・反映されない入力・エンジンの点検（SYS-01〜04 ほか）・計算の記録 | 実装・画面で確認 |
+| 結果 | 合計（未取得の入力があれば「少なくとも …（下限）」と、入っていない入力の一覧）・段階別（不完全な段階に印と埋め方の案内）・年ごとの排出・推定の影響・入力ごとの反映の表・反映されない入力・エンジンの点検（SYS-01〜04 ほか）・入力が変わった後の古い結果の警告・計算の記録 | 実装・画面で確認 |
 | 精度検証 | 公開の実データ（Material Intensity Research Database, CC BY 4.0）で、同じ文献を除いた取り置き検証 | 実行済み：**目標未達**（下） |
 
 ## 精度（目標と、実際に測ったもの）
@@ -54,8 +54,9 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 4
 | `docs/unconnected_inputs.md` | 計算に反映されない入力の一覧（未接続台帳） |
 | `docs/accuracy_report.md`・`docs/validation_results.json` | 精度の検証（生成） |
 | `docs/security.md` | セキュリティ・個人情報、外部公開の前に要ること |
+| `docs/review_fixes.md` | 敵対的レビューで確認された 31 件の指摘と修正 |
 
-## 試験（41 件）と指示書の対応
+## 試験（59 件）と指示書の対応
 
 | 指示書の項目 | 試験 |
 |---|---|
@@ -72,6 +73,7 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 4
 | 権限・安全 | `test_http_guards`、`test_refuses_non_loopback_bind`、手入力で「統計推定」にできない |
 | 回帰 | `test_research_folders_and_engine_unchanged`（23 章の外は変えていない）、`test_no_bytecode_written`、エンジンの版の確認 |
 | 行列化の等価性 | `test_vectorised_a13_equals_engine`、`test_masks_partition_and_unknown_is_not_zero` |
+| レビューの指摘 31 件 | `ReviewFixTests`（18 件：未取得の入力で下限になる、補充の有無、国交省・鉄の全量の二重計上、質量と数量の基準、IFC の mm、zip 爆弾、単位だけの保存の拒否、資料の検査、削除、古い結果、自動推定の範囲、住所をキャッシュしない、secure_delete、時間切れ、デモの再現性） |
 
 ## 指示書の Phase と到達点
 
@@ -84,7 +86,7 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 4
 | 4 概算 | 材料（国交省・RASMI）は動作。設備・水は出典が無いので概算しない。運用は参考値だけ |
 | 5 エンジン接続と高速化 | 済み（入力の版の再利用、at(T) の再利用、要素積の等価性） |
 | 6 実データでの精度 | 材料の量は検証した（目標未達）。LCA の精度は未検証（実際の原単位が無い） |
-| 7 公開前の品質 | ローカル専用としての防御だけ。外部公開には認証・暗号化・分離・記録が要る（未実装） |
+| 7 公開前の品質 | ローカル専用としての防御だけ。敵対的レビュー（4 観点・31 件確認）を全部直した。外部公開には認証・暗号化・分離・記録が要る（未実装） |
 
 ## 未完了・課題
 

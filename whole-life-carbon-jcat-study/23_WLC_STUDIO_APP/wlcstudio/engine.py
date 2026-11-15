@@ -35,6 +35,7 @@ class Engine:
         if str(path) != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
         self.store = _store.Store(str(path))
+        self.store.db.execute("PRAGMA secure_delete = ON")       # deleted rows are overwritten, not left in free pages
         self.svc = _service.Service(self.store, _binding.default())
         self.lock = threading.Lock()
         self.refset_path = Path(refset_path) if refset_path else FICTIONAL_REFSET
@@ -80,6 +81,30 @@ class Engine:
                     "import_issues": imp.get("issues", [])[:20], "unsupported": imp.get("unsupported", [])[:20],
                     "timing_ms": {"import": round((t1 - t0) * 1000, 1), "calculate": round((t2 - t1) * 1000, 1)},
                     "prepared_systems": self.svc.prepared}
+
+    def delete_project(self, lca_project_id: int | None) -> dict:
+        """Remove the engine-side copy of a WLC Studio project: its input versions (the converted inputs, including
+        quantities read from documents), conditions and runs, and the prepared systems kept in memory. This is a data
+        operation on the existing store (its schema cascades); no code of 12_APP_BASE is changed."""
+        if lca_project_id is None:
+            return {"engine_rows": 0}
+        with self.lock:
+            db = self.store.db
+            vids = [r[0] for r in db.execute("SELECT id FROM input_versions WHERE project_id=?", (lca_project_id,))]
+            n = {t: db.execute("SELECT COUNT(*) FROM %s WHERE project_id=?" % t, (lca_project_id,)).fetchone()[0]
+                 for t in ("input_versions", "conditions", "runs")}
+            with db:
+                db.execute("DELETE FROM runs WHERE project_id=?", (lca_project_id,))
+                db.execute("DELETE FROM conditions WHERE project_id=?", (lca_project_id,))
+                if vids:
+                    db.execute("DELETE FROM other_items WHERE input_version_id IN (%s)" % ",".join("?" * len(vids)), vids)
+                db.execute("DELETE FROM input_versions WHERE project_id=?", (lca_project_id,))
+                db.execute("DELETE FROM projects WHERE id=?", (lca_project_id,))
+            cache = getattr(self.svc, "_systems", None)
+            if isinstance(cache, dict):
+                for key in [k for k in cache if isinstance(k, tuple) and k and k[0] in vids]:
+                    cache.pop(key, None)
+            return {"engine_rows": sum(n.values()), **n}
 
     def close(self):
         self.store.close()

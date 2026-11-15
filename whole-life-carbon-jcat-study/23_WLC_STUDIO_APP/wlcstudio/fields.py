@@ -37,8 +37,9 @@ STRUCTURES = [
 STAGE_PRESETS = [
     ("ALL", "全段階（A1-A3〜C4）", STAGES_ALL),
     ("EMBODIED", "建設時まで（A1-A3・A4・A5）", ("A1-A3", "A4", "A5")),
-    ("NO_OPERATION", "運用のエネルギー・水を除く（B6・B7 なし）",
-     tuple(s for s in STAGES_ALL if s not in ("B6", "B7"))),
+    # B2 in this engine is the facility-management share of purchased electricity, so it goes with B6
+    ("NO_OPERATION", "運用のエネルギー・水と施設管理の電力を除く（B2・B6・B7 なし）",
+     tuple(s for s in STAGES_ALL if s not in ("B2", "B6", "B7"))),
     ("UPFRONT_EOL", "建設時と解体時（A・C 段階）", ("A1-A3", "A4", "A5", "C1", "C2", "C3", "C4")),
 ]
 
@@ -289,5 +290,5 @@ def meta_fields() -> dict:
         out[fid] = {"label": F["label"], "unit": F.get("unit", ""), "type": "number" if F["type"] == "integer" else F["type"],
                     "enum": [{"value": v, "label": lab} for v, lab in F.get("enum", [])],
                     "help": F["help"], "required": F["required"], "estimable": F["estimable"], "engine": F["engine"],
-                    "category": F["category"], "units": F.get("units", [F.get("unit", "")])}
+                    "category": F["category"], "units": F.get("units", [F.get("unit", "")]), "na": F["na"]}
     return out

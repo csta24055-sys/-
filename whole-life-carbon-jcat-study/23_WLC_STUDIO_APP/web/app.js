@@ -32,15 +32,17 @@ async function render() {
   const m = $("#main"); m.innerHTML = ""; window.scrollTo(0, 0);
   $("#btn-back").style.visibility = state.view === "home" ? "hidden" : "visible";
   try {
-    if (state.view === "home") return renderHome(m);
-    if (state.view === "structures") return renderStructures(m);
-    if (state.view === "hub") return renderHub(m);
-    if (state.view === "screen") return renderScreen(m, state.arg);
-    if (state.view === "result") return renderResult(m);
-    if (state.view === "settings") return renderSettings(m);
+    if (state.view === "home") await renderHome(m);
+    else if (state.view === "structures") await renderStructures(m);
+    else if (state.view === "hub") await renderHub(m);
+    else if (state.view === "screen") await renderScreen(m, state.arg);
+    else if (state.view === "result") await renderResult(m);
+    else if (state.view === "settings") await renderSettings(m);
   } catch (e) { m.innerHTML = `<div class="notice bad">表示できなかった：${esc(e.message)}</div>`; }
-  m.focus();
+  finally { m.focus({ preventScroll: true }); }   // screen readers start at the new view
 }
+/* a failed request inside any button handler is shown, never silently swallowed */
+window.addEventListener("unhandledrejection", (e) => { e.preventDefault(); toast((e.reason && e.reason.message) || String(e.reason)); });
 
 /* ---------- home ---------- */
 async function renderHome(m) {
@@ -104,11 +106,20 @@ function fieldHtml(fid) {
   const input = F.type === "enum"
     ? `<select id="in-${fid}" aria-label="${esc(F.label)}"><option value="">選ぶ</option>${F.enum.map((e) => `<option value="${esc(e.value)}" ${v && v.value === e.value ? "selected" : ""}>${esc(e.label)}</option>`).join("")}</select>`
     : `<input id="in-${fid}" aria-label="${esc(F.label)}" ${F.type === "number" ? 'inputmode="decimal"' : ""} value="${v && v.value !== null && typeof v.value !== "object" ? esc(v.value) : ""}" placeholder="${F.unit ? "単位：" + esc(F.unit) : ""}">`;
-  const unc = v && v.uncertainty && v.uncertainty.kind !== "none"
+  const curUnit = (v && v.unit) || F.unit;
+  const unitSel = F.type === "number" && (F.units || []).filter((u) => u).length > 1
+    ? `<select id="unit-${fid}" aria-label="${esc(F.label)}の単位">${F.units.map((u) => `<option ${u === curUnit ? "selected" : ""}>${esc(u)}</option>`).join("")}</select>`
+    : (F.unit ? `<span class="muted unit">${esc(curUnit)}</span>` : "");
+  const estimated = v && (v.state === "assumption" || v.state === "statistical");
+  const stateSel = `<select id="st-${fid}" aria-label="${esc(F.label)}の状態"><option value="confirmed" ${estimated ? "" : "selected"}>確認済み</option><option value="assumption" ${estimated ? "selected" : ""}>仮定</option></select>`;
+  const naLabel = F.na === "zero" ? "適用外（0 として計算）" : F.na === "absent" ? "適用外（無い）" : "適用外";
+  const unc = v && v.uncertainty && v.uncertainty.kind === "unknown" ? `<div class="muted">範囲は不明（根拠のある幅を付けられない推定）</div>`
+    : v && v.uncertainty && v.uncertainty.kind !== "none"
     ? `<div class="muted">範囲 ${fmt(v.uncertainty.low, v.unit)} 〜 ${fmt(v.uncertainty.high, v.unit)}${v.uncertainty.kind === "interval" ? (v.uncertainty.calibrated ? "（校正済みの予測区間）" : "（仮の範囲）") : "（シナリオ）"}</div>` : "";
   const ml = (m) => esc((state.meta.methods || {})[m] || m);
   const cands = (f.candidates || []).map((c, i) => `<li><div>${fmt(c.value, c.unit)} ${badge(c.state)} <span class="muted">${ml(c.method)}</span></div>
-      ${c.uncertainty && c.uncertainty.kind !== "none" ? `<div class="muted">範囲 ${fmt(c.uncertainty.low, c.unit)} 〜 ${fmt(c.uncertainty.high, c.unit)}${c.uncertainty.calibrated ? "" : "（仮の範囲）"}</div>` : ""}
+      ${c.uncertainty && c.uncertainty.kind === "unknown" ? `<div class="muted">範囲は不明</div>` : ""}
+      ${c.uncertainty && c.uncertainty.kind !== "none" && c.uncertainty.kind !== "unknown" ? `<div class="muted">範囲 ${fmt(c.uncertainty.low, c.unit)} 〜 ${fmt(c.uncertainty.high, c.unit)}${c.uncertainty.calibrated ? "" : "（仮の範囲）"}</div>` : ""}
       <div class="muted">${c.source_id ? "出典 " + esc(c.source_id) + (c.source_detail ? "：" + esc(c.source_detail) : "") : ""}</div>
       <div class="muted">${esc(c.note || "")}</div><button class="btn small" data-accept="${fid}" data-i="${i}">この候補を採用</button></li>`).join("");
   return `<div class="field" id="f-${fid}">
@@ -116,12 +127,14 @@ function fieldHtml(fid) {
     <div class="value">${v ? fmt(v.value, v.unit) : '<span class="muted">未取得</span>'}${f.later ? ' <span class="badge st-statistical">あとで確認</span>' : ""}</div>${unc}
     ${F.help ? `<div class="muted">${esc(F.help)}</div>` : ""}
     ${F.type === "table" ? `<div class="muted">表の入力は「資料の読み込み」か自動概算で行います（${(v && Array.isArray(v.value)) ? v.value.length + " 行" : "未入力"}）。</div>` :
-      `<div class="edit">${input}<button class="btn small" data-save="${fid}">保存</button></div>`}
+      `<div class="edit">${input}<div class="row">${unitSel}${stateSel}<button class="btn small" data-save="${fid}">保存</button></div></div>`}
     <div class="actions">
       <button class="btn small" data-why="${fid}">根拠を表示</button>
       ${F.estimable ? `<button class="btn small" data-est="${fid}">自動概算</button>` : ""}
-      <button class="btn small" data-na="${fid}">適用外</button>
+      <button class="btn small" data-na="${fid}">${naLabel}</button>
       <button class="btn small" data-later="${fid}">${f.later ? "確認済みにする" : "あとで確認"}</button>
+      ${v && v.state !== "not_obtained" ? `<button class="btn small" data-unset="${fid}">未取得に戻す</button>` : ""}
+      <button class="btn small" data-nc="${fid}">計算不能</button>
     </div>${cands ? `<ul class="cands" aria-label="候補">${cands}</ul>` : ""}</div>`;
 }
 
@@ -158,12 +171,26 @@ function bindScreen(m, sid) {
     if (raw === "") { toast("空欄は保存しません（未取得のまま。0 にはしません）"); return; }
     let value = raw;
     if (F.type === "number") { value = Number(raw.replace(/,/g, "")); if (!Number.isFinite(value)) { toast("数値で入力してください"); return; } }
-    await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body: { value, unit: F.unit, state: "confirmed", method: "user_entered" } });
+    const cur = (state.project.fields[fid] || {}).value;
+    const us = $("#unit-" + fid), unit = us ? us.value : ((cur && cur.unit) || F.unit);
+    const st = $("#st-" + fid).value;
+    if (cur && cur.value === value && (cur.unit || "") === (F.type === "number" ? unit : "") && cur.state === st) { toast("変更はありません"); return; }
+    await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body: { value, unit: F.type === "number" ? unit : "", state: st, method: "user_entered" } });
     await refresh(sid, fid);
   }));
   m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = async () => {
+    const F = state.meta.fields[b.dataset.na];
+    if (F.na === "zero" && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
     await api(`/projects/${state.project.id}/fields/${b.dataset.na}`, { method: "PUT", body: { value: null, state: "not_applicable", method: "user_entered" } });
     await refresh(sid, b.dataset.na);
+  }));
+  m.querySelectorAll("[data-unset]").forEach((b) => (b.onclick = async () => {
+    await api(`/projects/${state.project.id}/fields/${b.dataset.unset}`, { method: "PUT", body: { value: null, state: "not_obtained", method: "user_entered" } });
+    await refresh(sid, b.dataset.unset);
+  }));
+  m.querySelectorAll("[data-nc]").forEach((b) => (b.onclick = async () => {
+    await api(`/projects/${state.project.id}/fields/${b.dataset.nc}`, { method: "PUT", body: { value: null, state: "not_computable", method: "user_entered" } });
+    await refresh(sid, b.dataset.nc);
   }));
   m.querySelectorAll("[data-later]").forEach((b) => (b.onclick = async () => {
     const f = state.project.fields[b.dataset.later] || {};
@@ -264,13 +291,19 @@ function showResult(r) {
     return;
   }
   const s = r.summary, maxStage = Math.max(...s.stages.map((x) => Math.abs(x.value || 0)), 1);
+  const tot = s.total_t === null ? null : s.total_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 });
+  const head = s.nothing_counted ? "未計算（計算に入った量がありません）" : tot === null ? "未計算" : (s.lower_bound ? `少なくとも ${tot} tCO2e` : `${tot} tCO2e`);
+  const miss = (r.missing_inputs || []);
   el.innerHTML = `
-  <div class="card"><div class="muted">ホールライフカーボン（評価期間 ${r.period} 年）</div>
-    <div class="big">${s.total_t === null ? "未計算" : s.total_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " tCO2e"}</div>
-    <div class="muted">${s.complete ? "" : "不完全（エンジンが一部を合計できなかった）・"}延床面積あたり ${fmt(s.per_area, "kgCO2e/m²")}・年あたり ${fmt(s.per_area_year, "kgCO2e/(m²·年)")}</div>
+  ${r.stale ? `<div class="notice bad"><strong>入力が変わっています。</strong>下は前の入力での結果です。「計算する」を押して計算し直してください。</div>` : ""}
+  <div class="card${r.stale ? " stale" : ""}"><div class="muted">ホールライフカーボン（評価期間 ${r.period} 年）</div>
+    <div class="big">${esc(head)}</div>
+    <div class="muted">${s.lower_bound ? "<strong>下限</strong>（入っていない分がある）・" : ""}延床面積あたり ${fmt(s.per_area, "kgCO2e/m²")}・年あたり ${fmt(s.per_area_year, "kgCO2e/(m²·年)")}</div>
     ${r.range ? `<div class="muted">範囲：${r.range.low_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} 〜 ${r.range.high_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} tCO2e（${esc(r.range.note)}）</div>` : ""}
     <div class="notice">${esc(r.factor_note)}</div>
-    ${s.lower_bound ? `<div class="notice bad">この合計は<strong>少なめ（下限）</strong>の可能性があります：${(r.missing_materials || []).length ? "未取得の材料 " + r.missing_materials.length + " 種（" + esc(r.missing_materials.slice(0, 6).join("、")) + "）は合計に入っていません。" : ""}${s.complete ? "" : "エンジンが一部の単位を合計できませんでした（" + esc(s.incomplete_units.join("、")) + "）。"}</div>` : ""}
+    ${s.lower_bound ? `<div class="notice bad">この合計は<strong>下限</strong>です。次の分は合計に入っていません：
+      <ul>${miss.slice(0, 12).map((x) => `<li>${esc(x.label)}（${esc(x.stages.join("・"))}）：${esc(x.reason)}</li>`).join("")}${miss.length > 12 ? `<li>ほか ${miss.length - 12} 件</li>` : ""}
+      ${s.engine_complete ? "" : `<li>エンジンが合計できなかった単位：${esc(s.incomplete_units.join("、"))}</li>`}</ul></div>` : ""}
     ${(r.double_count || []).map((x) => `<div class="notice">二重計上の防止：${esc(x)}</div>`).join("")}</div>
   <div class="card"><h3 style="margin-top:0">推定値の影響</h3><p>${esc(r.reflection.summary)}</p>
     <table class="t"><tr><th>状態</th><th>計算に入った入力</th></tr>${Object.entries(r.reflection.by_state).map(([k, n]) => `<tr><td>${badge(k)}</td><td class="num">${n}</td></tr>`).join("")}</table></div>
@@ -280,6 +313,7 @@ function showResult(r) {
     <p class="muted">単位 kgCO2e。出所：エンジンの結果のキー（${esc(s.source_keys)}）。</p></div>
   <div class="card"><h3 style="margin-top:0">時間の変化</h3>${curve(s.by_year)}<p class="muted">年ごとの排出（研究のモデルの X-07）。評価期間の関数 C(T) の傾きを、そのまま実際の排出率と読まないでください。</p></div>
   ${missingHtml(r)}
+  ${fieldsHtml(r.fields)}
   ${checksHtml(r.checks)}
   <div class="card"><h3 style="margin-top:0">計算の記録</h3><table class="t">${Object.entries(r.trace).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("")}</table></div>`;
 }
@@ -288,6 +322,14 @@ function missingHtml(r) {
   const u = r.unconnected || [], miss = r.missing_required || [];
   return `${miss.length ? `<div class="card"><h3 style="margin-top:0">計算に必須で足りない入力</h3><ul>${miss.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
   <div class="card"><h3 style="margin-top:0">計算に反映されない入力（${u.length} 件）</h3>${u.length ? `<ul>${u.slice(0, 40).map((x) => `<li>${esc(x.label)}：${esc(x.reason)}</li>`).join("")}</ul>` : '<p class="muted">ありません</p>'}</div>`;
+}
+
+function fieldsHtml(rows) {
+  if (!rows || !rows.length) return "";
+  const n = rows.filter((x) => x.reflected).length;
+  return `<div class="card"><details><summary><strong>入力ごとの反映</strong>（計算に入った ${n} / ${rows.length} 項目）</summary>
+    <table class="t"><tr><th>項目</th><th>状態</th><th>計算</th><th>どう渡したか・理由</th></tr>${rows.map((x) => `<tr><td>${esc(x.label)}</td><td>${badge(x.state)}</td>
+    <td>${x.reflected ? "入った" : "入っていない"}</td><td class="muted">${esc(x.detail)}</td></tr>`).join("")}</table></details></div>`;
 }
 
 function checksHtml(checks) {
@@ -319,8 +361,11 @@ async function renderSettings(m) {
    <p class="muted">${esc(state.meta.privacy)}</p><p class="muted">データの出典：${esc(state.meta.attribution)}</p></div>`;
   m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = async () => { await loadProject(+b.dataset.open); go("hub"); }));
   m.querySelectorAll("[data-del]").forEach((b) => (b.onclick = async () => {
-    if (!confirm("このプロジェクトと、その入力・資料の記録を削除します。元に戻せません。")) return;
-    await api("/projects/" + b.dataset.del, { method: "DELETE" }); toast("削除しました"); render();
+    if (!confirm("このプロジェクトと、その入力・候補・資料の記録、計算用に変換した入力と計算の記録を削除します。元に戻せません。")) return;
+    const id = +b.dataset.del;
+    await api("/projects/" + id, { method: "DELETE" }); toast("削除しました");
+    if (state.project && state.project.id === id) { state.project = null; state.stack = []; }
+    render();
   }));
 }
 

@@ -179,7 +179,10 @@ class BridgeTests(unittest.TestCase):
                                                 uncertainty=Uncertainty("interval", 5, 20, 0.9))), REFSET)
         row = tables(doc)["materials"][0]
         self.assertEqual(row["states"]["quantity"], "ESTIMATE")
-        self.assertEqual(row["states"]["end_of_life.mass_kg"], "DERIVED")
+        self.assertEqual(row["states"]["end_of_life.mass_kg"], "ESTIMATE")     # computed from an estimate: still an estimate
+        self.assertEqual(row["provenance_id"], "WLC-ESTIMATE")
+        doc2, _ = bridge.build(minimal(), REFSET)
+        self.assertEqual(tables(doc2)["materials"][0]["states"]["end_of_life.mass_kg"], "DERIVED")
         self.assertEqual(items(doc)["project.states"]["gross_floor_area"], "OBSERVED")
         self.assertEqual({p["value_state"] for p in tables(doc)["provenance"]}, {"OBSERVED", "DERIVED", "ESTIMATE"})
 
@@ -524,12 +527,269 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(req("POST", "/api/projects", {"Host": "127.0.0.1:%d" % port, "Content-Type": "text/plain"},
                              b'{"structure":"RC"}')[0], 415)
         self.assertEqual(req("GET", "/../wlcstudio/server.py", {"Host": "127.0.0.1:%d" % port})[0], 404)   # no path escape
+        self.assertEqual(req("POST", "/api/projects", {"Host": "127.0.0.1:%d" % port, "Content-Type": "application/json",
+                                                       "Content-Length": "-5"}, None)[0], 400)
         httpd.server_close()
 
     def test_refuses_non_loopback_bind(self):
         from wlcstudio import server
         with self.assertRaises(SystemExit):
             server.serve(self.td.name, host="0.0.0.0", port=0)
+
+
+class ReviewFixTests(unittest.TestCase):
+    """Regression tests for the 31 findings of the adversarial review (docs/review_fixes.md)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.td = tempfile.TemporaryDirectory()
+        cls.app = App(cls.td.name)
+        cls.E = cls.app.engine
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.app.engine.close()
+        cls.app.projects.close()
+        cls.td.cleanup()
+
+    def run_vals(self, vals, T=60.0):
+        doc, rep = bridge.build(vals, self.app.refset)
+        self.assertEqual(rep["missing_required"], [])
+        return self.E.run(doc, None, T), doc, rep
+
+    def full(self, **over):
+        """A value set with everything filled (equipment, refrigerant, fuel, profiles), so that it is complete."""
+        v = minimal(m_quantity_basis=V("m_quantity_basis", "DESIGN"), m_repair_rate=V("m_repair_rate", 0.01),
+                    m_refresh_cycle=V("m_refresh_cycle", 30.0), a_eol_haul_km=V("a_eol_haul_km", 20.0),
+                    a_reconstruction=V("a_reconstruction", "NONE"), c_site_electricity=V("c_site_electricity", 1000.0),
+                    c_diesel=V("c_diesel", 500.0), e_repair_rate=V("e_repair_rate", 0.01),
+                    r_charge_kg=V("r_charge_kg", 20.0), r_gwp=V("r_gwp", 2000.0), r_leak_rate=V("r_leak_rate", 0.03),
+                    r_loss_rate=V("r_loss_rate", 0.05), r_recovery_rate=V("r_recovery_rate", 0.5), r_life=V("r_life", 15.0),
+                    r_top_up=V("r_top_up", "yes"), o_elec_kwh=V("o_elec_kwh", 100000.0), o_fm_ratio=V("o_fm_ratio", 0.1))
+        for t, _ in FL.TRADES:
+            k = t.lower()
+            v["e_%s_count" % k] = V("e_%s_count" % k, 2.0)
+            v["e_%s_life" % k] = V("e_%s_life" % k, 15.0)
+            v["e_%s_mass" % k] = V("e_%s_mass" % k, 100.0)
+        for f in ("o_gas_m3", "o_oil_l", "o_dheat_mj", "o_pv_kwh", "o_export_kwh"):
+            v[f] = V(f, None, "not_applicable")
+        for f, *_ in FL.MATERIALS:
+            v.setdefault(f, V(f, None, "not_applicable"))
+        v.update(over)
+        return {k: x for k, x in v.items() if x is not None}
+
+    # --- missing inputs make the total a lower bound (findings 0, 15, 24)
+    def test_missing_equipment_refrigerant_fuel_are_flagged(self):
+        base, _, rep0 = self.run_vals(self.full())
+        self.assertEqual(rep0["missing_inputs"], [])
+        vals = self.full()
+        for t, _ in FL.TRADES:
+            vals.pop("e_%s_count" % t.lower())
+        vals.pop("r_charge_kg")
+        vals.pop("c_diesel")
+        r, doc, rep = self.run_vals(vals)
+        fields = {m["field"] for m in rep["missing_inputs"]}
+        self.assertTrue({"e_hvac_count", "r_charge_kg", "c_diesel"} <= fields)
+        inc = r["results"]["X-02"]["incomplete_units"]
+        self.assertIn("A5-02", inc)                                   # placeholder fuel row: the engine itself says so
+        self.assertTrue(any(u.startswith("B1-") for u in inc))
+        self.assertFalse(r["results"]["SUM-03"]["complete"])
+        rows = tables(doc)["equipment"]
+        self.assertTrue(all(r_["quantity"] is None for r_ in rows))
+
+    def test_server_marks_lower_bound_and_stage(self):
+        pid = self.app.projects.create("lb", "RC")
+        vals = self.full()
+        vals.pop("e_hvac_count")
+        for fid, v in vals.items():
+            self.app.projects.put(pid, v)
+        _, out = self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
+        self.assertTrue(out["summary"]["lower_bound"])
+        self.assertFalse(out["summary"]["complete"])
+        st = {x["stage"]: x["complete"] for x in out["summary"]["stages"]}
+        self.assertFalse(st["A1-A3"])
+        self.assertTrue(any(m["field"] == "e_hvac_count" for m in out["missing_inputs"]))
+
+    def test_nothing_counted_is_not_shown_as_a_number(self):
+        pid = self.app.projects.create("zero", "RC")
+        vals = minimal(m_rebar=V("m_rebar", None, "not_applicable"))
+        for fid, v in vals.items():
+            self.app.projects.put(pid, v)
+        _, out = self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
+        self.assertTrue(out["summary"]["lower_bound"])
+
+    # --- refrigerant top-up missing (16)
+    def test_missing_top_up_does_not_silently_cut_b1(self):
+        r, doc, rep = self.run_vals(self.full(r_top_up=None))
+        self.assertIsNone(tables(doc)["refrigerants"][0]["charge_mass_kg"])
+        self.assertTrue(any(u.startswith("B1-") for u in r["results"]["X-02"]["incomplete_units"]))
+        self.assertTrue(any(m["field"] == "r_top_up" for m in rep["missing_inputs"]))
+
+    # --- double counting with MLIT and all-steel estimates (2, 17)
+    def test_double_counting_mlit_concrete_and_all_steel(self):
+        unc = Uncertainty("interval", 1, 2000, 0.9)
+        whole = V("m_concrete", 700.0, "statistical", "m3", method="mlit_area_unit_x_gfa", source_id="mlit", factor_version="r6", uncertainty=unc)
+        doc, rep = bridge.build(self.full(m_concrete=whole, m_concrete_fdn=V("m_concrete_fdn", 50.0, unit="m3")), REFSET)
+        self.assertEqual(len([r for r in tables(doc)["materials"] if r["material_class"] == "CONCRETE"]), 1)
+        steel = V("m_rebar", 130.0, "statistical", "t", method="mlit_area_unit_x_gfa", source_id="mlit", factor_version="r6", uncertainty=unc)
+        doc, rep = bridge.build(self.full(m_rebar=steel, m_steel=V("m_steel", 40.0, unit="t")), REFSET)
+        classes = [r["material_class"] for r in tables(doc)["materials"]]
+        self.assertIn("REBAR", classes)
+        self.assertNotIn("STRUCTURAL_STEEL", classes)
+        self.assertTrue(any("鉄" in x for x in rep["double_count"]))
+        estimate._mlit = {"RC": {"鋼材": (1.3, "t")}}
+        try:
+            props, msgs = estimate.estimate_materials({"b_gfa": V("b_gfa", 1000.0), "b_use": V("b_use", "office"),
+                                                       "m_steel": V("m_steel", 40.0, unit="t")}, "RC", ranges={})
+            self.assertFalse(any(p.field_id == "m_rebar" for p in props))
+        finally:
+            estimate._mlit = None
+
+    # --- end-of-life mass follows the quantity basis (19); installation factor unit (22); states (4, 20)
+    def test_masses_follow_quantity_basis(self):
+        for basis, expect in (("DESIGN", 10000.0), ("ORDERED", 9000.0)):
+            doc, _ = bridge.build(self.full(m_rebar=V("m_rebar", 10.0, unit="t"), m_quantity_basis=V("m_quantity_basis", basis),
+                                            m_waste_rate=V("m_waste_rate", 0.1)), REFSET)
+            row = [r for r in tables(doc)["materials"] if r["material_class"] == "REBAR"][0]
+            self.assertAlmostEqual(row["end_of_life.mass_kg"], expect)
+        r, _, _ = self.run_vals(self.full(m_rebar=V("m_rebar", 10.0, unit="t"), m_waste_rate=V("m_waste_rate", 0.1)))
+        self.assertTrue(r["results"]["C-05"]["ok"], r["results"]["C-05"])
+
+    def test_installation_factor_unit_and_assumed_zero_state(self):
+        doc, rep = bridge.build(self.full(m_concrete=V("m_concrete", 100.0, unit="t")), REFSET)
+        row = [r for r in tables(doc)["materials"] if r["material_class"] == "CONCRETE"][0]
+        self.assertIsNone(row["installation_factor_id"])              # F-INST-CONCRETE is per m3, the row is in t
+        doc, _ = bridge.build(self.full(m_waste_rate=V("m_waste_rate", 0.0, "assumption")), REFSET)
+        self.assertEqual(tables(doc)["materials"][0]["states"]["waste_rate"], "ESTIMATE")
+        prov = tables(doc)["provenance"][0]
+        self.assertIsNone(prov["measurement_year"])
+
+    # --- presets (18)
+    def test_no_operation_preset_excludes_b2(self):
+        st = dict((k, s) for k, _, s in FL.STAGE_PRESETS)["NO_OPERATION"]
+        self.assertNotIn("B2", st)
+
+    # --- IFC units and cycles (3, 10)
+    def test_ifc_millimetre_units_and_cycle(self):
+        ifc = """ISO-10303-21;
+HEADER;FILE_SCHEMA(('IFC4'));ENDSEC;
+DATA;
+#1=IFCSIUNIT(*,.LENGTHUNIT.,.MILLI.,.METRE.);
+#2=IFCSIUNIT(*,.AREAUNIT.,.MILLI.,.SQUARE_METRE.);
+#3=IFCSIUNIT(*,.VOLUMEUNIT.,.MILLI.,.CUBIC_METRE.);
+#4=IFCUNITASSIGNMENT((#1,#2,#3));
+#10=IFCSLAB('2abc',$,'Slab 1',$,$,$,$,$,$);
+#20=IFCQUANTITYVOLUME('NetVolume',$,$,12500000000.,$);
+#21=IFCELEMENTQUANTITY('q1',$,'Qto',$,$,(#20));
+#22=IFCRELDEFINESBYPROPERTIES('r1',$,$,$,(#10),#21);
+#30=IFCMATERIAL('Concrete',$,$);
+#31=IFCRELASSOCIATESMATERIAL('m1',$,$,$,(#10),#30);
+#40=IFCMATERIALLIST((#41));
+#41=IFCMATERIALLIST((#40));
+#42=IFCRELASSOCIATESMATERIAL('m2',$,$,$,(#10),#40);
+ENDSEC;
+END-ISO-10303-21;
+"""
+        r = documents.read("mm.ifc", base64.b64encode(ifc.encode()).decode(), "d")
+        self.assertEqual(len(r["proposals"]), 1)
+        self.assertAlmostEqual(r["proposals"][0].value, 12.5)          # 1.25e10 mm3 = 12.5 m3
+
+    # --- xlsx zip bomb (11)
+    def test_xlsx_expansion_limit(self):
+        import io as _io
+        import zipfile
+        buf = _io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+            z.writestr("xl/workbook.xml", "<x/>")
+            z.writestr("xl/worksheets/sheet1.xml", b"\0" * 60_000_000)
+        from wlcstudio.importers import tabular
+        with self.assertRaises(tabular.ImportError_):
+            tabular.read_xlsx(buf.getvalue(), "d")
+
+    # --- saving (1, 26), unit-only change
+    def test_unit_only_change_is_refused_and_assumption_can_be_saved(self):
+        pid = self.app.projects.create("u", "RC")
+        self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": 12000, "unit": "kg", "state": "confirmed"})
+        with self.assertRaises(ApiError):
+            self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": 12000, "unit": "t", "state": "confirmed"})
+        _, v = self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": 12, "unit": "t", "state": "assumption"})
+        self.assertEqual((v["value"], v["unit"], v["state"]), (12.0, "t", "assumption"))
+        _, v = self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": None, "state": "not_obtained"})
+        self.assertEqual(v["state"], "not_obtained")
+
+    # --- documents validated before storing (6, 12)
+    def test_document_bad_row_does_not_half_import(self):
+        pid = self.app.projects.create("d", "RC")
+        csv = "名称,数量,単位\nコンクリート,200000000,m3\n鉄筋,5,t\n".encode()
+        body = {"name": "q.csv", "data_b64": base64.b64encode(csv).decode()}
+        _, out = self.app.handle("POST", "/api/projects/%d/documents" % pid, body)
+        self.assertEqual(out["n_proposals"], 1)                         # the out-of-range row is reported, not stored
+        self.assertTrue(any("範囲" in w for w in out["warnings"]))
+
+    # --- delete removes the engine copy (7)
+    def test_delete_removes_engine_rows(self):
+        pid = self.app.projects.create("del", "RC")
+        for fid, v in minimal().items():
+            self.app.projects.put(pid, v)
+        self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
+        lca = self.app.projects.get(pid)["lca_project_id"]
+        self.assertIsNotNone(lca)
+        _, out = self.app.handle("DELETE", "/api/projects/%d" % pid, None)
+        self.assertGreater(out["engine"]["engine_rows"], 0)
+        n = self.E.store.db.execute("SELECT COUNT(*) FROM input_versions WHERE project_id=?", (lca,)).fetchone()[0]
+        self.assertEqual(n, 0)
+
+    # --- stale result (23)
+    def test_stale_result_is_flagged(self):
+        pid = self.app.projects.create("st", "RC")
+        for fid, v in minimal().items():
+            self.app.projects.put(pid, v)
+        self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
+        _, r = self.app.handle("GET", "/api/projects/%d/result" % pid, None)
+        self.assertFalse(r["stale"])
+        self.app.projects.put(pid, V("b_gfa", 1200.0))
+        _, r = self.app.handle("GET", "/api/projects/%d/result" % pid, None)
+        self.assertTrue(r["stale"])
+
+    # --- estimator values need an uncertainty and a version (5)
+    def test_automated_assumption_needs_uncertainty(self):
+        with self.assertRaises(ProvenanceError):
+            Value("b_gfa", "assumption", 1000.0, "m2", method="plateau_roof_x_storeys", source_id="plateau", factor_version="x").check()
+        props, _ = research.plateau_proposals({"plateau_building_id": "b", "storeys_above": 3, "roof_edge_area_m2": 100.0,
+                                               "floor_area_factor": 1.0, "estimated_gross_floor_area_m2": 300.0, "dataset": "13101_bldg_lod1"}, "RC")
+        g = [p for p in props if p.field_id == "b_gfa"][0]
+        self.assertEqual(g.uncertainty.kind, "unknown")
+        g.check()
+
+    # --- personal queries are not cached (8)
+    def test_address_queries_are_not_cached(self):
+        from wlcstudio.sources import gsi
+        seen = {}
+
+        def fake(url, **kw):
+            seen.update(kw)
+            return [], {"fetched_at": "x", "from_cache": False}
+        orig = gsi.get_json
+        gsi.get_json = fake
+        try:
+            gsi.geocode("東京都千代田区")
+        finally:
+            gsi.get_json = orig
+        self.assertIs(seen.get("use_cache"), False)
+
+    # --- secure delete (9), timeout (13)
+    def test_secure_delete_and_timeout(self):
+        self.assertEqual(self.app.projects.db.execute("PRAGMA secure_delete").fetchone()[0], 1)
+        self.assertEqual(self.E.store.db.execute("PRAGMA secure_delete").fetchone()[0], 1)
+        self.assertEqual(make_handler(self.app, 1).timeout, 15)
+
+    # --- reproducible demo (21)
+    def test_demo_does_not_depend_on_hash_seed(self):
+        code = ("import sys; sys.dont_write_bytecode=True; sys.path.insert(0, %r); from wlcstudio import demo; "
+                "print(sorted((k, v.value, v.unit) for k, v in demo.demo_values().items() if k.startswith('m_')))" % str(HERE))
+        outs = {subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True,
+                               env=dict(os.environ, PYTHONHASHSEED=str(seed))).stdout for seed in (1, 2, 3)}
+        self.assertEqual(len(outs), 1)
 
 
 class RegressionTests(unittest.TestCase):

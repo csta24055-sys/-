@@ -21,6 +21,7 @@ HEADERS = {
     "specification": ("規格", "仕様", "spec", "specification", "grade"),
 }
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+MAX_PART, MAX_TOTAL, MAX_RATIO = 50_000_000, 200_000_000, 200
 
 
 class ImportError_(ValueError):
@@ -109,6 +110,14 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
     names = z.namelist()
     if any(n.lower().endswith("vbaproject.bin") for n in names):
         raise ImportError_("マクロを含むファイルは読まない（マクロを実行・解析しない方針）")
+    # zip bomb guard: limits on the expanded size of each part and of the whole workbook, and on the ratio
+    total = 0
+    for info in z.infolist():
+        total += info.file_size
+        if info.file_size > MAX_PART or total > MAX_TOTAL or \
+                (info.compress_size and info.file_size / info.compress_size > MAX_RATIO and info.file_size > 1_000_000):
+            raise ImportError_("展開すると大きすぎる Excel ファイルは読まない（1 部品 %d MB・合計 %d MB まで）"
+                               % (MAX_PART // 1_000_000, MAX_TOTAL // 1_000_000))
     shared = []
     if "xl/sharedStrings.xml" in names:
         root = ET.fromstring(z.read("xl/sharedStrings.xml"))

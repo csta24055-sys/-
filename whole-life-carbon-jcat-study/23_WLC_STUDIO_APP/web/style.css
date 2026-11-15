@@ -77,7 +77,8 @@ a.btn { display: inline-flex; align-items: center; text-decoration: none; }
 .badge { display: inline-block; font-size: .75rem; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; font-weight: 600; }
 .st-confirmed { color: var(--s-confirmed); } .st-from_drawing { color: var(--s-drawing); } .st-statistical { color: var(--s-stat); }
 .st-assumption { color: var(--s-assume); } .st-not_obtained { color: var(--s-none); } .st-not_applicable { color: var(--s-na); } .st-not_computable { color: var(--s-bad); }
-.field .edit { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-top: 6px; }
+.field .edit { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 6px; }
+.field .edit select:not([id^="in-"]) { width: auto; }
 .card input, .field input, .field select { min-height: 44px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); width: 100%; }
 .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 .cands { margin: 6px 0 0; padding: 0; list-style: none; }
@@ -95,4 +96,8 @@ table.t td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .toast.show { opacity: 1; }
 dialog { border: 0; border-radius: var(--radius); padding: 0; max-width: min(640px, 94vw); background: var(--card); color: var(--ink); }
 .dlg-body { padding: 16px; } .dlg-actions { text-align: right; margin-top: 12px; }
-svg text { font-family: inherit; }
+svg text { font-family: inherit; fill: currentColor; }
+svg line { stroke: currentColor; }
+.stale { opacity: .55; }
+.unit { padding: 0 4px; }
+details summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }

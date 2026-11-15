@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime as _dt
 
-from .provenance import Value
+from .provenance import Uncertainty, Value
 from .sources.plateau import USAGE_HINT
 
 STRUCTURE_WORDS = {"SRC": ("鉄骨鉄筋",), "RC": ("鉄筋コンクリート",), "S": ("鉄骨造", "軽量鉄骨"), "W": ("木造",)}
@@ -19,7 +19,8 @@ def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value
     today = _dt.date.today().isoformat()
     bid = c.get("plateau_building_id") or c.get("gml_id") or "?"
     detail = "PLATEAU 建物 %s（タイル %s、調査年 %s）" % (bid, c.get("tile"), c.get("survey_year"))
-    kw = dict(source_id="plateau", source_detail=detail, retrieved_at=today, permission="plateau_open_data")
+    kw = dict(source_id="plateau", source_detail=detail, retrieved_at=today, permission="PDL1.0（PLATEAU サイトポリシー）",
+              factor_version=str(c.get("dataset") or "PLATEAU 3D Tiles"))
     out, notes = [], []
     if c.get("storeys_above"):
         out.append(Value("b_floors_above", "confirmed", c["storeys_above"], "階", method="plateau_attribute",
@@ -47,7 +48,9 @@ def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value
     if c.get("estimated_gross_floor_area_m2") and not (tfa and tfa > 0):
         out.append(Value("b_gfa", "assumption", c["estimated_gross_floor_area_m2"], "m2", method="plateau_roof_x_storeys",
                          note="屋根伏面積 %.1f m2 × 地上階数 %s × 延べ面積換算係数 %s。延床面積の記録ではない（仮定）。"
-                              % (c["roof_edge_area_m2"], c["storeys_above"], c["floor_area_factor"]), **kw))
+                              "セットバック・吹き抜け・地下階で実際と大きく違いうるが、その幅を示す資料は無い（範囲は不明）。"
+                              % (c["roof_edge_area_m2"], c["storeys_above"], c["floor_area_factor"]),
+                         uncertainty=Uncertainty("unknown", basis="範囲を示す資料が無い"), **kw))
     elif c.get("roof_edge_area_m2"):
         notes.append("延べ面積換算係数が無いので、延床面積の仮定値は作らなかった（屋根伏面積 %.1f m2）" % c["roof_edge_area_m2"])
     use = USAGE_HINT.get(c.get("usage") or "")

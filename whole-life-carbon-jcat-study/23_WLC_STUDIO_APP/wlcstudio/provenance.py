@@ -31,7 +31,10 @@ ESTIMATED = {"statistical", "assumption"}
 # Which value wins when several exist for one field (higher first). Ties: the newest.
 PRIORITY = {"confirmed": 5, "from_drawing": 4, "statistical": 2, "assumption": 1,
             "not_applicable": 3, "not_computable": 0, "not_obtained": -1}
-UNCERTAINTY_KINDS = ("none", "interval", "scenario")
+UNCERTAINTY_KINDS = ("none", "interval", "scenario", "unknown")
+# methods of automated estimators: a numeric value they produce must say how uncertain it is (an interval, a
+# scenario range, or explicitly "unknown" when no defensible range exists), and from which dataset version
+ESTIMATOR_PREFIXES = ("plateau_roof", "rasmi_", "mlit_")
 
 
 class ProvenanceError(ValueError):
@@ -46,6 +49,7 @@ class Uncertainty:
               empirical coverage was measured on independent data (validate.py); otherwise the UI
               shows 「仮の範囲」.
     scenario: low/high are alternative scenarios (e.g. 直接基礎 / 杭基礎), not a probability.
+    unknown:  the value is an estimate whose range cannot be stated from any source (shown as 「範囲は不明」).
     """
     kind: str = "none"
     low: float | None = None
@@ -57,7 +61,9 @@ class Uncertainty:
     def check(self) -> None:
         if self.kind not in UNCERTAINTY_KINDS:
             raise ProvenanceError("不確かさの種類 %r は使えない" % self.kind)
-        if self.kind == "none":
+        if self.kind in ("none", "unknown"):
+            if self.kind == "unknown" and (self.low is not None or self.high is not None):
+                raise ProvenanceError("範囲が不明なら下限・上限を持たせない")
             return
         for v in (self.low, self.high):
             if not (isinstance(v, (int, float)) and math.isfinite(v)):
@@ -103,6 +109,12 @@ class Value:
             raise ProvenanceError("統計推定には不確かさ（区間）を付ける（%s）" % self.field_id)
         if self.state in ("statistical", "from_drawing") and not self.source_id:
             raise ProvenanceError("統計推定・図面からの計算には出典（source_id）を付ける（%s）" % self.field_id)
+        if self.state in ESTIMATED and self.method.startswith(ESTIMATOR_PREFIXES) \
+                and isinstance(self.value, (int, float)) and not isinstance(self.value, bool):
+            if self.uncertainty.kind == "none":
+                raise ProvenanceError("自動の推定には不確かさ（範囲、または「不明」）を付ける（%s）" % self.field_id)
+            if not (self.source_id and self.factor_version):
+                raise ProvenanceError("自動の推定には出典と、使ったデータの版を付ける（%s）" % self.field_id)
         self.uncertainty.check()
         return self
 

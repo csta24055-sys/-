@@ -68,6 +68,7 @@ class Projects:
         self.db = sqlite3.connect(self.path)
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys = ON")
+        self.db.execute("PRAGMA secure_delete = ON")       # a deleted project is overwritten, not left in free pages
         self.db.executescript(SCHEMA)
         row = self.db.execute("SELECT value FROM app_meta WHERE key='schema_version'").fetchone()
         if row is None:
@@ -165,6 +166,15 @@ class Projects:
         for r in self.db.execute("SELECT field_id, payload FROM field_values WHERE project_id=? ORDER BY id", (pid,)):
             out[r[0]] = Value.from_json(json.loads(r[1]))
         return out
+
+    def validate(self, v: Value) -> Value:
+        """The checks of put()/propose() without storing (raises ProjectError / ProvenanceError)."""
+        F = FL.FIELDS.get(v.field_id)
+        if F is None:
+            raise ProjectError("項目 %r は無い" % v.field_id)
+        v = _normalise(F, v)
+        v.check()
+        return v
 
     # ------------------------------------------------------------------ candidates
     def propose(self, pid: int, v: Value, origin: str) -> int:

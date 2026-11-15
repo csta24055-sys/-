@@ -131,6 +131,10 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             sums.setdefault((fid, u), []).append((q["value"], q["trace"]))
         if parsed["no_quantities"]:
             warnings.append("数量セットの無い部材 %d 個は数えていない（0 にしない）" % len(parsed["no_quantities"]))
+        warnings += parsed.get("unit_notes", [])
+        for e in parsed["elements"]:
+            for pr in e.get("unit_problems", []):
+                unused.append({"trace": pr.split("（")[0], "name": "%s %s" % (e["type"], e["name"]), "reason": "単位を換算できない数量"})
     elif kind == "pdf":
         parsed = pdf.read(data, doc_id)
         if parsed.get("error"):

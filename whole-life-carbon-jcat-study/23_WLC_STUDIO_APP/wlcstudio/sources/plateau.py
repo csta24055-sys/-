@@ -202,6 +202,7 @@ def nearby(lat: float, lon: float, radius_m: float = 60.0, limit: int = 6) -> di
             "structure_code": _kv(attrs, "建物構造コード"),
             "survey_year": a("uro:BuildingDetailAttribute_uro:surveyYear"),
             "creation_date": a("core:creationDate"), "tile": t.rsplit("/", 1)[-1],
+            "dataset": "PLATEAU %s（%s 年度、%s）" % (ds.get("id"), ds.get("year"), ds.get("format")),
         })
     return {"city_code": city, "dataset": {k: ds.get(k) for k in ("id", "name", "year", "lod", "format", "url")},
             "candidates": cands, "source_id": SOURCE_ID, "n_tiles_read": len(tiles),

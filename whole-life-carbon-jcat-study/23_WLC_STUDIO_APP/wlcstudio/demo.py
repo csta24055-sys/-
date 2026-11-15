@@ -47,19 +47,28 @@ def demo_values() -> dict[str, Value]:
     put("a_eol_route", "RECYCLE", state="assumption", detail="生成器の経路の割合を 1 つのシナリオにまとめた（仮定）")
 
     mats = tables["materials"]
-    by = {}
-    for r in mats:
-        by.setdefault((r["material_class"], r["quantity_unit"], r["construction_division"] == "FOUNDATION"), []).append(r)
+    to_kg = {"kg": 1.0, "t": 1000.0}
     for fid, cls, label, unit, units, div, grp in FL.MATERIALS:
         fdn = div == "FOUNDATION"
-        rows = [r for (c, u, f), rs in by.items() for r in rs if c == cls and (f == fdn if cls == "CONCRETE" else True)]
-        rows_u = [r for r in rows if r["quantity_unit"] in units]
-        if not rows_u:
+        rows = [r for r in mats if r["material_class"] == cls
+                and ((r["construction_division"] == "FOUNDATION") == fdn if cls == "CONCRETE" else True)
+                and r["quantity_unit"] in units]
+        if not rows:
             out[fid] = Value(fid, "not_applicable", note=NOTE + "（この分類の行が無い）", method="fictional_sample")
             continue
-        u = max({r["quantity_unit"] for r in rows_u}, key=lambda x: sum(1 for r in rows_u if r["quantity_unit"] == x))
-        q = sum(r["quantity"] for r in rows_u if r["quantity_unit"] == u)
-        put(fid, round(q, 6), unit=u, detail="materials[] の %s・%s の合計（%d 行）" % (cls, u, len(rows_u)))
+        # one value per field: the rows of the field's own unit, or (if there are more of them) the mass rows in t.
+        # The choice is deterministic (no set order), and rows of the other dimension are named in the note.
+        mass_rows = [r for r in rows if r["quantity_unit"] in to_kg]
+        own_rows = [r for r in rows if r["quantity_unit"] == unit and unit not in to_kg]
+        if unit in to_kg or len(mass_rows) > len(own_rows):
+            used, u = mass_rows, ("t" if "t" in units else unit)
+            q = sum(r["quantity"] * to_kg[r["quantity_unit"]] for r in used) / to_kg[u]
+        else:
+            used, u = own_rows, unit
+            q = sum(r["quantity"] for r in used)
+        left = len(rows) - len(used)
+        put(fid, round(q, 6), unit=u, detail="materials[] の %s を %s で合計（%d 行%s）"
+            % (cls, u, len(used), "、単位の違う %d 行は入れていない" % left if left else ""))
     put("m_waste_rate", round(statistics.fmean(r["waste_rate"] for r in mats), 6), state="assumption", detail="materials[].waste_rate の平均")
     put("m_reuse_rate", round(statistics.fmean(r["reuse_rate"] for r in mats), 6), state="assumption", detail="materials[].reuse_rate の平均")
     put("m_repair_rate", round(statistics.fmean(r["repair_rate"] for r in mats), 6), state="assumption", detail="materials[].repair_rate の平均")

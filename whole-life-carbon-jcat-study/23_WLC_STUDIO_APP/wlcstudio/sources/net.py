@@ -62,7 +62,8 @@ def get(url: str, rng: tuple[int, int] | None = None, timeout: float = 30.0, max
         raise SourceError("取得できなかった（%s に接続できない：%s）" % (host, getattr(e, "reason", e))) from None
     if rng and status != 206:
         body = body[rng[0]:rng[1] + 1]
-    meta = {"url": url, "range": list(rng) if rng else None, "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+    # the metadata keeps only the host (never the query string, which may hold an address or a coordinate)
+    meta = {"host": host, "range": list(rng) if rng else None, "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
             "status": status}
     if use_cache:
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -77,3 +78,19 @@ def get_json(url: str, **kw) -> tuple[object, dict]:
         return json.loads(body.decode("utf-8")), meta
     except (UnicodeDecodeError, json.JSONDecodeError):
         raise SourceError("応答が JSON でない（%s）" % urllib.parse.urlparse(url).netloc) from None
+
+
+def sweep(max_age: float = 400 * 86400) -> int:
+    """Delete cache entries older than max_age (run at server start). Returns the number of files removed."""
+    n = 0
+    if not CACHE.exists():
+        return 0
+    now = time.time()
+    for p in CACHE.rglob("*"):
+        if p.is_file() and now - p.stat().st_mtime > max_age:
+            try:
+                p.unlink()
+                n += 1
+            except OSError:
+                pass
+    return n

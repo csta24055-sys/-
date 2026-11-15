@@ -35,8 +35,9 @@ MAX_BODY = 40 * 1024 * 1024
 USER_STATES = ("confirmed", "assumption", "not_applicable", "not_obtained", "not_computable")
 DISCLAIMER = ("WLC Studio は研究用の試作です。計算の核は独立に作った概念モデル（70 評価単位）で、J-CAT の複製・認定品・互換品ではありません。"
               "いま登録されている原単位は架空（研究用）なので、表示される排出量は実在の建物の値ではありません。")
-PRIVACY = ("入力・資料・住所はこの端末の中（var/）にだけ保存します。住所・座標は自動調査のときだけ国土地理院・PLATEAU に送ります。"
-           "資料の原本は、設定で残すと決めたときだけ保存します。プロジェクトを削除すると、その入力・候補・資料の記録も消えます。")
+PRIVACY = ("入力・資料・住所はこの端末の中（var/）にだけ保存します。住所は検索のときだけ国土地理院に、座標は市区町村を調べるときだけ国土地理院に送り、"
+           "端末のキャッシュには残しません（PLATEAU・統計のファイルは cache/ に残ります）。資料の原本は、起動時に残すと決めたときだけ保存します。"
+           "プロジェクトを削除すると、その入力・候補・資料の記録と、計算用に変換した入力・計算の記録も消えます（削除した部分は上書きされます）。")
 ATTRIBUTION = ("住所検索・逆ジオコーダ：国土地理院（地理院地図の住所検索・逆ジオコーダ）をもとに WLC Studio が加工。"
                "建物の属性：国土交通省 PLATEAU（3D 都市モデル、著作権は各地方公共団体）をもとに加工。"
                "材料の統計：国土交通省「建設資材・労働力需要実態調査」（e-Stat）をもとに作成；RASMI（Fishman ほか 2024, CC BY 4.0）。"
@@ -112,7 +113,10 @@ class App:
                 if method == "GET":
                     return 200, self._project_view(pid)
                 if method == "DELETE":
-                    return 200, self.projects.delete(pid)
+                    lca = self.projects.get(pid)["lca_project_id"]
+                    out = self.projects.delete(pid)
+                    out["engine"] = self.engine.delete_project(lca)
+                    return 200, out
             if rest[:1] == ["fields"] and len(rest) >= 2:
                 fid = rest[1]
                 if fid not in FL.FIELDS:
@@ -137,7 +141,11 @@ class App:
             if rest == ["calculate"] and method == "POST":
                 return 200, self.calculate(pid, b.get("period"))
             if rest == ["result"] and method == "GET":
-                return 200, self.projects.last_run(pid) or {}
+                last = self.projects.last_run(pid) or {}
+                if last:
+                    _, rep_now = bridge.build(self.projects.values(pid), self.refset, title="WLC Studio #%d" % pid)
+                    last["stale"] = rep_now["input_hash"][:16] != (last.get("trace") or {}).get("入力の指紋（SHA-256 の先頭）")
+                return 200, last
             if rest == ["ledger"] and method == "GET":
                 doc, rep = bridge.build(self.projects.values(pid), self.refset)
                 return 200, {"fields": bridge.reflection_table(rep), "unconnected": rep["unconnected"],
@@ -163,6 +171,16 @@ class App:
         value = b.get("value")
         if state in ("confirmed", "assumption") and (value is None or value == ""):
             raise ApiError(400, "空欄は保存しない（未取得のまま。0 にはしない）")
+        cur = self.projects.current(pid, fid)
+        unit = str(b.get("unit") if b.get("unit") is not None else F.get("unit", ""))
+        if cur is not None and state in ("confirmed", "assumption") and cur.state in ("confirmed", "from_drawing", "statistical", "assumption") \
+                and F["type"] in ("number", "integer") and cur.unit and unit != cur.unit:
+            try:
+                same = float(str(value).replace(",", "")) == float(cur.value)
+            except (TypeError, ValueError):
+                same = False
+            if same:
+                raise ApiError(400, "数値を変えずに単位だけ変えることはしない（%s → %s）。換算した値を入れる" % (cur.unit, unit))
         v = Value(fid, state, value if state in ("confirmed", "assumption") else None,
                   str(b.get("unit") if b.get("unit") is not None else F.get("unit", "")) if state in ("confirmed", "assumption") else "",
                   method=str(b.get("method") or "user_entered"), source_id=str(b.get("source_id") or ""),
@@ -220,10 +238,19 @@ class App:
         r = documents.read(name, data_b64, doc_id)
         if any(d["sha256"] == r["sha256"] for d in self.projects.documents(pid)):
             raise ApiError(409, "同じ資料はもう読み込んである（二重計上を防ぐため、もう一度は読まない）")
-        self.projects.add_document(pid, name, r["kind"], base64.b64decode(data_b64),
-                                   {"parsed": r["parsed_summary"], "n_proposals": len(r["proposals"]), "unused": r["unused"][:200],
-                                    "warnings": r["warnings"]})
+        # every candidate is checked BEFORE anything is stored: a bad row is reported as not used instead of leaving
+        # a half-imported document behind (which would also block a corrected re-upload of the same file)
+        good = []
         for v in r["proposals"]:
+            try:
+                good.append(self.projects.validate(v))
+            except (ProjectError, ProvenanceError) as e:
+                r["unused"].append({"trace": v.source_detail[:80], "name": FL.FIELDS[v.field_id]["label"], "reason": str(e)})
+        r["proposals"] = good
+        self.projects.add_document(pid, name, r["kind"], base64.b64decode(data_b64),
+                                   {"parsed": r["parsed_summary"], "n_proposals": len(good), "unused": r["unused"][:200],
+                                    "warnings": r["warnings"]})
+        for v in good:
             self.projects.propose(pid, v, "document:" + doc_id)
         summary = "「%s」（%s）から %d 件の候補を作った。使わなかった行 %d 件。" % (name, r["kind"], len(r["proposals"]), len(r["unused"]))
         warnings = r["warnings"] + ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in r["unused"][:8]]
@@ -233,6 +260,7 @@ class App:
         """Low / high totals with every value that has a range set to its low / high end (two more engine runs).
         This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
         lo_vals, n = _with(vals, "low")
+        n_unknown = sum(1 for v in vals.values() if v.uncertainty.kind == "unknown")
         if n == 0:
             return None
         hi_vals, _ = _with(vals, "high")
@@ -247,8 +275,9 @@ class App:
         if tot["low"] is None or tot["high"] is None:
             return None
         a, b = sorted((tot["low"] / 1000.0, tot["high"] / 1000.0))
-        return {"low_t": a, "high_t": b, "n_values_with_range": n,
-                "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n}
+        return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown,
+                "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n
+                        + ("範囲が不明な推定 %d 項目の幅は含まれていない。" % n_unknown if n_unknown else "")}
 
     def calculate(self, pid: int, period) -> dict:
         T = _float(period)
@@ -261,7 +290,8 @@ class App:
                  "入力の指紋（SHA-256 の先頭）": rep["input_hash"][:16]}
         base = {"period": T, "reflection": {"summary": rep["summary"], "by_state": rep["by_state"]},
                 "unconnected": rep["unconnected"], "missing_required": rep["missing_required"],
-                "missing_materials": rep["missing_materials"], "fields": bridge.reflection_table(rep),
+                "missing_materials": rep["missing_materials"], "missing_inputs": rep["missing_inputs"],
+                "fields": bridge.reflection_table(rep),
                 "factor_note": _factor_note(self.refset), "notes": rep["notes"], "double_count": rep["double_count"]}
         if rep["missing_required"]:
             out = dict(base, status="blocked", message="計算に必須の入力が足りないので計算していない（%s）" % "、".join(rep["missing_required"]),
@@ -346,7 +376,7 @@ def _hints(incomplete: list[str], rep: dict) -> list[dict]:
         cand = [f for f in UNIT_HINTS.get(u, []) if state.get(f, "not_obtained") in ("not_obtained", "not_computable")]
         out.append({"unit": u, "stage": UNIT_STAGE.get(u, "—"),
                     "fields": [{"field": f, "label": FL.FIELDS[f]["label"]} for f in cand],
-                    "note": ("未取得の入力：" + "、".join(FL.FIELDS[f]["label"] for f in cand) + "（無いものは「適用外」にする）") if cand
+                    "note": ("未取得の入力：" + "、".join(FL.FIELDS[f]["label"] for f in cand) + "（調べて入れる。本当に無いと分かっているときだけ「適用外」）") if cand
                     else "材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）"})
     return out
 
@@ -355,7 +385,7 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
     s3 = res.get("SUM-03") or {}
     x2 = res.get("X-02") or {}
     inc = x2.get("incomplete_units") or []
-    bad_stages = {UNIT_STAGE.get(u) for u in inc}
+    bad_stages = {UNIT_STAGE.get(u) for u in inc} | set(rep.get("incomplete_stages") or [])
     stages = [{"stage": k, "value": v, "complete": k not in bad_stages}
               for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
     x7 = res.get("X-07") or {}
@@ -368,10 +398,13 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
     total = s3.get("value")
     return {"total_kg": total, "total_t": None if total is None else total / 1000.0,
             "per_area": (res.get("SUM-04") or {}).get("value"), "per_area_year": (res.get("SUM-05") or {}).get("value"),
-            "complete": bool(s3.get("complete")), "incomplete_units": inc, "hints": _hints(inc, rep),
+            "complete": bool(s3.get("complete")) and not rep.get("missing_inputs"),
+            "engine_complete": bool(s3.get("complete")), "incomplete_units": inc, "hints": _hints(inc, rep),
             "stages": stages, "by_year": rows, "year_axis": "評価期間の年（1 年目〜）",
             "source_keys": "SUM-03.value、X-02.by_stage、X-07.by_year、SUM-04/05.value",
-            "lower_bound": bool(rep["missing_materials"]) or not s3.get("complete")}
+            "lower_bound": bool(rep["missing_materials"] or rep.get("missing_inputs")) or not s3.get("complete"),
+            # nothing that carries emissions reached the engine: the headline must not read as a real 0
+            "nothing_counted": not total}
 
 
 def _checks(res: dict) -> list[dict]:
@@ -411,6 +444,7 @@ def make_handler(app: App, port: int):
     class H(BaseHTTPRequestHandler):
         server_version = "WLCStudio/" + APP_VERSION
         sys_version = ""
+        timeout = 15                                 # an idle connection cannot hold the single-threaded server
 
         def log_message(self, fmt, *args):          # no request bodies, no addresses in the log
             sys.stderr.write("%s %s\n" % (time.strftime("%H:%M:%S"), fmt % args))
@@ -448,7 +482,12 @@ def make_handler(app: App, port: int):
         def _api(self):
             body = None
             if self.command in ("POST", "PUT"):
-                n = int(self.headers.get("Content-Length") or 0)
+                try:
+                    n = int(self.headers.get("Content-Length") or 0)
+                except ValueError:
+                    return self._send(400, {"error": "Content-Length が不正"})
+                if n < 0:
+                    return self._send(400, {"error": "Content-Length が不正"})
                 if n > MAX_BODY:
                     return self._send(413, {"error": "大きすぎる（40 MB まで）"})
                 raw = self.rfile.read(n) if n else b""
@@ -509,6 +548,8 @@ def serve(var: str | Path, host: str = "127.0.0.1", port: int = 8770, keep_uploa
     except ValueError:
         if host != "localhost":
             raise SystemExit("ホスト名は localhost か 127.0.0.1 にする") from None
+    from .sources.net import sweep
+    sweep()
     app = App(var, keep_uploads=keep_uploads)
     httpd = HTTPServer((host, port), make_handler(app, port))
     print("WLC Studio %s: http://%s:%d/ （止めるには Ctrl+C）" % (APP_VERSION, "127.0.0.1" if host == "localhost" else host, port))

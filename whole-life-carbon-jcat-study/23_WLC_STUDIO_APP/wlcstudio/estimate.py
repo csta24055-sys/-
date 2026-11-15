@@ -168,6 +168,16 @@ def _coverage_note(mat: str, method: str = "rasmi") -> str:
                ("%.0f%%" % (100 * r["coverage_p5_p95"])) if r.get("coverage_p5_p95") is not None else "—"))
 
 
+def _other_steel(fid: str) -> str:
+    return "m_steel" if fid == "m_rebar" else "m_rebar"
+
+
+def _other_steel_has_value(values: dict, fid: str) -> bool:
+    """An all-steel estimate (rebar + structural steel together) must not sit next to a value in the other steel field."""
+    v = values.get(_other_steel(fid))
+    return v is not None and v.state in HAS_VALUE
+
+
 def estimate_materials(values: dict[str, Value], structure: str, only: str | None = None, ranges: dict | None = None) -> tuple[list[Value], list[str]]:
     msgs, out = [], []
     gfa, use = values.get("b_gfa"), values.get("b_use")
@@ -192,6 +202,10 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
             continue
         fid = fid0 or ("m_steel" if structure in ("S", "SRC") else "m_rebar")
         if only and fid != only:
+            continue
+        if fid0 is None and _other_steel_has_value(values, fid):
+            msgs.append("「%s」に値があるので、鉄の全量（鉄筋＋鉄骨）の統計（国交省）は候補にしない（二重計上を防ぐ）"
+                        % FL.FIELDS[_other_steel(fid)]["label"])
             continue
         cur = values.get(fid)
         if cur and cur.state in ("confirmed", "from_drawing"):
@@ -235,6 +249,10 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
             notes.append("RASMI の鉄（steel）は鉄筋と鉄骨を分けていない。%s では全量を「%s」とした（仮定）"
                          % (structure, FL.FIELDS[fid]["label"]))
         if only and fid != only:
+            continue
+        if mat == "steel" and _other_steel_has_value(values, fid):
+            msgs.append("「%s」に値があるので、鉄の全量（鉄筋＋鉄骨）の統計（RASMI）は候補にしない（二重計上を防ぐ）"
+                        % FL.FIELDS[_other_steel(fid)]["label"])
             continue
         if rec is None:
             msgs.append("RASMI に %s・%s・%s・日本 の範囲が無い" % (mat, fn, st))

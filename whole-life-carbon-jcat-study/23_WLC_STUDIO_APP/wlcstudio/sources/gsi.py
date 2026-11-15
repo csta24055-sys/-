@@ -27,7 +27,8 @@ def geocode(address: str, limit: int = 8) -> dict:
     q = (address or "").strip()
     if not q:
         raise SourceError("住所または名称を入力する")
-    data, meta = get_json(SEARCH + urllib.parse.quote(q))
+    # an address is personal data: it is sent to GSI but never written to the local cache
+    data, meta = get_json(SEARCH + urllib.parse.quote(q), use_cache=False)
     if not isinstance(data, list):
         raise SourceError("住所検索の応答の形が想定と違う")
     cands = []
@@ -44,6 +45,6 @@ def geocode(address: str, limit: int = 8) -> dict:
 
 
 def reverse(lat: float, lon: float) -> dict:
-    data, meta = get_json(REVERSE % (lat, lon))
+    data, meta = get_json(REVERSE % (lat, lon), use_cache=False)
     res = (data or {}).get("results") if isinstance(data, dict) else None
     return {"lat": lat, "lon": lon, "result": res, "source_id": "gsi_reverse_geocoder", "fetched_at": meta["fetched_at"]}
