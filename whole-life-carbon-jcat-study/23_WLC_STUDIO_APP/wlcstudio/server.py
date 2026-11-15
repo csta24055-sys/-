@@ -1,0 +1,426 @@
+"""Local HTTP server of WLC Studio: the PWA (web/) and its JSON API (/api/...), standard library only.
+
+Security model (see docs/security.md): a single user on this machine. The server binds to a loopback
+address only and refuses anything else; there is no authentication, so it must not be exposed to a network.
+Every request must carry a Host header naming the loopback address and port (blocks DNS rebinding); a
+state-changing request must be JSON and, when an Origin header is present, come from the same origin.
+Responses carry a strict CSP, no framing, no referrer, no caching of API answers. Single-threaded: the
+engine's store and System objects are bound to one thread.
+"""
+from __future__ import annotations
+
+import base64
+import ipaddress
+import json
+import mimetypes
+import re
+import sys
+import time
+import traceback
+import urllib.parse
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+
+from . import APP_NAME, APP_VERSION
+from . import bridge, documents, estimate, research
+from . import fields as FL
+from .engine import Engine
+from .project import ProjectError, Projects
+from .provenance import LABEL, STATES, ProvenanceError, Value
+from .sources import gsi, plateau
+from .sources.net import SourceError
+
+WEB = Path(__file__).resolve().parents[1] / "web"
+MAX_BODY = 40 * 1024 * 1024
+USER_STATES = ("confirmed", "assumption", "not_applicable", "not_obtained", "not_computable")
+DISCLAIMER = ("WLC Studio は研究用の試作です。計算の核は独立に作った概念モデル（70 評価単位）で、J-CAT の複製・認定品・互換品ではありません。"
+              "いま登録されている原単位は架空（研究用）なので、表示される排出量は実在の建物の値ではありません。")
+PRIVACY = ("入力・資料・住所はこの端末の中（var/）にだけ保存します。住所・座標は自動調査のときだけ国土地理院・PLATEAU に送ります。"
+           "資料の原本は、設定で残すと決めたときだけ保存します。プロジェクトを削除すると、その入力・候補・資料の記録も消えます。")
+ATTRIBUTION = ("住所検索・逆ジオコーダ：国土地理院。建物の属性：国土交通省 Project PLATEAU（3D 都市モデル）。"
+               "材料の原単位の統計：RASMI（Fishman ほか, CC BY 4.0）。")
+
+
+class ApiError(Exception):
+    def __init__(self, status: int, message: str):
+        super().__init__(message)
+        self.status = status
+
+
+class App:
+    """The API without sockets (used by the HTTP handler and by the tests)."""
+
+    def __init__(self, var: str | Path, keep_uploads: bool = False):
+        var = Path(var)
+        var.mkdir(parents=True, exist_ok=True)
+        self.projects = Projects(var / "projects.sqlite3", upload_dir=var / "uploads", keep_uploads=keep_uploads)
+        self.engine = Engine(var / "engine.sqlite3")
+        self.refset = self.engine.refset_dict()
+
+    # ------------------------------------------------------------------ helpers
+    def _project_view(self, pid: int) -> dict:
+        p = self.projects.get(pid)
+        vals = self.projects.values(pid)
+        later = self.projects.later(pid)
+        cands = {}
+        for c in self.projects.candidates(pid):
+            cands.setdefault(c["field_id"], []).append(c)
+        fields = {}
+        for fid in FL.FIELDS:
+            v = vals.get(fid)
+            fields[fid] = {"value": v.to_json() if v else None,
+                           "history": [h.to_json() for h in self.projects.history(pid, fid)] if v else [],
+                           "candidates": cands.get(fid, []), "later": fid in later}
+        label = next(s["label"] for s in FL.STRUCTURES if s["id"] == p["structure"])
+        return {"id": pid, "name": p["name"], "structure": p["structure"], "structure_label": label, "data_kind": p["data_kind"],
+                "fields": fields, "progress": self.projects.progress(pid), "last_period": p["last_period"],
+                "documents": [{k: d[k] for k in ("id", "name", "kind", "size", "kept", "created_at")} for d in self.projects.documents(pid)],
+                "research": self.projects.research(pid)[-20:]}
+
+    # ------------------------------------------------------------------ routes
+    def handle(self, method: str, path: str, body: dict | None) -> tuple[int, dict | list]:
+        parts = [urllib.parse.unquote(p) for p in path.strip("/").split("/")][1:]       # drop "api"
+        b = body or {}
+        if method == "GET" and parts == ["meta"]:
+            return 200, self.meta()
+        if method == "GET" and parts == ["sources"]:
+            return 200, estimate.registry()
+        if parts[:1] == ["projects"]:
+            if len(parts) == 1:
+                if method == "GET":
+                    return 200, [{"id": p["id"], "name": p["name"], "data_kind": p["data_kind"],
+                                  "structure_label": next(s["label"] for s in FL.STRUCTURES if s["id"] == p["structure"]),
+                                  "progress": self.projects.progress(p["id"])} for p in self.projects.list()]
+                if method == "POST":
+                    return 201, {"id": self.projects.create(str(b.get("name") or ""), str(b.get("structure") or ""))}
+            pid = _int(parts[1]) if len(parts) > 1 else None
+            if pid is None:
+                raise ApiError(404, "そのページは無い")
+            self.projects.get(pid)
+            rest = parts[2:]
+            if not rest:
+                if method == "GET":
+                    return 200, self._project_view(pid)
+                if method == "DELETE":
+                    return 200, self.projects.delete(pid)
+            if rest[:1] == ["fields"] and len(rest) >= 2:
+                fid = rest[1]
+                if fid not in FL.FIELDS:
+                    raise ApiError(404, "項目 %s は無い" % fid)
+                if len(rest) == 2 and method == "PUT":
+                    return 200, self.put_field(pid, fid, b)
+                if rest[2:] == ["later"] and method == "POST":
+                    self.projects.set_later(pid, fid, bool(b.get("later")))
+                    return 200, {"ok": True}
+                if rest[2:] == ["accept"] and method == "POST":
+                    return 200, self.projects.accept(pid, fid, _int(b.get("index"), 0)).to_json()
+            if rest == ["research", "address"] and method == "POST":
+                return 200, self.research_address(pid, b)
+            if rest == ["research", "plateau"] and method == "POST":
+                return 200, self.research_plateau(pid, b)
+            if rest == ["research", "plateau", "select"] and method == "POST":
+                return 200, self.research_select(pid, b)
+            if rest == ["estimate"] and method == "POST":
+                return 200, self.estimate(pid, b)
+            if rest == ["documents"] and method == "POST":
+                return 200, self.document(pid, b)
+            if rest == ["calculate"] and method == "POST":
+                return 200, self.calculate(pid, b.get("period"))
+            if rest == ["result"] and method == "GET":
+                return 200, self.projects.last_run(pid) or {}
+            if rest == ["ledger"] and method == "GET":
+                doc, rep = bridge.build(self.projects.values(pid), self.refset)
+                return 200, {"fields": bridge.reflection_table(rep), "unconnected": rep["unconnected"],
+                             "missing_required": rep["missing_required"], "binding_coverage": bridge.binding_coverage()}
+        if method == "POST" and parts == ["demo"]:
+            from .demo import create_demo
+            return 201, {"id": create_demo(self.projects)}
+        raise ApiError(404, "そのページは無い")
+
+    def meta(self) -> dict:
+        return {"app_name": APP_NAME, "version": APP_VERSION, "disclaimer": DISCLAIMER, "privacy": PRIVACY,
+                "attribution": ATTRIBUTION, "states": LABEL, "state_order": list(STATES),
+                "screens": [{"id": s["id"], "label": s["label"], "groups": s["groups"]} for s in FL.SCREENS],
+                "fields": FL.meta_fields(), "structures": FL.STRUCTURES, "priority": FL.PRIORITY,
+                "refset": {"name": self.refset["name"], "version": self.refset["version"], "data_kind": self.refset["data_kind"]}}
+
+    def put_field(self, pid: int, fid: str, b: dict) -> dict:
+        state = b.get("state") or "confirmed"
+        if state not in USER_STATES:
+            raise ApiError(400, "手で入れられる状態は %s。統計推定・図面からの計算は候補を採用して入れる" % "・".join(LABEL[s] for s in USER_STATES))
+        F = FL.FIELDS[fid]
+        value = b.get("value")
+        if state in ("confirmed", "assumption") and (value is None or value == ""):
+            raise ApiError(400, "空欄は保存しない（未取得のまま。0 にはしない）")
+        v = Value(fid, state, value if state in ("confirmed", "assumption") else None,
+                  str(b.get("unit") if b.get("unit") is not None else F.get("unit", "")) if state in ("confirmed", "assumption") else "",
+                  method=str(b.get("method") or "user_entered"), source_id=str(b.get("source_id") or ""),
+                  source_detail=str(b.get("source_detail") or ""), note=str(b.get("note") or "")[:300], updated_by="user")
+        return self.projects.put(pid, v).to_json()
+
+    def research_address(self, pid: int, b: dict) -> dict:
+        q = str(b.get("query") or "").strip()
+        if not q:
+            raise ApiError(400, "住所を入れる")
+        r = gsi.geocode(q)
+        self.projects.log(pid, "gsi_address_search", {"n": len(r["candidates"]), "source_id": r["source_id"], "fetched_at": r["fetched_at"]})
+        return r
+
+    def research_plateau(self, pid: int, b: dict) -> dict:
+        lat, lon = _float(b.get("lat")), _float(b.get("lon"))
+        if lat is None or lon is None or not (20 <= lat <= 46 and 122 <= lon <= 154):
+            raise ApiError(400, "日本の範囲の緯度・経度を指定する")
+        r = plateau.nearby(lat, lon)
+        self.projects.log(pid, "plateau_nearby", {"city_code": r.get("city_code"), "dataset": (r.get("dataset") or {}).get("id"),
+                                                  "n": len(r["candidates"]), "source_id": "plateau"})
+        return r
+
+    def research_select(self, pid: int, b: dict) -> dict:
+        c = b.get("candidate") or {}
+        if not isinstance(c, dict):
+            raise ApiError(400, "建物の候補が無い")
+        p = self.projects.get(pid)
+        props, notes = research.plateau_proposals(c, p["structure"])
+        n = 0
+        for v in props:
+            self.projects.propose(pid, v, "plateau")
+            n += 1
+        self.projects.touch(pid, location_json=json.dumps({"lat": _float(b.get("lat")), "lon": _float(b.get("lon")),
+                                                           "plateau_building_id": c.get("plateau_building_id")}))
+        self.projects.log(pid, "plateau_select", {"plateau_building_id": c.get("plateau_building_id"), "n_proposals": n, "notes": notes})
+        return {"n_proposals": n, "notes": notes}
+
+    def estimate(self, pid: int, b: dict) -> dict:
+        p = self.projects.get(pid)
+        res = estimate.run(self.projects.values(pid), p["structure"], screen=b.get("screen"), field=b.get("field"),
+                           demo=p["data_kind"] == "fictional_demo")
+        for v in res["proposals"]:
+            self.projects.propose(pid, v, "estimate:" + v.method)
+        self.projects.log(pid, "estimate", {"screen": b.get("screen"), "field": b.get("field"), "n": len(res["proposals"]),
+                                            "sources": sorted({v.source_id for v in res["proposals"]})})
+        return {"n_proposals": len(res["proposals"]), "message": res["message"], "messages": res["messages"]}
+
+    def document(self, pid: int, b: dict) -> dict:
+        name = str(b.get("name") or "document")[:200]
+        data_b64 = b.get("data_b64")
+        if not isinstance(data_b64, str) or not data_b64:
+            raise ApiError(400, "ファイルが空")
+        doc_id = "doc%d-%s" % (pid, re.sub(r"[^\w.\-]", "_", name)[:40])
+        r = documents.read(name, data_b64, doc_id)
+        if any(d["sha256"] == r["sha256"] for d in self.projects.documents(pid)):
+            raise ApiError(409, "同じ資料はもう読み込んである（二重計上を防ぐため、もう一度は読まない）")
+        self.projects.add_document(pid, name, r["kind"], base64.b64decode(data_b64),
+                                   {"parsed": r["parsed_summary"], "n_proposals": len(r["proposals"]), "unused": r["unused"][:200],
+                                    "warnings": r["warnings"]})
+        for v in r["proposals"]:
+            self.projects.propose(pid, v, "document:" + doc_id)
+        summary = "「%s」（%s）から %d 件の候補を作った。使わなかった行 %d 件。" % (name, r["kind"], len(r["proposals"]), len(r["unused"]))
+        warnings = r["warnings"] + ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in r["unused"][:8]]
+        return {"summary": summary, "warnings": warnings, "n_proposals": len(r["proposals"])}
+
+    def calculate(self, pid: int, period) -> dict:
+        T = _float(period)
+        if T is None or not (0 < T <= 130):
+            raise ApiError(400, "評価期間は 0 より大きく 130 年以下で入れる（エンジンの年表の長さが 130 年）")
+        p = self.projects.get(pid)
+        vals = self.projects.values(pid)
+        doc, rep = bridge.build(vals, self.refset, title="WLC Studio #%d" % pid)
+        trace = {"評価期間（年）": T, "参照セット": "%s / %s（%s）" % (self.refset["name"], self.refset["version"], self.refset["data_kind"]),
+                 "入力の指紋（SHA-256 の先頭）": rep["input_hash"][:16]}
+        base = {"period": T, "reflection": {"summary": rep["summary"], "by_state": rep["by_state"]},
+                "unconnected": rep["unconnected"], "missing_required": rep["missing_required"],
+                "missing_materials": rep["missing_materials"], "fields": bridge.reflection_table(rep),
+                "factor_note": _factor_note(self.refset), "notes": rep["notes"]}
+        if rep["missing_required"]:
+            out = dict(base, status="blocked", message="計算に必須の入力が足りないので計算していない（%s）" % "、".join(rep["missing_required"]),
+                       summary=None, trace=trace)
+            self.projects.save_run(pid, None, rep["input_hash"], T, "blocked", out)
+            return out
+        r = self.engine.run(doc, p["lca_project_id"], T, name="WLC Studio #%d" % pid)
+        if p["lca_project_id"] != r["lca_project_id"]:
+            self.projects.touch(pid, lca_project_id=r["lca_project_id"])
+        self.projects.touch(pid, last_period=T)
+        run = r["run"]
+        trace.update({"エンジンの計算番号": run["id"], "入力の版": r["input_version_id"],
+                      "取り込み・計算の時間（ms）": "%s / %s" % (r["timing_ms"]["import"], r["timing_ms"]["calculate"]),
+                      "準備済みの計算（使い回し）": r["prepared_systems"],
+                      "エンジンの版の確認": (run.get("versions") or {}).get("engine_is_verified_version")})
+        if run["status"] != "ok":
+            out = dict(base, status=run["status"], message=run["message"], summary=None, trace=trace)
+        else:
+            out = dict(base, status="ok", message="", summary=_summary(r["results"], run.get("view") or {}, rep), trace=trace,
+                       checks=_checks(r["results"]))
+        self.projects.save_run(pid, run["id"], rep["input_hash"], T, out["status"], out)
+        return out
+
+
+def _factor_note(refset: dict) -> str:
+    if refset.get("data_kind") == "fictional":
+        return ("原単位は架空の研究用セット（%s / %s）。計算の流れを確かめるためのもので、表示される排出量は実在の建物の排出量ではない。"
+                "実在の建物の評価には、権利を確認した実際の原単位セットの登録が要る。" % (refset["name"], refset["version"]))
+    return "原単位セット %s / %s（利用許諾の記録あり）。" % (refset["name"], refset["version"])
+
+
+def _summary(res: dict, view: dict, rep: dict) -> dict:
+    s3 = res.get("SUM-03") or {}
+    x2 = res.get("X-02") or {}
+    stages = [{"stage": k, "value": v} for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
+    x7 = res.get("X-07") or {}
+    by_year = x7.get("by_year") or []
+    start = None
+    for f in rep["fields"]:
+        if f["field"] == "b_completion_year" and f["reflected"]:
+            start = True
+    rows = [[i + 1, v] for i, v in enumerate(by_year)]
+    total = s3.get("value")
+    return {"total_kg": total, "total_t": None if total is None else total / 1000.0,
+            "per_area": (res.get("SUM-04") or {}).get("value"), "per_area_year": (res.get("SUM-05") or {}).get("value"),
+            "complete": bool(s3.get("complete")), "incomplete_units": x2.get("incomplete_units") or [],
+            "stages": stages, "by_year": rows, "year_axis": "評価期間の年（1 年目〜）",
+            "source_keys": "SUM-03.value、X-02.by_stage、X-07.by_year、SUM-04/05.value",
+            "lower_bound": bool(rep["missing_materials"]) or not s3.get("complete")}
+
+
+def _checks(res: dict) -> list[dict]:
+    out = []
+    for k in ("SYS-01", "SYS-02", "SYS-03", "SYS-04", "QA-01", "QA-02", "QA-03", "QA-04", "C-05"):
+        r = res.get(k)
+        if isinstance(r, dict):
+            out.append({"id": k, "ok": r.get("ok"), "n_violations": len(r.get("violations") or []),
+                        "examples": (r.get("violations") or [])[:5], "counts": r.get("counts")})
+    return out
+
+
+def _int(x, default=None):
+    try:
+        return int(x)
+    except (TypeError, ValueError):
+        return default
+
+
+def _float(x):
+    try:
+        f = float(x)
+    except (TypeError, ValueError):
+        return None
+    return f if f == f and f not in (float("inf"), float("-inf")) else None
+
+
+# ---------------------------------------------------------------------------------------------- HTTP
+CSP = ("default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; "
+       "frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
+
+
+def make_handler(app: App, port: int):
+    allowed_hosts = {"127.0.0.1:%d" % port, "localhost:%d" % port, "[::1]:%d" % port}
+
+    class H(BaseHTTPRequestHandler):
+        server_version = "WLCStudio/" + APP_VERSION
+        sys_version = ""
+
+        def log_message(self, fmt, *args):          # no request bodies, no addresses in the log
+            sys.stderr.write("%s %s\n" % (time.strftime("%H:%M:%S"), fmt % args))
+
+        def _send(self, status, payload, ctype="application/json; charset=utf-8", cache="no-store"):
+            data = payload if isinstance(payload, bytes) else json.dumps(payload, ensure_ascii=False, allow_nan=False).encode()
+            self.send_response(status)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Cache-Control", cache)
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header("Referrer-Policy", "no-referrer")
+            self.send_header("Content-Security-Policy", CSP)
+            self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+            self.end_headers()
+            if self.command != "HEAD":
+                self.wfile.write(data)
+
+        def _guard(self) -> bool:
+            host = self.headers.get("Host", "")
+            if host not in allowed_hosts:
+                self._send(421, {"error": "この Host は受け付けない（ローカル専用）"})
+                return False
+            if self.command in ("POST", "PUT", "DELETE"):
+                origin = self.headers.get("Origin")
+                if origin is not None and urllib.parse.urlparse(origin).netloc not in allowed_hosts:
+                    self._send(403, {"error": "別のサイトからの書き込みは受け付けない"})
+                    return False
+                if self.command != "DELETE" and not (self.headers.get("Content-Type", "").startswith("application/json")):
+                    self._send(415, {"error": "JSON で送る"})
+                    return False
+            return True
+
+        def _api(self):
+            body = None
+            if self.command in ("POST", "PUT"):
+                n = int(self.headers.get("Content-Length") or 0)
+                if n > MAX_BODY:
+                    return self._send(413, {"error": "大きすぎる（40 MB まで）"})
+                raw = self.rfile.read(n) if n else b""
+                try:
+                    body = json.loads(raw.decode("utf-8")) if raw else {}
+                except (UnicodeDecodeError, json.JSONDecodeError):
+                    return self._send(400, {"error": "JSON として読めない"})
+                if not isinstance(body, dict):
+                    return self._send(400, {"error": "JSON のオブジェクトで送る"})
+            try:
+                status, out = app.handle(self.command, urllib.parse.urlparse(self.path).path, body)
+                self._send(status, out)
+            except ApiError as e:
+                self._send(e.status, {"error": str(e)})
+            except (ProjectError, ProvenanceError, ValueError) as e:
+                self._send(400, {"error": str(e)})
+            except SourceError as e:
+                self._send(502, {"error": str(e)})
+            except Exception:                        # details go to the local log only
+                traceback.print_exc()
+                self._send(500, {"error": "内部エラー（端末のログを見る）"})
+
+        def _static(self):
+            path = urllib.parse.urlparse(self.path).path
+            rel = "index.html" if path in ("/", "") else path.lstrip("/")
+            f = (WEB / rel).resolve()
+            if WEB.resolve() not in f.parents or not f.is_file():
+                return self._send(404, {"error": "無い"})
+            ctype = "application/manifest+json" if f.suffix == ".webmanifest" else (mimetypes.guess_type(f.name)[0] or "application/octet-stream")
+            if ctype.startswith("text/") or ctype in ("application/javascript",):
+                ctype += "; charset=utf-8"
+            self._send(200, f.read_bytes(), ctype, cache="no-cache")
+
+        def do_GET(self):
+            if not self._guard():
+                return
+            if self.path.startswith("/api/"):
+                return self._api()
+            return self._static()
+
+        def do_HEAD(self):
+            self.do_GET()
+
+        def do_POST(self):
+            if self._guard():
+                self._api() if self.path.startswith("/api/") else self._send(404, {"error": "無い"})
+
+        do_PUT = do_POST
+        do_DELETE = do_POST
+
+    return H
+
+
+def serve(var: str | Path, host: str = "127.0.0.1", port: int = 8770, keep_uploads: bool = False) -> None:
+    try:
+        if not ipaddress.ip_address(host).is_loopback:
+            raise SystemExit("ループバック（127.0.0.1 / ::1）以外では起動しない。認証の無いこの版を外部に公開しないこと（docs/security.md）")
+    except ValueError:
+        if host != "localhost":
+            raise SystemExit("ホスト名は localhost か 127.0.0.1 にする") from None
+    app = App(var, keep_uploads=keep_uploads)
+    httpd = HTTPServer((host, port), make_handler(app, port))
+    print("WLC Studio %s: http://%s:%d/ （止めるには Ctrl+C）" % (APP_VERSION, "127.0.0.1" if host == "localhost" else host, port))
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        httpd.server_close()

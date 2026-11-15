@@ -1,0 +1,140 @@
+{
+  "format": "wlcstudio-source-registry/1",
+  "checked_at": "2026-11-15",
+  "note": "各データ源の取得方法・権利・制限。automated=true のものだけを net.get で自動取得する。条件は変わるので、公開前に原文で再確認する。",
+  "sources": [
+    {
+      "id": "gsi_address_search",
+      "name": "国土地理院 地理院地図 住所検索 API",
+      "provider": "国土地理院",
+      "url": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=",
+      "access": "HTTP GET（JSON）",
+      "automated": true,
+      "licence": "国土地理院コンテンツ利用規約（出典の明示）。API は地理院地図で使われているもので、提供条件の変更・停止がありうる",
+      "redistribution": "検索結果の座標を保存して使う。結果の一括収集・再配布はしない",
+      "rate_limit": "明記なし。アプリ側で 1 秒に 1 回まで、結果を 30 日キャッシュ",
+      "retention": "端末のキャッシュ（cache/）のみ",
+      "confidential": "送るのは利用者が入れた住所の文字列だけ（個人情報になりうるので外部送信の前に画面で明示）",
+      "status": "connected"
+    },
+    {
+      "id": "gsi_reverse_geocoder",
+      "name": "国土地理院 逆ジオコーダ（LonLatToAddress）",
+      "provider": "国土地理院",
+      "url": "https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress",
+      "access": "HTTP GET（JSON）。市区町村コード muniCd を得る",
+      "automated": true,
+      "licence": "国土地理院コンテンツ利用規約（出典の明示）",
+      "redistribution": "市区町村コードの利用のみ",
+      "rate_limit": "アプリ側で 1 秒に 1 回まで、30 日キャッシュ",
+      "retention": "cache/",
+      "confidential": "座標を送る",
+      "status": "connected"
+    },
+    {
+      "id": "plateau",
+      "name": "Project PLATEAU 3D 都市モデル（建築物 LOD1/LOD2 の 3D Tiles）とデータカタログ API",
+      "provider": "国土交通省",
+      "url": "https://api.plateauview.mlit.go.jp/datacatalog/plateau-datasets",
+      "access": "データカタログ API（JSON）→ 3D Tiles（tileset.json と b3dm のヘッダー・バッチテーブルだけを HTTP Range で読む）",
+      "automated": true,
+      "licence": "PLATEAU のサイトポリシー（出典を示せば商用を含め利用可、CC BY 4.0 相当の扱い）。データセットごとの記載を優先する",
+      "redistribution": "建物 1 棟の属性を候補として使う。タイルの一括保存・再配布はしない",
+      "rate_limit": "明記なし。1 秒に 1 回まで、読んだ部分を 30 日キャッシュ",
+      "retention": "cache/",
+      "confidential": "座標から市区町村を決め、その市のタイルを読む",
+      "status": "connected",
+      "limits": "構造（RC/S/SRC/W）と延床面積は直接記録されていない。収録属性は自治体・年度で違う。構造図は公開されていない"
+    },
+    {
+      "id": "rasmi_20230905",
+      "name": "RASMI: Regional Assessment of buildings' Material Intensities, v20230905-B",
+      "provider": "Fishman, Mastrucci, Peled, Saxe, van Ruijven（IIASA ほか）",
+      "url": "https://zenodo.org/records/10782341",
+      "doi": "10.5281/zenodo.10782341",
+      "citation": "Fishman T. et al. RASMI: Global Ranges of Building Material Intensities Differentiated by Region, Structure, and Function. Scientific Data 11, 418 (2024). https://doi.org/10.1038/s41597-024-03190-7",
+      "access": "Zenodo のファイル取得（MI_ranges_20230905.xlsx を実行時に取得してキャッシュ）",
+      "automated": true,
+      "licence": "CC BY 4.0（Zenodo の記録）",
+      "redistribution": "CC BY 4.0 の範囲で可（出典表示）。このリポジトリにはファイルを入れず、実行時に取得する",
+      "rate_limit": "Zenodo の一般の制限。1 年キャッシュ",
+      "retention": "cache/",
+      "confidential": "なし",
+      "status": "connected",
+      "limits": "地域 OECD_JPN の元データは少なく、近い地域のデータで補われている。鉄は鉄筋・鉄骨を分けない。kg/m2 の範囲はプールの散らばりで、1 棟の予測区間ではない"
+    },
+    {
+      "id": "rasmi_data_20230905",
+      "name": "RASMI の元データのプール（MI_data_20230905.xlsx）",
+      "provider": "同上",
+      "url": "https://zenodo.org/records/10782341",
+      "access": "精度検証（validate.py）でだけ実行時に取得",
+      "automated": true,
+      "licence": "CC BY 4.0（Zenodo の記録）",
+      "redistribution": "検証結果の集計値だけを公開する",
+      "status": "used_for_validation"
+    },
+    {
+      "id": "kunijiban",
+      "name": "国土地盤情報検索サイト KuniJiban",
+      "provider": "国立研究開発法人 土木研究所",
+      "url": "https://www.kunijiban.pwri.go.jp/",
+      "access": "検索サイトを利用者が開いて調べる（リンクのみ）。自動取得はしない",
+      "automated": false,
+      "licence": "サイトの利用規約（https://www.kunijiban.pwri.go.jp/jp/terms.html）に従う。自動での一括取得の可否が確認できないため、アプリは自動で取得しない",
+      "redistribution": "しない",
+      "status": "link_and_manual_note",
+      "limits": "ボーリングは近くの地点の記録で、敷地の地盤ではない。調査年・距離を必ず書き留める。基礎の設計判断には使わない"
+    },
+    {
+      "id": "maker_bim",
+      "name": "メーカーの BIM・製品データ（例：パナソニックの空調・照明の BIM データ）",
+      "provider": "各メーカー",
+      "url": "https://panasonic.co.jp/hvac-cc/biz/solutions/bim/",
+      "access": "利用者が各社の規約に同意して入手したファイルを、利用者が読み込む（IFC・仕様書）。アプリは自動で一括取得しない",
+      "automated": false,
+      "licence": "各社の利用規約。保存・再配布・自動一括ダウンロードは規約の範囲だけ",
+      "redistribution": "しない（読み込んだ数量は候補として使うだけ）",
+      "status": "manual_upload_only",
+      "limits": "製品の性能値（質量・冷媒充填量・消費電力）は製造時の CO2 ではない。EPD が無ければ製品の CO2e を断定しない"
+    },
+    {
+      "id": "jcat",
+      "name": "J-CAT（建築物のライフサイクルカーボン算定ツール）",
+      "provider": "一般財団法人 住宅・建築 SDGs 推進センター（IBECs）",
+      "url": "https://www.ibecs.or.jp/zero-carbon_building/jcat/licenseterms.html",
+      "access": "使わない",
+      "automated": false,
+      "licence": "使用許諾条件に従う。このアプリは J-CAT の係数・数式・マクロ・有償データを持ち込まない",
+      "status": "not_used"
+    },
+    {
+      "id": "decc",
+      "name": "非住宅建築物の環境関連データベース（DECC）",
+      "provider": "一般社団法人 日本サステナブル建築協会",
+      "access": "使わない（利用条件を確認できていない）",
+      "automated": false,
+      "status": "not_used"
+    },
+    {
+      "id": "heeren_fishman_mi_db",
+      "name": "Material intensity database（Heeren & Fishman 2019, GitHub nheeren/material_intensity_db）",
+      "provider": "Heeren, Fishman",
+      "url": "https://github.com/nheeren/material_intensity_db",
+      "access": "使わない",
+      "automated": false,
+      "licence": "GitHub にライセンスの記載が無く、行ごとの出典の権利表示はさまざま（Elsevier 等）。RASMI（CC BY 4.0）を使う",
+      "status": "not_used"
+    },
+    {
+      "id": "fictional_sample_seed4201",
+      "name": "架空の研究用データ（凍結済みの生成器 seed 4201）",
+      "provider": "この研究",
+      "access": "リポジトリ内（12_APP_BASE/samples）",
+      "automated": false,
+      "licence": "架空データ。第三者の権利なし",
+      "status": "demo_only",
+      "limits": "実在の建物・原単位ではない。デモと計算経路の確認だけに使う"
+    }
+  ]
+}

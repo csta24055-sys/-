@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8a5a2b">
+<title>WLC Studio</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/door.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/door.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<div id="splash" class="splash" role="button" tabindex="0" aria-label="扉をタップして始める">
+  <div class="door-frame">
+    <div class="door" id="door"><img src="assets/door.svg" alt="" width="180" height="360"></div>
+  </div>
+  <p class="splash-title">WLC Studio</p>
+  <p class="splash-sub">扉をタップして始める</p>
+</div>
+
+<header class="appbar" id="appbar" hidden>
+  <button class="icon-btn" id="btn-back" aria-label="戻る">←</button>
+  <h1 id="title">WLC Studio</h1>
+  <button class="icon-btn" id="btn-settings" aria-label="設定とプロジェクト管理">⚙</button>
+</header>
+
+<main id="main" tabindex="-1" hidden></main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <form method="dialog" class="dlg-body">
+    <h2 id="dlg-title"></h2>
+    <div id="dlg-content"></div>
+    <div class="dlg-actions"><button value="close" class="btn">閉じる</button></div>
+  </form>
+</dialog>
+
+<noscript>このアプリは JavaScript を使います。</noscript>
+<script src="app.js"></script>
+</body>
+</html>
