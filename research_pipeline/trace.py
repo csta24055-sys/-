@@ -108,8 +108,24 @@ def parse_quiz(b: BL.Block) -> dict:
     return q
 
 
-def check_quiz(b: BL.Block, where: str, errors: list[str]) -> None:
+QUIZ_STATUS = {"公開可", "要確認"}
+QUIZ_DATA = {"原論文", "教材上の仮定値", "実データ再現", "観測値"}
+
+
+def quiz_status(b: BL.Block) -> str:
+    """第10部 10-5: 状態が無い・不正な問題は自動公開しない（要確認扱い）。"""
+    return b.attrs.get("status") if b.attrs.get("status") in QUIZ_STATUS else "要確認"
+
+
+def check_quiz(b: BL.Block, where: str, errors: list[str], warnings: list[str] | None = None) -> None:
     t, ans = b.attrs.get("type"), b.attrs.get("answer", "")
+    if warnings is not None:
+        if b.attrs.get("status") not in QUIZ_STATUS:
+            warnings.append(f"{where}: 問題の状態 status=（公開可/要確認）が無い・不正。要確認として非公開")
+        if b.attrs.get("data") not in QUIZ_DATA:
+            warnings.append(f"{where}: 数値・内容の種類 data=（{'/'.join(sorted(QUIZ_DATA))}）が無い")
+        if b.attrs.get("level") not in ("初級", "中級", "上級"):
+            warnings.append(f"{where}: 難易度 level= が無い・不正")
     q = parse_quiz(b)
     if t not in QUIZ_TYPES:
         errors.append(f"{where}: type は {sorted(QUIZ_TYPES)} のいずれか")
@@ -157,6 +173,8 @@ class Audit:
     units: dict = field(default_factory=dict)       # unit_id -> Item
     edu_items: dict = field(default_factory=dict)   # "doc#id" -> Item
     objectives: dict = field(default_factory=dict)  # LO -> Item
+    paper_version: str = ""
+    flashcards: int = 0
 
     def stale(self) -> list[Item]:
         return [it for it in [*self.units.values(), *self.edu_items.values()] if it.status != "OK"]
@@ -273,7 +291,7 @@ def audit(root: Path) -> Audit:
             if b.kind == "calc":
                 check_calc(b, where, a.errors)
             if b.kind == "quiz":
-                check_quiz(b, where, a.errors)
+                check_quiz(b, where, a.errors, a.warnings)
             if b.kind == "objective":
                 if not re.fullmatch(r"LO-\d{2}", b.id):
                     a.errors.append(f"{where}: 学習目標IDは LO-01 形式")
@@ -287,6 +305,29 @@ def audit(root: Path) -> Audit:
             if b.kind == "objective":
                 a.objectives[b.id] = it
 
+    paper_versions = {d.meta.get("version", "") for d in a.papers}
+    a.paper_version = sorted(paper_versions)[-1] if paper_versions else ""
+    for d in a.edus:
+        pv = d.meta.get("paper_version", "")
+        if not pv:
+            a.warnings.append(f"{d.path.relative_to(root)}: paper_version（準拠する論文の版）が無い")
+        elif pv not in paper_versions:
+            a.warnings.append(f"{d.path.relative_to(root)}: 論文旧版準拠（教材 {pv} / 論文 {a.paper_version}）。"
+                              "整合するまで検証済み最新版と呼ばない")
+    for fc in sorted((root / "education").rglob("flashcards*.csv")):
+        for i, r in enumerate(read_csv(fc), start=2):
+            us = LG.split_ids(r.get("unit_ids", ""))
+            cs = LG.split_ids(r.get("claim_ids", ""))
+            where = f"{fc.relative_to(root)}:{i}"
+            if not us or not cs or not r.get("front") or not r.get("back"):
+                a.errors.append(f"{where}: front/back/unit_ids/claim_ids のいずれかが空")
+                continue
+            bad_u = [u for u in us if u not in a.units]
+            allowed = {c for u in us if u in a.units for c in a.units[u].block.ids("claims")}
+            bad_c = [c for c in cs if c not in allowed]
+            if bad_u or bad_c:
+                a.errors.append(f"{where}: 存在しない段落 {bad_u} / 段落に無い主張 {bad_c}")
+            a.flashcards += 1
     quizzes = [it for it in a.edu_items.values() if it.block.kind == "quiz"]
     for it in quizzes:
         for lo in it.block.ids("lo"):

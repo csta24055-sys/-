@@ -26,7 +26,7 @@ from research_pipeline.common import (atomic_write, digest, file_sha256, read_cs
                                       research_root, write_csv, write_json)
 
 JST = timezone(timedelta(hours=9))
-STAGES = ("ledgers", "trace", "render", "office", "sync_plan")
+STAGES = ("ledgers", "trace", "learning", "render", "office", "sync_plan")
 # 同期先。既存の同名研究がある場合は、統合方針が決まるまで別名のフォルダに保存する（第7部）
 DROPBOX_ROOT = os.environ.get("AI_RESEARCH_DROPBOX_ROOT", "/AI_WORLD_PRIMARY_RESEARCH")
 SYNC_COLS = ["rel_path", "sha256", "size", "dropbox_path", "method", "synced_at"]
@@ -119,6 +119,31 @@ def stage_trace(root: Path, o) -> dict:
             "coverage_ok": all(c["ok"] for c in cov)}
 
 
+def stage_learning(root: Path, o) -> dict:
+    """第10部: 学習設計台帳の検証と更新、問題台帳、論文と教材の差分表。"""
+    from research_learning import learning as LN
+    a = TR.audit(root)
+    if a.errors:
+        raise RuntimeError("監査エラーがあるため学習設計を更新しない")
+    rows = LN.read_csv(root / "education" / "learning_design.csv")
+    errs = LN.validate(rows, a)
+    if errs:
+        raise RuntimeError("学習設計台帳のエラー:\n" + "\n".join(errs[:20]))
+    rows = LN.refresh(root, a)
+    qrows = LN.question_rows(a)
+    write_csv(root / "education" / "question_ledger.csv", LN.QCOLS, qrows)
+    blocks = LN.diff_blocks(a, rows)
+    for d in a.papers:
+        name = _out_name(root, d).replace("papers/", "education/").rsplit("/", 1)[0]
+        write_json(root / "build" / "layout" / f"{name}/09_論文と教材の差分表.json", blocks)
+        atomic_write(root / "exports" / f"{name}/09_論文と教材の差分表.md", RD.to_markdown(blocks))
+    imp = {k: sum(r["importance"] == k for r in rows) for k in "SABC"}
+    return {"importance": imp, "questions": len(qrows),
+            "questions_pending_review": sum(q["answer_status"] != "公開可" for q in qrows),
+            "flashcards": a.flashcards, "s_without_independent_evidence":
+                [r["unit_id"] for r in rows if r["evidence_warning"].startswith("S相当")]}
+
+
 def _docs(a: TR.Audit):
     for d in a.papers:
         yield "paper", d
@@ -201,7 +226,7 @@ def stage_sync_plan(root: Path, o) -> dict:
     return sync_plan(root)
 
 
-RUNNERS = {"ledgers": stage_ledgers, "trace": stage_trace, "render": stage_render,
+RUNNERS = {"ledgers": stage_ledgers, "trace": stage_trace, "learning": stage_learning, "render": stage_render,
            "office": stage_office, "sync_plan": stage_sync_plan}
 
 
@@ -209,10 +234,12 @@ def stage_inputs(root: Path, name: str, o) -> str:
     led = files_fp(root, [v[0] for v in LG.SCHEMAS.values()])
     src = files_fp(root, ["papers/**/*.src.md", "education/**/*.src.md", "audit/excerpt_verification.csv",
                           "revisions/trace_lock.json"])
-    code = files_fp(Path(__file__).resolve().parent, ["*.py"])
+    code = digest([files_fp(Path(__file__).resolve().parent, ["*.py"]),
+                   files_fp(Path(__file__).resolve().parent.parent / "research_learning", ["*.py"])])
     if name == "ledgers":
         return digest([led, code])
-    if name in ("trace", "render"):
+    if name in ("trace", "render", "learning"):
+        src = digest([src, files_fp(root, ["education/*.csv", "education/**/*.csv"])])
         return digest([led, src, code, name])
     if name == "office":
         return digest([files_fp(root, ["build/layout/**/*.json"]), str(getattr(o, "structlab", "")), code])

@@ -78,10 +78,17 @@ def layout(a: TR.Audit, doc: Doc, scope: str, mode: str = "full") -> tuple[list[
                                   f"{doc.meta.get('date', '?')} ／ 研究基準日: 2026-11-15（日本時間）"}]
     if reasons:
         out.append({"t": "small", "text": "暫定版の理由: " + "；".join(reasons)})
+    if scope == "education":
+        pv, cur = doc.meta.get("paper_version", ""), getattr(a, "paper_version", "")
+        label = "暫定教材" if status != "検証済み版" else "教材"
+        if pv and cur and pv != cur:
+            label += "・論文旧版準拠（論文 " + cur + " ／ 教材は " + pv + " に準拠）"
+        out.append({"t": "small", "text": f"【{label}】準拠する論文: v{pv or '不明'}。未確定の箇所: 論文が暫定版"
+                                          "（初版執筆の閾値が未達）。【】で始まる段落は資料の主張ではない。"})
     for k in ("basis", "audience", "part10"):
         if doc.meta.get(k):
             out.append({"t": "small", "text": doc.meta[k]})
-    qn = 0
+    qn = hidden_q = 0
     for it in doc.items:
         if it[0] == "heading":
             _, level, text, _ = it
@@ -93,6 +100,9 @@ def layout(a: TR.Audit, doc: Doc, scope: str, mode: str = "full") -> tuple[list[
         # 問題用紙には根拠を出さない（原文の抜粋・訳から正答がわかるため）。根拠は解答・解説に付ける
         nums = [] if mode == "quiz_questions" else [num(c) for c in b.ids("claims")]
         origin = f"（論文段落 {', '.join(b.ids('units'))} から）" if scope == "education" and b.ids("units") else ""
+        if b.kind == "quiz" and TR.quiz_status(b) != "公開可":
+            hidden_q += 1
+            continue
         if b.kind == "quiz":
             qn += 1
             q = TR.parse_quiz(b)
@@ -115,6 +125,8 @@ def layout(a: TR.Audit, doc: Doc, scope: str, mode: str = "full") -> tuple[list[
             if q["model"] and b.attrs.get("type") == "short":
                 out.append({"t": "p", "text": "解答例: " + q["model"]})
             out.append({"t": "p", "text": "解説: " + q["explain"]})
+            out.append({"t": "small", "text": f"難易度: {b.attrs.get('level', '未設定')} ／ 内容・数値の種類: "
+                                              f"{b.attrs.get('data', '未設定')} ／ 問題ID: {b.id}"})
             out.append({"t": "small", "text": f"{_cite(nums)}{origin}"})
             continue
         if mode != "full":
@@ -138,6 +150,8 @@ def layout(a: TR.Audit, doc: Doc, scope: str, mode: str = "full") -> tuple[list[
         if tail:
             out.append({"t": "small", "text": tail})
 
+    if hidden_q:
+        out.append({"t": "small", "text": f"要確認のため公開を止めている問題 {hidden_q} 件（第10部 10-5）"})
     if order:
         claims, srcs = a.led.index("claims"), a.led.index("sources")
         rows = [["番号", "主張ID・種別", "資料（著者・公開日）・原文位置・URL", "原文抜粋（短い引用）", "日本語訳"]]
@@ -184,29 +198,27 @@ def to_markdown(blocks: list[dict]) -> str:
     return "\n".join(md)
 
 
-def office(blocks: list[dict], pdf: Path, docx: Path, title: str, structlab_src: Path | None) -> dict:
-    """structlab-exam の render.py（取得・テスト済みの既存コード）で PDF/Word を作り、品質検査する。"""
-    if structlab_src is None or not (structlab_src / "structlab" / "exam" / "render.py").exists():
-        return {"ok": False, "skipped": "structlab-exam の render.py が見つからない（未取得として扱う）"}
-    if str(structlab_src) not in sys.path:
-        sys.path.insert(0, str(structlab_src))
+def office(blocks: list[dict], pdf: Path, docx: Path, title: str, structlab_src: Path | None = None) -> dict:
+    """research_learning.office（structlab-exam の render.py から抽出・移植）で PDF/Word を作り、品質検査する。"""
     try:
-        from structlab.exam import render as R  # 既存コードの再利用
+        from research_learning import office as R
+        import reportlab  # noqa: F401
+        import docx as _docx  # noqa: F401
+        import pymupdf  # noqa: F401
     except ImportError as e:
-        return {"ok": False, "skipped": f"structlab-exam の render.py を読み込めない: {e}"}
+        return {"ok": False, "skipped": f"PDF/Word 用ライブラリが無い（未作成）: {e}"}
     mm = 72 / 25.4
     clean = [dict(b) for b in blocks]
     for b in clean:
         if b["t"] == "table":
             w = b.pop("widths_mm", None) or [174 / len(b["rows"][0])] * len(b["rows"][0])
             b["widths"] = [x * mm for x in w]
-    try:
-        R.to_pdf(clean, pdf, title, header=title[:40])
-        R.to_docx(clean, docx, title)
-    except ImportError as e:
-        return {"ok": False, "skipped": f"PDF/Word 用ライブラリが無い: {e}"}
+    lay = R.safe_pdf(clean, pdf, title, header=title[:40])
+    if not lay["ok"]:
+        return {"ok": False, "pdf": lay}
+    R.to_docx(clean, docx, title)
     expect = [b["text"] for b in clean if b["t"] in ("h1",)][:3]
     res = {"pdf": R.check_pdf(pdf, expect), "docx": R.check_docx(docx, expect),
-           "missing_glyphs": R.missing_glyphs(clean)}
-    res["ok"] = res["pdf"]["ok"] and res["docx"]["ok"] and not res["missing_glyphs"]
+           "missing_glyphs": R.missing_glyphs(clean), "extra": R.extra_checks(clean, pdf)}
+    res["ok"] = res["pdf"]["ok"] and res["docx"]["ok"] and not res["missing_glyphs"] and res["extra"]["ok"]
     return res

@@ -20,3 +20,10 @@ python3 -I research_pipeline/pipeline.py approve --scope all --all-new --reason 
 ```
 
 同期先の Dropbox フォルダは環境変数 `AI_RESEARCH_DROPBOX_ROOT` で指定する（既定 `/AI_WORLD_PRIMARY_RESEARCH`）。
+
+## 第10部（教材生成）との関係
+
+- 段階 `learning` が学習設計台帳（`education/learning_design.csv`。S/A/B/C と証拠の強さを別の列で持つ）を検証・更新し、問題台帳（`education/question_ledger.csv`）と論文と教材の差分表を作る。
+- 問題は `status=公開可|要確認` と `data=原論文|教材上の仮定値|実データ再現|観測値` を持ち、要確認の問題は出力しない。
+- 教材の `paper_version` が論文の版と違うと「論文旧版準拠」と表示する。
+- PDF/Word は `research_learning/office.py`（structlab-exam の render.py から抽出・移植し、追加検査を加えたもの）で作る。

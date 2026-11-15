@@ -38,6 +38,7 @@ version: 0.0.1
 """
 EDU = """::: meta
 title: 合成教材
+paper_version: 0.0.1
 :::
 # 合成教材
 ::: objective id=LO-01 units=P1-U001
@@ -49,7 +50,7 @@ title: 合成教材
 ::: analogy id=A-01
 たとえ。
 :::
-::: quiz id=Q-01 units=P1-U001 claims=CLAIM-000001 lo=LO-01 type=choice answer=B level=初級
+::: quiz id=Q-01 units=P1-U001 claims=CLAIM-000001 lo=LO-01 type=choice answer=B level=初級 status=公開可 data=原論文
 問題。
 A) 誤り
 B) 正しい
@@ -80,6 +81,10 @@ def make_root(tmp: Path) -> Path:
     (root / "papers" / "p" / "paper.src.md").write_text(PAPER, encoding="utf-8")
     (root / "education" / "e").mkdir(parents=True)
     (root / "education" / "e" / "01.src.md").write_text(EDU, encoding="utf-8")
+    from research_learning.learning import COLS
+    write_csv(root / "education" / "learning_design.csv", COLS,
+              [{"unit_id": f"P1-U00{i}", "chapter": "ch8", "topic": "t", "importance": "SABC"[i - 1],
+                "importance_reason": "テスト"} for i in range(1, 5)])
     return root
 
 
