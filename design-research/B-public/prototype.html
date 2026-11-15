@@ -89,7 +89,7 @@
 @media (prefers-reduced-motion: reduce){ :root{ --dur-fast:0ms; --dur:0ms; } *{animation:none!important; scroll-behavior:auto!important} }
 
 /* 文字サイズ拡大（rem 基準で全体が拡大） */
-html{font-size:100%; scroll-padding-top:144px; scroll-padding-bottom:96px; -webkit-text-size-adjust:100%}
+html{font-size:100%; scroll-padding-top:193px; scroll-padding-bottom:96px; -webkit-text-size-adjust:100%}
 html.size-l{font-size:112.5%}
 html.size-xl{font-size:137.5%}
 
@@ -407,6 +407,8 @@ dialog::backdrop{background:rgba(27,36,48,.55)}
   table.stack tr{display:block; border:1px solid var(--color-border-strong); border-radius:var(--radius-m); margin-bottom:var(--space-3); padding:var(--space-2) var(--space-3); background:var(--color-bg)}
   table.stack td{display:grid; grid-template-columns:8em minmax(0,1fr); gap:var(--space-2); border:0; padding:var(--space-1) 0; text-align:left}
   table.stack td::before{content:attr(data-label); font-weight:700; color:var(--color-text-muted)}
+  /* a11y修正(QA): 文字間隔を広げても状態ラベルが折り返すようにする (WCAG 1.4.12 / 1.4.10) */
+  table.stack td > *{min-width:0; white-space:normal; overflow-wrap:anywhere}
   .sort-mobile{display:flex!important}
   .evidence dl,.meta-list{grid-template-columns:minmax(0,1fr)}
   .evidence dd,.meta-list dd{margin-bottom:var(--space-2)}
@@ -1547,17 +1549,6 @@ tileMap($("#tile-national"),NAT,null); tileMap($("#tile-pref"),PREF,"青葉市")
 renderWorkspace(); renderCharts(); renderSwatches(); syncToggles();
 route();
 if(/selfcheck/.test(location.search)){ var out=[]; ROUTES.forEach(function(r){ show(r); out.push(r+":"+root.scrollWidth+"/"+root.clientWidth); }); var pre=doc.createElement("pre"); pre.id="selfcheck"; pre.textContent=out.join(" "); doc.body.appendChild(pre); }
-})();
-</script>
-<script>
-/* a11y修正(QA): 固定ヘッダーの実高さ（文字拡大・折り返しで変化）に合わせて scroll-padding-top を更新し、
-   フォーカスやページ内リンクの移動先がヘッダーの下に隠れないようにする (WCAG 2.4.11) */
-(function(){
-  var h=document.querySelector('.site-header'); if(!h||!window.ResizeObserver) return;
-  function sync(){ var sticky=getComputedStyle(h).position==='sticky';
-    var ln=document.querySelector('.layer-nav'); var extra=(ln&&ln.offsetHeight&&getComputedStyle(ln).position==='sticky')?ln.offsetHeight:0;
-    document.documentElement.style.scrollPaddingTop = sticky ? (h.offsetHeight+extra+16)+'px' : (extra+16)+'px'; }
-  new ResizeObserver(sync).observe(h); window.addEventListener('resize',sync); sync();
 })();
 </script>
 </body>
