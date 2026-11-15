@@ -45,7 +45,7 @@ p.lead{color:var(--muted);margin:0 0 4px;max-width:70ch}
 .meta{font-size:.85rem;color:var(--muted)}
 nav.toc ul{list-style:none;padding:0;margin:12px 0 0;display:flex;flex-wrap:wrap;gap:8px}
 nav.toc a{display:inline-block;padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--surface);text-decoration:none;color:var(--text);font-size:.9rem}
-.axis{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-top:16px}
+.axis{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-top:16px}
 .axis table{width:100%}
 section.concept{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px 20px;margin-top:20px}
 section.concept > h2{margin-top:4px}
@@ -69,7 +69,7 @@ figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
 /* ===== Mockups (fixed specimen colors: each concept's own light palette) ===== */
 .mock{border:1px solid #9AA3AE;border-radius:6px;overflow:hidden;font-family:var(--font);color:#1A1D21;background:#fff;line-height:1.3}
 .mock .mono{font-family:var(--mono)}
-.desk{aspect-ratio:16/10;display:grid;font-size:10px;min-height:0}
+.desk{aspect-ratio:16/10;display:grid;font-size:10px;min-height:0;overflow:hidden}
 .phone{width:180px;height:360px;border-radius:18px;border:6px solid #2B3036;display:flex;flex-direction:column;font-size:10px;margin:0 auto}
 .phone .ps{flex:1;overflow:hidden}
 .bar{display:flex;align-items:center;gap:6px;padding:4px 8px;white-space:nowrap;overflow:hidden}
@@ -87,7 +87,7 @@ table.g td:first-child,table.g td.l{text-align:left}
 
 /* A: Grid Ledger */
 .mA{background:#FFFFFF}
-.mA .desk{grid-template-rows:22px 18px 1fr 46px;grid-template-columns:20% 1fr 26%}
+.mA .desk{grid-template-rows:22px 18px 1fr 46px;grid-template-columns:20% minmax(0,1fr) 26%}
 .mA .top{grid-column:1/-1;background:#1F5FA8;color:#fff}
 .mA .filter{grid-column:1/-1;background:#EEF1F5;border-bottom:1px solid #D5DAE1;color:#1A1D21}
 .mA .left{border-right:1px solid #D5DAE1;background:#F7F8FA}
@@ -101,7 +101,7 @@ table.g td:first-child,table.g td.l{text-align:left}
 
 /* B: Evidence Notebook */
 .mB{background:#FBFAF7}
-.mB .desk{grid-template-rows:24px 1fr;grid-template-columns:18% 1fr 22%}
+.mB .desk{grid-template-rows:24px 1fr;grid-template-columns:18% minmax(0,1fr) 22%}
 .mB .top{grid-column:1/-1;background:#FBFAF7;border-bottom:1px solid #E2DED6;color:#22252A}
 .mB .top .run{margin-left:auto;background:#5B3FA8;color:#fff;padding:1px 8px;border-radius:3px}
 .mB .left{border-right:1px solid #E2DED6;color:#22252A}
@@ -118,7 +118,7 @@ table.g td:first-child,table.g td.l{text-align:left}
 
 /* C: Pipeline Ledger */
 .mC{background:#F4F6F8}
-.mC .desk{grid-template-rows:22px 1fr 42px;grid-template-columns:22% 1fr 25%}
+.mC .desk{grid-template-rows:22px 1fr 42px;grid-template-columns:22% minmax(0,1fr) 25%}
 .mC .top{grid-column:1/-1;background:#16191D;color:#fff}
 .mC .top .run{margin-left:auto;background:#00687A;color:#fff;padding:1px 6px;border-radius:3px}
 .mC .left{background:#fff;border-right:1px solid #CDD3DB}
@@ -336,7 +336,7 @@ footer.site{padding-top:30px;padding-bottom:40px;font-size:.85rem;color:var(--mu
             <svg viewBox="0 0 200 60" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><polyline points="0,53 50,44 100,35 150,27 200,17" fill="none" stroke="#2D6CDF" stroke-width="2"/><polyline points="0,40 50,38 100,36 150,34 200,32" fill="none" stroke="#C2571A" stroke-width="2" stroke-dasharray="5 3"/></svg>
           </div>
           <div>係数を上げると、CLT は RC に近づく。</div>
-          <div style="border:1px solid #E2DED6;border-radius:4px;padding:5px;background:#fff">💬 教授: EF の出典の版を明記すること</div>
+          <div style="border:1px solid #E2DED6;border-radius:4px;padding:5px;background:#fff">コメント（教授）: EF の出典の版を明記すること</div>
         </div>
         <div class="bar" style="border-top:1px solid #E2DED6;justify-content:space-around;color:#22252A"><span>目次</span><span>コメント</span></div>
       </div>

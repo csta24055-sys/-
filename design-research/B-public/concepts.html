@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>公共ダッシュボード3案比較</title>
+<meta name="description" content="B分類（公共性の高いプロジェクト）向け、大気質とLCAの公開ダッシュボードUIコンセプト3案の視覚比較と評価。データは全てダミー。">
+<style>
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --surface-2:#EEF1F4; --border:#C9D1DA;
+  --text:#1B2430; --text-muted:#4D5B6A; --link:#1F5F8B; --accent:#1F5F8B;
+  --focus:#B4540A; --adopt-bg:#E7F2EA; --adopt-border:#2F6B3C; --adopt-text:#173D20;
+  --font:system-ui,-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
+  --space-1:4px; --space-2:8px; --space-3:16px; --space-4:24px; --space-5:40px;
+  --radius:8px;
+  /* 共通の大気質区分（ダミー）: 色＋記号＋文字の三重表示 */
+  --lv1-bg:#D6EFD8; --lv1-fg:#14361A; --lv2-bg:#FFF1B8; --lv2-fg:#4A3800;
+  --lv3-bg:#FFD9B3; --lv3-fg:#5A2A00; --lv4-bg:#F7C6CB; --lv4-fg:#5C0A14;
+  --nodata-bg:#E8EAED; --nodata-fg:#2B2F33;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161C; --surface:#1A2129; --surface-2:#232C36; --border:#3A4654;
+    --text:#E8EDF2; --text-muted:#B3BFCB; --link:#8CC8F2; --accent:#8CC8F2;
+    --focus:#FFB870; --adopt-bg:#18301F; --adopt-border:#6FBF83; --adopt-text:#D9F2DF;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161C; --surface:#1A2129; --surface-2:#232C36; --border:#3A4654;
+  --text:#E8EDF2; --text-muted:#B3BFCB; --link:#8CC8F2; --accent:#8CC8F2;
+  --focus:#FFB870; --adopt-bg:#18301F; --adopt-border:#6FBF83; --adopt-text:#D9F2DF;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.75}
+a{color:var(--link);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--surface);color:var(--text);padding:var(--space-2) var(--space-3);z-index:10}
+.skip:focus{left:var(--space-3);top:var(--space-3)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.idstrip{background:var(--surface-2);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-muted)}
+.idstrip .wrap{padding-top:var(--space-2);padding-bottom:var(--space-2)}
+header.site{background:var(--surface);border-bottom:1px solid var(--border)}
+header.site .wrap{padding-top:var(--space-3);padding-bottom:var(--space-3)}
+header.site p.title{margin:0;font-weight:700;font-size:18px}
+nav.toc ul{list-style:none;margin:var(--space-2) 0 0;padding:0;display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4)}
+nav.toc a{font-size:15px}
+main{padding:var(--space-4) 0 var(--space-5)}
+h1{font-size:clamp(24px,4vw,32px);line-height:1.35;margin:0 0 var(--space-3)}
+h2{font-size:clamp(20px,3vw,26px);line-height:1.4;margin:var(--space-5) 0 var(--space-3);padding-top:var(--space-3);border-top:2px solid var(--border)}
+h3{font-size:18px;margin:var(--space-4) 0 var(--space-2)}
+p{margin:0 0 var(--space-3)}
+.lead{font-size:17px;max-width:72ch}
+.note{font-size:14px;color:var(--text-muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--space-4)}
+.axis{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-3);margin:var(--space-3) 0}
+.axis .card h3{margin-top:0}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:0 var(--space-2);border-radius:4px;border:1px solid var(--border);background:var(--surface-2);color:var(--text)}
+.concept-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:var(--space-4);align-items:start}
+@media (max-width:900px){.concept-grid{grid-template-columns:minmax(0,1fr)}}
+.mocks{display:flex;gap:var(--space-3);align-items:flex-start;flex-wrap:wrap}
+figure{margin:0}
+figcaption{font-size:14px;color:var(--text-muted);margin-top:var(--space-2)}
+dl.spec{margin:0;display:grid;grid-template-columns:auto 1fr;gap:var(--space-1) var(--space-3);font-size:15px}
+dl.spec dt{font-weight:700}
+dl.spec dd{margin:0}
+.meter{display:flex;gap:3px;align-items:center}
+.meter span{display:inline-block;width:14px;height:14px;border:1px solid var(--text-muted);border-radius:2px}
+.meter span.on{background:var(--text)}
+.tree{font-size:14px;margin:0;padding-left:1.2em}
+.tree ul{padding-left:1.2em;margin:0}
+.swatches{display:flex;flex-wrap:wrap;gap:var(--space-2);list-style:none;padding:0;margin:0}
+.swatches li{display:flex;align-items:center;gap:6px;font-size:13px;font-variant-numeric:tabular-nums}
+.swatches i{display:inline-block;width:18px;height:18px;border:1px solid var(--text-muted);border-radius:3px}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-weight:700;padding:var(--space-3);font-size:16px}
+th,td{border-top:1px solid var(--border);padding:var(--space-2) var(--space-3);text-align:left;vertical-align:top}
+thead th{background:var(--surface-2)}
+td.num,th.num{text-align:center}
+tr.total th,tr.total td{font-weight:700;background:var(--surface-2)}
+.adopt{background:var(--adopt-bg);border:2px solid var(--adopt-border);color:var(--adopt-text);border-radius:var(--radius);padding:var(--space-4);margin-top:var(--space-4)}
+.adopt h3{margin-top:0}
+.adopt a{color:inherit}
+.legend{display:flex;flex-wrap:wrap;gap:var(--space-2);list-style:none;padding:0;margin:var(--space-2) 0 var(--space-3)}
+.legend li{font-size:14px;padding:2px 10px;border-radius:4px;border:1px solid rgba(0,0,0,.25)}
+.l1{background:var(--lv1-bg);color:var(--lv1-fg)} .l2{background:var(--lv2-bg);color:var(--lv2-fg)}
+.l3{background:var(--lv3-bg);color:var(--lv3-fg)} .l4{background:var(--lv4-bg);color:var(--lv4-fg)}
+.l0{background:var(--nodata-bg) repeating-linear-gradient(45deg,transparent 0 4px,rgba(0,0,0,.12) 4px 6px);color:var(--nodata-fg)}
+footer.site{border-top:1px solid var(--border);background:var(--surface);font-size:14px;color:var(--text-muted)}
+footer.site .wrap{padding-top:var(--space-4);padding-bottom:var(--space-4)}
+
+/* ===== モックアップ共通（固定配色。ページのテーマに依存しない） ===== */
+.mock{font-family:var(--font);border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25);font-size:10px;line-height:1.45;flex:none}
+.mock *{box-sizing:border-box}
+.desk{width:min(560px,100%);height:350px;display:flex;flex-direction:column}
+.phone{width:176px;height:350px;border:6px solid #2A2F35;border-radius:22px;display:flex;flex-direction:column}
+.m-id{font-size:8px;padding:3px 8px;border-bottom:1px solid rgba(0,0,0,.15)}
+.m-alert{font-size:9px;font-weight:700;padding:4px 8px}
+.chip{display:inline-block;padding:1px 6px;border-radius:3px;font-weight:700;font-size:9px}
+.chip.l1{background:#D6EFD8;color:#14361A}.chip.l2{background:#FFF1B8;color:#4A3800}.chip.l3{background:#FFD9B3;color:#5A2A00}.chip.l4{background:#F7C6CB;color:#5C0A14}
+.chip.l0{background:#E8EAED repeating-linear-gradient(45deg,transparent 0 3px,rgba(0,0,0,.15) 3px 5px);color:#2B2F33}
+.bar{height:8px;border-radius:2px}
+.m-row{display:flex;gap:6px}
+.grow{flex:1;min-width:0}
+
+/* 案A: 市民優先 */
+.mA{background:#FFFFFF;color:#1A1F24}
+.mA .m-id{background:#F4F7F8;color:#4A5560}
+.mA .m-alert{background:#FFF1B8;color:#4A3800;border-bottom:2px solid #4A3800}
+.mA .top{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid #D5DDE2}
+.mA .brand{font-weight:700;font-size:11px;color:#0B5A7A}
+.mA .gnav{display:flex;gap:10px;font-size:9px;color:#0B5A7A;text-decoration:underline}
+.mA .body{padding:10px 16px;max-width:400px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column;gap:7px}
+.mA .search{border:2px solid #1A1F24;border-radius:4px;padding:5px 7px;font-size:10px;color:#4A5560;display:flex;justify-content:space-between}
+.mA .btn{background:#0B5A7A;color:#FFFFFF;border-radius:4px;padding:2px 8px;font-weight:700}
+.mA .answer{border:2px solid #0B5A7A;border-radius:6px;padding:8px}
+.mA .answer .big{font-size:15px;font-weight:700}
+.mA .tasks{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.mA .task{border:1px solid #0B5A7A;border-radius:4px;padding:5px;color:#0B5A7A;font-weight:700;font-size:9px}
+.mA .ev{font-size:8px;color:#4A5560;border-top:1px solid #D5DDE2;padding-top:4px}
+.phone.mA .body{padding:7px;gap:5px}
+.phone.mA .answer .big{font-size:13px}
+
+/* 案B: 専門家優先 */
+.mB{background:#0F1720;color:#E6EDF3}
+.mB .m-id{background:#17212B;color:#A9B7C4;border-bottom-color:#2C3A47}
+.mB .m-alert{background:#3A2A0E;color:#FFE08A;border-bottom:1px solid #FFB454}
+.mB .top{display:flex;gap:8px;align-items:center;padding:4px 8px;border-bottom:1px solid #2C3A47;font-size:9px}
+.mB .ws{padding:1px 6px;border-radius:3px;color:#A9B7C4}
+.mB .ws.on{background:#17212B;color:#5CC8FF;border:1px solid #5CC8FF}
+.mB .url{margin-left:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:8px;background:#17212B;border:1px solid #2C3A47;padding:1px 5px;border-radius:3px;color:#A9B7C4;white-space:nowrap;overflow:hidden;max-width:46%}
+.mB .panes{flex:1;display:grid;grid-template-columns:110px 1fr 120px;min-height:0}
+.mB .pane{border-right:1px solid #2C3A47;padding:6px;overflow:hidden;font-size:8.5px}
+.mB .pane:last-child{border-right:0}
+.mB .lbl{color:#A9B7C4;font-size:8px;text-transform:none;margin-top:4px}
+.mB .opt{display:flex;gap:4px;align-items:center}
+.mB .box{width:8px;height:8px;border:1px solid #A9B7C4;border-radius:1px}
+.mB .box.on{background:#5CC8FF;border-color:#5CC8FF}
+.mB .dis{color:#A9B7C4;text-decoration:line-through}
+.mB .tabs{display:flex;gap:2px;margin-bottom:4px}
+.mB .tab{padding:1px 6px;border:1px solid #2C3A47;border-radius:3px 3px 0 0;color:#A9B7C4}
+.mB .tab.on{color:#0F1720;background:#5CC8FF;border-color:#5CC8FF;font-weight:700}
+.mB .mapgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-bottom:4px}
+.mB .mapgrid i{display:block;height:12px;border-radius:1px}
+.mB .sm{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:4px}
+.mB .sm div{border:1px solid #2C3A47;height:26px;border-radius:2px;position:relative;overflow:hidden}
+.mB .sm div::after{content:"";position:absolute;left:3px;right:3px;top:50%;border-top:1.5px solid #5CC8FF;transform:skewY(-12deg)}
+.mB table.dt{border-collapse:collapse;width:100%;font-size:8px}
+.mB table.dt td{border-top:1px solid #2C3A47;padding:1px 3px;font-variant-numeric:tabular-nums}
+.mB code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:7.5px;display:block;background:#17212B;border:1px solid #2C3A47;padding:3px;border-radius:2px;color:#E6EDF3;white-space:pre;overflow:hidden}
+.phone.mB .ptabs{display:flex;border-top:1px solid #2C3A47;font-size:8.5px}
+.phone.mB .ptabs span{flex:1;text-align:center;padding:5px 0;color:#A9B7C4}
+.phone.mB .ptabs span.on{color:#5CC8FF;font-weight:700;border-top:2px solid #5CC8FF}
+
+/* 案C: 段階的開示 */
+.mC{background:#FFFFFF;color:#1B2430}
+.mC .m-id{background:#F3F6F9;color:#4D5B6A}
+.mC .m-alert{background:#FFF1B8;color:#4A3800;border-bottom:2px solid #4A3800}
+.mC .top{display:flex;align-items:center;gap:10px;padding:5px 10px;border-bottom:1px solid #C9D3DD}
+.mC .brand{font-weight:700;font-size:10.5px;color:#1F5F8B}
+.mC .gnav{display:flex;gap:8px;font-size:8.5px;color:#1F5F8B}
+.mC .gnav span{text-decoration:underline}
+.mC .lang{margin-left:auto;font-size:8.5px;border:1px solid #1F5F8B;color:#1F5F8B;border-radius:3px;padding:0 4px}
+.mC .layernav{display:flex;gap:0;margin:5px 10px;border:1px solid #1F5F8B;border-radius:4px;overflow:hidden;font-size:8.5px}
+.mC .layernav span{flex:1;text-align:center;padding:2px 0;color:#1F5F8B;border-right:1px solid #1F5F8B}
+.mC .layernav span:last-child{border-right:0}
+.mC .layernav span.on{background:#1F5F8B;color:#FFFFFF;font-weight:700}
+.mC .scroll{flex:1;overflow:hidden;padding:0 10px 6px;display:flex;flex-direction:column;gap:5px}
+.mC .layer{border:1px solid #C9D3DD;border-radius:5px;padding:5px 7px}
+.mC .layer h6{margin:0 0 3px;font-size:9px;color:#1B2430}
+.mC .L1{border-left:4px solid #1F5F8B}
+.mC .L2{background:#E6EEF5}
+.mC .L3{background:#EEF0E6}
+.mC .closed{color:#4D5B6A;font-size:8.5px}
+.mC .big{font-size:13px;font-weight:700}
+.mC .seg{display:inline-flex;border:1px solid #1F5F8B;border-radius:3px;overflow:hidden;font-size:8px;margin-bottom:3px}
+.mC .seg span{padding:0 5px;color:#1F5F8B}
+.mC .seg span.on{background:#1F5F8B;color:#FFFFFF}
+.mC .line{height:30px;border-left:1px solid #4D5B6A;border-bottom:1px solid #4D5B6A;position:relative;margin:2px 0}
+.mC .line::after{content:"";position:absolute;left:4px;right:6px;top:45%;border-top:2px solid #1F5F8B;transform:skewY(-8deg)}
+.mC .line::before{content:"";position:absolute;left:0;right:0;top:30%;border-top:1px dashed #5A2A00}
+.mC .meta{display:grid;grid-template-columns:auto 1fr;gap:0 6px;font-size:8px}
+.mC .meta b{color:#4D5B6A;font-weight:700}
+.phone.mC .btabs{display:flex;border-top:1px solid #C9D3DD;font-size:8.5px;background:#F3F6F9}
+.phone.mC .btabs span{flex:1;text-align:center;padding:5px 0;color:#4D5B6A}
+.phone.mC .btabs span.on{color:#1F5F8B;font-weight:700;border-top:2px solid #1F5F8B}
+.phone.mC .layernav{margin:4px 6px}
+.phone.mC .scroll{padding:0 6px 4px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<div class="idstrip" role="note" aria-label="運営主体の識別">
+  <div class="wrap">大学研究プロジェクト「世界水準のUI・UX研究」の比較資料です。政府・自治体の公式サイトではありません。掲載データはすべてダミーで、出典は架空の『環境データ公開基盤（ダミー）』です。</div>
+</div>
+<header class="site">
+  <div class="wrap">
+    <p class="title">B分類（公共性の高いプロジェクト）UIコンセプト比較</p>
+    <nav class="toc" aria-label="ページ内の目次">
+      <ul>
+        <li><a href="#axis">比較軸</a></li>
+        <li><a href="#concept-a">案A 市民優先</a></li>
+        <li><a href="#concept-b">案B 専門家優先</a></li>
+        <li><a href="#concept-c">案C 段階的開示</a></li>
+        <li><a href="#summary">構造の比較</a></li>
+        <li><a href="#evaluation">評価</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+  <h1>大気質とLCAの公開ダッシュボード — 3案の比較</h1>
+  <p class="lead">全国・自治体別の大気質（PM2.5・光化学オキシダント）と、公共建築物の環境性能（LCA・CO2排出量・省エネ性能）を公開するダッシュボードを題材に、操作体系と情報構造が異なる3案を中忠実度のモックアップで比べます。地名・施設名・数値はすべて架空です。</p>
+  <p class="note">モックアップは縮小表示のサムネイルです。各モックアップの内容は、図の説明文（代替テキスト）と下の仕様欄にも文字で記載しています。</p>
+
+  <h3 id="legend-h">共通の大気質区分（ダミー）</h3>
+  <ul class="legend" aria-labelledby="legend-h">
+    <li class="l1">● 区分1 良好 0〜15 µg/m³</li>
+    <li class="l2">▲ 区分2 やや注意 15〜35</li>
+    <li class="l3">◆ 区分3 注意 35〜70</li>
+    <li class="l4">■ 区分4 警戒 70以上</li>
+    <li class="l0">斜線 データなし（測定停止・欠損）</li>
+  </ul>
+
+  <section aria-labelledby="axis">
+    <h2 id="axis">比較軸: 「誰のタスクから情報構造を組み立てるか」</h2>
+    <p>基本形の「実用性／先進性／統合型」ではなく、公共用途で最も大きな緊張である<strong>一般市民と専門家の両立</strong>を軸にしました。視覚的完成度は全案の評価基準に残しています。</p>
+    <div class="axis">
+      <div class="card"><h3><span class="tag">案A</span> 一般市民優先「タスク直行型」</h3><p>1画面1タスク。開いて5秒で「今日の状況と取るべき行動」が分かる。</p></div>
+      <div class="card"><h3><span class="tag">案B</span> 専門家優先「分析ワークベンチ型」</h3><p>条件を組み立て、地図・時系列・表を連動させ、条件ごと共有・再計算する。</p></div>
+      <div class="card"><h3><span class="tag">案C</span> 段階的開示「3層レイヤー型」</h3><p>同じページで「いまの状況 → くらべる → 根拠とデータ」と深く潜れる統合型。</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== 案A ===================== -->
+  <section aria-labelledby="concept-a">
+    <h2 id="concept-a">案A: 一般市民優先「タスク直行型」</h2>
+    <div class="concept-grid">
+      <div class="mocks">
+        <figure>
+          <div class="mock desk mA" role="img" aria-label="案Aのデスクトップ画面。最上部に運営主体の識別帯、その下に光化学オキシダント注意報の緊急時バナー。中央寄せの1カラムで、大きな地域検索欄、青葉市の結論カード『今日の空気 区分2 やや注意、PM2.5 18マイクログラム、屋外での長時間の激しい運動は控えめに』、4つのタスクボタン、最下部に出典と更新日の1行。">
+            <div class="m-id">○○大学 △△研究室が運営する研究用サイトです（政府サイトではありません）｜出典: 環境データ公開基盤（ダミー）</div>
+            <div class="m-alert">▲ 緊急: 北浜県に光化学オキシダント注意報（ダミー）— 屋外活動を控えてください ＞ 詳しく</div>
+            <div class="top"><span class="brand">そらと建物のデータ（仮称）</span><span class="gnav"><span>空気を調べる</span><span>建物を調べる</span><span>お知らせ・通知</span><span>このサイトについて</span></span></div>
+            <div class="body">
+              <div class="search"><span>市区町村名・郵便番号を入力</span><span class="btn">調べる</span></div>
+              <div class="answer">
+                <div>北浜県 青葉市　2026-11-15 14時（速報値）</div>
+                <div class="big"><span class="chip l2">▲ 区分2 やや注意</span> PM2.5 18 µg/m³</div>
+                <div>屋外での長時間の激しい運動は控えめに。窓開け換気は短時間で。</div>
+                <div>呼吸器の病気がある人・高齢の人・子ども: 屋外では体調の変化に注意。</div>
+              </div>
+              <div class="tasks"><div class="task">明日の予報を見る</div><div class="task">近くの公共建築物のCO2</div><div class="task">注意報をメールで受け取る</div><div class="task">やさしい日本語で読む</div></div>
+              <div class="ev">出典: 環境データ公開基盤（ダミー）｜速報値は後日修正される場合があります｜最終更新 2026-11-15 14:05 ＞ 詳しいデータ（専門家向け）</div>
+            </div>
+          </div>
+          <figcaption>デスクトップ: 最大幅720pxの1カラム（サムネイル）</figcaption>
+        </figure>
+        <figure>
+          <div class="mock phone mA" role="img" aria-label="案Aのスマートフォン画面。識別帯、緊急時バナー、結論カードが最上部、その下に2×2の大きなタスクボタン、最下部に地域検索欄が追従。">
+            <div class="m-id">研究用サイト（政府ではありません）</div>
+            <div class="m-alert">▲ 注意報（ダミー）＞</div>
+            <div class="body">
+              <div class="answer"><div>青葉市 14時（速報）</div><div class="big"><span class="chip l2">▲ 区分2</span></div><div>PM2.5 18 µg/m³</div><div>激しい運動は控えめに</div></div>
+              <div class="tasks"><div class="task">空気</div><div class="task">建物</div><div class="task">通知</div><div class="task">説明</div></div>
+              <div class="ev">出典・更新日 ＞</div>
+              <div class="search" style="margin-top:auto"><span>地域を検索</span><span class="btn">→</span></div>
+            </div>
+          </div>
+          <figcaption>スマートフォン</figcaption>
+        </figure>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">ナビゲーション構造</h3>
+        <ul class="tree"><li>トップ（全国概況＋検索）<ul><li>空気を調べる → 地域の結果</li><li>建物を調べる → 施設の結果</li><li>お知らせ・通知 → 1画面1問×3</li><li>このサイトについて</li></ul></li></ul>
+        <h3>情報密度</h3>
+        <div class="meter" aria-label="情報密度 5段階中1"><span class="on"></span><span></span><span></span><span></span><span></span><span style="border:0;width:auto">&nbsp;低（数値は最大3）</span></div>
+        <h3>配色</h3>
+        <ul class="swatches"><li><i style="background:#FFFFFF"></i>#FFFFFF</li><li><i style="background:#1A1F24"></i>#1A1F24</li><li><i style="background:#0B5A7A"></i>#0B5A7A</li><li><i style="background:#C2410C"></i>#C2410C 焦点</li></ul>
+        <dl class="spec" style="margin-top:var(--space-3)"><dt>文字</dt><dd>本文18px／行間1.8</dd><dt>技術</dt><dd>静的生成＋HTML中心</dd><dt>難易度</dt><dd>低</dd></dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 案B ===================== -->
+  <section aria-labelledby="concept-b">
+    <h2 id="concept-b">案B: 専門家優先「分析ワークベンチ型」</h2>
+    <div class="concept-grid">
+      <div class="mocks">
+        <figure>
+          <div class="mock desk mB" role="img" aria-label="案Bのデスクトップ画面。ダーク基調の3ペイン構成。上部にワークスペース切替（大気質、建築物LCA、データセット、方法論）と現在の条件を表すURL。左ペインは指標・地域・期間・集計方法の条件で、データの無い選択肢は打ち消し線と理由付き。中央は地図・時系列・表・散布図のタブと、地図と小型多重グラフと表の連動ビュー。右ペインは出典、速報か確定か、ライセンス、引用文、APIとPythonのコード例。">
+            <div class="m-id">○○大学 △△研究室 運営（政府サイトではありません）｜出典: 環境データ公開基盤（ダミー）</div>
+            <div class="m-alert">▲ 注意報発令中（ダミー）: 北浜県 光化学オキシダント</div>
+            <div class="top"><span class="ws on">大気質</span><span class="ws">建築物LCA</span><span class="ws">データセット</span><span class="ws">方法論</span><span class="url">?ind=pm25&amp;area=kitahama&amp;from=2026-10-01&amp;agg=daily</span></div>
+            <div class="panes">
+              <div class="pane">
+                <div class="lbl">指標</div>
+                <div class="opt"><span class="box on"></span>PM2.5 日平均</div>
+                <div class="opt"><span class="box on"></span>光化学Ox 1時間値</div>
+                <div class="opt"><span class="box"></span><span class="dis">PM10</span></div>
+                <div style="color:#FFB454;font-size:7.5px">PM10: この地域は未測定</div>
+                <div class="lbl">地域</div>
+                <div class="opt"><span class="box on"></span>北浜県（12局）</div>
+                <div class="opt"><span class="box"></span>南風県（9局）</div>
+                <div class="lbl">期間</div>
+                <div>2026-10-01〜11-15</div>
+                <div class="lbl">集計</div>
+                <div>日平均／基準超過日数</div>
+              </div>
+              <div class="pane">
+                <div class="tabs"><span class="tab on">地図</span><span class="tab">時系列</span><span class="tab">表</span><span class="tab">散布図</span></div>
+                <div class="mapgrid">
+                  <i style="background:#D6EFD8"></i><i style="background:#D6EFD8"></i><i style="background:#FFF1B8"></i><i style="background:#FFF1B8"></i><i style="background:#FFD9B3"></i><i style="background:#D6EFD8"></i><i style="background:#E8EAED"></i><i style="background:#FFF1B8"></i>
+                  <i style="background:#FFF1B8"></i><i style="background:#FFD9B3"></i><i style="background:#FFD9B3"></i><i style="background:#FFF1B8"></i><i style="background:#D6EFD8"></i><i style="background:#D6EFD8"></i><i style="background:#FFF1B8"></i><i style="background:#F7C6CB"></i>
+                </div>
+                <div class="sm"><div></div><div></div><div></div></div>
+                <table class="dt"><tr><td>局</td><td>平均</td><td>最大</td><td>超過日</td><td>状態</td></tr><tr><td>青葉中央</td><td>14.2</td><td>38.1</td><td>1</td><td>速報</td></tr><tr><td>港町</td><td>17.9</td><td>41.6</td><td>3</td><td>速報</td></tr><tr><td>山手</td><td>—</td><td>—</td><td>—</td><td>停止</td></tr></table>
+              </div>
+              <div class="pane">
+                <div class="lbl">根拠</div>
+                <div>出典: 環境データ公開基盤（ダミー）</div>
+                <div>単位: µg/m³（日平均）</div>
+                <div>状態: 速報値（確定は翌年度）</div>
+                <div>ライセンス: CC BY 4.0（ダミー）</div>
+                <div class="lbl">引用</div>
+                <div>環境データ公開基盤（ダミー）, 2026</div>
+                <div class="lbl">API</div>
+                <code>import pandas as pd
+df = pd.read_csv(URL)</code>
+              </div>
+            </div>
+          </div>
+          <figcaption>デスクトップ: 3ペインのリンクドビュー（サムネイル）</figcaption>
+        </figure>
+        <figure>
+          <div class="mock phone mB" role="img" aria-label="案Bのスマートフォン画面。保存済み条件の閲覧専用。上部に条件の要約、中央に小型多重グラフ、下部に条件・図・根拠の3タブ。条件の新規作成はデスクトップ推奨と表示。">
+            <div class="m-id">研究用（政府ではありません）</div>
+            <div class="top" style="font-size:8px">保存済み条件: 北浜県 PM2.5 10/01–11/15</div>
+            <div class="pane" style="flex:1;border:0">
+              <div class="sm" style="grid-template-columns:1fr 1fr"><div></div><div></div><div></div><div></div></div>
+              <table class="dt"><tr><td>青葉中央</td><td>14.2</td><td>速報</td></tr><tr><td>港町</td><td>17.9</td><td>速報</td></tr><tr><td>山手</td><td>—</td><td>停止</td></tr></table>
+              <div style="color:#FFB454;font-size:7.5px;margin-top:4px">条件の新規作成はデスクトップ推奨</div>
+              <div class="lbl">共有URLをコピー</div>
+            </div>
+            <div class="ptabs"><span>条件</span><span class="on">図</span><span>根拠</span></div>
+          </div>
+          <figcaption>スマートフォン（閲覧・共有のみ）</figcaption>
+        </figure>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">ナビゲーション構造</h3>
+        <ul class="tree"><li>ワークスペース（4種）<ul><li>左: 条件パネル（多次元フィルタ）</li><li>中央: 地図｜時系列｜表｜散布図</li><li>右: 根拠・引用・API</li><li>上: 条件URL・履歴</li></ul></li></ul>
+        <h3>情報密度</h3>
+        <div class="meter" aria-label="情報密度 5段階中5"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span style="border:0;width:auto">&nbsp;高（数値30〜100）</span></div>
+        <h3>配色</h3>
+        <ul class="swatches"><li><i style="background:#0F1720"></i>#0F1720</li><li><i style="background:#E6EDF3"></i>#E6EDF3</li><li><i style="background:#5CC8FF"></i>#5CC8FF</li><li><i style="background:#FFB454"></i>#FFB454 選択</li></ul>
+        <dl class="spec" style="margin-top:var(--space-3)"><dt>文字</dt><dd>本文14px／表13px</dd><dt>技術</dt><dd>SPA＋WebGL地図＋API</dd><dt>難易度</dt><dd>高</dd></dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 案C ===================== -->
+  <section aria-labelledby="concept-c">
+    <h2 id="concept-c">案C: 段階的開示「3層レイヤー型」（統合型）</h2>
+    <div class="concept-grid">
+      <div class="mocks">
+        <figure>
+          <div class="mock desk mC" role="img" aria-label="案Cのデスクトップ画面。識別帯、緊急時バナー、5項目のグローバルナビと言語切替。その下に『いまの状況、くらべる、根拠とデータ』の層ナビ。第1層の結論カードと第2層の推移グラフが2カラムで並び、第2層にはグラフ・地図・表の切替。下に第3層の根拠ブロック（定義、単位、測定局数、速報か確定か、出典、最終更新、次回更新、ライセンス、条件付きURLとAPI）。">
+            <div class="m-id">○○大学 △△研究室 運営の研究用サイト（政府サイトではありません）｜出典: 環境データ公開基盤（ダミー）｜連絡先</div>
+            <div class="m-alert">▲ 緊急: 北浜県に光化学オキシダント注意報（ダミー）＞ 詳しく</div>
+            <div class="top"><span class="brand">そらと建物のデータ（仮称）</span><span class="gnav"><span>地域から探す</span><span>指標から探す</span><span>公共建築物</span><span>お知らせ</span><span>方法と出典</span></span><span class="lang">言語 / Language</span></div>
+            <div class="layernav"><span class="on">1 いまの状況</span><span>2 くらべる</span><span>3 根拠とデータ</span></div>
+            <div class="scroll">
+              <div class="m-row">
+                <div class="layer L1 grow">
+                  <h6>1 いまの状況 — 北浜県 青葉市</h6>
+                  <div class="big"><span class="chip l2">▲ 区分2 やや注意</span> 18 µg/m³</div>
+                  <div>屋外での長時間の激しい運動は控えめに。</div>
+                  <div>影響を受けやすい人: 体調の変化に注意。</div>
+                  <div style="color:#4D5B6A">2026-11-15 14時・速報値</div>
+                </div>
+                <div class="layer L2 grow">
+                  <h6>2 くらべる — 30日の推移</h6>
+                  <div class="seg"><span class="on">グラフ</span><span>地図</span><span>表</span></div>
+                  <div class="line" aria-hidden="true"></div>
+                  <div>この図が言っていること: 11月は県平均より低め（破線=区分2の下限）</div>
+                </div>
+              </div>
+              <div class="layer L3">
+                <h6>3 根拠とデータ（開いた状態）</h6>
+                <div class="meta"><b>定義</b><span>PM2.5 日平均（測定局12局の平均）</span><b>状態</b><span>速報値 — 確定値は翌年度に公表、修正される場合あり</span><b>出典</b><span>環境データ公開基盤（ダミー）／管理: △△研究室</span><b>更新</b><span>最終 2026-11-15 14:05／次回 15:05</span><b>再利用</b><span>表示中のデータ・全データ（CSV）｜条件付きURL｜API・Pythonコード例｜引用文</span></div>
+              </div>
+            </div>
+          </div>
+          <figcaption>デスクトップ: 第1層と第2層を2カラム、第3層は全幅（サムネイル）</figcaption>
+        </figure>
+        <figure>
+          <div class="mock phone mC" role="img" aria-label="案Cのスマートフォン画面。識別帯と緊急時バナーの下に3つの層ナビ。第1層の結論カードが開き、第2層と第3層は閉じたアコーディオン。下部にホーム・地域・建物・方法の4タブ。">
+            <div class="m-id">研究用サイト（政府ではありません）</div>
+            <div class="m-alert">▲ 注意報（ダミー）＞</div>
+            <div class="layernav"><span class="on">1 状況</span><span>2 比較</span><span>3 根拠</span></div>
+            <div class="scroll">
+              <div class="layer L1"><h6>1 いまの状況 青葉市</h6><div class="big"><span class="chip l2">▲ 区分2</span></div><div>18 µg/m³・速報値</div><div>激しい運動は控えめに</div></div>
+              <div class="layer L2"><h6>＋ 2 くらべる</h6><div class="closed">推移・県内比較（閉じています）</div></div>
+              <div class="layer L3"><h6>＋ 3 根拠とデータ</h6><div class="closed">出典・方法・ダウンロード</div></div>
+            </div>
+            <div class="btabs"><span class="on">ホーム</span><span>地域</span><span>建物</span><span>方法</span></div>
+          </div>
+          <figcaption>スマートフォン: 層はアコーディオン</figcaption>
+        </figure>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">ナビゲーション構造</h3>
+        <ul class="tree"><li>グローバル5項目＋検索＋言語<ul><li>地域・指標・建物ページ<ul><li>層1 いまの状況（常時表示）</li><li>層2 くらべる（初期は開）</li><li>層3 根拠とデータ（初期は閉）→ 詳細分析モード</li></ul></li><li>方法と出典（判断基準・更新履歴）</li></ul></li></ul>
+        <h3>情報密度</h3>
+        <div class="meter" aria-label="情報密度 層により5段階中1から4まで可変"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span style="border:0;width:auto">&nbsp;層ごとに可変（低→高）</span></div>
+        <h3>配色</h3>
+        <ul class="swatches"><li><i style="background:#FFFFFF"></i>#FFFFFF</li><li><i style="background:#1B2430"></i>#1B2430</li><li><i style="background:#1F5F8B"></i>#1F5F8B</li><li><i style="background:#E6EEF5"></i>#E6EEF5 層2</li><li><i style="background:#EEF0E6"></i>#EEF0E6 層3</li><li><i style="background:#B4540A"></i>#B4540A 焦点</li></ul>
+        <dl class="spec" style="margin-top:var(--space-3)"><dt>文字</dt><dd>本文16px／結論22px</dd><dt>技術</dt><dd>SSR＋アイランド＋SVG図</dd><dt>難易度</dt><dd>中〜やや高</dd></dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 構造比較 ===================== -->
+  <section aria-labelledby="summary">
+    <h2 id="summary">操作体系と情報構造の比較</h2>
+    <div class="table-wrap">
+      <table>
+        <caption>3案の構造上の違い</caption>
+        <thead><tr><th scope="col">項目</th><th scope="col">案A 市民優先</th><th scope="col">案B 専門家優先</th><th scope="col">案C 段階的開示</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">起点</th><td>地域検索 → 結論</td><td>条件の組み立て → 比較</td><td>2軸入口 → 結論 → 比較 → 根拠</td></tr>
+          <tr><th scope="row">ナビゲーション</th><td>上部4項目、最大2階層</td><td>ワークスペース＋3ペイン＋タブ</td><td>上部5項目＋ページ内の層ナビ</td></tr>
+          <tr><th scope="row">情報密度</th><td>低</td><td>高</td><td>層ごとに低→高</td></tr>
+          <tr><th scope="row">根拠の提示</th><td>簡易1行＋専門家向けリンク</td><td>右ペインに常時表示</td><td>第3層の定型根拠ブロック</td></tr>
+          <tr><th scope="row">再現性（条件URL・API）</th><td>なし</td><td>あり（中核機能）</td><td>あり（第3層）</td></tr>
+          <tr><th scope="row">スマートフォン</th><td>主用途。デスクトップとほぼ同じ</td><td>閲覧・共有のみ</td><td>アコーディオン＋下部タブ</td></tr>
+          <tr><th scope="row">JSが動かないとき</th><td>ほぼ全機能が使える</td><td>表のみSSRで表示</td><td>全層が展開された状態で読める</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== 評価 ===================== -->
+  <section aria-labelledby="evaluation">
+    <h2 id="evaluation">評価</h2>
+    <p>重みはB分類の目的（信頼性・透明性・アクセシビリティ・公共的価値）に合わせて設定しました。点数は1〜5点、加重合計は「Σ（重み×点数）÷100」で5点満点です。</p>
+    <div class="table-wrap">
+      <table>
+        <caption>評価基準・重み・採点</caption>
+        <thead><tr><th scope="col">評価基準</th><th scope="col" class="num">重み（%）</th><th scope="col" class="num">案A</th><th scope="col" class="num">案B</th><th scope="col" class="num">案C</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">操作効率</th><td class="num">8</td><td class="num">4</td><td class="num">3</td><td class="num">4</td></tr>
+          <tr><th scope="row">学習の容易さ</th><td class="num">10</td><td class="num">5</td><td class="num">2</td><td class="num">4</td></tr>
+          <tr><th scope="row">情報の理解しやすさ</th><td class="num">12</td><td class="num">5</td><td class="num">2</td><td class="num">5</td></tr>
+          <tr><th scope="row">視覚的完成度</th><td class="num">5</td><td class="num">3</td><td class="num">4</td><td class="num">4</td></tr>
+          <tr><th scope="row">アクセシビリティ</th><td class="num">13</td><td class="num">5</td><td class="num">3</td><td class="num">4</td></tr>
+          <tr><th scope="row">拡張性</th><td class="num">6</td><td class="num">3</td><td class="num">5</td><td class="num">4</td></tr>
+          <tr><th scope="row">実装・保守コスト</th><td class="num">8</td><td class="num">5</td><td class="num">2</td><td class="num">3</td></tr>
+          <tr><th scope="row">目的への適合性</th><td class="num">10</td><td class="num">3</td><td class="num">3</td><td class="num">5</td></tr>
+          <tr><th scope="row">信頼性（分類固有）</th><td class="num">10</td><td class="num">4</td><td class="num">4</td><td class="num">5</td></tr>
+          <tr><th scope="row">透明性（分類固有）</th><td class="num">10</td><td class="num">3</td><td class="num">5</td><td class="num">5</td></tr>
+          <tr><th scope="row">公平性（分類固有）</th><td class="num">8</td><td class="num">4</td><td class="num">3</td><td class="num">5</td></tr>
+          <tr class="total"><th scope="row">加重合計（5点満点）</th><td class="num">100</td><td class="num">4.12</td><td class="num">3.17</td><td class="num">4.42（採用）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="adopt" role="region" aria-labelledby="adopt-h">
+      <h3 id="adopt-h">採用案: 案C 段階的開示「3層レイヤー型」（4.42点）</h3>
+      <p>一般市民と専門家を同じページ・同じURL・同じ根拠で扱える唯一の案で、信頼性・透明性・公平性の3基準すべてで満点でした。JSが動かなくても全層を読めるため、災害時や低速回線でも案Aに近い頑健さがあります。</p>
+      <p><strong>案Aから取り込む要素:</strong> 第1層の文字サイズ・タップ領域、通知などの手続きの「1画面1問」、やさしい日本語版、災害時の第1層だけの軽量表示、トップの4つの市民タスクボタン。</p>
+      <p style="margin-bottom:0"><strong>案Bから取り込む要素:</strong> 条件のURL保持、表示中データと全データのダウンロード、APIとコード例、データの無い選択肢の理由付き無効化、第3層から入る詳細分析モード（ロードマップ扱い）、セル単位の状態記号。</p>
+    </div>
+    <p class="note" style="margin-top:var(--space-3)">感度の確認: 学習の容易さとアクセシビリティの重みを各+5%（他の基準から按分で計−10%）にしても、案C（約4.37）が案A（約4.23）を上回ります。</p>
+  </section>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>作成: 「世界水準のUI・UX研究」B分類担当（研究用資料）。根拠は調査台帳 ledger-B-1 / ledger-B-2 の12事例。詳細は principles.md と concepts.md を参照。</p>
+    <p style="margin-bottom:0">本資料は既存製品の画面を複製したものではなく、抽出した設計原則に基づく独自のモックアップです。政府・自治体のブランド要素は使用していません。</p>
+  </div>
+</footer>
+</body>
+</html>

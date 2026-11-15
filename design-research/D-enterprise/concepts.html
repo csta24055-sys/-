@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EnviroOps 3案比較</title>
+<meta name="description" content="大企業品質（D分類）の3案UIコンセプト比較：Operations Console / Insight Workspace / Federated Shell。データはすべてダミー。">
+<style>
+:root{
+  color-scheme: light;
+  /* ページ本体のトークン */
+  --bg:#F4F5F7; --surface:#FFFFFF; --ink:#16191D; --ink-2:#3F4753; --line:#D1D5DB;
+  --accent:#0B5CAD; --accent-ink:#FFFFFF; --focus:#0B5CAD;
+  --ok:#1E7A3C; --warn:#8A5A00; --bad:#B42318; --pend:#5B3FA0;
+  --ok-bg:#E7F4EC; --warn-bg:#FBF1DE; --bad-bg:#FBE9E7; --pend-bg:#EFEAF8;
+  --font:system-ui,-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --r1:4px; --r2:8px; --r3:12px;
+  /* 案A トークン */
+  --a-bg:#F5F6F8; --a-surface:#FFFFFF; --a-ink:#1B1F24; --a-ink2:#4A5260; --a-line:#D3D8DF; --a-accent:#0B5CAD; --a-sel:#E6EFF9;
+  /* 案B トークン */
+  --b-bg:#F3F4F7; --b-surface:#FFFFFF; --b-head:#14213D; --b-ink:#172033; --b-ink2:#4D5870; --b-accent:#3047C9; --b-accent2:#00695C; --b-s3:#A04A00; --b-s4:#7B3FA0;
+  /* 案C トークン（組織アクセントのみ差し替え） */
+  --c-bg:#F6F7F9; --c-surface:#FFFFFF; --c-scope:#0F2A3D; --c-ink:#16191D; --c-ink2:#4B5563; --c-line:#D1D5DB; --brand-accent:#1D5FA8; --c-sel:#E8F0FA;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.7}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--surface);color:var(--accent);padding:var(--s2) var(--s4);z-index:10}
+.skip:focus{left:var(--s4);top:var(--s4)}
+header.site{background:var(--surface);border-bottom:1px solid var(--line)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+header.site .wrap{padding-top:var(--s5);padding-bottom:var(--s5)}
+.eyebrow{font-size:13px;color:var(--ink-2);margin:0 0 var(--s1)}
+h1{font-size:26px;line-height:1.35;margin:0 0 var(--s2)}
+h2{font-size:21px;line-height:1.4;margin:var(--s7) 0 var(--s3)}
+h3{font-size:17px;line-height:1.45;margin:var(--s5) 0 var(--s2)}
+p{margin:0 0 var(--s3)}
+.lead{color:var(--ink-2);max-width:72ch}
+nav.toc ul{list-style:none;display:flex;flex-wrap:wrap;gap:var(--s2);padding:0;margin:var(--s3) 0 0}
+nav.toc a{display:inline-block;padding:var(--s1) var(--s3);border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:14px;background:var(--surface)}
+.note{font-size:13px;color:var(--ink-2);border-left:3px solid var(--line);padding-left:var(--s3)}
+.axis{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);font-size:14px}
+.axis th,.axis td{border-bottom:1px solid var(--line);padding:var(--s2) var(--s3);text-align:left;vertical-align:top}
+.axis thead th{background:#EEF0F3;font-size:13px}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+section.concept{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:var(--s5);margin-top:var(--s5)}
+section.concept.adopted{border:2px solid var(--accent)}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:#EEF0F3;color:var(--ink);margin-right:var(--s2)}
+.tag.adopt{background:var(--accent);color:var(--accent-ink)}
+.concept h2{margin-top:var(--s2)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--s3);margin:var(--s4) 0}
+.facts div{border:1px solid var(--line);border-radius:var(--r2);padding:var(--s3)}
+.facts dt{font-size:12px;color:var(--ink-2);font-weight:600}
+.facts dd{margin:0;font-size:14px}
+.mocks{display:flex;gap:var(--s5);align-items:flex-start;flex-wrap:wrap;margin-top:var(--s4)}
+figure{margin:0}
+figcaption{font-size:13px;color:var(--ink-2);margin-top:var(--s2);max-width:560px}
+.swatches{display:flex;flex-wrap:wrap;gap:var(--s2);list-style:none;padding:0;margin:var(--s2) 0 0}
+.swatches li{display:flex;align-items:center;gap:6px;font-size:12px;font-family:var(--mono)}
+.swatches i{display:inline-block;width:18px;height:18px;border-radius:4px;border:1px solid rgba(0,0,0,.15)}
+.pm{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.pm ul{margin:0;padding-left:1.2em;font-size:14px}
+@media (max-width:720px){.pm{grid-template-columns:1fr} section.concept{padding:var(--s4)}}
+
+/* ===== モックアップ共通 ===== */
+.mock{font-family:var(--font);overflow:hidden;border-radius:var(--r2);border:1px solid #9AA3AF;box-shadow:0 1px 3px rgba(0,0,0,.08);position:relative}
+.desk{width:560px;max-width:100%;height:340px;display:flex;flex-direction:column}
+.phone{width:180px;height:340px;border-radius:20px;border:6px solid #2A2F36;display:flex;flex-direction:column}
+.mock *{line-height:1.3}
+.mock .mono{font-family:var(--mono)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:3px;vertical-align:middle}
+.st{font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;white-space:nowrap}
+.st.ok{background:var(--ok-bg);color:var(--ok)} .st.warn{background:var(--warn-bg);color:var(--warn)} .st.bad{background:var(--bad-bg);color:var(--bad)} .st.pend{background:var(--pend-bg);color:var(--pend)}
+
+/* 案A */
+.ma{background:var(--a-bg);color:var(--a-ink)}
+.ma .top{height:28px;background:var(--a-surface);border-bottom:1px solid var(--a-line);display:flex;align-items:center;gap:8px;padding:0 8px;font-size:10px}
+.ma .top b{font-size:11px}
+.ma .search{flex:1;max-width:180px;border:1px solid var(--a-line);border-radius:3px;padding:2px 6px;color:var(--a-ink2)}
+.ma .orgsel{border:1px solid var(--a-line);border-radius:3px;padding:2px 6px}
+.ma .body{flex:1;display:flex;min-height:0}
+.ma .side{width:96px;background:var(--a-surface);border-right:1px solid var(--a-line);padding:6px 0;font-size:10px}
+.ma .side div{padding:4px 10px;color:var(--a-ink2)}
+.ma .side .on{background:var(--a-sel);color:var(--a-accent);font-weight:700;border-left:3px solid var(--a-accent);padding-left:7px}
+.ma .main{flex:1;padding:8px;min-width:0;display:flex;flex-direction:column;gap:5px}
+.ma .ttl{font-size:11px;font-weight:700}
+.ma .ttl span{font-weight:400;color:var(--a-ink2)}
+.ma .chips{display:flex;gap:4px;flex-wrap:wrap}
+.ma .chip{font-size:9px;border:1px solid var(--a-line);background:var(--a-surface);border-radius:3px;padding:1px 5px}
+.ma .bulk{font-size:9px;background:var(--a-accent);color:#fff;border-radius:3px;padding:3px 6px;display:flex;gap:8px}
+.ma table{width:100%;border-collapse:collapse;background:var(--a-surface);font-size:9px}
+.ma th{text-align:left;background:#ECEFF3;color:var(--a-ink);padding:3px 4px;font-weight:600;border-bottom:1px solid var(--a-line)}
+.ma td{padding:2px 4px;border-bottom:1px solid #E6E9EE;height:15px;white-space:nowrap}
+.ma tr.sel td{background:var(--a-sel)}
+.ma .num{text-align:right;font-variant-numeric:tabular-nums}
+.ma .panel{width:150px;background:var(--a-surface);border-left:1px solid var(--a-line);padding:8px;font-size:9px;display:flex;flex-direction:column;gap:5px}
+.ma .panel .mh{margin:0;font-size:10px}
+.ma .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 6px;color:var(--a-ink2)}
+.ma .kv b{color:var(--a-ink);font-weight:600}
+.ma .btnrow{display:flex;gap:4px;margin-top:auto}
+.ma .btn{font-size:9px;padding:3px 6px;border-radius:3px;border:1px solid var(--a-line);background:var(--a-surface)}
+.ma .btn.pri{background:var(--a-accent);border-color:var(--a-accent);color:#fff}
+.ma.phone .ph-top{background:var(--a-surface);border-bottom:1px solid var(--a-line);padding:6px 8px;font-size:10px;font-weight:700}
+.ma.phone .list{flex:1;overflow:hidden}
+.ma.phone .row{background:var(--a-surface);border-bottom:1px solid var(--a-line);padding:5px 8px;font-size:9px;display:flex;justify-content:space-between;align-items:center}
+.ma.phone .row small{display:block;color:var(--a-ink2);font-size:8px}
+.tabbar{display:flex;border-top:1px solid #C9CED6;background:#fff}
+.tabbar div{flex:1;text-align:center;font-size:8px;padding:5px 0;color:#4A5260}
+.tabbar .on{color:#0B5CAD;font-weight:700;box-shadow:inset 0 2px 0 #0B5CAD}
+
+/* 案B */
+.mb{background:var(--b-bg);color:var(--b-ink)}
+.mb .head{background:var(--b-head);color:#fff;padding:6px 10px 0;font-size:10px}
+.mb .head .r1{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.mb .ws{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:2px 8px;font-weight:700}
+.mb .tabs{display:flex;gap:12px}
+.mb .tabs span{padding:3px 0 4px;color:#D7DCE8}
+.mb .tabs .on{color:#fff;font-weight:700;border-bottom:2px solid #fff}
+.mb .grid{flex:1;padding:8px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto 1fr 1fr;gap:7px;min-height:0}
+.mb .card{background:var(--b-surface);border-radius:10px;padding:6px 8px;font-size:9px;box-shadow:0 1px 2px rgba(20,33,61,.08);min-height:0;overflow:hidden}
+.mb .card .mh{margin:0 0 3px;font-size:9px;color:var(--b-ink2);font-weight:600}
+.mb .kpi b{display:block;font-size:17px;font-variant-numeric:tabular-nums;color:var(--b-ink)}
+.mb .kpi small{color:var(--b-ink2)}
+.mb .span2{grid-column:span 2} .mb .span3{grid-column:span 3}
+.mb .map{background:#E9EDF3;border-radius:6px;height:calc(100% - 16px);position:relative}
+.mb .map i{position:absolute;width:9px;height:9px;border-radius:50%;border:2px solid #fff}
+.mb .bars{display:flex;flex-direction:column;gap:4px}
+.mb .bar{display:flex;align-items:center;gap:4px}
+.mb .bar span{width:52px;color:var(--b-ink2)}
+.mb .bar div{display:flex;flex:1;height:9px;border-radius:2px;overflow:hidden}
+.mb.phone .ph-head{background:var(--b-head);color:#fff;font-size:10px;padding:7px 8px;font-weight:700}
+.mb.phone .stack{flex:1;padding:6px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+
+/* 案C */
+.mc{background:var(--c-bg);color:var(--c-ink)}
+.mc .scope{height:26px;background:var(--c-scope);color:#fff;display:flex;align-items:center;gap:6px;padding:0 8px;font-size:9.5px}
+.mc .scope .crumb{display:flex;gap:4px;align-items:center}
+.mc .scope .crumb span{background:rgba(255,255,255,.12);border-radius:3px;padding:1px 5px}
+.mc .scope .sep{color:#C5D0DA}
+.mc .scope .env{border:1px solid #F2C46B;color:#F8D99A;border-radius:3px;padding:0 4px}
+.mc .scope .role{margin-left:auto;background:#fff;color:var(--c-scope);border-radius:3px;padding:1px 5px;font-weight:700}
+.mc .scope .kbd{border:1px solid rgba(255,255,255,.5);border-radius:3px;padding:0 4px;color:#fff}
+.mc .body{flex:1;display:flex;min-height:0}
+.mc .rail{width:30px;background:var(--c-surface);border-right:1px solid var(--c-line);display:flex;flex-direction:column;align-items:center;gap:7px;padding-top:7px}
+.mc .rail i{width:14px;height:14px;border-radius:3px;background:#D5DAE1;display:block}
+.mc .rail i.on{background:var(--brand-accent);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--brand-accent)}
+.mc .col{background:var(--c-surface);border-right:1px solid var(--c-line);padding:6px;font-size:9px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.mc .c1{flex:1.15} .mc .c2{flex:1} .mc .c3{flex:.95;border-right:0}
+.mc .col .mh{margin:0;font-size:10px;display:flex;justify-content:space-between;align-items:center}
+.mc .col .mh small{font-weight:400;color:var(--c-ink2);font-size:8px}
+.mc table{width:100%;border-collapse:collapse;font-size:8.5px}
+.mc th{text-align:left;background:#EEF0F3;padding:2px 3px;font-weight:600}
+.mc td{padding:2px 3px;border-bottom:1px solid #E5E7EB;white-space:nowrap}
+.mc tr.sel td{background:var(--c-sel);box-shadow:inset 2px 0 0 var(--brand-accent)}
+.mc .num{text-align:right;font-variant-numeric:tabular-nums}
+.mc .steps{display:flex;gap:2px;font-size:8px}
+.mc .steps span{flex:1;text-align:center;padding:2px 0;border-radius:2px;background:#EEF0F3;color:var(--c-ink2)}
+.mc .steps .done{background:var(--ok-bg);color:var(--ok);font-weight:700}
+.mc .steps .now{background:var(--pend-bg);color:var(--pend);font-weight:700}
+.mc .diff{border:1px solid var(--c-line);border-radius:3px;font-size:8.5px}
+.mc .diff div{padding:2px 4px;font-family:var(--mono)}
+.mc .diff .del{background:var(--bad-bg);color:var(--bad)} .mc .diff .add{background:var(--ok-bg);color:var(--ok)}
+.mc .tl{list-style:none;margin:0;padding:0;font-size:8.5px}
+.mc .tl li{border-left:2px solid var(--c-line);padding:1px 0 3px 6px;color:var(--c-ink2)}
+.mc .tl li b{color:var(--c-ink);font-weight:600}
+.mc .prov{font-size:8px;color:var(--c-ink2);border-top:1px dashed var(--c-line);padding-top:3px}
+.mc .btnrow{display:flex;gap:4px;margin-top:auto}
+.mc .btn{font-size:9px;padding:3px 6px;border-radius:3px;border:1px solid var(--c-line);background:#fff}
+.mc .btn.pri{background:var(--brand-accent);border-color:var(--brand-accent);color:#fff}
+.mc.phone .ph-scope{background:var(--c-scope);color:#fff;font-size:8.5px;padding:5px 7px;display:flex;justify-content:space-between}
+.mc.phone .ph-title{background:#fff;border-bottom:1px solid var(--c-line);padding:5px 7px;font-size:10px;font-weight:700}
+.mc.phone .ph-body{flex:1;padding:6px;display:flex;flex-direction:column;gap:5px;overflow:hidden;font-size:9px;background:#fff}
+.mc .tenants{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s3)}
+.tenant{font-size:12px;border:1px solid var(--line);border-radius:var(--r2);padding:var(--s2) var(--s3);background:var(--surface)}
+.tenant b{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+
+/* 評価表 */
+.score{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);font-size:14px;min-width:620px}
+.score th,.score td{border-bottom:1px solid var(--line);padding:var(--s2) var(--s3)}
+.score thead th{background:#EEF0F3;text-align:center;font-size:13px}
+.score thead th:first-child,.score tbody th{text-align:left}
+.score td{text-align:center;font-variant-numeric:tabular-nums}
+.score .w{color:var(--ink-2)}
+.score .adoptcol{background:#EEF4FB}
+.score tfoot td,.score tfoot th{font-weight:700;border-top:2px solid var(--ink);font-size:15px}
+.meter{display:inline-block;height:6px;border-radius:3px;background:var(--accent);vertical-align:middle;margin-left:6px}
+footer{margin:var(--s7) 0 var(--s6);font-size:13px;color:var(--ink-2)}
+@media (max-width:620px){h1{font-size:22px} .desk{height:auto;min-height:300px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+<header class="site" role="banner">
+  <div class="wrap">
+    <p class="eyebrow">世界水準の UI・UX 研究 / D 分類：大企業品質</p>
+    <h1>（仮称）EnviroOps Platform — 3 案の UI コンセプト比較</h1>
+    <p class="lead">大学・自治体・建設会社が共同利用する環境データ基盤（空気質センサー運用、LCA 計算ジョブ、組織・ロール、承認フロー、監査ログ）を題材に、操作体系と情報構造が異なる 3 案を中忠実度のモックアップで比較します。組織名・数値はすべて架空のダミーです。</p>
+    <nav class="toc" aria-label="ページ内の目次">
+      <ul>
+        <li><a href="#axis">比較軸</a></li>
+        <li><a href="#concept-a">案A Operations Console</a></li>
+        <li><a href="#concept-b">案B Insight Workspace</a></li>
+        <li><a href="#concept-c">案C Federated Shell（採用）</a></li>
+        <li><a href="#evaluation">評価</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <section id="axis" aria-labelledby="axis-h">
+    <h2 id="axis-h">比較軸：何を起点にナビゲーションし、詳細をどう開くか</h2>
+    <p>大企業品質では「見た目の方向性」より「誰が・どの範囲で・どう運用するか」が設計を決めるため、比較軸を <strong>単一プロダクト最適型 / ワークスペース・ハブ型 / プラットフォーム統合型（トークン駆動マルチテナント）</strong> に置き換えました。3 案の違いは配色ではなく次の 3 点です。</p>
+    <div class="table-scroll">
+    <table class="axis">
+      <caption class="note" style="caption-side:bottom;text-align:left;padding-top:8px">密度は 1 画面あたりに一覧できる対象数の目安。</caption>
+      <thead><tr><th scope="col">観点</th><th scope="col">案A Operations Console</th><th scope="col">案B Insight Workspace</th><th scope="col">案C Federated Shell</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">ナビゲーションの起点</th><td>機能（左ナビ）</td><td>ワークスペース（上部の切替＋タブ）</td><td>スコープ（組織 › プロジェクト › 環境）＋左レール</td></tr>
+        <tr><th scope="row">詳細の開き方</th><td>一覧＋右の分割パネル</td><td>ページ遷移（パンくずで戻る）</td><td>3 列ドリルダウン（一覧 → 詳細 → 証跡・承認）</td></tr>
+        <tr><th scope="row">情報密度</th><td>高（25〜40 行）</td><td>低〜中（カード 6〜8 枚）</td><td>中〜高・可変（列ごとに要約化）</td></tr>
+        <tr><th scope="row">承認・監査の位置</th><td>独立した機能ページ</td><td>タブの一つ／カード</td><td>全画面の 3 列目に常設</td></tr>
+        <tr><th scope="row">組織ブランド</th><td>なし（全組織同一）</td><td>ワークスペースごとに自由</td><td>アクセントトークンのみ差し替え、状態色は共通固定</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ===================== 案A ===================== -->
+  <section id="concept-a" class="concept" aria-labelledby="a-h">
+    <span class="tag">単一プロダクト最適型</span><span class="tag">実用性・効率</span>
+    <h2 id="a-h">案A　Operations Console</h2>
+    <p>運用者の 1 分を削る。どの機能でも「高密度テーブル＋右の分割詳細パネル」という単一の骨格で作業し、キーボードだけで完結させます。</p>
+    <dl class="facts">
+      <div><dt>想定利用者</dt><dd>各組織の運用担当、プラットフォーム管理者、LCA 解析者</dd></div>
+      <div><dt>主要タスク</dt><dd>異常センサーの切り分け、失敗ジョブ再実行、承認の一括処理、監査ログ検索</dd></div>
+      <div><dt>文字・余白</dt><dd>本文 13/20px、表 13px・行高 24/32/40px の 3 段階、4px 基本単位</dd></div>
+      <div><dt>技術・難易度</dt><dd>React＋ヘッドレス UI＋仮想スクロール／難易度：中</dd></div>
+    </dl>
+    <ul class="swatches" aria-label="案Aの主要色">
+      <li><i style="background:#F5F6F8"></i>#F5F6F8 背景</li><li><i style="background:#1B1F24"></i>#1B1F24 文字</li><li><i style="background:#4A5260"></i>#4A5260 補助</li><li><i style="background:#0B5CAD"></i>#0B5CAD アクセント</li><li><i style="background:#B42318"></i>#B42318 警戒</li>
+    </ul>
+    <div class="mocks">
+      <figure>
+        <div class="mock desk ma" role="img" aria-label="案Aデスクトップ版：上部バー、左ナビ、センサー一覧テーブル、右に選択中センサーの詳細パネル">
+          <div class="top"><b>EnviroOps</b><span class="orgsel">組織：すべて ▾</span><span class="search">/ で検索（センサー・ジョブ・ユーザー）</span><span style="margin-left:auto">通知 3</span><span>運用担当 ▾</span></div>
+          <div class="body">
+            <div class="side"><div>概要</div><div class="on">センサー</div><div>LCA ジョブ</div><div>承認 <span class="st pend">4</span></div><div>監査ログ</div><div>組織と権限</div><div>設定</div></div>
+            <div class="main">
+              <div class="ttl">センサー <span>1,284 台中 37 台を表示</span></div>
+              <div class="chips"><span class="chip">状態 = 警戒・注意 ✕</span><span class="chip">指標 = PM2.5 ✕</span><span class="chip">組織 = 湊川市 ✕</span><span class="chip">＋ フィルタ</span><span class="chip">保存ビュー：当番用 ▾</span></div>
+              <div class="bulk"><span>2 件選択中</span><span>校正を申請</span><span>停止</span><span>CSV 出力</span><span>その他 ▾</span></div>
+              <table>
+                <thead><tr><th>☐</th><th>センサー ID</th><th>設置場所</th><th>組織</th><th class="num">PM2.5 ▼</th><th class="num">CO2</th><th>状態</th><th>最終受信</th></tr></thead>
+                <tbody>
+                  <tr class="sel"><td>☑</td><td class="mono">AQ-0142</td><td>市庁舎 3F</td><td>湊川市</td><td class="num">41.2</td><td class="num">812</td><td><span class="st bad">警戒</span></td><td>2 分前</td></tr>
+                  <tr class="sel"><td>☑</td><td class="mono">AQ-0157</td><td>中央図書館</td><td>湊川市</td><td class="num">38.6</td><td class="num">745</td><td><span class="st bad">警戒</span></td><td>1 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0311</td><td>東棟 実験室B</td><td>北陵大学</td><td class="num">29.4</td><td class="num">1,104</td><td><span class="st warn">注意</span></td><td>4 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0489</td><td>現場事務所 A</td><td>東和建設</td><td class="num">27.0</td><td class="num">688</td><td><span class="st warn">注意</span></td><td>3 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0490</td><td>現場事務所 B</td><td>東和建設</td><td class="num">—</td><td class="num">—</td><td><span class="st warn">欠測</span></td><td>48 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0322</td><td>講義棟 201</td><td>北陵大学</td><td class="num">24.8</td><td class="num">962</td><td><span class="st warn">注意</span></td><td>1 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0163</td><td>市民会館</td><td>湊川市</td><td class="num">23.1</td><td class="num">701</td><td><span class="st warn">注意</span></td><td>2 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0501</td><td>資材置場</td><td>東和建設</td><td class="num">22.7</td><td class="num">455</td><td><span class="st warn">注意</span></td><td>5 分前</td></tr>
+                  <tr><td>☐</td><td class="mono">AQ-0334</td><td>図書館 1F</td><td>北陵大学</td><td class="num">21.9</td><td class="num">640</td><td><span class="st warn">注意</span></td><td>2 分前</td></tr>
+                </tbody>
+              </table>
+              <div style="font-size:9px;color:var(--a-ink2)">1–37 / 37　行高：標準 ▾　j / k で移動・x で選択</div>
+            </div>
+            <div class="panel">
+              <div class="mh"><span class="mono">AQ-0142</span>　市庁舎 3F</div>
+              <span><span class="st bad">警戒</span> PM2.5 が 35 µg/m³ を 25 分超過</span>
+              <svg viewBox="0 0 130 40" width="130" height="40" aria-hidden="true"><line x1="0" y1="14" x2="130" y2="14" stroke="#B42318" stroke-dasharray="3 2" stroke-width="1"/><polyline fill="none" stroke="#0B5CAD" stroke-width="1.5" points="0,32 12,30 24,31 36,28 48,27 60,24 72,20 84,15 96,12 108,10 120,11 130,9"/></svg>
+              <div class="kv"><span>機種</span><b>AQ-S2</b><span>校正</span><b>2026-08-02</b><span>担当</span><b>環境政策課</b><span>関連承認</span><b>1 件審査中</b></div>
+              <div class="btnrow"><span class="btn pri">校正を申請</span><span class="btn">履歴</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>デスクトップ：機能起点の左ナビ、URL に保存されるフィルタ、選択時の一括操作バー、一覧を残したまま開く分割パネル。</figcaption>
+      </figure>
+      <figure>
+        <div class="mock phone ma" role="img" aria-label="案Aスマートフォン版：当番対応用の縮退版。アラート一覧と下部タブ">
+          <div class="ph-top">アラート（警戒 2・注意 6）</div>
+          <div class="list">
+            <div class="row"><div><span class="mono">AQ-0142</span><small>市庁舎 3F・湊川市</small></div><span class="st bad">警戒</span></div>
+            <div class="row"><div><span class="mono">AQ-0157</span><small>中央図書館・湊川市</small></div><span class="st bad">警戒</span></div>
+            <div class="row"><div><span class="mono">AQ-0311</span><small>東棟 実験室B・北陵大学</small></div><span class="st warn">注意</span></div>
+            <div class="row"><div><span class="mono">AQ-0490</span><small>現場事務所 B・東和建設</small></div><span class="st warn">欠測</span></div>
+            <div class="row"><div>LCA-2026-0381<small>エンジン停止で再試行待ち</small></div><span class="st warn">保留</span></div>
+            <div class="row"><div>承認 4 件<small>一括操作はデスクトップで</small></div><span class="st pend">待ち</span></div>
+          </div>
+          <div class="tabbar"><div class="on">アラート</div><div>承認</div><div>検索</div></div>
+        </div>
+        <figcaption>スマートフォン：確認と承認だけに絞った縮退版。</figcaption>
+      </figure>
+    </div>
+    <h3>メリットとデメリット</h3>
+    <div class="pm">
+      <ul><li>操作効率が最も高く、キーボードで完結する</li><li>骨格が 1 種類で一貫性・保守性が高い</li></ul>
+      <ul><li>非専門の閲覧者には密度が高く入りにくい</li><li>組織横断の比較や組織ごとのブランド表現ができない</li></ul>
+    </div>
+  </section>
+
+  <!-- ===================== 案B ===================== -->
+  <section id="concept-b" class="concept" aria-labelledby="b-h">
+    <span class="tag">ワークスペース・ハブ型</span><span class="tag">先進性・視覚的完成度</span>
+    <h2 id="b-h">案B　Insight Workspace</h2>
+    <p>まず状況を見て、気になったところに入る。組織・プロジェクトごとのワークスペースを入口に、可視化カードで俯瞰します。詳細はページ遷移で開きます。</p>
+    <dl class="facts">
+      <div><dt>想定利用者</dt><dd>自治体の担当課・管理職、研究室 PI、建設会社のプロジェクト責任者</dd></div>
+      <div><dt>主要タスク</dt><dd>地区ごとの空気質把握、LCA シナリオ比較、月次報告、承認の判断</dd></div>
+      <div><dt>文字・余白</dt><dd>本文 15/24px、KPI 28/36px、8px 基本単位、角丸 12px</dd></div>
+      <div><dt>技術・難易度</dt><dd>React＋可視化ライブラリ＋地図＋グリッド配置／難易度：中〜高</dd></div>
+    </dl>
+    <ul class="swatches" aria-label="案Bの主要色">
+      <li><i style="background:#14213D"></i>#14213D ヘッダー</li><li><i style="background:#3047C9"></i>#3047C9 系列1</li><li><i style="background:#00695C"></i>#00695C 系列2</li><li><i style="background:#A04A00"></i>#A04A00 系列3</li><li><i style="background:#7B3FA0"></i>#7B3FA0 系列4</li>
+    </ul>
+    <div class="mocks">
+      <figure>
+        <div class="mock desk mb" role="img" aria-label="案Bデスクトップ版：濃色ヘッダーにワークスペース切替と上部タブ、KPIカード4枚、時系列と地図、LCA段階別の積み上げ棒カード">
+          <div class="head">
+            <div class="r1"><span class="ws">湊川市 環境政策課 ▾</span><span style="color:#D7DCE8">ワークスペース</span><span style="margin-left:auto">検索</span><span>レポート出力</span></div>
+            <div class="tabs"><span class="on">概要</span><span>センサー</span><span>LCA</span><span>承認</span><span>レポート</span></div>
+          </div>
+          <div class="grid">
+            <div class="card kpi"><div class="mh">稼働センサー</div><b>412</b><small>/ 418 台</small></div>
+            <div class="card kpi"><div class="mh">警戒中</div><b style="color:var(--bad)">2</b><small>前日比 +1</small></div>
+            <div class="card kpi"><div class="mh">LCA 実行中</div><b>6</b><small>待機 3</small></div>
+            <div class="card kpi"><div class="mh">承認待ち</div><b style="color:var(--pend)">4</b><small>最長 2 日</small></div>
+            <div class="card span2"><div class="mh">PM2.5 日平均（過去 14 日）　表で見る</div>
+              <svg viewBox="0 0 240 70" width="100%" height="70" aria-hidden="true"><rect x="0" y="0" width="240" height="22" fill="#FBE9E7"/><polyline fill="none" stroke="#3047C9" stroke-width="2" points="0,52 18,50 36,48 54,46 72,49 90,44 108,40 126,38 144,35 162,30 180,28 198,24 216,20 240,18"/><polyline fill="none" stroke="#00695C" stroke-width="2" stroke-dasharray="4 2" points="0,58 18,57 36,56 54,58 72,55 90,54 108,55 126,53 144,52 162,51 180,50 198,51 216,49 240,48"/></svg>
+            </div>
+            <div class="card span2"><div class="mh">センサー配置（地区別）</div>
+              <div class="map"><i style="left:20%;top:30%;background:#1E7A3C"></i><i style="left:42%;top:55%;background:#B42318"></i><i style="left:60%;top:25%;background:#8A5A00"></i><i style="left:75%;top:60%;background:#1E7A3C"></i><i style="left:33%;top:70%;background:#1E7A3C"></i><i style="left:52%;top:40%;background:#B42318"></i></div>
+            </div>
+            <div class="card span3"><div class="mh">LCA シナリオ比較（t-CO2e、段階別）</div>
+              <div class="bars">
+                <div class="bar"><span>市民会館 改修</span><div><i style="width:46%;background:var(--b-accent)"></i><i style="width:12%;background:var(--b-accent2)"></i><i style="width:18%;background:var(--b-s3)"></i><i style="width:8%;background:var(--b-s4)"></i></div></div>
+                <div class="bar"><span>同 建替え</span><div><i style="width:58%;background:var(--b-accent)"></i><i style="width:15%;background:var(--b-accent2)"></i><i style="width:14%;background:var(--b-s3)"></i><i style="width:11%;background:var(--b-s4)"></i></div></div>
+                <div class="bar"><span>同 木造化</span><div><i style="width:31%;background:var(--b-accent)"></i><i style="width:10%;background:var(--b-accent2)"></i><i style="width:16%;background:var(--b-s3)"></i><i style="width:9%;background:var(--b-s4)"></i></div></div>
+              </div>
+            </div>
+            <div class="card"><div class="mh">最近の活動</div><div style="color:var(--b-ink2)">校正申請 2 件<br>LCA 完了 1 件<br>メンバー追加</div></div>
+          </div>
+        </div>
+        <figcaption>デスクトップ：ワークスペース起点。カードは並べ替え可能で、すべてのグラフに「表で見る」を付ける。</figcaption>
+      </figure>
+      <figure>
+        <div class="mock phone mb" role="img" aria-label="案Bスマートフォン版：カードを1列に積み、下部ナビバー5項目">
+          <div class="ph-head">湊川市 環境政策課 ▾</div>
+          <div class="stack">
+            <div class="card kpi"><div class="mh">警戒中のセンサー</div><b style="color:var(--bad)">2</b><small>市庁舎 3F／中央図書館</small></div>
+            <div class="card"><div class="mh">PM2.5 日平均</div><svg viewBox="0 0 150 40" width="100%" height="40" aria-hidden="true"><polyline fill="none" stroke="#3047C9" stroke-width="2" points="0,34 20,32 40,30 60,29 80,24 100,20 120,15 150,10"/></svg></div>
+            <div class="card"><div class="mh">LCA シナリオ</div><div class="bars"><div class="bar"><div><i style="width:60%;background:var(--b-accent)"></i><i style="width:20%;background:var(--b-accent2)"></i></div></div><div class="bar"><div><i style="width:45%;background:var(--b-accent)"></i><i style="width:15%;background:var(--b-accent2)"></i></div></div></div></div>
+          </div>
+          <div class="tabbar"><div class="on">概要</div><div>センサー</div><div>LCA</div><div>承認</div><div>他</div></div>
+        </div>
+        <figcaption>スマートフォン：デスクトップとの差が最も小さい。</figcaption>
+      </figure>
+    </div>
+    <h3>メリットとデメリット</h3>
+    <div class="pm">
+      <ul><li>閲覧者・意思決定者に最も分かりやすく、報告にそのまま使える</li><li>視覚的完成度が高く、スマートフォンでも同じ体験</li></ul>
+      <ul><li>大量データの一括処理が遅い（ページ遷移が多い）</li><li>ワークスペースごとの自由配置で多組織の一貫性が崩れやすく、承認・監査が脇役になる</li></ul>
+    </div>
+  </section>
+
+  <!-- ===================== 案C ===================== -->
+  <section id="concept-c" class="concept adopted" aria-labelledby="c-h">
+    <span class="tag adopt">採用案</span><span class="tag">プラットフォーム統合型</span><span class="tag">トークン駆動マルチテナント</span>
+    <h2 id="c-h">案C　Federated Shell</h2>
+    <p>誰が・どの範囲で見ているかを常に明示し、全機能が同じシェルを共有します。上部のスコープバー（組織 › プロジェクト › 環境）が全データを絞り込み、詳細は 3 列ドリルダウンで証跡・承認まで辿れます。組織ブランドはアクセントトークンだけを差し替えます。</p>
+    <dl class="facts">
+      <div><dt>想定利用者</dt><dd>3 組織の全ロール（組織管理者・責任者・解析者・閲覧者・監査担当）</dd></div>
+      <div><dt>主要タスク</dt><dd>スコープ切替、校正値変更・LCA 結果公開の申請と承認、監査ログ追跡</dd></div>
+      <div><dt>文字・余白</dt><dd>本文 14/20px、表 13px、見出しは 16/20/24px の 3 段のみ、4px 基本単位</dd></div>
+      <div><dt>技術・難易度</dt><dd>3 層トークン（global / semantic / component）＋スコープ埋め込みルーティング＋RBAC/ABAC／難易度：高</dd></div>
+    </dl>
+    <ul class="swatches" aria-label="案Cの主要色">
+      <li><i style="background:#0F2A3D"></i>#0F2A3D スコープバー</li><li><i style="background:#16191D"></i>#16191D 文字</li><li><i style="background:#4B5563"></i>#4B5563 補助</li><li><i style="background:#5B3FA0"></i>#5B3FA0 承認待ち</li><li><i style="background:#1E7A3C"></i>#1E7A3C 良好</li><li><i style="background:#B42318"></i>#B42318 警戒</li>
+    </ul>
+    <div class="tenants" aria-label="組織ごとに差し替えるアクセントトークン">
+      <span class="tenant"><b style="background:#1D5FA8"></b>北陵大学 <code>--brand-accent: #1D5FA8</code></span>
+      <span class="tenant"><b style="background:#1F6F4A"></b>湊川市 <code>--brand-accent: #1F6F4A</code></span>
+      <span class="tenant"><b style="background:#8A4B0F"></b>東和建設 <code>--brand-accent: #8A4B0F</code></span>
+    </div>
+    <div class="mocks">
+      <figure>
+        <div class="mock desk mc" role="img" aria-label="案Cデスクトップ版：濃色のスコープバーに組織・プロジェクト・環境と現在のロール、左レール、3列ドリルダウン（センサー一覧、AQ-0311の詳細、承認ステップと差分と監査タイムライン）">
+          <div class="scope">
+            <div class="crumb"><span>北陵大学 環境工学研究室</span><span class="sep">›</span><span>キャンパス空気質 2026</span><span class="sep">›</span><span class="env">本番</span></div>
+            <span class="role">ロール：解析者</span><span class="kbd">⌘K</span>
+          </div>
+          <div class="body">
+            <div class="rail" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <div class="col c1">
+              <div class="mh">センサー <small>86 台・保存ビュー：研究棟</small></div>
+              <table>
+                <thead><tr><th>ID</th><th>場所</th><th class="num">CO2</th><th>状態</th></tr></thead>
+                <tbody>
+                  <tr class="sel"><td class="mono">AQ-0311</td><td>東棟 実験室B</td><td class="num">1,104</td><td><span class="st warn">注意</span></td></tr>
+                  <tr><td class="mono">AQ-0322</td><td>講義棟 201</td><td class="num">962</td><td><span class="st warn">注意</span></td></tr>
+                  <tr><td class="mono">AQ-0334</td><td>図書館 1F</td><td class="num">640</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td class="mono">AQ-0340</td><td>学生会館</td><td class="num">588</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td class="mono">AQ-0351</td><td>西棟 102</td><td class="num">571</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td class="mono">AQ-0356</td><td>西棟 204</td><td class="num">543</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td class="mono">AQ-0362</td><td>体育館</td><td class="num">512</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td class="mono">AQ-0370</td><td>食堂</td><td class="num">498</td><td><span class="st ok">良好</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col c2">
+              <div class="mh"><span class="mono">AQ-0311</span> <small>東棟 実験室B</small></div>
+              <span><span class="st warn">注意</span> CO2 1,000 ppm 超過 42 分</span>
+              <svg viewBox="0 0 150 46" width="100%" height="46" aria-hidden="true"><rect x="0" y="0" width="150" height="16" fill="#FBF1DE"/><rect x="62" y="0" width="14" height="46" fill="#EEF0F3"/><polyline fill="none" stroke="#1D5FA8" stroke-width="1.5" points="0,38 15,36 30,33 45,30 60,27"/><polyline fill="none" stroke="#1D5FA8" stroke-width="1.5" points="76,20 90,16 105,12 120,10 135,11 150,9"/></svg>
+              <span style="font-size:8px;color:var(--c-ink2)">灰色帯＝欠測区間（10:20–10:35）</span>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:2px 6px;color:var(--c-ink2)"><span>校正係数</span><b style="color:var(--c-ink)">0.982</b><span>機種</span><b style="color:var(--c-ink)">AQ-S2</b><span>所有</span><b style="color:var(--c-ink)">北陵大学</b></div>
+              <div class="btnrow"><span class="btn">下書き</span><span class="btn pri">変更を申請</span></div>
+            </div>
+            <div class="col c3">
+              <div class="mh">証跡と承認 <small>REQ-2291</small></div>
+              <div class="steps"><span class="done">申請</span><span class="now">一次承認</span><span>最終承認</span></div>
+              <div class="diff"><div class="del">− calib: 0.982</div><div class="add">＋ calib: 0.995</div></div>
+              <span style="font-size:8px;color:var(--c-ink2)">理由：基準器比較（2026-11-12）</span>
+              <ul class="tl">
+                <li><b>11/14 16:02</b> 申請 解析者 R.K.</li>
+                <li><b>11/14 16:05</b> 承認者を自動割当</li>
+                <li><b>11/13 09:12</b> 閾値設定を閲覧</li>
+              </ul>
+              <div class="prov">値の出所：センサー直送 / 校正 v3 / 監査 ID AUD-77812</div>
+            </div>
+          </div>
+        </div>
+        <figcaption>デスクトップ：スコープ起点。一覧（案A のテーブル仕様）→ 詳細 → 証跡・承認の 3 列を、ページ遷移なしで辿る。変更はすべて差分つきの申請になる。</figcaption>
+      </figure>
+      <figure>
+        <div class="mock phone mc" role="img" aria-label="案Cスマートフォン版：1行のスコープ要約、1列ずつのスタック遷移で承認の差分を確認して承認">
+          <div class="ph-scope"><span>北陵大学 › キャンパス空気質</span><span>▾</span></div>
+          <div class="ph-title">‹ 承認 REQ-2291</div>
+          <div class="ph-body">
+            <div class="steps"><span class="done">申請</span><span class="now">一次</span><span>最終</span></div>
+            <div><span class="mono">AQ-0311</span> 校正係数の変更</div>
+            <div class="diff"><div class="del">− 0.982</div><div class="add">＋ 0.995</div></div>
+            <div style="color:var(--c-ink2);font-size:8.5px">理由：基準器比較<br>申請：解析者 R.K.（11/14）</div>
+            <div class="prov">監査 ID AUD-77812</div>
+            <div class="btnrow"><span class="btn">差戻し</span><span class="btn pri">承認する</span></div>
+          </div>
+          <div class="tabbar"><div>ホーム</div><div>センサー</div><div class="on">承認</div><div>監査</div><div>他</div></div>
+        </div>
+        <figcaption>スマートフォン：3 列を 1 列ずつのスタックに変換。差分を見てから承認できる。</figcaption>
+      </figure>
+    </div>
+    <h3>メリットとデメリット</h3>
+    <div class="pm">
+      <ul><li>多組織・多ロール運用に最も適合し、別組織データの誤操作を構造的に防ぐ</li><li>承認・監査・値の出所が主要導線に常設される</li><li>組織ブランドを許しつつ状態色と操作体系は全組織共通</li></ul>
+      <ul><li>初期の設計・実装コストが最も高い</li><li>スコープ概念の学習が必要、1280px 未満で 3 列が窮屈</li></ul>
+    </div>
+  </section>
+
+  <!-- ===================== 評価 ===================== -->
+  <section id="evaluation" aria-labelledby="eval-h">
+    <h2 id="eval-h">評価：D 分類の重み付けによる採点</h2>
+    <p>各基準を 1〜5 点で採点し、重み（合計 100%）で加重平均しました。分類固有の「一貫性・運用性・セキュリティ設計」に合計 22% を配分し、視覚的完成度は成熟度の一部として 8% にとどめています。実装・保守コストはコストが低いほど高得点です。</p>
+    <div class="table-scroll">
+    <table class="score">
+      <caption class="note" style="caption-side:bottom;text-align:left;padding-top:8px">加重合計 = Σ（点数 × 重み）÷ 100。5 点満点。</caption>
+      <thead><tr><th scope="col">評価基準</th><th scope="col">重み</th><th scope="col">案A<br>Operations Console</th><th scope="col">案B<br>Insight Workspace</th><th scope="col" class="adoptcol">案C<br>Federated Shell</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">操作効率</th><td class="w">12%</td><td>5</td><td>3</td><td class="adoptcol">4</td></tr>
+        <tr><th scope="row">学習の容易さ</th><td class="w">8%</td><td>4</td><td>4</td><td class="adoptcol">3</td></tr>
+        <tr><th scope="row">情報の理解しやすさ</th><td class="w">10%</td><td>4</td><td>4</td><td class="adoptcol">5</td></tr>
+        <tr><th scope="row">視覚的完成度</th><td class="w">8%</td><td>3</td><td>5</td><td class="adoptcol">4</td></tr>
+        <tr><th scope="row">アクセシビリティ</th><td class="w">12%</td><td>5</td><td>3</td><td class="adoptcol">4</td></tr>
+        <tr><th scope="row">拡張性</th><td class="w">10%</td><td>3</td><td>3</td><td class="adoptcol">5</td></tr>
+        <tr><th scope="row">実装・保守コスト</th><td class="w">8%</td><td>4</td><td>3</td><td class="adoptcol">3</td></tr>
+        <tr><th scope="row">目的への適合性</th><td class="w">10%</td><td>4</td><td>3</td><td class="adoptcol">5</td></tr>
+        <tr><th scope="row">一貫性（分類固有）</th><td class="w">8%</td><td>5</td><td>3</td><td class="adoptcol">5</td></tr>
+        <tr><th scope="row">運用性（分類固有）</th><td class="w">8%</td><td>4</td><td>3</td><td class="adoptcol">5</td></tr>
+        <tr><th scope="row">セキュリティ設計（分類固有）</th><td class="w">6%</td><td>4</td><td>3</td><td class="adoptcol">5</td></tr>
+      </tbody>
+      <tfoot><tr><th scope="row">加重合計</th><td class="w">100%</td><td>4.14<span class="meter" style="width:41px" aria-hidden="true"></span></td><td>3.34<span class="meter" style="width:33px" aria-hidden="true"></span></td><td class="adoptcol">4.36<span class="meter" style="width:44px" aria-hidden="true"></span></td></tr></tfoot>
+    </table>
+    </div>
+
+    <h3>採用案：案C Federated Shell</h3>
+    <p>共同利用基盤の本質は「大学・自治体・建設会社が同じ基盤を異なる権限で共有すること」です。スコープを全画面で明示する案C だけが、別組織のデータを承認するといった誤操作を構造的に防ぎ、承認・監査・値の出所を後付けではなく画面骨格で保証できます。組織ブランドはアクセントトークンに限定し、状態色と操作体系は全組織共通にします。</p>
+    <h3>不採用案から取り込む要素</h3>
+    <ul>
+      <li><strong>案A から</strong>：列 1 のテーブル仕様一式（3 段階密度、3 状態ソート、一括操作バー、仮想スクロール、保存ビュー）、キーボード操作体系、スマートフォンを確認と承認に絞る割り切り。</li>
+      <li><strong>案B から</strong>：スコープのホームの KPI カードと時系列・地図（固定配置）、全グラフへの「表で見る」と要約文の必須化、報告用エクスポート、LCA シナリオ作成のステップ形式。</li>
+    </ul>
+    <p class="note">確認レベル：根拠とした台帳 12 件のうち 10 件は公式ページを取得、SAP Fiori と Salesforce SLDS 2 は検索結果のみ。いずれも製品画面の見た目は直接確認していないため、モックアップは他社画面の複製ではなく、抽出した設計原則（principles.md）から独自に構成しています。</p>
+  </section>
+</main>
+
+<footer class="wrap" role="contentinfo">
+  <p>関連文書：principles.md（設計原則 P1〜P12・避けるべき設計 X1〜X8）／ concepts.md（3 案の詳細と評価）。データはすべてダミーです。</p>
+</footer>
+</body>
+</html>
