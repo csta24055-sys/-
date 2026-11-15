@@ -10,17 +10,16 @@ from __future__ import annotations
 import base64
 import hashlib
 import re
+import unicodedata
 
 from . import fields as FL
 from .importers import ifc, pdf, tabular
 from .provenance import Value
 
-KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular expressions on the lower-cased name
+KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular expressions on the normalised name
     ("m_masonry", ("re:(^|[^a-z])alc([^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
-    # rebar products, also when their name mentions concrete (JIS: 鉄筋コンクリート用棒鋼; reinforcement for concrete),
-    # but not 鉄筋コンクリート itself (reinforced concrete is concrete)
-    ("m_rebar", ("棒鋼", "異形鉄筋", "鉄筋コンクリート用", "re:鉄筋(?!コンクリート)", "rebar", "re:reinforc(?!ed concrete)",
-                 "re:(^|[^a-z])sd ?[2-6]\\d{2}")),
+    # rebar: see REBAR_PRODUCT / REBAR_GENERIC below (a reinforced-concrete name is concrete)
+    ("m_rebar", ()),
     ("m_concrete", ("コンクリート", "生コン", "concrete")),
     ("m_steel", ("鉄骨", "鋼材", "形鋼", "鋼管", "デッキ", "structural steel", "steel")),
     ("m_timber", ("木材", "製材", "集成材", "合板", "clt", "timber", "wood", "lumber")),
@@ -33,35 +32,62 @@ KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular e
     ("m_plastic", ("塩ビ", "樹脂", "pvc", "plastic", "ポリ")),
     ("m_finish", ("仕上", "塗装", "クロス", "タイル", "床材", "finish", "tile", "paint", "flooring")),
 ]
+# words that name a reinforcement PRODUCT, also when the name mentions concrete (JIS: 鉄筋コンクリート用棒鋼;
+# "reinforcement for concrete"; welded mesh; grades SD295…SD685). Bar sizes (D13) alone are not used: "board d10".
+REBAR_PRODUCT = ("棒鋼", "異形鉄筋", "鉄筋コンクリート用", "re:コンクリート用.*鉄筋", "溶接金網", "ワイヤーメッシュ", "rebar",
+                 "re:deformed bars?", "re:(welded|wire|steel) (wire )?mesh", "re:(^|[^a-z])sd ?[2-6]\\d{2}",
+                 "re:reinforc[a-z]* (steel|bars?|mesh)", "re:steel reinforc", "re:reinforc[a-z]* for concrete")
+# words that may mean the reinforcement or the reinforced concrete: rebar only when the name does not name concrete
+REBAR_GENERIC = ("鉄筋", "reinforc")
+CONCRETE_WORDS = ("コンクリート", "生コン", "concrete")
 FOUNDATION_WORDS = ("基礎", "杭", "フーチング", "地中梁", "footing", "pile", "foundation")
 TOTAL_WORDS = ("合計", "小計", "総計", "計", "total", "subtotal", "sum")
 UNIT_ALIASES = {"m3": "m3", "㎥": "m3", "m³": "m3", "立米": "m3", "t": "t", "ｔ": "t", "トン": "t", "ton": "t",
                 "kg": "kg", "ｋｇ": "kg", "m2": "m2", "㎡": "m2", "m²": "m2", "平米": "m2"}
+_PUNCT = re.compile(r"[\s,，、。・/／_\-‐－–—:：;；()（）\[\]［］{}｛｝【】「」『』<>＜＞]+")
+
+
+def normalise_name(name: str) -> str:
+    """NFKC (full-width letters and digits, ㎥ …), lower case, punctuation as single spaces."""
+    n = unicodedata.normalize("NFKC", name or "").lower()
+    return _PUNCT.sub(" ", n).strip()
+
+
+def _hit(words, low: str) -> bool:
+    return any((re.search(w[3:], low) is not None) if w.startswith("re:") else (w in low) for w in words)
 
 
 def _field_for(name: str, division: str = "") -> str | None:
-    low = (name or "").lower()
+    low = normalise_name(name)
+    div = normalise_name(division)
     for fid, words in KEYWORDS:
-        if any((re.search(w[3:], low) is not None) if w.startswith("re:") else (w in low) for w in words):
-            if fid == "m_concrete" and any(w in (division or "") + low for w in FOUNDATION_WORDS):
+        if fid == "m_rebar":
+            if _hit(REBAR_PRODUCT, low) or (_hit(REBAR_GENERIC, low) and not _hit(CONCRETE_WORDS, low)):
+                return fid
+            continue
+        if _hit(words, low):
+            if fid == "m_concrete" and any(w in div + " " + low for w in FOUNDATION_WORDS):
                 return "m_concrete_fdn"
             return fid
     return None
 
 
-NOT_TOTAL_ENDINGS = ("設計", "統計", "会計", "時計", "家計", "余計", "生計")
+NOT_TOTAL_ENDINGS = ("設計", "統計", "会計", "時計", "家計", "余計", "生計", "温度計", "湿度計", "圧力計", "流量計", "水位計",
+                     "電力計", "電流計", "電圧計", "風速計", "照度計")
+_TRAIL = re.compile(r"(\([^()]*\)|\[[^\[\]]*\])+$")
 
 
 def _is_total(name: str) -> bool:
-    """A total / subtotal row: a name ending in 計 (鉄筋計, コンクリート 計, 合計 …) unless the word is one where 計 is not a
-    total (設計, 統計 …); 合計・小計・総計 at the start; or total/subtotal/sum/totals as English whole words."""
-    n = re.sub(r"[\s　]+", "", (name or ""))
-    low = n.lower()
-    if n.endswith("計") and not n.endswith(NOT_TOTAL_ENDINGS):
+    """A total / subtotal row: a word ending in 計 (鉄筋計, コンクリート 計, 鉄筋計（SD345）, 合計 t …) unless 計 is not a
+    total there (設計, 統計, 温度計 …); 合計・小計・総計 anywhere; or total/subtotal/sum/totals as English whole words."""
+    n = unicodedata.normalize("NFKC", name or "")
+    if any(w in n for w in ("合計", "小計", "総計")):
         return True
-    if any(n.startswith(w) for w in ("合計", "小計", "総計")):
-        return True
-    return re.search(r"(^|[^a-z])(total|totals|subtotal|sum)($|[^a-z])", (name or "").lower()) is not None
+    for tok in re.split(r"[\s　,、・/]+", n):
+        tok = _TRAIL.sub("", tok)                       # 鉄筋計(SD345) -> 鉄筋計
+        if tok.endswith("計") and not tok.endswith(NOT_TOTAL_ENDINGS):
+            return True
+    return re.search(r"(^|[^a-z])(total|totals|subtotal|sum)($|[^a-z])", n.lower()) is not None
 
 
 def _unit(u: str) -> str | None:

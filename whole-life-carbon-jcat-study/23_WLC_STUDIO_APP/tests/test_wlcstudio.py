@@ -857,7 +857,8 @@ class SecondRoundTests(unittest.TestCase):
         fields = [m["field"] for m in rep["missing_inputs"]]
         self.assertNotIn("e_hvac_life", fields)
         self.assertNotIn("r_top_up", fields)
-        self.assertEqual(tables(doc)["refrigerants"][0]["charge_mass_kg"], 0.0)
+        self.assertEqual(tables(doc)["refrigerants"], [])           # a confirmed zero makes no row (round 5)
+        self.assertNotIn("HVAC", [r["trade"] for r in tables(doc)["equipment"]])
 
     def test_equipment_without_factor_is_flagged_either_way(self):
         ref = json.loads(json.dumps(REFSET))
@@ -1220,6 +1221,235 @@ class FourthRoundTests(unittest.TestCase):
         self.app.projects.put(pid, V("b_structure", None, "not_obtained"))
         with self.assertRaises(ApiError):
             self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"screen": "material"})
+
+
+class FifthRoundTests(unittest.TestCase):
+    """Regression tests for the fifth verification round (docs/review_fixes.md, round 5)."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+    summary = FourthRoundTests.summary
+
+    # --- operation: purchased electricity, self-consumed PV, export
+    def test_self_consumed_pv_is_not_subtracted_twice(self):
+        vals = self.full(o_pv_kwh=V("o_pv_kwh", 30000.0), o_export_kwh=V("o_export_kwh", 10000.0))
+        r, doc, rep = self.run_vals(vals)
+        self.assertEqual(items(doc)["operation.electricity.base"], 120000.0)      # purchase 100000 + self-use 20000
+        self.assertAlmostEqual(r["results"]["B6-04"]["by_year"][1], 100000.0)     # the engine nets back to the bills
+        self.assertEqual(items(doc)["operation.states"]["electricity"], "DERIVED")
+        row = {x["field"]: x for x in bridge.reflection_table(rep)}["o_elec_kwh"]
+        self.assertIn("自家消費", row["detail"])
+
+    def test_export_above_generation_blocks_only_when_b6_counts(self):
+        vals = self.full(o_pv_kwh=V("o_pv_kwh", 1000.0), o_export_kwh=V("o_export_kwh", 5000.0))
+        _, rep = bridge.build(vals, REFSET)
+        self.assertTrue(any("より多い" in m for m in rep["missing_required"]))
+        vals["a_stages"] = V("a_stages", "EMBODIED")
+        _, rep = bridge.build(vals, REFSET)
+        self.assertFalse(any("より多い" in m for m in rep["missing_required"]))
+
+    def test_no_purchase_makes_b2_and_grid_moot(self):
+        vals = self.full(o_elec_kwh=V("o_elec_kwh", 0.0))
+        vals.pop("o_fm_ratio")
+        vals.pop("o_grid_value")
+        doc, rep = bridge.build(vals, REFSET)
+        self.assertEqual(rep["missing_required"], [])                           # the grid table is filled with 0
+        self.assertNotIn("o_fm_ratio", [m["field"] for m in rep["missing_inputs"]])
+        self.assertTrue(rep["expand"]["b2_moot"])
+        out, st = self.summary(vals)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue(st["B2"])
+        self.assertNotIn("B2-01", out["summary"]["incomplete_units"])
+
+    def test_site_electricity_zero_fills_construction_grid(self):
+        vals = self.full(c_site_electricity=V("c_site_electricity", None, "not_applicable"))
+        vals.pop("o_grid_construction")
+        doc, rep = bridge.build(vals, REFSET)
+        self.assertNotIn(FL.FIELDS["o_grid_construction"]["label"], rep["missing_required"])
+        self.assertEqual(items(doc)["operation.grid.construction_value"], 0.0)
+
+    # --- confirmed zeros and B5
+    def test_zero_count_makes_no_equipment_row(self):
+        doc, rep = bridge.build(self.full(e_conveyance_count=V("e_conveyance_count", 0.0)), REFSET)
+        self.assertNotIn("CONVEYANCE", [r["trade"] for r in tables(doc)["equipment"]])
+        self.assertNotIn("e_conveyance_mass", [m["field"] for m in rep["missing_inputs"]])
+
+    def test_b5_moot_with_zero_share(self):
+        vals = self.full(a_reconstruction=V("a_reconstruction", "MAJOR_REFURBISHMENT"),
+                         a_recon_fraction=V("a_recon_fraction", None, "not_applicable"))
+        _, rep = bridge.build(vals, REFSET, period=60)
+        fields = [m["field"] for m in rep["missing_inputs"]]
+        self.assertNotIn("a_replacement_cycle", fields)                         # the share is a known 0
+        self.assertFalse(rep["expand"]["b5"])
+        out, st = self.summary(vals)
+        self.assertTrue(st["B5"])
+        self.assertNotIn("B5-01", out["summary"]["incomplete_units"])
+
+    # --- assumed vs omitted
+    def test_delivery_fallback_is_assumed_not_omitted(self):
+        vals = self.full(m_transport_km=None)
+        _, rep = bridge.build(vals, REFSET)
+        m = {x["field"]: x for x in rep["missing_inputs"]}["a4_delivery_fallback"]
+        self.assertEqual(m["gap"], "assumed")
+        self.assertNotIn("a4_delivery_fallback", [x["field"] for x in rep["omitted_inputs"]])
+        self.assertNotIn("A4", rep["incomplete_stages"])
+        self.assertIn("A4", rep["assumed_stages"])
+        out, st = self.summary(vals)
+        self.assertIn("a4_delivery_fallback", [x["field"] for x in out["assumed_inputs"]])
+        self.assertNotIn("a4_delivery_fallback", [x["field"] for x in out["omitted_inputs"]])
+        self.assertIn("A4", out["summary"]["assumed_stages"])
+        self.assertTrue([x for x in out["summary"]["stages"] if x["stage"] == "A4"][0]["assumed"])
+
+    def test_hints_name_the_pseudo_entries_and_only_bad_stages(self):
+        out, st = self.summary(self.full())
+        hints = {h["stage"]: h for h in out["summary"]["hints"]}
+        self.assertIn("C1", hints)
+        self.assertNotIn("未取得の入力", hints["C1"]["note"])                    # no screen field for demolition
+        for h in out["summary"]["hints"]:
+            self.assertTrue(h["stage"] == "—" or not st.get(h["stage"], False), h)
+
+    # --- range note
+    def test_range_note_counts_assumed_grid_factor(self):
+        unc = Uncertainty("interval", 8.0, 12.0, 0.8)
+        vals = self.full(m_rebar=V("m_rebar", 10.0, "statistical", "t", source_id="s", factor_version="v", uncertainty=unc),
+                         o_grid_value=V("o_grid_value", 0.4, "assumption"))
+        out, _ = self.summary(vals)
+        self.assertIn("o_grid_value", out["range"]["unknown_fields"])
+        self.assertIn(FL.FIELDS["o_grid_value"]["label"], out["range"]["note"])
+
+    # --- put_field keeps what a value covers
+    def scoped(self):
+        pid = self.app.projects.create("r5", "RC")
+        unc = Uncertainty("interval", 800.0, 1200.0, 0.8)
+        est = V("m_concrete", 1000.0, "statistical", "t", method="mlit_area_unit_x_gfa", source_id="mlit", factor_version="v",
+                uncertainty=unc, scope="whole_building", depends={"b_gfa": 1000.0, "b_structure": "RC"})
+        self.app.projects.put(pid, est)
+        url = "/api/projects/%d/fields/m_concrete" % pid
+        self.app.handle("PUT", url, {"value": 950, "unit": "t", "state": "confirmed", "from_estimate": True})
+        return pid, url
+
+    def test_state_change_keeps_scope_premises_source_and_unknown_range(self):
+        pid, url = self.scoped()
+        self.app.handle("PUT", url, {"value": 950, "unit": "t", "state": "assumption"})
+        v = self.app.projects.current(pid, "m_concrete")
+        self.assertEqual((v.state, v.scope, v.uncertainty.kind, v.source_id), ("assumption", "whole_building", "unknown", "mlit"))
+        self.assertEqual(v.depends, {"b_gfa": 1000.0, "b_structure": "RC"})
+
+    def test_new_value_over_scoped_value_must_say_its_scope(self):
+        pid, url = self.scoped()
+        with self.assertRaises(ApiError):
+            self.app.handle("PUT", url, {"value": 700, "unit": "t", "state": "confirmed"})
+        self.app.handle("PUT", url, {"value": 700, "unit": "t", "state": "confirmed", "scope": "field_only"})
+        self.assertEqual(self.app.projects.current(pid, "m_concrete").scope, "")
+
+    def test_comma_only_as_thousands_separator(self):
+        pid = self.app.projects.create("r5c", "RC")
+        url = "/api/projects/%d/fields/b_gfa" % pid
+        with self.assertRaises((ApiError, ProjectError)):
+            self.app.handle("PUT", url, {"value": "1,5", "unit": "m2", "state": "confirmed"})
+        self.app.handle("PUT", url, {"value": "12,500", "unit": "m2", "state": "confirmed"})
+        self.assertEqual(self.app.projects.current(pid, "b_gfa").value, 12500.0)
+
+    # --- estimates
+    def test_operation_estimate_does_not_need_structure(self):
+        pid = self.app.projects.create("r5e", "RC")
+        self.app.projects.put(pid, V("b_structure", None, "not_obtained"))
+        st, out = self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"screen": "operation"})
+        self.assertEqual(st, 200)
+        with self.assertRaises(ApiError):
+            self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"screen": "material"})
+
+    def test_new_premises_dismiss_old_estimates(self):
+        pid = self.app.projects.create("r5d", "RC")
+        unc = Uncertainty("interval", 1.0, 2.0, 0.8)
+        for gfa, val in ((1000.0, 1.5), (2000.0, 3.0)):
+            self.app.projects.propose(pid, V("m_concrete", val, "statistical", "t", method="mlit_area_unit_x_gfa", source_id="m",
+                                             factor_version="v", uncertainty=Uncertainty("interval", val * .8, val * 1.2, 0.8),
+                                             depends={"b_gfa": gfa, "b_structure": "RC"}), "estimate")
+        cs = self.app.projects.candidates(pid, "m_concrete")
+        self.assertEqual([c["value"] for c in cs], [3.0])
+        self.app.projects.propose(pid, V("m_concrete", 9.0, "from_drawing", "t", method="table_sum", source_id="d"), "document")
+        self.app.projects.propose(pid, V("m_concrete", 8.0, "from_drawing", "t", method="table_sum", source_id="d2"), "document")
+        self.assertEqual([c["value"] for c in self.app.projects.candidates(pid, "m_concrete")][:2], [8.0, 9.0])   # newest first
+
+    # --- documents
+    def test_reinforced_concrete_names_and_subtotals(self):
+        f = documents._field_for
+        self.assertEqual(f("Concrete, Reinforced"), "m_concrete")
+        self.assertEqual(f("Concrete, Reinforced, C30/37"), "m_concrete")
+        self.assertEqual(f("Reinforcement for concrete"), "m_rebar")
+        self.assertEqual(f("Board d10"), "m_board")
+        self.assertEqual(f("ＲＥＢＡＲ　Ｄ１３"), "m_rebar")
+        for n in ("鉄筋計（SD345）", "コンクリート計 (m3)", "躯体小計 鉄筋"):
+            self.assertTrue(documents._is_total(n), n)
+        for n in ("設計数量 仕上", "温度計", "鉄筋 D13"):
+            self.assertFalse(documents._is_total(n), n)
+
+    def xlsx(self, rows_xml, shared=("名称", "数量", "単位")):
+        import io, zipfile
+        ns = 'xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"'
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+            z.writestr("xl/workbook.xml", '<workbook %s xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+                       '<sheets><sheet name="S" sheetId="1" r:id="rId1"/></sheets></workbook>' % ns)
+            z.writestr("xl/_rels/workbook.xml.rels", '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                       '<Relationship Id="rId1" Target="worksheets/sheet1.xml"/></Relationships>')
+            z.writestr("xl/sharedStrings.xml", '<sst %s>%s</sst>' % (ns, "".join("<si><t>%s</t></si>" % x for x in shared)))
+            z.writestr("xl/worksheets/sheet1.xml", '<worksheet %s><sheetData>%s</sheetData></worksheet>' % (ns, rows_xml))
+        return buf.getvalue()
+
+    HEAD = '<row r="1"><c r="A1" t="s"><v>0</v></c><c r="B1" t="s"><v>1</v></c><c r="C1" t="s"><v>2</v></c></row>'
+
+    def test_xlsx_long_strings_and_empty_rows_are_bounded(self):
+        from wlcstudio.importers import tabular
+        with self.assertRaises(tabular.ImportError_):
+            tabular.read_xlsx(self.xlsx(self.HEAD, shared=("名称", "数量", "x" * 40000)), "d")
+        old = tabular.MAX_ROWS
+        tabular.MAX_ROWS = 50
+        try:
+            with self.assertRaises(tabular.ImportError_):
+                tabular.read_xlsx(self.xlsx(self.HEAD + "<row/>" * 60), "d")
+        finally:
+            tabular.MAX_ROWS = old
+        with self.assertRaises(tabular.ImportError_):                       # rows must go down the sheet
+            tabular.read_xlsx(self.xlsx(self.HEAD + '<row r="1"><c r="A1"><v>1</v></c></row>'), "d")
+
+    def test_xlsx_trace_uses_sheet_row_and_formula_totals_are_not_added(self):
+        rows = (self.HEAD +
+                '<row r="5"><c r="A5" t="inlineStr"><is><t>鉄筋 D13</t></is></c><c r="B5"><v>5</v></c><c r="C5" t="inlineStr"><is><t>t</t></is></c></row>'
+                '<row r="6"><c r="A6" t="inlineStr"><is><t>鉄筋 D16</t></is></c><c r="B6"><f>D6*0.001</f><v>7</v></c><c r="C6" t="inlineStr"><is><t>t</t></is></c><c r="D6"><v>7000</v></c></row>'
+                '<row r="7"><c r="A7" t="inlineStr"><is><t>鉄筋（全体）</t></is></c><c r="B7"><f>SUM(B5:B6)</f><v>12</v></c><c r="C7" t="inlineStr"><is><t>t</t></is></c></row>'
+                '<row r="8"><c r="A8" t="inlineStr"><is><t>鉄筋（再掲）</t></is></c><c r="B8"><f>B5</f><v>5</v></c><c r="C8" t="inlineStr"><is><t>t</t></is></c></row>')
+        r = documents.read("q.xlsx", base64.b64encode(self.xlsx(rows)).decode(), "d")
+        got = {(p.field_id, p.unit): p for p in r["proposals"]}
+        self.assertEqual(got[("m_rebar", "t")].value, 12.0)                  # 5 + 7, not the SUM row nor the repeat
+        self.assertIn("R5C2", got[("m_rebar", "t")].source_detail)
+        reasons = " ".join(u["reason"] for u in r["unused"])
+        self.assertIn("SUM", reasons)
+        self.assertIn("同じ列", reasons)
+
+    # --- the screen
+    def test_ui_has_the_round5_guards(self):
+        js = (HERE / "web" / "app.js").read_text(encoding="utf-8")
+        for needle in ("function parseNumber", "function clearedInput", "function openProject", "state.seq",
+                       '"field_only"', "function dependsHtml", "T <= 130", "assumed_inputs"):
+            self.assertIn(needle, js, needle)
+        proc = subprocess.run(["node", "-e", """
+            const src = require('fs').readFileSync(process.argv[1], 'utf8');
+            const m = src.match(/function parseNumber[\\s\\S]*?\\n}\\n/);
+            eval(m[0]);
+            const out = ['12,500', '1,5', '1,234.5', '１２３', 'abc', '1e3'].map((x) => JSON.stringify(parseNumber(x)));
+            console.log(out.join('|'));""", str(HERE / "web" / "app.js")], capture_output=True, text=True)
+        if proc.returncode != 0 and "not found" in (proc.stderr or ""):
+            self.skipTest("node is not installed")
+        parts = proc.stdout.strip().split("|")
+        self.assertEqual(json.loads(parts[0])["value"], 12500)
+        self.assertTrue(json.loads(parts[1])["bad"])
+        self.assertEqual(json.loads(parts[2])["value"], 1234.5)
+        self.assertEqual(json.loads(parts[3])["value"], 123)
+        self.assertTrue(json.loads(parts[4])["bad"])
+        self.assertEqual(json.loads(parts[5])["value"], 1000)
 
 
 class RegressionTests(unittest.TestCase):

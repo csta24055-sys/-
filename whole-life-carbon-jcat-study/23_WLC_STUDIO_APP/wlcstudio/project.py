@@ -14,6 +14,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
+import math
 import os
 import sqlite3
 import time
@@ -187,10 +189,13 @@ class Projects:
         # value will have once accepted (e.g. a PLATEAU attribute: confirmed; a GFA estimate: assumption).
         # the same proposal twice is not stored twice
         for c in self.candidates(pid, v.field_id):
-            if c["value"] == v.value and c["unit"] == v.unit and c["method"] == v.method and c["state"] == v.state:
-                if (c.get("depends") or {}) == (v.depends or {}):
-                    return c["id"]
-                self.db.execute("UPDATE candidates SET status='dismissed' WHERE id=?", (c["id"],))   # same number, new premises
+            same_premises = (c.get("depends") or {}) == (v.depends or {})
+            if c["value"] == v.value and c["unit"] == v.unit and c["method"] == v.method and c["state"] == v.state and same_premises:
+                return c["id"]
+            if c["method"] == v.method and (v.depends or c.get("depends")) and not same_premises:
+                # an estimate of the same method on other premises (floor area, structure, use changed): the old one is
+                # out of date, whatever its number, and must not stay next to the new one as if both were valid
+                self.db.execute("UPDATE candidates SET status='dismissed' WHERE id=?", (c["id"],))
         cur = self.db.execute("INSERT INTO candidates (project_id, field_id, payload, origin, created_at) VALUES (?,?,?,?,?)",
                               (pid, v.field_id, _j(v.to_json()), origin, time.time()))
         self.db.commit()
@@ -212,8 +217,8 @@ class Projects:
                                     "basis": "範囲を示す資料が無い"}
                 d["factor_version"] = d.get("factor_version") or "PLATEAU（版の記録の無い古い候補）"
             out.append(d)
-        # strongest evidence first
-        out.sort(key=lambda d: (-PRIORITY[d["state"]], d["id"]))
+        # strongest evidence first; among equals the newest first
+        out.sort(key=lambda d: (-PRIORITY[d["state"]], -d["id"]))
         return out
 
     def accept(self, pid: int, fid: str, index: int) -> Value:
@@ -318,6 +323,24 @@ class Projects:
                 "note": "入力が埋まった割合であって、精度ではない。"}
 
 
+_THOUSANDS = re.compile(r"^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$")
+
+
+def parse_number(x) -> float:
+    """A typed number. A comma is accepted only as a thousands separator ("12,500" or "1,234.5"); "1,5" (a decimal
+    comma) or "12,50" is refused instead of silently becoming 15 or 1250."""
+    if isinstance(x, (int, float)) and not isinstance(x, bool):
+        return float(x)
+    t = str(x).strip().replace("\u3000", "").replace(" ", "")
+    if "," in t:
+        if not _THOUSANDS.match(t):
+            raise ValueError("カンマは 3 桁ごとの区切りだけに使う（小数点はピリオド）")
+        t = t.replace(",", "")
+    if not re.match(r"^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$", t):
+        raise ValueError("数値として読めない")
+    return float(t)
+
+
 def _normalise(F: dict, v: Value) -> Value:
     """Type/unit/range checks of a value against its field (no coercion of a missing value into 0)."""
     if v.state not in HAS_VALUE:
@@ -327,9 +350,11 @@ def _normalise(F: dict, v: Value) -> Value:
     if t in ("number", "integer"):
         if isinstance(v.value, bool) or not isinstance(v.value, (int, float)):
             try:
-                v.value = float(str(v.value).replace(",", ""))
-            except ValueError:
-                raise ProjectError("「%s」は数値で入れる" % F["label"]) from None
+                v.value = parse_number(v.value)
+            except ValueError as e:
+                raise ProjectError("「%s」は数値で入れる（%s）" % (F["label"], e)) from None
+        if not math.isfinite(v.value):
+            raise ProjectError("「%s」は有限の数値で入れる" % F["label"])
         if t == "integer":
             if abs(v.value - round(v.value)) > 1e-9:
                 raise ProjectError("「%s」は整数で入れる" % F["label"])

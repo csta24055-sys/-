@@ -2,7 +2,7 @@
 "use strict";
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const state = { meta: null, project: null, stack: [], view: "home" };
+const state = { meta: null, project: null, stack: [], view: "home", seq: 0 };
 
 async function api(path, opts = {}) {
   const r = await fetch("/api" + path, { headers: { "Content-Type": "application/json" }, ...opts,
@@ -26,9 +26,12 @@ function go(view, arg, push = true) {
   if (push) state.stack.push([state.view, state.arg]);
   state.view = view; state.arg = arg; render();
 }
+/* opening a project starts a fresh history: 戻る must never lead into the screens of another project */
+function openProject(id) { return loadProject(id).then(() => { state.stack = [["home", undefined]]; go("hub", undefined, false); }); }
 function back() { const p = state.stack.pop(); if (p) { state.view = p[0]; state.arg = p[1]; render(); } else { state.view = "home"; render(); } }
 
 async function render() {
+  state.seq++;                                    // a pending request of the previous view must not paint into this one
   const m = $("#main"); m.innerHTML = ""; window.scrollTo(0, 0);
   $("#btn-back").style.visibility = state.view === "home" ? "hidden" : "visible";
   try {
@@ -63,8 +66,8 @@ async function renderHome(m) {
       <div><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.structure_label)}・入力 ${p.progress.filled}/${p.progress.total}（${p.progress.percent}%）</span></div>
       <button class="btn small" data-open="${p.id}">開く</button></div>`).join("") : '<p class="muted">まだプロジェクトはありません。</p>'}</div>`;
   $("#start").onclick = () => go("structures");
-  $("#demo").onclick = async () => { const r = await api("/demo", { method: "POST", body: {} }); await loadProject(r.id); go("hub"); };
-  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = async () => { await loadProject(+b.dataset.open); go("hub"); }));
+  $("#demo").onclick = async () => { const r = await api("/demo", { method: "POST", body: {} }); await openProject(r.id); };
+  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = () => openProject(+b.dataset.open)));
 }
 
 /* ---------- structure select ---------- */
@@ -78,7 +81,7 @@ function renderStructures(m) {
       <img src="${s.img}" alt=""><h3>${esc(s.label)}</h3><p>${esc(s.desc)}</p></button>`).join("")}</div>`;
   m.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => {
     const r = await api("/projects", { method: "POST", body: { structure: b.dataset.s, name: $("#pname").value.trim() } });
-    await loadProject(r.id); go("hub");
+    await openProject(r.id);
   }));
 }
 
@@ -121,6 +124,7 @@ function fieldHtml(fid) {
       ${c.uncertainty && c.uncertainty.kind === "unknown" ? `<div class="muted">範囲は不明</div>` : ""}
       ${c.uncertainty && c.uncertainty.kind !== "none" && c.uncertainty.kind !== "unknown" ? `<div class="muted">範囲 ${fmt(c.uncertainty.low, c.unit)} 〜 ${fmt(c.uncertainty.high, c.unit)}${c.uncertainty.calibrated ? "" : "（仮の範囲）"}</div>` : ""}
       <div class="muted">${c.source_id ? "出典 " + esc(c.source_id) + (c.source_detail ? "：" + esc(c.source_detail) : "") : ""}</div>
+      ${dependsHtml(c.depends)}
       <div class="muted">${esc(c.note || "")}</div><button class="btn small" data-accept="${fid}" data-i="${i}">この候補を採用</button></li>`).join("");
   return `<div class="field" id="f-${fid}">
     <div class="field-head"><label for="in-${fid}">${esc(F.label)}${F.required ? ' <span class="muted">（計算に必須）</span>' : ""}</label>${badge(st)}</div>
@@ -136,6 +140,19 @@ function fieldHtml(fid) {
       ${v && v.state !== "not_obtained" ? `<button class="btn small" data-unset="${fid}">未取得に戻す</button>` : ""}
       <button class="btn small" data-nc="${fid}">計算不能</button>
     </div>${cands ? `<ul class="cands" aria-label="候補">${cands}</ul>` : ""}</div>`;
+}
+
+/* the premises an estimate was made from (floor area, structure, use group): shown so that a stale one is visible */
+function dependsHtml(dep) {
+  if (!dep || !Object.keys(dep).length) return "";
+  const name = { b_use_group: "用途の区分" };
+  const parts = Object.entries(dep).map(([k, x]) => {
+    const F = state.meta.fields[k];
+    const label = name[k] || (F ? F.label : k);
+    const shown = F && F.type === "enum" ? ((F.enum.find((e) => e.value === x) || {}).label || x) : (typeof x === "number" ? fmt(x, F ? F.unit : "") : x);
+    return `${esc(label)} ${typeof shown === "string" && typeof x !== "number" ? esc(shown) : shown}`;
+  });
+  return `<div class="muted">前提：${parts.join("・")}</div>`;
 }
 
 function renderScreen(m, sid) {
@@ -162,13 +179,30 @@ function renderScreen(m, sid) {
   bindScreen(m, sid);
 }
 
+/* a typed number: full-width digits allowed; a comma only as a thousands separator ("12,500"), never as a decimal
+   point ("1,5" is refused instead of becoming 15) */
+function parseNumber(raw) {
+  let t = raw.normalize("NFKC").replace(/\s/g, "");
+  if (t.includes(",")) { if (!/^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(t)) return { bad: true, why: "カンマは 3 桁ごとの区切りだけに使ってください（小数点はピリオド）" }; t = t.replace(/,/g, ""); }
+  if (!/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/.test(t)) return { bad: true };
+  const v = Number(t); return Number.isFinite(v) ? { value: v } : { bad: true };
+}
 function inputValue(fid) {
   const F = state.meta.fields[fid], el = $("#in-" + fid);
   if (!el) return { empty: true };
   const raw = el.value.trim();
   if (raw === "") return { empty: true };
-  if (F.type === "number") { const v = Number(raw.replace(/,/g, "")); return Number.isFinite(v) ? { value: v } : { bad: true }; }
+  if (F.type === "number") return parseNumber(raw);
   return { value: raw };
+}
+/* the input was emptied although a value is stored: say that it was not removed, and show the stored value again */
+function clearedInput(fid) {
+  const el = $("#in-" + fid), cur = (state.project.fields[fid] || {}).value;
+  return !!(el && el.value.trim() === "" && cur && cur.value !== null && cur.value !== undefined && typeof cur.value !== "object");
+}
+function restoreInput(fid) {
+  const el = $("#in-" + fid), cur = (state.project.fields[fid] || {}).value;
+  if (el && cur) el.value = cur.value;
 }
 function ownValue(cur) {
   return cur && ["user_entered", "initial_setting", "structure_card"].includes(cur.method) && !["statistical", "from_drawing"].includes(cur.state);
@@ -184,8 +218,13 @@ function isDirty(fid) {
 /* save one row: "saved" | "unchanged" | "refused" */
 async function saveField(fid, quiet = false) {
   const F = state.meta.fields[fid], iv = inputValue(fid);
+  if (iv.empty && clearedInput(fid)) {
+    restoreInput(fid);
+    toast(`「${F.label}」の空欄は保存していません（値は消えていません）。値を消すときは「未取得に戻す」を押してください`);
+    return "refused";
+  }
   if (iv.empty) { if (!quiet) toast("空欄は保存しません（未取得のまま。0 にはしません）"); return "unchanged"; }
-  if (iv.bad) { toast("「" + F.label + "」は数値で入力してください"); return "refused"; }
+  if (iv.bad) { toast("「" + F.label + "」は数値で入力してください" + (iv.why ? "（" + iv.why + "）" : "")); return "refused"; }
   const value = iv.value;
   const cur = (state.project.fields[fid] || {}).value;
   const us = $("#unit-" + fid), unit = us ? us.value : ((cur && cur.unit) || F.unit);
@@ -204,11 +243,14 @@ async function saveField(fid, quiet = false) {
       body.relabel = true;
     }
     if (cur.scope) body.scope = cur.scope;                       // what the value covers stays with it
-  } else if (cur && cur.state === "statistical") {
-    if (confirm(`今の値は統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）でした。新しい値は、その推定を手で直したものですか？\n（はい＝同じ範囲・前提を引き継ぐ。統計の範囲は使わず「範囲は不明」になる／いいえ＝別に調べた値）`)) body.from_estimate = true;
-  } else if (cur && cur.scope) {
-    const what = cur.scope === "whole_building" ? "基礎・杭を含む建物全体の量" : "鉄筋と鉄骨を合わせた鉄の全量";
-    if (confirm(`今の値は「${what}」でした。新しい値も${what}ですか？（はい＝もう一方の欄と二重に数えない／いいえ＝この欄だけの量）`)) body.scope = cur.scope;
+  } else {
+    if (cur && cur.state === "statistical" &&
+        confirm(`今の値は統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）でした。新しい値は、その推定を手で直したものですか？\n（はい＝同じ範囲・前提を引き継ぐ。統計の範囲は使わず「範囲は不明」になる／いいえ＝別に調べた値）`)) body.from_estimate = true;
+    if (cur && cur.scope && !body.from_estimate) {
+      // what the new value covers must be said: the server refuses to guess (it decides the double-counting guard)
+      const what = cur.scope === "whole_building" ? "基礎・杭を含む建物全体の量" : "鉄筋と鉄骨を合わせた鉄の全量";
+      body.scope = confirm(`今の値は「${what}」でした。新しい値も${what}ですか？（はい＝もう一方の欄と二重に数えない／いいえ＝この欄だけの量）`) ? cur.scope : "field_only";
+    }
   }
   try {
     await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body });
@@ -220,7 +262,14 @@ function bindScreen(m, sid) {
   $("#bb-back").onclick = back;
   $("#bb-hub").onclick = async () => {
     // 保存して戻る: every row whose input differs from the stored value is saved like its own 保存 button
-    const dirty = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save).filter(isDirty);
+    const rows = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save);
+    const cleared = rows.filter(clearedInput);
+    if (cleared.length) {
+      cleared.forEach(restoreInput);
+      toast(`空欄にした${cleared.map((f) => "「" + state.meta.fields[f].label + "」").join("")}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`);
+      return;
+    }
+    const dirty = rows.filter(isDirty);
     let saved = 0;
     for (const fid of dirty) {
       const r = await saveField(fid, true);
@@ -302,8 +351,11 @@ async function estimate(sid, fid) {
   try {
     const r = await api(`/projects/${state.project.id}/estimate`, { method: "POST", body: { screen: sid, field: fid } });
     toast(r.n_proposals ? `${r.n_proposals} 件の候補を作りました（採用するまで計算には使いません）` : (r.message || "概算できる項目がありません"));
-    if (r.messages && r.messages.length) dialog("自動概算の説明", r.messages.map((x) => `<p>${esc(x)}</p>`).join(""));
     await refresh(sid, fid);
+    if (r.messages && r.messages.length && state.view === "screen") {
+      await new Promise((res) => setTimeout(res, 40));          // after refresh() has placed its focus
+      dialog("自動概算の説明", r.messages.map((x) => `<p>${esc(x)}</p>`).join(""));
+    }
   } catch (e) { toast(e.message); }
 }
 
@@ -328,18 +380,29 @@ async function renderResult(m) {
   $("#title").textContent = "結果";
   m.innerHTML = `<div class="card"><label for="period"><strong>評価期間（年）</strong></label>
     <div class="edit"><input id="period" inputmode="decimal" value="${state.project.last_period || 60}"><button class="btn small" id="calc">計算する</button></div>
-    <p class="muted">評価期間だけを変えた再計算は、準備した計算を使い回すので速くなります。</p></div><div id="res"></div>`;
+    <p class="muted">評価期間だけを変えた再計算は、準備した計算を使い回すので速くなります。</p></div><div id="res-msg" role="status"></div><div id="res"></div>`;
+  const seq = state.seq, pid = state.project.id;
+  const here = () => state.seq === seq && state.view === "result" && state.project && state.project.id === pid;
   $("#calc").onclick = async () => {
-    const T = Number($("#period").value); if (!(T > 0)) return toast("評価期間は正の数で入力してください");
-    $("#res").innerHTML = '<p class="muted">計算中…</p>';
-    try { showResult(await api(`/projects/${state.project.id}/calculate`, { method: "POST", body: { period: T } })); }
-    catch (e) { $("#res").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; }
+    const p = parseNumber($("#period").value.trim()), T = p.value;
+    // checked here as on the server; an error is shown above the last result instead of replacing it
+    if (p.bad || !(T > 0 && T <= 130)) { $("#res-msg").innerHTML = `<div class="notice bad">評価期間は 0 より大きく 130 年以下で入力してください（エンジンの年表の長さが 130 年）</div>`; return; }
+    $("#res-msg").innerHTML = '<p class="muted">計算中…</p>';
+    const btn = $("#calc"); btn.disabled = true;
+    try {
+      const r = await api(`/projects/${pid}/calculate`, { method: "POST", body: { period: T } });
+      if (state.project && state.project.id === pid) state.project.last_period = r.period;
+      if (!here()) return;                                   // the user went elsewhere: do not paint into that view
+      $("#res-msg").innerHTML = ""; showResult(r);
+    } catch (e) { if (here()) $("#res-msg").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; }
+    finally { btn.disabled = false; }
   };
-  try { const r = await api(`/projects/${state.project.id}/result`); if (r && r.status) showResult(r); } catch { /* no result yet */ }
+  try { const r = await api(`/projects/${pid}/result`); if (r && r.status && here()) showResult(r); } catch { /* no result yet */ }
 }
 
 function showResult(r) {
   const el = $("#res");
+  if (r.period && $("#period")) $("#period").value = r.period;   // the period shown is the period of this result
   if (r.status !== "ok") {
     el.innerHTML = r.stale ? `<div class="notice bad"><strong>入力が変わっています。</strong>前の計算では「${esc(r.message)}」でした。「計算する」を押して計算し直してください。</div>`
       : `<div class="notice bad"><strong>計算していません</strong>：${esc(r.message)}</div>${missingHtml(r)}`;
@@ -348,7 +411,8 @@ function showResult(r) {
   const s = r.summary, maxStage = Math.max(...s.stages.map((x) => Math.abs(x.value || 0)), 1);
   const tot = s.total_t === null ? null : s.total_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 });
   const head = s.nothing_counted ? "未計算（計算に入った量がありません）" : tot === null ? "未計算" : (s.lower_bound ? `少なくとも ${tot} tCO2e` : `${tot} tCO2e`);
-  const miss = (r.missing_inputs || []);
+  const miss = (r.omitted_inputs || (r.missing_inputs || []).filter((x) => (x.gap || "omitted") === "omitted"));
+  const assumed = (r.assumed_inputs || (r.missing_inputs || []).filter((x) => x.gap === "assumed"));
   el.innerHTML = `
   ${r.stale ? `<div class="notice bad"><strong>入力が変わっています。</strong>下は前の入力での結果です。「計算する」を押して計算し直してください。</div>` : ""}
   <div class="card${r.stale ? " stale" : ""}"><div class="muted">ホールライフカーボン（評価期間 ${r.period} 年）</div>
@@ -359,13 +423,15 @@ function showResult(r) {
     <div class="notice">${esc(r.factor_note)}</div>
     ${s.lower_bound ? `<div class="notice bad">この合計は<strong>下限</strong>です。次の分は合計に入っていません：
       <ul>${miss.slice(0, 12).map((x) => `<li>${esc(x.label)}（${esc(x.stages.join("・"))}）：${esc(x.reason)}</li>`).join("")}${miss.length > 12 ? `<li>ほか ${miss.length - 12} 件</li>` : ""}
-      ${s.engine_complete ? "" : `<li>エンジンが合計できなかった単位：${esc(s.incomplete_units.join("、"))}</li>`}</ul></div>` : ""}
+      ${(s.incomplete_units || []).length ? `<li>エンジンが合計できなかった単位：${esc(s.incomplete_units.join("、"))}</li>` : ""}</ul></div>` : ""}
+    ${assumed.length ? `<div class="notice">次の分は、入力の代わりに<strong>仮定で計算した</strong>ものです（合計には入っていますが、決まった値ではありません）：
+      <ul>${assumed.map((x) => `<li>${esc(x.label)}（${esc(x.stages.join("・"))}）：${esc(x.reason)}</li>`).join("")}</ul></div>` : ""}
     ${(r.double_count || []).map((x) => `<div class="notice">二重計上の防止：${esc(x)}</div>`).join("")}
     ${(r.stale_estimates || []).map((x) => `<div class="notice bad">「${esc(x.label)}」の推定は、前提が変わっています（${esc(x.changes.join("、"))}）。材料の画面で概算し直してください。</div>`).join("")}</div>
   <div class="card"><h3 style="margin-top:0">推定値の影響</h3><p>${esc(r.reflection.summary)}</p>
     <table class="t"><tr><th>状態</th><th>計算に入った入力</th></tr>${Object.entries(r.reflection.by_state).map(([k, n]) => `<tr><td>${badge(k)}</td><td class="num">${n}</td></tr>`).join("")}</table></div>
   <div class="card"><h3 style="margin-top:0">段階別</h3><table class="t">${s.stages.map((x) => `<tr><td>${esc(x.stage)}</td>
-    <td style="width:45%"><div class="bar" style="width:${Math.max(1, Math.abs(x.value || 0) / maxStage * 100)}%"></div></td><td class="num">${fmt(x.value, "")}${x.complete ? "" : ' <span class="badge st-not_computable">不完全</span>'}</td></tr>`).join("")}</table>
+    <td style="width:45%"><div class="bar" style="width:${Math.max(1, Math.abs(x.value || 0) / maxStage * 100)}%"></div></td><td class="num">${fmt(x.value, "")}${x.complete ? "" : ' <span class="badge st-not_computable">不完全</span>'}${x.assumed ? ' <span class="badge st-assumption">一部は仮定</span>' : ""}</td></tr>`).join("")}</table>
     ${(s.hints || []).length ? `<h4>不完全な段階を埋めるには</h4><ul>${s.hints.map((h) => `<li><strong>${esc(h.stage)}</strong>（${esc(h.unit)}）：${esc(h.note)}</li>`).join("")}</ul>` : ""}
     <p class="muted">単位 kgCO2e。出所：エンジンの結果のキー（${esc(s.source_keys)}）。</p></div>
   <div class="card"><h3 style="margin-top:0">時間の変化</h3>${curve(s.by_year)}<p class="muted">年ごとの排出（研究のモデルの X-07）。評価期間の関数 C(T) の傾きを、そのまま実際の排出率と読まないでください。</p></div>
@@ -416,7 +482,7 @@ async function renderSettings(m) {
      <button class="btn small" data-del="${p.id}">削除</button></span></div>`).join("") || '<p class="muted">ありません</p>'}</div>
    <div class="card"><h3 style="margin-top:0">このアプリについて</h3><p>${esc(state.meta.app_name)} ${esc(state.meta.version)}</p><p class="muted">${esc(state.meta.disclaimer)}</p>
    <p class="muted">${esc(state.meta.privacy)}</p><p class="muted">データの出典：${esc(state.meta.attribution)}</p></div>`;
-  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = async () => { await loadProject(+b.dataset.open); go("hub"); }));
+  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = () => openProject(+b.dataset.open)));
   m.querySelectorAll("[data-del]").forEach((b) => (b.onclick = async () => {
     if (!confirm("このプロジェクトと、その入力・候補・資料の記録、計算用に変換した入力と計算の記録を削除します。元に戻せません。")) return;
     const id = +b.dataset.del;

@@ -24,6 +24,9 @@ NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 MAX_PART, MAX_TOTAL = 10_000_000, 40_000_000     # bytes after decompression (real quantity tables are far smaller)
 MAX_COLS, MAX_CELLS, MAX_SHARED = 16_384, 1_000_000, 300_000   # Excel's column limit (XFD); all sheets together
 MAX_CSV_BYTES, MAX_CSV_ROWS = 10_000_000, 100_000
+MAX_STRING = 32_767                               # Excel's limit for the text of one cell
+MAX_CHARS = 50_000_000                            # characters of cell text over the whole workbook (counted per cell)
+MAX_ROWS, MAX_ROW_NUMBER = 1_000_000, 1_048_576   # rows of all sheets together; Excel's last row
 
 
 class ImportError_(ValueError):
@@ -53,7 +56,26 @@ def _header_map(row: list) -> dict:
     return out
 
 
-def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str) -> dict:
+_FUNC_TOTAL = re.compile(r"\b(SUM|SUMIF|SUMIFS|SUMPRODUCT|SUBTOTAL|AGGREGATE)\s*\(", re.I)
+_REF = re.compile(r"(?:(?:'[^']+'|[A-Za-z0-9_.]+)!)?\$?([A-Z]{1,3})\$?(\d+)(?![\d(])")
+
+
+def formula_reason(formula: str | None, col: int) -> str | None:
+    """Why a quantity cell computed by a formula must not be added: a SUM-like function, or a reference to another row of
+    the same column (a total, a 再掲 repeat or an allowance on another row). None for e.g. volume × density."""
+    if not formula:
+        return None
+    f = re.sub(r'"[^"]*"', '""', formula)                 # text inside quotes is not a reference
+    if _FUNC_TOTAL.search(f):
+        return "数式の合計（%s）の行は足さない（二重計上を防ぐ）" % _FUNC_TOTAL.search(f).group(1).upper()
+    letters = {m.group(1) for m in _REF.finditer(f)}
+    if any(_col_index(L) == col for L in letters if len(L) <= 3):
+        return "同じ列の別の行から計算した数量（合計・再掲・割増のおそれ）は足さない。必要なら手で入れる"
+    return None
+
+
+def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: list[int] | None = None,
+                        formulas: list[dict] | None = None) -> dict:
     hdr_i, hmap = None, {}
     for i, r in enumerate(rows[:30]):            # the header is one of the first rows
         m = _header_map(r)
@@ -72,14 +94,20 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str) -> dict:
         q = _num(col("quantity"))
         if not name and q is None:
             continue
-        trace = "%s:%s!R%dC%d" % (doc_id, sheet, i + 1, (hmap["quantity"] or 0) + 1)
+        rn = row_numbers[i] if row_numbers else i + 1          # the sheet's own row number (gaps kept)
+        trace = "%s:%s!R%dC%d" % (doc_id, sheet, rn, (hmap["quantity"] or 0) + 1)
         if q is None:
-            skipped.append({"row": i + 1, "name": name, "reason": "数量が数値でない（0 として読まない）", "trace": trace})
+            skipped.append({"row": rn, "name": name, "reason": "数量が数値でない（0 として読まない）", "trace": trace})
+            continue
+        why = formula_reason((formulas[i] if formulas else {}).get(hmap["quantity"]), hmap["quantity"])
+        if why:
+            skipped.append({"row": rn, "name": name, "reason": why, "trace": trace})
             continue
         cands.append({"name": name, "quantity": q, "unit": str(col("unit") or "").strip(),
                       "division": str(col("division") or "").strip(), "specification": str(col("specification") or "").strip(),
-                      "trace": trace, "row": i + 1})
-    return {"sheet": sheet, "rows": cands, "skipped": skipped, "header_row": hdr_i + 1}
+                      "trace": trace, "row": rn})
+    return {"sheet": sheet, "rows": cands, "skipped": skipped,
+            "header_row": row_numbers[hdr_i] if row_numbers else hdr_i + 1}
 
 
 def read_csv(data: bytes, doc_id: str) -> dict:
@@ -117,7 +145,13 @@ def _col_index(ref: str) -> int:
 
 
 def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
-    """All sheets of an .xlsx as (name, rows); cell values are the stored text/cached values (no formula is evaluated).
+    """All sheets of an .xlsx as (name, rows), the rows packed in order (the statistics loaders search by content)."""
+    return [(name, rows) for name, rows, _, _ in xlsx_workbook(data)]
+
+
+def xlsx_workbook(data: bytes) -> list[tuple[str, list[list], list[int], list[dict]]]:
+    """All sheets of an .xlsx as (name, rows, row numbers, formulas); cell values are the stored text/cached values
+    (no formula is evaluated; the formula text is kept per cell so that totals can be recognised).
 
     Guards (a quantity table is small): every part is read through a bounded stream counting the bytes actually
     decompressed; the XML is parsed incrementally (iterparse, elements cleared as they are consumed), with limits on
@@ -165,7 +199,10 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
             if root is None:
                 root = el
             if ev == "end" and el.tag == M + "si":
-                shared.append("".join(t.text or "" for t in el.iter(M + "t")))
+                text = "".join(t.text or "" for t in el.iter(M + "t"))
+                if len(text) > MAX_STRING:
+                    raise ImportError_("共有の文字列が長すぎる（1 つ %d 文字まで：Excel の上限）" % MAX_STRING)
+                shared.append(text)
                 if len(shared) > MAX_SHARED:
                     raise ImportError_("共有の文字列が多すぎる（%d まで）" % MAX_SHARED)
                 el.clear()
@@ -181,7 +218,7 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
         raise ImportError_("Excel のブックの部品を読めない（%s）" % e) from None
     rel_target = {r.get("Id"): r.get("Target") for r in rels}
     out = []
-    cells = {"n": 0}
+    cells = {"n": 0, "chars": 0, "rows": 0}
     sheets_el = wb.find("m:sheets", NS)
     for sh in (sheets_el if sheets_el is not None else []):
         rid = sh.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
@@ -189,18 +226,33 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
         path = "xl/" + target.lstrip("/").replace("xl/", "") if not target.startswith("/xl/") else target.lstrip("/")
         if path not in names:
             continue
-        rows = []
+        rows, numbers, forms = [], [], []
+        shared_f = {}                                   # si -> formula text of a shared formula's master cell
         root = None
+        last_row = 0
         for ev, el in events(path):
             if root is None:
                 root = el
             if ev != "end" or el.tag != M + "row":
                 continue
-            vals = {}
+            # every row costs at least one cell, so that a sheet of empty <row/> elements cannot run unbounded
+            cells["rows"] += 1
+            if cells["rows"] > MAX_ROWS:
+                raise ImportError_("行が多すぎる（%d 行まで）" % MAX_ROWS)
+            rattr = el.get("r")
+            try:
+                rn = int(rattr) if rattr is not None else last_row + 1
+            except ValueError:
+                raise ImportError_("行の番号 %r を読めない" % rattr) from None
+            if not (last_row < rn <= MAX_ROW_NUMBER):
+                raise ImportError_("行の番号 %r が正しくない（増える順で Excel の上限 %d まで）" % (rattr, MAX_ROW_NUMBER))
+            last_row = rn
+            vals, fs = {}, {}
             last = -1
             for c in el.findall("m:c", NS):
                 ref, t = c.get("r"), c.get("t")
                 v = c.find("m:v", NS)
+                f = c.find("m:f", NS)
                 if t == "s" and v is not None:
                     try:
                         val = shared[int(v.text)]
@@ -208,6 +260,8 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
                         raise ImportError_("共有の文字列の番号 %r が正しくない" % (v.text,)) from None
                 elif t == "inlineStr":
                     val = "".join(x.text or "" for x in c.iter(M + "t"))
+                    if len(val) > MAX_STRING:
+                        raise ImportError_("セルの文字列が長すぎる（%d 文字まで）" % MAX_STRING)
                 else:
                     val = v.text if v is not None else None   # formulas: the cached value only, never evaluated
                 ci = _col_index(ref) if ref else last + 1     # a cell without a reference follows the previous one
@@ -215,15 +269,30 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
                 if ci >= MAX_COLS:
                     raise ImportError_("列の位置 %s が Excel の上限を超えている" % ref)
                 vals[ci] = val
-            cells["n"] += max(vals) + 1 if vals else 0
+                cells["chars"] += len(val) if isinstance(val, str) else 0
+                if f is not None:
+                    text = f.text or ""
+                    if f.get("t") == "shared" and f.get("si") is not None:
+                        if text:
+                            shared_f[f.get("si")] = text[:2000]
+                        text = text or shared_f.get(f.get("si"), "")
+                    fs[ci] = text[:2000]
+                    cells["chars"] += len(fs[ci])
+            if cells["chars"] > MAX_CHARS:
+                raise ImportError_("セルの文字が多すぎる（合計 %d 文字まで）" % MAX_CHARS)
+            cells["n"] += max(max(vals) + 1 if vals else 0, 1)
             if cells["n"] > MAX_CELLS:
                 raise ImportError_("セルが多すぎる（%d まで）" % MAX_CELLS)
-            rows.append([vals.get(j) for j in range(max(vals) + 1)] if vals else [])
+            if vals:
+                rows.append([vals.get(j) for j in range(max(vals) + 1)])
+                numbers.append(rn)
+                forms.append(fs)
             el.clear()
             root.clear()
-        out.append((sh.get("name"), rows))
+        out.append((sh.get("name"), rows, numbers, forms))
     return out
 
 
 def read_xlsx(data: bytes, doc_id: str) -> dict:
-    return {"format": "xlsx", "sheets": [_rows_to_candidates(rows, name, doc_id) for name, rows in xlsx_sheets(data)]}
+    return {"format": "xlsx", "sheets": [_rows_to_candidates(rows, name, doc_id, numbers, forms)
+                                         for name, rows, numbers, forms in xlsx_workbook(data)]}

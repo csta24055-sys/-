@@ -36,3 +36,11 @@
 ## エンジンへの文書（lca-input/1、`wlcstudio/bridge.py`）
 
 既存アプリの入力形式そのもの（`12_APP_BASE/README.md`）。カテゴリーは 5 大分類、項目の ID はエンジンのモデルの名前。材料・設備・冷媒は表の行（`materials`・`equipment`・`refrigerants`）、燃料は `construction.fuels`、状態は `<所有者>.states` と `provenance` の表。参照セット（原単位）は `reference_set` で指定する。
+
+## 計算の報告（`bridge.build` の report）
+
+- `missing_inputs`：評価範囲の中で決まらない入力。各要素は field（入力欄、または入力欄の無い分の ID：解体工事・現場の廃棄物・代わりの配送原単位など）、label、stages、reason、`gap`、`screen_field`（画面の入力欄か）。
+  - `gap = "omitted"`：合計に入っていない（その段階は不完全、合計は下限）。`omitted_inputs` に同じものを並べる。
+  - `gap = "assumed"`：合計には入っているが、入力の代わりに仮定で計算した（例：運搬距離・手段の代わりに参照セットの数量あたりの配送原単位）。`assumed_stages` に段階を並べ、画面は「一部は仮定」と出す。下限にはしない。
+- `incomplete_stages`：入っていない分のある段階。`expand`：依存する段階へ広げる条件（b5、b4_material、b4_equipment、b1_replacement、b2_moot＝購入の正味が 0、route_stages）。
+- 電力：画面の「購入電力」は請求書の量（自家消費を含まない）。エンジンへは使用量＝購入電力＋max(0, 自家発電 − 売電) を導出の値として渡し、エンジンが買電量＝max(0, 使用量 − (発電 − 売電)) に戻す。

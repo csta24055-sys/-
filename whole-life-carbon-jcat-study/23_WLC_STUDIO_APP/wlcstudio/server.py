@@ -12,6 +12,7 @@ mutates shared state), so calls never run concurrently.
 from __future__ import annotations
 
 import base64
+import dataclasses
 import ipaddress
 import json
 import mimetypes
@@ -29,7 +30,7 @@ from . import APP_NAME, APP_VERSION
 from . import bridge, documents, estimate, research
 from . import fields as FL
 from .engine import Engine
-from .project import ProjectError, Projects
+from .project import ProjectError, Projects, parse_number
 from .provenance import LABEL, STATES, ProvenanceError, Uncertainty, Value
 from .sources import gsi, plateau
 from .sources.net import SourceError
@@ -185,10 +186,7 @@ class App:
         unit = str(b.get("unit") if b.get("unit") is not None else F.get("unit", ""))
         if cur is not None and state in ("confirmed", "assumption") and cur.state in ("confirmed", "from_drawing", "statistical", "assumption"):
             if F["type"] in ("number", "integer"):
-                try:
-                    same = float(str(value).replace(",", "")) == float(cur.value)
-                except (TypeError, ValueError):
-                    same = False
+                same = _same_value(F, value, cur.value)
             else:
                 same = str(value) == str(cur.value)
             same_unit = F["type"] not in ("number", "integer") or not cur.unit or unit == cur.unit
@@ -206,23 +204,33 @@ class App:
                                     "画面の確認に答えて「単位の付け直し」として保存する" % (cur.unit, unit))
         if state == "not_applicable" and F.get("na_never"):
             raise ApiError(400, "「%s」は「適用外」にできない（無いということが無い項目）。分からないときは「未取得」のままにする" % F["label"])
-        scope = str(b.get("scope") or "")
+        raw_scope = str(b.get("scope") or "")
+        explicit = raw_scope != ""                     # "field_only" = the value covers just this field (drops a scope)
+        scope = "" if raw_scope == "field_only" else raw_scope
         depends, unc, note_extra, src = {}, None, "", ""
         if cur is not None and cur.state in ("confirmed", "from_drawing", "statistical", "assumption") and state in ("confirmed", "assumption"):
-            try:
-                same_v = float(str(value).replace(",", "")) == float(cur.value) if F["type"] in ("number", "integer") else str(value) == str(cur.value)
-            except (TypeError, ValueError):
-                same_v = False
-            if same_v and not scope:
-                scope = cur.scope or ""                   # a state-only change or a relabel keeps what the value covers
+            same_v = _same_value(F, value, cur.value)
+            if same_v:
+                # a state-only change or a relabel keeps what the value covers, its premises, its source and the fact
+                # that its range is unknown (dropping them would silently drop the double-counting guard or the range note)
+                if not explicit:
+                    scope = cur.scope or ""
                 depends = dict(cur.depends or {})
+                if cur.uncertainty.kind == "unknown":
+                    unc = dataclasses.replace(cur.uncertainty)
+                src = cur.source_id
             if b.get("from_estimate") and cur.state == "statistical":
                 # the user corrected an estimate: same quantity, same premises; its statistical range no longer applies
-                scope = scope or cur.scope or ""
+                if not explicit:
+                    scope = cur.scope or ""
                 depends = dict(cur.depends or {})
                 unc = Uncertainty("unknown", basis="推定（%s）を手で直した値：元の範囲は使わない" % cur.source_id)
                 note_extra = "推定 %s %s（%s）を手で直した。" % (cur.value, cur.unit, cur.source_id)
                 src = cur.source_id
+            elif cur.scope and not explicit and not same_v:
+                raise ApiError(400, "今の値は「%s」の範囲（%s）を含む。新しい値がどこまでを含むかを指定して保存する"
+                                    "（同じ範囲なら scope=%s、この欄だけなら scope=field_only）"
+                               % (F["label"], SCOPE_LABEL.get(cur.scope, cur.scope), cur.scope))
         if scope and not ((fid == "m_concrete" and scope == "whole_building") or (fid in ("m_rebar", "m_steel") and scope == "all_steel")):
             raise ApiError(400, "この項目にその範囲（%s）は付けられない" % scope)
         v = Value(fid, state, value if state in ("confirmed", "assumption") else None,
@@ -231,8 +239,9 @@ class App:
                   source_detail=str(b.get("source_detail") or ""), note=(note_extra + str(b.get("note") or ""))[:300], updated_by="user",
                   scope=scope if state in ("confirmed", "assumption") else "",
                   depends=depends if state in ("confirmed", "assumption") else {})
-        if unc is not None:
+        if unc is not None and state in ("confirmed", "assumption"):
             v.uncertainty = unc
+        if state in ("confirmed", "assumption"):
             v.source_id = v.source_id or src
         out = self.projects.put(pid, v).to_json()
         if fid == "b_structure" and state in ("confirmed", "assumption"):
@@ -281,9 +290,14 @@ class App:
         p = self.projects.get(pid)
         vals = self.projects.values(pid)
         sv = vals.get("b_structure")
-        if sv is None or sv.state not in ("confirmed", "assumption", "statistical", "from_drawing"):
-            raise ApiError(400, "構造が未取得なので概算しない（基本情報で構造を入れる）")
-        res = estimate.run(vals, sv.value, screen=b.get("screen"), field=b.get("field"),
+        field = b.get("field")
+        if field is not None and field not in FL.FIELDS:
+            raise ApiError(400, "項目 %r は無い" % field)
+        target = FL.FIELDS[field]["screen"] if field else b.get("screen")
+        has_structure = sv is not None and sv.state in ("confirmed", "assumption", "statistical", "from_drawing")
+        if target == "material" and not has_structure:
+            raise ApiError(400, "構造が未取得なので材料は概算しない（基本情報で構造を入れる）")
+        res = estimate.run(vals, sv.value if has_structure else None, screen=b.get("screen"), field=field,
                            demo=p["data_kind"] == "fictional_demo")
         for v in res["proposals"]:
             self.projects.propose(pid, v, "estimate:" + v.method)
@@ -318,17 +332,25 @@ class App:
         warnings = r["warnings"] + ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in r["unused"][:8]]
         return {"summary": summary, "warnings": warnings, "n_proposals": len(r["proposals"])}
 
-    def _range(self, vals: dict, T: float, lca_pid: int, pid: int) -> dict | None:
+    def _range(self, vals: dict, T: float, lca_pid: int, pid: int, rep: dict | None = None) -> dict | None:
         """Low / high totals with every value that has a range set to its low / high end (two more engine runs).
         This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
         lo_vals, n = _with(vals, "low")
-        n_unknown = sum(1 for f, v in vals.items() if v.uncertainty.kind == "unknown" or
-                        (v.state == "assumption" and v.uncertainty.kind == "none" and FL.FIELDS[f]["type"] in ("number", "integer")
-                         and FL.FIELDS[f]["role"] in ("material", "gfa", "equipment", "profile", "refrigerant")))
+        reflected = {f["field"] for f in (rep or {}).get("fields") or [] if f.get("reflected")} if rep else None
+        unknown = [f for f, v in vals.items()
+                   if f in FL.FIELDS and FL.FIELDS[f]["type"] in ("number", "integer") and isinstance(v.value, (int, float))
+                   and (reflected is None or f in reflected)
+                   and (v.uncertainty.kind == "unknown" or
+                        (v.state in ("assumption", "statistical") and v.uncertainty.kind == "none"))]
+        n_unknown = len(unknown)
+        names = "、".join(FL.FIELDS[f]["label"] for f in sorted(unknown, key=lambda f: (f != "o_grid_value", f))[:6]) + \
+            ("ほか" if n_unknown > 6 else "")
+        unk_note = ("範囲が不明な推定・仮定 %d 項目（%s）の幅は含まれていない。" % (n_unknown, names)) if n_unknown else ""
         if n == 0:
             if n_unknown:
                 return {"low_t": None, "high_t": None, "n_values_with_range": 0, "n_values_range_unknown": n_unknown,
-                        "note": "範囲が不明な推定・仮定 %d 項目があり、合計の幅は示せない。" % n_unknown}
+                        "unknown_fields": unknown,
+                        "note": "範囲が不明な推定・仮定 %d 項目（%s）があり、合計の幅は示せない。" % (n_unknown, names)}
             return None
         hi_vals, _ = _with(vals, "high")
         tot = {}
@@ -342,9 +364,9 @@ class App:
         if tot["low"] is None or tot["high"] is None:
             return None
         a, b = sorted((tot["low"] / 1000.0, tot["high"] / 1000.0))
-        return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown,
+        return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown, "unknown_fields": unknown,
                 "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n
-                        + ("範囲が不明な推定・仮定 %d 項目の幅は含まれていない。" % n_unknown if n_unknown else "")}
+                        + unk_note}
 
     def calculate(self, pid: int, period) -> dict:
         T = _float(period)
@@ -358,6 +380,8 @@ class App:
         base = {"period": T, "reflection": {"summary": rep["summary"], "by_state": rep["by_state"]},
                 "unconnected": rep["unconnected"], "missing_required": rep["missing_required"],
                 "missing_materials": rep["missing_materials"], "missing_inputs": rep["missing_inputs"],
+                "omitted_inputs": rep.get("omitted_inputs") or [],
+                "assumed_inputs": [m for m in rep["missing_inputs"] if m.get("gap") == "assumed"],
                 "fields": bridge.reflection_table(rep),
                 "factor_note": _factor_note(self.refset), "notes": rep["notes"], "double_count": rep["double_count"],
                 "stale_estimates": rep.get("stale_estimates") or []}
@@ -380,12 +404,25 @@ class App:
         else:
             out = dict(base, status="ok", message="", summary=_summary(r["results"], run.get("view") or {}, rep), trace=trace,
                        checks=_checks(r["results"]))
-            out["range"] = None if out["summary"]["nothing_counted"] else self._range(vals, T, r["lca_project_id"], pid)
+            out["range"] = None if out["summary"]["nothing_counted"] else self._range(vals, T, r["lca_project_id"], pid, rep)
             if out["range"] and out["summary"]["lower_bound"]:
                 out["range"]["lower_bound"] = True
                 out["range"]["note"] += "入っていない入力があるので、両端とも下限（本当の合計は上端より大きいことがある）。"
         self.projects.save_run(pid, run["id"], rep["input_hash"], T, out["status"], out)
         return out
+
+
+SCOPE_LABEL = {"whole_building": "基礎を含む建物全体", "all_steel": "鉄筋と鉄骨の全量"}
+
+
+def _same_value(F: dict, value, cur_value) -> bool:
+    """Is a typed value the same as the stored one? Numbers compare as numbers (a comma only as a thousands separator)."""
+    if F["type"] in ("number", "integer"):
+        try:
+            return parse_number(value) == float(cur_value)
+        except (TypeError, ValueError):
+            return False
+    return str(value) == str(cur_value)
 
 
 def _hero() -> dict:
@@ -446,26 +483,37 @@ UNIT_HINTS = {
 MATERIAL_UNITS = {"A13-01", "A13-03", "A13-04", "A13-05", "A4-01", "A4-02", "C2-01", "C3-01", "C4-01"}
 
 
-def _hints(incomplete: list[str], rep: dict) -> list[dict]:
+def _hints(incomplete: list[str], rep: dict, bad_stages: set | None = None) -> list[dict]:
     """For each incomplete stage: the inputs of the screens that are missing for it (from the bridge's record), else the
-    usual inputs of the engine's incomplete units that are still not obtained, else a pointer to the unconnected list."""
+    usual inputs of the engine's incomplete units that are still not obtained, else a pointer to the unconnected list.
+    `incomplete` is the engine's list AFTER the filter of the units that cannot act; only `bad_stages` are listed."""
     state = {f["field"]: f["state"] for f in rep["fields"]}
-    by_stage = {}
+    by_stage, other = {}, {}
     for m in rep.get("missing_inputs") or []:
         for st in m["stages"]:
-            by_stage.setdefault(st, []).append(m["label"])
+            if m.get("screen_field", m["field"] in FL.FIELDS) and m.get("gap", "omitted") == "omitted":
+                by_stage.setdefault(st, []).append(m["label"])
+            else:
+                # no screen field (C1 demolition, A5 site waste …) or computed with an assumption: say what it is
+                other.setdefault(st, []).append(("仮定で計算：" if m.get("gap") == "assumed" else "") + m["reason"])
     units = {}
     for u in incomplete:
         units.setdefault(UNIT_STAGE.get(u, "—"), []).append(u)
     out = []
-    for st in [s_ for s_ in FL.STAGES_ALL if s_ in by_stage or s_ in units] + (["—"] if "—" in units else []):
+    for st in [s_ for s_ in FL.STAGES_ALL if s_ in by_stage or s_ in units or s_ in other] + (["—"] if "—" in units else []):
+        if bad_stages is not None and st != "—" and st not in bad_stages:
+            continue
         labels = by_stage.get(st, [])
         if not labels:
             cand = [f for u in units.get(st, []) for f in UNIT_HINTS.get(u, [])
                     if state.get(f, "not_obtained") in ("not_obtained", "not_computable")]
             labels = list(dict.fromkeys(FL.FIELDS[f]["label"] for f in cand))
-        note = ("未取得の入力：" + "、".join(dict.fromkeys(labels)) + "（調べて入れる。本当に無いと分かっているときだけ「適用外」）") if labels \
-            else "材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）"
+        parts = []
+        if labels:
+            parts.append("未取得の入力：" + "、".join(dict.fromkeys(labels)) + "（調べて入れる。本当に無いと分かっているときだけ「適用外」）")
+        parts += list(dict.fromkeys(other.get(st, [])))
+        note = "。".join(p.rstrip("。") for p in parts) if parts else \
+            "材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）"
         out.append({"stage": st, "unit": "、".join(units.get(st, [])) or "—", "fields": labels, "note": note})
     return out
 
@@ -479,21 +527,29 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
     ctx = rep.get("expand") or {}
     route = set(ctx.get("route_stages") or ["C3", "C4"])
     eng = {"material": set(), "equipment": set(), "other": set()}
+    kept = []                              # the engine's incomplete units that can still change the total
     for u in inc:
         st = UNIT_STAGE.get(u)
         if st is None:
+            kept.append(u)
             continue
         if u in ("C3-01", "C4-01") and st not in route:
             continue                       # the material rows' treatment goes to the other C stage on this route
         if u == "B1-03" and not ctx.get("b1_replacement", True):
             continue                       # no refrigerant replacement falls inside T: its loss rate cannot act
+        if u == "B2-01" and ctx.get("b2_moot"):
+            continue                       # net purchased electricity is 0: the facility-management share cannot act
+        if u == "B5-01" and not ctx.get("b5", False):
+            continue                       # no refurbishment / rebuild with a share falls inside T
+        kept.append(u)
         kind = "material" if u in MATERIAL_UNITS else ("equipment" if u in ("X-01", "X-14") else "other")
         eng[kind].add(st)
     spread = set()
     for kind, sts in eng.items():
         spread |= set(bridge.expand_stages(sts, ctx, kind))
     bad_stages = (spread & set(rep["stages"] or [])) | set(rep.get("incomplete_stages") or [])
-    stages = [{"stage": k, "value": v, "complete": k not in bad_stages}
+    assumed = set(rep.get("assumed_stages") or [])
+    stages = [{"stage": k, "value": v, "complete": k not in bad_stages, "assumed": k in assumed}
               for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
     x7 = res.get("X-07") or {}
     by_year = x7.get("by_year") or []
@@ -503,14 +559,20 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
             start = True
     rows = [[i + 1, v] for i, v in enumerate(by_year)]
     total = s3.get("value")
+    # the engine's total is short only when an incomplete unit that can act is left (or the engine names none)
+    engine_short = not s3.get("complete") and (bool(kept) or not inc)
+    omitted = [m for m in rep.get("missing_inputs") or [] if m.get("gap", "omitted") == "omitted"]
     return {"total_kg": total, "total_t": None if total is None else total / 1000.0,
             "per_area": (res.get("SUM-04") or {}).get("value"), "per_area_year": (res.get("SUM-05") or {}).get("value"),
-            "complete": bool(s3.get("complete")) and not rep.get("missing_inputs"),
-            "engine_complete": bool(s3.get("complete")), "incomplete_units": inc, "hints": _hints(inc, rep),
+            "complete": not engine_short and not rep.get("missing_inputs"),
+            "engine_complete": bool(s3.get("complete")), "incomplete_units": kept, "engine_incomplete_units": inc,
+            "hints": _hints(kept, rep, bad_stages),
             "incomplete_stages": sorted(st for st in bad_stages if st),
             "stages": stages, "by_year": rows, "year_axis": "評価期間の年（1 年目〜）",
             "source_keys": "SUM-03.value、X-02.by_stage、X-07.by_year、SUM-04/05.value",
-            "lower_bound": bool(rep["missing_materials"] or rep.get("missing_inputs")) or not s3.get("complete"),
+            # a lower bound only when something is LEFT OUT; a value computed with an assumption is not an omission
+            "lower_bound": bool(rep["missing_materials"] or omitted) or engine_short,
+            "assumed_stages": sorted(assumed),
             # nothing that carries emissions reached the engine: the headline must not read as a real 0
             "nothing_counted": not total}
 

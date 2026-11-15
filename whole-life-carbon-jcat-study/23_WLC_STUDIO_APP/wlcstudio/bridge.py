@@ -292,13 +292,16 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.skip("a_stages", sv, "未設定：計算しない（段階が空だとエンジンは 0 を返すため）")
     st_set = set(stages or ())
 
-    ctx = {"b5": False, "b4_material": True, "b4_equipment": True, "b1_replacement": True, "route_stages": ["C3", "C4"]}
+    ctx = {"b5": False, "b4_material": True, "b4_equipment": True, "b1_replacement": True, "b2_moot": False,
+           "route_stages": ["C3", "C4"]}
 
-    def missing(fid, stage_list, reason, kind=None, label=None):
-        """Record an input that is not obtained and whose stages are inside the boundary (the total is then a lower bound)."""
+    def missing(fid, stage_list, reason, kind=None, label=None, gap="omitted"):
+        """Record a gap whose stages are inside the boundary. gap="omitted": not in the total (the total is a lower bound);
+        gap="assumed": in the total, but computed with an assumption instead of the inputs (the stage is not determined)."""
         hit = [s for s in expand_stages(stage_list, ctx, kind) if s in st_set]
         if hit and not any(m["field"] == fid for m in missing_inputs):
-            missing_inputs.append({"field": fid, "label": label or FL.FIELDS[fid]["label"], "stages": hit, "reason": reason})
+            missing_inputs.append({"field": fid, "label": label or FL.FIELDS[fid]["label"], "stages": hit, "reason": reason,
+                                   "gap": gap, "screen_field": fid in FL.FIELDS})
 
     rec = V("a_reconstruction")
     if rec is not None and rec.state == "not_applicable":
@@ -311,13 +314,14 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     fra_x, _, _ = _num(V("a_recon_fraction"))
     # B5 can only be affected when a refurbishment / rebuild falls inside the study period and has a non-zero share
     cyc_in = not isinstance(cyc_x, (int, float)) or period is None or cyc_x < period
-    ctx["b5"] = rec_active and cyc_in and not (isinstance(fra_x, (int, float)) and fra_x == 0)
+    fra0 = (fra_x == "NA" and FL.FIELDS["a_recon_fraction"]["na"] == "zero") or (isinstance(fra_x, (int, float)) and fra_x == 0)
+    ctx["b5"] = rec_active and cyc_in and not fra0
     if rec_active:
         # the cycle and the share are passed only when a rebuild / refurbishment is assumed: the engine computes B5 for
         # any scenario other than "NONE", so passing them with an unknown scenario would add a rebuild nobody chose
         scalar("a_replacement_cycle", "assessment", "boundary.replacement_cycle")
         scalar("a_recon_fraction", "assessment", "boundary.reconstruction_scope_fraction")
-        if _never("a_replacement_cycle", V("a_replacement_cycle")):
+        if _never("a_replacement_cycle", V("a_replacement_cycle")) and not fra0:
             missing("a_replacement_cycle", ("B5",), "改修・建替えの周期が未取得（エンジンは周期が無いと B5 を数えないが、不完全とは示さない）")
         if _unknown(V("a_recon_fraction")) and cyc_in:
             missing("a_recon_fraction", ("B5",), "改修の範囲の割合が未取得")
@@ -508,7 +512,8 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.assumed.append("運搬（A4）は %d 行（%s）で参照セットの配送原単位（数量あたり）を使った：運搬距離・手段の入力によるものではない（仮定）"
                              % (len(fallback_rows), "、".join(fallback_rows[:6])))
             missing("a4_delivery_fallback", ("A4",), "%d 行（%s）は運搬距離・手段ではなく、参照セットの数量あたりの配送原単位で計算した（仮定）"
-                    % (len(fallback_rows), "、".join(fallback_rows[:6])), kind="material", label="運搬（A4）の代わりの原単位")
+                    % (len(fallback_rows), "、".join(fallback_rows[:6])), kind="material", label="運搬（A4）の代わりの原単位",
+                    gap="assumed")
         by_cause = {}
         for lab, cause in no_transport_rows:
             by_cause.setdefault(cause, []).append(lab)
@@ -588,6 +593,12 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             continue
         states = {"quantity": st}
         zero = float(x) == 0.0                       # a confirmed zero count: lives, masses and repair do not matter
+        if zero:
+            # no row at all: a row with count 0 and missing companions would make the engine flag units that cannot change
+            d.use("e_%s_count" % t, cv, "台数 0：この設備の行は作らない", ["equipment"])
+            for f in ("life", "mass"):
+                d.skip("e_%s_%s" % (t, f), V("e_%s_%s" % (t, f)), "台数が 0 なので使われない")
+            continue
         row = {"equipment_id": "E-" + trade, "trade": trade, "model": None, "quantity": float(x), "quantity_unit": "unit",
                "factor_id": ids["factor"], "eol_factor_id": ids["eol"], "delivery_factor_id": ids["delivery"],
                "installation_factor_id": ids["install"], "replacement_event_list": None, "provenance_id": _prov(st)}
@@ -641,11 +652,11 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     cv = V("r_charge_kg")
     x, st, how = _num(cv)
     rparts = [k for k, F in FL.FIELDS.items() if F["role"] == "refrigerant" and k != "r_charge_kg"]
-    if x == "NA":
+    if x == "NA" or (isinstance(x, (int, float)) and float(x) == 0.0):
         d.tables["equipment"]["refrigerants"] = []
-        d.use("r_charge_kg", cv, "適用外：冷媒を使う機器なし", ["refrigerants"])
+        d.use("r_charge_kg", cv, "適用外：冷媒を使う機器なし" if x == "NA" else "充填量 0：冷媒の行は作らない", ["refrigerants"])
         for k in rparts:
-            d.skip(k, V(k), "冷媒が適用外")
+            d.skip(k, V(k), "冷媒が無い（適用外・充填量 0）ので使われない")
     else:
         row = {"device_id": "R-1", "substance": None, "application": "AIR_CONDITIONING",
                "charge_mass_kg": float(x) if x is not None else None, "change_years": None,
@@ -720,11 +731,33 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.tables["equipment"]["refrigerants"] = [row]
 
     # ------------------------------------------------------------------ operation and water
+    # The engine reads operation.electricity as CONSUMPTION and nets it: purchase = max(0, c − (generation − export)).
+    # The screen asks for PURCHASED electricity (the bills already exclude self-consumed generation), so the
+    # consumption passed is purchase + self-consumption, max(0, g − x); otherwise self-consumed PV is subtracted twice.
+    pe, pe_st, _ = _num(V("o_elec_kwh"))
+    g_, g_st, _ = _num(V("o_pv_kwh"))
+    x_, x_st, _ = _num(V("o_export_kwh"))
+    g0 = 0.0 if g_ == "NA" else g_
+    x0 = 0.0 if x_ == "NA" else x_
+    elec_override = None
+    if isinstance(g0, (int, float)) and isinstance(x0, (int, float)) and x0 > g0:
+        if stages is None or st_set & {"B6", "B2"}:
+            d.missing.append("自家発電のうち外へ売った電力（%s kWh/年）が自家発電（%s kWh/年）より多い（入力の見直しが要る）"
+                             % (x0, g0))
+    elif isinstance(pe, (int, float)) and isinstance(g0, (int, float)) and isinstance(x0, (int, float)):
+        selfc = max(0.0, g0 - x0)
+        elec_override = (float(pe) + selfc, _derived(pe_st, g_st, x_st) if selfc > 0 else pe_st,
+                         "購入電力 %s ＋ 自家消費 %s ＝ 電力の使用量 %s kWh/年として渡した" % (pe, selfc, float(pe) + selfc))
+    # net purchased electricity provably 0 → the grid factor and the facility-management share cannot act
+    pe0 = pe == "NA" or (isinstance(pe, (int, float)) and pe == 0)
+    ctx["b2_moot"] = bool(pe0 and isinstance(g0, (int, float)) and isinstance(x0, (int, float)) and g0 >= x0)
     for fid, F in FL.FIELDS.items():
         if F["role"] != "profile":
             continue
         v = V(fid)
         x, st, how = _num(v)
+        if fid == "o_elec_kwh" and elec_override is not None and x not in (None, "NA"):
+            x, st, how = elec_override
         name = F["profile"]
         stage = "B7" if name.startswith("water_waste") else "B6"
         cat, owner = "operation", name.split(".")[0]
@@ -755,8 +788,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     for name, fid in P["water"].items():
         d.item("operation", "water_waste.%s_factor_id" % ("waste" if name == "municipal_waste" else name), fid)
     scalar("o_fm_ratio", "operation", "operation.facility_management_ratio")
-    ex, _, _ = _num(V("o_elec_kwh"))
-    if _unknown(V("o_fm_ratio")) and not (ex == "NA" or (isinstance(ex, (int, float)) and ex == 0)):
+    if _unknown(V("o_fm_ratio")) and not ctx["b2_moot"]:
         missing("o_fm_ratio", ("B2", "B6"), "施設管理（B2）分の割合が未取得（B6 から差し引く分も決まらない）")
     scalar("o_source", "operation", "operation.energy_simulation_basis")
     gv, gc = V("o_grid_value"), V("o_grid_construction")
@@ -764,6 +796,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     g_filled = False
     if gx in (None, "NA") and stages is not None and not st_set & {"B6", "B2"}:
         gx, gst, ghow = 0.0, "EXPLICIT_ZERO", "B6・B2 を評価範囲から外したので、必須の年表を 0 で満たした（計算には入らない）"
+        g_filled = True
+    elif gx in (None, "NA") and ctx["b2_moot"]:
+        gx, gst, ghow = 0.0, "EXPLICIT_ZERO", "購入電力が 0 なので係数は効かない：必須の年表を 0 で満たした（計算には入らない）"
         g_filled = True
     if gx == "NA":
         gx = None
@@ -784,8 +819,12 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.use("o_grid_value", gv, ghow + "・評価期間中一定", ["operation.grid"])
     cx, cst, chow = _num(gc)
     c_filled = False
+    se, _, _ = _num(V("c_site_electricity"))
     if cx in (None, "NA") and stages is not None and "A5" not in st_set:
         cx, cst, chow = 0.0, "EXPLICIT_ZERO", "A5 を評価範囲から外したので 0 で満たした（計算には入らない）"
+        c_filled = True
+    elif cx in (None, "NA") and (se == "NA" or (isinstance(se, (int, float)) and se == 0)):
+        cx, cst, chow = 0.0, "EXPLICIT_ZERO", "工事中の電力が 0 なので係数は効かない：0 で満たした（計算には入らない）"
         c_filled = True
     if cx in (None, "NA"):
         d.missing.append(FL.FIELDS["o_grid_construction"]["label"])
@@ -852,7 +891,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.unconnected.append({"label": k, "reason": "入力画面に欄が無い：" + why})
     if missing_materials:
         d.assumed.append("未取得の材料 %d 種は行を作っていない：合計に入っていない（合計は少なめ＝下限）" % len(missing_materials))
-    other = [m for m in missing_inputs if m["field"] not in {f[0] for f in FL.MATERIALS}]
+    other = [m for m in missing_inputs if m["field"] not in {f[0] for f in FL.MATERIALS} and m.get("gap") == "omitted"]
     if other:
         d.assumed.append("入っていない入力 %d 件（%s）の分は合計に入っていない（合計は少なめ＝下限）"
                          % (len(other), "、".join(m["label"] for m in other[:6]) + ("…" if len(other) > 6 else "")))
@@ -867,7 +906,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             by_state[r["state"]] = by_state.get(r["state"], 0) + 1
     n_est = by_state.get("statistical", 0) + by_state.get("assumption", 0)
     n_ref = sum(by_state.values())
-    incomplete_stages = sorted({s for m in missing_inputs for s in m["stages"]})
+    omitted = [m for m in missing_inputs if m.get("gap") == "omitted"]
+    # stages with something left out (the total is short there) and stages computed partly with an assumption
+    incomplete_stages = sorted({s for m in omitted for s in m["stages"]})
+    assumed_stages = sorted({s for m in missing_inputs if m.get("gap") == "assumed" for s in m["stages"]})
     report = {
         "factor_profile": {"kind": fp["kind"], "name": fp["name"], "version": fp["version"], "notes": fp["notes"]},
         "fields": sorted(d.reflect.values(), key=lambda r: list(FL.FIELDS).index(r["field"])),
@@ -877,9 +919,11 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         "missing_required": d.missing,
         "missing_materials": missing_materials,
         "missing_inputs": missing_inputs,
+        "omitted_inputs": omitted,
         "stale_estimates": stale_estimates,
         "expand": dict(ctx),
         "incomplete_stages": incomplete_stages,
+        "assumed_stages": assumed_stages,
         "unconnected": d.unconnected,
         "notes": d.assumed,
         "double_count": d.double_count,
