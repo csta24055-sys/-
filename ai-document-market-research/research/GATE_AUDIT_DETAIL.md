@@ -1,16 +1,16 @@
 # ゲート監査の詳細（機械生成）
 
-生成時刻（UTC）：2026-11-15T15:57:22.903750+00:00
+生成時刻（UTC）：2026-11-15T15:58:16.583843+00:00
 
 RESEARCH_STATUS = INCOMPLETE
 最初に未達の工程：S1
 
-- 実行した検索・アクセス：3079
-- 採用資料：1136（うちS2精査済み 0、独立起源 0）
+- 実行した検索・アクセス：3082
+- 採用資料：1140（うちS2精査済み 0、独立起源 0）
 - テーマ（S1完了）：113
 - 旧検索候補：{"NOT_EXECUTED": 528, "EXECUTED": 368}
 - 競合候補（S1完了）：28、公式確認 55
-- 計算ID：1266
+- 計算ID：1274
 
 ## S0 reaudit_and_scope_lock：PASS（15/15）
 
@@ -44,20 +44,20 @@ RESEARCH_STATUS = INCOMPLETE
 - FAIL：additional-hypothesis topics (outside the 325) explored: 0/7
   - 次の要求アクション：run the topic worker for the listed additional topics
   - 未達 7 件（先頭7件）：ADD_N01_T01: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pa ／ ADD_N01_T02: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pa ／ ADD_N01_T03: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_N01_T04: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_N02_T01: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_N03_T01: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_SPD_T01: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen
-- PASS：search log integrity (dated, unique ids, valid same-action references): 4066 rows
-- PASS：every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3756)
-- PASS：every accepted source was opened; sweep sources carry a quote found in the fetched page: 1136 accepted
+- PASS：search log integrity (dated, unique ids, valid same-action references): 4075 rows
+- PASS：every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3765)
+- PASS：every accepted source was opened; sweep sources carry a quote found in the fetched page: 1140 accepted
 - PASS：no reference points to a source that is missing from the ledger: 0 dangling
-- FAIL：coverage audit is current (EXECUTED_ACTIONS = 3079)
+- FAIL：coverage audit is current (EXECUTED_ACTIONS = 3082)
   - 次の要求アクション：regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge
 
 ## S2 source_review_all：FAIL（0/5）
 
-- FAIL：every accepted source reviewed: verified 0, pending 1136
+- FAIL：every accepted source reviewed: verified 0, pending 1140
   - 次の要求アクション：run the source-review workers for the pending sources
   - 未達 400 件（先頭60件）：S001 ／ S002 ／ S003 ／ S004 ／ S005 ／ S006 ／ S007 ／ S008 ／ S009 ／ S010 ／ S011 ／ S012 ／ S013 ／ S014 ／ S015 ／ S016 ／ S017 ／ S018 ／ S019 ／ S020 ／ S021 ／ S022 ／ S023 ／ S024 ／ S025 ／ S026 ／ S027 ／ S028 ／ S029 ／ S030 ／ S031 ／ S032 ／ S033 ／ S034 ／ S035 ／ S036 ／ S037 ／ S038 ／ S039 ／ S040 ／ S041 ／ S042 ／ S043 ／ S044 ／ S045 ／ S046 ／ S047 ／ S048 ／ S049 ／ S050 ／ S051 ／ S052 ／ S053 ／ S054 ／ S055 ／ S056 ／ S057 ／ S058 ／ S059 ／ S060
 - FAIL：verified sources carry quote, location, kind, origin and date: 0/0
-- FAIL：every source-to-unit mapping reviewed: 0/2743
+- FAIL：every source-to-unit mapping reviewed: 0/2749
   - 未達 400 件（先頭60件）：M00001 ／ M00002 ／ M00003 ／ M00004 ／ M00005 ／ M00006 ／ M00007 ／ M00008 ／ M00009 ／ M00010 ／ M00011 ／ M00012 ／ M00013 ／ M00014 ／ M00015 ／ M00016 ／ M00017 ／ M00018 ／ M00019 ／ M00020 ／ M00021 ／ M00022 ／ M00023 ／ M00024 ／ M00025 ／ M00026 ／ M00027 ／ M00028 ／ M00029 ／ M00030 ／ M00031 ／ M00032 ／ M00033 ／ M00034 ／ M00035 ／ M00036 ／ M00037 ／ M00038 ／ M00039 ／ M00040 ／ M00041 ／ M00042 ／ M00043 ／ M00044 ／ M00045 ／ M00046 ／ M00047 ／ M00048 ／ M00049 ／ M00050 ／ M00051 ／ M00052 ／ M00053 ／ M00054 ／ M00055 ／ M00056 ／ M00057 ／ M00058 ／ M00059 ／ M00060
 - FAIL：dependency ledger covers every verified source and the stated independent-origin count (None) equals the recomputation (0)
   - 次の要求アクション：rebuild registry/source_dependencies.csv and restate INDEPENDENT_ORIGINS in research/SOURCE_DEPENDENCY_AUDIT.md
@@ -82,7 +82,7 @@ RESEARCH_STATUS = INCOMPLETE
 ## S5 calculations_all：FAIL（1/5）
 
 - PASS：every topic has at least one calculation id: 325/325
-- FAIL：every calculation id is in a justified terminal state: 0/1266
+- FAIL：every calculation id is in a justified terminal state: 0/1274
   - 未達 400 件（先頭60件）：CALC_AXIS_01_T01_C00 ／ CALC_AXIS_01_T02_C00 ／ CALC_AXIS_01_T03_C00 ／ CALC_AXIS_01_T04_C00 ／ CALC_AXIS_01_T05_C00 ／ CALC_AXIS_01_T06_C00 ／ CALC_AXIS_01_T07_C00 ／ CALC_AXIS_01_T08_C00 ／ CALC_AXIS_02_T01_C01 ／ CALC_AXIS_02_T01_C02 ／ CALC_AXIS_02_T01_C03 ／ CALC_AXIS_02_T01_C04 ／ CALC_AXIS_02_T01_C05 ／ CALC_AXIS_02_T01_C06 ／ CALC_AXIS_02_T01_C07 ／ CALC_AXIS_02_T01_C08 ／ CALC_AXIS_02_T01_C09 ／ CALC_AXIS_02_T01_C10 ／ CALC_AXIS_02_T01_C11 ／ CALC_AXIS_02_T01_C12 ／ CALC_AXIS_02_T01_C13 ／ CALC_AXIS_02_T01_N01 ／ CALC_AXIS_02_T01_N02 ／ CALC_AXIS_02_T01_N03 ／ CALC_AXIS_02_T01_N04 ／ CALC_AXIS_02_T01_N05 ／ CALC_AXIS_02_T01_N06 ／ CALC_AXIS_02_T01_N07 ／ CALC_AXIS_02_T01_N08 ／ CALC_AXIS_02_T01_N09 ／ CALC_AXIS_02_T01_N10 ／ CALC_AXIS_02_T01_N11 ／ CALC_AXIS_02_T01_N12 ／ CALC_AXIS_02_T01_N13 ／ CALC_AXIS_02_T02_C01 ／ CALC_AXIS_02_T02_C02 ／ CALC_AXIS_02_T02_C03 ／ CALC_AXIS_02_T02_C04 ／ CALC_AXIS_02_T02_C05 ／ CALC_AXIS_02_T02_N01 ／ CALC_AXIS_02_T02_N02 ／ CALC_AXIS_02_T02_N03 ／ CALC_AXIS_02_T02_N04 ／ CALC_AXIS_02_T02_N05 ／ CALC_AXIS_02_T03_C01 ／ CALC_AXIS_02_T03_C02 ／ CALC_AXIS_02_T03_C03 ／ CALC_AXIS_02_T03_C04 ／ CALC_AXIS_02_T03_C05 ／ CALC_AXIS_02_T03_C06 ／ CALC_AXIS_02_T03_C07 ／ CALC_AXIS_02_T03_C08 ／ CALC_AXIS_02_T03_C09 ／ CALC_AXIS_02_T03_C10 ／ CALC_AXIS_02_T03_N01 ／ CALC_AXIS_02_T03_N02 ／ CALC_AXIS_02_T03_N03 ／ CALC_AXIS_02_T03_N04 ／ CALC_AXIS_02_T03_N05 ／ CALC_AXIS_02_T03_N06
 - FAIL：reported numbers are classified and traceable to verified sources: 6/22
   - 未達 16 件（先頭16件）：QR01 ／ QR02 ／ QR03 ／ QR04 ／ QR05 ／ QR06 ／ QR07 ／ QR08 ／ QR09 ／ QR10 ／ QR11 ／ QR12 ／ QR13 ／ QR14 ／ QR15 ／ QR16

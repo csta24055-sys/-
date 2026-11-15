@@ -1,20 +1,20 @@
 {
  "research_status": "INCOMPLETE",
- "checked_at": "2026-11-15T15:57:22.903750+00:00",
+ "checked_at": "2026-11-15T15:58:16.583843+00:00",
  "first_unmet_stage": "S1",
- "source_rows": 1136,
- "accepted_rows": 1136,
+ "source_rows": 1140,
+ "accepted_rows": 1140,
  "verified_rows": 0,
  "independent_origins": 0,
  "verified_competitors": 55,
- "executed_actions": 3079,
+ "executed_actions": 3082,
  "legacy_queries": {
   "NOT_EXECUTED": 528,
   "EXECUTED": 368
  },
  "topics_s1_done": 113,
  "competitors_s1_done": 28,
- "calculation_ids": 1266,
+ "calculation_ids": 1274,
  "formal_deliverable_violation": false,
  "external_blocks": [],
  "steps": {
@@ -270,7 +270,7 @@
       "AXIS_16_T09: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_17_T09: no primary-route search",
       "AXIS_18_T09: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
-      "AXIS_19_T09: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
+      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_19_T10: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_20_T09: no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_21_T09: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -821,19 +821,19 @@
     },
     {
      "pass": true,
-     "detail": "search log integrity (dated, unique ids, valid same-action references): 4066 rows",
+     "detail": "search log integrity (dated, unique ids, valid same-action references): 4075 rows",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3756)",
+     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3765)",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1136 accepted",
+     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1140 accepted",
      "unmet": [],
      "action": ""
     },
@@ -845,7 +845,7 @@
     },
     {
      "pass": false,
-     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3079)",
+     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3082)",
      "unmet": [],
      "action": "regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge"
     }
@@ -859,7 +859,7 @@
    "checks": [
     {
      "pass": false,
-     "detail": "every accepted source reviewed: verified 0, pending 1136",
+     "detail": "every accepted source reviewed: verified 0, pending 1140",
      "unmet": [
       "S001",
       "S002",
@@ -1272,7 +1272,7 @@
     },
     {
      "pass": false,
-     "detail": "every source-to-unit mapping reviewed: 0/2743",
+     "detail": "every source-to-unit mapping reviewed: 0/2749",
      "unmet": [
       "M00001",
       "M00002",
@@ -2203,7 +2203,7 @@
     },
     {
      "pass": false,
-     "detail": "every calculation id is in a justified terminal state: 0/1266",
+     "detail": "every calculation id is in a justified terminal state: 0/1274",
      "unmet": [
       "CALC_AXIS_01_T01_C00",
       "CALC_AXIS_01_T02_C00",

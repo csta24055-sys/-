@@ -4,15 +4,15 @@ RESEARCH_STATUS = INCOMPLETE（最初に未達の工程：S1）
 
 ## いまの状態
 
-- 最後に記録された処理の時刻（UTC）：2026-11-15T15:57:02.168Z
+- 最後に記録された処理の時刻（UTC）：2026-11-15T15:58:04Z
 - テーマ：S1完了 113 / 325、未完了 212
 - 旧検索候補：実行済み 368、実行不能 0、未実行 528（計 896）
 - 競合候補：S1完了 28 / 80、未完了 52
 - 追加仮説のテーマ：S1完了 0 / 7
 - 作業員が実際に実行できたWeb検索：926 件。上限超過で拒否された検索：238 件（実行済みに数えていない）
-- 採用資料：1136（S2精査済み 0）
-- 別チャットの1,000候補（`registry/chat1000_candidate_review.csv`、1009行）：NOT_READ 555、READ_NOT_YET_ASSESSED 136、IN_LEDGER_QUOTE_VERIFIED_FOR_TOPIC 97、BLOCKED_FETCH 81、REJECT_OFF_TOPIC 53、IN_LEDGER_OTHER_TOPIC 30、HOLD_QUOTE_NOT_ACCEPTED 20、DUPLICATE_ORIGIN 17、HOLD_NOT_ORIGINAL 8、HOLD_VENDOR_PROMOTION 8、REJECT_NOT_A_SOURCE 4
-  - 作業員が実際に開いて判定した候補：247（`registry/candidate_assessments.csv`）。URL候補は証拠ではなく、引用照合を通ったものだけが台帳に入る。
+- 採用資料：1140（S2精査済み 0）
+- 別チャットの1,000候補（`registry/chat1000_candidate_review.csv`、1009行）：NOT_READ 551、READ_NOT_YET_ASSESSED 129、IN_LEDGER_QUOTE_VERIFIED_FOR_TOPIC 100、BLOCKED_FETCH 84、REJECT_OFF_TOPIC 54、IN_LEDGER_OTHER_TOPIC 30、HOLD_QUOTE_NOT_ACCEPTED 20、DUPLICATE_ORIGIN 18、HOLD_VENDOR_PROMOTION 10、HOLD_NOT_ORIGINAL 9、REJECT_NOT_A_SOURCE 4
+  - 作業員が実際に開いて判定した候補：255（`registry/candidate_assessments.csv`）。URL候補は証拠ではなく、引用照合を通ったものだけが台帳に入る。
 
 ## 未完了のID（先頭）
 
