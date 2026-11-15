@@ -1,11 +1,11 @@
 # ゲート監査の詳細（機械生成）
 
-生成時刻（UTC）：2026-11-15T16:01:30.129298+00:00
+生成時刻（UTC）：2026-11-15T16:01:52.657779+00:00
 
 RESEARCH_STATUS = INCOMPLETE
 最初に未達の工程：S1
 
-- 実行した検索・アクセス：3169
+- 実行した検索・アクセス：3171
 - 採用資料：1151（うちS2精査済み 0、独立起源 0）
 - テーマ（S1完了）：113
 - 旧検索候補：{"NOT_EXECUTED": 520, "EXECUTED": 376}
@@ -44,11 +44,11 @@ RESEARCH_STATUS = INCOMPLETE
 - FAIL：additional-hypothesis topics (outside the 325) explored: 0/7
   - 次の要求アクション：run the topic worker for the listed additional topics
   - 未達 7 件（先頭7件）：ADD_N01_T01: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pa ／ ADD_N01_T02: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pa ／ ADD_N01_T03: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_N01_T04: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_N02_T01: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_N03_T01: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen ／ ADD_SPD_T01: no primary-route search; primary: NO (own queries 0/2, pages read 0); indepen
-- PASS：search log integrity (dated, unique ids, valid same-action references): 4215 rows
-- PASS：every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3905)
+- PASS：search log integrity (dated, unique ids, valid same-action references): 4217 rows
+- PASS：every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3907)
 - PASS：every accepted source was opened; sweep sources carry a quote found in the fetched page: 1151 accepted
 - PASS：no reference points to a source that is missing from the ledger: 0 dangling
-- FAIL：coverage audit is current (EXECUTED_ACTIONS = 3169)
+- FAIL：coverage audit is current (EXECUTED_ACTIONS = 3171)
   - 次の要求アクション：regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge
 
 ## S2 source_review_all：FAIL（0/5）

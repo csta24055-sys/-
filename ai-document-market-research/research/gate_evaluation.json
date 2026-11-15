@@ -1,13 +1,13 @@
 {
  "research_status": "INCOMPLETE",
- "checked_at": "2026-11-15T16:01:30.129298+00:00",
+ "checked_at": "2026-11-15T16:01:52.657779+00:00",
  "first_unmet_stage": "S1",
  "source_rows": 1151,
  "accepted_rows": 1151,
  "verified_rows": 0,
  "independent_origins": 0,
  "verified_competitors": 55,
- "executed_actions": 3169,
+ "executed_actions": 3171,
  "legacy_queries": {
   "NOT_EXECUTED": 520,
   "EXECUTED": 376
@@ -270,7 +270,7 @@
       "AXIS_16_T09: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_17_T09: no primary-route search",
       "AXIS_18_T09: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
-      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 11); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 11); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 11); research unit record missing or incomplete",
+      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 13); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 13); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 13); research unit record missing or incomplete",
       "AXIS_19_T10: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); research unit record missing or incomplete",
       "AXIS_20_T09: no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_21_T09: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -821,13 +821,13 @@
     },
     {
      "pass": true,
-     "detail": "search log integrity (dated, unique ids, valid same-action references): 4215 rows",
+     "detail": "search log integrity (dated, unique ids, valid same-action references): 4217 rows",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3905)",
+     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3907)",
      "unmet": [],
      "action": ""
     },
@@ -845,7 +845,7 @@
     },
     {
      "pass": false,
-     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3169)",
+     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3171)",
      "unmet": [],
      "action": "regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge"
     }
