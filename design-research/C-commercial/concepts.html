@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AirLCA UI 3案比較</title>
+<meta name="description" content="C分類（商用SaaS）向け、（仮称）AirLCA Cloud の UI コンセプト3案を、デスクトップ／スマートフォンのモックアップと評価表で比較するページ。データはすべてダミー。">
+<style>
+:root{
+  --bg:#F3F4F1; --surface:#FFFFFF; --surface-2:#E9ECE6; --text:#1A222C; --muted:#4A5563;
+  --border:#C9CFC6; --accent:#0F6B5C; --accent-ink:#FFFFFF; --amber:#9A4A06; --focus:#1D4ED8;
+  --font:system-ui,-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --r:10px; --gap:16px;
+  /* 案A */ --a-bg:#FFFFFF; --a-surf:#F4F6F8; --a-text:#1F2933; --a-muted:#4B5563; --a-pri:#0B5F8A; --a-line:#D4D9DF;
+  /* 案B */ --b-bg:#0E1A2B; --b-surf:#16263D; --b-text:#E8EEF6; --b-muted:#A9B8CC; --b-pri:#5EEAD4; --b-hi:#FBBF77;
+  /* 案C */ --c-bg:#FAFAF7; --c-surf:#FFFFFF; --c-text:#1C2430; --c-muted:#4A5563; --c-pri:#0F6B5C; --c-amb:#B45309; --c-line:#D9DDD6;
+  /* 状態色（明背景用） */ --ok:#1E7B4C; --warn:#8A5A00; --bad:#B42318;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161C; --surface:#1A2129; --surface-2:#232C36; --text:#E7ECF1; --muted:#B3BECA;
+    --border:#3A4652; --accent:#5FD3BE; --accent-ink:#0B1A17; --amber:#F7B267; --focus:#93C5FD;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161C; --surface:#1A2129; --surface-2:#232C36; --text:#E7ECF1; --muted:#B3BECA;
+  --border:#3A4652; --accent:#5FD3BE; --accent-ink:#0B1A17; --amber:#F7B267; --focus:#93C5FD;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.7}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0}
+.skip:focus{left:16px;top:8px;background:var(--surface);color:var(--text);padding:8px 12px;border-radius:8px;z-index:10}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.site{border-bottom:1px solid var(--border);background:var(--surface)}
+header.site .wrap{padding-top:28px;padding-bottom:20px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--muted);margin:0}
+h1{font-size:clamp(24px,3.4vw,34px);line-height:1.3;margin:6px 0 8px}
+.lead{margin:0;color:var(--muted);max-width:62em}
+nav.toc ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0}
+nav.toc a{display:inline-block;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);font-size:14px;background:var(--surface)}
+nav.toc a:hover{border-color:var(--accent)}
+main{padding:24px 0 48px}
+h2{font-size:22px;line-height:1.35;margin:0 0 4px}
+h3{font-size:16px;margin:16px 0 6px}
+section.block{margin:0 0 32px}
+.axes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap);margin-top:12px}
+.axis{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.axis strong{display:block;font-size:15px}
+.axis p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.concept{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px}
+.concept.adopted{border:2px solid var(--accent)}
+.c-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:4px}
+.tag{font-size:13px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--surface-2);color:var(--text)}
+.tag.win{background:var(--accent);color:var(--accent-ink)}
+.idea{margin:4px 0 14px;color:var(--muted)}
+.mockrow{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:20px;align-items:start}
+figure{margin:0}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 0;padding:0}
+.facts div{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0}
+.facts dt{font-size:12px;font-weight:700;color:var(--muted)}
+.facts dd{margin:2px 0 0;font-size:14px;line-height:1.5}
+.meter{display:flex;gap:3px;margin-top:6px}
+.meter i{display:block;height:8px;flex:1;border-radius:2px;background:var(--border)}
+.meter i.on{background:var(--text)}
+.swatches{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.swatches span{width:22px;height:22px;border-radius:5px;border:1px solid var(--border)}
+.pm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;margin-top:14px;font-size:14px}
+.pm h3{margin-top:0}
+.pm ul{margin:0;padding-left:1.2em}
+
+/* ---------- モックアップ共通 ---------- */
+.desk{aspect-ratio:16/10;border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 0 rgba(0,0,0,.04);font-size:10.5px;line-height:1.35;position:relative}
+.desk .chrome{height:18px;display:flex;align-items:center;gap:4px;padding:0 8px;background:#E3E6EA}
+.desk .chrome b{width:7px;height:7px;border-radius:50%;background:#9AA3AD;display:block}
+.desk .chrome em{font-style:normal;font-size:9.5px;color:#3B4450;margin-left:8px}
+.phone{width:200px;aspect-ratio:9/18.5;border-radius:26px;border:6px solid #222A33;overflow:hidden;font-size:10.5px;line-height:1.35;position:relative;margin:0 auto}
+.screen{position:absolute;inset:18px 0 0 0;display:grid}
+.phone .screen{inset:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.st{display:inline-flex;align-items:center;gap:3px;font-weight:700;white-space:nowrap}
+.st::before{content:"";display:inline-block;width:7px;height:7px}
+.st.ok{color:var(--ok)} .st.ok::before{background:var(--ok);border-radius:50%}
+.st.warn{color:var(--warn)} .st.warn::before{background:var(--warn);transform:rotate(45deg)}
+.st.bad{color:var(--bad)} .st.bad::before{background:var(--bad)}
+
+/* ---------- 案A ワークベンチ ---------- */
+.ma{background:var(--a-bg);color:var(--a-text)}
+.ma .screen{grid-template-columns:22% 1fr 28%}
+.ma .side{background:var(--a-surf);border-right:1px solid var(--a-line);padding:8px 6px;display:flex;flex-direction:column;gap:2px}
+.ma .side .lg{font-weight:800;color:var(--a-pri);margin:0 4px 6px}
+.ma .side .it{padding:3px 6px;border-radius:4px;color:var(--a-text)}
+.ma .side .it.on{background:#DCE8F0;color:#0A4E72;font-weight:700}
+.ma .side .sec{font-size:9px;font-weight:700;color:var(--a-muted);margin:8px 6px 2px}
+.ma .mid{padding:6px 8px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.ma .bar{display:flex;gap:4px;align-items:center}
+.ma .bar .q{flex:1;border:1px solid var(--a-line);border-radius:4px;padding:2px 6px;color:var(--a-muted)}
+.ma .bar .k{border:1px solid var(--a-line);border-radius:3px;padding:1px 4px;font-family:var(--mono);color:var(--a-muted)}
+.ma .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.ma .kpis div{border:1px solid var(--a-line);border-radius:4px;padding:3px 5px}
+.ma .kpis small{display:block;color:var(--a-muted);font-size:9px}
+.ma .kpis b{font-size:12px}
+.ma table{width:100%;border-collapse:collapse}
+.ma th,.ma td{text-align:left;padding:2px 4px;border-bottom:1px solid var(--a-line);white-space:nowrap}
+.ma th{color:var(--a-muted);font-weight:700;font-size:9.5px;background:var(--a-surf)}
+.ma tr.sel td{background:#EAF2F7}
+.ma .det{border-left:1px solid var(--a-line);padding:8px;display:flex;flex-direction:column;gap:5px}
+.ma .det .t{font-weight:700}
+.ma .det svg{width:100%;height:58px;border:1px solid var(--a-line);border-radius:4px}
+.ma .btn{background:var(--a-pri);color:#fff;border-radius:4px;padding:3px 6px;text-align:center;font-weight:700}
+.ma .btn.o{background:transparent;color:var(--a-pri);border:1px solid var(--a-pri)}
+.ma .usage{font-size:9.5px;color:var(--a-muted)}
+.pa{background:var(--a-bg);color:var(--a-text)}
+.pa .screen{grid-template-rows:auto auto 1fr}
+.pa .hd{display:flex;justify-content:space-between;align-items:center;padding:20px 10px 6px;border-bottom:1px solid var(--a-line);font-weight:800}
+.pa .hd span{color:var(--a-pri)}
+.pa .flt{display:flex;gap:4px;padding:6px 10px}
+.pa .flt i{font-style:normal;border:1px solid var(--a-line);border-radius:999px;padding:1px 7px;color:var(--a-muted)}
+.pa .flt i.on{border-color:var(--a-pri);color:#0A4E72;font-weight:700}
+.pa .list{padding:0 10px;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.pa .row{border:1px solid var(--a-line);border-radius:6px;padding:5px 7px;display:grid;grid-template-columns:1fr auto;gap:1px 6px}
+.pa .row small{color:var(--a-muted)}
+
+/* ---------- 案B ショーケース ---------- */
+.mb{background:var(--b-bg);color:var(--b-text)}
+.mb .chrome{background:#24344A}.mb .chrome em{color:#C9D5E3}.mb .chrome b{background:#6C7F96}
+.mb .screen{display:block}
+.mb .top{position:absolute;left:12px;top:10px;right:12px;display:flex;justify-content:space-between;align-items:center}
+.mb .top .lg{font-weight:800;font-size:12px;color:var(--b-pri)}
+.mb .top .pj{color:var(--b-muted)}
+.mb .plan{position:absolute;left:9%;top:20%;width:54%;height:58%;display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px;border:2px solid #3B5170;border-radius:6px}
+.mb .rm{border-radius:4px;padding:5px;display:flex;flex-direction:column;justify-content:space-between;color:#0E1A2B;font-weight:700}
+.mb .rm small{font-weight:600}
+.mb .rm.g{background:#6EE7A8}.mb .rm.y{background:#FCD34D}.mb .rm.r{background:#FCA5A5}
+.mb .rm.wide{grid-row:span 2}
+.mb .story{position:absolute;right:12px;top:20%;width:28%;background:var(--b-surf);border:1px solid #2E4462;border-radius:10px;padding:9px}
+.mb .story b{display:block;font-size:12.5px;line-height:1.35;margin:3px 0 4px}
+.mb .story small{color:var(--b-muted)}
+.mb .story .dots{display:flex;gap:3px;margin-top:6px}.mb .story .dots i{width:14px;height:3px;background:#3B5170;border-radius:2px}.mb .story .dots i.on{background:var(--b-pri)}
+.mb .dock{position:absolute;left:50%;transform:translateX(-50%);bottom:8%;background:var(--b-surf);border:1px solid #2E4462;border-radius:999px;padding:4px 6px;display:flex;gap:4px;align-items:center}
+.mb .dock i{font-style:normal;padding:2px 8px;border-radius:999px;color:var(--b-text)}
+.mb .dock i.on{background:var(--b-pri);color:#0E1A2B;font-weight:700}
+.mb .dock .sl{width:70px;height:3px;background:#3B5170;border-radius:2px;position:relative}
+.mb .dock .sl::after{content:"";position:absolute;left:60%;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--b-hi)}
+.pb{background:var(--b-bg);color:var(--b-text)}
+.pb .screen{padding:22px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.pb .prog{display:flex;gap:3px}.pb .prog i{flex:1;height:3px;background:#3B5170;border-radius:2px}.pb .prog i.on{background:var(--b-pri)}
+.pb .lg{color:var(--b-pri);font-weight:800}
+.pb .hero{font-size:16px;font-weight:800;line-height:1.3}
+.pb .vis{flex:1;border-radius:12px;background:linear-gradient(160deg,#1E3A5F,#16263D);display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px}
+.pb .vis div{border-radius:5px;color:#0E1A2B;font-weight:700;padding:4px}
+.pb small{color:var(--b-muted)}
+.pb .cta{background:var(--b-pri);color:#0E1A2B;text-align:center;border-radius:999px;padding:6px;font-weight:800}
+
+/* ---------- 案C アウトカム・ハブ ---------- */
+.mc{background:var(--c-bg);color:var(--c-text)}
+.mc .screen{grid-template-columns:9% 1fr 30%;grid-template-rows:auto 1fr}
+.mc .rail{grid-row:span 2;background:var(--c-surf);border-right:1px solid var(--c-line);display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0}
+.mc .rail .lg{width:18px;height:18px;border-radius:5px;background:var(--c-pri)}
+.mc .rail i{font-style:normal;font-size:8.5px;text-align:center;color:var(--c-muted);line-height:1.2}
+.mc .rail i::before{content:"";display:block;width:14px;height:14px;margin:0 auto 2px;border-radius:4px;border:1.5px solid var(--c-muted)}
+.mc .rail i.on{color:var(--c-pri);font-weight:700}.mc .rail i.on::before{background:#D7EBE6;border-color:var(--c-pri)}
+.mc .topbar{grid-column:2 / span 2;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-bottom:1px solid var(--c-line);background:var(--c-surf)}
+.mc .steps{display:flex;gap:4px;align-items:center}
+.mc .steps span{display:flex;align-items:center;gap:3px;color:var(--c-muted)}
+.mc .steps span b{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font-size:8.5px;border:1.5px solid var(--c-muted)}
+.mc .steps span.done{color:var(--c-pri);font-weight:700}.mc .steps span.done b{background:var(--c-pri);border-color:var(--c-pri);color:#fff}
+.mc .steps span.now{color:var(--c-text);font-weight:700}.mc .steps span.now b{border-color:var(--c-text)}
+.mc .steps em{width:12px;height:1.5px;background:var(--c-line)}
+.mc .use{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--c-muted)}
+.mc .use .m{width:46px;height:5px;background:var(--c-line);border-radius:3px;overflow:hidden}.mc .use .m i{display:block;height:100%;width:66%;background:var(--c-pri)}
+.mc .use a{color:var(--c-amb);font-weight:700;text-decoration:none;border:1px solid var(--c-amb);border-radius:4px;padding:0 4px}
+.mc .main{padding:8px 10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.mc .h{font-weight:800;font-size:12px}
+.mc .card{background:var(--c-surf);border:1px solid var(--c-line);border-radius:7px;padding:7px 8px;display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center}
+.mc .card.hi{border-color:var(--c-pri);box-shadow:inset 3px 0 0 var(--c-pri)}
+.mc .card small{color:var(--c-muted)}
+.mc .pg{grid-column:1 / -1;height:5px;border-radius:3px;background:#E7EAE4;overflow:hidden}.mc .pg i{display:block;height:100%;background:var(--c-pri)}
+.mc .btn{background:var(--c-pri);color:#fff;border-radius:5px;padding:3px 7px;font-weight:700;white-space:nowrap}
+.mc .btn.o{background:transparent;color:var(--c-pri);border:1px solid var(--c-pri)}
+.mc .pro{color:var(--c-amb);font-weight:800;font-size:9px;border:1px solid var(--c-amb);border-radius:3px;padding:0 3px;margin-left:4px}
+.mc .ctx{border-left:1px solid var(--c-line);background:var(--c-surf);padding:8px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.mc .ctx .t{font-weight:700}
+.mc .ctx table{width:100%;border-collapse:collapse}
+.mc .ctx td,.mc .ctx th{padding:2px 3px;border-bottom:1px solid var(--c-line);text-align:left;white-space:nowrap}
+.mc .ctx th{color:var(--c-muted);font-size:9px}
+.mc .bars{display:flex;flex-direction:column;gap:3px}
+.mc .bars div{display:grid;grid-template-columns:44px 1fr 26px;gap:4px;align-items:center}
+.mc .bars i{display:block;height:6px;background:var(--c-pri);border-radius:2px}
+.pc{background:var(--c-bg);color:var(--c-text)}
+.pc .screen{grid-template-rows:auto 1fr auto}
+.pc .hd{padding:20px 10px 6px;display:flex;justify-content:space-between;align-items:center;background:var(--c-surf);border-bottom:1px solid var(--c-line)}
+.pc .hd b{font-size:13px}
+.pc .hd small{color:var(--c-muted)}
+.pc .body{padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.pc .card{background:var(--c-surf);border:1px solid var(--c-line);border-radius:8px;padding:7px 8px}
+.pc .card.alert{border-color:var(--bad);box-shadow:inset 3px 0 0 var(--bad)}
+.pc .card small{display:block;color:var(--c-muted)}
+.pc .pg{height:5px;border-radius:3px;background:#E7EAE4;overflow:hidden;margin:4px 0}.pc .pg i{display:block;height:100%;width:70%;background:var(--c-pri)}
+.pc .btn{display:block;text-align:center;background:var(--c-pri);color:#fff;border-radius:6px;padding:5px;font-weight:700;margin-top:4px}
+.pc .tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--c-line);background:var(--c-surf);padding:5px 0 10px}
+.pc .tabs i{font-style:normal;text-align:center;font-size:9px;color:var(--c-muted)}
+.pc .tabs i::before{content:"";display:block;width:14px;height:14px;margin:0 auto 2px;border-radius:4px;border:1.5px solid var(--c-muted)}
+.pc .tabs i.on{color:var(--c-pri);font-weight:700}.pc .tabs i.on::before{background:#D7EBE6;border-color:var(--c-pri)}
+
+/* ---------- 構造比較・評価表 ---------- */
+.struct{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}
+.struct .s{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.struct ol{margin:6px 0 0;padding-left:1.3em;font-size:14px}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+table.eval{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+table.eval caption{text-align:left;padding:12px 14px 4px;font-weight:700}
+table.eval th,table.eval td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:center}
+table.eval th[scope=row]{text-align:left;font-weight:600}
+table.eval thead th{background:var(--surface-2);font-size:13px}
+table.eval .w{color:var(--muted);font-family:var(--mono)}
+table.eval td.c{background:color-mix(in srgb,var(--accent) 10%,transparent);font-weight:700}
+table.eval tfoot th,table.eval tfoot td{font-weight:800;border-bottom:0;font-size:15px}
+.totals{display:flex;flex-direction:column;gap:8px;margin:16px 0 0}
+.totals div{display:grid;grid-template-columns:150px 1fr 48px;gap:10px;align-items:center;font-size:14px}
+.totals .tr{height:12px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.totals .tr i{display:block;height:100%;background:var(--muted);border-radius:6px}
+.totals .win .tr i{background:var(--accent)}
+.totals b{font-family:var(--mono)}
+.note{font-size:14px;color:var(--muted)}
+.decision{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r);padding:14px 18px;margin-top:16px}
+.decision h3{margin-top:0}
+.decision ul{margin:0;padding-left:1.2em}
+footer{border-top:1px solid var(--border);background:var(--surface);font-size:13px;color:var(--muted)}
+footer .wrap{padding-top:16px;padding-bottom:24px}
+
+@media (max-width:860px){
+  .axes,.struct{grid-template-columns:1fr}
+  .mockrow{grid-template-columns:1fr}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pm{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .desk{aspect-ratio:auto;height:300px;font-size:9.5px}
+  .ma .screen{grid-template-columns:26% 1fr}
+  .ma .det,.mc .ctx{display:none}
+  .mc .screen{grid-template-columns:11% 1fr}
+  .mc .topbar{grid-column:2}
+  .mb .story{display:none}.mb .plan{width:82%}
+  .totals div{grid-template-columns:110px 1fr 44px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="site">
+  <div class="wrap">
+    <p class="eyebrow">世界水準の UI・UX 研究 ／ C 分類：収益・利益追求型の商用アプリ</p>
+    <h1>（仮称）AirLCA Cloud — UI コンセプト 3 案の比較</h1>
+    <p class="lead">室内空気質センサーのモニタリングと建材 LCA レポートの自動作成を行う、中小の設計事務所・工務店・オフィス管理者向け SaaS。3 案は配色ではなく<strong>ホームの起点</strong>と<strong>ナビゲーションの型</strong>が異なる。画面内の数値・料金・名称はすべてダミー。</p>
+    <nav class="toc" aria-label="ページ内目次">
+      <ul>
+        <li><a href="#axes">比較軸</a></li>
+        <li><a href="#concept-a">案A ワークベンチ</a></li>
+        <li><a href="#concept-b">案B ショーケース</a></li>
+        <li><a href="#concept-c">案C アウトカム・ハブ（採用）</a></li>
+        <li><a href="#structure">構造の違い</a></li>
+        <li><a href="#evaluation">評価</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <section class="block" id="axes" aria-labelledby="axes-h">
+    <h2 id="axes-h">比較軸：基本 3 軸に「成長モデル」を対応づける</h2>
+    <p class="note">商用アプリでは売上の立ち方で UI の重心が変わるため、実用性／先進性／統合型の基本軸を維持しつつ、それぞれを成長モデルに結びつけた（根拠は concepts.md）。</p>
+    <div class="axes">
+      <div class="axis"><strong>案A 実用性・効率 × 業務定着・席拡大型</strong><p>データ一覧を起点に、熟練者の操作回数を最小化する。</p></div>
+      <div class="axis"><strong>案B 先進性・視覚 × ブランド・獲得型</strong><p>建物ビジュアルを起点に、共有物の美しさで新規を呼ぶ。</p></div>
+      <div class="axis"><strong>案C 統合型 × プロダクト主導成長型</strong><p>作る成果物を起点に、量の上限と共有で自然に有料化する。</p></div>
+    </div>
+  </section>
+
+  <!-- 案A -->
+  <section class="concept" id="concept-a" aria-labelledby="a-h">
+    <div class="c-head"><h2 id="a-h">案A ワークベンチ</h2><span class="tag">実用性・効率重視</span><span class="tag">総合 3.34</span></div>
+    <p class="idea">「毎日開く業務ツール」。左サイドバー＋高密度の表＋右詳細パネルの 3 ペイン。Ctrl+K とショートカットで熟練者を速くする。</p>
+    <div class="mockrow">
+      <figure>
+        <div class="desk ma" aria-hidden="true">
+          <div class="chrome"><b></b><b></b><b></b><em>app.airlca.example / sensors</em></div>
+          <div class="screen">
+            <div class="side">
+              <div class="lg">AirLCA</div>
+              <div class="sec">日常業務</div>
+              <div class="it">ホーム</div><div class="it on">センサー</div><div class="it">建物</div><div class="it">建材 DB</div><div class="it">レポート</div>
+              <div class="sec">ピン留め</div>
+              <div class="it">本社 3F 執務室</div><div class="it">A邸 LCA 比較</div>
+              <div class="sec">設定</div><div class="it">プランと請求</div>
+            </div>
+            <div class="mid">
+              <div class="bar"><span class="q">検索・コマンド…</span><span class="k">Ctrl K</span><span class="k">?</span></div>
+              <div class="kpis">
+                <div><small>平均 CO2</small><b class="num">742</b> ppm</div>
+                <div><small>要換気</small><b class="num">2</b> 室</div>
+                <div><small>今月 CO2e 削減</small><b class="num">1.8</b> t</div>
+                <div><small>未生成レポート</small><b class="num">3</b></div>
+              </div>
+              <table>
+                <thead><tr><th>センサー</th><th>部屋</th><th>CO2</th><th>PM2.5</th><th>状態</th></tr></thead>
+                <tbody>
+                  <tr><td>S-014</td><td>会議室 A</td><td class="num">1,180</td><td class="num">9</td><td><span class="st bad">要換気</span></td></tr>
+                  <tr class="sel"><td>S-009</td><td>執務室 3F</td><td class="num">920</td><td class="num">12</td><td><span class="st warn">注意</span></td></tr>
+                  <tr><td>S-002</td><td>受付</td><td class="num">610</td><td class="num">6</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td>S-021</td><td>倉庫</td><td class="num">540</td><td class="num">15</td><td><span class="st ok">良好</span></td></tr>
+                  <tr><td>S-017</td><td>休憩室</td><td class="num">1,040</td><td class="num">8</td><td><span class="st bad">要換気</span></td></tr>
+                  <tr><td>S-005</td><td>執務室 2F</td><td class="num">705</td><td class="num">7</td><td><span class="st ok">良好</span></td></tr>
+                </tbody>
+              </table>
+              <div class="usage">センサー 18/20 台（Pro）・この表示はダミーデータ</div>
+            </div>
+            <div class="det">
+              <div class="t">S-009 執務室 3F</div>
+              <svg viewBox="0 0 120 50" preserveAspectRatio="none"><polyline fill="none" stroke="#0B5F8A" stroke-width="1.6" points="0,38 15,34 30,30 45,22 60,18 75,20 90,14 105,12 120,16"/><line x1="0" y1="14" x2="120" y2="14" stroke="#B42318" stroke-dasharray="3 2" stroke-width=".8"/></svg>
+              <div>CO2 24 時間推移（破線＝1,000ppm）</div>
+              <div class="btn">換気メモを記録</div>
+              <div class="btn o">レポートに追加</div>
+            </div>
+          </div>
+        </div>
+        <figcaption>デスクトップ：2 段サイドバー（日常業務／ピン留め）、上部にコマンド検索、中央に 6 行以上の表、右に選択行の詳細グラフ。情報密度は高。</figcaption>
+      </figure>
+      <figure>
+        <div class="phone pa" aria-hidden="true">
+          <div class="screen">
+            <div class="hd">センサー<span>≡</span></div>
+            <div class="flt"><i class="on">要対応 2</i><i>すべて</i><i>建物別</i></div>
+            <div class="list">
+              <div class="row"><b>会議室 A</b><span class="st bad">要換気</span><small>S-014 ・ CO2 <span class="num">1,180</span></small></div>
+              <div class="row"><b>休憩室</b><span class="st bad">要換気</span><small>S-017 ・ CO2 <span class="num">1,040</span></small></div>
+              <div class="row"><b>執務室 3F</b><span class="st warn">注意</span><small>S-009 ・ CO2 <span class="num">920</span></small></div>
+              <div class="row"><b>受付</b><span class="st ok">良好</span><small>S-002 ・ CO2 <span class="num">610</span></small></div>
+              <div class="row"><b>倉庫</b><span class="st ok">良好</span><small>S-021 ・ CO2 <span class="num">540</span></small></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>スマホ：表をカードリストに変換。閲覧とアラート対応のみで、編集はデスクトップへ誘導。</figcaption>
+      </figure>
+    </div>
+    <dl class="facts">
+      <div><dt>ナビゲーション</dt><dd>左 2 段サイドバー＋Ctrl+K</dd></div>
+      <div><dt>情報密度</dt><dd>高<span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></dd></div>
+      <div><dt>主な配色</dt><dd>#0B5F8A / #F4F6F8 / #1F2933<span class="swatches" aria-hidden="true"><span style="background:#0B5F8A"></span><span style="background:#F4F6F8"></span><span style="background:#1F2933"></span></span></dd></div>
+      <div><dt>実装難易度</dt><dd>中（仮想スクロール表）</dd></div>
+    </dl>
+    <div class="pm">
+      <div><h3>メリット</h3><ul><li>継続利用者の作業時間が最短</li><li>列・ビュー追加で拡張しやすい</li><li>B2B の席拡大と相性がよい</li></ul></div>
+      <div><h3>デメリット</h3><ul><li>初見で価値が伝わりにくく、登録直後に離脱しやすい</li><li>ブランドの独自性が出にくい</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 案B -->
+  <section class="concept" id="concept-b" aria-labelledby="b-h">
+    <div class="c-head"><h2 id="b-h">案B ショーケース</h2><span class="tag">先進性・視覚的完成度重視</span><span class="tag">総合 3.44</span></div>
+    <p class="idea">「建物が呼吸しているのが見える」。全画面の建物キャンバスに状態を重ね、ストーリーカードと下部ドックで操作する。施主に見せたくなる表現で差別化。</p>
+    <div class="mockrow">
+      <figure>
+        <div class="desk mb" aria-hidden="true">
+          <div class="chrome"><b></b><b></b><b></b><em>app.airlca.example / project / a-residence</em></div>
+          <div class="screen">
+            <div class="top"><span class="lg">AirLCA</span><span class="pj">A邸（木造 2 階建・ダミー）▾</span></div>
+            <div class="plan">
+              <div class="rm g wide">LDK<small>CO2 620 ・ 良好</small></div>
+              <div class="rm y">寝室 1<small>890 ・ 注意</small></div>
+              <div class="rm g">書斎<small>650 ・ 良好</small></div>
+              <div class="rm r">子ども室<small>1,120 ・ 要換気</small></div>
+              <div class="rm g">和室<small>580 ・ 良好</small></div>
+            </div>
+            <div class="story">
+              <small>ストーリー 2 / 4</small>
+              <b>断熱材を変えると、40 年で CO2e を 12% 減らせます</b>
+              <small>グラスウール → 木質繊維（ダミー試算）</small>
+              <div class="dots"><i></i><i class="on"></i><i></i><i></i></div>
+            </div>
+            <div class="dock"><i class="on">空気質</i><i>LCA</i><span class="sl"></span><i>共有</i></div>
+          </div>
+        </div>
+        <figcaption>デスクトップ：全画面の平面図キャンバス（部屋ごとに色＋数値＋文言）、右上にめくるストーリーカード、下部にフローティングドックと時間スライダー。情報密度は低。</figcaption>
+      </figure>
+      <figure>
+        <div class="phone pb" aria-hidden="true">
+          <div class="screen">
+            <div class="prog"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+            <span class="lg">AirLCA ・ A邸</span>
+            <div class="hero">子ども室の換気を見直すと、睡眠時の CO2 が下がります</div>
+            <div class="vis">
+              <div style="background:#6EE7A8">LDK 良好</div><div style="background:#FCD34D">寝室 注意</div>
+              <div style="background:#FCA5A5">子ども室 要換気</div><div style="background:#6EE7A8">和室 良好</div>
+            </div>
+            <small>上にスワイプで次のストーリー</small>
+            <div class="cta">施主に共有する</div>
+          </div>
+        </div>
+        <figcaption>スマホ：縦スワイプのストーリー表示。施主が共有リンクから閲覧する体験を重視。</figcaption>
+      </figure>
+    </div>
+    <dl class="facts">
+      <div><dt>ナビゲーション</dt><dd>ギャラリー → キャンバス＋ドック</dd></div>
+      <div><dt>情報密度</dt><dd>低<span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></dd></div>
+      <div><dt>主な配色</dt><dd>#0E1A2B / #5EEAD4 / #FBBF77<span class="swatches" aria-hidden="true"><span style="background:#0E1A2B"></span><span style="background:#5EEAD4"></span><span style="background:#FBBF77"></span></span></dd></div>
+      <div><dt>実装難易度</dt><dd>高（WebGL・建物データ）</dd></div>
+    </dl>
+    <div class="pm">
+      <div><h3>メリット</h3><ul><li>第一印象と差別化が最も強い</li><li>共有物そのものが広告になる</li></ul></div>
+      <div><h3>デメリット</h3><ul><li>日常の監視・編集が遅い</li><li>実装・保守コストが高い</li><li>色に頼る表現でアクセシビリティに弱く、表の代替が必須</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 案C -->
+  <section class="concept adopted" id="concept-c" aria-labelledby="c-h">
+    <div class="c-head"><h2 id="c-h">案C アウトカム・ハブ</h2><span class="tag">統合型／プロダクト主導成長</span><span class="tag win">採用案 ・ 総合 4.37</span></div>
+    <p class="idea">「作りたい成果物から始める」。ホームは機能一覧ではなく今月作るレポートのカードで、完成度と次の 1 手を示す。データ表（案A）と平面図（案B）は右の文脈パネルで必要な分だけ開く。使用量メーターで課金理由を常に見せる。</p>
+    <div class="mockrow">
+      <figure>
+        <div class="desk mc" aria-hidden="true">
+          <div class="chrome"><b></b><b></b><b></b><em>app.airlca.example / home</em></div>
+          <div class="screen">
+            <div class="rail"><span class="lg"></span><i class="on">ホーム</i><i>モニター</i><i>LCA</i><i>レポート</i><i>設定</i></div>
+            <div class="topbar">
+              <div class="steps"><span class="done"><b>✓</b>データをつなぐ</span><em></em><span class="now"><b>2</b>確認する</span><em></em><span><b>3</b>共有する</span></div>
+              <div class="use">センサー <span class="num">2/3</span>（Free）<span class="m"><i></i></span><a href="#evaluation" tabindex="-1">プランを見る</a></div>
+            </div>
+            <div class="main">
+              <div class="h">今月つくるもの</div>
+              <div class="card hi"><b>11 月 空気質レポート（本社 3F）</b><span class="btn">確認する</span><small>あと 1 項目：換気メモ ・ テンプレート「月次・オフィス」</small><div class="pg"><i style="width:80%"></i></div></div>
+              <div class="card"><b>A邸 断熱材 3 案の LCA 比較</b><span class="btn o">続ける</span><small>建材 2/3 件入力済み ・ CSV 取り込み可</small><div class="pg"><i style="width:55%"></i></div></div>
+              <div class="card"><b>施主向けサマリー<span class="pro">Pro</span></b><span class="btn o">試す（14 日・カード不要）</span><small>自社ロゴ入り・共有リンクの閲覧は無料</small><div class="pg"><i style="width:0"></i></div></div>
+            </div>
+            <div class="ctx">
+              <div class="t">確認中：本社 3F（直近 7 日）</div>
+              <table>
+                <thead><tr><th>部屋</th><th>CO2 最大</th><th>状態</th></tr></thead>
+                <tbody>
+                  <tr><td>会議室 A</td><td class="num">1,180</td><td><span class="st bad">要換気</span></td></tr>
+                  <tr><td>執務室</td><td class="num">920</td><td><span class="st warn">注意</span></td></tr>
+                  <tr><td>受付</td><td class="num">610</td><td><span class="st ok">良好</span></td></tr>
+                </tbody>
+              </table>
+              <div class="t">建材別 CO2e（A邸・案1）</div>
+              <div class="bars">
+                <div><span>断熱材</span><i style="width:90%"></i><span class="num">3.1t</span></div>
+                <div><span>構造材</span><i style="width:60%"></i><span class="num">2.0t</span></div>
+                <div><span>外装</span><i style="width:35%"></i><span class="num">1.2t</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>デスクトップ：細い左レール＋上部の 3 ステップ進行、中央に成果物カード（完成度バー・次の操作）、右に文脈パネル（必要な表とグラフだけ）。右上の使用量メーターと「プランを見る」で上限を常時表示。Pro 機能は触る前にラベルと試用条件を明示。</figcaption>
+      </figure>
+      <figure>
+        <div class="phone pc" aria-hidden="true">
+          <div class="screen">
+            <div class="hd"><b>ホーム</b><small>Free ・ 2/3 台</small></div>
+            <div class="body">
+              <div class="card alert"><span class="st bad">要換気</span><b> 会議室 A</b><small>CO2 <span class="num">1,180</span> ppm ・ 10 分前</small><span class="btn">換気した（記録）</span></div>
+              <div class="card"><b>11 月 空気質レポート</b><div class="pg"><i></i></div><small>あと 1 項目で完成</small><span class="btn">仕上げて共有</span></div>
+            </div>
+            <div class="tabs"><i class="on">ホーム</i><i>アラート</i><i>レポート</i><i>アカウント</i></div>
+          </div>
+        </div>
+        <figcaption>スマホ：全タブ共通のヘッダーと下部タブ 4 つ。ホームは「要対応 1 件」と「今月のレポートの完成度」だけ。確認・即応・共有に絞る。</figcaption>
+      </figure>
+    </div>
+    <dl class="facts">
+      <div><dt>ナビゲーション</dt><dd>左レール＋上部ステップ／スマホは下部タブ</dd></div>
+      <div><dt>情報密度</dt><dd>中（詳細表示で高へ切替）<span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></dd></div>
+      <div><dt>主な配色</dt><dd>#0F6B5C / #B45309 / #FAFAF7<span class="swatches" aria-hidden="true"><span style="background:#0F6B5C"></span><span style="background:#B45309"></span><span style="background:#FAFAF7"></span></span></dd></div>
+      <div><dt>実装難易度</dt><dd>中〜やや高（成果物モデル）</dd></div>
+    </dl>
+    <div class="pm">
+      <div><h3>メリット</h3><ul><li>初回体験・継続・収益化を「成果物」という 1 つの構造でつなぐ</li><li>上限が使用量メーターとして見え、料金を払う理由が明確</li><li>料金・試用・解約を 1 か所に集約でき、ダークパターンを避けやすい</li></ul></div>
+      <div><h3>デメリット</h3><ul><li>成果物の概念設計を誤ると自由度が下がる</li><li>A の速さ・B の華やかさは単独案に及ばない</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block" id="structure" aria-labelledby="st-h">
+    <h2 id="st-h">構造の違い（初回ログイン後の最初の 3 手）</h2>
+    <div class="struct">
+      <div class="s"><h3>案A ワークベンチ</h3><ol><li>空のセンサー表とインポート案内</li><li>センサーを登録して列を設定</li><li>レポート画面へ移動して出力</li></ol></div>
+      <div class="s"><h3>案B ショーケース</h3><ol><li>プロジェクトギャラリーで建物を作成</li><li>平面図を読み込み部屋にセンサーを配置</li><li>ストーリーを生成して共有</li></ol></div>
+      <div class="s"><h3>案C アウトカム・ハブ</h3><ol><li>作りたい成果物のテンプレートを選ぶ</li><li>センサー接続または CSV 取り込み（不足分だけ質問）</li><li>完成したレポートを共有（閲覧者は無料）</li></ol></div>
+    </div>
+  </section>
+
+  <section class="block" id="evaluation" aria-labelledby="ev-h">
+    <h2 id="ev-h">評価</h2>
+    <p class="note">C 分類では初回利用体験と収益化への貢献を重くした。1〜5 点、加重合計＝Σ(点数×重み)÷100（5 点満点）。採点は台帳 12 件と設計判断に基づく専門家評価で、実ユーザー検証は未実施。</p>
+    <div class="tablewrap">
+      <table class="eval">
+        <caption>評価基準・重み・採点</caption>
+        <thead><tr><th scope="col">評価基準</th><th scope="col">重み</th><th scope="col">案A</th><th scope="col">案B</th><th scope="col">案C（採用）</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">操作効率</th><td class="w">8%</td><td>5</td><td>2</td><td class="c">4</td></tr>
+          <tr><th scope="row">学習の容易さ</th><td class="w">10%</td><td>3</td><td>4</td><td class="c">4</td></tr>
+          <tr><th scope="row">情報の理解しやすさ</th><td class="w">10%</td><td>3</td><td>4</td><td class="c">5</td></tr>
+          <tr><th scope="row">視覚的完成度</th><td class="w">7%</td><td>3</td><td>5</td><td class="c">4</td></tr>
+          <tr><th scope="row">アクセシビリティ</th><td class="w">8%</td><td>4</td><td>3</td><td class="c">4</td></tr>
+          <tr><th scope="row">拡張性</th><td class="w">6%</td><td>4</td><td>3</td><td class="c">4</td></tr>
+          <tr><th scope="row">実装保守コスト（高＝低コスト）</th><td class="w">6%</td><td>4</td><td>2</td><td class="c">3</td></tr>
+          <tr><th scope="row">目的への適合性</th><td class="w">10%</td><td>3</td><td>3</td><td class="c">5</td></tr>
+          <tr><th scope="row">収益化への貢献可能性</th><td class="w">13%</td><td>3</td><td>3</td><td class="c">5</td></tr>
+          <tr><th scope="row">初回利用体験</th><td class="w">12%</td><td>2</td><td>5</td><td class="c">4</td></tr>
+          <tr><th scope="row">継続利用のしやすさ</th><td class="w">10%</td><td>4</td><td>3</td><td class="c">5</td></tr>
+        </tbody>
+        <tfoot><tr><th scope="row">加重合計</th><td class="w">100%</td><td>3.34</td><td>3.44</td><td class="c">4.37</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="totals" role="img" aria-label="加重合計の比較：案A 3.34、案B 3.44、案C 4.37（5点満点）">
+      <div><span>案A ワークベンチ</span><span class="tr"><i style="width:66.8%"></i></span><b>3.34</b></div>
+      <div><span>案B ショーケース</span><span class="tr"><i style="width:68.8%"></i></span><b>3.44</b></div>
+      <div class="win"><span>案C アウトカム・ハブ</span><span class="tr"><i style="width:87.4%"></i></span><b>4.37</b></div>
+    </div>
+    <div class="decision">
+      <h3>採用：案C アウトカム・ハブ</h3>
+      <ul>
+        <li>成果物の件数とセンサー台数という「数えられる量」が使用量メーターとして見え、上位移行が成長の結果になる。閲覧者無料の共有が獲得経路になる。</li>
+        <li>初回（テンプレートで 1 件目）と継続（今月のレポート更新）が同じ動線で、継続理由が蓄積価値になる。</li>
+        <li>料金・試用・解約を「設定 → プラン」に集約。試用はカード不要・自動課金なし・終了 3 日前通知、解約は 2 操作以内、上限超過でもデータは閲覧・書き出し可。</li>
+        <li>取り込む要素：案A のコマンドパレット・ピン留め・高密度表の「詳細表示」、案B の施主向けサマリー（SVG 平面図・表の代替つき）。</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>根拠：調査台帳 ledger-C-1.json / ledger-C-2.json（12 件）。料金・無料体験の記述は公式ページの取得確認、画面構成の多くは事前知識による推測（台帳に明記）。既存製品の画面は複製しておらず、原則のみを抽出して独自に構成した。料金（Free ¥0／Pro ¥4,980／Team ¥3,480 per 編集者、税込）・センサー値・建物名はすべてダミー。</p>
+  </div>
+</footer>
+</body>
+</html>
