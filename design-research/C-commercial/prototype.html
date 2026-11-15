@@ -270,6 +270,11 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
   table.responsive thead:has(.sort-btn) .sort-btn{min-height:var(--target-min);padding:0 12px;border:1px solid var(--color-border-strong);border-radius:999px;background:var(--color-surface);box-sizing:border-box}
   table.responsive thead:has(.sort-btn) th[aria-sort="ascending"] .sort-btn,table.responsive thead:has(.sort-btn) th[aria-sort="descending"] .sort-btn{border-color:var(--color-primary);color:var(--color-primary-hover)}
   table.responsive,table.responsive tbody,table.responsive tr,table.responsive td{display:block;width:100%}
+  /* a11y修正: カード表示時に caption が1文字ずつ縦に折り返す問題（1.4.10 / 1.4.12） */
+  table.responsive caption{display:block;width:100%;white-space:normal}
+  fieldset legend{white-space:normal;max-width:100%}
+  fieldset:has(> legend) > legend{float:left;width:100%;margin-bottom:var(--space-2)}
+  fieldset:has(> legend) > legend + *{clear:both}
   table.responsive tr{border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:var(--space-3);padding:var(--space-2) var(--space-3);background:var(--color-surface)}
   table.responsive td{display:flex;justify-content:space-between;gap:var(--space-3);border:0;padding:6px 0;text-align:right}
   table.responsive td::before{content:attr(data-label);font-weight:700;color:var(--color-text-muted);text-align:left}

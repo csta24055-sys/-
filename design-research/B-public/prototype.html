@@ -94,6 +94,7 @@ html.size-l{font-size:112.5%}
 html.size-xl{font-size:137.5%}
 
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0; background:var(--color-bg); color:var(--color-text); font-family:var(--font-sans); font-size:var(--fs-s); line-height:var(--lh-body); overflow-wrap:anywhere}
 img,svg{max-width:100%}
 h1,h2,h3,h4{line-height:var(--lh-tight); margin:0 0 var(--space-3)}
@@ -140,7 +141,7 @@ pre{background:var(--color-surface); border:1px solid var(--color-border); borde
 .global-nav a{display:flex; align-items:center; min-height:var(--target-min); padding:0 var(--space-3); color:var(--color-text); text-decoration:none; border-bottom:4px solid transparent; font-weight:600}
 .global-nav a[aria-current="page"]{border-bottom-color:var(--color-primary); color:var(--color-primary)}
 .global-nav a:hover{background:var(--color-surface)}
-.menu-btn{display:none}
+.btn.menu-btn{display:none}
 
 /* 緊急帯（P8：識別帯とは別部品） */
 .emergency{background:var(--color-emergency-bg); color:var(--color-emergency-text)}
@@ -161,7 +162,7 @@ pre{background:var(--color-surface); border:1px solid var(--color-border); borde
 .side-box dl{margin:0}
 .side-box dt{font-weight:700}
 .side-box dd{margin:0 0 var(--space-2)}
-.drawer-close{display:none}
+.btn.drawer-close{display:none}
 main{min-width:0}
 main:focus{outline:none}
 
@@ -369,10 +370,10 @@ dialog::backdrop{background:rgba(27,36,48,.55)}
 /* ===== レスポンシブ ===== */
 @media (max-width:1023px){
   .layout{grid-template-columns:minmax(0,1fr)}
-  .menu-btn{display:inline-flex}
+  .btn.menu-btn{display:inline-flex}
   .sidebar{position:fixed; inset:0 auto 0 0; width:min(320px,88vw); max-height:none; background:var(--color-bg); z-index:60; padding:var(--space-4); box-shadow:var(--shadow-2); transform:translateX(-105%); transition:transform var(--dur) var(--ease); visibility:hidden}
   .sidebar.open{transform:none; visibility:visible}
-  .drawer-close{display:inline-flex}
+  .btn.drawer-close{display:inline-flex}
   .scrim{position:fixed; inset:0; background:rgba(27,36,48,.5); z-index:50}
   .ws-top{grid-template-columns:minmax(0,1fr)}
   .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -381,6 +382,8 @@ dialog::backdrop{background:rgba(27,36,48,.55)}
 @media (max-width:639px){
   html{scroll-padding-bottom:110px}
   .global-nav{display:none}
+  .site-header{position:static}
+  .layer-nav{top:0}
   .utility{margin-left:0; width:100%}
   .util-label{display:none}
   .grid-2,.grid-3,.grid-4{grid-template-columns:minmax(0,1fr)}
@@ -1274,7 +1277,7 @@ doc.addEventListener("change",function(e){
 });
 
 /* ---------- ヘッダー高さ（フォーカスが隠れない） ---------- */
-function measureHeader(){var h=$("#site-header").offsetHeight; root.style.setProperty("--header-h",h+"px"); root.style.scrollPaddingTop=(h+72)+"px";}
+function measureHeader(){var hd=$("#site-header"); var h=getComputedStyle(hd).position==="sticky"?hd.offsetHeight:0; root.style.setProperty("--header-h",h+"px"); root.style.scrollPaddingTop=(h+72)+"px";}
 window.addEventListener("resize",measureHeader);
 
 /* ---------- ルーティング ---------- */
