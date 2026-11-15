@@ -565,7 +565,8 @@ class ReviewFixTests(unittest.TestCase):
                     c_diesel=V("c_diesel", 500.0), e_repair_rate=V("e_repair_rate", 0.01),
                     r_charge_kg=V("r_charge_kg", 20.0), r_gwp=V("r_gwp", 2000.0), r_leak_rate=V("r_leak_rate", 0.03),
                     r_loss_rate=V("r_loss_rate", 0.05), r_recovery_rate=V("r_recovery_rate", 0.5), r_life=V("r_life", 15.0),
-                    r_top_up=V("r_top_up", "yes"), o_elec_kwh=V("o_elec_kwh", 100000.0), o_fm_ratio=V("o_fm_ratio", 0.1))
+                    r_top_up=V("r_top_up", "yes"), o_elec_kwh=V("o_elec_kwh", 100000.0), o_fm_ratio=V("o_fm_ratio", 0.1),
+                    m_transport_km=V("m_transport_km", 50.0), m_transport_mode=V("m_transport_mode", "TRUCK_LARGE"))
         for t, _ in FL.TRADES:
             k = t.lower()
             v["e_%s_count" % k] = V("e_%s_count" % k, 2.0)
@@ -1126,6 +1127,99 @@ class ThirdRoundTests(unittest.TestCase):
         except OSError:
             self.skipTest("IPv6 loopback is not available here")
         srv.server_close()
+
+
+class FourthRoundTests(unittest.TestCase):
+    """Regression tests for the fourth verification round."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+
+    def summary(self, vals, T=60):
+        pid = self.app.projects.create("r4", "RC")
+        for fid, v in vals.items():
+            self.app.projects.put(pid, v)
+        _, out = self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": T})
+        return out, {x["stage"]: x["complete"] for x in out["summary"]["stages"]}
+
+    def test_engine_unit_spread_by_kind(self):
+        vals = self.full(m_refresh_cycle=V("m_refresh_cycle", 100.0))
+        vals.pop("a_eol_haul_km")
+        out, st = self.summary(vals)
+        self.assertFalse(st["C2"])
+        self.assertTrue(st["B4"])                                       # no material renewal inside 60 years
+
+    def test_delivery_fallback_marks_a4(self):
+        _, rep = bridge.build(self.full(m_transport_km=None), REFSET)
+        self.assertIn("a4_delivery_fallback", [m["field"] for m in rep["missing_inputs"]])
+
+    def test_b5_only_when_rebuild_inside_t(self):
+        vals = self.full(a_reconstruction=V("a_reconstruction", "MAJOR_REFURBISHMENT"), a_replacement_cycle=V("a_replacement_cycle", 70.0),
+                         a_recon_fraction=V("a_recon_fraction", 0.5), m_steel=None)
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertNotIn("B5", rep["incomplete_stages"])
+
+    def test_waste_rate_gap_not_blamed_on_transport(self):
+        vals = self.full(m_concrete=V("m_concrete", 100.0, unit="t"), m_waste_rate=None, m_quantity_basis=V("m_quantity_basis", "DESIGN"))
+        _, rep = bridge.build(vals, REFSET)
+        self.assertNotIn("m_transport_mode", [m["field"] for m in rep["missing_inputs"]])
+        self.assertIn("m_waste_rate", [m["field"] for m in rep["missing_inputs"]])
+
+    def test_loss_rate_irrelevant_without_replacement(self):
+        out, st = self.summary(self.full(r_life=V("r_life", 70.0), r_loss_rate=None))
+        self.assertNotIn("r_loss_rate", [m["field"] for m in out["missing_inputs"]])
+        self.assertTrue(st["B1"])
+
+    def test_route_aware_c_stages_from_engine_units(self):
+        out, st = self.summary(self.full(m_concrete=V("m_concrete", 800.0, unit="m3")))
+        self.assertFalse(st["C4"])                                     # LANDFILL: the row's treatment goes to C4
+        self.assertTrue(st["C3"])
+
+    def test_scope_kept_on_state_change_and_from_estimate(self):
+        pid = self.app.projects.create("sc", "RC")
+        self.app.handle("PUT", "/api/projects/%d/fields/m_concrete" % pid, {"value": 5400, "unit": "t", "state": "assumption", "scope": "whole_building"})
+        _, v = self.app.handle("PUT", "/api/projects/%d/fields/m_concrete" % pid, {"value": 5400, "unit": "t", "state": "confirmed"})
+        self.assertEqual(v["scope"], "whole_building")
+        est = V("m_concrete", 900.0, "statistical", "t", method="rasmi_mi_x_gfa", source_id="r", factor_version="v",
+                uncertainty=Uncertainty("interval", 1, 9000, 0.9), scope="whole_building", depends={"b_gfa": 5000.0})
+        self.app.projects.put(pid, est)
+        _, v = self.app.handle("PUT", "/api/projects/%d/fields/m_concrete" % pid, {"value": 950, "unit": "t", "state": "assumption", "from_estimate": True})
+        self.assertEqual((v["scope"], v["depends"], v["uncertainty"]["kind"]), ("whole_building", {"b_gfa": 5000.0}, "unknown"))
+
+    def test_fingerprint_follows_state_changes(self):
+        _, a = bridge.build(self.full(m_glass=V("m_glass", None, "not_applicable")), REFSET)
+        _, b = bridge.build(self.full(m_glass=None), REFSET)
+        self.assertNotEqual(a["input_hash"], b["input_hash"])
+
+    def test_csv_limits_and_parse_errors(self):
+        from wlcstudio.importers import tabular
+        with self.assertRaises(tabular.ImportError_):
+            tabular.read_csv(b'name,quantity,unit\n"' + b"A" * 200000 + b'",5,t\n', "d")
+        big = ("名称,数量,単位\n" + "鉄筋,1,t\n" * 120000).encode()
+        with self.assertRaises(tabular.ImportError_):
+            tabular.read_csv(big, "d")
+
+    def test_totals_and_rebar_products(self):
+        csv = "品目,数量,単位\n鉄筋 D13,5,t\n鉄筋 D16,7,t\n鉄筋計,12,t\nコンクリート Fc24,100,m3\nコンクリート 計,100,m3\n鉄筋コンクリート用棒鋼 SD345,3,t\n".encode()
+        r = documents.read("t.csv", base64.b64encode(csv).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got[("m_rebar", "t")], 15.0)                  # 5 + 7 + 3; the 鉄筋計 subtotal is not added
+        self.assertEqual(got[("m_concrete", "m3")], 100.0)
+
+    def test_new_premises_make_a_new_candidate_and_structure_needed(self):
+        pid = self.app.projects.create("dp", "RC")
+        unc = Uncertainty("interval", 1, 9, 0.9)
+        a = V("m_rebar", 5.0, "statistical", "t", method="mlit_area_unit_x_gfa", source_id="m", factor_version="v", uncertainty=unc,
+              depends={"b_gfa": 100.0, "b_structure": "RC"})
+        b = Value.from_json(a.to_json())
+        b.depends = {"b_gfa": 200.0, "b_structure": "RC"}
+        i1 = self.app.projects.propose(pid, a, "x")
+        i2 = self.app.projects.propose(pid, b, "x")
+        self.assertNotEqual(i1, i2)
+        self.app.projects.put(pid, V("b_structure", None, "not_obtained"))
+        with self.assertRaises(ApiError):
+            self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"screen": "material"})
 
 
 class RegressionTests(unittest.TestCase):

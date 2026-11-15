@@ -30,7 +30,7 @@ from . import bridge, documents, estimate, research
 from . import fields as FL
 from .engine import Engine
 from .project import ProjectError, Projects
-from .provenance import LABEL, STATES, ProvenanceError, Value
+from .provenance import LABEL, STATES, ProvenanceError, Uncertainty, Value
 from .sources import gsi, plateau
 from .sources.net import SourceError
 
@@ -207,13 +207,33 @@ class App:
         if state == "not_applicable" and F.get("na_never"):
             raise ApiError(400, "「%s」は「適用外」にできない（無いということが無い項目）。分からないときは「未取得」のままにする" % F["label"])
         scope = str(b.get("scope") or "")
+        depends, unc, note_extra, src = {}, None, "", ""
+        if cur is not None and cur.state in ("confirmed", "from_drawing", "statistical", "assumption") and state in ("confirmed", "assumption"):
+            try:
+                same_v = float(str(value).replace(",", "")) == float(cur.value) if F["type"] in ("number", "integer") else str(value) == str(cur.value)
+            except (TypeError, ValueError):
+                same_v = False
+            if same_v and not scope:
+                scope = cur.scope or ""                   # a state-only change or a relabel keeps what the value covers
+                depends = dict(cur.depends or {})
+            if b.get("from_estimate") and cur.state == "statistical":
+                # the user corrected an estimate: same quantity, same premises; its statistical range no longer applies
+                scope = scope or cur.scope or ""
+                depends = dict(cur.depends or {})
+                unc = Uncertainty("unknown", basis="推定（%s）を手で直した値：元の範囲は使わない" % cur.source_id)
+                note_extra = "推定 %s %s（%s）を手で直した。" % (cur.value, cur.unit, cur.source_id)
+                src = cur.source_id
         if scope and not ((fid == "m_concrete" and scope == "whole_building") or (fid in ("m_rebar", "m_steel") and scope == "all_steel")):
             raise ApiError(400, "この項目にその範囲（%s）は付けられない" % scope)
         v = Value(fid, state, value if state in ("confirmed", "assumption") else None,
                   str(b.get("unit") if b.get("unit") is not None else F.get("unit", "")) if state in ("confirmed", "assumption") else "",
                   method=str(b.get("method") or "user_entered"), source_id=str(b.get("source_id") or ""),
-                  source_detail=str(b.get("source_detail") or ""), note=str(b.get("note") or "")[:300], updated_by="user",
-                  scope=scope if state in ("confirmed", "assumption") else "")
+                  source_detail=str(b.get("source_detail") or ""), note=(note_extra + str(b.get("note") or ""))[:300], updated_by="user",
+                  scope=scope if state in ("confirmed", "assumption") else "",
+                  depends=depends if state in ("confirmed", "assumption") else {})
+        if unc is not None:
+            v.uncertainty = unc
+            v.source_id = v.source_id or src
         out = self.projects.put(pid, v).to_json()
         if fid == "b_structure" and state in ("confirmed", "assumption"):
             # the project's structure follows the field (estimates, PLATEAU checks and field order use it)
@@ -259,7 +279,11 @@ class App:
 
     def estimate(self, pid: int, b: dict) -> dict:
         p = self.projects.get(pid)
-        res = estimate.run(self.projects.values(pid), p["structure"], screen=b.get("screen"), field=b.get("field"),
+        vals = self.projects.values(pid)
+        sv = vals.get("b_structure")
+        if sv is None or sv.state not in ("confirmed", "assumption", "statistical", "from_drawing"):
+            raise ApiError(400, "構造が未取得なので概算しない（基本情報で構造を入れる）")
+        res = estimate.run(vals, sv.value, screen=b.get("screen"), field=b.get("field"),
                            demo=p["data_kind"] == "fictional_demo")
         for v in res["proposals"]:
             self.projects.propose(pid, v, "estimate:" + v.method)
@@ -298,12 +322,13 @@ class App:
         """Low / high totals with every value that has a range set to its low / high end (two more engine runs).
         This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
         lo_vals, n = _with(vals, "low")
-        n_unknown = sum(1 for v in vals.values() if v.uncertainty.kind == "unknown")
+        n_unknown = sum(1 for f, v in vals.items() if v.uncertainty.kind == "unknown" or
+                        (v.state == "assumption" and v.uncertainty.kind == "none" and FL.FIELDS[f]["type"] in ("number", "integer")
+                         and FL.FIELDS[f]["role"] in ("material", "gfa", "equipment", "profile", "refrigerant")))
         if n == 0:
             if n_unknown:
                 return {"low_t": None, "high_t": None, "n_values_with_range": 0, "n_values_range_unknown": n_unknown,
-                        "note": "範囲が不明な推定 %d 項目（%s）があり、合計の幅は示せない。"
-                                % (n_unknown, "、".join(FL.FIELDS[f]["label"] for f, v in vals.items() if v.uncertainty.kind == "unknown"))}
+                        "note": "範囲が不明な推定・仮定 %d 項目があり、合計の幅は示せない。" % n_unknown}
             return None
         hi_vals, _ = _with(vals, "high")
         tot = {}
@@ -319,7 +344,7 @@ class App:
         a, b = sorted((tot["low"] / 1000.0, tot["high"] / 1000.0))
         return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown,
                 "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n
-                        + ("範囲が不明な推定 %d 項目の幅は含まれていない。" % n_unknown if n_unknown else "")}
+                        + ("範囲が不明な推定・仮定 %d 項目の幅は含まれていない。" % n_unknown if n_unknown else "")}
 
     def calculate(self, pid: int, period) -> dict:
         T = _float(period)
@@ -418,6 +443,9 @@ UNIT_HINTS = {
              "e_electrical_mass", "e_plumbing_mass", "e_conveyance_mass"]}
 
 
+MATERIAL_UNITS = {"A13-01", "A13-03", "A13-04", "A13-05", "A4-01", "A4-02", "C2-01", "C3-01", "C4-01"}
+
+
 def _hints(incomplete: list[str], rep: dict) -> list[dict]:
     """For each incomplete stage: the inputs of the screens that are missing for it (from the bridge's record), else the
     usual inputs of the engine's incomplete units that are still not obtained, else a pointer to the unconnected list."""
@@ -448,9 +476,23 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
     inc = x2.get("incomplete_units") or []
     # stages of the units the engine marks incomplete, spread to the stages that depend on them (B3/B4/B5) by the same
     # rule the bridge uses for its own gaps
-    eng = {UNIT_STAGE.get(u) for u in inc} - {None}
-    bad_stages = (set(bridge.expand_stages(eng, rep.get("expand") or {})) & set(rep["stages"] or [])) \
-        | set(rep.get("incomplete_stages") or [])
+    ctx = rep.get("expand") or {}
+    route = set(ctx.get("route_stages") or ["C3", "C4"])
+    eng = {"material": set(), "equipment": set(), "other": set()}
+    for u in inc:
+        st = UNIT_STAGE.get(u)
+        if st is None:
+            continue
+        if u in ("C3-01", "C4-01") and st not in route:
+            continue                       # the material rows' treatment goes to the other C stage on this route
+        if u == "B1-03" and not ctx.get("b1_replacement", True):
+            continue                       # no refrigerant replacement falls inside T: its loss rate cannot act
+        kind = "material" if u in MATERIAL_UNITS else ("equipment" if u in ("X-01", "X-14") else "other")
+        eng[kind].add(st)
+    spread = set()
+    for kind, sts in eng.items():
+        spread |= set(bridge.expand_stages(sts, ctx, kind))
+    bad_stages = (spread & set(rep["stages"] or [])) | set(rep.get("incomplete_stages") or [])
     stages = [{"stage": k, "value": v, "complete": k not in bad_stages}
               for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
     x7 = res.get("X-07") or {}

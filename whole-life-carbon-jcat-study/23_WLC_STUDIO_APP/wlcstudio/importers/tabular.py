@@ -23,6 +23,7 @@ HEADERS = {
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 MAX_PART, MAX_TOTAL = 10_000_000, 40_000_000     # bytes after decompression (real quantity tables are far smaller)
 MAX_COLS, MAX_CELLS, MAX_SHARED = 16_384, 1_000_000, 300_000   # Excel's column limit (XFD); all sheets together
+MAX_CSV_BYTES, MAX_CSV_ROWS = 10_000_000, 100_000
 
 
 class ImportError_(ValueError):
@@ -90,7 +91,17 @@ def read_csv(data: bytes, doc_id: str) -> dict:
             continue
     else:
         raise ImportError_("CSV の文字コードを読めない（UTF-8 か Shift_JIS にする）")
-    rows = list(csv.reader(io.StringIO(text)))
+    if len(data) > MAX_CSV_BYTES:
+        raise ImportError_("CSV が大きすぎる（%d MB まで）" % (MAX_CSV_BYTES // 1_000_000))
+    rows, cells = [], 0
+    try:
+        for r in csv.reader(io.StringIO(text)):        # streamed with a cell budget, never materialised blindly
+            cells += len(r)
+            if len(rows) >= MAX_CSV_ROWS or cells > MAX_CELLS:
+                raise ImportError_("CSV の行・セルが多すぎる（%d 行・%d セルまで）" % (MAX_CSV_ROWS, MAX_CELLS))
+            rows.append(r)
+    except csv.Error as e:
+        raise ImportError_("CSV として読めない（%s）" % e) from None
     return {"format": "csv", "sheets": [_rows_to_candidates(rows, "csv", doc_id)]}
 
 

@@ -15,11 +15,13 @@ from . import fields as FL
 from .importers import ifc, pdf, tabular
 from .provenance import Value
 
-KEYWORDS = [  # (field, words) — first match wins. Order matters: blocks/panels before concrete, concrete before rebar
-    # (鉄筋コンクリート / reinforced concrete is concrete), rebar before steel (reinforcing steel is rebar)
+KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular expressions on the lower-cased name
     ("m_masonry", ("re:(^|[^a-z])alc([^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
+    # rebar products, also when their name mentions concrete (JIS: 鉄筋コンクリート用棒鋼; reinforcement for concrete),
+    # but not 鉄筋コンクリート itself (reinforced concrete is concrete)
+    ("m_rebar", ("棒鋼", "異形鉄筋", "鉄筋コンクリート用", "re:鉄筋(?!コンクリート)", "rebar", "re:reinforc(?!ed concrete)",
+                 "re:(^|[^a-z])sd ?[2-6]\\d{2}")),
     ("m_concrete", ("コンクリート", "生コン", "concrete")),
-    ("m_rebar", ("鉄筋", "異形棒鋼", "rebar", "reinforc")),
     ("m_steel", ("鉄骨", "鋼材", "形鋼", "鋼管", "デッキ", "structural steel", "steel")),
     ("m_timber", ("木材", "製材", "集成材", "合板", "clt", "timber", "wood", "lumber")),
     ("m_glass", ("ガラス", "glass")),
@@ -47,14 +49,19 @@ def _field_for(name: str, division: str = "") -> str | None:
     return None
 
 
+NOT_TOTAL_ENDINGS = ("設計", "統計", "会計", "時計", "家計", "余計", "生計")
+
+
 def _is_total(name: str) -> bool:
-    """A total / subtotal row: 合計・小計・総計 at the start or end, 計 alone, or the English words as whole words
-    (so that 設計数量 or Gypsum board are not taken for totals)."""
-    n = (name or "").strip()
+    """A total / subtotal row: a name ending in 計 (鉄筋計, コンクリート 計, 合計 …) unless the word is one where 計 is not a
+    total (設計, 統計 …); 合計・小計・総計 at the start; or total/subtotal/sum/totals as English whole words."""
+    n = re.sub(r"[\s　]+", "", (name or ""))
     low = n.lower()
-    if n == "計" or any(n.startswith(w) or n.endswith(w) for w in ("合計", "小計", "総計")):
+    if n.endswith("計") and not n.endswith(NOT_TOTAL_ENDINGS):
         return True
-    return re.search(r"(^|[^a-z])(total|subtotal|sum)($|[^a-z])", low) is not None
+    if any(n.startswith(w) for w in ("合計", "小計", "総計")):
+        return True
+    return re.search(r"(^|[^a-z])(total|totals|subtotal|sum)($|[^a-z])", (name or "").lower()) is not None
 
 
 def _unit(u: str) -> str | None:
@@ -116,7 +123,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         for e in parsed["elements"]:
             mats = " ".join(e["materials"]) + " " + e["name"]
             fid = _field_for(mats, "footing" if e["type"] in ("IFCFOOTING", "IFCPILE") else "")
-            if e["type"] == "IFCREINFORCINGBAR":
+            if e["type"] in ("IFCREINFORCINGBAR", "IFCREINFORCINGMESH"):
                 fid = "m_rebar"
             if fid is None:
                 unused.append({"trace": "%s:#%d" % (doc_id, e["step_id"]), "name": "%s %s" % (e["type"], e["name"]),
@@ -199,4 +206,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                                source_detail=detail, note="資料「%s」から。分類はキーワードによるので確認する" % doc_id))
     summ = {"n_rows": sum(len(s["rows"]) for s in parsed["sheets"])} if kind in ("csv", "xlsx") else \
         {"n_elements": len(parsed["elements"]), "schema": parsed["schema"]}
+    if len(unused) > 2000:
+        warnings.append("使わなかった行が多いので、最初の 2000 行だけを記録した（全部で %d 行）" % len(unused))
+        unused = unused[:2000]
     return {"kind": kind, "sha256": sha, "parsed_summary": summ, "proposals": proposals, "unused": unused, "warnings": warnings}

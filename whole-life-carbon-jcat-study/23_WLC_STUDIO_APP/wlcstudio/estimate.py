@@ -234,7 +234,7 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
                if lo is not None else Uncertainty("interval", round(q * 0.5, 3), round(q * 1.5, 3), 0.9, False,
                                                   "散らばりの資料が無いので ±50% を仮に置いた（根拠なし・仮の範囲）"))
         out.append(Value(fid, "statistical", round(q, 3), unit, method="mlit_area_unit_x_gfa", source_id=MLIT_ID,
-                         depends={"b_gfa": area, "b_use": use.value, "b_structure": structure},
+                         depends={"b_gfa": area, "b_structure": structure},          # MLIT: by structure, all uses
                          scope="whole_building" if fid == "m_concrete" else ("all_steel" if fid0 is None else ""),
                          source_detail="%s（%s）：%s %.4f %s / 延べ床 10 m2 × %.1f m2" % (MLIT_VERSION, structure, item, per10, u, area),
                          retrieved_at=today, factor_version=MLIT_VERSION, permission="政府標準利用規約2.0（e-Stat）",
@@ -271,7 +271,8 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
             notes.append("基礎・杭を含む建物全体の量。採用したら基礎の欄には別の値を入れない（入れると基礎の行は作らず、二重計上を防ぐ）")
         k = 1000.0   # kg -> t
         v = Value(fid, "statistical", round(rec["p_50"] * area / k, 3), "t", method="rasmi_mi_x_gfa", source_id=RASMI_ID,
-                  depends={"b_gfa": area, "b_use": use.value, "b_structure": structure},
+                  depends={"b_gfa": area, "b_structure": structure,
+                           "b_use_group": "residential" if use.value == "residential" else "non_residential"},
                   scope="whole_building" if mat == "concrete" else ("all_steel" if mat == "steel" else ""),
                   source_detail="%s / %s / %s / OECD_JPN：中央値 %.1f kg/m2（元データ %d 件、補った後 %d 件、拡張 %d 回）"
                                 % (mat, fn, st, rec["p_50"], rec["raw"], rec["n"], rec["iterations"]),

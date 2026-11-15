@@ -170,40 +170,50 @@ function inputValue(fid) {
   if (F.type === "number") { const v = Number(raw.replace(/,/g, "")); return Number.isFinite(v) ? { value: v } : { bad: true }; }
   return { value: raw };
 }
+function ownValue(cur) {
+  return cur && ["user_entered", "initial_setting", "structure_card"].includes(cur.method) && !["statistical", "from_drawing"].includes(cur.state);
+}
 function isDirty(fid) {
   const F = state.meta.fields[fid], cur = (state.project.fields[fid] || {}).value, iv = inputValue(fid);
   if (iv.empty || iv.bad) return false;
-  const us = $("#unit-" + fid);
-  return !cur || cur.value !== iv.value || (F.type === "number" && us && cur.unit && us.value !== cur.unit);
+  const us = $("#unit-" + fid), st = $("#st-" + fid);
+  if (!cur || cur.value !== iv.value) return true;
+  if (F.type === "number" && us && cur.unit && us.value !== cur.unit) return true;
+  return ownValue(cur) && st && st.value !== cur.state;          // a state-only change of one's own value
 }
-/* save one row; returns true when something was stored (or nothing needed storing) */
+/* save one row: "saved" | "unchanged" | "refused" */
 async function saveField(fid, quiet = false) {
   const F = state.meta.fields[fid], iv = inputValue(fid);
-  if (iv.empty) { if (!quiet) toast("空欄は保存しません（未取得のまま。0 にはしません）"); return !quiet ? false : true; }
-  if (iv.bad) { toast("「" + F.label + "」は数値で入力してください"); return false; }
+  if (iv.empty) { if (!quiet) toast("空欄は保存しません（未取得のまま。0 にはしません）"); return "unchanged"; }
+  if (iv.bad) { toast("「" + F.label + "」は数値で入力してください"); return "refused"; }
   const value = iv.value;
   const cur = (state.project.fields[fid] || {}).value;
   const us = $("#unit-" + fid), unit = us ? us.value : ((cur && cur.unit) || F.unit);
   const st = $("#st-" + fid).value;
   const body = { value, unit: F.type === "number" ? unit : "", state: st, method: "user_entered" };
-  const own = cur && ["user_entered", "initial_setting", "structure_card"].includes(cur.method) && !["statistical", "from_drawing"].includes(cur.state);
   if (cur && cur.value === value) {
     const sameUnit = F.type !== "number" || !cur.unit || cur.unit === unit;
-    if (!own) { if (!quiet) toast(`値が変わっていないので保存しません（${state.meta.states[cur.state]}の出典・範囲を残します）`); return true; }
-    if (sameUnit && cur.state === st) { if (!quiet) toast("変更はありません"); return true; }
+    if (!ownValue(cur)) {
+      if (!sameUnit) { toast(`${state.meta.states[cur.state]}の値の単位は付け直せません（候補を採用し直すか、「未取得に戻す」のあと入れ直す）`); await refresh("screen", fid); return "refused"; }
+      if (!quiet) toast(`値が変わっていないので保存しません（${state.meta.states[cur.state]}の出典・範囲を残します）`);
+      return "unchanged";
+    }
+    if (sameUnit && cur.state === st) { if (!quiet) toast("変更はありません"); return "unchanged"; }
     if (!sameUnit) {
-      if (!confirm(`数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（自分で入れた値の単位の付け間違いを直すとき）。よろしいですか？換算したいときは、換算した数値を入れてください。`)) return false;
+      if (!confirm(`数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（自分で入れた値の単位の付け間違いを直すとき）。よろしいですか？換算したいときは、換算した数値を入れてください。`)) return "refused";
       body.relabel = true;
     }
-  }
-  if (cur && cur.scope && cur.value !== value) {
+    if (cur.scope) body.scope = cur.scope;                       // what the value covers stays with it
+  } else if (cur && cur.state === "statistical") {
+    if (confirm(`今の値は統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）でした。新しい値は、その推定を手で直したものですか？\n（はい＝同じ範囲・前提を引き継ぐ。統計の範囲は使わず「範囲は不明」になる／いいえ＝別に調べた値）`)) body.from_estimate = true;
+  } else if (cur && cur.scope) {
     const what = cur.scope === "whole_building" ? "基礎・杭を含む建物全体の量" : "鉄筋と鉄骨を合わせた鉄の全量";
-    if (confirm(`今の値は「${what}」の推定でした。新しい値も${what}ですか？（はい＝もう一方の欄と二重に数えない／いいえ＝この欄だけの量）`)) body.scope = cur.scope;
+    if (confirm(`今の値は「${what}」でした。新しい値も${what}ですか？（はい＝もう一方の欄と二重に数えない／いいえ＝この欄だけの量）`)) body.scope = cur.scope;
   }
   try {
     await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body });
-    return true;
-  } catch (e) { toast(e.message); await refresh("screen", fid); return false; }
+    return "saved";
+  } catch (e) { toast(e.message); await refresh("screen", fid); return "refused"; }
 }
 
 function bindScreen(m, sid) {
@@ -211,14 +221,20 @@ function bindScreen(m, sid) {
   $("#bb-hub").onclick = async () => {
     // 保存して戻る: every row whose input differs from the stored value is saved like its own 保存 button
     const dirty = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save).filter(isDirty);
-    for (const fid of dirty) { if (!(await saveField(fid, true))) { toast("「" + state.meta.fields[fid].label + "」を保存できなかったので戻りません"); return; } }
-    await loadProject(state.project.id); toast(dirty.length ? `${dirty.length} 項目を保存しました` : "変更はありませんでした"); back();
+    let saved = 0;
+    for (const fid of dirty) {
+      const r = await saveField(fid, true);
+      if (r === "refused") { toast("「" + state.meta.fields[fid].label + "」を保存できなかったので戻りません"); return; }
+      if (r === "saved") saved++;
+    }
+    await loadProject(state.project.id); toast(saved ? `${saved} 項目を保存しました` : "保存する変更はありませんでした"); back();
   };
   $("#bb-est").onclick = () => estimate(sid, null);
-  m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = async () => { if (await saveField(b.dataset.save)) await refresh(sid, b.dataset.save); }));
+  m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = async () => { if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save); }));
   m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = async () => {
     const F = state.meta.fields[b.dataset.na];
-    if (F.na === "zero" && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
+    if (F.na === "zero" && !F.na_note && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
+    if (F.na_note && !confirm(`「${F.label}」を「${F.na_note}」として計算します（その分の排出は数えません）。本当にそうだと分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
     await api(`/projects/${state.project.id}/fields/${b.dataset.na}`, { method: "PUT", body: { value: null, state: "not_applicable", method: "user_entered" } });
     await refresh(sid, b.dataset.na);
   }));

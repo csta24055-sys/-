@@ -11,7 +11,7 @@
 | source_id, source_detail | 出典の ID（`sources/registry.json` か資料の ID）と、その中の場所（シート・行・列、IFC の部材、ページ・行、建物 ID、表の行） |
 | retrieved_at, factor_version, permission | 取得日、使ったデータ・原単位の版、利用許諾（例：CC-BY-4.0、政府標準利用規約2.0） |
 | uncertainty | kind（none／interval／scenario／unknown＝根拠のある幅を付けられない推定）、low、high、level（信頼水準）、calibrated（独立のデータで当たり率を測ったか）、basis（範囲の作り方） |
-| note, scope, updated_at, updated_by | 説明、推定が欄の名前より広い範囲を含むこと（whole_building＝基礎を含む建物全体、all_steel＝鉄筋と鉄骨の全量。二重計上の防止に使う）、保存の時刻、保存した人（候補を採用したときは「user（候補を採用: 出所）」） |
+| note, scope, depends, updated_at, updated_by | 説明、推定が欄の名前より広い範囲を含むこと（whole_building＝基礎を含む建物全体、all_steel＝鉄筋と鉄骨の全量。二重計上の防止に使う）、推定の前提（延床面積・構造・用途の区分。変わると結果に「概算し直す」）、保存の時刻、保存した人（候補を採用したときは「user（候補を採用: 出所）」） |
 
 検査（`Value.check`）：値のある状態には値と取り方が要る；値の無い状態は値を持てない；統計推定には区間と出典が要る；図面からの計算には出典（資料）が要る；範囲は有限で下限 ≤ 上限。
 

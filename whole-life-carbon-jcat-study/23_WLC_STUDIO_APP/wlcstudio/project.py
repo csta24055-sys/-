@@ -188,7 +188,9 @@ class Projects:
         # the same proposal twice is not stored twice
         for c in self.candidates(pid, v.field_id):
             if c["value"] == v.value and c["unit"] == v.unit and c["method"] == v.method and c["state"] == v.state:
-                return c["id"]
+                if (c.get("depends") or {}) == (v.depends or {}):
+                    return c["id"]
+                self.db.execute("UPDATE candidates SET status='dismissed' WHERE id=?", (c["id"],))   # same number, new premises
         cur = self.db.execute("INSERT INTO candidates (project_id, field_id, payload, origin, created_at) VALUES (?,?,?,?,?)",
                               (pid, v.field_id, _j(v.to_json()), origin, time.time()))
         self.db.commit()

@@ -206,8 +206,8 @@ def expand_stages(stages, ctx: dict, kind: str | None = None) -> list:
     if "A1-A3" in x:
         x.add("B3")
     if x & {"A1-A3", "A4", "C2", "C3", "C4"}:
-        if (kind == "material" and ctx.get("b4_material")) or (kind == "equipment" and ctx.get("b4_equipment")) \
-                or (kind is None and (ctx.get("b4_material") or ctx.get("b4_equipment"))):
+        # only gaps in material or equipment rows repeat at renewals; other gaps (site fuel, profiles …) do not
+        if (kind == "material" and ctx.get("b4_material")) or (kind == "equipment" and ctx.get("b4_equipment")):
             x.add("B4")
     if ctx.get("b5") and x & {"A1-A3", "A4", "A5", "C1", "C2", "C3", "C4"}:
         x.add("B5")
@@ -292,7 +292,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.skip("a_stages", sv, "未設定：計算しない（段階が空だとエンジンは 0 を返すため）")
     st_set = set(stages or ())
 
-    ctx = {"b5": False, "b4_material": True, "b4_equipment": True}
+    ctx = {"b5": False, "b4_material": True, "b4_equipment": True, "b1_replacement": True, "route_stages": ["C3", "C4"]}
 
     def missing(fid, stage_list, reason, kind=None, label=None):
         """Record an input that is not obtained and whose stages are inside the boundary (the total is then a lower bound)."""
@@ -306,20 +306,25 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.use("a_reconstruction", rec, "適用外：改修・建替えなし（NONE）として渡した", ["boundary.reconstruction_scenario"])
     else:
         scalar("a_reconstruction", "assessment", "boundary.reconstruction_scenario")
-    ctx["b5"] = _has(rec) and rec.value != "NONE"
-    if ctx["b5"]:
+    rec_active = _has(rec) and rec.value != "NONE"
+    cyc_x, _, _ = _num(V("a_replacement_cycle"))
+    fra_x, _, _ = _num(V("a_recon_fraction"))
+    # B5 can only be affected when a refurbishment / rebuild falls inside the study period and has a non-zero share
+    cyc_in = not isinstance(cyc_x, (int, float)) or period is None or cyc_x < period
+    ctx["b5"] = rec_active and cyc_in and not (isinstance(fra_x, (int, float)) and fra_x == 0)
+    if rec_active:
         # the cycle and the share are passed only when a rebuild / refurbishment is assumed: the engine computes B5 for
         # any scenario other than "NONE", so passing them with an unknown scenario would add a rebuild nobody chose
         scalar("a_replacement_cycle", "assessment", "boundary.replacement_cycle")
         scalar("a_recon_fraction", "assessment", "boundary.reconstruction_scope_fraction")
         if _never("a_replacement_cycle", V("a_replacement_cycle")):
             missing("a_replacement_cycle", ("B5",), "改修・建替えの周期が未取得（エンジンは周期が無いと B5 を数えないが、不完全とは示さない）")
-        if _unknown(V("a_recon_fraction")):
+        if _unknown(V("a_recon_fraction")) and cyc_in:
             missing("a_recon_fraction", ("B5",), "改修の範囲の割合が未取得")
     else:
         for f in ("a_replacement_cycle", "a_recon_fraction"):
             d.skip(f, V(f), "改修・建替えを想定していない（または想定が未取得）ので渡さない")
-        if _unknown(rec):
+        if _unknown(rec) and cyc_in:
             missing("a_reconstruction", ("B5",), "大規模改修・建替えの想定が未取得（B5 は計算できない）")
 
     # ------------------------------------------------------------------ materials
@@ -362,6 +367,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         lives.append(lx_)
     ctx["b4_equipment"] = any(l is None or (isinstance(l, (int, float)) and (period is None or l < period)) for l in lives)
     route_st = {"LANDFILL": ("C4",)}.get(route, ("C3",)) if route else ("C3", "C4")
+    ctx["route_stages"] = list(route_st)
     mat_stages = ("A1-A3", "A4", "C2") + route_st
     wx, wst, _ = _num(common["m_waste_rate"])
     w = 0.0 if wx == "NA" and FL.FIELDS["m_waste_rate"]["na"] == "zero" else (float(wx) if isinstance(wx, (int, float)) else None)
@@ -452,10 +458,14 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         else:
             row.update({"transport.mass_t": None, "transport.distance_km": None, "transport.mode": None,
                         "transport.factor_id": None, "transport.delivery_factor_id": None})
-            why = ("廃棄率が未取得で発注量（運搬する質量）が決まらず、同じ単位の配送原単位も無い"
-                   if kg is not None and ordered_kg is None else "質量・距離・手段がそろわず、同じ単位の配送原単位も無い")
+            if kg is not None and ordered_kg is None:
+                why, cause = "廃棄率が未取得で発注量（運搬する質量）が決まらず、同じ単位の配送原単位も無い", "waste"
+            elif kg is None:
+                why, cause = "数量が %s で質量が分からず（密度を仮定しない）、同じ単位の配送原単位も無い" % qu, "unit"
+            else:
+                why, cause = "運搬距離・手段がそろわず、同じ単位の配送原単位も無い", "inputs"
             d.unconnected.append({"label": label + "の運搬（A4）", "reason": why})
-            no_transport_rows.append(label)
+            no_transport_rows.append((label, cause))
         row["transport.load_factor"] = None
         row["end_of_life.mass_kg"] = installed_kg
         if installed_kg is not None:
@@ -492,12 +502,23 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                              ("a_eol_haul_km", ("C2",), "解体材の運搬距離が未取得")):
             if _never(cf, common[cf]):
                 missing(cf, stg, why, kind="material")
-        if fallback_rows and (_never("m_transport_km", common["m_transport_km"]) or _never("m_transport_mode", common["m_transport_mode"])):
+        if fallback_rows:
+            # the per-quantity delivery factor of the reference set replaces distance × mode × mass: an assumption, so A4
+            # (and what repeats it) is marked as not determined from the inputs
             d.assumed.append("運搬（A4）は %d 行（%s）で参照セットの配送原単位（数量あたり）を使った：運搬距離・手段の入力によるものではない（仮定）"
                              % (len(fallback_rows), "、".join(fallback_rows[:6])))
-        if no_transport_rows:
+            missing("a4_delivery_fallback", ("A4",), "%d 行（%s）は運搬距離・手段ではなく、参照セットの数量あたりの配送原単位で計算した（仮定）"
+                    % (len(fallback_rows), "、".join(fallback_rows[:6])), kind="material", label="運搬（A4）の代わりの原単位")
+        by_cause = {}
+        for lab, cause in no_transport_rows:
+            by_cause.setdefault(cause, []).append(lab)
+        if by_cause.get("inputs"):
             tf = "m_transport_km" if _never("m_transport_km", common["m_transport_km"]) else "m_transport_mode"
-            missing(tf, ("A4",), "運搬を計算できない行がある（%s）" % "、".join(no_transport_rows[:6]), kind="material")
+            missing(tf, ("A4",), "運搬を計算できない行がある（%s）" % "、".join(by_cause["inputs"][:6]), kind="material")
+        if by_cause.get("unit"):
+            missing("a4_no_mass", ("A4",), "数量が体積・面積で質量が分からず、同じ単位の配送原単位も無いので運搬を計算できない（%s）"
+                    % "、".join(by_cause["unit"][:6]), kind="material", label="運搬（A4）：質量の分からない材料")
+        # the "waste" cause is already covered by the waste-rate entry (its stages include A4)
     elif any(_has(V(f[0])) for f in FL.MATERIALS) and route is None:
         d.missing.append("解体後の処理シナリオ（材料の行ごとに必須）")
     for cf in ("m_waste_rate", "m_reuse_rate", "m_repair_rate", "m_refresh_cycle", "m_transport_km", "m_transport_mode",
@@ -630,6 +651,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                "charge_mass_kg": float(x) if x is not None else None, "change_years": None,
                "provenance_id": _prov(st)}
         rzero = x is not None and float(x) == 0.0            # a confirmed zero charge: nothing leaks
+        rl_x, _, _ = _num(V("r_life"))
+        # a replacement (and its loss) happens inside T only with a known life shorter than T, or an unknown life
+        ctx["b1_replacement"] = rl_x is None or (isinstance(rl_x, (int, float)) and (period is None or rl_x < period))
         states = {"charge_mass_kg": st} if st else {}
         if x is None:
             missing("r_charge_kg", ("B1",), "冷媒の充填量が未取得（冷媒を使わないと分かっているときだけ「適用外」）")
@@ -679,7 +703,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                 d.use(k, kv, khow, ["refrigerants[R-1].%s" % F["part"]])
             else:
                 row[F["part"]] = None
-                if x is not None and not rzero:
+                if x is not None and not rzero and not (k == "r_loss_rate" and not ctx["b1_replacement"]):
                     missing(k, ("B1",), "%sが%s" % (F["label"], "適用外（0 にできない項目）" if kx == "NA" else khow))
                 d.skip(k, kv, ("適用外（0 にできない項目）" if kx == "NA" else khow) + "：渡していない（B1 のこの部分は不完全）")
         if row["charge_mass_kg"] is None:
@@ -796,12 +820,11 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         for es, (pid, stype, dq) in PROV_RECORDS.items()]
 
     # ------------------------------------------------------------------ stages that no screen can fill
-    if "C1" in st_set:
-        missing_inputs.append({"field": "end_of_life.demolition_activities", "label": "解体工事（C1）", "stages": ["C1"],
-                               "reason": "解体工事の作業量の入力欄がまだ無いので、C1 は合計に入っていない"})
-    if "A5" in st_set:
-        missing_inputs.append({"field": "construction.waste_streams", "label": "現場の廃棄物（A5 の一部）", "stages": ["A5"],
-                               "reason": "現場の廃棄物の内訳の入力欄がまだ無いので、A5 のその分は合計に入っていない"})
+    # (through the same expansion, so that a rebuild that repeats C1 and A5 is marked as well)
+    missing("end_of_life.demolition_activities", ("C1",), "解体工事の作業量の入力欄がまだ無いので、C1 は合計に入っていない",
+            label="解体工事（C1）")
+    missing("construction.waste_streams", ("A5",), "現場の廃棄物の内訳の入力欄がまだ無いので、A5 のその分は合計に入っていない",
+            label="現場の廃棄物（A5 の一部）")
     # estimates computed for other building data (floor area, use, structure) than the data now sent to the engine
     stale_estimates = []
     for fid, v in values.items():
@@ -810,6 +833,12 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             continue
         diffs = []
         for k, was in dep.items():
+            if k == "b_use_group":                    # only what the estimator used: residential or not
+                cu = V("b_use")
+                now = (("residential" if cu.value == "residential" else "non_residential") if cu is not None and cu.state in HAS_VALUE else None)
+                if now != was:
+                    diffs.append("用途の区分 %s → %s" % (was, now if now is not None else "未取得"))
+                continue
             cur = V(k)
             now = cur.value if cur is not None and cur.state in HAS_VALUE else None
             if now != was and not (isinstance(now, (int, float)) and isinstance(was, (int, float)) and abs(now - was) <= 1e-9 * max(1, abs(was))):
@@ -857,18 +886,21 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         "stages": stages,
         "summary": ("計算に入った %d 項目のうち、統計推定・仮定が %d 項目。" % (n_ref, n_est)
                     + ("推定の割合が大きいので、合計は目安として読む。" if n_ref and n_est / n_ref > 0.3 else "")),
-        "input_hash": input_hash(doc),
+        "input_hash": input_hash(doc, values),
     }
     return doc, report
 
 
-def input_hash(doc: dict) -> str:
-    """Fingerprint of the inputs, without the assessment date (which is today's date and would make every result look
-    stale the next day)."""
+def input_hash(doc: dict, values: dict | None = None) -> str:
+    """Fingerprint of the inputs: the engine document without the assessment date (today's date would make every result
+    look stale the next day), plus the state, value, unit and scope of every field (a change from 適用外 to 未取得 can
+    leave the document identical and still change what is missing)."""
     d = json.loads(json.dumps(doc))
     for c in d["categories"].values():
         c["items"].pop("project.assessment_date", None)
-    return hashlib.sha256(json.dumps(d, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    fields = sorted((k, v.state, json.dumps(v.value, ensure_ascii=False, default=str), v.unit, getattr(v, "scope", ""))
+                    for k, v in (values or {}).items())
+    return hashlib.sha256(json.dumps([d, fields], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
 def reflection_table(report: dict) -> list[dict]:
@@ -891,6 +923,7 @@ def binding_coverage() -> dict:
     binding = json.loads((APP_BASE.parent / "13_INPUT_CLASSIFICATION" / "binding_engine_model_v1.json").read_text(encoding="utf-8"))
     refset = json.loads((APP_BASE / "samples" / "refset_fictional.json").read_text(encoding="utf-8"))
     vals = demo_values()
+    vals["a_reconstruction"] = Value("a_reconstruction", "assumption", "MAJOR_REFURBISHMENT", method="coverage_probe")
     for fid, F in FL.FIELDS.items():            # every field the screens offer, filled once, so that coverage counts
         v = vals.get(fid)                       # what the screens CAN reach (the values themselves do not matter)
         if v is not None and v.state in HAS_VALUE:
