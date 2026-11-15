@@ -7,3 +7,4 @@ python3 -I scripts/recover_staging.py "$1" "$3"/wf_*          # staged outputs a
 python3 -I scripts/transcript_audit.py "$1/trace.jsonl" "$3"/wf_* --manifest registry/execution_manifest.csv   # committed list of executed calls (queries / URLs only)
 python3 -I scripts/merge_staging.py "$1" "$2" "$1/trace.jsonl"
 python3 -I scripts/build_status.py
+python3 -I scripts/build_calc_inventory.py   # calculation ids for every topic (PLANNED until S5)
