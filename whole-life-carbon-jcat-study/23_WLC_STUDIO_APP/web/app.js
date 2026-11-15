@@ -47,12 +47,13 @@ async function renderHome(m) {
   $("#title").textContent = state.meta.app_name;
   const projects = await api("/projects");
   m.innerHTML = `
-  <div class="hero"><img id="hero-img" src="assets/akabeko.jpg" alt="赤べこの置物" onerror="this.onerror=null;this.src='assets/akabeko-placeholder.svg';this.alt='赤べこの写真の差し替え用（プレースホルダー）';document.getElementById('ph').hidden=false">
-    <span class="ph" id="ph" hidden>プレースホルダー画像</span></div>
+  <div class="hero"><img id="hero-img" src="${esc(state.meta.hero.src)}" alt="${esc(state.meta.hero.alt)}">
+    ${state.meta.hero.placeholder ? '<span class="ph" id="ph">プレースホルダー画像（写真は web/assets/akabeko.jpg に置くと表示）</span>' : ""}</div>
   <div class="card lift">
     <h2 style="margin-top:0">建物のホールライフカーボンを、かんたんに</h2>
     <p class="muted">住所から公開データを調べ、足りないところは根拠つきの概算で補い、研究用の 70 評価単位のモデルで計算します。</p>
     <button class="btn primary" id="start">かんたん入力スタート</button>
+    <p class="muted" style="margin:10px 0 0">試しに見るなら：<button class="btn small" id="demo">架空デモを開く</button>（実在の建物ではありません）</p>
   </div>
   <div class="notice">${esc(state.meta.disclaimer)}</div>
   <div class="card"><h3 style="margin-top:0">続きから</h3>${projects.length ? projects.map((p) => `
@@ -60,6 +61,7 @@ async function renderHome(m) {
       <div><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.structure_label)}・入力 ${p.progress.filled}/${p.progress.total}（${p.progress.percent}%）</span></div>
       <button class="btn small" data-open="${p.id}">開く</button></div>`).join("") : '<p class="muted">まだプロジェクトはありません。</p>'}</div>`;
   $("#start").onclick = () => go("structures");
+  $("#demo").onclick = async () => { const r = await api("/demo", { method: "POST", body: {} }); await loadProject(r.id); go("hub"); };
   m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = async () => { await loadProject(+b.dataset.open); go("hub"); }));
 }
 
@@ -256,14 +258,19 @@ function showResult(r) {
   <div class="card"><div class="muted">ホールライフカーボン（評価期間 ${r.period} 年）</div>
     <div class="big">${s.total_t === null ? "未計算" : s.total_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " tCO2e"}</div>
     <div class="muted">${s.complete ? "" : "不完全（エンジンが一部を合計できなかった）・"}延床面積あたり ${fmt(s.per_area, "kgCO2e/m²")}・年あたり ${fmt(s.per_area_year, "kgCO2e/(m²·年)")}</div>
-    <div class="notice">${esc(r.factor_note)}</div></div>
+    ${r.range ? `<div class="muted">範囲：${r.range.low_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} 〜 ${r.range.high_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} tCO2e（${esc(r.range.note)}）</div>` : ""}
+    <div class="notice">${esc(r.factor_note)}</div>
+    ${s.lower_bound ? `<div class="notice bad">この合計は<strong>少なめ（下限）</strong>の可能性があります：${(r.missing_materials || []).length ? "未取得の材料 " + r.missing_materials.length + " 種（" + esc(r.missing_materials.slice(0, 6).join("、")) + "）は合計に入っていません。" : ""}${s.complete ? "" : "エンジンが一部の単位を合計できませんでした（" + esc(s.incomplete_units.join("、")) + "）。"}</div>` : ""}
+    ${(r.double_count || []).map((x) => `<div class="notice">二重計上の防止：${esc(x)}</div>`).join("")}</div>
   <div class="card"><h3 style="margin-top:0">推定値の影響</h3><p>${esc(r.reflection.summary)}</p>
     <table class="t"><tr><th>状態</th><th>計算に入った入力</th></tr>${Object.entries(r.reflection.by_state).map(([k, n]) => `<tr><td>${badge(k)}</td><td class="num">${n}</td></tr>`).join("")}</table></div>
   <div class="card"><h3 style="margin-top:0">段階別</h3><table class="t">${s.stages.map((x) => `<tr><td>${esc(x.stage)}</td>
-    <td style="width:45%"><div class="bar" style="width:${Math.max(1, Math.abs(x.value || 0) / maxStage * 100)}%"></div></td><td class="num">${fmt(x.value, "")}</td></tr>`).join("")}</table>
+    <td style="width:45%"><div class="bar" style="width:${Math.max(1, Math.abs(x.value || 0) / maxStage * 100)}%"></div></td><td class="num">${fmt(x.value, "")}${x.complete ? "" : ' <span class="badge st-not_computable">不完全</span>'}</td></tr>`).join("")}</table>
+    ${(s.hints || []).length ? `<h4>不完全な段階を埋めるには</h4><ul>${s.hints.map((h) => `<li><strong>${esc(h.stage)}</strong>（${esc(h.unit)}）：${esc(h.note)}</li>`).join("")}</ul>` : ""}
     <p class="muted">単位 kgCO2e。出所：エンジンの結果のキー（${esc(s.source_keys)}）。</p></div>
   <div class="card"><h3 style="margin-top:0">時間の変化</h3>${curve(s.by_year)}<p class="muted">年ごとの排出（研究のモデルの X-07）。評価期間の関数 C(T) の傾きを、そのまま実際の排出率と読まないでください。</p></div>
   ${missingHtml(r)}
+  ${checksHtml(r.checks)}
   <div class="card"><h3 style="margin-top:0">計算の記録</h3><table class="t">${Object.entries(r.trace).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("")}</table></div>`;
 }
 
@@ -271,6 +278,13 @@ function missingHtml(r) {
   const u = r.unconnected || [], miss = r.missing_required || [];
   return `${miss.length ? `<div class="card"><h3 style="margin-top:0">計算に必須で足りない入力</h3><ul>${miss.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
   <div class="card"><h3 style="margin-top:0">計算に反映されない入力（${u.length} 件）</h3>${u.length ? `<ul>${u.slice(0, 40).map((x) => `<li>${esc(x.label)}：${esc(x.reason)}</li>`).join("")}</ul>` : '<p class="muted">ありません</p>'}</div>`;
+}
+
+function checksHtml(checks) {
+  if (!checks || !checks.length) return "";
+  return `<div class="card"><h3 style="margin-top:0">エンジンの点検</h3><table class="t"><tr><th>点検</th><th>結果</th><th>例</th></tr>${checks.map((c) => `<tr><td>${esc(c.id)}</td>
+    <td>${c.ok === true ? "問題なし" : c.ok === false ? "指摘 " + c.n_violations + " 件" : "—"}</td><td class="muted">${esc((c.examples || []).join("、"))}</td></tr>`).join("")}</table>
+    <p class="muted">SYS-01 は値の状態（実測・推定・明示のゼロ・欠損・導出）を数え、欠損を一覧にします。欠損は 0 として計算していません。</p></div>`;
 }
 
 function curve(rows) {

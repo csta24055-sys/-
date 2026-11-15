@@ -12,7 +12,7 @@ import datetime as _dt
 from .provenance import Value
 from .sources.plateau import USAGE_HINT
 
-STRUCTURE_WORDS = {"RC": ("鉄筋コンクリート",), "SRC": ("鉄骨鉄筋",), "S": ("鉄骨造", "軽量鉄骨"), "W": ("木造",)}
+STRUCTURE_WORDS = {"SRC": ("鉄骨鉄筋",), "RC": ("鉄筋コンクリート",), "S": ("鉄骨造", "軽量鉄骨"), "W": ("木造",)}
 
 
 def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value], list[str]]:
@@ -36,7 +36,15 @@ def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value
                          note="bldg:measuredHeight（計測高さ。設計の高さと違うことがある）", **kw))
     if c.get("address"):
         out.append(Value("b_address", "confirmed", c["address"], "", method="plateau_attribute", note="bldg:address", **kw))
-    if c.get("estimated_gross_floor_area_m2"):
+    tfa = c.get("total_floor_area_m2")
+    if tfa and 0 < tfa < 1e7:
+        out.append(Value("b_gfa", "confirmed", round(float(tfa), 2), "m2", method="plateau_attribute",
+                         note="uro:totalFloorArea（都市計画基礎調査などの記録。自治体によって無い）", **kw))
+    yc = c.get("year_of_construction")
+    if yc and 1868 <= yc <= 2200:
+        out.append(Value("b_completion_year", "confirmed", int(yc), "年", method="plateau_attribute",
+                         note="bldg:yearOfConstruction", **kw))
+    if c.get("estimated_gross_floor_area_m2") and not (tfa and tfa > 0):
         out.append(Value("b_gfa", "assumption", c["estimated_gross_floor_area_m2"], "m2", method="plateau_roof_x_storeys",
                          note="屋根伏面積 %.1f m2 × 地上階数 %s × 延べ面積換算係数 %s。延床面積の記録ではない（仮定）。"
                               % (c["roof_edge_area_m2"], c["storeys_above"], c["floor_area_factor"]), **kw))
@@ -48,7 +56,7 @@ def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value
                          note="PLATEAU の用途「%s」からの対応（用途の分類が違うので確認する）" % c["usage"], **kw))
     elif c.get("usage"):
         notes.append("PLATEAU の用途「%s」はエンジンの用途に対応づけていない" % c["usage"])
-    code = str(c.get("structure_code") or "")
+    code = str(c.get("structure_type") or c.get("structure_code") or "")
     if code:
         guess = next((s for s, words in STRUCTURE_WORDS.items() if any(w in code for w in words)), None)
         notes.append("PLATEAU の建物構造コード：%s%s" % (code, "" if guess is None else "（%s 造の手掛かり）" % guess))
@@ -56,5 +64,6 @@ def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value
             notes.append("選んだ構造（%s）と PLATEAU の手掛かり（%s）が違う。図面で確かめる" % (structure_chosen, guess))
     else:
         notes.append("PLATEAU にこの建物の構造の記録が無い（構造は選んだものを使う）")
-    notes.append("竣工年は PLATEAU から取っていない。")
+    if not (yc and 1868 <= yc <= 2200):
+        notes.append("この建物には PLATEAU の建築年の記録が無い。")
     return out, notes

@@ -1,0 +1,501 @@
+{
+ "meta": {
+  "generated": "2026-11-15",
+  "test_data": "mirdb_v1_2",
+  "min_pool": 5,
+  "fictional_weights_for_proxy": {
+   "concrete": 0.07301874464486136,
+   "steel": 0.2709549434621531,
+   "wood": 0.6929409073122709
+  },
+  "target": "share of buildings with APE ≤ 10 % ≥ 0.90 (stretch 0.95)"
+ },
+ "japan": {
+  "holdout": {
+   "concrete": {
+    "n": 23,
+    "share_ape_le_10": 0.34782608695652173,
+    "share_ape_le_5": 0.17391304347826086,
+    "median_ape": 0.21073431237864076,
+    "p90_ape": 1.9425893839158106,
+    "p95_ape": 2.190967385840708,
+    "bias_median_signed": 0.07737048963282937,
+    "coverage_p5_p95": 0.9130434782608695,
+    "n_with_range": 23
+   },
+   "steel": {
+    "n": 23,
+    "share_ape_le_10": 0.08695652173913043,
+    "share_ape_le_5": 0.0,
+    "median_ape": 0.8867924528301887,
+    "p90_ape": 11.05,
+    "p95_ape": 11.05,
+    "bias_median_signed": -0.21045577098214277,
+    "coverage_p5_p95": 0.34782608695652173,
+    "n_with_range": 23
+   },
+   "wood": {
+    "n": 17,
+    "share_ape_le_10": 0.17647058823529413,
+    "share_ape_le_5": 0.11764705882352941,
+    "median_ape": 0.3735498839907193,
+    "p90_ape": 0.4213430301496599,
+    "p95_ape": 0.4674150247006143,
+    "bias_median_signed": -0.1840738595454545,
+    "coverage_p5_p95": 0.8823529411764706,
+    "n_with_range": 17
+   },
+   "total_mass": {
+    "n": 17,
+    "share_ape_le_10": 0.11764705882352941,
+    "share_ape_le_5": 0.0,
+    "median_ape": 0.4324972368722098,
+    "p90_ape": 1.4680545840051038,
+    "p95_ape": 2.240158459290604,
+    "bias_median_signed": 0.1361248580614657,
+    "coverage_p5_p95": 0.8823529411764706,
+    "n_with_range": 17
+   },
+   "a13_proxy_fictional_factors": {
+    "n": 17,
+    "share_ape_le_10": 0.058823529411764705,
+    "share_ape_le_5": 0.0,
+    "median_ape": 0.3947241691552967,
+    "p90_ape": 0.5766241595487765,
+    "p95_ape": 0.6512307493381948,
+    "bias_median_signed": 0.12925913786248353,
+    "coverage_p5_p95": null,
+    "n_with_range": 0
+   }
+  },
+  "rasmi_in_sample": {
+   "concrete": {
+    "n": 23,
+    "share_ape_le_10": 0.30434782608695654,
+    "share_ape_le_5": 0.17391304347826086,
+    "median_ape": 0.42507227419918464,
+    "p90_ape": 1.687531306162549,
+    "p95_ape": 1.914380373036761,
+    "bias_median_signed": 0.055528788952416655,
+    "coverage_p5_p95": 0.9130434782608695,
+    "n_with_range": 23
+   },
+   "steel": {
+    "n": 31,
+    "share_ape_le_10": 0.3870967741935484,
+    "share_ape_le_5": 0.3870967741935484,
+    "median_ape": 0.2088607594936709,
+    "p90_ape": 0.8679245283018868,
+    "p95_ape": 0.8883125000000001,
+    "bias_median_signed": 0.0,
+    "coverage_p5_p95": 0.8709677419354839,
+    "n_with_range": 31
+   },
+   "wood": {
+    "n": 23,
+    "share_ape_le_10": 0.6086956521739131,
+    "share_ape_le_5": 0.5217391304347826,
+    "median_ape": 0.018525643698630065,
+    "p90_ape": 0.4298533074999999,
+    "p95_ape": 0.5086411428112243,
+    "bias_median_signed": 0.0,
+    "coverage_p5_p95": 0.9565217391304348,
+    "n_with_range": 23
+   }
+  },
+  "mlit_external": {
+   "steel": {
+    "n": 31,
+    "share_ape_le_10": 0.25806451612903225,
+    "share_ape_le_5": 0.1935483870967742,
+    "median_ape": 0.7484246591600017,
+    "p90_ape": 2.3333732661299784,
+    "p95_ape": 2.3333732661299784,
+    "bias_median_signed": 0.17039028637589398,
+    "coverage_p5_p95": null,
+    "n_with_range": 0
+   }
+  },
+  "holdout_by_pool_level": {
+   "OECD": {
+    "n": 32,
+    "share_ape_le_10": 0.125,
+    "share_ape_le_5": 0.09375,
+    "median_ape": 0.38640598636752144,
+    "p90_ape": 0.9490773762162161,
+    "p95_ape": 2.190967385840708,
+    "bias_median_signed": -0.11356172395061721,
+    "coverage_p5_p95": 0.90625,
+    "n_with_range": 32
+   },
+   "世界": {
+    "n": 6,
+    "share_ape_le_10": 0.8333333333333334,
+    "share_ape_le_5": 0.3333333333333333,
+    "median_ape": 0.06720836702813492,
+    "p90_ape": 0.1452183863841256,
+    "p95_ape": 0.17797634938138318,
+    "bias_median_signed": 0.04153054390915662,
+    "coverage_p5_p95": 1.0,
+    "n_with_range": 6
+   },
+   "日本": {
+    "n": 25,
+    "share_ape_le_10": 0.16,
+    "share_ape_le_5": 0.04,
+    "median_ape": 0.8760330578512396,
+    "p90_ape": 11.05,
+    "p95_ape": 11.05,
+    "bias_median_signed": -0.07954545454545454,
+    "coverage_p5_p95": 0.36,
+    "n_with_range": 25
+   }
+  },
+  "holdout_by_structure_material": {
+   "RC/concrete": {
+    "n": 4,
+    "share_ape_le_10": 0.0,
+    "share_ape_le_5": 0.0,
+    "median_ape": 0.4398330083284799,
+    "p90_ape": 0.472107728639645,
+    "p95_ape": 0.4790237401348946,
+    "bias_median_signed": -0.4398330083284799,
+    "coverage_p5_p95": 1.0,
+    "n_with_range": 4
+   },
+   "RC/steel": {
+    "n": 6,
+    "share_ape_le_10": 0.16666666666666666,
+    "share_ape_le_5": 0.0,
+    "median_ape": 0.2374547559173356,
+    "p90_ape": 0.8907224889347457,
+    "p95_ape": 0.9000635408173728,
+    "bias_median_signed": -0.2374547559173356,
+    "coverage_p5_p95": 0.6666666666666666,
+    "n_with_range": 6
+   },
+   "RC/wood": {
+    "n": 4,
+    "share_ape_le_10": 0.0,
+    "share_ape_le_5": 0.0,
+    "median_ape": 0.3920138888888889,
+    "p90_ape": 0.3920138888888889,
+    "p95_ape": 0.3920138888888889,
+    "bias_median_signed": -0.3920138888888889,
+    "coverage_p5_p95": 1.0,
+    "n_with_range": 4
+   },
+   "S/concrete": {
+    "n": 6,
+    "share_ape_le_10": 0.8333333333333334,
+    "share_ape_le_5": 0.3333333333333333,
+    "median_ape": 0.06720836702813492,
+    "p90_ape": 0.1452183863841256,
+    "p95_ape": 0.17797634938138318,
+    "bias_median_signed": 0.04153054390915662,
+    "coverage_p5_p95": 1.0,
+    "n_with_range": 6
+   },
+   "W/concrete": {
+    "n": 13,
+    "share_ape_le_10": 0.23076923076923078,
+    "share_ape_le_5": 0.15384615384615385,
+    "median_ape": 0.6389968845454544,
+    "p90_ape": 2.190967385840708,
+    "p95_ape": 29.760925599504326,
+    "bias_median_signed": 0.15570293141025632,
+    "coverage_p5_p95": 0.8461538461538461,
+    "n_with_range": 13
+   },
+   "W/steel": {
+    "n": 17,
+    "share_ape_le_10": 0.058823529411764705,
+    "share_ape_le_5": 0.0,
+    "median_ape": 5.885714285714286,
+    "p90_ape": 11.05,
+    "p95_ape": 18.279999999999976,
+    "bias_median_signed": 5.885714285714286,
+    "coverage_p5_p95": 0.23529411764705882,
+    "n_with_range": 17
+   },
+   "W/wood": {
+    "n": 13,
+    "share_ape_le_10": 0.23076923076923078,
+    "share_ape_le_5": 0.15384615384615385,
+    "median_ape": 0.1840738595454545,
+    "p90_ape": 0.448429010401884,
+    "p95_ape": 0.46949330736041217,
+    "bias_median_signed": -0.11356172395061721,
+    "coverage_p5_p95": 0.8461538461538461,
+    "n_with_range": 13
+   }
+  },
+  "n_test_buildings": 31
+ },
+ "oecd": {
+  "holdout": {
+   "concrete": {
+    "n": 324,
+    "share_ape_le_10": 0.11728395061728394,
+    "share_ape_le_5": 0.06790123456790123,
+    "median_ape": 0.4442928894100254,
+    "p90_ape": 1.2684517304507041,
+    "p95_ape": 3.2948876630086783,
+    "bias_median_signed": -0.10995187754545456,
+    "coverage_p5_p95": 0.8333333333333334,
+    "n_with_range": 324
+   },
+   "steel": {
+    "n": 266,
+    "share_ape_le_10": 0.06766917293233082,
+    "share_ape_le_5": 0.03383458646616541,
+    "median_ape": 0.6311444126579332,
+    "p90_ape": 10.218535815281616,
+    "p95_ape": 23.628745913190556,
+    "bias_median_signed": 0.1836823578357553,
+    "coverage_p5_p95": 0.5526315789473685,
+    "n_with_range": 266
+   },
+   "wood": {
+    "n": 287,
+    "share_ape_le_10": 0.12195121951219512,
+    "share_ape_le_5": 0.07317073170731707,
+    "median_ape": 0.4797743380291971,
+    "p90_ape": 3.4156249994480468,
+    "p95_ape": 7.9669959849285155,
+    "bias_median_signed": 0.09657823987313442,
+    "coverage_p5_p95": 0.7909407665505227,
+    "n_with_range": 287
+   },
+   "total_mass": {
+    "n": 225,
+    "share_ape_le_10": 0.10222222222222223,
+    "share_ape_le_5": 0.06666666666666667,
+    "median_ape": 0.3710461324352855,
+    "p90_ape": 1.0292445659094933,
+    "p95_ape": 1.4093107591602214,
+    "bias_median_signed": -0.1929705777963301,
+    "coverage_p5_p95": 0.8977777777777778,
+    "n_with_range": 225
+   },
+   "a13_proxy_fictional_factors": {
+    "n": 225,
+    "share_ape_le_10": 0.2577777777777778,
+    "share_ape_le_5": 0.14666666666666667,
+    "median_ape": 0.2375994016216417,
+    "p90_ape": 0.718988204063316,
+    "p95_ape": 0.9757871303771072,
+    "bias_median_signed": -0.03391596456679356,
+    "coverage_p5_p95": null,
+    "n_with_range": 0
+   }
+  },
+  "rasmi_in_sample": {
+   "concrete": {
+    "n": 326,
+    "share_ape_le_10": 0.19325153374233128,
+    "share_ape_le_5": 0.09202453987730061,
+    "median_ape": 0.32365607281265785,
+    "p90_ape": 1.65015123505,
+    "p95_ape": 4.208663849514822,
+    "bias_median_signed": -0.004799519527385609,
+    "coverage_p5_p95": 0.8834355828220859,
+    "n_with_range": 326
+   },
+   "steel": {
+    "n": 275,
+    "share_ape_le_10": 0.11272727272727273,
+    "share_ape_le_5": 0.08363636363636363,
+    "median_ape": 0.5632399118723488,
+    "p90_ape": 5.804022431861588,
+    "p95_ape": 17.09129609419568,
+    "bias_median_signed": 0.16326530612244897,
+    "coverage_p5_p95": 0.8218181818181818,
+    "n_with_range": 275
+   },
+   "wood": {
+    "n": 297,
+    "share_ape_le_10": 0.18518518518518517,
+    "share_ape_le_5": 0.10774410774410774,
+    "median_ape": 0.3698951526271187,
+    "p90_ape": 3.600018747192717,
+    "p95_ape": 6.5,
+    "bias_median_signed": 0.006582632187490554,
+    "coverage_p5_p95": 0.9057239057239057,
+    "n_with_range": 297
+   }
+  },
+  "mlit_external": {
+   "steel": {
+    "n": 275,
+    "share_ape_le_10": 0.08363636363636363,
+    "share_ape_le_5": 0.06545454545454546,
+    "median_ape": 1.4215038041887382,
+    "p90_ape": 13.855428187563767,
+    "p95_ape": 29.47487255272619,
+    "bias_median_signed": 1.4215038041887382,
+    "coverage_p5_p95": null,
+    "n_with_range": 0
+   }
+  },
+  "holdout_by_pool_level": {
+   "OECD": {
+    "n": 445,
+    "share_ape_le_10": 0.0853932584269663,
+    "share_ape_le_5": 0.05393258426966292,
+    "median_ape": 0.6130017279097356,
+    "p90_ape": 3.4156249994480468,
+    "p95_ape": 8.395494146259397,
+    "bias_median_signed": -0.00989413060000004,
+    "coverage_p5_p95": 0.7797752808988764,
+    "n_with_range": 445
+   },
+   "世界": {
+    "n": 12,
+    "share_ape_le_10": 0.4166666666666667,
+    "share_ape_le_5": 0.16666666666666666,
+    "median_ape": 0.16050963708269267,
+    "p90_ape": 17.729249612919634,
+    "p95_ape": 21.514299476206077,
+    "bias_median_signed": 0.14521838638412557,
+    "coverage_p5_p95": 0.6666666666666666,
+    "n_with_range": 12
+   },
+   "日本": {
+    "n": 420,
+    "share_ape_le_10": 0.11428571428571428,
+    "share_ape_le_5": 0.06190476190476191,
+    "median_ape": 0.44971762272419635,
+    "p90_ape": 3.1560680092633486,
+    "p95_ape": 11.05,
+    "bias_median_signed": 0.0005830207115682295,
+    "coverage_p5_p95": 0.6880952380952381,
+    "n_with_range": 420
+   }
+  },
+  "holdout_by_structure_material": {
+   "RC/concrete": {
+    "n": 171,
+    "share_ape_le_10": 0.1286549707602339,
+    "share_ape_le_5": 0.07602339181286549,
+    "median_ape": 0.4045203659598507,
+    "p90_ape": 1.121897280248373,
+    "p95_ape": 1.6225581634627573,
+    "bias_median_signed": 0.009148254166362597,
+    "coverage_p5_p95": 0.847953216374269,
+    "n_with_range": 171
+   },
+   "RC/steel": {
+    "n": 135,
+    "share_ape_le_10": 0.06666666666666667,
+    "share_ape_le_5": 0.037037037037037035,
+    "median_ape": 0.5775337435827695,
+    "p90_ape": 1.8156718233441096,
+    "p95_ape": 3.122289766970618,
+    "bias_median_signed": 0.03571428571428571,
+    "coverage_p5_p95": 0.5555555555555556,
+    "n_with_range": 135
+   },
+   "RC/wood": {
+    "n": 140,
+    "share_ape_le_10": 0.04285714285714286,
+    "share_ape_le_5": 0.02142857142857143,
+    "median_ape": 0.905119808624471,
+    "p90_ape": 8.621354164939286,
+    "p95_ape": 13.070300873742541,
+    "bias_median_signed": 0.07208984374999998,
+    "coverage_p5_p95": 0.7571428571428571,
+    "n_with_range": 140
+   },
+   "S/concrete": {
+    "n": 13,
+    "share_ape_le_10": 0.46153846153846156,
+    "share_ape_le_5": 0.23076923076923078,
+    "median_ape": 0.21073431237864076,
+    "p90_ape": 2.896866710472009,
+    "p95_ape": 3.488576784271774,
+    "bias_median_signed": 0.07970246038961039,
+    "coverage_p5_p95": 0.6153846153846154,
+    "n_with_range": 13
+   },
+   "S/steel": {
+    "n": 4,
+    "share_ape_le_10": 0.0,
+    "share_ape_le_5": 0.0,
+    "median_ape": 9.864504556878483,
+    "p90_ape": 22.739983341856277,
+    "p95_ape": 23.475393661246393,
+    "bias_median_signed": 9.864504556878483,
+    "coverage_p5_p95": 0.25,
+    "n_with_range": 4
+   },
+   "S/wood": {
+    "n": 1,
+    "share_ape_le_10": 0.0,
+    "share_ape_le_5": 0.0,
+    "median_ape": 6.333333333333333,
+    "p90_ape": 6.333333333333333,
+    "p95_ape": 6.333333333333333,
+    "bias_median_signed": 6.333333333333333,
+    "coverage_p5_p95": 0.0,
+    "n_with_range": 1
+   },
+   "W/concrete": {
+    "n": 140,
+    "share_ape_le_10": 0.07142857142857142,
+    "share_ape_le_5": 0.04285714285714286,
+    "median_ape": 0.5166797024389054,
+    "p90_ape": 2.4352596315062094,
+    "p95_ape": 6.484986571086354,
+    "bias_median_signed": -0.36620183180801746,
+    "coverage_p5_p95": 0.8357142857142857,
+    "n_with_range": 140
+   },
+   "W/steel": {
+    "n": 127,
+    "share_ape_le_10": 0.07086614173228346,
+    "share_ape_le_5": 0.031496062992125984,
+    "median_ape": 0.8220222022075284,
+    "p90_ape": 22.968716028986567,
+    "p95_ape": 39.41862002031971,
+    "bias_median_signed": 0.20937598956488482,
+    "coverage_p5_p95": 0.5590551181102362,
+    "n_with_range": 127
+   },
+   "W/wood": {
+    "n": 146,
+    "share_ape_le_10": 0.19863013698630136,
+    "share_ape_le_5": 0.1232876712328767,
+    "median_ape": 0.2696455118305682,
+    "p90_ape": 0.6198967692045454,
+    "p95_ape": 0.703284573643193,
+    "bias_median_signed": 0.11164197203268722,
+    "coverage_p5_p95": 0.8287671232876712,
+    "n_with_range": 146
+   }
+  },
+  "n_test_buildings": 348
+ },
+ "holdout": {
+  "n": 17,
+  "share_ape_le_10": 0.11764705882352941,
+  "share_ape_le_5": 0.0,
+  "median_ape": 0.4324972368722098,
+  "p90_ape": 1.4680545840051038,
+  "p95_ape": 2.240158459290604,
+  "bias_median_signed": 0.1361248580614657,
+  "coverage_p5_p95": 0.8823529411764706,
+  "n_with_range": 17
+ },
+ "rasmi_in_sample": {
+  "n": 23,
+  "share_ape_le_10": 0.30434782608695654,
+  "share_ape_le_5": 0.17391304347826086,
+  "median_ape": 0.42507227419918464,
+  "p90_ape": 1.687531306162549,
+  "p95_ape": 1.914380373036761,
+  "bias_median_signed": 0.055528788952416655,
+  "coverage_p5_p95": 0.9130434782608695,
+  "n_with_range": 23
+ }
+}

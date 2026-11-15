@@ -37,8 +37,10 @@ DISCLAIMER = ("WLC Studio は研究用の試作です。計算の核は独立に
               "いま登録されている原単位は架空（研究用）なので、表示される排出量は実在の建物の値ではありません。")
 PRIVACY = ("入力・資料・住所はこの端末の中（var/）にだけ保存します。住所・座標は自動調査のときだけ国土地理院・PLATEAU に送ります。"
            "資料の原本は、設定で残すと決めたときだけ保存します。プロジェクトを削除すると、その入力・候補・資料の記録も消えます。")
-ATTRIBUTION = ("住所検索・逆ジオコーダ：国土地理院。建物の属性：国土交通省 Project PLATEAU（3D 都市モデル）。"
-               "材料の原単位の統計：RASMI（Fishman ほか, CC BY 4.0）。")
+ATTRIBUTION = ("住所検索・逆ジオコーダ：国土地理院（地理院地図の住所検索・逆ジオコーダ）をもとに WLC Studio が加工。"
+               "建物の属性：国土交通省 PLATEAU（3D 都市モデル、著作権は各地方公共団体）をもとに加工。"
+               "材料の統計：国土交通省「建設資材・労働力需要実態調査」（e-Stat）をもとに作成；RASMI（Fishman ほか 2024, CC BY 4.0）。"
+               "参考値：経済産業省「エネルギー消費統計調査」（e-Stat）。地盤：国土地盤情報検索サイト KuniJiban へのリンクのみ。")
 
 
 class ApiError(Exception):
@@ -142,6 +144,7 @@ class App:
                 "attribution": ATTRIBUTION, "states": LABEL, "state_order": list(STATES),
                 "screens": [{"id": s["id"], "label": s["label"], "groups": s["groups"]} for s in FL.SCREENS],
                 "fields": FL.meta_fields(), "structures": FL.STRUCTURES, "priority": FL.PRIORITY,
+                "hero": _hero(),
                 "refset": {"name": self.refset["name"], "version": self.refset["version"], "data_kind": self.refset["data_kind"]}}
 
     def put_field(self, pid: int, fid: str, b: dict) -> dict:
@@ -218,6 +221,27 @@ class App:
         warnings = r["warnings"] + ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in r["unused"][:8]]
         return {"summary": summary, "warnings": warnings, "n_proposals": len(r["proposals"])}
 
+    def _range(self, vals: dict, T: float, lca_pid: int, pid: int) -> dict | None:
+        """Low / high totals with every value that has a range set to its low / high end (two more engine runs).
+        This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
+        lo_vals, n = _with(vals, "low")
+        if n == 0:
+            return None
+        hi_vals, _ = _with(vals, "high")
+        tot = {}
+        for side, vv in (("low", lo_vals), ("high", hi_vals)):
+            doc, rep = bridge.build(vv, self.refset, title="WLC Studio #%d (%s)" % (pid, side))
+            if rep["missing_required"]:
+                return None
+            r = self.engine.run(doc, lca_pid, T)
+            res = r["results"] or {}
+            tot[side] = ((res.get("SUM-03") or {}).get("value"))
+        if tot["low"] is None or tot["high"] is None:
+            return None
+        a, b = sorted((tot["low"] / 1000.0, tot["high"] / 1000.0))
+        return {"low_t": a, "high_t": b, "n_values_with_range": n,
+                "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n}
+
     def calculate(self, pid: int, period) -> dict:
         T = _float(period)
         if T is None or not (0 < T <= 130):
@@ -230,7 +254,7 @@ class App:
         base = {"period": T, "reflection": {"summary": rep["summary"], "by_state": rep["by_state"]},
                 "unconnected": rep["unconnected"], "missing_required": rep["missing_required"],
                 "missing_materials": rep["missing_materials"], "fields": bridge.reflection_table(rep),
-                "factor_note": _factor_note(self.refset), "notes": rep["notes"]}
+                "factor_note": _factor_note(self.refset), "notes": rep["notes"], "double_count": rep["double_count"]}
         if rep["missing_required"]:
             out = dict(base, status="blocked", message="計算に必須の入力が足りないので計算していない（%s）" % "、".join(rep["missing_required"]),
                        summary=None, trace=trace)
@@ -250,8 +274,36 @@ class App:
         else:
             out = dict(base, status="ok", message="", summary=_summary(r["results"], run.get("view") or {}, rep), trace=trace,
                        checks=_checks(r["results"]))
+            out["range"] = self._range(vals, T, r["lca_project_id"], pid)
         self.projects.save_run(pid, run["id"], rep["input_hash"], T, out["status"], out)
         return out
+
+
+def _hero() -> dict:
+    """The home-screen photo: the user's own akabeko photo if one was placed in web/assets, else the placeholder.
+    The app never pretends a photo exists (implementation directive 1)."""
+    for name in ("akabeko.jpg", "akabeko.jpeg", "akabeko.png", "akabeko.webp"):
+        if (WEB / "assets" / name).is_file():
+            return {"src": "assets/" + name, "alt": "赤べこの写真", "placeholder": False}
+    return {"src": "assets/akabeko-placeholder.svg", "alt": "赤べこの写真の差し替え用の絵（プレースホルダー）", "placeholder": True}
+
+
+def _with(vals: dict, side: str) -> tuple[dict, int]:
+    """The values with every numeric interval/scenario replaced by its low or high end (the others unchanged)."""
+    out, n = {}, 0
+    for fid, v in vals.items():
+        u = v.uncertainty
+        if v.state in ("statistical", "assumption", "from_drawing") and u.kind in ("interval", "scenario") \
+                and isinstance(v.value, (int, float)) and not isinstance(v.value, bool):
+            w = Value.from_json(v.to_json())
+            w.value = float(u.low if side == "low" else u.high)
+            if FL.FIELDS[fid]["type"] == "integer":
+                w.value = int(round(w.value))
+            out[fid] = w
+            n += 1
+        else:
+            out[fid] = v
+    return out, n
 
 
 def _factor_note(refset: dict) -> str:
@@ -261,10 +313,43 @@ def _factor_note(refset: dict) -> str:
     return "原単位セット %s / %s（利用許諾の記録あり）。" % (refset["name"], refset["version"])
 
 
+# engine unit -> stage it counts in (specs/system.py COMP and its feeders) and the screen fields that usually complete it
+UNIT_STAGE = {"A13-01": "A1-A3", "A13-03": "A1-A3", "A13-04": "A1-A3", "X-01": "A1-A3", "A13-05": "A1-A3",
+              "A4-01": "A4", "A4-02": "A4", "A5-01": "A5", "A5-02": "A5", "A5-03": "A5", "A5-04": "A5",
+              "B1-02": "B1", "B1-03": "B1", "B1-04": "B1", "B2-01": "B2", "B3-01": "B3", "B4-02": "B4", "B5-01": "B5",
+              "B6-01": "B6", "B6-02": "B6", "B6-03": "B6", "B6-04": "B6", "X-06": "B6", "B7-01": "B7", "B7-02": "B7",
+              "B7-03": "B7", "B7-04": "B7", "C1-01": "C1", "C2-01": "C2", "C3-01": "C3", "X-14": "C3", "C4-01": "C4"}
+UNIT_HINTS = {
+    "A13-01": ["m_waste_rate", "m_quantity_basis"], "A4-01": ["m_transport_km", "m_transport_mode"],
+    "A5-01": ["c_site_electricity", "o_grid_construction"], "A5-02": ["c_diesel"],
+    "B1-02": ["r_leak_rate", "r_gwp"], "B1-03": ["r_loss_rate", "r_life"], "B1-04": ["r_recovery_rate", "r_top_up"],
+    "B2-01": ["o_fm_ratio"], "B3-01": ["m_repair_rate", "e_repair_rate"], "B4-02": ["m_refresh_cycle", "e_hvac_life", "e_electrical_life"],
+    "B5-01": ["a_reconstruction", "a_replacement_cycle", "a_recon_fraction"],
+    "B6-01": ["o_elec_kwh", "o_pv_kwh", "o_export_kwh"], "B6-02": ["o_gas_m3", "o_oil_l", "o_dheat_mj"],
+    "C1-01": [], "C2-01": ["a_eol_haul_km"], "C3-01": ["a_eol_route"], "C4-01": ["a_eol_route"],
+    "X-14": ["e_hvac_mass", "e_electrical_mass"]}
+
+
+def _hints(incomplete: list[str], rep: dict) -> list[dict]:
+    """For each incomplete unit: which inputs of the screens are still not obtained (the likely cause)."""
+    state = {f["field"]: f["state"] for f in rep["fields"]}
+    out = []
+    for u in incomplete:
+        cand = [f for f in UNIT_HINTS.get(u, []) if state.get(f, "not_obtained") in ("not_obtained", "not_computable")]
+        out.append({"unit": u, "stage": UNIT_STAGE.get(u, "—"),
+                    "fields": [{"field": f, "label": FL.FIELDS[f]["label"]} for f in cand],
+                    "note": ("未取得の入力：" + "、".join(FL.FIELDS[f]["label"] for f in cand) + "（無いものは「適用外」にする）") if cand
+                    else "材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）"})
+    return out
+
+
 def _summary(res: dict, view: dict, rep: dict) -> dict:
     s3 = res.get("SUM-03") or {}
     x2 = res.get("X-02") or {}
-    stages = [{"stage": k, "value": v} for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
+    inc = x2.get("incomplete_units") or []
+    bad_stages = {UNIT_STAGE.get(u) for u in inc}
+    stages = [{"stage": k, "value": v, "complete": k not in bad_stages}
+              for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
     x7 = res.get("X-07") or {}
     by_year = x7.get("by_year") or []
     start = None
@@ -275,7 +360,7 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
     total = s3.get("value")
     return {"total_kg": total, "total_t": None if total is None else total / 1000.0,
             "per_area": (res.get("SUM-04") or {}).get("value"), "per_area_year": (res.get("SUM-05") or {}).get("value"),
-            "complete": bool(s3.get("complete")), "incomplete_units": x2.get("incomplete_units") or [],
+            "complete": bool(s3.get("complete")), "incomplete_units": inc, "hints": _hints(inc, rep),
             "stages": stages, "by_year": rows, "year_axis": "評価期間の年（1 年目〜）",
             "source_keys": "SUM-03.value、X-02.by_stage、X-07.by_year、SUM-04/05.value",
             "lower_bound": bool(rep["missing_materials"]) or not s3.get("complete")}
@@ -307,7 +392,8 @@ def _float(x):
 
 
 # ---------------------------------------------------------------------------------------------- HTTP
-CSP = ("default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; "
+# style attributes are set by the page (bar widths); scripts stay strictly same-origin (no inline script)
+CSP = ("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; "
        "frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
 
 

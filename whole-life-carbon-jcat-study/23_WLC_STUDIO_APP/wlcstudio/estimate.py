@@ -8,13 +8,22 @@ Only one estimator is connected to real data today:
              not a calibrated prediction interval for one building: it is shown as 「仮の範囲」 unless validate.py measured
              its coverage on held-out buildings (the measured coverage is quoted in the note).
 
-Equipment counts, operational energy and water have no permitted statistical source connected yet; the estimator says
-so instead of inventing per-m2 coefficients (implementation directive: 「ソースのない具体的な係数を生成しない」).
+  materials  q = u_s × A_floor / 10 for 生コンクリート (m3), 鋼材 (t), 木材 (m3), from 国土交通省「建設資材・労働力需要実態調査
+             【建築部門】」令和6年度（令和5年度工事）面積原単位（延べ床面積 10 m2 当たり、全国、構造別）, e-Stat (政府標準利用規約 2.0,
+             CC BY 4.0 compatible). A national mean has no spread, so the range shown is the RASMI relative spread (p5/p50, p95/p50)
+             of the matching function × structure applied to this mean — stated as such, and 「仮の範囲」.
+  operation  only a reference figure (not a candidate): 経済産業省「エネルギー消費統計調査」令和6年度 第3表B the energy use per
+             floor area of the matching industry (GJ/m2) with its standard error. The engine needs electricity and gas separately
+             and the table gives the total only, so it is not turned into an input value.
+
+Equipment counts and water have no permitted statistical source connected yet; the estimator says so instead of inventing
+per-m2 coefficients (implementation directive: 「ソースのない具体的な係数を生成しない」).
 """
 from __future__ import annotations
 
 import datetime as _dt
 import json
+import re
 from pathlib import Path
 
 from . import fields as FL
@@ -27,6 +36,14 @@ RASMI_URL = "https://zenodo.org/api/records/10782341/files/MI_ranges_20230905.xl
 RASMI_ID = "rasmi_20230905"
 RASMI_VERSION = "RASMI v20230905-B (zenodo 10782341)"
 VALIDATION = Path(__file__).resolve().parents[1] / "docs" / "validation_results.json"
+MLIT_URL = "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040282146&fileKind=0"
+MLIT_ID = "mlit_shizai_r6"
+MLIT_VERSION = "建設資材・労働力需要実態調査【建築部門】令和6年度（令和5年度工事）面積原単位"
+METI_URL = "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040442517&fileKind=0"
+METI_ID = "meti_energy_r6"
+MLIT_ITEMS = {"生コンクリート": ("m_concrete", "m3", "concrete"), "鋼材": (None, "t", "steel"), "木材": ("m_timber", "m3", "wood")}
+METI_ROWS = {"office": ("業務部門平均", "事務所は業種を決められないので業務部門の平均"), "school": ("学校教育", ""), "hospital": ("医療業", ""),
+             "retail": ("卸売業，小売業", "卸売・小売業の平均"), "warehouse": ("倉庫業", "")}
 
 # RASMI material -> material field (the engine class is given by the field). copper: no engine class.
 RASMI_TO_FIELD = {"concrete": "m_concrete", "brick": "m_masonry", "wood": "m_timber", "glass": "m_glass",
@@ -76,14 +93,79 @@ def load_ranges(data: bytes | None = None) -> dict:
     return out
 
 
-def _coverage_note() -> str:
+_mlit: dict | None = None
+
+
+def load_mlit(data: bytes | None = None) -> dict:
+    """{structure: {item: (value per 10 m2, unit)}} from the 面積原単位 sheet."""
+    global _mlit
+    if _mlit is not None and data is None:
+        return _mlit
+    if data is None:
+        data, _ = get(MLIT_URL, timeout=60, max_age=365 * 86400)
+    out = {}
+    for name, rows in xlsx_sheets(data):
+        if "面積" not in (name or ""):
+            continue
+        head = next((r for r in rows if r and any(str(x or "").startswith("資材") for x in r)), None)
+        if head is None:
+            continue
+        cols = {}
+        for j, h in enumerate(head):
+            m = re.search(r"\((W|SRC|RC|S)\)", str(h or ""))   # 木造(W) / 鉄骨鉄筋ｺﾝｸﾘｰﾄ造(SRC) / 鉄筋ｺﾝｸﾘｰﾄ造(RC) / 鉄骨造(S)
+            if m:
+                cols[m.group(1)] = j
+        for r in rows:
+            item = str(r[1] if len(r) > 1 else "" or "").strip()
+            if item in MLIT_ITEMS:
+                for st, j in cols.items():
+                    try:
+                        out.setdefault(st, {})[item] = (float(r[j]), str(r[2]))
+                    except (TypeError, ValueError, IndexError):
+                        pass
+    if not out:
+        raise SourceError("建設資材・労働力需要実態調査の面積原単位の表を読めなかった（形式が変わった可能性）")
+    _mlit = out
+    return out
+
+
+def load_meti(data: bytes | None = None) -> dict:
+    """{row label: (GJ/m2, standard error)} from sheet ３－B (熱量単位表)."""
+    if data is None:
+        data, _ = get(METI_URL, timeout=60, max_age=365 * 86400)
+    out = {}
+    for name, rows in xlsx_sheets(data):
+        if "B" not in (name or ""):
+            continue
+        for r in rows:
+            if len(r) < 11:
+                continue
+            label = str(r[2] or r[1] or "").strip()
+            for key, _ in METI_ROWS.values():
+                if key in label and key not in out:
+                    try:
+                        out[key] = (float(r[9]), float(r[10]))
+                    except (TypeError, ValueError):
+                        pass
+    return out
+
+
+def _coverage_note(mat: str, method: str = "rasmi") -> str:
+    """The coverage of the 5–95 % range measured by validate.py for this material (Japanese buildings), if any."""
     try:
-        v = json.loads(VALIDATION.read_text(encoding="utf-8"))
-        c = v["rasmi_in_sample"]["coverage_p5_p95"]
-        h = v["holdout"]["coverage_p5_p95"]
-        return "（検証：取り置いた建物での 5〜95% 範囲の当たり率 %.0f%%、RASMI そのものの範囲では %.0f%%（同じデータを含む））" % (100 * h, 100 * c)
+        v = json.loads(VALIDATION.read_text(encoding="utf-8"))["japan"]
     except Exception:
-        return "（この範囲の当たり率はまだ検証していない）"
+        return "（この範囲の当たり率はまだ検証していない：仮の範囲）"
+    h = (v.get("holdout") or {}).get(mat) or {}
+    r = (v.get("rasmi_in_sample") or {}).get(mat) or {}
+    if method == "mlit":
+        return "（この組み合わせの範囲の当たり率は検証していない：仮の範囲）"
+    if not h.get("n"):
+        return "（この材料は検証データが無い：仮の範囲）"
+    return ("（検証：日本の建物 %d 件の取り置き検証で 5〜95%% 範囲の当たり率 %.0f%%、誤差の中央値 %.0f%%。"
+            "RASMI の範囲そのものでは %s（同じデータを含むので甘い）。校正済みとは言えない：仮の範囲）"
+            % (h["n"], 100 * (h.get("coverage_p5_p95") or 0), 100 * h["median_ape"],
+               ("%.0f%%" % (100 * r["coverage_p5_p95"])) if r.get("coverage_p5_p95") is not None else "—"))
 
 
 def estimate_materials(values: dict[str, Value], structure: str, only: str | None = None, ranges: dict | None = None) -> tuple[list[Value], list[str]]:
@@ -100,7 +182,47 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
     area = float(gfa.value)
     gfa_note = "" if gfa.state == "confirmed" else "延床面積が「%s」なので、その不確かさは範囲に含まれていない。" % gfa.label
     today = _dt.date.today().isoformat()
-    cov = _coverage_note()
+    try:
+        M = load_mlit().get(structure, {})
+    except SourceError as e:
+        M = {}
+        msgs.append("建設資材・労働力需要実態調査を取得できなかった：%s" % e)
+    for item, (fid0, unit, rmat) in MLIT_ITEMS.items():
+        if item not in M:
+            continue
+        fid = fid0 or ("m_steel" if structure in ("S", "SRC") else "m_rebar")
+        if only and fid != only:
+            continue
+        cur = values.get(fid)
+        if cur and cur.state in ("confirmed", "from_drawing"):
+            continue
+        if fid == "m_concrete":
+            fdn = values.get("m_concrete_fdn")
+            if fdn and fdn.state in HAS_VALUE:
+                msgs.append("基礎のコンクリートが別に入っているので、全体量の統計（国交省）は候補にしない（二重計上を防ぐ）")
+                continue
+        per10, u = M[item]
+        q = per10 * area / 10.0
+        rr = R.get((rmat, fn, st, "OECD_JPN"))
+        lo = hi = None
+        if rr and rr["p_50"] > 0:
+            lo, hi = q * rr["p_5"] / rr["p_50"], q * rr["p_95"] / rr["p_50"]
+        notes = ["全国の平均（構造別・用途は区別しない）。資材には加工品に含まれるものを含む（調査の注 1）"]
+        if item == "鋼材":
+            notes.append("鋼材は鉄筋と鉄骨を分けていない。%s では全量を「%s」とした（仮定）" % (structure, FL.FIELDS[fid]["label"]))
+        if fid == "m_concrete":
+            notes.append("基礎・杭を含む建物全体の量。採用したら基礎の欄には別の値を入れない")
+        if gfa_note:
+            notes.append(gfa_note)
+        unc = (Uncertainty("interval", round(lo, 3), round(hi, 3), 0.9, False,
+                           "国交省の平均に RASMI（%s・%s・日本）の 5〜95%% の比（%.2f〜%.2f）を当てた仮の範囲%s"
+                           % (fn, st, rr["p_5"] / rr["p_50"], rr["p_95"] / rr["p_50"], _coverage_note(rmat, "mlit")))
+               if lo is not None else Uncertainty("interval", round(q * 0.5, 3), round(q * 1.5, 3), 0.9, False,
+                                                  "散らばりの資料が無いので ±50% を仮に置いた（根拠なし・仮の範囲）"))
+        out.append(Value(fid, "statistical", round(q, 3), unit, method="mlit_area_unit_x_gfa", source_id=MLIT_ID,
+                         source_detail="%s（%s）：%s %.4f %s / 延べ床 10 m2 × %.1f m2" % (MLIT_VERSION, structure, item, per10, u, area),
+                         retrieved_at=today, factor_version=MLIT_VERSION, permission="政府標準利用規約2.0（e-Stat）",
+                         uncertainty=unc, note="；".join(notes)))
     for mat in ("concrete", "steel", "wood", "glass", "aluminum", "brick", "plastics", "copper"):
         rec = R.get((mat, fn, st, "OECD_JPN"))
         if mat == "copper":
@@ -133,7 +255,7 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
                                 % (mat, fn, st, rec["p_50"], rec["raw"], rec["n"], rec["iterations"]),
                   retrieved_at=today, factor_version=RASMI_VERSION, permission="CC-BY-4.0",
                   uncertainty=Uncertainty("interval", round(rec["p_5"] * area / k, 3), round(rec["p_95"] * area / k, 3), 0.9, False,
-                                          "RASMI の 5〜95 パーセンタイル × 延床面積 %.1f m2" % area + cov),
+                                          "RASMI の 5〜95 パーセンタイル × 延床面積 %.1f m2" % area + _coverage_note(mat)),
                   note="；".join(notes + [gfa_note] if gfa_note else notes))
         out.append(v)
     msgs.append("出典：RASMI（Fishman ほか 2024、CC BY 4.0）。日本の元データは少なく、近い地域のデータで補われている（件数を候補に表示）。")
@@ -156,8 +278,24 @@ def run(values: dict[str, Value], structure: str, screen: str | None = None, fie
         msgs.append("設備の台数・質量の統計は、権利を確認できた出典がまだ無いので概算しない（仮の係数を作らない）。"
                     "メーカーの仕様書（質量）や設計図の機器表から入れる。台数が分からないときは「あとで確認」にする。")
     elif target_screen == "operation":
-        msgs.append("運用のエネルギー・水の統計（例：非住宅建築物の環境関連データベース DECC）は、利用条件を確認できていないので使っていない。"
-                    "請求書・検針の実績が一番よい。次が設計の計算、最後が統計。")
+        msgs.append("運用の入力は、請求書・検針の実績が一番よい。次が設計の計算、最後が統計。")
+        use, gfa = values.get("b_use"), values.get("b_gfa")
+        row = METI_ROWS.get(use.value) if use and use.state in HAS_VALUE else None
+        if row and gfa and gfa.state in HAS_VALUE:
+            try:
+                meti = load_meti()
+            except SourceError as e:
+                meti = {}
+                msgs.append("エネルギー消費統計を取得できなかった：%s" % e)
+            if row[0] in meti:
+                gj, se = meti[row[0]]
+                msgs.append("参考（入力の候補にはしない）：経済産業省「エネルギー消費統計調査」令和6年度 第3表B の「%s」は 延床面積あたり %.3f GJ/m2"
+                            "（標準誤差 %.3f）。この建物（%.0f m2）では年 %.0f GJ 程度。%s電力とガスなどの内訳が無いので、エンジンの入力（電力 kWh・ガス m3）には"
+                            "分けられない。事業所の平均であって、建物の用途の平均ではない。"
+                            % (row[0], gj, se, float(gfa.value), gj * float(gfa.value), (row[1] + "。") if row[1] else ""))
+        elif use and use.state in HAS_VALUE and use.value == "residential":
+            msgs.append("住宅（家庭部門）のエネルギー統計はまだつないでいない。")
+        msgs.append("上水・下水・一般廃棄物の統計は、権利を確認できた出典がまだ無いので概算しない。")
     else:
         msgs.append("どの画面の概算かが分からない")
     return {"proposals": proposals, "message": msgs[0] if msgs and not proposals else "", "messages": msgs}

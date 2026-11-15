@@ -10,6 +10,7 @@ a lock so that an accidental second thread waits instead of corrupting a run).
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 import threading
@@ -59,14 +60,12 @@ class Engine:
         with self.lock:
             t0 = time.perf_counter()
             if lca_project_id is not None:
-                latest = self.store.latest_input_id(lca_project_id)
-                same = False
-                if latest is not None:
-                    prev = self.store.get_input(latest, with_data=True)
-                    same = prev.get("document") == doc
-                if same:
-                    vid = latest
-                    imp = {"project_id": lca_project_id, "input_version_id": vid, "issues": [], "unsupported": []}
+                # the same document (same SHA-256 as the store computes it) re-uses its input version, so that the
+                # prepared System(scenario) is found in the Service cache and only System.at(T) runs again
+                sha = hashlib.sha256(json.dumps(doc, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+                vid = next((v["id"] for v in reversed(self.store.list_inputs(lca_project_id)) if v["sha256"] == sha), None)
+                if vid is not None:
+                    imp = {"project_id": lca_project_id, "input_version_id": vid, "issues": [], "unsupported": [], "reused": True}
                 else:
                     imp = self.svc.import_document(doc, project_id=lca_project_id)
             else:
@@ -77,6 +76,7 @@ class Engine:
             t2 = time.perf_counter()
             full = self.store.get_run(run["id"], with_results=True)
             return {"lca_project_id": pid, "input_version_id": vid, "run": run, "results": full.get("results"),
+                    "reused_input_version": bool(imp.get("reused")),
                     "import_issues": imp.get("issues", [])[:20], "unsupported": imp.get("unsupported", [])[:20],
                     "timing_ms": {"import": round((t1 - t0) * 1000, 1), "calculate": round((t2 - t1) * 1000, 1)},
                     "prepared_systems": self.svc.prepared}

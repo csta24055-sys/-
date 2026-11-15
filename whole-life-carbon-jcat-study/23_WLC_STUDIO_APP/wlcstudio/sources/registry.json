@@ -10,12 +10,13 @@
       "url": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=",
       "access": "HTTP GET（JSON）",
       "automated": true,
-      "licence": "国土地理院コンテンツ利用規約（出典の明示）。API は地理院地図で使われているもので、提供条件の変更・停止がありうる",
+      "licence": "国土地理院コンテンツ利用規約（公共データ利用規約 第1.0版 PDL1.0、CC BY 4.0 互換）。出典の記載と、編集・加工した旨の記載が要る",
       "redistribution": "検索結果の座標を保存して使う。結果の一括収集・再配布はしない",
       "rate_limit": "明記なし。アプリ側で 1 秒に 1 回まで、結果を 30 日キャッシュ",
       "retention": "端末のキャッシュ（cache/）のみ",
       "confidential": "送るのは利用者が入れた住所の文字列だけ（個人情報になりうるので外部送信の前に画面で明示）",
-      "status": "connected"
+      "status": "connected",
+      "limits": "公開の API としての文書は無く、GSI は「主に地理院地図からの利用を想定」「常に・長期的に提供できるとは限らない」「予告なく変更する場合がある」としている（gsimaps issue #29）。止まったら手入力に戻る"
     },
     {
       "id": "gsi_reverse_geocoder",
@@ -24,12 +25,13 @@
       "url": "https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress",
       "access": "HTTP GET（JSON）。市区町村コード muniCd を得る",
       "automated": true,
-      "licence": "国土地理院コンテンツ利用規約（出典の明示）",
+      "licence": "国土地理院コンテンツ利用規約（公共データ利用規約 第1.0版 PDL1.0、CC BY 4.0 互換）。出典の記載と、編集・加工した旨の記載が要る",
       "redistribution": "市区町村コードの利用のみ",
       "rate_limit": "アプリ側で 1 秒に 1 回まで、30 日キャッシュ",
       "retention": "cache/",
       "confidential": "座標を送る",
-      "status": "connected"
+      "status": "connected",
+      "limits": "公開の API としての文書は無く、GSI は「主に地理院地図からの利用を想定」「常に・長期的に提供できるとは限らない」「予告なく変更する場合がある」としている（gsimaps issue #29）。止まったら手入力に戻る"
     },
     {
       "id": "plateau",
@@ -38,13 +40,13 @@
       "url": "https://api.plateauview.mlit.go.jp/datacatalog/plateau-datasets",
       "access": "データカタログ API（JSON）→ 3D Tiles（tileset.json と b3dm のヘッダー・バッチテーブルだけを HTTP Range で読む）",
       "automated": true,
-      "licence": "PLATEAU のサイトポリシー（出典を示せば商用を含め利用可、CC BY 4.0 相当の扱い）。データセットごとの記載を優先する",
+      "licence": "PLATEAU サイトポリシー 3（著作権は各地方公共団体。権利表記が無い限り PDL1.0。国交省は CC BY 4.0 に従う利用も許諾）。出典「国土交通省 PLATEAU」と、編集・加工した旨を記載する",
       "redistribution": "建物 1 棟の属性を候補として使う。タイルの一括保存・再配布はしない",
       "rate_limit": "明記なし。1 秒に 1 回まで、読んだ部分を 30 日キャッシュ",
       "retention": "cache/",
       "confidential": "座標から市区町村を決め、その市のタイルを読む",
       "status": "connected",
-      "limits": "構造（RC/S/SRC/W）と延床面積は直接記録されていない。収録属性は自治体・年度で違う。構造図は公開されていない"
+      "limits": "構造（RC/S/SRC/W）と延床面積は直接記録されていない。収録属性は自治体・年度で違う。構造図は公開されていない。データカタログ API は「試験運用中」で、提供期間・サービスレベルの保証なし"
     },
     {
       "id": "rasmi_20230905",
@@ -64,24 +66,47 @@
       "limits": "地域 OECD_JPN の元データは少なく、近い地域のデータで補われている。鉄は鉄筋・鉄骨を分けない。kg/m2 の範囲はプールの散らばりで、1 棟の予測区間ではない"
     },
     {
+      "id": "mlit_shizai_r6",
+      "name": "建設資材・労働力需要実態調査【建築部門】令和6年度（令和5年度工事）原単位",
+      "provider": "国土交通省",
+      "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040282146&fileKind=0",
+      "access": "e-Stat のファイル取得（実行時に取得して 1 年キャッシュ）",
+      "automated": true,
+      "licence": "e-Stat 利用規約（政府標準利用規約 第2.0版、CC BY 4.0 互換）。出典「建設資材・労働力需要実態調査（国土交通省）」と編集・加工した旨を記載",
+      "redistribution": "可（出典表示）。リポジトリには入れない",
+      "status": "connected",
+      "limits": "全国平均・構造別・用途は区別しない。散らばり（分布）は無い。資材には加工品に含まれるものを含む"
+    },
+    {
+      "id": "meti_energy_r6",
+      "name": "エネルギー消費統計調査 令和6年度 第3表 エネルギー消費原単位表（B 熱量単位表）",
+      "provider": "経済産業省",
+      "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040442517&fileKind=0",
+      "access": "e-Stat のファイル取得（実行時、1 年キャッシュ）",
+      "automated": true,
+      "licence": "e-Stat 利用規約（政府標準利用規約 第2.0版）",
+      "status": "reference_only",
+      "limits": "業種（事業所）ごとの延床面積あたりの総エネルギー（GJ/m2）で、電力・ガスの内訳も建物の用途の区分も無い。参考値として表示するだけで入力の候補にしない"
+    },
+    {
       "id": "rasmi_data_20230905",
       "name": "RASMI の元データのプール（MI_data_20230905.xlsx）",
       "provider": "同上",
       "url": "https://zenodo.org/records/10782341",
-      "access": "精度検証（validate.py）でだけ実行時に取得",
+      "access": "使っていない（検証は Material Intensity Research Database で行う）",
       "automated": true,
       "licence": "CC BY 4.0（Zenodo の記録）",
       "redistribution": "検証結果の集計値だけを公開する",
-      "status": "used_for_validation"
+      "status": "not_used"
     },
     {
       "id": "kunijiban",
       "name": "国土地盤情報検索サイト KuniJiban",
       "provider": "国立研究開発法人 土木研究所",
       "url": "https://www.kunijiban.pwri.go.jp/",
-      "access": "検索サイトを利用者が開いて調べる（リンクのみ）。自動取得はしない",
+      "access": "トップページへのリンクと、利用者が調べた結果の書き留め（地点・距離・調査年）。公開の API は無く、自動取得の可否が書かれていないので自動では取得しない",
       "automated": false,
-      "licence": "サイトの利用規約（https://www.kunijiban.pwri.go.jp/jp/terms.html）に従う。自動での一括取得の可否が確認できないため、アプリは自動で取得しない",
+      "licence": "KuniJiban 利用規約：個々の地盤情報に著作権は無く、閲覧・複製・頒布は許諾。第三者に提供するときは国土地盤情報検索サイトの地盤情報であることを表示する。リンクはトップページへ、利用規約を表示して張る",
       "redistribution": "しない",
       "status": "link_and_manual_note",
       "limits": "ボーリングは近くの地点の記録で、敷地の地盤ではない。調査年・距離を必ず書き留める。基礎の設計判断には使わない"
@@ -93,8 +118,8 @@
       "url": "https://panasonic.co.jp/hvac-cc/biz/solutions/bim/",
       "access": "利用者が各社の規約に同意して入手したファイルを、利用者が読み込む（IFC・仕様書）。アプリは自動で一括取得しない",
       "automated": false,
-      "licence": "各社の利用規約。保存・再配布・自動一括ダウンロードは規約の範囲だけ",
-      "redistribution": "しない（読み込んだ数量は候補として使うだけ）",
+      "licence": "パナソニックの BIM データ利用条件：同社商品を使った設計・設計検討の目的に限り、使用後は全て消去する。複製品の製作・目的外の使用は厳禁。抽出した値が実際の商品と一致する保証なし",
+      "redistribution": "しない。アプリは読み込んだファイルを既定で保存しない（ハッシュと要約だけ）。値は利用者のプロジェクトの候補にするだけで、製品データベースを作らない",
       "status": "manual_upload_only",
       "limits": "製品の性能値（質量・冷媒充填量・消費電力）は製造時の CO2 ではない。EPD が無ければ製品の CO2e を断定しない"
     },
@@ -120,11 +145,12 @@
       "id": "heeren_fishman_mi_db",
       "name": "Material intensity database（Heeren & Fishman 2019, GitHub nheeren/material_intensity_db）",
       "provider": "Heeren, Fishman",
-      "url": "https://github.com/nheeren/material_intensity_db",
-      "access": "使わない",
-      "automated": false,
-      "licence": "GitHub にライセンスの記載が無く、行ごとの出典の権利表示はさまざま（Elsevier 等）。RASMI（CC BY 4.0）を使う",
-      "status": "not_used"
+      "url": "https://zenodo.org/records/10131536",
+      "access": "精度検証（validate.py）でだけ実行時に取得（GitHub の同一ファイル）",
+      "automated": true,
+      "licence": "CC BY 4.0（Zenodo の記録 v1.2）。GitHub にはライセンスファイルが無い。元の各文献の出典も示す",
+      "status": "used_for_validation",
+      "redistribution": "検証の集計値だけを公開する"
     },
     {
       "id": "fictional_sample_seed4201",

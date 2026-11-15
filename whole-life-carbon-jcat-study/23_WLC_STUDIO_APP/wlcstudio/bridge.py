@@ -573,7 +573,21 @@ def binding_coverage() -> dict:
     from .engine import APP_BASE, Engine  # noqa: F401  (APP_BASE: path only)
     binding = json.loads((APP_BASE.parent / "13_INPUT_CLASSIFICATION" / "binding_engine_model_v1.json").read_text(encoding="utf-8"))
     refset = json.loads((APP_BASE / "samples" / "refset_fictional.json").read_text(encoding="utf-8"))
-    doc, rep = build(demo_values(), refset, "coverage")
+    vals = demo_values()
+    for fid, F in FL.FIELDS.items():            # every field the screens offer, filled once, so that coverage counts
+        v = vals.get(fid)                       # what the screens CAN reach (the values themselves do not matter)
+        if v is not None and v.state in HAS_VALUE:
+            continue
+        if F["type"] == "enum":
+            x = F["enum"][0][0]
+        elif F["type"] == "text":
+            x = "x"
+        else:
+            lo, hi = F.get("range", (1, 1))
+            x = float(min(max(lo, 1), hi)) if F["type"] == "number" else int(min(max(lo, 1), hi))
+        unit = F.get("unit", "") if F["type"] in ("number", "integer") else ""
+        vals[fid] = Value(fid, "assumption", x, unit, method="coverage_probe")
+    doc, rep = build(vals, refset, "coverage")
     present = set()
     for c in doc["categories"].values():
         present.update(c["items"])
@@ -585,13 +599,14 @@ def binding_coverage() -> dict:
                     present.add(nt)
                     for nr in nrows:
                         present.update(nr)
-    ids = [e["id"] for e in binding["map"]]
+    entries = list(binding["map"].values()) if isinstance(binding["map"], dict) else list(binding["map"])
+    ids = [e["id"] for e in entries]
     reached = [i for i in ids if i in present]
     by_cat = {}
-    for e in binding["map"]:
+    for e in entries:
         b = by_cat.setdefault(e["category"], {"total": 0, "reached": 0})
         b["total"] += 1
         b["reached"] += e["id"] in present
     return {"n_binding": len(ids), "n_reached": len(reached), "by_category": by_cat,
             "not_reached": [i for i in ids if i not in present],
-            "note": "架空デモの入力から作った文書に現れる ID を数えた（列の ID は表の中の相対名）。"}
+            "note": "4 画面の全項目に値がある場合に作られる文書に現れる ID を数えた（列の ID は表の中の相対名）。"}

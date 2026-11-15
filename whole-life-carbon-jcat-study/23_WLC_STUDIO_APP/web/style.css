@@ -12,6 +12,7 @@
   }
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { font-size: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, "Hiragino Sans", "Noto Sans JP", "IPAGothic", sans-serif;
   line-height: 1.6; -webkit-text-size-adjust: 100%; }
@@ -26,7 +27,7 @@ button, input, select, textarea { font: inherit; }
 .door { width: 180px; height: 360px; transform-origin: left center; transition: transform .9s ease-in; }
 .door img { display: block; width: 100%; height: 100%; }
 .splash.open .door { transform: rotateY(-100deg); }
-.splash.open { transition: opacity .5s .7s; opacity: 0; }
+.splash.open { transition: opacity .5s .7s; opacity: 0; pointer-events: none; }
 .splash-title { font-size: 1.6rem; font-weight: 700; color: #3b2611; margin: 8px 0 0; }
 .splash-sub { color: #4a3420; margin: 0; }
 @media (prefers-reduced-motion: reduce) { .door, .splash.open { transition: none; } .splash.open .door { transform: none; } }
