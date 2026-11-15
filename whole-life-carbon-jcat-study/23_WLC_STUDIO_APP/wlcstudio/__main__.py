@@ -22,7 +22,10 @@ def main(argv=None) -> int:
     d.add_argument("--period", type=float, default=60.0)
     v = sub.add_parser("validate", help="材料の統計概算の精度検証（RASMI の元データ、取り置き検証）")
     v.add_argument("--out", default=str(HERE / "docs"))
-    sub.add_parser("ledger", help="入力の対応表（4 画面 → エンジン入力、未接続台帳）を表示")
+    so = sub.add_parser("sources", help="データ源の権利台帳を表示")
+    so.add_argument("--md", help="Markdown にして書き出すファイル")
+    lg = sub.add_parser("ledger", help="入力の対応表（4 画面 → エンジン入力、未接続台帳）を表示")
+    lg.add_argument("--md", help="Markdown にして書き出すファイル")
     a = ap.parse_args(argv)
     if a.cmd == "serve":
         from .server import serve
@@ -41,9 +44,21 @@ def main(argv=None) -> int:
     if a.cmd == "validate":
         from .validate import main as vmain
         return vmain(a.out)
+    if a.cmd == "sources":
+        from . import estimate
+        if a.md:
+            Path(a.md).write_text(estimate.registry_markdown(), encoding="utf-8")
+            print(a.md)
+        else:
+            print(json.dumps(estimate.registry(), ensure_ascii=False, indent=1))
+        return 0
     if a.cmd == "ledger":
         from . import bridge
-        print(json.dumps(bridge.binding_coverage(), ensure_ascii=False, indent=1))
+        if a.md:
+            Path(a.md).write_text(bridge.ledger_markdown(), encoding="utf-8")
+            print(a.md)
+        else:
+            print(json.dumps(bridge.binding_coverage(), ensure_ascii=False, indent=1))
         return 0
     return 2
 

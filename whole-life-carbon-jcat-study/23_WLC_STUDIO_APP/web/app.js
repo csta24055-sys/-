@@ -48,7 +48,7 @@ async function renderHome(m) {
   const projects = await api("/projects");
   m.innerHTML = `
   <div class="hero"><img id="hero-img" src="${esc(state.meta.hero.src)}" alt="${esc(state.meta.hero.alt)}">
-    ${state.meta.hero.placeholder ? '<span class="ph" id="ph">プレースホルダー画像（写真は web/assets/akabeko.jpg に置くと表示）</span>' : ""}</div>
+    ${state.meta.hero.placeholder ? '<span class="ph" id="ph">プレースホルダー画像</span>' : ""}</div>
   <div class="card lift">
     <h2 style="margin-top:0">建物のホールライフカーボンを、かんたんに</h2>
     <p class="muted">住所から公開データを調べ、足りないところは根拠つきの概算で補い、研究用の 70 評価単位のモデルで計算します。</p>
@@ -106,7 +106,10 @@ function fieldHtml(fid) {
     : `<input id="in-${fid}" aria-label="${esc(F.label)}" ${F.type === "number" ? 'inputmode="decimal"' : ""} value="${v && v.value !== null && typeof v.value !== "object" ? esc(v.value) : ""}" placeholder="${F.unit ? "単位：" + esc(F.unit) : ""}">`;
   const unc = v && v.uncertainty && v.uncertainty.kind !== "none"
     ? `<div class="muted">範囲 ${fmt(v.uncertainty.low, v.unit)} 〜 ${fmt(v.uncertainty.high, v.unit)}${v.uncertainty.kind === "interval" ? (v.uncertainty.calibrated ? "（校正済みの予測区間）" : "（仮の範囲）") : "（シナリオ）"}</div>` : "";
-  const cands = (f.candidates || []).map((c, i) => `<li><div>${fmt(c.value, c.unit)} ${badge(c.state)} <span class="muted">${esc(c.method)}</span></div>
+  const ml = (m) => esc((state.meta.methods || {})[m] || m);
+  const cands = (f.candidates || []).map((c, i) => `<li><div>${fmt(c.value, c.unit)} ${badge(c.state)} <span class="muted">${ml(c.method)}</span></div>
+      ${c.uncertainty && c.uncertainty.kind !== "none" ? `<div class="muted">範囲 ${fmt(c.uncertainty.low, c.unit)} 〜 ${fmt(c.uncertainty.high, c.unit)}${c.uncertainty.calibrated ? "" : "（仮の範囲）"}</div>` : ""}
+      <div class="muted">${c.source_id ? "出典 " + esc(c.source_id) + (c.source_detail ? "：" + esc(c.source_detail) : "") : ""}</div>
       <div class="muted">${esc(c.note || "")}</div><button class="btn small" data-accept="${fid}" data-i="${i}">この候補を採用</button></li>`).join("");
   return `<div class="field" id="f-${fid}">
     <div class="field-head"><label for="in-${fid}">${esc(F.label)}${F.required ? ' <span class="muted">（計算に必須）</span>' : ""}</label>${badge(st)}</div>
@@ -219,7 +222,7 @@ async function estimate(sid, fid) {
 async function why(fid) {
   const F = state.meta.fields[fid], f = state.project.fields[fid] || {};
   const rows = (f.history || []).slice().reverse().map((v) => `<tr><td>${badge(v.state)}</td><td>${fmt(v.value, v.unit)}</td>
-    <td>${esc(v.method)}${v.source_id ? "<br><span class='muted'>出典 " + esc(v.source_id) + (v.source_detail ? "・" + esc(v.source_detail) : "") + "</span>" : ""}
+    <td>${esc((state.meta.methods || {})[v.method] || v.method)}${v.source_id ? "<br><span class='muted'>出典 " + esc(v.source_id) + (v.source_detail ? "・" + esc(v.source_detail) : "") + "</span>" : ""}
     ${v.factor_version ? "<br><span class='muted'>版 " + esc(v.factor_version) + "</span>" : ""}${v.note ? "<br>" + esc(v.note) : ""}</td>
     <td class="muted">${new Date(v.updated_at * 1000).toLocaleString("ja-JP")}</td></tr>`).join("");
   dialog(F.label, `<p class="muted">エンジンの入力：${esc((F.engine || []).join("、") || "（エンジンに対応する入力なし：計算には反映されない）")}</p>

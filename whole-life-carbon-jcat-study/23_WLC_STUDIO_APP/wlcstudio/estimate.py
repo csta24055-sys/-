@@ -299,3 +299,26 @@ def run(values: dict[str, Value], structure: str, screen: str | None = None, fie
     else:
         msgs.append("どの画面の概算かが分からない")
     return {"proposals": proposals, "message": msgs[0] if msgs and not proposals else "", "messages": msgs}
+
+
+def registry_markdown() -> str:
+    """docs/sources_rights.md: the rights ledger of every data source, from sources/registry.json."""
+    R = registry()
+    st = {"connected": "接続済み（自動取得）", "reference_only": "参考値だけ", "used_for_validation": "精度検証だけ",
+          "link_and_manual_note": "リンクと手書きの記録だけ", "manual_upload_only": "利用者が読み込むだけ", "not_used": "使わない",
+          "demo_only": "デモだけ"}
+    lines = ["# データ源の権利台帳", "", "生成：`python3 -B -m wlcstudio sources --md docs/sources_rights.md`（元は `wlcstudio/sources/registry.json`、確認日 %s）。"
+             "利用条件は変わるので、公開・商用利用の前に原文で確かめ直す。" % R["checked_at"], "",
+             "| データ源 | 提供 | 使い方 | 自動取得 | 権利・条件 | 再配布 | 限界 |", "|---|---|---|---|---|---|---|"]
+    for x in R["sources"]:
+        lines.append("| %s（`%s`） | %s | %s | %s | %s | %s | %s |" % (
+            x["name"], x["id"], x.get("provider", ""), st.get(x.get("status"), x.get("status", "")), "する" if x.get("automated") else "しない",
+            x.get("licence", "—"), x.get("redistribution", "—"), x.get("limits", "—")))
+    lines += ["", "## 守っていること", "",
+              "- J-CAT の係数・数式・マクロ・有償データ・名称は使わない（アプリ名は WLC Studio。計算の核は独立の概念モデル）。",
+              "- 国土地理院・PLATEAU・e-Stat のデータは出典を示し、加工したことを書く（画面の「このアプリについて」）。",
+              "- KuniJiban は自動で取得しない（トップページへのリンクと、利用者が調べた結果の書き留めだけ）。ボーリングは近くの地点の記録であって敷地の地盤ではない。",
+              "- メーカーの BIM・製品データは自動で集めず、原本を保存しない。性能値は製造時の CO2e ではなく、EPD が無ければ製品の CO2e を断定しない。",
+              "- 統計の値は、出典・版・単位・範囲・許諾を候補に付ける。出典の無い係数は作らない（設備の台数・水の量は概算しない）。",
+              ""]
+    return "\n".join(lines)

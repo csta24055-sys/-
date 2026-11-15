@@ -43,6 +43,14 @@ ATTRIBUTION = ("住所検索・逆ジオコーダ：国土地理院（地理院�
                "参考値：経済産業省「エネルギー消費統計調査」（e-Stat）。地盤：国土地盤情報検索サイト KuniJiban へのリンクのみ。")
 
 
+METHOD_LABEL = {
+    "user_entered": "手入力", "structure_card": "構造の選択画面", "initial_setting": "初期設定", "fictional_sample": "架空デモの値",
+    "plateau_attribute": "PLATEAU の属性", "plateau_roof_x_storeys": "PLATEAU の屋根面積×地上階数（仮定）",
+    "plateau_usage_hint": "PLATEAU の用途からの対応", "rasmi_mi_x_gfa": "RASMI の kg/m2 × 延床面積",
+    "mlit_area_unit_x_gfa": "国交省の面積原単位 × 延床面積", "csv_quantity_sum": "数量表（CSV）の行の合計",
+    "xlsx_quantity_sum": "数量表（Excel）の行の合計", "ifc_quantity_sum": "IFC の数量セットの合計", "pdf_text_line": "PDF の 1 行（要確認）"}
+
+
 class ApiError(Exception):
     def __init__(self, status: int, message: str):
         super().__init__(message)
@@ -144,7 +152,7 @@ class App:
                 "attribution": ATTRIBUTION, "states": LABEL, "state_order": list(STATES),
                 "screens": [{"id": s["id"], "label": s["label"], "groups": s["groups"]} for s in FL.SCREENS],
                 "fields": FL.meta_fields(), "structures": FL.STRUCTURES, "priority": FL.PRIORITY,
-                "hero": _hero(),
+                "hero": _hero(), "methods": METHOD_LABEL,
                 "refset": {"name": self.refset["name"], "version": self.refset["version"], "data_kind": self.refset["data_kind"]}}
 
     def put_field(self, pid: int, fid: str, b: dict) -> dict:

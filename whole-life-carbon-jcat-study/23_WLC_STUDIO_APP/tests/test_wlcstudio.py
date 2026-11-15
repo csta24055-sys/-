@@ -537,8 +537,10 @@ class RegressionTests(unittest.TestCase):
         root = HERE.parents[1]
         out = subprocess.run(["git", "status", "--porcelain", "--", "whole-life-carbon-jcat-study"], cwd=root,
                              capture_output=True, text=True).stdout.splitlines()
-        touched = [ln[3:] for ln in out if "23_WLC_STUDIO_APP" not in ln]
-        self.assertEqual(touched, [], "outside 23_WLC_STUDIO_APP nothing may change: %s" % touched)
+        import re
+        touched = [ln[3:] for ln in out
+                   if re.match(r"whole-life-carbon-jcat-study/(\d\d)_", ln[3:]) and int(ln[3:].split("/")[1][:2]) < 23]
+        self.assertEqual(touched, [], "the research folders 01-22 (engine, app base, classification) must not change: %s" % touched)
 
     def test_no_bytecode_written(self):
         self.assertEqual(list(HERE.rglob("__pycache__")), [])

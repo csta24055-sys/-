@@ -32,6 +32,7 @@
 | 20 | [20_LARGE_RANDOM_VERIFICATION/README.md](20_LARGE_RANDOM_VERIFICATION/README.md) | 統一理論 第 4 段階：宣言した抽出分布による 10 万ケース規模の無作為検証、負の対照、統計的な成立範囲。 |
 | 21 | [21_UNIFIED_THEORY_REPORT/README.md](21_UNIFIED_THEORY_REPORT/README.md) | 統一理論の研究報告書：最終成果物 14 項目の所在、証明・数値検証・統計的確認・追加データが必要なこと・未解決の区別、終了条件 A〜D の判定。 |
 | 22 | [22_WLC_COMPLETE_TEXTBOOK/README.md](22_WLC_COMPLETE_TEXTBOOK/README.md) | 教材：研究全体を五つの原理（量 × 係数の和、0/1 の条件、時間の節点、状態の漸化式、評価期間と実時間）と主張の強さの区別で学ぶ完全理解教材、原理シート、導出の図、問題と検算、研究の全工程の記録、監査表。 |
+| 23 | [23_WLC_STUDIO_APP/README.md](23_WLC_STUDIO_APP/README.md) | アプリ：WLC Studio（研究用の試作、J-CAT とは別物）。扉・赤べこのホーム・構造の選択・4 大入力のスマホ向け画面、7 つの取得状態、国土地理院・PLATEAU の自動調査、資料の読み込み、出典と範囲のある統計概算、既存の 70 評価単位への橋渡し、公開の実データでの精度検証（目標は未達）。原単位は架空。 |
 | 付録 | [scripts/README.md](scripts/README.md) | 許可された環境で原ファイルをローカル監査する際の方針 |
 
 ## 基本思想

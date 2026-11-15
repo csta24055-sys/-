@@ -610,3 +610,35 @@ def binding_coverage() -> dict:
     return {"n_binding": len(ids), "n_reached": len(reached), "by_category": by_cat,
             "not_reached": [i for i in ids if i not in present],
             "note": "4 画面の全項目に値がある場合に作られる文書に現れる ID を数えた（列の ID は表の中の相対名）。"}
+
+
+def ledger_markdown() -> str:
+    """docs/unconnected_inputs.md: the screen fields and the engine inputs that do not reach the calculation, with reasons."""
+    cov = binding_coverage()
+    lines = ["# 計算に反映されない入力の一覧（未接続台帳）", "",
+             "生成：`python3 -B -m wlcstudio ledger --md docs/unconnected_inputs.md`。プロジェクトごとの反映の有無は、"
+             "結果の画面と `GET /api/projects/{id}/ledger` に出る（未取得・適用外・記録のみの理由つき）。", "",
+             "## 1. 入力分類（13_INPUT_CLASSIFICATION の結び付け 241 項目）のうち、4 画面から届くもの", "",
+             "4 画面の全項目に値があるときに作られる文書に現れる ID：**%d / %d**。" % (cov["n_reached"], cov["n_binding"]), "",
+             "| 大分類 | 届く | 全体 |", "|---|---:|---:|"]
+    for k, b in cov["by_category"].items():
+        lines.append("| %s | %d | %d |" % (k, b["reached"], b["total"]))
+    lines += ["", "届かない ID（画面に欄が無い、またはアプリが既定で書かないもの）：", "",
+              ", ".join("`%s`" % i for i in cov["not_reached"]), "",
+              "（この 241 項目は、詳細分類 175 のうち 77 に結び付いている。残りの 98 の詳細分類はエンジンの入力が無い：12_APP_BASE の README と 13 の README を参照）", "",
+              "## 2. 入力画面に欄が無いエンジンの入力（理由つき）", "", "| エンジンの入力 | 理由 |", "|---|---|"]
+    for k, why in FL.NOT_ON_SCREENS.items():
+        lines.append("| `%s` | %s |" % (k, why))
+    lines += ["", "## 3. 画面にあるが計算には使わない項目（記録のみ）", "", "| 項目 | 理由 |", "|---|---|"]
+    for fid, F in FL.FIELDS.items():
+        if not F["engine"]:
+            lines.append("| %s（`%s`） | %s |" % (F["label"], fid, F["help"] or "記録のみ"))
+    lines += ["| 基礎の形式（`g_foundation`） | エンジンは `project.foundation_system` を読まない（記録のみ）。統計の概算の場合分けの説明に使う |",
+              "| 主な用途・構造（`b_use`・`b_structure`） | エンジンの単位は用途・構造を直接は読まない（用途別面積と、材料の行の分類を通じて効く） |",
+              "", "## 4. 値によっては計算に入らない場合", "",
+              "- 未取得・計算不能の項目：渡さない（欠損のまま。0 にしない）。材料・設備が未取得なら、その行が無いので合計に入らない（結果に「少なめ（下限）」と出る）。",
+              "- 数量の単位が参照セットの原単位と合わない材料（例：m3 の原単位しか無いのに m2）：行を作らない。",
+              "- 数量が m3・m2 の材料：質量が分からないので（密度を仮定しない）、解体時の運搬・処理（C2〜C4）のその行は不完全。",
+              "- 統計の全体量（基礎を含む）のコンクリートと、基礎のコンクリートが両方あるとき：基礎の行は作らない（二重計上の防止）。",
+              ""]
+    return "\n".join(lines)
