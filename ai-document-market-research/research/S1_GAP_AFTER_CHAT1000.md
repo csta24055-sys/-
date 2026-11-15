@@ -1,6 +1,6 @@
 # S1不足一覧（チャット1,000候補の取込み後・機械生成）
 
-生成時刻（UTC）：2026-11-15T16:12Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
+生成時刻（UTC）：2026-11-15T16:13Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
 
 > RESEARCH_STATUS = INCOMPLETE。S1未通過のためS2以降の分析・正式成果物には進まない。
 
@@ -11,7 +11,7 @@
 | 325テーマ | 125 | 200 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
 | 追加7テーマ（ZIP外） | 0 | 7 | N01〜N03・速度 |
 | 旧896検索ID | 実行 408 | 未実行 488 | 実行不能確定 0。ログの再索引だけでは実行にしない |
-| 80競合 | 31 | 49 | 公式資料の確認 55 社 |
+| 80競合 | 32 | 48 | 公式資料の確認 55 社 |
 
 ## 2. 不足の種類と数
 
@@ -37,7 +37,7 @@
 
 | 不足の種類 | 社数 |
 |---|---:|
-| no counter / independent search with results and no third-party-backed counter finding | 49 |
+| no counter / independent search with results and no third-party-backed counter finding | 48 |
 | attributes not recorded | 25 |
 | no vendor page read | 18 |
 
@@ -404,7 +404,7 @@
 | C018 | Prezi AI | P2 | 未完 | YES | 6（遮断4） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
 | C019 | Decktopus | P1 | 完了 | YES | 7（遮断2） | YES | — | 0 |
 | C020 | Presentations.AI | P1 | 完了 | YES | 17（遮断0） | YES | — | 0 |
-| C021 | Slidesgo AI Presentation Maker | P1 | 未完 | YES | 7（遮断2） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
+| C021 | Slidesgo AI Presentation Maker | P1 | 完了 | YES | 7（遮断2） | YES | — | 0 |
 | C022 | MagicSlides | P1 | 未完 | YES | 8（遮断0） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
 | C023 | SlideSpeak | P0 | 完了 | YES | 8（遮断6） | YES | — | 0 |
 | C024 | Alai | P1 | 未完 | YES | 10（遮断3） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
