@@ -89,6 +89,9 @@ class Value:
     permission: str = ""             # licence id or consent record
     uncertainty: Uncertainty = field(default_factory=Uncertainty)
     note: str = ""
+    # what an estimate covers beyond the field's own label: "whole_building" (concrete including foundations) or
+    # "all_steel" (rebar and structural steel together); used by the double-counting guard, kept with the value
+    scope: str = ""
     updated_at: float = field(default_factory=time.time)
     updated_by: str = "user"
 

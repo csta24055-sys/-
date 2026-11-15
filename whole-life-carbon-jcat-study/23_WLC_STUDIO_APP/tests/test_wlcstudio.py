@@ -184,7 +184,7 @@ class BridgeTests(unittest.TestCase):
         doc2, _ = bridge.build(minimal(), REFSET)
         self.assertEqual(tables(doc2)["materials"][0]["states"]["end_of_life.mass_kg"], "DERIVED")
         self.assertEqual(items(doc)["project.states"]["gross_floor_area"], "OBSERVED")
-        self.assertEqual({p["value_state"] for p in tables(doc)["provenance"]}, {"OBSERVED", "DERIVED", "ESTIMATE"})
+        self.assertEqual({p["value_state"] for p in tables(doc)["provenance"]}, {"OBSERVED", "DERIVED", "ESTIMATE", "MISSING"})
 
     def test_no_address_or_name_in_engine_document(self):
         vals = minimal(b_name=V("b_name", "秘密ビル"), b_address=V("b_address", "東京都どこか1-2-3"))
@@ -781,7 +781,7 @@ END-ISO-10303-21;
     def test_secure_delete_and_timeout(self):
         self.assertEqual(self.app.projects.db.execute("PRAGMA secure_delete").fetchone()[0], 1)
         self.assertEqual(self.E.store.db.execute("PRAGMA secure_delete").fetchone()[0], 1)
-        self.assertEqual(make_handler(self.app, 1).timeout, 15)
+        self.assertEqual(make_handler(self.app, 1).timeout, 10)
 
     # --- reproducible demo (21)
     def test_demo_does_not_depend_on_hash_seed(self):
@@ -790,6 +790,198 @@ END-ISO-10303-21;
         outs = {subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True,
                                env=dict(os.environ, PYTHONHASHSEED=str(seed))).stdout for seed in (1, 2, 3)}
         self.assertEqual(len(outs), 1)
+
+
+class SecondRoundTests(unittest.TestCase):
+    """Regression tests for the re-verification of the fixes (docs/review_fixes.md, second round)."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+
+    def test_unchanged_save_keeps_estimate_and_guard(self):
+        pid = self.app.projects.create("s2", "RC")
+        unc = Uncertainty("interval", 100, 900, 0.9)
+        est = V("m_concrete", 500.0, "statistical", "t", method="rasmi_mi_x_gfa", source_id="rasmi", factor_version="v",
+                uncertainty=unc, scope="whole_building")
+        self.app.projects.put(pid, est)
+        with self.assertRaises(ApiError):          # same number, now as 仮定: refused (source, range, scope would be lost)
+            self.app.handle("PUT", "/api/projects/%d/fields/m_concrete" % pid, {"value": 500, "unit": "t", "state": "assumption"})
+        self.assertEqual(self.app.projects.current(pid, "m_concrete").scope, "whole_building")
+        # the scope (not only the method) keeps the double-counting guard
+        v2 = Value.from_json(est.to_json())
+        v2.method = "something_else"
+        doc, rep = bridge.build(self.full(m_concrete=v2, m_concrete_fdn=V("m_concrete_fdn", 30.0, unit="m3")), REFSET)
+        self.assertEqual(len([r for r in tables(doc)["materials"] if r["material_class"] == "CONCRETE"]), 1)
+
+    def test_explicit_unit_relabel(self):
+        pid = self.app.projects.create("rl", "RC")
+        self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": 12000, "unit": "t", "state": "confirmed"})
+        with self.assertRaises(ApiError):
+            self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": 12000, "unit": "kg", "state": "confirmed"})
+        _, v = self.app.handle("PUT", "/api/projects/%d/fields/m_rebar" % pid, {"value": 12000, "unit": "kg", "state": "confirmed", "relabel": True})
+        self.assertEqual(v["unit"], "kg")
+
+    def test_stage_propagation_and_basis(self):
+        _, rep = bridge.build(self.full(o_pv_kwh=None), REFSET)
+        st = {s_ for m in rep["missing_inputs"] for s_ in m["stages"]}
+        self.assertTrue({"B6", "B2"} <= st)
+        _, rep = bridge.build(self.full(m_quantity_basis=None, m_waste_rate=V("m_waste_rate", 0.05)), REFSET)
+        self.assertTrue(any(m["field"] == "m_quantity_basis" for m in rep["missing_inputs"]))
+        _, rep = bridge.build(self.full(m_rebar=None), REFSET)               # no rebuild assumed: B5 is a real 0
+        self.assertNotIn("B5", {s_ for m in rep["missing_inputs"] for s_ in m["stages"]})
+        self.assertIn("B3", {s_ for m in rep["missing_inputs"] for s_ in m["stages"]})
+        _, rep = bridge.build(self.full(a_reconstruction=V("a_reconstruction", "MAJOR_REFURBISHMENT"),
+                                        a_replacement_cycle=V("a_replacement_cycle", 40.0), a_recon_fraction=V("a_recon_fraction", 0.5),
+                                        c_diesel=None), REFSET)
+        self.assertIn("B5", [s_ for m in rep["missing_inputs"] if m["field"] == "c_diesel" for s_ in m["stages"]])
+
+    def test_whole_figure_covers_the_other_field(self):
+        unc = Uncertainty("interval", 1, 9000, 0.9)
+        whole = V("m_concrete", 900.0, "statistical", "t", method="mlit_area_unit_x_gfa", source_id="m", factor_version="v",
+                  uncertainty=unc, scope="whole_building")
+        vals = self.full(m_concrete=whole)
+        vals.pop("m_concrete_fdn")
+        _, rep = bridge.build(vals, REFSET)
+        self.assertNotIn("m_concrete_fdn", [m["field"] for m in rep["missing_inputs"]])
+        self.assertNotIn("コンクリート（基礎・杭）", rep["missing_materials"])
+
+    def test_confirmed_zero_count_and_charge(self):
+        vals = self.full(e_hvac_count=V("e_hvac_count", 0.0), r_charge_kg=V("r_charge_kg", 0.0), r_top_up=None)
+        vals.pop("e_hvac_life")
+        vals.pop("e_hvac_mass")
+        doc, rep = bridge.build(vals, REFSET)
+        fields = [m["field"] for m in rep["missing_inputs"]]
+        self.assertNotIn("e_hvac_life", fields)
+        self.assertNotIn("r_top_up", fields)
+        self.assertEqual(tables(doc)["refrigerants"][0]["charge_mass_kg"], 0.0)
+
+    def test_equipment_without_factor_is_flagged_either_way(self):
+        ref = json.loads(json.dumps(REFSET))
+        del ref["data"]["factors"]["F-EQ-CONVEYANCE-01"]
+        for cnt in (V("e_conveyance_count", 3.0), None):
+            _, rep = bridge.build(self.full(e_conveyance_count=cnt), ref)
+            self.assertIn("e_conveyance_count", [m["field"] for m in rep["missing_inputs"]])
+
+    def test_refrigerant_parts_not_reflected_without_b1_and_top_up_na(self):
+        _, rep = bridge.build(self.full(r_top_up=None), REFSET)
+        rows = {r["field"]: r for r in bridge.reflection_table(rep)}
+        self.assertFalse(rows["r_gwp"]["reflected"])
+        doc, _ = bridge.build(self.full(r_top_up=V("r_top_up", None, "not_applicable")), REFSET)
+        self.assertIs(tables(doc)["refrigerants"][0]["top_up"], False)
+
+    def test_install_unit_not_flagged_without_renewal(self):
+        _, rep = bridge.build(self.full(m_concrete=V("m_concrete", 100.0, unit="t"),
+                                        m_refresh_cycle=V("m_refresh_cycle", None, "not_applicable")), REFSET, period=60)
+        self.assertNotIn("m_concrete", [m["field"] for m in rep["missing_inputs"]])
+
+    def test_hash_does_not_change_with_the_date(self):
+        _, a = bridge.build(minimal(), REFSET, today="2026-11-15")
+        _, b = bridge.build(minimal(), REFSET, today="2026-11-16")
+        self.assertEqual(a["input_hash"], b["input_hash"])
+
+    def test_ifc_foot_and_shared_material_list(self):
+        foot = """ISO-10303-21;
+HEADER;FILE_SCHEMA(('IFC4'));ENDSEC;
+DATA;
+#1=IFCDIMENSIONALEXPONENTS(1,0,0,0,0,0,0);
+#2=IFCMEASUREWITHUNIT(IFCLENGTHMEASURE(0.3048),#3);
+#3=IFCSIUNIT(*,.LENGTHUNIT.,$,.METRE.);
+#4=IFCCONVERSIONBASEDUNIT(#1,.LENGTHUNIT.,'FOOT',#2);
+#5=IFCUNITASSIGNMENT((#4));
+#10=IFCSLAB('2abc',$,'Slab',$,$,$,$,$,$);
+#20=IFCQUANTITYVOLUME('NetVolume',$,$,3531.47,$);
+#21=IFCELEMENTQUANTITY('q1',$,'Qto',$,$,(#20));
+#22=IFCRELDEFINESBYPROPERTIES('r1',$,$,$,(#10),#21);
+#30=IFCMATERIAL('Concrete',$,$);
+#31=IFCRELASSOCIATESMATERIAL('m1',$,$,$,(#10),#30);
+ENDSEC;
+END-ISO-10303-21;
+"""
+        r = documents.read("ft.ifc", base64.b64encode(foot.encode()).decode(), "d")
+        self.assertEqual(r["proposals"], [])                          # ft3 is never read as m3
+        lines = ["ISO-10303-21;", "HEADER;FILE_SCHEMA(('IFC4'));ENDSEC;", "DATA;", "#1=IFCMATERIAL('Concrete',$,$);"]
+        chain = list(range(2, 3000))
+        for i in chain:
+            lines.append("#%d=IFCMATERIALLIST((#%d));" % (i, i - 1))
+        for k in range(3000):
+            e = 10000 + 2 * k
+            lines.append("#%d=IFCWALL('g%d',$,'W',$,$,$,$,$);" % (e, k))
+            lines.append("#%d=IFCRELASSOCIATESMATERIAL('m%d',$,$,$,(#%d),#%d);" % (e + 1, k, e, chain[-1]))
+        lines += ["ENDSEC;", "END-ISO-10303-21;"]
+        import time as _t
+        t0 = _t.time()
+        documents.read("big.ifc", base64.b64encode("\n".join(lines).encode()).decode(), "d")
+        self.assertLess(_t.time() - t0, 10)                            # memoised: one walk, not 3000
+
+    def test_xlsx_far_column_and_negative_rows(self):
+        import io as _io
+        import zipfile
+        buf = _io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as z:
+            z.writestr("xl/workbook.xml", '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+                       'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'
+                       '<sheet name="s" sheetId="1" r:id="rId1"/></sheets></workbook>')
+            z.writestr("xl/_rels/workbook.xml.rels", '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                       '<Relationship Id="rId1" Target="worksheets/sheet1.xml"/></Relationships>')
+            z.writestr("xl/worksheets/sheet1.xml", '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+                       '<sheetData><row r="1"><c r="ZZZZZZ1"><v>1</v></c></row></sheetData></worksheet>')
+        from wlcstudio.importers import tabular
+        with self.assertRaises(tabular.ImportError_):
+            tabular.read_xlsx(buf.getvalue(), "d")
+        csv = "名称,数量,単位\n鉄筋,5,t\n鉄筋,-2,t\n".encode()
+        r = documents.read("n.csv", base64.b64encode(csv).decode(), "d")
+        self.assertEqual([p.value for p in r["proposals"]], [5.0])
+
+    def test_legacy_plateau_candidate_can_be_accepted(self):
+        pid = self.app.projects.create("lg", "RC")
+        legacy = Value("b_gfa", "assumption", 4000.0, "m2", method="plateau_roof_x_storeys", source_id="plateau").to_json()
+        self.app.projects.db.execute("INSERT INTO candidates (project_id, field_id, payload, origin, created_at) VALUES (?,?,?,?,0)",
+                                     (pid, "b_gfa", json.dumps(legacy), "plateau"))
+        self.app.projects.db.commit()
+        v = self.app.projects.accept(pid, "b_gfa", 0)
+        self.assertEqual(v.uncertainty.kind, "unknown")
+
+    def test_sweep_removes_legacy_personal_cache(self):
+        from wlcstudio.sources import net
+        root = Path(self.td.name) / "c"
+        orig = net.CACHE
+        net.CACHE = root
+        try:
+            h = "a" * 64
+            (root / "aa").mkdir(parents=True)
+            (root / "aa" / h).write_bytes(b"x")
+            (root / "aa" / (h + ".json")).write_text(json.dumps({"url": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=X"}))
+            (root / "notes.txt").write_text("keep")
+            net.sweep()
+            self.assertFalse((root / "aa" / h).exists())
+            self.assertTrue((root / "notes.txt").exists())
+        finally:
+            net.CACHE = orig
+
+    def test_slow_client_does_not_block_the_server(self):
+        import http.client
+        import socket
+        import threading
+        from http.server import ThreadingHTTPServer
+        from wlcstudio.server import AppWorker
+        w = AppWorker(Path(self.td.name) / "w")
+        httpd = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(w, 0))
+        port = httpd.server_address[1]
+        httpd.RequestHandlerClass = make_handler(w, port)
+        th = threading.Thread(target=httpd.serve_forever, daemon=True)
+        th.start()
+        idle = socket.create_connection(("127.0.0.1", port))
+        idle.send(b"GET /api/me")                                        # an unfinished request, then silence
+        try:
+            c = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+            c.request("GET", "/api/meta", headers={"Host": "127.0.0.1:%d" % port})
+            self.assertEqual(c.getresponse().status, 200)
+        finally:
+            idle.close()
+            httpd.shutdown()
+            httpd.server_close()
+            w.stop()
 
 
 class RegressionTests(unittest.TestCase):

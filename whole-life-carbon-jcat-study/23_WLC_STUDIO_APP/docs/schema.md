@@ -10,8 +10,8 @@
 | method | 取り方（手入力、PLATEAU の属性、数量表の合計、RASMI × 延床面積 …） |
 | source_id, source_detail | 出典の ID（`sources/registry.json` か資料の ID）と、その中の場所（シート・行・列、IFC の部材、ページ・行、建物 ID、表の行） |
 | retrieved_at, factor_version, permission | 取得日、使ったデータ・原単位の版、利用許諾（例：CC-BY-4.0、政府標準利用規約2.0） |
-| uncertainty | kind（none／interval／scenario）、low、high、level（信頼水準）、calibrated（独立のデータで当たり率を測ったか）、basis（範囲の作り方） |
-| note, updated_at, updated_by | 説明、保存の時刻、保存した人（候補を採用したときは「user（候補を採用: 出所）」） |
+| uncertainty | kind（none／interval／scenario／unknown＝根拠のある幅を付けられない推定）、low、high、level（信頼水準）、calibrated（独立のデータで当たり率を測ったか）、basis（範囲の作り方） |
+| note, scope, updated_at, updated_by | 説明、推定が欄の名前より広い範囲を含むこと（whole_building＝基礎を含む建物全体、all_steel＝鉄筋と鉄骨の全量。二重計上の防止に使う）、保存の時刻、保存した人（候補を採用したときは「user（候補を採用: 出所）」） |
 
 検査（`Value.check`）：値のある状態には値と取り方が要る；値の無い状態は値を持てない；統計推定には区間と出典が要る；図面からの計算には出典（資料）が要る；範囲は有限で下限 ≤ 上限。
 
@@ -31,7 +31,7 @@
 | research_log | 自動調査・概算の記録（出典 ID・件数。住所の文字列は残さない） |
 | runs | 計算の結果の表示用の記録（入力の指紋・評価期間・状態） |
 
-プロジェクトを削除すると、上の全部の行と保存した原本が消える。既存アプリの保存（`var/engine.sqlite3`）には変換した入力の版と計算の記録が残る（住所・建物名・原本は含まない）。
+プロジェクトを削除すると、上の全部の行と保存した原本が消え、既存アプリの保存（`var/engine.sqlite3`）の変換した入力の版・条件・計算の記録と、メモリの準備済みの計算も消える（先に計算側を消すので、失敗してもやり直せる）。両方の保存は `secure_delete` で、消した部分を上書きする。
 
 ## エンジンへの文書（lca-input/1、`wlcstudio/bridge.py`）
 

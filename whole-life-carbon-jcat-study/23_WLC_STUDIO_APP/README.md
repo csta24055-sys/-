@@ -18,7 +18,7 @@ python3 -B -m wlcstudio demo                  # 架空デモを作って計算�
 python3 -B -m wlcstudio validate              # 材料の統計概算の精度検証 → docs/accuracy_report.md
 python3 -B -m wlcstudio ledger --md docs/unconnected_inputs.md
 python3 -B -m wlcstudio sources --md docs/sources_rights.md
-WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 59 件（約 7 秒、外部に出ない）
+WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 73 件（約 7 秒、外部に出ない）
 ```
 
 保存先は `var/`（Git に入れない）。外部から取ったデータのキャッシュは `cache/`（同じく Git に入れない）。赤べこの写真は利用者のものを
@@ -56,7 +56,7 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 5
 | `docs/security.md` | セキュリティ・個人情報、外部公開の前に要ること |
 | `docs/review_fixes.md` | 敵対的レビューで確認された 31 件の指摘と修正 |
 
-## 試験（59 件）と指示書の対応
+## 試験（73 件）と指示書の対応
 
 | 指示書の項目 | 試験 |
 |---|---|
@@ -73,7 +73,7 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 5
 | 権限・安全 | `test_http_guards`、`test_refuses_non_loopback_bind`、手入力で「統計推定」にできない |
 | 回帰 | `test_research_folders_and_engine_unchanged`（23 章の外は変えていない）、`test_no_bytecode_written`、エンジンの版の確認 |
 | 行列化の等価性 | `test_vectorised_a13_equals_engine`、`test_masks_partition_and_unknown_is_not_zero` |
-| レビューの指摘 31 件 | `ReviewFixTests`（18 件：未取得の入力で下限になる、補充の有無、国交省・鉄の全量の二重計上、質量と数量の基準、IFC の mm、zip 爆弾、単位だけの保存の拒否、資料の検査、削除、古い結果、自動推定の範囲、住所をキャッシュしない、secure_delete、時間切れ、デモの再現性） |
+| レビューの指摘（2 回） | `SecondRoundTests`（14 件：値が同じ保存で推定を消さない、単位の付け直し、段階の広がりと数量の基準、全体量に含まれる欄、0 の台数・充填量、原単位の無い設備、冷媒の反映と補充の適用外、更新の無い施工、日付で変わらない指紋、IFC のフィートと共有の一覧、Excel の遠い列と負の数量、古い候補、古いキャッシュの消去、遅い接続）と `ReviewFixTests`（18 件：未取得の入力で下限になる、補充の有無、国交省・鉄の全量の二重計上、質量と数量の基準、IFC の mm、zip 爆弾、単位だけの保存の拒否、資料の検査、削除、古い結果、自動推定の範囲、住所をキャッシュしない、secure_delete、時間切れ、デモの再現性） |
 
 ## 指示書の Phase と到達点
 
@@ -86,7 +86,7 @@ WLCSTUDIO_OFFLINE=1 python3 -B -m unittest discover -s tests -t .     # 試験 5
 | 4 概算 | 材料（国交省・RASMI）は動作。設備・水は出典が無いので概算しない。運用は参考値だけ |
 | 5 エンジン接続と高速化 | 済み（入力の版の再利用、at(T) の再利用、要素積の等価性） |
 | 6 実データでの精度 | 材料の量は検証した（目標未達）。LCA の精度は未検証（実際の原単位が無い） |
-| 7 公開前の品質 | ローカル専用としての防御だけ。敵対的レビュー（4 観点・31 件確認）を全部直した。外部公開には認証・暗号化・分離・記録が要る（未実装） |
+| 7 公開前の品質 | ローカル専用としての防御だけ。敵対的レビュー（4 観点・31 件確認）と、その修正の再検証（7 人・約 35 件）を全部直した。外部公開には認証・暗号化・分離・記録が要る（未実装） |
 
 ## 未完了・課題
 

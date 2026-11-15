@@ -27,6 +27,7 @@ MATERIAL_TYPES = {"IFCMATERIAL", "IFCMATERIALLIST", "IFCMATERIALLAYERSETUSAGE", 
                   "IFCMATERIALCONSTITUENTSET", "IFCMATERIALCONSTITUENT", "IFCMATERIALPROFILESETUSAGE",
                   "IFCMATERIALPROFILESET", "IFCMATERIALPROFILE"}
 LINE = re.compile(r"#(\d+)\s*=\s*([A-Z0-9_]+)\s*\((.*)\)\s*;\s*$", re.S)
+MAX_WALK, MAX_QUANTITIES, MAX_NAMES = 500_000, 200_000, 20       # budgets for one file
 
 
 def _split_args(s: str) -> list:
@@ -115,23 +116,61 @@ def parse(text: str, doc_id: str) -> dict:
         return None if p is None else (p ** power) * base
 
     defaults, unit_notes = {}, []
+    assigned = False
     for eid, (typ, args) in ents.items():
         if typ == "IFCUNITASSIGNMENT":
+            assigned = True
             for r in _refs(args):
                 for kind, ut in UNIT_TYPE.items():
                     f = si_factor(r, kind)
                     if f is not None:
                         defaults[kind] = f
-                if r in ents and ents[r][0] != "IFCSIUNIT":
-                    unit_notes.append("SI でない単位（#%d %s）があり、その単位の数量は読まない" % (r, ents[r][0]))
+                if r in ents and ents[r][0] == "IFCCONVERSIONBASEDUNIT":
+                    # only units of length / area / volume / mass matter here (currency, derived units etc. are ignored)
+                    a = _split_args(ents[r][1])
+                    utype = a[1].strip(".") if len(a) > 1 else ""
                     for kind, ut in UNIT_TYPE.items():
-                        if ut in ents[r][1]:
+                        if ut == utype:
                             defaults[kind] = None
-    if "length" in defaults and defaults["length"] is not None:
-        defaults.setdefault("area", defaults["length"] ** 2)
-        defaults.setdefault("volume", defaults["length"] ** 3)
-    if not any(k in defaults for k in ("area", "volume", "weight")):
+                            unit_notes.append("%s が SI でない単位（%s）なので、その単位の数量は読まない" % (ut, _str(a[2]) if len(a) > 2 else "?"))
+    # area and volume follow the length unit only when they are not assigned themselves; a non-SI length (e.g. feet)
+    # makes undeclared areas and volumes unusable instead of reading them as m2 / m3
+    if "length" in defaults:
+        for kind, power in (("area", 2), ("volume", 3)):
+            if kind not in defaults:
+                defaults[kind] = None if defaults["length"] is None else defaults["length"] ** power
+    if not assigned:
         unit_notes.append("単位の割り当て（IfcUnitAssignment）が無いので、SI の基本単位（m2・m3・kg）とみなした")
+    budget = {"walk": MAX_WALK, "q": MAX_QUANTITIES}
+    memo: dict[int, list] = {}
+
+    def material_names(ref: int) -> list:
+        """Names of the IfcMaterial reachable from one material reference, following material entities only.
+        Memoised per reference and bounded by a budget for the whole file, so cycles, long chains shared by many
+        elements or huge lists cannot stall the (single-threaded) server."""
+        if ref in memo:
+            return memo[ref]
+        out, stack, seen = [], [ref], set()
+        while stack:
+            r = stack.pop()
+            if r in seen or r not in ents:
+                continue
+            seen.add(r)
+            budget["walk"] -= 1
+            if budget["walk"] < 0:
+                raise ValueError("IFC の材料の参照が多すぎる")
+            t2, a2 = ents[r]
+            if t2 not in MATERIAL_TYPES:
+                continue
+            if t2 == "IFCMATERIAL":
+                n = _str(_split_args(a2)[0])
+                if n and n not in out and len(out) < MAX_NAMES:
+                    out.append(n)
+            else:
+                stack.extend(_refs(a2))
+        memo[ref] = out
+        return out
+
     elements = {}
     for eid, (typ, args) in ents.items():
         if typ in ELEMENT_TYPES:
@@ -159,6 +198,12 @@ def parse(text: str, doc_id: str) -> dict:
                                     val = _num(qa[3]) if len(qa) > 3 else None
                                     if val is None:
                                         continue
+                                    if val < 0:
+                                        elements[o].setdefault("unit_problems", []).append("%s:#%d/#%d（負の数量は読まない）" % (doc_id, o, q))
+                                        continue
+                                    budget["q"] -= 1
+                                    if budget["q"] < 0:
+                                        raise ValueError("IFC の数量が多すぎる（%d 個まで）" % MAX_QUANTITIES)
                                     factor = 1.0
                                     if kind != "count":
                                         uref = _refs(qa[2]) if len(qa) > 2 else []
@@ -176,22 +221,13 @@ def parse(text: str, doc_id: str) -> dict:
             objs, mat = _refs(a[4]), _refs(a[5])
             names = []
             for mref in mat:
-                stack, seen = [mref], set()
-                while stack and len(seen) < 10000:           # a reference cycle or a huge file cannot loop forever
-                    r = stack.pop()
-                    if r in seen or r not in ents:
-                        continue
-                    seen.add(r)
-                    t2, a2 = ents[r]
-                    if t2 not in MATERIAL_TYPES:
-                        continue
-                    if t2 == "IFCMATERIAL":
-                        names.append(_str(_split_args(a2)[0]))
-                    else:
-                        stack.extend(_refs(a2))
+                names += material_names(mref)
             for o in objs:
                 if o in elements:
-                    elements[o]["materials"].extend(n for n in names if n)
+                    have = elements[o]["materials"]
+                    for n in names:
+                        if n and n not in have and len(have) < MAX_NAMES:
+                            have.append(n)
     els = sorted(elements.values(), key=lambda e: e["step_id"])
     return {"format": "ifc", "schema": schema, "n_entities": len(ents), "elements": els, "unit_notes": unit_notes,
             "unit_factors": {k: v for k, v in defaults.items()},

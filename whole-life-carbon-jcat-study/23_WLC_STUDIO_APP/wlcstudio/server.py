@@ -4,8 +4,10 @@ Security model (see docs/security.md): a single user on this machine. The server
 address only and refuses anything else; there is no authentication, so it must not be exposed to a network.
 Every request must carry a Host header naming the loopback address and port (blocks DNS rebinding); a
 state-changing request must be JSON and, when an Origin header is present, come from the same origin.
-Responses carry a strict CSP, no framing, no referrer, no caching of API answers. Single-threaded: the
-engine's store and System objects are bound to one thread.
+Responses carry a strict CSP, no framing, no referrer, no caching of API answers. Threads: each connection is
+read in its own thread (so an idle or slow client blocks only itself), and every API call is handed to ONE worker
+thread that owns the App, its SQLite connections and the engine (they are bound to one thread, and System.at()
+mutates shared state), so calls never run concurrently.
 """
 from __future__ import annotations
 
@@ -18,7 +20,9 @@ import sys
 import time
 import traceback
 import urllib.parse
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import queue
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from pathlib import Path
 
 from . import APP_NAME, APP_VERSION
@@ -68,6 +72,10 @@ class App:
         self.engine = Engine(var / "engine.sqlite3")
         self.refset = self.engine.refset_dict()
 
+    def close(self):
+        self.projects.close()
+        self.engine.close()
+
     # ------------------------------------------------------------------ helpers
     def _project_view(self, pid: int) -> dict:
         p = self.projects.get(pid)
@@ -113,9 +121,11 @@ class App:
                 if method == "GET":
                     return 200, self._project_view(pid)
                 if method == "DELETE":
+                    # the engine copy first: if that fails the project is still there and the delete can be retried
                     lca = self.projects.get(pid)["lca_project_id"]
+                    eng = self.engine.delete_project(lca)
                     out = self.projects.delete(pid)
-                    out["engine"] = self.engine.delete_project(lca)
+                    out["engine"] = eng
                     return 200, out
             if rest[:1] == ["fields"] and len(rest) >= 2:
                 fid = rest[1]
@@ -173,14 +183,24 @@ class App:
             raise ApiError(400, "空欄は保存しない（未取得のまま。0 にはしない）")
         cur = self.projects.current(pid, fid)
         unit = str(b.get("unit") if b.get("unit") is not None else F.get("unit", ""))
-        if cur is not None and state in ("confirmed", "assumption") and cur.state in ("confirmed", "from_drawing", "statistical", "assumption") \
-                and F["type"] in ("number", "integer") and cur.unit and unit != cur.unit:
-            try:
-                same = float(str(value).replace(",", "")) == float(cur.value)
-            except (TypeError, ValueError):
-                same = False
-            if same:
-                raise ApiError(400, "数値を変えずに単位だけ変えることはしない（%s → %s）。換算した値を入れる" % (cur.unit, unit))
+        if cur is not None and state in ("confirmed", "assumption") and cur.state in ("confirmed", "from_drawing", "statistical", "assumption"):
+            if F["type"] in ("number", "integer"):
+                try:
+                    same = float(str(value).replace(",", "")) == float(cur.value)
+                except (TypeError, ValueError):
+                    same = False
+            else:
+                same = str(value) == str(cur.value)
+            same_unit = F["type"] not in ("number", "integer") or not cur.unit or unit == cur.unit
+            from_source = cur.state in ("statistical", "from_drawing") or \
+                cur.method not in ("user_entered", "initial_setting", "structure_card")
+            if same and same_unit and from_source:
+                # an unchanged save must not turn an adopted estimate / drawing value into a typed value: that would drop
+                # its source, its range and its whole-building scope (and with it the double-counting guard)
+                raise ApiError(400, "値が同じなので保存しない（%sの出典・範囲を消さないため）。違う値を入れるときだけ保存する" % LABEL[cur.state])
+            if same and not same_unit and not b.get("relabel"):
+                raise ApiError(400, "数値を変えずに単位だけ変えることはしない（%s → %s）。単位の付け間違いを直すときは、"
+                                    "画面の確認に答えて「単位の付け直し」として保存する" % (cur.unit, unit))
         v = Value(fid, state, value if state in ("confirmed", "assumption") else None,
                   str(b.get("unit") if b.get("unit") is not None else F.get("unit", "")) if state in ("confirmed", "assumption") else "",
                   method=str(b.get("method") or "user_entered"), source_id=str(b.get("source_id") or ""),
@@ -262,11 +282,15 @@ class App:
         lo_vals, n = _with(vals, "low")
         n_unknown = sum(1 for v in vals.values() if v.uncertainty.kind == "unknown")
         if n == 0:
+            if n_unknown:
+                return {"low_t": None, "high_t": None, "n_values_with_range": 0, "n_values_range_unknown": n_unknown,
+                        "note": "範囲が不明な推定 %d 項目（%s）があり、合計の幅は示せない。"
+                                % (n_unknown, "、".join(FL.FIELDS[f]["label"] for f, v in vals.items() if v.uncertainty.kind == "unknown"))}
             return None
         hi_vals, _ = _with(vals, "high")
         tot = {}
         for side, vv in (("low", lo_vals), ("high", hi_vals)):
-            doc, rep = bridge.build(vv, self.refset, title="WLC Studio #%d (%s)" % (pid, side))
+            doc, rep = bridge.build(vv, self.refset, title="WLC Studio #%d (%s)" % (pid, side), period=T)
             if rep["missing_required"]:
                 return None
             r = self.engine.run(doc, lca_pid, T)
@@ -285,7 +309,7 @@ class App:
             raise ApiError(400, "評価期間は 0 より大きく 130 年以下で入れる（エンジンの年表の長さが 130 年）")
         p = self.projects.get(pid)
         vals = self.projects.values(pid)
-        doc, rep = bridge.build(vals, self.refset, title="WLC Studio #%d" % pid)
+        doc, rep = bridge.build(vals, self.refset, title="WLC Studio #%d" % pid, period=T)
         trace = {"評価期間（年）": T, "参照セット": "%s / %s（%s）" % (self.refset["name"], self.refset["version"], self.refset["data_kind"]),
                  "入力の指紋（SHA-256 の先頭）": rep["input_hash"][:16]}
         base = {"period": T, "reflection": {"summary": rep["summary"], "by_state": rep["by_state"]},
@@ -313,6 +337,9 @@ class App:
             out = dict(base, status="ok", message="", summary=_summary(r["results"], run.get("view") or {}, rep), trace=trace,
                        checks=_checks(r["results"]))
             out["range"] = self._range(vals, T, r["lca_project_id"], pid)
+            if out["range"] and out["summary"]["lower_bound"]:
+                out["range"]["lower_bound"] = True
+                out["range"]["note"] += "入っていない入力があるので、両端とも下限（本当の合計は上端より大きいことがある）。"
         self.projects.save_run(pid, run["id"], rep["input_hash"], T, out["status"], out)
         return out
 
@@ -360,24 +387,39 @@ UNIT_STAGE = {"A13-01": "A1-A3", "A13-03": "A1-A3", "A13-04": "A1-A3", "X-01": "
 UNIT_HINTS = {
     "A13-01": ["m_waste_rate", "m_quantity_basis"], "A4-01": ["m_transport_km", "m_transport_mode"],
     "A5-01": ["c_site_electricity", "o_grid_construction"], "A5-02": ["c_diesel"],
-    "B1-02": ["r_leak_rate", "r_gwp"], "B1-03": ["r_loss_rate", "r_life"], "B1-04": ["r_recovery_rate", "r_top_up"],
-    "B2-01": ["o_fm_ratio"], "B3-01": ["m_repair_rate", "e_repair_rate"], "B4-02": ["m_refresh_cycle", "e_hvac_life", "e_electrical_life"],
+    "X-01": ["e_hvac_count", "e_electrical_count", "e_plumbing_count", "e_conveyance_count"], "A5-02": ["c_diesel"],
+    "B1-02": ["r_charge_kg", "r_top_up", "r_leak_rate", "r_gwp"], "B1-03": ["r_charge_kg", "r_top_up", "r_loss_rate", "r_life"],
+    "B1-04": ["r_charge_kg", "r_recovery_rate", "r_top_up"],
+    "B2-01": ["o_fm_ratio", "o_elec_kwh", "o_pv_kwh", "o_export_kwh"],
+    "B3-01": ["m_repair_rate", "e_repair_rate", "e_hvac_count", "e_electrical_count", "e_plumbing_count", "e_conveyance_count"], "B4-02": ["m_refresh_cycle", "e_hvac_life", "e_electrical_life"],
     "B5-01": ["a_reconstruction", "a_replacement_cycle", "a_recon_fraction"],
     "B6-01": ["o_elec_kwh", "o_pv_kwh", "o_export_kwh"], "B6-02": ["o_gas_m3", "o_oil_l", "o_dheat_mj"],
     "C1-01": [], "C2-01": ["a_eol_haul_km"], "C3-01": ["a_eol_route"], "C4-01": ["a_eol_route"],
-    "X-14": ["e_hvac_mass", "e_electrical_mass"]}
+    "X-14": ["e_hvac_count", "e_electrical_count", "e_plumbing_count", "e_conveyance_count", "e_hvac_mass",
+             "e_electrical_mass", "e_plumbing_mass", "e_conveyance_mass"]}
 
 
 def _hints(incomplete: list[str], rep: dict) -> list[dict]:
-    """For each incomplete unit: which inputs of the screens are still not obtained (the likely cause)."""
+    """For each incomplete stage: the inputs of the screens that are missing for it (from the bridge's record), else the
+    usual inputs of the engine's incomplete units that are still not obtained, else a pointer to the unconnected list."""
     state = {f["field"]: f["state"] for f in rep["fields"]}
-    out = []
+    by_stage = {}
+    for m in rep.get("missing_inputs") or []:
+        for st in m["stages"]:
+            by_stage.setdefault(st, []).append(m["label"])
+    units = {}
     for u in incomplete:
-        cand = [f for f in UNIT_HINTS.get(u, []) if state.get(f, "not_obtained") in ("not_obtained", "not_computable")]
-        out.append({"unit": u, "stage": UNIT_STAGE.get(u, "—"),
-                    "fields": [{"field": f, "label": FL.FIELDS[f]["label"]} for f in cand],
-                    "note": ("未取得の入力：" + "、".join(FL.FIELDS[f]["label"] for f in cand) + "（調べて入れる。本当に無いと分かっているときだけ「適用外」）") if cand
-                    else "材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）"})
+        units.setdefault(UNIT_STAGE.get(u, "—"), []).append(u)
+    out = []
+    for st in [s_ for s_ in FL.STAGES_ALL if s_ in by_stage or s_ in units] + (["—"] if "—" in units else []):
+        labels = by_stage.get(st, [])
+        if not labels:
+            cand = [f for u in units.get(st, []) for f in UNIT_HINTS.get(u, [])
+                    if state.get(f, "not_obtained") in ("not_obtained", "not_computable")]
+            labels = list(dict.fromkeys(FL.FIELDS[f]["label"] for f in cand))
+        note = ("未取得の入力：" + "、".join(dict.fromkeys(labels)) + "（調べて入れる。本当に無いと分かっているときだけ「適用外」）") if labels \
+            else "材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）"
+        out.append({"stage": st, "unit": "、".join(units.get(st, [])) or "—", "fields": labels, "note": note})
     return out
 
 
@@ -400,6 +442,7 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
             "per_area": (res.get("SUM-04") or {}).get("value"), "per_area_year": (res.get("SUM-05") or {}).get("value"),
             "complete": bool(s3.get("complete")) and not rep.get("missing_inputs"),
             "engine_complete": bool(s3.get("complete")), "incomplete_units": inc, "hints": _hints(inc, rep),
+            "incomplete_stages": sorted(st for st in bad_stages if st),
             "stages": stages, "by_year": rows, "year_axis": "評価期間の年（1 年目〜）",
             "source_keys": "SUM-03.value、X-02.by_stage、X-07.by_year、SUM-04/05.value",
             "lower_bound": bool(rep["missing_materials"] or rep.get("missing_inputs")) or not s3.get("complete"),
@@ -438,13 +481,60 @@ CSP = ("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inlin
        "frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
 
 
-def make_handler(app: App, port: int):
+class AppWorker:
+    """Runs the App in one dedicated thread; HTTP threads hand it (method, path, body) and wait for the answer."""
+
+    def __init__(self, var, keep_uploads: bool = False):
+        self.q: queue.Queue = queue.Queue()
+        self.ready = threading.Event()
+        self.error = None
+        self.t = threading.Thread(target=self._run, args=(var, keep_uploads), name="wlcstudio-app", daemon=True)
+        self.t.start()
+        self.ready.wait()
+        if self.error:
+            raise self.error
+
+    def _run(self, var, keep_uploads):
+        try:
+            self.app = App(var, keep_uploads=keep_uploads)
+        except BaseException as e:            # reported to the caller of __init__
+            self.error = e
+            self.ready.set()
+            return
+        self.ready.set()
+        while True:
+            job = self.q.get()
+            if job is None:
+                self.app.close()
+                return
+            args, box, done = job
+            try:
+                box["out"] = self.app.handle(*args)
+            except BaseException as e:
+                box["err"] = e
+            done.set()
+
+    def handle(self, method, path, body):
+        box, done = {}, threading.Event()
+        self.q.put(((method, path, body), box, done))
+        done.wait()
+        if "err" in box:
+            raise box["err"]
+        return box["out"]
+
+    def stop(self):
+        self.q.put(None)
+        self.t.join(timeout=10)
+
+
+def make_handler(app, port: int):
+    """`app` is anything with handle(method, path, body): the App itself (tests) or an AppWorker (the server)."""
     allowed_hosts = {"127.0.0.1:%d" % port, "localhost:%d" % port, "[::1]:%d" % port}
 
     class H(BaseHTTPRequestHandler):
         server_version = "WLCStudio/" + APP_VERSION
         sys_version = ""
-        timeout = 15                                 # an idle connection cannot hold the single-threaded server
+        timeout = 10                                 # an idle connection is dropped (it only ever blocks its own thread)
 
         def log_message(self, fmt, *args):          # no request bodies, no addresses in the log
             sys.stderr.write("%s %s\n" % (time.strftime("%H:%M:%S"), fmt % args))
@@ -550,8 +640,9 @@ def serve(var: str | Path, host: str = "127.0.0.1", port: int = 8770, keep_uploa
             raise SystemExit("ホスト名は localhost か 127.0.0.1 にする") from None
     from .sources.net import sweep
     sweep()
-    app = App(var, keep_uploads=keep_uploads)
-    httpd = HTTPServer((host, port), make_handler(app, port))
+    worker = AppWorker(var, keep_uploads=keep_uploads)
+    ThreadingHTTPServer.daemon_threads = True
+    httpd = ThreadingHTTPServer((host, port), make_handler(worker, port))
     print("WLC Studio %s: http://%s:%d/ （止めるには Ctrl+C）" % (APP_VERSION, "127.0.0.1" if host == "localhost" else host, port))
     try:
         httpd.serve_forever()
@@ -559,3 +650,4 @@ def serve(var: str | Path, host: str = "127.0.0.1", port: int = 8770, keep_uploa
         pass
     finally:
         httpd.server_close()
+        worker.stop()

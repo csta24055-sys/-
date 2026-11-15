@@ -112,7 +112,7 @@ function fieldHtml(fid) {
     : (F.unit ? `<span class="muted unit">${esc(curUnit)}</span>` : "");
   const estimated = v && (v.state === "assumption" || v.state === "statistical");
   const stateSel = `<select id="st-${fid}" aria-label="${esc(F.label)}の状態"><option value="confirmed" ${estimated ? "" : "selected"}>確認済み</option><option value="assumption" ${estimated ? "selected" : ""}>仮定</option></select>`;
-  const naLabel = F.na === "zero" ? "適用外（0 として計算）" : F.na === "absent" ? "適用外（無い）" : "適用外";
+  const naLabel = F.na_note ? `適用外（${F.na_note}）` : F.na === "zero" ? "適用外（0 として計算）" : F.na === "absent" ? "適用外（無い）" : "適用外（渡さない）";
   const unc = v && v.uncertainty && v.uncertainty.kind === "unknown" ? `<div class="muted">範囲は不明（根拠のある幅を付けられない推定）</div>`
     : v && v.uncertainty && v.uncertainty.kind !== "none"
     ? `<div class="muted">範囲 ${fmt(v.uncertainty.low, v.unit)} 〜 ${fmt(v.uncertainty.high, v.unit)}${v.uncertainty.kind === "interval" ? (v.uncertainty.calibrated ? "（校正済みの予測区間）" : "（仮の範囲）") : "（シナリオ）"}</div>` : "";
@@ -174,8 +174,18 @@ function bindScreen(m, sid) {
     const cur = (state.project.fields[fid] || {}).value;
     const us = $("#unit-" + fid), unit = us ? us.value : ((cur && cur.unit) || F.unit);
     const st = $("#st-" + fid).value;
-    if (cur && cur.value === value && (cur.unit || "") === (F.type === "number" ? unit : "") && cur.state === st) { toast("変更はありません"); return; }
-    await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body: { value, unit: F.type === "number" ? unit : "", state: st, method: "user_entered" } });
+    const body = { value, unit: F.type === "number" ? unit : "", state: st, method: "user_entered" };
+    if (cur && cur.value === value) {
+      const own = ["user_entered", "initial_setting", "structure_card"].includes(cur.method) && !["statistical", "from_drawing"].includes(cur.state);
+      const sameUnit = F.type !== "number" || !cur.unit || cur.unit === unit;
+      if (sameUnit && !own) { toast(`値が変わっていないので保存しません（${state.meta.states[cur.state]}の出典・範囲を残します）`); return; }
+      if (sameUnit && cur.state === st) { toast("変更はありません"); return; }
+      if (!sameUnit) {
+        if (!confirm(`数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（単位の付け間違いを直すとき）。よろしいですか？換算したいときは、換算した数値を入れてください。`)) return;
+        body.relabel = true;
+      }
+    }
+    await api(`/projects/${state.project.id}/fields/${fid}`, { method: "PUT", body });
     await refresh(sid, fid);
   }));
   m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = async () => {
@@ -287,7 +297,8 @@ async function renderResult(m) {
 function showResult(r) {
   const el = $("#res");
   if (r.status !== "ok") {
-    el.innerHTML = `<div class="notice bad"><strong>計算していません</strong>：${esc(r.message)}</div>${missingHtml(r)}`;
+    el.innerHTML = r.stale ? `<div class="notice bad"><strong>入力が変わっています。</strong>前の計算では「${esc(r.message)}」でした。「計算する」を押して計算し直してください。</div>`
+      : `<div class="notice bad"><strong>計算していません</strong>：${esc(r.message)}</div>${missingHtml(r)}`;
     return;
   }
   const s = r.summary, maxStage = Math.max(...s.stages.map((x) => Math.abs(x.value || 0)), 1);
@@ -298,8 +309,9 @@ function showResult(r) {
   ${r.stale ? `<div class="notice bad"><strong>入力が変わっています。</strong>下は前の入力での結果です。「計算する」を押して計算し直してください。</div>` : ""}
   <div class="card${r.stale ? " stale" : ""}"><div class="muted">ホールライフカーボン（評価期間 ${r.period} 年）</div>
     <div class="big">${esc(head)}</div>
-    <div class="muted">${s.lower_bound ? "<strong>下限</strong>（入っていない分がある）・" : ""}延床面積あたり ${fmt(s.per_area, "kgCO2e/m²")}・年あたり ${fmt(s.per_area_year, "kgCO2e/(m²·年)")}</div>
-    ${r.range ? `<div class="muted">範囲：${r.range.low_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} 〜 ${r.range.high_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} tCO2e（${esc(r.range.note)}）</div>` : ""}
+    ${s.nothing_counted ? "" : `<div class="muted">${s.lower_bound ? "<strong>下限</strong>（入っていない分がある）・" : ""}延床面積あたり ${fmt(s.per_area, "kgCO2e/m²")}・年あたり ${fmt(s.per_area_year, "kgCO2e/(m²·年)")}</div>`}
+    ${r.range ? (r.range.low_t === null ? `<div class="muted">範囲：${esc(r.range.note)}</div>`
+      : `<div class="muted">${r.range.lower_bound ? "範囲（両端とも下限）" : "範囲"}：${r.range.low_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} 〜 ${r.range.high_t.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} tCO2e（${esc(r.range.note)}）</div>`) : ""}
     <div class="notice">${esc(r.factor_note)}</div>
     ${s.lower_bound ? `<div class="notice bad">この合計は<strong>下限</strong>です。次の分は合計に入っていません：
       <ul>${miss.slice(0, 12).map((x) => `<li>${esc(x.label)}（${esc(x.stages.join("・"))}）：${esc(x.reason)}</li>`).join("")}${miss.length > 12 ? `<li>ほか ${miss.length - 12} 件</li>` : ""}

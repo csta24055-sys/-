@@ -21,7 +21,8 @@ HEADERS = {
     "specification": ("規格", "仕様", "spec", "specification", "grade"),
 }
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-MAX_PART, MAX_TOTAL, MAX_RATIO = 50_000_000, 200_000_000, 200
+MAX_PART, MAX_TOTAL = 30_000_000, 60_000_000     # bytes after decompression (real quantity tables are far smaller)
+MAX_COLS, MAX_CELLS = 16_384, 2_000_000          # Excel's own column limit (XFD); all sheets together
 
 
 class ImportError_(ValueError):
@@ -94,7 +95,10 @@ def read_csv(data: bytes, doc_id: str) -> dict:
 
 
 def _col_index(ref: str) -> int:
-    letters = re.match(r"[A-Z]+", ref).group(0)
+    m = re.match(r"[A-Z]+", ref or "")
+    if not m or len(m.group(0)) > 3:
+        raise ImportError_("セルの位置 %r を読めない（Excel の列の上限を超えている）" % ref)
+    letters = m.group(0)
     n = 0
     for ch in letters:
         n = n * 26 + (ord(ch) - 64)
@@ -105,38 +109,52 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
     """All sheets of an .xlsx as (name, rows); cell values are the stored text/cached values (no formula is evaluated)."""
     try:
         z = zipfile.ZipFile(io.BytesIO(data))
-    except zipfile.BadZipFile:
+    except (zipfile.BadZipFile, ValueError):
         raise ImportError_("Excel（.xlsx）として開けない") from None
     names = z.namelist()
     if any(n.lower().endswith("vbaproject.bin") for n in names):
         raise ImportError_("マクロを含むファイルは読まない（マクロを実行・解析しない方針）")
-    # zip bomb guard: limits on the expanded size of each part and of the whole workbook, and on the ratio
-    total = 0
-    for info in z.infolist():
-        total += info.file_size
-        if info.file_size > MAX_PART or total > MAX_TOTAL or \
-                (info.compress_size and info.file_size / info.compress_size > MAX_RATIO and info.file_size > 1_000_000):
+    # zip bomb guard: every part is read through a bounded stream and the bytes actually decompressed are counted, so
+    # a part whose header understates its size cannot expand beyond the limits
+    budget = {"left": MAX_TOTAL}
+    if sum(i.file_size for i in z.infolist()) > MAX_TOTAL or any(i.file_size > MAX_PART for i in z.infolist()):
+        raise ImportError_("展開すると大きすぎる Excel ファイルは読まない（1 部品 %d MB・合計 %d MB まで）"
+                           % (MAX_PART // 1_000_000, MAX_TOTAL // 1_000_000))      # declared sizes: refuse early
+
+    def read(name):
+        try:
+            with z.open(name) as fh:
+                data = fh.read(MAX_PART + 1)
+        except KeyError:
+            raise ImportError_("Excel（.xlsx）の部品 %s が無い" % name) from None
+        except (zipfile.BadZipFile, OSError, EOFError) as e:
+            raise ImportError_("Excel ファイルが壊れている（%s）" % e) from None
+        if len(data) > MAX_PART or len(data) > budget["left"]:
             raise ImportError_("展開すると大きすぎる Excel ファイルは読まない（1 部品 %d MB・合計 %d MB まで）"
                                % (MAX_PART // 1_000_000, MAX_TOTAL // 1_000_000))
+        budget["left"] -= len(data)
+        return data
     shared = []
     if "xl/sharedStrings.xml" in names:
-        root = ET.fromstring(z.read("xl/sharedStrings.xml"))
+        root = ET.fromstring(read("xl/sharedStrings.xml"))
         for si in root.findall("m:si", NS):
             shared.append("".join(t.text or "" for t in si.iter("{%s}t" % NS["m"])))
-    wb = ET.fromstring(z.read("xl/workbook.xml"))
-    rels = ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))
+    wb = ET.fromstring(read("xl/workbook.xml"))
+    rels = ET.fromstring(read("xl/_rels/workbook.xml.rels"))
     rel_target = {r.get("Id"): r.get("Target") for r in rels}
     out = []
+    cells = {"n": 0}
     for sh in wb.find("m:sheets", NS):
         rid = sh.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
         target = rel_target.get(rid, "")
         path = "xl/" + target.lstrip("/").replace("xl/", "") if not target.startswith("/xl/") else target.lstrip("/")
         if path not in names:
             continue
-        root = ET.fromstring(z.read(path))
+        root = ET.fromstring(read(path))
         rows = []
         for row in root.iter("{%s}row" % NS["m"]):
             vals = {}
+            last = -1
             for c in row.findall("m:c", NS):
                 ref, t = c.get("r"), c.get("t")
                 v = c.find("m:v", NS)
@@ -146,7 +164,14 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
                     val = "".join(x.text or "" for x in c.iter("{%s}t" % NS["m"]))
                 else:
                     val = v.text if v is not None else None   # formulas: the cached value only, never evaluated
-                vals[_col_index(ref)] = val
+                ci = _col_index(ref) if ref else last + 1     # a cell without a reference follows the previous one
+                last = ci
+                if ci >= MAX_COLS:
+                    raise ImportError_("列の位置 %s が Excel の上限を超えている" % ref)
+                vals[ci] = val
+            cells["n"] += max(vals) + 1 if vals else 0
+            if cells["n"] > MAX_CELLS:
+                raise ImportError_("セルが多すぎる（%d まで）" % MAX_CELLS)
             rows.append([vals.get(j) for j in range(max(vals) + 1)] if vals else [])
         out.append((sh.get("name"), rows))
     return out

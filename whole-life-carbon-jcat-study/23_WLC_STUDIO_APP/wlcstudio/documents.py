@@ -88,6 +88,9 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 if _is_total(r["name"]):
                     unused.append({"trace": r["trace"], "name": r["name"], "reason": "合計・小計の行は足さない（二重計上を防ぐ）"})
                     continue
+                if r["quantity"] < 0:
+                    unused.append({"trace": r["trace"], "name": r["name"], "reason": "負の数量は読まない（差し引きにしない）"})
+                    continue
                 fid = _field_for(r["name"] + " " + r.get("specification", ""), r.get("division", ""))
                 u = _unit(r["unit"])
                 if fid is None:
@@ -134,7 +137,8 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         warnings += parsed.get("unit_notes", [])
         for e in parsed["elements"]:
             for pr in e.get("unit_problems", []):
-                unused.append({"trace": pr.split("（")[0], "name": "%s %s" % (e["type"], e["name"]), "reason": "単位を換算できない数量"})
+                unused.append({"trace": pr.split("（")[0], "name": "%s %s" % (e["type"], e["name"]),
+                               "reason": pr.split("（", 1)[1].rstrip("）") if "（" in pr else "使えない数量"})
     elif kind == "pdf":
         parsed = pdf.read(data, doc_id)
         if parsed.get("error"):
@@ -143,6 +147,9 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             warnings.append("文字の無いページ（スキャン画像）は読んでいない：%s" % parsed["pages_without_text"][:20])
         per_field = {}
         for c in parsed["candidates"]:
+            if c["quantity"] < 0:
+                unused.append({"trace": c["trace"], "name": c["name"], "reason": "負の数量は読まない"})
+                continue
             fid = _field_for(c["name"])
             u = _unit(c["unit"])
             if fid is None or u not in FL.FIELDS.get(fid, {}).get("units", []):

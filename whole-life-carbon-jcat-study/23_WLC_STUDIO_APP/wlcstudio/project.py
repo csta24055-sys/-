@@ -204,6 +204,11 @@ class Projects:
         for r in self.db.execute(q + " ORDER BY id", args):
             d = json.loads(r[2])
             d.update(id=r[0], origin=r[3])
+            if d.get("method") == "plateau_roof_x_storeys" and (d.get("uncertainty") or {}).get("kind", "none") == "none":
+                # candidates stored before the uncertainty rule: the range is unknown and the dataset version was not kept
+                d["uncertainty"] = {"kind": "unknown", "low": None, "high": None, "level": None, "calibrated": False,
+                                    "basis": "範囲を示す資料が無い"}
+                d["factor_version"] = d.get("factor_version") or "PLATEAU（版の記録の無い古い候補）"
             out.append(d)
         # strongest evidence first
         out.sort(key=lambda d: (-PRIORITY[d["state"]], d["id"]))
@@ -335,8 +340,19 @@ def _normalise(F: dict, v: Value) -> Value:
             raise ProjectError("「%s」の単位 %r は使えない（%s）" % (F["label"], unit, "・".join(u or "なし" for u in ok_units)))
         v.unit = unit
         lo, hi = F.get("range", (None, None))
-        if lo is not None and F.get("unit") == unit and not (lo <= v.value <= hi):
-            raise ProjectError("「%s」の値 %s は範囲 %s〜%s の外" % (F["label"], v.value, lo, hi))
+        if lo is not None:
+            mass = {"kg": 1.0, "t": 1000.0}
+            fu = F.get("unit")
+            if unit == fu:
+                x = v.value
+            elif unit in mass and fu in mass:
+                x = v.value * mass[unit] / mass[fu]          # check the range in the field's own unit
+            else:
+                x = None                                     # another dimension (e.g. t for an m3 field)
+            if x is not None and not (lo <= x <= hi):
+                raise ProjectError("「%s」の値 %s %s は範囲 %s〜%s %s の外" % (F["label"], v.value, unit, lo, hi, fu))
+            if x is None and v.value > 1e9:
+                raise ProjectError("「%s」の値 %s %s は大きすぎる" % (F["label"], v.value, unit))
         if v.value < 0:
             raise ProjectError("「%s」に負の値は入れない" % F["label"])
     elif t == "enum":

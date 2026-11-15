@@ -184,18 +184,18 @@ _f("r_charge_kg", label="冷媒の充填量（合計）", unit="kg", screen=G[0]
    engine=["refrigerants[].charge_mass_kg"], role="refrigerant", part="charge_mass_kg", na="absent", range=(0, 1e6),
    help="機器の銘板・仕様書の値。冷媒を使わないときは「適用外」。")
 _f("r_gwp", label="冷媒の地球温暖化係数（GWP）", unit="kgCO2e/kg", screen=G[0], group=G[1], category=G[2],
-   engine=["refrigerants[].gwp"], role="refrigerant", part="gwp", range=(0, 30000),
+   engine=["refrigerants[].gwp"], role="refrigerant", na_note="B1 は計算しない", part="gwp", range=(0, 30000),
    help="冷媒の種類に対する公的な値を、出典つきで入れる。")
 _f("r_leak_rate", label="年あたりの漏えい率", unit="", screen=G[0], group=G[1], category=G[2],
    engine=["refrigerants[].annual_leak_rate"], role="refrigerant", part="annual_leak_rate", range=(0, 1), na="zero")
 _f("r_loss_rate", label="交換時の損失率", unit="", screen=G[0], group=G[1], category=G[2],
    engine=["refrigerants[].replacement_loss_rate"], role="refrigerant", part="replacement_loss_rate", range=(0, 1), na="zero")
 _f("r_recovery_rate", label="廃棄時の回収率", unit="", screen=G[0], group=G[1], category=G[2],
-   engine=["refrigerants[].end_of_life_recovery_rate"], role="refrigerant", part="end_of_life_recovery_rate", range=(0, 1))
+   engine=["refrigerants[].end_of_life_recovery_rate"], role="refrigerant", na_note="B1 は計算しない", part="end_of_life_recovery_rate", range=(0, 1))
 _f("r_life", label="冷媒機器の交換周期", unit="年", screen=G[0], group=G[1], category=G[2],
-   engine=["refrigerants[].service_life"], role="refrigerant", part="service_life", range=(1, 120))
+   engine=["refrigerants[].service_life"], role="refrigerant", na_note="B1 は計算しない", part="service_life", range=(1, 120))
 _f("r_top_up", label="漏えい分の補充", type="enum", enum=[("yes", "補充する"), ("no", "補充しない")], screen=G[0],
-   group=G[1], category=G[2], engine=["refrigerants[].top_up"], role="refrigerant", part="top_up")
+   group=G[1], category=G[2], engine=["refrigerants[].top_up"], role="refrigerant", part="top_up", na_note="補充しないとして計算")
 
 # ---------------------------------------------------------------- 運用 -------------------------------------
 G = ("operation", "エネルギー（年あたり）", "operation")
@@ -290,5 +290,6 @@ def meta_fields() -> dict:
         out[fid] = {"label": F["label"], "unit": F.get("unit", ""), "type": "number" if F["type"] == "integer" else F["type"],
                     "enum": [{"value": v, "label": lab} for v, lab in F.get("enum", [])],
                     "help": F["help"], "required": F["required"], "estimable": F["estimable"], "engine": F["engine"],
-                    "category": F["category"], "units": F.get("units", [F.get("unit", "")]), "na": F["na"]}
+                    "category": F["category"], "units": F.get("units", [F.get("unit", "")]), "na": F["na"],
+                    "na_note": F.get("na_note", "")}
     return out

@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.parse
@@ -80,14 +81,41 @@ def get_json(url: str, **kw) -> tuple[object, dict]:
         raise SourceError("応答が JSON でない（%s）" % urllib.parse.urlparse(url).netloc) from None
 
 
+_ENTRY = re.compile(r"^[0-9a-f]{64}(\.json)?$")
+PERSONAL = ("AddressSearch", "LonLatToAddress")
+
+
 def sweep(max_age: float = 400 * 86400) -> int:
-    """Delete cache entries older than max_age (run at server start). Returns the number of files removed."""
+    """Clean the cache at server start. Only files that look like cache entries (<2 hex>/<64 hex>[.json]) are touched:
+    entries older than max_age are removed; entries of an address search or a reverse geocode written by an older
+    version (which cached them) are removed whatever their age; any old metadata that still holds the request URL is
+    rewritten without it. Returns the number of files removed."""
     n = 0
     if not CACHE.exists():
         return 0
     now = time.time()
-    for p in CACHE.rglob("*"):
-        if p.is_file() and now - p.stat().st_mtime > max_age:
+    for p in CACHE.glob("??/*"):
+        if not (p.is_file() and _ENTRY.match(p.name) and re.fullmatch(r"[0-9a-f]{2}", p.parent.name)):
+            continue
+        if p.suffix == ".json":
+            try:
+                meta = json.loads(p.read_text())
+            except (OSError, ValueError):
+                meta = {}
+            url = str(meta.get("url") or "")
+            if any(k in url for k in PERSONAL):
+                for q in (p, p.with_suffix("")):
+                    try:
+                        q.unlink()
+                        n += 1
+                    except OSError:
+                        pass
+                continue
+            if "url" in meta:
+                meta.pop("url")
+                meta.setdefault("host", urllib.parse.urlparse(url).netloc)
+                p.write_text(json.dumps(meta))
+        if p.exists() and now - p.stat().st_mtime > max_age:
             try:
                 p.unlink()
                 n += 1

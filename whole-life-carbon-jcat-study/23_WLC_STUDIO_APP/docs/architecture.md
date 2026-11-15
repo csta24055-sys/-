@@ -8,7 +8,7 @@ flowchart TD
     door[扉の起動画面] --> home[赤べこのホーム] --> st[構造の選択 S/RC/SRC/W] --> hub[4 大ボタン＋結果]
     hub --> scr[基本情報・材料・設備・運用の入力画面] --> res[結果]
   end
-  PWA -- "JSON /api/...（127.0.0.1 のみ）" --> server[wlcstudio/server.py<br/>Host・Origin・CSP の確認、1 スレッド]
+  PWA -- "JSON /api/...（127.0.0.1 のみ）" --> server[wlcstudio/server.py<br/>Host・Origin・CSP の確認<br/>接続ごとのスレッド＋アプリは 1 つの作業スレッド]
   server --> project[project.py<br/>値の履歴・候補・資料・削除<br/>var/projects.sqlite3]
   server --> research[research.py / sources/<br/>国土地理院・PLATEAU]
   server --> documents[documents.py / importers/<br/>CSV・XLSX・IFC・PDF]
