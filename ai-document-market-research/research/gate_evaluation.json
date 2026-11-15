@@ -1,20 +1,20 @@
 {
  "research_status": "INCOMPLETE",
- "checked_at": "2026-11-15T15:56:07.562704+00:00",
+ "checked_at": "2026-11-15T15:56:33.017901+00:00",
  "first_unmet_stage": "S1",
- "source_rows": 1081,
- "accepted_rows": 1081,
+ "source_rows": 1119,
+ "accepted_rows": 1119,
  "verified_rows": 0,
  "independent_origins": 0,
  "verified_competitors": 55,
- "executed_actions": 3066,
+ "executed_actions": 3079,
  "legacy_queries": {
   "NOT_EXECUTED": 528,
   "EXECUTED": 368
  },
- "topics_s1_done": 109,
- "competitors_s1_done": 25,
- "calculation_ids": 1241,
+ "topics_s1_done": 110,
+ "competitors_s1_done": 28,
+ "calculation_ids": 1248,
  "formal_deliverable_violation": false,
  "external_blocks": [],
  "steps": {
@@ -122,7 +122,7 @@
    "checks": [
     {
      "pass": false,
-     "detail": "topics with a complete research-unit collection: 109/325",
+     "detail": "topics with a complete research-unit collection: 110/325",
      "unmet": [
       "AXIS_01_T01: legacy queries not executed: 4; no primary-route search; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
       "AXIS_01_T02: legacy queries not executed: 4; no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -182,7 +182,6 @@
       "AXIS_18_T07: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_18_T08: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_19_T03: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 7); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 7); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 7); research unit record missing or incomplete",
-      "AXIS_19_T04: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 10); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 10); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 10); research unit record missing or incomplete",
       "AXIS_19_T05: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); research unit record missing or incomplete",
       "AXIS_19_T06: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); research unit record missing or incomplete",
       "AXIS_19_T07: legacy queries not executed: 4; no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -752,11 +751,9 @@
     },
     {
      "pass": false,
-     "detail": "competitor candidates explored: 25/80",
+     "detail": "competitor candidates explored: 28/80",
      "unmet": [
       "C010 SlidesAI: no counter / independent search with results and no third-party-backed counter finding",
-      "C013 Gemini: no counter / independent search with results and no third-party-backed counter finding",
-      "C014 Perplexity: no counter / independent search with results and no third-party-backed counter finding",
       "C015 Google Slides without AI: no counter / independent search with results and no third-party-backed counter finding",
       "C017 Pitch: no counter / independent search with results and no third-party-backed counter finding",
       "C018 Prezi AI: no counter / independent search with results and no third-party-backed counter finding",
@@ -804,7 +801,6 @@
       "C073 MagicSchool AI: no vendor page read (read 0, blocked attempts on distinct vendor pages 0/2, searches 0); attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
       "C074 Brisk Teaching: no vendor page read (read 0, blocked attempts on distinct vendor pages 0/2, searches 0); attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
       "C075 Curipod: no vendor page read (read 0, blocked attempts on distinct vendor pages 0/2, searches 0); attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
-      "C076 StudyPocket: attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
       "C077 Marp: no vendor page read (read 0, blocked attempts on distinct vendor pages 0/2, searches 0); attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
       "C078 Quarto: no vendor page read (read 0, blocked attempts on distinct vendor pages 0/2, searches 0); attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
       "C079 Pandoc: no vendor page read (read 0, blocked attempts on distinct vendor pages 0/2, searches 0); attributes not recorded: official_site,features_processing,pricing_limits,io_formats,pptx_editability,speed_claims,quality_claims,source_verification,data_handling,fit_school_work,free_alternative_strength; no counter / independent search with results and no third-party-backed counter finding",
@@ -828,19 +824,19 @@
     },
     {
      "pass": true,
-     "detail": "search log integrity (dated, unique ids, valid same-action references): 4033 rows",
+     "detail": "search log integrity (dated, unique ids, valid same-action references): 4050 rows",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3723)",
+     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3740)",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1081 accepted",
+     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1119 accepted",
      "unmet": [],
      "action": ""
     },
@@ -852,7 +848,7 @@
     },
     {
      "pass": false,
-     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3066)",
+     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3079)",
      "unmet": [],
      "action": "regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge"
     }
@@ -866,7 +862,7 @@
    "checks": [
     {
      "pass": false,
-     "detail": "every accepted source reviewed: verified 0, pending 1081",
+     "detail": "every accepted source reviewed: verified 0, pending 1119",
      "unmet": [
       "S001",
       "S002",
@@ -1279,7 +1275,7 @@
     },
     {
      "pass": false,
-     "detail": "every source-to-unit mapping reviewed: 0/2640",
+     "detail": "every source-to-unit mapping reviewed: 0/2725",
      "unmet": [
       "M00001",
       "M00002",
@@ -1777,7 +1773,7 @@
     },
     {
      "pass": false,
-     "detail": "every confirmed competitor attribute is backed by a verified source: 532 unbacked",
+     "detail": "every confirmed competitor attribute is backed by a verified source: 543 unbacked",
      "unmet": [
       "C001.data_handling",
       "C001.features_processing",
@@ -1910,6 +1906,7 @@
       "C013.free_alternative_strength",
       "C013.io_formats",
       "C013.official_site",
+      "C013.pptx_editability",
       "C013.pricing_limits",
       "C013.quality_claims",
       "C013.source_verification",
@@ -2177,8 +2174,7 @@
       "C044.features_processing",
       "C044.fit_school_work",
       "C044.free_alternative_strength",
-      "C044.io_formats",
-      "C044.official_site"
+      "C044.io_formats"
      ],
      "action": ""
     },
@@ -2210,7 +2206,7 @@
     },
     {
      "pass": false,
-     "detail": "every calculation id is in a justified terminal state: 0/1241",
+     "detail": "every calculation id is in a justified terminal state: 0/1248",
      "unmet": [
       "CALC_AXIS_01_T01_C00",
       "CALC_AXIS_01_T02_C00",
