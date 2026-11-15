@@ -159,6 +159,87 @@ def fig_assembly():
             f"<div style='display:flex'>{r2}</div><div style='font-size:12.5px;color:#444;margin-top:6px'>どの段からも、前の段（寄与した単位・段階・入力の行）へ戻せる。</div></div>")
 
 
+def fig_derivations():
+    """③ 導出のつながり：基本の式から建物全体方程式・時間の解析・動的 LCA・検証まで。"""
+    i = lambda x: f"<i style='font-family:FreeSerif'>{x}</i>"  # noqa: E731
+    sub = lambda x: f"<sub>{x}</sub>"  # noqa: E731
+
+    def box(no, t, f, sec, w=330, tone="#fff"):
+        return (f"<div style='{BOX};width:{w}px;background:{tone}'><b style='font-size:15px'>{no} {t}</b>"
+                f"<div style='font-family:FreeSerif;font-size:15.5px;margin:4px 0'>{f}</div>"
+                f"<div style='font-size:12px;color:#444'>{sec}</div></div>")
+
+    def down(label):
+        return (f"<div style='display:flex;align-items:center;height:34px;padding-left:150px'>"
+                f"<span style='font-size:20px;color:#555'>↓</span><span style='font-size:12.5px;color:#333;margin-left:8px'>{label}</span></div>")
+    main = [
+        box("①", "量 × 係数", f"{i('C')} = {i('f')}{i('m')}", "P1・2.2 節"),
+        down("項目を足す（線形性・分配法則）"),
+        box("②", "積和", f"{i('C')} = Σ{sub(i('i'))} {i('f')}{sub(i('i'))}{i('m')}{sub(i('i'))}", "P1・2.3〜2.7 節（行列 S）"),
+        down("条件を 0/1 にして掛ける（AND は積、OR は重ならない和）"),
+        box("③", "マスク付き積和（第 1 の構造）", f"out[{i('g')}] = Σ{sub(i('x'))} Σ{sub(i('j'))} Π{sub(i('k'))} φ{sub(i('j,k'))}({i('x')})", "P2・3.4 節"),
+        down("T への依存を核に分ける（振幅は T によらない）"),
+        box("④", "時間関数：核の重ね合わせ", f"Φ({i('T')}) = Σ{sub(i('j'))} {i('a')}{sub(i('j'))} κ({i('T')}; {i('s')}, ℓ, {i('g')})", "P3・4.2〜4.7 節"),
+        down("核を節点の一次式に分ける"),
+        box("⑤", "節点スペクトル（第 2 の構造）", f"Φ({i('T')}) = Φ{sub('0')} + Σ{sub(i('u') + ' &lt; ' + i('T'))} ({i('c')}{sub('0')} + {i('c')}{sub('1')}{i('T')})", "P3・4.8 節"),
+        down("70 単位・14 段階を合わせ、同じ節点を足す"),
+        box("⑥", "建物全体の方程式", f"{i('C')}({i('T')}) = {i('A')}{sub('0')} + Σ{sub('Λ')}[{i('t')}&lt;{i('T')}]({i('P')}+{i('Q')}{i('T')}) + Σ{sub(i('E'))} θ({i('p')}+{i('q')}{i('T')})",
+            "第 5 章（区分一次の証明 5.5 節）", tone="#f2f2f2"),
+        down("節点の表から読む"),
+        box("⑦", "跳び・傾き・積分・ラプラス変換", f"{i('J')} = {i('c')}{sub('0')}+{i('c')}{sub('1')}{i('u')}、 ℒ = Σ {i('e')}<sup>−{i('us')}</sup>(…)", "4.9・4.10・8.2 節"),
+    ]
+    side = [
+        box("⑧", "実時間に置く（P5）", f"{i('C')}({i('T')}) = {i('M')}([0,{i('T')}]) + {i('Z')}({i('T')})", "7.3 節：傾き ≠ 排出率", w=300),
+        down("工程ごとに分ける"),
+        box("⑨", "工程関数と再合成", f"Σ{sub(i('i'))} ∫ {i('e')}{sub(i('i'))} + {i('Z')} = {i('C')}{sub('70')}", "7.4〜7.6 節（時期は一意でない）", w=300),
+        down("時刻ごとの重みを掛ける"),
+        box("⑩", "動的な特性化（畳み込み）", f"{i('W')} = Σ {i('m')}{sub(i('j'))} {i('R')}({i('t')}{sub('end')}−{i('t')}{sub(i('j'))})/{i('R')}(100)", "7.7 節", w=300),
+        "<div style='height:16px'></div>",
+        box("⑪", "畳み込み（時不変・線形）", f"{i('y')}{sub(i('t'))} = Σ{sub(i('s'))} {i('x')}{sub(i('s'))}{i('h')}{sub(i('t') + '−' + i('s'))}", "6.3 節", w=300),
+        down("時不変でないとき"),
+        box("⑫", "状態の漸化式（P4）", f"{i('u')}{sub(i('k'))} = χ{i('m')}{sub('0')} + (1−χ){i('q')}{i('u')}{sub(i('k') + '−1')}", "6.5・6.6 節：二時刻の核", w=300),
+        "<div style='height:16px'></div>",
+        box("E", "主張の強さ（検証）", f"照合・(1−{i('p')})<sup>{i('N')}</sup> ≥ 0.05 ⇒ {i('p')} ≤ 1−0.05<sup>1/{i('N')}</sup>", "第 9 章", w=300),
+    ]
+    note = ("<div style='font-size:12.5px;color:#333;margin-top:8px;width:700px'>⑥ から ⑧ へ（実時間に置く）、② から ⑪ へ（比例は畳み込みの特別な場合）、"
+            "③ から ⑫ へ（交換の有無 χ は 0/1）がつながる。左の列が教材の主な導出の道筋、右の列が時間の扱いの枝分かれ。</div>")
+    return (f"<div style='padding:12px;background:#fff;font-family:IPAGothic;width:720px'><div style='display:flex;gap:40px'>"
+            f"<div>{''.join(main)}</div><div style='padding-top:40px'>{''.join(side)}</div></div>{note}</div>")
+
+
+def fig_research_map():
+    """研究全体図：二つの対象（独立概念モデル・J-CAT 原版）を別の帯に分け、章の流れとつながりを示す。"""
+    def box(ch, t, s_, w=150, tone="#fff"):
+        return (f"<div style='{BOX};width:{w}px;background:{tone};font-size:13px;line-height:1.35'>"
+                f"<b style='font-size:13.5px'>{ch}</b> {t}<br><span style='color:#444;font-size:12px'>{s_}</span></div>")
+    arr = "<div style='font-size:20px;color:#555;align-self:center;padding:0 3px'>→</div>"
+
+    def lane(title, note, boxes, tone):
+        return (f"<div style='border:1px dashed #777;border-radius:8px;padding:8px 10px;margin-bottom:10px;background:{tone}'>"
+                f"<div style='font-size:14px;margin-bottom:6px'><b>{title}</b>　<span style='color:#444;font-size:12.5px'>{note}</span></div>"
+                f"<div style='display:flex;align-items:stretch'>{arr.join(boxes)}</div></div>")
+    model = [box("01〜08", "研究台帳", "入力 124・算定式 53・出力 32・禁止事項"),
+             box("09", "70 評価単位", "凍結した基準計算・生成器。近似 0 採用で停止"),
+             box("10・11", "2 つの構造", "マスク付き積和・節点スペクトル。1,293 組で不一致 0"),
+             box("17", "全体方程式", "区分一次・C = M + Z・解析手法の比較"),
+             box("18", "動的 LCA", "工程関数・再構成・非一意性"),
+             box("20・21", "大規模検証と報告", "100,000 ケース・上限 1.7×10⁻⁴・主張の強さ")]
+    orig = [box("02・07", "構造の調査", "198 シート・数式セル 3,818,483"),
+            box("13", "入力の分類", "構造だけの台帳 14,652 行"),
+            box("14", "全数式の開示", "独立方程式 667"),
+            box("15", "2 構造への変換", "647 式・全セル・2,000 ケース"),
+            box("16", "未解決 8 式", "方式 A（厳密）・表せないことの証明"),
+            box("19", "残り 12 式", "方式 A・下流への影響")]
+    lane1 = lane("独立概念モデル（架空データ）", "数学的な成果はこの対象について。公開してよい", model, "#fafafa")
+    lane2 = lane("J-CAT 原版（利用条件により非公開）", "件数と方法だけを公開。数式の文・値・セル番地は非公開", orig, "#f1f1f1")
+    bottom = ("<div style='display:flex;gap:10px;align-items:stretch'>"
+              + box("12", "アプリの基礎", "入力変換・表示・SQLite 保存。計算は統一系", w=300)
+              + box("22", "教材（本書）", "五つの原理 P1〜P5 ＋ E で全体を学ぶ。問題 40 問", w=300, tone="#eaeaea")
+              + "<div style='font-size:12.5px;color:#333;align-self:center;width:330px'>上の帯の 2 つの構造（10・11）を、下の帯の変換（15〜19）で使った。"
+                "二つの帯の結果を混同しない（原版の式を表せることは、J-CAT と同じ結果を出すことではない）。</div></div>")
+    return f"<div style='padding:12px;background:#fff;font-family:IPAGothic;width:1130px'>{lane1}{lane2}{bottom}</div>"
+
+
 def build() -> dict[str, Path]:
     figs = {
         "F0-1_principles": ("html", fig_principles()),
@@ -168,6 +249,8 @@ def build() -> dict[str, Path]:
         "F5-1_assembly": ("html", fig_assembly()),
         "F6-1_refrigerant": ("svg", fig_refrigerant()),
         "F7-1_MZ": ("svg", fig_mz()),
+        "F3-1_derivations": ("html", fig_derivations()),
+        "F0-2_research_map": ("html", fig_research_map()),
     }
     return to_png(figs, OUT)
 

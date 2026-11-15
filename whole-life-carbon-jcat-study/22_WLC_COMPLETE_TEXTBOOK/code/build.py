@@ -56,6 +56,9 @@ def blocks_of(spec: dict) -> list[dict]:
         blocks += bs
     if not spec["toc"]:
         blocks = [b for b in blocks if b["t"] != "toc"]
+        first_h1 = next((i for i, b in enumerate(blocks) if b["t"] == "h1"), None)
+        if first_h1 is not None and blocks[first_h1]["text"] in spec["title"]:
+            blocks = blocks[:first_h1] + blocks[first_h1 + 1:]   # 表題と同じ見出しを二度出さない
         for b in blocks:
             if b["t"] == "h1":
                 b["nobreak"] = True

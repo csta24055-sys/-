@@ -176,7 +176,9 @@ def to_pdf(blocks: list[dict], path: Path, title: str, header: str = "", math_pn
                 lvl, txt = fl._toc
                 key = f"h{id(fl)}"
                 self.canv.bookmarkPage(key)
-                self.canv.addOutlineEntry(txt, key, level=lvl, closed=lvl > 0)
+                olvl = min(lvl, getattr(self, "_olvl", -1) + 1)   # しおりは一段ずつしか深くできない
+                self._olvl = olvl
+                self.canv.addOutlineEntry(txt, key, level=olvl, closed=olvl > 0)
                 self.notify("TOCEntry", (lvl, txt, self.page, key))
 
     story = []
