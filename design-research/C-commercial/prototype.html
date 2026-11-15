@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AirLCA Cloud 試作</title>
+<meta name="description" content="C分類（商用）採用案「アウトカム・ハブ」の操作可能な試作。データ・料金はすべてダミー。">
+<style>
+/* ===== デザイントークン（design-system.md と同一） ===== */
+:root{
+  --color-bg:#FAFAF7;          /* ページ背景 */
+  --color-surface:#FFFFFF;     /* カード・面 */
+  --color-surface-2:#F1F3EE;   /* 沈んだ面・表見出し */
+  --color-text:#1C2430;        /* 本文 */
+  --color-text-muted:#4A5563;  /* 補助文字 */
+  --color-border:#D9DDD6;      /* 区切り線（装飾） */
+  --color-border-strong:#7A847B;/* 入力欄・UI部品の境界（3:1以上） */
+  --color-primary:#0F6B5C;     /* 主色（深いティール） */
+  --color-primary-hover:#0B5649;
+  --color-primary-soft:#E3F0ED;
+  --color-on-primary:#FFFFFF;
+  --color-accent:#B45309;      /* 琥珀：Pro ラベル */
+  --color-accent-soft:#FDF0E1;
+  --color-good:#1E7B4C; --color-good-soft:#E6F3EB;
+  --color-warn:#8A5A00; --color-warn-soft:#FBF1DC;
+  --color-bad:#B42318;  --color-bad-soft:#FCE9E7;
+  --color-focus:#1D4ED8;       /* フォーカスリング */
+  --color-disabled-bg:#E5E7E2; --color-disabled-text:#5F6763;
+  --font-sans:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic UI",sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --fs-xs:13px; --fs-sm:14px; --fs-md:16px; --fs-lg:18px; --fs-xl:22px; --fs-2xl:28px;
+  --lh-tight:1.35; --lh-body:1.7;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-pill:999px;
+  --shadow-1:0 1px 2px rgba(28,36,48,.08),0 1px 3px rgba(28,36,48,.06);
+  --shadow-2:0 8px 24px rgba(28,36,48,.14);
+  --dur-fast:120ms; --dur-base:200ms; --ease:cubic-bezier(.2,.7,.3,1);
+  --header-h:60px; --bottomnav-h:64px; --rail-w:208px; --target-min:44px;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(var(--header-h) + 16px);scroll-padding-bottom:calc(var(--bottomnav-h) + 16px)}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font:var(--fs-md)/var(--lh-body) var(--font-sans);overflow-x:hidden}
+h1,h2,h3{line-height:var(--lh-tight);margin:0 0 var(--space-3)}
+h1{font-size:var(--fs-2xl)} h2{font-size:var(--fs-xl)} h3{font-size:var(--fs-lg)}
+p{margin:0 0 var(--space-3)}
+a{color:var(--color-primary)} a:hover{color:var(--color-primary-hover)}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--color-text-muted)} .small{font-size:var(--fs-sm)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:8px;top:-60px;z-index:100;background:var(--color-surface);padding:10px 16px;border:2px solid var(--color-focus);border-radius:var(--radius-sm);font-weight:700}
+.skip:focus{top:8px}
+
+/* ===== ヘッダー ===== */
+.app-header{position:sticky;top:0;z-index:20;height:var(--header-h);display:flex;align-items:center;gap:var(--space-3);padding:0 var(--space-4);background:var(--color-surface);border-bottom:1px solid var(--color-border)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--color-text);text-decoration:none;white-space:nowrap}
+.brand-mark{width:28px;height:28px;flex:none}
+.brand small{font-weight:500;color:var(--color-text-muted);font-size:var(--fs-xs)}
+.header-spacer{flex:1}
+.usage{display:flex;gap:var(--space-3);align-items:center;font-size:var(--fs-sm);padding:4px 10px;border:1px solid var(--color-border);border-radius:var(--radius-pill);background:var(--color-bg)}
+.usage-item{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.bar{width:44px;height:8px;border-radius:4px;background:var(--color-surface-2);border:1px solid var(--color-border-strong);overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--color-primary)}
+.bar.full>span{background:var(--color-warn)}
+.plan-badge{font-weight:700;color:var(--color-text-muted)}
+
+/* ===== ボタン ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:var(--target-min);min-width:var(--target-min);padding:0 16px;border-radius:var(--radius-md);border:1px solid transparent;font:600 var(--fs-sm)/1.2 var(--font-sans);cursor:pointer;text-decoration:none;transition:background var(--dur-fast) var(--ease)}
+.btn-primary{background:var(--color-primary);color:var(--color-on-primary)}
+.btn-primary:hover{background:var(--color-primary-hover);color:var(--color-on-primary)}
+.btn-secondary{background:var(--color-surface);color:var(--color-text);border-color:var(--color-border-strong)}
+.btn-secondary:hover{background:var(--color-surface-2);color:var(--color-text)}
+.btn-danger{background:var(--color-bad);color:#fff}
+.btn-danger:hover{background:#8F1C13;color:#fff}
+.btn-ghost{background:transparent;color:var(--color-primary);border-color:transparent}
+.btn-ghost:hover{background:var(--color-primary-soft)}
+.btn[disabled],.btn[aria-disabled="true"]{background:var(--color-disabled-bg);color:var(--color-disabled-text);border-color:var(--color-border);cursor:not-allowed}
+.btn-sm{min-height:36px;padding:0 12px}
+.btn-row{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}
+.btn-row.equal>.btn{flex:1 1 0;min-width:140px}
+kbd{font-family:var(--font-mono);font-size:12px;padding:1px 6px;border:1px solid var(--color-border-strong);border-bottom-width:2px;border-radius:4px;background:var(--color-surface)}
+
+/* ===== レイアウト ===== */
+.shell{display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);min-height:calc(100vh - var(--header-h))}
+.rail{position:sticky;top:var(--header-h);align-self:start;height:calc(100vh - var(--header-h));overflow:auto;border-right:1px solid var(--color-border);background:var(--color-surface);padding:var(--space-4) var(--space-3)}
+.rail ul{list-style:none;margin:0;padding:0}
+.rail a{display:flex;align-items:center;gap:10px;min-height:var(--target-min);padding:0 12px;border-radius:var(--radius-md);color:var(--color-text);text-decoration:none;font-weight:600}
+.rail a:hover{background:var(--color-surface-2)}
+.rail a[aria-current="page"]{background:var(--color-primary-soft);color:var(--color-primary-hover);box-shadow:inset 3px 0 0 var(--color-primary)}
+.rail svg,.bottom-nav svg{width:20px;height:20px;flex:none}
+.rail-title{font-size:var(--fs-xs);font-weight:700;color:var(--color-text-muted);margin:var(--space-5) 12px var(--space-2)}
+main{padding:var(--space-5) var(--space-6) var(--space-7);min-width:0;max-width:1240px}
+.route{display:none}
+.route.active{display:block}
+.page-head{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:flex-end;justify-content:space-between;margin-bottom:var(--space-5)}
+.page-head h1{margin:0}
+.grid{display:grid;gap:var(--space-4)}
+.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:var(--space-5);align-items:start}
+.stack>*+*{margin-top:var(--space-4)}
+section+section{margin-top:var(--space-6)}
+
+/* ===== カード ===== */
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);box-shadow:var(--shadow-1);min-width:0}
+.card h3{margin-bottom:var(--space-2)}
+.kpi-label{font-size:var(--fs-sm);color:var(--color-text-muted)}
+.kpi-value{font-size:var(--fs-2xl);font-weight:700}
+.progress{height:10px;border-radius:5px;background:var(--color-surface-2);border:1px solid var(--color-border-strong);overflow:hidden;margin:var(--space-2) 0}
+.progress>span{display:block;height:100%;background:var(--color-primary)}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:var(--fs-xs);font-weight:700;padding:2px 8px;border-radius:var(--radius-pill);border:1px solid currentColor;white-space:nowrap}
+.tag-pro{color:var(--color-accent);background:var(--color-accent-soft)}
+.tag-rec{color:var(--color-on-primary);background:var(--color-primary);border-color:var(--color-primary)}
+.status{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:var(--fs-sm);white-space:nowrap}
+.status svg{width:16px;height:16px;flex:none}
+.s-good{color:var(--color-good)} .s-warn{color:var(--color-warn)} .s-bad{color:var(--color-bad)}
+
+/* ===== 通知（成功・警告・エラー） ===== */
+.notice{display:flex;gap:var(--space-3);align-items:flex-start;padding:var(--space-4);border-radius:var(--radius-md);border:1px solid;border-left-width:6px}
+.notice svg{width:22px;height:22px;flex:none;margin-top:2px}
+.notice p{margin:0}
+.notice .notice-body{flex:1;min-width:0}
+.n-success{background:var(--color-good-soft);border-color:var(--color-good);color:var(--color-text)}
+.n-success svg{color:var(--color-good)}
+.n-warn{background:var(--color-warn-soft);border-color:var(--color-warn)}
+.n-warn svg{color:var(--color-warn)}
+.n-error{background:var(--color-bad-soft);border-color:var(--color-bad)}
+.n-error svg{color:var(--color-bad)}
+.n-info{background:var(--color-primary-soft);border-color:var(--color-primary)}
+.n-info svg{color:var(--color-primary)}
+
+/* ===== オンボーディング ===== */
+.onboard{border:2px solid var(--color-primary);background:linear-gradient(0deg,var(--color-surface),var(--color-primary-soft))}
+.steps{display:flex;gap:var(--space-2);list-style:none;margin:0 0 var(--space-4);padding:0;counter-reset:s}
+.steps li{flex:1;display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:600;color:var(--color-text-muted);padding:8px 10px;border-radius:var(--radius-md);background:var(--color-surface);border:1px solid var(--color-border);min-width:0}
+.steps li::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:24px;height:24px;flex:none;border-radius:50%;border:2px solid var(--color-border-strong);font-family:var(--font-mono)}
+.steps li[aria-current="step"]{color:var(--color-text);border-color:var(--color-primary)}
+.steps li[aria-current="step"]::before{border-color:var(--color-primary);color:var(--color-primary)}
+.steps li.done{color:var(--color-good)}
+.steps li.done::before{content:"✓";background:var(--color-good);border-color:var(--color-good);color:#fff}
+.choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3)}
+.choice{position:relative;display:block;border:1px solid var(--color-border-strong);border-radius:var(--radius-md);padding:var(--space-4);background:var(--color-surface);cursor:pointer;min-height:var(--target-min)}
+.choice input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.choice:has(input:checked){border:2px solid var(--color-primary);background:var(--color-primary-soft)}
+.choice:has(input:focus-visible){outline:3px solid var(--color-focus);outline-offset:2px}
+.choice strong{display:block}
+
+/* ===== 空状態・スケルトン ===== */
+.empty{text-align:center;padding:var(--space-7) var(--space-5);border:2px dashed var(--color-border-strong);border-radius:var(--radius-lg);background:var(--color-surface)}
+.empty svg{width:56px;height:56px;color:var(--color-primary)}
+.skeleton{display:block;height:14px;border-radius:6px;background:linear-gradient(90deg,#E6E9E3 0%,#F3F5F1 50%,#E6E9E3 100%);background-size:200% 100%;animation:shimmer 1.2s linear infinite;margin:8px 0}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* ===== フォーム ===== */
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:var(--space-4);min-width:0}
+.field label,.field legend{font-weight:700;font-size:var(--fs-sm)}
+.req{color:var(--color-bad);font-weight:700}
+.help{font-size:var(--fs-sm);color:var(--color-text-muted);margin:0}
+.input,select.input{min-height:var(--target-min);padding:8px 12px;border:1px solid var(--color-border-strong);border-radius:var(--radius-sm);font:inherit;background:var(--color-surface);color:var(--color-text);width:100%;max-width:100%}
+.input[aria-invalid="true"]{border:2px solid var(--color-bad)}
+.error-msg{display:flex;gap:6px;align-items:flex-start;color:var(--color-bad);font-size:var(--fs-sm);font-weight:600;margin:0}
+.error-msg svg{width:16px;height:16px;flex:none;margin-top:3px}
+.error-msg[hidden]{display:none}
+fieldset{border:0;padding:0;margin:0 0 var(--space-4);min-width:0}
+.check{display:flex;gap:10px;align-items:center;min-height:var(--target-min)}
+.check input{width:20px;height:20px;accent-color:var(--color-primary)}
+.dropzone{border:2px dashed var(--color-border-strong);border-radius:var(--radius-md);padding:var(--space-5);text-align:center;background:var(--color-surface)}
+.dropzone.over{border-color:var(--color-primary);background:var(--color-primary-soft)}
+
+/* ===== タブ ===== */
+.tablist{display:flex;gap:4px;border-bottom:1px solid var(--color-border-strong);margin-bottom:var(--space-4);overflow-x:auto;scrollbar-width:thin}
+.tab{min-height:var(--target-min);padding:0 16px;border:0;background:transparent;font:600 var(--fs-sm) var(--font-sans);color:var(--color-text-muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--color-primary-hover);border-bottom-color:var(--color-primary)}
+.tab:hover{color:var(--color-text)}
+.segmented{display:inline-flex;border:1px solid var(--color-border-strong);border-radius:var(--radius-pill);padding:3px;background:var(--color-surface)}
+.segmented label{position:relative;display:inline-flex;align-items:center;min-height:38px;padding:0 16px;border-radius:var(--radius-pill);cursor:pointer;font-weight:600;font-size:var(--fs-sm)}
+.segmented input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.segmented label:has(input:checked){background:var(--color-primary);color:#fff}
+.segmented label:has(input:focus-visible){outline:3px solid var(--color-focus);outline-offset:2px}
+
+/* ===== テーブル ===== */
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:var(--fs-sm);background:var(--color-surface)}
+caption{text-align:left;font-weight:700;padding:0 0 var(--space-2)}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--color-border);vertical-align:middle}
+thead th{background:var(--color-surface-2);font-weight:700;white-space:nowrap}
+td.r,th.r{text-align:right}
+.sort-btn{all:unset;display:inline-flex;align-items:center;gap:4px;cursor:pointer;min-height:32px;font-weight:700}
+.sort-btn:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px;border-radius:4px}
+.sort-btn .arrow{font-family:var(--font-mono);color:var(--color-text-muted)}
+.col-detail{display:none}
+.show-detail .col-detail{display:table-cell}
+.inline-num{width:110px;min-height:36px;padding:4px 8px;text-align:right}
+
+/* ===== チャート ===== */
+.chart svg{width:100%;height:auto;display:block}
+.chart text{font:12px var(--font-sans);fill:var(--color-text-muted)}
+details.alt{margin-top:var(--space-2)}
+details.alt summary{cursor:pointer;min-height:var(--target-min);display:flex;align-items:center;font-weight:600;color:var(--color-primary)}
+
+/* ===== 料金 ===== */
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4);align-items:stretch}
+.plan{display:flex;flex-direction:column;gap:var(--space-2)}
+.plan.recommended{border:2px solid var(--color-primary)}
+.price{font-size:var(--fs-2xl);font-weight:800}
+.plan ul{padding-left:1.2em;margin:0 0 var(--space-3)}
+.plan .btn{margin-top:auto}
+
+/* ===== ダイアログ ===== */
+dialog{border:0;border-radius:var(--radius-lg);padding:0;width:min(560px,calc(100vw - 32px));box-shadow:var(--shadow-2);color:var(--color-text);background:var(--color-surface)}
+dialog::backdrop{background:rgba(28,36,48,.5)}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-border)}
+.dlg-head h2{margin:0;font-size:var(--fs-lg)}
+.dlg-body{padding:var(--space-5);max-height:70vh;overflow:auto}
+.dlg-foot{padding:var(--space-4) var(--space-5);border-top:1px solid var(--color-border);display:flex;gap:var(--space-2);justify-content:flex-end;flex-wrap:wrap}
+.cmd-list{list-style:none;margin:var(--space-3) 0 0;padding:0}
+.cmd-list li{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:var(--target-min);padding:0 12px;border-radius:var(--radius-sm);cursor:pointer}
+.cmd-list li[aria-selected="true"]{background:var(--color-primary-soft);outline:2px solid var(--color-primary)}
+
+/* ===== トースト・ログ ===== */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;max-width:calc(100vw - 32px);background:var(--color-text);color:#fff;padding:12px 16px;border-radius:var(--radius-md);box-shadow:var(--shadow-2);font-size:var(--fs-sm)}
+.toast[hidden]{display:none}
+.log{font-family:var(--font-mono);font-size:12px;background:#1C2430;color:#E6EBE4;padding:var(--space-3);border-radius:var(--radius-md);max-height:200px;overflow:auto;white-space:pre-wrap;word-break:break-all;margin:0}
+.token-swatch{width:40px;height:28px;border-radius:6px;border:1px solid var(--color-border-strong);display:inline-block;vertical-align:middle}
+.bottom-nav{display:none}
+.mobile-only{display:none}
+footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);color:var(--color-text-muted);border-top:1px solid var(--color-border)}
+
+/* ===== レスポンシブ: タブレット ===== */
+@media (max-width:1100px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .plans{grid-template-columns:minmax(0,1fr)}
+  .cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* ===== レスポンシブ: スマートフォン ===== */
+@media (max-width:768px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .rail{display:none}
+  main{padding:var(--space-4) var(--space-4) calc(var(--bottomnav-h) + var(--space-6))}
+  .usage .usage-text-long,.header-help-label,.cmd-label{display:none}
+  .usage{gap:8px;padding:4px 8px}
+  .bar{width:28px}
+  .brand small{display:none}
+  .app-header{gap:var(--space-2);padding:0 var(--space-3)}
+  h1{font-size:var(--fs-xl)}
+  .cols-3,.cols-2,.choice-grid{grid-template-columns:minmax(0,1fr)}
+  .steps{flex-direction:column}
+  .hide-sm{display:none!important}
+  .mobile-only{display:block}
+  .card{padding:var(--space-4)}
+  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;height:var(--bottomnav-h);background:var(--color-surface);border-top:1px solid var(--color-border-strong);padding-bottom:env(safe-area-inset-bottom)}
+  .bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:700;color:var(--color-text-muted);text-decoration:none;min-height:var(--target-min)}
+  .bottom-nav a[aria-current="page"]{color:var(--color-primary-hover);box-shadow:inset 0 3px 0 var(--color-primary)}
+  footer.app-foot{padding-bottom:calc(var(--bottomnav-h) + 24px)}
+  .toast{bottom:calc(var(--bottomnav-h) + 16px)}
+  /* 表 → カードリスト */
+  table.responsive thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.responsive,table.responsive tbody,table.responsive tr,table.responsive td{display:block;width:100%}
+  table.responsive tr{border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:var(--space-3);padding:var(--space-2) var(--space-3);background:var(--color-surface)}
+  table.responsive td{display:flex;justify-content:space-between;gap:var(--space-3);border:0;padding:6px 0;text-align:right}
+  table.responsive td::before{content:attr(data-label);font-weight:700;color:var(--color-text-muted);text-align:left}
+  table.responsive td.col-detail{display:none}
+  .show-detail table.responsive td.col-detail{display:flex}
+  .mobile-sort{display:flex}
+  .dlg-foot .btn{flex:1}
+}
+@media (min-width:769px){.mobile-sort{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .skeleton{animation:none;background:#E6E9E3}
+}
+@media (forced-colors:active){.btn,.card,.tag{border:1px solid CanvasText}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+
+<!-- アイコン定義（形状で状態を区別：丸=良好／三角=注意／八角=要換気） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-good" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.4" fill="none"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 2L23 21H1z" fill="currentColor"/><path d="M12 9v5" stroke="#fff" stroke-width="2.4"/><circle cx="12" cy="17.5" r="1.4" fill="#fff"/></symbol>
+  <symbol id="i-bad" viewBox="0 0 24 24"><path d="M8 2h8l6 6v8l-6 6H8l-6-6V8z" fill="currentColor"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 11v6" stroke="#fff" stroke-width="2.4"/><circle cx="12" cy="7.5" r="1.4" fill="#fff"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-work" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M9 9v11" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 17v-4M12 17v-7M15 17v-2" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-parts" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="18" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M15 2v5h5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h8M9 16h8" stroke="currentColor" stroke-width="1.6"/></symbol>
+</svg>
+
+<header class="app-header" role="banner">
+  <a class="brand" href="#dashboard" aria-label="AirLCA Cloud（仮称）ホーム">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0F6B5C"/><path d="M7 21c4-9 9-9 18-12-2 7-6 13-14 13" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="10" cy="11" r="2.4" fill="#F7C98B"/></svg>
+    <span>AirLCA <small>Cloud（仮称）</small></span>
+  </a>
+  <div class="header-spacer"></div>
+  <a class="usage" href="#settings" data-tab-target="tab-plan" aria-label="使用量" id="usageMeter" data-analytics-event="usage_meter_click">
+    <span class="usage-item"><span class="usage-text-long">センサー</span><span class="visually-hidden">センサー</span><span class="bar" id="barSensor"><span style="width:66%"></span></span><span class="num" id="usageSensor">2/3台</span></span>
+    <span class="usage-item"><span class="usage-text-long">レポート</span><span class="visually-hidden">今月のレポート</span><span class="bar" id="barReport"><span style="width:0%"></span></span><span class="num" id="usageReport">0/1件</span></span>
+    <span class="plan-badge" id="planBadge">Free</span>
+  </a>
+  <button class="btn btn-secondary btn-sm" id="openCmd" aria-keyshortcuts="Control+K" data-analytics-event="command_palette_open" aria-label="コマンドパレットを開く（Ctrl+K）"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2"/></svg><span class="cmd-label">検索・操作 <kbd>Ctrl</kbd>+<kbd>K</kbd></span></button>
+  <button class="btn btn-ghost btn-sm" id="openHelp" data-analytics-event="help_open" aria-label="ヘルプ"><svg width="18" height="18" aria-hidden="true"><use href="#i-info"/></svg><span class="header-help-label">ヘルプ</span></button>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="メイン">
+    <ul>
+      <li><a href="#dashboard" data-route-link="dashboard"><svg aria-hidden="true"><use href="#i-home"/></svg>ホーム</a></li>
+      <li><a href="#workspace" data-route-link="workspace"><svg aria-hidden="true"><use href="#i-work"/></svg>作成（データ）</a></li>
+      <li><a href="#detail" data-route-link="detail"><svg aria-hidden="true"><use href="#i-report"/></svg>レポート</a></li>
+      <li><a href="#settings" data-route-link="settings"><svg aria-hidden="true"><use href="#i-gear"/></svg>設定・プラン</a></li>
+      <li><a href="#components" data-route-link="components"><svg aria-hidden="true"><use href="#i-parts"/></svg>部品とトークン</a></li>
+    </ul>
+    <p class="rail-title" id="pinTitle">ピン留め</p>
+    <ul aria-labelledby="pinTitle" id="pinList"><li class="small muted" style="padding:0 12px">まだありません。表の「ピン留め」で追加できます。</li></ul>
+    <p class="rail-title">最近</p>
+    <ul><li><a href="#detail" class="small">11月 空気質レポート</a></li></ul>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <!-- ================= ダッシュボード ================= -->
+    <section class="route" id="r-dashboard" aria-labelledby="h-dashboard">
+      <div class="page-head">
+        <div>
+          <p class="muted small" style="margin:0">サンプル設計室（ダミー） · 2026年11月</p>
+          <h1 id="h-dashboard" tabindex="-1">今月つくるもの</h1>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#workspace" data-analytics-event="report_create_start">新しいレポートを作る</a>
+        </div>
+      </div>
+
+      <!-- 初回オンボーディング（3ステップ） -->
+      <section class="card onboard" id="onboarding" aria-labelledby="h-onboard">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h2 id="h-onboard">3ステップで最初のレポート（約3分）</h2>
+          <button class="btn btn-ghost btn-sm" id="skipOnboard" data-analytics-event="onboarding_dismiss">あとで（いつでもヘルプから再開できます）</button>
+        </div>
+        <ol class="steps" id="obSteps" aria-label="進み具合">
+          <li data-step="1" aria-current="step">作りたいものを選ぶ</li>
+          <li data-step="2">サンプルデータで試す</li>
+          <li data-step="3">結果を見る</li>
+        </ol>
+        <div id="obPanel1">
+          <fieldset>
+            <legend class="visually-hidden">作りたい成果物</legend>
+            <div class="choice-grid">
+              <label class="choice"><input type="radio" name="goal" value="air" checked><strong>空気質の月次レポート</strong><span class="small muted">CO2・PM2.5・温湿度を部屋ごとに</span></label>
+              <label class="choice"><input type="radio" name="goal" value="lca"><strong>建材 LCA 比較</strong><span class="small muted">3案の CO2 排出量を比べる</span></label>
+              <label class="choice"><input type="radio" name="goal" value="owner"><strong>施主向けサマリー</strong><span class="small muted">平面図つきの1枚もの</span></label>
+            </div>
+          </fieldset>
+          <button class="btn btn-primary" id="obNext1" data-analytics-event="onboarding_step1_complete">次へ</button>
+        </div>
+        <div id="obPanel2" hidden>
+          <p>登録やセンサー設置の前に、架空の事務所（センサー2台・建材3案）のデータで仕上がりを確認できます。あとから自分のデータに置き換えられます。</p>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="loadSample" data-analytics-event="sample_data_loaded">サンプルデータで試す</button>
+            <a class="btn btn-secondary" href="#workspace" data-analytics-event="own_data_start">自分のデータを使う</a>
+          </div>
+        </div>
+        <div id="obPanel3" hidden>
+          <div class="notice n-success" role="status"><svg aria-hidden="true"><use href="#i-good"/></svg><div class="notice-body"><p><strong>成功:</strong> 最初のレポートができました（完成度 80%）。残りは「建物名」と「共有先」だけです。</p></div></div>
+          <div class="btn-row" style="margin-top:12px"><a class="btn btn-primary" href="#detail" data-analytics-event="activation">レポートを開く</a></div>
+        </div>
+      </section>
+
+      <!-- 成果物カード／空状態 -->
+      <section aria-labelledby="h-deliv" style="margin-top:24px">
+        <h2 id="h-deliv">成果物</h2>
+        <div class="empty" id="delivEmpty">
+          <svg aria-hidden="true"><use href="#i-doc"/></svg>
+          <h3>まだレポートがありません</h3>
+          <p class="muted">テンプレートを選ぶと、つないだセンサーと建材データが自動で入ります。</p>
+          <div class="btn-row" style="justify-content:center">
+            <button class="btn btn-primary" data-action="load-sample" data-analytics-event="empty_state_cta">サンプルで試す</button>
+            <a class="btn btn-secondary" href="#workspace" data-analytics-event="empty_state_cta_own">テンプレートから作る</a>
+          </div>
+        </div>
+        <div class="grid cols-3" id="delivCards" hidden>
+          <article class="card">
+            <h3>11月 空気質レポート</h3>
+            <p class="small muted">テンプレート: 月次空気質</p>
+            <div class="progress" role="img" aria-label="完成度 80%"><span style="width:80%"></span></div>
+            <p class="small">完成度 <span class="num">80%</span> · 未入力: 建物名</p>
+            <a class="btn btn-primary btn-sm" href="#detail" data-analytics-event="report_viewed">次の1手: 建物名を入れる</a>
+          </article>
+          <article class="card">
+            <h3>建材 LCA 比較（3案）</h3>
+            <p class="small muted">テンプレート: 建材比較</p>
+            <div class="progress" role="img" aria-label="完成度 60%"><span style="width:60%"></span></div>
+            <p class="small">完成度 <span class="num">60%</span> · 未入力: 断熱材の数量</p>
+            <a class="btn btn-secondary btn-sm" href="#workspace" data-tab-target="tab-lca" data-analytics-event="lca_edit_start">数量を入れる</a>
+          </article>
+          <article class="card">
+            <h3>施主向けサマリー <span class="tag tag-pro">Pro・税込¥4,980/月</span></h3>
+            <p class="small muted">平面図つき1枚もの。Free では透かし付きで作成・共有できます。</p>
+            <div class="progress" role="img" aria-label="完成度 20%"><span style="width:20%"></span></div>
+            <p class="small">完成度 <span class="num">20%</span></p>
+            <a class="btn btn-secondary btn-sm" href="#detail" data-analytics-event="owner_summary_open">平面図を見る</a>
+          </article>
+        </div>
+      </section>
+
+      <div class="grid cols-2" style="margin-top:24px">
+        <section class="card" aria-labelledby="h-alert">
+          <h2 id="h-alert" style="font-size:var(--fs-lg)">要対応 <span class="num">1</span>件</h2>
+          <div class="notice n-error"><svg aria-hidden="true"><use href="#i-bad"/></svg><div class="notice-body"><p><strong>要換気:</strong> 会議室B の CO2 が <span class="num">1,240ppm</span>（基準 1,000ppm）。</p><p class="small">提案: 窓を開けるか換気設定を「強」に。15分後に再確認します。</p></div></div>
+          <div class="btn-row" style="margin-top:12px"><button class="btn btn-secondary btn-sm" data-action="ack-alert" data-analytics-event="alert_ack">対応済みにする</button><a class="btn btn-ghost btn-sm" href="#workspace">センサー一覧へ</a></div>
+        </section>
+        <section class="card hide-sm" aria-labelledby="h-week">
+          <h2 id="h-week" style="font-size:var(--fs-lg)">CO2 平均の週推移（全室）</h2>
+          <figure class="chart" style="margin:0">
+            <svg viewBox="0 0 400 160" role="img" aria-labelledby="weekTitle weekDesc">
+              <title id="weekTitle">CO2平均の週推移</title>
+              <desc id="weekDesc">第1週 820ppm、第2週 910ppm、第3週 1,010ppm、第4週 860ppm。第3週に基準1,000ppmを超えた。</desc>
+              <line x1="40" y1="20" x2="390" y2="20" stroke="#D9DDD6"/><line x1="40" y1="70" x2="390" y2="70" stroke="#D9DDD6"/><line x1="40" y1="130" x2="390" y2="130" stroke="#7A847B"/>
+              <line x1="40" y1="46" x2="390" y2="46" stroke="#B42318" stroke-dasharray="6 4"/><text x="300" y="40">基準 1,000ppm</text>
+              <text x="4" y="24">1,200</text><text x="4" y="74">900</text><text x="4" y="134">600</text>
+              <polyline points="70,85 170,61 270,44 370,79" fill="none" stroke="#0F6B5C" stroke-width="3"/>
+              <g fill="#0F6B5C"><circle cx="70" cy="85" r="5"/><circle cx="170" cy="61" r="5"/><rect x="265" y="39" width="10" height="10"/><circle cx="370" cy="79" r="5"/></g>
+              <text x="58" y="152">第1週</text><text x="158" y="152">第2週</text><text x="258" y="152">第3週</text><text x="358" y="152">第4週</text>
+            </svg>
+            <figcaption class="small muted">第3週（四角の点）が基準超過。</figcaption>
+          </figure>
+          <details class="alt"><summary>データ表で見る</summary>
+            <table><caption class="visually-hidden">CO2平均の週推移</caption><thead><tr><th scope="col">週</th><th scope="col" class="r">CO2 平均(ppm)</th></tr></thead>
+            <tbody><tr><td>第1週</td><td class="r num">820</td></tr><tr><td>第2週</td><td class="r num">910</td></tr><tr><td>第3週</td><td class="r num">1,010（基準超過）</td></tr><tr><td>第4週</td><td class="r num">860</td></tr></tbody></table>
+          </details>
+        </section>
+      </div>
+
+      <!-- 押しつけないアップグレード提案 -->
+      <aside class="card" id="softUpsell" aria-labelledby="h-upsell" style="margin-top:24px">
+        <h2 id="h-upsell" style="font-size:var(--fs-lg)">センサーを4台以上つなぐなら Pro が向いています</h2>
+        <p class="small">いま <span class="num">2/3台</span> を使用中です。Free のままでもデータはずっと保存され、閲覧・書き出しできます。Pro は <strong>税込 ¥4,980/月</strong>（年払いなら ¥49,800/年）。14日間の試用はカード不要・自動課金なしです。</p>
+        <div class="btn-row equal">
+          <a class="btn btn-secondary" href="#settings" data-tab-target="tab-plan" data-analytics-event="upgrade_click" data-analytics-source="dashboard_soft">プランを比べる</a>
+          <button class="btn btn-secondary" data-action="dismiss-upsell" data-analytics-event="upgrade_dismiss">閉じる（30日間表示しない）</button>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ================= ワークスペース ================= -->
+    <section class="route" id="r-workspace" aria-labelledby="h-workspace">
+      <div class="page-head">
+        <div><p class="muted small" style="margin:0">11月 空気質レポート（サンプル）</p><h1 id="h-workspace" tabindex="-1">データをつなぐ・確認する</h1></div>
+        <div class="btn-row"><button class="btn btn-secondary btn-sm" id="pinBtn" aria-pressed="false" data-analytics-event="pin_toggle"><svg width="16" height="16" aria-hidden="true"><use href="#i-pin"/></svg>ピン留め</button></div>
+      </div>
+      <ol class="steps" aria-label="レポート作成の段階">
+        <li class="done">データをつなぐ</li>
+        <li aria-current="step">確認する</li>
+        <li>共有する</li>
+      </ol>
+
+      <div class="split">
+        <div>
+          <div class="tablist" role="tablist" aria-label="データの種類" data-tabs>
+            <button class="tab" role="tab" id="tab-sensor" aria-controls="pn-sensor" aria-selected="true">センサー</button>
+            <button class="tab" role="tab" id="tab-lca" aria-controls="pn-lca" aria-selected="false" tabindex="-1">建材 LCA</button>
+            <button class="tab" role="tab" id="tab-plan2" aria-controls="pn-floor" aria-selected="false" tabindex="-1">平面図</button>
+          </div>
+
+          <div role="tabpanel" id="pn-sensor" aria-labelledby="tab-sensor" tabindex="0">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <label class="check small"><input type="checkbox" id="detailToggle" data-analytics-event="detail_toggle">詳細表示（温度・湿度の列を追加）</label>
+              <button class="btn btn-secondary btn-sm" id="refreshBtn" data-analytics-event="sensor_refresh">最新値を取得</button>
+            </div>
+            <div class="mobile-sort field" style="flex-direction:row;align-items:center;gap:8px">
+              <label for="mSort" class="small" style="white-space:nowrap">並べ替え</label>
+              <select class="input" id="mSort"><option value="0">名前</option><option value="2" selected>CO2（高い順）</option><option value="3">PM2.5</option></select>
+            </div>
+            <div id="sensorSkeleton" hidden aria-hidden="true"><span class="skeleton" style="width:90%"></span><span class="skeleton" style="width:75%"></span><span class="skeleton" style="width:82%"></span></div>
+            <p class="visually-hidden" role="status" id="tableStatus"></p>
+            <div class="table-wrap" id="sensorTableWrap">
+              <table class="responsive sortable" id="sensorTable">
+                <caption>センサー（<span class="num" id="sensorCount">2</span>台）</caption>
+                <thead><tr>
+                  <th scope="col" aria-sort="none"><button class="sort-btn" data-col="0">名前<span class="arrow" aria-hidden="true">↕</span></button></th>
+                  <th scope="col">部屋</th>
+                  <th scope="col" class="r" aria-sort="descending"><button class="sort-btn" data-col="2" data-type="num">CO2 (ppm)<span class="arrow" aria-hidden="true">↓</span></button></th>
+                  <th scope="col" class="r" aria-sort="none"><button class="sort-btn" data-col="3" data-type="num">PM2.5 (µg/m³)<span class="arrow" aria-hidden="true">↕</span></button></th>
+                  <th scope="col" class="r col-detail">温度 (℃)</th>
+                  <th scope="col" class="r col-detail">湿度 (%)</th>
+                  <th scope="col">状態</th>
+                </tr></thead>
+                <tbody id="sensorBody"></tbody>
+              </table>
+            </div>
+
+            <h2 style="font-size:var(--fs-lg);margin-top:24px">センサーを追加</h2>
+            <div id="limitNotice" hidden></div>
+            <form id="sensorForm" novalidate>
+              <div class="grid cols-2">
+                <div class="field">
+                  <label for="sName">センサー名 <span class="req" aria-hidden="true">*</span><span class="visually-hidden">（必須）</span></label>
+                  <input class="input" id="sName" name="sName" autocomplete="off" aria-describedby="sNameHelp sNameErr" required>
+                  <p class="help" id="sNameHelp">本体ラベルの英数字（例: AQ-1003）</p>
+                  <p class="error-msg" id="sNameErr" hidden><svg aria-hidden="true"><use href="#i-bad"/></svg><span></span></p>
+                </div>
+                <div class="field">
+                  <label for="sRoom">部屋 <span class="req" aria-hidden="true">*</span><span class="visually-hidden">（必須）</span></label>
+                  <input class="input" id="sRoom" name="sRoom" list="roomList" value="会議室B" aria-describedby="sRoomHelp sRoomErr" required>
+                  <datalist id="roomList"><option value="会議室B"><option value="執務室A"><option value="応接室"></datalist>
+                  <p class="help" id="sRoomHelp">前回の入力値を初期値にしています。</p>
+                  <p class="error-msg" id="sRoomErr" hidden><svg aria-hidden="true"><use href="#i-bad"/></svg><span></span></p>
+                </div>
+                <div class="field">
+                  <label for="sTh">CO2 の通知基準 (ppm)</label>
+                  <input class="input num" id="sTh" name="sTh" inputmode="numeric" value="1000" aria-describedby="sThHelp sThErr">
+                  <p class="help" id="sThHelp">建築物衛生法の目安 1,000ppm を初期値にしています。400〜5,000 の範囲。</p>
+                  <p class="error-msg" id="sThErr" hidden><svg aria-hidden="true"><use href="#i-bad"/></svg><span></span></p>
+                </div>
+              </div>
+              <div class="btn-row"><button class="btn btn-primary" type="submit" id="addSensorBtn" data-analytics-event="sensor_connected">追加する</button></div>
+            </form>
+
+            <h2 style="font-size:var(--fs-lg);margin-top:24px">CSV / Excel から取り込む</h2>
+            <div class="dropzone" id="dropzone">
+              <p>ここにファイルをドラッグ＆ドロップ</p>
+              <p class="small muted">ドラッグしなくても、下のボタンから選べます（同じ結果になります）。</p>
+              <label class="btn btn-secondary" for="fileInput" style="cursor:pointer">ファイルを選ぶ</label>
+              <input type="file" id="fileInput" accept=".csv,.xlsx" class="visually-hidden" data-analytics-event="csv_import">
+              <p class="small" id="fileResult" role="status"></p>
+            </div>
+          </div>
+
+          <div role="tabpanel" id="pn-lca" aria-labelledby="tab-lca" tabindex="0" hidden>
+            <p class="small muted">数量を変えると CO2e（kg）とグラフがすぐ更新されます。原単位はダミー値です。</p>
+            <div class="table-wrap">
+              <table class="responsive" id="lcaTable">
+                <caption>建材 LCA（A1〜A3 製造段階・ダミー原単位）</caption>
+                <thead><tr><th scope="col">建材</th><th scope="col" class="r">原単位 (kgCO2e/単位)</th><th scope="col" class="r">数量</th><th scope="col" class="r">CO2e (kg)</th></tr></thead>
+                <tbody id="lcaBody"></tbody>
+              </table>
+            </div>
+            <figure class="chart" style="margin:16px 0 0">
+              <svg viewBox="0 0 420 150" role="img" aria-labelledby="lcaChartTitle" id="lcaChart"><title id="lcaChartTitle">建材別CO2e 横棒グラフ</title></svg>
+              <figcaption class="small muted" id="lcaChartCap"></figcaption>
+            </figure>
+          </div>
+
+          <div role="tabpanel" id="pn-floor" aria-labelledby="tab-plan2" tabindex="0" hidden>
+            <div id="floorSlot"></div>
+          </div>
+        </div>
+
+        <aside class="card" aria-labelledby="h-side">
+          <h2 id="h-side" style="font-size:var(--fs-lg)">このレポートに必要なもの</h2>
+          <ul class="small" style="padding-left:1.2em">
+            <li><span class="status s-good"><svg aria-hidden="true"><use href="#i-good"/></svg>済</span> センサーデータ（2台）</li>
+            <li><span class="status s-good"><svg aria-hidden="true"><use href="#i-good"/></svg>済</span> 建材 3 案</li>
+            <li><span class="status s-warn"><svg aria-hidden="true"><use href="#i-warn"/></svg>未入力</span> 建物名</li>
+          </ul>
+          <div class="field" style="margin-top:12px">
+            <label for="bName">建物名</label>
+            <input class="input" id="bName" value="" placeholder="例: 〇〇ビル 3F" autocomplete="organization">
+            <p class="help">レポート表紙に入ります。後から変更できます。</p>
+          </div>
+          <a class="btn btn-primary" href="#detail" data-analytics-event="report_generated" id="genReport" style="width:100%">確認して次へ（共有する）</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= 詳細・結果 ================= -->
+    <section class="route" id="r-detail" aria-labelledby="h-detail">
+      <div class="page-head">
+        <div><p class="muted small" style="margin:0">レポート · 最終更新 2026-11-15 09:00（ダミー）</p><h1 id="h-detail" tabindex="-1">11月 空気質・LCA レポート</h1></div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" data-action="export" data-analytics-event="report_export">PDF で書き出す（Free でも可）</button>
+          <button class="btn btn-primary" id="openShare" data-analytics-event="share_dialog_open">共有する</button>
+        </div>
+      </div>
+      <div class="grid cols-3">
+        <div class="card"><p class="kpi-label">CO2 月平均</p><p class="kpi-value num">900<span class="small"> ppm</span></p><span class="status s-good"><svg aria-hidden="true"><use href="#i-good"/></svg>良好（基準内）</span></div>
+        <div class="card"><p class="kpi-label">基準超過した時間</p><p class="kpi-value num">14<span class="small"> 時間</span></p><span class="status s-warn"><svg aria-hidden="true"><use href="#i-warn"/></svg>注意（会議室B）</span></div>
+        <div class="card"><p class="kpi-label">建材案C の削減量（案A比）</p><p class="kpi-value num" id="kpiSaving">−</p><span class="status s-good"><svg aria-hidden="true"><use href="#i-good"/></svg>削減</span></div>
+      </div>
+      <section class="card" aria-labelledby="h-floor" style="margin-top:24px">
+        <h2 id="h-floor" style="font-size:var(--fs-lg)">施主向けサマリー: 部屋ごとの空気の状態</h2>
+        <div id="floorMain"></div>
+      </section>
+      <section class="card" aria-labelledby="h-proexport" style="margin-top:24px">
+        <h2 id="h-proexport" style="font-size:var(--fs-lg)">書き出しオプション</h2>
+        <ul class="small" style="padding-left:1.2em">
+          <li>PDF 書き出し（AirLCA 表記つき）: <strong>Free で利用可</strong></li>
+          <li>自社ロゴ入り・表記なし PDF: <span class="tag tag-pro">Pro</span> 税込 ¥4,980/月 — 押す前に価格を表示しています</li>
+        </ul>
+      </section>
+    </section>
+
+    <!-- ================= 設定・プラン ================= -->
+    <section class="route" id="r-settings" aria-labelledby="h-settings">
+      <div class="page-head"><h1 id="h-settings" tabindex="-1">設定</h1></div>
+      <div class="tablist" role="tablist" aria-label="設定の項目" data-tabs>
+        <button class="tab" role="tab" id="tab-plan" aria-controls="pn-plan" aria-selected="true">プランと請求</button>
+        <button class="tab" role="tab" id="tab-account" aria-controls="pn-account" aria-selected="false" tabindex="-1">アカウント</button>
+        <button class="tab" role="tab" id="tab-metrics" aria-controls="pn-metrics" aria-selected="false" tabindex="-1">計測とプライバシー</button>
+      </div>
+
+      <div role="tabpanel" id="pn-plan" aria-labelledby="tab-plan" tabindex="0">
+        <fieldset class="card small" style="background:var(--color-surface-2)">
+          <legend class="small" style="font-weight:700;padding:0 4px">試作用: 契約状態を切り替える（実製品にはありません）</legend>
+          <div class="btn-row" role="radiogroup" aria-label="デモの契約状態">
+            <label class="check"><input type="radio" name="demoState" value="free" checked> Free</label>
+            <label class="check"><input type="radio" name="demoState" value="trial"> Pro 試用中</label>
+            <label class="check"><input type="radio" name="demoState" value="paid"> Pro 契約中</label>
+          </div>
+        </fieldset>
+
+        <section class="card" aria-labelledby="h-current" style="margin-top:16px" id="currentPlan" aria-live="polite"></section>
+
+        <section aria-labelledby="h-plans" style="margin-top:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+            <h2 id="h-plans" style="margin:0">プランを比べる</h2>
+            <div class="segmented" role="radiogroup" aria-label="支払い間隔">
+              <label><input type="radio" name="period" value="month" checked data-analytics-event="billing_period_toggle">月払い</label>
+              <label><input type="radio" name="period" value="year" data-analytics-event="billing_period_toggle">年払い（2か月分おトク）</label>
+            </div>
+          </div>
+          <p class="small muted">表示価格はすべて税込（消費税10%）・ダミー価格です。閲覧者（施主・テナント・上司）はどのプランでも無料・無制限です。</p>
+          <div class="plans" id="plans"></div>
+
+          <div class="table-wrap" style="margin-top:24px">
+            <table class="responsive">
+              <caption>機能比較（「含む」「制限付き（数値）」「—（対象外）」で表記）</caption>
+              <thead><tr><th scope="col">項目</th><th scope="col">Free</th><th scope="col">Pro（おすすめ）</th><th scope="col">Team</th></tr></thead>
+              <tbody>
+                <tr><th scope="row" data-label="項目">センサー接続</th><td data-label="Free">制限付き（3台）</td><td data-label="Pro">制限付き（20台）</td><td data-label="Team">制限付き（編集者1名あたり20台）</td></tr>
+                <tr><th scope="row">LCA レポート</th><td data-label="Free">制限付き（月1件）</td><td data-label="Pro">含む（無制限）</td><td data-label="Team">含む（無制限）</td></tr>
+                <tr><th scope="row">閲覧者</th><td data-label="Free">含む（無制限・無料）</td><td data-label="Pro">含む（無制限・無料）</td><td data-label="Team">含む（無制限・無料）</td></tr>
+                <tr><th scope="row">データ保持</th><td data-label="Free">含む（無期限）</td><td data-label="Pro">含む（無期限）</td><td data-label="Team">含む（無期限）</td></tr>
+                <tr><th scope="row">自社ロゴ入り書き出し</th><td data-label="Free">—</td><td data-label="Pro">含む</td><td data-label="Team">含む</td></tr>
+                <tr><th scope="row">権限管理・監査ログ</th><td data-label="Free">—</td><td data-label="Pro">—</td><td data-label="Team">含む</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="h-cancel" style="margin-top:24px" id="cancelSection">
+          <h2 id="h-cancel" style="font-size:var(--fs-lg)">解約・プラン変更</h2>
+          <p class="small">解約はこのボタンと確認の <strong>2操作</strong> で完了します。電話や問い合わせは不要です。解約後も Free としてデータの閲覧・書き出しを続けられ、データは削除されません。</p>
+          <button class="btn btn-danger" id="cancelBtn" data-analytics-event="cancel_flow_start">プランを解約する</button>
+          <p class="small muted" id="cancelHint" style="margin-top:8px"></p>
+        </section>
+      </div>
+
+      <div role="tabpanel" id="pn-account" aria-labelledby="tab-account" tabindex="0" hidden>
+        <form class="card" id="accountForm" novalidate style="max-width:640px">
+          <h2 style="font-size:var(--fs-lg)">アカウント</h2>
+          <div class="field">
+            <label for="aEmail">メールアドレス <span class="req" aria-hidden="true">*</span><span class="visually-hidden">（必須）</span></label>
+            <input class="input" id="aEmail" type="email" autocomplete="email" value="demo@example.jp" aria-describedby="aEmailHelp aEmailErr" required>
+            <p class="help" id="aEmailHelp">請求書と試用終了のお知らせが届きます。</p>
+            <p class="error-msg" id="aEmailErr" hidden><svg aria-hidden="true"><use href="#i-bad"/></svg><span></span></p>
+          </div>
+          <div class="field">
+            <label for="aOrg">事務所名（請求書の宛名）</label>
+            <input class="input" id="aOrg" autocomplete="organization" value="サンプル設計室">
+            <p class="help">登録時の入力を再利用しています（再入力は不要です）。</p>
+          </div>
+          <div class="notice n-info"><svg aria-hidden="true"><use href="#i-info"/></svg><div class="notice-body"><p class="small"><strong>ログイン方法:</strong> パスキー、またはメールに届くワンタイムリンク。パスワード管理ツールの自動入力と貼り付けに対応し、画像パズルや文字の書き写しは求めません。</p></div></div>
+          <div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" type="submit" data-analytics-event="account_save">保存する</button><button class="btn btn-secondary" type="button" disabled>パスキーを追加（試作では無効）</button></div>
+        </form>
+      </div>
+
+      <div role="tabpanel" id="pn-metrics" aria-labelledby="tab-metrics" tabindex="0" hidden>
+        <section class="card" aria-labelledby="h-plan-metrics">
+          <h2 id="h-plan-metrics" style="font-size:var(--fs-lg)">計測計画（ダミー）</h2>
+          <p class="small">UI 上の操作には <code>data-analytics-event</code> 属性を付けています。試作では外部送信は一切せず、下のログに表示するだけです。</p>
+          <div class="table-wrap">
+            <table class="responsive">
+              <caption>指標とイベント</caption>
+              <thead><tr><th scope="col">指標</th><th scope="col">定義</th><th scope="col">イベント</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">アクティベーション率</th><td data-label="定義">登録後7日以内にセンサー1台接続かつレポート1件生成</td><td data-label="イベント"><code>activation</code>, <code>sensor_connected</code>, <code>report_generated</code></td></tr>
+                <tr><th scope="row">無料→有料転換率</th><td data-label="定義">30日以内に Pro/Team へ移行した割合</td><td data-label="イベント"><code>upgrade_click</code>, <code>trial_start</code>, <code>plan_changed</code></td></tr>
+                <tr><th scope="row">4週継続率</th><td data-label="定義">登録4週目に1回以上ログインまたはレポート閲覧</td><td data-label="イベント"><code>session_start</code>, <code>report_viewed</code></td></tr>
+                <tr><th scope="row">月次解約率</th><td data-label="定義">当月初の有料契約のうち解約した割合</td><td data-label="イベント"><code>cancel_flow_start</code>, <code>cancel_flow_confirm</code>, <code>cancel_flow_abort</code></td></tr>
+                <tr><th scope="row">共有起点獲得</th><td data-label="定義">共有リンク閲覧者のうち登録した割合</td><td data-label="イベント"><code>share_link_created</code>, <code>share_viewed</code></td></tr>
+                <tr><th scope="row">押しつけ度の監視</th><td data-label="定義">提案の「閉じる」率と、提案表示後の解約率（高ければ提案を減らす）</td><td data-label="イベント"><code>upgrade_dismiss</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <label class="check" style="margin-top:12px"><input type="checkbox" id="optOut"> 利用状況の計測をオフにする（機能は変わりません）</label>
+          <h3 style="margin-top:16px">計測ログ（この画面内のみ）</h3>
+          <pre class="log" id="eventLog" aria-label="計測ログ" tabindex="0">（操作するとここに記録されます）</pre>
+        </section>
+        <section class="card" aria-labelledby="h-nodark" style="margin-top:24px">
+          <h2 id="h-nodark" style="font-size:var(--fs-lg)">ダークパターンを使わないという約束</h2>
+          <ul class="small" style="padding-left:1.2em">
+            <li>試用はカード不要。終了の3日前にお知らせし、自動で課金しません。</li>
+            <li>解約は「設定 → プランと請求 → 解約する → 確定」の2操作。引き止めの割引や、選択肢をわかりにくくする表示はしません。</li>
+            <li>上限を超えてもデータは消しません。追加が止まるだけで、閲覧と書き出しは続けられます。</li>
+            <li>アップグレード提案の「閉じる」は、提案ボタンと同じ大きさ・同じ見た目です。</li>
+            <li>カウントダウン、残りわずか表示、連続記録の途切れを使った誘導はしません。</li>
+            <li>料金は税込で、月払い・年払いを並べて表示します。共有リンクの既定は「非公開」です。</li>
+          </ul>
+        </section>
+      </div>
+    </section>
+
+    <!-- ================= 部品とトークン ================= -->
+    <section class="route" id="r-components" aria-labelledby="h-components">
+      <div class="page-head"><h1 id="h-components" tabindex="-1">共通部品とトークン</h1></div>
+      <div class="grid cols-2">
+        <section class="card" aria-labelledby="c-btn"><h2 id="c-btn" style="font-size:var(--fs-lg)">ボタン</h2>
+          <div class="btn-row"><button class="btn btn-primary">主ボタン</button><button class="btn btn-secondary">副ボタン</button><button class="btn btn-danger">危険</button><button class="btn btn-secondary" disabled>無効</button><button class="btn btn-ghost">文字ボタン</button></div>
+          <p class="small muted" style="margin-top:8px">高さ 44px 以上。無効は灰色＋カーソル変化。1画面の主ボタンは1つ。</p>
+        </section>
+        <section class="card" aria-labelledby="c-alert"><h2 id="c-alert" style="font-size:var(--fs-lg)">成功・警告・エラー</h2>
+          <div class="stack">
+            <div class="notice n-success"><svg aria-hidden="true"><use href="#i-good"/></svg><p><strong>成功:</strong> 保存しました。</p></div>
+            <div class="notice n-warn"><svg aria-hidden="true"><use href="#i-warn"/></svg><p><strong>注意:</strong> 試用はあと9日です（自動課金なし）。</p></div>
+            <div class="notice n-error"><svg aria-hidden="true"><use href="#i-bad"/></svg><p><strong>エラー:</strong> 取り込めませんでした。3行目の日付を「2026-11-01」の形にしてください。</p></div>
+          </div>
+        </section>
+        <section class="card" aria-labelledby="c-form"><h2 id="c-form" style="font-size:var(--fs-lg)">フォーム（エラー表示の例）</h2>
+          <form id="demoForm" novalidate>
+            <div class="field">
+              <label for="dPpm">CO2 の通知基準 (ppm) <span class="req" aria-hidden="true">*</span><span class="visually-hidden">（必須）</span></label>
+              <input class="input num" id="dPpm" value="80" inputmode="numeric" aria-describedby="dPpmHelp dPpmErr">
+              <p class="help" id="dPpmHelp">400〜5,000 の整数</p>
+              <p class="error-msg" id="dPpmErr" hidden><svg aria-hidden="true"><use href="#i-bad"/></svg><span></span></p>
+            </div>
+            <button class="btn btn-secondary" type="submit">検証する</button>
+          </form>
+        </section>
+        <section class="card" aria-labelledby="c-dlg"><h2 id="c-dlg" style="font-size:var(--fs-lg)">ダイアログ・読み込み中・空状態</h2>
+          <div class="btn-row"><button class="btn btn-secondary" id="openDemoDlg">ダイアログを開く</button></div>
+          <div aria-hidden="true" style="margin-top:12px"><span class="skeleton" style="width:80%"></span><span class="skeleton" style="width:60%"></span></div>
+          <p class="small muted">スケルトン（動きを減らす設定では静止）</p>
+          <div class="empty" style="padding:24px"><svg aria-hidden="true"><use href="#i-doc"/></svg><p><strong>共有されたレポートはまだありません</strong></p><a class="btn btn-secondary btn-sm" href="#detail">レポートを共有する</a></div>
+        </section>
+      </div>
+
+      <section class="card" aria-labelledby="c-tokens" style="margin-top:24px"><h2 id="c-tokens" style="font-size:var(--fs-lg)">カラートークン（コントラストは白 #FFFFFF に対する比）</h2>
+        <div class="table-wrap"><table class="responsive"><caption class="visually-hidden">カラートークン</caption>
+          <thead><tr><th scope="col">見本</th><th scope="col">トークン</th><th scope="col">HEX</th><th scope="col">用途</th><th scope="col" class="r">コントラスト</th></tr></thead>
+          <tbody id="tokenBody"></tbody></table></div>
+      </section>
+      <div class="grid cols-3" style="margin-top:24px">
+        <section class="card" aria-labelledby="c-type"><h2 id="c-type" style="font-size:var(--fs-lg)">文字サイズ</h2>
+          <p style="font-size:28px;margin:0">28 見出し1</p><p style="font-size:22px;margin:0">22 見出し2</p><p style="font-size:18px;margin:0">18 見出し3</p><p style="font-size:16px;margin:0">16 本文</p><p style="font-size:14px;margin:0">14 補助・表</p><p style="font-size:13px;margin:0">13 注記（最小）</p>
+        </section>
+        <section class="card" aria-labelledby="c-space"><h2 id="c-space" style="font-size:var(--fs-lg)">余白（8px 基準）</h2>
+          <div id="spaceList"></div>
+        </section>
+        <section class="card" aria-labelledby="c-radius"><h2 id="c-radius" style="font-size:var(--fs-lg)">角丸・影</h2>
+          <div class="btn-row">
+            <div style="width:64px;height:48px;border:1px solid var(--color-border-strong);border-radius:6px"></div>
+            <div style="width:64px;height:48px;border:1px solid var(--color-border-strong);border-radius:10px"></div>
+            <div style="width:64px;height:48px;border:1px solid var(--color-border-strong);border-radius:16px;box-shadow:var(--shadow-2)"></div>
+          </div>
+          <p class="small muted">6 入力欄 / 10 ボタン / 16 カード（影2はダイアログのみ）</p>
+        </section>
+      </div>
+      <p class="small muted" style="margin-top:16px">タブ（矢印キー操作）・並べ替え表・チャートと代替表・サイドバー・下部ナビは、それぞれ「作成」「レポート」「設定」画面で実際に動作します。</p>
+    </section>
+  </main>
+</div>
+
+<footer class="app-foot" role="contentinfo">
+  <p style="margin:0">（仮称）AirLCA Cloud — UI 研究用の試作。料金・数値・事業所名はすべてダミーで、実在の製品・企業とは関係ありません。評価は専門家によるヒューリスティック評価の段階で、実利用者による検証は未実施です。 <a href="#components">部品とトークン</a> · <button class="btn btn-ghost btn-sm" data-action="open-help">ヘルプ</button></p>
+</footer>
+
+<nav class="bottom-nav" aria-label="メイン（スマートフォン）">
+  <a href="#dashboard" data-route-link="dashboard"><svg aria-hidden="true"><use href="#i-home"/></svg>ホーム</a>
+  <a href="#workspace" data-route-link="workspace"><svg aria-hidden="true"><use href="#i-work"/></svg>データ</a>
+  <a href="#detail" data-route-link="detail"><svg aria-hidden="true"><use href="#i-report"/></svg>レポート</a>
+  <a href="#settings" data-route-link="settings"><svg aria-hidden="true"><use href="#i-gear"/></svg>設定</a>
+</nav>
+
+<!-- ===== ダイアログ群 ===== -->
+<dialog id="cmdDlg" aria-labelledby="cmdTitle">
+  <div class="dlg-head"><h2 id="cmdTitle">検索・操作</h2><button class="btn btn-ghost btn-sm" data-close aria-label="閉じる">✕</button></div>
+  <div class="dlg-body">
+    <label for="cmdInput" class="visually-hidden">コマンドを検索</label>
+    <input class="input" id="cmdInput" role="combobox" aria-expanded="true" aria-controls="cmdList" aria-autocomplete="list" placeholder="例: レポート、解約、センサー" autocomplete="off">
+    <ul class="cmd-list" id="cmdList" role="listbox" aria-label="候補"></ul>
+    <p class="small muted" style="margin-top:8px"><kbd>↑</kbd><kbd>↓</kbd> で選択、<kbd>Enter</kbd> で実行、<kbd>Esc</kbd> で閉じる</p>
+  </div>
+</dialog>
+
+<dialog id="helpDlg" aria-labelledby="helpTitle">
+  <div class="dlg-head"><h2 id="helpTitle">ヘルプ</h2><button class="btn btn-ghost btn-sm" data-close aria-label="閉じる">✕</button></div>
+  <div class="dlg-body">
+    <p>ヘルプはどの画面でも右上の同じ位置にあります。</p>
+    <h3>キーボード操作</h3>
+    <ul class="small"><li><kbd>Ctrl</kbd>+<kbd>K</kbd>（Mac は <kbd>⌘</kbd>+<kbd>K</kbd>）: 検索・操作</li><li><kbd>?</kbd>: このヘルプ</li><li>タブ: <kbd>←</kbd><kbd>→</kbd> で移動、<kbd>Home</kbd>/<kbd>End</kbd></li></ul>
+    <h3>問い合わせ（ダミー）</h3>
+    <p class="small">チャット（平日 9–18 時）／ support@example.jp。解約の手続きに問い合わせは不要です。</p>
+    <button class="btn btn-secondary" data-action="restart-onboarding">はじめのガイドを再開する</button>
+  </div>
+</dialog>
+
+<dialog id="shareDlg" aria-labelledby="shareTitle">
+  <form method="dialog">
+    <div class="dlg-head"><h2 id="shareTitle">レポートを共有</h2><button class="btn btn-ghost btn-sm" value="cancel" aria-label="閉じる">✕</button></div>
+    <div class="dlg-body">
+      <p class="small">受け取る人（施主・テナントなど）は<strong>無料</strong>で閲覧できます。アカウント登録も不要です。</p>
+      <fieldset><legend>公開範囲</legend>
+        <label class="check"><input type="radio" name="scope" value="private" checked> 招待した人だけ（既定）</label>
+        <label class="check"><input type="radio" name="scope" value="link"> リンクを知っている人</label>
+      </fieldset>
+      <div class="field"><label for="shareEmail">招待するメールアドレス</label><input class="input" id="shareEmail" type="email" autocomplete="email" placeholder="owner@example.jp"><p class="help">複数の場合はカンマ区切り</p></div>
+      <label class="check"><input type="checkbox" id="madeWith" checked> 閲覧画面の下に小さく「AirLCA で作成」と表示する（いつでも外せます）</label>
+    </div>
+    <div class="dlg-foot"><button class="btn btn-secondary" value="cancel">キャンセル</button><button class="btn btn-primary" value="ok" data-analytics-event="share_link_created">共有リンクを作成</button></div>
+  </form>
+</dialog>
+
+<dialog id="cancelDlg" aria-labelledby="cancelTitle">
+  <form method="dialog">
+    <div class="dlg-head"><h2 id="cancelTitle">解約の確認</h2></div>
+    <div class="dlg-body">
+      <ul class="small" id="cancelFacts" style="padding-left:1.2em"></ul>
+      <div class="field"><label for="cancelReason">理由（任意・答えなくても解約できます）</label>
+        <select class="input" id="cancelReason"><option value="">選ばない</option><option>価格が合わない</option><option>必要な機能がない</option><option>一時的に使わない</option><option>その他</option></select></div>
+    </div>
+    <div class="dlg-foot"><button class="btn btn-secondary" value="cancel" data-analytics-event="cancel_flow_abort">解約しない</button><button class="btn btn-danger" value="confirm" data-analytics-event="cancel_flow_confirm">解約を確定する</button></div>
+  </form>
+</dialog>
+
+<dialog id="demoDlg" aria-labelledby="demoTitle">
+  <form method="dialog">
+    <div class="dlg-head"><h2 id="demoTitle">ダイアログの例</h2></div>
+    <div class="dlg-body"><p>開くと最初の操作要素にフォーカスが移り、閉じると開いたボタンに戻ります。<kbd>Esc</kbd> で閉じられます。</p></div>
+    <div class="dlg-foot"><button class="btn btn-secondary" value="cancel">閉じる</button><button class="btn btn-primary" value="ok">わかった</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+/* ---------- 状態（すべてダミー） ---------- */
+var state={plan:'free',period:'month',sensors:[
+  {name:'AQ-1001',room:'執務室A',co2:780,pm:8,t:22.4,h:45},
+  {name:'AQ-1002',room:'会議室B',co2:1240,pm:12,t:24.1,h:52}
+],limitSensor:3,reports:0,limitReport:1,optOut:false,sampleLoaded:false};
+var TODAY=new Date(2026,10,15);
+function fmtDate(d){return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日'}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+function yen(n){return '¥'+n.toLocaleString('ja-JP')}
+
+/* ---------- 計測（外部送信なし） ---------- */
+var logLines=[];
+function track(name,props){
+  if(state.optOut) return;
+  var line=new Date().toLocaleTimeString('ja-JP')+'  '+name+(props?' '+JSON.stringify(props):'');
+  logLines.unshift(line); logLines=logLines.slice(0,40);
+  var el=$('#eventLog'); if(el) el.textContent=logLines.join('\n');
+  if(window.console) console.info('[analytics:dummy]',name,props||{});
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-analytics-event]');
+  if(t && t.type!=='radio' && t.type!=='checkbox' && t.type!=='file'){track(t.getAttribute('data-analytics-event'),{source:t.getAttribute('data-analytics-source')||location.hash.slice(1)||'dashboard'})}
+});
+document.addEventListener('change',function(e){
+  var t=e.target; if(t.matches&&t.matches('[data-analytics-event]')&&(t.type==='radio'||t.type==='checkbox'||t.type==='file')) track(t.getAttribute('data-analytics-event'),{value:t.type==='checkbox'?t.checked:t.value});
+});
+
+function toast(msg){var t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true},3600)}
+
+/* ---------- ルーティング ---------- */
+var ROUTES=['dashboard','workspace','detail','settings','components'];
+var TITLES={dashboard:'ホーム',workspace:'作成',detail:'レポート',settings:'設定',components:'部品とトークン'};
+function route(focus){
+  var r=(location.hash||'#dashboard').slice(1); if(ROUTES.indexOf(r)<0) r='dashboard';
+  ROUTES.forEach(function(x){$('#r-'+x).classList.toggle('active',x===r)});
+  $$('[data-route-link]').forEach(function(a){if(a.getAttribute('data-route-link')===r)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  document.title=TITLES[r]+' — AirLCA Cloud 試作';
+  if(r==='settings') track('pricing_view');
+  if(r==='detail') renderFloor('#floorMain');
+  if(r==='workspace') renderFloor('#floorSlot');
+  if(focus!==false){var h=$('#h-'+r); if(h) h.focus({preventScroll:true}); window.scrollTo(0,0)}
+}
+window.addEventListener('hashchange',function(){route(true)});
+// data-tab-target: 遷移先で特定タブを開く
+document.addEventListener('click',function(e){var a=e.target.closest('[data-tab-target]');if(a){var id=a.getAttribute('data-tab-target');setTimeout(function(){var t=document.getElementById(id);if(t)selectTab(t,false)},0)}});
+
+/* ---------- タブ（ARIA tablist・矢印キー） ---------- */
+function selectTab(tab,focus){
+  var list=tab.closest('[role=tablist]');
+  $$('[role=tab]',list).forEach(function(t){var on=t===tab;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;var p=document.getElementById(t.getAttribute('aria-controls'));if(p)p.hidden=!on});
+  if(focus) tab.focus();
+  if(tab.id==='tab-plan2') renderFloor('#floorSlot');
+}
+$$('[data-tabs]').forEach(function(list){
+  list.addEventListener('click',function(e){var t=e.target.closest('[role=tab]');if(t)selectTab(t,true)});
+  list.addEventListener('keydown',function(e){
+    var tabs=$$('[role=tab]',list),i=tabs.indexOf(document.activeElement),n=null;
+    if(i<0) return;
+    if(e.key==='ArrowRight') n=(i+1)%tabs.length; else if(e.key==='ArrowLeft') n=(i-1+tabs.length)%tabs.length;
+    else if(e.key==='Home') n=0; else if(e.key==='End') n=tabs.length-1;
+    if(n!==null){e.preventDefault();selectTab(tabs[n],true)}
+  });
+});
+
+/* ---------- ダイアログ（フォーカス管理） ---------- */
+var opener=null;
+function openDlg(id){var d=document.getElementById(id);opener=document.activeElement;d.showModal();var f=d.querySelector('input:not([type=hidden]),select,button:not([data-close]):not([value=cancel]),[data-close]');if(id==='cmdDlg')f=$('#cmdInput');if(f)f.focus()}
+$$('dialog').forEach(function(d){
+  d.addEventListener('close',function(){if(opener&&document.contains(opener))opener.focus();opener=null});
+  d.addEventListener('click',function(e){if(e.target.closest('[data-close]'))d.close()});
+});
+$('#openHelp').addEventListener('click',function(){openDlg('helpDlg')});
+$('#openDemoDlg').addEventListener('click',function(){openDlg('demoDlg')});
+$('#openShare').addEventListener('click',function(){openDlg('shareDlg')});
+$('#shareDlg').addEventListener('close',function(){if(this.returnValue==='ok'){var s=$('input[name=scope]:checked').value;toast(s==='private'?'成功: 招待した人だけが見られる共有を作成しました。':'成功: リンク共有を作成しました（閲覧者は無料）。');track('share_scope',{scope:s})}});
+
+/* ---------- コマンドパレット ---------- */
+var CMDS=[
+  {l:'ホームへ',k:'home dashboard ほーむ',go:'#dashboard'},
+  {l:'新しいレポートを作る',k:'report れぽーと 作成',go:'#workspace'},
+  {l:'センサーを追加',k:'sensor せんさー 追加',go:'#workspace',focus:'#sName'},
+  {l:'建材 LCA を編集',k:'lca 建材 co2',go:'#workspace',tab:'tab-lca'},
+  {l:'レポートを共有',k:'share 共有',go:'#detail',run:function(){openDlg('shareDlg')}},
+  {l:'プランと料金を見る',k:'plan 料金 pricing upgrade',go:'#settings',tab:'tab-plan'},
+  {l:'プランを解約する',k:'cancel 解約',go:'#settings',tab:'tab-plan',focus:'#cancelBtn'},
+  {l:'計測とプライバシー',k:'analytics 計測 privacy',go:'#settings',tab:'tab-metrics'},
+  {l:'部品とトークン一覧',k:'components 部品 token',go:'#components'}
+];
+var cmdSel=0,cmdFiltered=CMDS;
+function renderCmds(){
+  var q=$('#cmdInput').value.trim().toLowerCase();
+  cmdFiltered=CMDS.filter(function(c){return !q||(c.l+' '+c.k).toLowerCase().indexOf(q)>=0});
+  if(cmdSel>=cmdFiltered.length)cmdSel=0;
+  var ul=$('#cmdList');ul.innerHTML='';
+  if(!cmdFiltered.length){ul.innerHTML='<li role="option" aria-disabled="true" class="muted">見つかりません。「レポート」「解約」などで探せます。</li>';$('#cmdInput').removeAttribute('aria-activedescendant');return}
+  cmdFiltered.forEach(function(c,i){var li=document.createElement('li');li.id='cmd-'+i;li.setAttribute('role','option');li.setAttribute('aria-selected',i===cmdSel);li.innerHTML='<span>'+c.l+'</span><span class="small muted">'+c.go.slice(1)+'</span>';li.addEventListener('click',function(){runCmd(c)});ul.appendChild(li)});
+  $('#cmdInput').setAttribute('aria-activedescendant','cmd-'+cmdSel);
+  var cur=document.getElementById('cmd-'+cmdSel);if(cur&&cur.scrollIntoView)cur.scrollIntoView({block:'nearest'});
+}
+function runCmd(c){track('command_run',{command:c.l});opener=null;$('#cmdDlg').close();location.hash=c.go;setTimeout(function(){route(true);if(c.tab){selectTab(document.getElementById(c.tab),false)}if(c.focus){var f=$(c.focus);if(f)f.focus()}if(c.run)c.run()},10)}
+function openCmd(){$('#cmdInput').value='';cmdSel=0;renderCmds();openDlg('cmdDlg');track('command_palette_open')}
+$('#openCmd').addEventListener('click',function(e){e.stopPropagation();$('#cmdInput').value='';cmdSel=0;renderCmds();openDlg('cmdDlg')});
+$('#cmdInput').addEventListener('input',function(){cmdSel=0;renderCmds()});
+$('#cmdInput').addEventListener('keydown',function(e){
+  if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdSel+1,cmdFiltered.length-1);renderCmds()}
+  else if(e.key==='ArrowUp'){e.preventDefault();cmdSel=Math.max(cmdSel-1,0);renderCmds()}
+  else if(e.key==='Enter'){e.preventDefault();if(cmdFiltered[cmdSel])runCmd(cmdFiltered[cmdSel])}
+});
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();if(!$('#cmdDlg').open)openCmd()}
+  else if(e.key==='?'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){openDlg('helpDlg')}
+});
+
+/* ---------- 使用量メーター ---------- */
+function renderUsage(){
+  var paid=state.plan!=='free';
+  var ls=paid?20:state.limitSensor, lr=paid?null:state.limitReport;
+  var n=state.sensors.length;
+  $('#usageSensor').textContent=n+'/'+ls+'台';
+  $('#barSensor').firstElementChild.style.width=Math.min(100,n/ls*100)+'%';
+  $('#barSensor').classList.toggle('full',n>=ls);
+  $('#usageReport').textContent=lr?state.reports+'/'+lr+'件':state.reports+'件（無制限）';
+  $('#barReport').firstElementChild.style.width=lr?Math.min(100,state.reports/lr*100)+'%':'10%';
+  $('#planBadge').textContent={free:'Free',trial:'Pro 試用中',paid:'Pro'}[state.plan];
+  $('#usageMeter').setAttribute('aria-label','使用量: センサー '+n+'/'+ls+'台、今月のレポート '+(lr?state.reports+'/'+lr+'件':state.reports+'件')+'、プラン '+$('#planBadge').textContent+'。プラン設定を開く');
+  $('#sensorCount').textContent=n;
+}
+
+/* ---------- センサー表（並べ替え） ---------- */
+function statusOf(co2){return co2>=1000?['s-bad','i-bad','要換気']:co2>=900?['s-warn','i-warn','注意']:['s-good','i-good','良好']}
+var sortState={col:2,dir:'descending'};
+function renderSensors(){
+  var rows=state.sensors.slice();
+  var key=['name','room','co2','pm'][sortState.col];
+  rows.sort(function(a,b){var x=a[key],y=b[key];var c=typeof x==='number'?x-y:String(x).localeCompare(String(y),'ja');return sortState.dir==='ascending'?c:-c});
+  $('#sensorBody').innerHTML=rows.map(function(s){var st=statusOf(s.co2);return '<tr><td data-label="名前"><strong>'+s.name+'</strong></td><td data-label="部屋">'+s.room+'</td><td data-label="CO2 (ppm)" class="r num">'+s.co2.toLocaleString()+'</td><td data-label="PM2.5" class="r num">'+s.pm+'</td><td data-label="温度 (℃)" class="r num col-detail">'+s.t+'</td><td data-label="湿度 (%)" class="r num col-detail">'+s.h+'</td><td data-label="状態"><span class="status '+st[0]+'"><svg aria-hidden="true"><use href="#'+st[1]+'"/></svg>'+st[2]+'</span></td></tr>'}).join('');
+  $$('#sensorTable thead th').forEach(function(th){var b=th.querySelector('.sort-btn');if(!b)return;var c=+b.getAttribute('data-col');var on=c===sortState.col;th.setAttribute('aria-sort',on?sortState.dir:'none');b.querySelector('.arrow').textContent=on?(sortState.dir==='ascending'?'↑':'↓'):'↕'});
+}
+$$('#sensorTable .sort-btn').forEach(function(b){b.addEventListener('click',function(){var c=+b.getAttribute('data-col');sortState.dir=(sortState.col===c&&sortState.dir==='descending')?'ascending':'descending';if(sortState.col!==c)sortState.dir=b.getAttribute('data-type')==='num'?'descending':'ascending';sortState.col=c;renderSensors();$('#tableStatus').textContent=b.textContent.replace(/[↑↓↕]/g,'')+'で'+(sortState.dir==='ascending'?'昇順':'降順')+'に並べ替えました';track('table_sort',{col:c,dir:sortState.dir})})});
+$('#mSort').addEventListener('change',function(){sortState.col=+this.value;sortState.dir=this.value==='0'?'ascending':'descending';renderSensors();track('table_sort',{col:sortState.col,via:'mobile'})});
+$('#detailToggle').addEventListener('change',function(){$('#pn-sensor').classList.toggle('show-detail',this.checked)});
+$('#refreshBtn').addEventListener('click',function(){var sk=$('#sensorSkeleton'),w=$('#sensorTableWrap');sk.hidden=false;w.hidden=true;$('#tableStatus').textContent='読み込み中…';setTimeout(function(){state.sensors.forEach(function(s){s.co2=Math.max(420,s.co2+Math.round((Math.random()-.5)*80))});renderSensors();sk.hidden=true;w.hidden=false;$('#tableStatus').textContent='最新値に更新しました'},1200)});
+
+/* ---------- フォーム検証（エラーの特定と修正提案） ---------- */
+function setErr(input,msg){var e=document.getElementById(input.id+'Err');if(!e)return;if(msg){input.setAttribute('aria-invalid','true');e.querySelector('span').textContent=msg;e.hidden=false}else{input.removeAttribute('aria-invalid');e.hidden=true}}
+function validPpm(v){var n=Number(String(v).replace(/[,，]/g,'').replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}));return {ok:Number.isInteger(n)&&n>=400&&n<=5000,n:n}}
+$('#sensorForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=$('#sName'),room=$('#sRoom'),th=$('#sTh'),first=null;
+  var nv=name.value.trim().toUpperCase();
+  if(!nv){setErr(name,'センサー名を入力してください。本体ラベルの「AQ-」から始まる英数字です。');first=first||name}
+  else if(!/^AQ-\d{4}$/.test(nv)){setErr(name,'「'+name.value+'」は形式が違います。「AQ-」と4桁の数字にしてください（例: AQ-1003）。');first=first||name}
+  else if(state.sensors.some(function(s){return s.name===nv})){setErr(name,nv+' はすでに登録されています。別の番号を入力してください。');first=first||name}
+  else setErr(name,'');
+  if(!room.value.trim()){setErr(room,'部屋を入力してください。候補から選ぶこともできます。');first=first||room}else setErr(room,'');
+  var p=validPpm(th.value);
+  if(!p.ok){setErr(th,'400〜5,000 の整数で入力してください（入力値: '+(th.value||'空欄')+'）。迷ったら 1000 が目安です。');first=first||th}else setErr(th,'');
+  if(first){first.focus();return}
+  var limit=state.plan==='free'?state.limitSensor:20;
+  if(state.sensors.length>=limit){showLimit();return}
+  state.sensors.push({name:nv,room:room.value.trim(),co2:650,pm:6,t:22.0,h:48});
+  renderSensors();renderUsage();name.value='';
+  toast('成功: '+nv+' を追加しました。');
+  if(state.sensors.length>=limit) showLimit();
+});
+function showLimit(){
+  var el=$('#limitNotice');el.hidden=false;
+  el.innerHTML='<div class="notice n-warn" role="status" style="margin-bottom:16px"><svg aria-hidden="true"><use href="#i-warn"/></svg><div class="notice-body"><p><strong>Free の上限（センサー 3 台）に達しました。</strong>これ以上は追加できませんが、既存のデータはこれまでどおり閲覧・書き出しできます。データは削除されません。</p><p class="small">Pro（税込 ¥4,980/月）なら 20 台まで。14日間の試用はカード不要・自動課金なしです。</p><div class="btn-row equal" style="margin-top:8px"><a class="btn btn-secondary" href="#settings" data-tab-target="tab-plan" data-analytics-event="upgrade_click" data-analytics-source="sensor_limit">プランを比べる</a><button class="btn btn-secondary" type="button" data-action="close-limit" data-analytics-event="upgrade_dismiss">閉じる</button></div></div></div>';
+  track('limit_reached',{resource:'sensor'});
+}
+$('#demoForm').addEventListener('submit',function(e){e.preventDefault();var i=$('#dPpm'),p=validPpm(i.value);setErr(i,p.ok?'':'「'+i.value+'」は範囲外です。400〜5,000 の整数にしてください（例: 1000）。');if(!p.ok)i.focus();else toast('成功: 正しい値です。')});
+$('#accountForm').addEventListener('submit',function(e){e.preventDefault();var i=$('#aEmail');var ok=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(i.value);setErr(i,ok?'':'メールアドレスの形式が違います。「@」と「.」を含めてください（例: name@example.jp）。');if(!ok)i.focus();else toast('成功: アカウント情報を保存しました。')});
+
+/* ---------- ドラッグ＆ドロップ（代替: ファイル選択ボタン） ---------- */
+var dz=$('#dropzone');
+['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('over')})});
+['dragleave','drop'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('over')})});
+function importFile(f){if(!f)return;var ok=/\.(csv|xlsx)$/i.test(f.name);$('#fileResult').innerHTML=ok?'<span class="status s-good"><svg aria-hidden="true"><use href="#i-good"/></svg>成功</span> '+f.name+' を確認しました（試作のため実際には取り込みません）':'<span class="status s-bad"><svg aria-hidden="true"><use href="#i-bad"/></svg>エラー</span> '+f.name+' は対応していません。CSV か Excel（.xlsx）を選んでください。';track('csv_import',{ok:ok})}
+dz.addEventListener('drop',function(e){importFile(e.dataTransfer.files[0])});
+$('#fileInput').addEventListener('change',function(){importFile(this.files[0])});
+
+/* ---------- 建材 LCA ---------- */
+var MATS=[{n:'案A 鉄筋コンクリート',f:310,u:'m³',q:42},{n:'案B 鉄骨＋ALC',f:240,u:'m³',q:42},{n:'案C CLT（木質）',f:120,u:'m³',q:42}];
+function renderLca(){
+  $('#lcaBody').innerHTML=MATS.map(function(m,i){return '<tr><th scope="row" data-label="建材">'+m.n+'</th><td data-label="原単位" class="r num">'+m.f+' / '+m.u+'</td><td data-label="数量" class="r"><label class="visually-hidden" for="q'+i+'">'+m.n+' の数量 ('+m.u+')</label><input class="input inline-num num" id="q'+i+'" inputmode="decimal" value="'+m.q+'" data-i="'+i+'"> '+m.u+'</td><td data-label="CO2e (kg)" class="r num" id="co'+i+'">'+(m.f*m.q).toLocaleString()+'</td></tr>'}).join('');
+  $$('#lcaBody input').forEach(function(inp){inp.addEventListener('input',function(){var v=parseFloat(inp.value);var i=+inp.getAttribute('data-i');if(!isNaN(v)&&v>=0){MATS[i].q=v;inp.removeAttribute('aria-invalid');$('#co'+i).textContent=Math.round(MATS[i].f*v).toLocaleString();drawLca()}else{inp.setAttribute('aria-invalid','true')}})});
+  drawLca();
+}
+function drawLca(){
+  var max=Math.max.apply(null,MATS.map(function(m){return m.f*m.q}))||1;
+  var svg='<title id="lcaChartTitle">建材別CO2e 横棒グラフ</title>';
+  var shapes=['#0F6B5C','#4A5563','#1E7B4C'];
+  MATS.forEach(function(m,i){var v=Math.round(m.f*m.q),w=Math.max(2,v/max*230),y=14+i*44;svg+='<text x="0" y="'+(y+18)+'">'+m.n.split(' ')[0]+'</text><rect x="44" y="'+y+'" width="'+w+'" height="26" rx="4" fill="'+shapes[i]+'"/><text x="'+(50+w)+'" y="'+(y+18)+'" style="fill:#1C2430">'+v.toLocaleString()+' kg</text>'});
+  $('#lcaChart').innerHTML=svg;
+  var a=MATS[0].f*MATS[0].q,c=MATS[2].f*MATS[2].q,pct=a?Math.round((a-c)/a*100):0;
+  var cap='案C は案A より '+Math.round(a-c).toLocaleString()+' kgCO2e（'+pct+'%）少ない。数値は上の表と同じです。';
+  $('#lcaChartCap').textContent=cap;$('#lcaChart').setAttribute('aria-label','建材別CO2e: '+MATS.map(function(m){return m.n+' '+Math.round(m.f*m.q).toLocaleString()+'kg'}).join('、'));
+  $('#kpiSaving').innerHTML=pct+'<span class="small">%（'+Math.round((a-c)/1000*10)/10+' t）</span>';
+}
+
+/* ---------- 平面図（SVG＋代替表） ---------- */
+var ROOMS=[{n:'執務室A',x:10,y:10,w:220,h:130,s:'AQ-1001'},{n:'会議室B',x:240,y:10,w:150,h:130,s:'AQ-1002'},{n:'応接室',x:10,y:150,w:140,h:90,s:null},{n:'廊下・受付',x:160,y:150,w:230,h:90,s:null}];
+function renderFloor(sel){
+  var host=$(sel);if(!host)return;
+  var fill={'s-good':'#E6F3EB','s-warn':'#FBF1DC','s-bad':'#FCE9E7'},stroke={'s-good':'#1E7B4C','s-warn':'#8A5A00','s-bad':'#B42318'};
+  var rows=[],g='';
+  ROOMS.forEach(function(r){var s=r.s&&state.sensors.filter(function(x){return x.name===r.s})[0];var st=s?statusOf(s.co2):null;
+    var f=st?fill[st[0]]:'#F1F3EE',k=st?stroke[st[0]]:'#7A847B';
+    g+='<rect x="'+r.x+'" y="'+r.y+'" width="'+r.w+'" height="'+r.h+'" fill="'+f+'" stroke="'+k+'" stroke-width="2" rx="4"/><text x="'+(r.x+12)+'" y="'+(r.y+26)+'" style="fill:#1C2430;font-weight:700;font-size:14px">'+r.n+'</text>';
+    if(st){g+='<use href="#'+st[1]+'" x="'+(r.x+12)+'" y="'+(r.y+38)+'" width="20" height="20" style="color:'+k+'"/><text x="'+(r.x+38)+'" y="'+(r.y+53)+'" style="fill:#1C2430;font-size:13px">'+st[2]+' · '+s.co2.toLocaleString()+'ppm</text>'}
+    else g+='<text x="'+(r.x+12)+'" y="'+(r.y+53)+'" style="fill:#4A5563;font-size:13px">センサー未設置</text>';
+    rows.push('<tr><th scope="row" data-label="部屋">'+r.n+'</th><td data-label="状態">'+(st?'<span class="status '+st[0]+'"><svg aria-hidden="true"><use href="#'+st[1]+'"/></svg>'+st[2]+'</span>':'未設置')+'</td><td data-label="CO2 (ppm)" class="r num">'+(s?s.co2.toLocaleString():'—')+'</td></tr>')});
+  host.innerHTML='<figure class="chart" style="margin:0"><svg viewBox="0 0 400 250" role="img" aria-label="平面図: '+ROOMS.map(function(r){var s=r.s&&state.sensors.filter(function(x){return x.name===r.s})[0];return r.n+(s?' '+statusOf(s.co2)[2]+' '+s.co2+'ppm':' 未設置')}).join('、')+'">'+g+'</svg><figcaption class="small muted">形状でも状態を区別: 丸=良好、三角=注意、八角形=要換気。</figcaption></figure><details class="alt"><summary>表で見る（平面図と同じ内容）</summary><table class="responsive"><caption class="visually-hidden">部屋ごとの状態</caption><thead><tr><th scope="col">部屋</th><th scope="col">状態</th><th scope="col" class="r">CO2 (ppm)</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></details>';
+}
+
+/* ---------- 料金・試用・解約 ---------- */
+var PRICES={pro:{month:4980,year:49800},team:{month:3480,year:34800}};
+function renderPlans(){
+  var y=state.period==='year';
+  function priceLine(key){var p=PRICES[key];return y?'<span class="price num">'+yen(p.year)+'</span><span class="small"> /年'+(key==='team'?'・編集者1名':'')+'</span><p class="small muted">月あたり '+yen(Math.round(p.year/12))+'。月払いより年 '+yen(p.month*12-p.year)+' おトク</p>':'<span class="price num">'+yen(p.month)+'</span><span class="small"> /月'+(key==='team'?'・編集者1名':'')+'</span><p class="small muted">年払いなら '+yen(p.year)+'/年（'+yen(p.month*12-p.year)+' おトク）</p>'}
+  var cur=state.plan;
+  $('#plans').innerHTML=
+  '<article class="card plan"><h3>Free</h3><div><span class="price num">¥0</span></div><p class="small">まず1件、レポートを作ってみたい方に</p><ul class="small"><li>センサー 3 台</li><li>LCA レポート 月 1 件</li><li>閲覧者 無制限・無料</li><li>データ保持 無期限</li></ul><button class="btn btn-secondary" '+(cur==='free'?'disabled':'')+'>'+(cur==='free'?'利用中のプラン':'Free に戻す')+'</button></article>'+
+  '<article class="card plan recommended"><h3>Pro <span class="tag tag-rec">おすすめ</span></h3><div>'+priceLine('pro')+'</div><p class="small"><strong>センサーが4台以上</strong>、または毎月2件以上レポートを作るなら</p><ul class="small"><li>センサー 20 台</li><li>レポート 無制限</li><li>自社ロゴ入り書き出し</li><li>閲覧者 無制限・無料</li></ul>'+
+    (cur==='free'?'<button class="btn btn-primary" data-action="start-trial" data-analytics-event="trial_start">14日間 無料で試す（カード不要）</button><p class="small muted" style="margin:0">試用後に自動で課金されません。データはそのまま残ります。</p>':'<button class="btn btn-secondary" disabled>'+(cur==='trial'?'試用中':'利用中のプラン')+'</button>')+'</article>'+
+  '<article class="card plan"><h3>Team</h3><div>'+priceLine('team')+'</div><p class="small">3名以上で編集する事務所に（3名から・最小 '+(y?yen(PRICES.team.year*3)+'/年':yen(PRICES.team.month*3)+'/月')+'）</p><ul class="small"><li>Pro のすべて</li><li>課金は<strong>編集者のみ</strong>。閲覧者は無料</li><li>権限管理・監査ログ</li></ul><button class="btn btn-secondary" data-action="contact-team" data-analytics-event="upgrade_click" data-analytics-source="team_card">Team の見積りを見る</button></article>';
+}
+function renderCurrent(){
+  var c=$('#currentPlan'),h='';
+  var trialEnd=addDays(TODAY,14),notify=addDays(trialEnd,-3),renew=addDays(TODAY,30);
+  if(state.plan==='free'){h='<h2 id="h-current" style="font-size:var(--fs-lg)">現在のプラン: Free（¥0）</h2><p class="small">センサー '+state.sensors.length+'/3 台・レポート '+state.reports+'/1 件。期限はなく、自動で有料になることはありません。</p>'}
+  else if(state.plan==='trial'){h='<h2 id="h-current" style="font-size:var(--fs-lg)">現在のプラン: Pro 試用中</h2><div class="notice n-info"><svg aria-hidden="true"><use href="#i-info"/></svg><div class="notice-body"><p><strong>試用終了日: '+fmtDate(trialEnd)+'</strong>（'+fmtDate(notify)+' にメールでお知らせします）</p><p class="small"><strong>自動更新・自動課金はありません。</strong>何もしなければ Free に戻り、データはすべて残ります（センサー4台目以降は閲覧のみ）。</p></div></div><div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" data-action="go-paid" data-analytics-event="plan_changed">Pro を契約する（'+(state.period==='year'?yen(49800)+'/年':yen(4980)+'/月')+'・税込）</button></div>'}
+  else {h='<h2 id="h-current" style="font-size:var(--fs-lg)">現在のプラン: Pro（'+(state.period==='year'?yen(49800)+'/年':yen(4980)+'/月')+'・税込）</h2><div class="notice n-warn"><svg aria-hidden="true"><use href="#i-warn"/></svg><div class="notice-body"><p><strong>自動更新: あり</strong> · 次回更新日 '+fmtDate(renew)+'</p><p class="small">更新の7日前にメールでお知らせします。下の「プランを解約する」でいつでも止められ、更新日までは Pro のまま使えます。</p></div></div><p class="small" style="margin-top:8px">請求書・支払い方法は決済代行のホスト型ポータル（試作では未接続）で変更できます。</p>'}
+  c.innerHTML=h;
+  var cb=$('#cancelBtn'),hint=$('#cancelHint');
+  if(state.plan==='free'){cb.disabled=true;hint.textContent='Free プランのため解約するものはありません（ボタンは無効）。'}else{cb.disabled=false;cb.textContent=state.plan==='trial'?'試用をやめて Free に戻る':'プランを解約する';hint.textContent=''}
+}
+function setPlan(p){state.plan=p;$$('input[name=demoState]').forEach(function(r){r.checked=r.value===p});renderPlans();renderCurrent();renderUsage()}
+$$('input[name=demoState]').forEach(function(r){r.addEventListener('change',function(){setPlan(r.value)})});
+$$('input[name=period]').forEach(function(r){r.addEventListener('change',function(){state.period=r.value;renderPlans();renderCurrent()})});
+$('#cancelBtn').addEventListener('click',function(){
+  var end=state.plan==='trial'?'すぐに Free に戻ります。':'次回更新日（'+fmtDate(addDays(TODAY,30))+'）まで Pro を使え、その後 Free に戻ります。返金・日割りの扱いは利用規約（ダミー）のとおりです。';
+  $('#cancelFacts').innerHTML='<li>'+end+'</li><li>データは削除されません。Free の上限を超える分は閲覧・書き出しのみになります。</li><li>いつでも同じ画面から再開できます。</li>';
+  openDlg('cancelDlg');
+});
+$('#cancelDlg').addEventListener('close',function(){if(this.returnValue==='confirm'){track('plan_cancelled',{reason:$('#cancelReason').value||null});setPlan('free');toast('成功: 解約しました。データはそのまま残っています。')}});
+
+/* ---------- オンボーディング ---------- */
+function obStep(n){
+  [1,2,3].forEach(function(i){$('#obPanel'+i).hidden=i!==n;var li=$('#obSteps li[data-step="'+i+'"]');li.classList.toggle('done',i<n);if(i===n)li.setAttribute('aria-current','step');else li.removeAttribute('aria-current')});
+}
+$('#obNext1').addEventListener('click',function(){track('onboarding_goal',{goal:$('input[name=goal]:checked').value});obStep(2);$('#loadSample').focus()});
+function loadSample(){
+  if(state.sampleLoaded)return; state.sampleLoaded=true;state.reports=1;
+  $('#delivEmpty').hidden=true;$('#delivCards').hidden=false;renderUsage();obStep(3);
+  track('report_generated',{source:'sample'});
+  var l=$('#obPanel3 a');if(l)l.focus();
+}
+$('#loadSample').addEventListener('click',loadSample);
+$('#skipOnboard').addEventListener('click',function(){$('#onboarding').hidden=true;toast('ガイドを閉じました。ヘルプからいつでも再開できます。')});
+
+/* ---------- 汎用アクション ---------- */
+document.addEventListener('click',function(e){
+  var a=e.target.closest('[data-action]');if(!a)return;
+  var act=a.getAttribute('data-action');
+  if(act==='load-sample'){location.hash='#dashboard';$('#onboarding').hidden=false;obStep(2);loadSample()}
+  if(act==='dismiss-upsell'){$('#softUpsell').hidden=true;toast('提案を閉じました。30日間は表示しません。');$('#h-deliv').setAttribute('tabindex','-1');$('#h-deliv').focus()}
+  if(act==='close-limit'){$('#limitNotice').hidden=true;$('#sName').focus()}
+  if(act==='ack-alert'){a.closest('section').querySelector('.notice').outerHTML='<div class="notice n-success" role="status"><svg aria-hidden="true"><use href="#i-good"/></svg><p><strong>対応済み:</strong> 15分後に会議室B を再確認します。</p></div>';a.disabled=true}
+  if(act==='start-trial'){setPlan('trial');toast('成功: Pro の試用を開始しました。カードは登録されていません。');$('#currentPlan h2').setAttribute('tabindex','-1');$('#currentPlan h2').focus()}
+  if(act==='go-paid'){setPlan('paid');toast('（試作）実際は決済代行のホスト型画面に移動します。')}
+  if(act==='contact-team'){toast('（試作）Team: 編集者3名 × '+yen(3480)+' = '+yen(10440)+'/月（税込）から。')}
+  if(act==='export'){toast('（試作）PDF を書き出しました。');}
+  if(act==='open-help'){openDlg('helpDlg')}
+  if(act==='restart-onboarding'){$('#helpDlg').close();location.hash='#dashboard';$('#onboarding').hidden=false;setTimeout(function(){$('#h-onboard').setAttribute('tabindex','-1');$('#h-onboard').focus()},20)}
+});
+$('#pinBtn').addEventListener('click',function(){var on=this.getAttribute('aria-pressed')!=='true';this.setAttribute('aria-pressed',on);this.lastChild.textContent=on?'ピン留め済み':'ピン留め';$('#pinList').innerHTML=on?'<li><a href="#workspace" class="small">11月レポートのデータ</a></li>':'<li class="small muted" style="padding:0 12px">まだありません。</li>'});
+$('#genReport').addEventListener('click',function(){track('activation',{via:'workspace'})});
+$('#optOut').addEventListener('change',function(){if(this.checked){track('analytics_opt_out');state.optOut=true}else{state.optOut=false;track('analytics_opt_in')}});
+
+/* ---------- トークン一覧 ---------- */
+var TOKENS=[['--color-bg','#FAFAF7','ページ背景','—'],['--color-surface','#FFFFFF','カード・面','—'],['--color-surface-2','#F1F3EE','表見出し・沈んだ面','—'],['--color-text','#1C2430','本文','15.9:1'],['--color-text-muted','#4A5563','補助文字','7.5:1'],['--color-border','#D9DDD6','装飾の区切り線（意味を持たせない）','1.4:1'],['--color-border-strong','#7A847B','入力欄・UI部品の境界','3.9:1'],['--color-primary','#0F6B5C','主ボタン・リンク・選択','6.4:1'],['--color-accent','#B45309','Pro ラベル','5.0:1'],['--color-good','#1E7B4C','良好（＋丸アイコン）','5.3:1'],['--color-warn','#8A5A00','注意（＋三角アイコン）','5.9:1'],['--color-bad','#B42318','要換気・エラー・危険（＋八角形）','6.5:1'],['--color-focus','#1D4ED8','フォーカスリング','6.7:1']];
+$('#tokenBody').innerHTML=TOKENS.map(function(t){return '<tr><td data-label="見本"><span class="token-swatch" style="background:'+t[1]+'"></span></td><td data-label="トークン"><code>'+t[0]+'</code></td><td data-label="HEX" class="num">'+t[1]+'</td><td data-label="用途">'+t[2]+'</td><td data-label="コントラスト" class="r num">'+t[3]+'</td></tr>'}).join('');
+$('#spaceList').innerHTML=[4,8,12,16,24,32,48].map(function(n,i){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><span class="num small" style="width:84px">space-'+(i+1)+' '+n+'</span><span style="display:inline-block;height:12px;width:'+n+'px;background:var(--color-primary);border-radius:2px"></span></div>'}).join('');
+
+/* ---------- 初期化 ---------- */
+renderSensors();renderUsage();renderLca();renderPlans();renderCurrent();
+if(!location.hash) history.replaceState(null,'','#dashboard');
+route(false);
+track('session_start');
+})();
+</script>
+</body>
+</html>
