@@ -354,11 +354,18 @@ class App:
         for v in good:
             self.projects.propose(pid, v, "document:" + doc_id)
         summary = "「%s」（%s）から %d 件の候補を作った。使わなかった行 %d 件。" % (name, r["kind"], len(r["proposals"]), len(r["unused"]))
-        warnings = r["warnings"] + ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in r["unused"][:8]]
-        return {"summary": summary, "warnings": warnings, "n_proposals": len(r["proposals"])}
+        shown = r["unused"][:200]
+        unused = ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in shown]
+        if len(r["unused"]) > len(shown):
+            unused.append("ほか %d 行（記録は最初の %d 行まで）" % (len(r["unused"]) - len(shown), len(shown)))
+        return {"summary": summary, "warnings": r["warnings"], "unused": unused, "n_unused": len(r["unused"]),
+                "n_proposals": len(r["proposals"])}
 
-    def _range(self, vals: dict, T: float, lca_pid: int, pid: int, rep: dict | None = None) -> dict | None:
-        """Low / high totals with every value that has a range set to its low / high end (two more engine runs).
+    def _range(self, vals: dict, T: float, lca_pid: int, pid: int, rep: dict | None = None,
+               base_total: float | None = None) -> dict | None:
+        """Low / high totals with every value that has a range set to the end that lowers / raises the total (two more
+        engine runs): a quantity, a rate or a factor at its low end lowers it; a life, a cycle or a recovery rate at its
+        HIGH end lowers it (bridge.DECREASING). The computed total is always inside the range shown.
         This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
         reflected = {f["field"] for f in (rep or {}).get("fields") or [] if f.get("reflected")} if rep else None
         # only values that reach the calculation are moved to their ends and counted (a dropped foundation row, a
@@ -401,10 +408,16 @@ class App:
         if tot["low"] is None or tot["high"] is None:
             return None
         a, b = sorted((tot["low"] / 1000.0, tot["high"] / 1000.0))
+        widened = ""
+        if base_total is not None and not a - 1e-9 <= base_total / 1000.0 <= b + 1e-9:
+            # (a step in a life or a cycle can move against its end): the range always holds the computed total
+            a, b = min(a, base_total / 1000.0), max(b, base_total / 1000.0)
+            widened = "端の組み合わせが今の合計を挟まなかったので、今の合計を含むように広げた。"
         return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown, "unknown_fields": unknown,
                 "end_gaps": end_gaps,
-                "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n
-                        + unk_note + ("".join(g + "。" for g in end_gaps))}
+                "note": "範囲のある %d 項目を、合計を小さくする端・大きくする端にそろえたときの合計（2 回の追加計算。寿命・周期・回収率は"
+                        "大きいほど合計が小さい）。確率の区間ではなく、校正していない範囲を含む。" % n
+                        + widened + unk_note + ("".join(g + "。" for g in end_gaps))}
 
     def calculate(self, pid: int, period) -> dict:
         T = _float(period)
@@ -443,7 +456,9 @@ class App:
         else:
             out = dict(base, status="ok", message="", summary=_summary(r["results"], run.get("view") or {}, rep), trace=trace,
                        checks=_checks(r["results"]))
-            out["range"] = None if out["summary"]["nothing_counted"] else self._range(vals, T, r["lca_project_id"], pid, rep)
+            base_total = ((r["results"] or {}).get("SUM-03") or {}).get("value")
+            out["range"] = None if out["summary"]["nothing_counted"] else \
+                self._range(vals, T, r["lca_project_id"], pid, rep, base_total)
             if out["range"] and out["summary"]["lower_bound"]:
                 out["range"]["lower_bound"] = True
                 out["range"]["note"] += "入っていない入力があるので、両端とも下限（本当の合計は上端より大きいことがある）。"
@@ -486,7 +501,8 @@ def _with(vals: dict, side: str, only: set | None = None) -> tuple[dict, int]:
                 v.state in ("statistical", "assumption", "from_drawing") and u.kind in ("interval", "scenario") \
                 and isinstance(v.value, (int, float)) and not isinstance(v.value, bool):
             w = Value.from_json(v.to_json())
-            w.value = float(u.low if side == "low" else u.high)
+            low_end = (side == "low") != (fid in bridge.DECREASING)      # a longer life lowers the total
+            w.value = float(u.low if low_end else u.high)
             if FL.FIELDS[fid]["type"] == "integer":
                 w.value = int(round(w.value))
             out[fid] = w

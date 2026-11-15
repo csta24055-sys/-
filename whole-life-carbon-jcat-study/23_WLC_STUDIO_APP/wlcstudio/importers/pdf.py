@@ -17,8 +17,20 @@ from pathlib import Path
 from ..numbers import number_or_reason
 
 UNITS = r"(m3|㎥|m³|m2|㎡|m²|t|kg|本|台|基|個|箇所|m|ｍ|ｔ)"
-# the unit ends the token: "120 ㎥" at the end of a line counts (㎥ ㎡ m³ are not word characters, so \b would fail)
-LINE = re.compile(r"^(?P<name>[^\d\s][^\d]{0,40}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*(?P<u>" + UNITS + r")(?![A-Za-z0-9])")
+# "name … number unit": the unit ends the token ("120 ㎥" at the end of a line counts: ㎥ ㎡ m³ are not word characters,
+# so \b would fail). The name starts with a non-digit and may hold digits after that (鉄筋 D13, コンクリート Fc24); the
+# FIRST "number unit" after it is the quantity. An item number before the name ((1), 1., 1)) is not part of it.
+LINE = re.compile(r"^(?:(?:\(\d{1,3}\)|\d{1,3}[.)])\s*)?(?P<name>[^\d\s].{0,60}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*"
+                  r"(?P<u>" + UNITS + r")(?![A-Za-z0-9])")
+# a number with a quantity unit somewhere on a line that LINE did not read: listed, not dropped silently
+LOOSE = re.compile(r"(?<![A-Za-z0-9.,])-?\d[\d,]*(?:\.\d+)?\s*(?:m3|m2|t|kg)(?![A-Za-z0-9])")
+# enclosed numbers (①, ⑴, ⒈, ㉑ …) are item marks: kept as they are (NFKC would make ① a digit of the name)
+_ENCLOSED = re.compile(r"[^\u2460-\u24ff\u2776-\u2793\u3251-\u325f\u32b1-\u32bf]+")
+
+
+def norm_line(ln: str) -> str:
+    """NFKC (ｍ³ ㎥ → m3, full-width digits) except the enclosed item numbers."""
+    return _ENCLOSED.sub(lambda m: unicodedata.normalize("NFKC", m.group(0)), ln)
 
 
 def available() -> bool:
@@ -59,8 +71,11 @@ def read(data: bytes, doc_id: str, max_pages: int = 200) -> dict:
             has_text = len(t.strip()) > 20
             pages.append({"page": i, "has_text": has_text, "n_chars": len(t)})
             for k, ln in enumerate(t.splitlines(), 1):
-                ln = unicodedata.normalize("NFKC", ln.strip()[:500])     # ｍ³ ㎥ → m3, full-width digits
+                ln = norm_line(ln.strip()[:500])
                 mm = LINE.search(ln)
+                if not mm and LOOSE.search(ln):
+                    refused.append({"name": ln[:80], "trace": "%s:p%d/L%d" % (doc_id, i, k),
+                                    "reason": "名前と数量の並びを読めなかった行（原本で確かめて、必要なら手で入れる）"})
                 if mm:
                     q, why = number_or_reason(mm.group("q"))
                     if q is None:            # e.g. "1,5": refused like on the screen, and said

@@ -48,6 +48,9 @@ METI_ROWS = {"office": ("業務部門平均", "事務所は業種を決められ
 # RASMI material -> material field (the engine class is given by the field). copper: no engine class.
 RASMI_TO_FIELD = {"concrete": "m_concrete", "brick": "m_masonry", "wood": "m_timber", "glass": "m_glass",
                   "plastics": "m_plastic", "aluminum": "m_aluminium", "steel": None}
+# the material fields some statistics source can estimate (国交省: concrete, steel or rebar, timber; RASMI: the rest)
+ESTIMATED_FIELDS = {f for f, _u, _r in MLIT_ITEMS.values() if f} | {"m_rebar", "m_steel"} | \
+    {f for f in RASMI_TO_FIELD.values() if f}
 STRUCTURE_TO_RASMI = {"RC": ("C", ""), "SRC": ("C", "SRC は RASMI に無いのでコンクリート造（C）の範囲を使った（仮定）"),
                       "S": ("S", ""), "W": ("T", "")}
 
@@ -296,11 +299,13 @@ def run(values: dict[str, Value], structure: str, screen: str | None = None, fie
             p, m = estimate_materials(values, structure, only=field)
             proposals += p
             msgs += m
-            if field and not p:
+            if field and not p and field not in ESTIMATED_FIELDS:
                 msgs.insert(0, "「%s」の統計の出典はつないでいない%s" % (
                     FL.FIELDS[field]["label"],
                     "（基礎のコンクリートは、上部構造の欄の建物全体の推定に含まれる）" if field == "m_concrete_fdn" else
                     "（資料か仮定で入れる）"))
+            elif field and not p and not m:
+                msgs.append("「%s」の統計の候補は作らなかった（条件が合わない）" % FL.FIELDS[field]["label"])
     elif target_screen == "basic":
         msgs.append("基本情報の候補は「住所から調べる」（国土地理院・PLATEAU）で作る。延床面積は PLATEAU の屋根面積×階数の仮定値になる。")
     elif target_screen == "equipment":

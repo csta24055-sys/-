@@ -2,7 +2,9 @@
 "use strict";
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const state = { meta: null, project: null, stack: [], view: "home", seq: 0 };
+// seq: renders; nav: moves between views (a late answer of the view that was left must not paint into the new one);
+// act: user actions (toast messages of one action are joined, a new action starts a new message)
+const state = { meta: null, project: null, stack: [], view: "home", seq: 0, nav: 0, act: 0, busy: false };
 
 async function api(path, opts = {}) {
   const r = await fetch("/api" + path, { headers: { "Content-Type": "application/json" }, ...opts,
@@ -13,17 +15,18 @@ async function api(path, opts = {}) {
   return j;
 }
 function toast(msg) {
-  const t = $("#toast"), now = Date.now();
-  // a message that follows within 1.5 s is added to the one on screen, not written over it
-  const prev = t.classList.contains("show") && now - (toast._at || 0) < 1500 ? t.textContent : "";
+  const t = $("#toast");
+  // messages of the same action are joined (a refusal and the "not saved yet" notice); a new action starts afresh
+  const prev = t.classList.contains("show") && toast._act === state.act ? t.textContent : "";
   t.textContent = prev && !prev.split(" ／ ").includes(msg) ? prev + " ／ " + msg : (prev || msg);
-  toast._at = now;
+  toast._act = state.act;
   t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600 + Math.min(4000, t.textContent.length * 20));
 }
 /* one request at a time per button: a double tap must not send twice (and focus stays on the button) */
 function guard(b, fn) {
   return async (...a) => {
     if (b.dataset.busy) return;
+    state.act++;
     b.dataset.busy = "1"; b.setAttribute("aria-disabled", "true");
     try { return await fn(...a); } finally { delete b.dataset.busy; b.removeAttribute("aria-disabled"); }
   };
@@ -57,13 +60,31 @@ function fmt(v, unit) {
 }
 function badge(st) { const L = state.meta.states; return `<span class="badge st-${esc(st)}">${esc(L[st] || st)}</span>`; }
 
+/* while 保存して戻る saves row after row, moving away would leave rows unsaved without notice: the first press says so,
+   a second press stops the remaining saves (they are named) and moves */
+function blocked() {
+  if (!state.busy) return false;
+  if (state.busyWarned) { state.cancel = true; return false; }
+  state.busyWarned = true; state.act++;
+  toast("保存の途中です。終わるまで待つか、もう一度押すと残りの行を保存せずに移ります");
+  return true;
+}
 function go(view, arg, push = true) {
+  if (blocked()) return;
   if (push) state.stack.push([state.view, state.arg]);
+  state.nav++; state.act++;
   state.view = view; state.arg = arg; render();
 }
 /* opening a project starts a fresh history: 戻る must never lead into the screens of another project */
-function openProject(id) { return loadProject(id).then(() => { state.stack = [["home", undefined]]; go("hub", undefined, false); }); }
-function back() { const p = state.stack.pop(); if (p) { state.view = p[0]; state.arg = p[1]; render(); } else { state.view = "home"; render(); } }
+function openProject(id) {
+  if (blocked()) return Promise.resolve();
+  return loadProject(id).then(() => { state.stack = [["home", undefined]]; go("hub", undefined, false); });
+}
+function back() {
+  if (blocked()) return;
+  state.nav++; state.act++;
+  const p = state.stack.pop(); if (p) { state.view = p[0]; state.arg = p[1]; render(); } else { state.view = "home"; render(); }
+}
 
 async function render() {
   state.seq++;                                    // a pending request of the previous view must not paint into this one
@@ -102,7 +123,7 @@ async function renderHome(m) {
       <button class="btn small" data-open="${p.id}">開く</button></div>`).join("") : '<p class="muted">まだプロジェクトはありません。</p>'}</div>`;
   $("#start").onclick = () => go("structures");
   $("#demo").onclick = guard($("#demo"), async () => { const r = await api("/demo", { method: "POST", body: {} }); await openProject(r.id); });
-  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = () => openProject(+b.dataset.open)));
+  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = guard(b, () => openProject(+b.dataset.open))));
 }
 
 /* ---------- structure select ---------- */
@@ -114,10 +135,12 @@ function renderStructures(m) {
   <div class="structures" role="list">${state.meta.structures.map((s) => `
     <button class="structure" role="listitem" data-s="${s.id}" aria-label="${esc(s.label)}：${esc(s.desc)}">
       <img src="${s.img}" alt=""><h3>${esc(s.label)}</h3><p>${esc(s.desc)}</p></button>`).join("")}</div>`;
-  m.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => {
+  // one project per choice: the cards share one guard (a double tap, or a tap on a second card, creates one project)
+  const cards = $(".structures", m);
+  m.querySelectorAll("[data-s]").forEach((b) => (b.onclick = guard(cards, async () => {
     const r = await api("/projects", { method: "POST", body: { structure: b.dataset.s, name: $("#pname").value.trim() } });
     await openProject(r.id);
-  }));
+  })));
 }
 
 async function loadProject(id) { state.project = await api("/projects/" + id); }
@@ -208,7 +231,8 @@ function renderScreen(m, sid) {
       <a class="btn small" href="https://www.kunijiban.pwri.go.jp/jp/terms.html" target="_blank" rel="noopener noreferrer">利用規約</a></div></div>`
     : sid === "material" ? `<div class="card"><h3 style="margin-top:0">資料を読み込む</h3>
       <p class="muted">数量表（CSV・Excel）、IFC、PDF（文字のあるもの）。読んだ数値は候補になり、原本の場所（シート・セル、部材 ID、ページ）を記録します。</p>
-      <input type="file" id="docfile" accept=".csv,.xlsx,.ifc,.pdf" aria-label="資料ファイル"><div id="doc-out"></div>
+      <input type="file" id="docfile" accept=".csv,.xlsx,.ifc,.pdf" aria-label="資料ファイル"><div id="doc-out">${
+        state.lastImport && state.lastImport.pid === state.project.id && state.lastImport.sid === sid ? state.lastImport.html : ""}</div>
       <p class="muted">原本は既定では保存しません（読んだ数値の候補と、ファイルの指紋だけを残します）。メーカーの BIM データは各社の利用条件（設計検討の目的に限る・使用後は消去など）に従ってください。製品の性能値（質量・冷媒量）は製造時の CO2 ではありません。</p></div>` : "";
   m.innerHTML = extra + S.groups.map((g) => {
     const fids = [...g.fields].sort((a, b) => (pri[b] || 0) - (pri[a] || 0));
@@ -264,11 +288,19 @@ function isDirty(fid) {
    keep what was typed) and a refusal's reason is returned in saveField.reason */
 async function saveField(fid, quiet = false, batch = false) {
   saveField.reason = "";
+  const nav = state.nav;
   const refuse = async (msg, reload = true) => {
     saveField.reason = msg;
-    if (!batch) { toast(msg); if (reload) await refresh("screen", fid, true); }
+    if (!batch) { toast(msg); if (reload) await refresh("screen", fid, true, nav); }
     return "refused";
   };
+  // a question is about one row: it names the row and the values, and the row is brought into view and marked
+  const askRow = async (title, text, choices) => {
+    const row = $("#f-" + fid);
+    row?.scrollIntoView({ block: "center" }); row?.classList.add("asking");
+    try { return await ask(`「${state.meta.fields[fid].label}」：${title}`, text, choices); } finally { row?.classList.remove("asking"); }
+  };
+  const shown = (x, u) => `${x}${u ? " " + u : ""}`;
   const F = state.meta.fields[fid], iv = inputValue(fid);
   if (iv.empty && clearedInput(fid)) {
     restoreInput(fid);
@@ -295,7 +327,7 @@ async function saveField(fid, quiet = false, batch = false) {
     }
     if (sameUnit && cur.state === st) { if (!quiet) toast("変更はありません"); return "unchanged"; }
     if (!sameUnit) {
-      const a = await ask("単位の付け直し", `数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（自分で入れた値の単位の付け間違いを直すとき）。換算したいときは、換算した数値を入れてください。`,
+      const a = await askRow("単位の付け直し", `数値 ${value} はそのままで、単位を ${cur.unit} から ${unit} に付け直します（自分で入れた値の単位の付け間違いを直すとき）。換算したいときは、換算した数値を入れてください。`,
         [{ value: "yes", label: "付け直す", primary: true }]);
       if (!a) return "cancelled";
       body.relabel = true;
@@ -306,7 +338,7 @@ async function saveField(fid, quiet = false, batch = false) {
       || (cur.uncertainty && cur.uncertainty.kind === "unknown" && cur.source_id));
     if (carriesEstimate) {
       const what = cur.state === "statistical" ? `統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）` : `推定（${cur.source_id || "出典つき"}）を手で直した値`;
-      const a = await ask("推定を直した値ですか", `今の値は${what}でした。新しい値も、その推定を手で直したものですか？`,
+      const a = await askRow("推定を直した値ですか", `今の値 ${shown(cur.value, cur.unit)} は${what}でした。新しい値 ${shown(value, F.type === "number" ? unit : "")} も、その推定を手で直したものですか？`,
         [{ value: "fix", label: "推定を手で直した（範囲・前提を引き継ぐ。範囲は「不明」になる）", primary: true },
          { value: "new", label: "別に調べた値" }]);
       if (!a) return "cancelled";
@@ -315,7 +347,7 @@ async function saveField(fid, quiet = false, batch = false) {
     if (cur && cur.scope && !body.from_estimate) {
       // what the new value covers must be said: the server refuses to guess (it decides the double-counting guard)
       const what = cur.scope === "whole_building" ? "基礎・杭を含む建物全体の量" : "鉄筋と鉄骨を合わせた鉄の全量";
-      const a = await ask("新しい値の範囲", `今の値は「${what}」でした。新しい値も${what}ですか？`,
+      const a = await askRow("新しい値の範囲", `今の値 ${shown(cur.value, cur.unit)} は「${what}」でした。新しい値 ${shown(value, unit)} も${what}ですか？`,
         [{ value: "same", label: `${what}（もう一方の欄と二重に数えない）`, primary: true }, { value: "field", label: "この欄だけの量" }]);
       if (!a) return "cancelled";
       body.scope = a === "same" ? cur.scope : "field_only";
@@ -329,12 +361,12 @@ async function saveField(fid, quiet = false, batch = false) {
 
 function bindScreen(m, sid) {
   $("#bb-back").onclick = back;
-  let busy = false;                                   // a double click must not save twice or go back twice
-  $("#bb-hub").onclick = async () => {
-    if (busy) return;
-    busy = true;
-    try { await saveAndBack(); } finally { busy = false; }
-  };
+  // a double click must not save twice or go back twice; while it runs, moving away waits (see blocked())
+  $("#bb-hub").onclick = guard($("#bb-hub"), async () => {
+    state.busy = true; state.busyWarned = false; state.cancel = false;
+    try { await saveAndBack(); } finally { state.busy = false; }
+  });
+  const label = (f) => "「" + state.meta.fields[f].label + "」";
   const saveAndBack = async () => {
     // 保存して戻る: every row whose input differs from the stored value is saved like its own 保存 button
     const rows = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save);
@@ -354,9 +386,16 @@ function bindScreen(m, sid) {
       return;
     }
     const dirty = rows.filter(isDirty);
-    const saved = [];
-    for (const fid of dirty) {
+    const saved = [], nav0 = state.nav, pid = state.project.id;
+    const snap = typedRows(null);                      // what was typed, before the first request (a redraw keeps it)
+    const moved = () => state.cancel || state.nav !== nav0 || !state.project || state.project.id !== pid;
+    const stopNote = (rest) => `保存して戻るを途中でやめました：${saved.length ? saved.map(label).join("") + "は保存しました。" : ""}`
+      + `${rest.map(label).join("")}は保存していません`;
+    for (const [i, fid] of dirty.entries()) {
+      if (moved()) { state.act++; toast(stopNote(dirty.slice(i))); return; }
+      if (inputValue(fid).empty && snap[fid]) restoreTyped({ [fid]: snap[fid] });
       const r = await saveField(fid, true, true);
+      if (moved()) { state.act++; toast(stopNote(dirty.slice(i + (r === "saved" ? 1 : 0)))); if (r === "saved") saved.push(fid); return; }
       if (r === "refused" || r === "cancelled") {
         // redraw: the saved rows, badges and candidates become current; what was typed in the others stays
         const keep = typedRows(null);
@@ -370,37 +409,45 @@ function bindScreen(m, sid) {
       }
       if (r === "saved") saved.push(fid);
     }
-    await loadProject(state.project.id); toast(saved.length ? `${saved.length} 項目を保存しました` : "保存する変更はありませんでした"); back();
+    await loadProject(pid);
+    if (moved()) { state.act++; toast(saved.length ? `${saved.map(label).join("")}を保存しました` : "保存する変更はありませんでした"); return; }
+    toast(saved.length ? `${saved.length} 項目を保存しました（${saved.map(label).join("")}）` : "保存する変更はありませんでした");
+    state.busy = false; back();
   };
   $("#bb-est").onclick = guard($("#bb-est"), () => estimate(sid, null));
   m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = guard(b, async () => {
-    if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save);
+    const nav = state.nav;
+    if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save, false, nav);
   })));
   m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = guard(b, async () => {
     const F = state.meta.fields[b.dataset.na];
     if (F.na === "zero" && !F.na_note && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
     if (F.na_note && !confirm(`「${F.label}」を「${F.na_note}」として計算します（その分の排出は数えません）。本当にそうだと分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
+    const nav = state.nav;
     await api(`/projects/${state.project.id}/fields/${b.dataset.na}`, { method: "PUT", body: { value: null, state: "not_applicable", method: "user_entered" } });
-    await refresh(sid, b.dataset.na);
+    await refresh(sid, b.dataset.na, false, nav);
   })));
   m.querySelectorAll("[data-unset]").forEach((b) => (b.onclick = guard(b, async () => {
+    const nav = state.nav;
     await api(`/projects/${state.project.id}/fields/${b.dataset.unset}`, { method: "PUT", body: { value: null, state: "not_obtained", method: "user_entered" } });
-    await refresh(sid, b.dataset.unset);
+    await refresh(sid, b.dataset.unset, false, nav);
   })));
   m.querySelectorAll("[data-nc]").forEach((b) => (b.onclick = guard(b, async () => {
+    const nav = state.nav;
     await api(`/projects/${state.project.id}/fields/${b.dataset.nc}`, { method: "PUT", body: { value: null, state: "not_computable", method: "user_entered" } });
-    await refresh(sid, b.dataset.nc);
+    await refresh(sid, b.dataset.nc, false, nav);
   })));
   m.querySelectorAll("[data-later]").forEach((b) => (b.onclick = guard(b, async () => {
-    const f = state.project.fields[b.dataset.later] || {};
+    const f = state.project.fields[b.dataset.later] || {}, nav = state.nav;
     await api(`/projects/${state.project.id}/fields/${b.dataset.later}/later`, { method: "POST", body: { later: !f.later } });
-    await refresh(sid, b.dataset.later);
+    await refresh(sid, b.dataset.later, true, nav);              // the flag does not use the input: what was typed stays
   })));
   // a candidate is adopted by its id (a position could point at another candidate after a repeat tap)
   m.querySelectorAll("[data-accept]").forEach((b) => (b.onclick = guard(b, async () => {
+    const nav = state.nav;
     try {
       await api(`/projects/${state.project.id}/fields/${b.dataset.accept}/accept`, { method: "POST", body: { id: +b.dataset.cid } });
-    } finally { await refresh(sid, b.dataset.accept); }
+    } finally { await refresh(sid, b.dataset.accept, false, nav); }
   })));
   m.querySelectorAll("[data-est]").forEach((b) => (b.onclick = guard(b, () => estimate(sid, b.dataset.est))));
   // the state select of an estimate / drawing value opens once a new value is typed
@@ -432,13 +479,17 @@ function bindScreen(m, sid) {
     if (file.size > 30e6) return toast("30 MB までのファイルにしてください");
     $("#doc-out").innerHTML = '<p class="muted">読み込み中…</p>';
     const b64 = await new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result.split(",")[1]); fr.readAsDataURL(file); });
+    const nav = state.nav, pid = state.project.id;
     try {
-      const r = await api(`/projects/${state.project.id}/documents`, { method: "POST", body: { name: file.name, data_b64: b64 } });
-      await refresh(sid);
-      // after the redraw (which rebuilds the screen): the summary, the warnings and the rows not used, with reasons
-      const out = $("#doc-out");
-      if (out) out.innerHTML = `<p>${esc(r.summary)}</p>${r.warnings.map((w) => `<div class="notice">${esc(w)}</div>`).join("")}`;
-    } catch (e) { $("#doc-out").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; }
+      const r = await api(`/projects/${pid}/documents`, { method: "POST", body: { name: file.name, data_b64: b64 } });
+      // the summary, the warnings and EVERY row not used, with its reason; kept for this screen until the next import
+      const unused = r.unused || [];
+      state.lastImport = { pid, sid, html: `<p>${esc(r.summary)}</p>${(r.warnings || []).map((w) => `<div class="notice">${esc(w)}</div>`).join("")}`
+        + (unused.length ? `<details${unused.length <= 8 ? " open" : ""}><summary>使わなかった行 ${r.n_unused ?? unused.length} 件と理由</summary>`
+          + `<ul class="unused">${unused.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></details>` : "") };
+      await refresh(sid, undefined, false, nav);
+      if (state.nav !== nav) toast(r.summary);
+    } catch (e) { if (state.nav === nav && $("#doc-out")) $("#doc-out").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; else toast(e.message); }
   };
 }
 
@@ -459,11 +510,12 @@ async function plateau(c) {
 }
 
 async function estimate(sid, fid) {
+  const nav = state.nav;
   try {
     const r = await api(`/projects/${state.project.id}/estimate`, { method: "POST", body: { screen: sid, field: fid } });
     toast(r.n_proposals ? `${r.n_proposals} 件の候補を作りました（採用するまで計算には使いません）` : (r.message || "概算できる項目がありません"));
-    await refresh(sid, fid);
-    if (r.messages && r.messages.length && state.view === "screen") {
+    await refresh(sid, fid, true, nav);              // the estimate does not use the input: what was typed stays
+    if (r.messages && r.messages.length && state.view === "screen" && state.nav === nav) {
       await new Promise((res) => setTimeout(res, 40));          // after refresh() has placed its focus
       const opener = fid ? $(`[data-est="${fid}"]`) : $("#bb-est");
       opener?.focus({ preventScroll: true });
@@ -507,15 +559,19 @@ function restoreTyped(saved) {
     if (st && x.s !== null) { if (x.unlocked) st.disabled = false; st.value = x.s; }
   }
 }
-async function refresh(sid, fid, keepActed = false) {
+/* after a row action: reload and redraw the screen, keeping what was typed. `nav` is the view the action started on: when
+   the user has moved since, nothing is redrawn and no focus is taken (only the data is reloaded) */
+async function refresh(sid, fid, keepActed = false, nav = state.nav) {
+  if (state.nav !== nav) { if (state.project) await loadProject(state.project.id); return; }
   const keep = state.view === "screen" ? typedRows(keepActed ? null : fid) : {};
   await loadProject(state.project.id);
+  if (state.nav !== nav) return;
   if (state.view === "screen") {
     const y = window.scrollY; await render(); restoreTyped(keep); setTimeout(() => window.scrollTo(0, y), 0);
-    const others = Object.keys(keep).filter((f) => f !== fid);
-    if (others.length) toast(`ほかの行の入力（${others.map((f) => "「" + state.meta.fields[f].label + "」").join("")}）はまだ保存していません`);
+    const typed = Object.keys(keep);
+    if (typed.length) toast(`まだ保存していない入力：${typed.map((f) => "「" + state.meta.fields[f].label + "」").join("")}`);
   }
-  if (fid) setTimeout(() => { const el = $("#f-" + fid); if (el) { const b = el.querySelector("[data-save]") || el.querySelector("button"); b?.focus({ preventScroll: true }); el.scrollIntoView({ block: "center" }); } }, 30);
+  if (fid) setTimeout(() => { if (state.nav !== nav) return; const el = $("#f-" + fid); if (el) { const b = el.querySelector("[data-save]") || el.querySelector("button"); b?.focus({ preventScroll: true }); el.scrollIntoView({ block: "center" }); } }, 30);
 }
 
 /* ---------- result ---------- */
@@ -526,20 +582,19 @@ async function renderResult(m) {
     <p class="muted">評価期間だけを変えた再計算は、準備した計算を使い回すので速くなります。</p></div><div id="res-msg" role="status"></div><div id="res"></div>`;
   const seq = state.seq, pid = state.project.id;
   const here = () => state.seq === seq && state.view === "result" && state.project && state.project.id === pid;
-  $("#calc").onclick = async () => {
+  $("#calc").onclick = guard($("#calc"), async () => {
     const p = parseNumber($("#period").value.trim()), T = p.value;
     // checked here as on the server; an error is shown above the last result instead of replacing it
-    if (p.bad || !(T > 0 && T <= 130)) { $("#res-msg").innerHTML = `<div class="notice bad">評価期間は 0 より大きく 130 年以下で入力してください（エンジンの年表の長さが 130 年）</div>`; return; }
+    if (p.bad) { $("#res-msg").innerHTML = `<div class="notice bad">評価期間は数値で入力してください（${esc(p.why || "数値として読めません")}）</div>`; return; }
+    if (!(T > 0 && T <= 130)) { $("#res-msg").innerHTML = `<div class="notice bad">評価期間は 0 より大きく 130 年以下で入力してください（エンジンの年表の長さが 130 年）</div>`; return; }
     $("#res-msg").innerHTML = '<p class="muted">計算中…</p>';
-    const btn = $("#calc"); btn.disabled = true;
     try {
       const r = await api(`/projects/${pid}/calculate`, { method: "POST", body: { period: T } });
       if (state.project && state.project.id === pid) state.project.last_period = r.period;
       if (!here()) return;                                   // the user went elsewhere: do not paint into that view
       $("#res-msg").innerHTML = ""; showResult(r);
     } catch (e) { if (here()) $("#res-msg").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; }
-    finally { btn.disabled = false; }
-  };
+  });
   try { const r = await api(`/projects/${pid}/result`); if (r && r.status && here()) showResult(r); } catch { /* no result yet */ }
 }
 
@@ -626,14 +681,14 @@ async function renderSettings(m) {
      <button class="btn small" data-del="${p.id}">削除</button></span></div>`).join("") || '<p class="muted">ありません</p>'}</div>
    <div class="card"><h3 style="margin-top:0">このアプリについて</h3><p>${esc(state.meta.app_name)} ${esc(state.meta.version)}</p><p class="muted">${esc(state.meta.disclaimer)}</p>
    <p class="muted">${esc(state.meta.privacy)}</p><p class="muted">データの出典：${esc(state.meta.attribution)}</p></div>`;
-  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = () => openProject(+b.dataset.open)));
-  m.querySelectorAll("[data-del]").forEach((b) => (b.onclick = async () => {
+  m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = guard(b, () => openProject(+b.dataset.open))));
+  m.querySelectorAll("[data-del]").forEach((b) => (b.onclick = guard(b, async () => {
     if (!confirm("このプロジェクトと、その入力・候補・資料の記録、計算用に変換した入力と計算の記録を削除します。元に戻せません。")) return;
     const id = +b.dataset.del;
     await api("/projects/" + id, { method: "DELETE" }); toast("削除しました");
     if (state.project && state.project.id === id) { state.project = null; state.stack = []; }
-    render();
-  }));
+    if (state.view === "settings") render();
+  })));
 }
 
 /* ---------- boot ---------- */

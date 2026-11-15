@@ -23,6 +23,7 @@ from wlcstudio.engine import Engine  # noqa: E402
 from wlcstudio.project import ProjectError, Projects  # noqa: E402
 from wlcstudio.provenance import ProvenanceError, Uncertainty, Value, best, conflicts  # noqa: E402
 from wlcstudio.server import ApiError, App, make_handler  # noqa: E402
+from wlcstudio import server as server_mod  # noqa: E402
 
 REFSET = json.loads((HERE.parent / "12_APP_BASE" / "samples" / "refset_fictional.json").read_text(encoding="utf-8"))
 
@@ -727,7 +728,7 @@ END-ISO-10303-21;
         body = {"name": "q.csv", "data_b64": base64.b64encode(csv).decode()}
         _, out = self.app.handle("POST", "/api/projects/%d/documents" % pid, body)
         self.assertEqual(out["n_proposals"], 1)                         # the out-of-range row is reported, not stored
-        self.assertTrue(any("範囲" in w for w in out["warnings"]))
+        self.assertTrue(any("範囲" in w for w in out["unused"]))       # (round 9: the unused rows are their own list)
 
     # --- delete removes the engine copy (7)
     def test_delete_removes_engine_rows(self):
@@ -1427,8 +1428,7 @@ class FifthRoundTests(unittest.TestCase):
         self.assertEqual(got[("m_rebar", "t")].value, 12.0)                  # 5 + 7, not the SUM row nor the repeat
         self.assertIn("R5C2", got[("m_rebar", "t")].source_detail)
         reasons = " ".join(u["reason"] for u in r["unused"])
-        self.assertIn("SUM", reasons)
-        self.assertIn("同じ列", reasons)
+        self.assertIn("同じシートのほかの材料の行", reasons)          # the SUM row reaches rows 5-6 (round 9: by what it reaches)
 
     # --- the screen
     def test_ui_has_the_round5_guards(self):
@@ -1628,9 +1628,8 @@ class SixthRoundTests(unittest.TestCase):
         got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
         self.assertEqual(got, {("m_concrete", "m3"): 100.0})
         reasons = " ".join(u["reason"] for u in r["unused"])
-        self.assertIn("同じ列", reasons)
+        self.assertIn("同じシートのほかの材料の行", reasons)
         self.assertIn("共有の数式の元が無い", reasons)
-        self.assertIn("SUM", reasons)
 
     # --- the screen
     def test_ui_has_the_round6_guards(self):
@@ -1885,11 +1884,19 @@ class SeventhRoundTests(unittest.TestCase):
     def test_xlsx_formula_reaches_and_booleans(self):
         from wlcstudio.importers import tabular
         ctx = {"sheet": "内訳", "qsheets": ["内訳"], "names": {"BASE": "内訳!$B$2"}}
-        for f in ("内訳!B2*0.1", "'内訳'!B2*0.1", "INDEX(B:B,2)*0.1", "INDEX(A2:D2,1,2)*0.1", "INDIRECT(\"B2\")*0.1",
-                  "DSUM(A1:D2,\"数量\",F1:F2)", "Table1[[#Totals],[数量]]*0.1", "BASE*0.1"):
+        # round 9: what a formula reaches is judged against the material rows by the importer; formula_reason only
+        # says when the references cannot be checked
+        for f in ("INDIRECT(\"B2\")*0.1", "Table1[[#Totals],[数量]]*0.1", "[1]内訳!B2", "明細:集計!B2"):
             self.assertIsNotNone(tabular.formula_reason(f, 1, ctx), f)
         self.assertIsNone(tabular.formula_reason("VLOOKUP(A3,単価!$A$2:$C$100,3,FALSE)*2.4", 1, ctx))
-        self.assertIsNone(tabular.formula_reason("D2*0.001", 1, ctx))
+        self.assertEqual(tabular.formula_refs("BASE*0.1", ctx)[1], [(None, 1, 1, 2, 2)])
+        for f in ("内訳!B2*0.1", "'内訳'!B2*0.1", "INDEX(B:B,2)*0.1", "INDEX(A2:D2,1,2)*0.1", "DSUM(A1:D2,\"数量\",F1:F2)",
+                  "BASE*0.1"):
+            rows = _HEAD + _row(2, "異形鉄筋", '<c r="B2"><v>10</v></c>', "t") + \
+                _row(3, "異形鉄筋 D16", '<c r="B3"><f>%s</f><v>1</v></c>' % f.replace("&", "&amp;").replace('"', "&quot;"), "t")
+            wb = _wb([("内訳", rows, None)], defined={"BASE": "内訳!$B$2"})
+            r = documents.read("f.xlsx", base64.b64encode(wb).decode(), "d")
+            self.assertEqual({(p.field_id, p.unit): p.value for p in r["proposals"]}, {("m_rebar", "t"): 10.0}, f)
         data = _wb([("S", _HEAD + _row(2, "普通コンクリート", '<c r="B2" t="b"><v>1</v></c>'), None)])
         r = documents.read("b.xlsx", base64.b64encode(data).decode(), "d")
         self.assertEqual(r["proposals"], [])
@@ -2085,6 +2092,224 @@ class EighthRoundTests(unittest.TestCase):
         parts = [json.loads(x) for x in proc.stdout.strip().split("|")]
         self.assertTrue(parts[0]["bad"] and parts[1]["bad"] and parts[2]["bad"])
         self.assertEqual(parts[3]["value"], 123)
+
+
+class NinthRoundTests(unittest.TestCase):
+    """Round 9: copies found by what a quantity formula reaches; names classified by their head; markers in the
+    specification; bounded hidden columns and normalisation; Strict Open XML; PDF item numbers; the delivery factor
+    needs the waste rate; B1 surely 0; inputs outside the boundary or made moot are not estimates; the range by
+    direction; the screens (batch save, questions that name the row, typed text kept, late answers, toasts)."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+    summary = FourthRoundTests.summary
+    fields_of = SeventhRoundTests.fields_of
+
+    def read_wb(self, sheets, defined=None):
+        r = documents.read("x.xlsx", base64.b64encode(_wb(sheets, defined=defined)).decode(), "d")
+        return {(p.field_id, p.unit): p.value for p in r["proposals"]}, r
+
+    # --- the importer: a quantity that reaches another material row is a copy
+    def test_copies_are_found_by_what_the_formula_reaches(self):
+        det = _HEAD + _row(2, "普通コンクリート Fc24", '<c r="B2"><v>100</v></c>') + _row(3, "普通コンクリート Fc27", '<c r="B3"><v>50</v></c>')
+        for sub in ('<c r="B4"><f>SUM(B2:B3)</f><v>150</v></c>', '<c r="B4"><f>B2+B3</f><v>150</v></c>'):
+            got, _ = self.read_wb([("明細", det + _row(4, "コンクリート 小計", sub), None),
+                                   ("集計", _HEAD + _row(2, "コンクリート", '<c r="B2"><f>明細!B4</f><v>150</v></c>'), None)])
+            self.assertEqual(got, {("m_concrete", "m3"): 150.0}, sub)
+        for f in ("'Owner''s BoQ'!B2", "MAX('Owner''s BoQ'!B3:B2)"):
+            got, _ = self.read_wb([("Owner's BoQ", det, None),
+                                   ("Summary", _HEAD + _row(2, "Concrete", '<c r="B2"><f>%s</f><v>100</v></c>' % f.replace("'", "&apos;")), None)])
+            self.assertEqual(got, {("m_concrete", "m3"): 150.0}, f)
+        got, r = self.read_wb([("明細", det, None), ("集計", _HEAD + _row(2, "コンクリート", '<c r="B2"><f>MAX(明細:Other!B2)</f><v>1</v></c>'), None),
+                               ("Other", _HEAD, None)])
+        self.assertEqual(got, {("m_concrete", "m3"): 150.0})
+        self.assertIn("3D", " ".join(u["reason"] for u in r["unused"]))
+        # another column of a material row; a helper cell; a calculation column on the same sheet
+        head4 = '<row r="1">%s%s%s%s</row>' % (_is(1, "A", "名称"), _is(1, "B", "数量"), _is(1, "C", "単位"), _is(1, "D", "所要数量"))
+        det2 = head4 + _row(2, "異形鉄筋 D19", '<c r="B2"><v>40</v></c>', "t", '<c r="D2"><f>B2*1.04</f><v>41.6</v></c>')
+        got, _ = self.read_wb([("明細", det2, None), ("集計", _HEAD + _row(2, "鉄筋", '<c r="B2"><f>明細!D2</f><v>41.6</v></c>', "t"), None)])
+        self.assertEqual(got, {("m_rebar", "t"): 40.0})
+        got, _ = self.read_wb([("明細", det, None), ("集計", _HEAD + _row(2, "コンクリート", '<c r="B2"><f>E2</f><v>100</v></c>', "m3",
+                                                                        '<c r="E2"><f>明細!B2</f><v>100</v></c>'), None)])
+        self.assertEqual(got, {("m_concrete", "m3"): 150.0})
+        calc = _HEAD + "".join(_row(i, n, '<c r="B%d"><f>ROUND(F%d,1)</f><v>%s</v></c>' % (i, i, q), "m3", '<c r="F%d">%s</c>' % (i, fx))
+                               for i, n, q, fx in ((2, "普通コンクリート", 100, "<v>100</v>"), (3, "普通コンクリート", 50, "<v>50</v>"),
+                                                   (4, "普通コンクリート", 150, "<f>SUM(F2:F3)</f><v>150</v>")))
+        got, _ = self.read_wb([("内訳", calc, None)])
+        self.assertEqual(got, {("m_concrete", "m3"): 150.0})
+
+    def test_own_row_sums_and_dimension_rows_are_not_copies(self):
+        head = '<row r="1">%s%s%s%s%s%s</row>' % (_is(1, "A", "名称"), _is(1, "B", "1階"), _is(1, "C", "2階"), _is(1, "D", "3階"),
+                                                  _is(1, "E", "数量"), _is(1, "F", "単位"))
+        rows = head + '<row r="2">%s<c r="B2"><v>120</v></c><c r="C2"><v>110</v></c><c r="D2"><v>100</v></c><c r="E2"><f>SUM(B2:D2)</f><v>330</v></c>%s</row>' \
+            % (_is(2, "A", "普通コンクリート"), _is(2, "F", "m3"))
+        got, _ = self.read_wb([("内訳", rows, None)])
+        self.assertEqual(got, {("m_concrete", "m3"): 330.0})
+        dims = _HEAD + _row(2, "延床面積 1F", '<c r="B2"><v>1000</v></c>', "m2") + _row(3, "延床面積 合計", '<c r="B3"><v>2000</v></c>', "m2") + \
+            _row(4, "うち 事務所部分", '<c r="B4"><v>1500</v></c>', "m2")
+        det = _HEAD + _row(2, "石膏ボード", '<c r="B2"><f>概要!B3*2.5</f><v>5000</v></c>', "m2") + \
+            _row(3, "タイルカーペット", '<c r="B3"><f>概要!B4</f><v>1500</v></c>', "m2")
+        got, _ = self.read_wb([("概要", dims, None), ("内訳", det, None)])
+        self.assertEqual(got, {("m_board", "m2"): 5000.0, ("m_finish", "m2"): 1500.0})
+
+    # --- names: the head of the first part that names a material
+    def test_names_are_classified_by_their_head(self):
+        f = documents._field_for
+        for n, want in (("Steel reinforcement", "m_rebar"), ("Reinforcement to slabs", "m_rebar"),
+                        ("Reinforcement, high yield steel bars T12", "m_rebar"), ("High tensile reinforcement 16mm", "m_rebar"),
+                        ("エポキシ樹脂塗装鉄筋 D13", "m_rebar"), ("FRP防水", "m_membrane"), ("GRP roofing membrane", "m_membrane"),
+                        ("ウッドデッキ", "m_timber"), ("アルミ製デッキ", "m_aluminium"), ("デッキプレート", "m_steel"),
+                        ("ワイヤーメッシュ入りコンクリート", "m_concrete"), ("Wire mesh reinforced concrete slab", "m_concrete"),
+                        ("型枠コンクリートブロック", "m_masonry"), ("Supply and installation of 12.5mm plasterboard", "m_board"),
+                        ("Structural steel beams", "m_steel")):
+            self.assertEqual(f(n), want, n)
+        w = documents._is_work
+        for n in ("Supply and pour C30/37 ready-mixed concrete to slabs", "Precast concrete stair units; supply and erect",
+                  "鉄骨 製作・建方 材工共", "Ready mixed concrete C30/37 including placing and compacting", "型枠コンクリートブロック",
+                  "コンクリート（打設共）"):
+            self.assertFalse(w(n), n)
+        for n in ("Concrete pump hire", "鉄筋 ; 加工組立", "コンクリート ; 打設手間"):
+            self.assertTrue(w(n), n)
+
+    def test_markers_in_the_specification_spaced_and_deductions(self):
+        csv = ("名称,規格,数量,単位\n異形鉄筋,SD345 D19,42.5,t\n鉄筋,加工組立,42.5,t\n鉄筋,小計,42.5,t\n鉄筋スクラップ控除,,1.7,t\n"
+               "普通コンクリート,Fc24 基礎,350,m3\n普通コンクリート（再　掲）,基礎,80,m3\n普通コンクリート（上記に含む）,基礎,80,m3\n"
+               "コンクリート,打設手間,350,m3\nFRP防水,バルコニー,120,m2\n").encode()
+        r = documents.read("m.csv", base64.b64encode(csv).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got, {("m_rebar", "t"): 42.5, ("m_concrete_fdn", "m3"): 350.0, ("m_membrane", "m2"): 120.0})
+        self.assertIn("控除", " ".join(u["reason"] for u in r["unused"]))
+        csv = "Item,Item description,Qty,Unit\nA1,Ready-mixed concrete Fc24,350,m3\nA2,Deformed reinforcing bar SD345,42,t\n".encode()
+        r = documents.read("h.csv", base64.b64encode(csv).decode(), "d")
+        self.assertEqual({(p.field_id, p.unit): p.value for p in r["proposals"]}, {("m_concrete", "m3"): 350.0, ("m_rebar", "t"): 42.0})
+
+    # --- bounded work on hostile files; Strict Open XML; PDF item numbers
+    def test_hostile_columns_and_names_are_bounded(self):
+        import io, time, zipfile
+        from wlcstudio.importers import tabular
+        def with_cols(n):
+            data = _wb([("S", _HEAD + _row(2, "普通コンクリート", '<c r="B2"><v>350</v></c>'), None)])
+            z = zipfile.ZipFile(io.BytesIO(data))
+            parts = {k: z.read(k) for k in z.namelist()}
+            parts["xl/worksheets/sheet1.xml"] = parts["xl/worksheets/sheet1.xml"].replace(
+                b"<sheetData>", b"<cols>" + b'<col min="1" max="16384" hidden="1"/>' * n + b"</cols><sheetData>")
+            out = io.BytesIO()
+            with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z2:
+                for k, b in parts.items():
+                    z2.writestr(k, b)
+            return out.getvalue()
+        t0 = time.perf_counter()
+        r = documents.read("c.xlsx", base64.b64encode(with_cols(16000)).decode(), "d")
+        self.assertTrue(any("非表示の列 16384" in w for w in r["warnings"]))
+        with self.assertRaises(tabular.ImportError_):
+            documents.read("c.xlsx", base64.b64encode(with_cols(20000)).decode(), "d")
+        self.assertLess(time.perf_counter() - t0, 3.0)
+        shared = ("<t>名称</t>", "<t>規格</t>", "<t>数量</t>", "<t>単位</t>", "<t>%s</t>" % ("ﷺ" * 400), "<t>m3</t>")
+        head = '<row>' + "".join('<c t="s"><v>%d</v></c>' % i for i in range(4)) + '</row>'
+        body = '<row><c t="s"><v>4</v></c><c t="s"><v>4</v></c><c><v>1</v></c><c t="s"><v>5</v></c></row>' * 20000
+        t0 = time.perf_counter()
+        documents.read("n.xlsx", base64.b64encode(_wb([("S", head + body, None)], shared)).decode(), "d")
+        self.assertLess(time.perf_counter() - t0, 5.0)
+
+    def test_strict_workbook_and_pdf_item_numbers(self):
+        data = _wb([("S", _HEAD + _row(2, "普通コンクリート", '<c r="B2"><v>350</v></c>'), None)])
+        import io, zipfile
+        z = zipfile.ZipFile(io.BytesIO(data))
+        parts = {k: z.read(k).replace(b"http://schemas.openxmlformats.org/spreadsheetml/2006/main", b"http://purl.oclc.org/ooxml/spreadsheetml/main")
+                 .replace(b"http://schemas.openxmlformats.org/officeDocument/2006/relationships", b"http://purl.oclc.org/ooxml/officeDocument/relationships")
+                 for k in z.namelist()}
+        out = io.BytesIO()
+        with zipfile.ZipFile(out, "w") as z2:
+            for k, b in parts.items():
+                z2.writestr(k, b)
+        r = documents.read("s.xlsx", base64.b64encode(out.getvalue()).decode(), "d")
+        self.assertEqual({(p.field_id, p.unit): p.value for p in r["proposals"]}, {("m_concrete", "m3"): 350.0})
+        from wlcstudio.importers import pdf
+        for ln, name in (("① コンクリート 120 m3", "① コンクリート"), ("鉄骨⑫ 30 t", "鉄骨⑫"), ("(1) 鉄筋 D13 12.5 t", "鉄筋 D13")):
+            m = pdf.LINE.search(pdf.norm_line(ln))
+            self.assertEqual(m.group("name"), name, ln)
+        self.assertIsNotNone(pdf.LOOSE.search(pdf.norm_line("12 コンクリート 120 m3")))
+
+    # --- the calculation
+    def test_delivery_factor_needs_the_waste_rate_for_every_basis(self):
+        for basis in ("ORDERED", "AS_BUILT"):
+            vals = self.full(m_quantity_basis=V("m_quantity_basis", basis), m_concrete=V("m_concrete", 500.0, unit="m3"))
+            vals.pop("m_waste_rate")
+            _, rep = bridge.build(vals, REFSET)
+            self.assertNotIn("a4_delivery_fallback", self.fields_of(rep), basis)
+            self.assertIn("A4", {m["field"]: m for m in rep["missing_inputs"]}["m_waste_rate"]["stages"], basis)
+
+    def test_refrigerant_b1_surely_zero(self):
+        base = dict(r_leak_rate=V("r_leak_rate", 0.0), r_loss_rate=V("r_loss_rate", 0.0), r_recovery_rate=V("r_recovery_rate", 1.0))
+        for gone in ("r_charge_kg", "r_gwp"):
+            vals = self.full(**base)
+            vals.pop(gone)
+            doc, rep = bridge.build(vals, REFSET, period=60)
+            self.assertEqual(tables(doc)["refrigerants"], [])
+            self.assertFalse({k for k in self.fields_of(rep) if k.startswith("r_")})
+        vals = self.full(r_leak_rate=V("r_leak_rate", 0.0), r_recovery_rate=V("r_recovery_rate", 1.0), r_life=V("r_life", 70.0))
+        vals.pop("r_charge_kg")
+        out, st = self.summary(vals)
+        self.assertTrue(st["B1"])
+        vals = self.full(**dict(base, r_recovery_rate=V("r_recovery_rate", 1.0, "assumption", uncertainty=Uncertainty("interval", 0.9, 1.0, 0.8))))
+        doc, _ = bridge.build(vals, REFSET, period=60)
+        self.assertEqual(len(tables(doc)["refrigerants"]), 1)          # a recovery that may be below 100 % keeps B1
+
+    def test_inputs_outside_the_boundary_or_moot_are_not_estimates(self):
+        vals = self.full(a_stages=V("a_stages", "EMBODIED"), o_elec_kwh=V("o_elec_kwh", 100000.0, "assumption"),
+                         r_charge_kg=V("r_charge_kg", 20.0, "assumption"), m_repair_rate=V("m_repair_rate", 0.01, "assumption"))
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertEqual(rep["n_estimated"], 0)
+        refl = {f["field"]: f for f in rep["fields"]}
+        self.assertFalse(refl["o_elec_kwh"]["reflected"])
+        out, _ = self.summary(vals)
+        self.assertFalse((out["range"] or {}).get("unknown_fields"))
+        for over, fid in ((dict(a_reconstruction=V("a_reconstruction", "MAJOR_REFURBISHMENT"), a_recon_fraction=V("a_recon_fraction", 0.0),
+                                a_replacement_cycle=V("a_replacement_cycle", 20.0, "assumption")), "a_replacement_cycle"),
+                          (dict(a_reconstruction=V("a_reconstruction", "MAJOR_REFURBISHMENT"), a_replacement_cycle=V("a_replacement_cycle", 70.0),
+                                a_recon_fraction=V("a_recon_fraction", 0.5, "assumption")), "a_recon_fraction"),
+                          (dict(r_loss_rate=V("r_loss_rate", 0.0), r_life=V("r_life", 15.0, "assumption")), "r_life"),
+                          (dict(r_life=V("r_life", 70.0), r_loss_rate=V("r_loss_rate", 0.05, "assumption")), "r_loss_rate")):
+            _, rep = bridge.build(self.full(**over), REFSET, period=60)
+            self.assertFalse({f["field"]: f for f in rep["fields"]}[fid]["reflected"], fid)
+            self.assertEqual(rep["n_estimated"], 0, fid)
+
+    def test_range_puts_lives_at_the_opposite_end_and_holds_the_total(self):
+        vals = self.full(e_hvac_life=V("e_hvac_life", 15.0, "statistical", source_id="s", uncertainty=Uncertainty("interval", 10.0, 20.0, 0.8)),
+                         m_rebar=V("m_rebar", 10.0, "statistical", "t", source_id="s", uncertainty=Uncertainty("interval", 9.0, 11.0, 0.8)))
+        out, _ = self.summary(vals)
+        rg = out["range"]
+        self.assertLessEqual(rg["low_t"], out["summary"]["total_t"])
+        self.assertGreaterEqual(rg["high_t"], out["summary"]["total_t"])
+        lo, _ = server_mod._with(vals, "low")
+        self.assertEqual((lo["e_hvac_life"].value, lo["m_rebar"].value), (20.0, 9.0))
+
+    def test_estimate_message_and_report_rows(self):
+        pid = self.app.projects.create("r9e", "RC")
+        _, out = self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"screen": "material", "field": "m_rebar"})
+        self.assertNotIn("つないでいない", out["message"])
+        _, out = self.app.handle("POST", "/api/projects/%d/estimate" % pid, {"screen": "material", "field": "m_board"})
+        self.assertIn("つないでいない", out["message"])
+        vals = self.full(o_pv_kwh=V("o_pv_kwh", 30000.0), o_export_kwh=V("o_export_kwh", 10000.0))
+        vals.pop("o_elec_kwh")
+        _, rep = bridge.build(vals, REFSET)
+        refl = {f["field"]: f for f in rep["fields"]}
+        self.assertFalse(refl["o_pv_kwh"]["reflected"] or refl["o_export_kwh"]["reflected"])
+
+    def test_import_result_lists_every_unused_row(self):
+        pid = self.app.projects.create("r9u", "RC")
+        csv = ("名称,数量,単位\nコンクリート,100,m3\n" + "".join("諸経費%d,1,式\n" % i for i in range(12))).encode()
+        _, out = self.app.handle("POST", "/api/projects/%d/documents" % pid, {"name": "u.csv", "data_b64": base64.b64encode(csv).decode()})
+        self.assertEqual(out["n_unused"], 12)
+        self.assertEqual(len(out["unused"]), 12)
+
+    def test_ui_has_the_round9_guards(self):
+        js = (HERE / "web" / "app.js").read_text(encoding="utf-8")
+        for needle in ("function blocked()", "askRow", "state.nav !== nav", "lastImport", 'guard($("#calc")', "guard(cards",
+                       "toast._act === state.act", "評価期間は数値で入力してください", "refresh(sid, b.dataset.later, true, nav)"):
+            self.assertIn(needle, js, needle)
+        self.assertNotIn("btn.disabled = true", js)
 
 
 class RegressionTests(unittest.TestCase):
