@@ -140,6 +140,17 @@ class Value:
         return LABEL[self.state]
 
 
+def competes(v: Value | None) -> bool:
+    """A value that can be counted twice next to a whole-building / all-steel figure: a value that is not surely 0
+    (a 0 whose stated range stays at 0 cannot be double counted; it behaves like 適用外)."""
+    if v is None or v.state not in HAS_VALUE:
+        return False
+    if isinstance(v.value, (int, float)) and not isinstance(v.value, bool) and v.value == 0:
+        u = v.uncertainty
+        return u.kind in ("interval", "scenario") and isinstance(u.high, (int, float)) and u.high > 0
+    return True
+
+
 def best(values: list[Value]) -> Value | None:
     """The value that is used for a field: highest state priority, then newest."""
     if not values:

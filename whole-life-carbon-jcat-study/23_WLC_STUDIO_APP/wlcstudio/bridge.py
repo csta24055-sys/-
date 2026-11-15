@@ -24,7 +24,7 @@ import hashlib
 import json
 
 from . import fields as FL
-from .provenance import HAS_VALUE, LABEL, Value
+from .provenance import HAS_VALUE, LABEL, Value, competes
 
 ENGINE_STATE = {"confirmed": "OBSERVED", "from_drawing": "DERIVED", "statistical": "ESTIMATE", "assumption": "ESTIMATE"}
 PROV_RECORDS = {
@@ -196,6 +196,10 @@ def _surely_zero(v: Value | None) -> bool:
     return False
 
 
+def _competes(v: Value | None) -> bool:
+    return competes(v)
+
+
 def _whole_word(v: Value) -> str:
     """How a whole-building / all-steel value is named in the double-counting notes: only a statistical value is a
     「統計量」."""
@@ -315,11 +319,11 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     ctx = {"b5": False, "b4_material": True, "b4_equipment": True, "b1_replacement": True, "b2_moot": False,
            "route_stages": ["C3", "C4"]}
 
-    def missing(fid, stage_list, reason, kind=None, label=None, gap="omitted"):
+    def missing(fid, stage_list, reason, kind=None, label=None, gap="omitted", ctx_over=None):
         """Record a gap whose stages are inside the boundary. gap="omitted": not in the total (the total is a lower bound);
         gap="assumed": in the total, but computed with an assumption instead of the inputs (the stage is not determined);
         gap="split": the total is right but how it splits between stages is not determined (B2 counted inside B6)."""
-        hit = [s for s in expand_stages(stage_list, ctx, kind) if s in st_set]
+        hit = [s for s in expand_stages(stage_list, dict(ctx, **(ctx_over or {})), kind) if s in st_set]
         if hit and not any(m["field"] == fid for m in missing_inputs):
             missing_inputs.append({"field": fid, "label": label or FL.FIELDS[fid]["label"], "stages": hit, "reason": reason,
                                    "gap": gap, "screen_field": fid in FL.FIELDS})
@@ -335,7 +339,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     fra_x, _, _ = _num(V("a_recon_fraction"))
     # B5 can only be affected when a refurbishment / rebuild falls inside the study period and has a non-zero share
     cyc_in = not isinstance(cyc_x, (int, float)) or period is None or cyc_x < period
-    fra0 = (fra_x == "NA" and FL.FIELDS["a_recon_fraction"]["na"] == "zero") or (isinstance(fra_x, (int, float)) and fra_x == 0)
+    fra0 = _surely_zero(V("a_recon_fraction"))
     ctx["b5"] = rec_active and cyc_in and not fra0
     if rec_active:
         # the cycle and the share are passed only when a rebuild / refurbishment is assumed: the engine computes B5 for
@@ -367,7 +371,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     covered = {}          # fields whose quantity is already inside a whole-building / all-steel figure (not missing)
     whole_c, fdn = V("m_concrete"), V("m_concrete_fdn")
     if _is_whole(whole_c, "whole_building"):
-        if _has(fdn):
+        if _competes(fdn):
             skip["m_concrete_fdn"] = "上部構造の欄に基礎を含む建物全体の%sが入っているので、基礎の行は作らない（二重計上を防ぐ）" % _whole_word(whole_c)
             d.double_count.append("コンクリート：建物全体（基礎を含む）の%sと基礎の値が両方ある。基礎の行は使っていない" % _whole_word(whole_c))
         elif _unknown(fdn):
@@ -376,7 +380,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     for whole, other, wname, oname in ((rb, stl, "鉄筋", "鉄骨"), (stl, rb, "鉄骨", "鉄筋")):
         ofid = "m_steel" if oname == "鉄骨" else "m_rebar"
         if _is_whole(whole, "all_steel") and ofid not in skip and ("m_rebar" if ofid == "m_steel" else "m_steel") not in skip:
-            if _has(other):
+            if _competes(other):
                 skip[ofid] = "%sの欄に鉄の全量（鉄筋＋鉄骨）の%sが入っているので、%sの行は作らない（二重計上を防ぐ）" % (wname, _whole_word(whole), oname)
                 d.double_count.append("鉄：鉄の全量（%sの欄）の%sと%sの値が両方ある。%sの行は使っていない" % (wname, _whole_word(whole), oname, oname))
             elif _unknown(other):
@@ -385,14 +389,15 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     rcx, _, _ = _num(rc_v)
     # can a material renewal fall inside the study period? (unknown cycle: maybe; 適用外 = no renewal)
     ctx["b4_material"] = rcx is None or (isinstance(rcx, (int, float)) and (period is None or rcx < period))
-    lives = []
+    renew = {}                 # per trade: can a replacement fall inside the study period? (unknown life: maybe)
     for trade, _ in FL.TRADES:
-        cx_, _, _ = _num(V("e_%s_count" % trade.lower()))
+        cv_ = V("e_%s_count" % trade.lower())
         lx_, _, _ = _num(V("e_%s_life" % trade.lower()))
-        if cx_ == "NA" or (isinstance(cx_, (int, float)) and cx_ == 0):
+        if (cv_ is not None and cv_.state == "not_applicable") or _surely_zero(cv_):
             continue
-        lives.append(lx_)
-    ctx["b4_equipment"] = any(l is None or (isinstance(l, (int, float)) and (period is None or l < period)) for l in lives)
+        renew[trade] = lx_ is None or (isinstance(lx_, (int, float)) and (period is None or lx_ < period))
+    ctx["b4_equipment"] = any(renew.values())
+    eq_gap_renew = []          # trades with a count / mass gap that can be renewed inside T (the server's X-01 / X-14)
     route_st = {"LANDFILL": ("C4",)}.get(route, ("C3",)) if route else ("C3", "C4")
     ctx["route_stages"] = list(route_st)
     mat_stages = ("A1-A3", "A4", "C2") + route_st
@@ -474,14 +479,20 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             installed_kg = q * kg * (1.0 - w) if w is not None else None
         dist, dst, _ = _num(common["m_transport_km"])
         mode = common["m_transport_mode"]
-        wb = (w_state, b_state) if (w is None or w > 0) else ()     # the basis matters only with offcuts
-        if ordered_kg is not None and isinstance(dist, float) and _has(mode) and mode.value in P["transport"]:
-            row.update({"transport.mass_t": ordered_kg / 1000.0, "transport.distance_km": dist, "transport.mode": mode.value,
-                        "transport.factor_id": P["transport"][mode.value], "transport.delivery_factor_id": None})
+        wb = (w_state, b_state) if (w is None or not _surely_zero(common["m_waste_rate"])) else ()  # basis matters only with offcuts
+        mode_ok = _has(mode) and mode.value in P["transport"]
+        dist0 = _surely_zero(common["m_transport_km"])           # 0 km: the mode cannot change A4
+        # the delivered (ordered) quantity is determined: a mass, or a volume/area whose waste allowance is known
+        delivered_known = ordered_kg is not None if kg is not None else (w is not None or basis != "DESIGN")
+        if ordered_kg is not None and isinstance(dist, float) and (mode_ok or dist0):
+            mv_ = mode.value if mode_ok else sorted(P["transport"])[0]
+            row.update({"transport.mass_t": ordered_kg / 1000.0, "transport.distance_km": dist, "transport.mode": mv_,
+                        "transport.factor_id": P["transport"][mv_], "transport.delivery_factor_id": None})
             states.update({"transport.mass_t": _derived(qst, *(wb if basis == "DESIGN" else (b_state,))), "transport.distance_km": dst})
-            how.append("運搬 トンキロ（%s・%s km）" % (mode.value, dist))
+            how.append("運搬 トンキロ（%s・%s km）" % (mv_, dist) if mode_ok else
+                       "運搬 距離 0 km：手段は効かない（計算上 %s とした。A4 は 0）" % mv_)
             used_tkm = True
-        elif P["delivery"].get(cls) and _same_dim(F_[P["delivery"][cls]]["unit"], qu):
+        elif P["delivery"].get(cls) and _same_dim(F_[P["delivery"][cls]]["unit"], qu) and delivered_known:
             row.update({"transport.mass_t": None, "transport.distance_km": None, "transport.mode": None,
                         "transport.factor_id": None, "transport.delivery_factor_id": P["delivery"][cls]})
             how.append("運搬 参照セットの配送原単位 %s（数量あたり。距離・手段の入力ではない）" % P["delivery"][cls])
@@ -489,8 +500,8 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         else:
             row.update({"transport.mass_t": None, "transport.distance_km": None, "transport.mode": None,
                         "transport.factor_id": None, "transport.delivery_factor_id": None})
-            if kg is not None and ordered_kg is None:
-                why, cause = "廃棄率が未取得で発注量（運搬する質量）が決まらず、同じ単位の配送原単位も無い", "waste"
+            if (kg is not None and ordered_kg is None) or not delivered_known:
+                why, cause = "廃棄率が未取得で発注量（運搬する量）が決まらない", "waste"
             elif kg is None:
                 why, cause = "数量が %s で質量が分からず（密度を仮定しない）、同じ単位の配送原単位も無い" % qu, "unit"
             else:
@@ -505,6 +516,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.unconnected.append({"label": label + "の解体時質量（C2〜C4）",
                                   "reason": (("数量が %s のため質量が分からない（密度を仮定しない）" % qu) if kg is None
                                              else "廃棄率が未取得で、施工後の質量が決まらない") + "。解体段階のこの行は不完全"})
+            if kg is None:
+                # a named gap (the same field takes t / kg): the hint and the lower-bound list say what completes it
+                missing(fid, ("C2",) + route_st, "数量が %s で質量が分からない（密度を仮定しない）：t か kg で入れると解体段階（C2〜C4）が計算できる" % qu,
+                        kind="material")
         hk, hst, _ = _num(common["a_eol_haul_km"])
         row["end_of_life.haul_distance_km"] = hk if isinstance(hk, float) else None
         if isinstance(hk, float):
@@ -533,16 +548,18 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                              ("a_eol_haul_km", ("C2",), "解体材の運搬距離が未取得")):
             if _never(cf, common[cf]):
                 missing(cf, stg, why, kind="material")
-                if cf == "m_refresh_cycle" and "B3" in st_set:
+                mr_, _, _ = _num(common["m_repair_rate"])
+                if cf == "m_refresh_cycle" and "B3" in st_set and isinstance(mr_, (int, float)) and mr_ > 0:
                     missing("m_refresh_cycle@B3", ("B3",), "更新周期が未取得：更新の年の修繕を除けないので、B3 は多めになりうる（合計には入っている）",
                             label="更新周期（修繕 B3 への影響）", gap="assumed")
         if fallback_rows:
             # the per-quantity delivery factor of the reference set replaces distance × mode × mass: an assumption, so A4
             # (and what repeats it) is marked as not determined from the inputs
+            names = "、".join(fallback_rows[:6]) + ("ほか %d 行" % (len(fallback_rows) - 6) if len(fallback_rows) > 6 else "")
             d.assumed.append("運搬（A4）は %d 行（%s）で参照セットの配送原単位（数量あたり）を使った：運搬距離・手段の入力によるものではない（仮定）"
-                             % (len(fallback_rows), "、".join(fallback_rows[:6])))
+                             % (len(fallback_rows), names))
             missing("a4_delivery_fallback", ("A4",), "%d 行（%s）は運搬距離・手段ではなく、参照セットの数量あたりの配送原単位で計算した（仮定）"
-                    % (len(fallback_rows), "、".join(fallback_rows[:6])), kind="material", label="運搬（A4）の代わりの原単位",
+                    % (len(fallback_rows), names), kind="material", label="運搬（A4）の代わりの原単位",
                     gap="assumed")
         by_cause = {}
         for lab, cause in no_transport_rows:
@@ -554,7 +571,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             missing("a4_no_mass", ("A4",), "数量が体積・面積で質量が分からず、同じ単位の配送原単位も無いので運搬を計算できない（%s）"
                     % "、".join(by_cause["unit"][:6]), kind="material", label="運搬（A4）：質量の分からない材料")
         # the "waste" cause is already covered by the waste-rate entry (its stages include A4)
-    elif any(_has(V(f[0])) for f in FL.MATERIALS) and route is None:
+    elif any(_competes(V(f[0])) and f[0] not in skip for f in FL.MATERIALS) and route is None:
         d.missing.append("解体後の処理シナリオ（材料の行ごとに必須）")
     for cf in ("m_waste_rate", "m_reuse_rate", "m_repair_rate", "m_refresh_cycle", "m_transport_km", "m_transport_mode",
                "m_quantity_basis", "a_eol_haul_km"):
@@ -571,9 +588,15 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.skip(cf, cv, "材料の行が無い" if not rows else ((LABEL[cv.state] if cv else "未取得") + "：渡していない"))
 
     # ------------------------------------------------------------------ construction (site)
-    scalar("c_site_electricity", "construction", "construction.electricity_kwh", "construction", "electricity_kwh")
-    if _unknown(V("c_site_electricity")):
-        missing("c_site_electricity", ("A5",), "工事中の電力が未取得")
+    if _unknown(V("c_site_electricity")) and _surely_zero(V("o_grid_construction")):
+        # the construction electricity factor is 0: the quantity cannot change A5 (filled, not an observation)
+        d.item("construction", "construction.electricity_kwh", 0.0)
+        d.state("construction", "electricity_kwh", "EXPLICIT_ZERO")
+        d.skip("c_site_electricity", V("c_site_electricity"), "工事中の電力の排出係数が 0 なので量は効かない：0 で満たした（計算には入らない）")
+    else:
+        scalar("c_site_electricity", "construction", "construction.electricity_kwh", "construction", "electricity_kwh")
+        if _unknown(V("c_site_electricity")):
+            missing("c_site_electricity", ("A5",), "工事中の電力が未取得")
     dv = V("c_diesel")
     if dv and dv.state in HAS_VALUE and P["fuel"].get("DIESEL"):
         d.tables["construction"]["construction.fuels"] = [{"kind": "DIESEL", "quantity": float(dv.value), "unit": "L",
@@ -616,13 +639,15 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                             "factor_id": ids["factor"], "eol_factor_id": ids["eol"], "delivery_factor_id": ids["delivery"],
                             "installation_factor_id": ids["install"], "replacement_event_list": None, "service_life": None,
                             "end_of_life_mass_kg": None, "repair_rate": None, "provenance_id": _prov(None), "states": {}})
-            missing("e_%s_count" % t, EQUIPMENT_STAGES, "%s機器の台数が未取得（本当に無いと分かっているときだけ「適用外」）" % tl, kind="equipment")
+            missing("e_%s_count" % t, EQUIPMENT_STAGES, "%s機器の台数が未取得（本当に無いと分かっているときだけ「適用外」）" % tl, kind="equipment",
+                    ctx_over={"b4_equipment": renew.get(trade, True)})
+            eq_gap_renew.append(renew.get(trade, True))
             d.skip("e_%s_count" % t, cv, how + "：台数の欠けた設備の行を渡した（エンジンが不完全とする。この設備は合計に入っていない）")
             for f in ("life", "mass"):
                 d.skip("e_%s_%s" % (t, f), V("e_%s_%s" % (t, f)), "台数が無いので渡していない")
             continue
         states = {"quantity": st}
-        zero = float(x) == 0.0                       # a confirmed zero count: lives, masses and repair do not matter
+        zero = _surely_zero(cv)                      # a confirmed zero count: lives, masses and repair do not matter
         if zero:
             # no row at all: a row with count 0 and missing companions would make the engine flag units that cannot change
             d.use("e_%s_count" % t, cv, "台数 0：この設備の行は作らない", ["equipment"])
@@ -642,8 +667,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         elif not zero:
             missing("e_%s_life" % t, ("B4",), "%s機器の耐用年数が未取得（エンジンは交換を数えないが、不完全とは示さない）" % tl,
                     kind="equipment")
-            missing("e_life@B3", ("B3",), "設備の耐用年数が未取得：交換の年の修繕を除けないので、B3 は多めになりうる（合計には入っている）",
-                    label="設備の耐用年数（修繕 B3 への影響）", gap="assumed")
+            ex_, _, _ = _num(rr)
+            if isinstance(ex_, (int, float)) and ex_ > 0:   # a repair rate of 0 or 適用外: the life cannot change B3
+                missing("e_life@B3", ("B3",), "設備の耐用年数が未取得：交換の年の修繕を除けないので、B3 は多めになりうる（合計には入っている）",
+                        label="設備の耐用年数（修繕 B3 への影響）", gap="assumed")
             d.skip("e_%s_life" % t, lv, lhow + "：交換を数えられない（B4 のこの行は不完全）")
         else:
             d.skip("e_%s_life" % t, lv, "台数が 0 なので使われない")
@@ -655,7 +682,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         else:
             row["end_of_life_mass_kg"] = None
             if not zero:
-                missing("e_%s_mass" % t, ("C3",), "%s機器 1 台の解体時質量が%s" % (tl, LABEL[mv.state] if mv else "未取得"), kind="equipment")
+                missing("e_%s_mass" % t, ("C3",), "%s機器 1 台の解体時質量が%s" % (tl, LABEL[mv.state] if mv else "未取得"), kind="equipment",
+                        ctx_over={"b4_equipment": renew.get(trade, True)})
+                eq_gap_renew.append(renew.get(trade, True))
             d.skip("e_%s_mass" % t, mv, mhow + ("：解体時の処理（C3）のこの行は不完全" if not zero else "：台数が 0 なので使われない"))
         x2, st2, _ = _num(rr)
         if x2 == "NA":
@@ -671,6 +700,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.used_states.add("OBSERVED" if s == "EXPLICIT_ZERO" else s)
         eq_rows.append(row)
         d.use("e_%s_count" % t, cv, "%s %s 台（原単位 %s）" % (tl, x, ids["factor"]), ["equipment[E-%s]" % trade])
+    ctx["b4_equipment_gap"] = any(eq_gap_renew)
     if eq_rows:
         d.tables["equipment"]["equipment"] = eq_rows
         if rr and (rr.state in HAS_VALUE or rr.state == "not_applicable") and any(r["quantity"] is not None for r in eq_rows):
@@ -684,16 +714,25 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     cv = V("r_charge_kg")
     x, st, how = _num(cv)
     rparts = [k for k, F in FL.FIELDS.items() if F["role"] == "refrigerant" and k != "r_charge_kg"]
-    if x == "NA" or (isinstance(x, (int, float)) and float(x) == 0.0):
+    gwp0 = _surely_zero(V("r_gwp"))
+    if x == "NA" or _surely_zero(cv) or gwp0:
         d.tables["equipment"]["refrigerants"] = []
-        d.use("r_charge_kg", cv, "適用外：冷媒を使う機器なし" if x == "NA" else "充填量 0：冷媒の行は作らない", ["refrigerants"])
-        for k in rparts:
-            d.skip(k, V(k), "冷媒が無い（適用外・充填量 0）ので使われない")
+        if gwp0 and not (x == "NA" or _surely_zero(cv)):
+            d.skip("r_charge_kg", cv, "冷媒の GWP が 0 なので、充填量・漏えいは B1 に効かない（冷媒の行は作らない）")
+            d.use("r_gwp", V("r_gwp"), "GWP 0：冷媒の行は作らない（B1 は 0）", ["refrigerants"])
+            for k in rparts:
+                if k != "r_gwp":
+                    d.skip(k, V(k), "GWP が 0 なので使われない")
+        else:
+            d.use("r_charge_kg", cv, "適用外：冷媒を使う機器なし" if x == "NA" else "充填量 0：冷媒の行は作らない", ["refrigerants"])
+            for k in rparts:
+                d.skip(k, V(k), "冷媒が無い（適用外・充填量 0）ので使われない")
     else:
         row = {"device_id": "R-1", "substance": None, "application": "AIR_CONDITIONING",
                "charge_mass_kg": float(x) if x is not None else None, "change_years": None,
                "provenance_id": _prov(st)}
-        rzero = x is not None and float(x) == 0.0            # a confirmed zero charge: nothing leaks
+        rzero = False                                         # (a charge surely 0 makes no row above)
+        leak0 = _surely_zero(V("r_leak_rate"))               # nothing leaks: whether leaks are topped up cannot matter
         rl_x, _, _ = _num(V("r_life"))
         # a replacement (and its loss) happens inside T only with a known life shorter than T, or an unknown life
         ctx["b1_replacement"] = rl_x is None or (isinstance(rl_x, (int, float)) and (period is None or rl_x < period))
@@ -719,9 +758,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                         d.use(k, kv, "適用外：補充しないとして渡した", ["refrigerants[R-1].top_up"])
                     else:
                         d.skip(k, kv, "適用外（補充しない）。ただし充填量が無いので使われない")
-                elif rzero:
-                    row["top_up"] = None
-                    d.skip(k, kv, "充填量が 0 なので使われない")
+                elif rzero or leak0:
+                    row["top_up"] = False
+                    d.skip(k, kv, "漏えい率が 0 なので、補充の有無は B1 に効かない（補充しないとして渡した）")
                 else:
                     # a missing top_up would silently change B1 by a large factor: do not compute B1 at all
                     row["top_up"] = None
@@ -786,13 +825,16 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     if pe_known and gx_known and not inconsistent:
         selfc = max(0.0, g0 - x0)
         if isinstance(pe, (int, float)):
+            # the consumption passed is derived (purchase + self-consumption); the engine's purchase comes back exactly
+            # as the bills say, so PV / export are not counted as estimates that move the total (see the reflection)
             elec_override = (float(pe) + selfc, _derived(pe_st, g_st, x_st) if selfc > 0 else pe_st,
                              "購入電力 %s ＋ 自家消費 %s ＝ 電力の使用量 %s kWh/年として渡した" % (pe, selfc, float(pe) + selfc))
     elif pe_known:
         pv_fill = ("購入電力が分かっているので、自家発電・売電は B6・B2 に効かない（エンジンの買電量＝購入電力）："
                    "0 で満たした（計算には入らない）")
     # net purchased electricity surely 0 → the grid factor and the facility-management share cannot act
-    ctx["b2_moot"] = _surely_zero(V("o_elec_kwh"))
+    grid0 = _surely_zero(V("o_grid_value"))              # a factor of 0: the purchase cannot change B6/B2 either
+    ctx["b2_moot"] = _surely_zero(V("o_elec_kwh")) or grid0
     for fid, F in FL.FIELDS.items():
         if F["role"] != "profile":
             continue
@@ -818,6 +860,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         if x == "NA":
             x, st, how = 0.0, "EXPLICIT_ZERO", "適用外：0 として渡した（明示のゼロ）"
         filled = False
+        if fid == "o_elec_kwh" and x is None and grid0:
+            x, st, how = 0.0, "EXPLICIT_ZERO", "運用時の電力の排出係数が 0 なので、購入電力は B6・B2 に効かない：0 で満たした（計算には入らない）"
+            filled = True
         if x is None and F["required"] and stages is not None and stage not in st_set:
             x, st, how = 0.0, "EXPLICIT_ZERO", "%s を評価範囲から外したので、エンジンの必須の年表を 0 で満たした（計算には入らない）" % stage
             filled = True
@@ -835,6 +880,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.state(owner, name.split(".", 1)[1], st)
         if filled:
             d.skip(fid, v, how)
+        elif fid in ("o_pv_kwh", "o_export_kwh") and pe_known:
+            # passed (the self-consumed part is added to the consumption) but the total does not depend on it
+            d.skip(fid, v, how + "：渡したが、購入電力が B6・B2 を決めるので合計は変わらない（自家消費の分を使用量に足しただけ）")
         else:
             d.use(fid, v, how + "・年ごとに一定", [name])
     for name, fid in P["op"].items():
@@ -959,7 +1007,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     for r in d.reflect.values():
         if r["reflected"]:
             by_state[r["state"]] = by_state.get(r["state"], 0) + 1
-    n_est = by_state.get("statistical", 0) + by_state.get("assumption", 0)
+    neutral = {"o_fm_ratio"}                # moves B2 inside B6 only: the total does not depend on it
+    n_est = sum(1 for r in d.reflect.values() if r["reflected"] and r["state"] in ("statistical", "assumption")
+                and r["field"] not in neutral)
     n_ref = sum(by_state.values())
     omitted = [m for m in missing_inputs if m.get("gap") == "omitted"]
     # stages with something left out (the total is short there) and stages computed partly with an assumption

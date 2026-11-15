@@ -15,6 +15,7 @@ import unicodedata
 _THOUSANDS = re.compile(r"[+-]?\d{1,3}(?:,\d{3})+(?:\.\d+)?", re.ASCII)
 _PLAIN = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?", re.ASCII)
 MAX_TEXT = 100                                   # a number is never longer than this
+_ALLOWED = set("0123456789+-.,eE \u3000\u2212\uff0b\uff0d\uff0e\uff0c\uff25\uff45")
 
 
 def parse_number(x) -> float:
@@ -29,9 +30,14 @@ def parse_number(x) -> float:
         if not math.isfinite(f):
             raise ValueError("有限の数値で入れる")
         return f
-    t = unicodedata.normalize("NFKC", str(x)[:MAX_TEXT + 50]).strip().replace("−", "-")
-    if len(t) > MAX_TEXT:
+    raw = str(x)
+    if len(raw) > 1000 or len(raw.strip()) > MAX_TEXT:      # the whole text is checked, never a cut prefix
         raise ValueError("数値として長すぎる")
+    raw = raw.strip()
+    # only ASCII and full-width digits / signs / points: ² ⑫ 𝟏 … are not digits a person typed as a quantity
+    if any(c not in _ALLOWED and not ("\uff10" <= c <= "\uff19") for c in raw):
+        raise ValueError("数値として読めない（使えない文字がある）")
+    t = unicodedata.normalize("NFKC", raw).replace("\u2212", "-")
     if re.search(r"\s", t):
         raise ValueError("数の中に空白がある（3 桁の区切りはカンマ）")
     if "," in t:
@@ -43,6 +49,8 @@ def parse_number(x) -> float:
     f = float(t)
     if not math.isfinite(f):
         raise ValueError("有限の数値で入れる")
+    if f == 0.0 and re.search(r"[1-9]", re.split(r"[eE]", t)[0]):
+        raise ValueError("小さすぎて 0 になってしまう数")           # 1e-400 is not 0
     return f
 
 

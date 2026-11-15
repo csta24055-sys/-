@@ -28,7 +28,7 @@ from pathlib import Path
 
 from . import fields as FL
 from .importers.tabular import xlsx_sheets
-from .provenance import HAS_VALUE, Uncertainty, Value
+from .provenance import HAS_VALUE, Uncertainty, Value, competes
 from .sources.net import SourceError, get
 
 REGISTRY = Path(__file__).resolve().parent / "sources" / "registry.json"
@@ -174,8 +174,7 @@ def _other_steel(fid: str) -> str:
 
 def _other_steel_has_value(values: dict, fid: str) -> bool:
     """An all-steel estimate (rebar + structural steel together) must not sit next to a value in the other steel field."""
-    v = values.get(_other_steel(fid))
-    return v is not None and v.state in HAS_VALUE
+    return competes(values.get(_other_steel(fid)))
 
 
 def estimate_materials(values: dict[str, Value], structure: str, only: str | None = None, ranges: dict | None = None) -> tuple[list[Value], list[str]]:
@@ -212,7 +211,7 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
             continue
         if fid == "m_concrete":
             fdn = values.get("m_concrete_fdn")
-            if fdn and fdn.state in HAS_VALUE:
+            if competes(fdn):
                 msgs.append("基礎のコンクリートが別に入っているので、全体量の統計（国交省）は候補にしない（二重計上を防ぐ）")
                 continue
         per10, u = M[item]
@@ -242,7 +241,8 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
     for mat in ("concrete", "steel", "wood", "glass", "aluminum", "brick", "plastics", "copper"):
         rec = R.get((mat, fn, st, "OECD_JPN"))
         if mat == "copper":
-            msgs.append("RASMI の銅（copper）はエンジンの材料分類に無いので使わない（反映外）")
+            if not only:
+                msgs.append("RASMI の銅（copper）はエンジンの材料分類に無いので使わない（反映外）")
             continue
         fid = RASMI_TO_FIELD[mat]
         notes = [n for n in (fn_note, st_note) if n]
@@ -265,7 +265,7 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
             continue
         if mat == "concrete":
             fdn = values.get("m_concrete_fdn")
-            if fdn and fdn.state in HAS_VALUE:
+            if competes(fdn):
                 msgs.append("基礎のコンクリートが別に入っているので、基礎を含む統計の全体量は候補にしない（二重計上を防ぐ）")
                 continue
             notes.append("基礎・杭を含む建物全体の量。採用したら基礎の欄には別の値を入れない（入れると基礎の行は作らず、二重計上を防ぐ）")
@@ -295,6 +295,11 @@ def run(values: dict[str, Value], structure: str, screen: str | None = None, fie
             p, m = estimate_materials(values, structure, only=field)
             proposals += p
             msgs += m
+            if field and not p and not m:
+                msgs.append("「%s」の統計の出典はつないでいない%s" % (
+                    FL.FIELDS[field]["label"],
+                    "（基礎のコンクリートは、上部構造の欄の建物全体の推定に含まれる）" if field == "m_concrete_fdn" else
+                    "（資料か仮定で入れる）"))
     elif target_screen == "basic":
         msgs.append("基本情報の候補は「住所から調べる」（国土地理院・PLATEAU）で作る。延床面積は PLATEAU の屋根面積×階数の仮定値になる。")
     elif target_screen == "equipment":

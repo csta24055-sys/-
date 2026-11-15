@@ -23,7 +23,7 @@ from pathlib import Path
 
 from . import fields as FL
 from .numbers import parse_number  # noqa: F401  (re-exported: the server imports it from here)
-from .provenance import HAS_VALUE, PRIORITY, ProvenanceError, Uncertainty, Value
+from .provenance import HAS_VALUE, PRIORITY, ProvenanceError, Uncertainty, Value, competes
 
 SCHEMA_VERSION = 1
 SCHEMA = """
@@ -229,12 +229,20 @@ class Projects:
         c = dict(cs[index])
         cid = c.pop("id")
         origin = c.pop("origin")
+        other = {("m_concrete", "whole_building"): "m_concrete_fdn", ("m_rebar", "all_steel"): "m_steel",
+                 ("m_steel", "all_steel"): "m_rebar"}.get((fid, c.get("scope") or ""))
+        if other and competes(self.current(pid, other)):
+            # adopting it would make the bridge drop the value typed in the other field (or count it twice)
+            raise ProjectError("「%s」に値があるので、それを含む全体量の候補は採用しない（二重計上を防ぐ）。全体量を使うときは、先に「%s」を"
+                               "「未取得に戻す」か適用外にする" % (FL.FIELDS[other]["label"], FL.FIELDS[other]["label"]))
         v = Value.from_json(c)
         v.updated_at = time.time()
         v.updated_by = "user (候補を採用: %s)" % origin
         v = self.put(pid, v)
         self.db.execute("UPDATE candidates SET status='accepted' WHERE id=?", (cid,))
         self.db.commit()
+        if fid in ("m_concrete_fdn", "m_rebar", "m_steel"):
+            self.withdraw_whole_candidates(pid)
         return v
 
     def dismiss_candidates(self, pid: int, fid: str, origin: str | None = None) -> int:
@@ -253,8 +261,7 @@ class Projects:
         out = []
         for fid, scope, other in (("m_concrete", "whole_building", "m_concrete_fdn"), ("m_rebar", "all_steel", "m_steel"),
                                   ("m_steel", "all_steel", "m_rebar")):
-            ov = vals.get(other)
-            if ov is None or ov.state not in HAS_VALUE:
+            if not competes(vals.get(other)):
                 continue
             for c in self.candidates(pid, fid):
                 if c.get("scope") == scope:
@@ -381,10 +388,12 @@ def _normalise(F: dict, v: Value) -> Value:
             raise ProjectError("「%s」に負の値は入れない" % F["label"])
     elif t == "enum":
         allowed = {e for e, _ in F["enum"]}
-        if v.value not in allowed:
+        if not isinstance(v.value, str) or v.value not in allowed:
             raise ProjectError("「%s」の選択肢 %r は無い" % (F["label"], v.value))
         v.unit = ""
     else:
+        if not isinstance(v.value, (str, int, float)) or isinstance(v.value, bool):
+            raise ProjectError("「%s」は文字で入れる" % F["label"])
         v.value = str(v.value).strip()[:500]
         v.unit = ""
     return v

@@ -23,30 +23,46 @@ def available() -> bool:
     return shutil.which("pdftotext") is not None
 
 
+TIMEOUT_INFO, TIMEOUT_TEXT = 10, 20      # seconds: a crafted PDF must not hold the app's only worker
+MAX_TEXT_OUT = 20_000_000                 # characters of extracted text
+
+
 def read(data: bytes, doc_id: str, max_pages: int = 200) -> dict:
     if not available():
         return {"format": "pdf", "pages": [], "error": "pdftotext が無いので PDF を読めない"}
     with tempfile.TemporaryDirectory() as td:
         p = Path(td) / "in.pdf"
         p.write_bytes(data)
-        info = subprocess.run(["pdfinfo", str(p)], capture_output=True, text=True)
+        try:
+            info = subprocess.run(["pdfinfo", str(p)], capture_output=True, text=True, timeout=TIMEOUT_INFO, errors="replace")
+        except subprocess.TimeoutExpired:
+            return {"format": "pdf", "pages": [], "error": "PDF の情報の読み取りが時間内に終わらなかった（%d 秒）" % TIMEOUT_INFO}
         m = re.search(r"Pages:\s+(\d+)", info.stdout)
         if not m:
             return {"format": "pdf", "pages": [], "error": "PDF として開けない"}
         n = min(int(m.group(1)), max_pages)
+        # one run for all pages (pages are separated by form feeds), with one time limit for the whole document
+        try:
+            out = subprocess.run(["pdftotext", "-layout", "-f", "1", "-l", str(n), str(p), "-"],
+                                 capture_output=True, text=True, timeout=TIMEOUT_TEXT, errors="replace").stdout
+        except subprocess.TimeoutExpired:
+            return {"format": "pdf", "pages": [], "error": "PDF の文字の読み取りが時間内に終わらなかった（%d 秒）。数量表は CSV・Excel で読み込む"
+                                                          % TIMEOUT_TEXT}
+        if len(out) > MAX_TEXT_OUT:
+            return {"format": "pdf", "pages": [], "error": "PDF の文字が多すぎる（%d 文字まで）" % MAX_TEXT_OUT}
+        texts = out.split("\f")
         pages, cands, refused = [], [], []
         for i in range(1, n + 1):
-            t = subprocess.run(["pdftotext", "-layout", "-f", str(i), "-l", str(i), str(p), "-"],
-                               capture_output=True, text=True).stdout
+            t = texts[i - 1] if i - 1 < len(texts) else ""
             has_text = len(t.strip()) > 20
             pages.append({"page": i, "has_text": has_text, "n_chars": len(t)})
             for k, ln in enumerate(t.splitlines(), 1):
-                mm = LINE.search(ln.strip())
+                mm = LINE.search(ln.strip()[:500])
                 if mm:
                     q, why = number_or_reason(mm.group("q"))
                     if q is None:            # e.g. "1,5": refused like on the screen, and said
-                        refused.append({"name": mm.group("name").strip(), "trace": "%s:p%d/L%d" % (doc_id, i, k),
-                                        "reason": "数量 %r を読めない（%s）" % (mm.group("q"), why)})
+                        refused.append({"name": mm.group("name").strip()[:80], "trace": "%s:p%d/L%d" % (doc_id, i, k),
+                                        "reason": "数量 %r を読めない（%s）" % (mm.group("q")[:30], why)})
                         continue
                     cands.append({"name": mm.group("name").strip(), "quantity": q, "unit": mm.group("u"),
                                   "trace": "%s:p%d/L%d" % (doc_id, i, k), "line": ln.strip()[:120], "needs_review": True})

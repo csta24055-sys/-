@@ -253,7 +253,12 @@ async function saveField(fid, quiet = false, batch = false) {
     restoreInput(fid);
     return refuse(`「${F.label}」の空欄は保存していません（値は消えていません）。値を消すときは「未取得に戻す」を押してください`, false);
   }
-  if (iv.empty) { if (!quiet) toast("空欄は保存しません（未取得のまま。0 にはしません）"); return "unchanged"; }
+  if (iv.empty) {
+    const cur0 = (state.project.fields[fid] || {}).value;
+    if (!quiet) toast(cur0 && cur0.state !== "not_obtained" ? `空欄は保存しません（今の「${state.meta.states[cur0.state]}」のまま）`
+      : "空欄は保存しません（未取得のまま。0 にはしません）");
+    return "unchanged";
+  }
   if (iv.bad) return refuse("「" + F.label + "」は数値で入力してください" + (iv.why ? "（" + iv.why + "）" : ""), false);
   const value = iv.value;
   const cur = (state.project.fields[fid] || {}).value;
@@ -276,8 +281,11 @@ async function saveField(fid, quiet = false, batch = false) {
     }
     if (cur.scope) body.scope = cur.scope;                       // what the value covers stays with it
   } else {
-    if (cur && cur.state === "statistical") {
-      const a = await ask("推定を直した値ですか", `今の値は統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）でした。新しい値は、その推定を手で直したものですか？`,
+    const carriesEstimate = cur && (cur.state === "statistical" || (cur.depends && Object.keys(cur.depends).length)
+      || (cur.uncertainty && cur.uncertainty.kind === "unknown" && cur.source_id));
+    if (carriesEstimate) {
+      const what = cur.state === "statistical" ? `統計の推定（${(state.meta.methods || {})[cur.method] || cur.method}）` : `推定（${cur.source_id || "出典つき"}）を手で直した値`;
+      const a = await ask("推定を直した値ですか", `今の値は${what}でした。新しい値も、その推定を手で直したものですか？`,
         [{ value: "fix", label: "推定を手で直した（範囲・前提を引き継ぐ。範囲は「不明」になる）", primary: true },
          { value: "new", label: "別に調べた値" }]);
       if (!a) return "cancelled";
@@ -300,7 +308,13 @@ async function saveField(fid, quiet = false, batch = false) {
 
 function bindScreen(m, sid) {
   $("#bb-back").onclick = back;
+  let busy = false;                                   // a double click must not save twice or go back twice
   $("#bb-hub").onclick = async () => {
+    if (busy) return;
+    busy = true;
+    try { await saveAndBack(); } finally { busy = false; }
+  };
+  const saveAndBack = async () => {
     // 保存して戻る: every row whose input differs from the stored value is saved like its own 保存 button
     const rows = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save);
     const cleared = rows.filter(clearedInput);
@@ -333,7 +347,11 @@ function bindScreen(m, sid) {
     await loadProject(state.project.id); toast(saved.length ? `${saved.length} 項目を保存しました` : "保存する変更はありませんでした"); back();
   };
   $("#bb-est").onclick = () => estimate(sid, null);
-  m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = async () => { if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save); }));
+  m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = async () => {
+    if (b.disabled) return;
+    b.disabled = true;
+    try { if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save); } finally { b.disabled = false; }
+  }));
   m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = async () => {
     const F = state.meta.fields[b.dataset.na];
     if (F.na === "zero" && !F.na_note && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
@@ -361,8 +379,14 @@ function bindScreen(m, sid) {
   m.querySelectorAll("[data-est]").forEach((b) => (b.onclick = () => estimate(sid, b.dataset.est)));
   // the state select of an estimate / drawing value opens once a new value is typed
   m.querySelectorAll("select[id^='st-'][disabled]").forEach((sel) => {
-    const inp = $("#in-" + sel.id.slice(3));
-    if (inp) inp.addEventListener("input", () => { sel.disabled = false; sel.removeAttribute("title"); });
+    const f = sel.id.slice(3), inp = $("#in-" + f), cur = (state.project.fields[f] || {}).value;
+    const lockTitle = sel.getAttribute("title"), stored = sel.value;
+    if (inp) inp.addEventListener("input", () => {
+      const iv = inputValue(f);
+      const same = !iv.empty && !iv.bad && cur && iv.value === cur.value;
+      sel.disabled = same || iv.empty;                 // the same value cannot change an estimate's state
+      if (sel.disabled) { sel.value = stored; sel.setAttribute("title", lockTitle || ""); } else sel.removeAttribute("title");
+    });
   });
   m.querySelectorAll("[data-why]").forEach((b) => (b.onclick = () => why(b.dataset.why)));
   const geo = $("#btn-geo");
@@ -430,9 +454,37 @@ async function why(fid) {
     <table class="t"><tr><th>状態</th><th>値</th><th>根拠</th><th>日時</th></tr>${rows || '<tr><td colspan="4">記録はまだありません</td></tr>'}</table>`);
 }
 
+/* what was typed (and not saved) in the rows of the screen, except `except` — kept across a re-render */
+function typedRows(except) {
+  const out = {};
+  document.querySelectorAll("[data-save]").forEach((b) => {
+    const f = b.dataset.save;
+    if (f === except) return;
+    const inp = $("#in-" + f), cur = (state.project.fields[f] || {}).value;
+    if (!inp) return;
+    const stored = cur && cur.value !== null && cur.value !== undefined && typeof cur.value !== "object" ? String(cur.value) : "";
+    const us = $("#unit-" + f), st = $("#st-" + f);
+    const changed = inp.value !== stored || (us && cur && cur.unit && us.value !== cur.unit) || (st && !st.disabled && cur && st.value !== cur.state);
+    if (changed) out[f] = { v: inp.value, u: us ? us.value : null, s: st ? st.value : null, unlocked: st ? !st.disabled : false };
+  });
+  return out;
+}
+function restoreTyped(saved) {
+  for (const [f, x] of Object.entries(saved)) {
+    const inp = $("#in-" + f); if (!inp) continue;
+    inp.value = x.v;
+    if (x.u !== null && $("#unit-" + f)) $("#unit-" + f).value = x.u;
+    const st = $("#st-" + f);
+    if (st && x.s !== null) { if (x.unlocked) st.disabled = false; st.value = x.s; }
+  }
+}
 async function refresh(sid, fid) {
+  const keep = state.view === "screen" ? typedRows(fid) : {};
   await loadProject(state.project.id);
-  if (state.view === "screen") { const y = window.scrollY; render(); setTimeout(() => window.scrollTo(0, y), 0); }
+  if (state.view === "screen") {
+    const y = window.scrollY; await render(); restoreTyped(keep); setTimeout(() => window.scrollTo(0, y), 0);
+    if (Object.keys(keep).length) toast(`ほかの行の入力（${Object.keys(keep).map((f) => "「" + state.meta.fields[f].label + "」").join("")}）はまだ保存していません`);
+  }
   if (fid) setTimeout(() => { const el = $("#f-" + fid); if (el) { const b = el.querySelector("[data-save]") || el.querySelector("button"); b?.focus({ preventScroll: true }); el.scrollIntoView({ block: "center" }); } }, 30);
 }
 

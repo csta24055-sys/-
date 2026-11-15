@@ -222,13 +222,16 @@ class App:
                 src = cur.source_id
                 carry = {"source_detail": cur.source_detail, "factor_version": cur.factor_version,
                          "retrieved_at": cur.retrieved_at, "permission": cur.permission, "note": cur.note}
-            if b.get("from_estimate") and cur.state == "statistical":
+            carries_estimate = cur.state == "statistical" or bool(cur.depends) or \
+                (cur.uncertainty.kind == "unknown" and bool(cur.source_id))
+            if b.get("from_estimate") and carries_estimate:
                 # the user corrected an estimate: same quantity, same premises; its statistical range no longer applies
                 if not explicit:
                     scope = cur.scope or ""
                 depends = dict(cur.depends or {})
                 unc = Uncertainty("unknown", basis="推定（%s）を手で直した値：元の範囲は使わない" % cur.source_id)
-                note_extra = "推定 %s %s（%s）を手で直した。" % (cur.value, cur.unit, cur.source_id)
+                note_extra = ("推定 %s %s（%s）を手で直した。" % (cur.value, cur.unit, cur.source_id)) if cur.state == "statistical" \
+                    else (cur.note or "") + "（さらに %s %s から直した）" % (cur.value, cur.unit)
                 src = cur.source_id
                 carry = {"source_detail": cur.source_detail, "factor_version": cur.factor_version,
                          "retrieved_at": cur.retrieved_at, "permission": cur.permission}
@@ -252,6 +255,8 @@ class App:
                 if x and not getattr(v, k):
                     setattr(v, k, x)
         out = self.projects.put(pid, v).to_json()
+        if fid in ("m_concrete_fdn", "m_rebar", "m_steel"):
+            self.projects.withdraw_whole_candidates(pid)
         if fid == "b_structure" and state in ("confirmed", "assumption"):
             # the project's structure follows the field (estimates, PLATEAU checks and field order use it)
             self.projects.touch(pid, structure=str(value))
@@ -351,11 +356,13 @@ class App:
     def _range(self, vals: dict, T: float, lca_pid: int, pid: int, rep: dict | None = None) -> dict | None:
         """Low / high totals with every value that has a range set to its low / high end (two more engine runs).
         This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
-        lo_vals, n = _with(vals, "low")
         reflected = {f["field"] for f in (rep or {}).get("fields") or [] if f.get("reflected")} if rep else None
+        # only values that reach the calculation are moved to their ends and counted (a dropped foundation row, a
+        # cycle without a rebuild …); inputs that cannot change the total are not counted as unknown widths
+        lo_vals, n = _with(vals, "low", reflected)
         unknown = [f for f, v in vals.items()
                    if f in FL.FIELDS and FL.FIELDS[f]["type"] in ("number", "integer") and isinstance(v.value, (int, float))
-                   and (reflected is None or f in reflected)
+                   and (reflected is None or f in reflected) and f not in TOTAL_NEUTRAL
                    and (v.uncertainty.kind == "unknown" or
                         (v.state in ("assumption", "statistical") and v.uncertainty.kind == "none"))]
         n_unknown = len(unknown)
@@ -368,8 +375,9 @@ class App:
                         "unknown_fields": unknown,
                         "note": "範囲が不明な推定・仮定 %d 項目（%s）があり、合計の幅は示せない。" % (n_unknown, names)}
             return None
-        hi_vals, _ = _with(vals, "high")
-        tot = {}
+        hi_vals, _ = _with(vals, "high", reflected)
+        tot, end_gaps = {}, []
+        base_omitted = {m["field"] for m in (rep or {}).get("omitted_inputs") or []}
         for side, vv in (("low", lo_vals), ("high", hi_vals)):
             doc, rep_ = bridge.build(vv, self.refset, title="WLC Studio #%d (%s)" % (pid, side), period=T)
             if rep_["missing_required"]:
@@ -378,6 +386,11 @@ class App:
                         "unknown_fields": unknown,
                         "note": "範囲のある %d 項目を%s端にすると計算できない（%s）ので、合計の幅は示せない。%s"
                                 % (n, "下" if side == "low" else "上", "、".join(rep_["missing_required"]), unk_note)}
+            new = [m for m in rep_.get("omitted_inputs") or [] if m["field"] not in base_omitted]
+            if new:
+                # an end where inputs become necessary that are missing: that end is a lower bound, and it is said
+                end_gaps.append("%s端では「%s」が要るが未取得（その端は下限）" % ("下" if side == "low" else "上",
+                                                                      "」「".join(m["label"] for m in new[:4])))
             r = self.engine.run(doc, lca_pid, T)
             res = r["results"] or {}
             tot[side] = ((res.get("SUM-03") or {}).get("value"))
@@ -385,8 +398,9 @@ class App:
             return None
         a, b = sorted((tot["low"] / 1000.0, tot["high"] / 1000.0))
         return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown, "unknown_fields": unknown,
+                "end_gaps": end_gaps,
                 "note": "範囲のある %d 項目を、全部下端・全部上端にしたときの合計（2 回の追加計算）。確率の区間ではなく、校正していない範囲を含む。" % n
-                        + unk_note}
+                        + unk_note + ("".join(g + "。" for g in end_gaps))}
 
     def calculate(self, pid: int, period) -> dict:
         T = _float(period)
@@ -455,12 +469,17 @@ def _hero() -> dict:
     return {"src": "assets/akabeko-placeholder.svg", "alt": "赤べこの写真の差し替え用の絵（プレースホルダー）", "placeholder": True}
 
 
-def _with(vals: dict, side: str) -> tuple[dict, int]:
-    """The values with every numeric interval/scenario replaced by its low or high end (the others unchanged)."""
+TOTAL_NEUTRAL = {"o_fm_ratio", "o_pv_kwh", "o_export_kwh"}    # cannot change the total (the split / the purchase decides)
+
+
+def _with(vals: dict, side: str, only: set | None = None) -> tuple[dict, int]:
+    """The values with every numeric interval/scenario replaced by its low or high end (the others unchanged); with
+    `only`, just those fields (the ones that reach the calculation)."""
     out, n = {}, 0
     for fid, v in vals.items():
         u = v.uncertainty
-        if v.state in ("statistical", "assumption", "from_drawing") and u.kind in ("interval", "scenario") \
+        if (only is None or fid in only) and fid not in TOTAL_NEUTRAL and \
+                v.state in ("statistical", "assumption", "from_drawing") and u.kind in ("interval", "scenario") \
                 and isinstance(v.value, (int, float)) and not isinstance(v.value, bool):
             w = Value.from_json(v.to_json())
             w.value = float(u.low if side == "low" else u.high)
@@ -579,7 +598,8 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
         eng[kind].add(st)
     spread = set()
     for kind, sts in eng.items():
-        spread |= set(bridge.expand_stages(sts, ctx, kind))
+        c = dict(ctx, b4_equipment=ctx.get("b4_equipment_gap", ctx.get("b4_equipment"))) if kind == "equipment" else ctx
+        spread |= set(bridge.expand_stages(sts, c, kind))
     bad_stages = (spread & set(rep["stages"] or [])) | set(rep.get("incomplete_stages") or [])
     assumed = set(rep.get("assumed_stages") or [])
     split = set(rep.get("split_stages") or [])
@@ -745,7 +765,7 @@ def make_handler(app, port: int):
                 raw = self.rfile.read(n) if n else b""
                 try:
                     body = json.loads(raw.decode("utf-8")) if raw else {}
-                except (UnicodeDecodeError, json.JSONDecodeError):
+                except (UnicodeDecodeError, ValueError, RecursionError):   # also over-long integer literals, deep nesting
                     return self._send(400, {"error": "JSON として読めない"})
                 if not isinstance(body, dict):
                     return self._send(400, {"error": "JSON のオブジェクトで送る"})
