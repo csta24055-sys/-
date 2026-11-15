@@ -18,7 +18,7 @@ import subprocess
 from html import escape
 from pathlib import Path
 
-from tex2mml import TexError, to_rl, to_runs
+from tex2mml import to_plain, TexError, to_rl, to_runs
 
 FONT_DIR = "/usr/share/fonts"
 JP_CANDIDATES = [
@@ -50,6 +50,7 @@ def fonts() -> dict:
     addMapping("JP", 1, 0, "JP")     # 太字は同じ書体（IPA ゴシックに太字が無い）。見出しは大きさで区別
     addMapping("JP", 0, 1, "JP")
     addMapping("JP", 1, 1, "JP")
+    _patch_cjk()
     jp_chars = set(pdfmetrics.getFont("JP").face.charToGlyph)
     ms_chars = set(pdfmetrics.getFont("MSerif").face.charToGlyph)
     _FONTS = {"jp": "JP", "jp_path": jp, "jp_chars": jp_chars, "ms_chars": ms_chars}
@@ -57,6 +58,69 @@ def fonts() -> dict:
 
 
 MISSING: set[str] = set()   # どちらのフォントにも無い文字（品質検査で問題にする）
+
+CANNOT_END = set("（「『〔［【〈《([{")
+
+
+def _patch_cjk() -> None:
+    """ReportLab の和文の行分割に禁則処理を足す（元の処理はそのまま使い、行の境目だけを直す）。
+    - 行頭禁則の文字（、。）」など）が続くときは 2 文字まで前の行にぶら下げる（元の処理は 1 文字だけ）
+    - 行末禁則の文字（（「『〔 など）で行が終わるときは、その文字を次の行へ送る
+    複数の飾りを持つ段落（cjkFragSplit）と、飾りの無い段落（wordSplit）の両方に効かせる。
+    文中の上付き・下付きの位置も、行に収まるよう浅くする。"""
+    import inspect
+    from reportlab.lib import textsplit as TS
+    from reportlab.platypus import paragraph as P
+    from reportlab.platypus import paraparser as PP
+    PP.subFraction = 0.25
+    PP.supFraction = 0.38
+    if getattr(P, "_wlc_patched", False):
+        return
+    src = inspect.getsource(P.cjkFragSplit)
+    key = "            lines.append(makeCJKParaLine(U[lineStartPos:i],maxWidth,widthUsed,extraSpace,lineBreak,calcBounds))"
+    assert key in src, "ReportLab の版が違う"
+    fix = (
+        "            if not lineBreak:\n"
+        "                _h = 0\n"
+        "                while i < nU and U[i] in ALL_CANNOT_START and _h < 2:\n"
+        "                    extraSpace -= float(getattr(U[i].width, 'normalizedValue', lambda m: U[i].width)(maxWidth)) if hasattr(U[i].width, 'normalizedValue') else U[i].width\n"
+        "                    i += 1\n"
+        "                    _h += 1\n"
+        "                if i - 1 > lineStartPos + 1 and str(U[i - 1]) in _CANNOT_END:\n"
+        "                    i -= 1\n"
+        "                    extraSpace += U[i].width if not hasattr(U[i].width, 'normalizedValue') else 0\n")
+    src = src.replace(key, fix + key)
+    ns = dict(P.__dict__)
+    ns["_CANNOT_END"] = CANNOT_END
+    exec(compile(src, "<cjkFragSplit+kinsoku>", "exec"), ns)
+    P.cjkFragSplit = ns["cjkFragSplit"]
+
+    orig_ws = P.wordSplit
+
+    def word_split(word, maxWidths, fontName, fontSize, encoding="utf8"):
+        lines = orig_ws(word, maxWidths, fontName, fontSize, encoding)
+        if len(lines) < 2 or not all(isinstance(t, str) for _, t in lines):
+            return lines
+        texts = [t for _, t in lines]
+        for k in range(len(texts) - 1):
+            moved = 0
+            while texts[k + 1] and texts[k + 1][0] in P.ALL_CANNOT_START and moved < 2:
+                texts[k] += texts[k + 1][0]
+                texts[k + 1] = texts[k + 1][1:]
+                moved += 1
+            if len(texts[k]) > 2 and texts[k][-1] in CANNOT_END:
+                texts[k + 1] = texts[k][-1] + texts[k + 1]
+                texts[k] = texts[k][:-1]
+        out = []
+        for k, t in enumerate(texts):
+            if not t:
+                continue
+            mw = maxWidths[min(k, len(maxWidths) - 1)] if isinstance(maxWidths, (list, tuple)) else maxWidths
+            out.append([mw - sum(TS.getCharWidths(t, fontName, fontSize)), t])
+        return out
+
+    P.wordSplit = word_split
+    P._wlc_patched = True
 
 
 def _font_runs(text: str) -> str:
@@ -93,6 +157,7 @@ def _tokens(text: str) -> list[tuple[str, str, bool]]:
 
     def plain(seg: str):
         nonlocal bold
+        seg = seg.replace("`", "")
         for k, piece in enumerate(seg.split("**")):
             if k:
                 bold = not bold
@@ -154,9 +219,9 @@ def to_pdf(blocks: list[dict], path: Path, title: str, header: str = "", math_pn
     st = {
         "title": ParagraphStyle("title", fontName=f, fontSize=20, leading=28, alignment=TA_CENTER, spaceAfter=10),
         "subtitle": ParagraphStyle("subtitle", fontName=f, fontSize=11, leading=17, alignment=TA_CENTER, spaceAfter=6),
-        "h1": ParagraphStyle("h1", fontName=f, fontSize=15, leading=21, spaceBefore=6, spaceAfter=8),
-        "h2": ParagraphStyle("h2", fontName=f, fontSize=12.5, leading=18, spaceBefore=10, spaceAfter=4),
-        "h3": ParagraphStyle("h3", fontName=f, fontSize=11, leading=16, spaceBefore=7, spaceAfter=2),
+        "h1": ParagraphStyle("h1", fontName=f, fontSize=15, leading=21, spaceBefore=6, spaceAfter=8, keepWithNext=1),
+        "h2": ParagraphStyle("h2", fontName=f, fontSize=12.5, leading=18, spaceBefore=10, spaceAfter=4, keepWithNext=1),
+        "h3": ParagraphStyle("h3", fontName=f, fontSize=11, leading=16, spaceBefore=7, spaceAfter=2, keepWithNext=1),
         "p": ParagraphStyle("p", fontName=f, fontSize=10, leading=16.5, wordWrap="CJK"),
         "small": ParagraphStyle("small", fontName=f, fontSize=8.5, leading=13, wordWrap="CJK", textColor=colors.HexColor("#333333")),
         "pre": ParagraphStyle("pre", fontName=f, fontSize=9.5, leading=15, wordWrap="CJK", leftIndent=10),
@@ -205,7 +270,9 @@ def to_pdf(blocks: list[dict], path: Path, title: str, header: str = "", math_pn
             if widths:
                 cw = [w * mm for w in widths]
             else:  # 文字数に応じた幅（最小 12%）
-                lens = [max(min(len(str(r[j])), 60) for r in rows) + 4 for j in range(ncol)]
+                def _vis(c):   # 式は組んだ後の長さで数える
+                    return len(re.sub(r"\$([^$]*)\$", lambda m_: to_plain(m_.group(1)), str(c)))
+                lens = [max(min(_vis(r[j]), 60) for r in rows) + 4 for j in range(ncol)]
                 tot = sum(lens)
                 cw = [max(frame_w * 0.12, frame_w * x / tot) for x in lens]
                 k = frame_w / sum(cw)
@@ -498,6 +565,12 @@ def check_pdf(path: Path, expect: list[str] = (), render_dir: Path | None = None
     allt = "".join(texts)
     if "�" in allt:
         res["problems"].append("置換文字（文字化け）がある")
+    lines_ = [ln.strip() for t in texts for ln in t.splitlines() if ln.strip()]
+    bad_start = [ln[:20] for ln in lines_ if ln[0] in "、。，．"]
+    bad_end = [ln[-20:] for ln in lines_ if ln[-1] in "（「『〔［【"]
+    res["kinsoku"] = {"line_start": len(bad_start), "line_end": len(bad_end)}
+    if bad_start or bad_end:   # 和文の禁則（行頭の句読点、行末の開き括弧）
+        res["problems"].append(f"禁則の違反：行頭の句読点 {len(bad_start)}、行末の開き括弧 {len(bad_end)}（例 {(bad_start + bad_end)[:2]}）")
     flat = re.sub(r"\s", "", allt)
     missing = [e for e in expect if re.sub(r"\s", "", e) not in flat]
     if missing:

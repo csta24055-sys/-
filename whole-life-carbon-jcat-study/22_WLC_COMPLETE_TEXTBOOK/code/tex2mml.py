@@ -12,7 +12,7 @@ from __future__ import annotations
 import re
 from html import escape
 
-VERSION = "8"            # 変換の版（式の画像のキャッシュの鍵に入れる）
+VERSION = "9"            # 変換の版（式の画像のキャッシュの鍵に入れる）
 
 GREEK = {
     "alpha": "α", "beta": "β", "gamma": "γ", "delta": "δ", "epsilon": "ϵ", "varepsilon": "ε", "zeta": "ζ", "eta": "η",
@@ -150,11 +150,11 @@ class Parser:
     def scripted(self):
         base = self.atom()
         sub = sup = None
+        primes = 0
         while self.peek() in ("^", "_", "'"):
             tok = self.next()
             if tok == "'":
-                prime = ("mo", "′", {})
-                sup = ("row", [sup, prime]) if sup else prime
+                primes += 1
                 continue
             arg = self.group_or_atom()
             if tok == "^":
@@ -165,6 +165,13 @@ class Parser:
                 if sub is not None:
                     raise TexError(f"下付きが二重: {self.src}")
                 sub = arg
+        if primes:   # f' は上付きにせず、文字の後ろに置く（重なりを避ける）
+            pr = ("mo", "′" * primes, {"prime": True})
+            if sup is not None:
+                sup = ("row", [pr, sup])
+            else:
+                core = ("sub", base, sub) if sub is not None else base
+                return ("row", [core, pr])
         if sub is None and sup is None:
             return base
         if base[0] == "bigop":
@@ -368,6 +375,8 @@ def mml(n, display=True) -> str:
     if k == "mn":
         return f"<mn>{escape(n[1])}</mn>"
     if k == "mo":
+        if n[2].get("prime"):
+            return f'<mo lspace="0" rspace="0">{escape(n[1])}</mo>'
         if n[2].get("size"):
             sz = n[2]["size"]
             return f'<mo stretchy="true" symmetric="true" minsize="{sz}em" maxsize="{sz}em">{escape(n[1])}</mo>'

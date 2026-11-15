@@ -52,7 +52,7 @@ def fig_steps():
     ch.line(xs, ys, "C(T) = a + bT + R·N(T)")
     ch.line(xs, [a + b * T for T in xs], "交換なし a + bT", color=LINE, width=1.5)
     _csv("F4-1_steps", ["T", "C(T)", "a+bT"], [[x, y, a + b * x] for x, y in zip(xs, ys)][::10])
-    return _svg(ch, note="a = 500、b = 20 /年、R = 40、L = 15 年（架空）。交換の時刻 15・30・45・60 年で跳ぶ。")
+    return _svg(ch)
 
 
 # ---------------------------------------------------------------- 図 4.2：核の五つの形
@@ -94,7 +94,7 @@ def fig_refrigerant():
     ch = sp.Chart(w=720, h=340, title="冷媒の年初の残存量（補充なし、10 年ごとに交換）", xlabel="実時間 t（年）", ylabel="残存量（kg）")
     ch.line(xs, ys, "残存量")
     _csv("F6-1_refrigerant", ["k", "u_k"], [[k, round(v, 6)] for k, v in enumerate(u)])
-    return _svg(ch, note="m0 = 10 kg、漏洩率 r = 0.1/年、補充なし。年 9・19 の終わりの交換で翌年は満タンに戻る（架空）。")
+    return _svg(ch)
 
 
 # ---------------------------------------------------------------- 図 7.1：C(T) = M([0,T]) + Z(T)（例題 7.1）
@@ -108,7 +108,7 @@ def fig_mz():
     ch.line(xs, C, "C(T) = M + Z")
     ch.line(xs, M, "M([0,T])（実際の累積）")
     _csv("F7-1_MZ", ["T", "C", "M"], [[x, c, m] for x, c, m in zip(xs[::10], C[::10], M[::10])])
-    return _svg(ch, note="初期 600、運用 25/年、15 年ごとの交換 60、解体 Z = 40（架空）。差はいつも Z（評価の終わりに数える解体）。")
+    return _svg(ch)
 
 
 # ---------------------------------------------------------------- 図 0.1・1.1・5.1：構成図（HTML）
@@ -209,15 +209,17 @@ def fig_derivations():
 
 def fig_research_map():
     """研究全体図：二つの対象（独立概念モデル・J-CAT 原版）を別の帯に分け、章の流れとつながりを示す。"""
-    def box(ch, t, s_, w=150, tone="#fff"):
-        return (f"<div style='{BOX};width:{w}px;background:{tone};font-size:13px;line-height:1.35'>"
-                f"<b style='font-size:13.5px'>{ch}</b> {t}<br><span style='color:#444;font-size:12px'>{s_}</span></div>")
+    def box(ch, t, s_, w=200, tone="#fff"):
+        return (f"<div style='{BOX};width:{w}px;background:{tone};font-size:15px;line-height:1.4'>"
+                f"<b style='font-size:15.5px'>{ch}</b> {t}<br><span style='color:#333;font-size:14px'>{s_}</span></div>")
     arr = "<div style='font-size:20px;color:#555;align-self:center;padding:0 3px'>→</div>"
 
     def lane(title, note, boxes, tone):
         return (f"<div style='border:1px dashed #777;border-radius:8px;padding:8px 10px;margin-bottom:10px;background:{tone}'>"
-                f"<div style='font-size:14px;margin-bottom:6px'><b>{title}</b>　<span style='color:#444;font-size:12.5px'>{note}</span></div>"
-                f"<div style='display:flex;align-items:stretch'>{arr.join(boxes)}</div></div>")
+                f"<div style='font-size:16px;margin-bottom:6px'><b>{title}</b><br><span style='color:#333;font-size:14px'>{note}</span></div>"
+                f"<div style='display:flex;align-items:stretch'>{arr.join(boxes[:3])}</div>"
+                f"<div style='font-size:18px;color:#555;text-align:right;padding-right:110px'>↓</div>"
+                f"<div style='display:flex;align-items:stretch'>{arr.join(boxes[3:])}</div></div>")
     model = [box("01〜08", "研究台帳", "入力 124・算定式 53・出力 32・禁止事項"),
              box("09", "70 評価単位", "凍結した基準計算・生成器。近似 0 採用で停止"),
              box("10・11", "2 つの構造", "マスク付き積和・節点スペクトル。1,293 組で不一致 0"),
@@ -233,11 +235,11 @@ def fig_research_map():
     lane1 = lane("独立概念モデル（架空データ）", "数学的な成果はこの対象について。公開してよい", model, "#fafafa")
     lane2 = lane("J-CAT 原版（利用条件により非公開）", "件数と方法だけを公開。数式の文・値・セル番地は非公開", orig, "#f1f1f1")
     bottom = ("<div style='display:flex;gap:10px;align-items:stretch'>"
-              + box("12", "アプリの基礎", "入力変換・表示・SQLite 保存。計算は統一系", w=300)
-              + box("22", "教材（本書）", "五つの原理 P1〜P5 ＋ E で全体を学ぶ。問題 47 問", w=300, tone="#eaeaea")
-              + "<div style='font-size:12.5px;color:#333;align-self:center;width:330px'>上の帯の 2 つの構造（10・11）を、下の帯の変換（15〜19）で使った。"
-                "二つの帯の結果を混同しない（原版の式を表せることは、J-CAT と同じ結果を出すことではない）。</div></div>")
-    return f"<div style='padding:12px;background:#fff;font-family:IPAGothic;width:1130px'>{lane1}{lane2}{bottom}</div>"
+              + box("12", "アプリの基礎", "入力変換・表示・SQLite 保存。計算は統一系", w=320)
+              + box("22", "教材（本書）", "五つの原理 P1〜P5 ＋ E で全体を学ぶ。問題 47 問", w=320, tone="#eaeaea") + "</div>"
+              + "<div style='font-size:14px;color:#333;margin-top:8px;width:700px'>上の帯の 2 つの構造（10・11）を、下の帯の変換（15〜19）で使った。"
+                "二つの帯の結果を混同しない（原版の式を表せることは、J-CAT と同じ結果を出すことではない）。</div>")
+    return f"<div style='padding:12px;background:#fff;font-family:IPAGothic;width:720px'>{lane1}{lane2}{bottom}</div>"
 
 
 def build() -> dict[str, Path]:
