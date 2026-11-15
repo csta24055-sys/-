@@ -68,12 +68,12 @@ async function renderHome(m) {
 /* ---------- structure select ---------- */
 function renderStructures(m) {
   $("#title").textContent = "構造を選ぶ";
-  m.innerHTML = `<p class="muted" style="margin-top:12px">建物の主な構造を選んでください。あとから変えられます。</p>
+  m.innerHTML = `<div class="card"><label for="pname"><strong>プロジェクト名</strong>（任意）</label>
+    <input id="pname" placeholder="例：〇〇ビル" maxlength="80"></div>
+  <p class="muted">建物の主な構造を選んでください（あとから変えられます）。</p>
   <div class="structures" role="list">${state.meta.structures.map((s) => `
     <button class="structure" role="listitem" data-s="${s.id}" aria-label="${esc(s.label)}：${esc(s.desc)}">
-      <img src="${s.img}" alt=""><h3>${esc(s.label)}</h3><p>${esc(s.desc)}</p></button>`).join("")}</div>
-  <div class="card"><label for="pname"><strong>プロジェクト名</strong>（任意）</label>
-    <input id="pname" class="btn" style="width:100%;text-align:left;font-weight:400" placeholder="例：〇〇ビル" maxlength="80"></div>`;
+      <img src="${s.img}" alt=""><h3>${esc(s.label)}</h3><p>${esc(s.desc)}</p></button>`).join("")}</div>`;
   m.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => {
     const r = await api("/projects", { method: "POST", body: { structure: b.dataset.s, name: $("#pname").value.trim() } });
     await loadProject(r.id); go("hub");
@@ -131,10 +131,17 @@ function renderScreen(m, sid) {
   const pri = state.meta.priority[state.project.structure] || {};
   const extra = sid === "basic" ? `<div class="card"><h3 style="margin-top:0">住所から調べる</h3>
       <div class="edit"><input id="addr" placeholder="住所または建物名" aria-label="住所または建物名"><button class="btn small" id="btn-geo">住所を検索</button></div>
-      <div id="geo-out"></div><p class="muted">国土地理院の住所検索と、PLATEAU（国土交通省）の公開建物データを使います。候補は確認してから採用してください。</p></div>`
+      <div id="geo-out"></div><p class="muted">国土地理院の住所検索と、PLATEAU（国土交通省）の公開建物データを使います。候補は確認してから採用してください。住所は検索のときだけ国土地理院に送ります。</p></div>
+      <div class="card"><h3 style="margin-top:0">地盤（参考）</h3>
+      <p class="muted">近くのボーリング調査の記録は、国土地盤情報検索サイト（KuniJiban）で見られます。アプリは自動では取得しません。
+      見つけた地点の<strong>距離・調査年・孔番号</strong>を「近くのボーリング調査」に書き留めてください。近くの記録は敷地の地盤そのものではなく、
+      基礎の形式（直接基礎・杭・地盤改良）を決めるものでもありません。</p>
+      <div class="row"><a class="btn small" href="https://www.kunijiban.pwri.go.jp/" target="_blank" rel="noopener noreferrer">KuniJiban を開く</a>
+      <a class="btn small" href="https://www.kunijiban.pwri.go.jp/jp/terms.html" target="_blank" rel="noopener noreferrer">利用規約</a></div></div>`
     : sid === "material" ? `<div class="card"><h3 style="margin-top:0">資料を読み込む</h3>
       <p class="muted">数量表（CSV・Excel）、IFC、PDF（文字のあるもの）。読んだ数値は候補になり、原本の場所（シート・セル、部材 ID、ページ）を記録します。</p>
-      <input type="file" id="docfile" accept=".csv,.xlsx,.ifc,.pdf" aria-label="資料ファイル"><div id="doc-out"></div></div>` : "";
+      <input type="file" id="docfile" accept=".csv,.xlsx,.ifc,.pdf" aria-label="資料ファイル"><div id="doc-out"></div>
+      <p class="muted">原本は既定では保存しません（読んだ数値の候補と、ファイルの指紋だけを残します）。メーカーの BIM データは各社の利用条件（設計検討の目的に限る・使用後は消去など）に従ってください。製品の性能値（質量・冷媒量）は製造時の CO2 ではありません。</p></div>` : "";
   m.innerHTML = extra + S.groups.map((g) => {
     const fids = [...g.fields].sort((a, b) => (pri[b] || 0) - (pri[a] || 0));
     return `<div class="card group"><h3>${esc(g.label)}</h3>${fids.map(fieldHtml).join("")}</div>`;

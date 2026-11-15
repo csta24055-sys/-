@@ -44,19 +44,21 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 120px; }
 .card.lift { margin-top: -36px; position: relative; }
 .btn { min-height: var(--tap); padding: 10px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-weight: 600; cursor: pointer; }
 .btn.primary { background: var(--wood); color: #fff; border-color: var(--wood); width: 100%; font-size: 1.1rem; }
-.btn.small { min-height: 40px; padding: 6px 12px; font-size: .9rem; }
+.btn.small { min-height: 44px; padding: 6px 12px; font-size: .9rem; }
+a.btn { display: inline-flex; align-items: center; text-decoration: none; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .muted { color: var(--muted); font-size: .9rem; }
 .notice { border-left: 4px solid var(--s-stat); padding: 8px 12px; background: var(--card); font-size: .9rem; margin: 12px 0; }
 .notice.bad { border-color: var(--s-bad); }
 
-.structures { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 12px; }
-.structure { flex: 0 0 72%; max-width: 260px; scroll-snap-align: start; text-align: left; background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 12px; cursor: pointer; color: var(--ink); }
-.structure img { width: 100%; height: 130px; object-fit: contain; background: #f2efe9; border-radius: 10px; }
-.structure h3 { margin: 8px 0 2px; font-size: 1.2rem; }
-.structure p { margin: 0; color: var(--ink2); font-size: .9rem; }
-@media (min-width: 720px) { .structure { flex: 1 1 0; } }
+.structures { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 0 12px; }
+.structure { text-align: left; background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 10px; cursor: pointer; color: var(--ink); min-height: var(--tap); }
+.structure img { width: 100%; height: 96px; object-fit: contain; background: #f2efe9; border-radius: 10px; }
+.structure h3 { margin: 6px 0 2px; font-size: 1rem; line-height: 1.35; }
+.structure p { margin: 0; color: var(--ink2); font-size: .82rem; line-height: 1.45; }
+.structure:hover, .structure:focus-visible { border-color: var(--wood); }
+@media (min-width: 720px) { .structures { grid-template-columns: repeat(4, 1fr); } .structure img { height: 120px; } }
 
 .hub { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .hub-btn { min-height: 120px; border: 0; border-radius: 18px; color: #fff; font-size: 1.25rem; font-weight: 700; text-align: left; padding: 14px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
