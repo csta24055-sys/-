@@ -1,6 +1,6 @@
 # S1不足一覧（チャット1,000候補の取込み後・機械生成）
 
-生成時刻（UTC）：2026-11-15T15:48Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
+生成時刻（UTC）：2026-11-15T15:49Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
 
 > RESEARCH_STATUS = INCOMPLETE。S1未通過のためS2以降の分析・正式成果物には進まない。
 
@@ -30,7 +30,7 @@
 | 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 22 |
 
 - 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1802** 回。1ターンの検索上限（全作業員共有で200回）に対し、約10ターン分。
-- 必要なページ読了：未判定のチャット候補の割当て 1150 件（重複を除くURL 799 件）。読了は検索上限を消費しない。
+- 必要なページ読了：未判定のチャット候補の割当て 1143 件（重複を除くURL 794 件）。読了は検索上限を消費しない。
 - 462件（旧予定タスクの未達数）は採用証拠の必要件数ではない。上の不足（ルート・旧ID・競合項目）を満たす分だけ新規に調査し、必要ならそれ以上集める。
 
 ### 競合（80）
@@ -55,7 +55,7 @@
 | AXIS_01_T06 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_01_T07 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_01_T08 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_02_T01 | 完了 | — | FOUND | FOUND | FOUND | 3/2/2 | 17/20 | YES | 20/2 |
+| AXIS_02_T01 | 完了 | — | FOUND | FOUND | FOUND | 3/2/2 | 19/24 | YES | 18/2 |
 | AXIS_02_T02 | 完了 | — | FOUND | FOUND | FOUND | 2/2/2 | 3/5 | YES | 16/1 |
 | AXIS_02_T03 | 完了 | — | FOUND | FOUND | FOUND | 3/2/2 | 15/18 | YES | 16/5 |
 | AXIS_02_T04 | 完了 | — | FOUND | FOUND | FOUND | 4/2/2 | 18/20 | YES | 18/4 |
@@ -78,7 +78,7 @@
 | AXIS_04_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 8/13 | YES | 13/0 |
 | AXIS_04_T06 | 完了 | — | FOUND | FOUND | FOUND | 2/1/2 | 12/16 | YES | 19/0 |
 | AXIS_04_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 10/10 | YES | 19/0 |
-| AXIS_04_T08 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 11/13 | YES | 23/0 |
+| AXIS_04_T08 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 13/15 | YES | 23/0 |
 | AXIS_05_T01 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 17/18 | YES | 12/4 |
 | AXIS_05_T02 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_05_T03 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -97,20 +97,20 @@
 | AXIS_06_T08 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
 | AXIS_07_T01 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 6/8 | YES | 16/0 |
 | AXIS_07_T02 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 11/13 | YES | 19/0 |
-| AXIS_07_T03 | 完了 | — | FOUND | FOUND | FOUND | 0/2/1 | 11/11 | YES | 21/0 |
+| AXIS_07_T03 | 完了 | — | FOUND | FOUND | FOUND | 0/2/1 | 11/11 | YES | 20/0 |
 | AXIS_07_T04 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 11/11 | YES | 20/1 |
-| AXIS_07_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 9/11 | YES | 18/0 |
+| AXIS_07_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 9/11 | YES | 17/0 |
 | AXIS_07_T06 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 7/7 | YES | 17/1 |
 | AXIS_07_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/3/1 | 7/10 | YES | 16/0 |
 | AXIS_07_T08 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 5/5 | YES | 15/0 |
-| AXIS_08_T01 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 9/15 | YES | 20/0 |
+| AXIS_08_T01 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 10/17 | YES | 18/0 |
 | AXIS_08_T02 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 9/11 | YES | 19/0 |
 | AXIS_08_T03 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 6/9 | YES | 18/0 |
 | AXIS_08_T04 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 7/7 | YES | 18/1 |
 | AXIS_08_T05 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 7/7 | YES | 19/0 |
 | AXIS_08_T06 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 5/8 | YES | 16/0 |
 | AXIS_08_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 5/6 | YES | 8/0 |
-| AXIS_08_T08 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 5/6 | YES | 4/0 |
+| AXIS_08_T08 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 5/6 | YES | 3/0 |
 | AXIS_09_T01 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 8/8 | YES | 10/0 |
 | AXIS_09_T02 | 完了 | — | FOUND | FOUND | FOUND | 1/1/2 | 9/10 | YES | 5/0 |
 | AXIS_09_T03 | 完了 | — | FOUND | FOUND | FOUND | 1/1/2 | 7/7 | YES | 4/0 |
@@ -153,7 +153,7 @@
 | AXIS_13_T08 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
 | AXIS_14_T01 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
 | AXIS_14_T02 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/10 | NO | 0/0 |
-| AXIS_14_T03 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 12/12 | NO | 6/0 |
+| AXIS_14_T03 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 13/14 | NO | 6/0 |
 | AXIS_14_T04 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 13/14 | NO | 2/0 |
 | AXIS_14_T05 | 未完 | Q1,Q2,Q3,Q4 | ATTEMPTED_INSUFFICIENT | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
 | AXIS_14_T06 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
@@ -178,10 +178,10 @@
 | AXIS_17_T01 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 16/19 | YES | 20/3 |
 | AXIS_17_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
 | AXIS_17_T03 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
-| AXIS_17_T04 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 5/6 | NO | 0/0 |
-| AXIS_17_T05 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/14 | NO | 0/0 |
-| AXIS_17_T06 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/10 | NO | 0/0 |
-| AXIS_17_T07 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/12 | NO | 0/0 |
+| AXIS_17_T04 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
+| AXIS_17_T05 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 10/16 | NO | 0/0 |
+| AXIS_17_T06 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 10/13 | NO | 0/0 |
+| AXIS_17_T07 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 11/14 | NO | 0/0 |
 | AXIS_17_T08 | 未完 | Q1,Q2,Q3,Q4 | FOUND | FOUND | FOUND | 0/0/0 | 9/9 | YES | 45/5 |
 | AXIS_18_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/3 | NO | 0/0 |
 | AXIS_18_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/2 | NO | 0/0 |
@@ -191,8 +191,8 @@
 | AXIS_18_T06 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_18_T07 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_18_T08 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_19_T01 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/10 | NO | 0/0 |
-| AXIS_19_T02 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 7/8 | NO | 0/0 |
+| AXIS_19_T01 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 11/14 | NO | 0/0 |
+| AXIS_19_T02 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 11/13 | NO | 0/0 |
 | AXIS_19_T03 | 未完 | Q1,Q2,Q3,Q4 | ATTEMPTED_INSUFFICIENT | NO | NO | 0/0/0 | 0/0 | NO | 2/0 |
 | AXIS_19_T04 | 未完 | Q1,Q2,Q3,Q4 | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/1 | NO | 0/0 |
 | AXIS_19_T05 | 未完 | Q1,Q2,Q3,Q4 | ATTEMPTED_INSUFFICIENT | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -385,7 +385,7 @@
 | ID | 名称 | 優先 | 状態 | 公式確認 | 公式ページ読了 | 反証 | 未記録の項目・理由 | チャット候補 |
 |---|---|---|---|---|---|---|---|---|
 | C001 | Adobe Acrobat AI Assistant | P0 | 完了 | YES | 4（遮断9） | YES | — | 14 |
-| C002 | Gamma | P0 | 完了 | YES | 7（遮断4） | YES | — | 20 |
+| C002 | Gamma | P0 | 完了 | YES | 8（遮断4） | YES | — | 20 |
 | C003 | Microsoft Copilot PowerPoint | P0 | 完了 | YES | 17（遮断0） | YES | — | 17 |
 | C004 | Google Slides Gemini | P0 | 完了 | YES | 8（遮断1） | YES | — | 14 |
 | C005 | Gemini Notebook / NotebookLM | P0 | 完了 | YES | 14（遮断2） | YES | — | 14 |
