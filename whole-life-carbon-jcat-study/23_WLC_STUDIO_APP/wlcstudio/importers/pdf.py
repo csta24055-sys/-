@@ -20,8 +20,12 @@ UNITS = r"(m3|㎥|m³|m2|㎡|m²|t|kg|本|台|基|個|箇所|m|ｍ|ｔ)"
 # "name … number unit": the unit ends the token ("120 ㎥" at the end of a line counts: ㎥ ㎡ m³ are not word characters,
 # so \b would fail). The name starts with a non-digit and may hold digits after that (鉄筋 D13, コンクリート Fc24); the
 # FIRST "number unit" after it is the quantity. An item number before the name ((1), 1., 1)) is not part of it.
-LINE = re.compile(r"^(?:(?:\(\d{1,3}\)|\d{1,3}[.)])\s*)?(?P<name>[^\d\s].{0,60}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*"
+# A bare item number (1   コンクリート …) and a floor label at the start of the name (3F slab concrete, B1F, 2階) are
+# allowed. After a match, the rest of the line is read again: a two-column schedule holds two items on one line.
+LINE = re.compile(r"^(?:(?:\(\d{1,3}\)|\d{1,3}[.)]|\d{1,4}(?=\s))\s*)?"
+                  r"(?P<name>(?:(?:[BRbr]?\d{1,2}[Ff]|\d{1,2}階)\s*)?[^\d\s].{0,60}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*"
                   r"(?P<u>" + UNITS + r")(?![A-Za-z0-9])")
+MAX_PER_LINE = 8
 # a number with a quantity unit somewhere on a line that LINE did not read: listed, not dropped silently
 LOOSE = re.compile(r"(?<![A-Za-z0-9.,])-?\d[\d,]*(?:\.\d+)?\s*(?:m3|m2|t|kg)(?![A-Za-z0-9])")
 # enclosed numbers (①, ⑴, ⒈, ㉑ …) are item marks: kept as they are (NFKC would make ① a digit of the name)
@@ -72,18 +76,24 @@ def read(data: bytes, doc_id: str, max_pages: int = 200) -> dict:
             pages.append({"page": i, "has_text": has_text, "n_chars": len(t)})
             for k, ln in enumerate(t.splitlines(), 1):
                 ln = norm_line(ln.strip()[:500])
-                mm = LINE.search(ln)
-                if not mm and LOOSE.search(ln):
-                    refused.append({"name": ln[:80], "trace": "%s:p%d/L%d" % (doc_id, i, k),
-                                    "reason": "名前と数量の並びを読めなかった行（原本で確かめて、必要なら手で入れる）"})
-                if mm:
+                rest, j = ln, 0
+                while rest and j < MAX_PER_LINE:
+                    mm = LINE.search(rest)
+                    if not mm:
+                        break
+                    j += 1
+                    trace = "%s:p%d/L%d%s" % (doc_id, i, k, "" if j == 1 else "-%d" % j)
                     q, why = number_or_reason(mm.group("q"))
                     if q is None:            # e.g. "1,5": refused like on the screen, and said
-                        refused.append({"name": mm.group("name").strip()[:80], "trace": "%s:p%d/L%d" % (doc_id, i, k),
+                        refused.append({"name": mm.group("name").strip()[:80], "trace": trace,
                                         "reason": "数量 %r を読めない（%s）" % (mm.group("q")[:30], why)})
-                        continue
-                    cands.append({"name": mm.group("name").strip(), "quantity": q, "unit": mm.group("u"),
-                                  "trace": "%s:p%d/L%d" % (doc_id, i, k), "line": ln.strip()[:120], "needs_review": True})
+                    else:
+                        cands.append({"name": mm.group("name").strip(), "quantity": q, "unit": mm.group("u"),
+                                      "trace": trace, "line": ln.strip()[:120], "needs_review": True})
+                    rest = rest[mm.end():].strip()
+                if rest and LOOSE.search(rest):
+                    refused.append({"name": rest[:80], "trace": "%s:p%d/L%d" % (doc_id, i, k),
+                                    "reason": "名前と数量の並びを読めなかった行（原本で確かめて、必要なら手で入れる）"})
     no_text = [pg["page"] for pg in pages if not pg["has_text"]]
     return {"format": "pdf", "n_pages": n, "pages": pages, "candidates": cands, "refused": refused, "pages_without_text": no_text,
             "note": "PDF の文字から読んだ候補。寸法・合計・参照番号を拾うことがあるので、必ず原本で確認して採用する。"

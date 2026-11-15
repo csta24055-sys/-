@@ -352,8 +352,11 @@ class App:
                                    {"parsed": r["parsed_summary"], "n_proposals": len(good), "unused": r["unused"][:200],
                                     "warnings": r["warnings"]})
         for v in good:
-            self.projects.propose(pid, v, "document:" + doc_id)
+            self.projects.propose(pid, v, "document:" + doc_id, extra=(r.get("evidence") or {}).get(v.field_id))
         summary = "「%s」（%s）から %d 件の候補を作った。使わなかった行 %d 件。" % (name, r["kind"], len(r["proposals"]), len(r["unused"]))
+        maybe = sum((r.get("evidence") or {}).get(v.field_id, {}).get("n_maybe", 0) for v in good)
+        if maybe:
+            summary += "足さなかった行のうち %d 行は、足すべき行かもしれない（各候補の「足さなかった行」で理由を確かめる）。" % maybe
         shown = r["unused"][:200]
         unused = ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in shown]
         if len(r["unused"]) > len(shown):

@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS runs (
 """
 
 
+EVIDENCE_KEYS = ("rows", "n_rows", "excluded", "n_excluded", "n_maybe")   # shown with a candidate, never part of a value
+
 class ProjectError(ValueError):
     pass
 
@@ -180,7 +182,10 @@ class Projects:
         return v
 
     # ------------------------------------------------------------------ candidates
-    def propose(self, pid: int, v: Value, origin: str) -> int:
+    def propose(self, pid: int, v: Value, origin: str, extra: dict | None = None) -> int:
+        """Store a candidate. `extra` is shown with it and dropped when it is accepted (a document's candidate carries
+        the rows it added and the rows of the same material it did not add: {rows, n_rows, excluded, n_excluded,
+        n_maybe})."""
         F = FL.FIELDS.get(v.field_id)
         if F is None:
             raise ProjectError("項目 %r は無い" % v.field_id)
@@ -197,8 +202,12 @@ class Projects:
                 # an estimate of the same method on other premises (floor area, structure, use changed): the old one is
                 # out of date, whatever its number, and must not stay next to the new one as if both were valid
                 self.db.execute("UPDATE candidates SET status='dismissed' WHERE id=?", (c["id"],))
+        payload = v.to_json()
+        for k, x in (extra or {}).items():
+            if k in EVIDENCE_KEYS:
+                payload[k] = x
         cur = self.db.execute("INSERT INTO candidates (project_id, field_id, payload, origin, created_at) VALUES (?,?,?,?,?)",
-                              (pid, v.field_id, _j(v.to_json()), origin, time.time()))
+                              (pid, v.field_id, _j(payload), origin, time.time()))
         self.db.commit()
         return cur.lastrowid
 
@@ -235,6 +244,8 @@ class Projects:
             c = dict(cs[index])
         cid = c.pop("id")
         origin = c.pop("origin")
+        for k in EVIDENCE_KEYS:
+            c.pop(k, None)
         other = {("m_concrete", "whole_building"): "m_concrete_fdn", ("m_rebar", "all_steel"): "m_steel",
                  ("m_steel", "all_steel"): "m_rebar"}.get((fid, c.get("scope") or ""))
         if other and competes(self.current(pid, other)):
