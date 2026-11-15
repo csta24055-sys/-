@@ -1,0 +1,129 @@
+{
+  "entries": [
+    {
+      "id": "A-1-1",
+      "category": "A",
+      "name": "MATLAB（MathWorks。デスクトップ版 / MATLAB Online）",
+      "official_url": "https://www.mathworks.com/products/matlab.html",
+      "what": "数値計算・行列演算・可視化・アルゴリズム開発の統合環境。MATLAB Online はブラウザで動き、インストール不要。MATLAB Drive（無料5GB、ライセンス付きなら20GB）にファイルを保存し、GitHub・File Exchange・OneDrive・Amazon S3 と連携する。",
+      "users": "工学系・理学系の教員、大学院生、学部生（授業・演習）、企業の研究開発エンジニア。",
+      "layout_navigation": "上部のツールストリップ（Home / Plots / Apps などのタブ）、Files パネル（ファイル操作）、Workspace パネル（作った変数や読み込んだデータの一覧）、Command Window（>> プロンプト）、サイドバー（ドッキングしたツールや追加パネル）からなる多ペイン構成。Live Script と Apps には、ほかのデスクトップ要素を隠して全画面で表示する Focused View がある。",
+      "visual_traits": "（公式ドキュメントの文章で確認した範囲）タブ式ツールストリップでコマンドを機能グループにまとめ、ペインを並べて情報を詰め込む。配色・フォント・アイコンの細部はこのセッションで画面画像を見ておらず、ここに書くのは事前知識による推測：白〜淡いグレー地に青系のアクセント、等幅フォントのコード領域、小型のモノクロ寄りアイコン。",
+      "ux_strengths": "変数をすぐに確認できる（Workspace パネル）。コマンド入力と GUI 操作を併用できる。Live Script でコード・出力・説明文を1つの文書にまとめられ、計算の根拠が残る。Focused View で作業内容に集中できる。ブラウザ版は環境構築が不要で、授業や学生の導入コストが低い。",
+      "weaknesses": "パネルとツールストリップのボタンが多く、初学者の学習負荷が大きい（一般的な評価で、本セッションでは未検証）。ライセンス費用と Toolbox ごとの機能差がある。MATLAB Online は計算資源（vCPU 数、16GB メモリ）とストレージの上限に制約される。",
+      "adopt": "(1) 現在の変数・入力パラメータを常に見られる「ワークスペース」型サイドパネル（Math IR の中間変数・LCA 係数の一覧表示に応用）。(2) コマンド入力と GUI フォームの二重入力経路（上級者は式を直接入力、学部生はフォーム入力）。(3) コード・数式・結果・説明を1文書にまとめる Live Script 型のレポート（計算根拠の追跡と再現性）。(4) 作業内容だけを全画面表示する集中モード。(5) Git 連携とファイルストレージ連携。",
+      "avoid": "機能を大量に詰め込んだ多段タブ式ツールストリップをそのまま採ること（研究室内部アプリでは操作を絞るべき）。Toolbox の有無で機能が出たり消えたりして、利用者が混乱する構成。商用製品固有の配色・アイコン・レイアウトの複製。",
+      "reference_links": [
+        "https://www.mathworks.com/products/matlab-online.html",
+        "https://www.mathworks.com/help/matlab/learn_matlab/desktop.html"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "MATLAB Online 製品ページ（機能・ストレージ・連携・Focused View）と、ヘルプ『desktop』ページ（ツールストリップ / Files / Workspace / Command Window / サイドバーの構成）を WebFetch で取得した。画面画像は見ていないため、配色・フォント・アイコンの記述は事前知識による推測。パネル配置の変更方法は取得ページに記載がなかった。"
+    },
+    {
+      "id": "A-1-2",
+      "category": "A",
+      "name": "JupyterLab（Project Jupyter）",
+      "official_url": "https://jupyter.org/",
+      "what": "ブラウザで動くオープンソースの対話型計算環境。ノートブック（コード・出力・Markdown）、テキストエディタ、ターミナル、コンソールをタブとパネルで並べて使える。拡張機能で機能を追加できる。",
+      "users": "データ解析を行う大学院生、研究者、学部生（授業）、データサイエンティスト。Python（SymPy 等）利用者との相性が良い。",
+      "layout_navigation": "中央のメイン作業領域にドキュメントやアクティビティをタブで開き、タブを中央や端へドラッグすると、サイズ変更できるパネルに分割できる。作業中のタブは上辺の色付きボーダーで示される。左サイドバー（折りたたみ可）には、ファイルブラウザ、開いているタブと稼働中のカーネル・ターミナルの一覧、コマンドパレット、目次、拡張機能マネージャーがある。右サイドバー（折りたたみ可）には、プロパティインスペクターとデバッガーがある。上部メニューは File / Edit / View / Run / Kernel / Tabs / Settings / Help。コマンドパレットは v3.0 以降モーダル表示。Simple Interface モードでは、ほかを閉じずに1つのドキュメントだけを表示できる。",
+      "visual_traits": "（ドキュメント本文で確認した範囲）作業中のタブは上辺の色付きボーダーで示される。それ以外の配色・フォント・余白・アイコンは画面画像を見ておらず、事前知識による推測：明るい背景と細い区切り線、控えめな青系アクセント、ダークテーマあり、セル左側の実行番号表示。",
+      "ux_strengths": "自由にパネルを分割して、データ・コード・グラフを並べて比較できる。コマンドパレットで全コマンドをキーボードから呼び出せる。目次パネルで長いノートブックを移動できる。Simple Interface で集中モードに切り替えられる。拡張機能で研究室固有の機能を追加できる。",
+      "weaknesses": "セルの実行順序が自由なため、隠れた状態が生じて再現性が損なわれやすい（一般的に知られた課題で、本セッションでは未検証）。カーネル管理や環境構築の概念が学部生には難しい。大量の表データを閲覧・編集する UI は標準では弱い。",
+      "adopt": "(1) 分割可能な多パネル作業領域（入力条件・計算結果・グラフを並べて比較）。(2) キーボード中心のコマンドパレット（少ない操作で全機能を呼び出せる）。(3) 左に資源（ファイル・目次・実行中ジョブ）、右に選択対象のプロパティ、という役割の明確なサイドバー分担。(4) 作業中タブの明確な強調表示。(5) 単一ドキュメントの集中表示モード。",
+      "avoid": "実行順序を自由にしすぎて、計算の依存関係が不透明になる設計（Math IR パイプラインでは依存グラフと実行履歴を明示すべき）。カーネルなどの実装概念を利用者にそのまま見せる UI。",
+      "reference_links": [
+        "https://jupyter.org/",
+        "https://jupyterlab.readthedocs.io/en/stable/user/interface.html"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "JupyterLab 公式ドキュメント『The JupyterLab Interface』（readthedocs）を WebFetch で取得し、メイン作業領域、左右サイドバー、メニューバー、タブ、コマンドパレット、Simple Interface モードを確認した。ステータスバーは取得ページに記載がなかった。jupyter.org トップは今回開いていない（公式トップ URL として記載）。配色等は事前知識による推測。"
+    },
+    {
+      "id": "A-1-3",
+      "category": "A",
+      "name": "Origin / OriginPro（OriginLab Corporation）",
+      "official_url": "https://www.originlab.com/",
+      "what": "科学技術向けのデータ解析・グラフ作成ソフト（Windows デスクトップ）。ワークブック / ワークシートにデータを保持し、グラフウィンドウで出版品質の図を作る。OriginPro では高度な解析（ピークフィット・信号処理・統計など）が追加される。",
+      "users": "物理・化学・材料・工学系の研究者、大学院生（論文図の作成）、企業の研究開発部門。",
+      "layout_navigation": "Project Explorer（プロジェクトをフォルダ構造で表示）で、ワークブック・グラフ・マトリクスなどの子ウィンドウを管理する。各フローティングウィンドウには Object Manager パネルがある。選択した対象（グラフ・ワークシート・マトリクス）に応じて変わるミニツールバーを表示する。解析ダイアログは後から開き直して設定を変え、再計算できる。GUI モードは4種類、ダークモードあり。",
+      "visual_traits": "（公式ページ本文で確認した範囲）ダークモード、4種類の GUI モード、フローティングウィンドウ、文脈依存のミニツールバー。配色・アイコン・余白の具体的な見た目は画面画像を見ておらず、事前知識による推測：Windows 伝統型の多数ツールバーと MDI 風の子ウィンドウで、情報密度は高い。",
+      "ux_strengths": "入力データが変わると（再インポート時など）結果・グラフ・レポートが自動更新される（再計算・自動更新）。解析ダイアログを開き直してパラメータを変えられ、解析をやり直さずに済む。30以上の形式（CSV / Excel / HDF5 / NetCDF / DB）をインポートでき、ドラッグ＆ドロップで取り込み、元ファイルから再インポートできる。データコネクタは接続設定をワークシートに保存する。Excel がなくても Excel ファイルを取り込める。グラフ画像からデータを抽出する Digitizer。ミニツールバーで、ダイアログを開かずに主要な設定を変えられる。",
+      "weaknesses": "機能が非常に多く、メニューやダイアログが深い階層になる（一般的な評価で、本セッションでは未検証）。Windows 中心で macOS 対応は限定的（事前知識）。有償ライセンス。",
+      "adopt": "(1) 入力データ → 解析 → グラフ・レポートの依存関係を保持し、元データが変わると自動で再計算する仕組みと、「再計算が必要」を示す状態表示。(2) 解析条件を後から開き直して編集できる（計算条件の追跡と再利用）。(3) 元ファイルへのリンクを保持した再インポート（CSV / Excel 連携）。(4) 選択対象に応じた文脈依存ツールバー（少ない操作）。(5) 多形式インポートと Excel なしでの取り込み。",
+      "avoid": "多数の固定ツールバーと深いダイアログ階層。子ウィンドウが散らばるウィンドウ管理（ブラウザアプリではタブやパネルで代替する）。製品固有の UI の複製。",
+      "reference_links": [
+        "https://www.originlab.com/",
+        "https://www.originlab.com/index.aspx?go=Products/Origin"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "OriginLab 公式の Origin 製品ページを WebFetch で取得した。本文が長く、前半 100,000 文字のみ解析（後半は未読）。ワークブック / グラフ / Project Explorer / Object Manager / ミニツールバー / 解析ダイアログの再編集 / 自動再計算 / インポート形式 / データコネクタを確認した。エクスポートの詳細は見出しのみ。画面の見た目は推測。"
+    },
+    {
+      "id": "A-1-4",
+      "category": "A",
+      "name": "LabArchives（電子実験ノート ELN。Dotmatics 傘下）",
+      "official_url": "https://www.labarchives.com/",
+      "what": "クラウド型の電子実験ノート（ELN）。研究データを記録・整理・検索・共有する。ノートブックはページ単位で、カスタムテンプレート、化学構造の描画、画像注釈、DNA ファイルの閲覧（SnapGene 連携）を備える。関連製品に Inventory（試料・資源の管理）と Scheduler（機器・部屋の予約）がある。",
+      "users": "大学・研究機関（中核市場）の PI・研究員・大学院生。授業向けの ELN for Education。企業や政府機関（FedRAMP 認証版）も対象。",
+      "layout_navigation": "ノートブック → フォルダ → ページ → エントリーの階層構造で、フォルダツリーでナビゲーションする。ページ上部に New Entry ツールバーと Page Tools がある（Page Tools → View revisions でページの全変更履歴を開く）。各エントリーのツールバーのメニューから、そのエントリーの履歴表示・復元ができる。ウィジェットもエントリーの一種。",
+      "visual_traits": "画面画像はこのセッションで見ていない。ヘルプの検索結果から確認できたのは、過去版を表示中であることを示す青いバナーと、older / newer の切替操作のみ。その他の配色・フォント・アイコンは未確認（推測を避けて記載しない）。",
+      "ux_strengths": "全エントリーに完全な変更履歴があり、任意の版に戻せる（再現性と監査）。ページ単位でも全変更ログを時系列にたどれる。過去版の表示中であることを明確にバナーで示す。テンプレートで記録形式を標準化できる。共有・同時編集・活動追跡ができる。教育版で学部生の実習にも使える。",
+      "weaknesses": "フォルダ / ページの自由な階層は研究室ごとに整理がばらつきやすく、構造化データ（表・数値）の集計・比較には向きにくい（一般的な ELN の課題で、本セッションでは未検証）。メニューのラベルが版によって異なるとの記述が大学ガイドにある。",
+      "adopt": "(1) エントリー単位の改訂履歴と「この版に戻す」操作（計算条件・入力データの変更履歴）。(2) 過去版を表示中であることを示す明確な状態バナーと、前後の版の切替。(3) 研究室で共有するテンプレート（実験条件・測定記録の標準化）。(4) 教授（Notebook Owner / Admin）・院生・学部生の権限差（テンプレートやウィジェットの管理は管理者だけ）。(5) 機器予約・試料管理との連携という発想。",
+      "avoid": "自由すぎるフォルダ階層だけに頼る整理（タグ・メタデータ・検索と併用すべき）。数値データを非構造の添付ファイルとして埋もれさせる設計。",
+      "reference_links": [
+        "https://www.labarchives.com/",
+        "https://help.labarchives.com/hc/en-us/sections/16360685241364-Creating-and-Organizing-Notebooks",
+        "https://help.labarchives.com/hc/en-us/articles/24201701503252-2024-Feature-Releases"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップ（labarchives.com）を WebFetch で取得し、製品概要・対象ユーザー・関連製品を確認した。改訂履歴（Page Tools → View revisions、青いバナー、Revert to this version、Widget Manager）は WebSearch の検索結果要約（公式ヘルプセンターと大学ガイド）による確認で、ヘルプ記事本体は開いていない。reference_links の help.labarchives.com 2件は検索結果に表示された URL で、内容は未取得。画面の見た目は未確認。"
+    },
+    {
+      "id": "A-1-5",
+      "category": "A",
+      "name": "Benchling（Benchling Notebook / R&D Cloud）",
+      "official_url": "https://www.benchling.com/",
+      "what": "ライフサイエンス研究開発向けのクラウドプラットフォーム。Notebook（ELN）、Registry（生体分子・細胞株・試薬などのエンティティ登録）、Results（スキーマ定義された結果データ）、Warehouse（SQL 分析用）などを統合している。",
+      "users": "バイオテク・製薬企業の研究者、学術研究室（アカデミック版）、データ管理者・管理者（スキーマやテンプレートの設計）。",
+      "layout_navigation": "取得した製品ページには画面構成の説明がなかった。確認できたのは、エントリーにテンプレート・スキーマ・試料と結果へのリンクがあること、共同編集・タグ付け・コメント・タスク割当ができること、ロールベースの権限があることまで。ヘルプ（検索結果の題名）には『Standardize data capture with structured tables』『Capture data with Results』『Configure Result schemas』がある。",
+      "visual_traits": "このセッションでは画面画像も UI 記述も確認できていない（製品ページに UI 記述なし、ヘルプ記事は 403）。見た目の特徴は記載しない。",
+      "ux_strengths": "スキーマで結果表の列・単位を定義し、チーム全体でデータの一貫性を保てる（設定画面で単位を表示）。テンプレートと SOP で記録を標準化できる。結果を試料やエンティティにリアルタイムでリンクでき、データの出所を追跡できる。監査証跡と電子署名（21 CFR Part 11 対応）。過去エントリーの高度な検索。レビュー済みエントリーの結果だけを分析用ビューに出す（Warehouse の cleaned views）。",
+      "weaknesses": "企業向けの設計で、スキーマやテンプレートの設計に管理者の労力が要る。小規模な研究室には過剰になり得る（推測）。ヘルプの一部はログインやアクセス制限があり、外部から確認できなかった。",
+      "adopt": "(1) スキーマ（列定義・単位・型）で入力表を構造化し、入力時に検証する（数値入力の正確性と異常値の検出）。(2) 結果と入力データ・試料・計算条件を双方向にリンクする（計算根拠の追跡）。(3) レビュー済みかどうかで、分析に使うデータを区別する（教授の承認フロー）。(4) テンプレートで実験・計算の手順を標準化する。(5) 監査証跡（誰が・いつ・何を変えたか）。",
+      "avoid": "企業の規制対応を前提とした重い承認フローや署名を、研究室内部アプリへ必須として持ち込むこと（任意機能にとどめる）。最初から大規模なスキーマ設計を利用者に強いる構成。",
+      "reference_links": [
+        "https://www.benchling.com/",
+        "https://www.benchling.com/notebook",
+        "https://help.benchling.com/hc/en-us/articles/9684194769421",
+        "https://docs.benchling.com/docs/wh-results-runs"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "Benchling Notebook 製品ページ（benchling.com/notebook）を WebFetch で取得し、テンプレート・スキーマ・リンク・共同編集・監査・Part 11 を確認した。ページに UI 記述はなかった。ヘルプ記事『Standardize data capture with structured tables』は WebFetch すると 403 で本文を確認できず、検索結果に URL と題名が出たのみ。Warehouse の raw / cleaned views や結果スキーマの単位表示は検索結果の要約による。画面の見た目は未確認。"
+    },
+    {
+      "id": "A-1-6",
+      "category": "A",
+      "name": "GraphPad Prism（GraphPad by Dotmatics）",
+      "official_url": "https://www.graphpad.com/",
+      "what": "生物医学系を中心とした統計解析とグラフ作成のソフト。目的別の8種類のデータ表（XY / Column / Grouped / Contingency / Survival / Parts of whole / Multiple variables / Nested）から始めて、適切な検定・回帰とグラフに導く。Prism Cloud で共有できる。",
+      "users": "生命科学・医学・薬学の研究者、大学院生、統計の専門家ではない実験系研究者。",
+      "layout_navigation": "左の Navigator に、プロジェクトの5セクション（Data tables / Info / Results / Graphs / Layouts）が固定で並ぶ。各セクションに最大500シートを置ける。利用者はフォルダを追加できない。セクション名をクリックするとサムネイルのギャラリーが開く。Navigator 下部の Family には、現在のシートに関連するシート（データ・結果・グラフ・レイアウト）がまとまって表示され、結果は元データの下にインデントされる。Prism 8.2 以降は、Data と Results を1つのフォルダに統合し、結果を元データ表の下に入れ子で表示する形も選べる。凍結（frozen）された結果・グラフはシート名がイタリック表示になる。",
+      "visual_traits": "（ユーザーガイドの検索結果で確認した範囲）凍結シートのイタリック表示、セクションのサムネイルギャラリー、旧版では結果シートを赤いグリッドで表示し読み取り専用を示していた。現行版の配色・アイコンは画面画像を見ておらず未確認。",
+      "ux_strengths": "データ表の型を最初に選ばせ、適切な解析だけを提示する（入力支援と誤用の防止）。データや解析の選択を変えると、結果とグラフが自動更新される。各解析に統計的仮定のチェックリストがあり、P 値だけでなく効果量と信頼区間を出す。多重比較の『星』がグラフ上で解析と連動して更新される。結果の一部をライブリンクとしてグラフやレイアウトに貼れる。Family で関連シートをすぐたどれる。投稿規定に合わせたエクスポート（形式・解像度・色空間）と PowerPoint / Word への送信。CSV / PNG / JSON などのオープン形式に対応。",
+      "weaknesses": "Navigator にフォルダを作れないため、大規模プロジェクトの整理に限界がある（公式ガイドに『大規模プロジェクトの移動のコツ』のページがある）。データ表の型が固定のため、型に合わないデータは変換が必要（推測）。有償ライセンス。",
+      "adopt": "(1) 『データの型 → 可能な解析 → 結果 → グラフ』を固定セクションで見せる、わかりやすい情報設計（LCA では『インベントリ → 演算子 → 影響評価結果 → 図表』に対応）。(2) 結果を元データの下に入れ子で示す Family 表示（計算根拠と使用データの追跡）。(3) 凍結（スナップショット）と自動更新の状態を視覚的に区別する（イタリック等）。(4) 解析ごとの前提条件チェックリストと、信頼区間などの不確かさの表示。(5) 投稿規定に合わせたエクスポートプリセット（論文図・PDF・CSV）。",
+      "avoid": "フォルダもタグも作れない固定構造だけにすること（大量データの検索・比較ができなくなる）。旧版のような色だけで状態を示す表現（色覚多様性への配慮として、形・テキストを併用する）。",
+      "reference_links": [
+        "https://www.graphpad.com/",
+        "https://www.graphpad.com/features",
+        "https://www.graphpad.com/guides/prism/latest/user-guide/using_prism_navigator.htm",
+        "https://www.graphpad.com/guides/prism/latest/user-guide/using_what_are_the_parts_of_a_prism_.htm"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式 Features ページ（graphpad.com/features）を WebFetch で取得し、8種類のデータ表、仮定チェックリスト、自動更新、エクスポート、Prism Cloud を確認した。Navigator の推測 URL は 404 だった。Navigator / Family / 5セクション / 凍結シートのイタリック / Data+Results の統合表示は、graphpad.com に限定した WebSearch の結果要約（Prism 11 ユーザーガイド）による確認で、該当ページ本体は開いていない。現行画面の配色は未確認。"
+    }
+  ]
+}

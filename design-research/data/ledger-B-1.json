@@ -1,0 +1,145 @@
+{
+  "entries": [
+    {
+      "id": "B-1-1",
+      "category": "B",
+      "name": "GOV.UK Design System",
+      "official_url": "https://design-system.service.gov.uk/",
+      "what": "英国政府（GDS）が提供する公共デジタルサービス向けデザインシステム。Styles（レイアウト・タイポグラフィ・色・画像）、Components（フォーム・ナビゲーション・パネル・表など）、Patterns（氏名・住所の入力、フォーム記入、アカウント作成など共通タスク）を、コード実装である GOV.UK Frontend（取得時点で v6.6.0、2026-10-15 公開）とともに提供する。他チームの調査結果を共有し重複作業を減らすことが目的。",
+      "users": "英国政府・公共機関のサービスチーム（デザイナー、開発者、コンテンツデザイナー、UXリサーチャー）。最終的な利用者は英国の一般市民全体（高齢者、障害者、デジタルに不慣れな人を含む）。",
+      "layout_navigation": "ドキュメントサイトは上部の主要ナビ（Get started / Styles / Components / Patterns / Community / Accessibility）と、各セクション内の左サイドナビで構成。Styles 配下は Page template・Layout・Spacing・Section break・Typeface・Type scale・Headings・Links・Lists 等の目次を持つ。サービス側は『1画面1問（one thing per page）』型の直線的な質問フローが代表的パターン（このパターン名・詳細は事前知識で、今回は個別ページを取得していない）。",
+      "visual_traits": "GOV.UK カラーパレットの使用が必須。用途別の『機能色（functional colours）』を Sass 関数 govuk-functional-colour(\"brand\") 等で参照し、16進値の直接コピーを禁止。brand 色は #1d70b8 相当。フォーカス色は『フォーカス中の要素を示す目的にのみ』使用、エラー・成功にも専用色。テキストと操作要素は WCAG 2.2 達成基準 1.4.3（AA）を満たす必要あり。ブランドリフレッシュ（新ブランド）対応の更新が進行中。※書体 GDS Transport や黄色の太いフォーカスリング、黒い太字ヘッダー等の見た目は事前知識に基づく記述で、今回の取得では確認していない。",
+      "ux_strengths": "色を値ではなく『意味（役割）』でトークン化しており、誤用を防ぎ長期保守に強い。フォーカス色の用途限定によりキーボード利用者が現在位置を見失いにくい。Patterns が『住所を聞く』『アカウントを作る』など市民の実タスク単位で整理され、調査知見の再利用が容易。アクセシビリティ戦略・アクセシビリティステートメントを公開し、ロードマップや今後のコンポーネントもコミュニティに公開して共同設計している。",
+      "weaknesses": "英国政府ブランド（GOV.UK）での使用を前提とし、政府外や他国では書体・ブランド要素をそのまま使えない（ライセンス上の制約がある点は事前知識）。トランザクション型（申請・手続き）サービスに最適化されており、データ可視化や研究者向けの高密度な分析画面のガイダンスは手薄（取得ページの範囲ではデータ可視化コンポーネントは確認できず）。ブランドリフレッシュの移行対応が利用側の負担になる。",
+      "adopt": "色・余白を『意味ベースのトークン』で定義し、値の直書きを禁止する運用。フォーカス表示専用色の確保。市民タスク単位のパターン集（例: 『地域の空気質を調べる』『建物のLCA結果を確認する』）として画面を設計する考え方。アクセシビリティステートメントとロードマップを公開し、透明性と長期維持の姿勢を示すこと。エラー・成功の専用色と、それを色だけに頼らずテキストでも伝える組み合わせ。",
+      "avoid": "GOV.UK の書体・王冠ロゴ・ヘッダー意匠など英国政府固有のブランド要素の模倣（公的機関の誤認を招く）。申請フロー向けの『1画面1問』を、専門家が多変量を比較する分析画面にまで機械的に適用すること。",
+      "reference_links": [
+        "https://design-system.service.gov.uk/",
+        "https://design-system.service.gov.uk/styles/colour/",
+        "https://design-system.service.gov.uk/components/",
+        "https://design-system.service.gov.uk/patterns/",
+        "https://design-system.service.gov.uk/accessibility/accessibility-strategy/",
+        "https://www.gov.uk/guidance/government-design-principles"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップページ（主要セクション、v6.6.0 リリース情報、リンク一覧）と Styles > Colour ページを WebFetch で取得。Components / Patterns / Accessibility strategy / Government design principles の URL は取得ページ内リンクとして存在を確認したが個別には開いていない。書体名、フォーカスリングの見た目、『1画面1問』パターン、ライセンス制約は事前知識による記述で、今回の取得では未確認。"
+    },
+    {
+      "id": "B-1-2",
+      "category": "B",
+      "name": "U.S. Web Design System (USWDS)",
+      "official_url": "https://designsystem.digital.gov/",
+      "what": "米国連邦政府向けデザインシステム（GSA の TTS が運営）。アクセシブルでモバイル対応の政府サイトを作るための Components、Patterns、Design tokens、Utilities（CSS ユーティリティ）、Templates（404・ドキュメントページ・ランディング・認証ページ・フォーム）を提供。取得時点の最新版は v3.14.0。NIH Library、VA、NASA Glenn、PubMed、vote.gov などで採用。",
+      "users": "米国連邦政府機関の開発者・デザイナー・調達担当（調達契約用のサンプル文言まで用意）。最終利用者は米国の一般市民と専門家（例: PubMed の研究者）。",
+      "layout_navigation": "上部主要ナビ（How to use USWDS / Design principles / Components / Patterns / Design tokens / Utilities / Templates / About）と各セクションの左サイドナビ。コンポーネントは Identifier、Site alert、Language selector、Step indicator、Process list、In-page navigation、Summary box、Data visualizations など公共サービス特有の部品を含む。サイト上部には政府公式サイトであることを示すバナーコンポーネント（Banner）がある。",
+      "visual_traits": "Design tokens は Color / Typesetting / Spacing units / Shadow / Opacity / Z-index / Flex / Order で体系化。ユーティリティクラスで余白・色・文字サイズを直接指定できる。※書体 Public Sans / Source Sans、濃紺を基調とした配色、『An official website of the United States government』バナーの文言・見た目は事前知識による記述で、今回の取得ではトークン一覧とコンポーネント名のみ確認。",
+      "ux_strengths": "設計原則が明確（Start with real user needs / Earn trust / Embrace accessibility / Promote continuity / Listen）。特に『信頼は毎回獲得する』として .gov ドメイン・HTTPS・政府サイトの明示を例示し、なりすまし防止と信頼表示を設計要件にしている。『Promote continuity』でデバイス・時間・機関をまたぐ一貫性を求めつつ『一貫性は画一性ではない』と明言。Maturity model、Performance、Sample contract language、Website standards など、長期運用・調達まで含めたガイダンスがある。Data visualizations コンポーネントがあり、統計公開系にも対応。",
+      "weaknesses": "ユーティリティクラス中心の実装は自由度が高い反面、機関ごとの見た目のばらつきや独自拡張を招きやすい（一般的な傾向としての推測）。米国の法制度（Section 508 等）を前提とした記述が多く、他国の基準への読み替えが必要（事前知識）。v2→v3 のような大型移行時に利用側の移行コストが大きい（移行ガイド v2/v3 が存在することは確認）。",
+      "adopt": "『Earn trust』の考え方：公的情報源・運営主体・データの出典を毎画面で明示し、公式性を示す識別帯（Identifier に相当するフッター情報：運営機関、問い合わせ、アクセシビリティ方針へのリンク）を設ける。Site alert（災害時・緊急時の全体告知）と Language selector を最初から組み込む。Step indicator / Process list で手続きや分析手順を可視化し、判断基準の透明性を高める。Data visualizations のガイダンスに倣い、グラフに表とテキスト代替を併置。Maturity model のような品質成熟度の自己評価を長期維持に活用。",
+      "avoid": "米国政府の公式バナーや紋章を想起させる意匠の流用（政府機関への誤認）。ユーティリティクラスの乱用で画面ごとに余白・色がばらつく実装。",
+      "reference_links": [
+        "https://designsystem.digital.gov/",
+        "https://designsystem.digital.gov/design-principles/",
+        "https://designsystem.digital.gov/components/",
+        "https://designsystem.digital.gov/design-tokens/color/",
+        "https://designsystem.digital.gov/templates/",
+        "https://designsystem.digital.gov/maturity-model/"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップページ（セクション構成、v3.14.0、コンポーネント／トークン／テンプレート一覧、採用事例）と Design principles ページを WebFetch で取得。Components / Color token / Templates / Maturity model の URL は取得ページ内リンクとして確認したが個別には開いていない。書体名・配色・公式バナーの文言と見た目、Section 508 への言及は事前知識による記述。"
+    },
+    {
+      "id": "B-1-3",
+      "category": "B",
+      "name": "デジタル庁デザインシステム（Digital Agency Design System, DADS）β版",
+      "official_url": "https://design.digital.go.jp/",
+      "what": "デジタル庁が公開する、行政機関や公共性の高い組織のウェブサイト・オンラインサービス向けデザインシステム（取得時点 v2.18.2、β版＝リビングスタンダード）。デザイン言語（基本デザイン）、UIコンポーネント、設計・実装ガイドライン、Figma デザインデータ（Figma Community）、HTML版・React版コードスニペット（GitHub / Storybook）、デザイントークン、イラスト・アイコン素材を提供。ミッションは『誰一人取り残されない、人に優しいデジタル化を。』。",
+      "users": "国・自治体などの行政機関、公共性の高い組織のサービス開発者・デザイナー・発注担当。最終利用者は日本の住民全体（高齢者、障害者、外国人住民を含む）。",
+      "layout_navigation": "サイトは『はじめに / ガイダンス / 基本デザイン / コンポーネント / リソース / お知らせ（更新履歴） / 検索』の構成。コンポーネントにはヘッダーコンテナ、ハンバーガーメニューボタン、モバイルメニュー、ドロワー、パンくず、ユーティリティリンク、言語セレクター、通知バナー、緊急時バナー（emergency-banner）などがあり、緊急情報と多言語の導線が部品として用意されている。",
+      "visual_traits": "基本デザインはカラー、タイポグラフィ、アイコン（文書構造中の位置ごとに4種の仕様）、レイアウト、リンクテキスト、余白、角の形状、エレベーションの8項目で構成。『サービスのニーズに合わせてスタイルを選択・変更してスタイルガイドを作る』方針で、固定ブランドではなくカラースキーム構築の仕組みを提供。コンポーネントページでは JIS X 8341-3:2016 と WCAG 2.2 の該当達成基準をバッジ表示（達成基準名は WAIC 訳）。※書体（Noto Sans JP 等）や具体的な配色・角丸値は今回取得していないため未確認。",
+      "ux_strengths": "各コンポーネントに関連するアクセシビリティ達成基準を明示しており、品質基準が追跡可能。日本語の公共サービスに特化（日本語タイポグラフィ・リンクテキストの扱い）。緊急時バナーや言語セレクターが標準部品で、災害時・多言語対応を最初から設計に織り込める。更新履歴をドキュメント／デザインデータ／コードスニペット別に公開しており、変更の透明性が高い。Figma・HTML・React を揃え、発注側と受注側で共通言語を持てる。",
+      "weaknesses": "β版（リビングスタンダード）のため仕様変更が頻繁で、長期維持では追従コストがかかる（更新履歴の多さから推測）。取得範囲では、データ可視化や研究・分析向けの高密度画面のガイダンスは確認できなかった。ブランドを固定しない方針のため、各組織のスタイル選択次第で品質にばらつきが出うる（推測）。",
+      "adopt": "日本語の公共向けアプリの基準として最優先で参照：JIS X 8341-3 / WCAG 2.2 の達成基準をコンポーネント単位で紐付ける管理方法、緊急時バナー（災害・高濃度汚染時の警告）、言語セレクター、リンクテキスト規則。更新履歴の分類公開（ドキュメント・デザイン・コード別）を本プロジェクトの変更記録にも採用。基本デザイン8項目（色・文字・アイコン・レイアウト・リンク・余白・角・エレベーション）をトークン設計の枠組みとして流用。",
+      "avoid": "デジタル庁・政府のロゴや『政府公式』と誤認される表現の使用（大学研究のアプリが行政サービスと誤認されるおそれ）。β版仕様の特定バージョンへの密結合（バージョン固定と差分確認の運用なしに取り込むこと）。",
+      "reference_links": [
+        "https://design.digital.go.jp/",
+        "https://design.digital.go.jp/dads/foundations/",
+        "https://design.digital.go.jp/dads/components/",
+        "https://design.digital.go.jp/dads/components/emergency-banner/",
+        "https://design.digital.go.jp/dads/webaccessibility/",
+        "https://www.figma.com/community/file/1377880368787735577"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップページ（v2.18.2、セクション構成、ミッション、更新されたコンポーネント一覧、Figma リンク）と『基本デザイン』一覧ページ（8項目、JIS X 8341-3:2016 / WCAG 2.2 バッジの説明）を WebFetch で取得。コンポーネント一覧・緊急時バナー・ウェブアクセシビリティ・Figma の URL は取得ページ内リンクとして確認したが個別には開いていない。書体・配色の具体値は未確認。"
+    },
+    {
+      "id": "B-1-4",
+      "category": "B",
+      "name": "NHS digital service manual（NHS.UK design system）",
+      "official_url": "https://service-manual.nhs.uk/design-system",
+      "what": "英国国民保健サービス（NHS）のデジタルサービス向けサービスマニュアル兼デザインシステム。一般市民とスタッフ向けに一貫性がありアクセシブルな NHS サービスを作るため、Styles / Components / Patterns をコード付きで提供（プロトタイプにも本番にも利用可、取得時点で v10）。あわせて NHS service standard、Content guide、Accessibility、Community and contribution を含む。",
+      "users": "NHS のデジタルチーム（デザイナー、開発者、コンテンツデザイナー）、医療系サービスの提供者。最終利用者は患者・家族・介護者・医療職員で、健康状態や不安を抱えた人、高齢者、学習障害のある人を含む。",
+      "layout_navigation": "サービスマニュアル全体は Service standard / Design system / Content guide / Accessibility / Community and contribution の上位区分。Design system 内は Principles、Setup（Prototyping / Production）、Design（Styles / Components / Patterns）、Update guides（フロントエンドのバージョン確認、v10 への更新）で構成。",
+      "visual_traits": "※今回は Styles ページを取得していないため、配色・書体は事前知識に基づく：NHS ブルー（#005eb8）を基調にした高コントラスト配色、Frutiger 系書体、黄色のフォーカス表示、大きめの文字と余白。これらは未確認。",
+      "ux_strengths": "10項目のデザイン原則が公共医療に即している：人を中心に据える（身体・感情・技術面を含む全人的理解）、成果を見据える（健康などの測定可能な成果）、包括性、文脈（体験全体と背後の仕組み）、信頼を守る（信頼性と安全性）、前提の検証、作って学び反復、複雑さを利用者に押し付けない、公開して透明性を高める（設計判断の説明責任）、環境を守る設計。Content guide がデザインシステムと同列に置かれ、平易な言葉による誤認防止が重視されている。",
+      "weaknesses": "NHS ブランドと英国医療制度に強く結び付いており、他組織での直接利用は不適（ブランド利用制約は事前知識）。メジャーバージョン更新（v10 など）に伴う移行ガイドが必要で、追従コストがある。取得範囲では専門家向けの高密度なデータ表示のガイダンスは確認できなかった。",
+      "adopt": "『複雑さを利用者に押し付けない』『公開して透明性を高める（設計判断を記録・公開）』『環境を守る設計』の3原則は、空気質・LCA の公共アプリに直結するため採用。健康リスクに関わる情報（例: 室内空気質の基準超過）では、平易な言葉・行動指示・根拠を併記する Content guide 型の書き方。患者と職員の双方を対象とする NHS の構図に倣い、一般利用者向けの要約と専門家向けの詳細を同一画面で段階的に開示する設計。",
+      "avoid": "NHS ブルーのロゴ帯など NHS 固有ブランドの模倣（医療機関・公的保健サービスへの誤認）。医療的な断定表現を研究段階のデータに使うこと（重要情報の誤認防止の観点）。",
+      "reference_links": [
+        "https://service-manual.nhs.uk/design-system",
+        "https://service-manual.nhs.uk/design-system/design-principles",
+        "https://service-manual.nhs.uk/design-system/components",
+        "https://service-manual.nhs.uk/design-system/patterns",
+        "https://service-manual.nhs.uk/content",
+        "https://service-manual.nhs.uk/accessibility"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "Design system トップページ（セクション構成、v10、リンク一覧）と Design principles ページ（10原則）を WebFetch で取得。Components / Patterns / Content guide / Accessibility の URL は取得ページ内リンクとして確認したが個別には開いていない。配色（NHS ブルー #005eb8）・書体（Frutiger）・フォーカス表示の見た目は事前知識による推測で未確認。"
+    },
+    {
+      "id": "B-1-5",
+      "category": "B",
+      "name": "GC Design System（Système de design GC / Canada.ca）",
+      "official_url": "https://design-system.canada.ca/en/",
+      "what": "カナダ政府の Web サイト・製品を作る担当者向けの本番利用可能なデザインシステム。ブランドの一貫性、アクセシビリティ、二言語（英語・フランス語）対応を保ちながら速く開発することを目的とし、Components（フォーム・ナビゲーション・テーブル等のコード・デザイン・ガイダンス）、Page templates（Canada.ca の体験に沿ったページ）、CSS Shortcuts、Foundations（トークン・色・余白・タイポグラフィ）を提供。Canadian Digital Service（CDS）が運営。",
+      "users": "カナダ連邦政府の各省庁の開発者・デザイナー・コンテンツ担当。最終利用者は英語・フランス語話者を含むカナダの一般市民。",
+      "layout_navigation": "サイトは Components / Page templates / CSS Shortcuts / Foundations / Learn more（紹介・ロードマップ・利用チーム・アクセシビリティテスト）/ Get involved（コミュニティフォーラム）/ What's new の構成。英語・フランス語の言語切替が常設で、Canada.ca ページと GC サイトではヘッダーに Language toggle が必須とされる（検索結果のガイダンスページ要約より）。",
+      "visual_traits": "Foundations でデザイントークン・色・余白・タイポグラフィを定義（取得ページではセクション名のみ確認）。サイト名・利用規約が英仏併記。※Canada.ca のワードマーク、赤と白の国旗系アクセント、見出しと本文の書体などの具体的な見た目は事前知識に基づく記述で未確認。",
+      "ux_strengths": "二言語対応がシステムの前提（Language toggle コンポーネント、英仏のコンポーネントライブラリ、英仏ガイダンス付き Figma ライブラリ）。フレームワーク非依存（HTML、Angular、Vue、React、SSR）で長期維持に強い。参加者を伴うアクセシビリティテストを実施し、その結果を公開、コンポーネントのセルフサービス型アクセシビリティチェックをロードマップに掲載。基本ページテンプレートは WCAG 2.1 AA を満たすコンポーネントで構成。ロードマップ・What's new を公開し透明性が高い。最近の更新に日付入力の ISO 形式やフォーム検証ガイダンスがある。",
+      "weaknesses": "Canada.ca ブランドと連邦政府の二言語政策に強く結び付き、政府外での利用は想定外。テンプレートは Canada.ca 体験の統一を優先するため、研究ツールや分析ダッシュボードのような独自レイアウトの自由度は限られる（推測）。比較的新しい中央集約型システムで、旧来の Canada.ca テンプレート（WET 等）との併存・移行課題がある可能性（事前知識・未確認）。",
+      "adopt": "多言語を『後付けの翻訳』でなく最初からの要件にする設計：言語切替の常設、文言の長さが言語で変わってもレイアウトが崩れないコンポーネント設計、両言語のガイダンス整備。日付の ISO 形式採用（国際共同研究・多言語環境での誤読防止）。アクセシビリティテストの実施と結果公開、ロードマップ公開。フレームワーク非依存の Web Components 型実装で長期保守性を確保。",
+      "avoid": "Canada.ca のワードマークや国旗意匠を想起させるデザイン（政府機関への誤認）。全画面を単一テンプレートに縛り、専門家向けの比較・分析画面の情報密度を犠牲にすること。",
+      "reference_links": [
+        "https://design-system.canada.ca/en/",
+        "https://design-system.canada.ca/en/components/",
+        "https://design-system.canada.ca/en/components/language-toggle/design",
+        "https://design-system.canada.ca/en/page-templates/basic/",
+        "https://design-system.canada.ca/en/roadmap/",
+        "https://digital.canada.ca/2025/06/18/meet-gc-design-systems-new-templates-for-canada.ca-web-pages/"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップ（https://design-system.canada.ca/ はタイトルと言語切替のみで内容が少なかった）と英語版トップ /en/（セクション構成、目的、What's new）を WebFetch で取得。Language toggle、Basic page template、Roadmap、Components、CDS ブログの内容（WCAG 2.1 AA、英仏 Figma ライブラリ、フレームワーク非依存、ヘッダーへの言語切替必須）は WebSearch の検索結果要約でのみ確認し、個別ページは開いていない。ワードマーク・配色・書体の見た目、WET との併存は事前知識による記述。"
+    },
+    {
+      "id": "B-1-6",
+      "category": "B",
+      "name": "Singapore Government Design System（SGDS）",
+      "official_url": "https://www.designsystem.tech.gov.sg/",
+      "what": "シンガポール政府のデジタルサービス向けデザインシステム（GovTech）。『Design once, use everywhere』を掲げ、デザインとコードを統一。デザイントークンを Tailwind v4 で利用でき、React・Vue・Angular・Svelte・Vanilla JS など多様な技術スタックに組み込める Web Components（例: sgds-combo-box）を提供。セクションは Get started / Foundations / Components / Templates / Blocks / AI / Stories。旧版 v1・v2 も公開継続。",
+      "users": "シンガポール政府機関（.gov.sg サービス）のデザイナー・開発者。最終利用者はシンガポール住民（多言語・多民族社会）。",
+      "layout_navigation": "サイトは上部ナビで Get started / Foundations / Components / Templates / Blocks（画面部品の組み合わせ）/ AI / Stories に分かれる。全 .gov.sg サービスはすべてのページ最上部に公式政府バナー（Masthead）を置くことが必須で、ブランディングやナビゲーションより前に表示し、内部フローや完了画面でも省略しない。Masthead 内にページ固有の操作を置くことは禁止。",
+      "visual_traits": "Foundations は Design tokens / Border / Colour / Iconography / Layer / Layout / Motion / Spacing / Typography の9項目。Masthead は Merlion アイコン、ラベル、リンク、開閉式の詳細コンテナで構成され、色・文言・レイアウトの変更・上書きは禁止。※具体的な配色値・書体は今回取得していないため未確認。",
+      "ux_strengths": "公式性の識別（Masthead）を『全ページ必須・改変禁止・最上部固定』と厳格に定め、なりすましサイトとの区別を利用者が一貫して行える。開閉式の説明は Enter / Space キーで操作可能でキーボード対応。マルチフレームワーク対応の Web Components とトークンにより、機関横断で一貫性を保ちつつ技術選択の自由を残す。Motion や Layer までトークン化しており、動きや重なりの一貫性まで管理。AI セクションを持ち、AI を使った開発・利用への対応を明示している点が先進的。",
+      "weaknesses": "取得範囲ではアクセシビリティ方針の詳細、ブレークポイント、多言語（英語・中国語・マレー語・タミル語）対応のガイダンスは確認できなかった。v1・v2・現行と世代交代が多く、旧版利用サービスの移行負担がある（旧版サイトの存在から推測）。Tailwind 前提のトークン配布は、Tailwind を使わないチームには追加の変換が必要になりうる（推測）。",
+      "adopt": "『公式性・運営主体の識別帯』の考え方：本プロジェクトでは政府を名乗らず、『大学研究プロジェクトであること・運営主体・データ出典・連絡先』を示す独自の識別帯を全ページ最上部に固定し、改変禁止・省略禁止のルールにする。Masthead 内に操作を置かない分離原則。Motion・Layer を含むトークン設計。Web Components による技術非依存の部品化。Blocks（部品の組み合わせ単位）の考え方で、地図＋凡例＋出典など公共データ表示の定型ブロックを用意する。",
+      "avoid": "Merlion アイコンやシンガポール政府公式バナーの模倣（政府サービスへの誤認、なりすまし）。識別帯に広告・特定企業へのリンクや操作ボタンを混在させること。",
+      "reference_links": [
+        "https://www.designsystem.tech.gov.sg/",
+        "https://www.designsystem.tech.gov.sg/foundations/",
+        "https://www.designsystem.tech.gov.sg/components/masthead"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップページ（コンセプト、セクション構成、Tailwind v4・マルチフレームワーク対応、sgds-combo-box 例）、Foundations 一覧ページ（9項目、旧版 v1/v2 リンク）、Components > Masthead ページ（必須要件、構成要素、キーボード操作、改変禁止）を WebFetch で取得。トップページの取得内容は途中で切り詰められていた。配色・書体の具体値、多言語ガイダンスは未確認。"
+    }
+  ]
+}

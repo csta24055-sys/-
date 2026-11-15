@@ -1,0 +1,142 @@
+{
+  "entries": [
+    {
+      "id": "D-1-1",
+      "category": "D",
+      "name": "Microsoft Fluent 2 Design System",
+      "official_url": "https://fluent2.microsoft.design/",
+      "what": "Microsoft が自社製品（Microsoft 365、Teams、Outlook、Windows など）向けに提供する横断的デザインシステム。デザイン基盤（レイアウト、色、タイポグラフィ、モーション等）、Figma UI キット、プラットフォーム別コンポーネント（Web/React、iOS、Android、Windows）、アクセシビリティ用 Figma プラグインを提供する。",
+      "users": "Microsoft 社内外のプロダクトデザイナー・フロントエンド開発者、Microsoft 365 / Teams 連携アプリを作るサードパーティ開発者。",
+      "layout_navigation": "公式サイトはヘッダー（ホーム・検索・社員サインイン）＋ Get started（Design / Develop の2入口）＋ Components（Web・iOS・Android・Windows のプラットフォーム別）＋ Newsworthy ＋ Resources（Figma プラグイン）の構成。Layout ページでは 12 カラムグリッド（カラム・ガター・マージン）、baseline / column / manuscript / modular の4種のグリッド型、6段階のブレークポイント（small 320–479 から xxx-large 1920 以上）、レスポンシブ手法（reposition / resize / reflow / show-hide / re-architect）を定義している。",
+      "visual_traits": "4px 基本単位のスペーシングランプ（アイコン整列用に 2・6・10 の補助値あり）。値はプラットフォーム単位（iOS=pt、Android=dp、Web=px）で読み替え。タッチターゲットは iOS/Web 44×44、Android 48×48。テキストは左揃え、アイコン・画像は中央揃えが原則。余白で階層を作り、区切り線に頼らない。※配色（ニュートラル＋ブランド色のトークン体系）、Segoe UI 系書体、Regular/Filled の2スタイルのアイコンは事前知識による記述でこのセッションでは未確認。",
+      "ux_strengths": "単一の設計言語を Web・iOS・Android・Windows に展開し、プラットフォーム差を単位系の読み替えで吸収している点。余白・近接による関係性表現、明確なブレークポイント定義、タッチターゲット最小サイズの明示など、実装者が迷わない具体的な数値ルールがある。A11y Focus Order / Color Contrast Checker などのアクセシビリティ検証プラグインを設計段階で使える。",
+      "weaknesses": "Layout ページに密度（density）の専用ガイドがなく、業務アプリで必要な高密度表示の指針は薄い。公式トップはリンクハブ的で、原則やトークン一覧へ到達するまでの導線が分かりにくい（Layout ページ取得時にも色・タイポ等への関連リンクが本文から取れなかった）。Microsoft 製品の見た目に強く結び付くため、そのまま使うと Microsoft 製品風になる。",
+      "adopt": "4px 基本単位＋補助値のスペーシングランプ、6段階ブレークポイント、12 カラムグリッド、タッチターゲット最小 44/48 の明文化。マルチプラットフォーム展開時に『同じトークン名・異なる単位』で管理する方式。デザイン段階でフォーカス順・コントラストを検証するワークフロー。余白で階層を作り区切り線を減らす方針。",
+      "avoid": "Microsoft 製品固有の配色・書体・アクリル素材風の見た目をそのまま模倣すること。密度指針が不足しているため、大規模データ画面（LCA 結果表など）にそのまま適用すると余白過多で情報量が落ちる可能性がある。",
+      "reference_links": [
+        "https://fluent2.microsoft.design/",
+        "https://fluent2.microsoft.design/layout",
+        "https://fluent2.microsoft.design/get-started/develop",
+        "https://fluent2.microsoft.design/components/web/react",
+        "https://inclusive.microsoft.design/"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップ（サイト構成・プラットフォーム一覧・Figma プラグイン）と Layout ページ（スペーシング・グリッド・ブレークポイント・整列・レスポンシブ手法）を WebFetch で取得。get-started/develop・components/web/react・inclusive.microsoft.design は公式トップ上のリンクとして存在を確認したが個別には開いていない。配色・書体・アイコンの具体的特徴は事前知識による推測で、画面の見た目は直接確認していない。"
+    },
+    {
+      "id": "D-1-2",
+      "category": "D",
+      "name": "Apple Human Interface Guidelines（HIG）",
+      "official_url": "https://developer.apple.com/design/human-interface-guidelines/",
+      "what": "Apple が iOS・iPadOS・macOS・watchOS・tvOS・visionOS 向けアプリ設計のために公開するデザインガイドライン。2025 年以降はガラスの光学特性と流動性を組み合わせた新素材『Liquid Glass』を中心に、階層（hierarchy）・調和（harmony）・一貫性（consistency）を設計原則として掲げる。",
+      "users": "Apple プラットフォーム向けアプリのデザイナー・開発者（SwiftUI / UIKit / AppKit 利用者）。",
+      "layout_navigation": "HIG は Foundations / Patterns / Components / Inputs / Technologies の大分類（事前知識。このセッションでは HIG 本文は取得できず）。Liquid Glass の公式技術概要では、最重要コンテンツに焦点が当たるレイアウトとナビゲーション構造の選択、プラットフォーム横断で統一されたナビゲーションと検索体験、ウィンドウ・モーダル・メニュー・ツールバーのベストプラクティス、サイドバー／インスペクタの下まで横スクロールを延長するエッジ・トゥ・エッジ表現、ウィンドウサイズ変化への適応を求めている。",
+      "visual_traits": "コントロールやナビゲーション要素は Liquid Glass 素材をまとってコンテンツの上に浮かび、コンテンツがその下から透けて見える。コントロールやナビゲーションでの色の使用は控えめにし、可読性を保つ。アプリアイコンは単純で大胆なレイヤー構成で立体感と一貫性を出す。標準アイコンと予測可能なアクション配置を採用。※ SF Pro 書体、Dynamic Type、SF Symbols は事前知識による記述で未確認。",
+      "ux_strengths": "標準コンポーネント（SwiftUI/UIKit/AppKit）を使えば新素材の見た目と挙動が自動的に適用され、OS 更新に追従しやすい。プラットフォーム間で一貫したナビゲーション・検索・アクション配置により、利用者の学習コストが低い。既存アプリの全面作り直しを求めず、最新 Xcode でビルドして段階的に適応するという移行方針が明示されている。",
+      "weaknesses": "Apple プラットフォーム専用であり、Web やクロスプラットフォームの業務アプリには直接適用できない。半透明素材は背景によって可読性・コントラストが変動しやすい（一般論としての懸念。第三者解説ではガラスの重ね掛けを避けるよう注意喚起されている）。HIG 公式ページは JavaScript 描画で、本セッションでは本文を機械取得できなかった。",
+      "adopt": "『コンテンツが主役、操作系は控えめに浮かせる』という階層原則。標準コンポーネントを使うことで基盤更新に自動追従させる設計（自社デザインシステムでも同様に、トークンとコンポーネント経由で一括更新できる構造にする）。プラットフォーム横断で検索とアクション配置を統一すること。段階的移行（全面刷新を要求しない）方針。",
+      "avoid": "業務・研究データ画面への半透明素材の多用（数値表や LCA 結果の可読性を損なう）。ガラス層の重ね掛け。Apple 固有の見た目の模倣。",
+      "reference_links": [
+        "https://developer.apple.com/design/human-interface-guidelines/",
+        "https://developer.apple.com/documentation/technologyoverviews/liquid-glass.md",
+        "https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "HIG 公式トップは WebFetch で開いたがタイトルのみ取得（JS 描画のため本文なし）。Apple 公式の Liquid Glass 技術概要（developer.apple.com/documentation/technologyoverviews/liquid-glass.md）を取得し、採用手順・設計原則（hierarchy/harmony/consistency）・サンプルコード項目を確認。adopting-liquid-glass は同ページ内リンクとして存在確認のみ（未取得）。HIG の章構成、SF Pro・Dynamic Type・SF Symbols は事前知識。ガラス重ね掛けへの注意は第三者解説（検索結果）由来。画面の見た目は直接確認していない。"
+    },
+    {
+      "id": "D-1-3",
+      "category": "D",
+      "name": "Google Material Design 3（Material 3 / M3、M3 Expressive を含む）",
+      "official_url": "https://m3.material.io/",
+      "what": "Google のオープンなデザインシステム。カラースキーム、タイポグラフィ、シェイプの3サブシステムからなるテーマ機構と、ボタン・カード・ナビゲーション等のコンポーネント群を提供。Material You の動的カラー（壁紙由来の配色生成）に対応し、M3 Expressive はテーマ・コンポーネント・モーション・タイポグラフィを研究ベースで拡張した最新版。Jetpack Compose、Web、Flutter 等で実装される。",
+      "users": "Android アプリ開発者・デザイナー、Google 製品チーム、Web/Flutter で Material を採用するチーム。",
+      "layout_navigation": "画面幅に応じてナビゲーションを切り替える適応型設計: コンパクト端末で 5 項目以下なら NavigationBar（下部）、小〜中型タブレット・横向きスマホでは NavigationRail、中〜大型タブレットでは Permanent / Modal NavigationDrawer。大画面・折りたたみ端末向けの適応レイアウト指針もある。ガイドサイトは Foundations / Styles / Components の構成（Styles 配下に color・typography・shape の overview ページが存在することを公式ドキュメントのリンクで確認）。",
+      "visual_traits": "5 つのキーカラー（primary / secondary / tertiary 等）から各 13 トーンのトーナルパレットを生成し、primary・onPrimary・primaryContainer・onPrimaryContainer 等の色ロールに割当。タイプスケールは display / headline / title / body / label × large / medium / small の 15 スタイル（例: displayLarge 57/64、bodyMedium 14/20、labelSmall 11/16、既定は Roboto）。シェイプは extraSmall〜extraLarge の5段階の角丸（例 4/8/12/16/24dp）。エレベーションは主にトーナル（色調）オーバーレイで表現し、影は補助。",
+      "ux_strengths": "色ロールの『on-X を X の上に置く』ルールにより、カスタム配色でもコントラストが自動的に担保されやすい。動的カラーはコントラスト基準を満たすよう設計されている。強調度別のボタン階層（Extended FAB → Filled → Text）が明確。Material Theme Builder でブランド色から配色一式とコードを生成でき、ライト／ダーク両テーマを同時に定義できる。",
+      "weaknesses": "動的カラーは Android 12 以上限定でフォールバック定義が必要。一部 API は実験的（ExperimentalMaterial3Api の opt-in が必要）。トーナルエレベーションは面の差が微妙で、高密度な業務画面では境界が分かりにくくなる可能性がある（推測）。全 15 タイプスタイルを使うと過剰で、公式も縮小セットの選択を推奨している。m3.material.io 本体は JS 描画で本セッションでは本文取得不可。",
+      "adopt": "色を『色値』ではなく『役割（ロール）』で管理し、on-X ペアでコントラストを保証する方式。用途名ベースのタイプスケール（display/headline/title/body/label）とそこからの縮小セット選定。5段階の角丸スケール。画面幅による Bar / Rail / Drawer の段階的ナビゲーション切替。テーマ生成ツールによるライト／ダーク同時定義。",
+      "avoid": "業務・研究アプリでの壁紙連動の動的カラー（組織ブランドや状態色の一貫性を壊す）。M3 Expressive の大胆な形状・動きをデータ密度の高い画面に持ち込むこと。FAB を業務フローの主要操作に乱用すること。",
+      "reference_links": [
+        "https://m3.material.io/",
+        "https://developer.android.com/develop/ui/compose/designsystems/material3",
+        "https://m3.material.io/styles/color/overview",
+        "https://m3.material.io/styles/typography/overview",
+        "https://m3.material.io/styles/color/dynamic-color/overview",
+        "https://github.com/android/compose-samples/tree/main/Reply"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "m3.material.io 公式トップは WebFetch で開いたがタイトルのみ（JS 描画）。Google 公式の Android Developers『Material Design 3 in Compose』ページを取得し、色ロール・13 トーン・動的カラー・15 スタイルのタイプスケール数値・シェイプ・トーナルエレベーション・ナビゲーション部品・アクセシビリティ記述を確認。m3.material.io の styles 配下 URL と Reply サンプルは同ページ内リンクとして存在確認のみ（未取得）。M3 Expressive の詳細仕様は未確認。高密度画面での境界の分かりにくさは推測。"
+    },
+    {
+      "id": "D-1-4",
+      "category": "D",
+      "name": "Atlassian Design System",
+      "official_url": "https://atlassian.design/",
+      "what": "Jira・Confluence・Trello 等の Atlassian 製品群に一貫性と親しみやすさを与えるための共有デザイン言語。Foundations（色・タイポグラフィ・アイコン・アクセシビリティ・トークン）、コンポーネント、AI 体験向けパターン（Rovo UI）、トークン移行ガイドなどを提供する。",
+      "users": "Atlassian 社内のプロダクトチーム、Atlassian Marketplace / Forge でアプリを開発するサードパーティ開発者・デザイナー。",
+      "layout_navigation": "公式サイトはトップバーに Design system / News、検索、テーマ切替（ライト／ダーク）を配置し、本文へのスキップリンクとフッターへのスキップリンクを備える。Foundations 配下に color・typography・spacing・motion・elevation・border・radius・tokens の各ページ、トークン配下に all-tokens（検索・フィルタ可能なトークンライブラリ）、トークンピッカー、コードでの利用、デザインでの利用、移行ガイドがある。",
+      "visual_traits": "デザイントークンを『デザイン判断を命名・保存する唯一の情報源』と位置付け、色・タイポ・余白・モーション・エレベーション・ボーダー・角丸をトークン化。ライト／ダークテーマを前提。※トークン名の具体形（例 color.text.subtle、elevation.surface 系）は公式トップに例示があるとの取得結果だが詳細構造は未確認。8px 基準の space トークンや独自書体は事前知識による推測。",
+      "ux_strengths": "トークンライブラリが検索・フィルタ可能で、さらに『トークンピッカー』で用途からトークンを選べるため、開発者が正しいトークンに辿り着きやすい。ハードコード値からトークンへの移行ガイドが用意され、長期運用中の既存製品を段階的に移行できる。ドキュメントサイト自体がスキップリンクとテーマ切替を備え、アクセシビリティを実践している。AI 体験のパターン（Rovo UI）を独立した設計領域として扱っている。",
+      "weaknesses": "Atlassian 製品（Jira/Confluence）の文脈に最適化されており、汎用性は限定的。トークン概要ページ自体はリンク集的で、命名規則やカテゴリの説明は下位ページに分散している。Lint 等の自動化ツールについてはトークン概要ページでは言及が見当たらなかった（存在しないとは断定できない）。",
+      "adopt": "トークンを単一の真実の情報源とし、検索可能なトークンライブラリと『用途→トークン』のピッカーを用意すること。ハードコード値からの移行ガイドを最初から整備すること（長期運用・多チーム開発の要）。ドキュメント自体にスキップリンク・テーマ切替を実装すること。AI 機能の UI パターンを独立した章として定義すること。",
+      "avoid": "Atlassian 製品の見た目（青系ブランド、特有のアイコン）の模倣。製品固有のコンポーネント（課題カード等）を文脈を無視して流用すること。",
+      "reference_links": [
+        "https://atlassian.design/",
+        "https://atlassian.design/foundations/tokens",
+        "https://atlassian.design/components/tokens/all-tokens",
+        "https://atlassian.design/foundations/tokens/use-tokens-in-code",
+        "https://atlassian.design/foundations/tokens/migrate-to-tokens",
+        "https://atlassian.design/foundations/accessibility"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップ（サイト構成、Foundations 一覧、Rovo UI、スキップリンク、テーマ切替）と Tokens 概要ページ（トークンの位置付け、トークンライブラリ、ピッカー、コード／デザインでの利用、移行ガイド）を WebFetch で取得。all-tokens・use-tokens-in-code・migrate-to-tokens・accessibility はページ内リンクとして存在確認のみ（未取得）。トークン命名の具体構造、余白基準値、書体は事前知識・推測。画面の見た目は直接確認していない。"
+    },
+    {
+      "id": "D-1-5",
+      "category": "D",
+      "name": "IBM Carbon Design System",
+      "official_url": "https://carbondesignsystem.com/",
+      "what": "IBM Design Language に基づく、エンタープライズ向けのオープンソース・デザインシステム。2x Grid・テーマ・色・タイポグラフィ・余白・モーション・アクセシビリティ・コンテンツ・アイコン・ピクトグラム・Carbon for AI の基盤と、40 種以上のコンポーネント、17 種程度のパターン（空状態、ローディング、通知、フィルタ、フォーム、読み取り専用状態、無効状態など）を提供。React と Web Components の実装、Carbon MCP がある。",
+      "users": "IBM 社内のエンタープライズ製品チーム（クラウド、データ、AI 製品）、業務系・管理画面系アプリを作る社外の開発者・デザイナー。",
+      "layout_navigation": "サイトは Getting started（About / Designing / Developing / Carbon MCP / Contributing / Migrating）、Building blocks（Foundations / Components / Patterns）、Building experiences、Support の構成。製品側のナビゲーション構造として UI shell（header / left panel / right panel）コンポーネントと Global header パターンを定義し、ヘッダー＋左ナビ＋右パネルのアプリシェルを標準化している。",
+      "visual_traits": "2x Grid に基づくレイアウトと、テーマ切替前提の色体系。データテーブルは xs 24px / sm 32px / md 40px（既定）/ lg 48px / xl 64px の 5 段階行高で密度を調整し、ヘッダー行・ツールバー・ページネーションの高さを行高に揃える。※ IBM Plex 書体、White / Gray 10 / Gray 90 / Gray 100 の 4 テーマ、8px 基準は事前知識で、このセッションでは未確認（トップページ取得結果に IBM Plex の記載はなかった）。",
+      "ux_strengths": "業務アプリに必要な状態設計（空状態、ローディング、無効、読み取り専用、通知、ステータス表示）がパターンとして体系化されている。データテーブルのガイドが非常に具体的: ツールバーは最大 5 アクションで超過分はオーバーフロー、選択時にバッチアクションバーが出て行単位操作を無効化、ヘッダーの全選択は indeterminate を含む3状態、ソートは未ソート／昇順／降順の3状態、追加ロードが見込まれる場合はスピナーではなくスケルトン、展開行は遅いクエリのデータに使い全展開は既定で出さない。AI 生成内容に AI ラベルを付けるルールまで定義している。",
+      "weaknesses": "公式自身がデータテーブルを複雑なデータ表示・操作やスプレッドシートの代替には不向きと明記しており、LCA の大規模表計算的用途には別途設計が必要。列見出しは 1〜2 語推奨で、学術・専門用語の長い見出しとは相性が悪い。IBM らしい硬質な印象が強く、そのままでは IBM 製品風になる。データテーブル usage ページ単体ではキーボード操作の詳細は Accessibility タブに委ねられている。",
+      "adopt": "5 段階の行高による密度切替と、周辺要素（ツールバー・ページネーション）の高さ連動。選択時バッチアクションバー、3状態ソート、indeterminate を含む全選択。待ち時間が想定される場合のスケルトン表示。空状態・読み取り専用・無効状態をパターンとして定義すること。AI 生成値への明示ラベル（研究アプリで計算・推定値の出所を示すのに有用）。UI shell による標準アプリ枠。",
+      "avoid": "データテーブルをスプレッドシート代替として使うこと（公式も非推奨）。テーブルの入れ子や狭いコンテナへの配置。IBM ブランドの書体・配色の模倣。行アクションが 3 未満なのにオーバーフローメニューに隠すこと。",
+      "reference_links": [
+        "https://carbondesignsystem.com/",
+        "https://carbondesignsystem.com/building-blocks/core/components/data-table/usage/",
+        "https://carbondesignsystem.com/building-blocks/core/patterns/empty-states",
+        "https://carbondesignsystem.com/building-blocks/core/patterns/loading",
+        "https://carbondesignsystem.com/building-blocks/core/patterns/notifications",
+        "https://carbondesignsystem.com/building-blocks/foundations/2x-grid"
+      ],
+      "verification": "fetched_official_page",
+      "verification_note": "公式トップ（基盤一覧、コンポーネント一覧、パターン一覧、Getting started 構成、React / Web Components チュートリアル、Carbon MCP）と Data table の Usage ページ（バリエーション、5 段階行高、ツールバー、バッチアクション、選択、ソート、展開、ページネーション、スケルトン、制約事項）を WebFetch で取得。empty-states・loading・notifications・2x-grid はトップページ内リンクとして存在確認のみ（未取得）。IBM Plex・4 テーマ・8px 基準は事前知識。画面の見た目は直接確認していない。"
+    },
+    {
+      "id": "D-1-6",
+      "category": "D",
+      "name": "Salesforce Lightning Design System 2（SLDS 2）",
+      "official_url": "https://www.lightningdesignsystem.com/",
+      "what": "Salesforce Lightning Experience と Lightning Web Components（LWC）向けのデザインシステムの第2世代。従来のデザイントークンを CSS カスタムプロパティ『グローバルスタイリングフック（--slds-g-*）』に置き換え、新しい既定テーマ『Salesforce Cosmos』を採用。フック値を変えると、それを参照する全コンポーネントのスタイルが一括で更新される。",
+      "users": "Salesforce 管理者、LWC 開発者、AppExchange パートナー、Salesforce 上で業務アプリ（CRM 等）を構築する企業の開発チーム。",
+      "layout_navigation": "Lightning Experience の画面構成（グローバルヘッダー、アプリナビゲーションバー、レコードページ等）に準拠すると考えられるが、このセッションでは公式サイト本文を取得できず未確認。公式サイトトップのタイトルが『Lightning Design System 2』であることのみ確認。",
+      "visual_traits": "スタイリングフックで色・余白・フォント・ボーダー等を管理し、名前空間は --slds、グローバルフックは --slds-g- 接頭辞（検索結果による）。Cosmos テーマは既定テーマ（検索結果による）。※ Cosmos の具体的な見た目（角丸の増加、余白の拡大、配色の刷新など）は事前知識・推測で未確認。",
+      "ux_strengths": "スタイリングフックにより、テーマ変更時に個々のコンポーネントを編集せずに全体を更新できる。SLDS 1 へのフォールバック値を併記することで同じコンポーネントを SLDS 1 / 2 の両方で動かせる移行設計。SLDS Linter / SLDS Validator により旧トークンの検出とフックへの置換を支援する（検索結果による）。",
+      "weaknesses": "コンポーネント単位のスタイリングフック（--slds-c-*）は SLDS 2 で現時点未サポートで、それを使うコンポーネントは SLDS 1 に留まるよう推奨されている（検索結果による）。旧デザイントークンは非推奨化されており、長期運用中の資産に移行コストが発生する。Salesforce プラットフォームへの依存度が高く、外部の汎用 Web アプリへの流用は限定的。公式サイト・開発者ドキュメントは本セッションでは本文取得できず（JS 描画／HTTP 403）。",
+      "adopt": "CSS カスタムプロパティによるグローバルトークン（フック）で一括テーマ変更できる構造。新旧バージョン併存のためのフォールバック値併記ルール。Linter / Validator による旧トークンの自動検出・置換（長期運用・メンテナンス性の要）。グローバル層とコンポーネント層のトークンを名前空間で分ける命名（--x-g- / --x-c-）。",
+      "avoid": "移行途中で層（グローバル／コンポーネント）のサポート状況が食い違う状態を利用者に強いること。Salesforce 固有の見た目や Lightning 専用パターンの模倣。",
+      "reference_links": [
+        "https://www.lightningdesignsystem.com/",
+        "https://www.salesforce.com/blog/what-is-slds-2/",
+        "https://developer.salesforce.com/docs/platform/lwc/guide/create-components-css-slds1-slds2.html",
+        "https://trailhead.salesforce.com/content/learn/modules/salesforce-lightning-design-system-2-for-developers/explore-salesforce-lightning-design-system-2"
+      ],
+      "verification": "search_results_only",
+      "verification_note": "公式トップを WebFetch で開いたがタイトル『Lightning Design System 2』のみ取得（JS 描画で本文なし）。開発者ドキュメント（SLDS 1 と SLDS 2 の比較ページ）は HTTP 403 で取得不可。グローバルスタイリングフック、Cosmos、--slds-c-* 未サポート、フォールバック、Linter / Validator の記述は WebSearch の結果要約（Salesforce 公式ブログ・開発者ドキュメント・Trailhead の検索結果）に基づく。reference_links のブログ・比較ページ・Trailhead は検索結果に出現したことで存在を確認したのみで、内容は直接読んでいない。画面構成・見た目は推測。"
+    }
+  ]
+}
