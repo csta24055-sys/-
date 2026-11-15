@@ -182,6 +182,12 @@ def _other_steel_has_value(values: dict, fid: str) -> bool:
 
 def estimate_materials(values: dict[str, Value], structure: str, only: str | None = None, ranges: dict | None = None) -> tuple[list[Value], list[str]]:
     msgs, out = [], []
+    steel_to = "m_steel" if structure in ("S", "SRC") else "m_rebar"
+    if only in ("m_rebar", "m_steel") and only != steel_to:
+        # both sources give all steel (rebar + structural steel) together, which this structure puts in the other field
+        slab = next((s["label"] for s in FL.STRUCTURES if s["id"] == structure), structure)
+        return [], ["%sでは、統計の鉄の全量（鉄筋＋鉄骨）は「%s」の欄の候補になる（二重計上を防ぐため、「%s」の欄には作らない）"
+                    % (slab, FL.FIELDS[steel_to]["label"], FL.FIELDS[only]["label"])]
     gfa, use = values.get("b_gfa"), values.get("b_use")
     if not (gfa and gfa.state in HAS_VALUE and use and use.state in HAS_VALUE):
         return [], ["材料の統計概算には延床面積と用途が要る（基本情報で入れるか、住所から調べる）"]

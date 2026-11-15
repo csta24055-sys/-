@@ -158,11 +158,16 @@ class App:
             if rest == ["result"] and method == "GET":
                 last = self.projects.last_run(pid) or {}
                 if last:
-                    _, rep_now = bridge.build(self.projects.values(pid), self.refset, title="WLC Studio #%d" % pid)
+                    # rebuilt for the period of that run: the document depends on T (a replacement inside T or not), so a
+                    # rebuild without it would make a fresh result look stale
+                    _, rep_now = bridge.build(self.projects.values(pid), self.refset, title="WLC Studio #%d" % pid,
+                                              period=_float(last.get("period")))
                     last["stale"] = rep_now["input_hash"][:16] != (last.get("trace") or {}).get("入力の指紋（SHA-256 の先頭）")
                 return 200, last
             if rest == ["ledger"] and method == "GET":
-                doc, rep = bridge.build(self.projects.values(pid), self.refset)
+                # the reflection for the period last calculated (the same rows as that calculation)
+                doc, rep = bridge.build(self.projects.values(pid), self.refset,
+                                        period=_float(self.projects.get(pid)["last_period"]))
                 return 200, {"fields": bridge.reflection_table(rep), "unconnected": rep["unconnected"],
                              "missing_required": rep["missing_required"], "binding_coverage": bridge.binding_coverage()}
         if method == "POST" and parts == ["demo"]:
@@ -365,12 +370,17 @@ class App:
                base_total: float | None = None) -> dict | None:
         """Low / high totals with every value that has a range set to the end that lowers / raises the total (two more
         engine runs): a quantity, a rate or a factor at its low end lowers it; a life, a cycle or a recovery rate at its
-        HIGH end lowers it (bridge.DECREASING). The computed total is always inside the range shown.
+        HIGH end lowers it, and so does the waste rate unless the quantities are design quantities (bridge.decreasing).
+        Which values are moved comes from the base report, whose partner rules already use the end of a deciding
+        input's range (a cycle or a life whose range reaches below T keeps the share / loss rate). The computed total is
+        always inside the range shown.
         This is a scenario width, not a probability interval; ranges that are not calibrated stay 「仮の範囲」."""
         reflected = {f["field"] for f in (rep or {}).get("fields") or [] if f.get("reflected")} if rep else None
         # only values that reach the calculation are moved to their ends and counted (a dropped foundation row, a
         # cycle without a rebuild …); inputs that cannot change the total are not counted as unknown widths
         lo_vals, n = _with(vals, "low", reflected)
+        # the waste rate is moved like a life when the quantities are not design quantities (said in the note)
+        waste_dec = lo_vals.get("m_waste_rate") is not vals.get("m_waste_rate") and bridge.decreasing("m_waste_rate", vals)
         unknown = [f for f, v in vals.items()
                    if f in FL.FIELDS and FL.FIELDS[f]["type"] in ("number", "integer") and isinstance(v.value, (int, float))
                    and (reflected is None or f in reflected) and f not in TOTAL_NEUTRAL
@@ -415,8 +425,9 @@ class App:
             widened = "端の組み合わせが今の合計を挟まなかったので、今の合計を含むように広げた。"
         return {"low_t": a, "high_t": b, "n_values_with_range": n, "n_values_range_unknown": n_unknown, "unknown_fields": unknown,
                 "end_gaps": end_gaps,
-                "note": "範囲のある %d 項目を、合計を小さくする端・大きくする端にそろえたときの合計（2 回の追加計算。寿命・周期・回収率は"
-                        "大きいほど合計が小さい）。確率の区間ではなく、校正していない範囲を含む。" % n
+                "note": "範囲のある %d 項目を、合計を小さくする端・大きくする端にそろえたときの合計（2 回の追加計算。寿命・周期・回収率%sは"
+                        "大きいほど合計が小さい）。確率の区間ではなく、校正していない範囲を含む。"
+                        % (n, "・廃棄率（数量の基準が設計数量でないとき）" if waste_dec else "")
                         + widened + unk_note + ("".join(g + "。" for g in end_gaps))}
 
     def calculate(self, pid: int, period) -> dict:
@@ -501,7 +512,7 @@ def _with(vals: dict, side: str, only: set | None = None) -> tuple[dict, int]:
                 v.state in ("statistical", "assumption", "from_drawing") and u.kind in ("interval", "scenario") \
                 and isinstance(v.value, (int, float)) and not isinstance(v.value, bool):
             w = Value.from_json(v.to_json())
-            low_end = (side == "low") != (fid in bridge.DECREASING)      # a longer life lowers the total
+            low_end = (side == "low") != bridge.decreasing(fid, vals)     # a longer life lowers the total
             w.value = float(u.low if low_end else u.high)
             if FL.FIELDS[fid]["type"] == "integer":
                 w.value = int(round(w.value))
@@ -554,10 +565,12 @@ def _hints(incomplete: list[str], rep: dict, bad_stages: set | None = None) -> l
     `incomplete` is the engine's list AFTER the filter of the units that cannot act; only `bad_stages` are listed."""
     state = {f["field"]: f["state"] for f in rep["fields"]}
     unknown_state = ("not_obtained", "not_computable")
-    todo, why, extra = {}, {}, {}
+    todo, why, extra, advice = {}, {}, {}, {}
     for m in rep.get("missing_inputs") or []:
         gap = m.get("gap", "omitted")
         for st in m["stages"]:
+            if m.get("advice") and st == m["stages"][0]:
+                advice.setdefault(st, []).append(m["advice"])         # more than one way to complete it (direct stage)
             if gap == "omitted" and m["field"] in FL.FIELDS and state.get(m["field"], "not_obtained") in unknown_state:
                 todo.setdefault(st, []).append(m["label"])
             elif gap == "omitted":
@@ -579,6 +592,7 @@ def _hints(incomplete: list[str], rep: dict, bad_stages: set | None = None) -> l
         if labels:
             parts.append("未取得の入力：" + "、".join(labels) + "（調べて入れる。本当に無いと分かっているときだけ「適用外」）")
         parts += list(dict.fromkeys(why.get(st, [])))
+        parts += list(dict.fromkeys(advice.get(st, [])))
         if units.get(st) and not labels and not why.get(st):
             parts.append("材料の行の質量・単位など、画面の欄では埋まらない部分が欠けている（計算に反映されない入力の一覧を参照）")
         note = "。".join(p.rstrip("。") for p in parts) if parts else "入っていない分がある（計算に反映されない入力の一覧を参照）"
