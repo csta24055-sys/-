@@ -39,7 +39,7 @@ def write_csv(path: Path, header: list[str], rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
     with tmp.open("w", encoding="utf-8", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=header, extrasaction="raise")
+        w = csv.DictWriter(fh, fieldnames=header, extrasaction="raise", lineterminator="\n")
         w.writeheader()
         for r in rows:
             w.writerow({k: r.get(k, "") for k in header})
