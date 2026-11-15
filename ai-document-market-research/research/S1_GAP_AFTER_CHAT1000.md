@@ -1,6 +1,6 @@
 # S1不足一覧（チャット1,000候補の取込み後・機械生成）
 
-生成時刻（UTC）：2026-11-15T16:09Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
+生成時刻（UTC）：2026-11-15T16:12Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
 
 > RESEARCH_STATUS = INCOMPLETE。S1未通過のためS2以降の分析・正式成果物には進まない。
 
@@ -8,10 +8,10 @@
 
 | 対象 | S1完了 | 未完 | 備考 |
 |---|---:|---:|---|
-| 325テーマ | 122 | 203 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
+| 325テーマ | 125 | 200 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
 | 追加7テーマ（ZIP外） | 0 | 7 | N01〜N03・速度 |
 | 旧896検索ID | 実行 408 | 未実行 488 | 実行不能確定 0。ログの再索引だけでは実行にしない |
-| 80競合 | 30 | 50 | 公式資料の確認 55 社 |
+| 80競合 | 31 | 49 | 公式資料の確認 55 社 |
 
 ## 2. 不足の種類と数
 
@@ -19,25 +19,25 @@
 
 | 不足の種類 | テーマ数 |
 |---|---:|
-| 研究ユニット記録（定義・計算/識別不能）が未完 | 206 |
+| 研究ユニット記録（定義・計算/識別不能）が未完 | 203 |
 | 一次資料ルートの検索なし | 182 |
 | 独立資料が未確定（NO） | 165 |
 | 反証資料が未確定（NO） | 165 |
 | 旧検索IDの未実行が残る | 122 |
 | 一次資料が未確定（NO） | 109 |
-| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 41 |
-| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 41 |
-| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 9 |
+| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 38 |
+| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 38 |
+| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 8 |
 
-- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1548** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
-- 必要なページ読了：未判定のチャット候補の割当て 894 件（重複を除くURL 681 件）。読了は検索上限を消費しない。
+- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1534** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
+- 必要なページ読了：未判定のチャット候補の割当て 880 件（重複を除くURL 674 件）。読了は検索上限を消費しない。
 - 462件（旧予定タスクの未達数）は採用証拠の必要件数ではない。上の不足（ルート・旧ID・競合項目）を満たす分だけ新規に調査し、必要ならそれ以上集める。
 
 ### 競合（80）
 
 | 不足の種類 | 社数 |
 |---|---:|
-| no counter / independent search with results and no third-party-backed counter finding | 50 |
+| no counter / independent search with results and no third-party-backed counter finding | 49 |
 | attributes not recorded | 25 |
 | no vendor page read | 18 |
 
@@ -99,9 +99,9 @@
 | AXIS_07_T02 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 27/32 | YES | 10/2 |
 | AXIS_07_T03 | 完了 | — | FOUND | FOUND | FOUND | 0/2/1 | 25/28 | YES | 11/3 |
 | AXIS_07_T04 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 26/28 | YES | 11/3 |
-| AXIS_07_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 9/11 | YES | 15/0 |
+| AXIS_07_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 9/11 | YES | 13/0 |
 | AXIS_07_T06 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 7/7 | YES | 14/1 |
-| AXIS_07_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/3/1 | 7/10 | YES | 14/0 |
+| AXIS_07_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/3/1 | 7/10 | YES | 12/0 |
 | AXIS_07_T08 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 5/5 | YES | 12/0 |
 | AXIS_08_T01 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 20/32 | YES | 10/4 |
 | AXIS_08_T02 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 9/11 | YES | 13/0 |
@@ -203,10 +203,10 @@
 | AXIS_20_T02 | 完了 | — | FOUND | FOUND | FOUND | 0/2/2 | 11/12 | YES | 0/0 |
 | AXIS_20_T03 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 9/10 | YES | 0/0 |
 | AXIS_20_T04 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 7/8 | YES | 0/0 |
-| AXIS_20_T05 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/10 | NO | 0/0 |
+| AXIS_20_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 9/10 | YES | 0/0 |
 | AXIS_20_T06 | 完了 | — | FOUND | FOUND | FOUND | 0/2/1 | 8/10 | YES | 0/0 |
-| AXIS_20_T07 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
-| AXIS_20_T08 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 6/9 | NO | 0/0 |
+| AXIS_20_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 8/9 | YES | 0/0 |
+| AXIS_20_T08 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 6/9 | YES | 0/1 |
 | AXIS_21_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
 | AXIS_21_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
 | AXIS_21_T03 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -283,7 +283,7 @@
 | AXIS_06_T09 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_06_T10 | 未完 | — | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_07_T09 | 完了 | — | FOUND | FOUND | FOUND | 0/3/1 | 7/8 | YES | 10/0 |
-| AXIS_07_T10 | 完了 | — | FOUND | FOUND | FOUND | 1/1/2 | 10/11 | YES | 8/0 |
+| AXIS_07_T10 | 完了 | — | FOUND | FOUND | FOUND | 1/1/2 | 10/11 | YES | 5/0 |
 | AXIS_08_T09 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 12/17 | YES | 5/2 |
 | AXIS_09_T09 | 完了 | — | FOUND | FOUND | FOUND | 1/1/2 | 8/9 | YES | 3/3 |
 | AXIS_09_T10 | 完了 | — | FOUND | FOUND | FOUND | 0/2/2 | 6/7 | YES | 6/0 |
@@ -403,7 +403,7 @@
 | C017 | Pitch | P1 | 未完 | YES | 9（遮断7） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
 | C018 | Prezi AI | P2 | 未完 | YES | 6（遮断4） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
 | C019 | Decktopus | P1 | 完了 | YES | 7（遮断2） | YES | — | 0 |
-| C020 | Presentations.AI | P1 | 未完 | YES | 17（遮断0） | NO | no counter / independent search with results and no third-party-backed counter finding | 7 |
+| C020 | Presentations.AI | P1 | 完了 | YES | 17（遮断0） | YES | — | 0 |
 | C021 | Slidesgo AI Presentation Maker | P1 | 未完 | YES | 7（遮断2） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
 | C022 | MagicSlides | P1 | 未完 | YES | 8（遮断0） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
 | C023 | SlideSpeak | P0 | 完了 | YES | 8（遮断6） | YES | — | 0 |

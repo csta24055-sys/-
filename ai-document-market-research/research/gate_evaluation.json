@@ -1,20 +1,20 @@
 {
  "research_status": "INCOMPLETE",
- "checked_at": "2026-11-15T16:09:20.567148+00:00",
+ "checked_at": "2026-11-15T16:12:28.970534+00:00",
  "first_unmet_stage": "S1",
- "source_rows": 1207,
- "accepted_rows": 1207,
+ "source_rows": 1222,
+ "accepted_rows": 1222,
  "verified_rows": 0,
  "independent_origins": 0,
  "verified_competitors": 55,
- "executed_actions": 3293,
+ "executed_actions": 3301,
  "legacy_queries": {
   "NOT_EXECUTED": 488,
   "EXECUTED": 408
  },
- "topics_s1_done": 122,
- "competitors_s1_done": 30,
- "calculation_ids": 1397,
+ "topics_s1_done": 125,
+ "competitors_s1_done": 31,
+ "calculation_ids": 1419,
  "formal_deliverable_violation": false,
  "external_blocks": [],
  "steps": {
@@ -122,7 +122,7 @@
    "checks": [
     {
      "pass": false,
-     "detail": "topics with a complete research-unit collection: 122/325",
+     "detail": "topics with a complete research-unit collection: 125/325",
      "unmet": [
       "AXIS_01_T01: legacy queries not executed: 4; no primary-route search; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
       "AXIS_01_T02: legacy queries not executed: 4; no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -182,9 +182,6 @@
       "AXIS_18_T07: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_18_T08: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_19_T06: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); research unit record missing or incomplete",
-      "AXIS_20_T05: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 9); research unit record missing or incomplete",
-      "AXIS_20_T07: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); research unit record missing or incomplete",
-      "AXIS_20_T08: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 6); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 6); research unit record missing or incomplete",
       "AXIS_21_T01: legacy queries not executed: 4; no primary-route search; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
       "AXIS_21_T02: legacy queries not executed: 4; no primary-route search; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
       "AXIS_21_T03: legacy queries not executed: 4; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -739,12 +736,11 @@
     },
     {
      "pass": false,
-     "detail": "competitor candidates explored: 30/80",
+     "detail": "competitor candidates explored: 31/80",
      "unmet": [
       "C015 Google Slides without AI: no counter / independent search with results and no third-party-backed counter finding",
       "C017 Pitch: no counter / independent search with results and no third-party-backed counter finding",
       "C018 Prezi AI: no counter / independent search with results and no third-party-backed counter finding",
-      "C020 Presentations.AI: no counter / independent search with results and no third-party-backed counter finding",
       "C021 Slidesgo AI Presentation Maker: no counter / independent search with results and no third-party-backed counter finding",
       "C022 MagicSlides: no counter / independent search with results and no third-party-backed counter finding",
       "C024 Alai: no counter / independent search with results and no third-party-backed counter finding",
@@ -810,19 +806,19 @@
     },
     {
      "pass": true,
-     "detail": "search log integrity (dated, unique ids, valid same-action references): 4387 rows",
+     "detail": "search log integrity (dated, unique ids, valid same-action references): 4398 rows",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 4077)",
+     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 4088)",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1207 accepted",
+     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1222 accepted",
      "unmet": [],
      "action": ""
     },
@@ -834,7 +830,7 @@
     },
     {
      "pass": false,
-     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3293)",
+     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3301)",
      "unmet": [],
      "action": "regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge"
     }
@@ -848,7 +844,7 @@
    "checks": [
     {
      "pass": false,
-     "detail": "every accepted source reviewed: verified 0, pending 1207",
+     "detail": "every accepted source reviewed: verified 0, pending 1222",
      "unmet": [
       "S001",
       "S002",
@@ -1261,7 +1257,7 @@
     },
     {
      "pass": false,
-     "detail": "every source-to-unit mapping reviewed: 0/2877",
+     "detail": "every source-to-unit mapping reviewed: 0/2911",
      "unmet": [
       "M00001",
       "M00002",
@@ -2192,7 +2188,7 @@
     },
     {
      "pass": false,
-     "detail": "every calculation id is in a justified terminal state: 0/1397",
+     "detail": "every calculation id is in a justified terminal state: 0/1419",
      "unmet": [
       "CALC_AXIS_01_T01_C00",
       "CALC_AXIS_01_T02_C00",
