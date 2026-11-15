@@ -106,3 +106,10 @@ details summary { cursor: pointer; min-height: var(--tap); display: flex; align-
 .field.asking { outline: 3px solid var(--wood); outline-offset: 4px; border-radius: 8px; }
 [aria-disabled="true"] { opacity: .7; }
 ul.unused { margin: 6px 0; padding-left: 1.2em; font-size: .88rem; }
+/* a document candidate: the rows it adds up, and the rows of its material it left out (with the reason) */
+.cands details { margin: 4px 0; }
+ul.crows { margin: 4px 0; padding-left: 1.2em; font-size: .88rem; overflow-wrap: anywhere; }
+.cands ul.crows li { border: 0; border-radius: 0; padding: 0; margin: 4px 0; }
+ul.crows .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cands .notice { margin: 6px 0; }
+[data-busy], input[aria-busy="true"] { cursor: progress; }
