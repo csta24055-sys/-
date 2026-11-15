@@ -12,7 +12,7 @@ from __future__ import annotations
 import re
 from html import escape
 
-VERSION = "9"            # 変換の版（式の画像のキャッシュの鍵に入れる）
+VERSION = "10"            # 変換の版（式の画像のキャッシュの鍵に入れる）
 
 GREEK = {
     "alpha": "α", "beta": "β", "gamma": "γ", "delta": "δ", "epsilon": "ϵ", "varepsilon": "ε", "zeta": "ζ", "eta": "η",
@@ -461,6 +461,16 @@ def to_mathml(tex: str, display: bool = True) -> str:
 
 
 # ---------------------------------------------------------------- reportlab inline markup
+def to_plain_node(n) -> str:
+    """節の中身を飾り無しの文字列に（上線を付ける文字を取り出す）。"""
+    k = n[0]
+    if k == "row":
+        return "".join(to_plain_node(x) for x in n[1])
+    if k in ("mi", "mn", "mo", "mtext"):
+        return n[1]
+    return ""
+
+
 def _rl(n) -> str:
     k = n[0]
     if k == "row":
@@ -506,6 +516,8 @@ def _rl(n) -> str:
         s = f'<font name="MSerif">{n[1]}</font>'
         return s + (f"<sub>{_rl(n[2])}</sub>" if len(n) > 2 and n[2] is not None else "")
     if k == "accent":
+        if n[2] == "¯":   # 上線（循環小数など）は文字ごとの結合用の上線で
+            return "".join(f'<font name="MSerif">{escape(ch)}\u0305</font>' for ch in to_plain_node(n[1]))
         return _rl(n[1]) + f'<font name="MSerif">{escape(n[2] if n[2] != "^" else "̂")}</font>'
     if k == "fenced":
         return f'<font name="MSerif">{escape(n[1])}</font>{_rl(n[2])}<font name="MSerif">{escape(n[3])}</font>'

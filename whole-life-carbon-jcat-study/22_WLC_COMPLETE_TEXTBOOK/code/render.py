@@ -81,17 +81,24 @@ def _patch_cjk() -> None:
     assert key in src, "ReportLab の版が違う"
     fix = (
         "            if not lineBreak:\n"
-        "                _h = 0\n"
-        "                while i < nU and U[i] in ALL_CANNOT_START and _h < 2:\n"
-        "                    extraSpace -= float(getattr(U[i].width, 'normalizedValue', lambda m: U[i].width)(maxWidth)) if hasattr(U[i].width, 'normalizedValue') else U[i].width\n"
-        "                    i += 1\n"
-        "                    _h += 1\n"
+        "                while i < nU and U[i] in ALL_CANNOT_START and i - 1 > lineStartPos + 1:\n"
+        "                    i -= 1\n"
+        "                    extraSpace += U[i].width if not hasattr(U[i].width, 'normalizedValue') else 0\n"
         "                if i - 1 > lineStartPos + 1 and str(U[i - 1]) in _CANNOT_END:\n"
         "                    i -= 1\n"
-        "                    extraSpace += U[i].width if not hasattr(U[i].width, 'normalizedValue') else 0\n")
+        "                    extraSpace += U[i].width if not hasattr(U[i].width, 'normalizedValue') else 0\n"
+        "                _k = i\n"
+        "                while 0 < _k - lineStartPos and _k < nU and _isM(U[_k - 1]) and _isM(U[_k]):\n"
+        "                    _k -= 1\n"
+        "                if lineStartPos + 1 < _k < i and i - _k <= 24:\n"
+        "                    for _j in range(_k, i):\n"
+        "                        extraSpace += U[_j].width if not hasattr(U[_j].width, 'normalizedValue') else 0\n"
+        "                    i = _k\n")
+    src = src.replace("if u not in ALL_CANNOT_START and i>lineStartPos+1:", "if i>lineStartPos+1:")   # ぶら下げず追い出す
     src = src.replace(key, fix + key)
     ns = dict(P.__dict__)
     ns["_CANNOT_END"] = CANNOT_END
+    ns["_isM"] = lambda c: str(getattr(getattr(c, "frag", None), "fontName", "")).startswith("MSerif") and str(c) not in " 　"
     exec(compile(src, "<cjkFragSplit+kinsoku>", "exec"), ns)
     P.cjkFragSplit = ns["cjkFragSplit"]
 
@@ -103,11 +110,11 @@ def _patch_cjk() -> None:
             return lines
         texts = [t for _, t in lines]
         for k in range(len(texts) - 1):
-            moved = 0
-            while texts[k + 1] and texts[k + 1][0] in P.ALL_CANNOT_START and moved < 2:
-                texts[k] += texts[k + 1][0]
-                texts[k + 1] = texts[k + 1][1:]
-                moved += 1
+            guard = 0
+            while texts[k + 1] and texts[k + 1][0] in P.ALL_CANNOT_START and len(texts[k]) > 2 and guard < 4:
+                texts[k + 1] = texts[k][-1] + texts[k + 1]
+                texts[k] = texts[k][:-1]
+                guard += 1
             if len(texts[k]) > 2 and texts[k][-1] in CANNOT_END:
                 texts[k + 1] = texts[k][-1] + texts[k + 1]
                 texts[k] = texts[k][:-1]
@@ -344,7 +351,8 @@ def to_pdf(blocks: list[dict], path: Path, title: str, header: str = "", math_pn
             story.append(PageBreak())
         else:
             raise ValueError(f"知らないブロック {t}")
-        story.append(Spacer(1, 3 if t in ("list", "olist", "p") else 6))
+        if t not in ("h1", "h2", "h3"):   # 見出しの後は空けない（keepWithNext を切らないため。間は spaceAfter）
+            story.append(Spacer(1, 3 if t in ("list", "olist", "p") else 6))
 
     def footer(c, d):
         c.saveState()

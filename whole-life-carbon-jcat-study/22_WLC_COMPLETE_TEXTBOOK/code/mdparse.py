@@ -39,6 +39,7 @@ def parse(text: str, base: Path | None = None) -> list[dict]:
     blocks: list[dict] = []
     i = 0
     para: list[str] = []
+    pending_widths = None
 
     def flush():
         nonlocal para
@@ -67,6 +68,11 @@ def parse(text: str, base: Path | None = None) -> list[dict]:
         if m:
             flush()
             blocks.append({"t": f"h{len(m.group(1))}", "text": m.group(2).strip()})
+            i += 1
+            continue
+        if s.startswith("widths:"):
+            flush()
+            pending_widths = [float(x) for x in s[7:].split(",") if x.strip()]
             i += 1
             continue
         if s.startswith("small:"):
@@ -126,7 +132,8 @@ def parse(text: str, base: Path | None = None) -> list[dict]:
                 if not all(re.fullmatch(r":?-{2,}:?", c) for c in row):
                     rows.append(row)
                 i += 1
-            blocks.append({"t": "table", "rows": rows})
+            blocks.append({"t": "table", "rows": rows, **({"widths_mm": pending_widths} if pending_widths else {})})
+            pending_widths = None
             continue
         if s.startswith(">"):
             flush()
