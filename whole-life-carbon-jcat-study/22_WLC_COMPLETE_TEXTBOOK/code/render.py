@@ -50,8 +50,40 @@ def fonts() -> dict:
     addMapping("JP", 1, 0, "JP")     # 太字は同じ書体（IPA ゴシックに太字が無い）。見出しは大きさで区別
     addMapping("JP", 0, 1, "JP")
     addMapping("JP", 1, 1, "JP")
-    _FONTS = {"jp": "JP", "jp_path": jp}
+    jp_chars = set(pdfmetrics.getFont("JP").face.charToGlyph)
+    ms_chars = set(pdfmetrics.getFont("MSerif").face.charToGlyph)
+    _FONTS = {"jp": "JP", "jp_path": jp, "jp_chars": jp_chars, "ms_chars": ms_chars}
     return _FONTS
+
+
+MISSING: set[str] = set()   # どちらのフォントにも無い文字（品質検査で問題にする）
+
+
+def _font_runs(text: str) -> str:
+    """日本語フォントに無い文字（≥ ⇔ など）を数式用フォントに切り替える。どちらにも無い文字は MISSING に記録。"""
+    F = fonts()
+    out, cur, buf = [], None, []
+
+    def flush():
+        if buf:
+            seg = escape("".join(buf), quote=False).replace("\n", "<br/>")
+            out.append(f'<font name="MSerif">{seg}</font>' if cur == "ms" else seg)
+            buf.clear()
+    for ch in text:
+        cp = ord(ch)
+        if ch == "\n" or cp in F["jp_chars"]:
+            kind = "jp"
+        elif cp in F["ms_chars"]:
+            kind = "ms"
+        else:
+            kind = "jp"
+            MISSING.add(ch)
+        if kind != cur:
+            flush()
+            cur = kind
+        buf.append(ch)
+    flush()
+    return "".join(out)
 
 
 # ---------------------------------------------------------------- inline text → reportlab markup
@@ -79,7 +111,7 @@ def rl_markup(text: str) -> str:
     out = []
     for kind, s_, bold in _tokens(text):
         if kind == "t":
-            piece = escape(s_, quote=False).replace("\n", "<br/>")
+            piece = _font_runs(s_)
         else:
             try:
                 piece = to_rl(s_)

@@ -78,12 +78,16 @@ def build(key: str, force: bool = False) -> dict:
     if not force and fp_path.exists() and fp_path.read_text() == fp and pdf.exists() and docx.exists():
         return {"name": stem, "skipped": True}
     mp = render_all(mdparse.math_of(blocks), CACHE / "math")
+    render.MISSING.clear()
     render.to_pdf(blocks, pdf, title=spec["title"], header=HEADER if key == "1" else spec["title"], math_png=mp)
     render.to_docx(blocks, docx, title=spec["title"], math_png=mp)
     n_img = len(mdparse.math_of(blocks)) + len(figs)
     chk_pdf = render.check_pdf(pdf, spec["expect"], render_dir=OUT / "_renders", render_pages=[1, 2, 3],
                                header=HEADER if key == "1" else spec["title"])
     chk_docx = render.check_docx(docx, spec["expect"], n_images=n_img)
+    if render.MISSING:
+        chk_pdf["ok"] = False
+        chk_pdf["problems"].append("どのフォントにも無い文字: " + " ".join(f"U+{ord(c):04X}" for c in sorted(render.MISSING)))
     fp_path.parent.mkdir(parents=True, exist_ok=True)
     fp_path.write_text(fp)
     return {"name": stem, "skipped": False, "pdf": chk_pdf, "docx": chk_docx, "math": len(mdparse.math_of(blocks)),
