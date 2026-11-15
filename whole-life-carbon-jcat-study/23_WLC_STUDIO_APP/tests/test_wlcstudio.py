@@ -581,7 +581,9 @@ class ReviewFixTests(unittest.TestCase):
     # --- missing inputs make the total a lower bound (findings 0, 15, 24)
     def test_missing_equipment_refrigerant_fuel_are_flagged(self):
         base, _, rep0 = self.run_vals(self.full())
-        self.assertEqual(rep0["missing_inputs"], [])
+        self.assertEqual([m for m in rep0["missing_inputs"] if m["field"] in FL.FIELDS], [])
+        # C1 demolition and A5 site waste have no screen field: always reported (the total is honestly a lower bound)
+        self.assertEqual({m["field"] for m in rep0["missing_inputs"]}, {"end_of_life.demolition_activities", "construction.waste_streams"})
         vals = self.full()
         for t, _ in FL.TRADES:
             vals.pop("e_%s_count" % t.lower())
@@ -982,6 +984,148 @@ END-ISO-10303-21;
             httpd.shutdown()
             httpd.server_close()
             w.stop()
+
+
+class ThirdRoundTests(unittest.TestCase):
+    """Regression tests for the third verification round (systematic field sweep, UI flows, attacks)."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+
+    def screen_missing(self, rep):
+        return [m["field"] for m in rep["missing_inputs"] if m["field"] in FL.FIELDS]
+
+    def test_reconstruction_unknown_or_na_adds_no_rebuild(self):
+        base = dict(a_replacement_cycle=V("a_replacement_cycle", 40.0), a_recon_fraction=V("a_recon_fraction", 0.5))
+        doc, rep = bridge.build(self.full(a_reconstruction=None, **base), REFSET)
+        self.assertNotIn("boundary.replacement_cycle", items(doc))      # an unknown scenario must not trigger B5
+        r, _, _ = self.run_vals(self.full(a_reconstruction=V("a_reconstruction", None, "not_applicable"), **base))
+        self.assertEqual(r["results"]["X-02"]["by_stage"]["B5"], 0.0)
+        doc, _ = bridge.build(self.full(a_reconstruction=V("a_reconstruction", None, "not_applicable"), **base), REFSET)
+        self.assertEqual(items(doc)["boundary.reconstruction_scenario"], "NONE")
+
+    def test_na_never_fields(self):
+        pid = self.app.projects.create("nv", "RC")
+        with self.assertRaises(ApiError):
+            self.app.handle("PUT", "/api/projects/%d/fields/m_quantity_basis" % pid, {"value": None, "state": "not_applicable"})
+        _, rep = bridge.build(self.full(m_quantity_basis=V("m_quantity_basis", None, "not_applicable"),
+                                        m_waste_rate=V("m_waste_rate", 0.05)), REFSET)
+        self.assertIn("m_quantity_basis", self.screen_missing(rep))      # a stored 適用外 counts as missing
+
+    def test_refresh_na_means_no_renewal(self):
+        _, rep = bridge.build(self.full(m_refresh_cycle=V("m_refresh_cycle", None, "not_applicable")), REFSET, period=60)
+        self.assertNotIn("m_refresh_cycle", self.screen_missing(rep))
+        rows = {r["field"]: r for r in bridge.reflection_table(rep)}
+        self.assertIn("更新しない", rows["m_refresh_cycle"]["detail"])
+
+    def test_transport_fallback_is_reported(self):
+        vals = self.full(m_rebar=V("m_rebar", 10.0, unit="t"), m_transport_km=None)
+        _, rep = bridge.build(vals, REFSET)
+        self.assertTrue(any("配送原単位" in n for n in rep["notes"]))
+
+    def test_engine_flags_spread_to_dependent_stages(self):
+        pid = self.app.projects.create("sp", "RC")
+        vals = self.full(a_reconstruction=V("a_reconstruction", "MAJOR_REFURBISHMENT"), a_replacement_cycle=V("a_replacement_cycle", 40.0),
+                         a_recon_fraction=V("a_recon_fraction", 0.5))
+        vals.pop("a_eol_haul_km")
+        for fid, v in vals.items():
+            self.app.projects.put(pid, v)
+        _, out = self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
+        st = {x["stage"]: x["complete"] for x in out["summary"]["stages"]}
+        self.assertFalse(st["C2"])
+        self.assertFalse(st["B5"])
+
+    def test_b4_and_route_specific_c_stage(self):
+        vals = self.full(m_refresh_cycle=V("m_refresh_cycle", 100.0), m_steel=None)
+        _, rep = bridge.build(vals, REFSET, period=60)
+        stages = [x for m in rep["missing_inputs"] if m["field"] == "m_steel" for x in m["stages"]]
+        self.assertNotIn("B4", stages)                                    # no renewal inside 60 years
+        self.assertIn("C4", stages)                                       # route LANDFILL -> C4
+        self.assertNotIn("C3", stages)
+
+    def test_grid_na_outside_boundary_does_not_block(self):
+        vals = self.full(a_stages=V("a_stages", "EMBODIED"), o_grid_value=V("o_grid_value", None, "not_applicable"))
+        _, rep = bridge.build(vals, REFSET)
+        self.assertEqual(rep["missing_required"], [])
+        rows = {r["field"]: r for r in bridge.reflection_table(rep)}
+        self.assertFalse(rows["o_grid_value"]["reflected"])               # the zero fill is not "in the calculation"
+
+    def test_fm_ratio_irrelevant_without_electricity(self):
+        _, rep = bridge.build(self.full(o_elec_kwh=V("o_elec_kwh", None, "not_applicable"), o_fm_ratio=None), REFSET)
+        self.assertNotIn("o_fm_ratio", self.screen_missing(rep))
+
+    def test_stale_estimate_and_structure_edit(self):
+        pid = self.app.projects.create("se", "RC")
+        unc = Uncertainty("interval", 1, 9000, 0.9)
+        est = V("m_concrete", 900.0, "statistical", "t", method="rasmi_mi_x_gfa", source_id="r", factor_version="v",
+                uncertainty=unc, scope="whole_building", depends={"b_gfa": 5000.0, "b_use": "office", "b_structure": "RC"})
+        vals = self.full(m_concrete=est, b_gfa=V("b_gfa", 2000.0), b_structure=V("b_structure", "RC"))
+        _, rep = bridge.build(vals, REFSET)
+        self.assertEqual(rep["stale_estimates"][0]["field"], "m_concrete")
+        self.app.handle("PUT", "/api/projects/%d/fields/b_structure" % pid, {"value": "S", "state": "confirmed"})
+        self.assertEqual(self.app.projects.get(pid)["structure"], "S")
+
+    def test_plateau_select_validates_each_attribute(self):
+        pid = self.app.projects.create("pl", "RC")
+        c = {"plateau_building_id": "x", "storeys_above": 3, "storeys_below": 0, "measured_height_m": 5000.0,
+             "address": "東京都", "usage": "業務施設", "dataset": "d"}
+        _, out = self.app.handle("POST", "/api/projects/%d/research/plateau/select" % pid, {"candidate": c, "lat": 35.7, "lon": 139.7})
+        self.assertGreater(out["n_proposals"], 0)
+        self.assertTrue(any("高さ" in n for n in out["notes"]))
+
+    def test_ifc_invalid_quantities_cannot_loop(self):
+        K = 2500
+        objs = ",".join(["#10"] * K)
+        qids = ",".join(["#20"] * K)
+        ifc = ("ISO-10303-21;\nHEADER;FILE_SCHEMA(('IFC4'));ENDSEC;\nDATA;\n#10=IFCSLAB('a',$,'S',$,$,$,$,$,$);\n"
+               "#20=IFCQUANTITYVOLUME('V',$,$,$,$);\n#21=IFCELEMENTQUANTITY('q',$,'Q',$,$,(%s));\n"
+               "#22=IFCRELDEFINESBYPROPERTIES('r',$,$,$,(%s),#21);\nENDSEC;\nEND-ISO-10303-21;\n" % (qids, objs))
+        import time as _t
+        t0 = _t.time()
+        documents.read("k.ifc", base64.b64encode(ifc.encode()).decode(), "d")   # de-duplicated: one pair
+        self.assertLess(_t.time() - t0, 3)
+
+    def test_xlsx_shared_string_index_and_keywords(self):
+        import io as _io
+        import zipfile
+        buf = _io.BytesIO()
+        ns = 'xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"'
+        with zipfile.ZipFile(buf, "w") as z:
+            z.writestr("xl/workbook.xml", '<workbook %s xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+                       '<sheets><sheet name="s" sheetId="1" r:id="rId1"/></sheets></workbook>' % ns)
+            z.writestr("xl/_rels/workbook.xml.rels", '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                       '<Relationship Id="rId1" Target="worksheets/sheet1.xml"/></Relationships>')
+            z.writestr("xl/sharedStrings.xml", '<sst %s><si><t>a</t></si></sst>' % ns)
+            z.writestr("xl/worksheets/sheet1.xml", '<worksheet %s><sheetData><row r="1"><c r="A1" t="s"><v>999</v></c></row>'
+                       '</sheetData></worksheet>' % ns)
+        from wlcstudio.importers import tabular
+        with self.assertRaises(tabular.ImportError_):
+            tabular.read_xlsx(buf.getvalue(), "d")
+        csv = "名称,数量,単位\n鉄筋コンクリート（躯体）,850,m3\n鉄筋 D13,40,t\n鉄筋 D10,8000,kg\nGypsum board,30,m2\n設計数量 仕上,10,m2\n".encode()
+        r = documents.read("k.csv", base64.b64encode(csv).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got[("m_concrete", "m3")], 850.0)
+        self.assertEqual(got[("m_rebar", "t")], 48.0)                   # 40 t + 8000 kg in one candidate
+        self.assertIn(("m_board", "m2"), got)                           # 'Gypsum' is not a total row
+        self.assertIn(("m_finish", "m2"), got)                          # '設計…' is not a total row
+
+    def test_service_worker_is_network_first(self):
+        sw = (HERE / "web" / "sw.js").read_text(encoding="utf-8")
+        self.assertIn("skipWaiting", sw)
+        self.assertIn("fetch(e.request).then", sw)
+
+    def test_ipv6_loopback_server_class(self):
+        import socket
+        from http.server import ThreadingHTTPServer
+
+        class S6(ThreadingHTTPServer):
+            address_family = socket.AF_INET6
+        try:
+            srv = S6(("::1", 0), make_handler(self.app, 0))
+        except OSError:
+            self.skipTest("IPv6 loopback is not available here")
+        srv.server_close()
 
 
 class RegressionTests(unittest.TestCase):

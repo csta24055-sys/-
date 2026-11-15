@@ -15,14 +15,15 @@ from . import fields as FL
 from .importers import ifc, pdf, tabular
 from .provenance import Value
 
-KEYWORDS = [  # (field, words) — first match wins; foundation concrete is decided by the division/element
+KEYWORDS = [  # (field, words) — first match wins. Order matters: blocks/panels before concrete, concrete before rebar
+    # (鉄筋コンクリート / reinforced concrete is concrete), rebar before steel (reinforcing steel is rebar)
+    ("m_masonry", ("re:(^|[^a-z])alc([^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
+    ("m_concrete", ("コンクリート", "生コン", "concrete")),
     ("m_rebar", ("鉄筋", "異形棒鋼", "rebar", "reinforc")),
     ("m_steel", ("鉄骨", "鋼材", "形鋼", "鋼管", "デッキ", "structural steel", "steel")),
-    ("m_concrete", ("コンクリート", "生コン", "concrete")),
     ("m_timber", ("木材", "製材", "集成材", "合板", "clt", "timber", "wood", "lumber")),
     ("m_glass", ("ガラス", "glass")),
     ("m_aluminium", ("アルミ", "alumin")),
-    ("m_masonry", ("alc", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
     ("m_membrane", ("防水", "membrane", "waterproof")),
     ("m_insulation", ("断熱", "insulation")),
     ("m_board", ("石膏ボード", "せっこうボード", "ボード", "board", "gypsum")),
@@ -39,7 +40,7 @@ UNIT_ALIASES = {"m3": "m3", "㎥": "m3", "m³": "m3", "立米": "m3", "t": "t", 
 def _field_for(name: str, division: str = "") -> str | None:
     low = (name or "").lower()
     for fid, words in KEYWORDS:
-        if any(w in low for w in words):
+        if any((re.search(w[3:], low) is not None) if w.startswith("re:") else (w in low) for w in words):
             if fid == "m_concrete" and any(w in (division or "") + low for w in FOUNDATION_WORDS):
                 return "m_concrete_fdn"
             return fid
@@ -47,8 +48,13 @@ def _field_for(name: str, division: str = "") -> str | None:
 
 
 def _is_total(name: str) -> bool:
-    n = (name or "").strip().lower()
-    return any(n == w or n.startswith(w) or n.endswith(w) for w in TOTAL_WORDS)
+    """A total / subtotal row: 合計・小計・総計 at the start or end, 計 alone, or the English words as whole words
+    (so that 設計数量 or Gypsum board are not taken for totals)."""
+    n = (name or "").strip()
+    low = n.lower()
+    if n == "計" or any(n.startswith(w) or n.endswith(w) for w in ("合計", "小計", "総計")):
+        return True
+    return re.search(r"(^|[^a-z])(total|subtotal|sum)($|[^a-z])", low) is not None
 
 
 def _unit(u: str) -> str | None:
@@ -169,9 +175,25 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
     else:
         raise ValueError("この形式は読めない（CSV・XLSX・IFC・PDF）")
     proposals = []
+    to_t = {"t": 1.0, "kg": 0.001}
+    by_field = {}
     for (fid, u), items in sums.items():
-        total = sum(q for q, _ in items)
-        traces = [t for _, t in items]
+        by_field.setdefault(fid, {}).setdefault("mass" if u in to_t else u, []).extend((q, t, u) for q, t in items)
+    for fid, dims in by_field.items():
+        # one field holds one value: t and kg rows are added in t; rows of another dimension (m3 next to t) cannot be
+        # added, so the dimension with more rows is proposed and the other rows are listed as not used
+        dim = max(dims, key=lambda k: (len(dims[k]), k == "mass"))
+        for other, rows_ in dims.items():
+            if other != dim:
+                for q, t, u in rows_:
+                    unused.append({"trace": t, "name": FL.FIELDS[fid]["label"],
+                                   "reason": "同じ材料の別の行と単位の次元が違う（%s と %s）ので合計できない：確認して入れる" % (u, dim)})
+        items = dims[dim]
+        if dim == "mass":
+            total, u = sum(q * to_t[uu] for q, _, uu in items), "t"
+        else:
+            total, u = sum(q for q, _, _ in items), dim
+        traces = [t for _, t, _ in items]
         detail = "%d 行の合計：%s%s" % (len(items), "、".join(traces[:12]), "…" if len(traces) > 12 else "")
         proposals.append(Value(fid, "from_drawing", round(total, 6), u, method="%s_quantity_sum" % kind, source_id=doc_id,
                                source_detail=detail, note="資料「%s」から。分類はキーワードによるので確認する" % doc_id))

@@ -13,7 +13,7 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { font-size: 100%; }
+html { font-size: 100%; scroll-padding-top: 72px; scroll-padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, "Hiragino Sans", "Noto Sans JP", "IPAGothic", sans-serif;
   line-height: 1.6; -webkit-text-size-adjust: 100%; }
 .skip { position: absolute; left: -999px; } .skip:focus { left: 8px; top: 8px; background: var(--card); padding: 8px; z-index: 99; }

@@ -198,14 +198,27 @@ class App:
                 # an unchanged save must not turn an adopted estimate / drawing value into a typed value: that would drop
                 # its source, its range and its whole-building scope (and with it the double-counting guard)
                 raise ApiError(400, "値が同じなので保存しない（%sの出典・範囲を消さないため）。違う値を入れるときだけ保存する" % LABEL[cur.state])
+            if same and not same_unit and from_source:
+                raise ApiError(400, "%sの値の単位は付け直さない（出典の単位を変えると数値の意味が変わる）。候補を採用し直すか、"
+                                    "「未取得に戻す」のあと入れ直す" % LABEL[cur.state])
             if same and not same_unit and not b.get("relabel"):
                 raise ApiError(400, "数値を変えずに単位だけ変えることはしない（%s → %s）。単位の付け間違いを直すときは、"
                                     "画面の確認に答えて「単位の付け直し」として保存する" % (cur.unit, unit))
+        if state == "not_applicable" and F.get("na_never"):
+            raise ApiError(400, "「%s」は「適用外」にできない（無いということが無い項目）。分からないときは「未取得」のままにする" % F["label"])
+        scope = str(b.get("scope") or "")
+        if scope and not ((fid == "m_concrete" and scope == "whole_building") or (fid in ("m_rebar", "m_steel") and scope == "all_steel")):
+            raise ApiError(400, "この項目にその範囲（%s）は付けられない" % scope)
         v = Value(fid, state, value if state in ("confirmed", "assumption") else None,
                   str(b.get("unit") if b.get("unit") is not None else F.get("unit", "")) if state in ("confirmed", "assumption") else "",
                   method=str(b.get("method") or "user_entered"), source_id=str(b.get("source_id") or ""),
-                  source_detail=str(b.get("source_detail") or ""), note=str(b.get("note") or "")[:300], updated_by="user")
-        return self.projects.put(pid, v).to_json()
+                  source_detail=str(b.get("source_detail") or ""), note=str(b.get("note") or "")[:300], updated_by="user",
+                  scope=scope if state in ("confirmed", "assumption") else "")
+        out = self.projects.put(pid, v).to_json()
+        if fid == "b_structure" and state in ("confirmed", "assumption"):
+            # the project's structure follows the field (estimates, PLATEAU checks and field order use it)
+            self.projects.touch(pid, structure=str(value))
+        return out
 
     def research_address(self, pid: int, b: dict) -> dict:
         q = str(b.get("query") or "").strip()
@@ -230,10 +243,15 @@ class App:
             raise ApiError(400, "建物の候補が無い")
         p = self.projects.get(pid)
         props, notes = research.plateau_proposals(c, p["structure"])
-        n = 0
-        for v in props:
+        good = []
+        for v in props:                           # all checked first: one bad attribute must not leave a half selection
+            try:
+                good.append(self.projects.validate(v))
+            except (ProjectError, ProvenanceError) as e:
+                notes.append("「%s」は候補にしなかった：%s" % (FL.FIELDS[v.field_id]["label"], e))
+        for v in good:
             self.projects.propose(pid, v, "plateau")
-            n += 1
+        n = len(good)
         self.projects.touch(pid, location_json=json.dumps({"lat": _float(b.get("lat")), "lon": _float(b.get("lon")),
                                                            "plateau_building_id": c.get("plateau_building_id")}))
         self.projects.log(pid, "plateau_select", {"plateau_building_id": c.get("plateau_building_id"), "n_proposals": n, "notes": notes})
@@ -316,7 +334,8 @@ class App:
                 "unconnected": rep["unconnected"], "missing_required": rep["missing_required"],
                 "missing_materials": rep["missing_materials"], "missing_inputs": rep["missing_inputs"],
                 "fields": bridge.reflection_table(rep),
-                "factor_note": _factor_note(self.refset), "notes": rep["notes"], "double_count": rep["double_count"]}
+                "factor_note": _factor_note(self.refset), "notes": rep["notes"], "double_count": rep["double_count"],
+                "stale_estimates": rep.get("stale_estimates") or []}
         if rep["missing_required"]:
             out = dict(base, status="blocked", message="計算に必須の入力が足りないので計算していない（%s）" % "、".join(rep["missing_required"]),
                        summary=None, trace=trace)
@@ -336,7 +355,7 @@ class App:
         else:
             out = dict(base, status="ok", message="", summary=_summary(r["results"], run.get("view") or {}, rep), trace=trace,
                        checks=_checks(r["results"]))
-            out["range"] = self._range(vals, T, r["lca_project_id"], pid)
+            out["range"] = None if out["summary"]["nothing_counted"] else self._range(vals, T, r["lca_project_id"], pid)
             if out["range"] and out["summary"]["lower_bound"]:
                 out["range"]["lower_bound"] = True
                 out["range"]["note"] += "入っていない入力があるので、両端とも下限（本当の合計は上端より大きいことがある）。"
@@ -427,7 +446,11 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
     s3 = res.get("SUM-03") or {}
     x2 = res.get("X-02") or {}
     inc = x2.get("incomplete_units") or []
-    bad_stages = {UNIT_STAGE.get(u) for u in inc} | set(rep.get("incomplete_stages") or [])
+    # stages of the units the engine marks incomplete, spread to the stages that depend on them (B3/B4/B5) by the same
+    # rule the bridge uses for its own gaps
+    eng = {UNIT_STAGE.get(u) for u in inc} - {None}
+    bad_stages = (set(bridge.expand_stages(eng, rep.get("expand") or {})) & set(rep["stages"] or [])) \
+        | set(rep.get("incomplete_stages") or [])
     stages = [{"stage": k, "value": v, "complete": k not in bad_stages}
               for k, v in (x2.get("by_stage") or {}).items() if k in (rep["stages"] or [])]
     x7 = res.get("X-07") or {}
@@ -592,8 +615,8 @@ def make_handler(app, port: int):
                 self._send(status, out)
             except ApiError as e:
                 self._send(e.status, {"error": str(e)})
-            except (ProjectError, ProvenanceError, ValueError) as e:
-                self._send(400, {"error": str(e)})
+            except (ProjectError, ProvenanceError, ValueError, SyntaxError, IndexError) as e:   # SyntaxError: XML ParseError
+                self._send(400, {"error": "読めない・正しくない入力：%s" % e if isinstance(e, (SyntaxError, IndexError)) else str(e)})
             except SourceError as e:
                 self._send(502, {"error": str(e)})
             except Exception:                        # details go to the local log only
@@ -641,8 +664,12 @@ def serve(var: str | Path, host: str = "127.0.0.1", port: int = 8770, keep_uploa
     from .sources.net import sweep
     sweep()
     worker = AppWorker(var, keep_uploads=keep_uploads)
-    ThreadingHTTPServer.daemon_threads = True
-    httpd = ThreadingHTTPServer((host, port), make_handler(worker, port))
+    import socket
+
+    class _Server(ThreadingHTTPServer):
+        daemon_threads = True
+        address_family = socket.AF_INET6 if ":" in host else socket.AF_INET
+    httpd = _Server((host, port), make_handler(worker, port))
     print("WLC Studio %s: http://%s:%d/ （止めるには Ctrl+C）" % (APP_VERSION, "127.0.0.1" if host == "localhost" else host, port))
     try:
         httpd.serve_forever()

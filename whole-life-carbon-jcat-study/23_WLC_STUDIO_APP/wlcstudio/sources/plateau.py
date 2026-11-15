@@ -120,6 +120,7 @@ def _kv(attrs: dict, key: str):
 
 
 SENTINELS = {"不明", "Null", "NULL", "null", "", "-9999", "9999", "0001"}
+NUM_SENTINELS = {-9999.0, 9999.0, -999.0, 999.0}
 
 
 def _s(x):
@@ -131,6 +132,12 @@ def _s(x):
 
 
 def _num(x):
+    """Number attribute, or None for PLATEAU's numeric 'unknown' codes (-9999, 9999 …)."""
+    v = _num_raw(x)
+    return None if v is None or v in NUM_SENTINELS else v
+
+
+def _num_raw(x):
     try:
         v = float(x)
         return v if math.isfinite(v) else None

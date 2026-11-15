@@ -21,8 +21,8 @@ HEADERS = {
     "specification": ("規格", "仕様", "spec", "specification", "grade"),
 }
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-MAX_PART, MAX_TOTAL = 30_000_000, 60_000_000     # bytes after decompression (real quantity tables are far smaller)
-MAX_COLS, MAX_CELLS = 16_384, 2_000_000          # Excel's own column limit (XFD); all sheets together
+MAX_PART, MAX_TOTAL = 10_000_000, 40_000_000     # bytes after decompression (real quantity tables are far smaller)
+MAX_COLS, MAX_CELLS, MAX_SHARED = 16_384, 1_000_000, 300_000   # Excel's column limit (XFD); all sheets together
 
 
 class ImportError_(ValueError):
@@ -106,7 +106,11 @@ def _col_index(ref: str) -> int:
 
 
 def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
-    """All sheets of an .xlsx as (name, rows); cell values are the stored text/cached values (no formula is evaluated)."""
+    """All sheets of an .xlsx as (name, rows); cell values are the stored text/cached values (no formula is evaluated).
+
+    Guards (a quantity table is small): every part is read through a bounded stream counting the bytes actually
+    decompressed; the XML is parsed incrementally (iterparse, elements cleared as they are consumed), with limits on
+    shared strings, cells and columns enforced while parsing, never after a full tree is built."""
     try:
         z = zipfile.ZipFile(io.BytesIO(data))
     except (zipfile.BadZipFile, ValueError):
@@ -114,8 +118,6 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
     names = z.namelist()
     if any(n.lower().endswith("vbaproject.bin") for n in names):
         raise ImportError_("マクロを含むファイルは読まない（マクロを実行・解析しない方針）")
-    # zip bomb guard: every part is read through a bounded stream and the bytes actually decompressed are counted, so
-    # a part whose header understates its size cannot expand beyond the limits
     budget = {"left": MAX_TOTAL}
     if sum(i.file_size for i in z.infolist()) > MAX_TOTAL or any(i.file_size > MAX_PART for i in z.infolist()):
         raise ImportError_("展開すると大きすぎる Excel ファイルは読まない（1 部品 %d MB・合計 %d MB まで）"
@@ -134,34 +136,67 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
                                % (MAX_PART // 1_000_000, MAX_TOTAL // 1_000_000))
         budget["left"] -= len(data)
         return data
+
+    def events(name, small=False):
+        raw = read(name)
+        if small and len(raw) > 2_000_000:
+            raise ImportError_("Excel の部品 %s が大きすぎる" % name)
+        try:
+            yield from ET.iterparse(io.BytesIO(raw), events=("start", "end"))
+        except ET.ParseError as e:
+            raise ImportError_("Excel の部品 %s を読めない（%s）" % (name, e)) from None
+
+    M = "{%s}" % NS["m"]
     shared = []
     if "xl/sharedStrings.xml" in names:
-        root = ET.fromstring(read("xl/sharedStrings.xml"))
-        for si in root.findall("m:si", NS):
-            shared.append("".join(t.text or "" for t in si.iter("{%s}t" % NS["m"])))
-    wb = ET.fromstring(read("xl/workbook.xml"))
-    rels = ET.fromstring(read("xl/_rels/workbook.xml.rels"))
+        root = None
+        for ev, el in events("xl/sharedStrings.xml"):
+            if root is None:
+                root = el
+            if ev == "end" and el.tag == M + "si":
+                shared.append("".join(t.text or "" for t in el.iter(M + "t")))
+                if len(shared) > MAX_SHARED:
+                    raise ImportError_("共有の文字列が多すぎる（%d まで）" % MAX_SHARED)
+                el.clear()
+                root.clear()
+    wb_raw = read("xl/workbook.xml")
+    rels_raw = read("xl/_rels/workbook.xml.rels")
+    if len(wb_raw) > 2_000_000 or len(rels_raw) > 2_000_000:
+        raise ImportError_("Excel のブックの部品が大きすぎる")
+    try:
+        wb = ET.fromstring(wb_raw)
+        rels = ET.fromstring(rels_raw)
+    except ET.ParseError as e:
+        raise ImportError_("Excel のブックの部品を読めない（%s）" % e) from None
     rel_target = {r.get("Id"): r.get("Target") for r in rels}
     out = []
     cells = {"n": 0}
-    for sh in wb.find("m:sheets", NS):
+    sheets_el = wb.find("m:sheets", NS)
+    for sh in (sheets_el if sheets_el is not None else []):
         rid = sh.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
-        target = rel_target.get(rid, "")
+        target = rel_target.get(rid, "") or ""
         path = "xl/" + target.lstrip("/").replace("xl/", "") if not target.startswith("/xl/") else target.lstrip("/")
         if path not in names:
             continue
-        root = ET.fromstring(read(path))
         rows = []
-        for row in root.iter("{%s}row" % NS["m"]):
+        root = None
+        for ev, el in events(path):
+            if root is None:
+                root = el
+            if ev != "end" or el.tag != M + "row":
+                continue
             vals = {}
             last = -1
-            for c in row.findall("m:c", NS):
+            for c in el.findall("m:c", NS):
                 ref, t = c.get("r"), c.get("t")
                 v = c.find("m:v", NS)
                 if t == "s" and v is not None:
-                    val = shared[int(v.text)]
+                    try:
+                        val = shared[int(v.text)]
+                    except (ValueError, TypeError, IndexError):
+                        raise ImportError_("共有の文字列の番号 %r が正しくない" % (v.text,)) from None
                 elif t == "inlineStr":
-                    val = "".join(x.text or "" for x in c.iter("{%s}t" % NS["m"]))
+                    val = "".join(x.text or "" for x in c.iter(M + "t"))
                 else:
                     val = v.text if v is not None else None   # formulas: the cached value only, never evaluated
                 ci = _col_index(ref) if ref else last + 1     # a cell without a reference follows the previous one
@@ -173,6 +208,8 @@ def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
             if cells["n"] > MAX_CELLS:
                 raise ImportError_("セルが多すぎる（%d まで）" % MAX_CELLS)
             rows.append([vals.get(j) for j in range(max(vals) + 1)] if vals else [])
+            el.clear()
+            root.clear()
         out.append((sh.get("name"), rows))
     return out
 

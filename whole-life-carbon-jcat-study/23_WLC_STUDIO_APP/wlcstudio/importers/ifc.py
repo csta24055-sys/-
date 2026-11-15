@@ -142,6 +142,7 @@ def parse(text: str, doc_id: str) -> dict:
     if not assigned:
         unit_notes.append("単位の割り当て（IfcUnitAssignment）が無いので、SI の基本単位（m2・m3・kg）とみなした")
     budget = {"walk": MAX_WALK, "q": MAX_QUANTITIES}
+    qcache: dict[int, list] = {}
     memo: dict[int, list] = {}
 
     def material_names(ref: int) -> list:
@@ -185,15 +186,21 @@ def parse(text: str, doc_id: str) -> dict:
     for eid, (typ, args) in ents.items():
         if typ == "IFCRELDEFINESBYPROPERTIES":
             a = _split_args(args)
-            objs, pdef = _refs(a[4]), _refs(a[5])
+            objs, pdef = list(dict.fromkeys(_refs(a[4]))), list(dict.fromkeys(_refs(a[5])))   # a repeated ref adds nothing
             for p in pdef:
                 if p in qsets:
                     qname, qids = qsets[p]
+                    qids = list(dict.fromkeys(qids))
                     for o in objs:
                         if o in elements:
                             for q in qids:
+                                budget["q"] -= 1             # every pair tried costs, valid or not
+                                if budget["q"] < 0:
+                                    raise ValueError("IFC の数量が多すぎる（%d 個まで）" % MAX_QUANTITIES)
                                 if q in ents and ents[q][0] in QTY:
-                                    qa = _split_args(ents[q][1])
+                                    qa = qcache.get(q)
+                                    if qa is None:
+                                        qa = qcache[q] = _split_args(ents[q][1])
                                     kind, unit = QTY[ents[q][0]]
                                     val = _num(qa[3]) if len(qa) > 3 else None
                                     if val is None:
@@ -201,9 +208,6 @@ def parse(text: str, doc_id: str) -> dict:
                                     if val < 0:
                                         elements[o].setdefault("unit_problems", []).append("%s:#%d/#%d（負の数量は読まない）" % (doc_id, o, q))
                                         continue
-                                    budget["q"] -= 1
-                                    if budget["q"] < 0:
-                                        raise ValueError("IFC の数量が多すぎる（%d 個まで）" % MAX_QUANTITIES)
                                     factor = 1.0
                                     if kind != "count":
                                         uref = _refs(qa[2]) if len(qa) > 2 else []

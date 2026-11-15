@@ -92,6 +92,9 @@ class Value:
     # what an estimate covers beyond the field's own label: "whole_building" (concrete including foundations) or
     # "all_steel" (rebar and structural steel together); used by the double-counting guard, kept with the value
     scope: str = ""
+    # the inputs an estimate was computed from (e.g. {"b_gfa": 5000.0, "b_use": "office", "b_structure": "RC"});
+    # when they change later the estimate no longer fits the building and the result says so
+    depends: dict = field(default_factory=dict)
     updated_at: float = field(default_factory=time.time)
     updated_by: str = "user"
 
