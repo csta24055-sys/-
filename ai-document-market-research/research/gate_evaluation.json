@@ -1,20 +1,20 @@
 {
  "research_status": "INCOMPLETE",
- "checked_at": "2026-11-15T15:59:01.583219+00:00",
+ "checked_at": "2026-11-15T15:59:49.194587+00:00",
  "first_unmet_stage": "S1",
- "source_rows": 1144,
- "accepted_rows": 1144,
+ "source_rows": 1145,
+ "accepted_rows": 1145,
  "verified_rows": 0,
  "independent_origins": 0,
  "verified_competitors": 55,
- "executed_actions": 3116,
+ "executed_actions": 3140,
  "legacy_queries": {
   "NOT_EXECUTED": 520,
   "EXECUTED": 376
  },
  "topics_s1_done": 113,
  "competitors_s1_done": 28,
- "calculation_ids": 1291,
+ "calculation_ids": 1299,
  "formal_deliverable_violation": false,
  "external_blocks": [],
  "steps": {
@@ -182,8 +182,8 @@
       "AXIS_18_T07: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_18_T08: legacy queries not executed: 4; no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_19_T06: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 8); research unit record missing or incomplete",
-      "AXIS_19_T07: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
-      "AXIS_19_T08: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
+      "AXIS_19_T07: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 6); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 6); research unit record missing or incomplete",
+      "AXIS_19_T08: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 4); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 4); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 4); research unit record missing or incomplete",
       "AXIS_20_T01: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
       "AXIS_20_T02: legacy queries not executed: 4; no primary-route search; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
       "AXIS_20_T03: legacy queries not executed: 4; independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 2); research unit record missing or incomplete",
@@ -270,8 +270,8 @@
       "AXIS_16_T09: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_17_T09: no primary-route search",
       "AXIS_18_T09: independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 1); research unit record missing or incomplete",
-      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 3); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 3); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 3); research unit record missing or incomplete",
-      "AXIS_19_T10: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
+      "AXIS_19_T09: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 5); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 5); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 5); research unit record missing or incomplete",
+      "AXIS_19_T10: no primary-route search; primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 5); independent: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 5); counter: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 5); research unit record missing or incomplete",
       "AXIS_20_T09: no primary-route search; independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_21_T09: primary: ATTEMPTED_INSUFFICIENT (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
       "AXIS_21_T10: no primary-route search; primary: NO (own queries 0/2, pages read 0); independent: NO (own queries 0/2, pages read 0); counter: NO (own queries 0/2, pages read 0); research unit record missing or incomplete",
@@ -821,19 +821,19 @@
     },
     {
      "pass": true,
-     "detail": "search log integrity (dated, unique ids, valid same-action references): 4143 rows",
+     "detail": "search log integrity (dated, unique ids, valid same-action references): 4182 rows",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3833)",
+     "detail": "every logged worker execution matches a call in the transcript-derived execution manifest (0 unmatched; manifest rows 3872)",
      "unmet": [],
      "action": ""
     },
     {
      "pass": true,
-     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1144 accepted",
+     "detail": "every accepted source was opened; sweep sources carry a quote found in the fetched page: 1145 accepted",
      "unmet": [],
      "action": ""
     },
@@ -845,7 +845,7 @@
     },
     {
      "pass": false,
-     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3116)",
+     "detail": "coverage audit is current (EXECUTED_ACTIONS = 3140)",
      "unmet": [],
      "action": "regenerate research/COLLECTION_COVERAGE_AUDIT.md after the last merge"
     }
@@ -859,7 +859,7 @@
    "checks": [
     {
      "pass": false,
-     "detail": "every accepted source reviewed: verified 0, pending 1144",
+     "detail": "every accepted source reviewed: verified 0, pending 1145",
      "unmet": [
       "S001",
       "S002",
@@ -1272,7 +1272,7 @@
     },
     {
      "pass": false,
-     "detail": "every source-to-unit mapping reviewed: 0/2759",
+     "detail": "every source-to-unit mapping reviewed: 0/2765",
      "unmet": [
       "M00001",
       "M00002",
@@ -2203,7 +2203,7 @@
     },
     {
      "pass": false,
-     "detail": "every calculation id is in a justified terminal state: 0/1291",
+     "detail": "every calculation id is in a justified terminal state: 0/1299",
      "unmet": [
       "CALC_AXIS_01_T01_C00",
       "CALC_AXIS_01_T02_C00",
@@ -2534,10 +2534,18 @@
       "CALC_AXIS_07_T04_C03",
       "CALC_AXIS_07_T04_C04",
       "CALC_AXIS_07_T04_C05",
+      "CALC_AXIS_07_T04_C06",
+      "CALC_AXIS_07_T04_C07",
+      "CALC_AXIS_07_T04_C08",
+      "CALC_AXIS_07_T04_C09",
+      "CALC_AXIS_07_T04_C10",
       "CALC_AXIS_07_T04_N01",
       "CALC_AXIS_07_T04_N02",
       "CALC_AXIS_07_T04_N03",
       "CALC_AXIS_07_T04_N04",
+      "CALC_AXIS_07_T04_N05",
+      "CALC_AXIS_07_T04_N06",
+      "CALC_AXIS_07_T04_N07",
       "CALC_AXIS_07_T05_C01",
       "CALC_AXIS_07_T05_C02",
       "CALC_AXIS_07_T05_C03",
@@ -2596,15 +2604,7 @@
       "CALC_AXIS_08_T02_C04",
       "CALC_AXIS_08_T02_N01",
       "CALC_AXIS_08_T02_N02",
-      "CALC_AXIS_08_T02_N03",
-      "CALC_AXIS_08_T02_N04",
-      "CALC_AXIS_08_T03_C01",
-      "CALC_AXIS_08_T03_C02",
-      "CALC_AXIS_08_T03_C03",
-      "CALC_AXIS_08_T03_C04",
-      "CALC_AXIS_08_T03_N01",
-      "CALC_AXIS_08_T03_N02",
-      "CALC_AXIS_08_T03_N03"
+      "CALC_AXIS_08_T02_N03"
      ],
      "action": ""
     },
