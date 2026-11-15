@@ -93,6 +93,7 @@ class App:
                            "candidates": cands.get(fid, []), "later": fid in later}
         label = next(s["label"] for s in FL.STRUCTURES if s["id"] == p["structure"])
         return {"id": pid, "name": p["name"], "structure": p["structure"], "structure_label": label, "data_kind": p["data_kind"],
+                "created_at": p["created_at"],
                 "fields": fields, "progress": self.projects.progress(pid), "last_period": p["last_period"],
                 "documents": [{k: d[k] for k in ("id", "name", "kind", "size", "kept", "created_at")} for d in self.projects.documents(pid)],
                 "research": self.projects.research(pid)[-20:]}

@@ -2307,7 +2307,7 @@ class NinthRoundTests(unittest.TestCase):
     def test_ui_has_the_round9_guards(self):
         js = (HERE / "web" / "app.js").read_text(encoding="utf-8")
         for needle in ("function blocked()", "askRow", "state.nav !== nav", "lastImport", 'guard($("#calc")', "guard(cards",
-                       "toast._act === state.act", "評価期間は数値で入力してください", "refresh(sid, b.dataset.later, true, nav)"):
+                       "toast._act === act", "評価期間は数値で入力してください", "refresh(sid, b.dataset.later, true, nav)"):
             self.assertIn(needle, js, needle)
         self.assertNotIn("btn.disabled = true", js)
 
