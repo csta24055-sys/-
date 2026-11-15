@@ -1,0 +1,1545 @@
+<!doctype html>
+<html lang="ja" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>くうきと建物の公開データ（試作）</title>
+<meta name="description" content="B分類（公共性の高いプロジェクト）採用案C「段階的開示・3層レイヤー型」の動く試作。データはすべて架空。">
+<style>
+/* =========================================================
+   トークン（役割名で定義。値の直書きは禁止 — principles P10）
+   ========================================================= */
+:root{
+  /* 面・文字 */
+  --color-bg:#FFFFFF;
+  --color-surface:#F3F6F9;
+  --color-surface-2:#E9EEF3;
+  --color-border:#C9D3DD;          /* 装飾用の区切り線（UI境界には使わない） */
+  --color-border-strong:#5F6E7D;   /* 入力欄・ボタン枠など UI 境界（3:1 以上） */
+  --color-text:#1B2430;
+  --color-text-muted:#4D5B6A;
+  --color-primary:#1F5F8B;
+  --color-primary-hover:#174A6C;
+  --color-on-primary:#FFFFFF;
+  --color-link:#1F5F8B;
+  --color-link-visited:#5B3E8C;
+  --color-focus:#B4540A;           /* フォーカス表示専用 */
+  --color-focus-inner:#FFFFFF;
+  --color-danger:#A1201B;
+  --color-danger-hover:#7F1914;
+  --color-disabled-bg:#E4E8EC;
+  --color-disabled-text:#5C6773;
+  /* 層の帯（色相＋見出し番号で現在位置を示す） */
+  --color-layer1:#FFFFFF;
+  --color-layer2:#E6EEF5;
+  --color-layer3:#EEF0E6;
+  /* 識別帯・緊急帯（別部品・別配色） */
+  --color-identity-bg:#1B2430;
+  --color-identity-text:#FFFFFF;
+  --color-emergency-bg:#8C1D18;
+  --color-emergency-text:#FFFFFF;
+  /* 状態（色＋記号＋文言の三重表示で使う） */
+  --status-good-fg:#17663A;   --status-good-bg:#E3F3E8;
+  --status-caution-fg:#735000;--status-caution-bg:#FFF1CC;
+  --status-alert-fg:#9A3412;  --status-alert-bg:#FDE6D8;
+  --status-severe-fg:#A1201B; --status-severe-bg:#FBE2E0;
+  --status-nodata-fg:#4D5B6A; --status-nodata-bg:#EEF0F2;
+  --status-info-fg:#1F5F8B;   --status-info-bg:#E6EEF5;
+  /* グラフ（白背景で 3:1 以上。線種・記号も併用） */
+  --chart-1:#1F5F8B;
+  --chart-2:#6E4A9E;
+  --chart-3:#2E7D5B;
+  --chart-4:#8A6A1F;
+  --chart-grid:#C9D3DD;
+  --chart-threshold:#A1201B;
+  /* 文字 */
+  --font-sans:"BIZ UDPGothic","BIZ UDゴシック","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  --font-mono:"BIZ UDGothic",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --fs-xs:.875rem;  /* 14px 第3層の表・注記 */
+  --fs-s:1rem;      /* 16px 本文 */
+  --fs-m:1.125rem;  /* 18px 第1層本文 */
+  --fs-l:1.375rem;  /* 22px 第1層の結論 */
+  --fs-xl:1.75rem;  /* 28px 画面見出し */
+  --fs-xxl:2.25rem; /* 36px 主要数値 */
+  --lh-body:1.75;
+  --lh-tight:1.35;
+  /* 余白（8px グリッド） */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:24px; --space-6:32px; --space-7:40px; --space-8:48px; --space-9:64px;
+  /* 角丸・影・動き */
+  --radius-s:4px; --radius-m:8px; --radius-l:12px; --radius-pill:999px;
+  --shadow-1:0 1px 2px rgba(27,36,48,.14);
+  --shadow-2:0 4px 16px rgba(27,36,48,.16);
+  --dur-fast:120ms; --dur:200ms; --ease:cubic-bezier(.2,0,0,1);
+  /* 操作領域 */
+  --target-min:48px;     /* 主要操作（案Aから） */
+  --target-floor:24px;   /* 絶対下限（WCAG 2.5.8） */
+  --header-h:0px;
+}
+/* 災害時の軽量モード：高コントラスト・装飾なし */
+.lite{
+  --color-surface:#FFFFFF; --color-surface-2:#FFFFFF;
+  --color-border:#000000; --color-border-strong:#000000;
+  --color-text:#000000; --color-text-muted:#1B1B1B;
+  --color-primary:#003A70; --color-primary-hover:#002447; --color-link:#003A70;
+  --color-layer2:#FFFFFF; --color-layer3:#FFFFFF;
+  --shadow-1:none; --shadow-2:none; --dur-fast:0ms; --dur:0ms;
+}
+.reduce-motion{ --dur-fast:0ms; --dur:0ms; }
+@media (prefers-reduced-motion: reduce){ :root{ --dur-fast:0ms; --dur:0ms; } *{animation:none!important; scroll-behavior:auto!important} }
+
+/* 文字サイズ拡大（rem 基準で全体が拡大） */
+html{font-size:100%; scroll-padding-top:96px; scroll-padding-bottom:96px; -webkit-text-size-adjust:100%}
+html.size-l{font-size:112.5%}
+html.size-xl{font-size:137.5%}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0; background:var(--color-bg); color:var(--color-text); font-family:var(--font-sans); font-size:var(--fs-s); line-height:var(--lh-body); overflow-wrap:anywhere}
+img,svg{max-width:100%}
+h1,h2,h3,h4{line-height:var(--lh-tight); margin:0 0 var(--space-3)}
+h1{font-size:var(--fs-xl)} h2{font-size:var(--fs-l)} h3{font-size:var(--fs-m)} h4{font-size:var(--fs-s)}
+p{margin:0 0 var(--space-4)}
+a{color:var(--color-link); text-underline-offset:.2em; text-decoration-thickness:1px}
+a:visited{color:var(--color-link-visited)}
+a:hover{text-decoration-thickness:3px}
+code,pre{font-family:var(--font-mono); font-size:var(--fs-xs)}
+pre{background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-m); padding:var(--space-3); white-space:pre-wrap; word-break:break-all; margin:0 0 var(--space-4)}
+.sr-only{position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+
+/* フォーカス：専用色 3px ＋ 白の内側リング（2.4.7 / 2.4.11） */
+:focus-visible{outline:3px solid var(--color-focus); outline-offset:2px; box-shadow:0 0 0 2px var(--color-focus-inner)}
+[tabindex="-1"]:focus{outline:none; box-shadow:none}
+[tabindex="-1"]:focus-visible{outline:3px solid var(--color-focus)}
+
+/* スキップリンク */
+.skip{position:absolute; left:var(--space-2); top:-100px; z-index:100; background:var(--color-bg); color:var(--color-primary); padding:var(--space-3) var(--space-4); border:2px solid var(--color-primary); border-radius:var(--radius-m); font-weight:700}
+.skip:focus{top:var(--space-2)}
+
+/* 識別帯（P1：全ページ最上部・操作なし・広告なし） */
+.identity{background:var(--color-identity-bg); color:var(--color-identity-text); font-size:var(--fs-xs); padding:var(--space-2) var(--space-4)}
+.identity a{color:var(--color-identity-text)}
+.identity .inner{max-width:1360px; margin:0 auto; display:flex; gap:var(--space-2) var(--space-4); flex-wrap:wrap; align-items:center}
+.identity strong{font-weight:700}
+
+/* ヘッダー */
+.site-header{background:var(--color-bg); border-bottom:1px solid var(--color-border); position:sticky; top:0; z-index:30}
+.site-header .inner{max-width:1360px; margin:0 auto; padding:var(--space-2) var(--space-4); display:flex; flex-wrap:wrap; gap:var(--space-2) var(--space-4); align-items:center}
+.brand{display:flex; align-items:center; gap:var(--space-2); text-decoration:none; color:var(--color-text)!important; font-weight:700; font-size:var(--fs-m); min-height:var(--target-min)}
+.brand-mark{width:32px; height:32px; flex:none}
+.tag{display:inline-block; font-size:var(--fs-xs); font-weight:700; border:1px solid var(--color-border-strong); border-radius:var(--radius-s); padding:0 var(--space-2); line-height:1.6; color:var(--color-text)}
+.utility{display:flex; flex-wrap:wrap; gap:var(--space-2) var(--space-3); align-items:center; margin-left:auto}
+.seg{display:inline-flex; border:1px solid var(--color-border-strong); border-radius:var(--radius-m); overflow:hidden}
+.seg button{border:0; background:var(--color-bg); color:var(--color-text); min-height:40px; min-width:40px; padding:0 var(--space-3); font:inherit; font-size:var(--fs-xs); cursor:pointer}
+.seg button+button{border-left:1px solid var(--color-border-strong)}
+.seg button[aria-pressed="true"]{background:var(--color-primary); color:var(--color-on-primary); font-weight:700}
+.seg button[aria-pressed="true"]::before{content:"✓ "}
+.util-label{font-size:var(--fs-xs); color:var(--color-text-muted); margin-right:var(--space-1)}
+.util-group{display:flex; align-items:center; gap:var(--space-1)}
+.global-nav{flex-basis:100%}
+.global-nav ul{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:0 var(--space-1)}
+.global-nav a{display:flex; align-items:center; min-height:var(--target-min); padding:0 var(--space-3); color:var(--color-text); text-decoration:none; border-bottom:4px solid transparent; font-weight:600}
+.global-nav a[aria-current="page"]{border-bottom-color:var(--color-primary); color:var(--color-primary)}
+.global-nav a:hover{background:var(--color-surface)}
+.menu-btn{display:none}
+
+/* 緊急帯（P8：識別帯とは別部品） */
+.emergency{background:var(--color-emergency-bg); color:var(--color-emergency-text)}
+.emergency .inner{max-width:1360px; margin:0 auto; padding:var(--space-3) var(--space-4); display:flex; gap:var(--space-3); align-items:flex-start}
+.emergency a{color:var(--color-emergency-text); font-weight:700}
+.emergency .ico{flex:none; width:28px; height:28px}
+.emergency p{margin:0}
+
+/* レイアウト */
+.layout{max-width:1360px; margin:0 auto; display:grid; grid-template-columns:264px minmax(0,1fr); gap:var(--space-6); padding:var(--space-5) var(--space-4) var(--space-9)}
+.sidebar{position:sticky; top:calc(var(--header-h) + var(--space-4)); align-self:start; max-height:calc(100vh - var(--header-h) - 32px); overflow:auto; font-size:var(--fs-xs)}
+.sidebar h2{font-size:var(--fs-s); margin-top:var(--space-4)}
+.side-nav{list-style:none; margin:0; padding:0}
+.side-nav a{display:flex; align-items:center; gap:var(--space-2); min-height:44px; padding:0 var(--space-3); border-radius:var(--radius-m); color:var(--color-text); text-decoration:none; font-size:var(--fs-s)}
+.side-nav a[aria-current="page"]{background:var(--color-layer2); font-weight:700; box-shadow:inset 4px 0 0 var(--color-primary)}
+.side-nav a:hover{background:var(--color-surface)}
+.side-box{background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-m); padding:var(--space-3); margin-top:var(--space-4)}
+.side-box dl{margin:0}
+.side-box dt{font-weight:700}
+.side-box dd{margin:0 0 var(--space-2)}
+.drawer-close{display:none}
+main{min-width:0}
+main:focus{outline:none}
+
+/* 画面 */
+.js .screen{display:none}
+.js .screen.active{display:block}
+.no-js .screen{border-top:4px solid var(--color-border); padding-top:var(--space-5); margin-top:var(--space-7)}
+.screen-head{margin-bottom:var(--space-5)}
+.breadcrumb{font-size:var(--fs-xs); margin-bottom:var(--space-2)}
+.breadcrumb ol{list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:var(--space-1)}
+.breadcrumb li+li::before{content:"›"; margin:0 var(--space-1); color:var(--color-text-muted)}
+.lead{font-size:var(--fs-m); color:var(--color-text)}
+
+/* 出典ストリップ（常時表示） */
+.provenance{display:flex; flex-wrap:wrap; gap:var(--space-1) var(--space-4); font-size:var(--fs-xs); color:var(--color-text-muted); background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-m); padding:var(--space-2) var(--space-3)}
+.provenance b{color:var(--color-text)}
+
+/* ボタン */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:var(--space-2); min-height:var(--target-min); padding:0 var(--space-5); border-radius:var(--radius-m); border:2px solid var(--color-primary); background:var(--color-primary); color:var(--color-on-primary); font:inherit; font-weight:700; cursor:pointer; text-decoration:none; transition:background var(--dur-fast) var(--ease)}
+.btn:hover{background:var(--color-primary-hover); border-color:var(--color-primary-hover)}
+a.btn, a.btn:visited{color:var(--color-on-primary)}
+.btn-secondary{background:var(--color-bg); color:var(--color-primary)}
+a.btn-secondary,a.btn-secondary:visited{color:var(--color-primary)}
+.btn-secondary:hover{background:var(--color-layer2); border-color:var(--color-primary)}
+.btn-danger{background:var(--color-danger); border-color:var(--color-danger)}
+.btn-danger:hover{background:var(--color-danger-hover); border-color:var(--color-danger-hover)}
+.btn[disabled],.btn[aria-disabled="true"]{background:var(--color-disabled-bg); border-color:var(--color-disabled-bg); color:var(--color-disabled-text); cursor:not-allowed}
+.btn-small{min-height:40px; padding:0 var(--space-3); font-size:var(--fs-xs)}
+.btn-link{background:none; border:0; color:var(--color-link); text-decoration:underline; font:inherit; cursor:pointer; min-height:var(--target-floor); padding:0}
+.btn-row{display:flex; flex-wrap:wrap; gap:var(--space-3); align-items:center; margin:var(--space-4) 0}
+
+/* カード */
+.card{background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-l); padding:var(--space-5); box-shadow:var(--shadow-1)}
+.grid{display:grid; gap:var(--space-4)}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.task-btn{display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-1); min-height:96px; padding:var(--space-4); border:2px solid var(--color-primary); border-radius:var(--radius-l); background:var(--color-bg); color:var(--color-text)!important; text-decoration:none; font-size:var(--fs-m); font-weight:700}
+.task-btn small{font-weight:400; font-size:var(--fs-xs); color:var(--color-text-muted)}
+.task-btn:hover{background:var(--color-layer2)}
+.task-btn .num{color:var(--color-primary)}
+
+/* 区分バッジ（色＋記号＋文言＋数値範囲） */
+.level{display:inline-flex; align-items:center; gap:var(--space-2); padding:var(--space-1) var(--space-3); border-radius:var(--radius-pill); border:2px solid currentColor; font-weight:700; font-size:var(--fs-s); line-height:1.4}
+.level .sym{font-size:1.1em; line-height:1}
+.lv-good{color:var(--status-good-fg); background:var(--status-good-bg)}
+.lv-caution{color:var(--status-caution-fg); background:var(--status-caution-bg)}
+.lv-alert{color:var(--status-alert-fg); background:var(--status-alert-bg)}
+.lv-severe{color:var(--status-severe-fg); background:var(--status-severe-bg)}
+.lv-nodata{color:var(--status-nodata-fg); background:repeating-linear-gradient(135deg,var(--status-nodata-bg) 0 6px,#FFFFFF 6px 12px)}
+.state{display:inline-block; font-size:var(--fs-xs); font-weight:700; border:1px solid var(--color-border-strong); border-radius:var(--radius-s); padding:0 var(--space-2); white-space:nowrap}
+.state-prelim{border-style:dashed}
+.state-est{font-style:italic}
+
+/* 通知（成功・警告・エラー・情報） */
+.notice{display:flex; gap:var(--space-3); align-items:flex-start; border-left:6px solid currentColor; border-radius:var(--radius-m); padding:var(--space-3) var(--space-4); margin:var(--space-4) 0}
+.notice .ico{flex:none; width:24px; height:24px; margin-top:2px}
+.notice p{margin:0; color:var(--color-text)}
+.notice strong{color:var(--color-text)}
+.n-success{color:var(--status-good-fg); background:var(--status-good-bg)}
+.n-warning{color:var(--status-caution-fg); background:var(--status-caution-bg)}
+.n-error{color:var(--status-severe-fg); background:var(--status-severe-bg)}
+.n-info{color:var(--status-info-fg); background:var(--status-info-bg)}
+
+/* 層（段階的開示） */
+.layer-nav{position:sticky; top:calc(var(--header-h) + 8px); z-index:10; background:var(--color-bg); border:1px solid var(--color-border-strong); border-radius:var(--radius-m); display:flex; margin-bottom:var(--space-5); box-shadow:var(--shadow-1)}
+.layer-nav a{flex:1; display:flex; align-items:center; justify-content:center; gap:var(--space-2); min-height:var(--target-min); text-decoration:none; color:var(--color-text); font-weight:600; padding:0 var(--space-2); text-align:center; line-height:1.3}
+.layer-nav a+a{border-left:1px solid var(--color-border-strong)}
+.layer-nav a[aria-current="true"]{background:var(--color-primary); color:var(--color-on-primary)}
+.layer-nav .n{display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; border:2px solid currentColor; font-size:var(--fs-xs); flex:none}
+.layer{border-radius:var(--radius-l); padding:var(--space-5); margin-bottom:var(--space-7)}
+.layer-1{background:var(--color-layer1); border:2px solid var(--color-primary); font-size:var(--fs-m)}
+.layer-2{background:var(--color-layer2)}
+.layer-3{background:var(--color-layer3)}
+.layer-head{display:flex; gap:var(--space-3); align-items:center}
+.layer-no{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:50%; background:var(--color-primary); color:var(--color-on-primary); font-weight:700; flex:none; font-size:var(--fs-s)}
+details.layer>summary{list-style:none; cursor:pointer; min-height:var(--target-min); display:flex; align-items:center; justify-content:space-between; gap:var(--space-3)}
+details.layer>summary::-webkit-details-marker{display:none}
+details.layer>summary h2{margin:0}
+details.layer>summary .toggle-txt{font-size:var(--fs-xs); font-weight:700; color:var(--color-primary); border:1px solid var(--color-primary); border-radius:var(--radius-pill); padding:var(--space-1) var(--space-3); white-space:nowrap; background:var(--color-bg)}
+details.layer[open]>summary{margin-bottom:var(--space-4)}
+.ws-top{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--space-5); align-items:start}
+.conclusion .big{font-size:var(--fs-xxl); font-weight:700; line-height:1.2}
+.conclusion .unit{font-size:var(--fs-s); font-weight:400}
+.conclusion .msg{font-size:var(--fs-l); font-weight:700; margin:var(--space-3) 0}
+.actions{margin:0; padding-left:1.4em}
+.actions li{margin-bottom:var(--space-2)}
+.easy{border:2px dashed var(--color-border-strong); border-radius:var(--radius-m); padding:var(--space-3) var(--space-4); background:var(--color-surface)}
+.audience-expert-only{display:none}
+.aud-expert .audience-expert-only{display:revert}
+.aud-expert tr.audience-expert-only{display:table-row}
+
+/* 根拠ブロック（P3：同じ順番・同じ見た目） */
+.evidence{border-top:2px solid var(--color-border-strong); margin-top:var(--space-4); padding-top:var(--space-3); font-size:var(--fs-xs)}
+.evidence dl{display:grid; grid-template-columns:max-content minmax(0,1fr); gap:var(--space-1) var(--space-4); margin:0}
+.evidence dt{font-weight:700}
+.evidence dd{margin:0}
+.meta-list{display:grid; grid-template-columns:minmax(10em,max-content) minmax(0,1fr); gap:var(--space-2) var(--space-5); margin:0; font-size:var(--fs-xs)}
+.meta-list dt{font-weight:700}
+.meta-list dd{margin:0}
+
+/* フォーム */
+.field{margin-bottom:var(--space-5)}
+.field label,.field legend{display:block; font-weight:700; margin-bottom:var(--space-1)}
+.hint{display:block; color:var(--color-text-muted); font-size:var(--fs-xs); margin-bottom:var(--space-2)}
+.input,select.input{display:block; width:100%; max-width:28em; min-height:var(--target-min); padding:var(--space-2) var(--space-3); font:inherit; color:var(--color-text); background:var(--color-bg); border:2px solid var(--color-border-strong); border-radius:var(--radius-m)}
+.input-num{max-width:8em}
+.field.has-error .input{border-color:var(--status-severe-fg); border-width:3px}
+.field.has-error{border-left:5px solid var(--status-severe-fg); padding-left:var(--space-3)}
+.error-msg{display:block; color:var(--status-severe-fg); font-weight:700; margin-bottom:var(--space-2)}
+.error-msg::before{content:"✕ エラー: "}
+fieldset{border:0; padding:0; margin:0 0 var(--space-5); min-width:0}
+.choice{display:flex; align-items:flex-start; gap:var(--space-3); min-height:var(--target-min); padding:var(--space-2) 0}
+.choice input{width:24px; height:24px; margin:4px 0 0; accent-color:var(--color-primary); flex:none}
+.choice.is-disabled{color:var(--color-disabled-text)}
+.choice .reason{display:block; font-size:var(--fs-xs)}
+.stepper{display:flex; gap:var(--space-2); align-items:center}
+.stepper .btn{min-width:var(--target-min); padding:0}
+.error-summary{border:3px solid var(--status-severe-fg); border-radius:var(--radius-m); padding:var(--space-4); margin-bottom:var(--space-5); background:var(--color-bg)}
+.error-summary h3{color:var(--status-severe-fg)}
+.error-summary ul{margin:0; padding-left:1.2em}
+.inline-form{display:flex; flex-wrap:wrap; gap:var(--space-2); align-items:flex-end}
+.inline-form .input{flex:1 1 14em}
+
+/* タブ */
+[role="tablist"]{display:flex; flex-wrap:wrap; gap:var(--space-1); border-bottom:2px solid var(--color-border-strong); margin-bottom:var(--space-4)}
+[role="tab"]{min-height:var(--target-min); padding:0 var(--space-4); border:2px solid transparent; border-bottom:0; border-radius:var(--radius-m) var(--radius-m) 0 0; background:transparent; font:inherit; font-weight:600; color:var(--color-text); cursor:pointer; margin-bottom:-2px}
+[role="tab"][aria-selected="true"]{background:var(--color-bg); border-color:var(--color-border-strong); border-bottom:2px solid var(--color-bg); color:var(--color-primary); box-shadow:inset 0 4px 0 var(--color-primary)}
+[role="tabpanel"]{background:var(--color-bg); border-radius:var(--radius-m); padding:var(--space-4)}
+[role="tabpanel"][hidden]{display:none}
+
+/* テーブル */
+.table-wrap{max-width:100%}
+table{border-collapse:collapse; width:100%; font-size:var(--fs-xs); background:var(--color-bg)}
+caption{text-align:left; font-weight:700; font-size:var(--fs-s); padding-bottom:var(--space-2)}
+th,td{border-bottom:1px solid var(--color-border); padding:var(--space-2) var(--space-3); text-align:left; vertical-align:top}
+thead th{border-bottom:2px solid var(--color-border-strong); background:var(--color-surface); white-space:nowrap}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
+th .sort{all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:var(--space-1); min-height:32px; font-weight:700}
+th .sort:focus-visible{outline:3px solid var(--color-focus); outline-offset:2px}
+th .sort .arr::after{content:"⇅"; color:var(--color-text-muted)}
+th[aria-sort="ascending"] .sort .arr::after{content:"▲"; color:var(--color-primary)}
+th[aria-sort="descending"] .sort .arr::after{content:"▼"; color:var(--color-primary)}
+tr.missing td{background:repeating-linear-gradient(135deg,transparent 0 6px,var(--status-nodata-bg) 6px 12px)}
+
+/* チャート */
+.chart{width:100%; height:auto; display:block; background:var(--color-bg)}
+.chart text{font-family:var(--font-sans); font-size:12px; fill:var(--color-text)}
+.chart .axis{stroke:var(--color-border-strong)}
+.chart .grid{stroke:var(--chart-grid); stroke-dasharray:2 3}
+.chart-says{font-weight:700; margin-bottom:var(--space-2)}
+.legend{display:flex; flex-wrap:wrap; gap:var(--space-2) var(--space-4); list-style:none; padding:0; margin:var(--space-2) 0; font-size:var(--fs-xs)}
+.legend li{display:flex; align-items:center; gap:var(--space-2)}
+.legend svg{width:32px; height:14px}
+
+/* タイル地図（色＋記号＋名称） */
+.tile-map{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--space-2); list-style:none; margin:0; padding:0}
+.tile-map li a,.tile-map li span.t{display:flex; flex-direction:column; min-height:72px; padding:var(--space-2); border-radius:var(--radius-m); border:2px solid currentColor; text-decoration:none; font-size:var(--fs-xs); font-weight:700}
+.tile-map .nm{color:var(--color-text)}
+.tile-map li a.lv-good,.tile-map li a.lv-good:visited{color:var(--status-good-fg)}
+.tile-map li a.lv-caution,.tile-map li a.lv-caution:visited{color:var(--status-caution-fg)}
+.tile-map li a.lv-alert,.tile-map li a.lv-alert:visited{color:var(--status-alert-fg)}
+.tile-map li .lv-nodata{color:var(--status-nodata-fg)}
+.tile-map .cur{outline:3px solid var(--color-text); outline-offset:2px}
+
+/* 空状態・スケルトン */
+.empty{text-align:center; border:2px dashed var(--color-border-strong); border-radius:var(--radius-l); padding:var(--space-6) var(--space-4); color:var(--color-text)}
+.empty .ico{width:48px; height:48px; color:var(--color-text-muted)}
+.skeleton{display:grid; gap:var(--space-3)}
+.sk{background:var(--color-surface-2); border-radius:var(--radius-s); height:16px; position:relative; overflow:hidden}
+.sk.tall{height:180px}
+.sk::after{content:""; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent); animation:shimmer 1.4s infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.reduce-motion .sk::after{animation:none; display:none}
+@media (prefers-reduced-motion: reduce){.sk::after{display:none}}
+
+/* ダイアログ */
+dialog{border:0; border-radius:var(--radius-l); padding:0; max-width:min(560px,calc(100vw - 32px)); width:100%; box-shadow:var(--shadow-2); color:var(--color-text); background:var(--color-bg)}
+dialog::backdrop{background:rgba(27,36,48,.55)}
+.dlg-body{padding:var(--space-5)}
+.dlg-foot{display:flex; flex-wrap:wrap; gap:var(--space-3); justify-content:flex-end; padding:var(--space-4) var(--space-5); border-top:1px solid var(--color-border); background:var(--color-surface); border-radius:0 0 var(--radius-l) var(--radius-l)}
+
+/* トークン一覧 */
+.swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:var(--space-3); list-style:none; padding:0; margin:0}
+.swatch{border:1px solid var(--color-border); border-radius:var(--radius-m); overflow:hidden; font-size:var(--fs-xs); background:var(--color-bg)}
+.swatch .chip{height:56px; border-bottom:1px solid var(--color-border)}
+.swatch .info{padding:var(--space-2) var(--space-3)}
+.swatch code{font-size:.8rem}
+.scale-row{display:flex; align-items:baseline; gap:var(--space-4); border-bottom:1px solid var(--color-border); padding:var(--space-2) 0; flex-wrap:wrap}
+.space-bar{height:16px; background:var(--color-primary); border-radius:2px}
+.radius-demo{width:64px; height:48px; border:2px solid var(--color-border-strong); background:var(--color-surface)}
+
+/* フッター・下部ナビ */
+.site-footer{background:var(--color-surface); border-top:1px solid var(--color-border); font-size:var(--fs-xs)}
+.site-footer .inner{max-width:1360px; margin:0 auto; padding:var(--space-6) var(--space-4) var(--space-8); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-5)}
+.site-footer ul{list-style:none; padding:0; margin:0}
+.site-footer li{margin-bottom:var(--space-2)}
+.bottom-nav{display:none}
+.lite-note{display:none}
+.lite .lite-note{display:flex}
+.lite [data-noncritical]{display:none!important}
+.lite .card{box-shadow:none; border:2px solid #000}
+.lite .layer-1{border-width:3px}
+
+/* ===== レスポンシブ ===== */
+@media (max-width:1023px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .menu-btn{display:inline-flex}
+  .sidebar{position:fixed; inset:0 auto 0 0; width:min(320px,88vw); max-height:none; background:var(--color-bg); z-index:60; padding:var(--space-4); box-shadow:var(--shadow-2); transform:translateX(-105%); transition:transform var(--dur) var(--ease); visibility:hidden}
+  .sidebar.open{transform:none; visibility:visible}
+  .drawer-close{display:inline-flex}
+  .scrim{position:fixed; inset:0; background:rgba(27,36,48,.5); z-index:50}
+  .ws-top{grid-template-columns:minmax(0,1fr)}
+  .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:639px){
+  html{scroll-padding-bottom:110px}
+  .global-nav{display:none}
+  .utility{margin-left:0; width:100%}
+  .util-label{display:none}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:minmax(0,1fr)}
+  .layout{padding:var(--space-4) var(--space-4) 120px; gap:var(--space-4)}
+  .layer{padding:var(--space-4)}
+  .layer-nav a{flex-direction:column; gap:2px; font-size:var(--fs-xs); padding:var(--space-1)}
+  .tile-map{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .site-footer .inner{grid-template-columns:minmax(0,1fr); padding-bottom:120px}
+  .bottom-nav{display:block; position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--color-bg); border-top:2px solid var(--color-border-strong)}
+  .bottom-nav ul{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); list-style:none; margin:0; padding:0 0 env(safe-area-inset-bottom)}
+  .bottom-nav a{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60px; font-size:.75rem; color:var(--color-text); text-decoration:none; gap:2px; font-weight:600}
+  .bottom-nav a[aria-current="page"]{color:var(--color-primary); box-shadow:inset 0 4px 0 var(--color-primary); font-weight:700}
+  .bottom-nav svg{width:22px; height:22px}
+  /* 表 → カードリスト */
+  table.stack thead{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0)}
+  table.stack tr{display:block; border:1px solid var(--color-border-strong); border-radius:var(--radius-m); margin-bottom:var(--space-3); padding:var(--space-2) var(--space-3); background:var(--color-bg)}
+  table.stack td{display:grid; grid-template-columns:8em minmax(0,1fr); gap:var(--space-2); border:0; padding:var(--space-1) 0; text-align:left}
+  table.stack td::before{content:attr(data-label); font-weight:700; color:var(--color-text-muted)}
+  .sort-mobile{display:flex!important}
+  .evidence dl,.meta-list{grid-template-columns:minmax(0,1fr)}
+  .evidence dd,.meta-list dd{margin-bottom:var(--space-2)}
+  .emergency .inner{padding:var(--space-3)}
+}
+.sort-mobile{display:none; gap:var(--space-2); align-items:center; flex-wrap:wrap; margin-bottom:var(--space-3)}
+@media print{.site-header,.bottom-nav,.sidebar,.utility{display:none} .js .screen{display:block}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">本文へ移動</a>
+
+<!-- 識別帯：運営主体の識別（政府の公式表示を模倣しない） -->
+<div class="identity" role="region" aria-label="運営主体の表示" data-i18n-aria="identityLabel">
+  <div class="inner">
+    <span aria-hidden="true">ⓘ</span>
+    <span data-i18n="identity"><strong>架空大学 環境データ研究室（ダミー）</strong>が運営する研究用の試作です。政府・自治体の公式サービスではありません。</span>
+    <span><span data-i18n="sourceLabel">出典</span>: <span data-i18n="sourceName">環境データ公開基盤（ダミー）</span></span>
+    <a href="#methods" data-i18n="aboutOperator">運営と方法について</a>
+  </div>
+</div>
+
+<header class="site-header" id="site-header">
+  <div class="inner">
+    <button type="button" class="btn btn-secondary btn-small menu-btn" id="menu-btn" aria-expanded="false" aria-controls="sidebar"><span aria-hidden="true">☰</span> <span data-i18n="menu">メニュー</span></button>
+    <a class="brand" href="#dashboard">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1F5F8B"/><path d="M6 20c4-6 8-6 10 0s6 6 10 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="9" y="8" width="6" height="7" fill="#fff"/><rect x="17" y="6" width="6" height="9" fill="#fff"/></svg>
+      <span data-i18n="brand">くうきと建物の公開データ</span>
+      <span class="tag" data-i18n="proto">試作</span>
+    </a>
+    <div class="utility">
+      <div class="util-group" role="group" aria-labelledby="lbl-lang">
+        <span class="util-label" id="lbl-lang">Language</span>
+        <div class="seg" data-pref="lang">
+          <button type="button" data-val="ja" aria-pressed="true" lang="ja">日本語</button>
+          <button type="button" data-val="en" aria-pressed="false" lang="en">English</button>
+          <button type="button" data-val="easy" aria-pressed="false" lang="ja">やさしい</button>
+        </div>
+      </div>
+      <div class="util-group" role="group" aria-labelledby="lbl-size">
+        <span class="util-label" id="lbl-size" data-i18n="textSize">文字</span>
+        <div class="seg" data-pref="size">
+          <button type="button" data-val="m" aria-pressed="true" aria-label="文字サイズ 標準">A</button>
+          <button type="button" data-val="l" aria-pressed="false" aria-label="文字サイズ 大"><span style="font-size:1.15em">A</span></button>
+          <button type="button" data-val="xl" aria-pressed="false" aria-label="文字サイズ 特大"><span style="font-size:1.3em">A</span></button>
+        </div>
+      </div>
+      <div class="util-group" role="group" aria-labelledby="lbl-aud">
+        <span class="util-label" id="lbl-aud" data-i18n="detailLevel">詳しさ</span>
+        <div class="seg" data-pref="audience">
+          <button type="button" data-val="general" aria-pressed="true" data-i18n="general">一般向け</button>
+          <button type="button" data-val="expert" aria-pressed="false" data-i18n="expert">専門家向け</button>
+        </div>
+      </div>
+      <div class="seg"><button type="button" id="lite-btn" aria-pressed="false" data-i18n="liteBtn">災害時 軽量表示</button></div>
+      <button type="button" class="btn btn-secondary btn-small" id="help-btn" data-dialog="dlg-help"><span aria-hidden="true">?</span> <span data-i18n="help">ヘルプ</span></button>
+    </div>
+    <nav class="global-nav" aria-label="主要メニュー" data-i18n-aria="mainNav">
+      <ul>
+        <li><a href="#dashboard" data-route-link="dashboard" data-i18n="navHome">ホーム（全国概況）</a></li>
+        <li><a href="#workspace" data-route-link="workspace" data-i18n="navRegion">地域のデータ</a></li>
+        <li><a href="#detail" data-route-link="detail" data-i18n="navBuilding">公共建築物</a></li>
+        <li><a href="#methods" data-route-link="methods" data-i18n="navMethods">方法と出典</a></li>
+        <li><a href="#settings" data-route-link="settings" data-i18n="navSettings">設定・管理</a></li>
+        <li><a href="#components" data-route-link="components" data-i18n="navComponents">共通部品</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- 緊急帯：識別帯とは別の部品。訓練・ダミー表示であることを明記 -->
+<div class="emergency" role="region" aria-label="緊急のお知らせ" data-i18n-aria="emergencyLabel">
+  <div class="inner">
+    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 1 21h22L12 2z" fill="#fff"/><path d="M11 9h2v6h-2zM11 16.5h2v2h-2z" fill="#8C1D18"/></svg>
+    <p><strong data-i18n="emTitle">【訓練用ダミー表示】光化学オキシダント注意報 発表中</strong><br>
+    <span data-i18n="emBody">対象: 北浜県 東部地域（東山市・南浦町）。発表 2026-11-15 13:00。屋外での激しい運動を控えてください。青葉市は対象外です。</span>
+    <a href="#methods" data-i18n="emMore">注意報の基準を見る</a></p>
+  </div>
+</div>
+
+<div class="notice n-warning lite-note" role="status" style="max-width:1360px;margin:8px auto;">
+  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M11 6h2v8h-2zM11 16h2v2h-2z" fill="#fff"/></svg>
+  <p><strong data-i18n="liteOn">軽量表示中:</strong> <span data-i18n="liteDesc">グラフと装飾を省き、重要な情報と表だけを表示しています。通信量を減らし、画面を見やすくします。</span></p>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="サイドメニュー" data-i18n-aria="sideNav">
+    <button type="button" class="btn btn-secondary btn-small drawer-close" id="drawer-close" data-i18n="close">閉じる</button>
+    <h2 data-i18n="screens">画面</h2>
+    <ul class="side-nav">
+      <li><a href="#dashboard" data-route-link="dashboard"><span aria-hidden="true">⌂</span><span data-i18n="navHome">ホーム（全国概況）</span></a></li>
+      <li><a href="#workspace" data-route-link="workspace"><span aria-hidden="true">◎</span><span data-i18n="navRegion">地域のデータ</span></a></li>
+      <li><a href="#detail" data-route-link="detail"><span aria-hidden="true">▤</span><span data-i18n="navBuilding">公共建築物</span></a></li>
+      <li><a href="#methods" data-route-link="methods"><span aria-hidden="true">§</span><span data-i18n="navMethods">方法と出典</span></a></li>
+      <li><a href="#settings" data-route-link="settings"><span aria-hidden="true">⚙</span><span data-i18n="navSettings">設定・管理</span></a></li>
+      <li><a href="#components" data-route-link="components"><span aria-hidden="true">▦</span><span data-i18n="navComponents">共通部品</span></a></li>
+    </ul>
+    <div class="side-box">
+      <h2 style="margin-top:0" data-i18n="dataStatus">データの状態</h2>
+      <dl>
+        <dt data-i18n="lastUpdated">最終更新</dt><dd><time datetime="2026-11-15T14:00+09:00">2026-11-15 14:00</time>（<span data-i18n="prelim">速報値</span>）</dd>
+        <dt data-i18n="nextUpdate">次回更新</dt><dd><time datetime="2026-11-15T15:00+09:00">2026-11-15 15:00</time></dd>
+        <dt data-i18n="sourceLabel">出典</dt><dd data-i18n="sourceName">環境データ公開基盤（ダミー）</dd>
+        <dt data-i18n="method">算出方法</dt><dd><a href="#methods" data-i18n="seeMethods">方法と出典を見る</a></dd>
+      </dl>
+    </div>
+    <div class="side-box">
+      <h2 style="margin-top:0" data-i18n="legendTitle">区分の見方（ダミー区分）</h2>
+      <ul style="list-style:none;padding:0;margin:0;display:grid;gap:6px">
+        <li><span class="level lv-good"><span class="sym" aria-hidden="true">●</span>区分1 良好</span></li>
+        <li><span class="level lv-caution"><span class="sym" aria-hidden="true">▲</span>区分2 やや注意</span></li>
+        <li><span class="level lv-alert"><span class="sym" aria-hidden="true">◆</span>区分3 注意</span></li>
+        <li><span class="level lv-severe"><span class="sym" aria-hidden="true">■</span>区分4 警戒</span></li>
+        <li><span class="level lv-nodata"><span class="sym" aria-hidden="true">／</span>データなし</span></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main id="main" tabindex="-1">
+
+<!-- ================= #dashboard ================= -->
+<section class="screen" id="screen-dashboard" data-route="dashboard" aria-labelledby="h-dashboard">
+  <div class="screen-head">
+    <h1 id="h-dashboard" tabindex="-1" data-i18n="dashTitle">全国の空気と公共建築物のいま</h1>
+    <p class="lead" data-i18n="dashLead">住んでいる地域の空気の状態と、公共建築物の環境性能を、根拠と一緒に確認できます。</p>
+    <div class="provenance"><span><b data-i18n="sourceLabel">出典</b>: <span data-i18n="sourceName">環境データ公開基盤（ダミー）</span></span><span><b data-i18n="lastUpdated">最終更新</b>: 2026-11-15 14:00 JST（<span data-i18n="prelim">速報値</span>）</span><span><b data-i18n="method">算出方法</b>: <a href="#methods" data-i18n="seeMethods">方法と出典を見る</a></span></div>
+  </div>
+
+  <h2 data-i18n="tasksTitle">よく使われる手続き</h2>
+  <div class="grid grid-4" style="margin-bottom:var(--space-7)">
+    <a class="task-btn" href="#workspace"><span><span class="num" aria-hidden="true">1 </span><span data-i18n="task1">今日の空気を知る</span></span><small data-i18n="task1s">地域の PM2.5・光化学オキシダント</small></a>
+    <a class="task-btn" href="#ws-l1" data-jump="ws-l1" data-route-to="workspace"><span><span class="num" aria-hidden="true">2 </span><span data-i18n="task2">外出・換気を判断する</span></span><small data-i18n="task2s">いまの区分と行動の目安</small></a>
+    <a class="task-btn" href="#detail"><span><span class="num" aria-hidden="true">3 </span><span data-i18n="task3">近くの公共建築物を調べる</span></span><small data-i18n="task3s">CO2排出量・省エネ性能</small></a>
+    <a class="task-btn" href="#notify" data-jump="notify" data-route-to="settings"><span><span class="num" aria-hidden="true">4 </span><span data-i18n="task4">注意報の通知を受け取る</span></span><small data-i18n="task4s">1画面1問・3ステップ</small></a>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:var(--space-7)">
+    <div class="card">
+      <h2 data-i18n="byPlace">地域から探す</h2>
+      <form class="inline-form" id="search-form" role="search" novalidate>
+        <div style="flex:1 1 14em">
+          <label for="q" style="font-weight:700;display:block" data-i18n="searchLabel">市区町村名・郵便番号</label>
+          <span class="hint" id="q-hint" data-i18n="searchHint">例: 青葉市、あおば、100-0000（架空）</span>
+          <input class="input" id="q" name="q" type="search" autocomplete="address-level2" aria-describedby="q-hint" list="q-list">
+          <datalist id="q-list"><option value="青葉市（北浜県）"><option value="東山市（北浜県）"><option value="南浦町（北浜県）"><option value="湊市（湊県）"></datalist>
+        </div>
+        <button class="btn" type="submit" data-i18n="search">探す</button>
+      </form>
+      <div id="search-result" aria-live="polite"></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="byIndicator">指標から探す</h2>
+      <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
+        <li><a class="btn btn-secondary" style="width:100%;justify-content:flex-start" href="#workspace?ind=pm25">PM2.5（微小粒子状物質）</a></li>
+        <li><a class="btn btn-secondary" style="width:100%;justify-content:flex-start" href="#workspace?ind=ox">光化学オキシダント</a></li>
+        <li><a class="btn btn-secondary" style="width:100%;justify-content:flex-start" href="#detail" data-i18n="indLca">公共建築物の CO2（LCA）・省エネ性能</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <section aria-labelledby="h-national" class="card" style="margin-bottom:var(--space-7)">
+    <h2 id="h-national" data-i18n="nationalTitle">全国概況：PM2.5 の区分別の自治体数</h2>
+    <p class="chart-says" data-i18n="nationalSays">この図が言っていること: 全国 1,722 自治体（架空）のうち、9割以上が「良好」か「やや注意」です。「警戒」はありません。</p>
+    <div role="tablist" aria-label="全国概況の表示方法" data-tabs>
+      <button role="tab" id="t-nat-chart" aria-controls="p-nat-chart" aria-selected="true" data-i18n="viewChart">グラフ</button>
+      <button role="tab" id="t-nat-map" aria-controls="p-nat-map" aria-selected="false" tabindex="-1" data-i18n="viewMap">地図</button>
+      <button role="tab" id="t-nat-table" aria-controls="p-nat-table" aria-selected="false" tabindex="-1" data-i18n="viewTable">表</button>
+    </div>
+    <div role="tabpanel" id="p-nat-chart" aria-labelledby="t-nat-chart" tabindex="0">
+      <div data-noncritical><svg class="chart" id="chart-national" role="img" aria-labelledby="chart-national-t chart-national-d" viewBox="0 0 640 240"><title id="chart-national-t">区分別の自治体数（横棒グラフ）</title><desc id="chart-national-d">区分1 良好 812、区分2 やや注意 734、区分3 注意 129、区分4 警戒 0、データなし 47。同じ内容を「表」タブで確認できます。</desc></svg></div>
+      <p class="hint lite-only" data-i18n="chartOmitted">（軽量表示ではグラフを省略しています。「表」タブで同じ内容を確認できます）</p>
+    </div>
+    <div role="tabpanel" id="p-nat-map" aria-labelledby="t-nat-map" tabindex="0" hidden>
+      <p class="hint" data-i18n="tileHint">各都道府県（架空）の代表値。四角の位置はおおよその配置で、面積とは関係ありません。</p>
+      <ul class="tile-map" id="tile-national"></ul>
+    </div>
+    <div role="tabpanel" id="p-nat-table" aria-labelledby="t-nat-table" tabindex="0" hidden>
+      <div class="table-wrap">
+      <table class="stack" id="tbl-national">
+        <caption>区分別の自治体数（2026-11-15 14:00 速報値・ダミー）</caption>
+        <thead><tr><th scope="col">区分</th><th scope="col">PM2.5 の範囲（µg/m³）</th><th scope="col" class="num">自治体数</th><th scope="col" class="num">割合</th></tr></thead>
+        <tbody>
+          <tr data-lv="good"><td data-label="区分"><span class="level lv-good"><span class="sym" aria-hidden="true">●</span>区分1 良好</span></td><td data-label="範囲">0〜12.0</td><td class="num" data-label="自治体数">812</td><td class="num" data-label="割合">47.2%</td></tr>
+          <tr data-lv="caution"><td data-label="区分"><span class="level lv-caution"><span class="sym" aria-hidden="true">▲</span>区分2 やや注意</span></td><td data-label="範囲">12.1〜35.0</td><td class="num" data-label="自治体数">734</td><td class="num" data-label="割合">42.6%</td></tr>
+          <tr data-lv="alert"><td data-label="区分"><span class="level lv-alert"><span class="sym" aria-hidden="true">◆</span>区分3 注意</span></td><td data-label="範囲">35.1〜55.0</td><td class="num" data-label="自治体数">129</td><td class="num" data-label="割合">7.5%</td></tr>
+          <tr data-lv="severe"><td data-label="区分"><span class="level lv-severe"><span class="sym" aria-hidden="true">■</span>区分4 警戒</span></td><td data-label="範囲">55.1 以上</td><td class="num" data-label="自治体数">0</td><td class="num" data-label="割合">0.0%</td></tr>
+          <tr data-lv="nodata" class="missing"><td data-label="区分"><span class="level lv-nodata"><span class="sym" aria-hidden="true">／</span>データなし</span></td><td data-label="範囲">測定停止・欠測</td><td class="num" data-label="自治体数">47</td><td class="num" data-label="割合">2.7%</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <aside class="evidence" aria-label="この図の根拠">
+      <dl>
+        <dt>定義</dt><dd>各自治体の測定局の 1 時間値の中央値（ダミー定義）</dd>
+        <dt>単位</dt><dd>µg/m³</dd>
+        <dt>対象期間</dt><dd>2026-11-15 13:00〜14:00 JST</dd>
+        <dt>出典</dt><dd>環境データ公開基盤（ダミー）</dd>
+        <dt>データの状態</dt><dd><span class="state state-prelim">速報値</span> 後日、確定値に置き換わります</dd>
+        <dt>次回更新</dt><dd>2026-11-15 15:00 JST</dd>
+        <dt>ライセンス</dt><dd>CC BY 4.0 相当（試作のため仮）</dd>
+        <dt>処理方法</dt><dd><a href="#methods">方法と出典 › 区分の判断基準</a></dd>
+      </dl>
+    </aside>
+  </section>
+
+  <section aria-labelledby="h-news" data-noncritical>
+    <h2 id="h-news" data-i18n="newsTitle">お知らせ・更新履歴</h2>
+    <ul>
+      <li><time datetime="2026-11-15">2026-11-15</time> 東山第2測定局は保守のため測定を停止しています（〜11-17 予定）。表では「データなし」と表示します。</li>
+      <li><time datetime="2026-11-01">2026-11-01</time> 公共建築物の原単位データベースを v3.1 から v3.2（架空）に更新しました。比較は版を揃えて表示します。</li>
+      <li><time datetime="2026-10-20">2026-10-20</time> 2026年9月分の PM2.5 を確定値に置き換えました。</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ================= #workspace ================= -->
+<section class="screen" id="screen-workspace" data-route="workspace" aria-labelledby="h-workspace">
+  <div class="screen-head">
+    <nav class="breadcrumb" aria-label="パンくず"><ol><li><a href="#dashboard" data-i18n="navHome">ホーム（全国概況）</a></li><li>北浜県</li><li aria-current="page">青葉市</li></ol></nav>
+    <h1 id="h-workspace" tabindex="-1"><span data-i18n="wsTitle">青葉市（北浜県）の空気</span></h1>
+    <div class="provenance"><span><b data-i18n="sourceLabel">出典</b>: <span data-i18n="sourceName">環境データ公開基盤（ダミー）</span></span><span><b data-i18n="lastUpdated">最終更新</b>: 2026-11-15 14:00 JST（<span data-i18n="prelim">速報値</span>）</span><span><b data-i18n="stations">測定局</b>: 3（うち 1 局 保守中）</span><span><b data-i18n="method">算出方法</b>: <a href="#methods" data-i18n="seeMethods">方法と出典を見る</a></span></div>
+  </div>
+
+  <nav class="layer-nav" aria-label="この画面の層" data-layer-nav>
+    <a href="#ws-l1" data-jump="ws-l1" aria-current="true"><span class="n" aria-hidden="true">1</span><span data-i18n="layer1">いまの状況</span></a>
+    <a href="#ws-l2" data-jump="ws-l2"><span class="n" aria-hidden="true">2</span><span data-i18n="layer2">くらべる</span></a>
+    <a href="#ws-l3" data-jump="ws-l3"><span class="n" aria-hidden="true">3</span><span data-i18n="layer3">根拠とデータ</span></a>
+  </nav>
+
+  <div class="ws-top">
+  <!-- 第1層：結論と行動（常に開いている） -->
+  <section class="layer layer-1 conclusion" id="ws-l1" aria-labelledby="h-ws-l1" tabindex="-1">
+    <div class="layer-head"><span class="layer-no" aria-hidden="true">1</span><h2 id="h-ws-l1"><span class="sr-only">第1層 </span><span data-i18n="layer1">いまの状況</span></h2></div>
+    <p style="margin:var(--space-3) 0 var(--space-2)">PM2.5（微小粒子状物質）・14:00 時点</p>
+    <p class="big">23<span class="unit"> µg/m³</span> <span class="state state-prelim">速報値</span></p>
+    <p><span class="level lv-caution" style="font-size:var(--fs-m)"><span class="sym" aria-hidden="true">▲</span><span data-i18n="lvCaution">区分2 やや注意</span></span> <span style="font-size:var(--fs-xs)">（範囲 12.1〜35.0・ダミー区分）</span></p>
+    <p class="msg" data-i18n="concMsg">多くの人は普段どおり過ごせます。</p>
+    <h3 data-i18n="actionsTitle">行動の目安</h3>
+    <ul class="actions">
+      <li data-i18n="act1">屋外での長時間の激しい運動は控えめにしましょう。</li>
+      <li data-i18n="act2">換気は短時間（5〜10分）にしましょう。</li>
+    </ul>
+    <div class="notice n-warning" style="font-size:var(--fs-s)">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 1 21h22L12 2z" fill="currentColor"/><path d="M11 9h2v6h-2zM11 16.5h2v2h-2z" fill="#fff"/></svg>
+      <p><strong data-i18n="sensitiveT">影響を受けやすい人へ:</strong> <span data-i18n="sensitiveB">高齢の方・子ども・呼吸器や心臓に病気のある方は、体調に変化があれば屋外での活動を減らしてください。</span></p>
+    </div>
+    <p style="font-size:var(--fs-s)"><b>光化学オキシダント</b>: 0.07 ppm <span class="level lv-good" style="font-size:var(--fs-xs)"><span class="sym" aria-hidden="true">●</span>区分1 良好</span>。<span data-i18n="notTarget">青葉市は 13:00 発表の注意報の対象地域ではありません。</span></p>
+    <div class="easy" lang="ja">
+      <p style="margin:0"><b>やさしい にほんご</b>: いま の くうき は 「すこし 気をつけて」 です。 そとで ながく はしったり しないで ください。</p>
+    </div>
+  </section>
+
+  <!-- 第2層：くらべる -->
+  <details class="layer layer-2" id="ws-l2" open data-layer="2">
+    <summary><span class="layer-head"><span class="layer-no" aria-hidden="true">2</span><h2 id="h-ws-l2"><span class="sr-only">第2層 </span><span data-i18n="layer2">くらべる</span></h2></span><span class="toggle-txt" aria-hidden="true" data-toggle-txt>閉じる</span></summary>
+
+    <form id="cmp-form" novalidate aria-labelledby="h-cmp">
+      <h3 id="h-cmp" data-i18n="cmpTitle">比較の条件</h3>
+      <div id="cmp-errors" tabindex="-1"></div>
+      <fieldset class="field" id="f-ind">
+        <legend data-i18n="indicator">指標</legend>
+        <label class="choice"><input type="radio" name="ind" value="pm25" checked> <span>PM2.5（微小粒子状物質）</span></label>
+        <label class="choice"><input type="radio" name="ind" value="ox"> <span>光化学オキシダント</span></label>
+        <label class="choice is-disabled"><input type="radio" name="ind" value="comp" disabled aria-describedby="why-comp"> <span>PM2.5 の成分<span class="reason" id="why-comp">選べません: 青葉市には成分を測る測定局がありません。近くでは「東山市」で見られます。</span></span></label>
+      </fieldset>
+      <div class="field" id="f-days">
+        <label for="days" data-i18n="periodLabel">期間（日数）</label>
+        <span class="hint" id="days-hint" data-i18n="periodHint">1〜90 の数字。1 にすると 1 時間ごとの 24 時間表示になります。</span>
+        <span class="error-msg" id="days-err" hidden></span>
+        <div class="stepper">
+          <button type="button" class="btn btn-secondary" data-step="-1" aria-label="期間を1日減らす">−</button>
+          <input class="input input-num" id="days" name="days" type="text" inputmode="numeric" value="1" aria-describedby="days-hint days-err" autocomplete="off">
+          <button type="button" class="btn btn-secondary" data-step="1" aria-label="期間を1日増やす">＋</button>
+        </div>
+      </div>
+      <div class="field" id="f-cmp">
+        <label for="cmp" data-i18n="cmpLabel">比較先</label>
+        <span class="hint" id="cmp-hint">同じ条件で、グラフ・地図・表・ダウンロードがそろって切り替わります。</span>
+        <span class="error-msg" id="cmp-err" hidden></span>
+        <select class="input" id="cmp" name="cmp" aria-describedby="cmp-hint cmp-err">
+          <option value="pref">北浜県の平均</option>
+          <option value="nation">全国の平均</option>
+          <option value="">（選んでください）</option>
+          <option value="higashiyama">東山市</option>
+        </select>
+      </div>
+      <button class="btn" type="submit" data-i18n="apply">この条件で表示</button>
+    </form>
+
+    <div role="status" id="cmp-status" class="sr-only"></div>
+    <div id="cmp-result" style="margin-top:var(--space-5)">
+      <p class="chart-says" id="ws-says">この図が言っていること: 青葉市の PM2.5 は昼にかけて上がり、県平均より少し高めですが、区分3（35.1 以上）には届いていません。</p>
+      <div role="tablist" aria-label="表示方法（同じ条件）" data-tabs>
+        <button role="tab" id="t-ws-chart" aria-controls="p-ws-chart" aria-selected="true" data-i18n="viewChart">グラフ</button>
+        <button role="tab" id="t-ws-map" aria-controls="p-ws-map" aria-selected="false" tabindex="-1" data-i18n="viewMap">地図</button>
+        <button role="tab" id="t-ws-table" aria-controls="p-ws-table" aria-selected="false" tabindex="-1" data-i18n="viewTable">表</button>
+      </div>
+      <div role="tabpanel" id="p-ws-chart" aria-labelledby="t-ws-chart" tabindex="0">
+        <div data-noncritical>
+          <ul class="legend" aria-label="凡例">
+            <li><svg viewBox="0 0 32 14" aria-hidden="true"><line x1="0" y1="7" x2="32" y2="7" stroke="#1F5F8B" stroke-width="3"/><circle cx="16" cy="7" r="4" fill="#1F5F8B"/></svg>青葉市（実線・●）</li>
+            <li><svg viewBox="0 0 32 14" aria-hidden="true"><line x1="0" y1="7" x2="32" y2="7" stroke="#6E4A9E" stroke-width="3" stroke-dasharray="6 4"/><rect x="12" y="3" width="8" height="8" fill="#6E4A9E"/></svg><span id="lg-cmp">北浜県の平均（破線・■）</span></li>
+            <li><svg viewBox="0 0 32 14" aria-hidden="true"><line x1="0" y1="7" x2="32" y2="7" stroke="#A1201B" stroke-width="2" stroke-dasharray="2 3"/></svg>区分3 の下限 35.1（点線）</li>
+            <li><span class="level lv-nodata" style="font-size:.75rem;padding:0 6px">／</span>欠測（線を途切れさせる）</li>
+          </ul>
+          <svg class="chart" id="chart-ws" role="img" aria-labelledby="chart-ws-t chart-ws-d" viewBox="0 0 640 280"><title id="chart-ws-t">PM2.5 の推移（折れ線グラフ）</title><desc id="chart-ws-d">表タブと同じデータです。</desc></svg>
+        </div>
+        <p class="hint lite-only" data-i18n="chartOmitted">（軽量表示ではグラフを省略しています。「表」タブで同じ内容を確認できます）</p>
+      </div>
+      <div role="tabpanel" id="p-ws-map" aria-labelledby="t-ws-map" tabindex="0" hidden>
+        <p class="hint">北浜県内の市町村（架空）の最新値。太枠が青葉市です。</p>
+        <ul class="tile-map" id="tile-pref"></ul>
+      </div>
+      <div role="tabpanel" id="p-ws-table" aria-labelledby="t-ws-table" tabindex="0" hidden>
+        <div class="sort-mobile"><label for="ws-sort-m"><b>並べ替え</b></label><select class="input" id="ws-sort-m" style="max-width:14em"><option value="0:asc">日時（古い順）</option><option value="0:desc">日時（新しい順）</option><option value="1:desc">青葉市（高い順）</option><option value="1:asc">青葉市（低い順）</option></select></div>
+        <div class="table-wrap">
+          <table class="stack sortable" id="tbl-ws">
+            <caption id="tbl-ws-cap">PM2.5 の推移（µg/m³）</caption>
+            <thead><tr><th scope="col" aria-sort="ascending"><button type="button" class="sort">日時<span class="arr" aria-hidden="true"></span></button></th><th scope="col" class="num"><button type="button" class="sort">青葉市<span class="arr" aria-hidden="true"></span></button></th><th scope="col" class="num"><button type="button" class="sort" id="th-cmp">比較先<span class="arr" aria-hidden="true"></span></button></th><th scope="col">区分</th><th scope="col">状態</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </details>
+  </div>
+
+  <!-- 第3層：根拠とデータ（一般向けでは初期は閉じる。JSなしでは開いた状態） -->
+  <details class="layer layer-3" id="ws-l3" open data-layer="3">
+    <summary><span class="layer-head"><span class="layer-no" aria-hidden="true">3</span><h2 id="h-ws-l3"><span class="sr-only">第3層 </span><span data-i18n="layer3">根拠とデータ</span></h2></span><span class="toggle-txt" aria-hidden="true" data-toggle-txt>閉じる</span></summary>
+    <div class="grid grid-2">
+      <div>
+        <h3>定義と出典</h3>
+        <dl class="meta-list">
+          <dt>指標</dt><dd>PM2.5（微小粒子状物質）質量濃度</dd>
+          <dt>単位</dt><dd>µg/m³（1 時間値）</dd>
+          <dt>集計方法</dt><dd>市内測定局の 1 時間値の中央値。日数指定時は日平均（有効測定 20 時間以上の日のみ）</dd>
+          <dt>測定局</dt><dd>3 局（青葉中央・青葉北・青葉港）。青葉港は保守のため停止中</dd>
+          <dt>データの状態</dt><dd><span class="state state-prelim">速報値</span> 直近 30 日 ／ <span class="state">確定値</span> それ以前 ／ <span class="state state-est">推計値</span> 欠測補完は行いません</dd>
+          <dt>区分の基準</dt><dd>ダミー区分 1〜4（<a href="#methods">判断基準</a>）</dd>
+          <dt>出典</dt><dd>環境データ公開基盤（ダミー）</dd>
+          <dt>管理者</dt><dd>架空大学 環境データ研究室（ダミー）</dd>
+          <dt>最終更新</dt><dd>2026-11-15 14:00 JST</dd>
+          <dt>次回更新</dt><dd>2026-11-15 15:00 JST（毎時）</dd>
+          <dt>ライセンス</dt><dd>CC BY 4.0 相当（試作のため仮）</dd>
+          <dt>引用文</dt><dd id="cite">架空大学 環境データ研究室（2026）「青葉市 PM2.5 1時間値」環境データ公開基盤（ダミー）, 2026-11-15 取得.</dd>
+        </dl>
+        <div class="btn-row"><button type="button" class="btn btn-secondary btn-small" data-copy="cite">引用文をコピー</button></div>
+      </div>
+      <div>
+        <h3>この条件の URL（共有・再現用）</h3>
+        <pre id="cond-url">#workspace?region=aoba&amp;ind=pm25&amp;days=1&amp;cmp=pref</pre>
+        <div class="btn-row"><button type="button" class="btn btn-secondary btn-small" data-copy="cond-url">URL をコピー</button></div>
+        <h3>データをダウンロード</h3>
+        <div class="btn-row">
+          <button type="button" class="btn" id="dl-view"><span aria-hidden="true">↓</span> 表示中のデータ（CSV）</button>
+          <button type="button" class="btn btn-secondary" id="dl-all"><span aria-hidden="true">↓</span> 全データ（CSV・90日分）</button>
+        </div>
+        <p class="hint">文字コード UTF-8（BOM 付き）。欠測は空欄ではなく <code>NA</code> と状態列「欠測」で表します。</p>
+        <h3>API とコード例</h3>
+        <p class="hint">利用上限: 1 時間あたり 60 回（試作の仮設定）。URL は架空で、実際には接続しません。</p>
+        <div role="tablist" aria-label="コード例の言語" data-tabs>
+          <button role="tab" id="t-api" aria-controls="p-api" aria-selected="true">API</button>
+          <button role="tab" id="t-py" aria-controls="p-py" aria-selected="false" tabindex="-1">Python</button>
+          <button role="tab" id="t-r" aria-controls="p-r" aria-selected="false" tabindex="-1">R</button>
+        </div>
+        <div role="tabpanel" id="p-api" aria-labelledby="t-api" tabindex="0"><pre id="code-api">GET https://api.example.invalid/v1/air?region=aoba&amp;ind=pm25&amp;days=1&amp;format=csv</pre></div>
+        <div role="tabpanel" id="p-py" aria-labelledby="t-py" tabindex="0" hidden><pre id="code-py">import pandas as pd
+url = "https://api.example.invalid/v1/air?region=aoba&amp;ind=pm25&amp;days=1&amp;format=csv"
+df = pd.read_csv(url, na_values=["NA"])
+print(df[df["state"] != "欠測"].describe())</pre></div>
+        <div role="tabpanel" id="p-r" aria-labelledby="t-r" tabindex="0" hidden><pre id="code-r">url &lt;- "https://api.example.invalid/v1/air?region=aoba&amp;ind=pm25&amp;days=1&amp;format=csv"
+df &lt;- read.csv(url, na.strings = "NA")
+summary(subset(df, state != "欠測"))</pre></div>
+        <h3>詳細分析モード</h3>
+        <p><button type="button" class="btn btn-secondary" aria-disabled="true" aria-describedby="why-adv" id="adv-btn">詳細分析モードを開く</button></p>
+        <p class="hint" id="why-adv">準備中（ロードマップ: 2027年度）。複数地域・指標を連動して比べる画面です。それまでは上の CSV・API をご利用ください。</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= #detail ================= -->
+<section class="screen" id="screen-detail" data-route="detail" aria-labelledby="h-detail">
+  <div class="screen-head">
+    <nav class="breadcrumb" aria-label="パンくず"><ol><li><a href="#dashboard" data-i18n="navHome">ホーム（全国概況）</a></li><li><a href="#detail" data-i18n="navBuilding">公共建築物</a></li><li aria-current="page">青葉市立中央図書館</li></ol></nav>
+    <h1 id="h-detail" tabindex="-1" data-i18n="detTitle">青葉市立中央図書館（ダミー）の環境性能</h1>
+    <p class="lead">図書館・延床面積 4,800 m²・2019年竣工・評価期間 60 年（すべて架空）</p>
+    <div class="provenance"><span><b data-i18n="sourceLabel">出典</b>: <span data-i18n="sourceName">環境データ公開基盤（ダミー）</span></span><span><b>算定日</b>: 2026-10-28（<span class="state">確定値</span>）</span><span><b>原単位</b>: 架空原単位DB v3.2</span><span><b data-i18n="method">算出方法</b>: <a href="#methods" data-i18n="seeMethods">方法と出典を見る</a></span></div>
+  </div>
+
+  <nav class="layer-nav" aria-label="この画面の層" data-layer-nav>
+    <a href="#dt-l1" data-jump="dt-l1" aria-current="true"><span class="n" aria-hidden="true">1</span><span data-i18n="layer1">いまの状況</span></a>
+    <a href="#dt-l2" data-jump="dt-l2"><span class="n" aria-hidden="true">2</span><span data-i18n="layer2">くらべる</span></a>
+    <a href="#dt-l3" data-jump="dt-l3"><span class="n" aria-hidden="true">3</span><span data-i18n="layer3">根拠とデータ</span></a>
+  </nav>
+
+  <section class="layer layer-1" id="dt-l1" aria-labelledby="h-dt-l1" tabindex="-1">
+    <div class="layer-head"><span class="layer-no" aria-hidden="true">1</span><h2 id="h-dt-l1"><span class="sr-only">第1層 </span>結論</h2></div>
+    <div class="grid grid-2" style="margin-top:var(--space-4)">
+      <div class="card">
+        <h3>ライフサイクル CO2</h3>
+        <p class="conclusion"><span class="big">−22%</span> <span class="unit">同じ用途・規模の平均と比べて</span></p>
+        <p><span class="level lv-good"><span class="sym" aria-hidden="true">↓</span>少ない（良い方向）</span></p>
+        <p style="font-size:var(--fs-s)">1,770 kg-CO2e/m²（平均 2,270）。60年間の製造・建設・運用・解体の合計です。</p>
+      </div>
+      <div class="card">
+        <h3>省エネ性能（BEI）</h3>
+        <p class="conclusion"><span class="big">0.78</span> <span class="unit">基準 = 1.00</span></p>
+        <p><span class="level lv-good"><span class="sym" aria-hidden="true">↓</span>基準より 22% 少ないエネルギー</span></p>
+        <p style="font-size:var(--fs-s)">BEI は小さいほど省エネです。1.00 を超えると基準より多く使っています。</p>
+      </div>
+    </div>
+    <div class="notice n-info" style="font-size:var(--fs-s)">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M11 10h2v8h-2zM11 6h2v2h-2z" fill="#fff"/></svg>
+      <p><strong>中立性について:</strong> この比較は建物の仕様の種類で説明しており、建材メーカーや製品名のランキングは作りません。</p>
+    </div>
+  </section>
+
+  <details class="layer layer-2" id="dt-l2" open data-layer="2">
+    <summary><span class="layer-head"><span class="layer-no" aria-hidden="true">2</span><h2 id="h-dt-l2"><span class="sr-only">第2層 </span><span data-i18n="layer2">くらべる</span></h2></span><span class="toggle-txt" aria-hidden="true" data-toggle-txt>閉じる</span></summary>
+    <h3>段階別の内訳（kg-CO2e/m²）</h3>
+    <p class="chart-says">この図が言っていること: 差の大部分は「運用（B6）」で、断熱と高効率設備により平均より 450 少なくなっています。</p>
+    <div data-noncritical><svg class="chart" id="chart-lca" role="img" aria-labelledby="chart-lca-t chart-lca-d" viewBox="0 0 640 200"><title id="chart-lca-t">段階別のCO2（積み上げ横棒）</title><desc id="chart-lca-d">本建物: 製造520・建設60・運用1150・解体40、合計1770。同用途平均: 製造560・建設70・運用1600・解体40、合計2270。下の表と同じ内容です。</desc></svg></div>
+    <table class="stack" id="tbl-lca">
+      <caption>段階別の CO2（kg-CO2e/m²・確定値）</caption>
+      <thead><tr><th scope="col">段階</th><th scope="col" class="num">本建物</th><th scope="col" class="num">同用途平均</th><th scope="col" class="num">差</th></tr></thead>
+      <tbody>
+        <tr><td data-label="段階">製造（A1–A3）</td><td class="num" data-label="本建物">520</td><td class="num" data-label="同用途平均">560</td><td class="num" data-label="差">−40</td></tr>
+        <tr><td data-label="段階">建設（A4–A5）</td><td class="num" data-label="本建物">60</td><td class="num" data-label="同用途平均">70</td><td class="num" data-label="差">−10</td></tr>
+        <tr><td data-label="段階">運用（B6・60年）</td><td class="num" data-label="本建物">1150</td><td class="num" data-label="同用途平均">1600</td><td class="num" data-label="差">−450</td></tr>
+        <tr><td data-label="段階">解体（C1–C4）</td><td class="num" data-label="本建物">40</td><td class="num" data-label="同用途平均">40</td><td class="num" data-label="差">0</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:var(--space-6)">同じ用途の建物とくらべる</h3>
+    <div class="sort-mobile"><label for="bld-sort-m"><b>並べ替え</b></label><select class="input" id="bld-sort-m" style="max-width:14em"><option value="4:asc">LCA 合計（少ない順）</option><option value="4:desc">LCA 合計（多い順）</option><option value="6:asc">BEI（小さい順）</option><option value="3:desc">竣工（新しい順）</option></select></div>
+    <table class="stack sortable" id="tbl-bld">
+      <caption>図書館の比較（架空・同じ原単位DB v3.2 で算定）</caption>
+      <thead><tr>
+        <th scope="col"><button type="button" class="sort">名称<span class="arr" aria-hidden="true"></span></button></th>
+        <th scope="col">自治体</th>
+        <th scope="col" class="num"><button type="button" class="sort">延床 m²<span class="arr" aria-hidden="true"></span></button></th>
+        <th scope="col" class="num"><button type="button" class="sort">竣工<span class="arr" aria-hidden="true"></span></button></th>
+        <th scope="col" class="num" aria-sort="ascending"><button type="button" class="sort">LCA 合計<span class="arr" aria-hidden="true"></span></button></th>
+        <th scope="col" class="num">平均比</th>
+        <th scope="col" class="num"><button type="button" class="sort">BEI<span class="arr" aria-hidden="true"></span></button></th>
+        <th scope="col">状態</th>
+      </tr></thead>
+      <tbody>
+        <tr><td data-label="名称">西野市立北図書館</td><td data-label="自治体">西野市</td><td class="num" data-label="延床">2600</td><td class="num" data-label="竣工">2022</td><td class="num" data-label="LCA合計">1640</td><td class="num" data-label="平均比">−28%</td><td class="num" data-label="BEI">0.71</td><td data-label="状態"><span class="state state-prelim">速報値</span></td></tr>
+        <tr style="font-weight:700"><td data-label="名称">青葉市立中央図書館 <span class="tag">この建物</span></td><td data-label="自治体">青葉市</td><td class="num" data-label="延床">4800</td><td class="num" data-label="竣工">2019</td><td class="num" data-label="LCA合計">1770</td><td class="num" data-label="平均比">−22%</td><td class="num" data-label="BEI">0.78</td><td data-label="状態"><span class="state">確定値</span></td></tr>
+        <tr><td data-label="名称">南浦町立図書館</td><td data-label="自治体">南浦町</td><td class="num" data-label="延床">1900</td><td class="num" data-label="竣工">2015</td><td class="num" data-label="LCA合計">2050</td><td class="num" data-label="平均比">−10%</td><td class="num" data-label="BEI">0.86</td><td data-label="状態"><span class="state state-est">推計値</span></td></tr>
+        <tr><td data-label="名称">東山市民図書館</td><td data-label="自治体">東山市</td><td class="num" data-label="延床">3200</td><td class="num" data-label="竣工">2008</td><td class="num" data-label="LCA合計">2410</td><td class="num" data-label="平均比">+6%</td><td class="num" data-label="BEI">0.95</td><td data-label="状態"><span class="state">確定値</span></td></tr>
+        <tr><td data-label="名称">湊市中央図書館</td><td data-label="自治体">湊市</td><td class="num" data-label="延床">5400</td><td class="num" data-label="竣工">1998</td><td class="num" data-label="LCA合計">2980</td><td class="num" data-label="平均比">+31%</td><td class="num" data-label="BEI">1.12</td><td data-label="状態"><span class="state">確定値</span></td></tr>
+        <tr class="missing"><td data-label="名称">高原町図書館</td><td data-label="自治体">高原町</td><td class="num" data-label="延床">1200</td><td class="num" data-label="竣工">1985</td><td class="num" data-label="LCA合計" data-sort="">データなし</td><td class="num" data-label="平均比">—</td><td class="num" data-label="BEI" data-sort="">データなし</td><td data-label="状態"><span class="state">未算定（図面未提出）</span></td></tr>
+      </tbody>
+    </table>
+    <p class="hint">「データなし」は並べ替えても常に最後に表示します（ゼロや良好として扱いません）。</p>
+  </details>
+
+  <details class="layer layer-3" id="dt-l3" open data-layer="3">
+    <summary><span class="layer-head"><span class="layer-no" aria-hidden="true">3</span><h2 id="h-dt-l3"><span class="sr-only">第3層 </span><span data-i18n="layer3">根拠とデータ</span></h2></span><span class="toggle-txt" aria-hidden="true" data-toggle-txt>閉じる</span></summary>
+    <div class="grid grid-2">
+      <div>
+        <h3>算定条件</h3>
+        <dl class="meta-list">
+          <dt>算定範囲</dt><dd>A1–A3（製造）・A4–A5（建設）・B6（運用エネルギー）・C1–C4（解体）。B1–B5（修繕・更新）は対象外</dd>
+          <dt>原単位</dt><dd>架空原単位DB v3.2（2026-11-01 版）</dd>
+          <dt>評価期間</dt><dd>60 年</dd>
+          <dt>電力の排出係数</dt><dd>0.45 kg-CO2e/kWh（固定・将来の低減は見込まない）</dd>
+          <dt>比較母集団</dt><dd>同用途（図書館）・延床 1,000〜6,000 m²・28 棟（架空）</dd>
+          <dt>BEI</dt><dd>設計一次エネルギー消費量 ÷ 基準一次エネルギー消費量</dd>
+          <dt>不確かさ</dt><dd>合計値 ±8%（数量の拾い出し誤差の目安・ダミー）</dd>
+        </dl>
+      </div>
+      <div>
+        <h3>計算式（Math IR から生成）</h3>
+        <math display="block" alttext="GWP 原単位 は、段階 s と資材 i について 数量 q かける 排出係数 EF の総和 を 延床面積 A で割ったもの">
+          <mrow><msub><mi>GWP</mi><mtext>/m²</mtext></msub><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mrow><mi>s</mi><mo>∈</mo><mi>S</mi></mrow></munder><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>q</mi><mrow><mi>s</mi><mo>,</mo><mi>i</mi></mrow></msub><mo>×</mo><msub><mi>EF</mi><mi>i</mi></msub></mrow><mi>A</mi></mfrac></mrow>
+        </math>
+        <p class="hint">読み上げ用: GWP（1 m² あたり）＝ 段階 s・資材 i ごとの「数量 q × 排出係数 EF」の合計 ÷ 延床面積 A。B6 は 年間エネルギー × 排出係数 × 60 年。</p>
+        <pre id="cond-json">{
+  "building": "aoba-central-lib",
+  "scope": ["A1-A3","A4-A5","B6","C1-C4"],
+  "ef_db": "fictional-ef-db@3.2",
+  "period_years": 60,
+  "grid_ef_kg_per_kwh": 0.45
+}</pre>
+        <div class="btn-row">
+          <button type="button" class="btn btn-secondary btn-small" data-copy="cond-json">算定条件（JSON）をコピー</button>
+          <button type="button" class="btn btn-small" id="dl-lca"><span aria-hidden="true">↓</span> 内訳データ（CSV）</button>
+        </div>
+        <p class="hint">再計算の接続先（予定）: リポジトリの <code>math_tools_v2/lca_ops.py</code>（LCA 演算子）と Math IR パイプライン。この試作では計算は行いません。</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= #methods ================= -->
+<section class="screen" id="screen-methods" data-route="methods" aria-labelledby="h-methods">
+  <div class="screen-head">
+    <h1 id="h-methods" tabindex="-1" data-i18n="navMethods">方法と出典</h1>
+    <p class="lead">指標の定義、区分の判断基準、データの状態、運営体制を公開しています。</p>
+  </div>
+  <h2>区分の判断基準（PM2.5・ダミー区分）</h2>
+  <table class="stack">
+    <caption>区分・範囲・意味・行動の目安</caption>
+    <thead><tr><th scope="col">区分</th><th scope="col">範囲（µg/m³）</th><th scope="col">意味</th><th scope="col">行動の目安</th></tr></thead>
+    <tbody>
+      <tr><td data-label="区分"><span class="level lv-good"><span class="sym" aria-hidden="true">●</span>区分1 良好</span></td><td data-label="範囲">0〜12.0</td><td data-label="意味">ほぼ影響なし</td><td data-label="行動">普段どおり</td></tr>
+      <tr><td data-label="区分"><span class="level lv-caution"><span class="sym" aria-hidden="true">▲</span>区分2 やや注意</span></td><td data-label="範囲">12.1〜35.0</td><td data-label="意味">敏感な人は影響を感じることがある</td><td data-label="行動">長時間の激しい運動は控えめに</td></tr>
+      <tr><td data-label="区分"><span class="level lv-alert"><span class="sym" aria-hidden="true">◆</span>区分3 注意</span></td><td data-label="範囲">35.1〜55.0</td><td data-label="意味">多くの人に影響が出るおそれ</td><td data-label="行動">屋外活動を減らす・換気は最小限</td></tr>
+      <tr><td data-label="区分"><span class="level lv-severe"><span class="sym" aria-hidden="true">■</span>区分4 警戒</span></td><td data-label="範囲">55.1 以上</td><td data-label="意味">健康への影響が大きい</td><td data-label="行動">不要な外出を避ける</td></tr>
+    </tbody>
+  </table>
+  <h2 style="margin-top:var(--space-6)">データの状態区分</h2>
+  <ul>
+    <li><span class="state state-prelim">速報値</span> 自動測定直後の値。後日、確定値に置き換わることがあります。</li>
+    <li><span class="state">確定値</span> 点検・校正後の値。</li>
+    <li><span class="state state-est">推計値</span> 実測ではなく計算で求めた値。必ず明記します。</li>
+    <li><span class="level lv-nodata" style="font-size:var(--fs-xs)"><span class="sym" aria-hidden="true">／</span>データなし</span> 測定停止・欠測・未算定。ゼロや良好として扱いません。</li>
+  </ul>
+  <h2>運営・維持管理</h2>
+  <dl class="meta-list">
+    <dt>運営主体</dt><dd>架空大学 環境データ研究室（ダミー）。政府・自治体の公式サービスではありません</dd>
+    <dt>中立性</dt><dd>特定の企業・製品・寄付への誘導を行いません</dd>
+    <dt>アクセシビリティ</dt><dd>WCAG 2.2 AA を目標。試験状況: 自動チェックの一部のみ実施、支援技術での利用者試験は未実施（試作）</dd>
+    <dt>恒久 URL</dt><dd>画面の URL は変更時にリダイレクトを用意します（方針）</dd>
+    <dt>終了時の扱い</dt><dd>サービス終了時は全データと算定条件をオープンなリポジトリに保存します（方針）</dd>
+  </dl>
+</section>
+
+<!-- ================= #settings ================= -->
+<section class="screen" id="screen-settings" data-route="settings" aria-labelledby="h-settings">
+  <div class="screen-head">
+    <h1 id="h-settings" tabindex="-1" data-i18n="navSettings">設定・管理</h1>
+    <p class="lead">表示の設定、通知の登録、データの公開範囲とプライバシー、研究室スタッフ向けの管理を行います。</p>
+  </div>
+
+  <div class="grid grid-2" style="align-items:start">
+  <section class="card" aria-labelledby="h-disp">
+    <h2 id="h-disp">表示の設定</h2>
+    <p class="hint">この端末のブラウザにだけ保存されます。サーバーには送りません。</p>
+    <fieldset class="field"><legend>言語 / Language</legend>
+      <label class="choice"><input type="radio" name="s-lang" value="ja"> 日本語</label>
+      <label class="choice" lang="en"><input type="radio" name="s-lang" value="en"> English (main parts only)</label>
+      <label class="choice"><input type="radio" name="s-lang" value="easy"> やさしい日本語</label>
+    </fieldset>
+    <fieldset class="field"><legend>文字の大きさ</legend>
+      <label class="choice"><input type="radio" name="s-size" value="m"> 標準（16px）</label>
+      <label class="choice"><input type="radio" name="s-size" value="l"> 大（18px）</label>
+      <label class="choice"><input type="radio" name="s-size" value="xl"> 特大（22px）</label>
+    </fieldset>
+    <fieldset class="field"><legend>表示の詳しさ</legend>
+      <label class="choice"><input type="radio" name="s-aud" value="general"> <span>一般向け<span class="reason">第3層「根拠とデータ」は閉じた状態で始まります</span></span></label>
+      <label class="choice"><input type="radio" name="s-aud" value="expert"> <span>専門家向け<span class="reason">すべての層を開き、測定局コードなど詳しい列も表示します</span></span></label>
+    </fieldset>
+    <fieldset class="field"><legend>その他</legend>
+      <label class="choice"><input type="checkbox" id="s-lite"> <span>災害時の軽量表示<span class="reason">グラフ・装飾を省き、高コントラストで重要情報だけを表示</span></span></label>
+      <label class="choice"><input type="checkbox" id="s-motion"> <span>動きを減らす<span class="reason">端末の「視差効果を減らす」設定がオンなら自動で減らします</span></span></label>
+    </fieldset>
+    <div role="status" id="disp-status"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-notify" id="notify" tabindex="-1">
+    <h2 id="h-notify">注意報の通知を受け取る</h2>
+    <p class="hint">1 画面に 1 つの質問です。途中で戻っても入力は消えません。メールアドレスなどの個人情報は求めません（試作ではこの端末のブラウザ通知を想定）。</p>
+    <form id="notify-form" novalidate>
+      <p id="step-label" style="font-weight:700;color:var(--color-text-muted)">ステップ 1 / 3</p>
+      <div data-step="1">
+        <div class="field" id="f-n-region">
+          <label for="n-region" style="font-size:var(--fs-m)">どの地域の通知を受け取りますか？</label>
+          <span class="hint" id="n-region-hint">「地域のデータ」で見ていた地域を、あらかじめ入れています。</span>
+          <span class="error-msg" id="n-region-err" hidden></span>
+          <select class="input" id="n-region" aria-describedby="n-region-hint n-region-err">
+            <option value="">（選んでください）</option>
+            <option value="青葉市" selected>青葉市（北浜県）</option>
+            <option value="東山市">東山市（北浜県）</option>
+            <option value="南浦町">南浦町（北浜県）</option>
+          </select>
+        </div>
+      </div>
+      <div data-step="2" hidden>
+        <fieldset class="field" id="f-n-kind" aria-describedby="n-kind-err">
+          <legend style="font-size:var(--fs-m)">どの情報を受け取りますか？（1 つ以上）</legend>
+          <span class="error-msg" id="n-kind-err" hidden></span>
+          <label class="choice"><input type="checkbox" name="n-kind" value="注意報・警報" checked> 注意報・警報の発表と解除</label>
+          <label class="choice"><input type="checkbox" name="n-kind" value="朝の見通し"> 毎朝 7 時の見通し</label>
+          <label class="choice"><input type="checkbox" name="n-kind" value="測定停止"> 測定局の停止・再開</label>
+        </fieldset>
+      </div>
+      <div data-step="3" hidden>
+        <h3 style="font-size:var(--fs-m)">内容を確認してください</h3>
+        <dl class="meta-list" style="font-size:var(--fs-s)">
+          <dt>地域</dt><dd><span id="sum-region"></span> <button type="button" class="btn-link" data-goto="1">変更<span class="sr-only">（地域）</span></button></dd>
+          <dt>受け取る情報</dt><dd><span id="sum-kind"></span> <button type="button" class="btn-link" data-goto="2">変更<span class="sr-only">（受け取る情報）</span></button></dd>
+        </dl>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" id="n-back" hidden>戻る</button>
+        <button type="submit" class="btn" id="n-next">次へ</button>
+      </div>
+      <div id="n-result" role="status"></div>
+    </form>
+  </section>
+  </div>
+
+  <section aria-labelledby="h-privacy" style="margin-top:var(--space-7)">
+    <h2 id="h-privacy">データの公開範囲とプライバシー</h2>
+    <table class="stack">
+      <caption>この試作が扱うデータ</caption>
+      <thead><tr><th scope="col">データ</th><th scope="col">公開範囲</th><th scope="col">粒度</th><th scope="col">保存期間</th><th scope="col">ライセンス</th></tr></thead>
+      <tbody>
+        <tr><td data-label="データ">大気質の測定値</td><td data-label="公開範囲">全面公開</td><td data-label="粒度">測定局・1時間</td><td data-label="保存期間">恒久</td><td data-label="ライセンス">CC BY 4.0 相当</td></tr>
+        <tr><td data-label="データ">公共建築物の LCA・BEI</td><td data-label="公開範囲">全面公開</td><td data-label="粒度">建物単位</td><td data-label="保存期間">恒久</td><td data-label="ライセンス">CC BY 4.0 相当</td></tr>
+        <tr><td data-label="データ">建物の図面・数量表</td><td data-label="公開範囲">非公開（防犯上の理由）</td><td data-label="粒度">—</td><td data-label="保存期間">算定後 5 年</td><td data-label="ライセンス">—</td></tr>
+        <tr><td data-label="データ">表示設定・通知設定</td><td data-label="公開範囲">送信しない（端末内のみ）</td><td data-label="粒度">—</td><td data-label="保存期間">利用者が削除するまで</td><td data-label="ライセンス">—</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>アクセス解析・広告・外部の追跡用スクリプトは使いません。</li>
+      <li>位置情報は使いません。地域は利用者が選びます。</li>
+    </ul>
+    <div class="btn-row"><button type="button" class="btn btn-danger" data-dialog="dlg-confirm" id="clear-btn">この端末の設定をすべて消す</button></div>
+  </section>
+
+  <section aria-labelledby="h-admin" style="margin-top:var(--space-7)" class="card">
+    <h2 id="h-admin">管理（研究室スタッフ向け・試作）</h2>
+    <div class="grid grid-2" style="align-items:start">
+      <form id="signin-form" novalidate>
+        <h3>サインイン</h3>
+        <p class="hint">パズルや文字の書き写し（認知機能テスト）は使いません。パスキー、またはメールで届くリンクで入れます。試作のため送信はしません。</p>
+        <div class="btn-row"><button type="button" class="btn" id="passkey-btn">パスキーでサインイン</button></div>
+        <div class="field" id="f-email">
+          <label for="email">メールアドレス（リンクで入る場合）</label>
+          <span class="hint" id="email-hint">例: name@example.ac.jp（貼り付け・自動入力できます）</span>
+          <span class="error-msg" id="email-err" hidden></span>
+          <input class="input" id="email" type="email" autocomplete="username email" aria-describedby="email-hint email-err">
+        </div>
+        <button class="btn btn-secondary" type="submit">リンクを送る</button>
+        <div role="status" id="signin-status"></div>
+      </form>
+      <div>
+        <h3>データ取得の状況</h3>
+        <table class="stack">
+          <caption class="sr-only">データ取得の状況</caption>
+          <thead><tr><th scope="col">取得元（ダミー）</th><th scope="col">状態</th><th scope="col">最終取得</th></tr></thead>
+          <tbody>
+            <tr><td data-label="取得元">大気常時監視（毎時）</td><td data-label="状態"><span class="level lv-good" style="font-size:var(--fs-xs)"><span class="sym" aria-hidden="true">✓</span>正常</span></td><td data-label="最終取得">14:02</td></tr>
+            <tr><td data-label="取得元">東山第2測定局</td><td data-label="状態"><span class="level lv-nodata" style="font-size:var(--fs-xs)"><span class="sym" aria-hidden="true">／</span>停止（保守）</span></td><td data-label="最終取得">11-14 09:00</td></tr>
+            <tr><td data-label="取得元">建築物 LCA 登録</td><td data-label="状態"><span class="level lv-caution" style="font-size:var(--fs-xs)"><span class="sym" aria-hidden="true">▲</span>遅延 2 日</span></td><td data-label="最終取得">11-13 18:00</td></tr>
+          </tbody>
+        </table>
+        <div class="btn-row"><button type="button" class="btn btn-secondary btn-small" id="refetch">再取得する</button><button type="button" class="btn btn-small" disabled>公開を再開（停止していません）</button></div>
+        <div role="status" id="refetch-status"></div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ================= #components ================= -->
+<section class="screen" id="screen-components" data-route="components" aria-labelledby="h-components">
+  <div class="screen-head">
+    <h1 id="h-components" tabindex="-1" data-i18n="navComponents">共通部品</h1>
+    <p class="lead">この試作で使う部品とトークンの一覧です。各部品は実際に操作できます。</p>
+  </div>
+  <div class="grid grid-2" style="align-items:start">
+    <section class="card" aria-labelledby="c-btn"><h2 id="c-btn">ボタン</h2>
+      <div class="btn-row"><button class="btn" type="button" data-demo="主ボタンを押しました">主ボタン</button><button class="btn btn-secondary" type="button" data-demo="副ボタンを押しました">副ボタン</button><button class="btn btn-danger" type="button" data-dialog="dlg-confirm">危険な操作</button><button class="btn" type="button" disabled>無効（理由: 条件未入力）</button></div>
+      <p class="hint">無効ボタンには理由を併記します。主ボタンは 1 画面に原則 1 つ。危険な操作は確認ダイアログを経由します。</p>
+      <div role="status" id="demo-status"></div>
+    </section>
+    <section class="card" aria-labelledby="c-form"><h2 id="c-form">フォーム（ラベル・ヘルプ・エラー）</h2>
+      <form id="demo-form" novalidate>
+        <div class="field" id="f-demo">
+          <label for="demo-code">郵便番号</label>
+          <span class="hint" id="demo-hint">半角数字 7 桁。ハイフンはあってもなくても構いません。</span>
+          <span class="error-msg" id="demo-err" hidden></span>
+          <input class="input" id="demo-code" autocomplete="postal-code" inputmode="numeric" aria-describedby="demo-hint demo-err" value="123-45">
+        </div>
+        <button class="btn btn-secondary" type="submit">確認する</button>
+        <div role="status" id="demo-form-status"></div>
+      </form>
+    </section>
+    <section class="card" aria-labelledby="c-dlg"><h2 id="c-dlg">ダイアログ</h2>
+      <p>開くとダイアログ内の最初の操作にフォーカスが移り、閉じると開いたボタンに戻ります。Esc で閉じます。</p>
+      <button class="btn btn-secondary" type="button" data-dialog="dlg-help">ヘルプのダイアログを開く</button>
+    </section>
+    <section class="card" aria-labelledby="c-nav"><h2 id="c-nav">ナビゲーション・サイドバー</h2>
+      <p>上部の主要メニュー（デスクトップ）、左のサイドバー（1023px 以下ではドロワー）、下部タブ（639px 以下）、パンくず、層ナビの 5 種類。現在地は <code>aria-current</code> と太字・下線（色以外）で示します。</p>
+      <nav class="breadcrumb" aria-label="パンくずの例"><ol><li><a href="#dashboard">ホーム</a></li><li><a href="#detail">公共建築物</a></li><li aria-current="page">例</li></ol></nav>
+    </section>
+    <section class="card" aria-labelledby="c-tabs"><h2 id="c-tabs">タブ</h2>
+      <p class="hint">← → で移動、Home / End で端へ。選んだタブだけが Tab キーの順序に入ります。</p>
+      <div role="tablist" aria-label="タブの例" data-tabs>
+        <button role="tab" id="t-ex1" aria-controls="p-ex1" aria-selected="true">概要</button>
+        <button role="tab" id="t-ex2" aria-controls="p-ex2" aria-selected="false" tabindex="-1">詳細</button>
+        <button role="tab" id="t-ex3" aria-controls="p-ex3" aria-selected="false" tabindex="-1">履歴</button>
+      </div>
+      <div role="tabpanel" id="p-ex1" aria-labelledby="t-ex1" tabindex="0">概要のパネルです。</div>
+      <div role="tabpanel" id="p-ex2" aria-labelledby="t-ex2" tabindex="0" hidden>詳細のパネルです。</div>
+      <div role="tabpanel" id="p-ex3" aria-labelledby="t-ex3" tabindex="0" hidden>履歴のパネルです。</div>
+    </section>
+    <section class="card" aria-labelledby="c-alert"><h2 id="c-alert">成功・警告・エラー・情報</h2>
+      <div class="notice n-success"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="m7 12 3.5 3.5L17 9" stroke="#fff" stroke-width="2.5" fill="none"/></svg><p><strong>成功:</strong> 通知を登録しました。</p></div>
+      <div class="notice n-warning"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 1 21h22L12 2z" fill="currentColor"/><path d="M11 9h2v6h-2zM11 16.5h2v2h-2z" fill="#fff"/></svg><p><strong>警告:</strong> この値は速報値です。後日変わることがあります。</p></div>
+      <div class="notice n-error"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="3" fill="currentColor"/><path d="m7 7 10 10M17 7 7 17" stroke="#fff" stroke-width="2.5"/></svg><p><strong>エラー:</strong> データを取得できませんでした。時間をおいて再読み込みしてください。表示中の値は 13:00 時点のものです。</p></div>
+      <div class="notice n-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M11 10h2v8h-2zM11 6h2v2h-2z" fill="#fff"/></svg><p><strong>お知らせ:</strong> 11-17 まで東山第2測定局は保守中です。</p></div>
+    </section>
+    <section class="card" aria-labelledby="c-empty"><h2 id="c-empty">空状態</h2>
+      <div class="empty">
+        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="4" fill="none"/><path d="m29 29 12 12" stroke="currentColor" stroke-width="4"/></svg>
+        <p><strong>この条件に合う建物はまだ登録されていません。</strong></p>
+        <p class="hint">延床面積の範囲を広げるか、用途を「すべて」にしてください。</p>
+        <button class="btn btn-secondary" type="button">条件を広げる</button>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="c-skel"><h2 id="c-skel">読み込み中（スケルトン）</h2>
+      <div class="skeleton" aria-hidden="true"><div class="sk" style="width:60%"></div><div class="sk tall"></div><div class="sk" style="width:80%"></div></div>
+      <p class="hint" role="status">読み込み中です（スクリーンリーダーには文字で伝えます。動きを減らす設定ではきらめきを止めます）。</p>
+    </section>
+    <section class="card" aria-labelledby="c-card"><h2 id="c-card">カード・区分バッジ</h2>
+      <div class="card" style="box-shadow:none">
+        <h3>青葉市 PM2.5</h3>
+        <p><span class="level lv-caution"><span class="sym" aria-hidden="true">▲</span>区分2 やや注意</span> 23 µg/m³ <span class="state state-prelim">速報値</span></p>
+        <p class="hint" style="margin:0">出典: 環境データ公開基盤（ダミー）・14:00</p>
+      </div>
+      <p style="margin-top:var(--space-3)" class="hint">区分は「色＋記号（●▲◆■／）＋区分名＋数値範囲」で必ず一緒に示します。</p>
+    </section>
+    <section class="card" aria-labelledby="c-table"><h2 id="c-table">テーブル（並べ替え）とチャート</h2>
+      <p>並べ替えは見出しのボタンで行い、状態を <code>aria-sort</code> で伝えます。639px 以下ではカードリストに変わり、並べ替えは選択欄で行います。実例は「<a href="#detail">公共建築物</a>」と「<a href="#workspace">地域のデータ</a>」。チャートは表のデータから描き、同じ内容の表と代替テキストを必ず持ちます。</p>
+    </section>
+  </div>
+
+  <h2 style="margin-top:var(--space-7)">カラートークン</h2>
+  <p class="hint">コントラスト比はこの画面で実際の値から計算しています（白 #FFFFFF に対する比。状態色は対応する背景色に対する比）。</p>
+  <ul class="swatches" id="swatches"></ul>
+
+  <h2 style="margin-top:var(--space-7)">文字サイズ</h2>
+  <div id="type-scale">
+    <div class="scale-row"><code>--fs-xxl 36px</code><span style="font-size:var(--fs-xxl);font-weight:700">23 µg/m³</span></div>
+    <div class="scale-row"><code>--fs-xl 28px</code><span style="font-size:var(--fs-xl);font-weight:700">画面見出し</span></div>
+    <div class="scale-row"><code>--fs-l 22px</code><span style="font-size:var(--fs-l);font-weight:700">第1層の結論</span></div>
+    <div class="scale-row"><code>--fs-m 18px</code><span style="font-size:var(--fs-m)">第1層の本文</span></div>
+    <div class="scale-row"><code>--fs-s 16px</code><span style="font-size:var(--fs-s)">標準の本文</span></div>
+    <div class="scale-row"><code>--fs-xs 14px</code><span style="font-size:var(--fs-xs)">第3層の表・注記</span></div>
+  </div>
+  <div class="grid grid-2" style="margin-top:var(--space-7)">
+    <div><h2>余白（8px グリッド）</h2>
+      <div id="space-scale"></div></div>
+    <div><h2>角丸・影・動き</h2>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+        <div><div class="radius-demo" style="border-radius:var(--radius-s)"></div><code>s 4px</code></div>
+        <div><div class="radius-demo" style="border-radius:var(--radius-m)"></div><code>m 8px</code></div>
+        <div><div class="radius-demo" style="border-radius:var(--radius-l)"></div><code>l 12px</code></div>
+        <div><div class="radius-demo" style="border-radius:var(--radius-pill);width:96px"></div><code>pill</code></div>
+      </div>
+      <p class="hint" style="margin-top:var(--space-3)">影: <code>--shadow-1</code>（カード）、<code>--shadow-2</code>（ダイアログ・ドロワー）。動き: <code>--dur-fast 120ms</code> / <code>--dur 200ms</code>。動きを減らす設定・軽量表示では 0ms。</p>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div>
+      <p><strong>架空大学 環境データ研究室（ダミー）</strong><br>研究用の試作です。政府・自治体の公式サービスではありません。</p>
+      <p>データ: 環境データ公開基盤（ダミー）。すべて架空の値です。</p>
+    </div>
+    <ul>
+      <li><a href="#methods">方法と出典</a></li>
+      <li><a href="#methods">アクセシビリティ方針と試験状況</a></li>
+      <li><a href="#settings">データの公開範囲とプライバシー</a></li>
+    </ul>
+    <ul>
+      <li><button type="button" class="btn-link" data-dialog="dlg-help">ヘルプ・問い合わせ</button>（どの画面でも同じ場所にあります）</li>
+      <li>特定の企業・製品を推奨しません</li>
+      <li>最終更新: 2026-11-15</li>
+    </ul>
+  </div>
+</footer>
+
+<nav class="bottom-nav" aria-label="主要メニュー（下部）">
+  <ul>
+    <li><a href="#dashboard" data-route-link="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z" fill="currentColor"/></svg><span data-i18n="bHome">ホーム</span></a></li>
+    <li><a href="#workspace" data-route-link="workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span data-i18n="bRegion">地域</span></a></li>
+    <li><a href="#detail" data-route-link="detail"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5l8-3 8 3v16z" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 9h2v2H9zm4 0h2v2h-2zm-4 4h2v2H9zm4 0h2v2h-2z" fill="currentColor"/></svg><span data-i18n="bBuilding">建物</span></a></li>
+    <li><a href="#methods" data-route-link="methods"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M8 11h8M8 15h8" stroke="currentColor" stroke-width="2"/></svg><span data-i18n="bMethods">方法</span></a></li>
+    <li><a href="#settings" data-route-link="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2"/></svg><span data-i18n="bSettings">設定</span></a></li>
+  </ul>
+</nav>
+
+<!-- ダイアログ -->
+<dialog id="dlg-help" aria-labelledby="dlg-help-t">
+  <div class="dlg-body">
+    <h2 id="dlg-help-t">ヘルプ</h2>
+    <ul>
+      <li>各画面は「1 いまの状況 → 2 くらべる → 3 根拠とデータ」の順に詳しくなります。</li>
+      <li>上部の「詳しさ」で一般向け／専門家向けを切り替えられます。どちらも同じデータです。</li>
+      <li>通信が不安定なときは「災害時 軽量表示」を押してください。</li>
+      <li>問い合わせ（ダミー）: 架空大学 環境データ研究室 窓口 平日 9:00〜17:00</li>
+    </ul>
+  </div>
+  <div class="dlg-foot"><button type="button" class="btn" data-close>閉じる</button></div>
+</dialog>
+<dialog id="dlg-confirm" aria-labelledby="dlg-confirm-t" aria-describedby="dlg-confirm-d">
+  <div class="dlg-body">
+    <h2 id="dlg-confirm-t">この端末の設定をすべて消しますか？</h2>
+    <p id="dlg-confirm-d">言語・文字サイズ・表示の詳しさ・通知の設定が初期状態に戻ります。公開データには影響しません。この操作は取り消せません。</p>
+  </div>
+  <div class="dlg-foot"><button type="button" class="btn btn-secondary" data-close autofocus>やめる</button><button type="button" class="btn btn-danger" id="confirm-clear">消す</button></div>
+</dialog>
+
+<div id="live" class="sr-only" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var doc=document, root=doc.documentElement;
+root.classList.remove("no-js"); root.classList.add("js");
+var $=function(s,c){return (c||doc).querySelector(s)}, $$=function(s,c){return Array.prototype.slice.call((c||doc).querySelectorAll(s))};
+var live=$("#live");
+function announce(m){live.textContent="";setTimeout(function(){live.textContent=m},30)}
+
+/* ---------- 設定の保存（失敗しても動く） ---------- */
+var KEY="bpublic-prefs";
+var prefs={lang:"ja",size:"m",audience:"general",lite:false,motion:false};
+try{var saved=JSON.parse(localStorage.getItem(KEY)||"null"); if(saved) for(var k in saved) prefs[k]=saved[k];}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(prefs))}catch(e){}}
+
+/* ---------- 多言語（主要部分のみ） ---------- */
+var I18N={
+ en:{skip:"Skip to main content",identity:"<strong>A research prototype run by the Environmental Data Lab, Fictional University (dummy).</strong> This is not an official government or municipal service.",sourceLabel:"Source",sourceName:"Environmental Open Data Platform (dummy)",aboutOperator:"About the operator and methods",menu:"Menu",brand:"Air & Buildings Open Data",proto:"Prototype",textSize:"Text",detailLevel:"Detail",general:"General",expert:"Expert",liteBtn:"Emergency lite view",help:"Help",navHome:"Home (national overview)",navRegion:"Regional data",navBuilding:"Public buildings",navMethods:"Methods & sources",navSettings:"Settings & admin",navComponents:"Components",emTitle:"[Drill / dummy] Photochemical oxidant advisory in effect",emBody:"Area: eastern Kitahama Prefecture (Higashiyama City, Minamiura Town). Issued 2026-11-15 13:00. Avoid strenuous outdoor exercise. Aoba City is NOT included.",emMore:"See advisory criteria",liteOn:"Lite view:",liteDesc:"Charts and decoration are hidden; only key information and tables are shown.",close:"Close",screens:"Screens",dataStatus:"Data status",lastUpdated:"Last updated",nextUpdate:"Next update",prelim:"preliminary",method:"Method",seeMethods:"See methods & sources",legendTitle:"How to read levels (dummy)",dashTitle:"Air quality and public buildings now",dashLead:"Check the air in your area and the environmental performance of public buildings, together with the evidence.",tasksTitle:"Common tasks",task1:"Check today's air",task1s:"PM2.5 and oxidants in your area",task2:"Decide on going out / ventilating",task2s:"Current level and what to do",task3:"Look up a public building",task3s:"CO2 emissions and energy performance",task4:"Get advisory alerts",task4s:"One question per page, 3 steps",byPlace:"Find by place",searchLabel:"City name or postcode",searchHint:"e.g. Aoba, 100-0000 (fictional)",search:"Search",byIndicator:"Find by indicator",indLca:"Public building CO2 (LCA) and energy",nationalTitle:"National overview: municipalities by PM2.5 level",nationalSays:"What this chart says: over 90% of 1,722 (fictional) municipalities are 'Good' or 'Slight caution'. None are 'Warning'.",viewChart:"Chart",viewMap:"Map",viewTable:"Table",chartOmitted:"(Chart hidden in lite view. The Table tab shows the same data.)",tileHint:"Representative value per (fictional) prefecture. Tile positions are approximate.",newsTitle:"News & change log",wsTitle:"Air in Aoba City (Kitahama Pref.)",stations:"Stations",layer1:"Now",layer2:"Compare",layer3:"Evidence & data",lvCaution:"Level 2 Slight caution",concMsg:"Most people can go about their day as usual.",actionsTitle:"What to do",act1:"Go easy on long, strenuous outdoor exercise.",act2:"Keep ventilation short (5-10 minutes).",sensitiveT:"For sensitive groups:",sensitiveB:"Older adults, children and people with heart or lung conditions should reduce outdoor activity if they feel unwell.",notTarget:"Aoba City is not in the area of the 13:00 advisory.",cmpTitle:"Comparison settings",indicator:"Indicator",periodLabel:"Period (days)",periodHint:"A number from 1 to 90. 1 shows hourly values for 24 hours.",cmpLabel:"Compare with",apply:"Show with these settings",detTitle:"Environmental performance of Aoba Central Library (dummy)",bHome:"Home",bRegion:"Region",bBuilding:"Buildings",bMethods:"Methods",bSettings:"Settings",identityLabel:"Operator identification",mainNav:"Main menu",sideNav:"Side menu",emergencyLabel:"Emergency notice"},
+ easy:{skip:"ほんぶん へ いく",identity:"<strong>かくうだいがく の けんきゅうしつ（ダミー）</strong> が つくった ためしの ページ です。くに や まち の ページ では ありません。",sourceLabel:"データ の でどころ",aboutOperator:"だれ が つくったか",menu:"メニュー",brand:"くうき と たてもの の データ",proto:"ためし",textSize:"もじ",detailLevel:"くわしさ",general:"かんたん",expert:"くわしく",liteBtn:"さいがい の とき の かるい がめん",help:"たすけ",navHome:"ホーム",navRegion:"まち の くうき",navBuilding:"たてもの",navMethods:"しらべかた",navSettings:"せってい",navComponents:"ぶひん",emTitle:"【れんしゅう・ダミー】ひかりかがく オキシダント の ちゅういほう が でています",emBody:"ばしょ: きたはまけん の ひがし（ひがしやまし・みなみうらちょう）。そとで はげしい うんどう を しないで ください。あおばし は ちがいます。",emMore:"きじゅん を みる",liteOn:"かるい がめん です:",liteDesc:"グラフ を けして、だいじな こと だけ を だしています。",close:"とじる",screens:"がめん",dataStatus:"データ の じょうたい",lastUpdated:"さいごに あたらしく した じかん",nextUpdate:"つぎ に あたらしく する じかん",prelim:"はやい ちょうさ の かず",method:"けいさん の しかた",seeMethods:"しらべかた を みる",legendTitle:"くぶん の みかた",dashTitle:"いま の くうき と たてもの",dashLead:"あなた の まち の くうき が きれいか どうか わかります。",tasksTitle:"よく つかう こと",task1:"きょう の くうき を しる",task1s:"PM2.5 など",task2:"そとに でるか きめる",task2s:"いま どうすれば よいか",task3:"ちかく の たてもの を しらべる",task3s:"CO2 と でんき の つかいかた",task4:"おしらせ を うけとる",task4s:"1 ページ に 1 つ の しつもん",byPlace:"まち から さがす",searchLabel:"まち の なまえ",searchHint:"れい: あおばし",search:"さがす",byIndicator:"なに を しらべるか から さがす",viewChart:"グラフ",viewMap:"ちず",viewTable:"ひょう",wsTitle:"あおばし の くうき",layer1:"いま",layer2:"くらべる",layer3:"もと に なった データ",lvCaution:"くぶん 2 すこし 気をつけて",concMsg:"ふだん どおり すごせます。",actionsTitle:"どうすれば よいか",act1:"そとで ながく はしらないで ください。",act2:"まど を あけるのは みじかく（5〜10 ふん）。",sensitiveT:"おとしより・こども・びょうき の ひと へ:",sensitiveB:"からだ の ぐあい が わるく なったら、そと に でる じかん を へらして ください。",notTarget:"あおばし は ちゅういほう の ばしょ では ありません。",bHome:"ホーム",bRegion:"まち",bBuilding:"たてもの",bMethods:"しらべかた",bSettings:"せってい"}
+};
+var JA={};
+$$("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n"); if(!(k in JA)) JA[k]=el.innerHTML;});
+var JA_ARIA={}; $$("[data-i18n-aria]").forEach(function(el){JA_ARIA[el.getAttribute("data-i18n-aria")]=el.getAttribute("aria-label")});
+function applyLang(){
+  var d=I18N[prefs.lang]||{};
+  $$("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n"); el.innerHTML=(d[k]!=null?d[k]:JA[k]);});
+  $$("[data-i18n-aria]").forEach(function(el){var k=el.getAttribute("data-i18n-aria"); el.setAttribute("aria-label",d[k]||JA_ARIA[k]);});
+  root.lang=prefs.lang==="en"?"en":"ja";
+}
+
+/* ---------- 表示設定の適用 ---------- */
+function applyPrefs(opts){
+  root.classList.remove("size-l","size-xl"); if(prefs.size!=="m") root.classList.add("size-"+prefs.size);
+  doc.body.classList.toggle("lite",!!prefs.lite);
+  doc.body.classList.toggle("reduce-motion",!!prefs.motion);
+  doc.body.classList.toggle("aud-expert",prefs.audience==="expert");
+  $$(".seg[data-pref]").forEach(function(g){var p=g.getAttribute("data-pref"); $$("button",g).forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-val")===prefs[p]))})});
+  $("#lite-btn").setAttribute("aria-pressed",String(!!prefs.lite));
+  $$('input[name="s-lang"]').forEach(function(i){i.checked=i.value===prefs.lang});
+  $$('input[name="s-size"]').forEach(function(i){i.checked=i.value===prefs.size});
+  $$('input[name="s-aud"]').forEach(function(i){i.checked=i.value===prefs.audience});
+  $("#s-lite").checked=!!prefs.lite; $("#s-motion").checked=!!prefs.motion;
+  $$(".lite-only").forEach(function(e){e.hidden=!prefs.lite});
+  if(opts&&opts.layers){ $$('details[data-layer="3"]').forEach(function(d){d.open=prefs.audience==="expert"}); syncToggles(); }
+  applyLang(); measureHeader();
+}
+function setPref(k,v,msg){prefs[k]=v; save(); applyPrefs({layers:k==="audience"}); if(msg) announce(msg);}
+$$(".seg[data-pref]").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button"); if(!b) return; var p=g.getAttribute("data-pref"); setPref(p,b.getAttribute("data-val"),b.textContent.trim()+" に切り替えました")})});
+$("#lite-btn").addEventListener("click",function(){setPref("lite",!prefs.lite,prefs.lite?"軽量表示を終了しました":"軽量表示にしました"); renderCharts();});
+doc.addEventListener("change",function(e){
+  var t=e.target, st=$("#disp-status");
+  if(t.name==="s-lang") setPref("lang",t.value); else if(t.name==="s-size") setPref("size",t.value); else if(t.name==="s-aud") setPref("audience",t.value);
+  else if(t.id==="s-lite"){setPref("lite",t.checked); renderCharts();} else if(t.id==="s-motion") setPref("motion",t.checked); else return;
+  if(st) st.textContent="✓ 設定を保存しました（この端末のみ）";
+});
+
+/* ---------- ヘッダー高さ（フォーカスが隠れない） ---------- */
+function measureHeader(){var h=$("#site-header").offsetHeight; root.style.setProperty("--header-h",h+"px"); root.style.scrollPaddingTop=(h+72)+"px";}
+window.addEventListener("resize",measureHeader);
+
+/* ---------- ルーティング ---------- */
+var ROUTES=["dashboard","workspace","detail","methods","settings","components"];
+var TITLES={dashboard:"全国概況",workspace:"青葉市の空気",detail:"青葉市立中央図書館",methods:"方法と出典",settings:"設定・管理",components:"共通部品"};
+function parseHash(){var h=location.hash.replace(/^#/,""); var q=h.split("?"); var params={}; (q[1]||"").split("&").forEach(function(p){if(!p) return; var kv=p.split("="); params[decodeURIComponent(kv[0])]=decodeURIComponent(kv[1]||"")}); return {name:q[0],params:params};}
+var current=null;
+function show(name,focusEl){
+  $$(".screen").forEach(function(s){s.classList.toggle("active",s.getAttribute("data-route")===name)});
+  $$("[data-route-link]").forEach(function(a){if(a.getAttribute("data-route-link")===name) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current")});
+  doc.title=TITLES[name]+"｜くうきと建物の公開データ（試作）";
+  closeDrawer(true);
+  var target=focusEl||$("#h-"+name);
+  if(current!==name||focusEl){ window.scrollTo(0,0); if(target){ if(focusEl) openAncestors(focusEl); target.focus({preventScroll:!!(!focusEl)}); if(focusEl) focusEl.scrollIntoView({block:"start"}); } }
+  current=name;
+}
+function openAncestors(el){var d=el.closest("details"); if(d) d.open=true; if(el.tagName==="DETAILS") el.open=true;}
+function route(){
+  var r=parseHash();
+  if(ROUTES.indexOf(r.name)>=0){ show(r.name); if(r.name==="workspace") applyParams(r.params); return; }
+  var el=r.name&&doc.getElementById(r.name);
+  if(el){ var sc=el.closest(".screen"); if(sc){ show(sc.getAttribute("data-route"),focusable(el)); return; } }
+  show("dashboard");
+}
+function focusable(el){ if(el.tagName==="DETAILS"){ var s=$("summary",el); return s; } if(!el.hasAttribute("tabindex")&&!/^(A|BUTTON|INPUT|SELECT|TEXTAREA|SUMMARY)$/.test(el.tagName)) el.setAttribute("tabindex","-1"); return el; }
+window.addEventListener("hashchange",route);
+/* 層ナビ・画面内ジャンプ（URL の条件を壊さない） */
+doc.addEventListener("click",function(e){
+  var a=e.target.closest("[data-jump]"); if(!a) return;
+  e.preventDefault();
+  var id=a.getAttribute("data-jump"), el=doc.getElementById(id), rt=a.getAttribute("data-route-to");
+  if(rt&&current!==rt){ history.pushState(null,"","#"+rt); show(rt); }
+  openAncestors(el); var f=focusable(el); f.focus({preventScroll:true}); el.scrollIntoView({block:"start",behavior:prefs.motion?"auto":"smooth"});
+  setLayerCurrent(a.closest("[data-layer-nav]"),id);
+});
+function setLayerCurrent(nav,id){ if(!nav) return; $$("a",nav).forEach(function(x){x.setAttribute("aria-current",String(x.getAttribute("data-jump")===id))}); }
+if("IntersectionObserver" in window){
+  var io=new IntersectionObserver(function(ents){ents.forEach(function(en){ if(en.isIntersecting){ var sc=en.target.closest(".screen"); setLayerCurrent($("[data-layer-nav]",sc),en.target.id);} })},{rootMargin:"-30% 0px -60% 0px"});
+  $$(".layer[id]").forEach(function(l){io.observe(l)});
+}
+/* details の開閉文言 */
+function syncToggles(){ $$("details.layer").forEach(function(d){ var t=$("[data-toggle-txt]",d); if(t) t.textContent=d.open?"閉じる":"開く"; }); }
+$$("details.layer").forEach(function(d){ d.addEventListener("toggle",syncToggles) });
+
+/* ---------- ドロワー ---------- */
+var sidebar=$("#sidebar"), menuBtn=$("#menu-btn"), scrim=null;
+function isDrawer(){return window.matchMedia("(max-width:1023px)").matches}
+function openDrawer(){ if(!isDrawer()) return; sidebar.classList.add("open"); menuBtn.setAttribute("aria-expanded","true"); scrim=doc.createElement("div"); scrim.className="scrim"; scrim.addEventListener("click",function(){closeDrawer()}); doc.body.appendChild(scrim); $("#drawer-close").focus(); }
+function closeDrawer(silent){ if(!sidebar.classList.contains("open")) return; sidebar.classList.remove("open"); menuBtn.setAttribute("aria-expanded","false"); if(scrim){scrim.remove(); scrim=null} if(!silent) menuBtn.focus(); }
+menuBtn.addEventListener("click",function(){ sidebar.classList.contains("open")?closeDrawer():openDrawer() });
+$("#drawer-close").addEventListener("click",function(){closeDrawer()});
+doc.addEventListener("keydown",function(e){ if(e.key==="Escape"&&sidebar.classList.contains("open")) closeDrawer(); });
+sidebar.addEventListener("keydown",function(e){ if(e.key!=="Tab"||!sidebar.classList.contains("open")) return; var f=$$("a,button",sidebar).filter(function(x){return x.offsetParent!==null}); var first=f[0], last=f[f.length-1]; if(e.shiftKey&&doc.activeElement===first){e.preventDefault(); last.focus()} else if(!e.shiftKey&&doc.activeElement===last){e.preventDefault(); first.focus()} });
+
+/* ---------- タブ（ARIA tablist・矢印キー） ---------- */
+$$("[data-tabs]").forEach(function(list){
+  var tabs=$$('[role="tab"]',list);
+  function select(t,focus){ tabs.forEach(function(x){var on=x===t; x.setAttribute("aria-selected",String(on)); x.tabIndex=on?0:-1; doc.getElementById(x.getAttribute("aria-controls")).hidden=!on;}); if(focus) t.focus(); }
+  tabs.forEach(function(t,i){
+    t.addEventListener("click",function(){select(t)});
+    t.addEventListener("keydown",function(e){var n=null; if(e.key==="ArrowRight") n=tabs[(i+1)%tabs.length]; else if(e.key==="ArrowLeft") n=tabs[(i-1+tabs.length)%tabs.length]; else if(e.key==="Home") n=tabs[0]; else if(e.key==="End") n=tabs[tabs.length-1]; if(n){e.preventDefault(); select(n,true);} });
+  });
+});
+
+/* ---------- ダイアログ（フォーカス管理） ---------- */
+var opener=null;
+doc.addEventListener("click",function(e){
+  var b=e.target.closest("[data-dialog]"); if(b){ var d=doc.getElementById(b.getAttribute("data-dialog")); opener=b; if(d.showModal) d.showModal(); else d.setAttribute("open",""); var f=$("[autofocus]",d)||$("button,a,input,select",d); if(f) f.focus(); return; }
+  var c=e.target.closest("[data-close]"); if(c){ c.closest("dialog").close(); }
+});
+$$("dialog").forEach(function(d){ d.addEventListener("close",function(){ if(opener&&doc.contains(opener)) opener.focus(); opener=null; }) });
+$("#confirm-clear").addEventListener("click",function(){ try{localStorage.removeItem(KEY)}catch(e){} prefs={lang:"ja",size:"m",audience:"general",lite:false,motion:false}; applyPrefs({layers:true}); $("#dlg-confirm").close(); announce("この端末の設定を消しました"); var st=$("#disp-status"); if(st) st.textContent="✓ 設定を初期状態に戻しました"; });
+
+/* ---------- 並べ替え表 ---------- */
+function cellVal(td){ var v=td.hasAttribute("data-sort")?td.getAttribute("data-sort"):td.textContent.trim(); if(v===""||v==="—"||/データなし|欠測/.test(v)) return null; if(/^[+\-−]?[\d,.]+%?$/.test(v)) return parseFloat(v.replace(/,/g,"").replace("−","-")); return v; }
+function sortTable(table,idx,dir){
+  var tb=table.tBodies[0], rows=Array.prototype.slice.call(tb.rows);
+  rows.sort(function(a,b){ var x=cellVal(a.cells[idx]), y=cellVal(b.cells[idx]); if(x===null&&y===null) return 0; if(x===null) return 1; if(y===null) return -1; var r=(typeof x==="number"&&typeof y==="number")?x-y:String(x).localeCompare(String(y),"ja"); return dir==="asc"?r:-r; });
+  rows.forEach(function(r){tb.appendChild(r)});
+  $$("thead th",table).forEach(function(th,i){ if(i===idx) th.setAttribute("aria-sort",dir==="asc"?"ascending":"descending"); else th.removeAttribute("aria-sort"); });
+  announce(($$("thead th",table)[idx].textContent.trim())+" で"+(dir==="asc"?"昇順":"降順")+"に並べ替えました（データなしは最後）");
+}
+$$("table.sortable").forEach(function(table){
+  $$("thead th",table).forEach(function(th,i){ var b=$(".sort",th); if(!b) return; b.addEventListener("click",function(){ var dir=th.getAttribute("aria-sort")==="ascending"?"desc":"asc"; sortTable(table,i,dir); }); });
+});
+function bindMobileSort(sel,table){ $(sel).addEventListener("change",function(e){ var p=e.target.value.split(":"); sortTable($(table),+p[0],p[1]); }); }
+bindMobileSort("#ws-sort-m","#tbl-ws"); bindMobileSort("#bld-sort-m","#tbl-bld");
+
+/* ---------- ダミーデータ ---------- */
+var H24=[9,10,11,12,12,13,15,18,22,26,29,31,30,28,27,26,null,24,24,23,22,21,22,23];
+var H24C=[8,9,9,10,11,12,13,15,18,21,24,26,26,25,24,23,22,21,21,20,19,19,20,20];
+function daily(n,seed,base){ var out=[]; for(var i=0;i<n;i++){ var v=base+8*Math.sin((i+seed)/3.1)+5*Math.cos((i*1.7+seed)/2.3); out.push(Math.round(Math.max(3,v)*10)/10);} return out; }
+function lvOf(v){ if(v===null) return ["nodata","／","データなし"]; if(v<=12) return ["good","●","区分1 良好"]; if(v<=35) return ["caution","▲","区分2 やや注意"]; if(v<=55) return ["alert","◆","区分3 注意"]; return ["severe","■","区分4 警戒"]; }
+var CMPN={pref:"北浜県の平均",nation:"全国の平均",higashiyama:"東山市"};
+var state={region:"aoba",ind:"pm25",days:1,cmp:"pref"};
+function series(){
+  var labels=[],a,c,d=state.days, oxK=state.ind==="ox"?0.0032:1;
+  if(d===1){ for(var i=0;i<24;i++) labels.push("11-"+(i<10?"14":"15")+" "+String((15+i)%24).padStart(2,"0")+":00"); a=H24.slice(); c=H24C.map(function(v){return state.cmp==="nation"?Math.round(v*0.85):state.cmp==="higashiyama"?v+4:v}); }
+  else { var base=new Date(2026,10,15); for(var j=d-1;j>=0;j--){ var t=new Date(base); t.setDate(base.getDate()-j); labels.push((t.getMonth()+1)+"-"+String(t.getDate()).padStart(2,"0")); } a=daily(d,1,18); c=daily(d,state.cmp==="nation"?4:2,state.cmp==="higashiyama"?20:15); if(d>5) a[d-4]=null; }
+  if(state.ind==="ox"){ a=a.map(function(v){return v===null?null:Math.round(v*oxK*1000)/1000}); c=c.map(function(v){return Math.round(v*oxK*1000)/1000}); }
+  return {labels:labels,a:a,c:c};
+}
+
+/* ---------- チャート描画（表のデータから生成） ---------- */
+var NS="http://www.w3.org/2000/svg";
+function el(n,attrs,txt){var e=doc.createElementNS(NS,n); for(var k in attrs) e.setAttribute(k,attrs[k]); if(txt!=null) e.textContent=txt; return e;}
+function clearSvg(svg){ $$(":scope > :not(title):not(desc)",svg).forEach(function(n){n.remove()}); }
+function tok(n){return getComputedStyle(root).getPropertyValue(n).trim()||"#000"}
+function lineChart(svg,s){
+  clearSvg(svg); var W=640,H=280,L=48,R=16,T=16,B=48; var ox=state.ind==="ox";
+  var vals=s.a.concat(s.c).filter(function(v){return v!==null}); var max=ox?0.15:Math.max(40,Math.ceil(Math.max.apply(null,vals)/10)*10);
+  var x=function(i){return L+(W-L-R)*(s.labels.length===1?0.5:i/(s.labels.length-1))}, y=function(v){return T+(H-T-B)*(1-v/max)};
+  for(var g=0;g<=4;g++){ var gv=max*g/4; svg.appendChild(el("line",{x1:L,x2:W-R,y1:y(gv),y2:y(gv),"class":"grid"})); svg.appendChild(el("text",{x:L-6,y:y(gv)+4,"text-anchor":"end"},ox?gv.toFixed(2):Math.round(gv))); }
+  svg.appendChild(el("line",{x1:L,x2:L,y1:T,y2:H-B,"class":"axis"})); svg.appendChild(el("line",{x1:L,x2:W-R,y1:H-B,y2:H-B,"class":"axis"}));
+  var th=ox?0.12:35.1; svg.appendChild(el("line",{x1:L,x2:W-R,y1:y(th),y2:y(th),stroke:tok("--chart-threshold"),"stroke-width":2,"stroke-dasharray":"2 3"})); svg.appendChild(el("text",{x:W-R,y:y(th)-6,"text-anchor":"end",fill:tok("--chart-threshold")},ox?"注意報 0.12":"区分3 35.1"));
+  var step=Math.ceil(s.labels.length/6); s.labels.forEach(function(lb,i){ if(i%step===0||i===s.labels.length-1) svg.appendChild(el("text",{x:x(i),y:H-B+18,"text-anchor":"middle"},lb.replace(/^11-1[45] /,""))); });
+  svg.appendChild(el("text",{x:L,y:H-8},ox?"ppm":"µg/m³"));
+  function path(arr,color,dash,mark){ var d="",pen=false; arr.forEach(function(v,i){ if(v===null){pen=false;return;} d+=(pen?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)+" "; pen=true; }); svg.appendChild(el("path",{d:d,fill:"none",stroke:color,"stroke-width":3,"stroke-dasharray":dash||"none","stroke-linejoin":"round"}));
+    if(arr.length<=31) arr.forEach(function(v,i){ if(v===null){ svg.appendChild(el("text",{x:x(i),y:H-B-6,"text-anchor":"middle",fill:tok("--status-nodata-fg"),"font-weight":"700"},"／欠測")); return;} svg.appendChild(mark==="c"?el("circle",{cx:x(i),cy:y(v),r:3.5,fill:color}):el("rect",{x:x(i)-3.5,y:y(v)-3.5,width:7,height:7,fill:color})); }); }
+  path(s.c,tok("--chart-2"),"6 4","r"); path(s.a,tok("--chart-1"),null,"c");
+}
+function barChart(svg){
+  clearSvg(svg); var rows=$$("#tbl-national tbody tr"); var W=640,L=150,R=60,T=10,bh=30,gap=14; var max=900;
+  var colors={good:"--status-good-fg",caution:"--status-caution-fg",alert:"--status-alert-fg",severe:"--status-severe-fg",nodata:"--status-nodata-fg"};
+  rows.forEach(function(r,i){ var lv=r.getAttribute("data-lv"), name=r.cells[0].textContent.trim(), v=+r.cells[2].textContent; var yy=T+i*(bh+gap); var w=(W-L-R)*v/max;
+    svg.appendChild(el("text",{x:L-8,y:yy+bh/2+5,"text-anchor":"end"},name));
+    var rc=el("rect",{x:L,y:yy,width:Math.max(w,0),height:bh,fill:tok(colors[lv]),rx:3}); if(lv==="nodata"){ rc.setAttribute("fill","url(#hatch)"); rc.setAttribute("stroke",tok(colors[lv])); rc.setAttribute("stroke-width","2"); }
+    svg.appendChild(rc); svg.appendChild(el("text",{x:L+w+8,y:yy+bh/2+5,"font-weight":"700"},v));
+  });
+  var defs=el("defs",{}), pat=el("pattern",{id:"hatch",width:8,height:8,patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"}); pat.appendChild(el("rect",{width:8,height:8,fill:"#fff"})); pat.appendChild(el("line",{x1:0,y1:0,x2:0,y2:8,stroke:tok("--status-nodata-fg"),"stroke-width":3})); defs.appendChild(pat); svg.insertBefore(defs,svg.firstChild.nextSibling);
+}
+function stackChart(svg){
+  clearSvg(svg); var rows=$$("#tbl-lca tbody tr"), W=640,L=110,R=20,T=20,bh=44,max=3000; var cols=["--chart-1","--chart-4","--chart-3","--chart-2"];
+  [["本建物",1],["同用途平均",2]].forEach(function(b,k){ var xx=L, yy=T+k*(bh+40); svg.appendChild(el("text",{x:L-8,y:yy+bh/2+5,"text-anchor":"end","font-weight":"700"},b[0])); var tot=0;
+    rows.forEach(function(r,i){ var v=+r.cells[b[1]].textContent, w=(W-L-R)*v/max; svg.appendChild(el("rect",{x:xx,y:yy,width:w,height:bh,fill:tok(cols[i]),stroke:"#fff","stroke-width":2})); if(w>44) svg.appendChild(el("text",{x:xx+w/2,y:yy+bh/2+5,"text-anchor":"middle",fill:"#fff","font-weight":"700"},v)); xx+=w; tot+=v; });
+    svg.appendChild(el("text",{x:xx+6,y:yy+bh/2+5,"font-weight":"700"},"計 "+tot)); });
+  var lx=L; ["製造","建設","運用","解体"].forEach(function(n,i){ svg.appendChild(el("rect",{x:lx,y:T+2*(bh+40)-30,width:14,height:14,fill:tok(cols[i])})); svg.appendChild(el("text",{x:lx+20,y:T+2*(bh+40)-18},n)); lx+=90; });
+}
+function tileMap(ul,items,cur){
+  ul.innerHTML=""; items.forEach(function(it){ var l=lvOf(it[1]); var li=doc.createElement("li"); var a=doc.createElement(it[2]?"a":"span"); if(it[2]) a.href=it[2]; else a.className="t"; a.className+=" lv-"+l[0]+(it[0]===cur?" cur":""); a.innerHTML='<span class="nm">'+it[0]+'</span><span><span aria-hidden="true">'+l[1]+' </span>'+l[2]+'</span><span class="nm">'+(it[1]===null?"測定停止":it[1]+" µg/m³")+'</span>'; li.appendChild(a); ul.appendChild(li); });
+}
+function renderTable(s){
+  var tb=$("#tbl-ws tbody"); tb.innerHTML=""; var ox=state.ind==="ox";
+  s.labels.forEach(function(lb,i){ var v=s.a[i], l=ox?(v===null?lvOf(null):v>=0.12?["alert","◆","注意報相当"]:["good","●","区分1 良好"]):lvOf(v); var tr=doc.createElement("tr"); if(v===null) tr.className="missing";
+    var st=v===null?"欠測（保守）":(state.days<=30||i>=s.labels.length-30?"速報値":"確定値");
+    tr.innerHTML='<td data-label="日時">'+lb+'</td><td class="num" data-label="青葉市">'+(v===null?"データなし":v)+'</td><td class="num" data-label="比較先">'+s.c[i]+'</td><td data-label="区分"><span class="level lv-'+l[0]+'" style="font-size:.8rem"><span class="sym" aria-hidden="true">'+l[1]+'</span>'+l[2]+'</span></td><td data-label="状態"><span class="state'+(st==="速報値"?" state-prelim":"")+'">'+st+'</span></td>';
+    tb.appendChild(tr); });
+  var unit=ox?"ppm":"µg/m³"; $("#tbl-ws-cap").textContent=(ox?"光化学オキシダント":"PM2.5")+"の推移（"+unit+"・"+(state.days===1?"24時間・1時間値":state.days+"日間・日平均")+"・比較先: "+CMPN[state.cmp]+"）";
+  $("#th-cmp").firstChild.nodeValue=CMPN[state.cmp]; $("#lg-cmp").textContent=CMPN[state.cmp]+"（破線・■）";
+  $$("#tbl-ws thead th").forEach(function(th,i){ if(i===0) th.setAttribute("aria-sort","ascending"); else th.removeAttribute("aria-sort"); });
+}
+function renderCharts(){
+  if(prefs.lite) return;
+  barChart($("#chart-national")); stackChart($("#chart-lca")); var s=series(); lineChart($("#chart-ws"),s);
+  $("#chart-ws-d").textContent="青葉市と"+CMPN[state.cmp]+"の"+(state.days===1?"24時間":state.days+"日間")+"の推移。欠測は線を途切れさせ「欠測」と表示。同じデータを表タブで確認できます。";
+}
+function renderWorkspace(){ var s=series(); renderTable(s); if(!prefs.lite) lineChart($("#chart-ws"),s); updateCondUrl(); }
+function updateCondUrl(){
+  var q="region="+state.region+"&ind="+state.ind+"&days="+state.days+"&cmp="+state.cmp;
+  $("#cond-url").textContent=location.href.split("#")[0].replace(/^file:\/\/.*\//,"…/")+"#workspace?"+q;
+  $("#code-api").textContent="GET https://api.example.invalid/v1/air?"+q+"&format=csv";
+  $("#code-py").textContent='import pandas as pd\nurl = "https://api.example.invalid/v1/air?'+q+'&format=csv"\ndf = pd.read_csv(url, na_values=["NA"])\nprint(df[df["state"] != "欠測"].describe())';
+  $("#code-r").textContent='url <- "https://api.example.invalid/v1/air?'+q+'&format=csv"\ndf <- read.csv(url, na.strings = "NA")\nsummary(subset(df, state != "欠測"))';
+}
+function applyParams(p){
+  var changed=false;
+  if(p.ind&&(p.ind==="pm25"||p.ind==="ox")&&p.ind!==state.ind){state.ind=p.ind;changed=true}
+  if(p.days&&/^\d+$/.test(p.days)&&+p.days>=1&&+p.days<=90&&+p.days!==state.days){state.days=+p.days;changed=true}
+  if(p.cmp&&CMPN[p.cmp]&&p.cmp!==state.cmp){state.cmp=p.cmp;changed=true}
+  $$('input[name="ind"]').forEach(function(i){i.checked=i.value===state.ind}); $("#days").value=state.days; $("#cmp").value=state.cmp;
+  if(changed) renderWorkspace();
+}
+
+/* ---------- 比較フォーム（エラーの特定と修正提案） ---------- */
+function setErr(fid,eid,msg){ var f=$(fid), e=$(eid); f.classList.toggle("has-error",!!msg); e.hidden=!msg; e.textContent=msg||""; var inp=$("input,select",f); if(inp){ if(msg) inp.setAttribute("aria-invalid","true"); else inp.removeAttribute("aria-invalid"); } }
+$$("[data-step]").forEach(function(b){ if(b.tagName!=="BUTTON") return; b.addEventListener("click",function(){ var i=$("#days"), v=parseInt(toHalf(i.value),10)||1; v=Math.min(90,Math.max(1,v+(+b.getAttribute("data-step")))); i.value=v; announce("期間 "+v+" 日"); }); });
+function toHalf(s){return String(s).replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).trim()}
+$("#cmp-form").addEventListener("submit",function(e){
+  e.preventDefault(); var errs=[]; var raw=toHalf($("#days").value), cmp=$("#cmp").value;
+  if(raw===""){ errs.push(["days","期間が入力されていません。1〜90 の数字を入れてください（例: 7）。"]); }
+  else if(!/^\d+$/.test(raw)){ errs.push(["days","期間は数字だけで入力してください。「"+raw+"」は使えません。例: 7"]); }
+  else if(+raw<1||+raw>90){ errs.push(["days","期間は 1〜90 日で入力してください。91 日以上は第3層の「全データ（CSV）」をご利用ください。"]); }
+  if(!cmp) errs.push(["cmp","比較先を選んでください。迷ったら「北浜県の平均」がおすすめです。"]);
+  setErr("#f-days","#days-err",(errs.filter(function(x){return x[0]==="days"})[0]||[])[1]);
+  setErr("#f-cmp","#cmp-err",(errs.filter(function(x){return x[0]==="cmp"})[0]||[])[1]);
+  var box=$("#cmp-errors");
+  if(errs.length){ box.innerHTML='<div class="error-summary" role="alert"><h3>入力を確認してください（'+errs.length+' 件）</h3><ul>'+errs.map(function(x){return '<li><a href="#'+x[0]+'" data-fix="'+x[0]+'">'+x[1]+'</a></li>'}).join("")+'</ul></div>'; box.focus(); return; }
+  box.innerHTML=""; $("#days").value=raw;
+  state.ind=$('input[name="ind"]:checked').value; state.days=+raw; state.cmp=cmp;
+  history.replaceState(null,"","#workspace?region=aoba&ind="+state.ind+"&days="+state.days+"&cmp="+state.cmp);
+  var res=$("#cmp-result"), panels=$$('[role="tabpanel"]',res), sk=doc.createElement("div");
+  sk.className="skeleton"; sk.setAttribute("aria-hidden","true"); sk.innerHTML='<div class="sk" style="width:50%"></div><div class="sk tall"></div><div class="sk" style="width:70%"></div>';
+  panels.forEach(function(p){p.style.visibility="hidden"}); res.appendChild(sk); $("#cmp-status").textContent="読み込み中です";
+  setTimeout(function(){ sk.remove(); panels.forEach(function(p){p.style.visibility=""}); renderWorkspace(); tileMap($("#tile-pref"),PREF,"青葉市");
+    $("#ws-says").textContent="この図が言っていること: "+(state.days===1?"24時間":state.days+"日間")+"の推移を "+CMPN[state.cmp]+" と比べています（"+(state.ind==="ox"?"光化学オキシダント":"PM2.5")+"）。";
+    $("#cmp-status").textContent="✓ "+(state.days===1?"24時間":state.days+"日間")+"・比較先 "+CMPN[state.cmp]+" で表示しました"; }, prefs.motion?0:600);
+});
+doc.addEventListener("click",function(e){ var a=e.target.closest("[data-fix]"); if(!a) return; e.preventDefault(); var t=doc.getElementById(a.getAttribute("data-fix")); t.focus(); });
+
+/* ---------- コピー・ダウンロード ---------- */
+doc.addEventListener("click",function(e){
+  var b=e.target.closest("[data-copy]"); if(!b) return; var txt=doc.getElementById(b.getAttribute("data-copy")).textContent;
+  var done=function(){announce("コピーしました"); var o=b.textContent; b.textContent="✓ コピーしました"; setTimeout(function(){b.textContent=o},1600)};
+  try{ navigator.clipboard.writeText(txt).then(done,function(){fallback()}); }catch(err){ fallback(); }
+  function fallback(){ var r=doc.createRange(); r.selectNodeContents(doc.getElementById(b.getAttribute("data-copy"))); var s=getSelection(); s.removeAllRanges(); s.addRange(r); announce("文字を選択しました。Ctrl+C（⌘+C）でコピーしてください"); }
+});
+function download(name,rows){
+  var csv="﻿"+rows.map(function(r){return r.map(function(c){c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(",")}).join("\n")+"\n";
+  try{ var url=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); var a=doc.createElement("a"); a.href=url; a.download=name; doc.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(url)},1000); announce(name+" をダウンロードしました"); }catch(err){ announce("ダウンロードできませんでした"); }
+}
+var SRC="出典: 環境データ公開基盤（ダミー）/ CC BY 4.0 相当 / 架空データ";
+$("#dl-view").addEventListener("click",function(){ var s=series(); var rows=[["datetime","aoba","compare_"+state.cmp,"state"]]; s.labels.forEach(function(l,i){rows.push([l,s.a[i]===null?"NA":s.a[i],s.c[i],s.a[i]===null?"欠測":"速報値"])}); rows.push(["#"+SRC]); download("aoba_"+state.ind+"_"+state.days+"d.csv",rows); });
+$("#dl-all").addEventListener("click",function(){ var a=daily(90,1,18), c=daily(90,2,15); a[86]=null; var rows=[["date","aoba","pref_avg","nation_avg","state"]]; for(var i=0;i<90;i++){ var t=new Date(2026,10,15); t.setDate(t.getDate()-89+i); rows.push([t.toISOString().slice(0,10),a[i]===null?"NA":a[i],c[i],Math.round(c[i]*0.85*10)/10,a[i]===null?"欠測":(i>=60?"速報値":"確定値")]); } rows.push(["#"+SRC]); download("aoba_pm25_all_90d.csv",rows); });
+$("#dl-lca").addEventListener("click",function(){ var rows=[["stage","building","use_avg","diff"]]; $$("#tbl-lca tbody tr").forEach(function(r){rows.push($$("td",r).map(function(td){return td.textContent.replace("−","-")}))}); rows.push(["#"+SRC+" / ef_db=fictional-ef-db@3.2 / period=60y"]); download("aoba_central_lib_lca.csv",rows); });
+$("#adv-btn").addEventListener("click",function(){ announce("詳細分析モードは準備中です。CSV または API をご利用ください。"); });
+
+/* ---------- 検索（空状態） ---------- */
+$("#search-form").addEventListener("submit",function(e){
+  e.preventDefault(); var q=$("#q").value.trim(), out=$("#search-result");
+  if(!q){ out.innerHTML='<p class="error-msg" style="margin-top:8px">市区町村名を入力してください。例: 青葉市</p>'; $("#q").setAttribute("aria-invalid","true"); $("#q").focus(); return; }
+  $("#q").removeAttribute("aria-invalid");
+  if(/青葉|あおば|aoba|100-?0000/i.test(q)){ out.innerHTML='<div class="notice n-success"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="m7 12 3.5 3.5L17 9" stroke="#fff" stroke-width="2.5" fill="none"/></svg><p><strong>1 件見つかりました:</strong> <a href="#workspace">青葉市（北浜県）の空気を見る</a></p></div>'; }
+  else { out.innerHTML='<div class="empty" style="margin-top:12px"><p><strong>「'+q.replace(/[<>&"]/g,"")+'」に一致する地域は見つかりませんでした。</strong></p><p class="hint">ひらがな（例: あおば）でも探せます。この試作に登録されているのは 青葉市・東山市・南浦町・湊市 です。</p><a class="btn btn-secondary" href="#dashboard" data-jump="h-national">全国概況から選ぶ</a></div>'; }
+});
+
+/* ---------- 通知登録（1画面1問・入力の再利用） ---------- */
+var step=1;
+function showStep(n){ step=n; $$("#notify-form [data-step]").forEach(function(d){ if(d.tagName==="DIV") d.hidden=+d.getAttribute("data-step")!==n; }); $("#step-label").textContent="ステップ "+n+" / 3"; $("#n-back").hidden=n===1; $("#n-next").textContent=n===3?"登録する":"次へ";
+  if(n===3){ $("#sum-region").textContent=$("#n-region").value; $("#sum-kind").textContent=$$('input[name="n-kind"]:checked').map(function(i){return i.value}).join("、"); }
+  var h=$('#notify-form [data-step="'+n+'"] label, #notify-form [data-step="'+n+'"] legend, #notify-form [data-step="'+n+'"] h3'); if(h){ h.setAttribute("tabindex","-1"); h.focus(); } }
+$("#notify-form").addEventListener("submit",function(e){
+  e.preventDefault(); $("#n-result").innerHTML="";
+  if(step===1){ var ok=!!$("#n-region").value; setErr("#f-n-region","#n-region-err",ok?"":"地域を選んでください。「地域のデータ」で見た地域を選ぶと便利です。"); if(!ok){$("#n-region").focus();return;} showStep(2); }
+  else if(step===2){ var c=$$('input[name="n-kind"]:checked').length; var f=$("#f-n-kind"); f.classList.toggle("has-error",!c); $("#n-kind-err").hidden=!!c; $("#n-kind-err").textContent=c?"":"1 つ以上選んでください。迷ったら「注意報・警報の発表と解除」がおすすめです。"; if(!c){$('input[name="n-kind"]').focus();return;} showStep(3); }
+  else { $("#n-result").innerHTML='<div class="notice n-success"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="m7 12 3.5 3.5L17 9" stroke="#fff" stroke-width="2.5" fill="none"/></svg><p><strong>登録しました（試作のため実際には通知されません）。</strong> '+$("#sum-region").textContent+' の「'+$("#sum-kind").textContent+'」を受け取ります。解除はこの画面からいつでもできます。</p></div>'; showStep(1); }
+});
+$("#n-back").addEventListener("click",function(){ showStep(step-1) });
+doc.addEventListener("click",function(e){ var g=e.target.closest("[data-goto]"); if(g) showStep(+g.getAttribute("data-goto")); });
+
+/* ---------- サインイン（認知機能テストなし） ---------- */
+$("#signin-form").addEventListener("submit",function(e){ e.preventDefault(); var v=$("#email").value.trim(); var msg=!v?"メールアドレスを入力してください。":(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)?"メールアドレスの形式が正しくありません。「@」の後ろに「example.ac.jp」のような部分があるか確認してください。":""); setErr("#f-email","#email-err",msg); if(msg){$("#email").focus();return;} $("#signin-status").innerHTML='<div class="notice n-info"><p><strong>試作のため送信していません。</strong> 本番ではこのアドレスにサインイン用のリンクを送ります。</p></div>'; });
+$("#passkey-btn").addEventListener("click",function(){ $("#signin-status").innerHTML='<div class="notice n-info"><p><strong>試作のためパスキー認証は動作しません。</strong> 本番では端末の指紋・顔・PIN で入れます。</p></div>'; });
+$("#refetch").addEventListener("click",function(){ var s=$("#refetch-status"); s.textContent="再取得しています…"; setTimeout(function(){s.innerHTML='<div class="notice n-success"><p><strong>✓ 再取得しました（ダミー）。</strong> 東山第2測定局は保守中のため、引き続き「データなし」です。</p></div>'},prefs.motion?0:700); });
+$$("[data-demo]").forEach(function(b){ b.addEventListener("click",function(){ $("#demo-status").textContent="✓ "+b.getAttribute("data-demo"); }) });
+$("#demo-form").addEventListener("submit",function(e){ e.preventDefault(); var v=toHalf($("#demo-code").value).replace(/[-ー－]/g,""); var msg=/^\d{7}$/.test(v)?"":"郵便番号は数字 7 桁です（いまは "+v.replace(/\D/g,"").length+" 桁）。例: 1000000 または 100-0000"; setErr("#f-demo","#demo-err",msg); $("#demo-form-status").innerHTML=msg?"":'<div class="notice n-success"><p><strong>✓ 確認しました。</strong></p></div>'; if(msg) $("#demo-code").focus(); });
+
+/* ---------- トークン一覧（コントラストを実測） ---------- */
+function hex2rgb(h){h=h.replace("#",""); return [0,2,4].map(function(i){return parseInt(h.substr(i,2),16)/255})}
+function lum(h){var c=hex2rgb(h).map(function(v){return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)}); return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]}
+function ratio(a,b){var x=lum(a),y=lum(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05)}
+var SW=[["--color-text","本文","--color-bg"],["--color-text-muted","補助文","--color-bg"],["--color-primary","主要色・リンク","--color-bg"],["--color-focus","フォーカス専用","--color-bg"],["--color-border-strong","UI 境界（入力欄）","--color-bg"],["--color-border","装飾の区切り線（UIに使わない）","--color-bg"],["--color-danger","危険な操作","--color-bg"],["--color-disabled-text","無効の文字","--color-disabled-bg"],["--color-identity-text","識別帯の文字","--color-identity-bg"],["--color-emergency-text","緊急帯の文字","--color-emergency-bg"],["--status-good-fg","区分1 良好","--status-good-bg"],["--status-caution-fg","区分2 やや注意","--status-caution-bg"],["--status-alert-fg","区分3 注意","--status-alert-bg"],["--status-severe-fg","区分4 警戒・エラー","--status-severe-bg"],["--status-nodata-fg","データなし","--status-nodata-bg"],["--status-info-fg","情報","--status-info-bg"],["--chart-1","系列1","--color-bg"],["--chart-2","系列2","--color-bg"],["--chart-3","系列3","--color-bg"],["--chart-4","系列4","--color-bg"],["--color-layer2","第2層の帯（面）","--color-text"],["--color-layer3","第3層の帯（面）","--color-text"]];
+function renderSwatches(){ var ul=$("#swatches"); ul.innerHTML=""; var cs=getComputedStyle(doc.body); SW.forEach(function(s){ var v=cs.getPropertyValue(s[0]).trim(), bg=cs.getPropertyValue(s[2]).trim(); var r=ratio(v,bg); var need=/border-strong|focus|chart|border$/.test(s[0])?3:4.5; var pass=r>=need; var li=doc.createElement("li"); li.className="swatch"; li.innerHTML='<div class="chip" style="background:'+v+'"></div><div class="info"><code>'+s[0]+'</code><br><b>'+v.toUpperCase()+'</b> '+s[1]+'<br>対 '+bg.toUpperCase()+': <b>'+r.toFixed(2)+':1</b> '+(s[0]==="--color-border"?"（装飾のため基準外）":(pass?"✓ "+need+":1 以上":"✕ 不足"))+'</div>'; ul.appendChild(li); }); }
+var sp=$("#space-scale"); [1,2,3,4,5,6,7,8,9].forEach(function(n){ var v=getComputedStyle(root).getPropertyValue("--space-"+n).trim(); var d=doc.createElement("div"); d.className="scale-row"; d.innerHTML='<code>--space-'+n+' '+v+'</code><span class="space-bar" style="width:'+v+'"></span>'; sp.appendChild(d); });
+
+/* ---------- タイル地図データ ---------- */
+var NAT=[["北浜県",21,"#workspace"],["中原県",9],["湊県",14],["高原県",7],["白砂県",28],["緑川県",11],["港北県",38],["朝日県",16],["桜台県",null],["東山県",12],["西谷県",19],["南浦県",33]];
+var PREF=[["青葉市",23,"#workspace"],["東山市",29],["南浦町",31],["西野市",17],["北沢町",12],["港町",null],["白浜村",10],["森田市",21]];
+
+/* ---------- 起動 ---------- */
+applyPrefs({layers:true});
+tileMap($("#tile-national"),NAT,null); tileMap($("#tile-pref"),PREF,"青葉市");
+renderWorkspace(); renderCharts(); renderSwatches(); syncToggles();
+route();
+if(/selfcheck/.test(location.search)){ var out=[]; ROUTES.forEach(function(r){ show(r); out.push(r+":"+root.scrollWidth+"/"+root.clientWidth); }); var pre=doc.createElement("pre"); pre.id="selfcheck"; pre.textContent=out.join(" "); doc.body.appendChild(pre); }
+})();
+</script>
+</body>
+</html>
