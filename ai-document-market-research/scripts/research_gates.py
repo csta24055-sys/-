@@ -26,6 +26,7 @@ import hashlib
 import json
 import re
 import sys
+import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -33,7 +34,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_status  # noqa: E402
 
-FULL_SCOPE = {'axes': 32, 'topics': 325, 'legacy': 896, 'competitors': 80, 'images': 8}
+FULL_SCOPE = {'axes': 32, 'topics': 325, 'legacy': 896, 'competitors': 80, 'images': 8, 'additional': 7,
+              # content of the locked scope (ids AND wording / priority), pinned in code so that editing a ledger cannot redefine the scope
+              'content_sha256': {"topics": "da086e6319dd2fc2bcacb0360b7c403bf7fd78a5168ec64c43528ae770470e7b", "legacy": "6b265d175e8a3321cff03c09c25d219c5e2045aef34eee8c10d262d343109306", "competitors": "c41a31eda6b9cd0e8260e363851ac74a7b6fdf9d99660acfbc57c0190837d688", "additional": "1ec84c0084fa21da35eda327ad4ca8f51b9b5fcce254320460d532ed2244dc0a"}}
+SCOPE_LOCK_FILE = 'scope_lock_sha256.json'  # only used for a scope without pinned hashes
 STEPS = [('S0', 'reaudit_and_scope_lock'), ('S1', 'collection_all_topics_queries_competitors'), ('S2', 'source_review_all'),
          ('S3', 'representativeness_and_axis_model'), ('S4', 'competitor_audit_all'), ('S5', 'calculations_all'),
          ('S6', 'cross_axis_integration'), ('S7', 'options_A_to_G'), ('S8', 'coverage_audit'), ('S9', 'formal_deliverables')]
@@ -85,6 +89,17 @@ def inventory_digest(rows: list[dict]) -> str:
     keys = ('calc_id', 'topic_id', 'formula', 'inputs_observed', 'inputs_assumed', 'result', 'status', 'category')
     blob = '\n'.join('|'.join(str(r.get(k, '')) for k in keys) for r in sorted(rows, key=lambda r: r.get('calc_id', '')))
     return hashlib.sha256(blob.encode('utf-8')).hexdigest()
+
+
+def scope_digest(reg: Path) -> dict:
+    """sha256 of the scope-defining content: topic ids / names / questions, legacy ids / queries, candidate ids / names / priority, added topics."""
+    def h(rows, keys):
+        blob = '\n'.join('\x1f'.join(str(r.get(k, '')) for k in keys) for r in sorted(rows, key=lambda r: [str(r.get(k, '')) for k in keys]))
+        return hashlib.sha256(blob.encode('utf-8')).hexdigest()
+    return {'topics': h(read_csv(reg / 'research_axes.csv'), ('axis_id', 'topic_id', 'topic_name', 'canonical_question', 'priority')),
+            'legacy': h(read_csv(reg / 'search_queries_candidates.csv'), ('suggestion_id', 'topic_id', 'target', 'sample_query')),
+            'competitors': h(read_csv(reg / 'competitor_candidates.csv'), ('competitor_id', 'name', 'research_priority', 'official_url_candidate')),
+            'additional': h(read_csv(reg / 'additional_axes.csv'), ('topic_id', 'topic_name', 'requirement_id'))}
 
 
 def image_state(root: Path) -> tuple[int, list[str]]:
@@ -139,6 +154,18 @@ def assess(root: Path, scope: dict | None = None) -> dict:
     gate('S0', {p.get('topic_id') for p in plans} == set(topic_ids) and len(plans) == len(axes), f'search plans cover every topic: {len(plans)}')
     cidl = [c.get('competitor_id', '') for c in comps]
     gate('S0', len(comps) == scope['competitors'] and len(set(cidl)) == len(cidl), f'competitor candidates: {len(comps)} (required {scope["competitors"]})', action='restore registry/competitor_candidates.csv')
+    n_add = len(read_csv(r / 'additional_axes.csv'))
+    gate('S0', n_add == scope.get('additional', 0), f'added-hypothesis topics (outside the 325): {n_add} (required {scope.get("additional", 0)})', action='restore registry/additional_axes.csv')
+    pinned = scope.get('content_sha256')
+    if pinned is None:
+        try:
+            pinned = json.loads(text_at(r / SCOPE_LOCK_FILE)).get('content_sha256')
+        except ValueError:
+            pinned = None
+    now = scope_digest(r)
+    changed = [k for k in now if not pinned or pinned.get(k) != now[k]]
+    gate('S0', bool(pinned) and not changed, 'scope content (topic wording, legacy query strings, candidate names / priority, added topics) equals the locked scope', changed,
+         'restore the scope ledgers from Git history; the scope may not be redefined')
     old_axes, old_comp = read_csv(root / 'original_20261109' / 'registry' / 'research_axes.csv'), read_csv(root / 'original_20261109' / 'registry' / 'competitor_candidates.csv')
     gate('S0', {x['topic_id'] for x in old_axes} <= set(topic_ids) and {x['competitor_id'] for x in old_comp} <= set(cidl), 'all original topics and candidates are preserved')
     n_img, bad_img = image_state(root)
@@ -179,6 +206,16 @@ def assess(root: Path, scope: dict | None = None) -> dict:
         if m and m.group(1) not in qids:
             bad_log.append(x.get('query_id', '?'))
     gate('S1', not bad_log and len(qids) == len(log), f'search log integrity (dated, unique ids, valid same-action references): {len(log)} rows', bad_log)
+    man = r / 'execution_manifest.csv'
+    try:
+        seal = json.loads(text_at(Path(str(man) + '.seal.json')))
+    except ValueError:
+        seal = {}
+    import transcript_audit  # noqa: E402
+    mrows = read_csv(man)
+    gate('S1', not recomputed.get('unbacked') and (not mrows or seal.get('manifest_sha256') == transcript_audit.manifest_digest(mrows)),
+         f"every logged worker execution matches a call in the transcript-derived execution manifest ({len(recomputed.get('unbacked', []))} unmatched; manifest rows {len(mrows)})",
+         recomputed.get('unbacked', []), 'rebuild the manifest from the transcripts (scripts/refresh.sh) and remove hand-typed log rows')
     bad_acc = [s['source_id'] for s in accepted if s.get('verified_state') not in ('DIRECT_ORIGINAL', 'VERIFIED_SECONDARY') or not str(s.get('url', '')).startswith(('https://', 'http://'))
                or (s.get('added_in', '').startswith('sweep') and (s.get('quote_check') != 'FOUND_IN_CACHE' or not nonempty(s.get('quote'))))]
     gate('S1', not bad_acc, f'every accepted source was opened; sweep sources carry a quote found in the fetched page: {len(accepted)} accepted', bad_acc)
@@ -267,15 +304,19 @@ def assess(root: Path, scope: dict | None = None) -> dict:
     no_calc = [t for t in topic_ids if t not in calc_topics]
     gate('S5', not no_calc and bool(calc), f'every topic has at least one calculation id: {len(topic_ids) - len(no_calc)}/{len(topic_ids)}', no_calc)
     bad_calc = []
+    allowed_cat = {'EXECUTED_AND_VERIFIED': {'OBSERVED', 'MODEL_BASED', 'MIXED', 'ASSUMPTION_ONLY'}, 'NON_IDENTIFIABLE': {'NON_IDENTIFIABLE'},
+                   'BLOCKED_DATA': {'NON_IDENTIFIABLE', 'ASSUMPTION_ONLY'}, 'REJECTED_INVALID_METHOD': {'INVALID'}}
     for c in calc:
         st, cat = c.get('status'), c.get('category')
-        ok = st in TERMINAL_CALC and cat in CATEGORIES and nonempty(c.get('formula')) and nonempty(c.get('target'))
+        ok = st in TERMINAL_CALC and cat in allowed_cat.get(st, set()) and nonempty(c.get('formula')) and nonempty(c.get('target'))
+        if cat in ('MODEL_BASED', 'MIXED', 'OBSERVED'):
+            ok = ok and bool(ids(c.get('source_ids', ''))) and ids(c.get('source_ids', '')) <= vids
         if st == 'EXECUTED_AND_VERIFIED':
             ok = ok and nonempty(c.get('script')) and nonempty(c.get('result')) and c.get('independent_check') == 'MATCH' and ids(c.get('source_ids', '')) <= vids
             if cat == 'OBSERVED':
                 ok = ok and bool(ids(c.get('source_ids', ''))) and not nonempty(c.get('inputs_assumed'))
-        if st in ('NON_IDENTIFIABLE', 'BLOCKED_DATA'):
-            ok = ok and not re.fullmatch(r'[-+]?[\d.,]+%?', str(c.get('result', '')).strip()) and nonempty(c.get('limits'))
+        if st in ('NON_IDENTIFIABLE', 'BLOCKED_DATA'):  # no figure of any kind (also not '約50%' or '0.3-0.5') may stand in for an unidentified quantity
+            ok = ok and not re.search(r'\d', unicodedata.normalize('NFKC', str(c.get('result', '')) + str(c.get('estimate', '')) + str(c.get('interval', '')))) and nonempty(c.get('limits'))
         if st == 'REJECTED_INVALID_METHOD':
             ok = ok and cat == 'INVALID' and nonempty(c.get('limits'))
         if cat == 'OBSERVED' and OWN_APP_UNMEASURABLE.search(str(c.get('target', ''))):
@@ -292,7 +333,7 @@ def assess(root: Path, scope: dict | None = None) -> dict:
             bad_q.append(x.get('result_id', '?'))
         elif cat == 'OBSERVED' and OWN_APP_UNMEASURABLE.search(str(x.get('metric', ''))):
             bad_q.append(x.get('result_id', '?'))
-        elif cat == 'NON_IDENTIFIABLE' and re.fullmatch(r'[-+]?[\d.,]+%?', str(x.get('estimate', '')).strip()):
+        elif cat == 'NON_IDENTIFIABLE' and re.search(r'\d', unicodedata.normalize('NFKC', str(x.get('estimate', '')) + str(x.get('interval', '')))):
             bad_q.append(x.get('result_id', '?'))
     gate('S5', not bad_q and len(quant) >= 5, f'reported numbers are classified and traceable to verified sources: {len(quant) - len(bad_q)}/{len(quant)}', bad_q)
     try:
@@ -365,7 +406,10 @@ def assess(root: Path, scope: dict | None = None) -> dict:
         external.append(f'{q_state["ATTEMPTED_BLOCKED"]} legacy queries could not be executed')
     if p0_open:
         external.append(f'{len(p0_open)} highest-priority competitors lack vendor-written confirmation')
-    overall = 'COMPLETE' if prior else ('BLOCKED' if (first_fail and all(not c['pass'] and 'BLOCKED' in c.get('action', '') for c in conditions[first_fail] if not c['pass'])) else 'INCOMPLETE')
+    if recomputed.get('unbacked'):
+        external.append(f"{len(recomputed['unbacked'])} logged worker executions have no matching call in the execution manifest (not counted)")
+    blocked_now = bool(q_state['ATTEMPTED_BLOCKED'] or p0_open)
+    overall = ('BLOCKED' if blocked_now else 'COMPLETE') if prior else ('BLOCKED' if (first_fail and all(not c['pass'] and 'BLOCKED' in c.get('action', '') for c in conditions[first_fail] if not c['pass'])) else 'INCOMPLETE')
     return {'research_status': overall, 'checked_at': datetime.now(timezone.utc).isoformat(), 'first_unmet_stage': first_fail,
             'source_rows': len(sources), 'accepted_rows': len(accepted), 'verified_rows': len(verified), 'independent_origins': independent,
             'verified_competitors': sum(c['official_confirmed'] == 'YES' for c in crows), 'executed_actions': actions,

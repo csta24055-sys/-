@@ -4,6 +4,18 @@
 Nothing here is hand-set: writing "PASS" into a status file changes nothing, because the
 gate script recomputes the same facts from search_log / source ledgers / unit records.
 
+Rules (each one exists because a weaker rule could be satisfied without doing the work):
+- A logged worker execution counts only if the execution manifest derived from the runtime
+  transcripts (registry/execution_manifest.csv) has the same call. Typing a row does nothing.
+- A legacy query is EXECUTED only by a verbatim, engine-answered search. A tool error is retried;
+  only after three failed attempts is it ATTEMPTED_BLOCKED (never counted as success).
+- "Not found after search" needs two distinct worker-formulated queries on that route (the legacy
+  query alone is not a deeper search) and at least one page actually read (or three failed reads).
+- "Vendor-written" is decided by the page's host (scripts/rules.py), not by a label.
+- A candidate is explored only if a vendor page was read (or repeated attempts were blocked and a
+  search for alternatives was run), every attribute is recorded, and a counter / independent
+  search returned results or a counter finding is backed by a third-party page.
+
 Writes:
   registry/query_execution_status.csv       896 legacy query ids, EXECUTED / ATTEMPTED_BLOCKED / NOT_EXECUTED
   registry/topic_execution_status.csv       325 topics, per-step state and blockers
@@ -16,6 +28,10 @@ import csv
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import rules  # noqa: E402
 
 R = Path(__file__).resolve().parents[1]
 REG = R / 'registry'
@@ -23,6 +39,11 @@ LEGACY_ROUTE = {'PRIMARY': 'PRIMARY', 'USER_VOICE': 'INDEPENDENT', 'COUNTEREXAMP
 ATTRS = ['official_site', 'features_processing', 'pricing_limits', 'io_formats', 'pptx_editability', 'speed_claims', 'quality_claims',
          'source_verification', 'data_handling', 'fit_school_work', 'free_alternative_strength']
 DONE = ('FOUND', 'NOT_FOUND_AFTER_SEARCH')
+EXECUTED_SEARCH = ('SNIPPET_ONLY', 'NO_RESULTS')
+FAILED_SEARCH = ('TOOL_ERROR', 'ERROR')
+BLOCK_AFTER_ATTEMPTS = 3
+VALID_QUOTE = ('FOUND_IN_CACHE', 'PENDING_BACKFILL')
+MANIFEST_OUTCOME = {'ok': 'SNIPPET_ONLY', 'no_links': 'NO_RESULTS', 'refused': 'REFUSED_BUDGET', 'error': 'TOOL_ERROR'}
 
 
 def read(name):
@@ -60,7 +81,24 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
     global REG
     if reg is not None:
         REG = reg
-    axes, legacy, log = read('research_axes.csv'), read('search_queries_candidates.csv'), read('search_log.csv')
+    axes, legacy, all_log = read('research_axes.csv'), read('search_queries_candidates.csv'), read('search_log.csv')
+    m_search, m_fetch = {}, set()
+    for x in read('execution_manifest.csv'):
+        ex = f"worker:{x['run']}:{x['agent_id']}"
+        if x['action'] == 'SEARCH':
+            m_search[(ex, x['ts'], x['target'], x['unit_id'])] = MANIFEST_OUTCOME.get(x['outcome'], '')
+        else:
+            m_fetch.add((ex, x['target'], x['unit_id']))
+
+    def backed(r):
+        if not r.get('verified_by', '').startswith('TRANSCRIPT'):
+            return True  # rows of the first session are records, not transcript claims; they never count as verified executions below
+        if r['query'].startswith('GET '):
+            return (r.get('executor', ''), r['query'][4:], r.get('unit_id', '')) in m_fetch
+        return m_search.get((r.get('executor', ''), r.get('searched_at', ''), r['query'], r.get('unit_id', ''))) == r.get('retrieval_status')
+    unbacked = [r['query_id'] for r in all_log if not backed(r)]
+    drop = set(unbacked)
+    log = [r for r in all_log if r['query_id'] not in drop]
     src = {s['source_id']: s for s in read('source_evidence.csv') if s.get('is_accepted') == 'yes'}
     smap, units, comps, cunits = read('source_topic_map.csv'), jsonl('topic_units.jsonl', 'topic_id'), read('competitor_candidates.csv'), jsonl('competitor_units.jsonl', 'competitor_id')
     calc = read('calculation_inventory.csv')
@@ -74,14 +112,15 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
     qrows = []
     for q in legacy:
         rs = [r for r in by_sid.get(q['suggestion_id'], []) if r.get('verified_by', '').startswith('TRANSCRIPT') and r['query'] == q['sample_query']]
-        ok = [r for r in rs if r['retrieval_status'] == 'SNIPPET_ONLY']
-        err = [r for r in rs if r['retrieval_status'] == 'ERROR']  # a refusal for budget reasons is not an execution and not a permanent block: it must be retried
-        state = 'EXECUTED' if ok else ('ATTEMPTED_BLOCKED' if err else 'NOT_EXECUTED')
+        ok = [r for r in rs if r['retrieval_status'] in EXECUTED_SEARCH]
+        err = [r for r in rs if r['retrieval_status'] in FAILED_SEARCH]  # a refusal for budget reasons is neither an execution nor a failed attempt: it is simply retried
+        state = 'EXECUTED' if ok else ('ATTEMPTED_BLOCKED' if len({r['searched_at'] for r in err}) >= BLOCK_AFTER_ATTEMPTS else 'NOT_EXECUTED')
         first = (ok or err or rs or [{}])[0]
         qrows.append({'suggestion_id': q['suggestion_id'], 'axis_id': q['axis_id'], 'topic_id': q['topic_id'], 'target': q['target'], 'query_verbatim': q['sample_query'],
                       'state': state, 'executed_at': first.get('searched_at', ''), 'platform': first.get('platform', ''), 'results_found': first.get('results_found', ''),
                       'search_log_query_id': first.get('query_id', ''), 'executions': len(rs), 'candidate_urls': first.get('candidate_urls', ''),
-                      'failure_reason': '' if ok else (first.get('blocked_reason', '') if rs else 'not executed yet'), 'refused_attempts': sum(r['retrieval_status'] == 'REFUSED_BUDGET' for r in rs),
+                      'failure_reason': '' if ok else ((first.get('blocked_reason', '') + f' (failed attempts: {len(err)}; retried until {BLOCK_AFTER_ATTEMPTS})') if err else 'not executed yet'),
+                      'failed_attempts': len(err), 'refused_attempts': sum(r['retrieval_status'] == 'REFUSED_BUDGET' for r in rs),
                       'verified_by': first.get('verified_by', '')})
     if write_files:
         write('query_execution_status.csv', list(qrows[0].keys()) if qrows else ['suggestion_id'], qrows)
@@ -97,7 +136,7 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
     legacy_target = {q['suggestion_id']: q['target'] for q in legacy}
     tmap = defaultdict(list)
     for m in smap:
-        if m['unit_kind'] == 'TOPIC' and m['source_id'] in src:
+        if m['unit_kind'] == 'TOPIC' and m['source_id'] in src and m.get('quote_check') in VALID_QUOTE:
             tmap[m['unit_id']].append(m)
     calc_by_topic = defaultdict(list)
     for c in calc:
@@ -106,11 +145,12 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
         t = a['topic_id']
         rows = tlog.get(t, [])
         searches = [r for r in rows if r['platform'] == 'web_search_engine' and 'same_action_as=' not in r.get('notes', '')]
-        route = Counter()
+        route, own = Counter(), defaultdict(set)
         for r in searches:
-            if r['retrieval_status'] in ('ERROR', 'REFUSED_BUDGET'):
+            if r['retrieval_status'] not in EXECUTED_SEARCH:
                 continue
             rt = r.get('route', '')
+            is_own = rt != 'LEGACY' and r.get('verified_by', '').startswith('TRANSCRIPT')
             if rt == 'LEGACY':
                 rt = LEGACY_ROUTE.get(legacy_target.get(r.get('suggestion_id', ''), ''), '')
             elif rt == 'FOLLOWUP':
@@ -119,6 +159,8 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
                 rt = 'PRIMARY'
             if rt in ('PRIMARY', 'INDEPENDENT', 'COUNTER'):
                 route[rt] += 1
+                if is_own:
+                    own[rt].add(rules.squash(r['query']).lower())
         fetches = [r for r in rows if r['query'].startswith('GET ') and 'same_action_as=' not in r.get('notes', '').replace('cache_read same_action_as=', 'cache_read ')]
         fetch_ok = [r for r in fetches if r['retrieval_status'] == 'RETRIEVED_FULL_TEXT']
         maps = tmap.get(t, [])
@@ -130,13 +172,13 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
         d = u.get('definition') or {}
         unit_ok = all(nonempty(d.get(k)) for k in ('operational_definition', 'population_and_unit', 'business_question')) and bool(u.get('calculations_proposed') or u.get('non_identifiable'))
 
-        def state(found, n_search, need_fetch=False):
+        def state(found, rt):
             if found:
                 return 'FOUND'
-            if n_search >= 2 and (not need_fetch or fetches):
+            if len(own[rt]) >= 2 and (fetch_ok or len(fetches) >= 3):
                 return 'NOT_FOUND_AFTER_SEARCH'
-            return 'ATTEMPTED_INSUFFICIENT' if n_search or fetches else 'NO'
-        p_state, i_state, c_state = state(prim, route['PRIMARY'], True), state(indep, route['INDEPENDENT']), state(counter, route['COUNTER'])
+            return 'ATTEMPTED_INSUFFICIENT' if route[rt] or fetches else 'NO'
+        p_state, i_state, c_state = state(prim, 'PRIMARY'), state(indep, 'INDEPENDENT'), state(counter, 'COUNTER')
         lt = sum(qstate[t].values())
         l_open = qstate[t]['NOT_EXECUTED']
         queried = l_open == 0 and route['PRIMARY'] >= 1
@@ -148,15 +190,16 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
             blockers.append(f'legacy queries not executed: {l_open}')
         if route['PRIMARY'] < 1:
             blockers.append('no primary-route search')
-        for nm, st in (('primary', p_state), ('independent', i_state), ('counter', c_state)):
+        for nm, st, rt in (('primary', p_state, 'PRIMARY'), ('independent', i_state, 'INDEPENDENT'), ('counter', c_state, 'COUNTER')):
             if st not in DONE:
-                blockers.append(f'{nm}: {st}')
+                blockers.append(f'{nm}: {st} (own queries {len(own[rt])}/2, pages read {len(fetch_ok)})')
         if not unit_ok:
             blockers.append('research unit record missing or incomplete')
         s1 = not blockers
         row = ({'topic_id': t, 'axis_id': a['axis_id'], 'priority': a['priority'], 'origin': a['origin'], 'planned': 'YES' if (t in plans or a.get('first_primary_route')) else 'NO',
                       'legacy_total': lt, 'legacy_executed': qstate[t]['EXECUTED'], 'legacy_blocked': qstate[t]['ATTEMPTED_BLOCKED'],
                       'searches_primary': route['PRIMARY'], 'searches_independent': route['INDEPENDENT'], 'searches_counter': route['COUNTER'],
+                      'own_primary': len(own['PRIMARY']), 'own_independent': len(own['INDEPENDENT']), 'own_counter': len(own['COUNTER']),
                       'fetch_attempts': len(fetches), 'fetch_ok': len(fetch_ok), 'sources_mapped': len({m['source_id'] for m in maps}),
                       'queried': 'YES' if queried else 'NO', 'primary_checked': p_state, 'independent_checked': i_state, 'counter_checked': c_state,
                       'unit_recorded': 'YES' if unit_ok else 'NO', 'calculation_checked': 'YES' if calc_ok else 'NO', 'review_checked': 'YES' if review_ok else ('N/A_NO_SOURCES' if not maps else 'NO'),
@@ -185,50 +228,61 @@ def compute(reg: Path | None = None, write_files: bool = True) -> dict:
             clog[r['unit_id']].append(r)
     cmap = defaultdict(list)
     for m in smap:
-        if m['unit_kind'] == 'COMPETITOR' and m['source_id'] in src:
+        if m['unit_kind'] == 'COMPETITOR' and m['source_id'] in src and m.get('quote_check') in VALID_QUOTE:
             cmap[m['unit_id']].append(m)
+    off_rules = rules.official_rules(REG, comps)
     crows = []
     for c in comps:
         cid = c['competitor_id']
         rows = clog.get(cid, [])
-        searches = [r for r in rows if r['platform'] == 'web_search_engine' and r['retrieval_status'] not in ('ERROR', 'REFUSED_BUDGET')]
+        searches = [r for r in rows if r['platform'] == 'web_search_engine' and r['retrieval_status'] in EXECUTED_SEARCH]
         fetches = [r for r in rows if r['query'].startswith('GET ')]
+        off_fetch = [r for r in fetches if rules.is_official(off_rules, cid, r['query'][4:])]
+        off_read = [r for r in off_fetch if r['retrieval_status'] == 'RETRIEVED_FULL_TEXT']
+        off_blocked = {r['query'] for r in off_fetch if r['retrieval_status'] != 'RETRIEVED_FULL_TEXT'}
         u = cunits.get(cid, {})
         prof = u.get('profile') or {}
         maps = cmap.get(cid, [])
-        official_sources = [m for m in maps if src[m['source_id']]['source_type'] == 'OFFICIAL_VENDOR']
-        prior_official = c.get('verification_state') == 'VERIFIED_OFFICIAL' and all(i in src for i in c.get('sources', '').split(';') if i)
+        official_sources = [m for m in maps if rules.is_official(off_rules, cid, src[m['source_id']]['url'])]
+        prior_ids = [i for i in c.get('sources', '').split(';') if i]
+        prior_official = c.get('verification_state') == 'VERIFIED_OFFICIAL' and bool(prior_ids) and all(i in src for i in prior_ids) and any(rules.is_official(off_rules, cid, src[i]['url']) for i in prior_ids)
         row = {'competitor_id': cid, 'name': c['name'], 'research_priority': c['research_priority'], 'market_role': c['market_role'],
                'searches': len(searches), 'fetch_attempts': len(fetches), 'fetch_ok': sum(r['retrieval_status'] == 'RETRIEVED_FULL_TEXT' for r in fetches),
+               'official_pages_read': len({r['query'] for r in off_read}), 'official_pages_blocked': len(off_blocked),
                'official_confirmed': 'YES' if (official_sources or prior_official) else 'NO', 'sources_mapped': len({m['source_id'] for m in maps})}
         missing = []
+        valid_ids = {m['source_id'] for m in maps}
         for k in ATTRS:
             st = (prof.get(k) or {}).get('status', '') if isinstance(prof.get(k), dict) else ''
             row[k] = st or 'NOT_RECORDED'
             if not st:
                 missing.append(k)
-        counter_done = bool(u.get('counter_findings')) or any(r.get('route') in ('COUNTER', 'INDEPENDENT') or r.get('followup_for') in ('COUNTER', 'INDEPENDENT') for r in searches)
+            elif st.startswith('CONFIRMED') and (prof[k].get('source_id') not in valid_ids):
+                row[k] = 'UNVERIFIED_SOURCE_NOT_VALID'  # a confirmed attribute must point at a source this unit read and quoted
+        counter_done = any(f.get('source_id') in valid_ids for f in (u.get('counter_findings') or []) if isinstance(f, dict)) or any(
+            (r.get('route') in ('COUNTER', 'INDEPENDENT') or r.get('followup_for') in ('COUNTER', 'INDEPENDENT')) and int(r.get('results_found') or 0) > 0 for r in searches)
         row['counter_checked'] = 'YES' if counter_done else 'NO'
         confirmed = [k for k in ATTRS if str(row[k]).startswith('CONFIRMED')]
         row['comparability'] = 'COMPARABLE' if (row['official_confirmed'] == 'YES' and len(confirmed) >= 4) else 'NOT_COMPARABLE'
         blockers = []
-        if not (fetches or len(searches) >= 2):
-            blockers.append('no official-site attempt recorded')
+        if not (off_read or (len(off_blocked) >= 2 and searches)):
+            blockers.append(f'no vendor page read (read {len(off_read)}, blocked attempts on distinct vendor pages {len(off_blocked)}/2, searches {len(searches)})')
         if missing:
             blockers.append('attributes not recorded: ' + ','.join(missing))
         if not counter_done:
-            blockers.append('counter-evidence search missing')
+            blockers.append('no counter / independent search with results and no third-party-backed counter finding')
         row['gate_state'] = 'S1_DONE' if not blockers else 'S1_INCOMPLETE'
         row['blockers'] = '; '.join(blockers)
         row['unverifiable_reason'] = str(u.get('blockers') or '')[:300]
         crows.append(row)
     if write_files:
         write('competitor_execution_status.csv', list(crows[0].keys()), crows)
-    return {'qrows': qrows, 'trows': trows, 'crows': crows, 'arows': arows, 'additional': dict(Counter(t['gate_state'] for t in arows)),
+    return {'qrows': qrows, 'trows': trows, 'crows': crows, 'arows': arows, 'unbacked': unbacked, 'manifest_rows': len(m_search) + len(m_fetch),
+            'additional': dict(Counter(t['gate_state'] for t in arows)),
             'legacy': dict(Counter(q['state'] for q in qrows)), 'topics': dict(Counter(t['gate_state'] for t in trows)),
             'competitors': dict(Counter(c['gate_state'] for c in crows)), 'official_confirmed': sum(c['official_confirmed'] == 'YES' for c in crows)}
 
 
 if __name__ == '__main__':
     out = compute()
-    print(json.dumps({k: v for k, v in out.items() if k not in ('qrows', 'trows', 'crows', 'arows')}, ensure_ascii=False))
+    print(json.dumps({k: (len(v) if k == 'unbacked' else v) for k, v in out.items() if k not in ('qrows', 'trows', 'crows', 'arows')}, ensure_ascii=False))

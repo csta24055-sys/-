@@ -224,6 +224,106 @@ class FaultInjection(unittest.TestCase):
             self.assertFalse(any(s['state'] == 'PASS' for s in res['steps'].values()))
 
 
+    # ---- rules added after the code review of 2026-11-12
+    def test_hand_typed_transcript_row_without_manifest_call_does_not_count(self):
+        f, data = rows(self.reg / 'search_log.csv')
+        for r in data:
+            if r['suggestion_id'] == 'AXIS_02_T01_Q4':
+                r['searched_at'] = '2026-11-12T09:99:00Z'  # a row that no traced call produced
+        save(self.reg / 'search_log.csv', f, data)
+        res = self.assess()
+        self.assertEqual(res['legacy_queries'].get('NOT_EXECUTED'), 1)
+        self.assertTrue(any('execution manifest' in x for x in failed(res, 'S1')))
+
+    def test_editing_the_manifest_by_hand_is_detected(self):
+        f, data = rows(self.reg / 'execution_manifest.csv')
+        data.append({**data[0], 'target': 'a call that never happened'})
+        save(self.reg / 'execution_manifest.csv', f, data)
+        self.assertTrue(any('execution manifest' in x for x in failed(self.assess(), 'S1')))
+
+    def test_single_tool_error_is_retried_not_blocked(self):
+        f, data = rows(self.reg / 'search_log.csv')
+        for r in data:
+            if r['suggestion_id'] == 'AXIS_02_T01_Q4':
+                r['retrieval_status'] = 'TOOL_ERROR'
+        save(self.reg / 'search_log.csv', f, data)
+        mf, man = rows(self.reg / 'execution_manifest.csv')
+        for x in man:
+            if x['target'] == 'beta survey':
+                x['outcome'] = 'error'
+        ff.w(self.reg / 'execution_manifest.csv', mf, man)
+        import transcript_audit
+        (self.reg / 'execution_manifest.csv.seal.json').write_text(json.dumps({'manifest_sha256': transcript_audit.manifest_digest(man)}), encoding='utf-8')
+        res = self.assess()
+        self.assertEqual(res['legacy_queries'].get('NOT_EXECUTED'), 1)
+        self.assertFalse(res['legacy_queries'].get('ATTEMPTED_BLOCKED'))
+
+    def test_not_found_needs_own_queries_not_only_the_legacy_one(self):
+        f, data = rows(self.reg / 'source_topic_map.csv')
+        save(self.reg / 'source_topic_map.csv', f, [r for r in data if not (r['unit_id'] == 'AXIS_01_T01' and r['role'] == 'COUNTER')])
+        st = build_status.compute(self.reg, write_files=False)
+        row = next(t for t in st['trows'] if t['topic_id'] == 'AXIS_01_T01')
+        self.assertEqual(row['counter_checked'], 'ATTEMPTED_INSUFFICIENT')  # one own query + the legacy counter query is not a deeper search
+
+    def test_official_label_on_a_third_party_host_does_not_confirm_vendor(self):
+        f, data = rows(self.reg / 'source_evidence.csv')
+        f2, smap = rows(self.reg / 'source_topic_map.csv')
+        c1 = {m['source_id'] for m in smap if m['unit_id'] == 'C001'}
+        for r in data:
+            if r['source_id'] in c1:
+                r['url'] = r['url'].replace('alpha.example.com', 'alpha-reviews.example.net')
+        save(self.reg / 'source_evidence.csv', f, data)
+        res = self.assess()
+        self.assertTrue(any('highest-priority candidates' in x for x in failed(res, 'S4')) or any('competitor candidates explored' in x for x in failed(res, 'S1')))
+        st = build_status.compute(self.reg, write_files=False)
+        self.assertEqual(next(c for c in st['crows'] if c['competitor_id'] == 'C001')['official_confirmed'], 'NO')
+
+    def test_rewording_a_topic_breaks_the_scope_lock(self):
+        f, data = rows(self.reg / 'research_axes.csv')
+        data[0]['topic_name'] = 'a narrower topic'
+        save(self.reg / 'research_axes.csv', f, data)
+        self.assertTrue(any('scope content' in x for x in failed(self.assess(), 'S0')))
+
+    def test_lowering_a_candidate_priority_breaks_the_scope_lock(self):
+        f, data = rows(self.reg / 'competitor_candidates.csv')
+        data[0]['research_priority'] = 'P2'
+        save(self.reg / 'competitor_candidates.csv', f, data)
+        self.assertTrue(any('scope content' in x for x in failed(self.assess(), 'S0')))
+
+    def test_unidentifiable_calculation_with_an_approximate_figure_fails(self):
+        f, data = rows(self.reg / 'calculation_inventory.csv')
+        data[0].update({'status': 'NON_IDENTIFIABLE', 'category': 'NON_IDENTIFIABLE', 'result': '約50%', 'limits': 'no data'})
+        save(self.reg / 'calculation_inventory.csv', f, data)
+        (self.root / 'research' / 'quant_outputs.json').write_text(json.dumps({'inventory_digest': g.inventory_digest(data)}), encoding='utf-8')
+        self.assertTrue(any('justified terminal state' in x for x in failed(self.assess(), 'S5')))
+
+    def test_status_and_category_must_agree(self):
+        f, data = rows(self.reg / 'calculation_inventory.csv')
+        data[0].update({'status': 'REJECTED_INVALID_METHOD', 'category': 'OBSERVED', 'limits': 'mixing populations'})
+        save(self.reg / 'calculation_inventory.csv', f, data)
+        (self.root / 'research' / 'quant_outputs.json').write_text(json.dumps({'inventory_digest': g.inventory_digest(data)}), encoding='utf-8')
+        self.assertTrue(any('justified terminal state' in x for x in failed(self.assess(), 'S5')))
+
+    def test_blocked_query_prevents_complete(self):
+        f, data = rows(self.reg / 'search_log.csv')
+        mf, man = rows(self.reg / 'execution_manifest.csv')
+        base = next(r for r in data if r['suggestion_id'] == 'AXIS_02_T01_Q4')
+        data = [r for r in data if r['suggestion_id'] != 'AXIS_02_T01_Q4']
+        man = [x for x in man if x['target'] != 'beta survey']
+        for i in range(3):
+            ts = f'2026-11-12T0{i}:30:00Z'
+            data.append({**base, 'query_id': f'Q9{i}00', 'searched_at': ts, 'retrieval_status': 'TOOL_ERROR'})
+            man.append({'run': ff.EXECUTOR[0], 'agent_id': ff.EXECUTOR[1], 'unit_kind': 'TOPIC', 'unit_id': base['unit_id'], 'action': 'SEARCH', 'ts': ts, 'target': base['query'], 'outcome': 'error', 'n_links': '0'})
+        save(self.reg / 'search_log.csv', f, data)
+        man.sort(key=lambda x: (x['run'], x['agent_id'], x['action'], x['ts'], x['target']))
+        ff.w(self.reg / 'execution_manifest.csv', mf, man)
+        import transcript_audit
+        (self.reg / 'execution_manifest.csv.seal.json').write_text(json.dumps({'manifest_sha256': transcript_audit.manifest_digest(man)}), encoding='utf-8')
+        res = self.assess()
+        self.assertEqual(res['legacy_queries'].get('ATTEMPTED_BLOCKED'), 1)
+        self.assertNotEqual(res['research_status'], 'COMPLETE')
+
+
 class LiveProject(unittest.TestCase):
     def test_live_state_is_internally_consistent(self):
         res = g.assess(ROOT)

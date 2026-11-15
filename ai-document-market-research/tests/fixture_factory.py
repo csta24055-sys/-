@@ -14,8 +14,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import build_status  # noqa: E402
 import research_gates  # noqa: E402
+import transcript_audit  # noqa: E402
 
-SCOPE = {'axes': 2, 'topics': 3, 'legacy': 4, 'competitors': 2, 'images': 0}
+SCOPE = {'axes': 2, 'topics': 3, 'legacy': 4, 'competitors': 2, 'images': 0, 'additional': 0}
+EXECUTOR = ('fx', 'a1')  # run id, agent id of the synthetic worker
 TOPICS = [('AXIS_01', 'AXIS_01_T01'), ('AXIS_01', 'AXIS_01_T02'), ('AXIS_02', 'AXIS_02_T01')]
 LEGACY = [('AXIS_01_T01_Q1', 'AXIS_01', 'AXIS_01_T01', 'PRIMARY', 'alpha official report'), ('AXIS_01_T01_Q3', 'AXIS_01', 'AXIS_01_T01', 'COUNTEREXAMPLE', 'alpha failure'),
           ('AXIS_02_T01_Q2', 'AXIS_02', 'AXIS_02_T01', 'USER_VOICE', 'beta users'), ('AXIS_02_T01_Q4', 'AXIS_02', 'AXIS_02_T01', 'INTERNATIONAL', 'beta survey')]
@@ -45,8 +47,8 @@ def build(root: Path) -> Path:
     w(reg / 'search_queries_candidates.csv', ['suggestion_id', 'axis_id', 'topic_id', 'target', 'sample_query', 'state', 'last_searched', 'notes'],
       [{'suggestion_id': s, 'axis_id': a, 'topic_id': t, 'target': g, 'sample_query': q} for s, a, t, g, q in LEGACY])
     w(reg / 'search_plans.csv', ['plan_id', 'axis_id', 'topic_id'], [{'plan_id': t + '_PLAN', 'axis_id': a, 'topic_id': t} for a, t in TOPICS])
-    comps = [{'competitor_id': 'C001', 'name': 'Alpha', 'research_priority': 'P0', 'market_role': 'DIRECT', 'verification_state': 'UNVERIFIED_CANDIDATE', 'sources': ''},
-             {'competitor_id': 'C002', 'name': 'Beta', 'research_priority': 'P2', 'market_role': 'DIRECT', 'verification_state': 'UNVERIFIED_CANDIDATE', 'sources': ''}]
+    comps = [{'competitor_id': 'C001', 'name': 'Alpha', 'research_priority': 'P0', 'market_role': 'DIRECT', 'verification_state': 'UNVERIFIED_CANDIDATE', 'sources': '', 'official_url_candidate': 'https://alpha.example.com/'},
+             {'competitor_id': 'C002', 'name': 'Beta', 'research_priority': 'P2', 'market_role': 'DIRECT', 'verification_state': 'UNVERIFIED_CANDIDATE', 'sources': '', 'official_url_candidate': 'https://beta.example.net/'}]
     w(reg / 'competitor_candidates.csv', list(comps[0]), comps)
     w(root / 'original_20261109' / 'registry' / 'competitor_candidates.csv', list(comps[0]), comps[:1])
 
@@ -57,12 +59,12 @@ def build(root: Path) -> Path:
         n['q'] += 1
         log.append({'query_id': f"Q{n['q']:04d}", 'searched_at': '2026-11-12T00:00:00Z', 'platform': platform, 'query': query, 'results_found': '5', 'notes': '',
                     'axis_id': topic[:7], 'topic_id': topic, 'retrieval_status': status, 'suggestion_id': sid, 'route': route, 'followup_for': '',
-                    'unit_kind': unit_kind, 'unit_id': unit_id, 'executor': 'worker:test', 'verified_by': 'TRANSCRIPT', 'blocked_reason': '', 'candidate_urls': ''})
+                    'unit_kind': unit_kind, 'unit_id': unit_id, 'executor': f'worker:{EXECUTOR[0]}:{EXECUTOR[1]}', 'verified_by': 'TRANSCRIPT', 'blocked_reason': '', 'candidate_urls': ''})
 
-    def add_source(unit_kind, unit_id, topic, role, group, stype='ACADEMIC', kind='FACT_MEASURED'):
+    def add_source(unit_kind, unit_id, topic, role, group, stype='ACADEMIC', kind='FACT_MEASURED', host='example.org'):
         n['s'] += 1
         sid = f"S{n['s']:03d}"
-        src.append({'source_id': sid, 'origin_group_id': group, 'url': f'https://example.org/{sid}', 'publisher': 'pub', 'published_at': '2026', 'checked_at': '2026-11-12T00:00:00Z',
+        src.append({'source_id': sid, 'origin_group_id': group, 'url': f'https://{host}/{sid}', 'publisher': 'pub', 'published_at': '2026', 'checked_at': '2026-11-12T00:00:00Z',
                     'source_type': stype, 'country': 'JP', 'segment': 'x', 'axis_id': topic[:7], 'topic_id': topic, 'verified_state': 'DIRECT_ORIGINAL', 'is_accepted': 'yes',
                     'claim_text': 'claim', 'page_or_section': 'sec', 'n': '100', 'population': 'pop', 'selection_method': 'random', 'method': 'survey', 'unit': '%', 'notes': '',
                     'quote': 'a verbatim quote of enough length', 'quote_check': 'FOUND_IN_CACHE', 'statement_kind': kind, 'origin_org': group, 'added_in': 'sweep_test',
@@ -70,7 +72,7 @@ def build(root: Path) -> Path:
         n['m'] += 1
         smap.append({'map_id': f"M{n['m']:05d}", 'source_id': sid, 'unit_kind': unit_kind, 'unit_id': unit_id, 'role': role, 'claim_text': 'claim',
                      'quote': 'a verbatim quote of enough length', 'quote_check': 'FOUND_IN_CACHE', 'added_by': 'worker:test', 'review_state': 'S2_VERIFIED', 'review_notes': ''})
-        add_log(unit_kind, unit_id, topic, 'direct_fetch:web_page', f'GET https://example.org/{sid}', route=role, status='RETRIEVED_FULL_TEXT')
+        add_log(unit_kind, unit_id, topic, 'direct_fetch:web_page', f'GET https://{host}/{sid}', route=role, status='RETRIEVED_FULL_TEXT')
         return sid
 
     for s, a, t, g, q in LEGACY:
@@ -86,10 +88,12 @@ def build(root: Path) -> Path:
         cid = c['competitor_id']
         add_log('COMPETITOR', cid, 'AXIS_01_T01', 'web_search_engine', f'{cid} official', route='PRIMARY')
         add_log('COMPETITOR', cid, 'AXIS_01_T01', 'web_search_engine', f'{cid} complaints', route='COUNTER')
-        sid = add_source('COMPETITOR', cid, 'AXIS_01_T01', 'PRIMARY', f'OG_{cid}', stype='OFFICIAL_VENDOR', kind='VENDOR_CLAIM')
-        cunits.append({'competitor_id': cid, 'profile': {k: {'status': 'CONFIRMED_OFFICIAL', 'value': 'v', 'source_url': f'https://example.org/{sid}', 'quote': 'q', 'source_id': sid} for k in ATTRS},
+        host = c['official_url_candidate'].split('/')[2]
+        sid = add_source('COMPETITOR', cid, 'AXIS_01_T01', 'PRIMARY', f'OG_{cid}', stype='OFFICIAL_VENDOR', kind='VENDOR_CLAIM', host=host)
+        cunits.append({'competitor_id': cid, 'profile': {k: {'status': 'CONFIRMED_OFFICIAL', 'value': 'v', 'source_url': f'https://{host}/{sid}', 'quote': 'q', 'source_id': sid} for k in ATTRS},
                        'counter_findings': [], 'blockers': ''})
     w(reg / 'search_log.csv', list(log[0]), log)
+    write_manifest(reg, log)
     w(reg / 'source_evidence.csv', list(src[0]), src)
     w(reg / 'source_topic_map.csv', list(smap[0]), smap)
     (reg / 'topic_units.jsonl').write_text(''.join(json.dumps(u, ensure_ascii=False) + '\n' for u in units), encoding='utf-8')
@@ -136,4 +140,19 @@ def build(root: Path) -> Path:
     for name in research_gates.DELIVERABLES:
         (deliv / name).write_text(filler(800, 'RESEARCH_STATUS = COMPLETE\n' + cite + ' 文字入力 学校 仕事 外部接続 競合 統計'), encoding='utf-8')
     build_status.compute(reg, write_files=True)
+    SCOPE['content_sha256'] = research_gates.scope_digest(reg)
     return root
+
+
+def write_manifest(reg: Path, log: list[dict]) -> None:
+    """The execution manifest a transcript audit would derive for the synthetic worker's calls."""
+    rows = []
+    for r in log:
+        base = {'run': EXECUTOR[0], 'agent_id': EXECUTOR[1], 'unit_kind': r['unit_kind'], 'unit_id': r['unit_id'], 'ts': r['searched_at']}
+        if r['query'].startswith('GET '):
+            rows.append({**base, 'action': 'FETCH', 'target': r['query'][4:], 'outcome': '', 'n_links': ''})
+        else:
+            rows.append({**base, 'action': 'SEARCH', 'target': r['query'], 'outcome': 'ok', 'n_links': r['results_found']})
+    rows.sort(key=lambda x: (x['run'], x['agent_id'], x['action'], x['ts'], x['target']))
+    w(reg / 'execution_manifest.csv', transcript_audit.MANIFEST_FIELDS, rows)
+    (reg / 'execution_manifest.csv.seal.json').write_text(json.dumps({'manifest_sha256': transcript_audit.manifest_digest(rows)}), encoding='utf-8')

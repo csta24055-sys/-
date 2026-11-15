@@ -8,6 +8,11 @@ Trust model (research tooling only, no app code):
 - "Was this page read?"   -> taken from the trace + the fetch cache metadata (status, chars).
 - "Does the source say this?" -> every proposed source must carry a verbatim quote that is
   found in the cached page text. Not found => the candidate is rejected, not accepted.
+- A worker's report is used only if the worker assigned to that unit wrote it (traced Write call).
+- Evidence (sources, counter findings, reported figures) must come from a page that this unit's
+  own worker read (HTTP 200 with real text); a figure must be visible in its quote.
+- "Vendor-written" is decided by the page's host (scripts/rules.py), not by the worker's label.
+- Every run re-checks the rows merged earlier under the current rules and demotes what fails.
 Semantic review of claim vs quote is a later stage (S2); rows enter as review_state=S2_PENDING.
 
 Usage: python3 scripts/merge_staging.py STAGING_DIR CACHE_DIR TRACE_JSONL
@@ -24,6 +29,10 @@ from collections import defaultdict
 from pathlib import Path
 from urllib.parse import urlsplit
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import rules  # noqa: E402
+from rules import domain, multi_origin, squash  # noqa: E402
+
 R = Path(__file__).resolve().parents[1]
 REG = R / 'registry'
 LOG_EXTRA = ['suggestion_id', 'route', 'followup_for', 'unit_kind', 'unit_id', 'executor', 'verified_by', 'candidate_urls']
@@ -32,16 +41,8 @@ MAP_FIELDS = ['map_id', 'source_id', 'unit_kind', 'unit_id', 'role', 'claim_text
 REJ_FIELDS = ['unit_kind', 'unit_id', 'url', 'reason', 'claimed_quote', 'executor']
 SOURCE_TYPES = {'OFFICIAL_VENDOR', 'INDEPENDENT_REVIEW', 'SPONSORED', 'ACADEMIC', 'GOVERNMENT', 'CUSTOMER_FIRSTHAND', 'OTHER'}
 ROLES = {'PRIMARY', 'INDEPENDENT', 'COUNTER'}
-MULTI_ORIGIN_HOSTS = ('arxiv.org', 'prtimes.jp', 'digitalpr.jp', 'github.com', 'note.com', 'reddit.com', 'youtube.com', 'medium.com',
-                      'qiita.com', 'zenn.dev', 'kyodonewsprwire.jp', 'researchgate.net', 'ssrn.com', 'nber.org', 'jst.go.jp', 'apple.com',
-                      'google.com', 'acm.org', 'petsymposium.org', 'usenix.org', 'openreview.net', 'aclanthology.org', 'sciencedirect.com',
-                      'springer.com', 'nature.com', 'mdpi.com', 'tandfonline.com', 'wiley.com', 'biorxiv.org', 'nih.gov', 'jsdelivr.net',
-                      'semanticscholar.org', 'substack.com', 'hatenablog.com', 'speakerdeck.com', 'slideshare.net', 'ieee.org', 'cvf.com',
-                      'thecvf.com', 'mlr.press', 'neurips.cc', 'huggingface.co', 'ac.jp', 'frontiersin.org', 'plos.org', 'sagepub.com',
-                      'oup.com', 'cambridge.org', 'jmir.org', 'elsevier.com', 'ceur-ws.org', 'osf.io', 'zenodo.org', 'ipsj.or.jp', 'nii.ac.jp')
-SECOND_LEVEL = ('co.jp', 'ac.jp', 'go.jp', 'or.jp', 'ne.jp', 'lg.jp', 'ed.jp', 'gr.jp', 'co.uk', 'ac.uk', 'gov.uk', 'org.uk', 'com.au', 'edu.au',
-                'gov.au', 'co.kr', 'com.cn', 'edu.cn', 'co.nz', 'com.sg', 'edu.sg', 'co.in', 'ac.in', 'com.br', 'com.tw', 'edu.tw')
-
+ROLE_VALUE = 'VALUE'  # a page that only backs a reported figure; not counted as primary / independent / counter evidence
+SEARCH_STATUS = {'ok': 'SNIPPET_ONLY', 'no_links': 'NO_RESULTS', 'refused': 'REFUSED_BUDGET', 'error': 'TOOL_ERROR'}
 
 def read(name: str) -> tuple[list[str], list[dict]]:
     p = REG / name
@@ -66,22 +67,10 @@ def norm_url(u: str) -> str:
     return f'{s.scheme.lower()}://{s.netloc.lower()}{path}' + (f'?{s.query}' if s.query else '')
 
 
-def domain(u: str) -> str:
-    host = urlsplit(u).netloc.lower().split(':')[0]
-    parts = host.split('.')
-    if len(parts) >= 3 and '.'.join(parts[-2:]) in SECOND_LEVEL:
-        return '.'.join(parts[-3:])
-    return '.'.join(parts[-2:]) if len(parts) >= 2 else host
-
-
 def slug(s: str) -> str:
     s = unicodedata.normalize('NFKC', s or '').strip().upper()
     s = re.sub(r'[\s/|:;,.()（）「」『』・、。\'"]+', '_', s).strip('_')
     return s[:48] or 'UNKNOWN'
-
-
-def squash(s: str) -> str:
-    return re.sub(r'\s+', '', unicodedata.normalize('NFKC', s or ''))
 
 
 class Cache:
@@ -108,9 +97,13 @@ class Cache:
         p = self.d / f"{m['key']}.txt"
         return p.read_text(encoding='utf-8', errors='replace') if p.exists() else ''
 
-    def has_quote(self, url: str, quote: str) -> bool:
+    def page_ok(self, url: str) -> bool:
+        m = self.get(url)
+        return bool(m) and int(m.get('status', 0) or 0) == 200 and int(m.get('chars', 0) or 0) > rules.MIN_PAGE_CHARS
+
+    def has_quote(self, url: str, quote: str, min_len: int = rules.MIN_QUOTE) -> bool:
         q = squash(quote)
-        return len(q) >= 12 and q in squash(self.text(url))
+        return len(q) >= min_len and q in squash(self.text(url))
 
 
 def platform_for(url: str) -> str:
@@ -200,7 +193,7 @@ def main() -> None:
     src_by_norm = {norm_url(s['url']): s for s in src}
     dom_group = {}
     for s in src:
-        if not domain(s['url']).endswith(MULTI_ORIGIN_HOSTS):
+        if not multi_origin(domain(s['url'])):
             dom_group.setdefault(domain(s['url']), s['origin_group_id'])
     map_seen = {(m['source_id'], m['unit_kind'], m['unit_id'], m['role'], squash(m.get('quote', ''))[:60]) for m in smap}
     rej_seen = {(r['unit_kind'], r['unit_id'], r['url'], r['reason']) for r in rejected}
@@ -220,6 +213,13 @@ def main() -> None:
     sn = max([int(s['source_id'][1:]) for s in src if re.fullmatch(r'S\d+', s['source_id'])] + [0])
     mn = len(smap)
     stats = defaultdict(int)
+    off_rules = rules.official_rules(REG, list(comps.values()))
+    unrecognised, drops = [], []
+    src_by_id = {s['source_id']: s for s in src}
+
+    def origin_group(url: str, org: str) -> str:
+        d = domain(url)
+        return f'OG_{slug(d)}__{slug(org)}' if multi_origin(d) else dom_group.setdefault(d, f'OG_D_{slug(d)}')
 
     def new_qid() -> str:
         nonlocal qn
@@ -242,6 +242,9 @@ def main() -> None:
             continue
         if kind == 'COMPETITOR' and uid not in comps:
             continue
+        if report and not any(str(w).endswith(f'/{sub}/{uid}.json') for run in runs for w in run.get('wrote', [])):
+            stats['reports_ignored_not_written_by_own_worker'] += 1
+            report = {}
         topic_for_log = uid if kind == 'TOPIC' else 'AXIS_17_T08'  # competitor work is logged under the direct-competitor axis placeholder
         reported = {}
         for s in report.get('searches', []) if isinstance(report.get('searches'), list) else []:
@@ -271,7 +274,7 @@ def main() -> None:
                             'language': language, 'results_found': str(s['n_links']) if s['ok'] else '0', 'accepted': '0', 'excluded': str(s['n_links']) if s['ok'] else '0',
                             'blocked_reason': '' if s['ok'] else (s.get('error') or 'search tool returned no result block'),
                             'notes': str(rep.get('note', ''))[:300], 'axis_id': topics[topic_for_log], 'topic_id': topic_for_log, 'origin_group_id': '',
-                            'retrieval_status': 'SNIPPET_ONLY' if s['ok'] else ('REFUSED_BUDGET' if s.get('refused') else 'ERROR'), 'excluded_reason': '検索要約は証拠にしない' if s['ok'] else '',
+                            'retrieval_status': SEARCH_STATUS.get(s.get('outcome') or ('ok' if s['ok'] else ('refused' if s.get('refused') else 'error')), 'TOOL_ERROR'), 'excluded_reason': '検索要約は証拠にしない' if s['ok'] else '',
                             'suggestion_id': sid, 'route': route, 'followup_for': str(rep.get('followup_for') or ''), 'unit_kind': kind, 'unit_id': uid,
                             'executor': executor, 'verified_by': 'TRANSCRIPT', 'candidate_urls': ' '.join(s['links'][:3])})
                 stats['searches_logged'] += 1
@@ -310,6 +313,18 @@ def main() -> None:
                 stats['fetches_logged'] += 1
         # ---- sources: quote must be found in the cached page
         fetched_norm = {norm_url(f['url']) for run in runs for f in run['fetches']}
+        stamps = {x for run in runs for x in run.get('fetch_stamps', [])}
+
+        def evidence_problem(url: str, quote: str, min_len: int = rules.MIN_QUOTE) -> str:
+            """'' if the quoted passage is usable evidence for this unit, else the reason it is not."""
+            meta = cache.get(url)
+            if not meta or not cache.page_ok(url):
+                return 'page not retrieved (no HTTP 200 page with text in the fetch cache)'
+            if norm_url(url) not in fetched_norm and meta.get('fetched_at') not in stamps:
+                return 'page was not read by this unit'
+            if not cache.has_quote(url, quote, min_len):
+                return 'quote not found in cached page text (or too short)'
+            return ''
         executor0 = f"worker:{runs[-1]['run']}:{runs[-1]['agent_id']}"
         accepted_here = []
 
@@ -320,14 +335,14 @@ def main() -> None:
                 return ''
             url, nu, quote = s['url'], norm_url(s['url']), str(s.get('quote', ''))
             role = str(s.get('role', '')).upper()
-            role = role if role in ROLES else 'PRIMARY'
-            reason = ''
+            role = role if role in ROLES or role == ROLE_VALUE else 'PRIMARY'
             existing = src_by_norm.get(nu)
+            if existing is not None and existing.get('is_accepted') != 'yes':
+                existing = None if existing.get('verified_state') != 'REJECTED_RECHECK' else existing
             meta = cache.get(url)
-            if not meta or int(meta.get('status', 0)) != 200:  # the page must be in the fetch cache; the quote check below is the real guarantee
-                reason = 'page not retrieved (status != 200)'
-            elif not cache.has_quote(url, quote):
-                reason = 'quote not found in cached page text'
+            reason = evidence_problem(url, quote, rules.MIN_QUOTE_VALUE if role == ROLE_VALUE else rules.MIN_QUOTE)
+            if not reason and existing is not None and existing.get('is_accepted') != 'yes':
+                existing.update({'is_accepted': 'yes', 'verified_state': 'DIRECT_ORIGINAL', 'quote': quote, 'quote_check': 'FOUND_IN_CACHE'})  # a later run supplied a passage that is on the page
             if reason:
                 rk = (kind, uid, url, reason)
                 if rk not in rej_seen:
@@ -338,14 +353,11 @@ def main() -> None:
             if not existing:
                 d = domain(url)
                 org = str(s.get('origin_org') or s.get('publisher') or '')
-                if d.endswith(MULTI_ORIGIN_HOSTS):
-                    og = f'OG_{slug(d)}__{slug(org)}'
-                else:
-                    og = dom_group.setdefault(d, f'OG_D_{slug(d)}')
+                og = origin_group(url, org)
                 sn += 1
                 st = str(s.get('source_type', 'OTHER')).upper()
                 existing = {k: 'UNKNOWN' for k in sf}
-                existing.update({'source_id': f'S{sn:03d}' if sn < 1000 else f'S{sn}', 'origin_group_id': og, 'url': url, 'publisher': str(s.get('publisher') or 'UNKNOWN'),
+                existing.update({'source_id': f'S{sn:03d}' if sn < 1000 else f'S{sn}', 'origin_group_id': og, 'url': url, 'publisher': str(s.get('publisher') or f'HOST:{rules.host_of(url)}（発行者は未記入、S2で確認）'),
                                  'published_at': str(s.get('published_at') or 'UNKNOWN'), 'checked_at': meta.get('fetched_at', ''), 'source_type': st if st in SOURCE_TYPES else 'OTHER',
                                  'country': str(s.get('country') or 'UNKNOWN'), 'segment': str(s.get('segment') or 'UNKNOWN'),
                                  'axis_id': topics[topic_for_log], 'topic_id': topic_for_log, 'verified_state': 'DIRECT_ORIGINAL', 'is_accepted': 'yes',
@@ -355,6 +367,7 @@ def main() -> None:
                                  'notes': f'collected by {executor0} for {kind} {uid}', 'quote': quote, 'quote_check': 'FOUND_IN_CACHE',
                                  'statement_kind': str(s.get('statement_kind') or 'UNKNOWN'), 'origin_org': org, 'added_in': 'sweep_2026-11-12', 'review_state': 'S2_PENDING', 'review_notes': ''})
                 src.append(existing)
+                src_by_id[existing['source_id']] = existing
                 src_by_norm[nu] = existing
                 stats['sources_added'] += 1
             mk = (existing['source_id'], kind, uid, role, squash(quote)[:60])
@@ -372,14 +385,18 @@ def main() -> None:
                 accepted_here.append(sid)
         verified_profile, verified_counter = {}, []
         if kind == 'COMPETITOR':
-            prof = report.get('profile') if isinstance(report.get('profile'), dict) else {}
+            prof = {**((cunits.get(uid) or {}).get('profile') or {}), **(report.get('profile') if isinstance(report.get('profile'), dict) else {})}
             for k, a in prof.items():
                 if not isinstance(a, dict):
                     continue
                 st = str(a.get('status', '')).upper()
                 entry = {'status': st, 'value': str(a.get('value', ''))[:600], 'source_url': str(a.get('source_url', '')), 'quote': str(a.get('quote', ''))[:300], 'source_id': ''}
                 if st.startswith('CONFIRMED'):
-                    official = st == 'CONFIRMED_OFFICIAL'
+                    official = rules.is_official(off_rules, uid, entry['source_url'])  # by host, not by the worker's label
+                    if st == 'CONFIRMED_OFFICIAL' and not official:
+                        unrecognised.append({'competitor_id': uid, 'name': comps[uid]['name'], 'host': rules.host_of(entry['source_url']), 'attribute': k, 'url': entry['source_url']})
+                        stats['official_label_not_on_vendor_host'] += 1
+                    st = entry['status'] = 'CONFIRMED_OFFICIAL' if official else 'CONFIRMED_THIRD_PARTY'
                     sid = accept_source({'url': entry['source_url'], 'quote': entry['quote'], 'role': 'PRIMARY' if official else 'INDEPENDENT',
                                          'publisher': comps[uid]['name'] + '（公式）' if official else 'UNKNOWN', 'origin_org': comps[uid]['name'] if official else '',
                                          'source_type': 'OFFICIAL_VENDOR' if official else 'OTHER', 'statement_kind': 'VENDOR_CLAIM' if official else 'UNKNOWN',
@@ -392,21 +409,41 @@ def main() -> None:
                         entry['status'] = 'UNVERIFIED_QUOTE_NOT_FOUND'
                         stats['attributes_downgraded'] += 1
                 verified_profile[k] = entry
-            for cfd in report.get('counter_findings', []) if isinstance(report.get('counter_findings'), list) else []:
-                if isinstance(cfd, dict) and cfd.get('source_url') and cache.has_quote(str(cfd['source_url']), str(cfd.get('quote', ''))):
-                    verified_counter.append({'summary': str(cfd.get('summary', ''))[:400], 'source_url': cfd['source_url'], 'quote': str(cfd.get('quote', ''))[:300],
-                                             'source_id': src_by_norm.get(norm_url(str(cfd['source_url'])), {}).get('source_id', '')})
+            for cfd in ((cunits.get(uid) or {}).get('counter_findings') or []) + (report.get('counter_findings', []) if isinstance(report.get('counter_findings'), list) else []):
+                if any(x['source_url'] == cfd.get('source_url') and x['quote'] == str(cfd.get('quote', ''))[:300] for x in verified_counter if isinstance(cfd, dict)):
+                    continue
+                sid = ''
+                if isinstance(cfd, dict) and cfd.get('source_url'):
+                    sid = accept_source({'url': str(cfd['source_url']), 'quote': str(cfd.get('quote', '')), 'role': 'COUNTER', 'claim_text': str(cfd.get('summary', ''))[:300],
+                                         'page_or_section': 'counter_finding', 'bias': '第三者ページ'})
+                if sid:
+                    accepted_here.append(sid)
+                    verified_counter.append({'summary': str(cfd.get('summary', ''))[:400], 'source_url': cfd['source_url'], 'quote': str(cfd.get('quote', ''))[:300], 'source_id': sid})
                 else:
                     stats['counter_findings_dropped_unverified'] += 1
+                    if isinstance(cfd, dict):
+                        drops.append({'unit': uid, 'what': 'counter_finding', 'url': str(cfd.get('source_url', ''))[:120], 'reason': evidence_problem(str(cfd.get('source_url', '')), str(cfd.get('quote', '')))})
         # ---- research unit record (narrative fields are the worker's; values are kept only when their quote is found)
         if report:
             vals = []
-            for v in report.get('observed_values', []) if isinstance(report.get('observed_values'), list) else []:
-                if isinstance(v, dict) and v.get('source_url') and cache.has_quote(str(v['source_url']), str(v.get('quote', ''))):
-                    sid = src_by_norm.get(norm_url(str(v['source_url'])), {}).get('source_id', '')
-                    vals.append({**{k: v.get(k, '') for k in ('metric', 'value', 'unit', 'n', 'period', 'geography', 'segment', 'quote')}, 'source_id': sid})
+            earlier = [{**v, 'source_url': (src_by_id.get(v.get('source_id')) or {}).get('url', '')} for v in ((units.get(uid) or {}).get('observed_values_verified') or [])] if kind == 'TOPIC' else []
+            for v in earlier + (report.get('observed_values', []) if isinstance(report.get('observed_values'), list) else []):
+                sid = ''
+                if isinstance(v, dict) and v.get('source_url') and rules.value_in_quote(str(v.get('value', '')), str(v.get('quote', ''))):
+                    have = src_by_norm.get(norm_url(str(v['source_url'])))
+                    if have is not None and have.get('is_accepted') == 'yes' and not evidence_problem(str(v['source_url']), str(v.get('quote', '')), rules.MIN_QUOTE_VALUE):
+                        sid = have['source_id']
+                    else:  # the page was not listed as a source: it enters the ledger only as the backing of this figure
+                        sid = accept_source({'url': str(v['source_url']), 'quote': str(v.get('quote', '')), 'role': ROLE_VALUE, 'page_or_section': 'observed_value',
+                                             'claim_text': f"{v.get('metric', '')}: {v.get('value', '')} {v.get('unit', '')}"[:300], 'n': v.get('n'), 'statement_kind': 'UNKNOWN'})
+                if sid:
+                    row = {**{k: v.get(k, '') for k in ('metric', 'value', 'unit', 'n', 'period', 'geography', 'segment', 'quote')}, 'source_id': sid}
+                    if row not in vals:
+                        vals.append(row)
                 else:
                     stats['values_dropped_unverified'] += 1
+                    drops.append({'unit': uid, 'what': 'value', 'value': str(v.get('value', ''))[:60] if isinstance(v, dict) else '', 'url': str(v.get('source_url', ''))[:120] if isinstance(v, dict) else '',
+                                  'reason': ('figure not visible in its quote' if isinstance(v, dict) and not rules.value_in_quote(str(v.get('value', '')), str(v.get('quote', ''))) else evidence_problem(str(v.get('source_url', '')), str(v.get('quote', '')), rules.MIN_QUOTE_VALUE)) if isinstance(v, dict) else 'malformed'})
             keep = ('definition', 'primary_status', 'independent_status', 'counter_status', 'absence_reason', 'calculations_proposed', 'non_identifiable',
                     'cross_axis_links', 'contradictions', 'product_implication', 'staleness_notes', 'problems', 'started_at', 'finished_at')
             unit = {k: report.get(k) for k in keep if k in report}
@@ -414,10 +451,11 @@ def main() -> None:
             if kind == 'TOPIC':
                 prev = units.get(uid, {})
                 merged = {**prev, **{k: v for k, v in unit.items() if v not in (None, '', [], {})}}
-                for k in ('calculations_proposed', 'non_identifiable', 'cross_axis_links', 'contradictions', 'observed_values_verified'):
+                for k in ('calculations_proposed', 'non_identifiable', 'cross_axis_links', 'contradictions'):
                     a = (prev.get(k) or []) + (unit.get(k) or [])
-                    merged[k] = [json.loads(x) for x in dict.fromkeys(json.dumps(i, ensure_ascii=False, sort_keys=True) for i in a)]
-                merged['source_ids'] = sorted(set(prev.get('source_ids', [])) | set(unit['source_ids']))
+                    merged[k] = [json.loads(x) for x in dict.fromkeys(json.dumps(i, ensure_ascii=False, sort_keys=True) for i in a if i not in (None, '', [], {}))]
+                merged['observed_values_verified'] = vals  # recomputed from the report on every run under the current rules
+                merged['source_ids'] = sorted(set(unit['source_ids']))
                 merged['worker_runs'] = sorted(set(prev.get('worker_runs', [])) | set(unit['worker_runs']))
                 merged['topic_id'] = uid
                 units[uid] = merged
@@ -425,14 +463,80 @@ def main() -> None:
                 ckeep = ('official_status', 'profile', 'counter_findings', 'comparability', 'blockers', 'problems', 'started_at', 'finished_at', 'absence_reason')
                 prev = cunits.get(uid, {})
                 cu = {**prev, **{k: report.get(k) for k in ckeep if report.get(k) not in (None, '', [], {})}}
-                cu['profile'] = {**(prev.get('profile') or {}), **verified_profile}
-                cu['counter_findings'] = verified_counter or prev.get('counter_findings', [])
-                cu['counter_search_done'] = bool(report.get('searches')) and any(str(x.get('route', '')).upper() in ('COUNTER', 'INDEPENDENT') for x in report.get('searches', []) if isinstance(x, dict))
+                cu['profile'] = verified_profile  # recomputed from the report on every run under the current rules
+                cu['counter_findings'] = verified_counter
+                cu.pop('counter_search_done', None)
                 cu['competitor_id'] = uid
-                cu['source_ids'] = sorted(set(prev.get('source_ids', [])) | set(accepted_here))
+                cu['source_ids'] = sorted(set(accepted_here))
                 cu['worker_runs'] = sorted(set(prev.get('worker_runs', [])) | {f"{r['run']}:{r['agent_id']}" for r in runs})
                 cunits[uid] = cu
             stats['units_recorded'] += 1
+
+    # ---- re-check everything merged by workers earlier under the current rules (nothing is trusted because it was accepted before)
+    reads = {key: ({norm_url(f['url']) for r in runs for f in r['fetches']}, {x for r in runs for x in r.get('fetch_stamps', [])}) for key, runs in traces.items()}
+    for s in src:
+        if not s.get('added_in', '').startswith('sweep') or s.get('is_accepted') != 'yes':
+            continue
+        if s.get('publisher') in ('', 'UNKNOWN'):
+            s['publisher'] = f'HOST:{rules.host_of(s["url"])}（発行者は未記入、S2で確認）'
+        problem = '' if cache.page_ok(s['url']) else 'page not retrieved (no HTTP 200 page with text in the fetch cache)'
+        if not problem and not cache.has_quote(s['url'], s.get('quote', ''), rules.MIN_QUOTE_VALUE if s.get('page_or_section') == 'observed_value' else rules.MIN_QUOTE):
+            problem = 'quote not found in cached page text (or shorter than the minimum)'
+        if problem:
+            s.update({'is_accepted': 'no', 'verified_state': 'REJECTED_RECHECK', 'quote_check': 'FAILED_RECHECK', 'review_notes': problem})
+            stats['sources_demoted_on_recheck'] += 1
+            continue
+        og = origin_group(s['url'], s.get('origin_org') or s.get('publisher') or '')
+        if og != s.get('origin_group_id'):
+            s['origin_group_id'] = og
+            stats['origin_groups_recomputed'] += 1
+    for m in smap:
+        if not m.get('added_by', '').startswith('worker:'):
+            continue
+        s = src_by_id.get(m['source_id'])
+        if s is None:
+            continue
+        got = reads.get((m['unit_kind'], m['unit_id']))
+        meta = cache.get(s['url']) or {}
+        if not cache.page_ok(s['url']):
+            qc = 'PAGE_NOT_RETRIEVED'
+        elif got is None or (norm_url(s['url']) not in got[0] and meta.get('fetched_at') not in got[1]):
+            qc = 'NOT_READ_BY_UNIT'
+        elif not cache.has_quote(s['url'], m.get('quote', ''), rules.MIN_QUOTE_VALUE if m.get('role') == ROLE_VALUE else rules.MIN_QUOTE):
+            qc = 'QUOTE_NOT_FOUND'
+        else:
+            qc = 'FOUND_IN_CACHE'
+        if qc != m.get('quote_check'):
+            m['quote_check'] = qc
+            stats['mappings_recheck_changed'] += 1
+    # vendor-written or not is a property of the page's host for the candidate it is cited for
+    cited_for = defaultdict(set)
+    valid_for = defaultdict(set)
+    for m in smap:
+        if m.get('quote_check') in ('FOUND_IN_CACHE', 'PENDING_BACKFILL') and (src_by_id.get(m['source_id']) or {}).get('is_accepted') == 'yes':
+            valid_for[(m['unit_kind'], m['unit_id'])].add(m['source_id'])
+            if m['unit_kind'] == 'COMPETITOR':
+                cited_for[m['source_id']].add(m['unit_id'])
+    for s in src:
+        if not s.get('added_in', '').startswith('sweep') or s['source_id'] not in cited_for or any(k == 'TOPIC' and s['source_id'] in v for (k, _), v in valid_for.items()):
+            continue
+        off = [c for c in sorted(cited_for[s['source_id']]) if rules.is_official(off_rules, c, s['url'])]
+        want = 'OFFICIAL_VENDOR' if off else ('OTHER' if s.get('source_type') == 'OFFICIAL_VENDOR' else s.get('source_type'))
+        if want != s.get('source_type'):
+            s['source_type'] = want
+            if off:
+                s.update({'publisher': comps[off[0]]['name'] + '（公式）', 'origin_org': comps[off[0]]['name'], 'statement_kind': 'VENDOR_CLAIM', 'bias': '当事者の表明'})
+            stats['source_types_reconciled'] += 1
+    for uid, u in units.items():
+        u['source_ids'] = sorted(valid_for.get(('TOPIC', uid), set()) | {i for i in u.get('source_ids', []) if (src_by_id.get(i) or {}).get('added_in', '').startswith('session')})
+    for uid, u in cunits.items():
+        u['source_ids'] = sorted(valid_for.get(('COMPETITOR', uid), set()))
+        for a in (u.get('profile') or {}).values():
+            if isinstance(a, dict) and a.get('source_id') and a['source_id'] not in valid_for.get(('COMPETITOR', uid), set()) and str(a.get('status', '')).startswith('CONFIRMED'):
+                a['status'], a['source_id'] = 'UNVERIFIED_QUOTE_NOT_FOUND', ''
+                stats['attributes_downgraded'] += 1
+    (staging / 'dropped_evidence.json').write_text(json.dumps(drops, ensure_ascii=False, indent=1), encoding='utf-8')
+    (staging / 'official_label_on_unrecognised_host.json').write_text(json.dumps(unrecognised, ensure_ascii=False, indent=1), encoding='utf-8')
 
     write('search_log.csv', lf, log)
     write('source_evidence.csv', sf, src)
