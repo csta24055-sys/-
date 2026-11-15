@@ -11,12 +11,14 @@ import re
 import shutil
 import subprocess
 import tempfile
+import unicodedata
 from pathlib import Path
 
 from ..numbers import number_or_reason
 
 UNITS = r"(m3|㎥|m³|m2|㎡|m²|t|kg|本|台|基|個|箇所|m|ｍ|ｔ)"
-LINE = re.compile(r"^(?P<name>[^\d\s][^\d]{0,40}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*(?P<u>" + UNITS + r")\b")
+# the unit ends the token: "120 ㎥" at the end of a line counts (㎥ ㎡ m³ are not word characters, so \b would fail)
+LINE = re.compile(r"^(?P<name>[^\d\s][^\d]{0,40}?)\s+(?P<q>-?\d[\d,]*(?:\.\d+)?)\s*(?P<u>" + UNITS + r")(?![A-Za-z0-9])")
 
 
 def available() -> bool:
@@ -57,7 +59,8 @@ def read(data: bytes, doc_id: str, max_pages: int = 200) -> dict:
             has_text = len(t.strip()) > 20
             pages.append({"page": i, "has_text": has_text, "n_chars": len(t)})
             for k, ln in enumerate(t.splitlines(), 1):
-                mm = LINE.search(ln.strip()[:500])
+                ln = unicodedata.normalize("NFKC", ln.strip()[:500])     # ｍ³ ㎥ → m3, full-width digits
+                mm = LINE.search(ln)
                 if mm:
                     q, why = number_or_reason(mm.group("q"))
                     if q is None:            # e.g. "1,5": refused like on the screen, and said

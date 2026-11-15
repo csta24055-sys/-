@@ -222,11 +222,17 @@ class Projects:
         out.sort(key=lambda d: (-PRIORITY[d["state"]], -d["id"]))
         return out
 
-    def accept(self, pid: int, fid: str, index: int) -> Value:
+    def accept(self, pid: int, fid: str, index: int = 0, cid: int | None = None) -> Value:
         cs = self.candidates(pid, fid)
-        if not 0 <= index < len(cs):
+        if cid is not None:
+            hit = [c for c in cs if c["id"] == cid]
+            if not hit:
+                raise ProjectError("その候補はもう無い（採用済みか、取り下げられた）")
+            c = dict(hit[0])
+        elif not 0 <= index < len(cs):
             raise ProjectError("候補 %s は無い" % index)
-        c = dict(cs[index])
+        else:
+            c = dict(cs[index])
         cid = c.pop("id")
         origin = c.pop("origin")
         other = {("m_concrete", "whole_building"): "m_concrete_fdn", ("m_rebar", "all_steel"): "m_steel",

@@ -25,6 +25,7 @@ HEADERS = {  # in order of preference: a name / description column is preferred 
     "specification": ("規格", "仕様", "spec", "specification", "grade"),
 }
 MAX_TEXT = 300                                    # characters of a name / unit / spec / division cell that are kept
+MONEY_WORDS = ("費", "単価", "金額", "価格", "代価", "円", "cost", "price", "rate", "amount", "value")
 MAX_FORMULA_CHARS = 3_000_000                     # distinct formula text scanned over the whole workbook
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 MAX_PART, MAX_TOTAL = 10_000_000, 40_000_000     # bytes after decompression (real quantity tables are far smaller)
@@ -54,11 +55,13 @@ def _header_map(row: list) -> dict:
         for j, hs in enumerate(heads):
             if j in used or not hs:
                 continue
+            if key in ("name", "quantity") and any(m in hs for m in MONEY_WORDS):
+                continue                                   # 材料費, 材料単価, Material cost, Amount …
             for rank, w in enumerate(words):
                 w = w.lower()
                 exact = w == hs
                 if exact or (len(w) > 1 and w in hs):
-                    score = (rank, 0 if exact else 1, j)
+                    score = (0 if exact else 1, rank, j)
                     if best is None or score < best:
                         best = score
                     break
@@ -71,6 +74,7 @@ def _header_map(row: list) -> dict:
 MAX_FORMULA = 8192                                 # Excel's limit for the text of one formula
 _FTOK = re.compile(r'"[^"]*"|\'[^\']*\'|[\w.$]+|.', re.S)   # linear: strings, words (any script: 内訳!B2), single characters
 _CELL = re.compile(r"(\$?)([A-Za-z]{1,3})(\$?)(\d+)")
+MAX_NAME_FOLLOWS = 20                             # defined names followed per formula (a name may refer to itself)
 _TOTAL_FUNCS = {"SUM", "SUMIF", "SUMIFS", "SUMPRODUCT", "SUBTOTAL", "AGGREGATE"}
 
 
@@ -107,12 +111,12 @@ def _formula_parts(f: str) -> tuple:
                 toks.append(("func", re.sub(r"^_XL(FN|WS)\.", "", tok.upper()), None))
             elif _CELL.fullmatch(tok):
                 c = _CELL.fullmatch(tok)
-                toks.append(("ref", (c.group(1) == "$", _col_index(c.group(2).upper())), sheet))
+                toks.append(("ref", (c.group(1) == "$", _col_index(c.group(2).upper()), c.group(3) == "$", int(c.group(4))), sheet))
             elif _COLWORD.fullmatch(tok):
                 c = _COLWORD.fullmatch(tok)
                 toks.append(("col", (c.group(1) == "$", _col_index(c.group(2).upper()), tok.upper()), sheet))
             elif _ROWWORD.fullmatch(tok):
-                toks.append(("row", None, sheet))
+                toks.append(("row", (tok.startswith("$"), int(tok.lstrip("$"))), sheet))
             else:
                 toks.append(("name", tok.upper(), sheet))
             sheet = None
@@ -127,17 +131,21 @@ def _formula_parts(f: str) -> tuple:
         if kind in ("ref", "col", "row") and k + 2 < len(toks) and toks[k + 1] == ("op", ":", None) \
                 and toks[k + 2][0] in ("ref", "col", "row"):
             kind2, val2, sh2 = toks[k + 2]
-            if kind == "row" or kind2 == "row":
-                refs.append((sh, True, 0, True, MAX_COLS - 1))          # whole rows: every column
+            if kind == "row" or kind2 == "row":                         # whole rows: every column
+                rr = [x[-1] if isinstance(x, tuple) else None for x in (val, val2)]
+                ra = [x[-2] if isinstance(x, tuple) else True for x in (val, val2)]
+                refs.append((sh, True, 0, True, MAX_COLS - 1, ra[0], rr[0], ra[1], rr[1]))
             else:
                 (a1, c1), (a2, c2) = val[:2], val2[:2]
+                r1 = (val[2], val[3]) if kind == "ref" else (True, None)     # a whole column: every row
+                r2 = (val2[2], val2[3]) if kind2 == "ref" else (True, None)
                 if c1 > c2:
                     (a1, c1), (a2, c2) = (a2, c2), (a1, c1)
-                refs.append((sh, a1, c1, a2, c2))
+                refs.append((sh, a1, c1, a2, c2, r1[0], r1[1], r2[0], r2[1]))
             k += 3
             continue
         if kind == "ref":
-            refs.append((sh, val[0], val[1], val[0], val[1]))
+            refs.append((sh, val[0], val[1], val[0], val[1], val[2], val[3], val[2], val[3]))
         elif kind == "col":
             names.append((val[2], sh))                              # a lone 1-3 letter word is a name, not a column
         elif kind == "name":
@@ -148,23 +156,28 @@ def _formula_parts(f: str) -> tuple:
     return frozenset(funcs), tuple(refs), tuple(names), structured
 
 
-def formula_reason(formula, col: int, ctx: dict | None = None, _depth: int = 0) -> str | None:
+def _formula_tuple(formula):
+    if isinstance(formula, str):
+        return formula, 0, False, 0
+    return (tuple(formula) + (0,))[:4] if len(formula) == 3 else tuple(formula)
+
+
+def formula_reason(formula, col: int, ctx: dict | None = None, _seen: set | None = None) -> str | None:
     """Why a quantity cell computed by a formula must not be added (None when it may be added, e.g. volume × density):
     - a SUM-like or database function (a total);
     - a reference that reaches the quantity column of this sheet on another row (a total, a 再掲 repeat, an allowance
       on another row) — ranges that span the column, whole columns and whole rows included; a shared-formula copy is
       checked with its column shift; a reference that names this sheet counts as this sheet;
-    - a reference to another sheet that is itself read as a quantity table (a summary that copies a detail sheet);
     - INDIRECT / OFFSET, structured (table) references, other workbooks: what is referenced cannot be checked;
-    - a defined name is followed to what it refers to.
-    `formula` is (text, column shift of a shared-formula copy, master missing?) or plain text; `ctx` has "sheet" (this
-    sheet's name), "qsheets" (the names of the sheets read as quantity tables) and "names" (defined names)."""
+    - a defined name is followed to what it refers to (each name once, at most MAX_NAME_FOLLOWS names).
+    References to OTHER sheets of the workbook are judged row by row by the importer (formula_xrefs): only a reference
+    to a material row of another read sheet is a copy. `formula` is (text, column shift, master missing?, row shift) or
+    plain text; `ctx` has "sheet" (this sheet's name) and "names" (defined names)."""
     if not formula:
         return None
-    if isinstance(formula, str):
-        formula = (formula, 0, False)
-    text, dcol, no_master = formula
+    text, dcol, no_master, _drow = _formula_tuple(formula)
     ctx = ctx or {}
+    seen = set() if _seen is None else _seen
     if no_master:
         return "数式の中身が分からない（共有の数式の元が無い）。必要なら手で入れる"
     if len(text) > MAX_FORMULA:
@@ -178,8 +191,7 @@ def formula_reason(formula, col: int, ctx: dict | None = None, _depth: int = 0) 
     if structured:
         return "表の参照（構造化参照）は確かめられない。必要なら手で入れる"
     this = (ctx.get("sheet") or "").casefold()
-    qsheets = {q.casefold() for q in ctx.get("qsheets") or ()}
-    for sh, a1, c1, a2, c2 in refs:
+    for sh, a1, c1, a2, c2, *_rows in refs:
         shf = (sh or "").casefold()
         if sh is None or shf == this:
             lo, hi = (c1 if a1 else c1 + dcol), (c2 if a2 else c2 + dcol)
@@ -187,17 +199,44 @@ def formula_reason(formula, col: int, ctx: dict | None = None, _depth: int = 0) 
                 return "同じ列の別の行から計算した数量（合計・再掲・割増のおそれ）は足さない。必要なら手で入れる"
         elif shf.startswith("["):
             return "別のブックを参照した数量は確かめられない。必要なら手で入れる"
-        elif shf in qsheets:
-            return "別のシート（%s）の数量を参照した行は足さない（そのシートも読んでいるので二重計上になる）" % sh
     defined = ctx.get("names") or {}
-    if _depth < 3:
-        for nm, _sh in names:
-            target = defined.get(nm)
-            if target:
-                why = formula_reason((target, 0, False), col, ctx, _depth + 1)
-                if why:
-                    return why + "（名前 %s の参照先）" % nm
+    for nm, _sh in names:
+        target = defined.get(nm)
+        if target and nm not in seen and len(seen) < MAX_NAME_FOLLOWS:
+            seen.add(nm)
+            why = formula_reason((target, 0, False, 0), col, ctx, seen)
+            if why:
+                return why + "（名前 %s の参照先）" % nm
     return None
+
+
+def formula_xrefs(formula, ctx: dict | None = None, _seen: set | None = None) -> list:
+    """References of a quantity formula to OTHER sheets: [(sheet casefolded, first col, last col, first row, last row)]
+    (None rows = every row), shared-formula shifts applied, defined names followed (bounded)."""
+    if not formula:
+        return []
+    text, dcol, no_master, drow = _formula_tuple(formula)
+    if no_master or len(text) > MAX_FORMULA:
+        return []
+    ctx = ctx or {}
+    seen = set() if _seen is None else _seen
+    this = (ctx.get("sheet") or "").casefold()
+    _f, refs, names, _s = _formula_parts(text)
+    out = []
+    for sh, a1, c1, a2, c2, ar1, r1, ar2, r2 in refs:
+        if sh is None or (sh or "").casefold() == this or sh.startswith("["):
+            continue
+        lo, hi = (c1 if a1 else c1 + dcol), (c2 if a2 else c2 + dcol)
+        rlo = None if r1 is None else (r1 if ar1 else r1 + drow)
+        rhi = None if r2 is None else (r2 if ar2 else r2 + drow)
+        out.append((sh.casefold(), lo, hi, rlo, rhi))
+    defined = ctx.get("names") or {}
+    for nm, _sh in names:
+        target = defined.get(nm)
+        if target and nm not in seen and len(seen) < MAX_NAME_FOLLOWS:
+            seen.add(nm)
+            out += formula_xrefs((target, 0, False, 0), ctx, seen)
+    return out
 
 
 def _find_header(rows: list[list]):
@@ -233,14 +272,15 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
             skipped.append({"row": rn, "name": name, "reason": "数量が数値でない（0 として読まない）" + ("：" + why if why else ""),
                             "trace": trace})
             continue
-        why = formula_reason((formulas[i] if formulas else {}).get(hmap["quantity"]), hmap["quantity"],
-                             dict(fctx or {}, sheet=sheet))
+        fobj = (formulas[i] if formulas else {}).get(hmap["quantity"])
+        why = formula_reason(fobj, hmap["quantity"], dict(fctx or {}, sheet=sheet))
         if why:
             skipped.append({"row": rn, "name": name, "reason": why, "trace": trace})
             continue
         cands.append({"name": name, "quantity": q, "unit": text("unit"), "division": text("division"),
-                      "specification": text("specification"), "trace": trace, "row": rn})
-    return {"sheet": sheet, "rows": cands, "skipped": skipped,
+                      "specification": text("specification"), "trace": trace, "row": rn,
+                      "xrefs": formula_xrefs(fobj, dict(fctx or {}, sheet=sheet)) if fobj else []})
+    return {"sheet": sheet, "rows": cands, "skipped": skipped, "qcol": hmap["quantity"],
             "header_row": row_numbers[hdr_i] if row_numbers else hdr_i + 1}
 
 
@@ -386,12 +426,22 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
             continue
         rows, numbers, forms = [], [], []
         hidden_rows = 0
+        hidden_cols = set()
         shared_f = {}                                   # si -> formula text of a shared formula's master cell
         root = None
         last_row = 0
         for ev, el in events(path):
             if root is None:
                 root = el
+            if ev == "end" and el.tag == M + "cols" and skip_hidden:
+                for c_ in el.findall("m:col", NS):
+                    if c_.get("hidden") in ("1", "true"):
+                        try:
+                            lo_, hi_ = int(c_.get("min")), int(c_.get("max"))
+                        except (TypeError, ValueError):
+                            continue
+                        hidden_cols.update(range(max(lo_, 1) - 1, min(hi_, MAX_COLS)))
+                continue
             if ev != "end" or el.tag != M + "row":
                 continue
             # every row costs at least one cell, so that a sheet of empty <row/> elements cannot run unbounded
@@ -438,13 +488,15 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
                 last = ci
                 if ci >= MAX_COLS:
                     raise ImportError_("列の位置 %s が Excel の上限を超えている" % ref)
+                if ci in hidden_cols:
+                    continue                          # a hidden column (often an old revision) is not read
                 vals[ci] = val
                 cells["chars"] += len(val) if isinstance(val, str) else 0
                 if f is not None:
                     text = f.text or ""
                     if len(text) > MAX_FORMULA:
                         text = text[:MAX_FORMULA + 1]        # kept only to say "too long" (formula_reason)
-                    dcol, no_master = 0, False
+                    dcol, no_master, drow = 0, False, 0
                     si = f.get("si")
                     if text:
                         cells["fchars"] += len(text)          # each distinct formula text is scanned once
@@ -452,13 +504,14 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
                             raise ImportError_("数式の文字が多すぎる（合計 %d 文字まで）" % formula_budget)
                     if f.get("t") == "shared" and si is not None:
                         if text:
-                            shared_f[si] = (text, ci)         # the master cell: its text and column
+                            shared_f[si] = (text, ci, rn)     # the master cell: its text, column and row
                         elif si in shared_f:
-                            text, mcol = shared_f[si]
-                            dcol = ci - mcol                  # relative columns of the copy move by this much
+                            text, mcol, mrow = shared_f[si]
+                            dcol = ci - mcol                  # relative columns / rows of the copy move by this much
+                            drow = rn - mrow
                         else:
                             no_master = True
-                    fs[ci] = (text, dcol, no_master)
+                    fs[ci] = (text, dcol, no_master, drow)
                     cells["chars"] += len(text)
             if cells["chars"] > MAX_CHARS:
                 raise ImportError_("セルの文字が多すぎる（合計 %d 文字まで）" % MAX_CHARS)
@@ -471,7 +524,8 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
                 forms.append(fs)
             el.clear()
             root.clear()
-        out.append({"name": sh.get("name"), "rows": rows, "numbers": numbers, "formulas": forms, "hidden_rows": hidden_rows})
+        out.append({"name": sh.get("name"), "rows": rows, "numbers": numbers, "formulas": forms, "hidden_rows": hidden_rows,
+                    "hidden_cols": len(hidden_cols)})
     return {"sheets": out, "hidden_sheets": hidden_sheets, "names": defined}
 
 
@@ -487,6 +541,8 @@ def read_xlsx(data: bytes, doc_id: str) -> dict:
     for sh in wbk["sheets"]:
         if sh["hidden_rows"]:
             warnings.append("%s：非表示の行 %d 行は読んでいない" % (sh["name"], sh["hidden_rows"]))
+        if sh.get("hidden_cols"):
+            warnings.append("%s：非表示の列 %d 列は読んでいない（古い数量の列のことがある）" % (sh["name"], sh["hidden_cols"]))
     if len(qsheets) > 1:
         warnings.append("数量の表が %d シートある（%s）：同じ材料が別のシートにも載っていないか確かめる"
                         % (len(qsheets), "、".join(qsheets[:6])))

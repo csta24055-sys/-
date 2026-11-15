@@ -1924,6 +1924,169 @@ class SeventhRoundTests(unittest.TestCase):
             self.assertIn(needle, js, needle)
 
 
+class EighthRoundTests(unittest.TestCase):
+    """Regression tests for the eighth verification round (docs/review_fixes.md, round 8)."""
+    setUpClass = ReviewFixTests.__dict__["setUpClass"]
+    tearDownClass = ReviewFixTests.__dict__["tearDownClass"]
+    run_vals = ReviewFixTests.run_vals
+    full = ReviewFixTests.full
+    summary = FourthRoundTests.summary
+    fields_of = SeventhRoundTests.fields_of
+
+    # --- zero multipliers, one rule per kind of row
+    def test_zero_km_gives_volume_rows_no_delivery_factor(self):
+        vals = self.full(m_transport_km=V("m_transport_km", 0.0), m_concrete=V("m_concrete", 500.0, unit="m3"))
+        r, doc, rep = self.run_vals(vals)
+        self.assertNotIn("a4_delivery_fallback", self.fields_of(rep))
+        self.assertEqual(r["results"]["X-02"]["by_stage"]["A4"], 0.0)
+        out, st = self.summary(vals)
+        self.assertTrue(st["A4"])
+
+    def test_zero_repair_and_haul_make_b3_and_c2_moot(self):
+        vals = self.full(m_repair_rate=V("m_repair_rate", 0.0), e_repair_rate=V("e_repair_rate", 0.0))
+        vals.pop("m_steel")
+        vals.pop("e_hvac_count")
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertFalse(any("B3" in m["stages"] for m in rep["missing_inputs"]))
+        out, st = self.summary(vals)
+        self.assertTrue(st["B3"])
+        vals = self.full(a_eol_haul_km=V("a_eol_haul_km", 0.0), m_concrete=V("m_concrete", 500.0, unit="m3"))
+        out, st = self.summary(vals)
+        self.assertTrue(st["C2"])
+
+    def test_other_zero_partners(self):
+        vals = self.full(o_fm_ratio=V("o_fm_ratio", 0.0))
+        vals.pop("o_elec_kwh")
+        _, rep = bridge.build(vals, REFSET)
+        self.assertNotIn("B2", {m["field"]: m for m in rep["missing_inputs"]}["o_elec_kwh"]["stages"])
+        vals = self.full(r_loss_rate=V("r_loss_rate", 0.0))
+        vals.pop("r_life")
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertNotIn("r_life", self.fields_of(rep))
+        vals = self.full(e_hvac_mass=V("e_hvac_mass", 0.0))
+        vals.pop("e_hvac_count")
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertNotIn("C3", {m["field"]: m for m in rep["missing_inputs"]}["e_hvac_count"]["stages"])
+
+    def test_grid_zero_with_unknown_purchase_and_pv(self):
+        vals = self.full(o_grid_value=V("o_grid_value", 0.0))
+        for f in ("o_elec_kwh", "o_pv_kwh", "o_export_kwh"):
+            vals.pop(f)
+        out, st = self.summary(vals)
+        self.assertTrue(st["B6"] and st["B2"])
+        self.assertNotIn("B6-01", out["summary"]["incomplete_units"])
+
+    def test_embodied_needs_no_route(self):
+        vals = self.full(a_stages=V("a_stages", "EMBODIED"))
+        vals.pop("a_eol_route")
+        _, rep = bridge.build(vals, REFSET)
+        self.assertEqual(rep["missing_required"], [])
+
+    def test_inputs_that_cannot_change_the_total_are_not_estimates(self):
+        vals = self.full(b_gfa=V("b_gfa", 1100.0, "assumption"), o_elec_kwh=V("o_elec_kwh", 0.0),
+                         o_grid_value=V("o_grid_value", 0.45, "assumption"))
+        out, _ = self.summary(vals)
+        unknown = (out["range"] or {}).get("unknown_fields") or []
+        self.assertNotIn("b_gfa", unknown)
+        self.assertNotIn("o_grid_value", unknown)
+
+    # --- candidates by id; estimate message
+    def test_accept_by_id(self):
+        pid = self.app.projects.create("r8a", "RC")
+        for val, m in ((10.0, "a"), (20.0, "b")):
+            self.app.projects.propose(pid, V("m_glass", val, "from_drawing", "m2", method=m, source_id="d"), "document")
+        cs = self.app.projects.candidates(pid, "m_glass")
+        cid = [c for c in cs if c["value"] == 10.0][0]["id"]
+        url = "/api/projects/%d/fields/m_glass/accept" % pid
+        self.app.handle("POST", url, {"id": cid})
+        self.assertEqual(self.app.projects.current(pid, "m_glass").value, 10.0)
+        with self.assertRaises(ProjectError):
+            self.app.handle("POST", url, {"id": cid})                     # a repeat tap does not take the next one
+        self.assertEqual(self.app.projects.current(pid, "m_glass").value, 10.0)
+
+    # --- documents
+    def test_work_spellings_and_products(self):
+        w = documents._is_work
+        for n in ("コンクリート打込み", "コンクリートポンプ車", "鉄骨製作", "鉄骨建て方", "鉄筋組み立て", "Concrete pouring",
+                  "Steel fabrication", "Rebar tying"):
+            self.assertTrue(w(n), n)
+        for n in ("加工鉄筋", "構造用集成材（プレカット加工済）", "押出成形セメント板（工場加工品）", "異形鉄筋"):
+            self.assertFalse(w(n), n)
+        f = documents._field_for
+        for n, want in (("Low-E 断熱複層ガラス", "m_glass"), ("断熱アルミサッシ", "m_aluminium"), ("防水コンクリート", "m_concrete"),
+                        ("押出法ポリスチレンフォーム保温板 3種b", "m_insulation"), ("Phenolic foam", "m_insulation"),
+                        ("押出成形セメント板", "m_masonry"), ("Glass wool insulation", "m_insulation")):
+            self.assertEqual(f(n), want, n)
+
+    def test_money_headers_are_not_names(self):
+        csv = "品目,規格,数量,単位,材料費,労務費,金額\n異形棒鋼,SD345 D13,12.5,t,1,2,3\n生コンクリート,Fc24,300,m3,4,5,6\n".encode()
+        r = documents.read("m.csv", base64.b64encode(csv).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got, {("m_rebar", "t"): 12.5, ("m_concrete", "m3"): 300.0})
+
+    def test_hidden_column_and_cross_sheet_rows(self):
+        head = '<row r="1">%s%s%s%s</row>' % (_is(1, "A", "名称"), _is(1, "B", "数量"), _is(1, "C", "単位"), _is(1, "D", "数量（変更後）"))
+        rows = head + '<row r="2">%s<c r="B2"><v>40</v></c>%s<c r="D2"><v>25</v></c></row>' % (_is(2, "A", "異形鉄筋 D13"), _is(2, "C", "t"))
+        import io, zipfile
+        data = _wb([("S", rows, None)])
+        buf = io.BytesIO(data)
+        z = zipfile.ZipFile(buf)
+        parts = {n: z.read(n) for n in z.namelist()}
+        parts["xl/worksheets/sheet1.xml"] = parts["xl/worksheets/sheet1.xml"].replace(
+            b"<sheetData>", b'<cols><col min="2" max="2" hidden="1"/></cols><sheetData>')
+        out = io.BytesIO()
+        with zipfile.ZipFile(out, "w") as z2:
+            for n, b in parts.items():
+                z2.writestr(n, b)
+        r = documents.read("hc.xlsx", base64.b64encode(out.getvalue()).decode(), "d")
+        self.assertEqual({(p.field_id, p.unit): p.value for p in r["proposals"]}, {("m_rebar", "t"): 25.0})
+        self.assertTrue(any("非表示の列" in w for w in r["warnings"]))
+        # a dimensions sheet referenced by the detail rows is not a copy; a material row referenced from another is
+        dims = _HEAD + _row(2, "延床面積", '<c r="B2"><v>5000</v></c>', "m2") + _row(3, "コンクリート比重", '<c r="B3"><v>2.3</v></c>', "t/m3")
+        detail = _HEAD + _row(2, "石膏ボード", '<c r="B2"><f>概要!B2*0.8</f><v>4000</v></c>', "m2") + \
+            _row(3, "普通コンクリート", '<c r="B3"><f>100*概要!B3</f><v>230</v></c>', "t")
+        summary = _HEAD + _row(2, "石膏ボード", '<c r="B2"><f>内訳!B2</f><v>4000</v></c>', "m2")
+        data = _wb([("概要", dims, None), ("内訳", detail, None), ("集計", summary, None)])
+        r = documents.read("x.xlsx", base64.b64encode(data).decode(), "d")
+        got = {(p.field_id, p.unit): p.value for p in r["proposals"]}
+        self.assertEqual(got, {("m_board", "m2"): 4000.0, ("m_concrete", "t"): 230.0})
+
+    def test_hostile_workbooks_are_fast(self):
+        import time
+        from wlcstudio.importers import tabular
+        q = "+".join(["QX"] * 300)
+        t0 = time.perf_counter()
+        self.assertIsNone(tabular.formula_reason(q, 1, {"sheet": "S", "names": {"QX": q}}))
+        self.assertLess(time.perf_counter() - t0, 1.0)
+        rows = "名称,数量,単位\n" + ("%s,1,m3\n" % ("ﷺ" * 298)) * 3000
+        t0 = time.perf_counter()
+        documents.read("d.csv", base64.b64encode(rows.encode()).decode(), "d")
+        self.assertLess(time.perf_counter() - t0, 5.0)
+
+    def test_pdf_symbol_units_at_line_end(self):
+        from wlcstudio.importers import pdf
+        import unicodedata
+        for ln, u in (("コンクリート 120 ㎥", "m3"), ("断熱材 300 ㎡", "m2"), ("コンクリート 120 ｍ³", "m3")):
+            m = pdf.LINE.search(unicodedata.normalize("NFKC", ln))
+            self.assertEqual(m.group("u"), u, ln)
+
+    def test_ui_has_the_round8_guards(self):
+        js = (HERE / "web" / "app.js").read_text(encoding="utf-8")
+        for needle in ("function guard(", "data-cid", "defaultValue", "defaultSelected", "keepActed", "使えない文字"):
+            self.assertIn(needle, js, needle)
+        proc = subprocess.run(["node", "-e", """
+            const src = require('fs').readFileSync(process.argv[1], 'utf8');
+            const m = src.match(/function parseNumber[\\s\\S]*?\\n}\\n/);
+            eval(m[0]);
+            console.log(['1²', '⑫', '1e-400', '１２３'].map((x) => JSON.stringify(parseNumber(x))).join('|'));""",
+                               str(HERE / "web" / "app.js")], capture_output=True, text=True)
+        if proc.returncode != 0 and "not found" in (proc.stderr or ""):
+            self.skipTest("node is not installed")
+        parts = [json.loads(x) for x in proc.stdout.strip().split("|")]
+        self.assertTrue(parts[0]["bad"] and parts[1]["bad"] and parts[2]["bad"])
+        self.assertEqual(parts[3]["value"], 123)
+
+
 class RegressionTests(unittest.TestCase):
     def test_research_folders_and_engine_unchanged(self):
         root = HERE.parents[1]

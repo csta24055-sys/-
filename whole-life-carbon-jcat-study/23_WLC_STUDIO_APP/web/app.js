@@ -12,7 +12,22 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
   return j;
 }
-function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600); }
+function toast(msg) {
+  const t = $("#toast"), now = Date.now();
+  // a message that follows within 1.5 s is added to the one on screen, not written over it
+  const prev = t.classList.contains("show") && now - (toast._at || 0) < 1500 ? t.textContent : "";
+  t.textContent = prev && !prev.split(" ／ ").includes(msg) ? prev + " ／ " + msg : (prev || msg);
+  toast._at = now;
+  t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600 + Math.min(4000, t.textContent.length * 20));
+}
+/* one request at a time per button: a double tap must not send twice (and focus stays on the button) */
+function guard(b, fn) {
+  return async (...a) => {
+    if (b.dataset.busy) return;
+    b.dataset.busy = "1"; b.setAttribute("aria-disabled", "true");
+    try { return await fn(...a); } finally { delete b.dataset.busy; b.removeAttribute("aria-disabled"); }
+  };
+}
 /* an information dialog; focus goes back to `returnTo` (or the element that had it) when it closes */
 function dialog(title, html, returnTo) {
   const d = $("#dlg"), back = returnTo || document.activeElement;
@@ -86,7 +101,7 @@ async function renderHome(m) {
       <div><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.structure_label)}・入力 ${p.progress.filled}/${p.progress.total}（${p.progress.percent}%）</span></div>
       <button class="btn small" data-open="${p.id}">開く</button></div>`).join("") : '<p class="muted">まだプロジェクトはありません。</p>'}</div>`;
   $("#start").onclick = () => go("structures");
-  $("#demo").onclick = async () => { const r = await api("/demo", { method: "POST", body: {} }); await openProject(r.id); };
+  $("#demo").onclick = guard($("#demo"), async () => { const r = await api("/demo", { method: "POST", body: {} }); await openProject(r.id); });
   m.querySelectorAll("[data-open]").forEach((b) => (b.onclick = () => openProject(+b.dataset.open)));
 }
 
@@ -146,7 +161,7 @@ function fieldHtml(fid) {
       ${c.uncertainty && c.uncertainty.kind !== "none" && c.uncertainty.kind !== "unknown" ? `<div class="muted">範囲 ${fmt(c.uncertainty.low, c.unit)} 〜 ${fmt(c.uncertainty.high, c.unit)}${c.uncertainty.calibrated ? "" : "（仮の範囲）"}</div>` : ""}
       <div class="muted">${c.source_id ? "出典 " + esc(c.source_id) + (c.source_detail ? "：" + esc(c.source_detail) : "") : ""}</div>
       ${dependsHtml(c.depends)}
-      <div class="muted">${esc(c.note || "")}</div><button class="btn small" data-accept="${fid}" data-i="${i}">この候補を採用</button></li>`).join("");
+      <div class="muted">${esc(c.note || "")}</div><button class="btn small" data-accept="${fid}" data-cid="${c.id}">この候補を採用</button></li>`).join("");
   return `<div class="field" id="f-${fid}">
     <div class="field-head"><label for="in-${fid}">${esc(F.label)}${F.required ? ' <span class="muted">（計算に必須）</span>' : ""}</label>${badge(st)}</div>
     <div class="value">${v ? fmt(v.value, v.unit) : '<span class="muted">未取得</span>'}${f.later ? ' <span class="badge st-statistical">あとで確認</span>' : ""}</div>${unc}
@@ -205,11 +220,17 @@ function renderScreen(m, sid) {
 /* a typed number: full-width digits allowed; a comma only as a thousands separator ("12,500"), never as a decimal
    point ("1,5" is refused instead of becoming 15) */
 function parseNumber(raw) {
-  let t = raw.normalize("NFKC").trim().replace(/\u2212/g, "-");
+  raw = raw.trim();
+  if (raw.length > 100) return { bad: true, why: "数値として長すぎます" };
+  if (/[^0-9+\-.,eE \u3000\u2212\uff0b\uff0d\uff0e\uff0c\uff25\uff45\uff10-\uff19]/.test(raw)) return { bad: true, why: "使えない文字があります" };
+  let t = raw.normalize("NFKC").replace(/\u2212/g, "-");
   if (/\s/.test(t)) return { bad: true, why: "数の中に空白があります（3 桁の区切りはカンマ）" };
   if (t.includes(",")) { if (!/^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(t)) return { bad: true, why: "カンマは 3 桁ごとの区切りだけに使ってください（小数点はピリオド）" }; t = t.replace(/,/g, ""); }
   if (!/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/.test(t)) return { bad: true };
-  const v = Number(t); return Number.isFinite(v) ? { value: v } : { bad: true };
+  const v = Number(t);
+  if (!Number.isFinite(v)) return { bad: true };
+  if (v === 0 && /[1-9]/.test(t.split(/[eE]/)[0])) return { bad: true, why: "小さすぎて 0 になってしまう数です" };
+  return { value: v };
 }
 function inputValue(fid) {
   const F = state.meta.fields[fid], el = $("#in-" + fid);
@@ -245,7 +266,7 @@ async function saveField(fid, quiet = false, batch = false) {
   saveField.reason = "";
   const refuse = async (msg, reload = true) => {
     saveField.reason = msg;
-    if (!batch) { toast(msg); if (reload) await refresh("screen", fid); }
+    if (!batch) { toast(msg); if (reload) await refresh("screen", fid, true); }
     return "refused";
   };
   const F = state.meta.fields[fid], iv = inputValue(fid);
@@ -320,7 +341,8 @@ function bindScreen(m, sid) {
     const cleared = rows.filter(clearedInput);
     if (cleared.length) {
       cleared.forEach(restoreInput);
-      toast(`空欄にした${cleared.map((f) => "「" + state.meta.fields[f].label + "」").join("")}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`);
+      toast(`空欄にした${cleared.map((f) => "「" + state.meta.fields[f].label + "」").join("")}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください。ほかの行も保存していません。戻りません`);
+      $("#in-" + cleared[0])?.focus();
       return;
     }
     // a number that cannot be read is said before anything is saved (it is never silently dropped)
@@ -336,7 +358,11 @@ function bindScreen(m, sid) {
     for (const fid of dirty) {
       const r = await saveField(fid, true, true);
       if (r === "refused" || r === "cancelled") {
-        await loadProject(state.project.id);                    // the data only: what was typed stays on the screen
+        // redraw: the saved rows, badges and candidates become current; what was typed in the others stays
+        const keep = typedRows(null);
+        saved.forEach((f) => delete keep[f]);
+        await loadProject(state.project.id);
+        await render(); restoreTyped(keep);
         const done = saved.length ? `（${saved.map((f) => "「" + state.meta.fields[f].label + "」").join("")}は保存しました）` : "";
         toast((r === "refused" ? saveField.reason : `「${state.meta.fields[fid].label}」の保存をやめました`) + "。戻りません" + done);
         $("#in-" + fid)?.focus();
@@ -346,37 +372,37 @@ function bindScreen(m, sid) {
     }
     await loadProject(state.project.id); toast(saved.length ? `${saved.length} 項目を保存しました` : "保存する変更はありませんでした"); back();
   };
-  $("#bb-est").onclick = () => estimate(sid, null);
-  m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = async () => {
-    if (b.disabled) return;
-    b.disabled = true;
-    try { if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save); } finally { b.disabled = false; }
-  }));
-  m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = async () => {
+  $("#bb-est").onclick = guard($("#bb-est"), () => estimate(sid, null));
+  m.querySelectorAll("[data-save]").forEach((b) => (b.onclick = guard(b, async () => {
+    if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save);
+  })));
+  m.querySelectorAll("[data-na]").forEach((b) => (b.onclick = guard(b, async () => {
     const F = state.meta.fields[b.dataset.na];
     if (F.na === "zero" && !F.na_note && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
     if (F.na_note && !confirm(`「${F.label}」を「${F.na_note}」として計算します（その分の排出は数えません）。本当にそうだと分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
     await api(`/projects/${state.project.id}/fields/${b.dataset.na}`, { method: "PUT", body: { value: null, state: "not_applicable", method: "user_entered" } });
     await refresh(sid, b.dataset.na);
-  }));
-  m.querySelectorAll("[data-unset]").forEach((b) => (b.onclick = async () => {
+  })));
+  m.querySelectorAll("[data-unset]").forEach((b) => (b.onclick = guard(b, async () => {
     await api(`/projects/${state.project.id}/fields/${b.dataset.unset}`, { method: "PUT", body: { value: null, state: "not_obtained", method: "user_entered" } });
     await refresh(sid, b.dataset.unset);
-  }));
-  m.querySelectorAll("[data-nc]").forEach((b) => (b.onclick = async () => {
+  })));
+  m.querySelectorAll("[data-nc]").forEach((b) => (b.onclick = guard(b, async () => {
     await api(`/projects/${state.project.id}/fields/${b.dataset.nc}`, { method: "PUT", body: { value: null, state: "not_computable", method: "user_entered" } });
     await refresh(sid, b.dataset.nc);
-  }));
-  m.querySelectorAll("[data-later]").forEach((b) => (b.onclick = async () => {
+  })));
+  m.querySelectorAll("[data-later]").forEach((b) => (b.onclick = guard(b, async () => {
     const f = state.project.fields[b.dataset.later] || {};
     await api(`/projects/${state.project.id}/fields/${b.dataset.later}/later`, { method: "POST", body: { later: !f.later } });
     await refresh(sid, b.dataset.later);
-  }));
-  m.querySelectorAll("[data-accept]").forEach((b) => (b.onclick = async () => {
-    await api(`/projects/${state.project.id}/fields/${b.dataset.accept}/accept`, { method: "POST", body: { index: +b.dataset.i } });
-    await refresh(sid, b.dataset.accept);
-  }));
-  m.querySelectorAll("[data-est]").forEach((b) => (b.onclick = () => estimate(sid, b.dataset.est)));
+  })));
+  // a candidate is adopted by its id (a position could point at another candidate after a repeat tap)
+  m.querySelectorAll("[data-accept]").forEach((b) => (b.onclick = guard(b, async () => {
+    try {
+      await api(`/projects/${state.project.id}/fields/${b.dataset.accept}/accept`, { method: "POST", body: { id: +b.dataset.cid } });
+    } finally { await refresh(sid, b.dataset.accept); }
+  })));
+  m.querySelectorAll("[data-est]").forEach((b) => (b.onclick = guard(b, () => estimate(sid, b.dataset.est))));
   // the state select of an estimate / drawing value opens once a new value is typed
   m.querySelectorAll("select[id^='st-'][disabled]").forEach((sel) => {
     const f = sel.id.slice(3), inp = $("#in-" + f), cur = (state.project.fields[f] || {}).value;
@@ -408,8 +434,10 @@ function bindScreen(m, sid) {
     const b64 = await new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result.split(",")[1]); fr.readAsDataURL(file); });
     try {
       const r = await api(`/projects/${state.project.id}/documents`, { method: "POST", body: { name: file.name, data_b64: b64 } });
-      $("#doc-out").innerHTML = `<p>${esc(r.summary)}</p>${r.warnings.map((w) => `<div class="notice">${esc(w)}</div>`).join("")}`;
       await refresh(sid);
+      // after the redraw (which rebuilds the screen): the summary, the warnings and the rows not used, with reasons
+      const out = $("#doc-out");
+      if (out) out.innerHTML = `<p>${esc(r.summary)}</p>${r.warnings.map((w) => `<div class="notice">${esc(w)}</div>`).join("")}`;
     } catch (e) { $("#doc-out").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; }
   };
 }
@@ -460,11 +488,12 @@ function typedRows(except) {
   document.querySelectorAll("[data-save]").forEach((b) => {
     const f = b.dataset.save;
     if (f === except) return;
-    const inp = $("#in-" + f), cur = (state.project.fields[f] || {}).value;
+    const inp = $("#in-" + f);
     if (!inp) return;
-    const stored = cur && cur.value !== null && cur.value !== undefined && typeof cur.value !== "object" ? String(cur.value) : "";
     const us = $("#unit-" + f), st = $("#st-" + f);
-    const changed = inp.value !== stored || (us && cur && cur.unit && us.value !== cur.unit) || (st && !st.disabled && cur && st.value !== cur.state);
+    const rendered = (sel) => { const o = [...sel.options].find((x) => x.defaultSelected) || sel.options[0]; return o ? o.value : ""; };
+    const initial = inp.tagName === "SELECT" ? rendered(inp) : inp.defaultValue;      // enum fields are selects
+    const changed = inp.value !== initial || (us && us.value !== rendered(us)) || (st && !st.disabled && st.value !== rendered(st));
     if (changed) out[f] = { v: inp.value, u: us ? us.value : null, s: st ? st.value : null, unlocked: st ? !st.disabled : false };
   });
   return out;
@@ -478,12 +507,13 @@ function restoreTyped(saved) {
     if (st && x.s !== null) { if (x.unlocked) st.disabled = false; st.value = x.s; }
   }
 }
-async function refresh(sid, fid) {
-  const keep = state.view === "screen" ? typedRows(fid) : {};
+async function refresh(sid, fid, keepActed = false) {
+  const keep = state.view === "screen" ? typedRows(keepActed ? null : fid) : {};
   await loadProject(state.project.id);
   if (state.view === "screen") {
     const y = window.scrollY; await render(); restoreTyped(keep); setTimeout(() => window.scrollTo(0, y), 0);
-    if (Object.keys(keep).length) toast(`ほかの行の入力（${Object.keys(keep).map((f) => "「" + state.meta.fields[f].label + "」").join("")}）はまだ保存していません`);
+    const others = Object.keys(keep).filter((f) => f !== fid);
+    if (others.length) toast(`ほかの行の入力（${others.map((f) => "「" + state.meta.fields[f].label + "」").join("")}）はまだ保存していません`);
   }
   if (fid) setTimeout(() => { const el = $("#f-" + fid); if (el) { const b = el.querySelector("[data-save]") || el.querySelector("button"); b?.focus({ preventScroll: true }); el.scrollIntoView({ block: "center" }); } }, 30);
 }

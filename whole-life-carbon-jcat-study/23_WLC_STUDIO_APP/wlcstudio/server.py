@@ -138,7 +138,11 @@ class App:
                     self.projects.set_later(pid, fid, bool(b.get("later")))
                     return 200, {"ok": True}
                 if rest[2:] == ["accept"] and method == "POST":
-                    return 200, self.projects.accept(pid, fid, _int(b.get("index"), 0)).to_json()
+                    # by the candidate's id (a position can point at another candidate after a repeat tap)
+                    cid = b.get("id")
+                    if cid is not None and (not isinstance(cid, int) or isinstance(cid, bool)):
+                        raise ApiError(400, "候補の番号が正しくない")
+                    return 200, self.projects.accept(pid, fid, _int(b.get("index"), 0), cid=cid).to_json()
             if rest == ["research", "address"] and method == "POST":
                 return 200, self.research_address(pid, b)
             if rest == ["research", "plateau"] and method == "POST":
@@ -469,7 +473,7 @@ def _hero() -> dict:
     return {"src": "assets/akabeko-placeholder.svg", "alt": "赤べこの写真の差し替え用の絵（プレースホルダー）", "placeholder": True}
 
 
-TOTAL_NEUTRAL = {"o_fm_ratio", "o_pv_kwh", "o_export_kwh"}    # cannot change the total (the split / the purchase decides)
+TOTAL_NEUTRAL = bridge.TOTAL_NEUTRAL      # cannot change the total (the split, the purchase decides, per-area values)
 
 
 def _with(vals: dict, side: str, only: set | None = None) -> tuple[dict, int]:
@@ -593,13 +597,22 @@ def _summary(res: dict, view: dict, rep: dict) -> dict:
             continue                       # share unknown: B2 is counted inside B6 (a split, reported as such)
         if u == "B5-01" and not ctx.get("b5", False):
             continue                       # no refurbishment / rebuild with a share falls inside T
+        if u in ("A4-01", "A4-02") and ctx.get("dist0"):
+            continue                       # 0 km: A4 is 0 whatever the masses
+        if u == "C2-01" and ctx.get("haul0"):
+            continue                       # 0 km haul: C2 is 0 whatever the masses
+        if u == "B3-01" and ctx.get("mrep0") and ctx.get("erep0"):
+            continue                       # both repair rates are 0: B3 is 0
         kept.append(u)
         kind = "material" if u in MATERIAL_UNITS else ("equipment" if u in ("X-01", "X-14") else "other")
         eng[kind].add(st)
     spread = set()
+    # the same "surely 0 multiplier" rule as the bridge: 0 km (A4), 0 haul (C2), repair rate 0 (B3) per kind of row
+    zero = {"material": {s_ for s_, z in (("A4", ctx.get("dist0")), ("C2", ctx.get("haul0")), ("B3", ctx.get("mrep0"))) if z},
+            "equipment": {"B3"} if ctx.get("erep0") else set(), "other": set()}
     for kind, sts in eng.items():
         c = dict(ctx, b4_equipment=ctx.get("b4_equipment_gap", ctx.get("b4_equipment"))) if kind == "equipment" else ctx
-        spread |= set(bridge.expand_stages(sts, c, kind))
+        spread |= set(bridge.expand_stages([x for x in sts if x not in zero[kind]], c, kind)) - zero[kind]
     bad_stages = (spread & set(rep["stages"] or [])) | set(rep.get("incomplete_stages") or [])
     assumed = set(rep.get("assumed_stages") or [])
     split = set(rep.get("split_stages") or [])

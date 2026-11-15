@@ -281,7 +281,8 @@ def estimate_materials(values: dict[str, Value], structure: str, only: str | Non
                                           "RASMI の 5〜95 パーセンタイル × 延床面積 %.1f m2" % area + _coverage_note(mat)),
                   note="；".join(notes + [gfa_note] if gfa_note else notes))
         out.append(v)
-    msgs.append("出典：RASMI（Fishman ほか 2024、CC BY 4.0）。日本の元データは少なく、近い地域のデータで補われている（件数を候補に表示）。")
+    if any(v.method == "rasmi_mi_x_gfa" for v in out):        # the attribution goes with a RASMI candidate only
+        msgs.append("出典：RASMI（Fishman ほか 2024、CC BY 4.0）。日本の元データは少なく、近い地域のデータで補われている（件数を候補に表示）。")
     return out, msgs
 
 
@@ -295,8 +296,8 @@ def run(values: dict[str, Value], structure: str, screen: str | None = None, fie
             p, m = estimate_materials(values, structure, only=field)
             proposals += p
             msgs += m
-            if field and not p and not m:
-                msgs.append("「%s」の統計の出典はつないでいない%s" % (
+            if field and not p:
+                msgs.insert(0, "「%s」の統計の出典はつないでいない%s" % (
                     FL.FIELDS[field]["label"],
                     "（基礎のコンクリートは、上部構造の欄の建物全体の推定に含まれる）" if field == "m_concrete_fdn" else
                     "（資料か仮定で入れる）"))

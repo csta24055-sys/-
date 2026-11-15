@@ -8,6 +8,7 @@ and rows that map to no field or whose unit the field cannot take are listed as 
 from __future__ import annotations
 
 import base64
+import bisect
 import hashlib
 import re
 import unicodedata
@@ -17,22 +18,28 @@ from .importers import ifc, pdf, tabular
 from .provenance import Value
 
 KEYWORDS = [  # (field, words) — first match wins; "re:" entries are regular expressions on the normalised name.
-    # A product (insulation, board, membrane) is tested before the material it is made of ("glass wool insulation" is
-    # insulation, "fibre reinforced cement board" is a board)
+    # Specific PRODUCT words come first ("glass wool insulation" is insulation, "gypsum board" a board, "fibre reinforced
+    # plastic" a plastic); then the materials; the GENERIC modifiers (断熱 / 防水 / ボード …) only after the materials, so
+    # that 断熱複層ガラス is glass, 断熱アルミサッシ aluminium and 防水コンクリート concrete.
+    ("m_insulation", ("グラスウール", "ロックウール", "glass wool", "glasswool", "rock wool", "rockwool", "mineral wool",
+                      "foam glass", "ウレタンフォーム", "スタイロ", "ポリスチレンフォーム", "押出法", "ビーズ法", "保温板",
+                      "フェノールフォーム", "polystyrene", "phenolic foam", "polyurethane foam", "pir board", "pur board",
+                      "re:(^|[^a-z])(eps|xps)([^a-z]|$)", "断熱材", "insulation")),
+    ("m_plastic", ("reinforced plastic", "繊維強化プラスチック", "re:(^|[^a-z])(frp|grp)([^a-z]|$)")),
+    ("m_board", ("石膏ボード", "せっこうボード", "gypsum board", "plasterboard", "cement board", "ケイ酸カルシウム板")),   # (押出成形セメント板 is masonry here)
     ("m_masonry", ("re:(^|[^a-z])alc([^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
     # rebar: decided by _is_rebar() below (a reinforced-concrete name is concrete; product words make it rebar)
     ("m_rebar", ()),
-    ("m_insulation", ("断熱", "insulation", "グラスウール", "ロックウール", "glass wool", "glasswool", "rock wool", "rockwool",
-                      "mineral wool", "foam glass", "ウレタンフォーム", "スタイロ")),
-    ("m_board", ("石膏ボード", "せっこうボード", "ボード", "board", "gypsum")),
-    ("m_membrane", ("防水", "membrane", "waterproof")),
     ("m_concrete", ("コンクリート", "生コン", "concrete")),
     ("m_steel", ("鉄骨", "鋼材", "形鋼", "鋼管", "デッキ", "structural steel", "steel")),
     ("m_timber", ("木材", "製材", "集成材", "合板", "clt", "timber", "wood", "lumber")),
     ("m_mortar", ("モルタル", "mortar", "plaster")),
     ("m_aluminium", ("アルミ", "alumin")),
-    ("m_plastic", ("塩ビ", "樹脂", "pvc", "plastic", "ポリ", "frp", "grp")),
     ("m_glass", ("ガラス", "glass")),
+    ("m_insulation", ("断熱", "保温")),
+    ("m_membrane", ("防水", "membrane", "waterproof")),
+    ("m_board", ("ボード", "board", "gypsum")),
+    ("m_plastic", ("塩ビ", "樹脂", "pvc", "plastic", "ポリ")),
     ("m_finish", ("仕上", "塗装", "クロス", "タイル", "床材", "finish", "tile", "paint", "flooring")),
 ]
 # Rebar or reinforced concrete? Decided by words, never by a backtracking pattern (names come from uploaded files):
@@ -83,10 +90,13 @@ UNIT_ALIASES = {"m3": "m3", "m^3": "m3", "m**3": "m3", "立米": "m3", "立方�
                 "kg": "kg", "キログラム": "kg", "m2": "m2", "m^2": "m2", "m**2": "m2", "平米": "m2", "平方メートル": "m2",
                 "sqm": "m2", "sq.m": "m2"}
 # rows that repeat a material quantity as work (a 内訳書 lists 加工組立・運搬・打設 with the same quantity as the material)
-WORK_WORDS = ("加工", "組立", "運搬", "打設", "圧送", "手間", "建方", "養生", "締固め", "揚重", "労務", "工賃",
-              "損料", "小運搬", "配筋", "型枠")   # (取付・据付 alone are not: 取付金物 is a product; 取付手間 has 手間)
-WORK_WORDS_EN = ("placing", "placement", "pumping", "fixing", "erection", "labour", "labor", "transport", "delivery",
-                 "formwork", "curing", "installation", "hoisting")
+WORK_WORDS = ("加工", "組立", "組み立て", "組立て", "運搬", "打設", "打込", "打ち込", "圧送", "ポンプ", "手間", "建方", "建て方",
+              "製作", "養生", "締固め", "揚重", "労務", "工賃", "損料", "配筋", "型枠")
+# a work word followed by one of these names a product (加工鉄筋, 加工済, 工場加工品, 製作金物): not a work row
+PRODUCT_AFTER = ("済", "品", "材", "鉄筋", "鋼", "木", "板", "金物", "ボード", "ガラス")
+WORK_WORDS_EN = ("placing", "placement", "pumping", "pump", "pour", "pouring", "fixing", "erection", "erect", "erecting",
+                 "fabrication", "fabricate", "fabricating", "cutting", "bending", "tying", "labour", "labor", "transport",
+                 "delivery", "formwork", "curing", "installation", "hoisting")
 _PUNCT = re.compile(r"[\s,，、。・/／_\-‐－–—:：;；()（）\[\]［］{}｛｝【】「」『』<>＜＞]+")
 
 
@@ -140,11 +150,25 @@ def _is_total(name: str) -> bool:
     return re.search(r"(?:^|[^a-z])(?:total|totals|subtotal|sum)(?:$|[^a-z])", n.lower()) is not None
 
 
+MAX_ROWS_CLASSIFIED = 20_000          # quantity rows classified per document (a real bill of quantities is far smaller)
+
+
+def _prep(s: str) -> str:
+    """NFKC once, cut before and after (the checks then work on at most MAX_NAME characters)."""
+    return unicodedata.normalize("NFKC", (s or "")[:MAX_NAME])[:MAX_NAME]
+
+
 def _is_work(name: str) -> bool:
-    """A labour / process row (鉄筋加工組立, コンクリート打設手間, Rebar fixing …): it repeats the material quantity."""
+    """A labour / process row (鉄筋加工組立, コンクリート打設手間, 鉄骨建て方, Rebar fixing …): it repeats the material
+    quantity. A work word that qualifies a product (加工鉄筋, プレカット加工済, 工場加工品) does not make a work row."""
     n = unicodedata.normalize("NFKC", (name or "")[:MAX_NAME])[:MAX_NAME]
-    low = n.lower()
-    return any(w in n for w in WORK_WORDS) or any(w in WORK_WORDS_EN for w in _words(low))
+    for w in WORK_WORDS:
+        k = n.find(w)
+        while k >= 0:
+            if not n[k + len(w):].startswith(PRODUCT_AFTER):
+                return True
+            k = n.find(w, k + 1)
+    return any(w in WORK_WORDS_EN for w in _words(n.lower()))
 
 
 # words that start with うち but are not "of which": 打ち放し (うちっぱなし), 内断熱 (うちだんねつ), 内張り / 内貼り
@@ -197,12 +221,27 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
     if kind in ("csv", "xlsx"):
         parsed = tabular.read_csv(data, doc_id) if kind == "csv" else tabular.read_xlsx(data, doc_id)
         warnings += parsed.get("warnings", [])
+        n_classified = 0
+        material_rows = {}                 # (sheet, row) -> quantity column, for the rows that are material quantities
+        later = []                         # rows that reference another sheet: judged after every sheet is classified
         for sh in parsed["sheets"]:
             if sh.get("error"):
                 warnings.append("%s：%s" % (sh["sheet"], sh["error"]))
             for s in sh.get("skipped", []):
-                unused.append({"trace": s["trace"], "name": s["name"], "reason": s["reason"]})
+                unused.append({"trace": s["trace"], "name": s["name"][:80], "reason": s["reason"]})
             for r in sh["rows"]:
+                n_classified += 1
+                if n_classified > MAX_ROWS_CLASSIFIED:
+                    if n_classified == MAX_ROWS_CLASSIFIED + 1:
+                        warnings.append("数量の行が多すぎるので、最初の %d 行だけを読んだ（残りは読んでいない）" % MAX_ROWS_CLASSIFIED)
+                    continue
+                # each text normalised once (NFKC can lengthen a string many times): the checks below work on these
+                r = dict(r, name=_prep(r["name"]), specification=_prep(r.get("specification", "")),
+                         division=_prep(r.get("division", "")))
+                # a row of material quantities (also a subtotal, a 再掲 or a work row of them): a formula on another
+                # sheet that references it copies a quantity; rows that name no material (延床面積, 比重 …) are not
+                key = (str(sh["sheet"]).casefold(), r["row"])
+                material_rows[key] = sh.get("qcol")
                 if _is_total(r["name"]):
                     unused.append({"trace": r["trace"], "name": r["name"][:80], "reason": "合計・小計の行は足さない（二重計上を防ぐ）"})
                     continue
@@ -220,13 +259,39 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 fid = _field_for(r["name"] + " " + r.get("specification", ""), r.get("division", ""))
                 u = _unit(r["unit"])
                 if fid is None:
+                    material_rows.pop(key, None)
                     unused.append({"trace": r["trace"], "name": r["name"][:80], "reason": "どの材料の欄にも当てはまらない"})
                     continue
                 if u not in FL.FIELDS[fid]["units"]:
+                    if u is None:                  # not a quantity unit at all (比重 t/m3, 単価 …): not a material row
+                        material_rows.pop(key, None)
                     unused.append({"trace": r["trace"], "name": r["name"][:80],
                                    "reason": "単位 %r は「%s」に使えない（%s）" % (r["unit"], FL.FIELDS[fid]["label"], "・".join(FL.FIELDS[fid]["units"]))})
                     continue
+                if r.get("xrefs"):
+                    later.append((r, fid, u))
+                    continue
                 sums.setdefault((fid, u), []).append((r["quantity"], r["trace"]))
+        by_sheet = {}                      # sheet -> (quantity column, sorted material rows)
+        for (msh, mrow), qcol in material_rows.items():
+            by_sheet.setdefault(msh, (qcol, []))[1].append(mrow)
+        for _q, rws in by_sheet.values():
+            rws.sort()
+        for r, fid, u in later:
+            hit = None
+            for shf, lo, hi, rlo, rhi in r["xrefs"]:
+                qcol, rws = by_sheet.get(shf, (None, []))
+                if qcol is None or not lo <= qcol <= hi:
+                    continue
+                k = bisect.bisect_left(rws, rlo if rlo is not None else -1)
+                if k < len(rws) and (rhi is None or rws[k] <= rhi):
+                    hit = shf
+                    break
+            if hit:
+                unused.append({"trace": r["trace"], "name": r["name"][:80],
+                               "reason": "別のシート（%s）の材料の数量を参照した行は足さない（そのシートも読んでいるので二重計上になる）" % hit})
+                continue
+            sums.setdefault((fid, u), []).append((r["quantity"], r["trace"]))
     elif kind == "ifc":
         try:
             text = data.decode("utf-8")
