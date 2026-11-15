@@ -1,6 +1,6 @@
 # S1不足一覧（チャット1,000候補の取込み後・機械生成）
 
-生成時刻（UTC）：2026-11-15T15:56Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
+生成時刻（UTC）：2026-11-15T15:57Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
 
 > RESEARCH_STATUS = INCOMPLETE。S1未通過のためS2以降の分析・正式成果物には進まない。
 
@@ -8,7 +8,7 @@
 
 | 対象 | S1完了 | 未完 | 備考 |
 |---|---:|---:|---|
-| 325テーマ | 112 | 213 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
+| 325テーマ | 113 | 212 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
 | 追加7テーマ（ZIP外） | 0 | 7 | N01〜N03・速度 |
 | 旧896検索ID | 実行 368 | 未実行 528 | 実行不能確定 0。ログの再索引だけでは実行にしない |
 | 80競合 | 28 | 52 | 公式資料の確認 55 社 |
@@ -19,17 +19,17 @@
 
 | 不足の種類 | テーマ数 |
 |---|---:|
-| 研究ユニット記録（定義・計算/識別不能）が未完 | 216 |
+| 研究ユニット記録（定義・計算/識別不能）が未完 | 215 |
 | 一次資料ルートの検索なし | 191 |
 | 独立資料が未確定（NO） | 173 |
 | 反証資料が未確定（NO） | 173 |
 | 旧検索IDの未実行が残る | 132 |
 | 一次資料が未確定（NO） | 113 |
-| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 43 |
-| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 43 |
-| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 9 |
+| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 42 |
+| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 42 |
+| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 8 |
 
-- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1636** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
+- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1630** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
 - 必要なページ読了：未判定のチャット候補の割当て 962 件（重複を除くURL 721 件）。読了は検索上限を消費しない。
 - 462件（旧予定タスクの未達数）は採用証拠の必要件数ではない。上の不足（ルート・旧ID・競合項目）を満たす分だけ新規に調査し、必要ならそれ以上集める。
 
@@ -96,7 +96,7 @@
 | AXIS_06_T07 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
 | AXIS_06_T08 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
 | AXIS_07_T01 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 6/8 | YES | 15/0 |
-| AXIS_07_T02 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 19/23 | YES | 15/0 |
+| AXIS_07_T02 | 完了 | — | FOUND | FOUND | FOUND | 3/1/1 | 23/27 | YES | 15/0 |
 | AXIS_07_T03 | 完了 | — | FOUND | FOUND | FOUND | 0/2/1 | 25/28 | YES | 12/3 |
 | AXIS_07_T04 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 26/28 | YES | 18/1 |
 | AXIS_07_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 9/11 | YES | 17/0 |
@@ -193,7 +193,7 @@
 | AXIS_18_T08 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_19_T01 | 完了 | — | FOUND | FOUND | FOUND | 2/1/2 | 11/14 | YES | 0/0 |
 | AXIS_19_T02 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 13/15 | YES | 0/0 |
-| AXIS_19_T03 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 7/10 | NO | 0/0 |
+| AXIS_19_T03 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 7/10 | YES | 0/0 |
 | AXIS_19_T04 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 10/14 | YES | 0/0 |
 | AXIS_19_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 9/10 | YES | 0/0 |
 | AXIS_19_T06 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
