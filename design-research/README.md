@@ -13,9 +13,9 @@
 | 1 | 世界の優良UI・UX事例 調査台帳（48件） | [research-ledger.md](research-ledger.md)（元データ: [data/](data/)） | 完了 |
 | 2 | 4分類のUI・UX設計原則 | [design-principles.md](design-principles.md) ＋ 各分類の `principles.md` | 完了 |
 | 3 | 12種類のUIコンセプト比較 | [concepts-comparison.md](concepts-comparison.md) ＋ 各分類の `concepts.md` / `concepts.html` ＋ [評価グラフ](assets/concepts-weighted-score.png)（[動画](assets/concepts-weighted-score.mp4)） | 完了 |
-| 4 | 推奨デザインシステム | 各分類の `design-system.md` ＋ [recommended-design-system.md](recommended-design-system.md) | <!--STATUS4-->作成中 |
-| 5 | プロトタイプ | 各分類の `prototype.html`（4画面＋部品一覧、デスクトップ/モバイル）、`screens.md`、`screenshots/`、Figma ボード | <!--STATUS5-->作成中 |
-| 6 | 既存アプリへの適用計画 | [existing-projects-analysis.md](existing-projects-analysis.md) ＋ [application-plan.md](application-plan.md) | <!--STATUS6-->作成中 |
+| 4 | 推奨デザインシステム | 各分類の `design-system.md` ＋ [recommended-design-system.md](recommended-design-system.md) | 完了 |
+| 5 | プロトタイプ | 各分類の `prototype.html`（4画面＋部品一覧、デスクトップ/モバイル）、`screens.md`、`screenshots/`、Figma ボード | 完了 |
+| 6 | 既存アプリへの適用計画 | [existing-projects-analysis.md](existing-projects-analysis.md) ＋ [application-plan.md](application-plan.md) | 完了 |
 
 ## 分類ごとの採用案
 
@@ -35,13 +35,25 @@
 - `principles.md`：その分類の設計原則と、避けるべき設計
 - `concepts.md`：3案の詳細と評価
 - `concepts.html`：3案の視覚比較
-- `prototype.html`：採用案のプロトタイプ（`#dashboard` `#workspace` `#detail` `#settings` `#components`）
+- `prototype.html`：採用案のプロトタイプ（`#dashboard` `#workspace` `#detail` `#settings` `#components`。B にはさらに方法論と出典の画面 `#methods` がある）
 - `screens.md`：画面一覧と操作説明
 - `design-system.md`：その分類のデザインシステム
 - `a11y-report.md`：WCAG 2.2 AA の検証結果
 - `screenshots/`：デスクトップとモバイルの画面
 
-<!--QA-->
+## アクセシビリティ検証（WCAG 2.2 AA）の結果
+
+Playwright（Chromium）と axe-core 4.10 で、各プロトタイプの全ルートと `concepts.html` を検査しました。タグは wcag2a / wcag2aa / wcag21a / wcag21aa / wcag22aa です。あわせて 375px 幅の横スクロールとキーボードフォーカスを確認し、見つかった問題は修正しました。詳細は各分類の `a11y-report.md` にあります。
+
+| 分類 | axe 違反（修正前→後） | 375px 横スクロール | 主な修正 | 残っている課題（未修正・未検証） |
+|---|---|---|---|---|
+| A 研究室 | 0 → 0（ライト・ダーク両方） | なし（320px でもなし） | axe では見つからない重大な不具合を修正：「本文へスキップ」でダッシュボードに戻されていた。比較ページのスキップ後のフォーカス先も修正 | 1.4.11（入力欄の枠線・グラフの線）、スクリーンリーダー、データグリッドのセル単位のキーボード操作、モバイルの下部ナビによるフォーカス被り、200% 拡大は未検証 |
+| B 公共 | 1 → 0 | なし | autocomplete の値、320px＋文字間隔での表の折り返し、単独リンクのターゲットを24px以上に、比較ページのはみ出し | モバイルの最初の画面が通知帯とヘッダー設定で埋まり、本文が見えない（使い勝手の問題、未修正）。英語とやさしい日本語は主要部分のみ。ダークモードは未対応 |
+| C 商用 | 5 → 0 | なし | チェックボックスとラジオを24pxに（2.5.8）、モバイルで見えない並べ替えボタンへのフォーカスを防止、表見出しの折り返し | 390px で設定タブの最後が切れる。空状態「まだレポートがありません」とサイドバーの「最近」が矛盾。ダークテーマは未実装 |
+| D 大企業 | 0 → 0（比較ページで横スクロール1件・ARIA 1件を修正） | なし | 比較ページの min-width 修正、role=group の付与 | axe が判定できなかったコントラスト26要素は目視未確認。設定画面のタブ切替後のパネルとダイアログは未検査。職務分離（申請者が自分の申請を承認できない）は規則のみで未実装 |
+
+自動検査で見つけられるのは WCAG の一部だけです。スクリーンリーダー（NVDA / VoiceOver）、実機、400% ズーム、操作が必要な達成基準（3.3.x、2.5.7 など）は、各レポートで「未検証」と記録しています。
+
 
 ## 外部ツールの利用状況（実際に行ったことだけ）
 
@@ -56,8 +68,30 @@
 
 ## 工程の完了状況
 
-<!--PROGRESS-->
+| 章 | 内容 | 状態 |
+|---|---|---|
+| 第1章 | 外部ツールの活用 | 実施：Canva・Figma・Picsart・GitHub・Web 検索。詳細は上の表 |
+| 第2章 | 4分類の独立研究 | 完了（4つのワークフローを分類ごとに独立して実行） |
+| 第3章 | 実在事例の調査（48件）と設計原則の抽出 | 完了：48件、10項目＋確認レベル |
+| 第4章 | 既存プロジェクトの調査 | このリポジトリは完了。他リポジトリは中身未確認（下記） |
+| 第5章 | 12案のUIコンセプト | 完了：各分類3案、文書と視覚比較 |
+| 第6章 | 評価と採用案の選定 | 完了：分類別の重みで加重評価 |
+| 第7章 | プロトタイプ（4画面×デスクトップ/モバイル、共通部品、WCAG 2.2 AA） | 完了：HTML プロトタイプ4件、Figma ボード、axe 検査と修正 |
+| 第8章 | 成果物1〜6と報告 | 完了：この README と [index.html](index.html) |
+
 
 ## 未達成・限界
 
-<!--GAPS-->
+- **他のリポジトリの中身は未確認**です。`structural-experiment-ai`、`architecture-exam-ai`、非公開の2件は、このセッションの GitHub アクセス範囲外です。リポジトリの追加も権限設定で拒否されたため、名前と説明だけから見立てています。
+- **空気清浄度アプリと、建築LCAアプリの本体は見つかりませんでした。** 適用計画では、用途ごとの見立て（A / B＋D / C＋D）だけを示しています。
+- **Figma 上のクリックで動くプロトタイプは作っていません。** 動く試作は HTML 版です。Figma にはトークン・色見本・文字サイズ・ワイヤーフレームのボードを作りました。席種が View・Starter プランで MCP の呼び出し回数に制限があるため、呼び出しは最小限にしています。
+- **実ユーザーでのユーザビリティテストは未実施**です。評価点は設計者側の採点です。4分類とも統合型（案C）が採用されており、評価軸の組み方による偏りがあり得ます。
+- 調査48件のうち4件は検索結果のみでの確認です。多くの項目で、製品画面の見た目は公式ガイドラインからの推定を含みます（台帳に件ごとに明記）。
+- 試作によってトークン名と最小文字サイズが揃っていません（A は 11.5px、D は 12px）。統一案は [recommended-design-system.md](recommended-design-system.md) にあります。
+- Picsart のグラフは日本語フォントが使えなかったため、ラベルを英語にしています。
+- 「ピクスタ」「メディカルスタジオ」という名前の接続先は見当たりませんでした。
+- [existing-projects-analysis.md](existing-projects-analysis.md) のうち、Dropbox OAuth（§4）とワークフロー単体実行（§5）は観点を簡略化しています。将来性や変更コストの独立した記述は、[application-plan.md](application-plan.md) で補っています。
+- C の concepts.md の重み表には、A・B・D にある「重みの理由」の列がありません（導入文での説明のみ）。
+- 完全性の点検は、別のエージェントが要件ごとに証拠を確認する形で実施しました。点検で指摘された README の未記入とリンク切れ（A・D の検証レポート作成前）は解消済みです。
+- 公開デプロイ、有料契約、既存コードの変更はしていません（指示どおり）。
+
