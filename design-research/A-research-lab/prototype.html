@@ -1,0 +1,1587 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pipeline Ledger 試作</title>
+<meta name="description" content="分類A（大学・研究室内部の研究支援アプリ）採用案C「Pipeline Ledger」の動く試作。データは全てダミー。">
+<style>
+/* ===== トークン（ライト） ===== */
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#EEF1F5; --border:#CDD3DB; --border-strong:#6B7480;
+  --text:#16191D; --text-2:#4A5361; --accent:#00687A; --accent-hover:#00505E; --on-accent:#FFFFFF; --accent-soft:#E0F1F4;
+  --st-unset:#5F6670; --st-ready:#8A5A00; --st-ok:#1E6B3A; --st-fail:#B3261E; --st-stale:#6A3FB5;
+  --bg-fail:#FDECEA; --bg-warn:#FFF4DB; --bg-ok:#E7F4EA; --bg-stale:#F1EBFB;
+  --info-bg:#E8F0FB; --info-text:#1F3F73; --focus:#1F5FA8;
+  --chart-1:#3B5BA5; --chart-grid:#D5DAE1;
+  --font:"BIZ UDPGothic","Noto Sans JP","Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;
+  --mono:ui-monospace,"BIZ UDGothic","SFMono-Regular",Consolas,monospace;
+  --fs-xs:11.5px; --fs-sm:12.5px; --fs-md:13px; --fs-lg:15px; --fs-xl:18px; --fs-2xl:22px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
+  --r-sm:4px; --r-md:6px; --r-lg:10px;
+  --shadow-1:0 1px 2px rgba(16,24,40,.08); --shadow-2:0 8px 24px rgba(16,24,40,.18);
+  --row-h:26px; --dur:120ms;
+  color-scheme:light;
+}
+/* ===== トークン（ダーク） ===== */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#111418; --surface:#1A1E23; --surface-2:#242A31; --border:#3A424D; --border-strong:#87919D;
+    --text:#E6E9ED; --text-2:#AAB3BE; --accent:#5CC7D6; --accent-hover:#86D7E2; --on-accent:#08191C; --accent-soft:#16343A;
+    --st-unset:#A7AFB9; --st-ready:#E3B455; --st-ok:#71CF8F; --st-fail:#FF8F85; --st-stale:#BEA1F2;
+    --bg-fail:#3A1B19; --bg-warn:#33290F; --bg-ok:#15301F; --bg-stale:#2A2140;
+    --info-bg:#1B2A40; --info-text:#AECBF5; --focus:#8AB4F8;
+    --chart-1:#8FA8E8; --chart-grid:#3A424D;
+    --shadow-1:0 1px 2px rgba(0,0,0,.5); --shadow-2:0 8px 24px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111418; --surface:#1A1E23; --surface-2:#242A31; --border:#3A424D; --border-strong:#87919D;
+  --text:#E6E9ED; --text-2:#AAB3BE; --accent:#5CC7D6; --accent-hover:#86D7E2; --on-accent:#08191C; --accent-soft:#16343A;
+  --st-unset:#A7AFB9; --st-ready:#E3B455; --st-ok:#71CF8F; --st-fail:#FF8F85; --st-stale:#BEA1F2;
+  --bg-fail:#3A1B19; --bg-warn:#33290F; --bg-ok:#15301F; --bg-stale:#2A2140;
+  --info-bg:#1B2A40; --info-text:#AECBF5; --focus:#8AB4F8;
+  --chart-1:#8FA8E8; --chart-grid:#3A424D;
+  --shadow-1:0 1px 2px rgba(0,0,0,.5); --shadow-2:0 8px 24px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+:root[data-density="compact"]{--row-h:22px}
+
+/* ===== 基本 ===== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:72px;scroll-padding-bottom:88px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:var(--fs-md)/1.55 var(--font);font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{margin:0 0 var(--sp-2);line-height:1.35}
+h1{font-size:var(--fs-xl)} h2{font-size:var(--fs-lg)} h3{font-size:var(--fs-md)} h4{font-size:var(--fs-sm)}
+p{margin:0 0 var(--sp-2)}
+a{color:var(--accent)} a:hover{color:var(--accent-hover)}
+code,kbd,.mono{font-family:var(--mono);font-size:.95em}
+kbd{display:inline-block;min-width:1.6em;padding:0 4px;border:1px solid var(--border-strong);border-bottom-width:2px;border-radius:var(--r-sm);background:var(--surface-2);color:var(--text);text-align:center;line-height:1.5}
+pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:var(--fs-sm)/1.5 var(--mono);background:var(--surface-2);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-md);border:1px solid var(--border)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+[hidden]{display:none!important}
+.sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:8px;top:-48px;z-index:100;background:var(--accent);color:var(--on-accent);padding:8px 12px;border-radius:var(--r-md);font-weight:700}
+.skip:focus{top:8px}
+.muted{color:var(--text-2)}
+.small{font-size:var(--fs-sm)}
+.row{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center}
+.spacer{flex:1}
+.stack>*+*{margin-top:var(--sp-3)}
+
+/* ===== 上部バー ===== */
+.topbar{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2) var(--sp-4);padding:var(--sp-2) var(--sp-4);background:var(--surface);border-bottom:1px solid var(--border)}
+.brand{font-weight:700;font-size:var(--fs-lg);display:flex;align-items:center;gap:var(--sp-2)}
+.brand-mark{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:var(--r-sm);background:var(--accent);color:var(--on-accent);font-size:13px}
+.proj{color:var(--text-2);font-size:var(--fs-sm);min-width:0}
+.top-actions{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;margin-left:auto}
+.tag-dummy{font-size:var(--fs-xs);border:1px solid var(--border-strong);border-radius:999px;padding:0 8px;color:var(--text-2);font-weight:400}
+
+/* ===== シェル ===== */
+.shell{display:grid;grid-template-columns:196px minmax(0,1fr);min-height:calc(100vh - 49px)}
+.sidenav{position:sticky;top:49px;align-self:start;height:calc(100vh - 49px);background:var(--surface);border-right:1px solid var(--border);padding:var(--sp-3) var(--sp-2);overflow:auto}
+.sidenav ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.sidenav a{display:flex;align-items:center;gap:var(--sp-2);min-height:36px;padding:var(--sp-1) var(--sp-3);border-radius:var(--r-md);color:var(--text);text-decoration:none}
+.sidenav a:hover{background:var(--surface-2)}
+.sidenav a[aria-current="page"]{background:var(--accent-soft);color:var(--text);font-weight:700;box-shadow:inset 3px 0 0 var(--accent)}
+.nav-ico{width:20px;text-align:center;font-size:15px}
+.nav-foot{margin-top:var(--sp-4);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-xs);color:var(--text-2);border-top:1px solid var(--border)}
+main{padding:var(--sp-4);min-width:0}
+main:focus{outline:none}
+.view-head{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2) var(--sp-3);margin-bottom:var(--sp-3)}
+.view-head h1{margin:0}
+.view-head h1:focus{outline:none}
+
+/* ===== ボタン ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;min-width:32px;padding:4px 12px;border-radius:var(--r-md);border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font:inherit;font-weight:600;cursor:pointer;text-decoration:none;transition:background var(--dur)}
+.btn:hover{background:var(--surface-2)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn-danger{background:var(--st-fail);border-color:var(--st-fail);color:#fff}
+:root[data-theme="dark"] .btn-danger{color:#1A0A09}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-danger{color:#1A0A09}}
+.btn-danger:hover{filter:brightness(.92);background:var(--st-fail)}
+.btn-ghost{border-color:transparent;background:transparent}
+.btn-sm{min-height:28px;padding:2px 8px;font-size:var(--fs-sm)}
+.btn:disabled,.btn[aria-disabled="true"]{background:var(--surface-2);border-color:var(--border);color:var(--text-2);cursor:not-allowed;filter:none}
+.btn-run{font-weight:700}
+.btn-run .n{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 4px;border-radius:999px;background:var(--on-accent);color:var(--accent)}
+.btn-run.has-pending{box-shadow:0 0 0 3px var(--bg-stale),0 0 0 4px var(--st-stale)}
+
+/* ===== フォーム ===== */
+label{font-weight:600}
+.field{display:grid;gap:4px;min-width:0}
+.field .help{font-size:var(--fs-xs);color:var(--text-2);font-weight:400}
+.field .err{font-size:var(--fs-sm);color:var(--st-fail);font-weight:600}
+input[type=text],input[type=number],input[type=search],input[type=password],input[type=date],select,textarea{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r-sm);min-height:32px;padding:4px 8px;max-width:100%;min-width:0}
+textarea{min-height:64px;width:100%}
+input[aria-invalid="true"],select[aria-invalid="true"],textarea[aria-invalid="true"]{border-color:var(--st-fail);box-shadow:inset 0 0 0 1px var(--st-fail);background:var(--bg-fail)}
+input[type=checkbox],input[type=radio]{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.chk{display:inline-flex;align-items:center;gap:6px;min-height:28px;font-weight:400}
+.unit{display:inline-flex;align-items:center;gap:4px}
+.unit input{width:7.5em}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--sp-3)}
+fieldset{border:1px solid var(--border);border-radius:var(--r-md);padding:var(--sp-3);margin:0;min-width:0}
+legend{font-weight:700;padding:0 4px}
+.err-summary{border:2px solid var(--st-fail);background:var(--bg-fail);border-radius:var(--r-md);padding:var(--sp-2) var(--sp-3)}
+.err-summary h3{color:var(--st-fail)}
+
+/* ===== カード・パネル ===== */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-3) var(--sp-4);box-shadow:var(--shadow-1);min-width:0}
+.card>h2{display:flex;align-items:center;gap:var(--sp-2)}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--sp-3)}
+.dash{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--sp-3)}
+.span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-6{grid-column:span 6}.span-4{grid-column:span 4}
+.kpi{display:grid;gap:2px}
+.kpi .v{font-size:var(--fs-2xl);font-weight:700;line-height:1.2}
+.kpi .l{color:var(--text-2);font-size:var(--fs-sm)}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);min-width:0}
+.panel-h{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--border);min-height:40px}
+.panel-h h2{margin:0;font-size:var(--fs-md)}
+.panel-b{padding:var(--sp-3)}
+
+/* ===== 状態語彙 ===== */
+.st{display:inline-flex;align-items:center;gap:4px;font-weight:700;white-space:nowrap}
+.st .sym{display:inline-block;width:1.1em;text-align:center}
+.st-unset{color:var(--st-unset)}.st-ready{color:var(--st-ready)}.st-ok{color:var(--st-ok)}.st-fail{color:var(--st-fail)}.st-stale{color:var(--st-stale)}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:0 8px;border-radius:999px;font-size:var(--fs-sm);font-weight:700;border:1px solid currentColor;white-space:nowrap}
+.v-bad{color:var(--st-fail);background:var(--bg-fail)}
+.v-warn{color:var(--st-ready);background:var(--bg-warn)}
+.v-ok{color:var(--st-ok)}
+.v-miss{color:var(--st-unset);background:var(--surface-2)}
+
+/* ===== 通知 ===== */
+.alert{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-md);border:1px solid;border-left-width:4px}
+.alert .ico{font-weight:700;font-size:15px;line-height:1.4}
+.alert-ok{border-color:var(--st-ok);background:var(--bg-ok)} .alert-ok .ico{color:var(--st-ok)}
+.alert-warn{border-color:var(--st-ready);background:var(--bg-warn)} .alert-warn .ico{color:var(--st-ready)}
+.alert-err{border-color:var(--st-fail);background:var(--bg-fail)} .alert-err .ico{color:var(--st-fail)}
+.alert-info{border-color:var(--info-text);background:var(--info-bg);color:var(--info-text)}
+.alert p:last-child{margin:0}
+.banner-past{position:sticky;top:49px;z-index:15;display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;padding:var(--sp-2) var(--sp-3);background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-text);border-radius:var(--r-md);margin-bottom:var(--sp-3);font-weight:700}
+.toasts{position:fixed;right:16px;bottom:16px;z-index:50;display:grid;gap:8px;max-width:min(380px,calc(100vw - 32px))}
+.toasts .alert{box-shadow:var(--shadow-2);background-clip:padding-box}
+
+/* ===== タブ ===== */
+.tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--border);margin-bottom:var(--sp-3)}
+.tabs [role=tab]{font:inherit;font-weight:600;min-height:36px;padding:4px 14px;border:0;background:transparent;color:var(--text-2);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs [role=tab][aria-selected=true]{color:var(--text);border-bottom-color:var(--accent)}
+.tabs [role=tab]:hover{color:var(--text);background:var(--surface-2)}
+
+/* ===== 表 ===== */
+.tbl-wrap{overflow-x:auto;max-width:100%}
+table.dt{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm)}
+.dt th,.dt td{padding:0 8px;height:var(--row-h);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;vertical-align:middle}
+.dt thead th{background:var(--surface-2);font-weight:700;position:sticky;top:0;z-index:2;height:auto;padding:4px 8px;vertical-align:bottom}
+.dt th .u{display:block;font-weight:400;color:var(--text-2);font-size:var(--fs-xs)}
+.dt td.num,.dt th.num{text-align:right}
+.dt th button.sort{all:unset;cursor:pointer;display:block;min-height:24px;border-radius:var(--r-sm)}
+.dt th button.sort:focus-visible{outline:2px solid var(--focus)}
+.dt th[aria-sort=ascending] .ar::after{content:" ▲"} .dt th[aria-sort=descending] .ar::after{content:" ▼"}
+.dt th:not([aria-sort]) .ar::after{content:" ⇅";color:var(--text-2)}
+.dt tbody tr:hover td{background:var(--surface-2)}
+.dt tr.sel td{background:var(--accent-soft)!important;box-shadow:inset 0 1px 0 var(--accent),inset 0 -1px 0 var(--accent)}
+.dt td.c-bad{background:var(--bg-fail);color:var(--st-fail);font-weight:700}
+.dt td.c-warn{background:var(--bg-warn);color:var(--st-ready);font-weight:700}
+.dt tfoot td{position:sticky;bottom:0;background:var(--surface-2);font-weight:700;border-top:2px solid var(--border-strong);z-index:2}
+.vgrid{height:440px;overflow:auto;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);position:relative}
+.vgrid:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.grid-tools{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-3);align-items:end;margin-bottom:var(--sp-2)}
+.grid-tools .field{grid-template-columns:auto;gap:2px}
+.g-cards{display:none}
+.g-pager{display:none}
+.rowcard{border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);padding:var(--sp-2) var(--sp-3);display:grid;gap:2px}
+.rowcard .k{color:var(--text-2);font-size:var(--fs-xs)}
+.rowcard dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:4px 0 0}
+.rowcard dd{margin:0;font-weight:700}
+.rowcard dt{font-size:var(--fs-xs);color:var(--text-2)}
+.sel-detail{margin-top:var(--sp-2);font-size:var(--fs-sm)}
+
+/* ===== 作業画面 ===== */
+.ws{display:grid;grid-template-columns:232px minmax(0,1fr) 300px;grid-template-areas:"stages center evid" "mon mon mon";gap:var(--sp-3);align-items:start}
+.ws-stages{grid-area:stages}.ws-center{grid-area:center}.ws-evid{grid-area:evid}.ws-mon{grid-area:mon}
+.stages{list-style:none;margin:0;padding:var(--sp-2);display:grid;gap:0;counter-reset:stg}
+.stages li{position:relative}
+.stages li+li::before{content:"";position:absolute;left:21px;top:-6px;height:8px;border-left:2px solid var(--border-strong)}
+.stage-btn{all:unset;box-sizing:border-box;display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 6px;width:100%;padding:6px 8px;border-radius:var(--r-md);cursor:pointer;min-height:44px;border:1px solid transparent;margin:3px 0}
+.stage-btn:hover{background:var(--surface-2)}
+.stage-btn:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.stage-btn[aria-current=step]{background:var(--accent-soft);border-color:var(--accent)}
+.stage-btn .sym{grid-row:span 2;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:2px solid currentColor;font-weight:700;background:var(--surface)}
+.stage-btn .nm{font-weight:700;color:var(--text)}
+.stage-btn .sl{font-size:var(--fs-xs);font-weight:700}
+.stage-btn .lock{font-size:var(--fs-xs);color:var(--text-2);font-weight:400}
+.cond-tbl td,.cond-tbl th{white-space:normal;height:auto;padding:6px 8px}
+.cond-tbl tr.dirty td:first-child{box-shadow:inset 4px 0 0 var(--st-stale)}
+.dirty-tag{display:inline-block;margin-left:4px;font-size:var(--fs-xs);color:var(--st-stale);font-weight:700;border:1px solid var(--st-stale);border-radius:999px;padding:0 6px;background:var(--bg-stale)}
+.evid details{border-bottom:1px solid var(--border);padding:var(--sp-2) var(--sp-3)}
+.evid details:last-child{border-bottom:0}
+.evid summary{cursor:pointer;font-weight:700;min-height:28px;display:flex;align-items:center;gap:6px}
+.evid .kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 8px;font-size:var(--fs-sm);margin:6px 0 0}
+.evid .kv dt{color:var(--text-2)} .evid .kv dd{margin:0;overflow-wrap:anywhere}
+.hist{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px;font-size:var(--fs-sm)}
+.hist li{border-left:3px solid var(--border-strong);padding-left:8px}
+.mon-list{list-style:none;margin:0;padding:0;display:grid}
+.mon-list li{display:grid;grid-template-columns:96px 120px minmax(0,1fr) auto;gap:var(--sp-2);align-items:center;padding:4px var(--sp-3);border-bottom:1px solid var(--border);min-height:36px;font-size:var(--fs-sm)}
+.mon-list li:last-child{border-bottom:0}
+.fig-src{font-size:var(--fs-xs);color:var(--text-2);margin-top:4px;overflow-wrap:anywhere}
+.mobile-note{display:none}
+
+/* ===== スケルトン ===== */
+.skel{display:grid;gap:8px}
+.skel i{display:block;height:14px;border-radius:var(--r-sm);background:linear-gradient(90deg,var(--surface-2) 25%,var(--border) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.empty{display:grid;justify-items:center;gap:var(--sp-2);text-align:center;padding:var(--sp-6) var(--sp-4);border:1px dashed var(--border-strong);border-radius:var(--r-lg);color:var(--text-2)}
+.empty .big{font-size:28px;line-height:1}
+
+/* ===== チャート ===== */
+svg.chart{display:block;width:100%;height:auto;max-width:100%}
+svg.chart text{fill:var(--text);font:11px var(--font)}
+svg.chart .axis text{fill:var(--text-2)}
+svg.chart .grid line{stroke:var(--chart-grid)}
+svg.chart .series{stroke:var(--chart-1);fill:none;stroke-width:1.6}
+svg.chart .bar{fill:var(--chart-1)}
+svg.chart .th-warn{stroke:var(--st-ready);stroke-dasharray:6 4}
+svg.chart .th-bad{stroke:var(--st-fail);stroke-dasharray:2 3}
+svg.chart .mk-bad{stroke:var(--st-fail);stroke-width:2}
+svg.chart .lbl-warn{fill:var(--st-ready);font-weight:700}
+svg.chart .lbl-bad{fill:var(--st-fail);font-weight:700}
+
+/* ===== ダイアログ ===== */
+dialog{border:1px solid var(--border-strong);border-radius:var(--r-lg);padding:0;background:var(--surface);color:var(--text);box-shadow:var(--shadow-2);width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 48px)}
+dialog::backdrop{background:rgba(10,14,18,.55)}
+.dlg-h{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--border)}
+.dlg-h h2{margin:0}
+.dlg-b{padding:var(--sp-3) var(--sp-4);overflow:auto}
+.dlg-f{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--border)}
+.cmd-list{list-style:none;margin:var(--sp-2) 0 0;padding:0;display:grid;gap:2px;max-height:320px;overflow:auto}
+.cmd-list button{all:unset;box-sizing:border-box;display:flex;justify-content:space-between;gap:8px;width:100%;padding:6px 10px;border-radius:var(--r-md);cursor:pointer;min-height:32px}
+.cmd-list button:hover,.cmd-list button:focus-visible{background:var(--accent-soft);outline:2px solid var(--focus);outline-offset:-2px}
+
+/* ===== 部品一覧 ===== */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--sp-2)}
+.sw{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;align-items:center;border:1px solid var(--border);border-radius:var(--r-md);padding:6px;background:var(--surface)}
+.sw i{width:40px;height:40px;border-radius:var(--r-sm);border:1px solid var(--border-strong)}
+.sw code{display:block;font-size:var(--fs-xs);overflow-wrap:anywhere}
+.reorder{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-width:420px}
+.reorder li{display:flex;align-items:center;gap:8px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);min-height:40px}
+.reorder li.drag-over{border-color:var(--accent);box-shadow:inset 0 2px 0 var(--accent)}
+.reorder .grip{cursor:grab;color:var(--text-2);user-select:none}
+.demo-side{display:grid;grid-template-columns:160px minmax(0,1fr);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;min-height:140px}
+.demo-side nav{background:var(--surface-2);padding:8px}
+.demo-side nav a{display:block;padding:4px 8px;border-radius:var(--r-sm);min-height:28px}
+.demo-side .c{padding:12px;background:var(--surface)}
+.report{font-size:var(--fs-lg);line-height:1.8;max-width:72ch}
+.report h3{font-size:var(--fs-lg);margin-top:var(--sp-4)}
+
+/* ===== レスポンシブ ===== */
+@media (max-width:1180px){
+  .ws{grid-template-columns:210px minmax(0,1fr);grid-template-areas:"stages center" "evid evid" "mon mon"}
+  .span-8,.span-4{grid-column:span 12}
+}
+@media (max-width:760px){
+  html{scroll-padding-bottom:96px}
+  .topbar{padding:var(--sp-2) var(--sp-4);gap:var(--sp-2)}
+  .proj{order:3;width:100%}
+  .top-actions{margin-left:0;width:100%}
+  .hide-sm{display:none!important}
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .sidenav{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:30;border-right:0;border-top:1px solid var(--border);padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
+  .sidenav ul{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .sidenav a{flex-direction:column;gap:0;min-height:52px;padding:4px 2px;font-size:var(--fs-xs);text-align:center;justify-content:center}
+  .sidenav a[aria-current="page"]{box-shadow:inset 0 3px 0 var(--accent)}
+  .sidenav .full{display:none} .sidenav .short{display:inline}
+  .nav-foot{display:none}
+  main{padding:var(--sp-3) var(--sp-4) 96px}
+  .span-6{grid-column:span 12}
+  .ws{grid-template-columns:minmax(0,1fr);grid-template-areas:"stages" "center" "evid" "mon"}
+  .stages{padding:var(--sp-1)}
+  .mon-list li{grid-template-columns:minmax(0,1fr) auto;}
+  .mon-list li .m-msg{grid-column:1 / -1}
+  .vgrid{display:none}
+  .g-cards{display:grid;gap:var(--sp-2)}
+  .g-pager{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;justify-content:space-between;margin-top:var(--sp-2)}
+  .mobile-note{display:block}
+  table.resp thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.resp,table.resp tbody,table.resp tr,table.resp td{display:block;width:100%}
+  table.resp tr{border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:var(--sp-2);padding:var(--sp-2) var(--sp-3);background:var(--surface)}
+  table.resp td{display:flex;justify-content:space-between;gap:var(--sp-3);height:auto;padding:2px 0;border:0;white-space:normal;text-align:right}
+  table.resp td::before{content:attr(data-label);color:var(--text-2);font-weight:400;text-align:left}
+  table.resp tfoot td{position:static}
+  .demo-side{grid-template-columns:minmax(0,1fr)}
+  .toasts{bottom:76px}
+  dialog{width:calc(100vw - 24px)}
+  .banner-past{top:0}
+}
+@media (min-width:761px){.sidenav .short{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .skel i{background:var(--surface-2)}
+}
+@media print{
+  .topbar,.sidenav,.toasts,.no-print,.skip{display:none!important}
+  .shell{display:block} main{padding:0}
+  body{background:#fff;color:#000}
+  .ws{display:block}
+}
+</style>
+</head>
+<body data-role="grad">
+<a class="skip" href="#main">本文へスキップ</a>
+
+<header class="topbar" data-f6 tabindex="-1">
+  <div class="brand"><span class="brand-mark" aria-hidden="true">▤</span>Pipeline Ledger <span class="tag-dummy">試作・ダミーデータ</span></div>
+  <div class="proj">プロジェクト: 室内空気質 × 建材LCA 2026（学内サーバー保存）／ パイプライン <b id="verTop">v5</b></div>
+  <div class="top-actions">
+    <label for="roleSel" class="small">表示ロール</label>
+    <select id="roleSel" aria-describedby="roleHelp">
+      <option value="prof">教授</option>
+      <option value="grad" selected>大学院生</option>
+      <option value="ug">学部生</option>
+    </select>
+    <span id="roleHelp" class="sr-only">ロールを切り替えると、表示される機能と既定の画面が変わります</span>
+    <button class="btn btn-sm hide-sm" id="cmdBtn" type="button">コマンド <kbd>Ctrl</kbd>+<kbd>K</kbd></button>
+    <button class="btn btn-sm" id="themeBtn" type="button" aria-label="配色の切替（現在: 自動）">配色: 自動</button>
+    <button class="btn btn-sm" id="helpBtn" type="button">？ ヘルプ</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sidenav" aria-label="主要画面" data-f6 tabindex="-1">
+    <ul>
+      <li><a href="#dashboard" data-nav="dashboard"><span class="nav-ico" aria-hidden="true">▦</span><span class="full">ダッシュボード</span><span class="short">ホーム</span></a></li>
+      <li><a href="#workspace" data-nav="workspace"><span class="nav-ico" aria-hidden="true">⇢</span><span class="full">作業（パイプライン）</span><span class="short">作業</span></a></li>
+      <li><a href="#detail" data-nav="detail"><span class="nav-ico" aria-hidden="true">◫</span><span class="full">結果の詳細</span><span class="short">結果</span></a></li>
+      <li><a href="#settings" data-nav="settings"><span class="nav-ico" aria-hidden="true">⚙</span><span class="full">設定・管理</span><span class="short">設定</span></a></li>
+      <li><a href="#components" data-nav="components"><span class="nav-ico" aria-hidden="true">◇</span><span class="full">共通部品</span><span class="short">部品</span></a></li>
+    </ul>
+    <div class="nav-foot">
+      <p>保存先: 学内サーバー（既定）</p>
+      <p><kbd>?</kbd> ショートカット一覧</p>
+    </div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <!-- ===================== ダッシュボード ===================== -->
+    <section id="view-dashboard" class="view" aria-labelledby="h-dashboard">
+      <div class="view-head">
+        <h1 id="h-dashboard" tabindex="-1">ダッシュボード</h1>
+        <span class="muted small" id="roleLead"></span>
+      </div>
+
+      <div class="dash">
+        <!-- 学部生: 測定入力を既定に -->
+        <section class="card span-12" data-roles="ug" aria-labelledby="h-entry">
+          <h2 id="h-entry">測定入力（学部生の既定画面）</h2>
+          <p class="muted small">部屋と装置は前回の入力を引き継ぎます（同じ内容を二度入力しない）。単位を変えると保存時に µg/m³・ppm に換算します。</p>
+          <form id="entryForm" novalidate>
+            <div id="entryErrors" class="err-summary" tabindex="-1" hidden></div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="eRoom">部屋</label>
+                <select id="eRoom" aria-describedby="eRoomH"><option>C101</option><option>C102</option><option selected>B204</option><option>B205</option><option>L1</option></select>
+                <span class="help" id="eRoomH">前回: B204（引き継ぎ）</span>
+              </div>
+              <div class="field">
+                <label for="eInst">装置</label>
+                <select id="eInst"><option>PC-01 光散乱式粒子計数器</option><option selected>PC-02 光散乱式粒子計数器</option></select>
+              </div>
+              <div class="field">
+                <label for="ePm">PM2.5 <span class="muted">（必須）</span></label>
+                <span class="unit"><input id="ePm" type="text" inputmode="decimal" aria-describedby="ePmH ePmE" autocomplete="off"><select id="ePmU" aria-label="PM2.5 の単位"><option value="ug">µg/m³</option><option value="mg">mg/m³</option></select></span>
+                <span class="help" id="ePmH">範囲 0〜1000 µg/m³。注意 35 以上、異常 55 以上</span>
+                <span class="err" id="ePmE" hidden></span>
+              </div>
+              <div class="field">
+                <label for="eCo2">CO2 <span class="muted">（必須）</span></label>
+                <span class="unit"><input id="eCo2" type="text" inputmode="decimal" aria-describedby="eCo2H eCo2E" autocomplete="off"><select id="eCo2U" aria-label="CO2 の単位"><option value="ppm">ppm</option><option value="pct">%</option></select></span>
+                <span class="help" id="eCo2H">範囲 300〜10000 ppm。注意 1000 以上</span>
+                <span class="err" id="eCo2E" hidden></span>
+              </div>
+              <div class="field">
+                <label for="ePc">浮遊粒子数 ≥0.5 µm</label>
+                <span class="unit"><input id="ePc" type="text" inputmode="numeric" aria-describedby="ePcH ePcE" autocomplete="off"><span class="muted">個/m³</span></span>
+                <span class="help" id="ePcH">ISO 14644-1 クラスを自動で判定: <output id="eIso" for="ePc">—</output></span>
+                <span class="err" id="ePcE" hidden></span>
+              </div>
+            </div>
+            <div class="row" style="margin-top:12px">
+              <button class="btn btn-primary" type="submit">保存して次の測定へ</button>
+              <button class="btn" type="reset">入力を消す</button>
+              <span class="muted small">保存先: 台帳「測定」・取り込み段（v5）</span>
+            </div>
+          </form>
+        </section>
+
+        <section class="span-12" aria-label="主要指標">
+          <div class="grid-cards" id="kpis"></div>
+        </section>
+
+        <section class="card span-8" aria-labelledby="h-pipe">
+          <h2 id="h-pipe">パイプラインの状態 <span class="muted small">室内空気質×建材LCA / v5</span></h2>
+          <ol class="row" id="dashStages" style="list-style:none;padding:0;margin:0 0 8px;gap:6px 14px"></ol>
+          <div class="row"><a class="btn btn-primary" href="#workspace">作業画面で開く</a><span class="muted small">失敗した段から再開できます</span></div>
+        </section>
+
+        <section class="card span-4" aria-labelledby="h-anom">
+          <h2 id="h-anom">異常値（直近）</h2>
+          <ul id="anomList" class="hist"></ul>
+        </section>
+
+        <section class="card span-6" aria-labelledby="h-approve" data-roles="prof">
+          <h2 id="h-approve">承認待ち <span class="muted small">（任意の機能）</span></h2>
+          <ul class="hist" id="approveList"></ul>
+        </section>
+
+        <section class="card span-12" aria-labelledby="h-jobs">
+          <div class="row"><h2 id="h-jobs" style="margin:0">最近の計算ジョブ</h2><span class="spacer"></span><a href="#detail" class="small">J-0412 の詳細を見る</a></div>
+          <p class="muted small">列見出しで並べ替え。スマートフォンではカード一覧で表示します。</p>
+          <div class="tbl-wrap"><table class="dt resp" id="jobsTable"></table></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================== 作業画面 ===================== -->
+    <section id="view-workspace" class="view" aria-labelledby="h-workspace" hidden>
+      <div class="view-head">
+        <h1 id="h-workspace" tabindex="-1">作業: パイプライン <span id="verWs">v5</span></h1>
+        <div class="tabs" role="tablist" aria-label="作業の表示" id="wsModeTabs" style="margin:0;border:0">
+          <button role="tab" id="t-stage" aria-controls="p-stage" aria-selected="true">段の表示</button>
+          <button role="tab" id="t-ledger" aria-controls="p-ledger" aria-selected="false" tabindex="-1">台帳</button>
+        </div>
+        <span class="spacer"></span>
+        <span class="muted small" id="runHint" aria-live="polite"></span>
+        <button class="btn btn-primary btn-run" id="runBtn" type="button" aria-describedby="runKey">未適用 <span class="n" id="pendN">0</span> 項目 ▶ 実行</button>
+        <span id="runKey" class="sr-only">ショートカット Ctrl+Enter</span>
+      </div>
+
+      <div id="p-stage" role="tabpanel" aria-labelledby="t-stage">
+        <div class="ws">
+          <nav class="panel ws-stages" aria-labelledby="h-stages" data-f6 tabindex="-1">
+            <div class="panel-h"><h2 id="h-stages">処理の段</h2><span class="spacer"></span><span class="muted small"><kbd>[</kbd><kbd>]</kbd></span></div>
+            <ol class="stages" id="stageList"></ol>
+            <p class="muted small" style="padding:0 12px 10px">依存: 取り込み → 検証 → Math IR → ソルバー → レポート、Math IR → LCA → レポート</p>
+          </nav>
+
+          <section class="panel ws-center" aria-labelledby="h-stage" data-f6 tabindex="-1">
+            <div class="panel-h"><h2 id="h-stage">段</h2><span id="stageState"></span><span class="spacer"></span><span class="muted small" id="stageDeps"></span></div>
+            <div class="panel-b">
+              <p class="alert alert-info mobile-note"><span class="ico" aria-hidden="true">ⓘ</span><span>スマートフォンでは条件の編集はできません（状態の確認・承認・再実行の指示のみ）。学部生の測定入力はホーム画面から行えます。</span></p>
+              <div class="tabs" role="tablist" aria-label="段の内容" id="stageTabs">
+                <button role="tab" id="t-cond" aria-controls="p-cond" aria-selected="true">条件</button>
+                <button role="tab" id="t-out" aria-controls="p-out" aria-selected="false" tabindex="-1">出力</button>
+              </div>
+              <div id="p-cond" role="tabpanel" aria-labelledby="t-cond" tabindex="0"></div>
+              <div id="p-out" role="tabpanel" aria-labelledby="t-out" tabindex="0" hidden></div>
+            </div>
+          </section>
+
+          <aside class="panel ws-evid evid" aria-labelledby="h-evid" data-f6 tabindex="-1">
+            <div class="panel-h"><h2 id="h-evid">根拠</h2><span class="muted small">この段の来歴と履歴</span></div>
+            <div id="evidBody"></div>
+          </aside>
+
+          <section class="panel ws-mon" aria-labelledby="h-mon" data-f6 tabindex="-1">
+            <div class="panel-h"><h2 id="h-mon">ジョブモニターと問題</h2><span class="spacer"></span><button class="btn btn-sm btn-ghost" id="monToggle" aria-expanded="true" aria-controls="monList" type="button">折りたたむ</button></div>
+            <ul class="mon-list" id="monList" aria-live="polite"></ul>
+          </section>
+        </div>
+      </div>
+
+      <div id="p-ledger" role="tabpanel" aria-labelledby="t-ledger" hidden>
+        <div class="panel"><div class="panel-b" id="ledgerHost"></div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 詳細 ===================== -->
+    <section id="view-detail" class="view" aria-labelledby="h-detail" hidden>
+      <div id="pastBanner" class="banner-past" role="status" hidden></div>
+      <div class="view-head">
+        <h1 id="h-detail" tabindex="-1">結果の詳細: ジョブ J-0412</h1>
+        <span class="st st-ok"><span class="sym" aria-hidden="true">●</span>成功</span>
+        <span class="spacer"></span>
+        <label for="verSel" class="small">条件の版</label>
+        <select id="verSel"><option value="5">v5（最新）</option><option value="4">v4</option><option value="3">v3</option></select>
+      </div>
+      <div class="row no-print" style="margin-bottom:12px">
+        <button class="btn btn-primary" id="rerunBtn" type="button">↻ 同条件で再実行</button>
+        <button class="btn" data-export="csv" type="button">CSV で書き出す</button>
+        <button class="btn" data-export="xls" type="button">Excel 用に書き出す</button>
+        <button class="btn" data-export="pdf" type="button">PDF（印刷）</button>
+        <button class="btn" id="copyCmd" type="button">再現コマンドをコピー</button>
+      </div>
+
+      <div class="dash">
+        <div class="span-12 grid-cards" id="detailKpis"></div>
+
+        <section class="card span-8" aria-labelledby="h-ts">
+          <h2 id="h-ts">PM2.5 の時系列（B205、10分値、2026-10-01）</h2>
+          <figure style="margin:0">
+            <div id="tsChart"></div>
+            <figcaption class="fig-src" id="tsSrc"></figcaption>
+          </figure>
+          <details style="margin-top:8px"><summary>この図のデータ表（1時間ごとの平均・最大）</summary><div class="tbl-wrap" style="max-height:320px;overflow:auto"><table class="dt resp" id="tsTable"></table></div></details>
+        </section>
+
+        <section class="card span-4" aria-labelledby="h-prov">
+          <h2 id="h-prov">計算根拠と来歴</h2>
+          <dl class="kv evid" id="provList" style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 8px;font-size:12.5px;margin:0"></dl>
+        </section>
+
+        <section class="card span-6" aria-labelledby="h-lcab">
+          <h2 id="h-lcab">建材別 CO2 排出量</h2>
+          <figure style="margin:0"><div id="lcaChartDetail"></div><figcaption class="fig-src" id="lcaSrcDetail"></figcaption></figure>
+          <details style="margin-top:8px"><summary>この図のデータ表</summary><div class="tbl-wrap"><table class="dt resp" id="lcaTableDetail"></table></div></details>
+        </section>
+
+        <section class="card span-6" aria-labelledby="h-diff">
+          <h2 id="h-diff">変更履歴と版の差分</h2>
+          <div class="tbl-wrap"><table class="dt resp" id="diffTable"></table></div>
+          <h3 style="margin-top:12px">再現コマンド（GUI 操作の書き出し）</h3>
+          <pre id="reproCmd"></pre>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================== 設定 ===================== -->
+    <section id="view-settings" class="view" aria-labelledby="h-settings" hidden>
+      <div class="view-head"><h1 id="h-settings" tabindex="-1">設定・管理</h1><span class="muted small">研究室の標準（テンプレート）と表示の設定</span></div>
+      <div class="tabs" role="tablist" aria-label="設定の分類" id="setTabs">
+        <button role="tab" id="t-s1" aria-controls="p-s1" aria-selected="true">閾値テンプレート</button>
+        <button role="tab" id="t-s2" aria-controls="p-s2" aria-selected="false" tabindex="-1">ロールと権限</button>
+        <button role="tab" id="t-s3" aria-controls="p-s3" aria-selected="false" tabindex="-1">表示</button>
+        <button role="tab" id="t-s4" aria-controls="p-s4" aria-selected="false" tabindex="-1">認証と保存先</button>
+        <button role="tab" id="t-s5" aria-controls="p-s5" aria-selected="false" tabindex="-1">ショートカット</button>
+      </div>
+
+      <div id="p-s1" role="tabpanel" aria-labelledby="t-s1" tabindex="0" class="card">
+        <h2>閾値テンプレート「研究室標準 2026」</h2>
+        <p class="muted small">異常値の判定に使います。色の意味は研究室で固定し、利用者は変更できません（記号・文字も併記）。</p>
+        <form id="thForm" novalidate>
+          <div id="thErrors" class="err-summary" tabindex="-1" hidden style="margin-bottom:12px"></div>
+          <div class="form-grid">
+            <div class="field"><label for="thPmW">PM2.5 注意</label><span class="unit"><input id="thPmW" type="text" inputmode="decimal" value="35" aria-describedby="thPmWH thPmWE"><span class="muted">µg/m³</span></span><span class="help" id="thPmWH">0〜500。異常より小さい値</span><span class="err" id="thPmWE" hidden></span></div>
+            <div class="field"><label for="thPmB">PM2.5 異常</label><span class="unit"><input id="thPmB" type="text" inputmode="decimal" value="55" aria-describedby="thPmBH thPmBE"><span class="muted">µg/m³</span></span><span class="help" id="thPmBH">0〜500</span><span class="err" id="thPmBE" hidden></span></div>
+            <div class="field"><label for="thCoW">CO2 注意</label><span class="unit"><input id="thCoW" type="text" inputmode="numeric" value="1000" aria-describedby="thCoWH thCoWE"><span class="muted">ppm</span></span><span class="help" id="thCoWH">400〜5000</span><span class="err" id="thCoWE" hidden></span></div>
+            <div class="field"><label for="thCoB">CO2 異常</label><span class="unit"><input id="thCoB" type="text" inputmode="numeric" value="1500" aria-describedby="thCoBH thCoBE"><span class="muted">ppm</span></span><span class="help" id="thCoBH">400〜10000</span><span class="err" id="thCoBE" hidden></span></div>
+          </div>
+          <div class="row" style="margin-top:12px"><button class="btn btn-primary" type="submit">テンプレートを保存</button><button class="btn btn-danger" type="button" id="resetTh">初期値に戻す…</button></div>
+        </form>
+      </div>
+
+      <div id="p-s2" role="tabpanel" aria-labelledby="t-s2" tabindex="0" class="card" hidden>
+        <h2>ロールと権限</h2>
+        <div class="tbl-wrap"><table class="dt resp">
+          <thead><tr><th>機能</th><th>教授</th><th>大学院生</th><th>学部生</th></tr></thead>
+          <tbody>
+            <tr><td data-label="機能">測定入力・取り込み</td><td data-label="教授">✓ 可</td><td data-label="大学院生">✓ 可</td><td data-label="学部生">✓ 可</td></tr>
+            <tr><td data-label="機能">検証の閾値の変更</td><td data-label="教授">✓ 可</td><td data-label="大学院生">✓ 可</td><td data-label="学部生">— 閲覧のみ</td></tr>
+            <tr><td data-label="機能">Math IR・ソルバー・LCA の条件</td><td data-label="教授">✓ 可</td><td data-label="大学院生">✓ 可</td><td data-label="学部生">— 非表示</td></tr>
+            <tr><td data-label="機能">承認・差し戻し（任意）</td><td data-label="教授">✓ 可</td><td data-label="大学院生">— 申請のみ</td><td data-label="学部生">— 申請のみ</td></tr>
+            <tr><td data-label="機能">テンプレートの編集</td><td data-label="教授">✓ 可</td><td data-label="大学院生">— 提案のみ</td><td data-label="学部生">— 不可</td></tr>
+          </tbody></table></div>
+      </div>
+
+      <div id="p-s3" role="tabpanel" aria-labelledby="t-s3" tabindex="0" class="card" hidden>
+        <h2>表示</h2>
+        <div class="form-grid">
+          <fieldset><legend>行の高さ</legend>
+            <label class="chk"><input type="radio" name="dens" value="normal" checked> 標準（26px）</label><br>
+            <label class="chk"><input type="radio" name="dens" value="compact"> 詰めた表示（22px）</label>
+          </fieldset>
+          <fieldset><legend>配色</legend>
+            <label class="chk"><input type="radio" name="theme" value="auto" checked> OS に合わせる</label><br>
+            <label class="chk"><input type="radio" name="theme" value="light"> ライト</label><br>
+            <label class="chk"><input type="radio" name="theme" value="dark"> ダーク</label>
+          </fieldset>
+        </div>
+        <h3 style="margin-top:16px" id="h-colorder">台帳の列の並び順</h3>
+        <p class="muted small" id="colOrderHelp">ドラッグで並べ替えできます。ドラッグを使わない場合は「↑」「↓」ボタンを使います（同じ結果になります）。</p>
+        <ol class="reorder" id="colOrder" aria-labelledby="h-colorder" aria-describedby="colOrderHelp"></ol>
+      </div>
+
+      <div id="p-s4" role="tabpanel" aria-labelledby="t-s4" tabindex="0" class="card" hidden>
+        <h2>認証と保存先</h2>
+        <div class="stack">
+          <div class="alert alert-ok"><span class="ico" aria-hidden="true">✓</span><div><p><b>学内シングルサインオン</b>（大学アカウント）でサインインしています。</p><p class="small">画像の文字入力や計算問題などの認知テストは使いません。パスキー、またはパスワード管理ツールからの貼り付けに対応します。</p></div></div>
+          <fieldset><legend>サインイン方法</legend>
+            <label class="chk"><input type="checkbox" checked> 学内シングルサインオン</label><br>
+            <label class="chk"><input type="checkbox" checked> パスキー（生体認証・セキュリティキー）</label><br>
+            <label class="chk"><input type="checkbox" checked> パスワード欄への貼り付けを許可</label>
+          </fieldset>
+          <fieldset><legend>データの保存先</legend>
+            <label class="chk"><input type="radio" name="store" checked> 学内サーバー（既定・推奨）</label><br>
+            <label class="chk"><input type="radio" name="store" disabled> 外部クラウド（学内規程の承認が必要なため無効）</label>
+          </fieldset>
+        </div>
+      </div>
+
+      <div id="p-s5" role="tabpanel" aria-labelledby="t-s5" tabindex="0" class="card" hidden>
+        <h2>キーボードショートカット</h2>
+        <div class="tbl-wrap"><table class="dt resp" id="keysTable"></table></div>
+      </div>
+    </section>
+
+    <!-- ===================== 部品 ===================== -->
+    <section id="view-components" class="view" aria-labelledby="h-components" hidden>
+      <div class="view-head"><h1 id="h-components" tabindex="-1">共通部品とトークン</h1><span class="muted small">この一覧の部品は全て実際に動きます</span></div>
+      <div class="dash">
+        <section class="card span-6" aria-labelledby="c-btn"><h2 id="c-btn">ボタン</h2>
+          <div class="row"><button class="btn btn-primary" type="button" data-toast="ok">主ボタン</button><button class="btn" type="button" data-toast="info">副ボタン</button><button class="btn btn-danger" type="button" id="dangerDemo">危険ボタン…</button><button class="btn" type="button" disabled>無効</button><button class="btn btn-ghost" type="button">文字ボタン</button></div>
+          <p class="muted small" style="margin-top:8px">最小の高さ 32px（小 28px）。アイコンだけのボタンは作らず、文字ラベルを付けます。</p>
+        </section>
+        <section class="card span-6" aria-labelledby="c-form"><h2 id="c-form">フォーム（ラベル・ヘルプ・エラー）</h2>
+          <form id="demoForm" novalidate>
+            <div class="field"><label for="dQty">コンクリート数量</label><span class="unit"><input id="dQty" type="text" inputmode="decimal" value="-20" aria-describedby="dQtyH dQtyE" aria-invalid="true"><span class="muted">m³</span></span><span class="help" id="dQtyH">0〜100000 m³。設計図書の数量表から入力</span><span class="err" id="dQtyE">✕ 0 以上の値を入力してください。負の値は入力できません（例: 1200）。</span></div>
+            <div class="row" style="margin-top:8px"><button class="btn btn-primary" type="submit">検証する</button></div>
+          </form>
+        </section>
+        <section class="card span-6" aria-labelledby="c-dlg"><h2 id="c-dlg">ダイアログ</h2>
+          <p class="small">&lt;dialog&gt; の showModal を使います。開くと最初の操作対象へ、閉じると開いたボタンへフォーカスを戻します。<kbd>Esc</kbd> で閉じます。</p>
+          <button class="btn" type="button" id="openDemoDlg">ダイアログを開く</button>
+        </section>
+        <section class="card span-6" aria-labelledby="c-tabs"><h2 id="c-tabs">タブ（矢印キー・Home・End）</h2>
+          <div class="tabs" role="tablist" aria-label="部品のタブ例" id="demoTabs">
+            <button role="tab" id="t-d1" aria-controls="p-d1" aria-selected="true">条件</button>
+            <button role="tab" id="t-d2" aria-controls="p-d2" aria-selected="false" tabindex="-1">出力</button>
+            <button role="tab" id="t-d3" aria-controls="p-d3" aria-selected="false" tabindex="-1">根拠</button>
+          </div>
+          <div id="p-d1" role="tabpanel" aria-labelledby="t-d1" tabindex="0">条件タブの内容。</div>
+          <div id="p-d2" role="tabpanel" aria-labelledby="t-d2" tabindex="0" hidden>出力タブの内容。</div>
+          <div id="p-d3" role="tabpanel" aria-labelledby="t-d3" tabindex="0" hidden>根拠タブの内容。</div>
+        </section>
+        <section class="card span-6" aria-labelledby="c-nav"><h2 id="c-nav">ナビゲーションとサイドバー</h2>
+          <div class="demo-side"><nav aria-label="例のサイドバー"><a href="#components" aria-current="page">測定</a><a href="#components">LCA 条件</a><a href="#components">ジョブ</a></nav><div class="c small">デスクトップでは左の固定サイドバー、スマートフォンでは画面下部のナビゲーション（5項目・高さ 52px）に変わります。現在地は太字・背景・左の線の3つで示します。</div></div>
+        </section>
+        <section class="card span-6" aria-labelledby="c-alert"><h2 id="c-alert">成功・警告・エラー・情報</h2>
+          <div class="stack">
+            <div class="alert alert-ok" role="status"><span class="ico" aria-hidden="true">●</span><p><b>成功:</b> ジョブ J-0414 が完了しました（2.4 秒）。</p></div>
+            <div class="alert alert-warn"><span class="ico" aria-hidden="true">△</span><p><b>注意:</b> 欠測が 14 行あります。検証の条件で「除外」になっています。</p></div>
+            <div class="alert alert-err"><span class="ico" aria-hidden="true">✕</span><p><b>エラー:</b> ソルバーが収束しません。最大反復回数を 200 以上にしてください。</p></div>
+            <div class="alert alert-info"><span class="ico" aria-hidden="true">ⓘ</span><p><b>情報:</b> 過去版 v4 を表示しています。</p></div>
+          </div>
+        </section>
+        <section class="card span-12" aria-labelledby="c-state"><h2 id="c-state">状態の語彙（固定）と値の判定</h2>
+          <div class="row" id="stateVocab"></div>
+          <div class="row" style="margin-top:8px"><span class="pill v-bad">⚠ 異常</span><span class="pill v-warn">△ 注意</span><span class="pill v-ok">✓ 正常</span><span class="pill v-miss">— 欠測</span><span class="dirty-tag">未適用</span></div>
+        </section>
+        <section class="card span-6" aria-labelledby="c-table"><h2 id="c-table">並べ替えできる表</h2><div class="tbl-wrap"><table class="dt resp" id="demoTable"></table></div></section>
+        <section class="card span-6" aria-labelledby="c-chart"><h2 id="c-chart">チャートと代替表</h2><figure style="margin:0"><div id="demoChart"></div><figcaption class="fig-src">図の入力: ダミー係数表 DMY-2026、条件 v5</figcaption></figure><details><summary>データ表</summary><div class="tbl-wrap"><table class="dt resp" id="demoChartTable"></table></div></details></section>
+        <section class="card span-4" aria-labelledby="c-card"><h2 id="c-card">カード</h2><div class="kpi"><span class="l">ISO クラス（C101）</span><span class="v">5</span><span class="small st st-ok"><span class="sym" aria-hidden="true">●</span>基準内（クラス 6 以下）</span></div></section>
+        <section class="card span-4" aria-labelledby="c-empty"><h2 id="c-empty">空状態</h2><div class="empty"><span class="big" aria-hidden="true">∅</span><p><b>条件に一致する行はありません</b></p><p class="small">絞り込みを解除するか、期間を広げてください。</p><button class="btn btn-sm" type="button" data-toast="info">絞り込みを解除</button></div></section>
+        <section class="card span-4" aria-labelledby="c-skel"><h2 id="c-skel">読み込み中（スケルトン）</h2><div class="skel" role="status" aria-label="読み込み中"><i style="width:70%"></i><i></i><i style="width:85%"></i><i style="width:50%"></i></div><p class="muted small" style="margin-top:8px">動きを減らす設定ではアニメーションを止めます。</p></section>
+        <section class="card span-12" aria-labelledby="c-tok"><h2 id="c-tok">カラートークン（現在の配色での値）</h2><div class="swatches" id="swatches"></div></section>
+        <section class="card span-6" aria-labelledby="c-type"><h2 id="c-type">文字サイズ</h2><div id="typeScale" class="stack"></div></section>
+        <section class="card span-6" aria-labelledby="c-space"><h2 id="c-space">余白と角丸</h2><div id="spaceScale" class="stack"></div></section>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<div id="live" class="sr-only" aria-live="polite"></div>
+<div id="liveA" class="sr-only" aria-live="assertive"></div>
+
+<!-- ===== ダイアログ ===== -->
+<dialog id="dlgRerun" aria-labelledby="dlgRerunH">
+  <div class="dlg-h"><h2 id="dlgRerunH">同条件で再実行</h2></div>
+  <div class="dlg-b stack">
+    <p>次の条件で J-0412 を再実行し、結果を元のジョブと比べます。</p>
+    <dl class="kv evid" id="rerunKv" style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 8px;margin:0"></dl>
+    <label class="chk"><input type="checkbox" id="rrSeed" checked> 同じ乱数シード（42）を使う</label>
+    <label class="chk"><input type="checkbox" id="rrCross" checked> 3つのエンジンで照合する（SymPy / SageMath / MATLAB）</label>
+  </div>
+  <div class="dlg-f"><button class="btn" type="button" data-close>キャンセル</button><button class="btn btn-primary" type="button" id="rrGo">再実行する</button></div>
+</dialog>
+
+<dialog id="dlgHelp" aria-labelledby="dlgHelpH">
+  <div class="dlg-h"><h2 id="dlgHelpH">ヘルプとショートカット</h2><span class="spacer"></span><button class="btn btn-sm" type="button" data-close>閉じる</button></div>
+  <div class="dlg-b stack">
+    <p class="small">ヘルプは全ての画面で右上の同じ位置にあります。研究室の窓口: 実験室 B204（内線 0000・ダミー）。</p>
+    <div class="tbl-wrap"><table class="dt" id="keysTable2"></table></div>
+  </div>
+</dialog>
+
+<dialog id="dlgCmd" aria-labelledby="dlgCmdH">
+  <div class="dlg-h"><h2 id="dlgCmdH">コマンドパレット</h2></div>
+  <div class="dlg-b">
+    <label for="cmdQ" class="sr-only">コマンドを検索</label>
+    <input id="cmdQ" type="search" placeholder="例: 実行、CSV、設定" style="width:100%" autocomplete="off" aria-controls="cmdList">
+    <ul class="cmd-list" id="cmdList"></ul>
+  </div>
+  <div class="dlg-f"><button class="btn" type="button" data-close>閉じる</button></div>
+</dialog>
+
+<dialog id="dlgConfirm" aria-labelledby="dlgConfirmH">
+  <div class="dlg-h"><h2 id="dlgConfirmH">確認</h2></div>
+  <div class="dlg-b"><p id="dlgConfirmMsg"></p></div>
+  <div class="dlg-f"><button class="btn" type="button" data-close autofocus>キャンセル</button><button class="btn btn-danger" type="button" id="dlgConfirmGo">実行する</button></div>
+</dialog>
+
+<dialog id="dlgDemo" aria-labelledby="dlgDemoH">
+  <div class="dlg-h"><h2 id="dlgDemoH">ダイアログの例</h2></div>
+  <div class="dlg-b"><div class="field"><label for="dlgName">ジョブのメモ</label><input id="dlgName" type="text" value="係数表を v2.1 に更新"><span class="help">閉じると、開いたボタンにフォーカスが戻ります</span></div></div>
+  <div class="dlg-f"><button class="btn" type="button" data-close>キャンセル</button><button class="btn btn-primary" type="button" data-close>保存</button></div>
+</dialog>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = (n, d = 1) => n == null ? '—' : Number(n).toLocaleString('ja-JP', {minimumFractionDigits: d, maximumFractionDigits: d});
+const mq = window.matchMedia('(max-width: 760px)');
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('pl:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('pl:' + k, JSON.stringify(v)); } catch (e) {} }
+};
+function announce(msg, assertive) {
+  const el = assertive ? $('#liveA') : $('#live');
+  el.textContent = ''; setTimeout(() => { el.textContent = msg; }, 40);
+}
+function toast(kind, msg) {
+  const ico = {ok: '●', warn: '△', err: '✕', info: 'ⓘ'}[kind] || 'ⓘ';
+  const lab = {ok: '成功', warn: '注意', err: 'エラー', info: '情報'}[kind] || '情報';
+  const d = document.createElement('div');
+  d.className = 'alert alert-' + kind;
+  d.innerHTML = `<span class="ico" aria-hidden="true">${ico}</span><p><b>${lab}:</b> ${esc(msg)}</p>`;
+  $('#toasts').appendChild(d);
+  setTimeout(() => d.remove(), 5000);
+}
+
+/* ---------- ダミーデータ ---------- */
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rnd = mulberry32(20261115);
+const ISO = [[2, 4], [3, 35], [4, 352], [5, 3520], [6, 35200], [7, 352000], [8, 3520000], [9, 35200000]];
+const isoClass = c => { for (const [n, l] of ISO) if (c <= l) return n; return 10; };
+const ROOMS = [
+  {id: 'C101', name: 'クリーンルーム', pm: 1.5, co2: 520, pc: 2400},
+  {id: 'C102', name: '準クリーン', pm: 4, co2: 560, pc: 26000},
+  {id: 'B204', name: '実験室', pm: 14, co2: 850, pc: 900000},
+  {id: 'B205', name: '実験室', pm: 18, co2: 930, pc: 1400000},
+  {id: 'L1', name: '図書室', pm: 10, co2: 720, pc: 650000}
+];
+const ROWS = [];
+const T0 = Date.UTC(2026, 9, 1, 0, 0);
+for (let i = 0; i < 5000; i++) {
+  const r = ROOMS[i % 5];
+  let pm = r.pm * (0.6 + rnd() * 0.8), co2 = r.co2 * (0.85 + rnd() * 0.35), pc = Math.round(r.pc * (0.5 + rnd()));
+  const x = rnd();
+  if (x < 0.012) pm = pm * 3 + 32; else if (x < 0.022) co2 += 620;
+  const miss = x > 0.9972;
+  ROWS.push({idx: i, id: 'M-' + String(i + 1).padStart(6, '0'), t: T0 + Math.floor(i / 5) * 600000, room: r.id, inst: r.id[0] === 'C' ? 'PC-01' : 'PC-02',
+    pm: miss ? null : +pm.toFixed(1), co2: Math.round(co2), pc, iso: isoClass(pc), tag: ''});
+}
+const fmtT = t => { const d = new Date(t); const p = n => String(n).padStart(2, '0'); return `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`; };
+const TH = {pmWarn: 35, pmBad: 55, co2Warn: 1000, co2Bad: 1500};
+const pmLvl = v => v == null ? 'miss' : v >= TH.pmBad ? 'bad' : v >= TH.pmWarn ? 'warn' : 'ok';
+const coLvl = v => v >= TH.co2Bad ? 'bad' : v >= TH.co2Warn ? 'warn' : 'ok';
+const rowLvl = r => { const a = pmLvl(r.pm), b = coLvl(r.co2); if (a === 'miss') return 'miss'; if (a === 'bad' || b === 'bad') return 'bad'; if (a === 'warn' || b === 'warn') return 'warn'; return 'ok'; };
+const LVL = {bad: {s: '⚠', l: '異常', c: 'v-bad'}, warn: {s: '△', l: '注意', c: 'v-warn'}, ok: {s: '✓', l: '正常', c: 'v-ok'}, miss: {s: '—', l: '欠測', c: 'v-miss'}};
+const lvlPill = k => `<span class="pill ${LVL[k].c}"><span aria-hidden="true">${LVL[k].s}</span>${LVL[k].l}</span>`;
+const TAGS = {1: '要確認', 2: '除外候補', 3: '再測定'};
+
+const STV = {unset: {s: '○', l: '未設定'}, ready: {s: '◐', l: '準備完了'}, ok: {s: '●', l: '成功'}, fail: {s: '✕', l: '失敗'}, stale: {s: '↻', l: '要再計算'}};
+const stHtml = k => `<span class="st st-${k}"><span class="sym" aria-hidden="true">${STV[k].s}</span>${STV[k].l}</span>`;
+
+const ENG = {sympy: 'SymPy 1.13.3（Python 3.12.7）', sage: 'SageMath 10.4', matlab: 'MATLAB R2025a'};
+const MATS = [
+  {k: 'q_conc', name: '普通コンクリート', unit: 'm³', v: 1200, f: 0.29, fu: 't-CO2e/m³', src: 'DMY-2026 #C-0102', min: 0, max: 100000},
+  {k: 'q_rebar', name: '鉄筋 SD345', unit: 't', v: 180, f: 1.45, fu: 't-CO2e/t', src: 'DMY-2026 #S-0210', min: 0, max: 50000},
+  {k: 'q_steel', name: '鉄骨', unit: 't', v: 95, f: 1.90, fu: 't-CO2e/t', src: 'DMY-2026 #S-0301', min: 0, max: 50000},
+  {k: 'q_clt', name: 'CLT（直交集成板）', unit: 'm³', v: 220, f: 0.12, fu: 't-CO2e/m³', src: 'DMY-2026 #W-0044', min: 0, max: 50000},
+  {k: 'q_glass', name: '板ガラス', unit: 't', v: 24, f: 1.10, fu: 't-CO2e/t', src: 'DMY-2026 #G-0007', min: 0, max: 10000},
+  {k: 'q_xps', name: '断熱材 XPS', unit: 't', v: 18, f: 3.20, fu: 't-CO2e/t', src: 'DMY-2026 #I-0015', min: 0, max: 10000}
+];
+
+/* ---------- パイプライン ---------- */
+const STAGES = [
+  {id: 'ingest', name: 'データ取り込み', state: 'ok', deps: [], roles: ['prof', 'grad', 'ug']},
+  {id: 'validate', name: '検証', state: 'ok', deps: ['ingest'], roles: ['prof', 'grad', 'ug']},
+  {id: 'mathir', name: 'Math IR 変換', state: 'ok', deps: ['validate'], roles: ['prof', 'grad']},
+  {id: 'solve', name: 'ソルバー実行', state: 'fail', deps: ['mathir'], roles: ['prof', 'grad']},
+  {id: 'lca', name: 'LCA 演算', state: 'ready', deps: ['mathir'], roles: ['prof', 'grad']},
+  {id: 'report', name: '図表・レポート', state: 'stale', deps: ['solve', 'lca'], roles: ['prof', 'grad']}
+];
+const F = (o) => Object.assign({type: 'num', applied: o.v}, o);
+const COND = {
+  ingest: [
+    F({k: 'file', label: '入力ファイル', type: 'text', v: 'aq_2026-10_Bblock.csv', help: '学内サーバーの元ファイル（リンクを保持）', src: 'sha256 3f9a1c…e21'}),
+    F({k: 'enc', label: '文字コード', type: 'sel', v: 'UTF-8', opts: ['UTF-8', 'Shift_JIS']}),
+    F({k: 'interval', label: '測定間隔', unit: '分', v: 10, min: 1, max: 60, help: '装置の設定と一致させる'})
+  ],
+  validate: [
+    F({k: 'pmWarn', label: 'PM2.5 注意', unit: 'µg/m³', v: 35, min: 0, max: 500, src: 'テンプレート 研究室標準 2026'}),
+    F({k: 'pmBad', label: 'PM2.5 異常', unit: 'µg/m³', v: 55, min: 0, max: 500, src: 'テンプレート 研究室標準 2026'}),
+    F({k: 'co2Warn', label: 'CO2 注意', unit: 'ppm', v: 1000, min: 400, max: 5000, src: 'テンプレート 研究室標準 2026'}),
+    F({k: 'co2Bad', label: 'CO2 異常', unit: 'ppm', v: 1500, min: 400, max: 10000, src: 'テンプレート 研究室標準 2026'}),
+    F({k: 'miss', label: '欠測の扱い', type: 'sel', v: '除外', opts: ['除外', '前値で補間']})
+  ],
+  mathir: [
+    F({k: 'engine', label: '主エンジン', type: 'sel', v: 'sympy', opts: ['sympy', 'sage', 'matlab'], optl: ENG}),
+    F({k: 'digits', label: '有効桁数', unit: '桁', v: 15, min: 6, max: 50}),
+    F({k: 'expr', label: 'ISO クラスの式', type: 'text', v: 'ceiling(log(C/(0.1/D)**2.08, 10))', help: 'SymPy 記法。Math IR に変換して3エンジンへ渡す'})
+  ],
+  solve: [
+    F({k: 'tol', label: '許容残差', unit: '—', v: 1e-6, min: 1e-12, max: 1e-2, help: '1e-12〜1e-2'}),
+    F({k: 'maxIter', label: '最大反復回数', unit: '回', v: 50, min: 1, max: 10000, help: '収束しない場合は 200 以上を推奨'}),
+    F({k: 'seed', label: '乱数シード', unit: '—', v: 42, min: 0, max: 99999})
+  ],
+  lca: MATS.map(m => F({k: m.k, label: m.name, unit: m.unit, v: m.v, min: m.min, max: m.max, src: `${m.f} ${m.fu}（${m.src}）`}))
+    .concat([F({k: 'dist', label: '平均輸送距離', unit: 'km', v: 45, min: 0, max: 2000, src: '0.000093 t-CO2e/(t·km)（DMY-2026 #T-0001）'}),
+             F({k: 'area', label: '延床面積', unit: 'm²', v: 4800, min: 1, max: 1000000, help: '原単位（kg-CO2e/m²）の分母'})]),
+  report: [
+    F({k: 'preset', label: '書き出しプリセット', type: 'sel', v: '論文用', opts: ['論文用', '研究室報告', '学部実験レポート'], help: '論文用: 図幅 8.5cm・300dpi・代替表を付録に'}),
+    F({k: 'evid', label: '根拠ページを付ける', type: 'chk', v: true}),
+    F({k: 'alt', label: '図の代替表を付ける', type: 'chk', v: true})
+  ]
+};
+let VERSION = 5;
+const HISTORY = [
+  {v: 5, who: '院生 A（ダミー）', at: '2026-11-14 17:20', msg: '係数表を DMY-2026 v2.1 に更新（コンクリート 0.31→0.29）'},
+  {v: 4, who: '院生 A（ダミー）', at: '2026-11-10 10:05', msg: '検証: PM2.5 注意を 30→35 µg/m³（研究室標準に合わせる）'},
+  {v: 3, who: '教授 K（ダミー）', at: '2026-11-02 09:40', msg: '承認: LCA 条件セット v3'}
+];
+const JOBS = [
+  {id: 'J-0415', kind: 'ソルバー実行', eng: 'MATLAB R2025a', ver: 'v5', st: 'fail', dur: '12.8 s', who: '院生 A', at: '2026-11-14 17:24', msg: '収束せず（残差 3.2e-4 > 許容 1e-6、50 回）', stage: 'solve'},
+  {id: 'J-0414', kind: 'Math IR 変換', eng: 'SymPy 1.13.3', ver: 'v5', st: 'ok', dur: '2.4 s', who: '院生 A', at: '2026-11-14 17:22', msg: '3エンジン照合: 差 0（整数クラス一致）', stage: 'mathir'},
+  {id: 'J-0413', kind: '検証', eng: 'Python 3.12.7', ver: 'v5', st: 'ok', dur: '0.9 s', who: '学部生 C', at: '2026-11-14 16:58', msg: '異常 58 行・注意 131 行・欠測 14 行', stage: 'validate'},
+  {id: 'J-0412', kind: 'LCA 演算', eng: 'SageMath 10.4', ver: 'v5', st: 'ok', dur: '4.1 s', who: '院生 A', at: '2026-11-14 15:10', msg: '合計 899.9 t-CO2e', stage: 'lca'},
+  {id: 'J-0411', kind: 'データ取り込み', eng: 'Python 3.12.7', ver: 'v5', st: 'ok', dur: '1.2 s', who: '学部生 C', at: '2026-11-14 14:31', msg: '5,000 行・8 列', stage: 'ingest'},
+  {id: 'J-0409', kind: 'LCA 演算', eng: 'SageMath 10.4', ver: 'v4', st: 'ok', dur: '4.0 s', who: '院生 A', at: '2026-11-10 10:12', msg: '合計 923.9 t-CO2e', stage: 'lca'},
+  {id: 'J-0405', kind: 'ソルバー実行', eng: 'SymPy 1.13.3', ver: 'v4', st: 'ok', dur: '8.7 s', who: '院生 B', at: '2026-11-08 13:44', msg: '収束（38 回）', stage: 'solve'},
+  {id: 'J-0398', kind: 'レポート', eng: '—', ver: 'v3', st: 'ok', dur: '3.3 s', who: '教授 K', at: '2026-11-02 09:45', msg: '研究室報告 PDF', stage: 'report'}
+];
+let curStage = 'solve';
+let running = false;
+
+const val = (st, k) => COND[st].find(f => f.k === k).v;
+const appliedVal = (st, k) => COND[st].find(f => f.k === k).applied;
+function lcaCalc(getter) {
+  const g = getter || ((k) => appliedVal('lca', k));
+  const parts = MATS.map(m => ({name: m.name, q: g(m.k), unit: m.unit, f: m.f, e: g(m.k) * m.f, src: m.src}));
+  const massT = g('q_conc') * 2.3 + g('q_rebar') + g('q_steel') + g('q_clt') * 0.47 + g('q_glass') + g('q_xps');
+  parts.push({name: '輸送', q: g('dist'), unit: 'km', f: 0.000093, e: massT * g('dist') * 0.000093, src: 'DMY-2026 #T-0001'});
+  const total = parts.reduce((a, p) => a + p.e, 0);
+  return {parts, total, perM2: total * 1000 / g('area')};
+}
+
+/* ---------- ロール ---------- */
+const ROLE_LEAD = {prof: '教授向け: 異常・失敗・承認待ちを先頭に表示', grad: '大学院生向け: 失敗した段と自分のジョブを先頭に表示', ug: '学部生向け: 測定入力を既定にし、取り込みと検証の段だけを開く'};
+function applyRole(role) {
+  document.body.dataset.role = role;
+  $('#roleSel').value = role;
+  $$('[data-roles]').forEach(el => { el.hidden = !el.dataset.roles.split(' ').includes(role); });
+  $('#roleLead').textContent = ROLE_LEAD[role];
+  const st = STAGES.find(s => s.id === curStage);
+  if (!st.roles.includes(role)) curStage = 'validate';
+  store.set('role', role);
+  renderStages(); renderStage();
+}
+
+/* ---------- 表（並べ替え） ---------- */
+function sortableTable(tbl, cols, data, opt = {}) {
+  let sk = opt.sortKey || null, sd = 1;
+  function draw() {
+    const rows = data.slice();
+    if (sk) { const c = cols.find(c => c.k === sk); rows.sort((a, b) => { const x = c.sv ? c.sv(a) : a[sk], y = c.sv ? c.sv(b) : b[sk]; return (x > y ? 1 : x < y ? -1 : 0) * sd; }); }
+    tbl.innerHTML = `<caption class="sr-only">${esc(opt.caption || '')}（列見出しのボタンで並べ替え）</caption><thead><tr>${cols.map(c => `<th scope="col" class="${c.num ? 'num' : ''}" ${sk === c.k ? `aria-sort="${sd > 0 ? 'ascending' : 'descending'}"` : ''}>${c.nosort ? esc(c.l) : `<button class="sort" type="button" data-k="${c.k}">${esc(c.l)}<span class="ar" aria-hidden="true"></span>${c.u ? `<span class="u">${esc(c.u)}</span>` : ''}</button>`}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${cols.map(c => `<td data-label="${esc(c.l)}" class="${c.num ? 'num' : ''} ${c.cls ? c.cls(r) : ''}">${c.h ? c.h(r) : esc(r[c.k])}</td>`).join('')}</tr>`).join('')}</tbody>${opt.foot ? `<tfoot><tr>${opt.foot(rows)}</tr></tfoot>` : ''}`;
+  }
+  tbl.addEventListener('click', e => {
+    const b = e.target.closest('button.sort'); if (!b) return;
+    const k = b.dataset.k; if (sk === k) sd = -sd; else { sk = k; sd = 1; }
+    draw(); const nb = tbl.querySelector(`button.sort[data-k="${k}"]`); if (nb) nb.focus();
+    announce(`${cols.find(c => c.k === k).l} で${sd > 0 ? '昇順' : '降順'}に並べ替えました`);
+  });
+  draw();
+  return {draw, setData(d) { data = d; draw(); }};
+}
+
+/* ---------- 仮想スクロールの台帳グリッド ---------- */
+const GRID_COLS = [
+  {k: 'id', l: 'ID'}, {k: 't', l: '日時'}, {k: 'room', l: '部屋'}, {k: 'inst', l: '装置'},
+  {k: 'pm', l: 'PM2.5', u: 'µg/m³', num: true}, {k: 'co2', l: 'CO2', u: 'ppm', num: true},
+  {k: 'pc', l: '粒子数≥0.5µm', u: '個/m³', num: true}, {k: 'iso', l: 'ISOクラス', num: true}, {k: 'lvl', l: '判定'}, {k: 'tag', l: 'タグ'}
+];
+let colOrder = store.get('colOrder', GRID_COLS.map(c => c.k));
+if (colOrder.length !== GRID_COLS.length) colOrder = GRID_COLS.map(c => c.k);
+const grids = [];
+function createGrid(host, name) {
+  const S = {sk: 'id', sd: 1, q: '', room: '', abn: false, sel: 0, page: 0, view: ROWS.slice()};
+  const uid = 'g' + grids.length;
+  host.innerHTML = `
+    <div class="grid-tools" role="search" aria-label="${esc(name)}の絞り込み">
+      <div class="field"><label for="${uid}q">検索</label><input id="${uid}q" type="search" placeholder="ID・部屋・装置" data-filter></div>
+      <div class="field"><label for="${uid}r">部屋</label><select id="${uid}r"><option value="">全て</option>${ROOMS.map(r => `<option value="${r.id}">${r.id} ${r.name}</option>`).join('')}</select></div>
+      <label class="chk"><input type="checkbox" id="${uid}a"> 異常・注意・欠測のみ</label>
+      <div class="row small" role="group" aria-label="保存検索"><span class="muted">保存検索:</span>
+        <button class="btn btn-sm" type="button" data-saved="abn">今週の異常値</button>
+        <button class="btn btn-sm" type="button" data-saved="c101">C101 クリーンルーム</button>
+        <button class="btn btn-sm" type="button" data-saved="clear">解除</button></div>
+      <span class="spacer"></span>
+      <div class="row" role="group" aria-label="書き出し"><button class="btn btn-sm" type="button" data-exp="csv">CSV</button><button class="btn btn-sm" type="button" data-exp="xls">Excel</button><button class="btn btn-sm" type="button" data-exp="pdf">PDF</button></div>
+    </div>
+    <p class="small muted" id="${uid}c" aria-live="polite"></p>
+    <div class="vgrid" tabindex="0" role="region" aria-label="${esc(name)}。上下矢印で行を移動、1〜3でタグ、0でタグを消す" aria-describedby="${uid}c">
+      <table class="dt"><caption class="sr-only">${esc(name)}</caption><thead></thead><tbody></tbody><tfoot></tfoot></table>
+    </div>
+    <div class="g-cards" aria-label="${esc(name)}（カード表示）"></div>
+    <nav class="g-pager" aria-label="ページ送り"><button class="btn btn-sm" type="button" data-pg="-1">← 前の20件</button><span class="small" data-pginfo></span><button class="btn btn-sm" type="button" data-pg="1">次の20件 →</button></nav>
+    <div class="sel-detail" aria-live="polite"></div>`;
+  const vg = host.querySelector('.vgrid'), tbl = vg.querySelector('table'), thead = tbl.tHead, tbody = tbl.tBodies[0], tfoot = tbl.tFoot;
+  const cnt = host.querySelector('#' + uid + 'c'), cards = host.querySelector('.g-cards'), selBox = host.querySelector('.sel-detail');
+  const cellHtml = (r, k) => {
+    switch (k) {
+      case 't': return fmtT(r.t);
+      case 'pm': { const l = pmLvl(r.pm); return r.pm == null ? '<span aria-hidden="true">—</span><span class="sr-only">欠測</span>' : (l === 'bad' ? '⚠ ' : l === 'warn' ? '△ ' : '') + nf(r.pm); }
+      case 'co2': { const l = coLvl(r.co2); return (l === 'bad' ? '⚠ ' : l === 'warn' ? '△ ' : '') + r.co2.toLocaleString('ja-JP'); }
+      case 'pc': return r.pc.toLocaleString('ja-JP');
+      case 'iso': return r.iso > 9 ? '9超' : r.iso;
+      case 'lvl': return lvlPill(rowLvl(r));
+      case 'tag': return r.tag ? esc(r.tag) : '';
+      default: return esc(r[k]);
+    }
+  };
+  const cellCls = (r, k) => k === 'pm' ? ({bad: 'c-bad', warn: 'c-warn'}[pmLvl(r.pm)] || '') : k === 'co2' ? ({bad: 'c-bad', warn: 'c-warn'}[coLvl(r.co2)] || '') : '';
+  const cols = () => colOrder.map(k => GRID_COLS.find(c => c.k === k));
+  function apply() {
+    const q = S.q.trim().toLowerCase();
+    let v = ROWS.filter(r => (!S.room || r.room === S.room) && (!S.abn || rowLvl(r) !== 'ok') && (!q || (r.id + ' ' + r.room + ' ' + r.inst).toLowerCase().includes(q)));
+    const k = S.sk;
+    if (k) v.sort((a, b) => { let x = k === 'lvl' ? rowLvl(a) : a[k], y = k === 'lvl' ? rowLvl(b) : b[k]; if (x == null) x = -Infinity; if (y == null) y = -Infinity; return (x > y ? 1 : x < y ? -1 : 0) * S.sd; });
+    S.view = v; S.sel = Math.min(S.sel, Math.max(0, v.length - 1)); S.page = 0;
+    const nb = v.filter(r => rowLvl(r) === 'bad').length;
+    cnt.textContent = `${v.length.toLocaleString('ja-JP')} 行 / 全 ${ROWS.length.toLocaleString('ja-JP')} 行（異常 ${nb} 行）。条件 v${VERSION}、判定は適用済みの閾値で行っています。`;
+    drawHead(); drawFoot(); draw(); drawCards();
+  }
+  function drawHead() {
+    tbl.setAttribute('aria-rowcount', S.view.length + 2);
+    thead.innerHTML = `<tr aria-rowindex="1">${cols().map(c => `<th scope="col" class="${c.num ? 'num' : ''}" ${S.sk === c.k ? `aria-sort="${S.sd > 0 ? 'ascending' : 'descending'}"` : ''}><button class="sort" type="button" data-k="${c.k}">${esc(c.l)}<span class="ar" aria-hidden="true"></span>${c.u ? `<span class="u">${esc(c.u)}</span>` : '<span class="u">&nbsp;</span>'}</button></th>`).join('')}</tr>`;
+  }
+  function drawFoot() {
+    const v = S.view.filter(r => r.pm != null);
+    const mean = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : null;
+    const pms = v.map(r => r.pm), cos = S.view.map(r => r.co2);
+    const agg = {id: `n = ${S.view.length.toLocaleString('ja-JP')}`, pm: `平均 ${nf(mean(pms))} / 最大 ${nf(pms.length ? Math.max(...pms) : null)}`, co2: `平均 ${nf(mean(cos), 0)} / 最大 ${cos.length ? Math.max(...cos).toLocaleString('ja-JP') : '—'}`};
+    tfoot.innerHTML = `<tr aria-rowindex="${S.view.length + 2}">${cols().map(c => `<td class="${c.num ? 'num' : ''}">${agg[c.k] || ''}</td>`).join('')}</tr>`;
+  }
+  function draw() {
+    const rh = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--row-h')) || 26;
+    const n = S.view.length, cc = cols().length;
+    if (!n) { tbody.innerHTML = `<tr><td colspan="${cc}" style="height:auto;white-space:normal"><div class="empty" style="margin:16px"><span class="big" aria-hidden="true">∅</span><p><b>条件に一致する行はありません</b></p><button class="btn btn-sm" type="button" data-saved="clear">絞り込みを解除</button></div></td></tr>`; return; }
+    const start = Math.max(0, Math.floor(vg.scrollTop / rh) - 10);
+    const end = Math.min(n, start + Math.ceil((vg.clientHeight || 440) / rh) + 20);
+    let h = `<tr aria-hidden="true" style="height:${start * rh}px"><td colspan="${cc}" style="height:${start * rh}px;padding:0;border:0"></td></tr>`;
+    for (let i = start; i < end; i++) {
+      const r = S.view[i];
+      h += `<tr id="${uid}-r${i}" aria-rowindex="${i + 2}" class="${i === S.sel ? 'sel' : ''}" aria-selected="${i === S.sel}" data-i="${i}">${cols().map(c => `<td class="${c.num ? 'num' : ''} ${cellCls(r, c.k)}">${cellHtml(r, c.k)}</td>`).join('')}</tr>`;
+    }
+    const rest = (n - end) * rh;
+    h += `<tr aria-hidden="true" style="height:${rest}px"><td colspan="${cc}" style="height:${rest}px;padding:0;border:0"></td></tr>`;
+    tbody.innerHTML = h;
+    vg.setAttribute('aria-activedescendant', `${uid}-r${S.sel}`);
+  }
+  function drawCards() {
+    const per = 20, pages = Math.max(1, Math.ceil(S.view.length / per));
+    S.page = Math.min(Math.max(0, S.page), pages - 1);
+    const part = S.view.slice(S.page * per, S.page * per + per);
+    cards.innerHTML = part.length ? part.map(r => `<article class="rowcard"><div class="row"><b class="mono">${r.id}</b><span class="muted small">${fmtT(r.t)} ・ ${r.room}</span><span class="spacer"></span>${lvlPill(rowLvl(r))}</div><dl><div><dt>PM2.5 µg/m³</dt><dd>${cellHtml(r, 'pm')}</dd></div><div><dt>CO2 ppm</dt><dd>${cellHtml(r, 'co2')}</dd></div><div><dt>ISOクラス</dt><dd>${cellHtml(r, 'iso')}</dd></div></dl></article>`).join('') : '<div class="empty"><p><b>条件に一致する行はありません</b></p></div>';
+    host.querySelector('[data-pginfo]').textContent = `${S.page + 1} / ${pages} ページ`;
+  }
+  function showSel() {
+    const r = S.view[S.sel]; if (!r) { selBox.textContent = ''; return; }
+    const l = rowLvl(r);
+    const why = [];
+    if (pmLvl(r.pm) === 'bad') why.push(`PM2.5 ${r.pm} ≥ 異常 ${TH.pmBad}`); else if (pmLvl(r.pm) === 'warn') why.push(`PM2.5 ${r.pm} ≥ 注意 ${TH.pmWarn}`);
+    if (coLvl(r.co2) === 'bad') why.push(`CO2 ${r.co2} ≥ 異常 ${TH.co2Bad}`); else if (coLvl(r.co2) === 'warn') why.push(`CO2 ${r.co2} ≥ 注意 ${TH.co2Warn}`);
+    if (l === 'miss') why.push('PM2.5 が欠測');
+    selBox.innerHTML = `<b>選択行 ${r.id}</b>: ${lvlPill(l)} ${esc(why.join('、') || '閾値内')} ／ 来歴: aq_2026-10_Bblock.csv の ${r.idx + 2} 行目（sha256 3f9a1c…e21、取り込み J-0411）${r.tag ? ' ／ タグ: ' + esc(r.tag) : ''}`;
+  }
+  function moveSel(d) {
+    if (!S.view.length) return;
+    S.sel = Math.max(0, Math.min(S.view.length - 1, S.sel + d));
+    const rh = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--row-h')) || 26;
+    const headH = thead.offsetHeight || 40, footH = tfoot.offsetHeight || 26;
+    const top = S.sel * rh, viewTop = vg.scrollTop, viewH = vg.clientHeight - headH - footH;
+    if (top < viewTop) vg.scrollTop = top; else if (top + rh > viewTop + viewH) vg.scrollTop = top + rh - viewH;
+    draw(); showSel();
+  }
+  vg.addEventListener('scroll', () => requestAnimationFrame(draw), {passive: true});
+  vg.addEventListener('keydown', e => {
+    if (e.target !== vg) return;
+    const m = {ArrowDown: 1, ArrowUp: -1, PageDown: 15, PageUp: -15};
+    if (m[e.key]) { e.preventDefault(); moveSel(m[e.key]); }
+    else if (e.key === 'Home') { e.preventDefault(); S.sel = 0; vg.scrollTop = 0; moveSel(0); }
+    else if (e.key === 'End') { e.preventDefault(); S.sel = S.view.length - 1; vg.scrollTop = vg.scrollHeight; moveSel(0); }
+    else if (e.key === 'Enter') { e.preventDefault(); showSel(); }
+    else if (/^[0-3]$/.test(e.key)) { const r = S.view[S.sel]; if (r) { r.tag = TAGS[e.key] || ''; grids.forEach(g => g.redraw()); showSel(); announce(r.tag ? `${r.id} にタグ「${r.tag}」を付けました` : `${r.id} のタグを消しました`); } }
+  });
+  host.addEventListener('click', e => {
+    const s = e.target.closest('button.sort');
+    if (s) { const k = s.dataset.k; if (S.sk === k) S.sd = -S.sd; else { S.sk = k; S.sd = 1; } apply(); const nb = thead.querySelector(`button.sort[data-k="${k}"]`); if (nb) nb.focus(); announce(`${GRID_COLS.find(c => c.k === k).l} で${S.sd > 0 ? '昇順' : '降順'}に並べ替えました`); return; }
+    const tr = e.target.closest('tbody tr[data-i]');
+    if (tr) { S.sel = +tr.dataset.i; draw(); showSel(); return; }
+    const sv = e.target.closest('[data-saved]');
+    if (sv) {
+      const k = sv.dataset.saved; const qi = host.querySelector('#' + uid + 'q'), ri = host.querySelector('#' + uid + 'r'), ai = host.querySelector('#' + uid + 'a');
+      if (k === 'abn') { S.abn = true; S.room = ''; S.q = ''; S.sk = 'pm'; S.sd = -1; }
+      if (k === 'c101') { S.room = 'C101'; S.abn = false; S.q = ''; }
+      if (k === 'clear') { S.room = ''; S.abn = false; S.q = ''; S.sk = 'id'; S.sd = 1; }
+      qi.value = S.q; ri.value = S.room; ai.checked = S.abn; vg.scrollTop = 0; apply(); return;
+    }
+    const pg = e.target.closest('[data-pg]');
+    if (pg) { S.page += +pg.dataset.pg; drawCards(); return; }
+    const ex = e.target.closest('[data-exp]');
+    if (ex) doExport(ex.dataset.exp, S.view);
+  });
+  host.querySelector('#' + uid + 'q').addEventListener('input', e => { S.q = e.target.value; vg.scrollTop = 0; apply(); });
+  host.querySelector('#' + uid + 'r').addEventListener('change', e => { S.room = e.target.value; vg.scrollTop = 0; apply(); });
+  host.querySelector('#' + uid + 'a').addEventListener('change', e => { S.abn = e.target.checked; vg.scrollTop = 0; apply(); });
+  const g = {host, vg, apply, redraw() { drawHead(); drawFoot(); draw(); drawCards(); }, focusFilter() { host.querySelector('#' + uid + 'q').focus(); }};
+  grids.push(g); apply();
+  return g;
+}
+
+/* ---------- 書き出し ---------- */
+function download(name, text, type) {
+  try {
+    const blob = new Blob([text], {type});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    toast('ok', `${name} を書き出しました（端末内で生成）`);
+  } catch (e) { toast('err', '書き出せませんでした。ブラウザの設定を確認してください。'); }
+}
+function toCSV(rows) {
+  const head = ['id', 'datetime', 'room', 'instrument', 'pm25_ug_m3', 'co2_ppm', 'particles_0.5um_per_m3', 'iso_class', 'judgement', 'tag', 'pipeline_version', 'source_sha256'];
+  const lines = [head.join(',')];
+  rows.forEach(r => lines.push([r.id, fmtT(r.t), r.room, r.inst, r.pm == null ? '' : r.pm, r.co2, r.pc, r.iso > 9 ? '>9' : r.iso, LVL[rowLvl(r)].l, r.tag, 'v' + VERSION, '3f9a1c...e21'].map(x => /[",\n]/.test(String(x)) ? `"${String(x).replace(/"/g, '""')}"` : x).join(',')));
+  return lines.join('\r\n');
+}
+function doExport(kind, rows) {
+  rows = rows || ROWS;
+  if (kind === 'csv') download(`aq_ledger_v${VERSION}.csv`, toCSV(rows), 'text/csv');
+  else if (kind === 'xls') download(`aq_ledger_v${VERSION}_excel.csv`, '﻿' + toCSV(rows), 'text/csv');
+  else if (kind === 'pdf') { toast('info', '印刷ダイアログで「PDF に保存」を選んでください'); setTimeout(() => window.print(), 300); }
+}
+
+/* ---------- 段のリスト ---------- */
+function renderStages() {
+  const role = document.body.dataset.role;
+  $('#stageList').innerHTML = STAGES.map((s, i) => {
+    const ok = s.roles.includes(role);
+    return `<li><button type="button" class="stage-btn st-${s.state}" data-stage="${s.id}" ${curStage === s.id ? 'aria-current="step"' : ''} ${ok ? '' : 'aria-disabled="true"'}><span class="sym" aria-hidden="true">${STV[s.state].s}</span><span class="nm">${i + 1}. ${esc(s.name)}</span><span class="sl">${STV[s.state].l}${ok ? '' : ' <span class="lock">（院生以上）</span>'}</span></button></li>`;
+  }).join('');
+  $('#dashStages').innerHTML = STAGES.map((s, i) => `<li>${i ? '<span aria-hidden="true" class="muted">→ </span>' : ''}<span class="st st-${s.state}"><span class="sym" aria-hidden="true">${STV[s.state].s}</span>${esc(s.name)}<span class="sr-only">: ${STV[s.state].l}</span></span></li>`).join('');
+  updateRun();
+}
+$('#stageList').addEventListener('click', e => {
+  const b = e.target.closest('.stage-btn'); if (!b) return;
+  if (b.getAttribute('aria-disabled') === 'true') { toast('info', 'この段は大学院生以上のロールで開けます'); return; }
+  selectStage(b.dataset.stage, true);
+});
+function selectStage(id, focus) {
+  curStage = id; renderStages(); renderStage();
+  if (focus) { const b = $(`.stage-btn[data-stage="${id}"]`); if (b) b.focus(); }
+}
+const pendingFields = () => Object.entries(COND).flatMap(([st, fs]) => fs.filter(f => f.v !== f.applied).map(f => ({st, f})));
+function updateRun() {
+  const n = pendingFields().length, todo = STAGES.filter(s => ['ready', 'stale', 'fail'].includes(s.state)).length;
+  const b = $('#runBtn');
+  $('#pendN').textContent = n;
+  b.classList.toggle('has-pending', n > 0);
+  if (running) { b.disabled = true; $('#runHint').textContent = '実行中…'; return; }
+  b.disabled = n === 0 && todo === 0;
+  $('#runHint').textContent = n ? `未適用の変更 ${n} 項目` : todo ? `要再計算・失敗・準備完了 ${todo} 段` : '全ての段が最新です';
+}
+
+/* ---------- 段の条件・出力 ---------- */
+function fieldErr(f, raw) {
+  if (f.type !== 'num') return '';
+  const s = String(raw).trim();
+  if (s === '') return `値を入力してください（${f.min}〜${f.max} ${f.unit}）`;
+  const n = Number(s.replace(/,/g, ''));
+  if (!isFinite(n)) return `数値で入力してください（例: ${f.applied}）。単位「${f.unit}」は入力欄の外にあります`;
+  if (n < f.min) return `${f.min} 以上にしてください（入力 ${s}）`;
+  if (n > f.max) return `${f.max} 以下にしてください（入力 ${s}）。単位が ${f.unit} か確認してください`;
+  if (f.k === 'pmBad' && n <= val('validate', 'pmWarn')) return `異常の閾値は注意（${val('validate', 'pmWarn')}）より大きくしてください`;
+  if (f.k === 'co2Bad' && n <= val('validate', 'co2Warn')) return `異常の閾値は注意（${val('validate', 'co2Warn')}）より大きくしてください`;
+  return '';
+}
+function renderStage() {
+  const s = STAGES.find(x => x.id === curStage), role = document.body.dataset.role;
+  const idx = STAGES.indexOf(s);
+  $('#h-stage').textContent = `${idx + 1}. ${s.name}`;
+  $('#stageState').innerHTML = stHtml(s.state);
+  $('#stageDeps').textContent = s.deps.length ? '入力: ' + s.deps.map(d => STAGES.find(x => x.id === d).name).join('・') : '入力: 元ファイル';
+  const ro = mq.matches || (role === 'ug' && s.id !== 'ingest');
+  const fs = COND[s.id];
+  const rowsHtml = fs.map(f => {
+    const id = 'f-' + s.id + '-' + f.k, dirty = f.v !== f.applied;
+    let ctl;
+    if (f.type === 'sel') ctl = `<select id="${id}" data-f="${f.k}">${f.opts.map(o => `<option value="${o}" ${o === f.v ? 'selected' : ''}>${esc(f.optl ? f.optl[o] : o)}</option>`).join('')}</select>`;
+    else if (f.type === 'chk') ctl = `<input type="checkbox" id="${id}" data-f="${f.k}" ${f.v ? 'checked' : ''}>`;
+    else if (f.type === 'text') ctl = `<input type="text" id="${id}" data-f="${f.k}" value="${esc(f.v)}" style="width:100%" ${f.k === 'file' ? 'readonly' : ''} aria-describedby="${id}-h">`;
+    else ctl = `<span class="unit"><input type="text" inputmode="decimal" id="${id}" data-f="${f.k}" value="${esc(f.v)}" aria-describedby="${id}-h ${id}-e"><span class="muted">${esc(f.unit)}</span></span>`;
+    const range = f.type === 'num' ? `${f.min}〜${f.max}` : '—';
+    return `<tr class="${dirty ? 'dirty' : ''}"><th scope="row" data-label="項目"><label for="${id}">${esc(f.label)}</label>${dirty ? '<span class="dirty-tag">未適用</span>' : ''}</th><td data-label="値">${ctl}<div class="err" id="${id}-e" hidden></div></td><td data-label="許容範囲" class="small">${range}</td><td data-label="既定・出典" class="small muted" id="${id}-h">${esc(f.src || f.help || '')}${dirty ? `<br>適用済み: ${esc(String(f.applied))}` : ''}</td></tr>`;
+  }).join('');
+  const extra = s.id === 'ingest' ? `<div class="row" style="margin-top:8px"><label for="fileIn" class="btn btn-sm">別の CSV を選ぶ（端末内で読むだけ）</label><input id="fileIn" type="file" accept=".csv,.tsv,.txt" class="sr-only"><span class="small muted" id="fileInfo"></span></div>` : '';
+  $('#p-cond').innerHTML = `${role === 'ug' && s.id !== 'ingest' ? '<p class="alert alert-info"><span class="ico" aria-hidden="true">ⓘ</span><span>学部生ロールでは閲覧のみです。値を変えたい場合は院生に依頼してください。</span></p>' : ''}
+    <fieldset ${ro ? 'disabled' : ''} style="border:0;padding:0"><legend class="sr-only">${esc(s.name)}の条件</legend>
+    <div class="tbl-wrap"><table class="dt resp cond-tbl"><thead><tr><th scope="col">項目</th><th scope="col">値と単位</th><th scope="col">許容範囲</th><th scope="col">既定・出典</th></tr></thead><tbody>${rowsHtml}</tbody></table></div></fieldset>${extra}
+    <p class="small muted" style="margin-top:8px">変更はすぐには計算しません。上部の「未適用 ▶ 実行」（<kbd>Ctrl</kbd>+<kbd>Enter</kbd>）で実行します。下流の段は「↻ 要再計算」になります。</p>`;
+  renderOut(); renderEvid();
+  const fi = $('#fileIn');
+  if (fi) fi.addEventListener('change', () => { const f = fi.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { const n = String(rd.result).split(/\r?\n/).filter(Boolean).length; $('#fileInfo').textContent = `${f.name}: ${n} 行（プレビューのみ。サーバーには送信しません）`; }; rd.readAsText(f.slice(0, 2e6)); });
+}
+$('#p-cond').addEventListener('input', onCond);
+$('#p-cond').addEventListener('change', onCond);
+function onCond(e) {
+  const el = e.target.closest('[data-f]'); if (!el) return;
+  const f = COND[curStage].find(x => x.k === el.dataset.f);
+  let v = f.type === 'chk' ? el.checked : el.value;
+  const errEl = document.getElementById(el.id + '-e');
+  if (f.type === 'num') {
+    const msg = fieldErr(f, v);
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    if (errEl) { errEl.hidden = !msg; errEl.textContent = msg ? '✕ ' + msg : ''; }
+    if (msg) return;
+    v = Number(String(v).replace(/,/g, ''));
+  }
+  if (e.type === 'input' && f.type !== 'num' && f.type !== 'text') return;
+  f.v = v;
+  markDirty();
+  const tr = el.closest('tr'), dirty = f.v !== f.applied;
+  tr.classList.toggle('dirty', dirty);
+  const th = tr.querySelector('th'); const tag = th.querySelector('.dirty-tag');
+  if (dirty && !tag) th.insertAdjacentHTML('beforeend', '<span class="dirty-tag">未適用</span>');
+  if (!dirty && tag) tag.remove();
+  if (curStage === 'lca' && f.k !== 'area') renderOut();
+}
+function downstream(id) {
+  const out = new Set(); const walk = x => STAGES.filter(s => s.deps.includes(x)).forEach(s => { if (!out.has(s.id)) { out.add(s.id); walk(s.id); } }); walk(id); return out;
+}
+function markDirty() {
+  const pend = pendingFields();
+  const touched = new Set(pend.map(p => p.st));
+  STAGES.forEach(s => { if (touched.has(s.id) && s.state === 'ok') s.state = 'ready'; });
+  touched.forEach(t => downstream(t).forEach(d => { const s = STAGES.find(x => x.id === d); if (s.state === 'ok') s.state = 'stale'; }));
+  renderStages();
+  $('#stageState').innerHTML = stHtml(STAGES.find(x => x.id === curStage).state);
+}
+
+function renderOut() {
+  const s = STAGES.find(x => x.id === curStage), o = $('#p-out');
+  if (running) { o.innerHTML = '<div class="skel" role="status" aria-label="計算中"><i style="width:60%"></i><i></i><i></i><i style="width:80%"></i><i style="width:40%"></i></div>'; return; }
+  const src = `<p class="fig-src">この出力の入力: ジョブ ${s.id === 'lca' ? 'J-0412' : 'J-0414'}、条件 v${VERSION}、データのハッシュ 3f9a1c…e21</p>`;
+  if (s.state === 'unset') { o.innerHTML = '<div class="empty"><span class="big" aria-hidden="true">○</span><p><b>まだ条件が設定されていません</b></p><p class="small">「条件」タブで値を入力してください。</p></div>'; return; }
+  if (s.id === 'ingest') o.innerHTML = `<dl class="kv evid" style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px"><dt>行数</dt><dd>5,000 行（列 8）</dd><dt>期間</dt><dd>2026-10-01 00:00 〜 ${fmtT(ROWS[4999].t)}（10分間隔）</dd><dt>欠測</dt><dd>${ROWS.filter(r => r.pm == null).length} 行（PM2.5）</dd><dt>元ファイル</dt><dd class="mono">aq_2026-10_Bblock.csv / sha256 3f9a1c…e21</dd></dl>${src}`;
+  else if (s.id === 'validate') { o.innerHTML = '<div id="valGridHost"></div>'; createGrid($('#valGridHost'), '検証の出力（測定台帳）'); }
+  else if (s.id === 'mathir') o.innerHTML = `<h3>Math IR（エンジン共通の中間表現）</h3><pre>{"op":"ceiling","args":[{"op":"log","base":10,"args":[{"op":"div","args":[{"sym":"C"},{"op":"pow","args":[{"op":"div","args":[0.1,{"sym":"D"}]},2.08]}]}]}]}</pre>
+    <h3 style="margin-top:12px">3エンジンでの照合（C = 35,200 個/m³, D = 0.5 µm）</h3><div class="tbl-wrap"><table class="dt resp"><thead><tr><th>エンジン</th><th class="num">結果</th><th class="num">連続値</th><th>判定</th></tr></thead><tbody>
+    <tr><td data-label="エンジン">${ENG.sympy}</td><td data-label="結果" class="num">6</td><td data-label="連続値" class="num">6.000 134</td><td data-label="判定">${stHtml('ok')}</td></tr>
+    <tr><td data-label="エンジン">${ENG.sage}</td><td data-label="結果" class="num">6</td><td data-label="連続値" class="num">6.000 134</td><td data-label="判定">${stHtml('ok')}</td></tr>
+    <tr><td data-label="エンジン">${ENG.matlab}</td><td data-label="結果" class="num">6</td><td data-label="連続値" class="num">6.000 134</td><td data-label="判定">${stHtml('ok')}</td></tr></tbody></table></div>
+    <p class="small muted">注: 規格値 35,200 は丸めた値のため、連続値は 6 をわずかに超えます。判定は規格表の上限値で行います。</p>${src}`;
+  else if (s.id === 'solve') o.innerHTML = s.state === 'fail'
+    ? `<div class="alert alert-err" role="alert"><span class="ico" aria-hidden="true">✕</span><div><p><b>失敗: ソルバーが収束しませんでした（J-0415）。</b></p><p>残差 3.2e-4 が許容残差 1e-6 を上回ったまま、最大反復回数 ${appliedVal('solve', 'maxIter')} 回に達しました。</p><p><b>修正案:</b> 「条件」タブで最大反復回数を 200 以上にして実行してください。前回の成功例（J-0405）は 38 回で収束しています。</p><p><button class="btn btn-sm" type="button" id="fixIter">最大反復回数を 200 にする</button></p></div></div>`
+    : `<div class="tbl-wrap"><table class="dt resp"><thead><tr><th class="num">反復</th><th class="num">残差</th></tr></thead><tbody>${[1, 5, 10, 20, 30, 41].map((k, i) => `<tr><td data-label="反復" class="num">${k}</td><td data-label="残差" class="num">${(3.2 * Math.pow(10, -1 - i)).toExponential(1)}</td></tr>`).join('')}</tbody></table></div><p class="alert alert-ok" style="margin-top:8px"><span class="ico" aria-hidden="true">●</span><span>41 回で収束（残差 3.2e-7 ≤ 許容 ${appliedVal('solve', 'tol')}）</span></p>${src}`;
+  else if (s.id === 'lca') {
+    const draft = COND.lca.some(f => f.v !== f.applied);
+    const r = lcaCalc(draft ? (k => val('lca', k)) : null);
+    o.innerHTML = `${draft ? '<p class="alert alert-warn"><span class="ico" aria-hidden="true">△</span><span>未適用の条件を使った<b>試算</b>です。台帳には記録されません。確定するには「▶ 実行」を押してください。</span></p>' : ''}
+      <div class="grid-cards"><div class="card kpi"><span class="l">合計</span><span class="v">${nf(r.total)} <span class="small">t-CO2e</span></span></div><div class="card kpi"><span class="l">延床面積あたり</span><span class="v">${nf(r.perM2, 0)} <span class="small">kg-CO2e/m²</span></span></div></div>
+      <figure style="margin:12px 0 0"><div id="lcaChart"></div><figcaption class="fig-src">図の入力: 条件 v${VERSION}${draft ? '＋未適用の変更' : ''}、係数表 DMY-2026 v2.1、エンジン ${ENG.sage}</figcaption></figure>
+      <details><summary>この図のデータ表</summary><div class="tbl-wrap"><table class="dt resp" id="lcaTbl"></table></div></details>
+      <fieldset style="margin-top:12px"><legend>感度分析（軽い計算なので即時に試算）</legend>
+        <div class="field"><label for="sens">コンクリート数量の変化率</label>
+          <div class="row"><input type="range" id="sens" min="-30" max="30" step="5" value="0" aria-describedby="sensOut" style="flex:1;min-width:140px"><span class="unit"><input type="text" inputmode="numeric" id="sensNum" value="0" aria-label="変化率（%）を数値で入力" style="width:5em"><span>%</span></span></div>
+          <output id="sensOut" class="small"></output>
+          <span class="help">スライダーは矢印キーでも操作できます。数値欄に直接入力もできます（ドラッグの代替）。</span></div>
+        <button class="btn btn-sm" type="button" id="sensApply">この値を条件に反映（未適用にする）</button>
+      </fieldset>`;
+    barChart($('#lcaChart'), r.parts.map(p => ({l: p.name, v: p.e})), 't-CO2e');
+    $('#lcaTbl').innerHTML = lcaTableHtml(r);
+    const upd = pct => { const base = val('lca', 'q_conc'); const rr = lcaCalc(k => k === 'q_conc' ? base * (1 + pct / 100) : val('lca', k)); $('#sensOut').textContent = `コンクリート ${nf(base * (1 + pct / 100), 0)} m³ → 合計 ${nf(rr.total)} t-CO2e（現在比 ${pct >= 0 ? '+' : ''}${nf((rr.total - r.total) / r.total * 100)}%）`; };
+    upd(0);
+    $('#sens').addEventListener('input', e => { $('#sensNum').value = e.target.value; upd(+e.target.value); });
+    $('#sensNum').addEventListener('input', e => { const n = Math.max(-30, Math.min(30, Number(e.target.value) || 0)); $('#sens').value = n; upd(n); });
+    $('#sensApply').addEventListener('click', () => { const pct = +$('#sens').value; const f = COND.lca.find(x => x.k === 'q_conc'); f.v = Math.round(f.v * (1 + pct / 100)); markDirty(); renderStage(); toast('info', `コンクリート数量 ${f.v} m³ を未適用の変更にしました`); });
+  }
+  else if (s.id === 'report') o.innerHTML = s.state === 'stale'
+    ? `<div class="alert alert-warn"><span class="ico" aria-hidden="true">↻</span><p><b>要再計算:</b> 上流のソルバー実行が失敗しているため、このレポートは古い結果（v4）に基づいています。報告に使う前に実行してください。</p></div>${reportHtml(true)}`
+    : reportHtml(false);
+  const fx = $('#fixIter');
+  if (fx) fx.addEventListener('click', () => { const f = COND.solve.find(x => x.k === 'maxIter'); f.v = 200; markDirty(); selectTab($('#t-cond')); renderStage(); const inp = $('#f-solve-maxIter'); if (inp) inp.focus(); toast('info', '最大反復回数を 200 にしました（未適用）。Ctrl+Enter で実行できます'); });
+}
+function reportHtml(old) {
+  const r = lcaCalc();
+  return `<article class="report card" aria-label="根拠ページのプレビュー"><h3 style="margin-top:0">計算根拠ページ（自動生成・${esc(appliedVal('report', 'preset'))}）</h3>
+  <p><b>目的</b>: B棟実験室の室内空気質と、改修案の建材 CO2 排出量を評価する。</p>
+  <p><b>入力</b>: aq_2026-10_Bblock.csv（5,000 行、sha256 3f9a1c…e21）、係数表 DMY-2026 v2.1。</p>
+  <p><b>方法</b>: ISO 14644-1 のクラス式 <code>ceiling(log10(C/(0.1/D)^2.08))</code> を Math IR に変換し、SymPy・SageMath・MATLAB で照合。LCA は Σ 数量×係数＋輸送。</p>
+  <p><b>結果</b>: 合計 ${nf(r.total)} t-CO2e（${nf(r.perM2, 0)} kg-CO2e/m²）。C101 は ISO クラス 5、B204・B205 はクラス 8〜9。</p>
+  <p><b>再現</b>: パイプライン v${VERSION}${old ? '（一部 v4）' : ''}、再現コマンドは結果の詳細画面からコピーできます。</p></article>
+  <div class="row no-print" style="margin-top:12px"><button class="btn" type="button" data-export="pdf">PDF（印刷）</button><button class="btn" type="button" data-export="csv">データ CSV</button><button class="btn" type="button" data-toast="info">コメント用リンクを作る（学内のみ）</button></div>`;
+}
+function lcaTableHtml(r) {
+  return `<thead><tr><th>建材</th><th class="num">数量</th><th class="num">係数</th><th class="num">排出量 t-CO2e</th><th>出典</th></tr></thead><tbody>${r.parts.map(p => `<tr><td data-label="建材">${esc(p.name)}</td><td data-label="数量" class="num">${nf(p.q, 0)} ${esc(p.unit)}</td><td data-label="係数" class="num">${p.f}</td><td data-label="排出量" class="num">${nf(p.e)}</td><td data-label="出典" class="small">${esc(p.src)}</td></tr>`).join('')}</tbody><tfoot><tr><td data-label="建材">合計</td><td></td><td></td><td data-label="排出量" class="num">${nf(r.total)}</td><td></td></tr></tfoot>`;
+}
+function renderEvid() {
+  const s = STAGES.find(x => x.id === curStage);
+  const ir = {ingest: '（式なし: 列の型と単位をスキーマで検証）', validate: 'judge = (PM2.5 ≥ 55 ∨ CO2 ≥ 1500) ? 異常 : (PM2.5 ≥ 35 ∨ CO2 ≥ 1000) ? 注意 : 正常', mathir: 'ceiling(log(C/(0.1/D)**2.08, 10))', solve: 'Newton 法: x_{k+1} = x_k − J⁻¹ r(x_k)', lca: 'E = Σ q_i·f_i + (Σ m_i)·d·f_t', report: '（式なし: 段の情報から組み立て）'}[s.id];
+  const eng = s.id === 'solve' ? ENG.matlab : s.id === 'lca' ? ENG.sage : ENG.sympy;
+  $('#evidBody').innerHTML = `
+  <details open><summary>入力の来歴</summary><dl class="kv"><dt>元ファイル</dt><dd class="mono">aq_2026-10_Bblock.csv</dd><dt>ハッシュ</dt><dd class="mono">sha256 3f9a1c…e21</dd><dt>上流</dt><dd>${s.deps.length ? s.deps.map(d => STAGES.find(x => x.id === d).name).join('・') : '—'}</dd><dt>条件の版</dt><dd>v${VERSION}</dd></dl></details>
+  <details><summary>使った式（Math IR）</summary><pre style="margin-top:6px">${esc(ir)}</pre></details>
+  <details><summary>エンジンと版</summary><dl class="kv"><dt>エンジン</dt><dd>${esc(eng)}</dd><dt>変換器</dt><dd class="mono">math_interop_v0（phase1〜5）</dd><dt>LCA 演算子</dt><dd class="mono">math_tools_v2/lca_ops.py</dd><dt>コミット</dt><dd class="mono">a1b2c3d（ダミー）</dd></dl></details>
+  <details><summary>係数の出典</summary><ul class="hist">${MATS.map(m => `<li>${esc(m.name)}: ${m.f} ${esc(m.fu)}<br><span class="muted">${esc(m.src)}</span></li>`).join('')}</ul></details>
+  <details><summary>変更履歴（${HISTORY.length}）</summary><ul class="hist">${HISTORY.map(h => `<li><b>v${h.v}</b> ${esc(h.at)} ${esc(h.who)}<br>${esc(h.msg)}</li>`).join('')}</ul></details>
+  <details><summary>コメント（1）</summary><ul class="hist"><li><b>教授 K</b>: 係数表の更新理由を根拠ページに書いてください。</li></ul><label for="cmt" class="small">コメントを追加</label><textarea id="cmt"></textarea><button class="btn btn-sm" type="button" data-toast="ok" style="margin-top:4px">投稿</button></details>`;
+}
+
+/* ---------- 実行 ---------- */
+function runPipeline() {
+  if (running) return;
+  const pend = pendingFields(), todo = STAGES.filter(s => ['ready', 'stale', 'fail'].includes(s.state));
+  if (!pend.length && !todo.length) { toast('info', '全ての段が最新です'); return; }
+  const bad = $$('#p-cond [aria-invalid="true"]');
+  if (bad.length) { toast('err', '入力にエラーがあります。赤枠の欄を直してから実行してください'); bad[0].focus(); return; }
+  running = true; updateRun(); renderOut();
+  const jid = 'J-0' + (416 + JOBS.length - 8);
+  JOBS.unshift({id: jid, kind: 'パイプライン実行', eng: '3エンジン', ver: 'v' + (VERSION + 1), st: 'ready', dur: '—', who: roleName(), at: '2026-11-15 10:00', msg: `実行中（${todo.map(s => s.name).join('→')}）`, stage: todo[0] ? todo[0].id : curStage});
+  renderMon(); announce('実行を開始しました');
+  setTimeout(() => {
+    const iterOk = val('solve', 'maxIter') >= 100;
+    const changes = pend.map(p => `${p.f.label} ${p.f.applied}→${p.f.v}`);
+    Object.values(COND).forEach(fs => fs.forEach(f => { f.applied = f.v; }));
+    TH.pmWarn = appliedVal('validate', 'pmWarn'); TH.pmBad = appliedVal('validate', 'pmBad'); TH.co2Warn = appliedVal('validate', 'co2Warn'); TH.co2Bad = appliedVal('validate', 'co2Bad');
+    let failed = false;
+    STAGES.forEach(s => {
+      if (!['ready', 'stale', 'fail'].includes(s.state)) return;
+      if (s.id === 'solve' && !iterOk) { s.state = 'fail'; failed = true; return; }
+      if (failed && downstream('solve').has(s.id)) { s.state = 'stale'; return; }
+      s.state = 'ok';
+    });
+    VERSION++;
+    HISTORY.unshift({v: VERSION, who: roleName(), at: '2026-11-15 10:00', msg: changes.length ? changes.join('、') : '要再計算の段を再実行（条件の変更なし）'});
+    const j = JOBS[0]; j.st = failed ? 'fail' : 'ok'; j.dur = '3.6 s'; j.msg = failed ? 'ソルバーが再び収束せず。最大反復回数を 200 以上に' : `完了: ${changes.length} 項目を適用し v${VERSION} を作成`;
+    running = false;
+    $('#verTop').textContent = 'v' + VERSION; $('#verWs').textContent = 'v' + VERSION;
+    renderStages(); renderStage(); renderMon(); grids.forEach(g => g.apply()); renderKpis();
+    if (failed) { toast('err', 'ソルバー実行が失敗しました。修正案を出力タブに表示しています'); announce('ソルバー実行が失敗しました', true); }
+    else { toast('ok', `実行が完了しました（v${VERSION}）`); announce(`実行が完了しました。パイプライン v${VERSION}`); }
+  }, 1400);
+}
+const roleName = () => ({prof: '教授 K（ダミー）', grad: '院生 A（ダミー）', ug: '学部生 C（ダミー）'})[document.body.dataset.role];
+$('#runBtn').addEventListener('click', runPipeline);
+function renderMon() {
+  $('#monList').innerHTML = JOBS.slice(0, 5).map(j => `<li><b class="mono">${j.id}</b>${j.st === 'ready' && j.dur === '—' ? '<span class="st st-ready"><span class="sym" aria-hidden="true">…</span>実行中</span>' : stHtml(j.st)}<span class="m-msg">${esc(j.kind)}: ${esc(j.msg)}</span><button class="btn btn-sm" type="button" data-go="${j.stage}">段へ移動</button></li>`).join('')
+    + `<li><b>問題</b><span class="st st-ready"><span class="sym" aria-hidden="true">△</span>注意</span><span class="m-msg">検証: 欠測 ${ROWS.filter(r => r.pm == null).length} 行を除外しています</span><button class="btn btn-sm" type="button" data-go="validate">段へ移動</button></li>`;
+}
+$('#monList').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { selectStage(b.dataset.go, false); selectTab($('#t-out')); $('#h-stage').scrollIntoView({block: 'nearest'}); } });
+$('#monToggle').addEventListener('click', e => { const l = $('#monList'); l.hidden = !l.hidden; e.currentTarget.setAttribute('aria-expanded', String(!l.hidden)); e.currentTarget.textContent = l.hidden ? '開く' : '折りたたむ'; });
+
+/* ---------- チャート ---------- */
+function barChart(host, data, unit) {
+  const W = 560, rowH = 26, L = 128, R = 70, H = data.length * rowH + 28;
+  const max = Math.max(...data.map(d => d.v)) * 1.05;
+  const x = v => L + (W - L - R) * v / max;
+  const ticks = [0, max / 4, max / 2, max * 3 / 4].map(t => Math.round(t / 50) * 50);
+  host.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="建材別の CO2 排出量（横棒グラフ）。最大は${esc(data.slice().sort((a, b) => b.v - a.v)[0].l)}。数値は下のデータ表を参照"><g class="grid">${ticks.map(t => `<line x1="${x(t)}" x2="${x(t)}" y1="4" y2="${H - 20}"/>`).join('')}</g>
+  ${data.map((d, i) => `<text x="${L - 8}" y="${i * rowH + 20}" text-anchor="end">${esc(d.l)}</text><rect class="bar" x="${L}" y="${i * rowH + 8}" width="${Math.max(1, x(d.v) - L)}" height="16" rx="2"/><text x="${x(d.v) + 6}" y="${i * rowH + 20}">${nf(d.v)}</text>`).join('')}
+  <g class="axis">${ticks.map(t => `<text x="${x(t)}" y="${H - 4}" text-anchor="middle">${t}</text>`).join('')}<text x="${W - 4}" y="${H - 4}" text-anchor="end">${esc(unit)}</text></g></svg>`;
+}
+function tsChart(host) {
+  const pts = ROWS.filter(r => r.room === 'B205').slice(0, 144);
+  const W = 720, H = 260, L = 40, R = 64, T = 12, B = 28;
+  const vals = pts.map(p => p.pm == null ? 0 : p.pm);
+  const ymax = Math.max(70, Math.ceil(Math.max(...vals) / 10) * 10);
+  const x = i => L + (W - L - R) * i / (pts.length - 1), y = v => T + (H - T - B) * (1 - v / ymax);
+  let d = ''; pts.forEach((p, i) => { if (p.pm == null) { d += ''; return; } d += (d && pts[i - 1] && pts[i - 1].pm != null ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.pm).toFixed(1); });
+  const bad = pts.map((p, i) => ({p, i})).filter(o => pmLvl(o.p.pm) === 'bad');
+  const yt = [0, 20, 40, 60].filter(v => v <= ymax);
+  host.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="B205 の PM2.5、2026年10月1日の10分値。注意 ${TH.pmWarn}、異常 ${TH.pmBad} µg/m³ の線。異常は ${bad.length} 点。下のデータ表に1時間ごとの値">
+  <g class="grid">${yt.map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>`).join('')}</g>
+  <g class="axis">${yt.map(v => `<text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`).join('')}${[0, 6, 12, 18, 24].map(h => `<text x="${x(Math.min(143, h * 6))}" y="${H - 8}" text-anchor="middle">${h}:00</text>`).join('')}<text x="${L}" y="${T - 2}" >µg/m³</text></g>
+  <line class="th-warn" x1="${L}" x2="${W - R}" y1="${y(TH.pmWarn)}" y2="${y(TH.pmWarn)}"/><text class="lbl-warn" x="${W - R + 4}" y="${y(TH.pmWarn) + 4}">△注意 ${TH.pmWarn}</text>
+  <line class="th-bad" x1="${L}" x2="${W - R}" y1="${y(TH.pmBad)}" y2="${y(TH.pmBad)}"/><text class="lbl-bad" x="${W - R + 4}" y="${y(TH.pmBad) + 4}">⚠異常 ${TH.pmBad}</text>
+  <path class="series" d="${d}"/>
+  ${bad.map(o => `<g class="mk-bad"><line x1="${x(o.i) - 4}" y1="${y(o.p.pm) - 4}" x2="${x(o.i) + 4}" y2="${y(o.p.pm) + 4}"/><line x1="${x(o.i) - 4}" y1="${y(o.p.pm) + 4}" x2="${x(o.i) + 4}" y2="${y(o.p.pm) - 4}"/></g>`).join('')}
+  </svg>`;
+  const hours = Array.from({length: 24}, (_, h) => { const a = pts.slice(h * 6, h * 6 + 6).filter(p => p.pm != null).map(p => p.pm); return {h: `${String(h).padStart(2, '0')}:00`, mean: a.length ? a.reduce((s, v) => s + v, 0) / a.length : null, max: a.length ? Math.max(...a) : null}; });
+  sortableTable($('#tsTable'), [{k: 'h', l: '時刻'}, {k: 'mean', l: '平均', u: 'µg/m³', num: true, h: r => nf(r.mean)}, {k: 'max', l: '最大', u: 'µg/m³', num: true, h: r => nf(r.max), cls: r => ({bad: 'c-bad', warn: 'c-warn'}[pmLvl(r.max)] || '')}, {k: 'j', l: '判定', nosort: true, h: r => lvlPill(pmLvl(r.max))}], hours, {caption: 'PM2.5 の1時間ごとの値'});
+  $('#tsSrc').textContent = `この図の入力: ジョブ J-0412、条件 v${VERSION}、データのハッシュ 3f9a1c…e21、閾値テンプレート「研究室標準 2026」`;
+}
+
+/* ---------- ダッシュボード ---------- */
+function renderKpis() {
+  const nb = ROWS.filter(r => rowLvl(r) === 'bad').length, nw = ROWS.filter(r => rowLvl(r) === 'warn').length;
+  const nf2 = STAGES.filter(s => s.state === 'fail').length, ns = STAGES.filter(s => s.state === 'stale').length;
+  $('#kpis').innerHTML = [
+    {l: '異常値（10月）', v: nb, sub: `<span class="pill v-bad"><span aria-hidden="true">⚠</span>異常</span> 注意 ${nw} 行`, href: '#workspace'},
+    {l: '失敗した段', v: nf2, sub: nf2 ? stHtml('fail') : stHtml('ok'), href: '#workspace'},
+    {l: '要再計算の段', v: ns, sub: ns ? stHtml('stale') : stHtml('ok'), href: '#workspace'},
+    {l: '合計 CO2（J-0412）', v: nf(lcaCalc().total), sub: '<span class="muted small">t-CO2e・条件 v' + VERSION + '</span>', href: '#detail'}
+  ].map(k => `<a class="card kpi" href="${k.href}" style="text-decoration:none;color:inherit"><span class="l">${k.l}</span><span class="v">${k.v}</span><span>${k.sub}</span></a>`).join('');
+  $('#anomList').innerHTML = ROWS.filter(r => rowLvl(r) === 'bad').slice(-5).reverse().map(r => `<li>${lvlPill('bad')} <b class="mono">${r.id}</b> ${r.room} ${fmtT(r.t)}<br><span class="small">PM2.5 ${nf(r.pm)} µg/m³ ／ CO2 ${r.co2} ppm</span></li>`).join('');
+}
+function renderDashboard() {
+  renderKpis();
+  $('#approveList').innerHTML = [['LCA 条件セット v5', '院生 A', '係数表 v2.1 への更新'], ['測定データ 10月分', '学部生 C', '欠測 14 行を除外'], ['レポート（論文用）', '院生 B', '図 3 点・代替表付き']].map((a, i) => `<li><b>${a[0]}</b>（${a[1]}）<br><span class="small muted">${a[2]}</span><div class="row" style="margin-top:4px"><button class="btn btn-sm btn-primary" type="button" data-approve="${i}">承認</button><button class="btn btn-sm" type="button" data-approve="${i}" data-back>差し戻し…</button></div></li>`).join('');
+  sortableTable($('#jobsTable'), [
+    {k: 'id', l: 'ジョブ', h: r => `<a href="#detail" class="mono">${r.id}</a>`}, {k: 'kind', l: '種別'}, {k: 'eng', l: 'エンジン・版'}, {k: 'ver', l: '条件の版'},
+    {k: 'st', l: '状態', h: r => stHtml(r.st)}, {k: 'dur', l: '所要', num: true}, {k: 'who', l: '実行者'}, {k: 'at', l: '日時'}
+  ], JOBS, {caption: '最近の計算ジョブ'});
+}
+$('#approveList').addEventListener('click', e => { const b = e.target.closest('[data-approve]'); if (!b) return; const li = b.closest('li'); if (b.hasAttribute('data-back')) confirmDlg('差し戻すと申請者に通知されます。差し戻しますか。', () => { li.remove(); toast('warn', '差し戻しました'); }, b); else { li.remove(); toast('ok', '承認しました（版に記録）'); } });
+
+/* ---------- 測定入力（学部生） ---------- */
+function isoOut() { const v = Number($('#ePc').value.replace(/,/g, '')); $('#eIso').textContent = $('#ePc').value && isFinite(v) && v >= 0 ? `クラス ${isoClass(v) > 9 ? '9超' : isoClass(v)}` : '—'; }
+$('#ePc').addEventListener('input', isoOut);
+$('#entryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const errs = [];
+  const chk = (id, eid, label, conv, min, max, unitName) => {
+    const el = $(id), raw = el.value.trim(), er = $(eid); let msg = '';
+    let n = Number(raw.replace(/,/g, ''));
+    if (raw === '') msg = `${label}を入力してください`;
+    else if (!isFinite(n)) msg = `${label}は数値で入力してください（例: 12.5）。単位は右の選択欄で選びます`;
+    else { n = conv(n); if (n < min || n > max) msg = `${label}は ${min}〜${max} ${unitName} の範囲です（換算後 ${nf(n)}）。単位の選択が正しいか確認してください`; }
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false'); er.hidden = !msg; er.textContent = msg ? '✕ ' + msg : '';
+    if (msg) errs.push({id, msg}); return n;
+  };
+  const pm = chk('#ePm', '#ePmE', 'PM2.5', n => $('#ePmU').value === 'mg' ? n * 1000 : n, 0, 1000, 'µg/m³');
+  const co = chk('#eCo2', '#eCo2E', 'CO2', n => $('#eCo2U').value === 'pct' ? n * 10000 : n, 300, 10000, 'ppm');
+  const pcRaw = $('#ePc').value.trim();
+  if (pcRaw) chk('#ePc', '#ePcE', '浮遊粒子数', n => n, 0, 1e9, '個/m³'); else { $('#ePc').setAttribute('aria-invalid', 'false'); $('#ePcE').hidden = true; }
+  const box = $('#entryErrors');
+  if (errs.length) {
+    box.hidden = false; box.innerHTML = `<h3>${errs.length} 件の入力を確認してください</h3><ul>${errs.map(x => `<li><a href="${x.id}">${esc(x.msg)}</a></li>`).join('')}</ul>`; box.focus(); return;
+  }
+  box.hidden = true;
+  const l = pm >= TH.pmBad || co >= TH.co2Bad ? 'bad' : pm >= TH.pmWarn || co >= TH.co2Warn ? 'warn' : 'ok';
+  toast(l === 'ok' ? 'ok' : 'warn', `保存しました: ${$('#eRoom').value} PM2.5 ${nf(pm)} µg/m³、CO2 ${nf(co, 0)} ppm（判定: ${LVL[l].l}）`);
+  store.set('lastRoom', $('#eRoom').value);
+  $('#eRoomH').textContent = `前回: ${$('#eRoom').value}（引き継ぎ）`;
+  $('#ePm').value = ''; $('#eCo2').value = ''; $('#ePc').value = ''; isoOut(); $('#ePm').focus();
+});
+$('#entryErrors').addEventListener('click', e => { const a = e.target.closest('a'); if (a) { e.preventDefault(); $(a.getAttribute('href')).focus(); } });
+
+/* ---------- 詳細 ---------- */
+const VERS = {5: {conc: 0.29, pmWarn: 35, total: null}, 4: {conc: 0.31, pmWarn: 35}, 3: {conc: 0.31, pmWarn: 30}};
+function renderDetail() {
+  const v = +$('#verSel').value, latest = v === 5;
+  const b = $('#pastBanner');
+  b.hidden = latest;
+  if (!latest) b.innerHTML = `<span aria-hidden="true">ⓘ</span> 過去版 v${v} を表示中です（最新は v5）。この版の値を報告に使う場合は理由を記録してください。<span class="spacer"></span><button class="btn btn-sm" type="button" id="toLatest">最新版に戻る</button>`;
+  const r = lcaCalc();
+  const total = latest ? r.total : r.total + 1200 * (VERS[v].conc - 0.29);
+  $('#detailKpis').innerHTML = [
+    ['合計 CO2 排出量', `${nf(total)} <span class="small">t-CO2e</span>`, stHtml('ok')],
+    ['延床面積あたり', `${nf(total * 1000 / 4800, 0)} <span class="small">kg-CO2e/m²</span>`, '<span class="muted small">延床 4,800 m²</span>'],
+    ['ISO クラス（C101）', '5', '<span class="st st-ok"><span class="sym" aria-hidden="true">●</span>基準内</span>'],
+    ['異常値（B205・10/1）', String(ROWS.filter(x => x.room === 'B205').slice(0, 144).filter(x => pmLvl(x.pm) === 'bad').length), '<span class="pill v-bad"><span aria-hidden="true">⚠</span>異常</span>']
+  ].map(k => `<div class="card kpi"><span class="l">${k[0]}</span><span class="v">${k[1]}</span><span>${k[2]}</span></div>`).join('');
+  tsChart($('#tsChart'));
+  barChart($('#lcaChartDetail'), r.parts.map(p => ({l: p.name, v: p.e})), 't-CO2e');
+  $('#lcaTableDetail').innerHTML = lcaTableHtml(r);
+  $('#lcaSrcDetail').textContent = `図の入力: ジョブ J-0412、条件 v${v}、係数表 DMY-2026 ${v === 5 ? 'v2.1' : 'v2.0'}、${ENG.sage}`;
+  $('#provList').innerHTML = [
+    ['入力データ', 'aq_2026-10_Bblock.csv（5,000 行）'], ['ハッシュ', '<span class="mono">sha256 3f9a1c…e21</span>'], ['条件の版', 'v' + v + (latest ? '（最新）' : '（過去版）')],
+    ['Math IR', '<span class="mono">ir-7c41…0b9（ISO クラス式）</span>'], ['主エンジン', ENG.sage], ['照合', `${ENG.sympy} / ${ENG.matlab}: 差 0`],
+    ['LCA 演算子', '<span class="mono">math_tools_v2/lca_ops.py</span>'], ['係数表', 'DMY-2026 ' + (v === 5 ? 'v2.1' : 'v2.0') + '（ダミー）'],
+    ['乱数シード', '42'], ['実行者', '院生 A（ダミー）'], ['実行日時', '2026-11-14 15:10'], ['実行環境', '学内計算サーバー（ダミー）']
+  ].map(p => `<dt>${p[0]}</dt><dd>${p[1]}</dd>`).join('');
+  sortableTable($('#diffTable'), [{k: 'item', l: '項目'}, {k: 'a', l: 'v3'}, {k: 'b', l: 'v4'}, {k: 'c', l: 'v5'}, {k: 'who', l: '変更者'}], [
+    {item: 'コンクリート係数', a: '0.31', b: '0.31', c: '0.29（変更）', who: '院生 A'},
+    {item: 'PM2.5 注意（µg/m³）', a: '30', b: '35（変更）', c: '35', who: '院生 A'},
+    {item: '承認', a: '教授 K', b: '—', c: '申請中', who: '—'}
+  ], {caption: '版の差分'});
+  $('#reproCmd').textContent = `# 同条件で再現（GUI 操作から自動生成）\npython -m pipeline_ledger run \\\n  --pipeline v${v} --job J-0412 \\\n  --input aq_2026-10_Bblock.csv --sha256 3f9a1c...e21 \\\n  --engine sage --crosscheck sympy,matlab --seed 42`;
+}
+$('#verSel').addEventListener('change', renderDetail);
+$('#pastBanner').addEventListener('click', e => { if (e.target.id === 'toLatest') { $('#verSel').value = '5'; renderDetail(); $('#verSel').focus(); } });
+$('#copyCmd').addEventListener('click', () => { const t = $('#reproCmd').textContent; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('ok', '再現コマンドをコピーしました'), () => toast('warn', 'コピーできませんでした。コマンド欄を選択してコピーしてください')); });
+
+/* ---------- ダイアログ ---------- */
+let lastOpener = null;
+function openDlg(d, opener) {
+  lastOpener = opener || document.activeElement;
+  if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  const f = d.querySelector('[autofocus]') || d.querySelector('input:not([type=hidden]),select,textarea,button');
+  if (f) f.focus();
+}
+$$('dialog').forEach(d => {
+  d.addEventListener('close', () => { if (lastOpener && document.contains(lastOpener)) lastOpener.focus(); });
+  d.addEventListener('click', e => { if (e.target.closest('[data-close]')) d.close(); });
+});
+function confirmDlg(msg, onOk, opener) {
+  $('#dlgConfirmMsg').textContent = msg;
+  const go = $('#dlgConfirmGo'); const ng = go.cloneNode(true); go.replaceWith(ng);
+  ng.addEventListener('click', () => { $('#dlgConfirm').close(); onOk(); });
+  openDlg($('#dlgConfirm'), opener);
+}
+$('#rerunBtn').addEventListener('click', e => {
+  $('#rerunKv').innerHTML = `<dt>ジョブ</dt><dd>J-0412（LCA 演算）</dd><dt>条件の版</dt><dd>v${$('#verSel').value}</dd><dt>入力</dt><dd class="mono">aq_2026-10_Bblock.csv / sha256 3f9a1c…e21</dd><dt>エンジン</dt><dd>${ENG.sage}</dd>`;
+  openDlg($('#dlgRerun'), e.currentTarget);
+});
+$('#rrGo').addEventListener('click', () => {
+  $('#dlgRerun').close();
+  toast('info', 'J-0412 を同条件で再実行しています…');
+  setTimeout(() => { toast('ok', '再実行が完了しました。元の結果と一致（差 0.0%、ハッシュ一致）'); announce('再実行が完了しました。元の結果と一致しました'); }, 1500);
+});
+$('#helpBtn').addEventListener('click', e => openDlg($('#dlgHelp'), e.currentTarget));
+$('#openDemoDlg').addEventListener('click', e => openDlg($('#dlgDemo'), e.currentTarget));
+$('#dangerDemo').addEventListener('click', e => confirmDlg('この操作は元に戻せません（例）。実行しますか。', () => toast('ok', '実行しました（例）'), e.currentTarget));
+$('#resetTh').addEventListener('click', e => confirmDlg('閾値テンプレートを初期値（PM2.5 35/55、CO2 1000/1500）に戻します。現在の値は変更履歴に残ります。戻しますか。', () => { $('#thPmW').value = 35; $('#thPmB').value = 55; $('#thCoW').value = 1000; $('#thCoB').value = 1500; toast('ok', '初期値に戻しました'); }, e.currentTarget));
+
+/* ---------- コマンドパレット ---------- */
+const CMDS = [
+  {l: 'ダッシュボードへ移動', k: 'g d', f: () => go('dashboard')}, {l: '作業画面へ移動', k: 'g w', f: () => go('workspace')},
+  {l: '結果の詳細へ移動', k: 'g r', f: () => go('detail')}, {l: '設定へ移動', k: 'g s', f: () => go('settings')},
+  {l: '共通部品へ移動', k: 'g c', f: () => go('components')}, {l: '未適用の変更を実行', k: 'Ctrl+Enter', f: () => { go('workspace'); runPipeline(); }},
+  {l: '台帳を CSV で書き出す', k: '', f: () => doExport('csv')}, {l: '台帳を Excel 用に書き出す', k: '', f: () => doExport('xls')},
+  {l: 'PDF に印刷', k: '', f: () => doExport('pdf')}, {l: '同条件で再実行（J-0412）', k: '', f: () => { go('detail'); setTimeout(() => $('#rerunBtn').click(), 50); }},
+  {l: '配色を切り替える', k: '', f: () => cycleTheme()}, {l: 'ショートカット一覧', k: '?', f: () => openDlg($('#dlgHelp'))}
+];
+function drawCmds(q) {
+  q = (q || '').trim();
+  $('#cmdList').innerHTML = CMDS.map((c, i) => ({c, i})).filter(o => !q || o.c.l.includes(q)).map(o => `<li><button type="button" data-cmd="${o.i}"><span>${esc(o.c.l)}</span>${o.c.k ? `<kbd>${esc(o.c.k)}</kbd>` : ''}</button></li>`).join('') || '<li class="muted small">一致するコマンドはありません</li>';
+}
+function openCmd() { drawCmds(''); $('#cmdQ').value = ''; openDlg($('#dlgCmd'), document.activeElement); }
+$('#cmdBtn').addEventListener('click', openCmd);
+$('#cmdQ').addEventListener('input', e => drawCmds(e.target.value));
+$('#cmdQ').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); const b = $('#cmdList button'); if (b) b.click(); } if (e.key === 'ArrowDown') { e.preventDefault(); const b = $('#cmdList button'); if (b) b.focus(); } });
+$('#cmdList').addEventListener('keydown', e => { const bs = $$('#cmdList button'), i = bs.indexOf(document.activeElement); if (e.key === 'ArrowDown' && i < bs.length - 1) { e.preventDefault(); bs[i + 1].focus(); } if (e.key === 'ArrowUp') { e.preventDefault(); i > 0 ? bs[i - 1].focus() : $('#cmdQ').focus(); } });
+$('#cmdList').addEventListener('click', e => { const b = e.target.closest('[data-cmd]'); if (!b) return; const c = CMDS[+b.dataset.cmd]; lastOpener = null; $('#dlgCmd').close(); c.f(); });
+
+/* ---------- タブ（ARIA） ---------- */
+function selectTab(tab) {
+  const list = tab.closest('[role=tablist]');
+  $$('[role=tab]', list).forEach(t => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; const p = document.getElementById(t.getAttribute('aria-controls')); if (p) p.hidden = !on; });
+}
+$$('[role=tablist]').forEach(list => {
+  list.addEventListener('click', e => { const t = e.target.closest('[role=tab]'); if (t) selectTab(t); });
+  list.addEventListener('keydown', e => {
+    const tabs = $$('[role=tab]', list), i = tabs.indexOf(document.activeElement); if (i < 0) return;
+    let n = null;
+    if (e.key === 'ArrowRight') n = (i + 1) % tabs.length; else if (e.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length; else if (e.key === 'Home') n = 0; else if (e.key === 'End') n = tabs.length - 1;
+    if (n != null) { e.preventDefault(); tabs[n].focus(); selectTab(tabs[n]); }
+  });
+});
+let ledger = null;
+$('#t-ledger').addEventListener('click', () => { if (!ledger) ledger = createGrid($('#ledgerHost'), '測定台帳（全ジョブ共通）'); else ledger.apply(); });
+$('#wsModeTabs').addEventListener('keydown', () => setTimeout(() => { if ($('#t-ledger').getAttribute('aria-selected') === 'true' && !ledger) ledger = createGrid($('#ledgerHost'), '測定台帳（全ジョブ共通）'); }, 0));
+$('#t-out').addEventListener('click', () => { if (curStage === 'validate') grids.forEach(g => g.redraw()); });
+
+/* ---------- 設定 ---------- */
+$('#thForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const defs = [['#thPmW', 'PM2.5 注意', 0, 500], ['#thPmB', 'PM2.5 異常', 0, 500], ['#thCoW', 'CO2 注意', 400, 5000], ['#thCoB', 'CO2 異常', 400, 10000]];
+  const errs = [];
+  const vals = defs.map(([id, l, mn, mx]) => { const el = $(id), n = Number(el.value); let m = ''; if (el.value.trim() === '' || !isFinite(n)) m = `${l}を数値で入力してください`; else if (n < mn || n > mx) m = `${l}は ${mn}〜${mx} の範囲にしてください（入力 ${el.value}）`; setErr(id, m); if (m) errs.push([id, m]); return n; });
+  if (!errs.length && vals[0] >= vals[1]) { const m = `PM2.5 注意（${vals[0]}）が異常（${vals[1]}）以上です。注意を ${vals[1]} 未満にするか、異常を ${vals[0]} より大きくしてください`; setErr('#thPmW', m); errs.push(['#thPmW', m]); }
+  if (!errs.length && vals[2] >= vals[3]) { const m = `CO2 注意（${vals[2]}）が異常（${vals[3]}）以上です。注意を ${vals[3]} 未満にしてください`; setErr('#thCoW', m); errs.push(['#thCoW', m]); }
+  const box = $('#thErrors');
+  if (errs.length) { box.hidden = false; box.innerHTML = `<h3>✕ ${errs.length} 件のエラー</h3><ul>${errs.map(x => `<li><a href="${x[0]}">${esc(x[1])}</a></li>`).join('')}</ul>`; box.focus(); return; }
+  box.hidden = true; toast('ok', 'テンプレートを保存しました。次の実行から反映されます（検証の段が ↻ 要再計算 になります）');
+});
+$('#thErrors').addEventListener('click', e => { const a = e.target.closest('a'); if (a) { e.preventDefault(); $(a.getAttribute('href')).focus(); } });
+function setErr(id, m) { const el = $(id), er = $(id + 'E'); el.setAttribute('aria-invalid', m ? 'true' : 'false'); er.hidden = !m; er.textContent = m ? '✕ ' + m : ''; }
+$('#demoForm').addEventListener('submit', e => { e.preventDefault(); const el = $('#dQty'), n = Number(el.value); const ok = el.value.trim() !== '' && isFinite(n) && n >= 0 && n <= 100000; el.setAttribute('aria-invalid', String(!ok)); $('#dQtyE').hidden = ok; if (ok) toast('ok', `${n} m³ は範囲内です`); else el.focus(); });
+
+function renderColOrder() {
+  $('#colOrder').innerHTML = colOrder.map((k, i) => `<li draggable="true" data-k="${k}"><span class="grip" aria-hidden="true">⋮⋮</span><span style="flex:1">${esc(GRID_COLS.find(c => c.k === k).l)}</span><button class="btn btn-sm" type="button" data-mv="-1" ${i === 0 ? 'disabled' : ''} aria-label="${esc(GRID_COLS.find(c => c.k === k).l)} を上へ">↑</button><button class="btn btn-sm" type="button" data-mv="1" ${i === colOrder.length - 1 ? 'disabled' : ''} aria-label="${esc(GRID_COLS.find(c => c.k === k).l)} を下へ">↓</button></li>`).join('');
+}
+function commitOrder(msg, focusK, dir) { store.set('colOrder', colOrder); renderColOrder(); grids.forEach(g => g.redraw()); announce(msg); if (focusK) { const li = $(`#colOrder li[data-k="${focusK}"]`); const b = li && (li.querySelector(`[data-mv="${dir}"]:not([disabled])`) || li.querySelector('[data-mv]:not([disabled])')); if (b) b.focus(); } }
+$('#colOrder').addEventListener('click', e => { const b = e.target.closest('[data-mv]'); if (!b) return; const k = b.closest('li').dataset.k, i = colOrder.indexOf(k), j = i + +b.dataset.mv; [colOrder[i], colOrder[j]] = [colOrder[j], colOrder[i]]; commitOrder(`${GRID_COLS.find(c => c.k === k).l} を ${j + 1} 番目に移動しました`, k, b.dataset.mv); });
+let dragK = null;
+$('#colOrder').addEventListener('dragstart', e => { const li = e.target.closest('li'); if (!li) return; dragK = li.dataset.k; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragK); } catch (x) {} });
+$('#colOrder').addEventListener('dragover', e => { const li = e.target.closest('li'); if (!li) return; e.preventDefault(); $$('#colOrder li').forEach(l => l.classList.toggle('drag-over', l === li)); });
+$('#colOrder').addEventListener('drop', e => { e.preventDefault(); const li = e.target.closest('li'); $$('#colOrder li').forEach(l => l.classList.remove('drag-over')); if (!li || !dragK || li.dataset.k === dragK) return; const from = colOrder.indexOf(dragK); colOrder.splice(from, 1); colOrder.splice(colOrder.indexOf(li.dataset.k), 0, dragK); commitOrder('列の並び順を変更しました'); dragK = null; });
+$$('input[name=dens]').forEach(r => r.addEventListener('change', () => { document.documentElement.dataset.density = r.value; store.set('dens', r.value); grids.forEach(g => g.redraw()); }));
+$$('input[name=theme]').forEach(r => r.addEventListener('change', () => setTheme(r.value)));
+
+const KEYS = [['?', 'ショートカット一覧とヘルプ'], ['Ctrl + K', 'コマンドパレット'], ['g → d / w / r / s / c', 'ダッシュボード / 作業 / 結果 / 設定 / 部品へ移動'], ['[ と ]', '前の段 / 次の段（作業画面）'], ['Ctrl + Enter', '未適用の変更を実行'], ['/', '台帳の検索欄へ'], ['↑ ↓ / PageUp PageDown / Home End', '台帳の行を移動'], ['1 〜 3 / 0', '選択行にタグ（要確認・除外候補・再測定）/ タグを消す'], ['Enter', '選択行の判定理由と来歴を表示'], ['← → / Home End', 'タブの切り替え'], ['F6', 'パネル（上部バー・ナビ・段・作業・根拠・ジョブ）の間を移動'], ['Esc', 'ダイアログを閉じる']];
+[$('#keysTable'), $('#keysTable2')].forEach(t => { t.innerHTML = `<thead><tr><th scope="col">キー</th><th scope="col">操作</th></tr></thead><tbody>${KEYS.map(k => `<tr><td data-label="キー">${k[0].split(' ').map(x => /^[a-zA-Z?\/\[\]0-9↑↓←→]$|^(Ctrl|Enter|Esc|F6|Home|End|PageUp|PageDown|K)$/.test(x) ? `<kbd>${esc(x)}</kbd>` : esc(x)).join(' ')}</td><td data-label="操作">${esc(k[1])}</td></tr>`).join('')}</tbody>`; });
+
+/* ---------- 部品ページ ---------- */
+function renderComponents() {
+  $('#stateVocab').innerHTML = Object.keys(STV).map(stHtml).join('');
+  sortableTable($('#demoTable'), [{k: 'room', l: '部屋'}, {k: 'pm', l: 'PM2.5', u: 'µg/m³', num: true, h: r => (pmLvl(r.pm) === 'bad' ? '⚠ ' : pmLvl(r.pm) === 'warn' ? '△ ' : '') + nf(r.pm), cls: r => ({bad: 'c-bad', warn: 'c-warn'}[pmLvl(r.pm)] || '')}, {k: 'iso', l: 'ISO', num: true}], [{room: 'C101', pm: 1.2, iso: 5}, {room: 'B204', pm: 38.4, iso: 8}, {room: 'B205', pm: 61.0, iso: 9}, {room: 'L1', pm: 9.8, iso: 8}], {caption: '並べ替えの例'});
+  const d = [{l: '2024', v: 1020}, {l: '2025', v: 960}, {l: '2026', v: 900}];
+  barChart($('#demoChart'), d, 't-CO2e');
+  $('#demoChartTable').innerHTML = `<thead><tr><th>年度</th><th class="num">t-CO2e</th></tr></thead><tbody>${d.map(x => `<tr><td data-label="年度">${x.l}</td><td data-label="t-CO2e" class="num">${x.v}</td></tr>`).join('')}</tbody>`;
+  drawSwatches();
+  $('#typeScale').innerHTML = [['--fs-2xl', '22px', '指標の数値'], ['--fs-xl', '18px', '画面見出し h1'], ['--fs-lg', '15px', '節見出し・根拠ページ本文'], ['--fs-md', '13px', '本文・フォーム'], ['--fs-sm', '12.5px', '表・根拠パネル'], ['--fs-xs', '11.5px', '単位・補足（最小）']].map(t => `<div style="font-size:var(${t[0]})"><code>${t[0]}</code> ${t[1]} — ${t[2]} 0123456789 µg/m³</div>`).join('');
+  $('#spaceScale').innerHTML = `<div class="row">${['--sp-1', '--sp-2', '--sp-3', '--sp-4', '--sp-6', '--sp-8'].map(s => `<div style="display:grid;gap:2px;justify-items:center"><i style="display:block;width:var(${s});height:var(${s});background:var(--accent)"></i><code class="small">${s}</code></div>`).join('')}</div><div class="row">${['--r-sm', '--r-md', '--r-lg'].map(r => `<div style="width:72px;height:40px;border:2px solid var(--border-strong);border-radius:var(${r});display:grid;place-items:center"><code class="small">${r}</code></div>`).join('')}</div><p class="small muted">余白は 4px の倍数。行の高さ 26px（詰めた表示 22px）。</p>`;
+}
+const TOKENS = [['--bg', '画面の背景'], ['--surface', 'パネル・カード'], ['--surface-2', '表のヘッダー・ホバー'], ['--border', '区切り線（装飾）'], ['--border-strong', '入力欄の枠（UI 3:1）'], ['--text', '本文'], ['--text-2', '補助の文字'], ['--accent', '主ボタン・選択・リンク'], ['--focus', 'フォーカスリング'], ['--st-unset', '○ 未設定'], ['--st-ready', '◐ 準備完了・△ 注意'], ['--st-ok', '● 成功・✓ 正常'], ['--st-fail', '✕ 失敗・⚠ 異常'], ['--st-stale', '↻ 要再計算・未適用'], ['--bg-fail', '異常セルの背景'], ['--bg-warn', '注意セルの背景'], ['--info-bg', '過去版バナー背景'], ['--info-text', '過去版バナー文字'], ['--chart-1', 'グラフの系列']];
+function drawSwatches() {
+  const cs = getComputedStyle(document.documentElement);
+  $('#swatches').innerHTML = TOKENS.map(t => `<div class="sw"><i style="background:var(${t[0]})"></i><div><code>${t[0]}</code><code>${cs.getPropertyValue(t[0]).trim()}</code><span class="small muted">${t[1]}</span></div></div>`).join('');
+}
+$(document.body).addEventListener('click', e => {
+  const t = e.target.closest('[data-toast]'); if (t) toast(t.dataset.toast, t.dataset.toast === 'ok' ? '操作を受け付けました（試作）' : '試作のため、この操作は表示のみです');
+  const x = e.target.closest('[data-export]'); if (x) doExport(x.dataset.export);
+});
+
+/* ---------- 配色 ---------- */
+function setTheme(m) {
+  if (m === 'auto') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = m;
+  const lab = {auto: '自動', light: 'ライト', dark: 'ダーク'}[m];
+  $('#themeBtn').textContent = '配色: ' + lab; $('#themeBtn').setAttribute('aria-label', `配色の切替（現在: ${lab}）`);
+  const r = $(`input[name=theme][value=${m}]`); if (r) r.checked = true;
+  store.set('theme', m); drawSwatches();
+}
+function cycleTheme() { const cur = document.documentElement.dataset.theme || 'auto'; setTheme({auto: 'light', light: 'dark', dark: 'auto'}[cur]); }
+$('#themeBtn').addEventListener('click', cycleTheme);
+
+/* ---------- ルーティング ---------- */
+const VIEWS = {dashboard: 'ダッシュボード', workspace: '作業', detail: '結果の詳細', settings: '設定・管理', components: '共通部品'};
+function go(n) { if (location.hash !== '#' + n) location.hash = n; else route(); }
+function route(initial) {
+  let n = location.hash.slice(1); if (!VIEWS[n]) n = 'dashboard';
+  Object.keys(VIEWS).forEach(v => { $('#view-' + v).hidden = v !== n; });
+  $$('[data-nav]').forEach(a => { if (a.dataset.nav === n) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.title = `${VIEWS[n]} | Pipeline Ledger 試作`;
+  if (n === 'detail') renderDetail();
+  if (n === 'workspace') grids.forEach(g => g.redraw());
+  if (n === 'components') renderComponents();
+  if (!initial) { const h = $('#h-' + n); if (h) h.focus({preventScroll: true}); window.scrollTo(0, 0); }
+}
+window.addEventListener('hashchange', () => route(false));
+
+/* ---------- キーボード ---------- */
+let gPending = false, gTimer = null;
+document.addEventListener('keydown', e => {
+  const tg = e.target, typing = tg.closest && (tg.closest('input,textarea,select,[contenteditable=true]'));
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmd(); return; }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { if (!$('#view-workspace').hidden) { e.preventDefault(); runPipeline(); } return; }
+  if (e.key === 'F6') { e.preventDefault(); const rs = $$('[data-f6]').filter(r => r.offsetParent !== null || r.classList.contains('topbar')); const i = rs.findIndex(r => r.contains(document.activeElement)); const nx = rs[(i + (e.shiftKey ? -1 : 1) + rs.length) % rs.length]; if (nx) nx.focus(); return; }
+  if (typing || e.ctrlKey || e.metaKey || e.altKey || document.querySelector('dialog[open]')) return;
+  if (gPending) { gPending = false; clearTimeout(gTimer); const m = {d: 'dashboard', w: 'workspace', r: 'detail', s: 'settings', c: 'components'}[e.key]; if (m) { e.preventDefault(); go(m); } return; }
+  if (e.key === 'g') { gPending = true; gTimer = setTimeout(() => { gPending = false; }, 1200); return; }
+  if (e.key === '?') { e.preventDefault(); openDlg($('#dlgHelp')); return; }
+  if (e.key === '/') { const vis = grids.find(g => g.host.offsetParent !== null); if (vis) { e.preventDefault(); vis.focusFilter(); } return; }
+  if ((e.key === '[' || e.key === ']') && !$('#view-workspace').hidden) {
+    const role = document.body.dataset.role, avail = STAGES.filter(s => s.roles.includes(role)); const i = avail.findIndex(s => s.id === curStage);
+    const n = avail[i + (e.key === ']' ? 1 : -1)]; if (n) { e.preventDefault(); selectStage(n.id, true); announce(`${n.name}: ${STV[n.state].l}`); }
+  }
+});
+mq.addEventListener('change', () => { renderStage(); grids.forEach(g => g.redraw()); });
+
+/* ---------- 初期化 ---------- */
+const lr = store.get('lastRoom', null); if (lr) { $('#eRoom').value = lr; $('#eRoomH').textContent = `前回: ${lr}（引き継ぎ）`; }
+const dens = store.get('dens', 'normal'); document.documentElement.dataset.density = dens; const dr = $(`input[name=dens][value=${dens}]`); if (dr) dr.checked = true;
+setTheme(store.get('theme', 'auto'));
+renderColOrder(); renderMon(); renderDashboard();
+applyRole(store.get('role', 'grad'));
+route(true);
+})();
+</script>
+</body>
+</html>

@@ -261,6 +261,14 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
   .toast{bottom:calc(var(--bottomnav-h) + 16px)}
   /* 表 → カードリスト */
   table.responsive thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  /* a11y修正: 並べ替えボタンを含む見出し行はカード表示でも見える「並べ替えバー」にする（非表示の要素にフォーカスが移る問題の解消 / 2.4.7・2.4.11） */
+  table.responsive thead:has(.sort-btn){position:static;width:auto;height:auto;overflow:visible;clip:auto;display:block;margin-bottom:var(--space-3)}
+  table.responsive thead:has(.sort-btn) tr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:0;padding:0;margin:0;background:none}
+  table.responsive thead:has(.sort-btn) tr::before{content:"並べ替え:";font-size:var(--fs-sm);font-weight:700;color:var(--color-text-muted)}
+  table.responsive thead:has(.sort-btn) th{display:block;width:auto;border:0;padding:0;background:none}
+  table.responsive thead:has(.sort-btn) th:not([aria-sort]){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  table.responsive thead:has(.sort-btn) .sort-btn{min-height:var(--target-min);padding:0 12px;border:1px solid var(--color-border-strong);border-radius:999px;background:var(--color-surface);box-sizing:border-box}
+  table.responsive thead:has(.sort-btn) th[aria-sort="ascending"] .sort-btn,table.responsive thead:has(.sort-btn) th[aria-sort="descending"] .sort-btn{border-color:var(--color-primary);color:var(--color-primary-hover)}
   table.responsive,table.responsive tbody,table.responsive tr,table.responsive td{display:block;width:100%}
   table.responsive tr{border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:var(--space-3);padding:var(--space-2) var(--space-3);background:var(--color-surface)}
   table.responsive td{display:flex;justify-content:space-between;gap:var(--space-3);border:0;padding:6px 0;text-align:right}
