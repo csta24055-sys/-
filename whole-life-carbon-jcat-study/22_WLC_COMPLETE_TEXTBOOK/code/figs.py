@@ -234,7 +234,7 @@ def fig_research_map():
     lane2 = lane("J-CAT 原版（利用条件により非公開）", "件数と方法だけを公開。数式の文・値・セル番地は非公開", orig, "#f1f1f1")
     bottom = ("<div style='display:flex;gap:10px;align-items:stretch'>"
               + box("12", "アプリの基礎", "入力変換・表示・SQLite 保存。計算は統一系", w=300)
-              + box("22", "教材（本書）", "五つの原理 P1〜P5 ＋ E で全体を学ぶ。問題 40 問", w=300, tone="#eaeaea")
+              + box("22", "教材（本書）", "五つの原理 P1〜P5 ＋ E で全体を学ぶ。問題 47 問", w=300, tone="#eaeaea")
               + "<div style='font-size:12.5px;color:#333;align-self:center;width:330px'>上の帯の 2 つの構造（10・11）を、下の帯の変換（15〜19）で使った。"
                 "二つの帯の結果を混同しない（原版の式を表せることは、J-CAT と同じ結果を出すことではない）。</div></div>")
     return f"<div style='padding:12px;background:#fff;font-family:IPAGothic;width:1130px'>{lane1}{lane2}{bottom}</div>"
