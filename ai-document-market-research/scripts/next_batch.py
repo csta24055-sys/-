@@ -14,7 +14,9 @@ It rewrites the task file of every selected unit with a `todo` block:
   previous_search_results  links returned by earlier real searches for this unit (so they need not be repeated)
   previous_unit         the unit record merged so far, if any
 
-Usage: python3 scripts/next_batch.py TASK_DIR STAGING_DIR BUDGET GROUPS [INFLIGHT_DIR TAG]  -> prints JSON {groups: [[kind:id,...],...]}
+Usage: python3 scripts/next_batch.py TASK_DIR STAGING_DIR BUDGET GROUPS [INFLIGHT_DIR TAG] [--chat-only N]  -> prints JSON {groups: [[kind:id,...],...]}
+--chat-only N: a READ-ONLY pass (no search allowance) for up to N units that still have unassessed candidate URLs
+               from the other session, including units that are already S1_DONE.
 With INFLIGHT_DIR, units that already have a marker there (assigned to a running batch) are skipped and the
 picked units get a marker `<kind>_<id>` containing `TAG.g<group>`; remove the markers when that group has finished.
 """
@@ -42,6 +44,13 @@ def rows(n):
 
 
 def main() -> None:
+    argv = sys.argv[:]
+    chat_only = 0
+    if '--chat-only' in argv:
+        i = argv.index('--chat-only')
+        chat_only = int(argv[i + 1])
+        del argv[i:i + 2]
+    sys.argv = argv
     tdir, sdir, budget, groups = Path(sys.argv[1]), Path(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
     inflight = Path(sys.argv[5]) if len(sys.argv) > 5 else None
     tag = sys.argv[6] if len(sys.argv) > 6 else 'B'
@@ -75,6 +84,13 @@ def main() -> None:
                 u = json.loads(line)
                 cunits[u['competitor_id']] = u
 
+    chat = defaultdict(list)  # unit -> open candidate URLs collected by the other session (registry/chat1000_candidate_review.csv)
+    for x in rows('chat1000_candidate_review.csv'):
+        if x['review_state'] in ('NOT_READ', 'READ_NOT_YET_ASSESSED', 'IN_LEDGER_OTHER_TOPIC'):
+            for u in [y for y in x.get('assigned_units', '').split(';') if y]:
+                chat[u].append({'review_id': x['review_id'], 'url': x['url'], 'claimed_source_class': x['claimed_source_class'],
+                                'claimed_read_depth': x['claimed_read_depth'], 'cache_state': x['cache_state']})
+    CHAT_PER_PASS = 8
     cand = []
     for t in st['trows'] + st['arows']:
         if t['gate_state'] == 'S1_DONE':
@@ -93,6 +109,10 @@ def main() -> None:
         allowance = 2 if (has_profile and c['official_confirmed'] == 'YES') else (3 if has_profile else 4)
         cand.append({'kind': 'COMPETITOR', 'id': c['competitor_id'], 'priority': c['research_priority'], 'allowance': allowance, 'legacy': [],
                      'routes': ['COUNTER'] if has_profile else ['PRIMARY', 'COUNTER'], 'need_unit': not has_profile, 'need_open': True})
+    if chat_only:
+        kind_of = {t['topic_id']: 'TOPIC' for t in st['trows'] + st['arows']} | {c['competitor_id']: 'COMPETITOR' for c in st['crows']}
+        cand = [{'kind': kind_of[u], 'id': u, 'priority': 'P9', 'allowance': 0, 'legacy': [], 'routes': [], 'need_unit': False, 'need_open': True}
+                for u in sorted(chat, key=lambda u: -len(chat[u])) if u in kind_of][: chat_only * 3]
     cand = [c for c in cand if f"{c['kind']}_{c['id']}" not in busy]
     tops = sorted([c for c in cand if c['kind'] == 'TOPIC'], key=lambda c: (c['priority'], c['id']))
     cmps = sorted([c for c in cand if c['kind'] == 'COMPETITOR'], key=lambda c: (c['priority'], c['id']))
@@ -104,18 +124,22 @@ def main() -> None:
         if cmps:
             order.append(cmps.pop(0))
     picked, total = [], 0
+    if chat_only:
+        order = [c for c in cand][:chat_only]
     for c in order:
         if total + c['allowance'] > budget:
             continue
         picked.append(c)
         total += c['allowance']
     for c in picked:
+        c['chat'] = sorted(chat.get(c['id'], []), key=lambda x: (x['cache_state'] != 'NOT_IN_CACHE', x['review_id']))[:CHAT_PER_PASS]
         sub = 'topics' if c['kind'] == 'TOPIC' else 'competitors'
         p = tdir / sub / f"{c['id']}.json"
         task = json.loads(p.read_text(encoding='utf-8'))
         task['todo'] = {'legacy_queries_todo': c['legacy'], 'routes_todo': c['routes'], 'max_searches': c['allowance'],
                         'need_unit_record': c['need_unit'], 'need_to_open_originals': c['need_open'],
                         'previous_search_results': prev.get((c['kind'], c['id']), [])[:12]}
+        task['chat_candidates'] = c['chat']
         if c['kind'] == 'TOPIC' and c['id'] in units:
             u = units[c['id']]
             task['previous_unit'] = {k: u.get(k) for k in ('definition', 'primary_status', 'independent_status', 'counter_status', 'absence_reason', 'source_ids')}
@@ -129,7 +153,7 @@ def main() -> None:
         out[i % groups].append(f"{c['kind']}:{c['id']}")
         if inflight:
             (inflight / f"{c['kind']}_{c['id']}").write_text(f'{tag}.g{i % groups}', encoding='utf-8')
-    print(json.dumps({'planned_searches': total, 'units': len(picked), 'in_flight_skipped': len(busy), 'remaining_units_after': len(order) - len(picked),
+    print(json.dumps({'planned_searches': total, 'units': len(picked), 'chat_candidates_assigned': sum(len(c['chat']) for c in picked), 'chat_candidates_open_total': sum(len(v) for v in chat.values()), 'in_flight_skipped': len(busy), 'remaining_units_after': len(order) - len(picked),
                       'remaining_search_estimate': sum(c['allowance'] for c in order) - total, 'groups': out}, ensure_ascii=False))
 
 

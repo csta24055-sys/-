@@ -11,6 +11,8 @@ RESEARCH_STATUS = INCOMPLETE（最初に未達の工程：S1）
 - 追加仮説のテーマ：S1完了 0 / 7
 - 作業員が実際に実行できたWeb検索：541 件。上限超過で拒否された検索：214 件（実行済みに数えていない）
 - 採用資料：701（S2精査済み 0）
+- 別チャットの1,000候補（`registry/chat1000_candidate_review.csv`、1009行）：NOT_READ 833、READ_NOT_YET_ASSESSED 103、BLOCKED_FETCH 27、IN_LEDGER_OTHER_TOPIC 27、IN_LEDGER_QUOTE_VERIFIED_FOR_TOPIC 14、REJECT_NOT_A_SOURCE 4、DUPLICATE_ORIGIN 1
+  - 作業員が実際に開いて判定した候補：0（`registry/candidate_assessments.csv`）。URL候補は証拠ではなく、引用照合を通ったものだけが台帳に入る。
 
 ## 未完了のID（先頭）
 
@@ -28,6 +30,7 @@ RESEARCH_STATUS = INCOMPLETE（最初に未達の工程：S1）
 
 - Web検索は1ターンあたり200回が上限で、全作業員で共有される。超過分は実行されず、拒否として記録される（実行済みには数えない）。このため収集は、1ターン200回以内の束（バッチ）に分けて進める。
 - 取得を拒否するサイトは迂回しない。検索上限の回避（他の手段での検索）もしない。
+- 作業員の実行は、実行記録（transcript）から導いた `registry/execution_manifest.csv` に同じ呼び出しがある場合だけ数える。
 
 ## 再開コマンド
 
@@ -36,8 +39,12 @@ RESEARCH_STATUS = INCOMPLETE（最初に未達の工程：S1）
 scripts/refresh.sh "$STAGING" "$CACHE" "$TRANSCRIPTS"
 # 2) ゲート評価と監査詳細の更新
 python3 scripts/research_gates.py evaluate && python3 scripts/build_resume.py
-# 3) 次の束を計画する（検索200回以内、未完了の単位を優先順に）
-python3 scripts/next_batch.py "$TASKS" "$STAGING" 200 5
+# 1b) 別チャットの1,000候補の状態と S1 不足一覧を再生成
+python3 scripts/import_chat1000.py --cache "$CACHE" && python3 scripts/build_chat1000_docs.py
+# 3) 次の束を計画する（検索195回以内、未完了の単位を優先順に、未判定のチャット候補も割当て）
+python3 scripts/next_batch.py "$TASKS" "$STAGING" 195 8 "$INFLIGHT" B0n
+#    読了だけの束（検索なし。S1完了済みの単位に割り当てられた候補も含む）
+python3 scripts/next_batch.py "$TASKS" "$STAGING" 0 4 "$INFLIGHT" R0n --chat-only 16
 # 4) 出力された単位を作業員に割り当てて実行し、1) に戻る
 ```
 

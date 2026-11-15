@@ -39,6 +39,8 @@ LOG_EXTRA = ['suggestion_id', 'route', 'followup_for', 'unit_kind', 'unit_id', '
 SRC_EXTRA = ['quote', 'quote_check', 'statement_kind', 'origin_org', 'added_in', 'review_state', 'review_notes']
 MAP_FIELDS = ['map_id', 'source_id', 'unit_kind', 'unit_id', 'role', 'claim_text', 'quote', 'quote_check', 'added_by', 'review_state', 'review_notes']
 REJ_FIELDS = ['unit_kind', 'unit_id', 'url', 'reason', 'claimed_quote', 'executor']
+ASSESS_FIELDS = ['review_id', 'url', 'unit_kind', 'unit_id', 'outcome', 'reason', 'opened_by_unit', 'page_state', 'executor']
+ASSESS_OUTCOMES = {'USED_AS_SOURCE', 'OFF_TOPIC', 'NOT_ORIGINAL', 'VENDOR_PROMOTION', 'BLOCKED', 'EMPTY', 'DUPLICATE_ORIGIN'}
 SOURCE_TYPES = {'OFFICIAL_VENDOR', 'INDEPENDENT_REVIEW', 'SPONSORED', 'ACADEMIC', 'GOVERNMENT', 'CUSTOMER_FIRSTHAND', 'OTHER'}
 ROLES = {'PRIMARY', 'INDEPENDENT', 'COUNTER'}
 ROLE_VALUE = 'VALUE'  # a page that only backs a reported figure; not counted as primary / independent / counter evidence
@@ -171,6 +173,7 @@ def main() -> None:
                     smap.append({'map_id': f'M{n:05d}', 'source_id': s['source_id'], 'unit_kind': 'TOPIC', 'unit_id': t, 'role': 'ALSO',
                                  'claim_text': '', 'quote': '', 'quote_check': 'PENDING_BACKFILL', 'added_by': 'session_2026-11-09_10', 'review_state': 'S2_PENDING'})
     _, rejected = read('rejected_candidates.csv')
+    assessments = {(a['review_id'], norm_url(a['url']), a['unit_kind'], a['unit_id']): a for a in read('candidate_assessments.csv')[1]}
     units_path = REG / 'topic_units.jsonl'
     units = {}
     if units_path.exists():
@@ -379,6 +382,17 @@ def main() -> None:
                 stats['mappings_added'] += 1
             return existing['source_id']
 
+        for ca in report.get('candidate_assessments', []) if isinstance(report.get('candidate_assessments'), list) else []:
+            if not isinstance(ca, dict) or not str(ca.get('url', '')).startswith(('http://', 'https://')):
+                continue
+            cu_ = str(ca['url'])
+            meta_ = cache.get(cu_) or {}
+            opened = norm_url(cu_) in fetched_norm or (meta_.get('fetched_at') in stamps if meta_ else False)
+            oc = str(ca.get('outcome', '')).upper()
+            assessments[(str(ca.get('review_id', '')), norm_url(cu_), kind, uid)] = {
+                'review_id': str(ca.get('review_id', ''))[:20], 'url': cu_, 'unit_kind': kind, 'unit_id': uid, 'outcome': oc if (oc in ASSESS_OUTCOMES and opened) else 'CLAIM_NOT_BACKED_BY_A_READ',
+                'reason': str(ca.get('reason', ''))[:240], 'opened_by_unit': 'YES' if opened else 'NO',
+                'page_state': 'HTTP_200_TEXT' if cache.page_ok(cu_) else (f"HTTP_{meta_.get('status')}_chars_{meta_.get('chars')}" if meta_ else 'NOT_IN_CACHE'), 'executor': executor0}
         for s in report.get('sources', []) if isinstance(report.get('sources'), list) else []:
             sid = accept_source(s)
             if sid:
@@ -542,6 +556,7 @@ def main() -> None:
     write('source_evidence.csv', sf, src)
     write('source_topic_map.csv', MAP_FIELDS, smap)
     write('rejected_candidates.csv', REJ_FIELDS, rejected)
+    write('candidate_assessments.csv', ASSESS_FIELDS, sorted(assessments.values(), key=lambda a: (a['review_id'], a['unit_id'])))
     units_path.write_text(''.join(json.dumps(units[k], ensure_ascii=False, sort_keys=True) + '\n' for k in sorted(units)), encoding='utf-8')
     cunits_path.write_text(''.join(json.dumps(cunits[k], ensure_ascii=False, sort_keys=True) + '\n' for k in sorted(cunits)), encoding='utf-8')
     print(json.dumps({**stats, 'search_log_rows': len(log), 'sources': len(src), 'mappings': len(smap), 'rejected': len(rejected),
