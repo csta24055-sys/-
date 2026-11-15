@@ -1,6 +1,6 @@
 # S1不足一覧（チャット1,000候補の取込み後・機械生成）
 
-生成時刻（UTC）：2026-11-15T16:01Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
+生成時刻（UTC）：2026-11-15T16:09Z　／　生成：`python3 scripts/build_chat1000_docs.py`（`scripts/build_status.py` の再計算結果から）
 
 > RESEARCH_STATUS = INCOMPLETE。S1未通過のためS2以降の分析・正式成果物には進まない。
 
@@ -8,10 +8,10 @@
 
 | 対象 | S1完了 | 未完 | 備考 |
 |---|---:|---:|---|
-| 325テーマ | 113 | 212 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
+| 325テーマ | 122 | 203 | 2026-11-12の過去監査値（16/325）は古い。本値は現台帳からの再計算 |
 | 追加7テーマ（ZIP外） | 0 | 7 | N01〜N03・速度 |
-| 旧896検索ID | 実行 376 | 未実行 520 | 実行不能確定 0。ログの再索引だけでは実行にしない |
-| 80競合 | 28 | 52 | 公式資料の確認 55 社 |
+| 旧896検索ID | 実行 408 | 未実行 488 | 実行不能確定 0。ログの再索引だけでは実行にしない |
+| 80競合 | 30 | 50 | 公式資料の確認 55 社 |
 
 ## 2. 不足の種類と数
 
@@ -19,25 +19,25 @@
 
 | 不足の種類 | テーマ数 |
 |---|---:|
-| 研究ユニット記録（定義・計算/識別不能）が未完 | 215 |
-| 一次資料ルートの検索なし | 189 |
-| 独立資料が未確定（NO） | 169 |
-| 反証資料が未確定（NO） | 169 |
-| 旧検索IDの未実行が残る | 130 |
-| 一次資料が未確定（NO） | 110 |
-| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 46 |
-| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 46 |
-| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 11 |
+| 研究ユニット記録（定義・計算/識別不能）が未完 | 206 |
+| 一次資料ルートの検索なし | 182 |
+| 独立資料が未確定（NO） | 165 |
+| 反証資料が未確定（NO） | 165 |
+| 旧検索IDの未実行が残る | 122 |
+| 一次資料が未確定（NO） | 109 |
+| 独立資料が未確定（ATTEMPTED_INSUFFICIENT） | 41 |
+| 反証資料が未確定（ATTEMPTED_INSUFFICIENT） | 41 |
+| 一次資料が未確定（ATTEMPTED_INSUFFICIENT） | 9 |
 
-- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1622** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
-- 必要なページ読了：未判定のチャット候補の割当て 900 件（重複を除くURL 683 件）。読了は検索上限を消費しない。
+- 必要な検索操作の下限（見積り式：未実行の旧検索ID数 ＋ 未確定ルートごとに『独自クエリ2本』に足りない本数）：**1548** 回。1ターンの検索上限（全作業員共有で200回）に対し、約9ターン分。
+- 必要なページ読了：未判定のチャット候補の割当て 894 件（重複を除くURL 681 件）。読了は検索上限を消費しない。
 - 462件（旧予定タスクの未達数）は採用証拠の必要件数ではない。上の不足（ルート・旧ID・競合項目）を満たす分だけ新規に調査し、必要ならそれ以上集める。
 
 ### 競合（80）
 
 | 不足の種類 | 社数 |
 |---|---:|
-| no counter / independent search with results and no third-party-backed counter finding | 52 |
+| no counter / independent search with results and no third-party-backed counter finding | 50 |
 | attributes not recorded | 25 |
 | no vendor page read | 18 |
 
@@ -167,7 +167,7 @@
 | AXIS_15_T06 | 未完 | Q1,Q2,Q3,Q4 | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/1 | NO | 1/0 |
 | AXIS_15_T07 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_15_T08 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_16_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
+| AXIS_16_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_16_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_16_T03 | 未完 | Q1,Q2,Q3,Q4 | ATTEMPTED_INSUFFICIENT | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_16_T04 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -197,16 +197,16 @@
 | AXIS_19_T04 | 完了 | — | FOUND | FOUND | FOUND | 1/1/1 | 10/14 | YES | 0/0 |
 | AXIS_19_T05 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 9/10 | YES | 0/0 |
 | AXIS_19_T06 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
-| AXIS_19_T07 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/14 | NO | 0/0 |
-| AXIS_19_T08 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/11 | NO | 0/0 |
-| AXIS_20_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 2/2 | NO | 2/0 |
-| AXIS_20_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 2/2 | NO | 0/0 |
-| AXIS_20_T03 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 2/2 | NO | 1/0 |
-| AXIS_20_T04 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
-| AXIS_20_T05 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_20_T06 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_20_T07 | 未完 | Q1,Q2,Q3,Q4 | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
-| AXIS_20_T08 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
+| AXIS_19_T07 | 完了 | — | FOUND | FOUND | FOUND | 1/2/1 | 9/14 | YES | 0/0 |
+| AXIS_19_T08 | 完了 | — | FOUND | FOUND | FOUND | 1/2/2 | 8/11 | YES | 0/0 |
+| AXIS_20_T01 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 11/12 | YES | 0/1 |
+| AXIS_20_T02 | 完了 | — | FOUND | FOUND | FOUND | 0/2/2 | 11/12 | YES | 0/0 |
+| AXIS_20_T03 | 完了 | — | FOUND | FOUND | FOUND | 2/1/1 | 9/10 | YES | 0/0 |
+| AXIS_20_T04 | 完了 | — | FOUND | FOUND | FOUND | 0/1/1 | 7/8 | YES | 0/0 |
+| AXIS_20_T05 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/10 | NO | 0/0 |
+| AXIS_20_T06 | 完了 | — | FOUND | FOUND | FOUND | 0/2/1 | 8/10 | YES | 0/0 |
+| AXIS_20_T07 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 8/9 | NO | 0/0 |
+| AXIS_20_T08 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 6/9 | NO | 0/0 |
 | AXIS_21_T01 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
 | AXIS_21_T02 | 未完 | Q1,Q2,Q3,Q4 | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
 | AXIS_21_T03 | 未完 | Q1,Q2,Q3,Q4 | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -304,8 +304,8 @@
 | AXIS_16_T09 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 2/0 |
 | AXIS_17_T09 | 未完 | — | FOUND | FOUND | FOUND | 0/2/2 | 14/18 | YES | 0/0 |
 | AXIS_18_T09 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 0/0 |
-| AXIS_19_T09 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 13/20 | NO | 0/0 |
-| AXIS_19_T10 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 9/12 | NO | 0/0 |
+| AXIS_19_T09 | 完了 | — | FOUND | FOUND | FOUND | 2/2/1 | 13/20 | YES | 0/0 |
+| AXIS_19_T10 | 完了 | — | FOUND | FOUND | FOUND | 1/2/2 | 9/12 | YES | 0/0 |
 | AXIS_20_T09 | 未完 | — | FOUND | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_21_T09 | 未完 | — | ATTEMPTED_INSUFFICIENT | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_21_T10 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
@@ -327,7 +327,7 @@
 | AXIS_28_T10 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_28_T11 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
 | AXIS_29_T01 | 未完 | — | FOUND | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 0/1 | NO | 1/0 |
-| AXIS_29_T02 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 5/0 |
+| AXIS_29_T02 | 未完 | — | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | ATTEMPTED_INSUFFICIENT | 0/0/0 | 1/1 | NO | 4/0 |
 | AXIS_29_T03 | 完了 | — | FOUND | FOUND | FOUND | 2/2/2 | 16/18 | YES | 11/3 |
 | AXIS_29_T04 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 1/0 |
 | AXIS_29_T05 | 未完 | — | NO | NO | NO | 0/0/0 | 0/0 | NO | 0/0 |
@@ -393,7 +393,7 @@
 | C007 | Canva | P0 | 完了 | YES | 4（遮断6） | YES | — | 2 |
 | C008 | Beautiful.ai | P0 | 完了 | YES | 10（遮断1） | YES | — | 0 |
 | C009 | Plus AI | P0 | 完了 | YES | 13（遮断5） | YES | — | 0 |
-| C010 | SlidesAI | P1 | 未完 | YES | 8（遮断7） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
+| C010 | SlidesAI | P1 | 完了 | YES | 8（遮断7） | YES | — | 0 |
 | C011 | ChatGPT | P0 | 完了 | YES | 4（遮断5） | YES | — | 0 |
 | C012 | Claude | P1 | 完了 | YES | 9（遮断2） | YES | — | 0 |
 | C013 | Gemini | P1 | 完了 | YES | 19（遮断1） | YES | — | 6 |
@@ -402,8 +402,8 @@
 | C016 | PowerPoint without AI | P1 | 完了 | YES | 19（遮断1） | YES | — | 17 |
 | C017 | Pitch | P1 | 未完 | YES | 9（遮断7） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
 | C018 | Prezi AI | P2 | 未完 | YES | 6（遮断4） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
-| C019 | Decktopus | P1 | 未完 | YES | 6（遮断2） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
-| C020 | Presentations.AI | P1 | 未完 | YES | 8（遮断0） | NO | no counter / independent search with results and no third-party-backed counter finding | 7 |
+| C019 | Decktopus | P1 | 完了 | YES | 7（遮断2） | YES | — | 0 |
+| C020 | Presentations.AI | P1 | 未完 | YES | 17（遮断0） | NO | no counter / independent search with results and no third-party-backed counter finding | 7 |
 | C021 | Slidesgo AI Presentation Maker | P1 | 未完 | YES | 7（遮断2） | NO | no counter / independent search with results and no third-party-backed counter finding | 0 |
 | C022 | MagicSlides | P1 | 未完 | YES | 8（遮断0） | NO | no counter / independent search with results and no third-party-backed counter finding | 1 |
 | C023 | SlideSpeak | P0 | 完了 | YES | 8（遮断6） | YES | — | 0 |
