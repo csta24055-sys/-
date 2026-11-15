@@ -20,7 +20,7 @@
   --color-primary-soft:#E3F0ED;
   --color-on-primary:#FFFFFF;
   --color-accent:#B45309;      /* 琥珀：Pro ラベル */
-  --color-accent-soft:#FDF0E1;
+  --color-accent-soft:#FEF6EC;
   --color-good:#1E7B4C; --color-good-soft:#E6F3EB;
   --color-warn:#8A5A00; --color-warn-soft:#FBF1DC;
   --color-bad:#B42318;  --color-bad-soft:#FCE9E7;
@@ -38,6 +38,8 @@
   --header-h:60px; --bottomnav-h:64px; --rail-w:208px; --target-min:44px;
 }
 *{box-sizing:border-box}
+img,svg{max-width:100%}
+.usage{min-width:0}
 html{scroll-padding-top:calc(var(--header-h) + 16px);scroll-padding-bottom:calc(var(--bottomnav-h) + 16px)}
 body{margin:0;background:var(--color-bg);color:var(--color-text);font:var(--fs-md)/var(--lh-body) var(--font-sans);overflow-x:hidden}
 h1,h2,h3{line-height:var(--lh-tight);margin:0 0 var(--space-3)}
@@ -57,7 +59,7 @@ a{color:var(--color-primary)} a:hover{color:var(--color-primary-hover)}
 .brand-mark{width:28px;height:28px;flex:none}
 .brand small{font-weight:500;color:var(--color-text-muted);font-size:var(--fs-xs)}
 .header-spacer{flex:1}
-.usage{display:flex;gap:var(--space-3);align-items:center;font-size:var(--fs-sm);padding:4px 10px;border:1px solid var(--color-border);border-radius:var(--radius-pill);background:var(--color-bg)}
+.usage{color:var(--color-text);text-decoration:none;display:flex;gap:var(--space-3);align-items:center;font-size:var(--fs-sm);padding:4px 10px;border:1px solid var(--color-border);border-radius:var(--radius-pill);background:var(--color-bg)}
 .usage-item{display:flex;align-items:center;gap:6px;white-space:nowrap}
 .bar{width:44px;height:8px;border-radius:4px;background:var(--color-surface-2);border:1px solid var(--color-border-strong);overflow:hidden}
 .bar>span{display:block;height:100%;background:var(--color-primary)}
@@ -196,6 +198,8 @@ td.r,th.r{text-align:right}
 .chart svg{width:100%;height:auto;display:block}
 .chart text{font:12px var(--font-sans);fill:var(--color-text-muted)}
 details.alt{margin-top:var(--space-2)}
+details.alt summary::before{content:"▸";margin-right:6px}
+details.alt[open] summary::before{content:"▾"}
 details.alt summary{cursor:pointer;min-height:var(--target-min);display:flex;align-items:center;font-weight:600;color:var(--color-primary)}
 
 /* ===== 料金 ===== */
@@ -239,7 +243,9 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
   main{padding:var(--space-4) var(--space-4) calc(var(--bottomnav-h) + var(--space-6))}
   .usage .usage-text-long,.header-help-label,.cmd-label{display:none}
   .usage{gap:8px;padding:4px 8px}
-  .bar{width:28px}
+  .bar{display:none}
+  table.responsive tbody th{display:block;width:100%;border:0;padding:6px 0;font-size:var(--fs-md)}
+  table.responsive td{overflow-wrap:anywhere}
   .brand small{display:none}
   .app-header{gap:var(--space-2);padding:0 var(--space-3)}
   h1{font-size:var(--fs-xl)}
@@ -265,6 +271,7 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
   .dlg-foot .btn{flex:1}
 }
 @media (min-width:769px){.mobile-sort{display:none}}
+@media (max-width:420px){.brand>span{display:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .skeleton{animation:none;background:#E6E9E3}
@@ -301,7 +308,7 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
     <span class="usage-item"><span class="usage-text-long">レポート</span><span class="visually-hidden">今月のレポート</span><span class="bar" id="barReport"><span style="width:0%"></span></span><span class="num" id="usageReport">0/1件</span></span>
     <span class="plan-badge" id="planBadge">Free</span>
   </a>
-  <button class="btn btn-secondary btn-sm" id="openCmd" aria-keyshortcuts="Control+K" data-analytics-event="command_palette_open" aria-label="コマンドパレットを開く（Ctrl+K）"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2"/></svg><span class="cmd-label">検索・操作 <kbd>Ctrl</kbd>+<kbd>K</kbd></span></button>
+  <button class="btn btn-secondary btn-sm" id="openCmd" aria-keyshortcuts="Control+K" data-analytics-event="command_palette_open" aria-label="検索・操作（Ctrl+K）"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2"/></svg><span class="cmd-label">検索・操作 <kbd>Ctrl</kbd>+<kbd>K</kbd></span></button>
   <button class="btn btn-ghost btn-sm" id="openHelp" data-analytics-event="help_open" aria-label="ヘルプ"><svg width="18" height="18" aria-hidden="true"><use href="#i-info"/></svg><span class="header-help-label">ヘルプ</span></button>
 </header>
 
@@ -461,7 +468,7 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
           <div class="tablist" role="tablist" aria-label="データの種類" data-tabs>
             <button class="tab" role="tab" id="tab-sensor" aria-controls="pn-sensor" aria-selected="true">センサー</button>
             <button class="tab" role="tab" id="tab-lca" aria-controls="pn-lca" aria-selected="false" tabindex="-1">建材 LCA</button>
-            <button class="tab" role="tab" id="tab-plan2" aria-controls="pn-floor" aria-selected="false" tabindex="-1">平面図</button>
+            <button class="tab" role="tab" id="tab-floor" aria-controls="pn-floor" aria-selected="false" tabindex="-1">平面図</button>
           </div>
 
           <div role="tabpanel" id="pn-sensor" aria-labelledby="tab-sensor" tabindex="0">
@@ -515,7 +522,7 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
                   <p class="error-msg" id="sThErr" hidden><svg aria-hidden="true"><use href="#i-bad"/></svg><span></span></p>
                 </div>
               </div>
-              <div class="btn-row"><button class="btn btn-primary" type="submit" id="addSensorBtn" data-analytics-event="sensor_connected">追加する</button></div>
+              <div class="btn-row"><button class="btn btn-primary" type="submit" id="addSensorBtn" data-analytics-event="sensor_add_submit">追加する</button></div>
             </form>
 
             <h2 style="font-size:var(--fs-lg);margin-top:24px">CSV / Excel から取り込む</h2>
@@ -543,7 +550,7 @@ footer.app-foot{padding:var(--space-5) var(--space-6);font-size:var(--fs-sm);col
             </figure>
           </div>
 
-          <div role="tabpanel" id="pn-floor" aria-labelledby="tab-plan2" tabindex="0" hidden>
+          <div role="tabpanel" id="pn-floor" aria-labelledby="tab-floor" tabindex="0" hidden>
             <div id="floorSlot"></div>
           </div>
         </div>
@@ -865,7 +872,7 @@ document.addEventListener('click',function(e){
   if(t && t.type!=='radio' && t.type!=='checkbox' && t.type!=='file'){track(t.getAttribute('data-analytics-event'),{source:t.getAttribute('data-analytics-source')||location.hash.slice(1)||'dashboard'})}
 });
 document.addEventListener('change',function(e){
-  var t=e.target; if(t.matches&&t.matches('[data-analytics-event]')&&(t.type==='radio'||t.type==='checkbox'||t.type==='file')) track(t.getAttribute('data-analytics-event'),{value:t.type==='checkbox'?t.checked:t.value});
+  var t=e.target; if(t.matches&&t.matches('[data-analytics-event]')&&(t.type==='radio'||t.type==='checkbox')) track(t.getAttribute('data-analytics-event'),{value:t.type==='checkbox'?t.checked:t.value});
 });
 
 function toast(msg){var t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true},3600)}
@@ -892,7 +899,7 @@ function selectTab(tab,focus){
   var list=tab.closest('[role=tablist]');
   $$('[role=tab]',list).forEach(function(t){var on=t===tab;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;var p=document.getElementById(t.getAttribute('aria-controls'));if(p)p.hidden=!on});
   if(focus) tab.focus();
-  if(tab.id==='tab-plan2') renderFloor('#floorSlot');
+  if(tab.id==='tab-floor') renderFloor('#floorSlot');
 }
 $$('[data-tabs]').forEach(function(list){
   list.addEventListener('click',function(e){var t=e.target.closest('[role=tab]');if(t)selectTab(t,true)});
@@ -907,7 +914,7 @@ $$('[data-tabs]').forEach(function(list){
 
 /* ---------- ダイアログ（フォーカス管理） ---------- */
 var opener=null;
-function openDlg(id){var d=document.getElementById(id);opener=document.activeElement;d.showModal();var f=d.querySelector('input:not([type=hidden]),select,button:not([data-close]):not([value=cancel]),[data-close]');if(id==='cmdDlg')f=$('#cmdInput');if(f)f.focus()}
+function openDlg(id){var d=document.getElementById(id);opener=document.activeElement;d.returnValue='';d.showModal();var f=d.querySelector('input:not([type=hidden]),select,button:not([data-close]):not([value=cancel]),[data-close]');if(id==='cmdDlg')f=$('#cmdInput');if(f)f.focus()}
 $$('dialog').forEach(function(d){
   d.addEventListener('close',function(){if(opener&&document.contains(opener))opener.focus();opener=null});
   d.addEventListener('click',function(e){if(e.target.closest('[data-close]'))d.close()});
@@ -942,7 +949,7 @@ function renderCmds(){
 }
 function runCmd(c){track('command_run',{command:c.l});opener=null;$('#cmdDlg').close();location.hash=c.go;setTimeout(function(){route(true);if(c.tab){selectTab(document.getElementById(c.tab),false)}if(c.focus){var f=$(c.focus);if(f)f.focus()}if(c.run)c.run()},10)}
 function openCmd(){$('#cmdInput').value='';cmdSel=0;renderCmds();openDlg('cmdDlg');track('command_palette_open')}
-$('#openCmd').addEventListener('click',function(e){e.stopPropagation();$('#cmdInput').value='';cmdSel=0;renderCmds();openDlg('cmdDlg')});
+$('#openCmd').addEventListener('click',function(){$('#cmdInput').value='';cmdSel=0;renderCmds();openDlg('cmdDlg')});
 $('#cmdInput').addEventListener('input',function(){cmdSel=0;renderCmds()});
 $('#cmdInput').addEventListener('keydown',function(e){
   if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdSel+1,cmdFiltered.length-1);renderCmds()}
@@ -1002,7 +1009,7 @@ $('#sensorForm').addEventListener('submit',function(e){
   var limit=state.plan==='free'?state.limitSensor:20;
   if(state.sensors.length>=limit){showLimit();return}
   state.sensors.push({name:nv,room:room.value.trim(),co2:650,pm:6,t:22.0,h:48});
-  renderSensors();renderUsage();name.value='';
+  renderSensors();renderUsage();name.value='';track('sensor_connected',{count:state.sensors.length});
   toast('成功: '+nv+' を追加しました。');
   if(state.sensors.length>=limit) showLimit();
 });
@@ -1122,7 +1129,7 @@ $('#genReport').addEventListener('click',function(){track('activation',{via:'wor
 $('#optOut').addEventListener('change',function(){if(this.checked){track('analytics_opt_out');state.optOut=true}else{state.optOut=false;track('analytics_opt_in')}});
 
 /* ---------- トークン一覧 ---------- */
-var TOKENS=[['--color-bg','#FAFAF7','ページ背景','—'],['--color-surface','#FFFFFF','カード・面','—'],['--color-surface-2','#F1F3EE','表見出し・沈んだ面','—'],['--color-text','#1C2430','本文','15.9:1'],['--color-text-muted','#4A5563','補助文字','7.5:1'],['--color-border','#D9DDD6','装飾の区切り線（意味を持たせない）','1.4:1'],['--color-border-strong','#7A847B','入力欄・UI部品の境界','3.9:1'],['--color-primary','#0F6B5C','主ボタン・リンク・選択','6.4:1'],['--color-accent','#B45309','Pro ラベル','5.0:1'],['--color-good','#1E7B4C','良好（＋丸アイコン）','5.3:1'],['--color-warn','#8A5A00','注意（＋三角アイコン）','5.9:1'],['--color-bad','#B42318','要換気・エラー・危険（＋八角形）','6.5:1'],['--color-focus','#1D4ED8','フォーカスリング','6.7:1']];
+var TOKENS=[['--color-bg','#FAFAF7','ページ背景','—'],['--color-surface','#FFFFFF','カード・面','—'],['--color-surface-2','#F1F3EE','表見出し・沈んだ面','—'],['--color-text','#1C2430','本文','15.6:1'],['--color-text-muted','#4A5563','補助文字','7.5:1'],['--color-border','#D9DDD6','装飾の区切り線（意味を持たせない）','1.4:1'],['--color-border-strong','#7A847B','入力欄・UI部品の境界','3.9:1'],['--color-primary','#0F6B5C','主ボタン・リンク・選択','6.4:1'],['--color-accent','#B45309','Pro ラベル','5.0:1'],['--color-good','#1E7B4C','良好（＋丸アイコン）','5.3:1'],['--color-warn','#8A5A00','注意（＋三角アイコン）','5.9:1'],['--color-bad','#B42318','要換気・エラー・危険（＋八角形）','6.5:1'],['--color-focus','#1D4ED8','フォーカスリング','6.7:1']];
 $('#tokenBody').innerHTML=TOKENS.map(function(t){return '<tr><td data-label="見本"><span class="token-swatch" style="background:'+t[1]+'"></span></td><td data-label="トークン"><code>'+t[0]+'</code></td><td data-label="HEX" class="num">'+t[1]+'</td><td data-label="用途">'+t[2]+'</td><td data-label="コントラスト" class="r num">'+t[3]+'</td></tr>'}).join('');
 $('#spaceList').innerHTML=[4,8,12,16,24,32,48].map(function(n,i){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><span class="num small" style="width:84px">space-'+(i+1)+' '+n+'</span><span style="display:inline-block;height:12px;width:'+n+'px;background:var(--color-primary);border-radius:2px"></span></div>'}).join('');
 
