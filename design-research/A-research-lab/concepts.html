@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>研究室アプリ3案比較</title>
+<meta name="description" content="分類A（大学・研究室内部の研究支援アプリ）の3つのUIコンセプトを、モックアップと加重評価で比較するページ。データは全てダミー。">
+<style>
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --surface-2:#EAEEF2; --text:#15181C; --muted:#454D58;
+  --border:#C3CAD3; --accent:#0B5CAD; --accent-ink:#FFFFFF;
+  --ok:#1E6B3A; --warn:#7A4F00; --err:#AE2318; --stale:#5F35A8; --focus:#0B5CAD;
+  --adopt-bg:#E3F1EA; --adopt-ink:#14532D;
+  --font:"BIZ UDPGothic","Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  --mono:ui-monospace,"BIZ UDGothic","SFMono-Regular",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#111418; --surface:#1A1F25; --surface-2:#232A32; --text:#E9ECEF; --muted:#B4BCC6;
+    --border:#3A434E; --accent:#86B7F2; --accent-ink:#0B1A2C;
+    --ok:#7DD3A0; --warn:#F0C674; --err:#FF9A8F; --stale:#C4A6FF; --focus:#86B7F2;
+    --adopt-bg:#173526; --adopt-ink:#BDEBD0; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111418; --surface:#1A1F25; --surface-2:#232A32; --text:#E9ECEF; --muted:#B4BCC6;
+  --border:#3A434E; --accent:#86B7F2; --accent-ink:#0B1A2C;
+  --ok:#7DD3A0; --warn:#F0C674; --err:#FF9A8F; --stale:#C4A6FF; --focus:#86B7F2;
+  --adopt-bg:#173526; --adopt-ink:#BDEBD0; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.65}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--surface);color:var(--text);padding:8px 12px;border:1px solid var(--border)}
+.skip:focus{left:16px;top:8px;z-index:10}
+header.site,main,footer.site{max-width:1240px;margin:0 auto;padding:0 16px}
+header.site{padding-top:28px;padding-bottom:8px}
+h1{font-size:1.6rem;line-height:1.3;margin:0 0 6px}
+h2{font-size:1.25rem;margin:40px 0 10px;line-height:1.35}
+h3{font-size:1.05rem;margin:18px 0 8px}
+p.lead{color:var(--muted);margin:0 0 4px;max-width:70ch}
+.meta{font-size:.85rem;color:var(--muted)}
+nav.toc ul{list-style:none;padding:0;margin:12px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{display:inline-block;padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--surface);text-decoration:none;color:var(--text);font-size:.9rem}
+.axis{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-top:16px}
+.axis table{width:100%}
+section.concept{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px 20px;margin-top:20px}
+section.concept > h2{margin-top:4px}
+.tag{display:inline-block;font-size:.78rem;padding:1px 8px;border-radius:3px;border:1px solid var(--border);color:var(--muted);margin-right:6px;vertical-align:middle}
+.tag.adopt{background:var(--adopt-bg);color:var(--adopt-ink);border-color:transparent;font-weight:700}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:20px;align-items:start;margin-top:12px}
+@media (max-width:820px){.row{grid-template-columns:1fr}}
+figure{margin:0}
+figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 18px;margin-top:14px;font-size:.9rem}
+.facts div{border-top:1px solid var(--border);padding-top:6px}
+.facts b{display:block;font-size:.8rem;color:var(--muted);font-weight:700}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.sw{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.75rem}
+.sw i{width:14px;height:14px;border-radius:2px;border:1px solid var(--border);display:inline-block}
+.pm{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;font-size:.9rem}
+@media (max-width:600px){.pm{grid-template-columns:1fr}}
+.pm ul{margin:4px 0 0;padding-left:1.2em}
+.pm h3{margin:0;font-size:.95rem}
+
+/* ===== Mockups (fixed specimen colors: each concept's own light palette) ===== */
+.mock{border:1px solid #9AA3AE;border-radius:6px;overflow:hidden;font-family:var(--font);color:#1A1D21;background:#fff;line-height:1.3}
+.mock .mono{font-family:var(--mono)}
+.desk{aspect-ratio:16/10;display:grid;font-size:10px;min-height:0}
+.phone{width:180px;height:360px;border-radius:18px;border:6px solid #2B3036;display:flex;flex-direction:column;font-size:10px;margin:0 auto}
+.phone .ps{flex:1;overflow:hidden}
+.bar{display:flex;align-items:center;gap:6px;padding:4px 8px;white-space:nowrap;overflow:hidden}
+.pane{overflow:hidden;padding:5px 6px;min-width:0}
+.lbl{font-weight:700;font-size:9px;letter-spacing:.02em;margin-bottom:3px}
+.li{padding:2px 4px;border-radius:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{display:inline-block;padding:0 4px;border-radius:2px;font-size:9px;border:1px solid currentColor}
+table.g{border-collapse:collapse;width:100%;font-size:9px;font-variant-numeric:tabular-nums}
+table.g th,table.g td{border:1px solid #D5DAE1;padding:1px 3px;text-align:right;white-space:nowrap}
+table.g th{background:#EEF1F5;text-align:left;font-weight:700}
+table.g td:first-child,table.g td.l{text-align:left}
+.bad{background:#FDECEA;color:#9E2016;font-weight:700}
+.caution{background:#FFF4DB;color:#7A4F00}
+.sel{outline:2px solid #1F5FA8;outline-offset:-2px}
+
+/* A: Grid Ledger */
+.mA{background:#FFFFFF}
+.mA .desk{grid-template-rows:22px 18px 1fr 46px;grid-template-columns:20% 1fr 26%}
+.mA .top{grid-column:1/-1;background:#1F5FA8;color:#fff}
+.mA .filter{grid-column:1/-1;background:#EEF1F5;border-bottom:1px solid #D5DAE1;color:#1A1D21}
+.mA .left{border-right:1px solid #D5DAE1;background:#F7F8FA}
+.mA .right{border-left:1px solid #D5DAE1;background:#FBFBFC}
+.mA .bottom{grid-column:2/3;border-top:1px solid #D5DAE1;display:flex;align-items:flex-end;gap:3px;padding:4px 8px}
+.mA .bottom span{flex:1;background:#1F5FA8;opacity:.85}
+.mA .bottom span.hi{background:#B3261E;opacity:1}
+.mA .tabs span{padding:1px 6px;border-radius:2px}
+.mA .tabs .on{background:#fff;color:#1F5FA8;font-weight:700}
+.mA .li.on{background:#DCE8F7;color:#0F3D73;font-weight:700}
+
+/* B: Evidence Notebook */
+.mB{background:#FBFAF7}
+.mB .desk{grid-template-rows:24px 1fr;grid-template-columns:18% 1fr 22%}
+.mB .top{grid-column:1/-1;background:#FBFAF7;border-bottom:1px solid #E2DED6;color:#22252A}
+.mB .top .run{margin-left:auto;background:#5B3FA8;color:#fff;padding:1px 8px;border-radius:3px}
+.mB .left{border-right:1px solid #E2DED6;color:#22252A}
+.mB .right{border-left:1px solid #E2DED6;background:#F4F2EC;color:#22252A}
+.mB .doc{padding:8px 14px;overflow:hidden;display:flex;flex-direction:column;gap:7px}
+.mB .cell{background:#fff;border:1px solid #E2DED6;border-left:3px solid #5B3FA8;border-radius:3px;padding:5px 7px}
+.mB .cell.stale{border-left-color:#8A5A00}
+.mB .math{font-family:"STIX Two Math","Cambria Math","Times New Roman",serif;font-size:12px;text-align:center}
+.mB .chart{height:60px;position:relative;border-left:1px solid #55595F;border-bottom:1px solid #55595F;margin:4px 4px 2px 14px}
+.mB .chart .line{position:absolute;left:0;right:0;bottom:0;top:0}
+.mB .slider{height:4px;background:#E2DED6;border-radius:2px;position:relative;margin:6px 0}
+.mB .slider i{position:absolute;left:0;width:62%;height:4px;background:#5B3FA8;border-radius:2px}
+.mB .slider b{position:absolute;left:62%;top:-4px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #5B3FA8;margin-left:-6px}
+
+/* C: Pipeline Ledger */
+.mC{background:#F4F6F8}
+.mC .desk{grid-template-rows:22px 1fr 42px;grid-template-columns:22% 1fr 25%}
+.mC .top{grid-column:1/-1;background:#16191D;color:#fff}
+.mC .top .run{margin-left:auto;background:#00687A;color:#fff;padding:1px 6px;border-radius:3px}
+.mC .left{background:#fff;border-right:1px solid #CDD3DB}
+.mC .center{background:#fff;overflow:hidden;padding:5px 7px}
+.mC .right{background:#F9FAFB;border-left:1px solid #CDD3DB}
+.mC .bottom{grid-column:1/-1;background:#fff;border-top:1px solid #CDD3DB;padding:3px 8px;font-size:9px}
+.mC .stage{display:flex;align-items:center;gap:4px;padding:3px 4px;border-radius:2px;margin-bottom:2px;white-space:nowrap}
+.mC .stage.on{background:#DDEFF1;outline:1px solid #00687A}
+.st-ok{color:#1E6B3A}.st-rdy{color:#8A5A00}.st-err{color:#B3261E}.st-stale{color:#6A3FB5}.st-none{color:#5F6670}
+.mC .ctabs{display:flex;gap:2px;border-bottom:1px solid #CDD3DB;margin-bottom:4px}
+.mC .ctabs span{padding:1px 6px}
+.mC .ctabs .on{border-bottom:2px solid #00687A;font-weight:700;color:#00525F}
+.mC .field{display:grid;grid-template-columns:1fr 46px 30px;gap:3px;align-items:center;margin-bottom:3px}
+.mC .field .in{border:1px solid #9AA3AE;padding:0 3px;background:#fff;text-align:right;font-variant-numeric:tabular-nums}
+.mC .field.dirty{border-left:3px solid #6A3FB5;padding-left:3px}
+.mC .prov{font-size:9px;border-top:1px solid #CDD3DB;padding-top:3px;margin-top:3px}
+.mC .banner{background:#E8F0FB;color:#1F3F73;padding:2px 6px;font-size:9px}
+
+/* density meter */
+.density{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-top:8px}
+.density .m{display:flex;gap:2px}
+.density .m span{width:14px;height:8px;border:1px solid var(--muted);border-radius:1px}
+.density .m span.f{background:var(--text);border-color:var(--text)}
+
+/* nav diagram */
+.navd{font-family:var(--mono);font-size:.8rem;background:var(--surface-2);border-radius:4px;padding:8px 10px;margin-top:8px;white-space:pre-wrap;overflow-x:auto}
+
+/* comparison + eval tables */
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:6px}
+table.t{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+table.t caption{text-align:left;padding:10px 12px;font-weight:700}
+table.t th,table.t td{border-top:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+table.t thead th{background:var(--surface-2);font-size:.85rem}
+table.t td.n,table.t th.n{text-align:right}
+table.t tr.total td,table.t tr.total th{font-weight:700;border-top:2px solid var(--text)}
+td.best{font-weight:700}
+.adoptbox{background:var(--adopt-bg);color:var(--adopt-ink);border-radius:6px;padding:12px 16px;margin-top:14px}
+.adoptbox h3{margin-top:0}
+footer.site{padding-top:30px;padding-bottom:40px;font-size:.85rem;color:var(--muted)}
+.legend-status{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;margin-top:6px}
+.legend-status span{font-weight:700}
+.legend-status .st-ok{color:var(--ok)}.legend-status .st-rdy{color:var(--warn)}.legend-status .st-err{color:var(--err)}.legend-status .st-stale{color:var(--stale)}.legend-status .st-none{color:var(--muted)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="site" role="banner">
+  <p class="meta">世界水準の UI・UX 研究 ／ 分類A: 大学・研究室内部の研究支援アプリ</p>
+  <h1>研究室アプリ 3つの UI コンセプトの比較</h1>
+  <p class="lead">室内空気清浄度の測定、建材 LCA、Math IR 計算ジョブを題材に、操作体系の違う3案をモックアップで並べ、加重評価で採用案を決めました。表示している値は全てダミーです。</p>
+  <nav class="toc" aria-label="ページ内の目次">
+    <ul>
+      <li><a href="#axis">比較軸</a></li>
+      <li><a href="#concept-a">案A 表計算・台帳型</a></li>
+      <li><a href="#concept-b">案B ノートブック型</a></li>
+      <li><a href="#concept-c">案C 統合型</a></li>
+      <li><a href="#diff">違いの一覧</a></li>
+      <li><a href="#eval">評価</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" role="main">
+
+<section id="axis" aria-labelledby="axis-h">
+  <h2 id="axis-h">比較軸: 作業の単位で3案を分けた</h2>
+  <p>研究支援アプリでは、見た目の差よりも<strong>「何を1つのまとまりとして操作するか」</strong>の差の方が、正確性・再現性・作業速度に効きます。そこで、基本の「実用性 / 先進性 / 統合型」を、作業の単位に対応させました。</p>
+  <div class="axis">
+    <table class="t">
+      <thead><tr><th scope="col">案</th><th scope="col">作業の単位</th><th scope="col">基本軸との対応</th><th scope="col">台帳12件のうち根拠にした事例</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">A 表計算・台帳型</th><td>行（1測定・1試行）</td><td>実用性・効率</td><td>Zotero, Weights &amp; Biases, GraphPad Prism, Origin</td></tr>
+        <tr><th scope="row">B ノートブック型</th><td>文書（説明・数式・図）</td><td>先進性・視覚的完成度</td><td>MATLAB Live Script, JupyterLab, Observable</td></tr>
+        <tr><th scope="row">C パイプライン統合型</th><td>処理の段（入力 → 処理 → 結果）</td><td>統合型</td><td>KNIME, ParaView, LabArchives, Benchling, eLabFTW</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend-status" aria-label="このページで使う状態の記号">
+    状態の記号（色・記号・文字を併用）:
+    <span class="st-none">○ 未設定</span><span class="st-rdy">◐ 準備完了</span><span class="st-ok">● 成功</span><span class="st-err">✕ 失敗</span><span class="st-stale">↻ 要再計算</span>
+  </div>
+</section>
+
+<!-- ================= A ================= -->
+<section class="concept" id="concept-a" aria-labelledby="a-h">
+  <h2 id="a-h"><span class="tag">案A</span>表計算・台帳型「Grid Ledger」</h2>
+  <p>研究データを、まず表として扱います。1行=1件のグリッドの上で、選択・編集・比較・書き出しを完結させます。Excel に慣れた研究者が、学習なしで使い始められることを最優先にします。</p>
+  <div class="row">
+    <figure>
+      <div class="mock mA" aria-hidden="true">
+        <div class="desk">
+          <div class="bar top tabs"><b>Grid Ledger</b><span class="on">測定</span><span>LCA</span><span>ジョブ</span><span style="margin-left:auto">⌘K</span></div>
+          <div class="bar filter"><span class="mono">/ CO2 &gt; 1000 and room = "B204"</span><span style="margin-left:auto">列: 標準 ▾</span></div>
+          <div class="pane left">
+            <div class="lbl">保存検索</div>
+            <div class="li on">今週の異常値 (7)</div>
+            <div class="li">レビュー待ち (12)</div>
+            <div class="lbl" style="margin-top:4px">部屋・装置</div>
+            <div class="li">▸ B204 クリーンブース</div>
+            <div class="li">▸ C101 講義室</div>
+            <div class="li">▸ 粒子計数器 PC-03</div>
+            <div class="lbl" style="margin-top:4px">タグ</div>
+            <div class="li"><span class="chip" style="color:#1F5FA8">1 校正後</span> <span class="chip" style="color:#7A4F00">2 要確認</span></div>
+          </div>
+          <div class="pane" style="padding:4px">
+            <table class="g">
+              <thead><tr><th>ID</th><th>部屋</th><th>PM2.5<br>µg/m³</th><th>CO2<br>ppm</th><th>≥0.5µm<br>個/m³</th><th>ISO</th><th>状態</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">M-1182</td><td class="l">B204</td><td>3.1</td><td>642</td><td>28,400</td><td>6</td><td class="l" style="color:#1E6B3A">✓ 済</td></tr>
+                <tr class="sel"><td class="mono">M-1183</td><td class="l">B204</td><td>4.8</td><td class="bad">⚠1,284</td><td>31,900</td><td>6</td><td class="l" style="color:#7A4F00">△ 待</td></tr>
+                <tr><td class="mono">M-1184</td><td class="l">B204</td><td>2.7</td><td>711</td><td class="bad">⚠412,000</td><td class="bad">8</td><td class="l" style="color:#7A4F00">△ 待</td></tr>
+                <tr><td class="mono">M-1185</td><td class="l">C101</td><td class="caution">△18.2</td><td class="bad">⚠1,530</td><td>—</td><td>—</td><td class="l" style="color:#7A4F00">△ 待</td></tr>
+                <tr><td class="mono">M-1186</td><td class="l">C101</td><td>9.4</td><td>980</td><td>—</td><td>—</td><td class="l" style="color:#1E6B3A">✓ 済</td></tr>
+                <tr><td class="mono">M-1187</td><td class="l">B204</td><td>3.3</td><td>655</td><td>27,100</td><td>6</td><td class="l" style="color:#1E6B3A">✓ 済</td></tr>
+                <tr><td class="mono">M-1188</td><td class="l">B204</td><td>3.0</td><td>630</td><td>26,800</td><td>6</td><td class="l" style="color:#1E6B3A">✓ 済</td></tr>
+                <tr><th>平均</th><th></th><th style="text-align:right">6.4</th><th style="text-align:right">919</th><th style="text-align:right">—</th><th></th><th>n=7</th></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pane right">
+            <div class="lbl">M-1183 の詳細</div>
+            <div class="li">▾ 条件</div>
+            <div class="li">　装置 PC-03 / 校正 2026-10-02</div>
+            <div class="li">　測定点 P2（高さ 1.1 m）</div>
+            <div class="li">▸ 来歴（CSV 取込）</div>
+            <div class="li">▸ 版の履歴（v2）</div>
+            <div class="li">▸ 添付 (1)</div>
+            <div class="lbl" style="margin-top:4px;color:#9E2016">⚠ CO2 1,284 ppm &gt; 閾値 1,000</div>
+          </div>
+          <div class="pane left" style="border-top:1px solid #D5DAE1;font-size:9px">CO2 時系列 ▸</div>
+          <div class="bottom" style="height:100%"><span style="height:40%"></span><span style="height:46%"></span><span class="hi" style="height:90%"></span><span style="height:52%"></span><span class="hi" style="height:100%"></span><span style="height:70%"></span><span style="height:44%"></span><span style="height:42%"></span></div>
+          <div class="pane right" style="border-top:1px solid #D5DAE1;font-size:9px">書き出し: CSV / XLSX / PDF</div>
+        </div>
+      </div>
+      <figcaption>デスクトップ版: 左に保存検索・部屋・タグ、中央に高密度のグリッド（異常値はセルに ⚠＋背景色）、右に折りたたみ式の詳細、下部にミニグラフ。</figcaption>
+    </figure>
+    <figure>
+      <div class="mock phone mA" aria-hidden="true">
+        <div class="bar" style="background:#1F5FA8;color:#fff"><b>測定</b><span style="margin-left:auto">＋入力</span></div>
+        <div class="ps" style="padding:6px;display:flex;flex-direction:column;gap:5px">
+          <div class="bar caution" style="border-radius:3px">⚠ 異常値 7件 ▸</div>
+          <div style="border:1px solid #D5DAE1;border-radius:4px;padding:5px"><b class="mono">M-1183</b> B204<br>CO2 <b style="color:#9E2016">⚠ 1,284 ppm</b><br><span style="color:#7A4F00">△ レビュー待ち</span></div>
+          <div style="border:1px solid #D5DAE1;border-radius:4px;padding:5px"><b class="mono">M-1184</b> B204<br>ISO <b style="color:#9E2016">⚠ クラス 8</b><br><span style="color:#7A4F00">△ レビュー待ち</span></div>
+          <div style="border:1px solid #D5DAE1;border-radius:4px;padding:5px"><b class="mono">M-1182</b> B204<br>CO2 642 ppm<br><span style="color:#1E6B3A">✓ レビュー済み</span></div>
+        </div>
+        <div class="bar" style="border-top:1px solid #D5DAE1;justify-content:space-around"><span>一覧</span><span>入力</span><span>承認</span></div>
+      </div>
+      <figcaption>スマートフォン版: グリッドをカードの一覧に変え、現場での1件ずつの入力・異常値の確認・承認に絞る。</figcaption>
+    </figure>
+  </div>
+  <div class="density">情報密度 <span class="m" aria-hidden="true"><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span></span> 非常に高い（30〜40行 × 12〜20列）</div>
+  <div class="navd" aria-label="案Aのナビゲーション構造">データセットのタブ ─▶ フィルタ式 ─▶ 行 ─▶ 右の詳細（最大2階層・平坦）
+キー操作: ↑↓ 行の移動 / Enter 編集 / "/" フィルタ / 1〜6 タグ / Ctrl+K コマンド</div>
+  <div class="facts">
+    <div><b>想定利用者</b>学部生（入力・取り込み）、院生（試行の比較）、教授（異常値とレビュー待ちの確認）</div>
+    <div><b>配色</b><span class="swatches"><span class="sw"><i style="background:#FFFFFF"></i>#FFFFFF</span><span class="sw"><i style="background:#1A1D21"></i>#1A1D21</span><span class="sw"><i style="background:#1F5FA8"></i>#1F5FA8</span><span class="sw"><i style="background:#B3261E"></i>#B3261E</span><span class="sw"><i style="background:#8A5A00"></i>#8A5A00</span></span></div>
+    <div><b>フォント・余白</b>BIZ UDPGothic / Noto Sans JP、表 12.5px、tabular-nums、4px グリッド、行の高さ 26px</div>
+    <div><b>グラフ・表・フォーム</b>表が主役で、単位はヘッダーの2段目に表示。グラフは補助。入力はセルに直接打ち、スキーマで検証する</div>
+    <div><b>アクセシビリティ</b>role="grid"、キーボードだけで全ての操作、色＋記号＋文字、行の高さの切替</div>
+    <div><b>技術・難易度</b>React + TanStack Table、SheetJS、FastAPI ／ <strong>低〜中</strong></div>
+  </div>
+  <div class="pm">
+    <div><h3>メリット</h3><ul><li>学習コストが最も低い</li><li>大量データの比較と異常値の確認が最速</li><li>Excel・CSV との往復が自然</li></ul></div>
+    <div><h3>デメリット</h3><ul><li>計算の依存関係と根拠が見えにくい</li><li>図と説明は別のツールに頼ることになる</li></ul></div>
+  </div>
+</section>
+
+<!-- ================= B ================= -->
+<section class="concept" id="concept-b" aria-labelledby="b-h">
+  <h2 id="b-h"><span class="tag">案B</span>ノートブック型「Evidence Notebook」</h2>
+  <p>研究を、根拠を説明する文書として扱います。前提・式・入力・図・考察を縦に流れる1つのノートにまとめ、入力と図をリアクティブにつなぎます。実行順は依存グラフで自動的に決めるため、手動の順番実行で隠れた状態が生まれません。</p>
+  <div class="row">
+    <figure>
+      <div class="mock mB" aria-hidden="true">
+        <div class="desk">
+          <div class="bar top"><b>CLT 床版の GWP 感度分析</b><span class="chip" style="color:#55595F">v5・レビュー待ち</span><span class="run">▶ 実行（重いセル 1）</span></div>
+          <div class="pane left">
+            <div class="lbl">目次</div>
+            <div class="li">● 1 目的と機能単位</div>
+            <div class="li">● 2 算定式</div>
+            <div class="li" style="font-weight:700;color:#5B3FA8">● 3 係数の感度</div>
+            <div class="li" style="color:#7A4F00">↻ 4 SageMath 検算</div>
+            <div class="li">● 5 結論</div>
+          </div>
+          <div class="doc">
+            <div class="cell"><div class="lbl">2 算定式（Math IR → SymPy）</div><div class="math">GWP = Σ<sub>i</sub> A<sub>i</sub> · EF<sub>i</sub>　[kg-CO<sub>2</sub>e / m²]</div></div>
+            <div class="cell"><div class="lbl">3 係数の感度: EF<sub>CLT</sub> = 0.62 kg-CO2e/kg</div><div class="slider"><i></i><b></b></div>
+              <div class="chart">
+                <svg class="line" viewBox="0 0 200 60" preserveAspectRatio="none"><polygon points="0,50 50,40 100,30 150,22 200,12 200,22 150,32 100,40 50,48 0,56" fill="#2D6CDF" opacity=".18"/><polyline points="0,53 50,44 100,35 150,27 200,17" fill="none" stroke="#2D6CDF" stroke-width="2"/><polyline points="0,40 50,38 100,36 150,34 200,32" fill="none" stroke="#C2571A" stroke-width="2" stroke-dasharray="5 3"/><line x1="124" y1="0" x2="124" y2="60" stroke="#5B3FA8" stroke-width="1"/></svg>
+              </div>
+              <div style="font-size:9px;color:#55595F">— CLT（実線）　- - RC（破線）　│ 現在値</div>
+            </div>
+            <div class="cell stale"><div class="lbl" style="color:#7A4F00">↻ 4 SageMath 検算（上流の係数が変更されたため要再計算）</div></div>
+          </div>
+          <div class="pane right">
+            <div class="lbl">変数インスペクタ</div>
+            <div class="li mono">A_CLT = 54.0 kg</div>
+            <div class="li mono">EF_CLT = 0.62</div>
+            <div class="li mono">A_steel = 3.2 kg</div>
+            <div class="li mono">EF_steel = 1.85</div>
+            <div class="li mono">GWP = 39.4</div>
+            <div class="lbl" style="margin-top:4px">定義したセル</div>
+            <div class="li">EF_CLT ← セル 3</div>
+          </div>
+        </div>
+      </div>
+      <figcaption>デスクトップ版: 左は目次とセルの状態、中央は本文（数式・スライダー・図）、右は変数インスペクタ。余白を広く取った読み物型。</figcaption>
+    </figure>
+    <figure>
+      <div class="mock phone mB" aria-hidden="true">
+        <div class="bar" style="border-bottom:1px solid #E2DED6;color:#22252A"><b>CLT 床版 GWP</b><span style="margin-left:auto">v5</span></div>
+        <div class="ps" style="padding:8px;display:flex;flex-direction:column;gap:7px;color:#22252A">
+          <div style="font-size:11px;font-weight:700">3 係数の感度</div>
+          <div class="chart" style="height:80px;border-left:1px solid #55595F;border-bottom:1px solid #55595F;position:relative">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><polyline points="0,53 50,44 100,35 150,27 200,17" fill="none" stroke="#2D6CDF" stroke-width="2"/><polyline points="0,40 50,38 100,36 150,34 200,32" fill="none" stroke="#C2571A" stroke-width="2" stroke-dasharray="5 3"/></svg>
+          </div>
+          <div>係数を上げると、CLT は RC に近づく。</div>
+          <div style="border:1px solid #E2DED6;border-radius:4px;padding:5px;background:#fff">💬 教授: EF の出典の版を明記すること</div>
+        </div>
+        <div class="bar" style="border-top:1px solid #E2DED6;justify-content:space-around;color:#22252A"><span>目次</span><span>コメント</span></div>
+      </div>
+      <figcaption>スマートフォン版: 本文を1段で閲覧するだけ。図を拡大し、セルにコメントを付ける。編集と実行はしない。</figcaption>
+    </figure>
+  </div>
+  <div class="density">情報密度 <span class="m" aria-hidden="true"><span class="f"></span><span class="f"></span><span></span><span></span><span></span></span> 中〜低（1画面に 2〜4 セル）</div>
+  <div class="navd" aria-label="案Bのナビゲーション構造">ノートの一覧 ─▶ ノート（縦スクロール） ─▶ 目次からジャンプ ─▶ セルの依存線で上流へ
+実行順は依存グラフで自動決定 ／ 重いセルだけを「実行」</div>
+  <div class="facts">
+    <div><b>想定利用者</b>院生（感度分析・式の記述）、教授（読んでコメント）、学部生（テンプレートの入力欄だけ）</div>
+    <div><b>配色</b><span class="swatches"><span class="sw"><i style="background:#FBFAF7"></i>#FBFAF7</span><span class="sw"><i style="background:#22252A"></i>#22252A</span><span class="sw"><i style="background:#5B3FA8"></i>#5B3FA8</span><span class="sw"><i style="background:#2D6CDF"></i>#2D6CDF</span><span class="sw"><i style="background:#C2571A"></i>#C2571A</span></span></div>
+    <div><b>フォント・余白</b>Noto Sans JP 15px・行間 1.7、数式 STIX Two Math、8px グリッド、セルの間 24px</div>
+    <div><b>グラフ・表・フォーム</b>大きな図が主役で、信頼区間と基準線を付ける。表は図の根拠として小さく置く。入力はスライダーと数値欄の組</div>
+    <div><b>アクセシビリティ</b>見出しから目次を生成、数式に MathML、図に代替の表、系列は色と形で区別</div>
+    <div><b>技術・難易度</b>Svelte/React + Observable Plot、KaTeX、Pyodide ／ <strong>中〜高</strong></div>
+  </div>
+  <div class="pm">
+    <div><h3>メリット</h3><ul><li>根拠を説明する力と、図の完成度が最も高い</li><li>感度分析のループが速い</li><li>指導と報告にそのまま使える</li></ul></div>
+    <div><h3>デメリット</h3><ul><li>大量データの一覧・一括編集に弱い</li><li>ノートごとに書き方がばらつきやすい</li></ul></div>
+  </div>
+</section>
+
+<!-- ================= C ================= -->
+<section class="concept" id="concept-c" aria-labelledby="c-h">
+  <h2 id="c-h"><span class="tag">案C</span>統合型「Pipeline Ledger」 <span class="tag adopt">採用案</span></h2>
+  <p>研究を、入力 → 処理 → 結果の連鎖として扱います。画面の骨格は計算パイプラインの段です。段を選ぶと、その段にふさわしい表示（案A のグリッド、フォーム、図、案B の根拠ページ）が中央に出ます。右には常に根拠パネル（来歴・式・版）を置きます。</p>
+  <div class="row">
+    <figure>
+      <div class="mock mC" aria-hidden="true">
+        <div class="desk">
+          <div class="bar top"><b>LCA-B204 改修</b><span class="mono">pipeline v5</span><span>パイプライン | 台帳</span><span class="run">未適用 3 ▶ 実行</span></div>
+          <div class="pane left">
+            <div class="lbl">段（依存順）</div>
+            <div class="stage"><span class="st-ok">●</span>1 取り込み <span class="st-ok">成功</span></div>
+            <div class="stage"><span class="st-ok">●</span>2 単位・範囲の検証</div>
+            <div class="stage on"><span class="st-rdy">◐</span>3 LCA 条件 <span class="st-rdy">準備</span></div>
+            <div class="stage"><span class="st-stale">↻</span>4 Math IR 変換</div>
+            <div class="stage"><span class="st-err">✕</span>5 SageMath 実行</div>
+            <div class="stage"><span class="st-none">○</span>6 図表・レポート</div>
+            <div class="lbl" style="margin-top:4px">表示</div>
+            <div class="li">☰ リスト　◇ グラフ（自動整列）</div>
+          </div>
+          <div class="center">
+            <div class="ctabs"><span class="on">条件</span><span>出力</span></div>
+            <div class="field"><span>機能単位</span><span class="in">1.0</span><span>m²</span></div>
+            <div class="field dirty"><span>EF CLT <span class="st-stale">未適用</span></span><span class="in">0.62</span><span>/kg</span></div>
+            <div class="field dirty"><span>EF 鋼材 <span class="st-stale">未適用</span></span><span class="in">1.85</span><span>/kg</span></div>
+            <div class="field"><span>システム境界</span><span class="in" style="text-align:left">A1–A3</span><span></span></div>
+            <div class="field dirty"><span>輸送距離 <span class="st-stale">未適用</span></span><span class="in">120</span><span>km</span></div>
+            <table class="g" style="margin-top:4px">
+              <thead><tr><th>材料</th><th>量 kg</th><th>EF</th><th>GWP</th></tr></thead>
+              <tbody><tr><td>CLT</td><td>54.0</td><td>0.62</td><td>33.5</td></tr><tr><td>鋼材</td><td>3.2</td><td>1.85</td><td>5.9</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane right">
+            <div class="lbl">根拠パネル</div>
+            <div class="li">入力: <span class="mono">inventory_B204.csv</span></div>
+            <div class="li">hash <span class="mono">3f9a…c21</span></div>
+            <div class="li">EF 出典: DB-JP v2.3 #CLT-07</div>
+            <div class="prov"><b>Math IR</b><br><span class="mono">Sum(A[i]*EF[i], i)</span></div>
+            <div class="prov"><b>変更履歴</b><br>v5 EF 0.58→0.62（院生 S）<br>v4 輸送距離 追加</div>
+          </div>
+          <div class="bottom">
+            <b>ジョブモニター</b>　<span class="st-err">✕ J-0413 SageMath: timeout 300 s ▸ 段5へ</span>　<span class="st-ok">● J-0412 SymPy 1.8 s</span>　<span class="st-rdy">◐ J-0414 待機</span>
+          </div>
+        </div>
+      </div>
+      <figcaption>デスクトップ版: 左は段のリストと状態、中央は選択した段の条件（未適用の項目に紫の縦線と文字）、右は根拠パネル、下部はジョブモニター。</figcaption>
+    </figure>
+    <figure>
+      <div class="mock phone mC" aria-hidden="true">
+        <div class="bar" style="background:#16191D;color:#fff"><b>LCA-B204</b><span style="margin-left:auto">v5</span></div>
+        <div class="ps" style="padding:6px;background:#fff">
+          <div class="banner" style="border-radius:3px;margin-bottom:5px">✕ 失敗 1件・承認待ち 2件</div>
+          <div class="stage"><span class="st-ok">●</span>1 取り込み</div>
+          <div class="stage"><span class="st-ok">●</span>2 検証</div>
+          <div class="stage"><span class="st-rdy">◐</span>3 LCA 条件</div>
+          <div class="stage"><span class="st-stale">↻</span>4 Math IR 変換</div>
+          <div class="stage" style="background:#FDECEA"><span class="st-err">✕</span>5 SageMath 実行</div>
+          <div style="font-size:9px;padding:2px 4px;color:#9E2016">timeout 300 s</div>
+          <div style="display:flex;gap:4px;padding:4px"><span class="chip" style="color:#00525F">再実行</span><span class="chip" style="color:#00525F">担当へ通知</span></div>
+          <div class="stage"><span class="st-none">○</span>6 レポート</div>
+        </div>
+        <div class="bar" style="border-top:1px solid #CDD3DB;justify-content:space-around;background:#fff"><span>ジョブ</span><span>異常</span><span>承認</span></div>
+      </div>
+      <figcaption>スマートフォン版: 段を縦のタイムラインで表示。状態の確認、失敗の通知、承認、再実行の指示だけを行う。</figcaption>
+    </figure>
+  </div>
+  <div class="density">情報密度 <span class="m" aria-hidden="true"><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span></span></span> 高い（段の単位で区切って見せる）</div>
+  <div class="navd" aria-label="案Cのナビゲーション構造">主軸: 段の順序 1 ▶ 2 ▶ 3 ▶ 4 ▶ 5 ▶ 6（"[" "]" で前後の段へ）
+副軸: 「台帳」タブ = 全ジョブ・全測定のグリッド（案A の部品）─▶ 1行を開くと、そのパイプラインの状態を復元
+報告: 段6「レポート」の出力として、根拠ページ（案B の部品）を自動で組み立てる ／ F6 でパネルの間を移動</div>
+  <div class="facts">
+    <div><b>想定利用者</b>院生（条件の設計・ジョブの投入・失敗の特定）、教授（俯瞰・承認・版の差分）、学部生（取り込みと検証の段だけ）</div>
+    <div><b>配色</b><span class="swatches"><span class="sw"><i style="background:#F4F6F8"></i>#F4F6F8</span><span class="sw"><i style="background:#16191D"></i>#16191D</span><span class="sw"><i style="background:#00687A"></i>#00687A</span><span class="sw"><i style="background:#1E6B3A"></i>#1E6B3A</span><span class="sw"><i style="background:#8A5A00"></i>#8A5A00</span><span class="sw"><i style="background:#B3261E"></i>#B3261E</span><span class="sw"><i style="background:#6A3FB5"></i>#6A3FB5</span></span></div>
+    <div><b>フォント・余白</b>BIZ UDPGothic 13px（レポート段は 15px）、tabular-nums、4px グリッド、パネルの内側 12px</div>
+    <div><b>グラフ・表・フォーム</b>条件はフォームで、単位・範囲・出典 ID を1行に。出力は表と図で、図の下に「入力ジョブ・条件の版・ハッシュ」を常に表示</div>
+    <div><b>アクセシビリティ</b>状態を3つの手段で表示、段は順序付きリスト（tree）、ジョブの更新は aria-live、F6 でパネル移動</div>
+    <div><b>技術・難易度</b>React + TanStack Table、ELK.js、Vega-Lite、FastAPI + ジョブキュー、来歴 DB ／ <strong>高</strong></div>
+  </div>
+  <div class="pm">
+    <div><h3>メリット</h3><ul><li>正確性・再現性・根拠の追跡が最も強い</li><li>既存の Math IR パイプラインと構造がそのまま対応する</li><li>役割ごとに必要な段だけを見せられる</li></ul></div>
+    <div><h3>デメリット</h3><ul><li>実装と保守のコストが最も高い</li><li>「段」という考え方を理解するまでに時間がかかる</li></ul></div>
+  </div>
+</section>
+
+<!-- ================= diff ================= -->
+<section id="diff" aria-labelledby="diff-h">
+  <h2 id="diff-h">操作体系と情報構造の違い</h2>
+  <div class="tablewrap">
+    <table class="t">
+      <caption>3案の構造の比較</caption>
+      <thead><tr><th scope="col">観点</th><th scope="col">案A 表計算・台帳型</th><th scope="col">案B ノートブック型</th><th scope="col">案C 統合型</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">主画面</th><td>データグリッド</td><td>縦に流れる文書</td><td>段のリスト＋段ごとの作業領域</td></tr>
+        <tr><th scope="row">前へ進む操作</th><td>フィルタ → 行の選択</td><td>スクロール → セル</td><td>段の選択 → 条件 / 出力</td></tr>
+        <tr><th scope="row">根拠の見え方</th><td>行の詳細の「来歴」セクション</td><td>本文そのもの</td><td>常設の根拠パネル＋自動生成のレポート</td></tr>
+        <tr><th scope="row">重い計算</th><td>行ごとの「再実行」</td><td>重いセルだけ「実行」</td><td>「未適用 n ▶ 実行」と段の状態 ↻</td></tr>
+        <tr><th scope="row">スマートフォン</th><td>カード一覧・入力・承認</td><td>閲覧とコメント</td><td>状態のタイムライン・承認・再実行</td></tr>
+        <tr><th scope="row">情報密度</th><td>非常に高い</td><td>中〜低</td><td>高い（段の単位で区切る）</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= eval ================= -->
+<section id="eval" aria-labelledby="eval-h">
+  <h2 id="eval-h">評価: 重み付きの採点</h2>
+  <p>研究室アプリでは正確性・再現性・目的への適合性・操作効率を重くし、視覚的な完成度を軽くしました。点数は1〜5点で、実装・保守コストは「コストが低いほど高得点」です。加重合計 = Σ（点数 × 重み）÷ 100（5点満点）。</p>
+  <div class="tablewrap">
+    <table class="t">
+      <caption>評価基準、重み、各案の点数</caption>
+      <thead><tr><th scope="col">評価基準</th><th scope="col" class="n">重み</th><th scope="col" class="n">案A</th><th scope="col" class="n">案B</th><th scope="col" class="n">案C</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">操作効率</th><td class="n">12%</td><td class="n best">5</td><td class="n">3</td><td class="n">4</td></tr>
+        <tr><th scope="row">学習の容易さ</th><td class="n">8%</td><td class="n best">4</td><td class="n">3</td><td class="n">3</td></tr>
+        <tr><th scope="row">情報の理解しやすさ</th><td class="n">10%</td><td class="n">4</td><td class="n">4</td><td class="n best">5</td></tr>
+        <tr><th scope="row">視覚的完成度</th><td class="n">4%</td><td class="n">3</td><td class="n best">5</td><td class="n">4</td></tr>
+        <tr><th scope="row">アクセシビリティ</th><td class="n">8%</td><td class="n best">4</td><td class="n">3</td><td class="n best">4</td></tr>
+        <tr><th scope="row">拡張性</th><td class="n">8%</td><td class="n">3</td><td class="n">4</td><td class="n best">5</td></tr>
+        <tr><th scope="row">実装・保守コスト</th><td class="n">8%</td><td class="n best">4</td><td class="n">3</td><td class="n">2</td></tr>
+        <tr><th scope="row">目的への適合性</th><td class="n">12%</td><td class="n">4</td><td class="n">3</td><td class="n best">5</td></tr>
+        <tr><th scope="row">正確性（分類固有）</th><td class="n">12%</td><td class="n">4</td><td class="n">3</td><td class="n best">5</td></tr>
+        <tr><th scope="row">再現性（分類固有）</th><td class="n">12%</td><td class="n">3</td><td class="n">3</td><td class="n best">5</td></tr>
+        <tr><th scope="row">操作速度（分類固有）</th><td class="n">6%</td><td class="n best">5</td><td class="n">3</td><td class="n">4</td></tr>
+        <tr class="total"><th scope="row">加重合計（5点満点）</th><td class="n">100%</td><td class="n">3.94</td><td class="n">3.26</td><td class="n best">4.30</td></tr>
+        <tr><th scope="row">100点換算</th><td class="n"></td><td class="n">78.8</td><td class="n">65.2</td><td class="n best">86.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">太字は、その基準での最高点です。</p>
+  <div class="adoptbox" role="region" aria-labelledby="adopt-h">
+    <h3 id="adopt-h">採用案: 案C「Pipeline Ledger」（統合型）</h3>
+    <p><strong>理由</strong>: 分類固有の3基準（正確性・再現性・適合性。合計 36%）で全て最高点でした。既存リポジトリの Math IR パイプラインと LCA 演算子の段の構造を、そのまま UI の骨格にできます。最大の弱点は実装コストで、これは段階的な実装で分散します（1 台帳グリッド → 2 段と状態 → 3 根拠パネル → 4 レポートの段）。</p>
+    <p><strong>案A から取り込む要素</strong>: 「台帳」タブのデータグリッド（スキーマ検証、集計行、数字キーのタグ、保存検索）。学部生の既定画面を「測定入力」の段のグリッドにする。CSV・Excel の往復。</p>
+    <p><strong>案B から取り込む要素</strong>: レポートの段で、根拠ページ（説明・数式・図・表）を自動で組み立てる。軽い計算はスライダーで即時に感度分析できるようにする。図の代替の表、論文用の書き出しプリセット、スマートフォンでのコメントレビュー。</p>
+  </div>
+</section>
+</main>
+
+<footer class="site" role="contentinfo">
+  <p>根拠: 調査台帳 ledger-A-1.json・ledger-A-2.json（12件。11件は公式ページの本文で確認し、Observable の1件は検索結果の要約だけで確認）。既存製品の画面画像は今回確認しておらず、モックアップは台帳から抽出した設計原則に基づく独自のデザインです。表示している数値・ID・人名は全てダミーです。</p>
+</footer>
+</body>
+</html>
