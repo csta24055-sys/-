@@ -1557,6 +1557,8 @@ function route(initial) {
   if (!initial) { const h = $('#h-' + n); if (h) h.focus({preventScroll: true}); window.scrollTo(0, 0); }
 }
 window.addEventListener('hashchange', () => route(false));
+/* 本文へスキップ: href="#main" をそのまま辿るとハッシュ経路が #main に変わり、ダッシュボードへ戻ってしまうため、ハッシュを変えずに現在画面の見出しへフォーカスを移す（a11y 検証で修正） */
+$('.skip').addEventListener('click', e => { e.preventDefault(); let n = location.hash.slice(1); if (!VIEWS[n]) n = 'dashboard'; const h = $('#h-' + n) || $('#main'); h.focus({preventScroll: true}); h.scrollIntoView({block: 'start'}); });
 
 /* ---------- キーボード ---------- */
 let gPending = false, gTimer = null;

@@ -189,7 +189,9 @@ figcaption{font-size:13px;color:var(--ink-2);margin-top:var(--s2);max-width:560p
 .score tfoot td,.score tfoot th{font-weight:700;border-top:2px solid var(--ink);font-size:15px}
 .meter{display:inline-block;height:6px;border-radius:3px;background:var(--accent);vertical-align:middle;margin-left:6px}
 footer{margin:var(--s7) 0 var(--s6);font-size:13px;color:var(--ink-2)}
-@media (max-width:620px){h1{font-size:22px} .desk{height:auto;min-height:300px}}
+@media (max-width:620px){h1{font-size:22px} .desk{height:auto;min-height:300px} .mock .top{flex-wrap:wrap;row-gap:4px}}
+/* a11y修正(1.4.10 リフロー): フレックス子要素の min-width:auto により 375px 幅で横スクロールが発生していたため上限を設定 */
+.mocks>figure{min-width:0;max-width:100%}
 </style>
 </head>
 <body>
@@ -382,7 +384,7 @@ footer{margin:var(--s7) 0 var(--s6);font-size:13px;color:var(--ink-2)}
     <ul class="swatches" aria-label="案Cの主要色">
       <li><i style="background:#0F2A3D"></i>#0F2A3D スコープバー</li><li><i style="background:#16191D"></i>#16191D 文字</li><li><i style="background:#4B5563"></i>#4B5563 補助</li><li><i style="background:#5B3FA0"></i>#5B3FA0 承認待ち</li><li><i style="background:#1E7A3C"></i>#1E7A3C 良好</li><li><i style="background:#B42318"></i>#B42318 警戒</li>
     </ul>
-    <div class="tenants" aria-label="組織ごとに差し替えるアクセントトークン">
+    <div class="tenants" role="group" aria-label="組織ごとに差し替えるアクセントトークン">
       <span class="tenant"><b style="background:#1D5FA8"></b>北陵大学 <code>--brand-accent: #1D5FA8</code></span>
       <span class="tenant"><b style="background:#1F6F4A"></b>湊川市 <code>--brand-accent: #1F6F4A</code></span>
       <span class="tenant"><b style="background:#8A4B0F"></b>東和建設 <code>--brand-accent: #8A4B0F</code></span>
