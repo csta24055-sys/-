@@ -48,9 +48,9 @@ try {
   blockComp.layoutMode = 'VERTICAL';
   blockComp.paddingLeft = blockComp.paddingRight = 8;
   blockComp.paddingTop = blockComp.paddingBottom = 8;
+  blockComp.resize(200, 40);
   blockComp.primaryAxisSizingMode = 'AUTO';
   blockComp.counterAxisSizingMode = 'FIXED';
-  blockComp.resize(200, 40);
   blockComp.cornerRadius = 6;
   blockComp.fills = solid('#eef1f5');
   blockComp.strokes = solid(LINE);
@@ -96,8 +96,9 @@ function desktopWF(cat, screenName, blocks, accent) {
     ['ダッシュボード', '操作', '結果', '設定'].forEach((n) => side.appendChild(txt(n, 10, n === screenName.slice(0, 2), MUTED)));
     contentW = 536 - 100;
   }
-  const content = al('HORIZONTAL', { name: 'content', itemSpacing: 8, counterAxisSpacing: 8 });
+  const content = al('HORIZONTAL', { name: 'content', itemSpacing: 8 });
   content.layoutWrap = 'WRAP';
+  content.counterAxisSpacing = 8;
   body.appendChild(content); content.layoutSizingHorizontal = 'FILL';
   const bw = Math.floor((contentW - 8) / 2) - 8;
   blocks.forEach((b) => content.appendChild(block(b, bw)));
@@ -147,8 +148,9 @@ for (const cat of DATA) {
     coll.renameMode(modeId, 'light');
   } catch (e) { coll = null; }
   col.appendChild(txt('カラートークン（ローカル変数に登録・見本は変数にバインド）', 13, true, MUTED));
-  const sw = al('HORIZONTAL', { name: 'swatches', itemSpacing: 12, counterAxisSpacing: 12 });
+  const sw = al('HORIZONTAL', { name: 'swatches', itemSpacing: 12 });
   sw.layoutWrap = 'WRAP';
+  sw.counterAxisSpacing = 12;
   col.appendChild(sw); sw.layoutSizingHorizontal = 'FILL';
   let nVars = 0;
   for (const c of colors) {

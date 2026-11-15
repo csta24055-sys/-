@@ -60,6 +60,9 @@ p{margin:0 0 var(--space-3)}
 @media (max-width:900px){.concept-grid{grid-template-columns:minmax(0,1fr)}}
 .mocks{display:flex;gap:var(--space-3);align-items:flex-start;flex-wrap:wrap}
 figure{margin:0}
+/* a11y修正(QA): 狭い画面でモックが横にはみ出さないようにする (WCAG 1.4.10) */
+.mocks>figure{min-width:0;max-width:100%}
+@media (max-width:640px){.mocks>figure:has(.desk){flex:1 1 100%}.mock.desk{width:100%}.mB .panes{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) minmax(0,1fr)}.mB .top{flex-wrap:wrap}.mB .url{max-width:100%}}
 figcaption{font-size:14px;color:var(--text-muted);margin-top:var(--space-2)}
 dl.spec{margin:0;display:grid;grid-template-columns:auto 1fr;gap:var(--space-1) var(--space-3);font-size:15px}
 dl.spec dt{font-weight:700}

@@ -89,7 +89,7 @@
 @media (prefers-reduced-motion: reduce){ :root{ --dur-fast:0ms; --dur:0ms; } *{animation:none!important; scroll-behavior:auto!important} }
 
 /* 文字サイズ拡大（rem 基準で全体が拡大） */
-html{font-size:100%; scroll-padding-top:96px; scroll-padding-bottom:96px; -webkit-text-size-adjust:100%}
+html{font-size:100%; scroll-padding-top:144px; scroll-padding-bottom:96px; -webkit-text-size-adjust:100%}
 html.size-l{font-size:112.5%}
 html.size-xl{font-size:137.5%}
 
@@ -296,6 +296,8 @@ fieldset{border:0; padding:0; margin:0 0 var(--space-5); min-width:0}
 
 /* テーブル */
 .table-wrap{max-width:100%}
+/* a11y修正(QA): 単独で置かれた補助リンクも 24×24px 以上の当たり判定を確保 (WCAG 2.5.8) */
+dd > a:only-child, .provenance a{display:inline-block; min-height:24px; padding-block:3px}
 table{border-collapse:collapse; width:100%; font-size:var(--fs-xs); background:var(--color-bg)}
 caption{text-align:left; font-weight:700; font-size:var(--fs-s); padding-bottom:var(--space-2)}
 th,td{border-bottom:1px solid var(--color-border); padding:var(--space-2) var(--space-3); text-align:left; vertical-align:top}
@@ -398,7 +400,10 @@ dialog::backdrop{background:rgba(27,36,48,.55)}
   .bottom-nav a[aria-current="page"]{color:var(--color-primary); box-shadow:inset 0 4px 0 var(--color-primary); font-weight:700}
   .bottom-nav svg{width:22px; height:22px}
   /* 表 → カードリスト */
-  table.stack thead{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0)}
+  table.stack{position:relative}
+  table.stack thead{position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); clip-path:inset(50%); white-space:nowrap}
+  table.stack thead th{display:block; width:1px; overflow:hidden; padding:0}
+  html{scroll-padding-top:72px}
   table.stack tr{display:block; border:1px solid var(--color-border-strong); border-radius:var(--radius-m); margin-bottom:var(--space-3); padding:var(--space-2) var(--space-3); background:var(--color-bg)}
   table.stack td{display:grid; grid-template-columns:8em minmax(0,1fr); gap:var(--space-2); border:0; padding:var(--space-1) 0; text-align:left}
   table.stack td::before{content:attr(data-label); font-weight:700; color:var(--color-text-muted)}
@@ -1040,7 +1045,7 @@ summary(subset(df, state != "欠測"))</pre></div>
           <label for="email">メールアドレス（リンクで入る場合）</label>
           <span class="hint" id="email-hint">例: name@example.ac.jp（貼り付け・自動入力できます）</span>
           <span class="error-msg" id="email-err" hidden></span>
-          <input class="input" id="email" type="email" autocomplete="username email" aria-describedby="email-hint email-err">
+          <input class="input" id="email" type="email" autocomplete="email" aria-describedby="email-hint email-err">
         </div>
         <button class="btn btn-secondary" type="submit">リンクを送る</button>
         <div role="status" id="signin-status"></div>
@@ -1542,6 +1547,17 @@ tileMap($("#tile-national"),NAT,null); tileMap($("#tile-pref"),PREF,"青葉市")
 renderWorkspace(); renderCharts(); renderSwatches(); syncToggles();
 route();
 if(/selfcheck/.test(location.search)){ var out=[]; ROUTES.forEach(function(r){ show(r); out.push(r+":"+root.scrollWidth+"/"+root.clientWidth); }); var pre=doc.createElement("pre"); pre.id="selfcheck"; pre.textContent=out.join(" "); doc.body.appendChild(pre); }
+})();
+</script>
+<script>
+/* a11y修正(QA): 固定ヘッダーの実高さ（文字拡大・折り返しで変化）に合わせて scroll-padding-top を更新し、
+   フォーカスやページ内リンクの移動先がヘッダーの下に隠れないようにする (WCAG 2.4.11) */
+(function(){
+  var h=document.querySelector('.site-header'); if(!h||!window.ResizeObserver) return;
+  function sync(){ var sticky=getComputedStyle(h).position==='sticky';
+    var ln=document.querySelector('.layer-nav'); var extra=(ln&&ln.offsetHeight&&getComputedStyle(ln).position==='sticky')?ln.offsetHeight:0;
+    document.documentElement.style.scrollPaddingTop = sticky ? (h.offsetHeight+extra+16)+'px' : (extra+16)+'px'; }
+  new ResizeObserver(sync).observe(h); window.addEventListener('resize',sync); sync();
 })();
 </script>
 </body>

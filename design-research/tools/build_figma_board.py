@@ -75,7 +75,7 @@ def tokens(cat):
         px = float(val) * (16 if unit == "rem" else 1)
         if 10 <= px <= 64:
             sizes.append({"name": name, "px": round(px)})
-    return colors[:16], sizes[:8]
+    return colors[:28], sizes[:8]
 
 
 def main():

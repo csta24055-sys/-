@@ -1,0 +1,2050 @@
+<!doctype html>
+<html lang="ja" data-org="hokuryo" data-density="std">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>EnviroOps Federated Shell</title>
+<meta name="description" content="D分類（大企業品質）採用案C『Federated Shell』のプロトタイプ。データはすべてダミー。">
+<style>
+/* =========================================================
+   トークン層 1: global（値）  層 2: semantic（役割）  層 3: component
+   画面のコードは semantic / component トークンだけを参照する（P1, P2）
+   ========================================================= */
+:root{
+  /* global: 文字 */
+  --font-sans: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Meiryo", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, monospace;
+  --fs-100: 12px; --lh-100: 16px;
+  --fs-200: 13px; --lh-200: 20px;
+  --fs-300: 14px; --lh-300: 20px;
+  --fs-400: 16px; --lh-400: 24px;
+  --fs-500: 20px; --lh-500: 28px;
+  --fs-600: 24px; --lh-600: 32px;
+  --fs-kpi: 28px; --lh-kpi: 36px;
+  /* global: 余白（4px 基本単位） */
+  --space-050: 2px; --space-100: 4px; --space-150: 6px; --space-200: 8px; --space-300: 12px;
+  --space-400: 16px; --space-500: 24px; --space-600: 32px;
+  /* global: 角丸・影・動き */
+  --radius-100: 4px; --radius-200: 6px; --radius-300: 8px; --radius-pill: 999px;
+  --shadow-100: 0 1px 2px rgba(16,24,40,.08);
+  --shadow-300: 0 8px 28px rgba(16,24,40,.22);
+  --dur-fast: 120ms; --dur-base: 200ms; --ease-standard: cubic-bezier(.2,0,0,1);
+
+  /* semantic: ライト（既定） */
+  --color-bg: #F6F7F9;
+  --color-surface: #FFFFFF;
+  --color-surface-sunken: #EEF0F3;
+  --color-surface-hover: #F1F3F6;
+  --color-text: #16191D;
+  --color-text-subtle: #4B5563;
+  --color-border: #D1D5DB;
+  --color-border-strong: #6B7280;
+  --color-focus: #0B57D0;
+  --color-scope-bg: #0F2A3D;
+  --color-on-scope: #FFFFFF;
+  --color-on-scope-subtle: #C9D6E0;
+  --color-scope-ctl-border: #8DA2B2;
+  --color-overlay: rgba(9,14,20,.5);
+  /* 状態色（全組織共通・固定。組織テーマでは変更不可：X3） */
+  --status-ok: #1E7A3C;      --status-ok-bg: #E8F4EC;
+  --status-warn: #8A5A00;    --status-warn-bg: #FBF1DD;
+  --status-danger: #B42318;  --status-danger-bg: #FCEBE9;
+  --status-pending: #5B3FA0; --status-pending-bg: #F0ECF9;
+  --status-neutral: #4B5563; --status-neutral-bg: #EEF0F3;
+  --on-danger: #FFFFFF;
+  /* 組織アクセント（このトークン群だけを組織ごとに差し替える） */
+  --brand-accent: #1D5FA8;
+  --brand-accent-bg: #E8F0FA;
+  --on-brand: #FFFFFF;
+  /* チャート（カテゴリ色は固定順。dataviz 既定パレットのスロット 1〜5） */
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
+  --chart-grid: #E5E7EB; --chart-axis: #9CA3AF; --chart-band: #FBF1DD;
+
+  /* component */
+  --ctl-h: 32px;
+  --row-h: 32px;
+  --scopebar-h: 48px;
+  --rail-w: 76px;
+  --rail-w-open: 232px;
+  --bottomnav-h: 60px;
+  color-scheme: light;
+}
+:root[data-org="minato"]{ --brand-accent:#1F6F4A; --brand-accent-bg:#E7F3EC; }
+:root[data-org="towa"]{   --brand-accent:#8A4B0F; --brand-accent-bg:#F7EDE3; }
+
+/* ダーク: OS 設定に追従（手動でライトを選んだ場合は除外） */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --color-bg:#0E1216; --color-surface:#161B21; --color-surface-sunken:#0B0E12; --color-surface-hover:#1E242C;
+    --color-text:#E7EAEE; --color-text-subtle:#A8B0BB; --color-border:#343C46; --color-border-strong:#7D8794;
+    --color-focus:#8AB4F8; --color-scope-bg:#08151F; --color-on-scope:#FFFFFF; --color-on-scope-subtle:#B8C6D1; --color-scope-ctl-border:#7F95A6;
+    --color-overlay: rgba(0,0,0,.6);
+    --status-ok:#5CC584; --status-ok-bg:#12271B; --status-warn:#E2AC45; --status-warn-bg:#2B2110;
+    --status-danger:#F28B7F; --status-danger-bg:#301614; --status-pending:#B7A3F0; --status-pending-bg:#221C33;
+    --status-neutral:#A8B0BB; --status-neutral-bg:#1E242C; --on-danger:#0B0F14;
+    --brand-accent:#82B4F0; --brand-accent-bg:#14243A; --on-brand:#0B0F14;
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500; --series-5:#d55181;
+    --chart-grid:#2A3038; --chart-axis:#5B6470; --chart-band:#2B2110;
+    --shadow-100: 0 1px 2px rgba(0,0,0,.4); --shadow-300: 0 8px 28px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+  :root:not([data-theme="light"])[data-org="minato"]{ --brand-accent:#6FCB9C; --brand-accent-bg:#11281D; }
+  :root:not([data-theme="light"])[data-org="towa"]{   --brand-accent:#E7A66C; --brand-accent-bg:#2C1D10; }
+}
+/* ダーク: 手動切替 */
+:root[data-theme="dark"]{
+  --color-bg:#0E1216; --color-surface:#161B21; --color-surface-sunken:#0B0E12; --color-surface-hover:#1E242C;
+  --color-text:#E7EAEE; --color-text-subtle:#A8B0BB; --color-border:#343C46; --color-border-strong:#7D8794;
+  --color-focus:#8AB4F8; --color-scope-bg:#08151F; --color-on-scope:#FFFFFF; --color-on-scope-subtle:#B8C6D1; --color-scope-ctl-border:#7F95A6;
+  --color-overlay: rgba(0,0,0,.6);
+  --status-ok:#5CC584; --status-ok-bg:#12271B; --status-warn:#E2AC45; --status-warn-bg:#2B2110;
+  --status-danger:#F28B7F; --status-danger-bg:#301614; --status-pending:#B7A3F0; --status-pending-bg:#221C33;
+  --status-neutral:#A8B0BB; --status-neutral-bg:#1E242C; --on-danger:#0B0F14;
+  --brand-accent:#82B4F0; --brand-accent-bg:#14243A; --on-brand:#0B0F14;
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500; --series-5:#d55181;
+  --chart-grid:#2A3038; --chart-axis:#5B6470; --chart-band:#2B2110;
+  --shadow-100: 0 1px 2px rgba(0,0,0,.4); --shadow-300: 0 8px 28px rgba(0,0,0,.55);
+  color-scheme: dark;
+}
+:root[data-theme="dark"][data-org="minato"]{ --brand-accent:#6FCB9C; --brand-accent-bg:#11281D; }
+:root[data-theme="dark"][data-org="towa"]{   --brand-accent:#E7A66C; --brand-accent-bg:#2C1D10; }
+
+/* 密度（P4）: 行高と周辺部品の高さを連動 */
+:root[data-density="compact"]{ --row-h:24px; --ctl-h:28px; }
+:root[data-density="comfy"]{ --row-h:40px; --ctl-h:36px; }
+
+/* =========================== 基本 =========================== */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-padding-top: calc(var(--scopebar-h) + 16px); scroll-padding-bottom: 24px; }
+body{
+  margin:0; background:var(--color-bg); color:var(--color-text);
+  font-family:var(--font-sans); font-size:var(--fs-300); line-height:var(--lh-300);
+  -webkit-text-size-adjust:100%; text-size-adjust:100%;
+}
+h1,h2,h3{ margin:0; font-weight:650; letter-spacing:0; }
+h1{ font-size:var(--fs-600); line-height:var(--lh-600); }
+h2{ font-size:var(--fs-500); line-height:var(--lh-500); }
+h3{ font-size:var(--fs-400); line-height:var(--lh-400); }
+p{ margin:0 0 var(--space-200); }
+a{ color:var(--brand-accent); text-underline-offset:2px; }
+code,.mono{ font-family:var(--font-mono); font-size:.95em; }
+.num{ font-variant-numeric: tabular-nums; }
+.subtle{ color:var(--color-text-subtle); }
+.vh{ position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+:focus-visible{ outline:2px solid var(--color-focus); outline-offset:2px; }
+[tabindex="-1"]:focus{ outline:none; }
+[tabindex="-1"]:focus-visible{ outline:2px solid var(--color-focus); outline-offset:2px; }
+svg.i{ width:16px; height:16px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; vertical-align:-3px; }
+kbd{ font-family:var(--font-mono); font-size:var(--fs-100); border:1px solid var(--color-border-strong); border-bottom-width:2px; border-radius:var(--radius-100); padding:0 4px; background:var(--color-surface); color:var(--color-text); white-space:nowrap; }
+
+.skip{ position:absolute; left:8px; top:-200px; z-index:1000; background:var(--color-surface); color:var(--color-text); padding:8px 12px; border:2px solid var(--color-focus); border-radius:var(--radius-200); }
+.skip:focus{ top:8px; }
+
+/* =========================== スコープバー（banner） =========================== */
+.scopebar{
+  position:sticky; top:0; z-index:50; min-height:var(--scopebar-h);
+  display:flex; align-items:center; gap:var(--space-300); padding:0 var(--space-400);
+  background:var(--color-scope-bg); color:var(--color-on-scope);
+  --color-focus:#9CCBFF;
+}
+.sb-brand{ display:flex; align-items:center; gap:8px; font-weight:700; white-space:nowrap; }
+.sb-logo{ width:24px; height:24px; border-radius:6px; background:var(--color-on-scope); position:relative; flex:none; }
+.sb-logo::after{ content:""; position:absolute; inset:6px; border-radius:3px; background:var(--color-scope-bg); }
+.sb-brand small{ font-weight:400; color:var(--color-on-scope-subtle); font-size:var(--fs-100); }
+.sb-scope{ min-width:0; }
+.crumbs{ list-style:none; margin:0; padding:0; display:flex; align-items:center; gap:4px; }
+.crumbs li{ display:flex; align-items:center; gap:4px; }
+.crumbs li + li::before{ content:"›"; color:var(--color-on-scope-subtle); padding:0 2px; }
+.sb-label{ font-size:var(--fs-100); color:var(--color-on-scope-subtle); }
+.sb-select{
+  height:32px; min-height:24px; max-width:220px; border-radius:var(--radius-200);
+  border:1px solid var(--color-scope-ctl-border); background:transparent; color:var(--color-on-scope);
+  font:inherit; padding:0 6px;
+}
+.sb-select option{ color:#16191D; background:#FFFFFF; }
+.env-flag{ display:none; font-size:var(--fs-100); font-weight:700; padding:2px 8px; border-radius:var(--radius-pill); background:#FBF1DD; color:#5C3C00; }
+:root[data-env="stg"] .env-flag{ display:inline-block; }
+.sb-spacer{ flex:1; }
+.sb-role{ display:flex; align-items:center; gap:6px; white-space:nowrap; }
+.sb-btn{
+  display:inline-flex; align-items:center; gap:6px; min-height:32px; min-width:32px; padding:0 10px;
+  border-radius:var(--radius-200); border:1px solid var(--color-scope-ctl-border); background:transparent;
+  color:var(--color-on-scope); font:inherit; cursor:pointer; white-space:nowrap;
+}
+.sb-btn:hover{ background:rgba(255,255,255,.08); }
+.sb-btn kbd{ background:transparent; color:var(--color-on-scope); border-color:var(--color-scope-ctl-border); }
+.sb-scope-summary{ display:none; }
+
+/* =========================== シェル =========================== */
+.shell{ display:grid; grid-template-columns: var(--rail-w) minmax(0,1fr); min-height:calc(100vh - var(--scopebar-h)); }
+:root[data-rail="open"] .shell{ grid-template-columns: var(--rail-w-open) minmax(0,1fr); }
+.rail{
+  position:sticky; top:var(--scopebar-h); align-self:start; height:calc(100vh - var(--scopebar-h));
+  background:var(--color-surface); border-right:1px solid var(--color-border); padding:var(--space-200) var(--space-100);
+  display:flex; flex-direction:column; gap:var(--space-100); overflow-y:auto;
+}
+.rail ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; }
+.rail a, .rail-pin{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:52px;
+  border-radius:var(--radius-300); color:var(--color-text-subtle); text-decoration:none; font-size:var(--fs-100); line-height:var(--lh-100);
+  padding:6px 4px; border:0; background:transparent; font-family:inherit; cursor:pointer; width:100%; text-align:center;
+}
+.rail a svg.i, .rail-pin svg.i{ width:20px; height:20px; }
+.rail a:hover, .rail-pin:hover{ background:var(--color-surface-hover); color:var(--color-text); }
+.rail a[aria-current="page"]{ background:var(--brand-accent-bg); color:var(--color-text); font-weight:650; box-shadow: inset 3px 0 0 var(--brand-accent); }
+:root[data-rail="open"] .rail a, :root[data-rail="open"] .rail-pin{ flex-direction:row; justify-content:flex-start; gap:12px; min-height:40px; padding:8px 12px; font-size:var(--fs-300); }
+.rail-foot{ margin-top:auto; }
+.rail-ver{ font-size:var(--fs-100); color:var(--color-text-subtle); text-align:center; padding:4px; }
+
+main{ min-width:0; padding:var(--space-500); padding-bottom:var(--space-600); }
+main:focus{ outline:none; }
+.view[hidden]{ display:none!important; }
+.page-head{ display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:var(--space-300); margin-bottom:var(--space-400); }
+.page-head h1, .page-head h1:focus-visible, #h-notfound:focus-visible{ outline:none; }
+.eyebrow{ font-size:var(--fs-100); color:var(--color-text-subtle); margin:0 0 2px; display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+.actions{ display:flex; flex-wrap:wrap; gap:var(--space-200); }
+.stack > * + *{ margin-top:var(--space-400); }
+.grid{ display:grid; gap:var(--space-400); }
+.g-kpi{ grid-template-columns:repeat(4, minmax(0,1fr)); }
+.g-2{ grid-template-columns: minmax(0,2fr) minmax(0,1fr); }
+.g-2e{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+
+/* =========================== 部品 =========================== */
+.card{ background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-300); padding:var(--space-400); min-width:0; }
+.card-head{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-200); flex-wrap:wrap; margin-bottom:var(--space-300); }
+.card-head h2, .card-head h3{ font-size:var(--fs-400); line-height:var(--lh-400); }
+.kpi-label{ color:var(--color-text-subtle); font-size:var(--fs-200); margin:0; }
+.kpi-value{ font-size:var(--fs-kpi); line-height:var(--lh-kpi); font-weight:650; font-variant-numeric:tabular-nums; margin:2px 0; }
+.kpi-value small{ font-size:var(--fs-300); font-weight:400; color:var(--color-text-subtle); }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:var(--ctl-h); min-width:24px;
+  padding:0 12px; border-radius:var(--radius-200); border:1px solid transparent; font:inherit; font-weight:600;
+  cursor:pointer; text-decoration:none; white-space:nowrap; transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.btn-primary{ background:var(--brand-accent); color:var(--on-brand); }
+.btn-primary:hover{ filter:brightness(.93); }
+.btn-secondary{ background:var(--color-surface); color:var(--color-text); border-color:var(--color-border-strong); }
+.btn-secondary:hover{ background:var(--color-surface-hover); }
+.btn-ghost{ background:transparent; color:var(--color-text); border-color:transparent; }
+.btn-ghost:hover{ background:var(--color-surface-hover); }
+.btn-danger{ background:var(--status-danger); color:var(--on-danger); }
+.btn-danger:hover{ filter:brightness(.93); }
+.btn[disabled], .btn[aria-disabled="true"]{ background:var(--color-surface-sunken); color:var(--color-text-subtle); border-color:var(--color-border); cursor:not-allowed; filter:none; }
+.btn-sm{ min-height:28px; padding:0 8px; font-size:var(--fs-200); }
+.btn-icon{ padding:0; width:var(--ctl-h); }
+.why{ font-size:var(--fs-100); color:var(--color-text-subtle); }
+
+.field{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+.field > label, .field > .label, fieldset > legend{ font-weight:600; font-size:var(--fs-300); }
+.req{ color:var(--status-danger); font-weight:600; font-size:var(--fs-100); margin-left:4px; }
+.help{ font-size:var(--fs-200); color:var(--color-text-subtle); margin:0; }
+.input, select.input, textarea.input{
+  min-height:var(--ctl-h); width:100%; padding:4px 8px; border:1px solid var(--color-border-strong); border-radius:var(--radius-200);
+  background:var(--color-surface); color:var(--color-text); font:inherit;
+}
+textarea.input{ min-height:72px; resize:vertical; }
+.input[aria-invalid="true"]{ border-color:var(--status-danger); box-shadow: inset 0 0 0 1px var(--status-danger); }
+.field-error{ display:flex; gap:6px; align-items:flex-start; color:var(--status-danger); font-size:var(--fs-200); margin:0; }
+.field-error[hidden]{ display:none; }
+fieldset{ border:1px solid var(--color-border); border-radius:var(--radius-300); padding:var(--space-300) var(--space-400) var(--space-400); margin:0; min-width:0; }
+fieldset.plain{ border:0; padding:0; }
+.check{ display:flex; align-items:center; gap:8px; min-height:28px; }
+.check input{ width:18px; height:18px; margin:3px; accent-color:var(--brand-accent); }
+.form-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-400); }
+.form-grid .span2{ grid-column:1 / -1; }
+.toolbar{ display:flex; flex-wrap:wrap; gap:var(--space-200); align-items:flex-end; margin-bottom:var(--space-300); }
+.toolbar .field{ flex:1 1 160px; }
+.toolbar .field.narrow{ flex:0 1 140px; }
+
+.seg{ display:inline-flex; border:1px solid var(--color-border-strong); border-radius:var(--radius-200); overflow:hidden; }
+.seg label{ display:flex; align-items:center; min-height:var(--ctl-h); padding:0 10px; cursor:pointer; font-size:var(--fs-200); border-left:1px solid var(--color-border); }
+.seg label:first-of-type{ border-left:0; }
+.seg input{ position:absolute; opacity:0; width:1px; height:1px; }
+.seg input:checked + span{ font-weight:700; }
+.seg label:has(input:checked){ background:var(--brand-accent-bg); box-shadow: inset 0 -3px 0 var(--brand-accent); }
+.seg label:has(input:focus-visible){ outline:2px solid var(--color-focus); outline-offset:-2px; }
+
+.badge{ display:inline-flex; align-items:center; gap:4px; padding:1px 8px; border-radius:var(--radius-pill); font-size:var(--fs-200); font-weight:600; white-space:nowrap; border:1px solid currentColor; }
+.st-ok{ color:var(--status-ok); background:var(--status-ok-bg); }
+.st-warn{ color:var(--status-warn); background:var(--status-warn-bg); }
+.st-danger{ color:var(--status-danger); background:var(--status-danger-bg); }
+.st-pending{ color:var(--status-pending); background:var(--status-pending-bg); }
+.st-neutral{ color:var(--status-neutral); background:var(--status-neutral-bg); }
+.tag{ display:inline-block; padding:0 6px; border-radius:var(--radius-100); background:var(--color-surface-sunken); color:var(--color-text-subtle); font-size:var(--fs-100); }
+.tag-beta{ background:var(--status-pending-bg); color:var(--status-pending); }
+.origin{ display:inline-flex; align-items:center; gap:4px; font-size:var(--fs-100); padding:0 6px; border-radius:var(--radius-100); border:1px dashed var(--color-border-strong); color:var(--color-text-subtle); }
+
+.msg{ display:flex; gap:10px; align-items:flex-start; padding:var(--space-300) var(--space-400); border-radius:var(--radius-300); border:1px solid currentColor; border-left-width:4px; }
+.msg > svg.i{ margin-top:2px; }
+.msg .msg-body{ color:var(--color-text); flex:1; min-width:0; }
+.msg .msg-body strong{ display:block; }
+.msg p{ margin:2px 0 0; }
+
+.tabs [role="tablist"]{ display:flex; gap:2px; border-bottom:1px solid var(--color-border); overflow-x:auto; scrollbar-width:thin; }
+[role="tab"]{
+  min-height:40px; padding:0 14px; border:0; background:transparent; color:var(--color-text-subtle); font:inherit; font-weight:600;
+  cursor:pointer; border-bottom:3px solid transparent; white-space:nowrap; flex:none;
+}
+[role="tab"]:hover{ color:var(--color-text); background:var(--color-surface-hover); }
+[role="tab"][aria-selected="true"]{ color:var(--color-text); border-bottom-color:var(--brand-accent); }
+[role="tab"]:focus-visible{ outline-offset:-2px; }
+[role="tabpanel"]{ padding-top:var(--space-400); }
+[role="tabpanel"]:focus-visible{ outline-offset:4px; }
+
+/* テーブル（大規模データ） */
+.table-wrap{ overflow:auto; max-width:100%; border:1px solid var(--color-border); border-radius:var(--radius-300); background:var(--color-surface); max-height:560px; }
+table.dt{ border-collapse:separate; border-spacing:0; width:100%; font-size:var(--fs-200); }
+.dt th, .dt td{ height:var(--row-h); padding:0 10px; text-align:left; border-bottom:1px solid var(--color-border); white-space:nowrap; background:var(--color-surface); }
+.dt thead th{ position:sticky; top:0; z-index:2; background:var(--color-surface-sunken); font-weight:650; color:var(--color-text); }
+.dt td.r, .dt th.r{ text-align:right; }
+.dt .sticky1{ position:sticky; left:0; z-index:1; }
+.dt .sticky2{ position:sticky; left:44px; z-index:1; box-shadow: 1px 0 0 var(--color-border); }
+.dt thead .sticky1, .dt thead .sticky2{ z-index:3; }
+.dt .cb{ width:44px; min-width:44px; text-align:center; }
+.dt .cb input{ width:18px; height:18px; margin:3px; accent-color:var(--brand-accent); }
+.dt tbody tr:hover td{ background:var(--color-surface-hover); }
+.dt tbody tr[aria-selected="true"] td{ background:var(--brand-accent-bg); }
+.dt tbody tr.active td{ box-shadow: inset 0 2px 0 var(--brand-accent), inset 0 -2px 0 var(--brand-accent); }
+.dt tbody tr:focus-visible{ outline:2px solid var(--color-focus); outline-offset:-2px; }
+.dt tbody tr{ cursor:pointer; }
+.sortbtn{ display:inline-flex; align-items:center; gap:4px; border:0; background:transparent; font:inherit; font-weight:650; color:inherit; cursor:pointer; padding:2px 4px; min-height:24px; border-radius:var(--radius-100); }
+.sortbtn:hover{ background:var(--color-surface-hover); }
+.sort-ind{ font-size:10px; color:var(--color-text-subtle); width:10px; display:inline-block; }
+.pager{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-200); margin-top:var(--space-300); }
+.pager .group{ display:flex; align-items:center; gap:var(--space-200); }
+.bulkbar{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-200); padding:var(--space-200) var(--space-300); margin-bottom:var(--space-300); border-radius:var(--radius-300); background:var(--brand-accent-bg); border:1px solid var(--brand-accent); }
+.bulkbar[hidden]{ display:none; }
+.colpanel{ border:1px solid var(--color-border); border-radius:var(--radius-300); padding:var(--space-300); margin-bottom:var(--space-300); background:var(--color-surface); }
+.colpanel[hidden]{ display:none; }
+.colpanel ol{ list-style:none; padding:0; margin:var(--space-200) 0 0; display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:4px 16px; }
+.colpanel li{ display:flex; align-items:center; gap:4px; }
+.colpanel li .check{ flex:1; }
+
+/* 3 列ドリルダウン（FCL 原則） */
+.fcl{ display:grid; gap:0; border:1px solid var(--color-border); border-radius:var(--radius-300); background:var(--color-surface); min-height:560px; }
+.fcl[data-cols="1"]{ grid-template-columns:minmax(0,1fr); }
+.fcl[data-cols="2"]{ grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); }
+.fcl[data-cols="3"]{ grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) minmax(0,.85fr); }
+.fcl[data-cols="1"] .col-detail, .fcl[data-cols="1"] .col-trail, .fcl[data-cols="2"] .col-trail{ display:none; }
+.col{ min-width:0; padding:var(--space-400); }
+.col + .col{ border-left:1px solid var(--color-border); }
+.col-head{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-200); flex-wrap:wrap; margin-bottom:var(--space-300); }
+.col-head h2{ font-size:var(--fs-400); line-height:var(--lh-400); }
+.col .back{ display:none; }
+.fcl[data-cols="3"] .col-list .hide-when-3{ display:none; }
+dl.kv{ display:grid; grid-template-columns:max-content minmax(0,1fr); gap:6px 16px; margin:0; font-size:var(--fs-200); }
+dl.kv dt{ color:var(--color-text-subtle); }
+dl.kv dd{ margin:0; overflow-wrap:anywhere; }
+.timeline{ list-style:none; margin:0; padding:0; }
+.timeline li{ position:relative; padding:0 0 var(--space-300) 22px; font-size:var(--fs-200); }
+.timeline li::before{ content:""; position:absolute; left:5px; top:6px; width:8px; height:8px; border-radius:50%; background:var(--color-border-strong); }
+.timeline li::after{ content:""; position:absolute; left:8px; top:16px; bottom:0; width:2px; background:var(--color-border); }
+.timeline li:last-child::after{ display:none; }
+.timeline time{ display:block; color:var(--color-text-subtle); font-size:var(--fs-100); }
+
+/* 承認ステッパー */
+.steps{ list-style:none; margin:0 0 var(--space-400); padding:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-200); counter-reset:s; }
+.steps li{ border:1px solid var(--color-border); border-top-width:4px; border-radius:var(--radius-200); padding:var(--space-200) var(--space-300); font-size:var(--fs-200); background:var(--color-surface); }
+.steps li strong{ display:flex; align-items:center; gap:6px; font-size:var(--fs-300); }
+.steps li.done{ border-top-color:var(--status-ok); }
+.steps li.current{ border-top-color:var(--status-pending); }
+.steps li.rejected{ border-top-color:var(--status-danger); }
+.steps li.todo{ border-top-color:var(--color-border); }
+.wizard-steps{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+
+.diff{ width:100%; border-collapse:collapse; font-size:var(--fs-200); }
+.diff th,.diff td{ border:1px solid var(--color-border); padding:6px 8px; text-align:left; vertical-align:top; }
+.diff thead th{ background:var(--color-surface-sunken); }
+.diff .before{ text-decoration:line-through; color:var(--color-text-subtle); }
+.diff .after{ font-weight:700; }
+
+/* チャート */
+.chart{ position:relative; width:100%; min-width:0; }
+.chart svg{ display:block; width:100%; height:auto; overflow:visible; }
+.chart text{ fill:var(--color-text-subtle); font-size:11px; font-family:var(--font-sans); }
+.chart .grid line{ stroke:var(--chart-grid); stroke-width:1; }
+.chart .axis{ stroke:var(--chart-axis); stroke-width:1; }
+.tip{ position:absolute; pointer-events:none; background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border-strong); border-radius:var(--radius-200); box-shadow:var(--shadow-300); padding:6px 8px; font-size:var(--fs-200); white-space:nowrap; z-index:5; transform:translate(-50%, calc(-100% - 10px)); }
+.tip[hidden]{ display:none; }
+.legend{ display:flex; flex-wrap:wrap; gap:4px 14px; list-style:none; margin:var(--space-200) 0 0; padding:0; font-size:var(--fs-200); color:var(--color-text); }
+.legend li{ display:flex; align-items:center; gap:6px; }
+.legend .sw{ width:12px; height:12px; border-radius:3px; flex:none; }
+.chart-summary{ font-size:var(--fs-200); color:var(--color-text); background:var(--color-surface-sunken); border-radius:var(--radius-200); padding:var(--space-200) var(--space-300); margin:var(--space-200) 0 0; }
+.chart-table[hidden]{ display:none; }
+.chart-table{ margin-top:var(--space-300); }
+.mini-table{ width:100%; border-collapse:collapse; font-size:var(--fs-200); }
+.mini-table th, .mini-table td{ text-align:left; padding:6px 8px; border-bottom:1px solid var(--color-border); }
+.mini-table th.r, .mini-table td.r{ text-align:right; }
+.mini-table thead th{ background:var(--color-surface-sunken); }
+.mini-table caption{ text-align:left; font-weight:600; padding-bottom:6px; }
+
+/* 空状態・スケルトン */
+.empty{ text-align:center; padding:var(--space-600) var(--space-400); border:1px dashed var(--color-border-strong); border-radius:var(--radius-300); background:var(--color-surface); }
+.empty .empty-icon{ width:40px; height:40px; color:var(--color-text-subtle); }
+.empty h2, .empty h3{ margin:var(--space-200) 0 var(--space-100); font-size:var(--fs-400); }
+.empty p{ color:var(--color-text-subtle); max-width:46ch; margin:0 auto var(--space-300); }
+.sk{ display:block; background:var(--color-surface-sunken); border-radius:var(--radius-100); position:relative; overflow:hidden; }
+.sk::after{ content:""; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); animation:sk 1.4s infinite; }
+@keyframes sk{ to{ transform:translateX(100%); } }
+
+/* トースト */
+.toasts{ position:fixed; right:16px; bottom:16px; z-index:200; display:flex; flex-direction:column; gap:8px; max-width:min(420px, calc(100vw - 32px)); }
+.toast{ display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:var(--radius-300); background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border-strong); box-shadow:var(--shadow-300); border-left:4px solid var(--status-ok); }
+.toast.t-warn{ border-left-color:var(--status-warn); }
+.toast.t-info{ border-left-color:var(--brand-accent); }
+.toast .t-body{ flex:1; min-width:0; }
+
+/* ダイアログ */
+dialog{ border:1px solid var(--color-border-strong); border-radius:var(--radius-300); padding:0; background:var(--color-surface); color:var(--color-text); box-shadow:var(--shadow-300); width:min(600px, calc(100vw - 32px)); max-height:calc(100vh - 48px); }
+dialog::backdrop{ background:var(--color-overlay); }
+.dlg-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:var(--space-400) var(--space-400) var(--space-200); }
+.dlg-head h2{ font-size:var(--fs-500); }
+.dlg-body{ padding:var(--space-200) var(--space-400) var(--space-400); }
+.dlg-foot{ display:flex; justify-content:flex-end; flex-wrap:wrap; gap:var(--space-200); padding:var(--space-300) var(--space-400); border-top:1px solid var(--color-border); background:var(--color-surface-sunken); border-radius:0 0 var(--radius-300) var(--radius-300); }
+.scope-confirm{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:8px 12px; border-radius:var(--radius-200); background:var(--color-scope-bg); color:var(--color-on-scope); font-size:var(--fs-200); margin-bottom:var(--space-300); }
+
+/* コマンドパレット */
+#dlg-palette{ width:min(640px, calc(100vw - 32px)); margin-top:10vh; }
+.pal-input{ width:100%; border:0; border-bottom:1px solid var(--color-border); padding:14px 16px; font:inherit; font-size:var(--fs-400); background:var(--color-surface); color:var(--color-text); border-radius:var(--radius-300) var(--radius-300) 0 0; }
+.pal-input:focus-visible{ outline:2px solid var(--color-focus); outline-offset:-2px; }
+.pal-list{ list-style:none; margin:0; padding:6px; max-height:50vh; overflow:auto; }
+.pal-list li{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; border-radius:var(--radius-200); cursor:pointer; min-height:36px; }
+.pal-list li[aria-selected="true"]{ background:var(--brand-accent-bg); box-shadow: inset 3px 0 0 var(--brand-accent); }
+.pal-list .grp{ font-size:var(--fs-100); color:var(--color-text-subtle); }
+
+/* 地図（模式図） */
+.map text{ font-size:11px; }
+.map .bld{ fill:var(--color-surface-sunken); stroke:var(--color-border-strong); stroke-width:1; }
+
+/* トークン一覧 */
+.swatches{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:var(--space-300); }
+.swatch{ border:1px solid var(--color-border); border-radius:var(--radius-300); overflow:hidden; background:var(--color-surface); font-size:var(--fs-200); }
+.swatch .chip{ height:44px; border-bottom:1px solid var(--color-border); }
+.swatch .meta{ padding:6px 8px; }
+.swatch code{ overflow-wrap:anywhere; }
+.scale-row{ display:flex; align-items:center; gap:12px; padding:6px 0; border-bottom:1px solid var(--color-border); flex-wrap:wrap; }
+.scale-row .bar{ height:12px; background:var(--brand-accent); border-radius:2px; }
+.radius-demo{ width:56px; height:40px; border:2px solid var(--color-border-strong); background:var(--color-surface-sunken); }
+
+/* モバイル下部ナビ */
+.bottomnav{ display:none; }
+
+/* =========================== 応答（レスポンシブ） =========================== */
+@media (max-width: 1279px){
+  .fcl[data-cols="3"]{ grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); grid-template-areas:"list detail" "list trail"; }
+  .fcl[data-cols="3"] .col-list{ grid-area:list; }
+  .fcl[data-cols="3"] .col-detail{ grid-area:detail; }
+  .fcl[data-cols="3"] .col-trail{ grid-area:trail; border-top:1px solid var(--color-border); }
+  .g-kpi{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 1023px){
+  .g-2{ grid-template-columns:minmax(0,1fr); }
+}
+@media (max-width: 767px){
+  :root{ --scopebar-h:52px; --ctl-h:40px; }
+  :root[data-density]{ --ctl-h:40px; }
+  html{ scroll-padding-bottom: calc(var(--bottomnav-h) + 16px); }
+  .scopebar{ gap:8px; padding:0 16px; }
+  .sb-brand .prod, .sb-brand small, .sb-scope, .sb-role, .sb-btn .lbl, .sb-btn kbd{ display:none; }
+  .sb-scope-summary{ display:flex; flex-direction:column; align-items:flex-start; justify-content:center; flex:1; min-width:0; min-height:44px; padding:2px 10px; border-radius:var(--radius-200); border:1px solid var(--color-scope-ctl-border); background:transparent; color:var(--color-on-scope); font:inherit; text-align:left; cursor:pointer; }
+  .sb-scope-summary span{ display:block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sb-scope-summary .r{ font-size:var(--fs-100); color:var(--color-on-scope-subtle); }
+  .sb-spacer{ display:none; }
+  .sb-btn{ min-width:44px; min-height:44px; justify-content:center; padding:0; }
+  .shell, :root[data-rail="open"] .shell{ grid-template-columns:minmax(0,1fr); }
+  .rail{ display:none; }
+  main{ padding:var(--space-400) 16px calc(var(--bottomnav-h) + var(--space-500)); }
+  h1{ font-size:var(--fs-500); line-height:var(--lh-500); }
+  .page-head{ align-items:flex-start; flex-direction:column; }
+  .g-kpi{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:var(--space-200); }
+  .g-2e, .form-grid{ grid-template-columns:minmax(0,1fr); }
+  .kpi-value{ font-size:var(--fs-600); line-height:var(--lh-600); }
+  .card{ padding:var(--space-300); }
+  .bottomnav{
+    display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); position:fixed; left:0; right:0; bottom:0; z-index:60;
+    height:var(--bottomnav-h); background:var(--color-surface); border-top:1px solid var(--color-border-strong); padding-bottom:env(safe-area-inset-bottom);
+  }
+  .bottomnav a, .bottomnav button{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:var(--fs-100); color:var(--color-text-subtle); text-decoration:none; border:0; background:transparent; font-family:inherit; min-height:44px; cursor:pointer; }
+  .bottomnav svg.i{ width:22px; height:22px; }
+  .bottomnav a[aria-current="page"]{ color:var(--color-text); font-weight:700; box-shadow: inset 0 3px 0 var(--brand-accent); }
+  .toasts{ bottom:calc(var(--bottomnav-h) + 12px); left:16px; right:16px; max-width:none; }
+  /* 表 → カードリスト */
+  .table-wrap{ border:0; background:transparent; max-height:none; overflow:visible; }
+  table.rt, table.rt tbody, table.rt tr, table.rt td{ display:block; width:100%; }
+  table.rt thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  table.rt tr{ border:1px solid var(--color-border); border-radius:var(--radius-300); background:var(--color-surface); margin-bottom:var(--space-200); padding:var(--space-200) var(--space-300); }
+  table.rt td{ height:auto; border:0; padding:3px 0; white-space:normal; display:grid; grid-template-columns:7.5em minmax(0,1fr); gap:8px; text-align:left!important; overflow-wrap:anywhere; position:static!important; box-shadow:none!important; background:transparent!important; }
+  table.rt td::before{ content:attr(data-label); color:var(--color-text-subtle); font-size:var(--fs-100); }
+  table.rt td.cb{ display:flex; justify-content:flex-end; width:auto; float:right; min-width:0; }
+  table.rt td.cb::before{ content:none; }
+  table.rt td.m-hide{ display:none; }
+  table.rt tbody tr[aria-selected="true"]{ border-color:var(--brand-accent); background:var(--brand-accent-bg); }
+  .dt tbody tr.active td{ box-shadow:none!important; }
+  .dt tbody tr.active{ outline:2px solid var(--brand-accent); }
+  .bulk-desktop{ display:none!important; }
+  /* 3 列 → 1 列ずつのスタック遷移 */
+  .fcl, .fcl[data-cols]{ display:block; border:0; background:transparent; min-height:0; }
+  .fcl .col{ display:none!important; padding:0; border:0!important; }
+  .fcl[data-pane="list"] .col-list, .fcl[data-pane="detail"] .col-detail, .fcl[data-pane="trail"] .col-trail{ display:block!important; }
+  .col .back{ display:inline-flex; margin-bottom:var(--space-300); }
+  .steps, .wizard-steps{ grid-template-columns:minmax(0,1fr); }
+  .dlg-foot .btn{ flex:1 1 auto; }
+  dialog{ width:calc(100vw - 32px); max-width:none; }
+  .seg label{ padding:0 8px; }
+  .pager{ flex-direction:column; align-items:stretch; }
+  .pager .group{ justify-content:space-between; }
+}
+@media (min-width: 768px){ .m-only{ display:none!important; } }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:0.01ms!important; animation-iteration-count:1!important; transition-duration:0.01ms!important; scroll-behavior:auto!important; }
+  .sk::after{ display:none; }
+}
+@media (forced-colors: active){
+  .badge, .btn, .msg{ border:1px solid CanvasText; }
+  .rail a[aria-current="page"], .bottomnav a[aria-current="page"]{ outline:2px solid Highlight; }
+}
+@media print{
+  .scopebar, .rail, .bottomnav, .toasts, .actions, .skip, .no-print{ display:none!important; }
+  .shell{ display:block; }
+  main{ padding:0; }
+  body{ background:#fff; color:#000; }
+  .card{ break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+
+<!-- アイコン（装飾。意味は必ず文言でも示す） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-sensor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 16.2a6 6 0 0 0 0-8.4M5 5a10 10 0 0 0 0 14M19 19a10 10 0 0 0 0-14"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 15H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.7 4.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.3"/></symbol>
+  <symbol id="i-danger" viewBox="0 0 24 24"><path d="M8.2 3h7.6L21 8.2v7.6L15.8 21H8.2L3 15.8V8.2z"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-pending" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-offline" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.3"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.5M12 17v.3"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
+  <symbol id="i-cmd" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1.5 2.5h5L16 13h5"/></symbol>
+</svg>
+
+<header class="scopebar" id="scopebar" tabindex="-1">
+  <div class="sb-brand"><span class="sb-logo" aria-hidden="true"></span><span class="prod">EnviroOps</span><small>（仮称）</small></div>
+  <nav class="sb-scope" aria-label="スコープ（組織 › プロジェクト › 環境）">
+    <ol class="crumbs">
+      <li><label class="vh" for="sel-org">組織</label><select id="sel-org" class="sb-select" data-scope="org"></select></li>
+      <li><label class="vh" for="sel-proj">プロジェクト</label><select id="sel-proj" class="sb-select" data-scope="proj"></select></li>
+      <li><label class="vh" for="sel-env">環境</label><select id="sel-env" class="sb-select" data-scope="env"><option value="prod">本番</option><option value="stg">検証</option></select><span class="env-flag">検証環境</span></li>
+    </ol>
+  </nav>
+  <button type="button" class="sb-scope-summary" id="btn-scope-mobile" aria-haspopup="dialog">
+    <span id="scope-sum-1">北陵大学</span><span class="r" id="scope-sum-2">キャンパス空気質 · 本番 · 解析者</span>
+    <span class="vh">（タップでスコープとロールを切替）</span>
+  </button>
+  <span class="sb-spacer"></span>
+  <div class="sb-role"><label class="sb-label" for="sel-role">現在のロール</label><select id="sel-role" class="sb-select" data-scope="role"></select></div>
+  <button type="button" class="sb-btn" id="btn-palette" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span class="lbl">コマンド</span><kbd>Ctrl K</kbd><span class="vh">コマンドパレットを開く</span></button>
+  <button type="button" class="sb-btn" id="btn-theme" aria-haspopup="menu"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg><span class="lbl" id="theme-lbl">テーマ: 自動</span><span class="vh">（クリックで 自動 → ライト → ダーク の順に切替）</span></button>
+  <button type="button" class="sb-btn" id="btn-help" aria-haspopup="dialog" aria-keyshortcuts="Shift+?"><svg class="i" aria-hidden="true"><use href="#i-help"/></svg><span class="lbl">ヘルプ</span><span class="vh">ヘルプとショートカット</span></button>
+</header>
+
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="主要ナビゲーション" tabindex="-1">
+    <button type="button" class="rail-pin" id="btn-rail" aria-expanded="false" aria-controls="rail"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg><span id="rail-pin-lbl">展開</span></button>
+    <ul>
+      <li><a href="#dashboard" data-route="dashboard"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg><span>ホーム</span></a></li>
+      <li><a href="#workspace" data-route="workspace"><svg class="i" aria-hidden="true"><use href="#i-sensor"/></svg><span>センサー</span></a></li>
+      <li><a href="#detail" data-route="detail"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg><span>LCA 結果</span></a></li>
+      <li><a href="#settings" data-route="settings"><svg class="i" aria-hidden="true"><use href="#i-settings"/></svg><span>管理</span></a></li>
+      <li><a href="#components" data-route="components"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg><span>部品</span></a></li>
+    </ul>
+    <div class="rail-foot"><p class="rail-ver">DS v2.4.0</p></div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ============ ダッシュボード（スコープのホーム） ============ -->
+    <section class="view" id="view-dashboard" aria-labelledby="h-dashboard" hidden>
+      <div class="page-head">
+        <div>
+          <p class="eyebrow" data-scope-text></p>
+          <h1 id="h-dashboard" tabindex="-1">ホーム</h1>
+          <p class="subtle" style="margin:0">このスコープの状況を固定レイアウトで表示します。最終更新 <time class="num" id="dash-updated">2026-11-15 09:40</time></p>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-secondary" id="btn-reload-dash">再読み込み</button>
+          <button type="button" class="btn btn-secondary" id="btn-print"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>報告用に出力（PDF）</button>
+        </div>
+      </div>
+      <div id="dash-body"></div>
+    </section>
+
+    <!-- ============ ワークスペース（3 列ドリルダウン） ============ -->
+    <section class="view" id="view-workspace" aria-labelledby="h-workspace" hidden>
+      <div class="page-head">
+        <div>
+          <p class="eyebrow" data-scope-text></p>
+          <h1 id="h-workspace" tabindex="-1">センサー運用</h1>
+          <p class="subtle" style="margin:0">一覧 → 詳細 → 証跡 の順に右へ開きます。<kbd>j</kbd>/<kbd>k</kbd> で行移動、<kbd>Enter</kbd> で詳細、<kbd>x</kbd> で選択、<kbd>F6</kbd> で列を移動。</p>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-secondary" id="btn-export-sensors"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CSV 出力（表示中の条件）</button>
+        </div>
+      </div>
+      <div id="ws-body"></div>
+    </section>
+
+    <!-- ============ 詳細（LCA 結果） ============ -->
+    <section class="view" id="view-detail" aria-labelledby="h-detail" hidden>
+      <div id="detail-body"></div>
+    </section>
+
+    <!-- ============ 設定・管理 ============ -->
+    <section class="view" id="view-settings" aria-labelledby="h-settings" hidden>
+      <div class="page-head">
+        <div>
+          <p class="eyebrow" data-scope-text></p>
+          <h1 id="h-settings" tabindex="-1">組織の管理</h1>
+          <p class="subtle" style="margin:0">メンバー・権限・セキュリティ・監査ログ・組織テーマを管理します。変更はすべて監査ログに記録されます。</p>
+        </div>
+      </div>
+      <div id="settings-body"></div>
+    </section>
+
+    <!-- ============ 共通部品とトークン ============ -->
+    <section class="view" id="view-components" aria-labelledby="h-components" hidden>
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">デザインシステム EnviroOps DS v2.4.0（stable）</p>
+          <h1 id="h-components" tabindex="-1">共通部品とトークン</h1>
+          <p class="subtle" style="margin:0">この画面の部品は実際に操作できます。色は現在のテーマと組織トークンで表示されます。</p>
+        </div>
+      </div>
+      <div id="components-body"></div>
+    </section>
+
+    <!-- ============ 404（ページ単位のエラー） ============ -->
+    <section class="view" id="view-notfound" aria-labelledby="h-notfound" hidden>
+      <div class="empty" style="margin-top:24px">
+        <svg class="i empty-icon" aria-hidden="true"><use href="#i-danger"/></svg>
+        <h1 id="h-notfound" tabindex="-1" style="font-size:var(--fs-500)">ページが見つかりません</h1>
+        <p>アドレス <code id="nf-hash"></code> に対応する画面はありません。リンクが古いか、入力に誤りがある可能性があります。</p>
+        <a class="btn btn-primary" href="#dashboard">ホームへ戻る</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="bottomnav" aria-label="主要ナビゲーション（モバイル）">
+  <a href="#dashboard" data-route="dashboard"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg>ホーム</a>
+  <a href="#workspace" data-route="workspace"><svg class="i" aria-hidden="true"><use href="#i-sensor"/></svg>センサー</a>
+  <a href="#detail" data-route="detail"><svg class="i" aria-hidden="true"><use href="#i-inbox"/></svg>承認</a>
+  <a href="#settings" data-route="settings"><svg class="i" aria-hidden="true"><use href="#i-settings"/></svg>管理</a>
+  <button type="button" id="btn-more" aria-haspopup="dialog"><svg class="i" aria-hidden="true"><use href="#i-more"/></svg>その他</button>
+</nav>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ===================== ダイアログ ===================== -->
+<dialog id="dlg-palette" aria-labelledby="pal-title">
+  <h2 id="pal-title" class="vh">コマンドパレット</h2>
+  <input id="pal-input" class="pal-input" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" aria-label="コマンドを検索（例: 監査、ダーク、湊川）" placeholder="コマンドや画面を検索（例: 監査、ダーク、湊川）" autocomplete="off">
+  <ul id="pal-list" class="pal-list" role="listbox" aria-label="コマンド候補"></ul>
+  <p class="help" style="padding:0 16px 12px"><kbd>↑</kbd><kbd>↓</kbd> で選択、<kbd>Enter</kbd> で実行、<kbd>Esc</kbd> で閉じる</p>
+</dialog>
+
+<dialog id="dlg-help" aria-labelledby="help-title">
+  <div class="dlg-head"><h2 id="help-title">ヘルプとキーボード操作</h2><button type="button" class="btn btn-ghost btn-icon" data-close aria-label="閉じる"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="dlg-body">
+    <table class="mini-table">
+      <caption>キーボードショートカット</caption>
+      <thead><tr><th scope="col">キー</th><th scope="col">操作</th><th scope="col">有効な場所</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd></td><td>コマンドパレット</td><td>全画面</td></tr>
+        <tr><td><kbd>/</kbd></td><td>コマンドパレット（検索）</td><td>全画面 ※</td></tr>
+        <tr><td><kbd>g</kbd> → <kbd>h</kbd>/<kbd>w</kbd>/<kbd>d</kbd>/<kbd>s</kbd>/<kbd>c</kbd></td><td>ホーム / センサー / LCA 結果 / 管理 / 部品 へ移動</td><td>全画面 ※</td></tr>
+        <tr><td><kbd>?</kbd></td><td>このヘルプ</td><td>全画面 ※</td></tr>
+        <tr><td><kbd>F6</kbd> / <kbd>Shift</kbd>+<kbd>F6</kbd></td><td>領域（スコープバー → ナビ → 本文の各列）を移動</td><td>全画面</td></tr>
+        <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>表の行を移動</td><td>表にフォーカスがあるとき</td></tr>
+        <tr><td><kbd>x</kbd> / <kbd>Enter</kbd></td><td>行を選択 / 詳細を開く</td><td>表にフォーカスがあるとき</td></tr>
+        <tr><td><kbd>←</kbd><kbd>→</kbd> <kbd>Home</kbd> <kbd>End</kbd></td><td>タブの切替</td><td>タブ</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>ダイアログ・パネルを閉じる</td><td>ダイアログ</td></tr>
+      </tbody>
+    </table>
+    <p class="help" style="margin-top:8px">※ 1 文字ショートカットは「管理 › 外観と操作」で無効にできます（WCAG 2.1.4）。</p>
+    <h3 style="margin-top:16px">お問い合わせ</h3>
+    <p>基盤運用窓口（ダミー）: 平日 9:00–17:00、内線 0000。ヘルプはどの画面でも右上の同じ位置にあります。</p>
+  </div>
+</dialog>
+
+<dialog id="dlg-scope" aria-labelledby="scope-title">
+  <div class="dlg-head"><h2 id="scope-title">スコープとロールの切替</h2><button type="button" class="btn btn-ghost btn-icon" data-close aria-label="閉じる"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="dlg-body stack">
+    <div class="field"><label for="m-org">組織</label><select id="m-org" class="input" data-scope="org"></select></div>
+    <div class="field"><label for="m-proj">プロジェクト</label><select id="m-proj" class="input" data-scope="proj"></select></div>
+    <div class="field"><label for="m-env">環境</label><select id="m-env" class="input" data-scope="env"><option value="prod">本番</option><option value="stg">検証</option></select></div>
+    <div class="field"><label for="m-role">現在のロール（デモ用に切替可）</label><select id="m-role" class="input" data-scope="role"></select></div>
+  </div>
+  <div class="dlg-foot"><button type="button" class="btn btn-primary" data-close>完了</button></div>
+</dialog>
+
+<dialog id="dlg-more" aria-labelledby="more-title">
+  <div class="dlg-head"><h2 id="more-title">その他</h2><button type="button" class="btn btn-ghost btn-icon" data-close aria-label="閉じる"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="dlg-body stack">
+    <a class="btn btn-secondary" style="width:100%" href="#components" data-close>共通部品とトークン</a>
+    <button type="button" class="btn btn-secondary" style="width:100%" id="more-palette">コマンドパレット</button>
+    <button type="button" class="btn btn-secondary" style="width:100%" id="more-help">ヘルプとお問い合わせ</button>
+  </div>
+</dialog>
+
+<!-- 申請（下書き → 申請、差分必須、理由必須、高リスクは ID 入力） -->
+<dialog id="dlg-request" aria-labelledby="req-title">
+  <form method="dialog" id="form-request" novalidate>
+    <div class="dlg-head"><h2 id="req-title">校正値の変更を申請</h2><button type="button" class="btn btn-ghost btn-icon" data-close aria-label="閉じる"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <div class="dlg-body stack">
+      <div class="scope-confirm" id="req-scope"></div>
+      <div id="req-errsum" class="msg st-danger" role="alert" tabindex="-1" hidden></div>
+      <div class="field">
+        <label for="req-offset">PM2.5 校正オフセット（µg/m³）<span class="req">必須</span></label>
+        <input id="req-offset" class="input num" type="text" inputmode="decimal" aria-describedby="req-offset-help req-offset-err">
+        <p class="help" id="req-offset-help">−10.0〜+10.0 の範囲。±5.0 を超える変更は高リスクとして対象 ID の入力が必要です。</p>
+        <p class="field-error" id="req-offset-err" hidden><svg class="i" aria-hidden="true"><use href="#i-danger"/></svg><span></span></p>
+      </div>
+      <div class="field">
+        <label for="req-reason">申請理由<span class="req">必須</span></label>
+        <textarea id="req-reason" class="input" aria-describedby="req-reason-help req-reason-err"></textarea>
+        <p class="help" id="req-reason-help">承認者が判断できるよう、根拠（基準器との比較結果など）を書いてください。</p>
+        <p class="field-error" id="req-reason-err" hidden><svg class="i" aria-hidden="true"><use href="#i-danger"/></svg><span></span></p>
+      </div>
+      <div class="field" id="req-confirm-wrap" hidden>
+        <label for="req-confirm">確認のため対象 ID <code id="req-confirm-id"></code> を入力<span class="req">必須</span></label>
+        <input id="req-confirm" class="input mono" type="text" autocomplete="off" aria-describedby="req-confirm-err">
+        <p class="field-error" id="req-confirm-err" hidden><svg class="i" aria-hidden="true"><use href="#i-danger"/></svg><span></span></p>
+      </div>
+      <div>
+        <h3 style="font-size:var(--fs-300)">変更の差分（申請前に必ず確認）</h3>
+        <table class="diff" id="req-diff"></table>
+      </div>
+      <dl class="kv" id="req-meta"></dl>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="btn btn-secondary" data-close>キャンセル</button>
+      <button type="submit" class="btn btn-primary" id="req-submit" value="submit">申請する</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 承認 / 差戻し -->
+<dialog id="dlg-decide" aria-labelledby="dec-title">
+  <form method="dialog" id="form-decide" novalidate>
+    <div class="dlg-head"><h2 id="dec-title">承認</h2><button type="button" class="btn btn-ghost btn-icon" data-close aria-label="閉じる"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <div class="dlg-body stack">
+      <div class="scope-confirm" id="dec-scope"></div>
+      <div id="dec-warn"></div>
+      <p id="dec-desc"></p>
+      <div class="field">
+        <label for="dec-comment" id="dec-comment-lbl">コメント</label>
+        <textarea id="dec-comment" class="input" aria-describedby="dec-comment-help dec-comment-err"></textarea>
+        <p class="help" id="dec-comment-help">差戻しの場合は、申請者が修正できるよう理由を具体的に書いてください。</p>
+        <p class="field-error" id="dec-comment-err" hidden><svg class="i" aria-hidden="true"><use href="#i-danger"/></svg><span></span></p>
+      </div>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="btn btn-secondary" data-close>キャンセル</button>
+      <button type="submit" class="btn btn-primary" id="dec-submit" value="submit">承認する</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 汎用確認（部品デモ・セッション失効など） -->
+<dialog id="dlg-confirm" aria-labelledby="cf-title">
+  <div class="dlg-head"><h2 id="cf-title">確認</h2><button type="button" class="btn btn-ghost btn-icon" data-close aria-label="閉じる"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="dlg-body"><p id="cf-desc"></p></div>
+  <div class="dlg-foot"><button type="button" class="btn btn-secondary" data-close>キャンセル</button><button type="button" class="btn btn-danger" id="cf-ok">実行する</button></div>
+</dialog>
+
+<script>
+(function(){
+'use strict';
+/* ===================== 基本ユーティリティ ===================== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const root = document.documentElement;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icon = (id, label) => `<svg class="i" aria-hidden="true"><use href="#i-${id}"/></svg>${label ? `<span class="vh">${esc(label)}</span>` : ''}`;
+const fmt = (n, d=0) => Number(n).toLocaleString('ja-JP', {minimumFractionDigits:d, maximumFractionDigits:d});
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('eops.'+k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('eops.'+k, JSON.stringify(v)); }catch(e){} }
+};
+const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* ===================== ダミーデータ ===================== */
+const ORGS = {
+  hokuryo: { name:'北陵大学 環境工学研究室', short:'北陵大学', projects:[
+    {id:'campus-aq', name:'キャンパス空気質モニタリング', kind:'aq'},
+    {id:'bldgb-lca', name:'研究棟B 改修 LCA', kind:'lca'},
+    {id:'joint-2027', name:'共同研究 2027 準備', kind:'empty'} ],
+    places:['研究棟A','研究棟B','講義棟','図書館','学生会館','実験棟','体育館','本部棟'] },
+  minato: { name:'湊川市 環境政策課', short:'湊川市', projects:[
+    {id:'city-aq', name:'公共施設 空気質', kind:'aq'},
+    {id:'hall-lca', name:'市庁舎 建替 LCA', kind:'lca'} ],
+    places:['市庁舎','第一小学校','第二小学校','中央図書館','市民会館','保健センター','港湾事務所','児童館'] },
+  towa: { name:'東和建設 技術本部', short:'東和建設', projects:[
+    {id:'site-dust', name:'現場 粉じん監視', kind:'aq'},
+    {id:'wood-lca', name:'木造オフィス LCA', kind:'lca'} ],
+    places:['湾岸現場','駅前現場','北工区','南工区','資材ヤード','仮設事務所','第2工区','搬入口'] }
+};
+const ROLES = [
+  {id:'admin', name:'組織管理者', perm:['view','edit','approve','admin','audit']},
+  {id:'approver', name:'プロジェクト責任者', perm:['view','edit','approve']},
+  {id:'editor', name:'解析者', perm:['view','edit']},
+  {id:'viewer', name:'閲覧者', perm:['view']},
+  {id:'auditor', name:'監査担当', perm:['view','audit']}
+];
+const STATUS = {
+  ok:{label:'良好', cls:'st-ok', icon:'ok'},
+  warn:{label:'注意', cls:'st-warn', icon:'warn'},
+  danger:{label:'警戒', cls:'st-danger', icon:'danger'},
+  offline:{label:'欠測', cls:'st-neutral', icon:'offline'},
+  pending:{label:'承認待ち', cls:'st-pending', icon:'pending'},
+  approved:{label:'承認済み', cls:'st-ok', icon:'ok'},
+  rejected:{label:'差戻し', cls:'st-danger', icon:'danger'},
+  draft:{label:'下書き', cls:'st-neutral', icon:'offline'}
+};
+const badge = k => { const s = STATUS[k]; return `<span class="badge ${s.cls}">${icon(s.icon)}${s.label}</span>`; };
+
+// センサー: 3 組織 × 約 413 台 = 1,240 台
+const SENSORS = [];
+(function gen(){
+  const r = rng(20261115);
+  const types = ['PM2.5/CO2 複合','VOC','PM2.5 単体','粉じん（PM10）'];
+  let n = 0;
+  Object.keys(ORGS).forEach((org, oi) => {
+    const count = [414, 413, 413][oi];
+    const o = ORGS[org];
+    for(let i=0;i<count;i++){
+      n++;
+      const pm = Math.round((4 + r()*r()*48) * 10) / 10;
+      const roll = r();
+      let st = pm > 35 ? 'danger' : pm > 25 ? 'warn' : 'ok';
+      if(roll < 0.035) st = 'offline';
+      const place = o.places[Math.floor(r()*o.places.length)];
+      const due = new Date(2026, 10, 15 + Math.floor(r()*240) - 30);
+      SENSORS.push({
+        id: 'AQ-' + String(n).padStart(4,'0'), org, proj: o.projects[0].id,
+        name: `${place} ${Math.floor(r()*5)+1}F-${String(Math.floor(r()*30)+1).padStart(2,'0')}`,
+        place, type: types[Math.floor(r()*types.length)],
+        pm25: st === 'offline' ? null : pm,
+        co2: st === 'offline' ? null : Math.round(420 + r()*900),
+        status: st,
+        last: st === 'offline' ? 60 + Math.floor(r()*600) : Math.floor(r()*9)+1,
+        due: due.toISOString().slice(0,10),
+        offset: Math.round((r()*4-2)*10)/10,
+        fw: '3.' + Math.floor(r()*4) + '.' + Math.floor(r()*9)
+      });
+    }
+  });
+  // 例示用に固定のセンサー
+  const s = SENSORS.find(x => x.id === 'AQ-0142'); if(s){ s.name='研究棟B 3F-12'; s.place='研究棟B'; s.status='warn'; s.pm25=28.4; s.co2=1180; s.offset=1.2; s.type='PM2.5/CO2 複合'; }
+})();
+
+const PEOPLE = { me:'利用者A（あなた）', b:'解析者 B', c:'教員 C', d:'管理者 D', e:'監査担当 E', f:'湊川市 担当 F', g:'東和建設 技術 G' };
+
+// 承認キュー
+const APPROVALS = [
+  { id:'REQ-2026-0311', org:'hokuryo', kind:'LCA 結果の公開', target:'LCA-2026-0918 研究棟B 改修シナリオ v3', by:PEOPLE.b, at:'2026-11-12 10:14', status:'pending', step:2, link:'#detail' },
+  { id:'REQ-2026-0309', org:'hokuryo', kind:'校正値の変更', target:'AQ-0087 講義棟 2F-04（+0.8 µg/m³）', by:PEOPLE.b, at:'2026-11-11 16:02', status:'pending', step:1, link:'#workspace?sel=AQ-0087' },
+  { id:'REQ-2026-0305', org:'minato', kind:'校正値の変更', target:'AQ-0502 第一小学校 1F-03（−1.5 µg/m³）', by:PEOPLE.f, at:'2026-11-10 09:30', status:'pending', step:1, link:'#workspace?sel=AQ-0502' },
+  { id:'REQ-2026-0298', org:'towa', kind:'ロールの変更', target:'東和建設 技術 G → プロジェクト責任者', by:PEOPLE.g, at:'2026-11-09 13:45', status:'pending', step:1, link:'#settings' }
+];
+
+// 監査ログ
+const AUDIT = [];
+(function(){
+  const r = rng(77);
+  const acts = [
+    ['ログイン','認証','成功'],['ログイン','認証','失敗'],['校正値変更を申請','センサー','成功'],['承認','承認フロー','成功'],
+    ['差戻し','承認フロー','成功'],['CSV エクスポート','データ','成功'],['ロールを変更','権限','成功'],['セッションを失効','セキュリティ','成功'],
+    ['LCA ジョブを実行','LCA','成功'],['LCA ジョブを実行','LCA','失敗'],['SSO 設定を変更','セキュリティ','成功'],['権限なし画面を表示','権限','拒否']
+  ];
+  const actors = [PEOPLE.b, PEOPLE.c, PEOPLE.d, PEOPLE.e, PEOPLE.f, PEOPLE.g, 'API トークン lca-runner'];
+  const srcs = ['192.0.2.14 · Web（Chrome）','192.0.2.37 · Web（Firefox）','198.51.100.8 · モバイル','203.0.113.21 · API','198.51.100.60 · Web（Edge）'];
+  const orgKeys = Object.keys(ORGS);
+  for(let i=0;i<180;i++){
+    const a = acts[Math.floor(r()*acts.length)];
+    const t = new Date(Date.UTC(2026,10,15,0,40) - Math.floor(r()*30*24*60)*60000 - i*60000);
+    const org = orgKeys[Math.floor(r()*3)];
+    AUDIT.push({ t, actor: actors[Math.floor(r()*actors.length)], action:a[0], cat:a[1], result:a[2],
+      target: a[1]==='センサー' ? 'AQ-' + String(Math.floor(r()*1240)+1).padStart(4,'0') : a[1]==='LCA' ? 'LCA-2026-0' + (900+Math.floor(r()*40)) : a[1]==='認証' ? 'ユーザーセッション' : a[1]==='権限' ? 'メンバー設定' : a[1]==='データ' ? 'センサー一覧' : a[1]==='承認フロー' ? 'REQ-2026-0' + (280+Math.floor(r()*30)) : 'SSO / セッション',
+      org, src: srcs[Math.floor(r()*srcs.length)] });
+  }
+  AUDIT.sort((x,y) => y.t - x.t);
+})();
+const fmtTime = d => { const p = n => String(n).padStart(2,'0'); const j = new Date(d.getTime() + 9*3600000); return `${j.getUTCFullYear()}-${p(j.getUTCMonth()+1)}-${p(j.getUTCDate())} ${p(j.getUTCHours())}:${p(j.getUTCMinutes())}`; };
+function addAudit(action, cat, target, result){
+  AUDIT.unshift({ t:new Date(), actor:PEOPLE.me, action, cat, result: result || '成功', target, org:S.org, src:'192.0.2.14 · Web（このブラウザ）' });
+}
+
+// LCA
+const STAGES = ['製造（A1–A3）','輸送（A4）','施工（A5）','運用（B6）','解体（C1–C4）'];
+const SCEN = [
+  { name:'基準（新築相当）', v:[1820,140,95,3650,210] },
+  { name:'改修案 v2', v:[980,85,120,3120,160] },
+  { name:'改修案 v3（申請中）', v:[860,80,115,2740,150] }
+];
+const LCA_JOB = { id:'LCA-2026-0918', title:'研究棟B 改修シナリオ v3', org:'hokuryo', status:'pending', step:2, history:[
+  {t:'2026-11-12 10:14', who:PEOPLE.b, what:'公開を申請（理由: 改修設計 第3版の確定に伴う更新）'},
+  {t:'2026-11-13 15:20', who:PEOPLE.c, what:'レビュー完了（係数 DB の版を確認済み）'}
+]};
+
+/* ===================== 状態 ===================== */
+const S = {
+  org: store.get('org','hokuryo'), proj:null, env:'prod', role: store.get('role','editor'),
+  theme: store.get('theme','system'), density: store.get('density','std'), shortcuts: store.get('shortcuts', true),
+  rail: store.get('rail','closed'),
+  q:'', st:'all', view:'all', sortKey:null, sortDir:'none', page:1, size:25,
+  selected:new Set(), active:null, cols:3, pane:'list', trail:true,
+  columns: store.get('columns', [
+    {k:'name', label:'名称', on:true}, {k:'place', label:'設置場所', on:true}, {k:'type', label:'種別', on:true},
+    {k:'pm25', label:'PM2.5（µg/m³）', on:true, num:true}, {k:'co2', label:'CO₂（ppm）', on:true, num:true},
+    {k:'status', label:'状態', on:true}, {k:'last', label:'最終受信', on:true, num:true}, {k:'due', label:'校正期限', on:false}, {k:'fw', label:'ファーム版', on:false}
+  ]),
+  auditQ:'', auditCat:'all', auditRes:'all', auditPeriod:'30', auditShown:25
+};
+if(!ORGS[S.org]) S.org = 'hokuryo';
+S.proj = ORGS[S.org].projects[0].id;
+const role = () => ROLES.find(r => r.id === S.role) || ROLES[2];
+const can = p => role().perm.includes(p);
+const orgObj = () => ORGS[S.org];
+const projObj = () => orgObj().projects.find(p => p.id === S.proj) || orgObj().projects[0];
+const envName = () => S.env === 'prod' ? '本番' : '検証';
+
+/* ===================== テーマ・組織 ===================== */
+function applyTheme(){
+  if(S.theme === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', S.theme);
+  $('#theme-lbl').textContent = 'テーマ: ' + ({system:'自動', light:'ライト', dark:'ダーク'})[S.theme];
+  store.set('theme', S.theme);
+}
+function applyDensity(){ root.setAttribute('data-density', S.density); store.set('density', S.density); }
+function applyRail(){
+  root.setAttribute('data-rail', S.rail);
+  $('#btn-rail').setAttribute('aria-expanded', S.rail === 'open' ? 'true' : 'false');
+  $('#rail-pin-lbl').textContent = S.rail === 'open' ? '折り畳む' : '展開';
+  store.set('rail', S.rail);
+}
+function fillScopeSelects(){
+  $$('select[data-scope="org"]').forEach(sel => { sel.innerHTML = Object.keys(ORGS).map(k => `<option value="${k}">${esc(ORGS[k].name)}</option>`).join(''); sel.value = S.org; });
+  $$('select[data-scope="proj"]').forEach(sel => { sel.innerHTML = orgObj().projects.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join(''); sel.value = S.proj; });
+  $$('select[data-scope="env"]').forEach(sel => sel.value = S.env);
+  $$('select[data-scope="role"]').forEach(sel => { sel.innerHTML = ROLES.map(r => `<option value="${r.id}">${esc(r.name)}</option>`).join(''); sel.value = S.role; });
+}
+function scopeText(){ return `${orgObj().short} › ${projObj().name} › ${envName()}`; }
+function applyScope(announce){
+  root.setAttribute('data-org', S.org);
+  root.setAttribute('data-env', S.env);
+  fillScopeSelects();
+  $('#scope-sum-1').textContent = orgObj().short + ' › ' + projObj().name;
+  $('#scope-sum-2').textContent = envName() + ' · ' + role().name;
+  $$('[data-scope-text]').forEach(el => el.innerHTML = `<span>${esc(scopeText())}</span><span class="tag">ロール: ${esc(role().name)}</span>`);
+  store.set('org', S.org); store.set('role', S.role);
+  if(announce) toast(announce, 'info');
+}
+$$('select[data-scope]').forEach(sel => sel.addEventListener('change', () => {
+  const k = sel.dataset.scope;
+  if(k === 'org'){ S.org = sel.value; S.proj = orgObj().projects[0].id; S.selected.clear(); S.active = null; S.page = 1; S.cols = 1; }
+  if(k === 'proj'){ S.proj = sel.value; S.selected.clear(); S.active = null; S.page = 1; S.cols = 1; }
+  if(k === 'env') S.env = sel.value;
+  if(k === 'role') S.role = sel.value;
+  applyScope(k === 'role' ? `ロールを「${role().name}」に切り替えました（デモ）` : `スコープを「${scopeText()}」に切り替えました`);
+  render();
+}));
+
+/* ===================== トースト（軽微な結果のみ。重要な結果は画面内にも残す：X5） ===================== */
+function toast(text, type){
+  const el = document.createElement('div');
+  el.className = 'toast ' + (type === 'warn' ? 't-warn' : type === 'info' ? 't-info' : '');
+  const ic = type === 'warn' ? 'warn' : type === 'info' ? 'info' : 'ok';
+  const lbl = type === 'warn' ? '注意' : type === 'info' ? 'お知らせ' : '完了';
+  el.innerHTML = `${icon(ic)}<div class="t-body"><strong>${lbl}:</strong> ${esc(text)}</div><button type="button" class="btn btn-ghost btn-sm btn-icon" aria-label="通知を閉じる">${icon('close')}</button>`;
+  el.querySelector('button').addEventListener('click', () => el.remove());
+  $('#toasts').appendChild(el);
+  let timer = setTimeout(() => el.remove(), 7000);
+  el.addEventListener('mouseenter', () => clearTimeout(timer));
+  el.addEventListener('focusin', () => clearTimeout(timer));
+  el.addEventListener('mouseleave', () => { timer = setTimeout(() => el.remove(), 4000); });
+}
+
+/* ===================== ダイアログ（フォーカス管理） ===================== */
+let lastOpener = null;
+function openDialog(dlg, focusSel){
+  lastOpener = document.activeElement;
+  if(typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open','');
+  const f = focusSel ? $(focusSel, dlg) : dlg.querySelector('input,textarea,select,button:not([data-close])');
+  if(f) setTimeout(() => f.focus(), 0);
+}
+$$('dialog').forEach(d => {
+  d.addEventListener('close', () => { if(lastOpener && document.contains(lastOpener)) lastOpener.focus(); });
+  d.addEventListener('click', e => { const c = e.target.closest('[data-close]'); if(c){ e.preventDefault(); d.close(); if(c.tagName === 'A') location.hash = c.getAttribute('href'); } });
+});
+function confirmDanger(title, desc, okLabel, onOk){
+  $('#cf-title').textContent = title; $('#cf-desc').textContent = desc; $('#cf-ok').textContent = okLabel;
+  const ok = $('#cf-ok'); const nb = ok.cloneNode(true); ok.replaceWith(nb);
+  nb.addEventListener('click', () => { $('#dlg-confirm').close(); onOk(); });
+  openDialog($('#dlg-confirm'), '[data-close].btn-secondary');
+}
+
+/* ===================== チャート（SVG + 表で見る + 要約） ===================== */
+const tipEl = () => { let t = document.createElement('div'); t.className = 'tip'; t.hidden = true; return t; };
+function lineChart(el, pts, o){
+  // pts: [{x:label, y:number|null}]
+  const W = Math.max(280, Math.floor(el.clientWidth || 600)), H = o.h || 220, m = {l:40, r:12, t:12, b:26};
+  const iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const ymax = o.ymax || Math.ceil(Math.max(...pts.filter(p=>p.y!=null).map(p=>p.y)) / 10) * 10 + 10;
+  const X = i => m.l + (i/(pts.length-1))*iw, Y = v => m.t + ih - (v/ymax)*ih;
+  let g = '';
+  const tk = ymax % 5 === 0 ? ymax/5 : ymax/4;
+  for(let v=0; v<=ymax; v+= tk){ g += `<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l-6}" y="${Y(v)+4}" text-anchor="end">${fmt(v)}</text>`; }
+  let band = '';
+  if(o.thr){ band = `<rect x="${m.l}" y="${Y(ymax)}" width="${iw}" height="${Y(o.thr)-Y(ymax)}" fill="var(--chart-band)"/><line x1="${m.l}" x2="${W-m.r}" y1="${Y(o.thr)}" y2="${Y(o.thr)}" stroke="var(--status-warn)" stroke-dasharray="4 3" stroke-width="1.5"/><text x="${W-m.r}" y="${Y(o.thr)-4}" text-anchor="end" style="fill:var(--color-text)">基準 ${o.thr}</text>`; }
+  let path = '', gaps = '', pen = false;
+  pts.forEach((p,i) => {
+    if(p.y == null){ pen = false; gaps += `<rect x="${X(Math.max(0,i-0.5))}" y="${m.t}" width="${iw/(pts.length-1)}" height="${ih}" fill="url(#hatch-${o.id})"/>`; return; }
+    path += (pen ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p.y).toFixed(1) + ' '; pen = true;
+  });
+  const step = Math.ceil(pts.length / (W < 420 ? 4 : 8));
+  let xl = ''; pts.forEach((p,i) => { if(i % step === 0) xl += `<text x="${X(i)}" y="${H-8}" text-anchor="middle">${esc(p.x)}</text>`; });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(o.label)}">
+    <defs><pattern id="hatch-${o.id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--chart-axis)" stroke-width="1.5"/></pattern></defs>
+    ${band}<g class="grid">${g}</g>${gaps}
+    <line class="axis" x1="${m.l}" x2="${W-m.r}" y1="${Y(0)}" y2="${Y(0)}"/>
+    <path d="${path}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line class="xh" x1="0" x2="0" y1="${m.t}" y2="${m.t+ih}" stroke="var(--color-border-strong)" stroke-width="1" visibility="hidden"/>
+    <circle class="xd" r="4" fill="var(--series-1)" stroke="var(--color-surface)" stroke-width="2" visibility="hidden"/>
+    <rect x="${m.l}" y="${m.t}" width="${iw}" height="${ih}" fill="transparent" class="hit"/>
+    ${xl}</svg>`;
+  const tip = tipEl(); el.appendChild(tip);
+  const svg = el.querySelector('svg'), xh = svg.querySelector('.xh'), xd = svg.querySelector('.xd');
+  svg.querySelector('.hit').addEventListener('pointermove', e => {
+    const rc = svg.getBoundingClientRect(); const px = (e.clientX - rc.left) * (W / rc.width);
+    const i = Math.max(0, Math.min(pts.length-1, Math.round((px - m.l) / iw * (pts.length-1))));
+    const p = pts[i];
+    xh.setAttribute('x1', X(i)); xh.setAttribute('x2', X(i)); xh.setAttribute('visibility','visible');
+    if(p.y != null){ xd.setAttribute('cx', X(i)); xd.setAttribute('cy', Y(p.y)); xd.setAttribute('visibility','visible'); } else xd.setAttribute('visibility','hidden');
+    tip.hidden = false; tip.style.left = (X(i) / W * rc.width) + 'px'; tip.style.top = ((p.y != null ? Y(p.y) : m.t + 20) / H * rc.height) + 'px';
+    tip.textContent = `${p.x}  ${p.y == null ? '欠測' : fmt(p.y,1) + ' ' + o.unit}`;
+  });
+  svg.querySelector('.hit').addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('visibility','hidden'); xd.setAttribute('visibility','hidden'); });
+}
+function stackedBar(el, o){
+  const W = Math.max(280, Math.floor(el.clientWidth || 600)), rowH = 34, m = {l: W < 480 ? 96 : 150, r:56, t:6, b:24};
+  const H = m.t + m.b + o.rows.length * (rowH + 14);
+  const tot = o.rows.map(r => r.v.reduce((a,b)=>a+b,0)); const max = Math.ceil(Math.max(...tot)/1000)*1000;
+  const iw = W - m.l - m.r; const Xs = v => v / max * iw;
+  let s = '', g = '';
+  for(let v=0; v<=max; v+=max/4){ const x = m.l + Xs(v); g += `<line x1="${x}" x2="${x}" y1="${m.t}" y2="${H-m.b}"/><text x="${x}" y="${H-6}" text-anchor="middle">${fmt(v)}</text>`; }
+  o.rows.forEach((r, ri) => {
+    const y = m.t + ri*(rowH+14); let x = m.l;
+    s += `<text x="${m.l-8}" y="${y+rowH/2+4}" text-anchor="end" style="fill:var(--color-text)">${esc(W < 480 ? r.name.replace('（申請中）','') : r.name)}</text>`;
+    r.v.forEach((v, si) => {
+      const w = Math.max(0, Xs(v) - 2);
+      s += `<rect class="seg-r" x="${x}" y="${y}" width="${w}" height="${rowH}" rx="${si===r.v.length-1?4:0}" fill="var(--series-${si+1})" data-tip="${esc(r.name)} / ${esc(o.cats[si])}: ${fmt(v)} ${esc(o.unit)}"/>`;
+      x += Xs(v);
+    });
+    s += `<text x="${x+6}" y="${y+rowH/2+4}" style="fill:var(--color-text);font-weight:600">${fmt(tot[ri])}</text>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(o.label)}"><g class="grid">${g}</g>${s}</svg>
+    <ul class="legend">${o.cats.map((c,i)=>`<li><span class="sw" style="background:var(--series-${i+1})"></span>${esc(c)}</li>`).join('')}</ul>`;
+  const tip = tipEl(); el.appendChild(tip); const svg = el.querySelector('svg');
+  $$('.seg-r', svg).forEach(rc => {
+    rc.addEventListener('pointerenter', () => { tip.hidden = false; tip.textContent = rc.dataset.tip; rc.setAttribute('stroke','var(--color-text)'); rc.setAttribute('stroke-width','1.5'); });
+    rc.addEventListener('pointermove', e => { const b = el.getBoundingClientRect(); tip.style.left = (e.clientX - b.left) + 'px'; tip.style.top = (e.clientY - b.top) + 'px'; });
+    rc.addEventListener('pointerleave', () => { tip.hidden = true; rc.removeAttribute('stroke'); });
+  });
+}
+// 「表で見る」切替（全グラフ必須）
+function wireTableToggle(scope){
+  $$('[data-table-toggle]', scope).forEach(b => b.addEventListener('click', () => {
+    const t = document.getElementById(b.getAttribute('aria-controls'));
+    const show = t.hidden; t.hidden = !show; b.setAttribute('aria-expanded', String(show));
+    b.textContent = show ? 'グラフの表を隠す' : '表で見る';
+  }));
+}
+function series24(id){
+  const r = rng(id.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
+  const base = (SENSORS.find(s=>s.id===id) || {pm25:15}).pm25 || 12;
+  return Array.from({length:24}, (_,h) => ({ x: String(h).padStart(2,'0') + ':00', y: (h===4||h===5) ? null : Math.max(1, Math.round((base*0.7 + Math.sin((h-6)/24*Math.PI*2)*base*0.35 + r()*6)*10)/10) }));
+}
+function seriesTableHTML(id, pts, unit, caption){
+  return `<div class="chart-table" id="${id}" hidden><table class="mini-table"><caption>${esc(caption)}</caption><thead><tr><th scope="col">時刻</th><th scope="col" class="r">値（${esc(unit)}）</th></tr></thead><tbody>${pts.map(p=>`<tr><td class="num">${p.x}</td><td class="r num">${p.y==null?'欠測':fmt(p.y,1)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function summarize(pts, thr){
+  const v = pts.filter(p=>p.y!=null); const mx = v.reduce((a,b)=>b.y>a.y?b:a, v[0]); const avg = v.reduce((a,b)=>a+b.y,0)/v.length;
+  const over = v.filter(p=>p.y>thr).length; const miss = pts.length - v.length;
+  return `要約: 24 時間平均 ${fmt(avg,1)} µg/m³、最大 ${fmt(mx.y,1)} µg/m³（${mx.x}）。基準 ${thr} µg/m³ 超過は ${over} 時間、欠測は ${miss} 時間（04:00–05:00、通信断）。`;
+}
+
+/* ===================== 画面: ダッシュボード ===================== */
+function skeletonDash(){
+  return `<div class="grid g-kpi">${'<div class="card" aria-hidden="true"><span class="sk" style="height:14px;width:50%"></span><span class="sk" style="height:32px;width:70%;margin-top:10px"></span><span class="sk" style="height:12px;width:60%;margin-top:10px"></span></div>'.repeat(4)}</div>
+  <div class="card" style="margin-top:16px" aria-hidden="true"><span class="sk" style="height:18px;width:30%"></span><span class="sk" style="height:200px;margin-top:12px"></span></div><p class="vh" role="status">読み込み中…</p>`;
+}
+function renderDashboard(withSkeleton){
+  const body = $('#dash-body');
+  const p = projObj();
+  if(withSkeleton){ body.innerHTML = skeletonDash(); setTimeout(() => renderDashboard(false), 650); return; }
+  if(p.kind === 'empty'){
+    body.innerHTML = `<div class="empty"><svg class="i empty-icon" aria-hidden="true"><use href="#i-sensor"/></svg><h2>このプロジェクトにはまだデータがありません</h2><p>「${esc(p.name)}」は作成済みですが、センサーも LCA ジョブも登録されていません。最初のセンサーを登録するか、既存プロジェクトから設定を複製してください。</p><div class="actions" style="justify-content:center">${can('edit') ? '<button type="button" class="btn btn-primary" data-demo="センサー登録ウィザード（デモでは未実装）">センサーを登録</button>' : '<button type="button" class="btn btn-primary" disabled>センサーを登録</button><p class="why" style="width:100%">登録には「編集」以上の権限が必要です（現在: ' + esc(role().name) + '）</p>'}<button type="button" class="btn btn-secondary" data-demo="複製ダイアログ（デモでは未実装）">設定を複製</button></div></div>`;
+    wireDemo(body); return;
+  }
+  const list = SENSORS.filter(s => s.org === S.org);
+  const cnt = k => list.filter(s => s.status === k).length;
+  const pend = APPROVALS.filter(a => a.org === S.org && a.status === 'pending');
+  const pts = series24('AQ-0142');
+  const mapPts = list.slice(0, 40);
+  body.innerHTML = `
+  <h2 class="vh">主要指標</h2>
+  <div class="grid g-kpi">
+    <div class="card"><p class="kpi-label">稼働中のセンサー</p><p class="kpi-value">${fmt(list.length - cnt('offline'))}<small> / ${fmt(list.length)} 台</small></p><span class="badge st-neutral">${icon('offline')}欠測 ${cnt('offline')} 台</span></div>
+    <div class="card"><p class="kpi-label">警戒（PM2.5 &gt; 35）</p><p class="kpi-value">${cnt('danger')}<small> 台</small></p><span class="badge st-danger">${icon('danger')}警戒</span> <span class="badge st-warn">${icon('warn')}注意 ${cnt('warn')}</span></div>
+    <div class="card"><p class="kpi-label">あなたの承認待ち</p><p class="kpi-value">${can('approve') ? pend.length : 0}<small> 件</small></p>${can('approve') ? `<span class="badge st-pending">${icon('pending')}承認待ち</span>` : `<span class="why">承認権限なし（${esc(role().name)}）</span>`}</div>
+    <div class="card"><p class="kpi-label">LCA ジョブ（24 時間）</p><p class="kpi-value">18<small> 件</small></p><span class="badge st-ok">${icon('ok')}成功 16</span> <span class="badge st-danger">${icon('danger')}失敗 2</span></div>
+  </div>
+  <div class="grid g-2" style="margin-top:16px">
+    <section class="card" aria-labelledby="h-dash-ts">
+      <div class="card-head"><h2 id="h-dash-ts">PM2.5 の推移（研究棟B 3F-12、直近 24 時間）</h2><button type="button" class="btn btn-secondary btn-sm" data-table-toggle aria-controls="dash-ts-table" aria-expanded="false">表で見る</button></div>
+      <div class="chart" id="dash-ts"></div>
+      <p class="chart-summary">${summarize(pts, 25)}</p>
+      ${seriesTableHTML('dash-ts-table', pts, 'µg/m³', 'PM2.5 時間値（研究棟B 3F-12）')}
+    </section>
+    <section class="card" aria-labelledby="h-dash-eng">
+      <div class="card-head"><h2 id="h-dash-eng">計算エンジンの状態</h2></div>
+      <ul class="timeline" style="margin-bottom:12px">
+        <li>${badge('ok')} SymPy 1.13 — 正常<time>応答 120 ms</time></li>
+        <li>${badge('ok')} SageMath 10.4 — 正常<time>応答 340 ms</time></li>
+        <li><span class="badge st-warn">${icon('warn')}縮退</span> MATLAB R2025b — ライセンスサーバー応答なし<time>09:12 から</time></li>
+      </ul>
+      <div class="msg st-warn" role="note">${icon('warn')}<div class="msg-body"><strong>一部の計算が保留中です（部分障害）</strong><p>MATLAB を使う LCA ジョブ 2 件を「エンジン停止中・再試行待ち」にしました。ほかの機能は通常どおり使えます。</p><p><a href="#detail">影響するジョブを見る</a></p></div></div>
+    </section>
+  </div>
+  <div class="grid g-2" style="margin-top:16px">
+    <section class="card" aria-labelledby="h-dash-map">
+      <div class="card-head"><h2 id="h-dash-map">センサー配置（模式図・先頭 40 台）</h2><button type="button" class="btn btn-secondary btn-sm" data-table-toggle aria-controls="dash-map-table" aria-expanded="false">表で見る</button></div>
+      <div class="chart map" id="dash-map"></div>
+      <ul class="legend"><li>${badge('ok')} 円</li><li>${badge('warn')} 三角</li><li>${badge('danger')} 四角</li><li>${badge('offline')} 中抜き</li></ul>
+      <p class="chart-summary">要約: 表示中 40 台のうち 警戒 ${mapPts.filter(s=>s.status==='danger').length} 台、注意 ${mapPts.filter(s=>s.status==='warn').length} 台、欠測 ${mapPts.filter(s=>s.status==='offline').length} 台。</p>
+      <div class="chart-table" id="dash-map-table" hidden><table class="mini-table"><caption>センサー配置（先頭 40 台）</caption><thead><tr><th scope="col">ID</th><th scope="col">設置場所</th><th scope="col">状態</th></tr></thead><tbody>${mapPts.map(s=>`<tr><td class="mono">${s.id}</td><td>${esc(s.name)}</td><td>${STATUS[s.status].label}</td></tr>`).join('')}</tbody></table></div>
+    </section>
+    <section class="card" aria-labelledby="h-dash-inbox">
+      <div class="card-head"><h2 id="h-dash-inbox">承認の受信箱</h2><span class="subtle">${esc(orgObj().short)} のみ</span></div>
+      ${pend.length ? `<ul class="timeline">${pend.map(a => `<li><a href="${a.link}">${esc(a.kind)}: ${esc(a.target)}</a><time>${a.id} · 申請 ${esc(a.by)} · ${a.at}</time></li>`).join('')}</ul>`
+        : `<div class="empty" style="padding:24px"><h3>承認待ちはありません</h3><p>新しい申請が届くとここに表示されます。</p></div>`}
+      ${!can('approve') ? `<p class="why">現在のロール（${esc(role().name)}）では内容の確認のみ可能です。</p>` : ''}
+    </section>
+  </div>`;
+  lineChart($('#dash-ts'), pts, {id:'dash', unit:'µg/m³', thr:25, ymax:50, label:'PM2.5 の 24 時間推移。詳細は下の要約と表を参照'});
+  drawMap($('#dash-map'), mapPts);
+  wireTableToggle(body);
+}
+function drawMap(el, pts){
+  const W = Math.max(280, Math.floor(el.clientWidth || 500)), H = 220;
+  const r = rng(5); let b = '', d = '';
+  const blds = [[0.05,0.08,0.28,0.34],[0.38,0.08,0.24,0.38],[0.70,0.10,0.26,0.30],[0.08,0.56,0.34,0.36],[0.50,0.58,0.44,0.34]];
+  blds.forEach((q,i) => { b += `<rect class="bld" x="${q[0]*W}" y="${q[1]*H}" width="${q[2]*W}" height="${q[3]*H}" rx="4"/><text x="${q[0]*W+6}" y="${q[1]*H+14}">${esc(orgObj().places[i])}</text>`; });
+  pts.forEach((s,i) => {
+    const q = blds[i % blds.length]; const x = (q[0] + 0.03 + r()*(q[2]-0.06))*W, y = (q[1] + 0.12 + r()*(q[3]-0.18))*H;
+    const tip = `${s.id} ${STATUS[s.status].label}`;
+    const c = s.status === 'ok' ? `<circle cx="${x}" cy="${y}" r="5" fill="var(--status-ok)"/>`
+      : s.status === 'warn' ? `<path d="M${x} ${y-6} L${x+6} ${y+5} L${x-6} ${y+5} Z" fill="var(--status-warn)"/>`
+      : s.status === 'danger' ? `<rect x="${x-5}" y="${y-5}" width="10" height="10" fill="var(--status-danger)"/>`
+      : `<circle cx="${x}" cy="${y}" r="5" fill="var(--color-surface)" stroke="var(--status-neutral)" stroke-width="2"/>`;
+    d += `<g><title>${esc(tip)}</title>${c}</g>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="センサー配置の模式図。内容は「表で見る」で確認できます">${b}${d}</svg>`;
+}
+
+/* ===================== 画面: ワークスペース ===================== */
+function filteredSensors(){
+  let list = SENSORS.filter(s => s.org === S.org && s.proj === S.proj);
+  if(S.view === 'alert') list = list.filter(s => s.status === 'danger' || s.status === 'warn');
+  if(S.view === 'due') list = list.filter(s => s.due < '2026-12-15');
+  if(S.st !== 'all') list = list.filter(s => s.status === S.st);
+  if(S.q){ const q = S.q.toLowerCase(); list = list.filter(s => (s.id + s.name + s.type).toLowerCase().includes(q)); }
+  if(S.sortKey && S.sortDir !== 'none'){
+    const k = S.sortKey, dir = S.sortDir === 'ascending' ? 1 : -1;
+    const ord = {danger:0, warn:1, offline:2, ok:3};
+    list = list.slice().sort((a,b) => {
+      let x = a[k], y = b[k]; if(k === 'status'){ x = ord[x]; y = ord[y]; }
+      if(x == null) return 1; if(y == null) return -1;
+      return (x > y ? 1 : x < y ? -1 : 0) * dir;
+    });
+  }
+  return list;
+}
+function renderWorkspace(){
+  const body = $('#ws-body');
+  const p = projObj();
+  const hash = parseHash();
+  if(hash.params.sel){ const s = SENSORS.find(x => x.id === hash.params.sel); if(s){ if(s.org !== S.org){ S.org = s.org; S.proj = orgObj().projects[0].id; applyScope(`リンクのスコープ「${scopeText()}」に切り替えました`); } S.active = s.id; S.cols = Math.max(S.cols, 2); if(isMobile()) S.pane = 'detail'; } }
+  if(p.kind !== 'aq'){
+    body.innerHTML = `<div class="empty"><svg class="i empty-icon" aria-hidden="true"><use href="#i-sensor"/></svg><h2>このプロジェクトにはセンサーがありません</h2><p>「${esc(p.name)}」は ${p.kind === 'lca' ? 'LCA 計算用' : '準備中'} のプロジェクトです。センサーは同じ組織の「${esc(orgObj().projects[0].name)}」にあります。</p><div class="actions" style="justify-content:center"><button type="button" class="btn btn-primary" id="ws-goaq">「${esc(orgObj().projects[0].name)}」に切り替える</button>${p.kind === 'lca' ? '<a class="btn btn-secondary" href="#detail">LCA 結果を見る</a>' : ''}</div></div>`;
+    $('#ws-goaq').addEventListener('click', () => { S.proj = orgObj().projects[0].id; applyScope(`スコープを「${scopeText()}」に切り替えました`); render(); });
+    return;
+  }
+  body.innerHTML = `
+  <div class="fcl" id="fcl" data-cols="${S.cols}" data-pane="${S.pane}">
+    <section class="col col-list" id="col-list" aria-labelledby="h-list" tabindex="-1">
+      <div class="col-head"><h2 id="h-list">センサー一覧</h2><span class="subtle num" id="list-count" aria-live="polite"></span></div>
+      <div class="toolbar" role="search" aria-label="センサーの絞り込み">
+        <div class="field"><label for="f-q">ID・名称で検索</label><input id="f-q" class="input" type="search" value="${esc(S.q)}" placeholder="例: AQ-0142、研究棟B"></div>
+        <div class="field narrow"><label for="f-st">状態</label><select id="f-st" class="input"><option value="all">すべて</option><option value="danger">警戒</option><option value="warn">注意</option><option value="ok">良好</option><option value="offline">欠測</option></select></div>
+        <div class="field narrow"><label for="f-view">保存ビュー</label><select id="f-view" class="input"><option value="all">すべてのセンサー</option><option value="alert">要対応（警戒・注意）</option><option value="due">校正期限 30 日以内</option></select></div>
+        <div class="field narrow hide-when-3"><span class="label" id="dens-lbl">表示密度</span><div class="seg" role="radiogroup" aria-labelledby="dens-lbl">
+          <label><input type="radio" name="dens" value="compact"><span>詰める</span></label><label><input type="radio" name="dens" value="std"><span>標準</span></label><label><input type="radio" name="dens" value="comfy"><span>広げる</span></label></div></div>
+        <button type="button" class="btn btn-secondary bulk-desktop" id="btn-cols" aria-expanded="false" aria-controls="colpanel">列の設定</button>
+      </div>
+      <div class="colpanel" id="colpanel" hidden>
+        <strong>表示する列と並び順</strong> <span class="help">（ドラッグ不要。↑↓ ボタンで並び替え）</span>
+        <ol id="col-list-ol"></ol>
+      </div>
+      <div class="bulkbar" id="bulkbar" role="region" aria-label="一括操作" hidden>
+        <strong id="bulk-n" class="num"></strong>
+        <button type="button" class="btn btn-primary btn-sm" id="bulk-req">校正を一括申請</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="bulk-csv">選択分を CSV 出力</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="bulk-clear">選択を解除</button>
+        <span class="why" id="bulk-why"></span>
+      </div>
+      <div class="table-wrap" id="table-wrap"><table class="dt rt" id="dt" aria-rowcount="-1"><caption class="vh">センサー一覧。列見出しのボタンで並べ替え（昇順 → 降順 → 解除）</caption><thead></thead><tbody></tbody></table></div>
+      <div id="list-empty"></div>
+      <div class="pager" id="pager"></div>
+    </section>
+    <section class="col col-detail" id="col-detail" aria-labelledby="h-sdetail" tabindex="-1"></section>
+    <section class="col col-trail" id="col-trail" aria-labelledby="h-trail" tabindex="-1"></section>
+  </div>`;
+  $('#f-st').value = S.st; $('#f-view').value = S.view;
+  $$('input[name="dens"]').forEach(r => { r.checked = r.value === S.density; r.addEventListener('change', () => { S.density = r.value; applyDensity(); }); });
+  let qt; $('#f-q').addEventListener('input', e => { clearTimeout(qt); qt = setTimeout(() => { S.q = e.target.value.trim(); S.page = 1; drawTable(); }, 200); });
+  $('#f-st').addEventListener('change', e => { S.st = e.target.value; S.page = 1; drawTable(); });
+  $('#f-view').addEventListener('change', e => { S.view = e.target.value; S.page = 1; drawTable(); toast(`保存ビュー「${e.target.selectedOptions[0].text}」を適用しました`, 'info'); });
+  $('#btn-cols').addEventListener('click', e => { const p = $('#colpanel'); p.hidden = !p.hidden; e.currentTarget.setAttribute('aria-expanded', String(!p.hidden)); });
+  $('#bulk-clear').addEventListener('click', () => { S.selected.clear(); drawTable(); });
+  $('#bulk-csv').addEventListener('click', () => { exportCSV('sensors-selected.csv', SENSORS.filter(s => S.selected.has(s.id))); });
+  $('#bulk-req').addEventListener('click', () => { const ids = [...S.selected]; openRequest(SENSORS.find(s => s.id === ids[0]), ids); });
+  drawColPanel(); drawTable(); drawDetail(); drawTrail();
+}
+function drawColPanel(){
+  const ol = $('#col-list-ol'); if(!ol) return;
+  ol.innerHTML = S.columns.map((c,i) => `<li><label class="check"><input type="checkbox" data-col="${c.k}" ${c.on?'checked':''}>${esc(c.label)}</label>
+    <button type="button" class="btn btn-ghost btn-sm btn-icon" data-mv="-1" data-i="${i}" aria-label="${esc(c.label)} を上へ" ${i===0?'disabled':''}>↑</button>
+    <button type="button" class="btn btn-ghost btn-sm btn-icon" data-mv="1" data-i="${i}" aria-label="${esc(c.label)} を下へ" ${i===S.columns.length-1?'disabled':''}>↓</button></li>`).join('');
+  $$('input[data-col]', ol).forEach(cb => cb.addEventListener('change', () => { S.columns.find(c => c.k === cb.dataset.col).on = cb.checked; store.set('columns', S.columns); drawTable(); }));
+  $$('button[data-mv]', ol).forEach(b => b.addEventListener('click', () => {
+    const i = +b.dataset.i, j = i + (+b.dataset.mv); const t = S.columns[i]; S.columns[i] = S.columns[j]; S.columns[j] = t;
+    store.set('columns', S.columns); drawColPanel(); drawTable();
+    const nb = $(`button[data-mv="${b.dataset.mv}"][data-i="${j}"]`, ol); (nb && !nb.disabled ? nb : $('input[data-col]', ol)).focus();
+  }));
+}
+function cell(s, c){
+  switch(c.k){
+    case 'pm25': return s.pm25 == null ? '<span class="subtle">—</span>' : fmt(s.pm25,1);
+    case 'co2': return s.co2 == null ? '<span class="subtle">—</span>' : fmt(s.co2);
+    case 'status': return badge(s.status);
+    case 'last': return s.last >= 60 ? `<span>${Math.floor(s.last/60)} 時間前</span>` : `${s.last} 分前`;
+    default: return esc(s[c.k]);
+  }
+}
+function drawTable(){
+  const tbl = $('#dt'); if(!tbl) return;
+  const list = filteredSensors(); const total = list.length;
+  const pages = Math.max(1, Math.ceil(total / S.size)); S.page = Math.min(S.page, pages);
+  const start = (S.page-1)*S.size; const rows = list.slice(start, start + S.size);
+  const cols = S.columns.filter(c => c.on);
+  const allOn = rows.length && rows.every(s => S.selected.has(s.id));
+  const sortTh = (c, extra) => { const st = S.sortKey === c.k ? S.sortDir : 'none'; const ind = st === 'ascending' ? '▲' : st === 'descending' ? '▼' : '↕';
+    return `<th scope="col" aria-sort="${st}" class="${extra||''} ${c.num?'r':''}"><button type="button" class="sortbtn" data-sort="${c.k}">${esc(c.label)}<span class="sort-ind" aria-hidden="true">${ind}</span></button></th>`; };
+  tbl.setAttribute('aria-rowcount', String(total + 1));
+  tbl.tHead.innerHTML = `<tr><th scope="col" class="cb sticky1"><input type="checkbox" id="cb-all" aria-label="このページの ${rows.length} 件をすべて選択" ${allOn?'checked':''}></th>${sortTh({k:'id', label:'ID'}, 'sticky2')}${cols.map(c => sortTh(c)).join('')}</tr>`;
+  const mobHide = ['place','type','co2','due','fw'];
+  tbl.tBodies[0].innerHTML = rows.map((s, i) => `<tr data-id="${s.id}" tabindex="${(S.active ? s.id === S.active : i === 0) ? 0 : -1}" aria-rowindex="${start + i + 2}" aria-selected="${S.selected.has(s.id)}" class="${s.id === S.active ? 'active' : ''}">
+    <td class="cb sticky1"><input type="checkbox" data-sel="${s.id}" aria-label="${s.id} を選択" ${S.selected.has(s.id)?'checked':''} tabindex="-1"></td>
+    <td class="sticky2 mono" data-label="ID"><a href="#workspace?sel=${s.id}" data-open="${s.id}" tabindex="-1">${s.id}</a></td>
+    ${cols.map(c => `<td data-label="${esc(c.label)}" class="${c.num?'r num':''} ${mobHide.includes(c.k)?'m-hide':''}">${cell(s,c)}</td>`).join('')}</tr>`).join('');
+  $('#list-count').textContent = `全 ${fmt(total)} 件中 ${total ? fmt(start+1) : 0}–${fmt(start + rows.length)} 件`;
+  $('#list-empty').innerHTML = total ? '' : `<div class="empty" style="margin-top:12px"><svg class="i empty-icon" aria-hidden="true"><use href="#i-search"/></svg><h3>条件に一致するセンサーはありません</h3><p>データはありますが、現在の絞り込み（検索語・状態・保存ビュー）に一致しません。</p><button type="button" class="btn btn-secondary" id="clear-filter">絞り込みを解除</button></div>`;
+  $('#table-wrap').hidden = !total;
+  if(!total) $('#clear-filter').addEventListener('click', () => { S.q=''; S.st='all'; S.view='all'; renderWorkspace(); });
+  $('#pager').innerHTML = `<div class="group"><label for="pg-size">表示件数</label><select id="pg-size" class="input" style="width:auto">${[25,50,100].map(n=>`<option ${n===S.size?'selected':''}>${n}</option>`).join('')}</select></div>
+    <div class="group"><button type="button" class="btn btn-secondary btn-sm" id="pg-prev" ${S.page<=1?'disabled':''}>前へ</button><span class="num" aria-live="polite">${S.page} / ${pages} ページ</span><button type="button" class="btn btn-secondary btn-sm" id="pg-next" ${S.page>=pages?'disabled':''}>次へ</button></div>`;
+  $('#pg-size').addEventListener('change', e => { S.size = +e.target.value; S.page = 1; drawTable(); });
+  $('#pg-prev').addEventListener('click', () => { S.page--; drawTable(); });
+  $('#pg-next').addEventListener('click', () => { S.page++; drawTable(); });
+  $$('.sortbtn', tbl).forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.sort;
+    if(S.sortKey !== k){ S.sortKey = k; S.sortDir = 'ascending'; } else S.sortDir = S.sortDir === 'ascending' ? 'descending' : S.sortDir === 'descending' ? 'none' : 'ascending';
+    drawTable(); const nb = $(`.sortbtn[data-sort="${k}"]`); if(nb) nb.focus();
+  }));
+  $('#cb-all').addEventListener('change', e => { rows.forEach(s => e.target.checked ? S.selected.add(s.id) : S.selected.delete(s.id)); drawTable(); $('#cb-all').focus(); });
+  $$('input[data-sel]', tbl).forEach(cb => cb.addEventListener('change', e => { e.stopPropagation(); toggleSel(cb.dataset.sel); }));
+  $$('tbody tr', tbl).forEach(tr => {
+    tr.addEventListener('click', e => { if(e.target.closest('input')) return; e.preventDefault(); openSensor(tr.dataset.id); });
+    tr.addEventListener('keydown', rowKeys);
+  });
+  // 一括操作バー
+  const n = S.selected.size; const bar = $('#bulkbar'); bar.hidden = n === 0;
+  $('#bulk-n').textContent = `${fmt(n)} 件選択中`;
+  const okEdit = can('edit'); $('#bulk-req').disabled = !okEdit;
+  $('#bulk-why').textContent = okEdit ? '' : `一括申請には「編集」以上の権限が必要です（現在: ${role().name}）`;
+}
+function toggleSel(id){ S.selected.has(id) ? S.selected.delete(id) : S.selected.add(id); const keep = id; drawTable(); const tr = $(`#dt tr[data-id="${keep}"]`); if(tr){ $$('#dt tbody tr').forEach(r => r.tabIndex = -1); tr.tabIndex = 0; tr.focus(); } }
+function rowKeys(e){
+  const tr = e.currentTarget; let t = null;
+  if(e.key === 'j' || e.key === 'ArrowDown') t = tr.nextElementSibling;
+  else if(e.key === 'k' || e.key === 'ArrowUp') t = tr.previousElementSibling;
+  else if(e.key === 'Enter'){ e.preventDefault(); openSensor(tr.dataset.id, true); return; }
+  else if(e.key === 'x' || e.key === ' '){ e.preventDefault(); toggleSel(tr.dataset.id); return; }
+  else return;
+  e.preventDefault(); e.stopPropagation();
+  if(t){ tr.tabIndex = -1; t.tabIndex = 0; t.focus(); }
+}
+function openSensor(id, moveFocus){
+  S.active = id; if(S.cols < 2) S.cols = S.trail ? 3 : 2; S.pane = 'detail';
+  history.replaceState(null, '', '#workspace?sel=' + id);
+  const f = $('#fcl'); f.dataset.cols = S.cols; f.dataset.pane = S.pane;
+  $$('#dt tbody tr').forEach(r => { r.classList.toggle('active', r.dataset.id === id); });
+  drawDetail(); drawTrail();
+  if(moveFocus || isMobile()) $('#col-detail').focus();
+}
+function drawDetail(){
+  const el = $('#col-detail'); if(!el) return;
+  const s = SENSORS.find(x => x.id === S.active);
+  if(!s){ el.innerHTML = `<h2 id="h-sdetail" class="vh">詳細</h2>`; return; }
+  const pts = series24(s.id);
+  const myReq = APPROVALS.find(a => a.sensor === s.id && a.status === 'pending');
+  el.innerHTML = `
+    <button type="button" class="btn btn-ghost btn-sm back" data-pane="list">${icon('back')}一覧へ戻る</button>
+    <div class="col-head"><h2 id="h-sdetail"><span class="mono">${s.id}</span> ${esc(s.name)}</h2>
+      <div class="actions"><button type="button" class="btn btn-ghost btn-sm" id="btn-trail" aria-expanded="${S.cols===3}" aria-controls="col-trail">${S.cols===3?'証跡を閉じる':'証跡を表示'}</button><button type="button" class="btn btn-ghost btn-sm btn-icon" id="btn-close-detail" aria-label="詳細を閉じる">${icon('close')}</button></div></div>
+    <p>${badge(s.status)} <span class="origin" title="値の出所">計測値 · ${s.type}</span></p>
+    <dl class="kv">
+      <dt>PM2.5</dt><dd class="num">${s.pm25 == null ? '欠測' : fmt(s.pm25,1) + ' µg/m³'}</dd>
+      <dt>CO₂</dt><dd class="num">${s.co2 == null ? '欠測' : fmt(s.co2) + ' ppm'}</dd>
+      <dt>校正オフセット</dt><dd class="num">${s.offset >= 0 ? '+' : ''}${fmt(s.offset,1)} µg/m³ <span class="origin">手入力 · 承認済み</span></dd>
+      <dt>校正期限</dt><dd class="num">${s.due}</dd>
+      <dt>ファームウェア</dt><dd class="mono">${s.fw}</dd>
+      <dt>スコープ</dt><dd>${esc(scopeText())}</dd>
+    </dl>
+    <h3 style="margin:16px 0 4px">PM2.5（直近 24 時間）</h3>
+    <div class="chart" id="det-ts"></div>
+    <p class="chart-summary">${summarize(pts, 25)}</p>
+    <button type="button" class="btn btn-secondary btn-sm" data-table-toggle aria-controls="det-ts-table" aria-expanded="false" style="margin-top:8px">表で見る</button>
+    ${seriesTableHTML('det-ts-table', pts, 'µg/m³', s.id + ' の PM2.5 時間値')}
+    <div style="margin-top:16px">
+      ${myReq ? `<div class="msg st-pending">${icon('pending')}<div class="msg-body"><strong>申請中（${myReq.id}）</strong><p>承認されるまで現在の値が使われます。</p></div></div>` :
+      can('edit') ? `<button type="button" class="btn btn-primary" id="btn-req">校正値の変更を申請</button>` :
+      `<button type="button" class="btn btn-primary" disabled aria-describedby="why-req">校正値の変更を申請</button><p class="why" id="why-req">申請には「編集」以上の権限が必要です（現在: ${esc(role().name)}）。<a href="#settings">権限の申請方法</a></p>`}
+    </div>`;
+  lineChart($('#det-ts'), pts, {id:'det', unit:'µg/m³', thr:25, ymax:50, h:180, label: s.id + ' の PM2.5 24 時間推移。下の要約と表を参照'});
+  wireTableToggle(el);
+  $('#btn-close-detail').addEventListener('click', () => { S.active = null; S.cols = 1; S.pane = 'list'; history.replaceState(null,'','#workspace'); const f = $('#fcl'); f.dataset.cols = 1; f.dataset.pane = 'list'; drawTable(); const tr = $('#dt tbody tr[tabindex="0"]'); if(tr) tr.focus(); });
+  $('#btn-trail').addEventListener('click', () => { S.cols = S.cols === 3 ? 2 : 3; S.trail = S.cols === 3; S.pane = S.cols === 3 ? 'trail' : 'detail'; const f = $('#fcl'); f.dataset.cols = S.cols; f.dataset.pane = S.pane; drawDetail(); drawTrail(); if(S.cols === 3) $('#col-trail').focus(); else $('#btn-trail').focus(); });
+  const rb = $('#btn-req'); if(rb) rb.addEventListener('click', () => openRequest(s, [s.id]));
+  $$('.back', el).forEach(b => b.addEventListener('click', () => setPane(b.dataset.pane)));
+}
+function drawTrail(){
+  const el = $('#col-trail'); if(!el) return;
+  const s = SENSORS.find(x => x.id === S.active);
+  if(!s){ el.innerHTML = `<h2 id="h-trail" class="vh">証跡</h2>`; return; }
+  const ev = AUDIT.filter(a => a.target === s.id).slice(0,4);
+  const req = APPROVALS.find(a => a.sensor === s.id);
+  el.innerHTML = `
+    <button type="button" class="btn btn-ghost btn-sm back" data-pane="detail">${icon('back')}詳細へ戻る</button>
+    <div class="col-head"><h2 id="h-trail">証跡</h2></div>
+    <h3 style="font-size:var(--fs-300)">承認の経過</h3>
+    ${req ? `<ol class="steps" style="grid-template-columns:minmax(0,1fr)"><li class="done"><strong>${icon('ok')}申請</strong>${esc(req.by)} · ${req.at}</li><li class="current"><strong>${icon('pending')}レビュー待ち</strong>プロジェクト責任者</li><li class="todo"><strong>承認 / 差戻し</strong>未着手</li></ol>`
+      : `<p class="subtle">進行中の申請はありません。</p>`}
+    <h3 style="font-size:var(--fs-300);margin-top:12px">変更履歴</h3>
+    <ul class="timeline">
+      <li>校正オフセット +0.4 → ${s.offset >= 0 ? '+' : ''}${fmt(s.offset,1)} µg/m³<time>2026-09-02 · 申請 ${PEOPLE.b} · 承認 ${PEOPLE.c}</time></li>
+      <li>ファームウェア 3.0.9 → ${s.fw}<time>2026-07-18 · 自動更新（運用ポリシー FW-02）</time></li>
+      <li>登録<time>2025-04-01 · ${PEOPLE.d}</time></li>
+    </ul>
+    <h3 style="font-size:var(--fs-300);margin-top:12px">監査イベント</h3>
+    ${ev.length ? `<ul class="timeline">${ev.map(a => `<li>${esc(a.action)}（${esc(a.result)}）<time>${fmtTime(a.t)} · ${esc(a.actor)} · ${esc(a.src)}</time></li>`).join('')}</ul>` : `<p class="subtle">直近 30 日の監査イベントはありません。</p>`}
+    <h3 style="font-size:var(--fs-300);margin-top:12px">値の出所</h3>
+    <dl class="kv"><dt>PM2.5</dt><dd>センサー実測（1 分値の 1 時間平均）</dd><dt>補正</dt><dd>校正オフセット（手入力・承認済み）</dd><dt>欠測補完</dt><dd>しない（欠測として表示）</dd></dl>`;
+  $$('.back', el).forEach(b => b.addEventListener('click', () => setPane(b.dataset.pane)));
+}
+function setPane(p){ S.pane = p; const f = $('#fcl'); if(!f) return; f.dataset.pane = p; const t = p === 'list' ? $('#col-list') : p === 'detail' ? $('#col-detail') : $('#col-trail'); if(t){ t.focus(); window.scrollTo(0,0); } }
+
+/* 申請ダイアログ */
+let reqCtx = null;
+function openRequest(s, ids){
+  reqCtx = { s, ids };
+  const high = () => Math.abs(parseFloat(($('#req-offset').value||'').replace('＋','+').replace('−','-'))) > 5;
+  $('#req-title').textContent = ids.length > 1 ? `校正値の変更を一括申請（${ids.length} 件）` : '校正値の変更を申請';
+  $('#req-scope').innerHTML = `${icon('lock')}<span>申請先スコープ: <strong>${esc(scopeText())}</strong></span><span>ロール: ${esc(role().name)}</span>`;
+  $('#req-offset').value = ''; $('#req-reason').value = ''; $('#req-confirm').value = '';
+  ['offset','reason','confirm'].forEach(k => setErr('req-'+k, null));
+  $('#req-errsum').hidden = true; $('#req-confirm-wrap').hidden = ids.length <= 1; $('#req-confirm-id').textContent = ids.length > 1 ? `${ids.length}件` : s.id;
+  $('#req-confirm').setAttribute('aria-label', ids.length > 1 ? `確認のため「${ids.length}件」と入力` : `確認のため ${s.id} と入力`);
+  const upd = () => {
+    const v = parseFloat(($('#req-offset').value||'').replace('＋','+').replace('−','-'));
+    const after = isNaN(v) ? '（未入力）' : `${v >= 0 ? '+' : ''}${fmt(v,1)} µg/m³`;
+    $('#req-diff').innerHTML = `<thead><tr><th scope="col">項目</th><th scope="col">変更前</th><th scope="col">変更後</th></tr></thead><tbody>
+      <tr><th scope="row">対象</th><td colspan="2">${ids.length > 1 ? esc(ids.slice(0,5).join('、')) + (ids.length > 5 ? ` ほか ${ids.length-5} 件` : '') : esc(s.id + ' ' + s.name)}</td></tr>
+      <tr><th scope="row">校正オフセット</th><td class="before num">${ids.length > 1 ? '個別値' : (s.offset >= 0 ? '+' : '') + fmt(s.offset,1) + ' µg/m³'}</td><td class="after num">${after}</td></tr></tbody>`;
+    $('#req-confirm-wrap').hidden = !(ids.length > 1 || high());
+  };
+  $('#req-offset').oninput = upd; upd();
+  $('#req-meta').innerHTML = `<dt>申請者</dt><dd>${esc(PEOPLE.me)}（自動入力）</dd><dt>承認者（自動提示）</dt><dd>${esc(PEOPLE.c)}（プロジェクト責任者）→ ${esc(PEOPLE.d)}（組織管理者）</dd><dt>適用</dt><dd>最終承認の時点で反映。それまでは現在の値を使用</dd>`;
+  openDialog($('#dlg-request'), '#req-offset');
+}
+function setErr(id, msg){
+  const inp = document.getElementById(id), er = document.getElementById(id + '-err');
+  if(!inp || !er) return;
+  if(msg){ inp.setAttribute('aria-invalid','true'); er.hidden = false; er.querySelector('span').textContent = msg; }
+  else { inp.removeAttribute('aria-invalid'); er.hidden = true; }
+}
+$('#form-request').addEventListener('submit', e => {
+  e.preventDefault();
+  const { s, ids } = reqCtx; const errs = [];
+  const raw = ($('#req-offset').value || '').trim().replace('＋','+').replace('−','-').replace('ー','-');
+  const v = parseFloat(raw);
+  if(!raw){ errs.push(['req-offset','校正オフセットを入力してください（例: +0.8 または -1.5）。']); }
+  else if(isNaN(v) || !/^[+-]?\d+(\.\d+)?$/.test(raw)){ errs.push(['req-offset',`「${raw}」は数値として読めません。半角数字と小数点で入力してください（例: -1.5）。`]); }
+  else if(v < -10 || v > 10){ errs.push(['req-offset',`${raw} は範囲外です。−10.0〜+10.0 の範囲で入力してください。大きな補正が必要な場合はセンサーの交換を検討してください。`]); }
+  const reason = $('#req-reason').value.trim();
+  if(reason.length < 10) errs.push(['req-reason', `申請理由は 10 文字以上で書いてください（現在 ${reason.length} 文字）。例:「基準器との比較で +0.8 の偏りを確認」`]);
+  const needConfirm = ids.length > 1 || Math.abs(v) > 5;
+  const expect = ids.length > 1 ? `${ids.length}件` : s.id;
+  if(needConfirm && $('#req-confirm').value.trim() !== expect) errs.push(['req-confirm', `高リスク変更のため「${expect}」と正確に入力してください。`]);
+  ['req-offset','req-reason','req-confirm'].forEach(k => setErr(k, null));
+  errs.forEach(([k,m]) => setErr(k, m));
+  const sum = $('#req-errsum');
+  if(errs.length){
+    sum.hidden = false;
+    sum.innerHTML = `${icon('danger')}<div class="msg-body"><strong>${errs.length} 件の入力を確認してください</strong><ul style="margin:4px 0 0;padding-left:18px">${errs.map(([k,m]) => `<li><a href="#${k}" data-focus="${k}">${esc(m)}</a></li>`).join('')}</ul></div>`;
+    $$('a[data-focus]', sum).forEach(a => a.addEventListener('click', ev => { ev.preventDefault(); document.getElementById(a.dataset.focus).focus(); }));
+    sum.focus(); return;
+  }
+  const id = 'REQ-2026-0' + (312 + APPROVALS.length);
+  ids.forEach((sid, i) => APPROVALS.unshift({ id: ids.length > 1 ? id + '-' + (i+1) : id, org:S.org, kind:'校正値の変更', target:`${sid}（${v>=0?'+':''}${fmt(v,1)} µg/m³）`, by:PEOPLE.me, at:fmtTime(new Date()), status:'pending', step:1, link:'#workspace?sel=' + sid, sensor:sid, mine:true }));
+  addAudit('校正値変更を申請', 'センサー', ids.length > 1 ? `${ids.length} 件` : s.id);
+  $('#dlg-request').close();
+  S.selected.clear(); drawTable(); drawDetail(); drawTrail();
+  toast(`${id} を申請しました。承認者 ${PEOPLE.c} に通知しました。`);
+});
+
+/* ===================== 画面: 詳細（LCA 結果） ===================== */
+function renderDetailView(){
+  const body = $('#detail-body');
+  const j = LCA_JOB; const tot = SCEN.map(s => s.v.reduce((a,b)=>a+b,0));
+  const sameOrg = S.org === j.org;
+  const isMine = false;
+  const stepCls = i => j.status === 'approved' ? 'done' : j.status === 'rejected' && i === 2 ? 'rejected' : i < j.step ? 'done' : i === j.step ? 'current' : 'todo';
+  const canDecide = can('approve') && sameOrg && j.status === 'pending' && !isMine;
+  const whyNot = !sameOrg ? `このジョブは「${ORGS[j.org].short}」のスコープに属します。承認するには組織を切り替えてください。` : !can('approve') ? `承認には「承認」権限が必要です（現在: ${role().name}）。` : j.status !== 'pending' ? 'この申請は処理済みです。' : '';
+  body.innerHTML = `
+  <div class="page-head">
+    <div>
+      <p class="eyebrow" data-scope-text></p>
+      <h1 id="h-detail" tabindex="-1"><span class="mono">${j.id}</span> ${esc(j.title)}</h1>
+      <p style="margin:4px 0 0">${badge(j.status)} <span class="origin">計算: SageMath 10.4 + SymPy 1.13 · 係数 DB（仮）JP-LCI 2026.1</span></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" id="btn-reject" ${canDecide?'':'disabled'}>差戻し</button>
+      <button type="button" class="btn btn-primary" id="btn-approve" ${canDecide?'':'disabled'} aria-describedby="why-approve">承認する</button>
+    </div>
+  </div>
+  ${whyNot ? `<p class="why" id="why-approve" style="margin-top:-8px">${icon('lock')} ${esc(whyNot)}</p>` : '<span id="why-approve" hidden></span>'}
+  ${!sameOrg ? `<div class="msg st-warn" role="note" style="margin-bottom:16px">${icon('warn')}<div class="msg-body"><strong>別組織のデータを表示しています</strong><p>現在のスコープは「${esc(orgObj().short)}」ですが、このジョブは「${esc(ORGS[j.org].short)}」に属します。誤操作を防ぐため承認操作を無効にしています。</p><button type="button" class="btn btn-secondary btn-sm" id="btn-switch-org">「${esc(ORGS[j.org].short)}」に切り替える</button></div></div>` : ''}
+  <div class="msg st-warn" role="note" style="margin-bottom:16px">${icon('warn')}<div class="msg-body"><strong>関連ジョブ 2 件が再試行待ちです</strong><p>MATLAB 停止の影響で感度分析ジョブ（LCA-2026-0921, 0922）が保留中です。本結果（v3 本計算）は SageMath で計算済みのため影響しません。</p></div></div>
+  <div class="tabs" id="detail-tabs">
+    <div role="tablist" aria-label="LCA 結果の表示切替">
+      <button role="tab" id="t-res" aria-controls="p-res" aria-selected="true">結果</button>
+      <button role="tab" id="t-flow" aria-controls="p-flow" aria-selected="false" tabindex="-1">承認フロー</button>
+      <button role="tab" id="t-src" aria-controls="p-src" aria-selected="false" tabindex="-1">値の出所</button>
+      <button role="tab" id="t-wiz" aria-controls="p-wiz" aria-selected="false" tabindex="-1">シナリオ改訂</button>
+    </div>
+    <div role="tabpanel" id="p-res" aria-labelledby="t-res" tabindex="0">
+      <div class="grid g-kpi">
+        <div class="card"><p class="kpi-label">v3 合計（60 年）</p><p class="kpi-value">${fmt(tot[2])}<small> t-CO₂e</small></p><span class="origin">計算値</span></div>
+        <div class="card"><p class="kpi-label">基準比</p><p class="kpi-value">−${fmt((1-tot[2]/tot[0])*100,1)}<small> %</small></p><span class="subtle">基準 ${fmt(tot[0])} t-CO₂e</span></div>
+        <div class="card"><p class="kpi-label">v2 からの変化</p><p class="kpi-value">−${fmt(tot[1]-tot[2])}<small> t-CO₂e</small></p><span class="subtle">主に運用段階</span></div>
+        <div class="card"><p class="kpi-label">床面積あたり</p><p class="kpi-value">${fmt(tot[2]/6.2,0)}<small> kg-CO₂e/m²</small></p><span class="origin">延床 6,200 m²（手入力）</span></div>
+      </div>
+      <section class="card" style="margin-top:16px" aria-labelledby="h-lca-bar">
+        <div class="card-head"><h2 id="h-lca-bar">段階別 CO₂ 排出量の比較（t-CO₂e、60 年）</h2><button type="button" class="btn btn-secondary btn-sm" data-table-toggle aria-controls="lca-table" aria-expanded="false">表で見る</button></div>
+        <div class="chart" id="lca-bar"></div>
+        <p class="chart-summary">要約: 改修案 v3 は合計 ${fmt(tot[2])} t-CO₂e で、基準より ${fmt(tot[0]-tot[2])} t-CO₂e（${fmt((1-tot[2]/tot[0])*100,1)}%）少ない。最大の要因は運用段階（B6）の削減 ${fmt(SCEN[0].v[3]-SCEN[2].v[3])} t-CO₂e で、製造段階（A1–A3）でも ${fmt(SCEN[0].v[0]-SCEN[2].v[0])} t-CO₂e 減る。施工段階（A5）は改修工事のため基準より ${fmt(SCEN[2].v[2]-SCEN[0].v[2])} t-CO₂e 多い。</p>
+        <div class="chart-table" id="lca-table" hidden><table class="mini-table"><caption>段階別 CO₂ 排出量（t-CO₂e）</caption><thead><tr><th scope="col">シナリオ</th>${STAGES.map(s=>`<th scope="col" class="r">${s}</th>`).join('')}<th scope="col" class="r">合計</th></tr></thead><tbody>${SCEN.map((s,i)=>`<tr><th scope="row">${esc(s.name)}</th>${s.v.map(v=>`<td class="r num">${fmt(v)}</td>`).join('')}<td class="r num"><strong>${fmt(tot[i])}</strong></td></tr>`).join('')}</tbody></table></div>
+      </section>
+    </div>
+    <div role="tabpanel" id="p-flow" aria-labelledby="t-flow" tabindex="0" hidden>
+      <h2 class="vh">承認フロー</h2>
+      <ol class="steps" aria-label="承認の段階">
+        <li class="${stepCls(0)}"><strong>${icon('ok')}1. 申請</strong>${esc(PEOPLE.b)}<br>2026-11-12 10:14</li>
+        <li class="${stepCls(1)}"><strong>${icon('ok')}2. レビュー</strong>${esc(PEOPLE.c)}（プロジェクト責任者）<br>2026-11-13 15:20</li>
+        <li class="${stepCls(2)}"><strong>${icon(j.status==='approved'?'ok':j.status==='rejected'?'danger':'pending')}3. 承認 / 差戻し</strong>${j.status==='approved'?'承認済み':j.status==='rejected'?'差戻し':'承認待ち（組織管理者またはプロジェクト責任者）'}</li>
+      </ol>
+      <div class="grid g-2e">
+        <section class="card" aria-labelledby="h-diff"><h3 id="h-diff" style="margin-bottom:8px">変更の差分（v2 → v3）</h3>
+          <table class="diff"><thead><tr><th scope="col">項目</th><th scope="col">変更前（v2）</th><th scope="col">変更後（v3）</th></tr></thead><tbody>
+            <tr><th scope="row">外壁断熱</th><td class="before">高性能 GW 100 mm</td><td class="after">高性能 GW 150 mm</td></tr>
+            <tr><th scope="row">構造材の再利用率</th><td class="before num">35%</td><td class="after num">48%</td></tr>
+            <tr><th scope="row">空調 COP</th><td class="before num">4.2</td><td class="after num">5.1</td></tr>
+            <tr><th scope="row">係数 DB</th><td class="before">JP-LCI 2025.2（仮）</td><td class="after">JP-LCI 2026.1（仮）</td></tr>
+            <tr><th scope="row">合計</th><td class="before num">${fmt(tot[1])} t-CO₂e</td><td class="after num">${fmt(tot[2])} t-CO₂e</td></tr></tbody></table></section>
+        <section class="card" aria-labelledby="h-hist"><h3 id="h-hist" style="margin-bottom:8px">経過とコメント</h3><ul class="timeline" id="flow-hist">${j.history.map(h => `<li>${esc(h.what)}<time>${h.t} · ${esc(h.who)}</time></li>`).join('')}</ul></section>
+      </div>
+    </div>
+    <div role="tabpanel" id="p-src" aria-labelledby="t-src" tabindex="0" hidden>
+      <h2 class="vh">値の出所</h2>
+      <div class="table-wrap" style="max-height:none"><table class="dt rt"><caption class="vh">主要な値の出所</caption><thead><tr><th scope="col">値</th><th scope="col" class="r">数値</th><th scope="col">出所</th><th scope="col">エンジン / DB</th><th scope="col">版</th></tr></thead><tbody>
+        <tr><td data-label="値">製造段階 合計</td><td data-label="数値" class="r num">${fmt(SCEN[2].v[0])} t-CO₂e</td><td data-label="出所"><span class="origin">計算値</span></td><td data-label="エンジン / DB">SageMath · JP-LCI（仮）</td><td data-label="版" class="mono">10.4 / 2026.1</td></tr>
+        <tr><td data-label="値">運用段階 合計</td><td data-label="数値" class="r num">${fmt(SCEN[2].v[3])} t-CO₂e</td><td data-label="出所"><span class="origin">計算値</span></td><td data-label="エンジン / DB">SymPy（記号計算で式を検証）</td><td data-label="版" class="mono">1.13</td></tr>
+        <tr><td data-label="値">延床面積</td><td data-label="数値" class="r num">6,200 m²</td><td data-label="出所"><span class="origin">手入力</span></td><td data-label="エンジン / DB">設計図書 第3版</td><td data-label="版" class="mono">—</td></tr>
+        <tr><td data-label="値">解体段階 輸送距離</td><td data-label="数値" class="r num">32 km</td><td data-label="出所"><span class="origin">推定値</span></td><td data-label="エンジン / DB">既定値（地域平均）</td><td data-label="版" class="mono">2026.1</td></tr>
+        <tr><td data-label="値">感度分析</td><td data-label="数値" class="r num">—</td><td data-label="出所"><span class="badge st-warn">${icon('warn')}保留</span></td><td data-label="エンジン / DB">MATLAB（停止中・再試行待ち）</td><td data-label="版" class="mono">R2025b</td></tr>
+      </tbody></table></div>
+    </div>
+    <div role="tabpanel" id="p-wiz" aria-labelledby="t-wiz" tabindex="0" hidden>
+      <h2 class="vh">シナリオ改訂ウィザード</h2>
+      <div id="wizard"></div>
+    </div>
+  </div>`;
+  applyScope();
+  stackedBar($('#lca-bar'), { rows:SCEN, cats:STAGES, unit:'t-CO₂e', label:'シナリオ別・段階別の CO₂ 排出量。要約と表を参照' });
+  wireTableToggle(body); initTabs(body);
+  const sw = $('#btn-switch-org'); if(sw) sw.addEventListener('click', () => { S.org = j.org; S.proj = ORGS[j.org].projects[1].id; applyScope(`スコープを「${scopeText()}」に切り替えました`); render(); });
+  $('#btn-approve').addEventListener('click', () => openDecide('approve'));
+  $('#btn-reject').addEventListener('click', () => openDecide('reject'));
+  drawWizard();
+}
+let decideMode = 'approve';
+function openDecide(mode){
+  decideMode = mode;
+  $('#dec-title').textContent = mode === 'approve' ? 'LCA 結果の公開を承認' : 'LCA 結果を差戻し';
+  $('#dec-submit').textContent = mode === 'approve' ? '承認する' : '差戻す';
+  $('#dec-submit').className = 'btn ' + (mode === 'approve' ? 'btn-primary' : 'btn-danger');
+  $('#dec-scope').innerHTML = `${icon('lock')}<span>対象スコープ: <strong>${esc(scopeText())}</strong></span><span>あなたのロール: ${esc(role().name)}</span>`;
+  $('#dec-desc').textContent = `${LCA_JOB.id}「${LCA_JOB.title}」を${mode === 'approve' ? '承認すると、組織内に公開され、報告書から参照できるようになります。' : '差戻すと、申請者に理由が通知され、下書きに戻ります。'}`;
+  $('#dec-comment-lbl').innerHTML = mode === 'approve' ? 'コメント（任意）' : '差戻しの理由<span class="req">必須</span>';
+  $('#dec-comment').value = ''; setErr('dec-comment', null);
+  $('#dec-warn').innerHTML = '';
+  openDialog($('#dlg-decide'), '#dec-comment');
+}
+$('#form-decide').addEventListener('submit', e => {
+  e.preventDefault();
+  const c = $('#dec-comment').value.trim();
+  if(decideMode === 'reject' && c.length < 5){ setErr('dec-comment', '差戻しの理由を 5 文字以上で書いてください。例:「解体段階の輸送距離の根拠を追記してください」'); $('#dec-comment').focus(); return; }
+  LCA_JOB.status = decideMode === 'approve' ? 'approved' : 'rejected';
+  LCA_JOB.history.push({ t: fmtTime(new Date()), who: PEOPLE.me + '（' + role().name + '）', what: decideMode === 'approve' ? '承認' + (c ? '（' + c + '）' : '') : '差戻し（' + c + '）' });
+  const a = APPROVALS.find(x => x.id === 'REQ-2026-0311'); if(a) a.status = LCA_JOB.status;
+  addAudit(decideMode === 'approve' ? '承認' : '差戻し', '承認フロー', 'REQ-2026-0311');
+  $('#dlg-decide').close();
+  renderDetailView();
+  const tb = $('#t-flow'); if(tb){ tb.click(); tb.focus(); }
+  toast(decideMode === 'approve' ? 'REQ-2026-0311 を承認しました。結果は画面内の承認フローにも残ります。' : 'REQ-2026-0311 を差戻しました。申請者に通知しました。');
+});
+
+/* ウィザード（入力値は次のステップへ引き継ぎ、再入力させない：3.3.7） */
+const W = { step:0, data:{ target:'研究棟B（延床 6,200 m²）', life:'60', insul:'150', reuse:'48', db:'JP-LCI 2026.1（仮）' } };
+function drawWizard(){
+  const el = $('#wizard'); if(!el) return;
+  const names = ['対象','材料','係数','確認'];
+  const d = W.data;
+  const canEdit = can('edit');
+  const panes = [
+    `<div class="form-grid"><div class="field"><label for="wz-target">対象建物</label><input id="wz-target" class="input" value="${esc(d.target)}" autocomplete="off"><p class="help">前回のシナリオ（v3）から引き継ぎました。</p></div>
+     <div class="field"><label for="wz-life">評価期間（年）<span class="req">必須</span></label><input id="wz-life" class="input num" inputmode="numeric" value="${esc(d.life)}" aria-describedby="wz-life-err"><p class="field-error" id="wz-life-err" hidden>${icon('danger')}<span></span></p></div></div>`,
+    `<div class="form-grid"><div class="field"><label for="wz-insul">外壁断熱厚（mm）</label><input id="wz-insul" class="input num" inputmode="numeric" value="${esc(d.insul)}" aria-describedby="wz-insul-err"><p class="field-error" id="wz-insul-err" hidden>${icon('danger')}<span></span></p></div>
+     <div class="field"><label for="wz-reuse">構造材の再利用率（%）</label><input id="wz-reuse" class="input num" inputmode="numeric" value="${esc(d.reuse)}" aria-describedby="wz-reuse-err"><p class="field-error" id="wz-reuse-err" hidden>${icon('danger')}<span></span></p></div></div>`,
+    `<div class="field"><label for="wz-db">係数データベース</label><select id="wz-db" class="input"><option>JP-LCI 2026.1（仮）</option><option>JP-LCI 2025.2（仮）</option></select><p class="help">版は値の出所として結果に記録されます。</p></div>`,
+    `<dl class="kv"><dt>対象</dt><dd>${esc(d.target)}</dd><dt>評価期間</dt><dd>${esc(d.life)} 年</dd><dt>外壁断熱厚</dt><dd>${esc(d.insul)} mm</dd><dt>再利用率</dt><dd>${esc(d.reuse)}%</dd><dt>係数 DB</dt><dd>${esc(d.db)}</dd></dl><p class="help" style="margin-top:8px">「下書きを保存して申請」で承認フローに送られます。計算は承認後に実行されます。</p>`
+  ];
+  el.innerHTML = `<ol class="steps wizard-steps" aria-label="ステップ">${names.map((n,i)=>`<li class="${i<W.step?'done':i===W.step?'current':'todo'}" ${i===W.step?'aria-current="step"':''}><strong>${i<W.step?icon('ok'):''}${i+1}. ${n}</strong>${i<W.step?'完了':i===W.step?'入力中':'未着手'}</li>`).join('')}</ol>
+    <form id="wz-form" novalidate><fieldset ${canEdit?'':'disabled'} class="plain"><legend class="vh">${names[W.step]}</legend>${panes[W.step]}</fieldset>
+    ${canEdit?'':`<p class="why">シナリオの改訂には「編集」以上の権限が必要です（現在: ${esc(role().name)}）。</p>`}
+    <div class="actions" style="margin-top:16px"><button type="button" class="btn btn-secondary" id="wz-prev" ${W.step===0?'disabled':''}>戻る</button><button type="submit" class="btn btn-primary" ${canEdit?'':'disabled'}>${W.step===3?'下書きを保存して申請':'次へ'}</button></div></form>`;
+  if(W.step === 2) $('#wz-db').value = d.db;
+  $('#wz-prev').addEventListener('click', () => { collectWz(); W.step--; drawWizard(); $('#wizard input, #wizard select, #wz-prev') && el.querySelector('input,select,button').focus(); });
+  $('#wz-form').addEventListener('submit', e => {
+    e.preventDefault(); collectWz();
+    const errs = [];
+    const chk = (id, min, max, label) => { const v = $('#'+id); if(!v) return; const n = Number(v.value); if(!/^\d+$/.test(v.value.trim()) || n < min || n > max){ errs.push(id); setErr(id, `${label}は ${min}〜${max} の整数で入力してください（入力値: 「${v.value}」）。`); } else setErr(id, null); };
+    if(W.step === 0) chk('wz-life', 10, 100, '評価期間');
+    if(W.step === 1){ chk('wz-insul', 0, 400, '断熱厚'); chk('wz-reuse', 0, 100, '再利用率'); }
+    if(errs.length){ $('#'+errs[0]).focus(); return; }
+    if(W.step < 3){ W.step++; drawWizard(); el.querySelector('input,select') ? el.querySelector('input,select').focus() : el.querySelector('button[type=submit]').focus(); }
+    else { addAudit('シナリオ改訂を申請', 'LCA', LCA_JOB.id); W.step = 0; drawWizard(); toast('シナリオ v4 の下書きを保存し、承認フローに申請しました。'); }
+  });
+}
+function collectWz(){ ['target','life','insul','reuse','db'].forEach(k => { const f = $('#wz-'+k); if(f) W.data[k] = f.value; }); }
+
+/* ===================== タブ（ARIA tablist・矢印キー） ===================== */
+function initTabs(scope){
+  $$('[role="tablist"]', scope).forEach(list => {
+    const tabs = $$('[role="tab"]', list);
+    const sel = t => { tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; const p = document.getElementById(x.getAttribute('aria-controls')); if(p) p.hidden = !on; }); };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => sel(t));
+      t.addEventListener('keydown', e => {
+        let n = null;
+        if(e.key === 'ArrowRight') n = tabs[(i+1) % tabs.length];
+        if(e.key === 'ArrowLeft') n = tabs[(i-1+tabs.length) % tabs.length];
+        if(e.key === 'Home') n = tabs[0];
+        if(e.key === 'End') n = tabs[tabs.length-1];
+        if(n){ e.preventDefault(); sel(n); n.focus(); }
+      });
+    });
+  });
+}
+
+/* ===================== 画面: 設定・管理 ===================== */
+function renderSettings(){
+  const body = $('#settings-body');
+  if(!can('admin') && !can('audit')){
+    body.innerHTML = `<div class="empty"><svg class="i empty-icon" aria-hidden="true"><use href="#i-lock"/></svg><h2>この画面を表示する権限がありません</h2>
+      <p>「組織の管理」は 組織管理者 と 監査担当 だけが使えます。現在のロールは「${esc(role().name)}」です。ナビゲーションから項目を消さず、申請方法を案内しています。</p>
+      <div class="actions" style="justify-content:center"><button type="button" class="btn btn-primary" id="btn-ask-perm">権限を申請</button><a class="btn btn-secondary" href="#dashboard">ホームへ戻る</a></div>
+      <p class="help" style="margin-top:12px">申請は ${esc(orgObj().short)} の組織管理者（${esc(PEOPLE.d)}）に届きます。</p></div>`;
+    $('#btn-ask-perm').addEventListener('click', () => { addAudit('権限を申請', '権限', '組織の管理'); toast('組織管理者に権限の申請を送りました。'); });
+    addAudit('権限なし画面を表示', '権限', '組織の管理', '拒否');
+    return;
+  }
+  const ro = !can('admin');
+  const perms = [
+    ['センサー・結果の閲覧', [1,1,1,1]], ['校正値・シナリオの変更を申請', [0,1,1,1]], ['校正値・LCA 公開の承認', [0,0,1,1]],
+    ['LCA ジョブの実行', [0,1,1,1]], ['CSV / 報告書のエクスポート', [1,1,1,1]], ['監査ログの閲覧', [0,0,0,1]],
+    ['メンバーとロールの管理', [0,0,0,1]], ['SSO・セッション設定', [0,0,0,1]], ['組織テーマの変更', [0,0,0,1]]
+  ];
+  const lv = ['閲覧','編集','承認','管理者'];
+  const mark = v => v ? `<span class="badge st-ok">${icon('ok')}可</span>` : `<span class="badge st-neutral">${icon('offline')}不可</span>`;
+  body.innerHTML = `
+  ${ro ? `<div class="msg st-pending" role="note" style="margin-bottom:16px">${icon('info')}<div class="msg-body"><strong>読み取り専用（監査担当）</strong><p>設定を確認できますが、変更はできません。監査ログの検索とエクスポートは使えます。</p></div></div>` : ''}
+  <div class="tabs">
+    <div role="tablist" aria-label="管理の項目">
+      <button role="tab" id="st-t1" aria-controls="st-p1" aria-selected="true">メンバー</button>
+      <button role="tab" id="st-t2" aria-controls="st-p2" aria-selected="false" tabindex="-1">権限マトリクス</button>
+      <button role="tab" id="st-t3" aria-controls="st-p3" aria-selected="false" tabindex="-1">セキュリティ</button>
+      <button role="tab" id="st-t4" aria-controls="st-p4" aria-selected="false" tabindex="-1">監査ログ</button>
+      <button role="tab" id="st-t5" aria-controls="st-p5" aria-selected="false" tabindex="-1">組織テーマ</button>
+      <button role="tab" id="st-t6" aria-controls="st-p6" aria-selected="false" tabindex="-1">外観と操作</button>
+    </div>
+    <div role="tabpanel" id="st-p1" aria-labelledby="st-t1" tabindex="0">
+      <h2 style="margin-bottom:12px">メンバー（${esc(orgObj().short)}）</h2>
+      <div class="table-wrap" style="max-height:none"><table class="dt rt"><caption class="vh">メンバー一覧</caption><thead><tr><th scope="col">氏名（ダミー）</th><th scope="col">ロール</th><th scope="col">2 要素認証</th><th scope="col">最終ログイン</th></tr></thead><tbody>
+        ${[[PEOPLE.d,'admin','パスキー','2026-11-15 08:55'],[PEOPLE.c,'approver','パスキー','2026-11-14 18:20'],[PEOPLE.b,'editor','認証アプリ','2026-11-15 09:31'],[PEOPLE.me,S.role,'パスキー','2026-11-15 09:40'],[PEOPLE.e,'auditor','認証アプリ','2026-11-10 11:02'],['学生 H','viewer','未設定','2026-11-01 13:15']].map((m,i) => `<tr>
+          <td data-label="氏名">${esc(m[0])}</td>
+          <td data-label="ロール"><label class="vh" for="mrole-${i}">${esc(m[0])} のロール</label><select id="mrole-${i}" class="input" style="width:auto" ${ro?'disabled':''} data-member="${esc(m[0])}">${ROLES.map(r=>`<option value="${r.id}" ${r.id===m[1]?'selected':''}>${r.name}</option>`).join('')}</select></td>
+          <td data-label="2 要素認証">${m[2]==='未設定' ? `<span class="badge st-warn">${icon('warn')}未設定</span>` : `<span class="badge st-ok">${icon('ok')}${m[2]}</span>`}</td>
+          <td data-label="最終ログイン" class="num">${m[3]}</td></tr>`).join('')}
+      </tbody></table></div>
+      <p class="help" style="margin-top:8px">ロールの変更は即時反映され、監査ログに記録されます。承認権限を付与する変更は二者確認（別の管理者の承認）が必要です。</p>
+    </div>
+    <div role="tabpanel" id="st-p2" aria-labelledby="st-t2" tabindex="0" hidden>
+      <h2 style="margin-bottom:4px">権限マトリクス</h2>
+      <p class="help" style="margin-bottom:12px">ロールは 4 段階の権限レベルに対応します（閲覧者=閲覧、解析者=編集、プロジェクト責任者=承認、組織管理者=管理者）。監査担当は「閲覧」＋「監査ログの閲覧」です。</p>
+      <div class="table-wrap" style="max-height:none"><table class="dt rt"><caption class="vh">機能ごとの権限</caption><thead><tr><th scope="col">機能</th>${lv.map(l=>`<th scope="col">${l}</th>`).join('')}</tr></thead><tbody>
+        ${perms.map(p => `<tr><th scope="row" style="text-align:left;font-weight:600">${p[0]}</th>${p[1].map((v,i)=>`<td data-label="${lv[i]}">${mark(v)}</td>`).join('')}</tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div role="tabpanel" id="st-p3" aria-labelledby="st-t3" tabindex="0" hidden>
+      <h2 style="margin-bottom:12px">セキュリティ</h2>
+      <form id="sec-form" novalidate><fieldset class="plain" ${ro?'disabled':''}>
+      <div class="grid g-2e">
+        <fieldset><legend>シングルサインオン（SSO）</legend>
+          <div class="stack">
+            <label class="check"><input type="checkbox" id="sso-on" checked> SSO を必須にする（パスワードログインを無効化）</label>
+            <div class="field"><label for="sso-proto">方式</label><select id="sso-proto" class="input"><option>SAML 2.0</option><option>OpenID Connect</option></select></div>
+            <div class="field"><label for="sso-url">IdP メタデータ URL<span class="req">必須</span></label><input id="sso-url" class="input mono" type="url" value="https://idp.example.ac.jp/metadata" aria-describedby="sso-url-help sso-url-err"><p class="help" id="sso-url-help">https:// で始まる URL。例: https://idp.example.ac.jp/metadata</p><p class="field-error" id="sso-url-err" hidden>${icon('danger')}<span></span></p></div>
+            <button type="button" class="btn btn-secondary" id="sso-test">接続をテスト</button>
+          </div>
+        </fieldset>
+        <fieldset><legend>2 要素認証</legend>
+          <div class="stack">
+            <label class="check"><input type="radio" name="mfa" checked> パスキー（推奨）または認証アプリを必須</label>
+            <label class="check"><input type="radio" name="mfa"> 管理者のみ必須</label>
+            <p class="help">SMS は使用しません。ワンタイムコード欄は貼り付けとパスワード管理ツールの自動入力を許可しています。画像パズルなどの認知機能テストは使いません（WCAG 3.3.8）。</p>
+            <div class="field"><label for="sess-to">無操作時のセッション失効</label><select id="sess-to" class="input"><option>15 分</option><option selected>30 分</option><option>8 時間</option></select><p class="help">失効の 2 分前に延長を確認します（入力中のデータは保持）。</p></div>
+            <div class="field"><label for="ip-allow">管理操作を許可する IP 範囲</label><textarea id="ip-allow" class="input mono">192.0.2.0/24
+198.51.100.0/24</textarea></div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="actions" style="margin-top:16px"><button type="submit" class="btn btn-primary">セキュリティ設定を保存</button></div>
+      </fieldset></form>
+      <h3 style="margin:24px 0 8px">アクティブなセッション</h3>
+      <div class="table-wrap" style="max-height:none"><table class="dt rt"><caption class="vh">アクティブなセッション</caption><thead><tr><th scope="col">利用者</th><th scope="col">接続元</th><th scope="col">開始</th><th scope="col">操作</th></tr></thead><tbody id="sess-body">
+        ${[[PEOPLE.me+'（このセッション）','192.0.2.14 · Web（Chrome）','09:12',true],[PEOPLE.b,'192.0.2.37 · Web（Firefox）','08:40'],[PEOPLE.c,'198.51.100.8 · モバイル','07:55'],['API トークン lca-runner','203.0.113.21 · API','00:00']].map((r,i)=>`<tr><td data-label="利用者">${esc(r[0])}</td><td data-label="接続元" class="mono">${esc(r[1])}</td><td data-label="開始" class="num">${r[2]}</td><td data-label="操作">${r[3]?'<span class="subtle">—</span>':`<button type="button" class="btn btn-danger btn-sm" data-revoke="${i}" ${ro?'disabled':''}>失効させる</button>`}</td></tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div role="tabpanel" id="st-p4" aria-labelledby="st-t4" tabindex="0" hidden>
+      <h2 style="margin-bottom:12px">監査ログ</h2>
+      <div class="toolbar" role="search" aria-label="監査ログの絞り込み">
+        <div class="field"><label for="au-q">実行者・対象・接続元で検索</label><input id="au-q" class="input" type="search" value="${esc(S.auditQ)}" placeholder="例: 解析者 B、AQ-0142、203.0.113"></div>
+        <div class="field narrow"><label for="au-cat">種類</label><select id="au-cat" class="input"><option value="all">すべて</option>${['認証','センサー','承認フロー','データ','権限','セキュリティ','LCA'].map(c=>`<option>${c}</option>`).join('')}</select></div>
+        <div class="field narrow"><label for="au-res">結果</label><select id="au-res" class="input"><option value="all">すべて</option><option>成功</option><option>失敗</option><option>拒否</option></select></div>
+        <div class="field narrow"><label for="au-per">期間</label><select id="au-per" class="input"><option value="1">24 時間</option><option value="7">7 日</option><option value="30">30 日</option></select></div>
+        <button type="button" class="btn btn-secondary" id="au-csv">${icon('download')}CSV 出力</button>
+      </div>
+      <p class="subtle num" id="au-count" aria-live="polite"></p>
+      <div class="table-wrap"><table class="dt rt"><caption class="vh">監査ログ（新しい順）</caption><thead><tr><th scope="col">日時（JST）</th><th scope="col">実行者</th><th scope="col">操作</th><th scope="col">対象</th><th scope="col">組織</th><th scope="col">接続元</th><th scope="col">結果</th></tr></thead><tbody id="au-body"></tbody></table></div>
+      <div class="actions" style="margin-top:12px"><button type="button" class="btn btn-secondary" id="au-more">さらに 25 件表示</button></div>
+      <p class="help">監査ログは改ざん防止のため追記のみで、利用者・管理者とも削除できません（保持期間 7 年・ダミー設定）。</p>
+    </div>
+    <div role="tabpanel" id="st-p5" aria-labelledby="st-t5" tabindex="0" hidden>
+      <h2 style="margin-bottom:4px">組織テーマ（アクセントトークン）</h2>
+      <p class="help" style="margin-bottom:12px">変更できるのは <code>--brand-accent</code> 系だけです。状態色（良好・注意・警戒・承認待ち）、余白、文字は全組織共通で固定です。登録時に背景とのコントラスト（4.5:1 以上）を自動検査します。</p>
+      <form id="brand-form" novalidate><fieldset class="plain" ${ro?'disabled':''}><div class="form-grid">
+        <div class="field"><label for="br-light">ライト用アクセント（白地 #FFFFFF に対して検査）</label><input id="br-light" class="input mono" value="${({hokuryo:'#1D5FA8',minato:'#1F6F4A',towa:'#8A4B0F'})[S.org]}" aria-describedby="br-light-res br-light-err"><p class="help" id="br-light-res"></p><p class="field-error" id="br-light-err" hidden>${icon('danger')}<span></span></p></div>
+        <div class="field"><label for="br-dark">ダーク用アクセント（#161B21 に対して検査）</label><input id="br-dark" class="input mono" value="${({hokuryo:'#82B4F0',minato:'#6FCB9C',towa:'#E7A66C'})[S.org]}" aria-describedby="br-dark-res br-dark-err"><p class="help" id="br-dark-res"></p><p class="field-error" id="br-dark-err" hidden>${icon('danger')}<span></span></p></div>
+      </div>
+      <div class="actions" style="margin-top:12px"><button type="submit" class="btn btn-primary">検査して変更を申請</button></div></fieldset></form>
+    </div>
+    <div role="tabpanel" id="st-p6" aria-labelledby="st-t6" tabindex="0" hidden>
+      <h2 style="margin-bottom:12px">外観と操作（あなたの設定）</h2>
+      <div class="grid g-2e">
+        <fieldset><legend>テーマ</legend>
+          ${['system','light','dark'].map(t=>`<label class="check"><input type="radio" name="theme-r" value="${t}" ${S.theme===t?'checked':''}> ${({system:'OS の設定に合わせる',light:'ライト',dark:'ダーク'})[t]}</label>`).join('')}
+        </fieldset>
+        <fieldset><legend>表の密度</legend>
+          ${[['compact','詰める（行高 24px）'],['std','標準（行高 32px）'],['comfy','広げる（行高 40px）']].map(t=>`<label class="check"><input type="radio" name="dens-r" value="${t[0]}" ${S.density===t[0]?'checked':''}> ${t[1]}</label>`).join('')}
+        </fieldset>
+        <fieldset class="span2"><legend>キーボード</legend>
+          <label class="check"><input type="checkbox" id="sc-on" ${S.shortcuts?'checked':''}> 1 文字ショートカット（g、/、? など）を有効にする</label>
+          <p class="help">音声入力や支援技術と競合する場合は無効にしてください。<kbd>Ctrl</kbd>+<kbd>K</kbd> と <kbd>F6</kbd> は常に有効です。</p>
+        </fieldset>
+      </div>
+    </div>
+  </div>`;
+  initTabs(body);
+  $$('select[data-member]', body).forEach(s => s.addEventListener('change', () => { addAudit('ロールを変更', '権限', s.dataset.member); toast(`${s.dataset.member} のロールを「${ROLES.find(r=>r.id===s.value).name}」に変更しました（監査ログに記録）。`); }));
+  $('#sso-test').addEventListener('click', () => { const ok = validSSO(); if(ok) toast('IdP に接続できました（ダミー）。'); });
+  $('#sec-form').addEventListener('submit', e => { e.preventDefault(); if(!validSSO()){ $('#sso-url').focus(); return; } addAudit('SSO 設定を変更', 'セキュリティ', 'SSO / セッション'); toast('セキュリティ設定を保存しました。'); });
+  $$('[data-revoke]', body).forEach(b => b.addEventListener('click', () => {
+    const tr = b.closest('tr'); const who = tr.cells[0].textContent;
+    confirmDanger('セッションを失効させますか', `${who} のセッションを直ちに終了します。相手は再ログインが必要になります。`, '失効させる', () => {
+      addAudit('セッションを失効', 'セキュリティ', who); tr.cells[3].innerHTML = `<span class="badge st-neutral">${icon('offline')}失効済み</span>`; toast(`${who} のセッションを失効させました。`);
+    });
+  }));
+  // 監査ログ
+  $('#au-cat').value = S.auditCat; $('#au-res').value = S.auditRes; $('#au-per').value = S.auditPeriod;
+  const reAu = () => { S.auditShown = 25; drawAudit(); };
+  let at; $('#au-q').addEventListener('input', e => { clearTimeout(at); at = setTimeout(() => { S.auditQ = e.target.value.trim(); reAu(); }, 200); });
+  $('#au-cat').addEventListener('change', e => { S.auditCat = e.target.value; reAu(); });
+  $('#au-res').addEventListener('change', e => { S.auditRes = e.target.value; reAu(); });
+  $('#au-per').addEventListener('change', e => { S.auditPeriod = e.target.value; reAu(); });
+  $('#au-more').addEventListener('click', () => { S.auditShown += 25; drawAudit(); });
+  $('#au-csv').addEventListener('click', () => {
+    const rows = auditFiltered();
+    const csv = '日時,実行者,操作,対象,組織,接続元,結果\n' + rows.map(a => [fmtTime(a.t), a.actor, a.action, a.target, ORGS[a.org].short, a.src, a.result].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    download('audit-log.csv', csv); addAudit('CSV エクスポート', 'データ', `監査ログ ${rows.length} 件`);
+    toast(`監査ログ ${rows.length} 件を CSV で出力しました（この操作も記録されます）。`);
+  });
+  drawAudit();
+  // 組織テーマのコントラスト検査
+  const chk = (id, bg) => {
+    const v = $('#'+id).value.trim(); const res = $('#'+id+'-res');
+    if(!/^#[0-9a-fA-F]{6}$/.test(v)){ setErr(id, `「${v}」は色として読めません。#RRGGBB 形式（例: #1D5FA8）で入力してください。`); res.textContent = ''; return false; }
+    const r = contrast(v, bg);
+    if(r < 4.5){ const fix = suggest(v, bg); setErr(id, `コントラスト比 ${r.toFixed(2)}:1 は基準 4.5:1 に足りません。候補: ${fix}（${contrast(fix,bg).toFixed(2)}:1）`); res.textContent = ''; return false; }
+    setErr(id, null); res.textContent = `コントラスト比 ${r.toFixed(2)}:1 — 基準 4.5:1 を満たします。`; return true;
+  };
+  ['br-light','br-dark'].forEach(id => $('#'+id).addEventListener('input', () => chk(id, id === 'br-light' ? '#FFFFFF' : '#161B21')));
+  chk('br-light','#FFFFFF'); chk('br-dark','#161B21');
+  $('#brand-form').addEventListener('submit', e => { e.preventDefault(); const a = chk('br-light','#FFFFFF'), b = chk('br-dark','#161B21'); if(!a){ $('#br-light').focus(); return; } if(!b){ $('#br-dark').focus(); return; } addAudit('組織テーマの変更を申請', '権限', '--brand-accent'); toast('組織テーマの変更を申請しました。承認後に全メンバーへ配布されます。'); });
+  // 外観
+  $$('input[name="theme-r"]', body).forEach(r => r.addEventListener('change', () => { S.theme = r.value; applyTheme(); }));
+  $$('input[name="dens-r"]', body).forEach(r => r.addEventListener('change', () => { S.density = r.value; applyDensity(); toast('表の密度を変更しました。'); }));
+  $('#sc-on').addEventListener('change', e => { S.shortcuts = e.target.checked; store.set('shortcuts', S.shortcuts); toast(S.shortcuts ? '1 文字ショートカットを有効にしました。' : '1 文字ショートカットを無効にしました。', 'info'); });
+}
+function validSSO(){ const v = $('#sso-url').value.trim(); if(!/^https:\/\/[^\s/]+\.[^\s]+/.test(v)){ setErr('sso-url', `「${v || '（空欄）'}」は使えません。https:// で始まる URL を入力してください（例: https://idp.example.ac.jp/metadata）。`); return false; } setErr('sso-url', null); return true; }
+function auditFiltered(){
+  const now = Date.UTC(2026,10,15,0,45); const per = (+S.auditPeriod) * 86400000; const q = S.auditQ.toLowerCase();
+  return AUDIT.filter(a => (a.actor === PEOPLE.me || now - a.t <= per) && (S.auditCat === 'all' || a.cat === S.auditCat) && (S.auditRes === 'all' || a.result === S.auditRes) && (!q || (a.actor + a.target + a.src + a.action).toLowerCase().includes(q)));
+}
+function drawAudit(){
+  const rows = auditFiltered(); const shown = rows.slice(0, S.auditShown);
+  $('#au-count').textContent = `${fmt(rows.length)} 件中 ${fmt(shown.length)} 件を表示`;
+  const resBadge = r => r === '成功' ? `<span class="badge st-ok">${icon('ok')}成功</span>` : r === '失敗' ? `<span class="badge st-danger">${icon('danger')}失敗</span>` : `<span class="badge st-warn">${icon('warn')}拒否</span>`;
+  $('#au-body').innerHTML = shown.length ? shown.map(a => `<tr><td data-label="日時" class="num">${fmtTime(a.t)}</td><td data-label="実行者">${esc(a.actor)}</td><td data-label="操作">${esc(a.action)}</td><td data-label="対象" class="mono">${esc(a.target)}</td><td data-label="組織">${esc(ORGS[a.org].short)}</td><td data-label="接続元" class="mono">${esc(a.src)}</td><td data-label="結果">${resBadge(a.result)}</td></tr>`).join('')
+    : `<tr><td colspan="7" style="white-space:normal;height:auto;padding:16px">条件に一致する記録はありません。期間を広げるか、検索語を変えてください。</td></tr>`;
+  $('#au-more').hidden = shown.length >= rows.length;
+}
+
+/* ===================== コントラスト計算 ===================== */
+function lum(hex){ const c = [1,3,5].map(i => parseInt(hex.substr(i,2),16)/255).map(v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4)); return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]; }
+function contrast(a, b){ const x = lum(a), y = lum(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }
+function suggest(hex, bg){
+  const dark = lum(bg) < 0.5; let c = [1,3,5].map(i => parseInt(hex.substr(i,2),16));
+  for(let k=0;k<60;k++){ const h = '#' + c.map(v => Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('').toUpperCase(); if(contrast(h,bg) >= 4.6) return h; c = c.map(v => dark ? v + (255-v)*0.08 : v*0.92); }
+  return dark ? '#FFFFFF' : '#000000';
+}
+
+/* ===================== 画面: 共通部品とトークン ===================== */
+function renderComponents(){
+  const body = $('#components-body');
+  const cs = getComputedStyle(root);
+  const colorTok = [
+    ['--color-bg','背景'],['--color-surface','面'],['--color-surface-sunken','くぼみ面'],['--color-text','本文'],['--color-text-subtle','補助文字'],
+    ['--color-border','区切り線（装飾）'],['--color-border-strong','入力枠（UI 部品 3:1）'],['--color-focus','フォーカス'],['--color-scope-bg','スコープバー'],
+    ['--brand-accent','組織アクセント（差し替え可）'],['--brand-accent-bg','アクセント淡色'],
+    ['--status-ok','良好（固定）'],['--status-warn','注意（固定）'],['--status-danger','警戒（固定）'],['--status-pending','承認待ち（固定）'],
+    ['--series-1','系列 1'],['--series-2','系列 2'],['--series-3','系列 3'],['--series-4','系列 4'],['--series-5','系列 5']
+  ];
+  const surf = cs.getPropertyValue('--color-surface').trim();
+  const rows = [['Aa','title-tok']];
+  const toHex = v => { v = v.trim(); return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : v; };
+  body.innerHTML = `
+  <div class="stack">
+  <section class="card" aria-labelledby="c-status"><h2 id="c-status" style="margin-bottom:8px">部品の状態と版（P11）</h2>
+    <table class="mini-table"><caption class="vh">部品の成熟度</caption><thead><tr><th scope="col">部品</th><th scope="col">状態</th><th scope="col">導入版</th><th scope="col">基幹画面での使用</th></tr></thead><tbody>
+      <tr><td>Button / Field / Dialog / Tabs / Table</td><td><span class="tag">stable</span></td><td class="num">2.0</td><td>可</td></tr>
+      <tr><td>ScopeBar / ColumnLayout（3 列）</td><td><span class="tag">stable</span></td><td class="num">2.2</td><td>可</td></tr>
+      <tr><td>CommandPalette</td><td><span class="tag">stable</span></td><td class="num">2.3</td><td>可</td></tr>
+      <tr><td>MapView（模式図）</td><td><span class="tag tag-beta">beta</span></td><td class="num">2.4</td><td>不可（概要表示のみ）</td></tr>
+    </tbody></table></section>
+
+  <section class="card" aria-labelledby="c-btn"><h2 id="c-btn" style="margin-bottom:8px">ボタン</h2>
+    <p class="help">1 画面で主ボタンは 1 つ（P7）。無効にする場合は理由を近くに書く。</p>
+    <div class="actions"><button type="button" class="btn btn-primary" data-demo="主ボタンを押しました">主（承認する）</button><button type="button" class="btn btn-secondary" data-demo="副ボタンを押しました">副（下書き保存）</button><button type="button" class="btn btn-ghost" data-demo="控えめボタンを押しました">控えめ（キャンセル）</button><button type="button" class="btn btn-danger" id="demo-danger">危険（削除）</button><button type="button" class="btn btn-primary" disabled aria-describedby="demo-why">無効</button></div>
+    <p class="why" id="demo-why">無効の理由: 承認権限がありません（例）</p></section>
+
+  <section class="card" aria-labelledby="c-form"><h2 id="c-form" style="margin-bottom:8px">フォーム（ラベル・ヘルプ・エラー）</h2>
+    <form id="demo-form" novalidate class="form-grid">
+      <div class="field"><label for="df-name">センサー名<span class="req">必須</span></label><input id="df-name" class="input" aria-describedby="df-name-help df-name-err"><p class="help" id="df-name-help">設置場所と番号（例: 研究棟B 3F-12）</p><p class="field-error" id="df-name-err" hidden>${icon('danger')}<span></span></p></div>
+      <div class="field"><label for="df-int">送信間隔（秒）</label><input id="df-int" class="input num" inputmode="numeric" value="60" aria-describedby="df-int-help df-int-err"><p class="help" id="df-int-help">10〜3600</p><p class="field-error" id="df-int-err" hidden>${icon('danger')}<span></span></p></div>
+      <div class="span2 actions"><button type="submit" class="btn btn-primary">検証する</button></div>
+    </form></section>
+
+  <section class="card" aria-labelledby="c-dlg"><h2 id="c-dlg" style="margin-bottom:8px">ダイアログ（&lt;dialog&gt;）</h2>
+    <p class="help">開くと最初の操作対象へ、閉じると開いたボタンへフォーカスが戻る。<kbd>Esc</kbd> で閉じる。モーダルは高リスク確認に限る（X5）。</p>
+    <button type="button" class="btn btn-secondary" id="demo-dlg">確認ダイアログを開く</button></section>
+
+  <section class="card" aria-labelledby="c-tabs"><h2 id="c-tabs" style="margin-bottom:8px">タブ（ARIA tablist）</h2>
+    <div class="tabs"><div role="tablist" aria-label="タブの例"><button role="tab" id="dt1" aria-controls="dp1" aria-selected="true">概要</button><button role="tab" id="dt2" aria-controls="dp2" aria-selected="false" tabindex="-1">履歴</button><button role="tab" id="dt3" aria-controls="dp3" aria-selected="false" tabindex="-1">設定</button></div>
+    <div role="tabpanel" id="dp1" aria-labelledby="dt1" tabindex="0"><p>矢印キー ← → でタブを移動し、Home / End で端へ移動します（自動で選択）。</p></div>
+    <div role="tabpanel" id="dp2" aria-labelledby="dt2" tabindex="0" hidden><p>履歴タブの内容（ダミー）。</p></div>
+    <div role="tabpanel" id="dp3" aria-labelledby="dt3" tabindex="0" hidden><p>設定タブの内容（ダミー）。</p></div></div></section>
+
+  <section class="card" aria-labelledby="c-tbl"><h2 id="c-tbl" style="margin-bottom:8px">テーブル（並べ替え・3 状態）</h2>
+    <div class="table-wrap" style="max-height:none"><table class="dt rt" id="demo-tbl"><caption class="vh">並べ替えの例</caption><thead><tr><th scope="col" aria-sort="none"><button type="button" class="sortbtn" data-k="0">組織<span class="sort-ind" aria-hidden="true">↕</span></button></th><th scope="col" class="r" aria-sort="none"><button type="button" class="sortbtn" data-k="1">センサー数<span class="sort-ind" aria-hidden="true">↕</span></button></th><th scope="col" class="r" aria-sort="none"><button type="button" class="sortbtn" data-k="2">警戒<span class="sort-ind" aria-hidden="true">↕</span></button></th></tr></thead><tbody></tbody></table></div>
+    <p class="help" style="margin-top:6px">大規模データ版（固定列・列の表示切替・一括操作・ページング・密度）は「センサー」画面を参照。</p></section>
+
+  <section class="card" aria-labelledby="c-chart"><h2 id="c-chart" style="margin-bottom:8px">チャート（SVG ＋ 表 ＋ 要約）</h2>
+    <div class="chart" id="demo-chart"></div>
+    <p class="chart-summary">要約: 3 組織のうち 東和建設 の警戒台数が最も多い（粉じん監視のため基準超過が起きやすい）。</p>
+    <button type="button" class="btn btn-secondary btn-sm" data-table-toggle aria-controls="demo-chart-t" aria-expanded="false" style="margin-top:8px">表で見る</button>
+    <div class="chart-table" id="demo-chart-t" hidden></div></section>
+
+  <section aria-labelledby="c-card"><h2 id="c-card" style="margin-bottom:8px">カード</h2>
+    <div class="grid g-kpi"><div class="card"><p class="kpi-label">指標カード</p><p class="kpi-value">412<small> 台</small></p><span class="badge st-ok">${icon('ok')}良好</span></div>
+    <div class="card"><h3>内容カード</h3><p class="subtle">見出し・本文・操作を持つ。固定配置で並べ、自由配置は不可。</p><a href="#workspace">一覧を開く</a></div></div></section>
+
+  <section class="card" aria-labelledby="c-msg"><h2 id="c-msg" style="margin-bottom:8px">成功・警告・エラー・情報（色＋アイコン＋文言）</h2>
+    <div class="stack">
+      <div class="msg st-ok">${icon('ok')}<div class="msg-body"><strong>成功: 申請を受け付けました</strong><p>承認者に通知しました。</p></div></div>
+      <div class="msg st-warn">${icon('warn')}<div class="msg-body"><strong>注意: 校正期限が近いセンサーが 12 台あります</strong><p>30 日以内に期限を迎えます。</p></div></div>
+      <div class="msg st-danger">${icon('danger')}<div class="msg-body"><strong>エラー: CSV の 14 行目を読み込めません</strong><p>日付が「2026/13/01」になっています。YYYY-MM-DD 形式に直してください。</p></div></div>
+      <div class="msg st-pending">${icon('pending')}<div class="msg-body"><strong>承認待ち: REQ-2026-0311</strong><p>最終承認を待っています。</p></div></div>
+    </div></section>
+
+  <section class="card" aria-labelledby="c-err"><h2 id="c-err" style="margin-bottom:8px">エラーの階層</h2>
+    <table class="mini-table"><caption class="vh">エラーの階層</caption><thead><tr><th scope="col">階層</th><th scope="col">使う場面</th><th scope="col">例</th></tr></thead><tbody>
+      <tr><td>トースト</td><td>軽微・取り消し可能な結果。重要な結果は画面内にも残す</td><td><button type="button" class="btn btn-secondary btn-sm" id="demo-toast">表示</button></td></tr>
+      <tr><td>インライン</td><td>入力項目の誤り。項目の直下に原因と修正例</td><td>上の「フォーム」で検証</td></tr>
+      <tr><td>セクション（部分障害）</td><td>一部機能の停止。画面全体は落とさない</td><td><a href="#dashboard">ホームの計算エンジン</a></td></tr>
+      <tr><td>ページ</td><td>権限なし・存在しない画面</td><td><a href="#no-such-page">存在しない画面</a> / 閲覧者で「管理」</td></tr>
+    </tbody></table></section>
+
+  <section class="card" aria-labelledby="c-empty"><h2 id="c-empty" style="margin-bottom:8px">空状態（2 種類を区別）</h2>
+    <div class="grid g-2e">
+      <div class="empty"><svg class="i empty-icon" aria-hidden="true"><use href="#i-sensor"/></svg><h3>まだデータがありません</h3><p>最初のセンサーを登録すると、ここに表示されます。</p><button type="button" class="btn btn-primary" data-demo="登録（デモ）">センサーを登録</button></div>
+      <div class="empty"><svg class="i empty-icon" aria-hidden="true"><use href="#i-search"/></svg><h3>条件に一致しません</h3><p>データはありますが、絞り込みに一致しません。</p><button type="button" class="btn btn-secondary" data-demo="絞り込みを解除しました">絞り込みを解除</button></div>
+    </div></section>
+
+  <section class="card" aria-labelledby="c-sk"><h2 id="c-sk" style="margin-bottom:8px">読み込み中（スケルトン）</h2>
+    <div id="demo-sk"></div><button type="button" class="btn btn-secondary btn-sm" id="demo-sk-btn" style="margin-top:8px">もう一度読み込む</button>
+    <p class="help">動きを減らす設定（prefers-reduced-motion）では光の流れを止めます。</p></section>
+
+  <section class="card" aria-labelledby="c-tok"><h2 id="c-tok" style="margin-bottom:8px">カラートークン（現在のテーマ・組織）</h2>
+    <p class="help">コントラスト比は「面」${esc(toHex(surf))} に対する値（画面上で計算）。</p>
+    <div class="swatches">${colorTok.map(([k,l]) => { const v = toHex(cs.getPropertyValue(k)); const r = /^#/.test(v) && /^#/.test(toHex(surf)) ? contrast(v, toHex(surf)).toFixed(2) + ':1' : '—'; return `<div class="swatch"><div class="chip" style="background:var(${k})"></div><div class="meta"><strong>${esc(l)}</strong><br><code>${k}</code><br><code>${esc(v)}</code> · <span class="num">${r}</span></div></div>`; }).join('')}</div></section>
+
+  <section class="card" aria-labelledby="c-type"><h2 id="c-type" style="margin-bottom:8px">文字サイズ</h2>
+    ${[['--fs-100','12/16','注記・凡例'],['--fs-200','13/20','表・補助'],['--fs-300','14/20','本文'],['--fs-400','16/24','見出し 3'],['--fs-500','20/28','見出し 2'],['--fs-600','24/32','見出し 1'],['--fs-kpi','28/36','KPI 数値']].map(t => `<div class="scale-row"><code style="width:7em">${t[0]}</code><span style="font-size:var(${t[0]});line-height:1.3">環境データ 123</span><span class="subtle">${t[1]} px · ${t[2]}</span></div>`).join('')}</section>
+
+  <section class="card" aria-labelledby="c-space"><h2 id="c-space" style="margin-bottom:8px">余白・角丸・影</h2>
+    ${[['--space-050',2],['--space-100',4],['--space-200',8],['--space-300',12],['--space-400',16],['--space-500',24],['--space-600',32]].map(s => `<div class="scale-row"><code style="width:7em">${s[0]}</code><span class="bar" style="width:${s[1]*3}px"></span><span class="subtle">${s[1]} px</span></div>`).join('')}
+    <div class="actions" style="margin-top:12px">${[['--radius-100','4px'],['--radius-200','6px'],['--radius-300','8px']].map(r => `<div style="text-align:center"><div class="radius-demo" style="border-radius:var(${r[0]})"></div><code>${r[0]}</code><br><span class="subtle">${r[1]}</span></div>`).join('')}
+      <div style="text-align:center"><div class="radius-demo" style="box-shadow:var(--shadow-100);border-radius:8px"></div><code>--shadow-100</code></div><div style="text-align:center"><div class="radius-demo" style="box-shadow:var(--shadow-300);border-radius:8px"></div><code>--shadow-300</code></div></div></section>
+  </div>`;
+  wireDemo(body); initTabs(body); wireTableToggle(body);
+  $('#demo-danger').addEventListener('click', () => confirmDanger('センサーを削除しますか', '削除したセンサーの計測履歴は 30 日後に完全に消去されます（デモでは何も削除しません）。', '削除する', () => toast('削除しました（デモ）。', 'warn')));
+  $('#demo-dlg').addEventListener('click', () => confirmDanger('確認ダイアログの例', 'フォーカスは「キャンセル」に置かれ、閉じると元のボタンに戻ります。', '実行する', () => toast('実行しました（デモ）。')));
+  $('#demo-toast').addEventListener('click', () => toast('表示設定を保存しました。'));
+  $('#demo-form').addEventListener('submit', e => {
+    e.preventDefault(); const n = $('#df-name').value.trim(), iv = $('#df-int').value.trim();
+    setErr('df-name', n ? null : 'センサー名を入力してください（例: 研究棟B 3F-12）。');
+    const ok2 = /^\d+$/.test(iv) && +iv >= 10 && +iv <= 3600; setErr('df-int', ok2 ? null : `「${iv}」は範囲外です。10〜3600 の整数で入力してください。`);
+    if(!n) $('#df-name').focus(); else if(!ok2) $('#df-int').focus(); else toast('入力に問題はありません。');
+  });
+  // 並べ替えデモ
+  const data = Object.keys(ORGS).map(k => [ORGS[k].short, SENSORS.filter(s=>s.org===k).length, SENSORS.filter(s=>s.org===k && s.status==='danger').length]);
+  let sk = null, sd = 'none';
+  const drawDemo = () => {
+    let d = data.slice(); if(sk != null && sd !== 'none') d.sort((a,b) => (a[sk] > b[sk] ? 1 : -1) * (sd === 'ascending' ? 1 : -1));
+    $('#demo-tbl tbody').innerHTML = d.map(r => `<tr><td data-label="組織">${r[0]}</td><td data-label="センサー数" class="r num">${fmt(r[1])}</td><td data-label="警戒" class="r num">${r[2]}</td></tr>`).join('');
+    $$('#demo-tbl th').forEach((th, i) => { const st = i === sk ? sd : 'none'; th.setAttribute('aria-sort', st); th.querySelector('.sort-ind').textContent = st === 'ascending' ? '▲' : st === 'descending' ? '▼' : '↕'; });
+  };
+  $$('#demo-tbl .sortbtn').forEach(b => b.addEventListener('click', () => { const k = +b.dataset.k; if(sk !== k){ sk = k; sd = 'ascending'; } else sd = sd === 'ascending' ? 'descending' : sd === 'descending' ? 'none' : 'ascending'; drawDemo(); }));
+  drawDemo();
+  // チャートデモ（単一系列の棒 = 系列 1）
+  const ch = $('#demo-chart'); const W2 = Math.max(260, ch.clientWidth || 500), H2 = 150, max = Math.max(...data.map(d=>d[2])) + 10;
+  ch.innerHTML = `<svg viewBox="0 0 ${W2} ${H2}" width="${W2}" height="${H2}" role="img" aria-label="組織別の警戒台数。要約と表を参照">${data.map((d,i) => { const bw = (W2-60)/3 - 24; const x = 50 + i*((W2-60)/3) + 12; const h = d[2]/max*(H2-40); return `<rect x="${x}" y="${H2-24-h}" width="${bw}" height="${h}" rx="4" fill="var(--series-1)"><title>${d[0]}: ${d[2]} 台</title></rect><text x="${x+bw/2}" y="${H2-8}" text-anchor="middle">${d[0]}</text><text x="${x+bw/2}" y="${H2-30-h}" text-anchor="middle" style="fill:var(--color-text);font-weight:600">${d[2]}</text>`; }).join('')}<line class="axis" x1="40" x2="${W2-10}" y1="${H2-24}" y2="${H2-24}"/></svg>`;
+  $('#demo-chart-t').innerHTML = `<table class="mini-table"><caption>組織別の警戒台数</caption><thead><tr><th scope="col">組織</th><th scope="col" class="r">警戒（台）</th></tr></thead><tbody>${data.map(d=>`<tr><td>${d[0]}</td><td class="r num">${d[2]}</td></tr>`).join('')}</tbody></table>`;
+  const skel = () => { $('#demo-sk').innerHTML = `<div aria-hidden="true"><span class="sk" style="height:16px;width:40%"></span><span class="sk" style="height:12px;width:90%;margin-top:8px"></span><span class="sk" style="height:12px;width:75%;margin-top:6px"></span></div><span class="vh" role="status">読み込み中…</span>`; setTimeout(() => { $('#demo-sk').innerHTML = `<p><strong>読み込みが完了しました。</strong> スケルトンは最終的な配置と同じ形にして、表示時のずれを防ぎます。</p>`; }, 1200); };
+  $('#demo-sk-btn').addEventListener('click', skel); skel();
+}
+function wireDemo(scope){ $$('[data-demo]', scope).forEach(b => b.addEventListener('click', () => toast(b.dataset.demo, 'info'))); }
+
+/* ===================== エクスポート ===================== */
+function download(name, text){
+  const blob = new Blob(['﻿' + text], {type:'text/csv;charset=utf-8'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function exportCSV(name, rows){
+  const csv = 'ID,名称,組織,種別,PM2.5,CO2,状態,校正期限\n' + rows.map(s => [s.id, s.name, ORGS[s.org].short, s.type, s.pm25 ?? '', s.co2 ?? '', STATUS[s.status].label, s.due].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  download(name, csv); addAudit('CSV エクスポート', 'データ', `センサー ${rows.length} 件`);
+  toast(`${rows.length} 件を CSV で出力しました（監査ログに記録）。`);
+}
+$('#btn-export-sensors').addEventListener('click', () => exportCSV('sensors.csv', filteredSensors()));
+$('#btn-print').addEventListener('click', () => { addAudit('報告書を出力', 'データ', 'ホーム（PDF）'); window.print(); });
+$('#btn-reload-dash').addEventListener('click', () => renderDashboard(true));
+
+/* ===================== ルーター ===================== */
+const ROUTES = { dashboard:'ホーム', workspace:'センサー運用', detail:'LCA 結果', settings:'組織の管理', components:'共通部品とトークン' };
+function parseHash(){
+  const h = (location.hash || '#dashboard').slice(1); const [path, qs] = h.split('?');
+  const params = {}; (qs || '').split('&').filter(Boolean).forEach(p => { const [k,v] = p.split('='); params[decodeURIComponent(k)] = decodeURIComponent(v || ''); });
+  return { path: path || 'dashboard', params };
+}
+let currentRoute = null;
+function render(){
+  const { path } = parseHash();
+  const r = ROUTES[path] ? path : 'notfound';
+  $$('.view').forEach(v => v.hidden = v.id !== 'view-' + r);
+  $$('[data-route]').forEach(a => { if(a.dataset.route === r) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  document.title = (ROUTES[r] || 'ページが見つかりません') + ' | EnviroOps（仮称）';
+  if(r === 'dashboard') renderDashboard(currentRoute !== 'dashboard');
+  if(r === 'workspace') renderWorkspace();
+  if(r === 'detail') renderDetailView();
+  if(r === 'settings') renderSettings();
+  if(r === 'components') renderComponents();
+  if(r === 'notfound') $('#nf-hash').textContent = location.hash;
+  applyScope();
+  const changed = currentRoute !== r; currentRoute = r;
+  return changed;
+}
+window.addEventListener('hashchange', () => {
+  const changed = render();
+  if(changed){ const h = $('#view-' + currentRoute + ' h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); } window.scrollTo(0,0); }
+});
+let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if(currentRoute === 'dashboard') renderDashboard(false); else if(currentRoute === 'workspace'){ drawDetail(); } else if(currentRoute === 'detail'){ const el = $('#lca-bar'); if(el) stackedBar(el, { rows:SCEN, cats:STAGES, unit:'t-CO₂e', label:'シナリオ別・段階別の CO₂ 排出量。要約と表を参照' }); } }, 250); });
+
+/* ===================== コマンドパレット ===================== */
+const CMDS = () => [
+  ...Object.keys(ROUTES).map(k => ({ g:'移動', t: ROUTES[k] + ' を開く', run: () => location.hash = '#' + k })),
+  { g:'移動', t:'監査ログを開く', run: () => { location.hash = '#settings'; setTimeout(() => { const t = $('#st-t4'); if(t) t.click(); }, 50); } },
+  { g:'移動', t:'権限マトリクスを開く', run: () => { location.hash = '#settings'; setTimeout(() => { const t = $('#st-t2'); if(t) t.click(); }, 50); } },
+  ...Object.keys(ORGS).map(k => ({ g:'スコープ', t:`組織を「${ORGS[k].name}」に切替`, run: () => { S.org = k; S.proj = ORGS[k].projects[0].id; S.active = null; S.cols = 1; applyScope(`スコープを「${scopeText()}」に切り替えました`); render(); } })),
+  ...ROLES.map(r => ({ g:'ロール（デモ）', t:`ロールを「${r.name}」に切替`, run: () => { S.role = r.id; applyScope(`ロールを「${r.name}」に切り替えました（デモ）`); render(); } })),
+  { g:'表示', t:'テーマ: ライト', run: () => { S.theme = 'light'; applyTheme(); } },
+  { g:'表示', t:'テーマ: ダーク', run: () => { S.theme = 'dark'; applyTheme(); } },
+  { g:'表示', t:'テーマ: OS に合わせる', run: () => { S.theme = 'system'; applyTheme(); } },
+  { g:'表示', t:'表の密度: 詰める', run: () => { S.density = 'compact'; applyDensity(); } },
+  { g:'表示', t:'表の密度: 標準', run: () => { S.density = 'std'; applyDensity(); } },
+  { g:'表示', t:'表の密度: 広げる', run: () => { S.density = 'comfy'; applyDensity(); } },
+  { g:'ヘルプ', t:'キーボードショートカット一覧', run: () => openDialog($('#dlg-help')) }
+];
+let palItems = [], palIdx = 0;
+function drawPal(){
+  const q = $('#pal-input').value.trim().toLowerCase();
+  palItems = CMDS().filter(c => !q || (c.t + c.g).toLowerCase().includes(q));
+  palIdx = Math.min(palIdx, Math.max(0, palItems.length-1));
+  $('#pal-list').innerHTML = palItems.length ? palItems.map((c,i) => `<li role="option" id="pal-${i}" aria-selected="${i===palIdx}" data-i="${i}"><span>${esc(c.t)}</span><span class="grp">${esc(c.g)}</span></li>`).join('') : `<li role="option" aria-disabled="true" aria-selected="false"><span>一致するコマンドはありません</span></li>`;
+  $('#pal-input').setAttribute('aria-activedescendant', palItems.length ? 'pal-' + palIdx : '');
+  const sel = $('#pal-' + palIdx); if(sel) sel.scrollIntoView({block:'nearest'});
+}
+function openPalette(){ $('#pal-input').value = ''; palIdx = 0; drawPal(); openDialog($('#dlg-palette'), '#pal-input'); }
+function runPal(i){ const c = palItems[i]; if(!c) return; lastOpener = null; $('#dlg-palette').close(); c.run(); }
+$('#pal-input').addEventListener('input', () => { palIdx = 0; drawPal(); });
+$('#pal-input').addEventListener('keydown', e => {
+  if(e.key === 'ArrowDown'){ e.preventDefault(); palIdx = (palIdx + 1) % Math.max(1, palItems.length); drawPal(); }
+  else if(e.key === 'ArrowUp'){ e.preventDefault(); palIdx = (palIdx - 1 + palItems.length) % Math.max(1, palItems.length); drawPal(); }
+  else if(e.key === 'Enter'){ e.preventDefault(); runPal(palIdx); }
+});
+$('#pal-list').addEventListener('click', e => { const li = e.target.closest('li[data-i]'); if(li) runPal(+li.dataset.i); });
+$('#btn-palette').addEventListener('click', openPalette);
+$('#btn-help').addEventListener('click', () => openDialog($('#dlg-help')));
+$('#btn-theme').addEventListener('click', () => { S.theme = ({system:'light', light:'dark', dark:'system'})[S.theme]; applyTheme(); toast('テーマ: ' + ({system:'OS の設定に合わせる', light:'ライト', dark:'ダーク'})[S.theme], 'info'); });
+$('#btn-scope-mobile').addEventListener('click', () => openDialog($('#dlg-scope')));
+$('#btn-more').addEventListener('click', () => openDialog($('#dlg-more')));
+$('#more-palette').addEventListener('click', () => { $('#dlg-more').close(); openPalette(); });
+$('#more-help').addEventListener('click', () => { $('#dlg-more').close(); openDialog($('#dlg-help')); });
+$('#btn-rail').addEventListener('click', () => { S.rail = S.rail === 'open' ? 'closed' : 'open'; applyRail(); });
+
+/* ===================== グローバルショートカット ===================== */
+let gPending = false, gTimer;
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  const typing = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); if($('#dlg-palette').open) $('#dlg-palette').close(); else openPalette(); return; }
+  if(e.key === 'F6'){
+    e.preventDefault();
+    const regions = [$('#scopebar'), isMobile() ? null : $('#rail'), ...$$('#view-' + currentRoute + ' .col:not([style*="none"])').filter(c => c.offsetParent !== null), $('#main')].filter(Boolean);
+    const uniq = [...new Set(regions)];
+    let i = uniq.findIndex(r => r.contains(document.activeElement));
+    i = e.shiftKey ? (i <= 0 ? uniq.length-1 : i-1) : (i + 1) % uniq.length;
+    uniq[i].setAttribute('tabindex','-1'); uniq[i].focus(); return;
+  }
+  if(typing || e.ctrlKey || e.metaKey || e.altKey || document.querySelector('dialog[open]')) return;
+  if(!S.shortcuts) return;
+  if(gPending){
+    const map = { h:'dashboard', w:'workspace', d:'detail', s:'settings', c:'components' };
+    gPending = false; clearTimeout(gTimer);
+    if(map[e.key]){ e.preventDefault(); location.hash = '#' + map[e.key]; }
+    return;
+  }
+  if(e.key === 'g'){ gPending = true; gTimer = setTimeout(() => gPending = false, 1200); return; }
+  if(e.key === '/'){ e.preventDefault(); openPalette(); return; }
+  if(e.key === '?'){ e.preventDefault(); openDialog($('#dlg-help')); return; }
+});
+
+/* ===================== 起動 ===================== */
+applyTheme(); applyDensity(); applyRail(); applyScope();
+if(!location.hash) history.replaceState(null, '', '#dashboard');
+render();
+})();
+</script>
+</body>
+</html>

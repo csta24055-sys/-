@@ -205,6 +205,7 @@ table.dt{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs
 .stages li{position:relative}
 .stages li+li::before{content:"";position:absolute;left:21px;top:-6px;height:8px;border-left:2px solid var(--border-strong)}
 .stage-btn{all:unset;box-sizing:border-box;display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 6px;width:100%;padding:6px 8px;border-radius:var(--r-md);cursor:pointer;min-height:44px;border:1px solid transparent;margin:3px 0}
+.stage-btn.st-unset{color:var(--st-unset)}.stage-btn.st-ready{color:var(--st-ready)}.stage-btn.st-ok{color:var(--st-ok)}.stage-btn.st-fail{color:var(--st-fail)}.stage-btn.st-stale{color:var(--st-stale)}
 .stage-btn:hover{background:var(--surface-2)}
 .stage-btn:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
 .stage-btn[aria-current=step]{background:var(--accent-soft);border-color:var(--accent)}
@@ -847,7 +848,7 @@ const HISTORY = [
 const JOBS = [
   {id: 'J-0415', kind: 'ソルバー実行', eng: 'MATLAB R2025a', ver: 'v5', st: 'fail', dur: '12.8 s', who: '院生 A', at: '2026-11-14 17:24', msg: '収束せず（残差 3.2e-4 > 許容 1e-6、50 回）', stage: 'solve'},
   {id: 'J-0414', kind: 'Math IR 変換', eng: 'SymPy 1.13.3', ver: 'v5', st: 'ok', dur: '2.4 s', who: '院生 A', at: '2026-11-14 17:22', msg: '3エンジン照合: 差 0（整数クラス一致）', stage: 'mathir'},
-  {id: 'J-0413', kind: '検証', eng: 'Python 3.12.7', ver: 'v5', st: 'ok', dur: '0.9 s', who: '学部生 C', at: '2026-11-14 16:58', msg: '異常 58 行・注意 131 行・欠測 14 行', stage: 'validate'},
+  {id: 'J-0413', kind: '検証', eng: 'Python 3.12.7', ver: 'v5', st: 'ok', dur: '0.9 s', who: '学部生 C', at: '2026-11-14 16:58', msg: '異常 58 行・注意 131 行・欠測 12 行', stage: 'validate'},
   {id: 'J-0412', kind: 'LCA 演算', eng: 'SageMath 10.4', ver: 'v5', st: 'ok', dur: '4.1 s', who: '院生 A', at: '2026-11-14 15:10', msg: '合計 899.9 t-CO2e', stage: 'lca'},
   {id: 'J-0411', kind: 'データ取り込み', eng: 'Python 3.12.7', ver: 'v5', st: 'ok', dur: '1.2 s', who: '学部生 C', at: '2026-11-14 14:31', msg: '5,000 行・8 列', stage: 'ingest'},
   {id: 'J-0409', kind: 'LCA 演算', eng: 'SageMath 10.4', ver: 'v4', st: 'ok', dur: '4.0 s', who: '院生 A', at: '2026-11-10 10:12', msg: '合計 923.9 t-CO2e', stage: 'lca'},
@@ -880,6 +881,8 @@ function applyRole(role) {
   store.set('role', role);
   renderStages(); renderStage();
 }
+
+$('#roleSel').addEventListener('change', e => { applyRole(e.target.value); toast('info', `表示ロールを「${e.target.selectedOptions[0].textContent}」に切り替えました`); });
 
 /* ---------- 表（並べ替え） ---------- */
 function sortableTable(tbl, cols, data, opt = {}) {
@@ -1330,7 +1333,7 @@ function renderKpis() {
 }
 function renderDashboard() {
   renderKpis();
-  $('#approveList').innerHTML = [['LCA 条件セット v5', '院生 A', '係数表 v2.1 への更新'], ['測定データ 10月分', '学部生 C', '欠測 14 行を除外'], ['レポート（論文用）', '院生 B', '図 3 点・代替表付き']].map((a, i) => `<li><b>${a[0]}</b>（${a[1]}）<br><span class="small muted">${a[2]}</span><div class="row" style="margin-top:4px"><button class="btn btn-sm btn-primary" type="button" data-approve="${i}">承認</button><button class="btn btn-sm" type="button" data-approve="${i}" data-back>差し戻し…</button></div></li>`).join('');
+  $('#approveList').innerHTML = [['LCA 条件セット v5', '院生 A', '係数表 v2.1 への更新'], ['測定データ 10月分', '学部生 C', '欠測 12 行を除外'], ['レポート（論文用）', '院生 B', '図 3 点・代替表付き']].map((a, i) => `<li><b>${a[0]}</b>（${a[1]}）<br><span class="small muted">${a[2]}</span><div class="row" style="margin-top:4px"><button class="btn btn-sm btn-primary" type="button" data-approve="${i}">承認</button><button class="btn btn-sm" type="button" data-approve="${i}" data-back>差し戻し…</button></div></li>`).join('');
   sortableTable($('#jobsTable'), [
     {k: 'id', l: 'ジョブ', h: r => `<a href="#detail" class="mono">${r.id}</a>`}, {k: 'kind', l: '種別'}, {k: 'eng', l: 'エンジン・版'}, {k: 'ver', l: '条件の版'},
     {k: 'st', l: '状態', h: r => stHtml(r.st)}, {k: 'dur', l: '所要', num: true}, {k: 'who', l: '実行者'}, {k: 'at', l: '日時'}
@@ -1524,7 +1527,7 @@ function drawSwatches() {
   const cs = getComputedStyle(document.documentElement);
   $('#swatches').innerHTML = TOKENS.map(t => `<div class="sw"><i style="background:var(${t[0]})"></i><div><code>${t[0]}</code><code>${cs.getPropertyValue(t[0]).trim()}</code><span class="small muted">${t[1]}</span></div></div>`).join('');
 }
-$(document.body).addEventListener('click', e => {
+document.body.addEventListener('click', e => {
   const t = e.target.closest('[data-toast]'); if (t) toast(t.dataset.toast, t.dataset.toast === 'ok' ? '操作を受け付けました（試作）' : '試作のため、この操作は表示のみです');
   const x = e.target.closest('[data-export]'); if (x) doExport(x.dataset.export);
 });
