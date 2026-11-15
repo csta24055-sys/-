@@ -1,5 +1,5 @@
 # Claude Code 最優先引継ぎ（別チャット新規URL候補1,000件の全量移管＋S1不足解消＋本研究復帰）
-作成基準日：2026-11-16（日本時間）／適用対象：GitHub \`csta24055-sys/-\`、ブランチ \`claude/new-session-qm9g7r\`、作業ディレクトリ \`ai-document-market-research/\`
+作成基準日：2026-11-16（日本時間）／適用対象：GitHub `csta24055-sys/-`、ブランチ `claude/new-session-qm9g7r`、作業ディレクトリ `ai-document-market-research/`
 
 > **この文書は、下段に原本全文を収録した「全項目強制調査・研究継続指示書」を上書きするものではない。** 新たに集めた「チャット側1,000件」を原本の研究作業へ結合するための最優先実行追加指示である。原本にある32軸・325テーマ・896検索候補・80競合・全計算・S0〜S9ゲート・アプリ実装禁止をすべて維持する。質問待ちをせずに、実際に操作・台帳更新・検算・コミットすること。権限不足等はBLOCKEDと記録する。
 
@@ -14,31 +14,31 @@
 作業ディレクトリ基準で、最初の500件の候補行と、追加500件の候補行を以下からCSVパーサで全行読み込み、列もすべて保持する。固定1000件の番号を新規付番する際も元IDを消さず、元ファイルと行番号に遡れるようにする。
 
 **チャット初回500（正規化と既存基礎差し引き前のレコード合計は509と2026-11-14の最終監査に記録；初期の別監査には502という異なる集計があるため必ず実ファイルで再計算）**
-- \`external_handoff/BROAD_POOL_20261113_PRIMARY_SOURCES_BATCH01.csv\`（15行）
-- \`external_handoff/BROAD_POOL_20261113_USER_EVIDENCE_BATCH02.csv\`（6行）
-- \`external_handoff/BROAD_POOL_20261114_VERIFIED_DISCOVERY_BATCH03.csv\`（30行）
-- \`external_handoff/BROAD_POOL_20261114_POLICY_SURVEYS_METHODS_BATCH04.csv\`（19行）
-- \`external_handoff/CHAT500_WEB_ORIGINAL_SOURCES_20261114.csv\`（22行）
-- \`external_handoff/CHAT500_PRIOR_SEARCH_LOG_INDEXED_BATCH05_20261114.csv\`（417行）
+- `external_handoff/BROAD_POOL_20261113_PRIMARY_SOURCES_BATCH01.csv`（15行）
+- `external_handoff/BROAD_POOL_20261113_USER_EVIDENCE_BATCH02.csv`（6行）
+- `external_handoff/BROAD_POOL_20261114_VERIFIED_DISCOVERY_BATCH03.csv`（30行）
+- `external_handoff/BROAD_POOL_20261114_POLICY_SURVEYS_METHODS_BATCH04.csv`（19行）
+- `external_handoff/CHAT500_WEB_ORIGINAL_SOURCES_20261114.csv`（22行）
+- `external_handoff/CHAT500_PRIOR_SEARCH_LOG_INDEXED_BATCH05_20261114.csv`（417行）
 
 **チャット追加500（計500行）**
-- \`external_handoff/CHAT_EXTRA500_WEB_DISCOVERY_20261114.csv\`（37行）
-- \`external_handoff/CHAT_EXTRA500_WEB_DISCOVERY_BATCH02_20261114.csv\`（21行）
-- \`external_handoff/CHAT_EXTRA500_PRIOR_LOG_SCREENED_BATCH03_20261114.csv\`（442行）
+- `external_handoff/CHAT_EXTRA500_WEB_DISCOVERY_20261114.csv`（37行）
+- `external_handoff/CHAT_EXTRA500_WEB_DISCOVERY_BATCH02_20261114.csv`（21行）
+- `external_handoff/CHAT_EXTRA500_PRIOR_LOG_SCREENED_BATCH03_20261114.csv`（442行）
 
 **補助監査原本**
-- \`research/CHAT_ONLY_EXTRA500_AND_TOTAL1000_20261114.md\`（1,000件の直近会計・問題点）
-- \`research/CHAT500_AUTOMATION500_SPLIT_PROGRESS_20261114.md\`（旧分担会計；後続の記録と矛盾があれば新記録を一次CSVで再監査）
-- \`external_handoff/CHAT_EXTRA500_PRIOR_LOG_REJECTED_20261114.csv\`（除外97行、**候補1000には含めない**）
-- \`external_handoff/CHAT500_PRIOR_SEARCH_LOG_DEFERRED_20261114.csv\`（後回し候補、1000には含めない）
-- \`external_handoff/CHAT500_ORIGINAL_SPOTCHECK_20261114.csv\`（14URL抜取監査、結果を参考・再検証する）
-- \`scripts/audit_chat_only_1000.py\`（URL正規化・台帳件数の再現監査。**実際に実行し**結果を記録）
-- \`scripts/audit_split_500.py\`（旧予定タスク分担の参考；直近のチャット1000監査と同義でない）
-- \`registry/source_evidence.csv\`（基礎464）と \`external_handoff/NEW_ORIGINAL_EVIDENCE_20261113_ADS_POLICY_RESEARCH.csv\` / \`external_handoff/NEW_ORIGINAL_EVIDENCE_20261113_OCR_UI_RISK.csv\`（合わせて基礎補助15）
+- `research/CHAT_ONLY_EXTRA500_AND_TOTAL1000_20261114.md`（1,000件の直近会計・問題点）
+- `research/CHAT500_AUTOMATION500_SPLIT_PROGRESS_20261114.md`（旧分担会計；後続の記録と矛盾があれば新記録を一次CSVで再監査）
+- `external_handoff/CHAT_EXTRA500_PRIOR_LOG_REJECTED_20261114.csv`（除外97行、**候補1000には含めない**）
+- `external_handoff/CHAT500_PRIOR_SEARCH_LOG_DEFERRED_20261114.csv`（後回し候補、1000には含めない）
+- `external_handoff/CHAT500_ORIGINAL_SPOTCHECK_20261114.csv`（14URL抜取監査、結果を参考・再検証する）
+- `scripts/audit_chat_only_1000.py`（URL正規化・台帳件数の再現監査。**実際に実行し**結果を記録）
+- `scripts/audit_split_500.py`（旧予定タスク分担の参考；直近のチャット1000監査と同義でない）
+- `registry/source_evidence.csv`（基礎464）と `external_handoff/NEW_ORIGINAL_EVIDENCE_20261113_ADS_POLICY_RESEARCH.csv` / `external_handoff/NEW_ORIGINAL_EVIDENCE_20261113_OCR_UI_RISK.csv`（合わせて基礎補助15）
 
 **予定タスクの38件は参考・重複除去専用。チャット側1000に混入してはならない：**
-- \`external_handoff/BROAD_POOL_20261114_AUTOMATION_BATCH05.csv\` 内 BPOOL071〜076 の6件。
-- \`external_handoff/AUTOMATION500_BATCH01_20261114.csv\` 〜 \`AUTOMATION500_BATCH09_20261114.csv\` 内 AUTO500_0001〜0032 の32件。
+- `external_handoff/BROAD_POOL_20261114_AUTOMATION_BATCH05.csv` 内 BPOOL071〜076 の6件。
+- `external_handoff/AUTOMATION500_BATCH01_20261114.csv` 〜 `AUTOMATION500_BATCH09_20261114.csv` 内 AUTO500_0001〜0032 の32件。
 - 38件すべてとチャット側1000・基礎479のURL正規化キー、DOI、同一調査起源を再照合。旧スクリプトが6件しか比較していない可能性に注意。
 
 ## C. 既知の品質問題：1,000件をS1適合と宣言するな
@@ -51,8 +51,8 @@
 
 ## D. **最初に実行する再監査／S1不足の確定**
 1. 実リポジトリ・作業ブランチ・git status・作業可能な権限を確認。既存の全台帳、既存5暫定成果物、ZIPの原本00〜12・original_20261109・参考画像8枚を再確認。元ZIPを持たない場合「原ZIP未確認」と記録。mainやアプリ本体を変更しない。
-2. \`python3 scripts/audit_chat_only_1000.py\` を実際に動かし、全ソースCSVを読み込んだ件数と重複を記録。エラー時は修正・再実行し、元台帳は破壊しない。共通研究CSVへ移行する場合は由来列 \`origin_file,origin_row,original_id,read_depth,normalization_rule,origin_group,claimed_topic,verified_topic,s1_usable,validation_reason\` を持たせる。
-3. \`research/GATE_AUDIT_DETAIL.md\` / \`registry/topic_execution_status.csv\` / \`registry/query_execution_status.csv\` / \`registry/competitor_execution_status.csv\` を再集計。**2026-11-12の過去監査ではS1完了16/325テーマ、実検索48/896ID、競合4/80、S1未達。新1,000候補が未マッピングならこの数字のままかもしれない。再実行せず過去数を最新と宣言しない。**
+2. `python3 scripts/audit_chat_only_1000.py` を実際に動かし、全ソースCSVを読み込んだ件数と重複を記録。エラー時は修正・再実行し、元台帳は破壊しない。共通研究CSVへ移行する場合は由来列 `origin_file,origin_row,original_id,read_depth,normalization_rule,origin_group,claimed_topic,verified_topic,s1_usable,validation_reason` を持たせる。
+3. `research/GATE_AUDIT_DETAIL.md` / `registry/topic_execution_status.csv` / `registry/query_execution_status.csv` / `registry/competitor_execution_status.csv` を再集計。**2026-11-12の過去監査ではS1完了16/325テーマ、実検索48/896ID、競合4/80、S1未達。新1,000候補が未マッピングならこの数字のままかもしれない。再実行せず過去数を最新と宣言しない。**
 4. 各テーマごとに原資料・独立出典・反証・観測値・必要な全計算・資料依存の未達を具体的に抽出し、特に未実行の896検索IDは検索語を原則そのまま実際に検索する。**過去ログのURLを再索引しただけでは検索IDをEXECUTEDへ変更しない**。検索上限・拒否はATTEMPTED_BLOCKEDと記録し、成功と混ぜない。
 5. 80競合の公式ページ、料金、制約、PPTX編集可否、利用者反証、データ保持、仕事/学校への適合を網羅。できない項目はBLOCKED/UNKNOWNで保持し、試していない機能に性能点をつけない。
 6. 既存1000件と基礎479件を再利用して満たせるS1条件は満たす。足りない箇所だけ**新規の対象限定検索・取得**を実施。優先順はS1の未実行義務→テーマに不足する独立一次根拠→反証→競合公式資料・利用者根拠→計算に必要な数値データとするが、優先度は完了対象の削除を認めない。
@@ -63,16 +63,16 @@
 - 0〜10分目安：branch確認、原本とチャット1000候補の全量ロード、旧指示全文読了、古い集計差異の再計算。
 - 10〜20分目安：1000件の候補品質・関連性・起源重複の自動スクリーニング、325/896/80の未達表と不足タイプの一覧を生成。重要な原文は手作業で抜取確認。URLだけでは原文確認済みにしない。
 - 20〜55分目安：S1に必要な**実際の探索・ページ取得・原文確認・反証検索・台帳追記**を最優先。検索操作の制限を無視しない。ツール制限に当たった場合は許される範囲の独立した台帳監査・原文照合・計算インベントリを続ける。無意味な検索でノルマだけ埋めない。
-- 55〜60分目安：\`research_gates.py\` とテストを実行、成果物/台帳整合性を検証、研究フォルダの変更だけコミット、次にやるべきIDと再開コマンドを保存。
+- 55〜60分目安：`research_gates.py` とテストを実行、成果物/台帳整合性を検証、研究フォルダの変更だけコミット、次にやるべきIDと再開コマンドを保存。
 - 作業が継続できるなら本来の指令に沿って継続。60分の目安が理由で未実施工程をPASSにしない。
 
 ## F. 必須のコミット成果物・完了条件
 **研究途中でも保存可（正式最終報告ではない）：**
-- \`research/CHAT1000_FULL_IMPORT_AUDIT.md\`：9個の原本CSV、全行数、別名・重複、38 AUTOとの衝突、1000の原文確認・ジャンル適合・出典独立性の内訳、単純URLと実証根拠の差。
-- \`registry/chat1000_candidate_review.csv\`：全候補の元IDを消さず、実際の出典種別と読了状態・32軸/325テーマ/検索ID対応・原著独立キー・採否・次アクションを記録（全1000候補のうち未判断を空欄にせずHOLDとする）。CSVの機械分類は予備判定であり読了認証とは別。
-- \`research/S1_GAP_AFTER_CHAT1000.md\`：全325テーマ・全896検索・全80競合の未達を根拠IDとともに列挙し、新たに不足する一次/独立/反証/統計を定量化。
-- 必要に応じ \`registry/targeted_s1_additional_sources.csv\`：不足を補うために今回**新規に**実際に探したURL・原文アクセス・根拠・ブロッカー・該当テーマを保存。
-- \`research/NEXT_STEPS.md\`、\`research/GATE_AUDIT_DETAIL.md\`、\`research/RESEARCH_PROGRESS.md\` と既存の実行台帳を**破壊せず追記・再計算**し、検証結果とコミットSHAを記録。
+- `research/CHAT1000_FULL_IMPORT_AUDIT.md`：9個の原本CSV、全行数、別名・重複、38 AUTOとの衝突、1000の原文確認・ジャンル適合・出典独立性の内訳、単純URLと実証根拠の差。
+- `registry/chat1000_candidate_review.csv`：全候補の元IDを消さず、実際の出典種別と読了状態・32軸/325テーマ/検索ID対応・原著独立キー・採否・次アクションを記録（全1000候補のうち未判断を空欄にせずHOLDとする）。CSVの機械分類は予備判定であり読了認証とは別。
+- `research/S1_GAP_AFTER_CHAT1000.md`：全325テーマ・全896検索・全80競合の未達を根拠IDとともに列挙し、新たに不足する一次/独立/反証/統計を定量化。
+- 必要に応じ `registry/targeted_s1_additional_sources.csv`：不足を補うために今回**新規に**実際に探したURL・原文アクセス・根拠・ブロッカー・該当テーマを保存。
+- `research/NEXT_STEPS.md`、`research/GATE_AUDIT_DETAIL.md`、`research/RESEARCH_PROGRESS.md` と既存の実行台帳を**破壊せず追記・再計算**し、検証結果とコミットSHAを記録。
 - 研究用スクリプトとユニットテストは可。ただし他の研究・アプリコードを勝手に変更しない。
 
 **最終完成宣言は原本S0〜S9の全ゲートPASSのみ。** S1が未達なら必ずRESEARCH_STATUS=INCOMPLETE/BLOCKEDで保存。前の成果物5点はPROVISIONAL_QUARANTINEDのまま。1時間の終わりに成果を報告する場合は「経過報告」と題し、候補原文読了数／検索の新規実行数／採用確定数／独立起源数／S1未達項目数／新規調査件数／次の作業IDを分け、研究完成とは書かない。
@@ -83,7 +83,7 @@
 ---
 
 # 添付原本（全文・省略禁止）
-以下は既存の \`Claude_Code_全項目強制調査_研究継続指示書.md\` の全文。上段の追加方針と併読して適用する。
+以下は既存の `Claude_Code_全項目強制調査_研究継続指示書.md` の全文。上段の追加方針と併読して適用する。
 
 
 # 【Claude Code最優先・研究続行指令】全32研究軸・全325下位テーマ・旧896検索候補・全80競合候補の省略禁止／全演算・全検証／ゲート厳守
