@@ -35,9 +35,13 @@ def _hav(lat1, lon1, lat2, lon2) -> float:
 
 def city_datasets(city_code: str) -> list[dict]:
     cat, _ = get_json(CATALOG, max_age=7 * 86400, timeout=90)
-    rows = [d for d in cat.get("latest_datasets", []) if d.get("type_en") == "bldg" and d.get("city_code") == city_code]
-    if not rows:
-        rows = [d for d in cat.get("datasets", []) if d.get("type_en") == "bldg" and d.get("city_code") == city_code]
+    # designated cities (政令市) publish per ward: the GSI muniCd is then the ward code (e.g. 熊本市中央区 43101,
+    # city 43100), so a ward match comes first, then a whole-city dataset without a ward
+    def pick(key):
+        ward = [d for d in cat.get(key, []) if d.get("type_en") == "bldg" and str(d.get("ward_code") or "") == city_code]
+        return ward or [d for d in cat.get(key, []) if d.get("type_en") == "bldg" and d.get("city_code") == city_code
+                        and not d.get("ward_code")]
+    rows = pick("latest_datasets") or pick("datasets")
     def lod(d):
         try:
             return int(str(d.get("lod") or 9))
@@ -115,6 +119,17 @@ def _kv(attrs: dict, key: str):
     return None
 
 
+SENTINELS = {"不明", "Null", "NULL", "null", "", "-9999", "9999", "0001"}
+
+
+def _s(x):
+    """Text attribute, or None for PLATEAU's 'unknown' codes (不明, Null, -9999, 9999, 0001)."""
+    if x is None:
+        return None
+    t = str(x).strip()
+    return None if t in SENTINELS else t
+
+
 def _num(x):
     try:
         v = float(x)
@@ -150,8 +165,16 @@ def nearby(lat: float, lon: float, radius_m: float = 60.0, limit: int = 6) -> di
             if inside or d <= radius_m:
                 found.append((0 if inside else 1, d, t, i, bt))
     found.sort(key=lambda r: (r[0], r[1]))
-    cands = []
-    for inside, d, t, i, bt in found[:limit]:
+    cands, seen = [], set()
+    for inside, d, t, i, bt in found:
+        if len(cands) >= limit:
+            break
+        bid = (bt.get("uro:BuildingIDAttribute_uro:buildingID") or [None] * (i + 1))[i] if isinstance(bt.get("uro:BuildingIDAttribute_uro:buildingID"), list) else None
+        gid = (bt.get("gml_id") or [None] * (i + 1))[i] if isinstance(bt.get("gml_id"), list) else None
+        key = bid or gid or (t, i)
+        if key in seen:                      # one building can appear in several tiles / parts: keep the nearest
+            continue
+        seen.add(key)
         def a(k):
             v = bt.get(k)
             return v[i] if isinstance(v, list) and i < len(v) else None
@@ -166,16 +189,16 @@ def nearby(lat: float, lon: float, radius_m: float = 60.0, limit: int = 6) -> di
         cands.append({
             "plateau_building_id": a("uro:BuildingIDAttribute_uro:buildingID"), "gml_id": a("gml_id"),
             "distance_m": round(d, 1), "contains_point": inside == 0,
-            "address": a("bldg:address"), "usage": a("bldg:usage"), "class": a("bldg:class"),
+            "address": _s(a("bldg:address")), "usage": _s(a("bldg:usage")), "class": _s(a("bldg:class")),
             "measured_height_m": _num(a("bldg:measuredHeight")),
             "storeys_above": int(storeys) if storeys and storeys < 900 else None,      # 9999 等は不明の符号
             "storeys_below": int(below) if below is not None and below < 900 else None,
             "roof_edge_area_m2": roof, "floor_area_factor": factor,
             "estimated_gross_floor_area_m2": round(gfa, 1) if gfa else None,
             "total_floor_area_m2": _num(a("uro:BuildingDetailAttribute_uro:totalFloorArea")),
-            "structure_type": a("uro:BuildingDetailAttribute_uro:buildingStructureType"),
-            "year_of_construction": _num(a("bldg:yearOfConstruction")),
-            "fireproof": a("uro:BuildingDetailAttribute_uro:fireproofStructureType"),
+            "structure_type": _s(a("uro:BuildingDetailAttribute_uro:buildingStructureType")),
+            "year_of_construction": (lambda y: y if y and 1800 <= y <= 2200 else None)(_num(a("bldg:yearOfConstruction"))),  # "0001" etc. = unknown
+            "fireproof": _s(a("uro:BuildingDetailAttribute_uro:fireproofStructureType")),
             "structure_code": _kv(attrs, "建物構造コード"),
             "survey_year": a("uro:BuildingDetailAttribute_uro:surveyYear"),
             "creation_date": a("core:creationDate"), "tile": t.rsplit("/", 1)[-1],

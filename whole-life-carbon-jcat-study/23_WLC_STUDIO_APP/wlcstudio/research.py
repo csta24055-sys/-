@@ -59,7 +59,7 @@ def plateau_proposals(c: dict, structure_chosen: str | None) -> tuple[list[Value
     code = str(c.get("structure_type") or c.get("structure_code") or "")
     if code:
         guess = next((s for s, words in STRUCTURE_WORDS.items() if any(w in code for w in words)), None)
-        notes.append("PLATEAU の建物構造コード：%s%s" % (code, "" if guess is None else "（%s 造の手掛かり）" % guess))
+        notes.append("PLATEAU の構造の記録：%s%s" % (code, "" if guess is None else "（%s 造の手掛かり）" % guess))
         if guess and structure_chosen and guess != structure_chosen:
             notes.append("選んだ構造（%s）と PLATEAU の手掛かり（%s）が違う。図面で確かめる" % (structure_chosen, guess))
     else:
