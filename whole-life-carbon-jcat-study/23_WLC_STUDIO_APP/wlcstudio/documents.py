@@ -620,17 +620,32 @@ _FollowBudget = tabular.FollowBudget
 CUT_SHEET = "非表示のシート（%s）が大きすぎて途中から読んでいないので、そこへの参照は確かめられない。必要なら手で入れる"
 
 
+def _family(fid):
+    """The material a field holds, as the engine sees it (its material class): コンクリート（上部構造）and コンクリート
+    （基礎・杭）are one material in two fields (the only such pair: every other field has its own class)."""
+    if fid is None:
+        return None
+    return FL.FIELDS.get(fid, {}).get("material_class") or fid
+
+
+MAX_PENDING = 2                        # rows whose dimensions one block keeps (two rows already make a copy)
+MAX_DIM_ROWS = 8                       # rows whose single dimension a formula's frame keeps
+
+
 class _Cells:
     """What a quantity formula reaches, followed through the formulas of every sheet (helper cells, other columns,
     other sheets, hidden helpers, array formulas, defined names, tables). A quantity is a copy when it reaches the
     QUANTITY of another material row (a row that names a material in a unit its field takes, or a total / 再掲 / work /
     deduction / removal row on a sheet that lists materials): a cell in its quantity columns (数量, 所要数量, 体積, 重量 …)
-    or a cell added into its quantity (a calculation column, per-floor columns), reached in any way; or any other number
-    of that row ADDED up by the quantity (集計!1F = 明細!C2 where C2 is a typed per-floor quantity, SUMPRODUCT, table
-    references), unless its column names money or a factor. A number of another row that is only multiplied or looked up
-    (a unit mass, a density, a lookup table beside the bill) is a factor, not a copy. Cells of the quantity's own row are
-    parts of it. Every formula cell and every range is followed once per document (the results are kept), and every
-    step, block and name expansion counts against MAX_FOLLOW_STEPS."""
+    or a cell its quantity SUMS (a calculation column, per-floor or per-type columns, whatever their header), reached in
+    any way; or any other number of that row ADDED up by the quantity (集計!1F = 明細!C2 where C2 is a typed per-floor
+    quantity, SUMPRODUCT, table references, a lookup keyed on the bill's name column), unless its column names money or
+    a factor. A DIMENSION of another row (a cell that row's own quantity only multiplies: 面積×厚さ, 長さ×単重) is a copy
+    when it is summed (集計 = 明細!D2) or when two of that row's numbers are reached (集計 = 明細!C2*明細!D2 recomputes
+    it), not when the formula multiplies that one dimension by its own number (土間 = C3*$D$2, 14 回目). A number of
+    another row that is only looked up from a table beside the bill (a unit mass, a density) is a factor, not a copy.
+    Cells of the quantity's own row are parts of it. Every formula cell and every range is followed once per document
+    (the results are kept), and every step, block, row and name expansion counts against MAX_FOLLOW_STEPS."""
 
     def __init__(self, parsed: dict):
         self.cells = parsed.get("cells") or {}
@@ -642,8 +657,11 @@ class _Cells:
         self.targets, self.tcols, self.owned = {}, {}, {}
         self.ncols = {}                    # (sheet, row) -> the row's numbers outside money / factor columns
         self.xcols = {}                    # sheet -> its money / factor columns (単価, 単位質量, 比重 …)
+        self.dims = {}                     # (sheet, row) -> cells the row's own quantity only multiplies (dimensions)
+        self.keycols = {}                  # sheet -> its name / specification / division columns (see _keyed)
         self.cut_sheets = set(parsed.get("cut_sheets") or ())
-        self.memo, self.name_memo = {}, {}
+        self.memo, self.name_memo, self.walks = {}, {}, {}
+        self.fam_rows, self.same_memo = {}, {}
         self.last_hits = ()
         self.left = MAX_FOLLOW_STEPS
         self.cut = 0
@@ -657,20 +675,46 @@ class _Cells:
         return {"sheet": self.disp.get(sh, sh), "names": self.names, "tables": self.tables, "row": rn, "col": ci,
                 "spend": self._spend, "name_memo": self.name_memo}
 
+    def _walk(self, sh, rn, ci):
+        """formula_walk of one formula cell, kept per document (a row's parts, the copy walk and the check of a copy
+        on another sheet read the same cell; what names give is charged to the budget the first time)."""
+        key = (sh, rn, ci)
+        got = self.walks.get(key)
+        if got is None:
+            got = self.walks[key] = tabular.formula_walk(self.cells[sh][rn][ci], self._ctx(sh, rn, ci))
+        return got
+
+    def _keyed(self, sh, keys) -> bool:
+        """Is a looked-up block keyed on a column that tells the rows of a bill apart (its name, specification or
+        division column, on a sheet that lists materials: XLOOKUP("コンクリート", 明細!A:A, 明細!C:C), VLOOKUP over
+        明細!A:E, INDEX(明細!C:C, MATCH(…, 明細!A:A, 0)))? Then it returns a row's own number, as a reference to it
+        would (14 回目). A table beside the bill keyed on its own column (a unit-mass 早見表) is not."""
+        for kb, how in keys:
+            t = kb[0] or sh
+            kc = self.keycols.get(t)
+            if not kc or t not in self.targets:
+                continue
+            if (how == "col" and kb[1] in kc) or (how == "all" and any(kb[1] <= c <= kb[2] for c in kc)):
+                return True
+        return False
+
     def _children(self, node, fr):
-        """(child, added?) of a node. A frame is [node, children, why, rows reached, rows reached by adding, added?]."""
+        """(child, level) of a node: 2 the child's value is summed into the node's, 1 it is a factor of a product of
+        references, 0 not added. A frame is [node, children, why, rows reached, rows reached by adding, level,
+        dimensions reached {(sheet, row): (columns, level)}]."""
         if node[0] == "c":
             _k, sh, rn, ci = node
             self._spend()
             if sh in self.cut_sheets:
                 fr[2] = (CUT_SHEET % tabular.sheet_label(self.disp.get(sh, sh)), node)
                 return iter(())
-            why, blocks = tabular.formula_walk(self.cells[sh][rn][ci], self._ctx(sh, rn, ci))
+            why, blocks = self._walk(sh, rn, ci)
             if why:
                 fr[2] = (why, node)
                 return iter(())
             self._spend(len(blocks))
-            return iter([(("b", b[0] or sh, b[1], b[2], b[3], b[4]), b[5]) for b in blocks])
+            return iter([(("b", b[0] or sh, b[1], b[2], b[3], b[4]),
+                          1 if b[5] == 0 and b[6] and self._keyed(sh, b[6]) else b[5]) for b in blocks])
         _k, t, c1, c2, r1, r2 = node
         if t in self.cut_sheets:
             fr[2] = (CUT_SHEET % tabular.sheet_label(self.disp.get(t, t)), node)
@@ -684,7 +728,7 @@ class _Cells:
                 self._spend()
                 key = (t, trows[k])
                 if key not in fr[3]:
-                    cols = self.owned.get(key, tc)    # the quantity columns, and the cells added into them
+                    cols = self.owned.get(key, tc)    # the quantity columns, and the cells summed into them
                     j = bisect.bisect_left(cols, c1)
                     if j < len(cols) and cols[j] <= c2:
                         fr[3].append(key)
@@ -693,37 +737,63 @@ class _Cells:
                         j = bisect.bisect_left(lc, c1)
                         if j < len(lc) and lc[j] <= c2:
                             fr[4].append(key)
+                        elif key in self.dims and (key in fr[6] or len(fr[6]) < MAX_PENDING):
+                            dc = self.dims[key]       # a dimension of the row: see _merge
+                            j = bisect.bisect_left(dc, c1)
+                            got = []
+                            while j < len(dc) and dc[j] <= c2 and len(got) < 2:
+                                got.append(dc[j])
+                                j += 1
+                            if got:
+                                # a factor column's cell (単位質量, 単重) is never a copy by itself, even summed
+                                # ($F$2*1000/1000): only with another number of its row
+                                xc = self.xcols.get(t, ())
+                                lv = 2 if any(c_ not in xc for c_ in got) else 1
+                                old = fr[6].get(key)
+                                fr[6][key] = (old[0] | frozenset(got), max(lv, old[1])) if old else (frozenset(got), lv)
                 k += 1
-        return ((c, True) for c in self._formula_cells(t, c1, c2, lo, hi))
+        return ((c, 2) for c in self._formula_cells(t, c1, c2, lo, hi))
 
     def own_parts(self, sh: str, row: int):
-        """The cells of a material row that are added into its quantity (ROUND(F2), SUM(B2:D2): a calculation column,
-        per-floor columns): another row that reaches one of them copies part of this row's quantity. A factor of the
-        row (a density, a unit mass multiplied by a length) is not a part of it: a cell in a money / factor column is
-        never one (13 回目: a product of references now counts every factor as added)."""
+        """The cells of a material row that its quantity SUMS (ROUND(F2), SUM(B2:D2), C2+D2, SUM(C2:E2)*1.05: a
+        calculation column, per-floor or per-type columns, whatever their header): another row that reaches one of them
+        copies part of this row's quantity. The cells its quantity only multiplies by another reference (面積×厚さ,
+        長さ×本数×単重, a rate cell) or looks up from a column of the bill (INDEX($F$2:$F$9, MATCH(B2, …)): a unit mass
+        on each row) are its dimensions and factors, not parts of it (14 回目: round 13 made every factor of a product a
+        part, and then skipped money / factor columns, which also dropped summed per-type columns)."""
         tc = self.tcols.get(sh, ())
-        xc = self.xcols.get(sh, ())
         rowcells = self.cells.get(sh, {}).get(row) or {}
-        owned, todo, seen = set(tc), [c for c in tc if c in rowcells], set()
+        owned, dims = set(tc), set()
+        todo, seen = [(c, 2) for c in tc if c in rowcells], {}
         while todo:
-            c = todo.pop()
-            if c in seen:
+            c, lv = todo.pop()
+            if seen.get(c, -1) >= lv:
                 continue
-            seen.add(c)
+            seen[c] = lv
             try:
-                blocks = tabular.added_blocks(rowcells[c], self._ctx(sh, row, c))
+                why, blocks = self._walk(sh, row, c)
+                blocks = [b[:6] for b in blocks if b[5] or b[6]] if why is None else \
+                    tabular.added_blocks(rowcells[c], None, levels=True)     # its own references only
             except _FollowBudget:
                 break
-            for bsh, c1, c2, r1, r2 in blocks:
-                if (bsh is None or bsh == sh) and r1 == row and r2 == row and c2 - c1 < 256:
+            for bsh, c1, c2, r1, r2, blv in blocks:
+                if (bsh is not None and bsh != sh) or c2 - c1 >= 256:
+                    continue
+                if blv == 0:                     # a value looked up from a column of the bill (a unit mass by 規格)
+                    if (r1 is None or r1 <= row) and (r2 is None or row <= r2):
+                        dims.update(range(c1, c2 + 1))
+                    continue
+                if r1 == row and r2 == row:
+                    lv2 = min(lv, blv)
                     for cc in range(c1, c2 + 1):
-                        if cc in xc and cc not in tc:
-                            continue
-                        owned.add(cc)
+                        (owned if lv2 == 2 else dims).add(cc)
                         if cc in rowcells:
-                            todo.append(cc)
+                            todo.append((cc, lv2))
+        dims -= owned
         if owned != set(tc):
             self.owned[(sh, row)] = sorted(owned)
+        if dims:
+            self.dims[(sh, row)] = sorted(dims)
 
     def _formula_cells(self, t, c1, c2, lo, hi):
         frs = self.frows.get(t, ())
@@ -742,75 +812,118 @@ class _Cells:
             k += 1
 
     @staticmethod
-    def _merge(fr, res, added):
-        why, hits, adds = res
+    def _merge(fr, res, level):
+        """Merge a child's result into its parent's frame; `level` is how the child's value makes the parent's. The
+        dimensions reached keep the lowest level of the path (MAX_DIM_ROWS rows, two columns each are enough);
+        copy_of judges them (see _dim_copy)."""
+        why, hits, adds, dims = res
         if why and fr[2] is None:
             fr[2] = why
         for h in hits:
             if h not in fr[3] and len(fr[3]) < 2:
                 fr[3].append(h)
-        if added:                                        # numbers reached by adding stay "added" only through sums
-            for h in adds:
-                if h not in fr[4] and h not in fr[3] and len(fr[4]) < 2:
-                    fr[4].append(h)
+        if not level:
+            return
+        for h in adds:                                   # numbers reached by adding stay "added" only through sums
+            if h not in fr[4] and h not in fr[3] and len(fr[4]) < 2:
+                fr[4].append(h)
+        pend = fr[6]
+        for key, cols, lv in dims:
+            lv = min(level, lv)
+            old = pend.get(key)
+            if old is None:
+                if len(pend) < MAX_DIM_ROWS:
+                    pend[key] = (cols, lv)
+            elif len(old[0]) < 2 or lv > old[1]:
+                pend[key] = (frozenset(sorted(old[0] | cols)[:2]), max(lv, old[1]))
+
+    @staticmethod
+    def _dim_copy(dims, own) -> list:
+        """The rows whose dimensions make a formula a copy: a dimension summed all the way (集計 = 明細!D2), two numbers
+        of one row (明細!C2*明細!D2 recomputes it), or dimensions of two other rows. One dimension of one row that the
+        formula multiplies by its own number (土間 = C3*$D$2) is not a copy (14 回目)."""
+        other = [(k, c, lv) for k, c, lv in dims if k != own]
+        if len(other) > 1:
+            return [k for k, _c, _l in other]
+        return [k for k, c, lv in other if lv == 2 or len(c) > 1]
 
     def _result(self, root):
         """(why it cannot be checked: (text, node) or None; up to two (sheet, row) material rows whose quantity is
-        reached; up to two whose other numbers are reached by adding only)."""
+        reached; up to two whose other numbers are reached by adding; a dimension reached ((sheet, row), columns,
+        level) that is not a copy by itself)."""
         memo = self.memo
         if root in memo:
             return memo[root]
-        stack, on = [[root, None, None, [], [], True]], {root}
+        stack, on = [[root, None, None, [], [], 2, {}]], {root}
         while stack:
             fr = stack[-1]
             if fr[1] is None:
                 fr[1] = self._children(fr[0], fr)
             nxt = next(fr[1], None) if fr[2] is None and len(fr[3]) < 2 else None
             if nxt is None:
-                res = memo[fr[0]] = (fr[2], tuple(fr[3]), tuple(fr[4]))
+                res = memo[fr[0]] = (fr[2], tuple(fr[3]), tuple(fr[4]),
+                                     tuple((k, v[0], v[1]) for k, v in fr[6].items()))
                 on.discard(fr[0])
                 stack.pop()
                 if stack:
                     self._merge(stack[-1], res, fr[5])
                 continue
-            child, added = nxt
+            child, level = nxt
             got = memo.get(child)
             if got is not None:
                 self._spend()
-                self._merge(fr, got, added)
+                self._merge(fr, got, level)
             elif child in on:
                 fr[2] = ("循環する参照（数式が自分自身にたどり着く）は確かめられない。必要なら手で入れる", fr[0])
             else:
                 on.add(child)
-                stack.append([child, None, None, [], [], added])
+                stack.append([child, None, None, [], [], level, {}])
         return memo[root]
 
+    def _family_rows(self, t: str, fam, row_fid: dict) -> list:
+        """The rows of sheet t (sorted) that name a material of this family, or a total / work row of no material."""
+        key = (t, fam)
+        got = self.fam_rows.get(key)
+        if got is None:
+            rows = self.targets.get(t, ())
+            self._spend(len(rows) + 1)
+            got = self.fam_rows[key] = [r for r in rows if (t, r) in row_fid
+                                        and (row_fid[(t, r)] is None or _family(row_fid[(t, r)]) == fam)]
+        return got
+
     def reaches_same(self, sh: str, row: int, col: int, fid: str, row_fid: dict) -> bool:
-        """After a copy on another sheet: does the quantity reach a row of the same material there (or a total / work row
-        that names none)? The rows the walk kept, and every material row of another sheet inside the blocks the formula
-        names itself (a mask or a SUMIF over the whole bill reaches the row of its own material even when the walk
-        stopped at the first two rows). Unsure (the formula cannot be read again): yes."""
-        same = lambda k: k in row_fid and row_fid[k] in (None, fid)   # noqa: E731
-        if any(same(h) for h in self.last_hits):
+        """After a copy on another sheet: does the quantity reach a row of the same material there (コンクリート and
+        基礎のコンクリート are one: _family), or a total / work row that names none? The rows the walk kept, and every
+        material row of another sheet inside the blocks the formula names itself (a mask or a SUMIF over the whole bill
+        reaches the row of its own material even when the walk stopped at the first two rows), found by bisection in
+        each sheet's rows of that material; every block counts against the budget. Unsure (the formula cannot be read
+        again, or the budget runs out): yes."""
+        fam = _family(fid)
+        if any(h in row_fid and (row_fid[h] is None or _family(row_fid[h]) == fam) for h in self.last_hits):
             return True
-        f = (self.cells.get(sh, {}).get(row) or {}).get(col)
+        if col not in (self.cells.get(sh, {}).get(row) or {}):
+            return True
         try:
-            why, blocks = tabular.formula_walk(f, self._ctx(sh, row, col))
+            self._spend()
+            why, blocks = self._walk(sh, row, col)
+            if why:
+                return True
+            for b in blocks:
+                self._spend()
+                t = b[0] or sh
+                if t == sh:
+                    continue
+                mkey = (t, b[3], b[4], fam)
+                got = self.same_memo.get(mkey)
+                if got is None:
+                    rows = self._family_rows(t, fam, row_fid)
+                    k = bisect.bisect_left(rows, 0 if b[3] is None else b[3])
+                    hi = tabular.MAX_ROW_NUMBER if b[4] is None else b[4]
+                    got = self.same_memo[mkey] = k < len(rows) and rows[k] <= hi
+                if got:
+                    return True
         except _FollowBudget:
             return True
-        if why:
-            return True
-        for bsh, c1, c2, r1, r2, _added in blocks:
-            t = bsh or sh
-            if t == sh:
-                continue
-            rows = self.targets.get(t, ())
-            k = bisect.bisect_left(rows, 0 if r1 is None else r1)
-            hi = tabular.MAX_ROW_NUMBER if r2 is None else r2
-            while k < len(rows) and rows[k] <= hi:
-                if same((t, rows[k])):
-                    return True
-                k += 1
         return False
 
     def copy_of(self, sh: str, row: int, col: int, qf=None):
@@ -823,12 +936,13 @@ class _Cells:
             self.frows[sh] = sorted(self.cells[sh])
             self.fcols.pop((sh, row), None)
         try:
-            why, hits, adds = self._result(node)
+            why, hits, adds, dims = self._result(node)
         except _FollowBudget:
             self.cut += 1
             return ("budget", "数式のたどる先が多すぎて確かめられない（1 つの資料で %d 歩まで）。必要なら手で入れる"
                     % MAX_FOLLOW_STEPS)
         others = [h for h in list(hits) + list(adds) if h != (sh, row)]
+        others += [k for k in self._dim_copy(dims, (sh, row)) if k not in others]
         if others:
             self.last_hits = tuple(others)       # every material row reached (up to four): the caller compares fields
             return ("copy",) + others[0]
@@ -909,17 +1023,52 @@ R_DEMOLISH_MAYBE = "材料の後に撤去・解体・処分の語がある（取
 R_WORK = "作業の行（加工・運搬・打設など。材料の量を繰り返す）は足さない（二重計上を防ぐ）"
 R_NEG = "負の数量は読まない（差し引きにしない）"
 R_COPY_SHEET = "別のシート（%s）の材料の行（%d 行目）の数量を参照した値は足さない（そのシートも読んでいるので二重計上になる）"
-# … but a row of ANOTHER material worked out from it (鉄筋 = 明細のコンクリート × 0.12) is counted nowhere: maybe (13 回目)
+# … but a row of ANOTHER material worked out from it (鉄筋 = 明細のコンクリート × 0.12) may belong: maybe, when no row of
+# its own material is counted anywhere in the file (13 回目); when one is, it is surely not added (14 回目)
 R_COPY_SHEET_OTHER = "別のシート（%s）のほかの材料の行（%d 行目）の数量から計算した値は足さない（二重計上のおそれ）。" \
                      "別の材料を比率で出した行など、足すべき行なら手で入れる"
+R_COPY_SHEET_COUNTED = "別のシート（%s）のほかの材料の行（%d 行目）の数量から計算した値は足さない（その材料は %s の %d 行目で" \
+                       "数えている。二重計上を防ぐ）"
 SURELY_NOT = (R_TOTAL, R_AGAIN, R_DEDUCT, R_DEMOLISH, R_NEG, tabular.HEADING)
-_COPY_SHEET_HEAD = R_COPY_SHEET.split("%s")[0]
+# reasons with a place in them that are surely not part of the total (a copy of what another sheet counts, a pivot
+# table of a sheet that is read)
+_SURELY_NOT_RX = re.compile("|".join("(?:%s)" % re.escape(r).replace(re.escape("%s"), ".*").replace(re.escape("%d"), r"\d+")
+                                     for r in (R_COPY_SHEET, R_COPY_SHEET_COUNTED, tabular.R_PIVOT)), re.S)
 
 
 def _maybe(reason: str) -> bool:
     """Whether a row left out for this reason might belong in the total (then the candidate may be too low)."""
-    return reason not in SURELY_NOT and not (reason.startswith(_COPY_SHEET_HEAD) and "数量を参照した値は足さない" in reason)
+    return reason not in SURELY_NOT and not _SURELY_NOT_RX.fullmatch(reason)
+
+
 MAX_EVIDENCE = 200
+_TO_T = {"t": 1.0, "kg": 0.001}
+
+
+def _by_dimension(sums: dict) -> dict:
+    """{field: {"mass" or unit: [(quantity, trace, unit, name) …]}} of the rows added (t and kg are one dimension)."""
+    by_field = {}
+    for (fid, u), items in sums.items():
+        by_field.setdefault(fid, {}).setdefault("mass" if u in _TO_T else u, []).extend((q, t, u, nm) for q, t, nm in items)
+    return by_field
+
+
+def _chosen_dim(dims: dict):
+    """(the dimension whose rows are proposed, or None when as many rows have another; the counts)."""
+    counts = sorted(((len(v), k) for k, v in dims.items()), reverse=True)
+    if len(counts) > 1 and counts[0][0] == counts[1][0]:
+        return None, counts
+    return counts[0][1], counts
+
+
+def _counted_traces(sums: dict) -> set:
+    """The traces of the rows that end in a proposal (the rows of a dimension that is not proposed do not)."""
+    out = set()
+    for dims in _by_dimension(sums).values():
+        dim = _chosen_dim(dims)[0]
+        if dim is not None:
+            out.update(t for _q, t, _u, _n in dims[dim])
+    return out
 
 
 def read(name: str, data_b64: str, doc_id: str) -> dict:
@@ -935,15 +1084,19 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
 
     def leave(fid, r_trace, r_name, reason, qty=None, unit=None):
         """A row not added: listed as unused and, when it names a field's material, on that field's candidate (with
-        its quantity and unit when it has them, so that a possible shortfall can be judged on the card)."""
-        unused.append({"trace": r_trace, "name": r_name[:80], "reason": reason})
-        if fid:
-            x = {"trace": r_trace, "name": r_name[:80], "reason": reason, "maybe": _maybe(reason)}
-            if qty is not None and qty != "":
-                x["quantity"] = qty if isinstance(qty, (int, float)) else str(qty)[:40]
-            if unit:
-                x["unit"] = str(unit)[:20]
-            excluded.setdefault(fid, []).append(x)
+        its quantity and unit when it has them, so that a possible shortfall can be judged on the card). Returns the
+        entries made (a reason decided later is written into them)."""
+        u_ = {"trace": r_trace, "name": r_name[:80], "reason": reason}
+        unused.append(u_)
+        if not fid:
+            return (u_,)
+        x = {"trace": r_trace, "name": r_name[:80], "reason": reason, "maybe": _maybe(reason)}
+        if qty is not None and qty != "":
+            x["quantity"] = qty if isinstance(qty, (int, float)) else str(qty)[:40]
+        if unit:
+            x["unit"] = str(unit)[:20]
+        excluded.setdefault(fid, []).append(x)
+        return u_, x
 
     if kind in ("csv", "xlsx"):
         parsed = tabular.read_csv(data, doc_id) if kind == "csv" else tabular.read_xlsx(data, doc_id)
@@ -998,11 +1151,13 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 cells.targets[shf] = sorted(set(mats + marks))
                 cells.tcols[shf] = list(sh.get("qcols") or [sh.get("qcol") or 0])
                 cells.xcols[shf] = xcols
+                cells.keycols[shf] = tuple(sh.get("keycols") or ())
                 for rn in cells.targets[shf]:
-                    cells.ncols[(shf, rn)] = sorted(set(nums.get(rn) or ()) - xcols)
-                    cells.own_parts(shf, rn)
+                    cells.own_parts(shf, rn)        # its parts and dimensions; its other numbers outside them
+                    cells.ncols[(shf, rn)] = sorted(set(nums.get(rn) or ()) - xcols - set(cells.dims.get((shf, rn), ())))
         if stopped:
             warnings.append(stopped)
+        where, others = {}, []             # trace -> (sheet, row) of the rows added; rows that copy another material
         for shf, r, c in classed:
             why = None
             if c["total"]:
@@ -1017,6 +1172,8 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 why = R_WORK
             elif r["quantity"] < 0:
                 why = R_NEG
+            elif r.get("pivot"):
+                why = r["pivot"]           # a pivot table's cell: a summary of another table (14 回目)
             elif c["fid"] is None:
                 why = "どの材料の欄にも当てはまらない"
             elif c["u"] not in FL.FIELDS[c["fid"]]["units"]:
@@ -1024,6 +1181,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 why = "単位 %r は「%s」に使えない（%s）。必要なら換算して手で入れる" % (r["unit"], f_["label"], "・".join(f_["units"]))
             elif r.get("qf"):
                 got = cells.copy_of(shf, r["row"], sh_qcol(parsed, shf), r["qf"])
+                other = None
                 if got and got[0] == "copy":
                     _k, tsh, trow = got
                     if tsh == shf:
@@ -1033,14 +1191,39 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                         # it reaches a row of the same material (or a total of no material): a copy of what that sheet
                         # counts. Only rows of other materials: it may belong (鉄筋 = 明細のコンクリート × 0.12)
                         why = R_COPY_SHEET % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
-                    else:                  # only another material's row there: this material is counted nowhere else
+                    else:                  # only another material's row there: decided once every row is read
                         why = R_COPY_SHEET_OTHER % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
+                        other = (tsh, trow)
                 elif got:
                     why = got[1]
+                if other:
+                    others.append((leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit")), c["fid"],
+                                   other))
+                    continue
             if why:
                 leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit"))
                 continue
             sums.setdefault((c["fid"], c["u"]), []).append((r["quantity"], r["trace"], c["name"]))
+            where[r["trace"]] = (c["fid"], (shf, r["row"]))
+        if others:
+            # a row worked out from another material's row (鉄筋 = 明細のコンクリート × 0.12) may belong only when its own
+            # material (コンクリート and 基礎のコンクリート are one) is counted nowhere in the file; when it is, the row
+            # repeats it (14 回目)
+            kept, counted = _counted_traces(sums), {}
+            for t, (fid, at) in where.items():
+                if t in kept:
+                    counted.setdefault(_family(fid), at)
+            names_ = parsed.get("sheet_names", {})
+            for ents, fid, (tsh, trow) in others:
+                at = counted.get(_family(fid))
+                if at is None:
+                    continue
+                reason = R_COPY_SHEET_COUNTED % (tabular.sheet_label(names_.get(tsh, tsh)), trow,
+                                                 tabular.sheet_label(names_.get(at[0], at[0])), at[1])
+                for e in ents:
+                    e["reason"] = reason
+                    if "maybe" in e:
+                        e["maybe"] = _maybe(reason)
         if cells.cut:
             warnings.append("数式のたどる先が多すぎるので、%d 行は確かめられず足していない（1 つの資料で %d 歩まで）。"
                             "その行は「使わなかった行」にある" % (cells.cut, MAX_FOLLOW_STEPS))
@@ -1133,24 +1316,20 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
     else:
         raise ValueError("この形式は読めない（CSV・XLSX・IFC・PDF）")
     proposals, evidence = [], {}
-    to_t = {"t": 1.0, "kg": 0.001}
-    by_field = {}
-    for (fid, u), items in sums.items():
-        by_field.setdefault(fid, {}).setdefault("mass" if u in to_t else u, []).extend((q, t, u, nm) for q, t, nm in items)
-    for fid, dims in by_field.items():
+    to_t = _TO_T
+    for fid, dims in _by_dimension(sums).items():
         # one field holds one value: t and kg rows are added in t; rows of another dimension (m3 next to t) cannot be
         # added. The dimension with more rows is proposed and the other rows are listed; when as many rows have one
         # dimension as another, neither is more likely the field's quantity, and nothing is proposed
         label = FL.FIELDS[fid]["label"]
-        counts = sorted(((len(v), k) for k, v in dims.items()), reverse=True)
-        if len(counts) > 1 and counts[0][0] == counts[1][0]:
+        dim, counts = _chosen_dim(dims)
+        if dim is None:
             desc = "・".join("%s の行 %d" % ("t・kg" if k == "mass" else k, n) for n, k in counts)
             for rows_ in dims.values():
                 for q, t, u, nm in rows_:
                     leave(fid, t, nm, "同じ材料の行の単位が混ざっていて（%s）、どれが「%s」の量か決められない：確かめて手で入れる"
                           % (desc, label), q, u)
             continue
-        dim = counts[0][1]
         for other, rows_ in dims.items():
             if other != dim:
                 for q, t, u, nm in rows_:
