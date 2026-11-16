@@ -18,10 +18,10 @@ sys.path.insert(0, HERE)
 from wlcstudio import documents  # noqa: E402
 
 try:
-    from tests.test_round10_importer import csv_read  # noqa: E402
+    from tests.test_round10_importer import csv_read, n, read, row, t, xlsx  # noqa: E402
     from tests.test_wlcstudio import _pdf  # noqa: E402
 except ImportError:
-    from test_round10_importer import csv_read  # noqa: E402
+    from test_round10_importer import csv_read, n, read, row, t, xlsx  # noqa: E402
     from test_wlcstudio import _pdf  # noqa: E402
 
 
@@ -90,7 +90,8 @@ class FourteenthRoundClassificationTests(unittest.TestCase):
                    "Concrete C30 Incl. placing and compacting", "Concrete excl. placing", "Concrete C30 exc. placing"):
             self.assertFalse(documents._is_work(nm), nm)
         # only the listed abbreviations, and only with their dot; sampling and testing after the material stays work
-        for nm in ("Concrete inc testing", "Concrete C30/37; sampling and testing as specification"):
+        for nm in ("Concrete inc testing", "Concrete C30/37; sampling and testing as specification",
+                   "Plasterboard inc. screws; fix only", "Blockwork incl. mortar; labour only"):
             self.assertTrue(documents._is_work(nm), nm)
         self.assertFalse(documents._is_demolition("In situ concrete C30, incl. disposal of surplus"))
         got, r = csv_read("Description,Qty,Unit\nReady mixed concrete C30/37 incl. cube testing,400,m3\n"
@@ -112,6 +113,11 @@ class FourteenthRoundClassificationTests(unittest.TestCase):
         for name in ("既存石膏ボード", "石膏ボード撤去", "既存天井 石膏ボード"):
             self.assertEqual(cls(name, "撤去後 新設")["demolish"], documents.SURE, name)
         self.assertEqual(cls("石膏ボード", "既存撤去 新設")["demolish"], documents.MAYBE)    # no 後: as before
+        # … and so does a name with 既設 / （既存） anywhere, and a new installation said to be elsewhere (14 回目の攻撃)
+        for name, spec in (("既設石膏ボード", "撤去後 新設"), ("石膏ボード（既存）", "撤去後 新設"), ("石膏ボード", "既存撤去後 新設は別途"),
+                           ("ビニル床タイル", "既存撤去後 張替え別途工事"), ("石膏ボード", "既存撤去後 新設 別途"),
+                           ("石膏ボード", "既存撤去後 新設（別途）"), ("石膏ボード", "既存撤去後新設なし")):
+            self.assertEqual(cls(name, spec)["demolish"], documents.MAYBE, (name, spec))
 
     def test_price_and_reference_notes_in_the_tekiyo(self):
         got, r = csv_read("名称,摘要,数量,単位,単価,金額,備考\n異形鉄筋,SD295 D10〜D16 スクラップ控除別途,30,t,95000,2850000,\n"
@@ -148,13 +154,146 @@ class FourteenthRoundClassificationTests(unittest.TestCase):
                            ("押出法ポリスチレンフォーム", "打込み")):
             self.assertTrue(documents._is_work(name, spec), spec)
         # with a size the method word says how the material is put in place (13 回目), and a price that includes the work
+        # (also when the price note is the next word: 14 回目の攻撃)
         for name, spec in (("押出法ポリスチレンフォーム", "t50 打込み"), ("押出法ポリスチレンフォーム", "3種b t25 打込み"),
                            ("押出法ポリスチレンフォーム", "床下敷込"), ("石膏ボード", "t12.5 取付け工共"),
-                           ("石膏ボード", "t12.5 GL工法 取付")):
+                           ("石膏ボード", "t12.5 GL工法 取付"), ("石膏ボード", "t12.5 取付け手間 別途"), ("ALCパネル", "t100 取付け工 共"),
+                           ("石膏ボード", "t9.5 GL工法 取付工 込み"), ("押出法ポリスチレンフォーム", "3種b t25 敷込み工 別途")):
             self.assertFalse(documents._is_work(name, spec), spec)
         got, r = csv_read("名称,規格,数量,単位\n押出法ポリスチレンフォーム,3種b t25,1200,m2\n押出法ポリスチレンフォーム,打込みのみ,1200,m2\n")
         self.assertEqual(got, {("m_insulation", "m2"): 1200.0})
         self.assertEqual(r["evidence"]["m_insulation"]["n_maybe"], 1)
+
+    # --- 14 回目の修正への攻撃で見つかった問題
+    def test_removal_of_what_is_there_with_incl_stays_removal(self):
+        for nm in ("Existing floor tiles; take up incl. disposal", "Existing concrete slab 150mm incl. removal",
+                   "Existing plasterboard ceiling incl. disposal", "Existing floor tiles including disposal"):
+            self.assertEqual(documents._demolish(documents._prep(nm)), documents.SURE, nm)
+        # a removal word after incl. with its dot is removal as before (maybe after the material); "existing" in a part
+        # that says what the item is makes "including" no note; a note of surplus or offcuts stays a note
+        for nm in ("Floor tiles; take up incl. disposal", "Concrete slab incl. removal", "Floor tiles (existing) including removal"):
+            self.assertEqual(documents._demolish(documents._prep(nm)), documents.MAYBE, nm)
+        for nm in ("In situ concrete C30, incl. disposal of surplus", "In situ concrete C30, including disposal",
+                   "Floor tiles to existing floor including disposal", "Plasterboard, incl. removal of offcuts"):
+            self.assertFalse(documents._is_demolition(nm), nm)
+        got, r = csv_read("Description,Qty,Unit\nFloor tiles 300x300,120,m2\n\"Existing floor tiles; take up incl. disposal\",120,m2\n"
+                          "Concrete C30/37 in slabs,50,m3\nExisting concrete slab 150mm incl. removal,15,m3\n"
+                          "Plasterboard 12.5mm,300,m2\nExisting plasterboard ceiling incl. disposal,300,m2\n")
+        self.assertEqual(got, {("m_finish", "m2"): 120.0, ("m_concrete", "m3"): 50.0, ("m_board", "m2"): 300.0})
+        self.assertEqual(sorted((x[1], x[2], x[3]) for x in excluded(r)),
+                         [(15.0, documents.R_DEMOLISH[:12], False), (120.0, documents.R_DEMOLISH[:12], False),
+                          (300.0, documents.R_DEMOLISH[:12], False)])
+        r = documents.read("e.pdf", base64.b64encode(_pdf(["Existing floor tiles; take up incl. disposal   120 m2",
+                                                            "Existing concrete slab 150mm incl. removal   15 m3",
+                                                            "Plasterboard 12.5mm inc. screws; fix only   500 m2",
+                                                            "Plasterboard 12.5mm   300 m2"])).decode(), "d")
+        self.assertEqual(sorted((p.field_id, p.value) for p in r["proposals"]), [("m_board", 300.0)])
+
+    def test_removal_then_new_installation_elsewhere_stays_removal(self):
+        got, r = csv_read("名称,摘要,数量,単位,単価,金額,備考\n石膏ボード,t12.5 新設,500,m2,,,\n"
+                          "石膏ボード,t12.5 既存撤去後 新設は別途,500,m2,,,\nビニル床タイル,既存撤去後 張替え別途工事,300,m2,,,\n"
+                          "ビニル床タイル,2.0mm 新規,300,m2,,,\n既設石膏ボード,撤去後 新設,100,m2,,,\n")
+        self.assertEqual(got, {("m_board", "m2"): 500.0, ("m_finish", "m2"): 300.0})
+        self.assertEqual(sorted((x[1], x[2], x[3]) for x in excluded(r)),
+                         [(100.0, documents.R_DEMOLISH_MAYBE[:12], True), (300.0, documents.R_DEMOLISH_MAYBE[:12], True),
+                          (500.0, documents.R_DEMOLISH_MAYBE[:12], True)])
+        # only nothing, or a note that includes it, may follow the new installation in its word
+        for spec in ("既存撤去後 新設共", "既存撤去後 新設込み", "既存撤去後 新設 処分共", "既存撤去後 新設 t12.5"):
+            self.assertFalse(cls("石膏ボード", spec)["demolish"], spec)
+        for spec in ("既存撤去後 新設工事", "既存撤去後 新設品", "既存撤去後 新設 工事別途", "既存撤去後 新設、別途"):
+            self.assertEqual(cls("石膏ボード", spec)["demolish"], documents.MAYBE, spec)
+
+    def test_incl_before_labour_only_is_labour(self):
+        got, r = csv_read("Description,Qty,Unit\nBlockwork 100mm in cement mortar,800,m2\n"
+                          "Blockwork 100mm incl. mortar; labour only,800,m2\nPlasterboard 12.5mm,500,m2\n"
+                          "Plasterboard 12.5mm inc. screws; fix only,500,m2\nPlasterboard 12.5mm including screws; fix only,500,m2\n")
+        self.assertEqual(got, {("m_masonry", "m2"): 800.0, ("m_board", "m2"): 500.0})
+        self.assertEqual(sum(1 for x in excluded(r) if x[3] and x[2] == documents.R_WORK[:12]), 3)
+        # the inclusive note keeps a material row with no "only" after the work word
+        self.assertFalse(documents._is_work("Concrete C30 Incl. placing and compacting"))
+
+    def test_reference_note_with_the_breakdown_on_another_sheet(self):
+        def sheet(hdr, rows):
+            x = row(1, t("A1", "名称"), t("B1", hdr), t("C1", "数量"), t("D1", "単位"))
+            for i, (nm, sp, q, u) in enumerate(rows, 2):
+                x += row(i, t("A%d" % i, nm), t("B%d" % i, sp), n("C%d" % i, q), t("D%d" % i, u))
+            return x
+        summary = [("普通コンクリート", "Fc24 S18 内訳書による", 300, "m3"), ("異形鉄筋", "SD345 内訳書参照", 30, "t")]
+        detail = [("普通コンクリート", "Fc24 S18 基礎", 120, "m3"), ("普通コンクリート", "Fc24 S18 上部躯体", 180, "m3"),
+                  ("異形鉄筋", "SD345 D19〜D25", 30, "t")]
+        for hdr in ("摘要", "規格"):
+            got, r = read(xlsx([("科目別内訳", sheet(hdr, summary)), ("内訳明細", sheet(hdr, detail))]))
+            self.assertEqual(got, {("m_concrete", "m3"): 180.0, ("m_concrete_fdn", "m3"): 120.0, ("m_rebar", "t"): 30.0}, hdr)
+            ex = [x for x in excluded(r) if x[2] == documents.R_REF_MAYBE[:12]]
+            self.assertEqual(sorted((x[1], x[3]) for x in ex), [(30.0, True), (300.0, True)], hdr)
+        # a breakdown of foundation concrete only is the same material (concrete); another material is not
+        got, _ = read(xlsx([("科目別内訳", sheet("摘要", summary[:1])), ("内訳明細", sheet("摘要", [("基礎コンクリート", "Fc24", 300, "m3")]))]))
+        self.assertEqual(got, {("m_concrete_fdn", "m3"): 300.0})
+        got, _ = read(xlsx([("科目別内訳", sheet("摘要", summary)), ("内訳明細", sheet("摘要", [("石膏ボード", "t12.5", 500, "m2")]))]))
+        self.assertEqual(got, {("m_concrete", "m3"): 300.0, ("m_rebar", "t"): 30.0, ("m_board", "m2"): 500.0})
+
+    def test_cut_to_only_the_listed_objects_is_a_participle(self):
+        for nm in ("Existing brickwork; cut to form new opening", "Concrete slab 200mm; cut to form opening for stair",
+                   "Reinforced concrete; cut to expose reinforcement and make good", "Existing blockwork; cut to receive new lintel",
+                   "Existing concrete; cut to line and level", "Concrete piles; cut to waste", "Concrete; cut from existing",
+                   "Concrete; cut into existing slab", "Reinforcement bars; cut to length only"):
+            self.assertTrue(documents._is_work(nm), nm)
+        for nm in ("Reinforcement bars; cut to length", "Steel plates, 10 mm, cut to size", "Insulation, cut to fit between joists",
+                   "Timber, cut to suit", "Rebar; cut into lengths", "Glass cut into pieces", "Steel; cut from plate",
+                   "Steel flats cut from bar", "Plywood cut from sheet", "Steel strip cut from coil"):
+            self.assertFalse(documents._is_work(nm), nm)
+        got, r = csv_read("Description,Qty,Unit\nBrickwork in facing bricks,800,m2\nExisting brickwork; cut to form new opening,12,m2\n"
+                          "Concrete C30/37 in slabs,400,m3\nConcrete slab 200mm; cut to form opening for stair,3,m3\n")
+        self.assertEqual(got, {("m_masonry", "m2"): 800.0, ("m_concrete", "m3"): 400.0})
+        self.assertEqual(sum(1 for x in excluded(r) if x[3] and x[2] == documents.R_WORK[:12]), 2)
+
+    def test_incl_and_excl_with_their_dot_split_the_name(self):
+        for nm, fid in (("Ready mixed concrete C30/37 incl. reinforcement", "m_concrete"),
+                        ("Concrete C30 excl. reinforcement", "m_concrete"), ("Concrete C30 exc. reinforcement", "m_concrete"),
+                        ("Blockwork 100mm incl. mortar", "m_masonry"), ("Brickwork inc. mortar and wall ties", "m_masonry")):
+            self.assertEqual(head(nm), fid, nm)
+            self.assertEqual(documents._field_for(nm), fid, nm)      # (the PDF and IFC paths)
+        for dotted, spelled in (("Timber stud partition incl. plasterboard", "Timber stud partition including plasterboard"),
+                                ("Structural steelwork incl. fire protection board", "Structural steelwork including fire protection board")):
+            self.assertEqual(head(dotted), head(spelled), dotted)
+        got, _ = csv_read("Description,Qty,Unit\nReady mixed concrete C30/37 incl. reinforcement,400,m3\nBlockwork 100mm incl. mortar,800,m2\n")
+        self.assertEqual(got, {("m_concrete", "m3"): 400.0, ("m_masonry", "m2"): 800.0})
+
+    def test_a_scrap_row_with_a_price_note_is_still_the_deduction(self):
+        for name, spec in (("鉄筋スクラップ", "控除 別途精算"), ("鉄骨スクラップ", "控除共"), ("鉄筋スクラップ", "スクラップ控除後"),
+                           ("鉄くず", "控除なし"), ("鉄筋スクラップ", "控除")):
+            self.assertEqual(cls(name, spec, "t")["deduct"], documents.SURE, (name, spec))
+        # the price note on a material row stays a note, also when the name says how the scrap is disposed of
+        for name, spec in (("異形鉄筋", "SD295 スクラップ控除別途"), ("異形鉄筋 スクラップ処分共", "控除後")):
+            self.assertFalse(cls(name, spec, "t")["deduct"], (name, spec))
+        got, r = csv_read("名称,摘要,数量,単位\n異形鉄筋,SD345 D19,30,t\n鉄筋スクラップ,控除 別途精算,1.2,t\n鉄骨,SS400,50,t\n"
+                          "鉄骨スクラップ,控除共,2,t\n")
+        self.assertEqual(got, {("m_rebar", "t"): 30.0, ("m_steel", "t"): 50.0})
+        self.assertEqual(sorted((x[1], x[2], x[3]) for x in excluded(r)),
+                         [(1.2, documents.R_DEDUCT[:12], False), (2.0, documents.R_DEDUCT[:12], False)])
+
+    def test_a_uchi_note_does_not_choose_the_foundation_card(self):
+        got, r = csv_read("名称,摘要,数量,単位\n普通コンクリート,Fc24 S18（うち基礎 40m3）,300,m3\n")
+        self.assertEqual(got, {})
+        self.assertEqual(list(r["left_out"]), ["m_concrete"])
+        self.assertEqual(excluded(r), [("普通コンクリート", 300.0, documents.R_AGAIN_MAYBE[:12], True)])
+        for spec in ("うち基礎", "Fc24 うち基礎 40m3", "Fc24 内 基礎", "of which foundations 40 m3"):
+            self.assertEqual(cls("普通コンクリート", spec, "m3")["fid"], "m_concrete", spec)
+        # foundation words outside the note, or in the division, still choose it
+        self.assertEqual(cls("普通コンクリート", "基礎 Fc24（うち地中梁 10m3）", "m3")["fid"], "m_concrete_fdn")
+        self.assertEqual(documents._row_class(documents._Prep(), {"name": "普通コンクリート", "specification": "（うち基礎 40m3）",
+                                                                 "division": "基礎工事", "unit": "m3"})["fid"], "m_concrete_fdn")
+        self.assertEqual(cls("基礎コンクリート", "Fc24（うち地中梁 10m3）", "m3")["fid"], "m_concrete_fdn")
+
+    def test_labour_only_tails_are_sorted_once(self):
+        self.assertEqual(documents._LABOUR_TAILS, ("",) + tuple(sorted(documents.METHOD_TAIL, key=len, reverse=True)))
+
+    def test_a_labour_suffix_then_a_price_note_is_the_material_row(self):
+        got, r = csv_read("名称,摘要,数量,単位,単価,金額,備考\n石膏ボード,t12.5 取付け手間 別途,500,m2,,,\nALCパネル,t100 取付け工 共,200,m2,,,\n"
+                          "石膏ボード,t9.5 GL工法 取付工 込み,300,m2,,,\n押出法ポリスチレンフォーム,3種b t25 敷込み工 別途,300,m2,,,\n"
+                          "石膏ボード,t12.5 取付け工、共,100,m2,,,\n石膏ボード,t12.5 取付け工 のみ,100,m2,,,\n")
+        self.assertEqual(got, {("m_board", "m2"): 900.0, ("m_insulation", "m2"): 300.0, ("m_masonry", "m2"): 200.0})
+        self.assertEqual(excluded(r), [("石膏ボード", 100.0, documents.R_WORK[:12], True)])
 
 
 if __name__ == "__main__":

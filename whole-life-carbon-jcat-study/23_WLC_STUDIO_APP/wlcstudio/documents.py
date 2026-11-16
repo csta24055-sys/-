@@ -153,9 +153,13 @@ MAX_PARTS = 8                      # parts of a name looked at for its head (the
 _PREP = ("to", "of", "in", "for", "with", "including", "incl", "excluding", "excl", "on", "at", "into", "from", "per",
          "under", "beneath", "below", "over", "above", "between", "behind", "against", "around", "within", "across",
          "onto", "upon")
+# … and the four abbreviations with their dot, which qualify the head as including / excluding do (Ready mixed
+# concrete incl. reinforcement is concrete, Blockwork incl. mortar is blockwork) (14 回目)
+PREP_DOT = ("incl.", "inc.", "excl.", "exc.")
 PLACE_PREP = frozenset(("to", "for", "on", "at", "into", "from", "under", "beneath", "below", "over", "above", "between",
                         "behind", "against", "around", "within", "across", "onto", "upon"))
-_SEGSPLIT = re.compile(r"[,;，；、()（）\[\]［］{}｛｝【】〔〕「」『』<>＜＞]+|\s+(%s)\s+" % "|".join(_PREP))
+_SEGSPLIT = re.compile(r"[,;，；、()（）\[\]［］{}｛｝【】〔〕「」『』<>＜＞]+|\s+(%s)\s+"
+                       % "|".join(tuple(re.escape(w) for w in PREP_DOT) + _PREP))
 
 
 def _matches(seg: str) -> list:
@@ -280,6 +284,13 @@ METHOD_TAIL = ("押え", "押さえ", "仕上げ", "仕上", "止め", "止", "�
 # 打込み工, 打ち込み手間, 敷込みのみ, 取付け工, 金ごて仕上げのみ), names the labour even in a specification (14 回目)
 LABOUR_ONLY = ("のみ", "工", "作業", "手間")
 OKURIGANA = "みけきしげ"
+_LABOUR_TAILS = ("",) + tuple(sorted(METHOD_TAIL, key=len, reverse=True))   # (sorted once: _labour_only runs per match)
+_LABOUR_WORDS = frozenset(x + y for x in _LABOUR_TAILS for y in LABOUR_ONLY + ("",))   # (any other word: not labour only)
+# … unless the next word is a price note on the material row (取付け工 共, 取付工 込み, 取付け手間 別途, 敷込み工 別途): the
+# same as when the note is in the same word (取付工共). Only these whole words, 費 before them, or a word that starts with
+# 別途 (別途精算) (14 回目)
+LABOUR_NOTE = frozenset(("共", "込", "込み", "含む", "とも", "別途", "は別途", "なし", "無し", "含まず", "含まない", "を除く",
+                         "除く"))
 # a work word (or a run of them: 加工組立共, 製作・建方共) followed by one of these names a product or a price that
 # includes the material (加工鉄筋, 加工済, 工場加工品, 製作金物, 型枠ブロック, 打設共, 建方込み, 運搬費込): not a work row
 PRODUCT_AFTER = ("済", "品", "材", "鉄筋", "鋼", "木", "板", "金物", "ボード", "ガラス", "ブロック", "杭", "共", "込", "含", "とも")
@@ -302,11 +313,14 @@ _WORK_NOUN_EN = re.compile(r"[a-z]*(?:ing|ion|ment)|labou?r|formwork|shuttering|
 # after the material, a participle describes the supply-and-fix item (poured against earth; cut, bent and fixed; laid in
 # slabs); a base verb or a noun names labour (fix only, place and compact, erect only, hoist and fix, Rebar fixing)
 _PARTICIPLE_EN = re.compile(r"[a-z]+ed|laid")
-# "cut" after the material is the participle when to / into / from follows (cut to length / size / fit, cut into lengths,
-# cut from plate) or another participle does (cut, bent and fixed); "cut only", "cut and bend" are labour (13 回目).
-# cut out / off / back / on / at / in name removal or trimming work or where the labour is done (pile cut-off, cut out
-# for opening, cut back to sound concrete, cut on site): work (14 回目)
-CUT_PARTICIPLE_NEXT = frozenset(("to", "into", "from"))
+# "cut" after the material is the participle when to / into / from and one of these words follow (cut to length / size /
+# fit, cut into lengths, cut from plate) or another participle does (cut, bent and fixed); "cut only", "cut and bend" are
+# labour (13 回目). cut out / off / back / on / at / in name removal or trimming work or where the labour is done (pile
+# cut-off, cut out for opening, cut back to sound concrete, cut on site), and so does cut to / into / from anything else
+# (cut to form opening, cut to expose reinforcement, cut to receive lintel, cut from existing): work (14 回目)
+CUT_PARTICIPLE_NEXT = {"to": frozenset(("length", "lengths", "size", "sizes", "fit", "suit")),
+                       "into": frozenset(("length", "lengths", "piece", "pieces")),
+                       "from": frozenset(("plate", "plates", "sheet", "sheets", "bar", "bars", "stock", "coil", "coils"))}
 WORK_WORDS_EN = ("placing", "placement", "pumping", "pump", "pour", "pouring", "fixing", "erection", "erect", "erecting",
                  "fabrication", "fabricate", "fabricating", "cutting", "bending", "tying", "labour", "labor", "transport",
                  "delivery", "formwork", "curing", "installation", "hoisting")        # (examples; _WORK_EN decides)
@@ -315,11 +329,12 @@ EXCLUDING_EN = ("excluding", "excl", "without", "less", "except", "exclusive", "
 SUPPLY_JA = ("材工共", "材工とも", "材工込", "材料共", "材料とも", "材料込", "材共", "材工一式")
 SUPPLY_EN = ("supply", "supplying", "supplied", "provide", "providing", "furnish", "furnishing", "furnished")
 INCLUSIVE_EN = ("including", "incl", "inclusive", "includes")
+INCL_DOT = ("incl.", "inc.")        # (the work check only: after them a removal word stays removal, see _demolish)
 
 
 def _incl(tok: str) -> bool:
     """including, incl … and the abbreviations incl. and inc. (a word keeps its dot: _PUNCT has no ".") (14 回目)."""
-    return tok in INCLUSIVE_EN or tok in ("incl.", "inc.")
+    return tok in INCLUSIVE_EN or tok in INCL_DOT
 
 
 def _excl(tok: str) -> bool:
@@ -342,14 +357,35 @@ def _prep(s: str) -> str:
     return unicodedata.normalize("NFKC", (s or "")[:MAX_NAME])[:MAX_NAME]
 
 
-def _classify(text: str, division: str = "") -> str | None:
-    """The field of an NFKC-normalised name (the head of its first part that names a material)."""
+def _classify(text: str, division: str = "", n_name: int | None = None) -> str | None:
+    """The field of an NFKC-normalised name (the head of its first part that names a material). With `n_name` (the
+    number of parts of the name), a うち / 内 / of which note in the specification is left out of the words that say
+    foundation: 普通コンクリート｜Fc24（うち基礎 40m3） is not foundation concrete (14 回目)."""
     fid = _head(text)[0]
     if fid == "m_concrete":
-        low = normalise_name(division) + " " + " ".join(_head(text)[4])
+        parts = _head(text)[4] if n_name is None else _outside_notes(text, n_name)
+        low = normalise_name(division) + " " + " ".join(parts)
         if any(w in low for w in FOUNDATION_WORDS):
             return "m_concrete_fdn"
     return fid
+
+
+def _outside_notes(text: str, n_name: int) -> list:
+    """The parts of a name ; specification, with each part of the specification cut at its うち / 内 / 内訳 word and
+    without a part that starts "of which"."""
+    out = []
+    for j, (seg, _place, prep) in enumerate(_parts(text.lower()[:MAX_NAME])):
+        if j >= n_name:
+            ws = seg.split()
+            if prep == "of" and ws[:1] == ["which"]:
+                continue
+            for q, w in enumerate(ws):
+                if (w.startswith("うち") and not w.startswith(_UCHI_WORDS)) or w == "内" or w.startswith("内訳"):
+                    ws = ws[:q]
+                    break
+            seg = " ".join(ws)
+        out.append(seg)
+    return out
 
 
 def _field_for(name: str, division: str = "") -> str | None:
@@ -433,14 +469,16 @@ def _work(n: str, n_name: int | None = None) -> bool:
         if t in ("test", "tests") and toks[i + 1:i + 2] and toks[i + 1].startswith("pile"):
             continue                               # "test piles" are piles (試験杭), not testing
         if head_tok is not None and i > head_tok and toks[i + 1:i + 2] != ["only"] and (
-                _PARTICIPLE_EN.fullmatch(t) or (t == "cut" and (toks[i + 1:i + 2] and toks[i + 1] in CUT_PARTICIPLE_NEXT
-                                                                or any(_PARTICIPLE_EN.fullmatch(x) or x == "bent"
-                                                                       for x in toks[head_tok + 1:])))
+                _PARTICIPLE_EN.fullmatch(t)
+                or (t == "cut" and (toks[i + 2:i + 3] and toks[i + 2] in CUT_PARTICIPLE_NEXT.get(toks[i + 1], ())
+                                    and toks[i + 3:i + 4] != ["only"]
+                                    or any(_PARTICIPLE_EN.fullmatch(x) or x == "bent" for x in toks[head_tok + 1:])))
                 or (t.endswith("s") and not _WORK_NOUN_EN.fullmatch(t) and t != "tests")):
             continue                               # "concrete C20; poured against earth", "bars; cut, bent and fixed",
             #                                        "thrust blocks to drainage bends" (a plural noun, not a verb)
-        if any(_incl(x) for x in toks[:i]):
+        if any(_incl(x) for x in toks[:i]) and toks[i + 1:i + 2] != ["only"]:
             continue                               # "concrete including placing and compacting", "incl. cube testing"
+            #                                        (but "incl. screws; fix only" is the labour, 14 回目)
         return True
     for i, seg in enumerate(parts):
         m = _WORKRX.search(seg)
@@ -450,7 +488,7 @@ def _work(n: str, n_name: int | None = None) -> bool:
                 and not any(c in parts[hs][a:b] for c in ("コンクリート", "生コン", "concrete"))
             method = m.group(0) in METHOD_WORDS or cast
             if i >= n_name and method and 0 <= hs < n_name and parts[hs][a:b] not in ("仕上", "finish") \
-                    and not _bare_method(seg, k, e) and not _labour_only(seg, k, e) \
+                    and not _bare_method(seg, k, e) and not _labour_only(seg, k, e, parts[i + 1] if i + 1 < len(parts) else "") \
                     and not (cast and _cast_alone(spec_words, m.group(0))):
                 m = _WORKRX.search(seg, e)         # 床下敷込, 溶接止め, 金ごて仕上 in the specification of a named material
                 continue
@@ -491,23 +529,49 @@ def _bare_method(seg: str, k: int, e: int) -> bool:
     return all(_SIZE.fullmatch(x) for x in rest)
 
 
-def _labour_only(seg: str, k: int, e: int) -> bool:
+def _labour_note(words: list) -> bool:
+    """Whether the first of these words is a price note on the material row (共, 込み, 別途, 費別途 …: LABOUR_NOTE, and
+    a word that starts with 別途)."""
+    w = words[0] if words else ""
+    if w[:1] == "費":
+        w = w[1:]
+    return w in LABOUR_NOTE or w.startswith(("別途", "は別途"))      # (別途精算, 別途工事)
+
+
+def _labour_only(seg: str, k: int, e: int, later: str = "") -> bool:
     """Whether the method word at seg[k:e] is followed in its word by のみ / 工 / 作業 / 手間, after its okurigana or a
     method tail if any (打込みのみ, 打込み工, 打ち込み手間, 敷込みのみ, 取付け工, 金ごて仕上げのみ), or by a next word のみ / 作業
-    (打込み のみ): the item is the labour, whatever else the specification says (14 回目)."""
+    (打込み のみ): the item is the labour, whatever else the specification says (14 回目). Not when the next word is a
+    price note on the material row (取付け工 共, 取付け手間 別途: as 取付工共). `later` is the next part (the next word may
+    be there: 取付け工、共)."""
     we = seg.find(" ", e)
     t = seg[e:len(seg) if we < 0 else we]
     if t[:1] and t[0] in OKURIGANA:
         t = t[1:]
-    for tail in ("",) + tuple(sorted(METHOD_TAIL, key=len, reverse=True)):
+    if t not in _LABOUR_WORDS:
+        return False                                 # (the loop below could not find のみ / 工 / 作業 / 手間 or the word end)
+    for tail in _LABOUR_TAILS:
         if t.startswith(tail):
             rest = t[len(tail):]
             if rest in LABOUR_ONLY:
-                return True
+                return not _labour_note(_next_words(seg, we, later))
             if not rest:
-                nxt = seg[we:].split()[:1] if we >= 0 else []
-                return nxt in (["のみ"], ["作業"])
+                nxt = _next_words(seg, we, later)
+                return nxt[:1] in (["のみ"], ["作業"]) and not _labour_note(nxt[1:])
     return False
+
+
+_NEXT2 = re.compile(r"\s*(\S+)(?:\s+(\S+))?")
+
+
+def _next_words(seg: str, we: int, later: str) -> list:
+    """The (at most two) words after seg[:we], going on into `later` (the next part) (a bounded match, not a split)."""
+    m = _NEXT2.match(seg, we) if we >= 0 else None
+    out = [w for w in m.groups() if w] if m else []
+    if len(out) < 2:
+        m = _NEXT2.match(later)
+        out += [w for w in m.groups() if w][:2 - len(out)] if m else []
+    return out
 
 
 def _cast_alone(spec_words: list, word: str) -> bool:
@@ -559,7 +623,12 @@ DEMOLISH_STRONG = ("撤去", "解体", "はつり", "斫り", "斫", "取壊", "
 # (殻 is removal in the name: コンクリート殻運搬・処分共; after the material, 殻処分費別途 is a price note on the row)
 DEMOLISH_WEAK_EN = frozenset(("disposal", "dispose", "disposed", "disposing"))
 # a removal word followed by 後 / の上 and a new installation (撤去後 新設, 撤去の上 新規, 撤去後に張替え): see _demolish
-_SEQ_NEW = re.compile(r"\s*(?:後に?|の上|のうえ)\s*(?:新設|新規|張替|張り替|取替|取り替|更新|やり替)")
+_SEQ_NEW = re.compile(r"\s*(?:後に?|の上|のうえ)\s*(?:新設|新規|張替|張り替|取替|取り替|更新|やり替)え?")
+# … the rest of that word may only be one of these (新設共, 新設込み: the row includes the new installation), and the next
+# word must not say that the new installation is elsewhere (新設は別途, 新設 別途, 張替え別途工事, 新設（別途）, 新設なし) (14 回目)
+SEQ_ATTACHED = ("", "共", "とも", "込", "込み", "含む", "は含む")
+_SEQ_NOT = re.compile(r"(?:工事|分|費)?(?:は|も)?(?:工事)?(?:別|なし|無し|含まず|含まない|除|を除|本工事外|対象外|不要)")
+EXISTING_WORDS = ("既存", "既設")
 SURE, MAYBE = "sure", "maybe"
 
 
@@ -587,6 +656,8 @@ def _not_added(*texts: str) -> str | None:
 _DEDUCT_NOTE = re.compile(r"発生材(?:の)?(?:処分|運搬|積込|片付け?)+費?(?:共|込|含|とも|別途|は別|別)")
 # in a specification (摘要), a price note: スクラップ控除別途, スクラップ控除なし, 控除後 … (14 回目)
 _DEDUCT_PRICE = re.compile(r"控除(?:別途|なし|無し|共|含む|込み?|後)")
+# … but not on a row that names the scrap itself (鉄筋スクラップ, 鉄くず; not スクラップ処分, a price note on work)
+_SCRAP_NAME = re.compile(r"(?:スクラップ|くず|屑)(?!\s*(?:処分|運搬|積込|積み込|片付|搬出))")
 # … and a reference to another document, not a breakdown row (14 回目)
 _AGAIN_REF = re.compile("|".join(r"\s*".join(w) for w in ("内訳書による", "内訳別紙", "内訳書参照", "別紙内訳", "別紙による")))
 # the marks that say outright that the row repeats a quantity listed elsewhere: sure in the specification as well
@@ -635,6 +706,22 @@ def _token_parts(toks: list, parts: tuple) -> list:
     return where
 
 
+def _seq_new(parts: tuple, i: int, seg: str, e: int) -> bool:
+    """Whether the removal word that ends at seg[:e] (part i) is followed by 後 / の上 and a new installation that is in
+    this row (撤去後 新設, 撤去後新設共, 撤去の上 新規): not 新設は別途, 新設別途, 張替え別途工事, 新設 別途, 新設（別途）,
+    新設なし (14 回目)."""
+    m = _SEQ_NEW.match(seg, e)
+    if not m:
+        return False
+    we = seg.find(" ", m.end())
+    if seg[m.end():len(seg) if we < 0 else we] not in SEQ_ATTACHED:
+        return False
+    if we < 0 and i + 1 == len(parts) == MAX_PARTS:
+        return False                             # the next words are not read: the note may go on
+    nxt = _next_words(seg, we, parts[i + 1] if i + 1 < len(parts) else "")[:1]
+    return not (nxt and _SEQ_NOT.match(nxt[0]))
+
+
 @functools.lru_cache(maxsize=8192)
 def _demolish(n: str, n_name: int | None = None):
     """None, SURE (removal of what is there: 既存コンクリート撤去, コンクリート殻処分, Demolition of existing slab) or MAYBE (a
@@ -650,11 +737,13 @@ def _demolish(n: str, n_name: int | None = None):
     def kind(i):
         return MAYBE if 0 <= hs < i and not existing else SURE
 
-    # in the specification of a name with no removal word that does not start with 既存, 撤去後 新設 says in which order
-    # the work is done: the row is the new material (既存撤去後 新設, 既存防水撤去の上 新規) (14 回目)
+    # in the specification of a name with no removal word that does not name what is there (既存, 既設, existing
+    # anywhere in it), 撤去後 新設 says in which order the work is done: the row is the new material (既存撤去後 新設,
+    # 既存防水撤去の上 新規). Not when the new installation is said to be elsewhere (新設は別途, 新設 別途) (14 回目)
     nn = len(parts) if n_name is None else min(n_name, len(parts))
     name_txt = " ".join(parts[:nn])
-    seq_ok = nn < len(parts) and not existing and not name_txt.startswith(("既存", "existing")) \
+    seq_ok = nn < len(parts) and not existing and not any(w in name_txt for w in EXISTING_WORDS) \
+        and "existing" not in name_txt.split() \
         and not _DEMRX.search(name_txt) and not any(t in DEMOLISH_EN for t in name_txt.split()) \
         and not any(p in name_txt for p in DEMOLISH_PHRASES_EN)
     for i, seg in enumerate(parts):
@@ -665,7 +754,7 @@ def _demolish(n: str, n_name: int | None = None):
                 if not c or c.end() == e:
                     break
                 e = c.end()
-            if seq_ok and i >= nn and _SEQ_NEW.match(seg, e):
+            if seq_ok and i >= nn and _seq_new(parts, i, seg, e):
                 continue
             after, before = seg[e:].lstrip(), seg[:m.start()].rstrip()
             run = seg[m.start():e]
@@ -677,11 +766,22 @@ def _demolish(n: str, n_name: int | None = None):
                 return SURE
             found = MAYBE
     where = None
+    # "including disposal" is a note on the material row, but not on a row of what is there (Existing floor tiles
+    # including disposal, Floor tiles (existing) including removal). incl. / inc. with their dot are no such note here:
+    # a removal word after them stays removal (Existing floor tiles; take up incl. disposal; "incl. disposal of surplus"
+    # is a note by NOTE_OF_EN) (14 回目)
+    j_incl = next((j for j, x in enumerate(toks) if x in INCLUSIVE_EN), None)
+    note_ok = j_incl is not None and not existing
+    if note_ok and "existing" in toks[:j_incl]:      # … in a part that says what the item is, not where it goes
+        where = _token_parts(toks, parts)            # (Floor tiles to existing floor including disposal: new tiles)
+        place = [pl for _s, pl, _p in _parts(n.lower()[:MAX_NAME])]
+        note_ok = not any(t == "existing" and where[q] is not None and not place[where[q]]
+                          for q, t in enumerate(toks[:j_incl]))
     for i, t in enumerate(toks):
         if t not in DEMOLISH_EN:
             continue
         nxt = toks[i + 1:i + 3]
-        if any(_incl(x) for x in toks[:i]) or (nxt[:1] == ["of"] and toks[i + 2:i + 3] and toks[i + 2] in NOTE_OF_EN):
+        if (note_ok and j_incl < i) or (nxt[:1] == ["of"] and toks[i + 2:i + 3] and toks[i + 2] in NOTE_OF_EN):
             continue                             # "including disposal", "removal of offcuts": a note
         if t in DEMOLISH_WEAK_EN and (" ".join(nxt) in ("by others",) or nxt[:1] in (["separately"], ["elsewhere"])):
             continue                             # "disposal by others": a price note
@@ -983,13 +1083,20 @@ def _row_class(prep: _Prep, r: dict) -> dict:
     # a 再掲 / 内訳 / 控除 mark in the name or the division is sure; one only in the specification (摘要) may be a note on
     # the material row: an exclusion with "maybe", unless it is an explicit 再掲 (14 回目)
     again = SURE if _again(name) or (_again(div) if div else False) else (_again_spec(spec) if spec else None)
-    deduct = SURE if _deduct(name) else (MAYBE if spec and _deduct(spec, True) else None)
+    if again and spec and fid == "m_concrete_fdn":
+        fid = _classify(text, div, n_name)     # 基礎 only inside a うち note: the row is not foundation concrete
+    # a row that names the scrap itself (鉄筋スクラップ｜控除 別途精算, 鉄骨スクラップ｜控除共) is the deduction: the price-note
+    # shapes of the specification are no price note there (14 回目)
+    if spec and _SCRAP_NAME.search(name):
+        deduct = SURE if _deduct(name) or _deduct(spec) else None
+    else:
+        deduct = SURE if _deduct(name) else (MAYBE if spec and _deduct(spec, True) else None)
     demolish = _demolish(text, n_name)
     work = _work(text, n_name)
     u = _unit(r.get("unit"))
     fid = _block_as_concrete(fid, text, div, u)
     return {"name": name, "fid": fid, "u": u, "total": total, "again": again, "deduct": deduct,
-            "demolish": demolish, "work": work}
+            "demolish": demolish, "work": work, "ref": bool(spec and _AGAIN_REF.search(spec))}
 
 
 _BLOCK_WORD = re.compile(r"(?i)blocks?|ブロック")
@@ -1025,6 +1132,10 @@ R_DEMOLISH_MAYBE = "材料の後に撤去・解体・処分の語がある（取
 # a mark only in the specification (摘要): perhaps a note on the material row (14 回目)
 R_AGAIN_MAYBE = "規格・摘要にうち・内訳などの語がある（ほかの行の内訳か、材料の行の注記か分からない）ので足さない。材料の行なら手で入れる"
 R_DEDUCT_MAYBE = "規格・摘要に控除などの語がある（控除の行か、材料の行の値段の注記か分からない）ので足さない。材料の行なら手で入れる"
+# 内訳書による on a row of a workbook whose other sheet lists the same material (14 回目)
+R_REF_MAYBE = "規格・摘要に内訳書による・内訳別紙などの注記があり、同じ資料の別のシート（%s）に同じ材料の行がある" \
+              "（その内訳と二重になるおそれ）ので足さない。材料の行なら手で入れる"
+_FAMILY = {"m_concrete_fdn": "m_concrete"}     # (a breakdown may split concrete into foundation and the rest)
 R_WORK = "作業の行（加工・運搬・打設など。材料の量を繰り返す）は足さない（二重計上を防ぐ）"
 R_NEG = "負の数量は読まない（差し引きにしない）"
 R_COPY_SHEET = "別のシート（%s）の材料の行（%d 行目）の数量を参照した値は足さない（そのシートも読んでいるので二重計上になる）"
@@ -1070,6 +1181,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         prep, cells = _Prep(), _Cells(parsed)
         classed = []                       # (sheet casefolded, row, class) of the candidate rows, in reading order
         row_fid = {}                       # (sheet casefolded, row) -> the field a material / marked row names (or None)
+        listed = {}                        # field (concrete with foundation concrete) -> sheets with a material row of it
         n_classified, stopped = 0, None
         for sh in parsed["sheets"]:
             if sh.get("error"):
@@ -1103,6 +1215,8 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                     mats.append(r["row"])
                     nums[r["row"]] = r.get("ncols") or ()
                     row_fid[(shf, r["row"])] = c["fid"]
+                    if not c["ref"]:
+                        listed.setdefault(_FAMILY.get(c["fid"], c["fid"]), set()).add(shf)
                 elif c["total"] or c["again"] or c["work"] or c["deduct"] or c["demolish"]:
                     marks.append(r["row"])
                     nums[r["row"]] = r.get("ncols") or ()
@@ -1160,6 +1274,12 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                         why = R_COPY_SHEET_OTHER % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
                 elif got:
                     why = got[1]
+            if not why and c["ref"]:
+                # 内訳書による on a row of a workbook whose other sheet lists the same material: perhaps that breakdown
+                # (on a single sheet, or with no such row elsewhere, the note only points to another document) (14 回目)
+                others = sorted(listed.get(_FAMILY.get(c["fid"], c["fid"]), set()) - {shf})
+                if others:
+                    why = R_REF_MAYBE % tabular.sheet_label(parsed.get("sheet_names", {}).get(others[0], others[0]))
             if why:
                 leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit"))
                 continue
