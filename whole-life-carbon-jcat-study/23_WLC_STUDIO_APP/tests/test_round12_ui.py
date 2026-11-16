@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -542,8 +543,10 @@ console.log(JSON.stringify([keyOf(b({ 'data-geo': '0', 'data-list': '3' })), key
         self.assertEqual(r["after"], "自動概算の説明", r)                      # shown once the field is left
 
     def test_service_worker_cache_is_new(self):
+        # v11 in round 12; a later round moves it on (round 13: v12, checked in test_round13_ui)
         sw = (WEB / "sw.js").read_text(encoding="utf-8")
-        self.assertIn('"wlcstudio-shell-v11"', sw)
+        m = re.search(r'"wlcstudio-shell-v(\d+)"', sw)
+        self.assertTrue(m and int(m.group(1)) >= 11, sw[:300])
         self.assertNotIn('"wlcstudio-shell-v10"', sw)
 
 

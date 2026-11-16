@@ -11,10 +11,13 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 // geo: what #geo-out shows (the address and PLATEAU answers its buttons act on: kept across redraws);
 // asking: the row a question is about (drawn marked again after a redraw); cancelRows: what the rows held when the user
 // stopped 保存して戻る (taken before the view changed: the stop names each row by what is stored); geoSeq: the number of
-// the latest request for #geo-out (an address search or a PLATEAU read: only its answer is shown)
+// the latest request for #geo-out (an address search or a PLATEAU read: only its answer is shown);
+// owed: the acted rows whose redraw was skipped while 保存して戻る ran (fid → what the row held when its action was sent,
+// and the view it was sent in): the next drawing of that screen shows their stored value (see owedRows);
+// warnings: what the answers of saves said about other fields while 保存して戻る ran (said with its message, see warnOf)
 const state = { meta: null, project: null, stack: [], view: "home", seq: 0, nav: 0, act: 0, busy: false, stale: null, gen: 0,
   running: new Set(), pending: new Set(), lastImport: null, importing: null, noteLater: null, geo: null, asking: null, cancelRows: null,
-  geoSeq: 0 };
+  geoSeq: 0, owed: new Map(), warnings: [] };
 
 async function api(path, opts = {}) {
   const r = await fetch("/api" + path, { headers: { "Content-Type": "application/json" }, ...opts,
@@ -35,6 +38,15 @@ function toast(msg, act = state.act) {
   toast._act = act;
   t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600 + Math.min(4000, t.textContent.length * 20));
 }
+/* the warnings a save's answer carries (`warnings`: ready-made sentences, e.g. that this save made another field's stored
+   適用外 unusable): every one is said, joined to the message of the action that sent it. While 保存して戻る runs they are
+   kept for its own message (its message would replace them, and it may then leave for the hub): see sayWarnings */
+function warnOf(r, act) {
+  const ws = (r && Array.isArray(r.warnings) ? r.warnings : []).filter((w) => typeof w === "string" && w.trim());
+  if (state.busy) state.warnings.push(...ws); else ws.forEach((w) => toast(w, act));
+}
+/* the warnings kept while 保存して戻る ran, joined to its message (`act`: the act of that message) */
+function sayWarnings(act) { state.warnings.splice(0).forEach((w) => toast(w, act)); }
 /* a control's identity across redraws: its id, or the data attribute that names its action and row (with the candidate
    it adopts, data-cid, and the #geo-out list it belongs to, data-list); a list's <summary> is known by its list
    (details[id]) and a link by where it leads */
@@ -121,9 +133,12 @@ function ask(title, text, choices) {
     d.showModal();
   }));
 }
+/* a number of 1000 or more is grouped by thousands, except in years: a calendar year (竣工年 2033) is never 「2,033 年」
+   (the other fields in 年 are durations, below 1000 anyway) */
 function fmt(v, unit) {
   if (v === null || v === undefined || v === "") return "—";
-  if (typeof v === "number") return (Math.abs(v) >= 1000 ? v.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) : String(+v.toPrecision(6))) + (unit ? " " + esc(unit) : "");
+  if (typeof v === "number") return (Math.abs(v) >= 1000 ? v.toLocaleString("ja-JP", { maximumFractionDigits: 1, useGrouping: unit !== "年" })
+    : String(+v.toPrecision(6))) + (unit ? " " + esc(unit) : "");
   if (typeof v === "object") return esc(JSON.stringify(v));
   return esc(v) + (unit ? " " + esc(unit) : "");
 }
@@ -536,10 +551,10 @@ async function saveField(fid, quiet = false, batch = false) {
       body.scope = a === "same" ? cur.scope : "field_only";
     }
   }
-  try {
-    await api(`/projects/${nav.pid}/fields/${fid}`, { method: "PUT", body });
-    return "saved";
-  } catch (e) { return refuse(`「${F.label}」：${e.message}`); }
+  let r;
+  try { r = await api(`/projects/${nav.pid}/fields/${fid}`, { method: "PUT", body }); } catch (e) { return refuse(`「${F.label}」：${e.message}`); }
+  warnOf(r, nav.act);
+  return "saved";
 }
 
 function bindScreen(m, sid) {
@@ -550,7 +565,7 @@ function bindScreen(m, sid) {
     if (state.busy) return;
     state.act++; state.busy = true; state.busyWarned = 0; state.cancel = false; state.cancelRows = null; busyMark($("#bb-hub"), true);
     let after = null;
-    try { after = await saveAndBack(); } finally { state.busy = false; busyMark($("#bb-hub"), false); }
+    try { after = await saveAndBack(); } finally { state.busy = false; busyMark($("#bb-hub"), false); sayWarnings(toast._act); }
     if (after) await after();
     // an estimate's explanation that came while the rows were saved is shown when its screen is still there
     const n = state.noteLater; state.noteLater = null;
@@ -563,32 +578,56 @@ function bindScreen(m, sid) {
   // it cannot be saved as it is, the batch stays and names it), so it never leaves with a row not saved as shown.
   // Resolves to what is to be done once state.busy is off (after a stop: read the project again and redraw what shows it)
   const saveAndBack = async () => {
-    const nav = startedAt(), pid = nav.pid, say = (msg) => toast(msg, nav.act);   // its messages are not joined to a later tap's
+    const nav = startedAt(), pid = nav.pid;
+    const say = (msg) => { toast(msg, nav.act); sayWarnings(nav.act); };   // its messages are not joined to a later tap's
     const moved = () => state.cancel || state.nav !== nav.n || !state.project || state.project.id !== pid;
     const saved = [], same = [], refused = [], refusedRows = [], sent = {};
+    // at the press: what is drawn (state.project) and what every row holds. The rows' own actions still under way (a 保存,
+    // 適用外, 未取得に戻す, 計算不能, この候補を採用 just pressed) are answered while the batch runs, and their redraw is
+    // skipped: the batch names what they stored (stored by their own action below), so that the user is told. A row
+    // typed at the press and stored as typed is named saved; any other row stored since the press is named by its new state
+    const p0 = state.project, at0 = rowsNow();
+    const fieldsHere = state.meta.screens.find((s) => s.id === sid).groups.flatMap((g) => g.fields);
+    const histLen = (p, f) => (((p && p.fields && p.fields[f]) || {}).history || []).length;
+    const byOwn = (p, skip) => {
+      const ok = [], to = {};
+      for (const f of fieldsHere) {
+        if (skip.includes(f) || histLen(p, f) <= histLen(p0, f)) continue;
+        if (at0[f] && at0[f].typed && storedAs(p, f, at0[f])) { ok.push(f); continue; }
+        const st = ((p.fields[f] || {}).value || {}).state || "not_obtained";
+        (to[st] = to[st] || []).push(f);
+      }
+      return { ok, to: Object.entries(to).map(([st, fs]) => `${names(fs)}は「${state.meta.states[st] || st}」になりました`) };
+    };
     // a stop names every row's outcome: saved, refused (with the reason), unchanged, not sent. When the user stopped,
     // blocked() took what each row held: that is compared with what is stored now, so a row stored by its own 保存 is
-    // named saved, a row corrected after it was sent is said to keep its earlier value, and a row typed meanwhile is named
+    // named saved, a row corrected after it was sent is said to keep its earlier value, and a row typed meanwhile is named.
+    // A row its own action decided (owed its stored value, unchanged since the action was sent) is named by what is stored
     const stop = async (rest) => {
       const at = state.cancelRows;
       let p = null;
       if (at) try { p = await api("/projects/" + pid); } catch { p = null; }
-      let ok = saved, early = [], lost = rest;
+      let ok = saved, early = [], lost = rest, to = [];
       if (p) {
         ok = []; lost = [];
+        const decided = (f, x) => { const o = state.owed.get(f); return !!(o && o.n === nav.n && sameRow(x, o.row)); };
         for (const [f, x] of Object.entries(at)) {
-          if (same.includes(f) || refusedRows.includes(f)) continue;
+          if (same.includes(f) || refusedRows.includes(f) || decided(f, x)) continue;
           if (x.typed && storedAs(p, f, x)) ok.push(f);
           else if (saved.includes(f)) early.push(f);
           else if (x.typed || rest.includes(f)) lost.push(f);
         }
+        const own = byOwn(p, ok.concat(early, lost, same, refusedRows, saved));
+        ok = ok.concat(own.ok); to = own.to;
       }
       state.act++;
-      toast(!lost.length && !early.length && !refused.length ? (ok.length ? `${names(ok)}を保存しました` : "保存する変更はありませんでした")
+      toast(!lost.length && !early.length && !refused.length
+        ? ([ok.length ? `${names(ok)}を保存しました` : "", ...to].filter(Boolean).join("。") || "保存する変更はありませんでした")
         : "保存して戻るを途中でやめました：" + [ok.length ? names(ok) + "は保存しました" : "",
-          early.length ? names(early) + "は直す前の値を保存しました（あとで直した値は保存していません）" : "", ...refused,
+          early.length ? names(early) + "は直す前の値を保存しました（あとで直した値は保存していません）" : "", ...refused, ...to,
           same.length ? names(same) + "は変わっていないので送っていません" : "", lost.length ? names(lost) + "は保存していません" : ""]
           .filter(Boolean).join("。"));
+      sayWarnings(state.act);
       return () => refresh(sid, null, true, nav);            // the next drawing shows what is stored
     };
     // the batch stays on the screen, drawn from what is stored now: a saved row that still holds what was sent shows its
@@ -613,13 +652,15 @@ function bindScreen(m, sid) {
     const typedNow = () => [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save).filter(isDirty);
     // a row action still under way (a 保存 just pressed …) is answered first, and the screen is drawn from what it stored;
     // a row the user has touched since it was drawn stays as it is (also when its text is back to the value drawn before:
-    // that is what the screen shows, and what is saved when it differs from what is stored now)
+    // that is what the screen shows, and what is saved when it differs from what is stored now), except the acted rows
+    // unchanged since their action was sent: they show what their action stored, as their own redraw would have
+    // (redraw pays state.owed), so the text typed before 未取得に戻す / 適用外 / 採用 is not saved over it
     if (state.pending.size) {
       const before = typedNow();
       await Promise.allSettled([...state.pending]);
       if (moved()) return stop(before);
     }
-    if (state.stale && state.stale.pid === pid) {
+    if ((state.stale && state.stale.pid === pid) || [...state.owed.values()].some((x) => x.n === nav.n)) {
       const before = typedNow();
       await loadProject(pid);
       if (moved()) return stop(before);
@@ -677,7 +718,9 @@ function bindScreen(m, sid) {
       if (pass >= 2) return stay(`保存して戻るの間に入力が変わった${names(late)}は保存していません`, late[0], []);
       dirty = late;
     }
-    say(saved.length ? `${saved.length} 項目を保存しました（${names(saved)}）` : "保存する変更はありませんでした");
+    // what the batch saved, and what the rows' own actions answered meanwhile stored ("nothing to save" only when neither)
+    const own = byOwn(state.project, saved), ok = saved.concat(own.ok);
+    say([ok.length ? `${ok.length} 項目を保存しました（${names(ok)}）` : "", ...own.to].filter(Boolean).join("。") || "保存する変更はありませんでした");
     state.busy = false; back(true);
     return null;
   };
@@ -697,15 +740,15 @@ function bindScreen(m, sid) {
     const F = state.meta.fields[b.dataset.na];
     if (F.na === "zero" && !F.na_note && !confirm(`「${F.label}」を 0 として計算します。本当に無い（0）と分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
     if (F.na_note && !confirm(`「${F.label}」を「${F.na_note}」として計算します（その分の排出は数えません）。本当にそうだと分かっていますか？分からないときは「未取得」のままにしてください。`)) return;
-    await api(`/projects/${nav.pid}/fields/${b.dataset.na}`, { method: "PUT", body: { value: null, state: "not_applicable", method: "user_entered" } });
+    warnOf(await api(`/projects/${nav.pid}/fields/${b.dataset.na}`, { method: "PUT", body: { value: null, state: "not_applicable", method: "user_entered" } }), nav.act);
     await refresh(sid, b.dataset.na, false, nav);
   }));
   m.querySelectorAll("[data-unset]").forEach((b) => rowAct(b, async (nav) => {
-    await api(`/projects/${nav.pid}/fields/${b.dataset.unset}`, { method: "PUT", body: { value: null, state: "not_obtained", method: "user_entered" } });
+    warnOf(await api(`/projects/${nav.pid}/fields/${b.dataset.unset}`, { method: "PUT", body: { value: null, state: "not_obtained", method: "user_entered" } }), nav.act);
     await refresh(sid, b.dataset.unset, false, nav);
   }));
   m.querySelectorAll("[data-nc]").forEach((b) => rowAct(b, async (nav) => {
-    await api(`/projects/${nav.pid}/fields/${b.dataset.nc}`, { method: "PUT", body: { value: null, state: "not_computable", method: "user_entered" } });
+    warnOf(await api(`/projects/${nav.pid}/fields/${b.dataset.nc}`, { method: "PUT", body: { value: null, state: "not_computable", method: "user_entered" } }), nav.act);
     await refresh(sid, b.dataset.nc, false, nav);
   }));
   m.querySelectorAll("[data-later]").forEach((b) => rowAct(b, async (nav) => {
@@ -716,7 +759,7 @@ function bindScreen(m, sid) {
   // a candidate is adopted by its id (a position could point at another candidate after a repeat tap)
   m.querySelectorAll("[data-accept]").forEach((b) => rowAct(b, async (nav) => {
     try {
-      await api(`/projects/${nav.pid}/fields/${b.dataset.accept}/accept`, { method: "POST", body: { id: +b.dataset.cid } });
+      warnOf(await api(`/projects/${nav.pid}/fields/${b.dataset.accept}/accept`, { method: "POST", body: { id: +b.dataset.cid } }), nav.act);
     } finally { await refresh(sid, b.dataset.accept, false, nav); }
   }));
   m.querySelectorAll("[data-est]").forEach((b) => (b.onclick = guard(b, () => estimate(sid, b.dataset.est))));
@@ -900,6 +943,16 @@ function typedRows(drop = []) {
   });
   return out;
 }
+/* the acted rows owed their stored value (state.owed: their action was answered while 保存して戻る ran, and its redraw was
+   skipped): the rows of the screen shown now that are unchanged since their action was sent. Taken once: the next
+   drawing pays them, whichever it is. A row the user has typed into since keeps what they typed (and 保存して戻る saves it);
+   an entry of a view left since (another nav) is dropped */
+function owedRows() {
+  const out = [];
+  state.owed.forEach((x, f) => { if (x.n === state.nav && state.view === "screen" && sameRow(rowNow(f), x.row)) out.push(f); });
+  state.owed.clear();
+  return out;
+}
 /* put kept rows back after a re-render; they stay touched (a later redraw keeps them too) */
 function restoreTyped(saved) {
   for (const [f, x] of Object.entries(saved)) {
@@ -936,9 +989,16 @@ async function refresh(sid, fid, keepActed = false, nav = startedAt()) {
 async function reloadShown(sid, fid, keepActed, nav) {
   const shows = () => !state.busy && !!state.project && projectKey(state.project) === nav.key
     && (state.view === "hub" || (state.view === "screen" && state.arg === sid));
-  if (!shows()) return false;
+  // skipped while 保存して戻る saves rows on this screen: the acted row is owed what this redraw would have shown (its
+  // stored value, unless the user changes it since its action was sent). The next drawing of the screen (the batch's,
+  // once its row actions are answered) pays it: see owedRows
+  const owe = () => {
+    if (state.busy && fid && !keepActed && nav.row && state.nav === nav.n && onScreen(nav, sid)) state.owed.set(fid, { row: nav.row, n: nav.n });
+    return false;
+  };
+  if (!shows()) return owe();
   const gen = state.gen, p = await api("/projects/" + nav.pid);
-  if (!shows() || projectKey(p) !== nav.key) return false;     // moved meanwhile: the next drawing reads it again
+  if (!shows() || projectKey(p) !== nav.key) return owe();     // moved meanwhile: the next drawing reads it again
   state.project = p;
   if (state.stale && state.stale.pid === p.id && state.stale.gen <= gen) state.stale = null;
   await redraw(nav, fid, keepActed);
@@ -952,7 +1012,8 @@ async function reloadShown(sid, fid, keepActed, nav) {
    a list's summary, a link, a dialog) is where the user is: the scroll stays and the focus goes back to the element that
    had it (the same control, found by its identity, with the caret). All in one task: no keystroke is lost.
    `opt.drop`: the rows that show their stored value (in place of the acted row); `opt.focus`: a row to bring into view and
-   focus when the user is on no control of their own (nowhere, or on 保存して戻る) */
+   focus when the user is on no control of their own (nowhere, or on 保存して戻る). The acted rows whose own redraw was
+   skipped while 保存して戻る ran show their stored value too, by the same rule (owedRows) */
 async function redraw(nav, fid, keepActed, quiet = false, opt = {}) {
   const same = state.nav === nav.n, had = document.activeElement, key = keyOf(had);
   let caret = null;
@@ -962,7 +1023,8 @@ async function redraw(nav, fid, keepActed, quiet = false, opt = {}) {
   const typing = inRow && /^(INPUT|SELECT|TEXTAREA)$/.test(had.tagName);     // in the acted row's own field: no jump
   const toRow = (inRow && !typing) || !!(same && fid && nowhere);
   const changedSince = !!(fid && nav.row && !sameRow(rowNow(fid), nav.row));
-  const keep = state.view === "screen" ? keepScreen(opt.drop || (same && !keepActed && !changedSince && fid ? [fid] : [])) : null;
+  const owed = owedRows();
+  const keep = state.view === "screen" ? keepScreen((opt.drop || (same && !keepActed && !changedSince && fid ? [fid] : [])).concat(owed)) : null;
   const y = window.scrollY;
   await render();
   if (keep) putBack(keep);
@@ -1015,9 +1077,11 @@ function showResult(r, base) {
   const el = $("#res"), pe = $("#period");
   // the period shown is the period of this result, unless the user has typed another since (kept for the next 計算する)
   if (r.period && pe && pe.value === base) { pe.value = r.period; pe.defaultValue = String(r.period); }
+  // not calculated: each missing input with the calculation's reason (fields[].detail: e.g. why a stored 適用外 is no longer
+  // accepted after another input changed), and every input's row as for a result
   if (r.status !== "ok") {
     el.innerHTML = r.stale ? `<div class="notice bad"><strong>入力が変わっています。</strong>前の計算では「${esc(r.message)}」でした。「計算する」を押して計算し直してください。</div>`
-      : `<div class="notice bad"><strong>計算していません</strong>：${esc(r.message)}</div>${missingHtml(r)}`;
+      : `<div class="notice bad"><strong>計算していません</strong>：${esc(r.message)}</div>${missingHtml(r, true)}${fieldsHtml(r.fields)}`;
     return;
   }
   const s = r.summary, maxStage = Math.max(...s.stages.map((x) => Math.abs(x.value || 0)), 1);
@@ -1054,9 +1118,16 @@ function showResult(r, base) {
   <div class="card"><h3 style="margin-top:0">計算の記録</h3><table class="t">${Object.entries(r.trace).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("")}</table></div>`;
 }
 
-function missingHtml(r) {
-  const u = r.unconnected || [], miss = r.missing_required || [];
-  return `${miss.length ? `<div class="card"><h3 style="margin-top:0">計算に必須で足りない入力</h3><ul>${miss.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+/* the required inputs that are missing, each with the calculation's reason when an input of that name is not used
+   (fields[].detail, with its state). `blocked`: the calculation did not run for them; then every required input set to
+   適用外 that the calculation does not use is named with how it was treated as well, also when the missing item has
+   another name (the route, the floor area: their missing item names more than the input) */
+function missingHtml(r, blocked = false) {
+  const u = r.unconnected || [], miss = r.missing_required || [], rows = (Array.isArray(r.fields) ? r.fields : []).filter((x) => x && !x.reflected && x.detail);
+  const why = (x) => `${x.state ? " " + badge(x.state) : ""}<div class="muted">${esc(x.detail)}</div>`;
+  const na = blocked ? rows.filter((x) => x.state === "not_applicable" && !miss.includes(x.label) && (state.meta.fields[x.field] || {}).required) : [];
+  return `${miss.length ? `<div class="card"><h3 style="margin-top:0">計算に必須で足りない入力</h3><ul>${miss.map((m) => `<li>${esc(m)}${rows.filter((x) => x.label === m).map(why).join("")}</li>`).join("")}</ul>${
+    na.length ? `<h4>適用外にした必須の入力（計算での扱い）</h4><ul>${na.map((x) => `<li>${esc(x.label)}${why(x)}</li>`).join("")}</ul>` : ""}</div>` : ""}
   <div class="card"><h3 style="margin-top:0">計算に反映されない入力（${u.length} 件）</h3>${u.length ? `<ul>${u.slice(0, 40).map((x) => `<li>${esc(x.label)}：${esc(x.reason)}</li>`).join("")}</ul>` : '<p class="muted">ありません</p>'}</div>`;
 }
 
@@ -1124,4 +1195,23 @@ async function boot() {
   sp.onclick = open; sp.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") open(); };
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 }
-boot().catch((e) => { document.body.innerHTML = `<p style="padding:16px">起動できませんでした：${esc(e.message)}</p>`; });
+/* the app could not start: said in words, under the door (the offline shell keeps it), with a way to try again. The
+   server cannot be reached when the request itself failed (the browser's TypeError: offline, the server stopped); any
+   other failure is the server's answer. The browser's own wording stays only as a small detail */
+function bootFailed(e) {
+  const sp = $("#splash"), msg = String((e && e.message) || e || "");
+  const head = e instanceof TypeError ? "WLC Studio のサーバーに接続できません" : "WLC Studio を起動できませんでした";
+  const hint = e instanceof TypeError ? "サーバーが動いているか、ネットワークを確かめてください。" : "しばらくしてから、もう一度読み込んでください。";
+  const html = `<div class="boot-error" role="alert"><p><strong>${esc(head)}</strong></p><p>${esc(hint)}</p>
+    <button class="btn primary" id="boot-reload" type="button">再読み込み</button>${msg ? `<p class="boot-detail">詳細：${esc(msg)}</p>` : ""}</div>`;
+  if (!sp) { document.body.innerHTML = html; } else {
+    // the door is no longer a button: nothing opens it
+    sp.onclick = null; sp.onkeydown = null; sp.removeAttribute("role"); sp.removeAttribute("tabindex"); sp.removeAttribute("aria-label");
+    sp.classList.add("failed"); sp.hidden = false;
+    const sub = sp.querySelector(".splash-sub"); if (sub) sub.remove();
+    sp.insertAdjacentHTML("beforeend", html);
+  }
+  const b = $("#boot-reload");
+  if (b) { b.onclick = () => location.reload(); b.focus(); }
+}
+boot().catch(bootFailed);
