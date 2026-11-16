@@ -166,9 +166,11 @@ class App:
                     last["stale"] = rep_now["input_hash"][:16] != (last.get("trace") or {}).get("入力の指紋（SHA-256 の先頭）")
                 return 200, last
             if rest == ["ledger"] and method == "GET":
-                # the reflection for the period last calculated (the same rows as that calculation)
-                doc, rep = bridge.build(self.projects.values(pid), self.refset,
-                                        period=_float(self.projects.get(pid)["last_period"]))
+                # the reflection for the period of the last calculation, as GET /result (the same rows as that calculation,
+                # also when it was blocked and the engine did not run); the stored period only without any run
+                last = self.projects.last_run(pid) or {}
+                T_ = _float(last.get("period")) if last else _float(self.projects.get(pid)["last_period"])
+                doc, rep = bridge.build(self.projects.values(pid), self.refset, period=T_)
                 return 200, {"fields": bridge.reflection_table(rep), "unconnected": rep["unconnected"],
                              "missing_required": rep["missing_required"], "binding_coverage": bridge.binding_coverage()}
         if method == "POST" and parts == ["demo"]:
@@ -462,6 +464,9 @@ class App:
             out = dict(base, status="blocked", message="計算に必須の入力が足りないので計算していない（%s）" % "、".join(rep["missing_required"]),
                        summary=None, trace=trace)
             self.projects.save_run(pid, None, rep["input_hash"], T, "blocked", out)
+            # the period of the last calculation, blocked or not (the screen shows it again after a reload, as it does
+            # right after the calculation)
+            self.projects.touch(pid, last_period=T)
             return out
         r = self.engine.run(doc, p["lca_project_id"], T, name="WLC Studio #%d" % pid)
         if p["lca_project_id"] != r["lca_project_id"]:
