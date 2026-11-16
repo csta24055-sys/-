@@ -111,6 +111,8 @@ ul.unused { margin: 6px 0; padding-left: 1.2em; font-size: .88rem; }
 ul.crows { margin: 4px 0; padding-left: 1.2em; font-size: .88rem; overflow-wrap: anywhere; }
 .cands ul.crows li { border: 0; border-radius: 0; padding: 0; margin: 4px 0; }
 ul.crows .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* a quantity that is text (a note in the quantity column) wraps like the name: only a number is kept on one line */
+ul.crows .qtext { white-space: normal; overflow-wrap: anywhere; }
 .cands .notice { margin: 6px 0; }
 /* a left-out row that may belong in the total: said in words (not by colour alone) */
 ul.crows .maybe { color: var(--s-bad); font-weight: 700; white-space: nowrap; }
