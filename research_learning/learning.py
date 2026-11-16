@@ -20,19 +20,27 @@ LOG_COLS = ["at", "unit_id", "old", "new", "reason", "reviewer"]
 QCOLS = ["question_id", "file", "paper_version", "section_id", "claim_ids", "difficulty", "type",
          "answer_status", "data_kind", "learning_objective"]
 LEVELS = {"S", "A", "B", "C"}
-E_RX = re.compile(r"^(E\d)")
+E_RX = re.compile(r"^(E\d|H1)")
+KINDS = {"E1": "本人・組織の見解や仕様（独立検証なし）", "E2": "測定・準実験（実施者は claims を参照）",
+         "E3": "無作為化比較試験", "H1": "伝聞・他者の結果の集約"}
 
 
 def evidence_strength(a, unit_id: str) -> tuple[str, str]:
-    """段落が引く主張の証拠水準（E1/E2/E3）をまとめる。E1 だけなら独立検証なし。"""
+    """段落が引く主張の証拠水準をまとめる。独立性は水準の名前ではなく資料区分（V1）で判定する。
+
+    是正命令（2026-11-16）以降、開発企業の社員による測定も E2 になるため、「E2＝独立」とはみなさない。
+    """
     claims = a.led.index("claims")
+    srcs = a.led.index("sources")
     blk = a.units[unit_id].block
-    levels = sorted({m.group(1) for c in blk.ids("claims") if c in claims
-                     for m in [E_RX.match(claims[c]["evidence_level"])] if m})
-    kinds = {"E1": "開発者の公式資料（独立検証なし）", "E2": "無作為化試験の中間報告", "E3": "無作為化比較試験"}
+    cids = [c for c in blk.ids("claims") if c in claims]
+    levels = sorted({m.group(1) for c in cids for m in [E_RX.match(claims[c]["evidence_level"])] if m})
     if not levels:
         return "根拠なし（本研究の方法・提案・限界）", ""
-    return "＋".join(f"{lv} {kinds.get(lv, '')}" for lv in levels), ("独立検証なし" if levels == ["E1"] else "")
+    tiers = sorted({srcs.get(claims[c]["source_id"], {}).get("source_tier", "") for c in cids} - {""})
+    independent = "V1" in tiers
+    label = "＋".join(f"{lv} {KINDS.get(lv, '')}" for lv in levels) + f"（資料区分: {'・'.join(tiers)}）"
+    return label, ("" if independent else "独立検証なし")
 
 
 def validate(rows: list[dict], a) -> list[str]:
