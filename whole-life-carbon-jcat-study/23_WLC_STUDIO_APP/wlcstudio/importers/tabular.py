@@ -24,7 +24,8 @@ HEADERS = {  # in order of preference: a name / description column is preferred 
     "quantity": ("数量", "quantity", "qty", "数"),
     "unit": ("単位", "unit", "uom"),
     "division": ("区分", "工種", "部位", "division", "category", "element"),
-    "specification": ("規格", "仕様", "spec", "specification", "grade"),
+    # 摘要 is the specification column of the usual 内訳書 (名称・摘要・数量・単位・単価・金額・備考); 形状・寸法 likewise
+    "specification": ("規格", "仕様", "摘要", "寸法", "形状", "spec", "specification", "grade"),
 }
 MAX_TEXT = 300                                    # characters of a name / unit / spec / division cell that are kept
 MONEY_WORDS = ("費", "単価", "金額", "価格", "代価", "円", "cost", "price", "rate", "amount", "value")
@@ -73,6 +74,15 @@ def _has_word(hs: str, words: tuple) -> bool:
     return _word_rx(tuple(words)).search(hs) is not None
 
 
+_CAMEL = re.compile(r"(?<=[a-z])(?=[A-Z])")
+
+
+def _head_text(h) -> str:
+    """A header cell as matched: cut, stripped, a camelCase run split into words (MaterialCost, UnitPrice, TotalVolume
+    are "material cost", "unit price", "total volume": whole-word matching must still see cost, price, volume), lowered."""
+    return _CAMEL.sub(" ", str(h or "")[:MAX_TEXT].strip()).lower()
+
+
 def _num(s):
     """A quantity cell: the same rule as the screen (a comma only as a thousands separator, no inner spaces)."""
     return number_or_reason(s)[0]
@@ -83,7 +93,7 @@ def _header_map(row: list) -> dict:
     before "Item"); an exact match only breaks a tie of the same word; money columns (材料費, Amount …) are never the name
     or the quantity; a column is used for one key only."""
     out, used = {}, set()
-    heads = [str(h or "")[:MAX_TEXT].strip().lower() for h in row]
+    heads = [_head_text(h) for h in row]
     for key, words in HEADERS.items():
         best = None
         for j, hs in enumerate(heads):
@@ -314,6 +324,8 @@ _MASK = frozenset(("ISNUMBER", "ISTEXT", "ISNONTEXT", "ISBLANK", "ISERROR", "ISE
                    "ISFORMULA", "ISREF", "NOT", "AND", "OR", "XOR", "EXACT", "COUNT", "COUNTA", "COUNTBLANK", "COUNTIF",
                    "COUNTIFS", "ROW", "ROWS", "COLUMN", "COLUMNS", "LEN", "SEARCH", "FIND", "SEARCHB", "FINDB", "MATCH",
                    "XMATCH"))
+# lookups that return one cell of a table (a unit mass, a density): such a cell multiplying another reference is a factor
+_LOOKUP_ONE = frozenset(("VLOOKUP", "HLOOKUP", "XLOOKUP", "LOOKUP", "INDEX", "LARGE", "SMALL", "DGET"))
 MAX_NEST = 64                                     # Excel's limit for nested functions in one formula
 UNPARSED = ("unparsed",)                          # in _additive's answer: the formula's shape was not understood
 
@@ -343,11 +355,15 @@ def _picked(f: str, n: int):
 
 def _additive(seq, names=()) -> frozenset:
     """The references (their tokens) of a formula that are ADDED into its value: alone or in a sum, rounded, chosen by
-    IF / IFS / SWITCH / CHOOSE, returned by a lookup, scaled by a number (C2*1.05) or by a 0/1 condition
-    ((名称=x)*C2, --(名称=x)); not those that only multiply another reference (長さ×$G$2: G2 is a factor), that sit inside
-    a condition, a count or a lookup's key, or are raised to a power. A LET name is what its value is. One linear pass
-    (recursive descent, at most MAX_NEST levels); a shape it does not understand gives UNPARSED (the formula is then not
-    checked), never a guess."""
+    IF / IFS / SWITCH / CHOOSE, returned by a lookup, scaled by a number (C2*1.05), by a 0/1 condition ((名称=x)*C2,
+    --(名称=x)) or by another reference (SUM(明細!C2:E2)*(1+$E$1), 長さ×$G$2: each factor that is not a divisor may carry
+    the quantity, as C2*1.05 does — a factor in a money / factor column is no part of a row's quantity, see documents),
+    passed to a function this parser does not know (MMULT, PRODUCT, REDUCE, MAP, CONVERT …: its arguments may make its
+    value); not those that sit inside a condition, a count or a lookup's key, that divide, or are raised to a power, and
+    not a value looked up (VLOOKUP, INDEX …: one cell of a table, a unit mass) that multiplies another reference. A LET
+    name is what its value is; a LAMBDA parameter is nothing of its own. One linear pass (recursive descent, at most
+    MAX_NEST levels); a shape it does not understand gives UNPARSED (the formula is then not checked), never a guess
+    (13 回目: an unknown function and a product of references counted as adding nothing, the one unsafe default)."""
     n = len(seq)
     if not n:
         return frozenset()                        # an empty formula adds nothing
@@ -362,6 +378,7 @@ def _additive(seq, names=()) -> frozenset:
         return frozenset((UNPARSED,))
     pos = [0]
     env = []                                      # LET scopes: [{name: (all refs, added, mask)}]
+    picks = set()                                 # added tokens that are one looked-up cell (not summed since)
     E = (frozenset(), frozenset(), False)
 
     def peek(k=0):
@@ -409,26 +426,54 @@ def _additive(seq, names=()) -> frozenset:
         finally:
             env.pop()
 
+    def lambda_():                                # LAMBDA(param, …, body): the parameters are bound by the caller
+        scope = {}
+        env.append(scope)
+        try:
+            while peek()[0] == "nm" and peek(1) == ("op", ","):
+                nm = names[peek()[1]] if peek()[1] < len(names) else None
+                take()
+                take()
+                scope[nm] = E
+            r = arg()
+            expect(")")
+            return r[0], r[1], False
+        finally:
+            env.pop()
+
     def call(f):
         if f == "LET":
             return let_()
+        if f == "LAMBDA":
+            return lambda_()
         res = arglist()
         alls = frozenset().union(*(r[0] for r in res))
         if f in _ADD_ALL:
-            return alls, frozenset().union(*(r[1] for r in res)), False
+            got = frozenset().union(*(r[1] for r in res))
+            picks.difference_update(got)          # summed: no longer one looked-up cell
+            return alls, got, False
         if f in _ADD_FIRST:
+            if f in _LOOKUP_ONE:
+                picks.update(res[0][1])
             return alls, res[0][1], res[0][2] if f in ("N", "VALUE", "INT", "ABS", "ROUND") else False
-        if f == "SUMPRODUCT":
+        if f == "SUMPRODUCT":                     # every array that is not a 0/1 condition is a factor of the sum
             live = [r for r in res if r[0] and not r[2]]
-            return alls, (live[0][1] if len(live) == 1 else frozenset()), False
+            got = frozenset().union(*(r[1] for r in live))
+            picks.difference_update(got)
+            return alls, got, False
         if f in _MASK:
             return alls, frozenset(), True
         pick = _picked(f, len(res))
         if pick is not None:
             got = [res[i] for i in pick]
             mask = bool(alls) and all(r[2] or not r[0] for r in got) and f not in _ADD_AT and f not in ("SUMIF", "AVERAGEIF", "LOOKUP")
-            return alls, frozenset().union(*(r[1] for r in got)), mask
-        return alls, frozenset(), False
+            added = frozenset().union(*(r[1] for r in got))
+            if f in _LOOKUP_ONE:
+                picks.update(added)
+            return alls, added, mask
+        got = frozenset().union(*(r[1] for r in res))   # a function not known here: its arguments may make its value
+        picks.difference_update(got)
+        return alls, got, False
 
     def primary():
         t = take()
@@ -495,7 +540,9 @@ def _additive(seq, names=()) -> frozenset:
         live = [f for f in withrefs if not f[1][2]]
         if len(live) == 1 and live[0][0] != "/":
             return alls, live[0][1][1], False                 # one reference scaled by numbers or by conditions
-        return alls, frozenset(), False
+        # several references multiplied: each that does not divide may carry the quantity (C2*1.05 and C2*(1+$E$1)
+        # alike), except a looked-up cell (長さ×VLOOKUP(径, 単位質量表, 2): a unit mass)
+        return alls, frozenset().union(*(f[1][1] - picks for f in live if f[0] != "/")), False
 
     def sum_():
         rs = [term()]
@@ -892,7 +939,7 @@ def _qty_cols(header: list) -> list:
     reaches one of them on another material row copies that row's quantity."""
     out = []
     for j, h in enumerate(header):
-        hs = str(h or "")[:MAX_TEXT].strip().lower()
+        hs = _head_text(h)
         if hs and _has_word(hs, QTY_LIKE) and not _has_word(hs, MONEY_WORDS + NOT_QTY):
             out.append(j)
     return out
@@ -901,7 +948,7 @@ def _qty_cols(header: list) -> list:
 def _factor_cols(header: list) -> list:
     """The columns whose header names money or a factor (単価, 金額, 単位質量, 比重, 密度, 係数, 率, kg/m …): a number there
     is never part of a material row's quantity."""
-    return [j for j, h in enumerate(header) if _has_word(str(h or "")[:MAX_TEXT].strip().lower(), MONEY_WORDS + NOT_QTY)]
+    return [j for j, h in enumerate(header) if _has_word(_head_text(h), MONEY_WORDS + NOT_QTY)]
 
 
 HEADING = "見出しの行（数量も単位も無い）は材料の行ではない"

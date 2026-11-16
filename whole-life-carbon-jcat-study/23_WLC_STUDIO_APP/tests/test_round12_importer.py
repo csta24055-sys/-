@@ -67,8 +67,10 @@ class TwelfthRoundImporterTests(unittest.TestCase):
 
     def test_factors_and_conditions_stay_factors(self):
         add = lambda f: sorted(k for k in tabular._formula_parts(f)[7] if k[0] == "ref")   # noqa: E731
-        self.assertEqual(add("SUMPRODUCT(B2:B9,C2:C9)"), [])                  # length × unit mass
-        self.assertEqual(add("_xlfn.LET(_xlpm.f,係数!B2,D2*_xlpm.f)"), [])        # a factor through LET
+        # 13 回目: every factor of a product of references counts as added (SUM(明細!C2:E2)*(1+$E$1) copies the floors);
+        # a unit mass is kept out by its column's header (単位質量) or by being looked up — see test_round13_importer
+        self.assertEqual(add("SUMPRODUCT(B2:B9,C2:C9)"), [("ref", 0), ("ref", 1)])
+        self.assertEqual(add("_xlfn.LET(_xlpm.f,係数!B2,D2*_xlpm.f)"), [("ref", 0), ("ref", 1)])
         self.assertEqual(add("_xlfn.LET(_xlpm.k,1.05,C2*_xlpm.k)"), [("ref", 0)])  # a number through LET
         self.assertEqual(add("IF(A1>0,1,0)*B1"), [("ref", 1)])                  # a 0/1 test scales B1
         self.assertEqual(add("A1=B1+C1"), [])                                    # a test is not a quantity

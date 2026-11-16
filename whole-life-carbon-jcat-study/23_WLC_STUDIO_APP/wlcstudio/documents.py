@@ -66,10 +66,33 @@ PLACE_NOT = ("下地", "上塗", "上張", "上貼", "面材", "面積", "上屋
 # X用Y is Y for X (鉄筋用スペーサー, コンクリート用砕石, モルタル用砂, 石膏ボード用パテ, 鉄骨用高力ボルト): not X. Only when Y is a
 # form of X itself is the material the item (防水用シート, 防水用塗膜 are membranes, 断熱用ボード insulation); when Y is another
 # material, Y is the head anyway (防水用モルタル is mortar). X用 alone names a purpose (the next parts may name the item)
-USE_FORMS = {"m_membrane": ("シート", "塗膜", "ルーフィング", "防水層", "膜", "層")}
+# A Japanese compound ends in its head, so Y is a form of X when it ENDS in one (防水用改質アスファルトシート, 防水用ウレタン
+# 塗膜, 断熱用フォームボード, 鉄骨用ベースプレート) — or names one with no purpose product after it (断熱用ボード張り);
+# 防水用シート押え金物 is hardware (13 回目)
+USE_FORMS = {"m_membrane": ("シート", "塗膜", "ルーフィング", "防水層", "膜", "層", "アスファルト"),
+             "m_steel": ("鋼板", "丸鋼", "鋼管", "形鋼", "プレート", "ブレース", "デッキ", "アングル", "チャンネル", "フラットバー")}
 PURPOSE_PRODUCTS = ("骨材", "金物", "金具", "スペーサ", "混和", "添加", "接着", "プライマー", "釘", "ビス", "ボルト", "アンカー",
                     "インサート", "スリーブ", "セパレータ", "型枠", "剥離", "はく離", "養生", "シール", "テープ", "目地",
-                    "補修", "塗料", "錆止", "さび止", "防錆", "塗材", "結束", "吊", "支持", "下地材")
+                    "補修", "塗料", "錆止", "さび止", "防錆", "塗材", "結束", "吊", "支持", "下地材", "ピン", "ファスナ",
+                    "パテ", "押え", "押さえ")
+_NON_ASCII_RUN = re.compile(r"[^\x00-\x7f]+")
+
+
+def _use_is_form(fid: str, rest: str) -> bool:
+    """Is Y of X用Y (rest: the text after 用) a form of X itself? Y is its first word (the Japanese run of it); it is a
+    form when it names one of X's forms (or ボード/board) with no purpose product after the last of them."""
+    words = rest.split()
+    if not words:
+        return False
+    y = words[0]
+    m = _NON_ASCII_RUN.match(y)
+    if m:
+        y = m.group(0)
+    forms = USE_FORMS.get(fid, ()) + tuple(FORM_WORDS)
+    ends = [y.rfind(f) + len(f) for f in forms if f in y]
+    if not ends:
+        return False
+    return not any(p in y[max(ends):] for p in PURPOSE_PRODUCTS)
 # English products of no field: a material after "in" is what they sit in (Waterstop in concrete, Dowel bars in concrete)
 PRODUCTS_IN_EN = ("waterstop", "water stop", "water bar", "waterbar", "dowel", "conduit", "sleeve", "hole", "bolt", "pipe",
                   "duct", "cable", "anchor", "insert", "joint", "chase", "groove", "recess", "opening", "fixing", "box",
@@ -129,7 +152,7 @@ def _head_of(seg: str, ms: list):
     """(the head among the keyword matches of one part or None, whether the part names a product of no field). The
     head is None when every match only qualifies something else: a place (土間コンクリート下: the next parts are looked
     at), or a product of no field (断熱サッシ, 鉄筋用スペーサー: the name is no material)."""
-    kept, product = [], False
+    kept, product, purposes = [], False, []
     for a, b, fid, w in ms:
         after = seg[b:]
         if after.startswith(PLACE_AFTER) and not after.startswith(PLACE_NOT):
@@ -138,14 +161,17 @@ def _head_of(seg: str, ms: list):
             rest = after[1:].lstrip()
             if not rest:
                 continue                                 # 防水用 alone: what it is for
-            if not rest.startswith(USE_FORMS.get(fid, ()) + tuple(FORM_WORDS)):
+            if not _use_is_form(fid, rest):
                 product = True
+                purposes.append(b)
                 continue                                 # 鉄筋用スペーサー, コンクリート用砕石: not rebar, not concrete
         if w in ADJECTIVES and after.lstrip().startswith(PRODUCT_NOUNS):
             product = True
             continue                                     # アルミ断熱サッシ: an insulated sash, not insulation
         kept.append((a, b, fid, w))
-    kept = [m for m in kept if not (m[3] in FORM_WORDS and any(o[2] != m[2] and o[1] <= m[0] for o in kept))]
+    # a bare form word (ボード) after another material, or after a purpose (断熱用ボード押え金物), is no head of its own
+    kept = [m for m in kept if not (m[3] in FORM_WORDS and (any(o[2] != m[2] and o[1] <= m[0] for o in kept)
+                                                            or any(e <= m[0] for e in purposes)))]
     if not kept:
         return None, product
     return max(kept, key=lambda m: (m[1], m[1] - m[0])), False
@@ -216,6 +242,9 @@ LABOUR_PREFIX = ("現場", "ガス", "工場", "手", "機械", "人力")
 LABOUR_SUFFIX = ("工", "作業", "のみ")
 _SIZE = re.compile(r"[a-zφ]{0,3}\d[\w.×*/@~\-]*|\d[\w.×*/@~\-]*")    # D19, t12.5, φ600, 100x100, @200
 WORK_WORDS = LABOUR_WORDS + METHOD_WORDS
+# 打込み in the specification of a material other than concrete names how it is put in place (押出法ポリスチレンフォーム｜
+# t50 打込み is cast-in insulation); for concrete it is the placing labour (13 回目)
+CAST_IN = ("打込", "打ち込")
 _WORKRX = re.compile("|".join(re.escape(w) for w in sorted(WORK_WORDS, key=len, reverse=True)))
 # what may follow a method word before 共 / 込 / 別途 (金ごて押え共, 溶接止め込み, 取付工共)
 METHOD_TAIL = ("押え", "押さえ", "仕上げ", "仕上", "止め", "止", "張り", "張", "貼り", "貼", "塗り", "塗", "工法", "工")
@@ -232,7 +261,7 @@ _WORK_EN = re.compile(
     r"hoist(?:s|ed|ing)?|install(?:s|ed|ing|ation)?|unload(?:s|ed|ing)?|weld(?:s|ed|ing)?|assembl(?:e|es|ed|ing|y)|"
     r"handl(?:e|es|ed|ing)|erect(?:s|ed|ing|ion)?|fix(?:es|ed|ing)?|pour(?:s|ed|ing)?|pump(?:s|ed|ing)?|"
     r"cur(?:e|es|ed|ing)|transport(?:s|ed|ing|ation)?|deliver(?:y|ies|ed|ing)?|fabricat(?:e|es|ed|ing|ion)|"
-    r"cut(?:s|ting)?|bend(?:s|ing)?|tying|formwork|shuttering|labou?r|trowel(?:s|led|ling)?)")
+    r"cut(?:s|ting)?|bend(?:s|ing)?|tying|formwork|shuttering|labou?r|trowel(?:s|led|ling)?|test(?:s|ing)?|sampling)")
 WORK_PHRASES_EN = ("power float", "float finish", "floated finish", "trowel finish", "trowelled finish")
 # after the material, only a work NOUN makes the row work (Rebar fixing, Steel erection, Concrete pumping, Placing of
 # concrete): a participle describes the supply-and-fix item (poured against earth; cut, bent and fixed; laid in slabs;
@@ -241,6 +270,9 @@ _WORK_NOUN_EN = re.compile(r"[a-z]*(?:ing|ion|ment)|labou?r|formwork|shuttering|
 # after the material, a participle describes the supply-and-fix item (poured against earth; cut, bent and fixed; laid in
 # slabs); a base verb or a noun names labour (fix only, place and compact, erect only, hoist and fix, Rebar fixing)
 _PARTICIPLE_EN = re.compile(r"[a-z]+ed|laid")
+# "cut" after the material is the participle when a preposition follows (cut to length / size / fit, cut into lengths,
+# cut from sheet) or another participle does (cut, bent and fixed); "cut only", "cut and bend" are labour (13 回目)
+CUT_PARTICIPLE_NEXT = frozenset(("to", "into", "from", "out", "back", "at", "in", "on", "off", "as"))
 WORK_WORDS_EN = ("placing", "placement", "pumping", "pump", "pour", "pouring", "fixing", "erection", "erect", "erecting",
                  "fabrication", "fabricate", "fabricating", "cutting", "bending", "tying", "labour", "labor", "transport",
                  "delivery", "formwork", "curing", "installation", "hoisting")        # (examples; _WORK_EN decides)
@@ -351,10 +383,13 @@ def _work(n: str, n_name: int | None = None) -> bool:
             continue                               # "fabricated steelwork", "pumped concrete": the material
         if t in ("place", "placed") and i and toks[i - 1] == "in":
             continue                               # "cast-in-place concrete", "in-place concrete": the material
+        if t in ("test", "tests") and toks[i + 1:i + 2] and toks[i + 1].startswith("pile"):
+            continue                               # "test piles" are piles (試験杭), not testing
         if head_tok is not None and i > head_tok and toks[i + 1:i + 2] != ["only"] and (
-                _PARTICIPLE_EN.fullmatch(t) or (t == "cut" and any(_PARTICIPLE_EN.fullmatch(x) or x == "bent"
-                                                                   for x in toks[head_tok + 1:]))
-                or (t.endswith("s") and not _WORK_NOUN_EN.fullmatch(t))):
+                _PARTICIPLE_EN.fullmatch(t) or (t == "cut" and (toks[i + 1:i + 2] and toks[i + 1] in CUT_PARTICIPLE_NEXT
+                                                                or any(_PARTICIPLE_EN.fullmatch(x) or x == "bent"
+                                                                       for x in toks[head_tok + 1:])))
+                or (t.endswith("s") and not _WORK_NOUN_EN.fullmatch(t) and t != "tests")):
             continue                               # "concrete C20; poured against earth", "bars; cut, bent and fixed",
             #                                        "thrust blocks to drainage bends" (a plural noun, not a verb)
         if any(x in INCLUSIVE_EN for x in toks[:i]):
@@ -364,7 +399,9 @@ def _work(n: str, n_name: int | None = None) -> bool:
         m = _WORKRX.search(seg)
         while m:
             k, e = m.span()
-            if i >= n_name and m.group(0) in METHOD_WORDS and 0 <= hs < n_name and parts[hs][a:b] not in ("仕上", "finish") \
+            method = m.group(0) in METHOD_WORDS or (m.group(0) in CAST_IN and 0 <= hs < len(parts)
+                                                     and not any(c in parts[hs][a:b] for c in ("コンクリート", "生コン", "concrete")))
+            if i >= n_name and method and 0 <= hs < n_name and parts[hs][a:b] not in ("仕上", "finish") \
                     and not _bare_method(seg, k, e):
                 m = _WORKRX.search(seg, e)         # 床下敷込, 溶接止め, 金ごて仕上 in the specification of a named material
                 continue
@@ -604,8 +641,10 @@ class _Cells:
         self.fcols = {}
         self.targets, self.tcols, self.owned = {}, {}, {}
         self.ncols = {}                    # (sheet, row) -> the row's numbers outside money / factor columns
+        self.xcols = {}                    # sheet -> its money / factor columns (単価, 単位質量, 比重 …)
         self.cut_sheets = set(parsed.get("cut_sheets") or ())
         self.memo, self.name_memo = {}, {}
+        self.last_hits = ()
         self.left = MAX_FOLLOW_STEPS
         self.cut = 0
 
@@ -660,8 +699,10 @@ class _Cells:
     def own_parts(self, sh: str, row: int):
         """The cells of a material row that are added into its quantity (ROUND(F2), SUM(B2:D2): a calculation column,
         per-floor columns): another row that reaches one of them copies part of this row's quantity. A factor of the
-        row (a density, a unit mass multiplied by a length) is not a part of it."""
+        row (a density, a unit mass multiplied by a length) is not a part of it: a cell in a money / factor column is
+        never one (13 回目: a product of references now counts every factor as added)."""
         tc = self.tcols.get(sh, ())
+        xc = self.xcols.get(sh, ())
         rowcells = self.cells.get(sh, {}).get(row) or {}
         owned, todo, seen = set(tc), [c for c in tc if c in rowcells], set()
         while todo:
@@ -676,6 +717,8 @@ class _Cells:
             for bsh, c1, c2, r1, r2 in blocks:
                 if (bsh is None or bsh == sh) and r1 == row and r2 == row and c2 - c1 < 256:
                     for cc in range(c1, c2 + 1):
+                        if cc in xc and cc not in tc:
+                            continue
                         owned.add(cc)
                         if cc in rowcells:
                             todo.append(cc)
@@ -742,6 +785,34 @@ class _Cells:
                 stack.append([child, None, None, [], [], added])
         return memo[root]
 
+    def reaches_same(self, sh: str, row: int, col: int, fid: str, row_fid: dict) -> bool:
+        """After a copy on another sheet: does the quantity reach a row of the same material there (or a total / work row
+        that names none)? The rows the walk kept, and every material row of another sheet inside the blocks the formula
+        names itself (a mask or a SUMIF over the whole bill reaches the row of its own material even when the walk
+        stopped at the first two rows). Unsure (the formula cannot be read again): yes."""
+        same = lambda k: k in row_fid and row_fid[k] in (None, fid)   # noqa: E731
+        if any(same(h) for h in self.last_hits):
+            return True
+        f = (self.cells.get(sh, {}).get(row) or {}).get(col)
+        try:
+            why, blocks = tabular.formula_walk(f, self._ctx(sh, row, col))
+        except _FollowBudget:
+            return True
+        if why:
+            return True
+        for bsh, c1, c2, r1, r2, _added in blocks:
+            t = bsh or sh
+            if t == sh:
+                continue
+            rows = self.targets.get(t, ())
+            k = bisect.bisect_left(rows, 0 if r1 is None else r1)
+            hi = tabular.MAX_ROW_NUMBER if r2 is None else r2
+            while k < len(rows) and rows[k] <= hi:
+                if same((t, rows[k])):
+                    return True
+                k += 1
+        return False
+
     def copy_of(self, sh: str, row: int, col: int, qf=None):
         """None, ("copy", sheet, row), ("unchecked", reason) or ("budget", reason)."""
         node = ("c", sh, row, col)
@@ -759,6 +830,7 @@ class _Cells:
                     % MAX_FOLLOW_STEPS)
         others = [h for h in list(hits) + list(adds) if h != (sh, row)]
         if others:
+            self.last_hits = tuple(others)       # every material row reached (up to four): the caller compares fields
             return ("copy",) + others[0]
         if why:
             text, at = why
@@ -799,11 +871,20 @@ def _row_class(prep: _Prep, r: dict) -> dict:
     demolish = _demolish(text, n_name)
     work = _work(text, n_name)
     u = _unit(r.get("unit"))
-    if fid == "m_masonry" and u == "m3" and _concrete_block(text):
-        fid = "m_concrete_fdn" if _classify(text.replace("block", "").replace("ブロック", ""), div) == "m_concrete_fdn" \
-            else "m_concrete"
+    fid = _block_as_concrete(fid, text, div, u)
     return {"name": name, "fid": fid, "u": u, "total": total, "again": again, "deduct": deduct,
             "demolish": demolish, "work": work}
+
+
+_BLOCK_WORD = re.compile(r"(?i)blocks?|ブロック")
+
+
+def _block_as_concrete(fid, text: str, div: str, u) -> str | None:
+    """A concrete block row measured in m3 is concrete (foundation concrete when the rest of the name or the division
+    says so), on every path that reads a table, a PDF or an IFC (13 回目: the word is taken out in any letter case)."""
+    if fid == "m_masonry" and u == "m3" and _concrete_block(text):
+        return "m_concrete_fdn" if _classify(_BLOCK_WORD.sub(" ", text), div) == "m_concrete_fdn" else "m_concrete"
+    return fid
 
 
 @functools.lru_cache(maxsize=8192)
@@ -828,6 +909,9 @@ R_DEMOLISH_MAYBE = "材料の後に撤去・解体・処分の語がある（取
 R_WORK = "作業の行（加工・運搬・打設など。材料の量を繰り返す）は足さない（二重計上を防ぐ）"
 R_NEG = "負の数量は読まない（差し引きにしない）"
 R_COPY_SHEET = "別のシート（%s）の材料の行（%d 行目）の数量を参照した値は足さない（そのシートも読んでいるので二重計上になる）"
+# … but a row of ANOTHER material worked out from it (鉄筋 = 明細のコンクリート × 0.12) is counted nowhere: maybe (13 回目)
+R_COPY_SHEET_OTHER = "別のシート（%s）のほかの材料の行（%d 行目）の数量から計算した値は足さない（二重計上のおそれ）。" \
+                     "別の材料を比率で出した行など、足すべき行なら手で入れる"
 SURELY_NOT = (R_TOTAL, R_AGAIN, R_DEDUCT, R_DEMOLISH, R_NEG, tabular.HEADING)
 _COPY_SHEET_HEAD = R_COPY_SHEET.split("%s")[0]
 
@@ -866,6 +950,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         warnings += parsed.get("warnings", [])
         prep, cells = _Prep(), _Cells(parsed)
         classed = []                       # (sheet casefolded, row, class) of the candidate rows, in reading order
+        row_fid = {}                       # (sheet casefolded, row) -> the field a material / marked row names (or None)
         n_classified, stopped = 0, None
         for sh in parsed["sheets"]:
             if sh.get("error"):
@@ -898,9 +983,11 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 if c["fid"] and c["u"] in FL.FIELDS[c["fid"]]["units"]:
                     mats.append(r["row"])
                     nums[r["row"]] = r.get("ncols") or ()
+                    row_fid[(shf, r["row"])] = c["fid"]
                 elif c["total"] or c["again"] or c["work"] or c["deduct"] or c["demolish"]:
                     marks.append(r["row"])
                     nums[r["row"]] = r.get("ncols") or ()
+                    row_fid[(shf, r["row"])] = c["fid"]
                 if cand:
                     classed.append((shf, r, c))
                 elif r.get("heading"):
@@ -910,6 +997,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             if mats:
                 cells.targets[shf] = sorted(set(mats + marks))
                 cells.tcols[shf] = list(sh.get("qcols") or [sh.get("qcol") or 0])
+                cells.xcols[shf] = xcols
                 for rn in cells.targets[shf]:
                     cells.ncols[(shf, rn)] = sorted(set(nums.get(rn) or ()) - xcols)
                     cells.own_parts(shf, rn)
@@ -941,8 +1029,12 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                     if tsh == shf:
                         why = "同じシートのほかの材料の行（%d 行目）の数量から計算した値（合計・再掲・割増のおそれ）は足さない。" \
                               "別の材料を比率で出した行など、足すべき行なら手で入れる" % trow
-                    else:
+                    elif cells.reaches_same(shf, r["row"], sh_qcol(parsed, shf), c["fid"], row_fid):
+                        # it reaches a row of the same material (or a total of no material): a copy of what that sheet
+                        # counts. Only rows of other materials: it may belong (鉄筋 = 明細のコンクリート × 0.12)
                         why = R_COPY_SHEET % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
+                    else:                  # only another material's row there: this material is counted nowhere else
+                        why = R_COPY_SHEET_OTHER % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
                 elif got:
                     why = got[1]
             if why:
@@ -963,6 +1055,8 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             fid = _field_for(mats, "footing" if e["type"] in ("IFCFOOTING", "IFCPILE") else "")
             if e["type"] in ("IFCREINFORCINGBAR", "IFCREINFORCINGMESH"):
                 fid = "m_rebar"
+            elif fid == "m_masonry" and e["type"] in ("IFCFOOTING", "IFCPILE") and _concrete_block(_prep(mats)):
+                fid = "m_concrete_fdn"           # a concrete block footing (anchor / thrust block) is foundation concrete
             label = "%s %s" % (e["type"], e["name"])
             if fid is None:
                 unused.append({"trace": "%s:#%d" % (doc_id, e["step_id"]), "name": label,
@@ -1006,6 +1100,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 continue
             fid = _field_for(c["name"])
             u = _unit(c["unit"])
+            fid = _block_as_concrete(fid, _prep(c["name"]), "", u)
             if fid is None or u not in FL.FIELDS.get(fid, {}).get("units", []):
                 unused.append({"trace": c["trace"], "name": c["name"][:80], "reason": "材料の欄・単位に当てはまらない"})
                 continue
