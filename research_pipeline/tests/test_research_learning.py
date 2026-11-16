@@ -92,3 +92,28 @@ class LearningLedger(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LearningExport(unittest.TestCase):
+    """第10部 10-7・10-8：learning/ の台帳（lesson・問題・根拠の経路・二軸）を合成データで検証する。"""
+
+    def test_export_traces_question_back_to_source(self):
+        import tempfile
+        from research_learning import export as EX
+        from research_pipeline import trace as TR
+        from research_pipeline.common import read_csv
+        from research_pipeline.tests.test_pipeline import make_root
+        with tempfile.TemporaryDirectory() as t:
+            root = make_root(Path(t))
+            a = TR.audit(root)
+            n = EX.write_all(root, a, "2026-11-16T00:00+09:00", "自動監査のみ", [("ch8", "開発", "作成済み")], "テスト")
+            self.assertEqual(n["questions"], 1)
+            q = read_csv(root / "learning" / "questions.csv")[0]
+            self.assertEqual((q["correct_answers"][:2], q["synthetic_data_flag"], q["status"]), ("B)", "false", "公開可"))
+            self.assertTrue(q["lesson_id"].startswith("01#L"))
+            m = read_csv(root / "learning" / "learning_evidence_map.csv")
+            self.assertIn(("SRC-000001", "CLAIM-000001", "P1-U001", q["question_id"]),
+                          {(r["source_id"], r["claim_id"], r["paper_unit"], r["question_id"]) for r in m})
+            pr = {r["unit_id"]: r["quadrant"] for r in read_csv(root / "learning" / "prioritization.csv")}
+            self.assertEqual(set(pr), {"P1-U001", "P1-U002", "P1-U003", "P1-U004"})
+            self.assertIn("LO-01", (root / "learning" / "curriculum.yaml").read_text(encoding="utf-8"))
