@@ -22,7 +22,7 @@ HEADERS = {  # in order of preference: a name / description column is preferred 
     # never a quantity
     "name": ("名称", "品名", "材料", "品目", "material", "description", "name", "項目", "item"),
     "quantity": ("数量", "quantity", "qty", "数"),
-    "unit": ("単位", "unit", "uom"),
+    "unit": ("単位", "unit", "uom", "units", "u/m", "u.o.m"),
     "division": ("区分", "工種", "部位", "division", "category", "element"),
     # 摘要 is the specification column of the usual 内訳書 (名称・摘要・数量・単位・単価・金額・備考); 形状・寸法 likewise
     "specification": ("規格", "仕様", "摘要", "寸法", "形状", "spec", "specification", "grade"),
@@ -74,13 +74,90 @@ def _has_word(hs: str, words: tuple) -> bool:
     return _word_rx(tuple(words)).search(hs) is not None
 
 
-_CAMEL = re.compile(r"(?<=[a-z])(?=[A-Z])")
+# a camelCase boundary: a lower-case letter, then an upper-case letter that starts a word (MaterialCost, TotalVolume);
+# UoM, NetQTY, U/M are not split by it (14 回目: round 13 split every lower→upper change and made UoM "uo m")
+_CAMEL = re.compile(r"(?<=[a-z])(?=[A-Z][a-z])")
+_CAMEL_ANY = re.compile(r"(?<=[a-z])(?=[A-Z])")    # round 13's split (NetQTY → net qty): also tried, never alone
+# spaces between two kanji / kana (名　称, 数 量, 単　位: the usual 内訳書 spaces its two-letter headers out)
+_CJK = "\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff"
+_CJK_SPACE = re.compile("(?<=[%s])[ \u3000]+(?=[%s])" % (_CJK, _CJK))
+
+
+@functools.lru_cache(maxsize=4096)
+def _forms(s: str) -> tuple:
+    """The lowered forms of one header text that are matched: split before an upper-case letter that starts a word,
+    unsplit, and split at every lower→upper change; and, when spaces stand between kanji or kana, the text without
+    those spaces (名　称 is 名称, 14 回目の攻撃). A word is found when it is found in any form."""
+    out = []
+    for v in (_CAMEL.sub(" ", s), s, _CAMEL_ANY.sub(" ", s), _CJK_SPACE.sub("", s)):
+        v = v.lower()
+        if v not in out:
+            out.append(v)
+    return tuple(out)
+
+
+def _head_forms(h) -> tuple:
+    """A header cell as matched: cut, stripped, in each of its forms (see _forms); () for an empty cell."""
+    s = str(h if h is not None else "")[:MAX_TEXT].strip()
+    return _forms(s) if s else ()
 
 
 def _head_text(h) -> str:
-    """A header cell as matched: cut, stripped, a camelCase run split into words (MaterialCost, UnitPrice, TotalVolume
-    are "material cost", "unit price", "total volume": whole-word matching must still see cost, price, volume), lowered."""
-    return _CAMEL.sub(" ", str(h or "")[:MAX_TEXT].strip()).lower()
+    """A header cell as shown in a match: cut, stripped, split before an upper-case letter that starts a word
+    (MaterialCost, UnitPrice, TotalVolume are "material cost", "unit price", "total volume"), lowered."""
+    f = _head_forms(h)
+    return f[0] if f else ""
+
+
+def _forms_have(forms: tuple, words: tuple) -> bool:
+    return any(_has_word(v, words) for v in forms)
+
+
+# a money word that ends one ASCII run of a header whose start is a cost word (MATERIALRATE, Materialcost, LABOURCOST,
+# UNITPRICE, TOTALAMOUNT, ALLINRATE): money for the name, quantity and unit keys. Only listed starts are read, so that
+# real words that end in the same letters (Substrate, Separate, Corporate, Accurate, Paramount, Devalue) are not
+# money (14 回目)
+_MONEY_EN = ("cost", "price", "rate", "amount", "value")
+_MONEY_STARTS = frozenset((
+    "material", "materials", "matl", "mat", "labour", "labor", "lab", "plant", "equipment", "equip", "unit", "total",
+    "net", "nett", "gross", "sub", "subcon", "subcontract", "item", "line", "base", "supply", "fix", "fixing", "install",
+    "installation", "extended", "ext", "all", "in", "composite", "contract", "tender", "budget", "est", "estimated",
+    "actual", "final", "bill", "boq", "day", "daily", "hour", "hourly"))
+_ASCII_RUN = re.compile(r"[a-z]+")
+
+
+@functools.lru_cache(maxsize=4096)
+def _cost_start(p: str) -> bool:
+    """Is p one or more of the listed cost-word starts written together (material, totalmaterial, allin …)?"""
+    if not p or len(p) > 40:
+        return False
+    ok = [True] + [False] * len(p)
+    for i in range(1, len(p) + 1):
+        ok[i] = any(ok[i - len(w)] and p[i - len(w):i] == w for w in _MONEY_STARTS if len(w) <= i)
+    return ok[len(p)]
+
+
+def _joined_money(forms: tuple) -> bool:
+    for v in forms:
+        for m in _ASCII_RUN.finditer(v):
+            run = m.group(0)
+            for w in _MONEY_EN:
+                for end in (w, w + "s"):
+                    if len(run) > len(end) and run.endswith(end) and _cost_start(run[:-len(end)]):
+                        return True
+    return False
+
+
+def _money_head(forms: tuple) -> bool:
+    """A money column (材料費, 材料単価, Material cost, MaterialCost, MATERIALRATE, Amount …): never the name, the quantity
+    or the unit."""
+    return _forms_have(forms, MONEY_WORDS) or _joined_money(forms)
+
+
+# the unit key: an exact unit word wins over a header that only contains one; a header that only contains one is not
+# the unit when it names a factor or a mass per unit (Unit Weight, 単位質量, 単位重量: 14 回目)
+UNIT_EXACT = frozenset(("単位", "unit", "units", "uom", "u/m", "u.o.m.", "u.o.m"))
+UNIT_NOT = ("per", "比重", "密度", "density", "率", "rate", "係数", "factor", "質量", "重量", "weight", "mass", "単重")
 
 
 def _num(s):
@@ -88,30 +165,41 @@ def _num(s):
     return number_or_reason(s)[0]
 
 
-def _header_map(row: list) -> dict:
+def _header_map(row: list, not_name: frozenset = frozenset()) -> dict:
     """The column of each key: the column whose header matches the most preferred word ("Item description" is the name
-    before "Item"); an exact match only breaks a tie of the same word; money columns (材料費, Amount …) are never the name
-    or the quantity; a column is used for one key only."""
+    before "Item"); an exact match only breaks a tie of the same word; money columns (材料費, Amount, MATERIALRATE …) are
+    never the name, the quantity or the unit; for the unit, an exact unit word (単位, Unit, UoM, U/M) wins over a header
+    that only contains one (Unit Rate, Unit Weight, 単位質量); a column is used for one key only. `not_name`: columns
+    not to take as the name (their cells are numbers, see _find_header)."""
     out, used = {}, set()
-    heads = [_head_text(h) for h in row]
+    heads = [_head_forms(h) for h in row]
+    money = [bool(f) and _money_head(f) for f in heads]
     for key, words in HEADERS.items():
         best = None
-        for j, hs in enumerate(heads):
-            if j in used or not hs:
+        for j, fs in enumerate(heads):
+            if j in used or not fs:
                 continue
-            if key in ("name", "quantity") and _has_word(hs, MONEY_WORDS):
-                continue                                   # 材料費, 材料単価, Material cost, Amount …
+            if key in ("name", "quantity", "unit") and money[j]:
+                continue                                   # 材料費, 材料単価, Material cost, Amount, Unit Rate …
+            if key == "name" and j in not_name:
+                continue
+            first = ()
+            if key == "unit":
+                exact_unit = any(v in UNIT_EXACT for v in fs)
+                if not exact_unit and _forms_have(fs, UNIT_NOT):
+                    continue                               # Unit Weight, 単位質量, 単位重量: a factor, not the unit
+                first = (0 if exact_unit else 1,)
             for rank, w in enumerate(words):
                 w = w.lower()
-                exact = w == hs
-                if exact or (len(w) > 1 and w in hs):
-                    score = (rank, 0 if exact else 1, j)
+                exact = w in fs
+                if exact or (len(w) > 1 and any(w in v for v in fs)):
+                    score = first + (rank, 0 if exact else 1, j)
                     if best is None or score < best:
                         best = score
                     break
         if best is not None:
-            out[key] = best[2]
-            used.add(best[2])
+            out[key] = best[-1]
+            used.add(best[-1])
     return out
 
 
@@ -192,8 +280,9 @@ def _split_structured(f: str):
 
 @functools.lru_cache(maxsize=4096)
 def _formula_parts(f: str) -> tuple:
-    """(function names, references, other names, structured references, 3D reference?, computed range?, name ranges)
-    of a formula, by one linear scan. A reference is (sheet or None, first column absolute?, first column, last column
+    """(function names, references, other names, structured references, 3D reference?, computed range?, name ranges,
+    added tokens, summed tokens, looked-up tokens with their keys: see _additive) of a formula, by one linear scan.
+    A reference is (sheet or None, first column absolute?, first column, last column
     absolute?, last column, first row absolute?, first row, last row absolute?, last row): a cell (B5), a range (A2:D2;
     the sheet of the first end carries to the second; ends written in reverse order are put in order), a whole column
     (C:C, rows None) or whole rows (2:5, every column). Text inside double quotes is skipped; a word or quoted name
@@ -203,7 +292,7 @@ def _formula_parts(f: str) -> tuple:
     f = _ERRLIT.sub('""', f)
     sp = _split_structured(f)
     if sp is None:
-        return frozenset(), (), (), None, False, False, (), frozenset()
+        return frozenset(), (), (), None, False, False, (), frozenset(), frozenset(), (), ()
     f, structured = sp
     toks, sheet, three_d, computed = [], None, False, False
     for m in _FTOK.finditer(f):
@@ -297,11 +386,13 @@ def _formula_parts(f: str) -> tuple:
             seq.append(("func", val))
         elif kind == "op":
             seq.append(("op", val))
+        elif kind == "row" and not val[0] and sh is None and val[1] < 100_000:
+            seq.append(("val", val[1]))                             # a whole number (a lookup's column index)
         else:
             seq.append(("val", None))                               # a number, a string, a lone row number
         k += 1
-    return frozenset(funcs), tuple(refs), tuple(names), structured, three_d, computed, tuple(nranges), \
-        _additive(seq, tuple(nm for nm, _ in names))
+    return (frozenset(funcs), tuple(refs), tuple(names), structured, three_d, computed, tuple(nranges)) \
+        + _additive(seq, tuple(nm for nm, _ in names))
 
 
 # How a formula's value is made of its references (see _additive). Functions whose value is (one of) their arguments
@@ -326,6 +417,8 @@ _MASK = frozenset(("ISNUMBER", "ISTEXT", "ISNONTEXT", "ISBLANK", "ISERROR", "ISE
                    "XMATCH"))
 # lookups that return one cell of a table (a unit mass, a density): such a cell multiplying another reference is a factor
 _LOOKUP_ONE = frozenset(("VLOOKUP", "HLOOKUP", "XLOOKUP", "LOOKUP", "INDEX", "LARGE", "SMALL", "DGET"))
+# lookups whose returned column (row) is given by a number: (table argument, index argument, which way)
+_NARROW = {"VLOOKUP": (1, 2, "col"), "HLOOKUP": (1, 2, "row"), "INDEX": (0, 2, "col")}
 MAX_NEST = 64                                     # Excel's limit for nested functions in one formula
 UNPARSED = ("unparsed",)                          # in _additive's answer: the formula's shape was not understood
 
@@ -353,20 +446,48 @@ def _picked(f: str, n: int):
     return None
 
 
-def _additive(seq, names=()) -> frozenset:
-    """The references (their tokens) of a formula that are ADDED into its value: alone or in a sum, rounded, chosen by
+def _lookup_keys(f: str, res: list) -> frozenset:
+    """The key array of a lookup (what it searches for its value), as (token, how): VLOOKUP's table searched in its
+    first column ("col"), HLOOKUP's in its first row ("row"), XLOOKUP's / LOOKUP's lookup array and INDEX's MATCH /
+    XMATCH arrays ("all")."""
+    n = len(res)
+    if f in ("VLOOKUP", "HLOOKUP") and n > 1:
+        return frozenset((t, "col" if f == "VLOOKUP" else "row") for t in res[1][0])
+    if f == "XLOOKUP" and n > 1:
+        return frozenset((t, "all") for t in res[1][0])
+    if f == "LOOKUP" and n > 1:
+        return frozenset((t, "all" if n == 3 else "col") for t in res[1][0])
+    if f == "INDEX":
+        return frozenset((t, "all") for r in res[1:] for t in r[5])
+    return frozenset()
+
+
+def _additive(seq, names=()) -> tuple:
+    """(added, summed, looked-up, narrowed) tokens of a formula.
+    ADDED: the references that may carry the quantity into the formula's value: alone or in a sum, rounded, chosen by
     IF / IFS / SWITCH / CHOOSE, returned by a lookup, scaled by a number (C2*1.05), by a 0/1 condition ((名称=x)*C2,
     --(名称=x)) or by another reference (SUM(明細!C2:E2)*(1+$E$1), 長さ×$G$2: each factor that is not a divisor may carry
-    the quantity, as C2*1.05 does — a factor in a money / factor column is no part of a row's quantity, see documents),
-    passed to a function this parser does not know (MMULT, PRODUCT, REDUCE, MAP, CONVERT …: its arguments may make its
-    value); not those that sit inside a condition, a count or a lookup's key, that divide, or are raised to a power, and
-    not a value looked up (VLOOKUP, INDEX …: one cell of a table, a unit mass) that multiplies another reference. A LET
-    name is what its value is; a LAMBDA parameter is nothing of its own. One linear pass (recursive descent, at most
-    MAX_NEST levels); a shape it does not understand gives UNPARSED (the formula is then not checked), never a guess
-    (13 回目: an unknown function and a product of references counted as adding nothing, the one unsafe default)."""
+    the quantity, as C2*1.05 does), passed to a function this parser does not know (MMULT, PRODUCT, REDUCE, MAP,
+    CONVERT …: its arguments may make its value); not those that sit inside a condition, a count or a lookup's key, that
+    divide, or are raised to a power, and not a value looked up (VLOOKUP, INDEX …: one cell of a table, a unit mass)
+    that multiplies another reference (13 回目: an unknown function and a product of references counted as adding
+    nothing, the one unsafe default).
+    SUMMED (a part of ADDED): the references the value adds up: alone, in a sum or a difference, rounded, chosen, looked
+    up, scaled by numbers or conditions, in a function this parser does not know, and inside a factor of a product that
+    itself adds up references ((C2+D2)*E2, SUM(C2:E2)*$H$1: C2, D2 and C2:E2). A reference that is one factor of a
+    product of references (面積×厚さ, 長さ×本数×単重, C2*$H$1) is a dimension or a factor of the value, not a part of it
+    (14 回目: a row's own parts are what its quantity sums, see documents._Cells.own_parts).
+    LOOKED UP: ((token, ((key token, how) …)) …) for each value looked up that a product left out of ADDED, with the key
+    array the lookup searched (see _lookup_keys): a lookup keyed on a bill's name column returns a row's own number,
+    which documents then treats as added (14 回目).
+    NARROWED: ((token, "col" / "row", offset) …) for each table of a VLOOKUP / HLOOKUP / INDEX whose column (row) index
+    is a whole number: the lookup returns that column (row) of the table only (14 回目の攻撃).
+    A LET name is what its value is; a LAMBDA parameter is nothing of its own. One linear pass (recursive descent, at
+    most MAX_NEST levels); a shape it does not understand gives UNPARSED in ADDED (the formula is then not checked),
+    never a guess."""
     n = len(seq)
     if not n:
-        return frozenset()                        # an empty formula adds nothing
+        return frozenset(), frozenset(), (), ()   # an empty formula adds nothing
     depth = mx = 0
     for t in seq:
         if t == ("op", "("):
@@ -375,11 +496,14 @@ def _additive(seq, names=()) -> frozenset:
         elif t == ("op", ")"):
             depth -= 1
     if mx > MAX_NEST:
-        return frozenset((UNPARSED,))
+        return frozenset((UNPARSED,)), frozenset(), (), ()
     pos = [0]
-    env = []                                      # LET scopes: [{name: (all refs, added, mask)}]
-    picks = set()                                 # added tokens that are one looked-up cell (not summed since)
-    E = (frozenset(), frozenset(), False)
+    env = []                                      # LET scopes: [{name: value}]
+    picks = {}                                    # added token that is one looked-up cell (not summed since) -> keys
+    narrow = {}                                   # a lookup's table token -> ("col" / "row", offset) it returns (see call)
+    dropped = set()                               # looked-up tokens a product left out of ADDED
+    # a value: (all refs, added, a condition?, summed, adds references up?, MATCH / XMATCH key arrays)
+    E = (frozenset(), frozenset(), False, frozenset(), False, frozenset())
 
     def peek(k=0):
         return seq[pos[0] + k] if pos[0] + k < n else ("end", None)
@@ -398,13 +522,24 @@ def _additive(seq, names=()) -> frozenset:
             return E
         return cmp_()
 
-    def arglist():
+    def arglist(consts=None):                     # consts: the whole number each argument is, or None
+        start = pos[0]
         out = [arg()]
-        while peek() == ("op", ","):
+        while True:
+            if consts is not None:
+                one = seq[start] if pos[0] - start == 1 else None
+                consts.append(one[1] if one and one[0] == "val" and isinstance(one[1], int) else None)
+            if peek() != ("op", ","):
+                break
             take()
+            start = pos[0]
             out.append(arg())
         expect(")")
         return out
+
+    def unpick(got):                              # summed: no longer one looked-up cell
+        for t in got:
+            picks.pop(t, None)
 
     def let_():                                   # LET(name1, value1, …, calculation)
         scope = {}
@@ -422,7 +557,7 @@ def _additive(seq, names=()) -> frozenset:
                     raise _Unparsed()
             r = arg()
             expect(")")
-            return frozenset(alls | r[0]), r[1], r[2]
+            return (frozenset(alls | r[0]),) + r[1:]
         finally:
             env.pop()
 
@@ -437,7 +572,7 @@ def _additive(seq, names=()) -> frozenset:
                 scope[nm] = E
             r = arg()
             expect(")")
-            return r[0], r[1], False
+            return r[0], r[1], False, r[3], r[4], r[5]
         finally:
             env.pop()
 
@@ -446,34 +581,55 @@ def _additive(seq, names=()) -> frozenset:
             return let_()
         if f == "LAMBDA":
             return lambda_()
-        res = arglist()
+        consts = []
+        res = arglist(consts)
         alls = frozenset().union(*(r[0] for r in res))
+        # VLOOKUP(key, 明細!B:E, 4, 0), HLOOKUP(key, …, 2, 0) and INDEX(明細!B:E, MATCH(…), 4) with the column (row)
+        # index written as a number return a cell of that column (row) only (14 回目の攻撃: the whole table reached
+        # the other numbers of every row of the bill)
+        at = _NARROW.get(f)
+        if at and len(res) > at[1] and consts[at[1]] and len(res[at[0]][0]) == 1:
+            (tk,) = res[at[0]][0]
+            if tk[0] in ("ref", "sr", "nr") and tk in res[at[0]][1]:
+                narrow[tk] = (at[2], consts[at[1]] - 1)
+        mk = frozenset().union(*(r[5] for r in res))
         if f in _ADD_ALL:
             got = frozenset().union(*(r[1] for r in res))
-            picks.difference_update(got)          # summed: no longer one looked-up cell
-            return alls, got, False
+            unpick(got)
+            return alls, got, False, frozenset().union(*(r[3] for r in res)), bool(alls), mk
         if f in _ADD_FIRST:
             if f in _LOOKUP_ONE:
-                picks.update(res[0][1])
-            return alls, res[0][1], res[0][2] if f in ("N", "VALUE", "INT", "ABS", "ROUND") else False
+                keys = _lookup_keys(f, res)
+                for t in res[0][1]:
+                    picks[t] = picks.get(t, frozenset()) | keys
+                if f == "INDEX":
+                    mk = res[0][5]                # INDEX(…, MATCH(…)) uses its MATCH's key array
+            return alls, res[0][1], res[0][2] if f in ("N", "VALUE", "INT", "ABS", "ROUND") else False, res[0][3], \
+                res[0][4], mk
         if f == "SUMPRODUCT":                     # every array that is not a 0/1 condition is a factor of the sum
             live = [r for r in res if r[0] and not r[2]]
             got = frozenset().union(*(r[1] for r in live))
-            picks.difference_update(got)
-            return alls, got, False
+            unpick(got)
+            summed = live[0][3] if len(live) == 1 else frozenset().union(*(r[3] for r in live if r[4]))
+            return alls, got, False, summed, bool(live), mk
         if f in _MASK:
-            return alls, frozenset(), True
+            if f in ("MATCH", "XMATCH") and len(res) > 1:
+                mk = mk | res[1][0]               # the array MATCH searches: INDEX's key
+            return alls, frozenset(), True, frozenset(), False, mk
         pick = _picked(f, len(res))
         if pick is not None:
             got = [res[i] for i in pick]
             mask = bool(alls) and all(r[2] or not r[0] for r in got) and f not in _ADD_AT and f not in ("SUMIF", "AVERAGEIF", "LOOKUP")
             added = frozenset().union(*(r[1] for r in got))
+            summed = frozenset().union(*(r[3] for r in got))
             if f in _LOOKUP_ONE:
-                picks.update(added)
-            return alls, added, mask
+                keys = _lookup_keys(f, res)
+                for t in added:
+                    picks[t] = picks.get(t, frozenset()) | keys
+            return alls, added, mask, summed, any(r[4] for r in got) or f in ("SUMIF", "AVERAGEIF"), mk
         got = frozenset().union(*(r[1] for r in res))   # a function not known here: its arguments may make its value
-        picks.difference_update(got)
-        return alls, got, False
+        unpick(got)
+        return alls, got, False, frozenset().union(*(r[3] for r in res)), bool(alls), mk
 
     def primary():
         t = take()
@@ -482,9 +638,11 @@ def _additive(seq, names=()) -> frozenset:
             for scope in reversed(env):
                 if nm in scope:
                     return scope[nm]
-            return frozenset((t,)), frozenset((t,)), False
+            one = frozenset((t,))
+            return one, one, False, one, False, frozenset()
         if t[0] in _REFKINDS:
-            return frozenset((t,)), frozenset((t,)), False
+            one = frozenset((t,))
+            return one, one, False, one, False, frozenset()
         if t[0] == "val":
             return E
         if t[0] == "func":
@@ -498,7 +656,8 @@ def _additive(seq, names=()) -> frozenset:
             expect(")")
             if len(r) == 1:
                 return r[0]
-            return frozenset().union(*(x[0] for x in r)), frozenset().union(*(x[1] for x in r)), False
+            return frozenset().union(*(x[0] for x in r)), frozenset().union(*(x[1] for x in r)), False, \
+                frozenset().union(*(x[3] for x in r)), True, frozenset().union(*(x[5] for x in r))
         if t == ("op", "{"):                     # an array constant {1,2;3,4}: numbers only
             while peek() != ("op", "}"):
                 if take()[0] == "end":
@@ -523,7 +682,7 @@ def _additive(seq, names=()) -> frozenset:
         while peek() == ("op", "^"):
             take()
             b = unary()
-            a = (a[0] | b[0], frozenset(), False)
+            a = (a[0] | b[0], frozenset(), False, frozenset(), False, a[5] | b[5])
         return a
 
     def term():
@@ -534,15 +693,23 @@ def _additive(seq, names=()) -> frozenset:
         if len(fs) == 1:
             return fs[0][1]
         alls = frozenset().union(*(f[1][0] for f in fs))
+        mk = frozenset().union(*(f[1][5] for f in fs))
         withrefs = [f for f in fs if f[1][0]]
         if withrefs and all(f[1][2] for f in withrefs):
-            return alls, frozenset(), True                    # a product of conditions is a condition
+            return alls, frozenset(), True, frozenset(), False, mk   # a product of conditions is a condition
         live = [f for f in withrefs if not f[1][2]]
         if len(live) == 1 and live[0][0] != "/":
-            return alls, live[0][1][1], False                 # one reference scaled by numbers or by conditions
+            v = live[0][1]
+            return alls, v[1], False, v[3], v[4], mk                 # one reference scaled by numbers or by conditions
         # several references multiplied: each that does not divide may carry the quantity (C2*1.05 and C2*(1+$E$1)
-        # alike), except a looked-up cell (長さ×VLOOKUP(径, 単位質量表, 2): a unit mass)
-        return alls, frozenset().union(*(f[1][1] - picks for f in live if f[0] != "/")), False
+        # alike), except a looked-up cell (長さ×VLOOKUP(径, 単位質量表, 2): a unit mass). Of a factor that adds
+        # references up ((C2+D2)*E2) those stay summed; a factor that is one reference is a dimension
+        mul = [f[1] for f in live if f[0] != "/"]
+        for v in mul:
+            dropped.update(t for t in v[1] if t in picks)
+        added = frozenset().union(*(v[1] - frozenset(picks) for v in mul))
+        summed = frozenset().union(*(v[3] - frozenset(picks) for v in mul if v[4]))
+        return alls, added, False, summed, False, mk
 
     def sum_():
         rs = [term()]
@@ -553,14 +720,16 @@ def _additive(seq, names=()) -> frozenset:
             return rs[0]
         withrefs = [r for r in rs if r[0]]
         mask = bool(withrefs) and all(r[2] for r in withrefs)
-        return frozenset().union(*(r[0] for r in rs)), frozenset().union(*(r[1] for r in rs)), mask
+        agg = len([r for r in withrefs if not r[2]]) >= 2 or any(r[4] for r in withrefs)
+        return frozenset().union(*(r[0] for r in rs)), frozenset().union(*(r[1] for r in rs)), mask, \
+            frozenset().union(*(r[3] for r in rs)), agg, frozenset().union(*(r[5] for r in rs))
 
     def cat():
         a = sum_()
         while peek() == ("op", "&"):
             take()
             b = sum_()
-            a = (a[0] | b[0], frozenset(), False)
+            a = (a[0] | b[0], frozenset(), False, frozenset(), False, a[5] | b[5])
         return a
 
     def cmp_():
@@ -570,7 +739,7 @@ def _additive(seq, names=()) -> frozenset:
             if op in ("<", ">") and peek() in (("op", "="), ("op", ">")):
                 take()
             b = cat()
-            a = (a[0] | b[0], frozenset(), True)
+            a = (a[0] | b[0], frozenset(), True, frozenset(), False, a[5] | b[5])
         return a
 
     try:
@@ -578,12 +747,14 @@ def _additive(seq, names=()) -> frozenset:
         while peek() == ("op", ","):                         # a name defined as a union: 明細!$C$2,明細!$C$5
             take()
             b = cmp_()
-            r = (r[0] | b[0], r[1] | b[1], False)
+            r = (r[0] | b[0], r[1] | b[1], False, r[3] | b[3], True, r[5] | b[5])
     except (_Unparsed, IndexError):
-        return frozenset((UNPARSED,))
+        return frozenset((UNPARSED,)), frozenset(), (), ()
     if pos[0] < n:
-        return frozenset((UNPARSED,))
-    return frozenset(r[1])
+        return frozenset((UNPARSED,)), frozenset(), (), ()
+    added = frozenset(r[1])
+    looked = tuple(sorted((t, tuple(sorted(picks.get(t, ())))) for t in dropped if t not in added and picks.get(t)))
+    return added, frozenset(r[3]) & added, looked, tuple(sorted((t, h, k) for t, (h, k) in narrow.items()))
 
 
 def _formula_tuple(formula):
@@ -712,7 +883,7 @@ def _name_shift(ctx: dict) -> tuple:
 def _relative(text: str) -> bool:
     """Whether what a name's definition refers to depends on the cell that uses it: a relative reference, a table
     reference or another name in it (then the name is followed again for each cell that uses it)."""
-    funcs, refs, names, structured, _t, _c, nranges, _a = _formula_parts(text)
+    funcs, refs, names, structured, _t, _c, nranges = _formula_parts(text)[:7]
     if structured is None or names or structured or nranges:
         return True
     return any(not (a1 and a2 and ar1 and ar2) for _s, a1, _c1, a2, _c2, ar1, _r1, ar2, _r2 in refs)
@@ -792,12 +963,22 @@ def _let_params(text: str) -> frozenset:
     return frozenset(out)
 
 
+MAX_KEYS = 8                                      # key blocks kept per looked-up block
+
+
 def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset()) -> tuple:
     """(why what the formula reaches cannot be checked, or None; the blocks it reaches) for one cell's formula.
-    Each block is (sheet casefolded, or None for this sheet; first column; last column; first row; last row; added?),
-    None rows meaning every row, and "added" telling whether the block is ADDED into the formula's value (alone, in a
-    sum, rounded, chosen, scaled by a number: see _additive) rather than multiplied by another reference, looked up or
-    tested. Shared-formula copies are moved by their column / row shift; a defined name is followed to what it refers
+    Each block is (sheet casefolded, or None for this sheet; first column; last column; first row; last row; level;
+    keys), None rows meaning every row. The level tells how the block makes the formula's value (see _additive):
+    2 = summed into it (alone, in a sum, rounded, chosen, looked up, scaled by a number), 1 = added only as a factor of
+    a product of references (面積×厚さ, SUM(…)*(1+$E$1)), 0 = not added (looked up and multiplied, tested, counted,
+    a divisor); the level is true when the block is ADDED. `keys` are, for a block looked up and multiplied (level 0),
+    the blocks the lookup searched with how ("col": a VLOOKUP table's first column, "row": an HLOOKUP table's first row,
+    "all": an XLOOKUP / LOOKUP array or INDEX's MATCH array), else ().
+    A VLOOKUP / HLOOKUP / INDEX whose column (row) index is written as a whole number gives two blocks: its whole table
+    at level 0 (reached: a quantity cell in it is still a copy) and the returned column (row) at the lookup's level
+    (14 回目の攻撃: the whole table reached the other numbers of every row of a bill).
+    Shared-formula copies are moved by their column / row shift; a defined name is followed to what it refers
     to (the sheet's own name first, then the workbook's; relative references in it from the using cell); a table
     reference becomes the table's rows and columns; a range between two names is the block between their ends.
     Cannot be checked (the quantity is then not added): a shared-formula copy without its master, a formula longer than
@@ -817,7 +998,7 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
         return "データテーブル（What-If 分析）の値は確かめられない。必要なら手で入れる", []
     if len(text) > MAX_FORMULA:
         return "数式が長すぎて確かめられない（%d 文字まで）" % MAX_FORMULA, []
-    funcs, refs, names, structured, three_d, computed, nranges, add = _formula_parts(text)
+    funcs, refs, names, structured, three_d, computed, nranges, add, summed, looked, narrow = _formula_parts(text)
     if structured is None:
         return "数式の括弧を読めない。必要なら手で入れる", []
     if "[" in text and _EXTREF.search(re.sub(r'"(?:[^"]|"")*"', '""', text)):
@@ -831,7 +1012,7 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
     if UNPARSED in add:
         return "数式の形を読めない（入れ子が %d 段より深い、または読めない書き方）ので確かめられない。必要なら手で入れる" % MAX_NEST, []
     this = (ctx.get("sheet") or "").casefold()
-    out = []
+    tokb, order = {}, []                                   # token -> its blocks (sheet, c1, c2, r1, r2), in order
     for i, (sh, a1, c1, a2, c2, ar1, r1, ar2, r2) in enumerate(refs):
         if sh is not None and sh.startswith("["):
             return "別のブックを参照した数量は確かめられない。必要なら手で入れる", []
@@ -845,13 +1026,14 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
         if lo < 0 or hi >= MAX_COLS or (rlo is not None and rlo < 1) or (rhi is not None and rhi > MAX_ROW_NUMBER):
             return "参照がシートの端を越える（#REF! になる）ので確かめられない。必要なら手で入れる", []
         shf = None if sh is None or sh.casefold() == this else sh.casefold()
-        out.append((shf, lo, hi, rlo, rhi, ("ref", i) in add))
+        tokb[("ref", i)] = [(shf, lo, hi, rlo, rhi)]
+        order.append(("ref", i))
     for k, (table, inner) in enumerate(structured):
         why, blk = _structured_block(table, inner, ctx)
         if why:
             return why, []
-        if blk:
-            out.append(tuple(blk) + (("sr", k) in add,))
+        tokb[("sr", k)] = [tuple(blk)] if blk else []
+        order.append(("sr", k))
     for j, (left, right) in enumerate(nranges):
         w1, b1 = _lone_block(left, ctx, _path)
         w2, b2 = _lone_block(right, ctx, _path) if not w1 else (None, None)
@@ -861,19 +1043,20 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
         s2 = b2[0] or this
         if s1 != s2 or None in (b1[3], b1[4], b2[3], b2[4]):
             return "名前の範囲（%s）の端を確かめられない。必要なら手で入れる" % "：".join(str(x[1])[:20] for x in (left, right)), []
-        out.append((None if s1 == this else s1, min(b1[1], b2[1]), max(b1[2], b2[2]), min(b1[3], b2[3]), max(b1[4], b2[4]),
-                    ("nr", j) in add))
+        tokb[("nr", j)] = [(None if s1 == this else s1, min(b1[1], b2[1]), max(b1[2], b2[2]), min(b1[3], b2[3]),
+                            max(b1[4], b2[4]))]
+        order.append(("nr", j))
     defined = ctx.get("names") or {}
     params = _let_params(text) if funcs & {"LET", "LAMBDA"} else set()
-    used = {}                                              # each name once per formula: added anywhere?
+    used = {}                                              # each name once per formula: its uses
     for j, (nm, sh) in enumerate(names):
         if nm.startswith(("_XLPM.", "__SR")) or nm in params or nm in ("TRUE", "FALSE"):
             continue
-        k = (sh.casefold() if sh else this, nm, sh)
-        used[k] = used.get(k, False) or ("nm", j) in add
+        used.setdefault((sh.casefold() if sh else this, nm, sh), []).append(("nm", j))
     if len(used) > MAX_NAME_FOLLOWS:
         return "名前の参照が多すぎて確かめられない（%d 個まで）。必要なら手で入れる" % MAX_NAME_FOLLOWS, []
-    for (scope, nm, sh), a in used.items():
+    named = []
+    for (scope, nm, sh), toks in used.items():
         target = name_target(defined, nm, scope)
         if not target:
             T = (ctx.get("tables") or {}).get(nm)
@@ -881,16 +1064,64 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
                 why, blk = _structured_block(nm, "", ctx)
                 if why:
                     return why, []
-                if blk:
-                    out.append(tuple(blk) + (a,))
+                more = [tuple(blk) + (2, ())] if blk else []
+            else:
+                return "名前 %s の参照先が分からない（ブックに定義が無い）。必要なら手で入れる" % nm[:40], []
+        else:
+            why, more = _expand_name(nm, scope, target, dict(ctx, sheet=sh or ctx.get("sheet")), _path)
+            if why:
+                return (why if "（名前 " in why else why + "（名前 %s の参照先）" % nm[:40]), []
+            if sh and sh.casefold() != this:               # blocks of a name used as 集計!QTY: on that name's sheet
+                on = sh.casefold()
+                more = [(b[0] if b[0] is not None else on,) + tuple(b[1:6])
+                        + (tuple(((kb[0] if kb[0] is not None else on,) + tuple(kb[1:]), how) for kb, how in b[6]),)
+                        for b in more]
+        named.append((toks, more))
+        for t in toks:
+            tokb[t] = more                                 # (blocks with their levels: a key reads their first five)
+    looked = dict(looked)
+
+    def level(tok):
+        return 2 if tok in summed else (1 if tok in add else 0)
+
+    def keys(tok):
+        out_ = []
+        for kt, how in looked.get(tok, ()):
+            for kb in tokb.get(kt, ())[:MAX_KEYS]:
+                out_.append((tuple(kb[:5]), how))
+        return tuple(out_[:MAX_KEYS])
+
+    narrow = {t: (h, k) for t, h, k in narrow}
+    out = []
+    for tok in order:
+        lv = level(tok)
+        kz = keys(tok) if lv == 0 else ()
+        blks = tokb[tok]
+        nb = narrow.get(tok) if len(blks) == 1 else None
+        if nb:
+            b = blks[0]
+            how, k = nb
+            if how == "col" and b[1] + k <= b[2]:
+                one = (b[0], b[1] + k, b[1] + k, b[3], b[4])
+            elif how == "row" and b[3] is not None and b[4] is not None and b[3] + k <= b[4]:
+                one = (b[0], b[1], b[2], b[3] + k, b[3] + k)
+            else:
+                one = None                                 # past the table's edge (#REF!): the whole table, as before
+            if one is not None:
+                # the table is still reached (a quantity cell in it is a copy, as before); only the returned column
+                # (row) makes the value
+                out += [b + (0, ()), one + (lv, kz)]
                 continue
-            return "名前 %s の参照先が分からない（ブックに定義が無い）。必要なら手で入れる" % nm[:40], []
-        why, more = _expand_name(nm, scope, target, dict(ctx, sheet=sh or ctx.get("sheet")), _path)
-        if why:
-            return (why if "（名前 " in why else why + "（名前 %s の参照先）" % nm[:40]), []
-        if sh and sh.casefold() != this:                   # blocks of a name used as 集計!QTY: on that name's sheet
-            more = [(b[0] if b[0] is not None else sh.casefold(),) + tuple(b[1:]) for b in more]
-        out += [tuple(b[:5]) + (a and b[5],) for b in more]
+        out += [b + (lv, kz) for b in blks]
+    for toks, more in named:
+        lv = max(level(t) for t in toks)
+        if lv == 2:                                        # used as it is: its blocks keep their own levels
+            out += more
+            continue
+        kz = tuple(x for t in toks if level(t) == 0 for x in keys(t))[:MAX_KEYS] if lv == 0 else ()
+        for b in more:
+            lv2 = min(lv, b[5])
+            out.append(tuple(b[:5]) + (lv2, ((kz + tuple(b[6]))[:MAX_KEYS] if lv2 == 0 else ())))
     return None, out
 
 
@@ -901,10 +1132,12 @@ def formula_refs(formula, ctx: dict | None = None, _seen=None) -> tuple:
     return why, [b[:5] for b in blocks]
 
 
-def added_blocks(formula, ctx: dict | None = None) -> list:
+def added_blocks(formula, ctx: dict | None = None, levels: bool = False) -> list:
     """The blocks (sheet casefolded or None, c1, c2, r1, r2) that a formula ADDS into its value (see _additive), moved
-    by a shared formula's shift. With `ctx` the names and table references ([@1F], 明細表[@[1F]:[3F]]) are followed too;
-    [] when the formula cannot be read or checked."""
+    by a shared formula's shift; with `levels`, each with its level (2 summed, 1 a factor of a product of references),
+    and also the blocks it looks a value up from to multiply (level 0).
+    With `ctx` the names and table references ([@1F], 明細表[@[1F]:[3F]]) are followed too; when the formula cannot be
+    checked, only its own references are read; [] when it cannot be read."""
     if not formula:
         return []
     text, dcol, no_master, drow = _formula_tuple(formula)
@@ -913,7 +1146,7 @@ def added_blocks(formula, ctx: dict | None = None) -> list:
     if ctx is not None:
         why, blocks = formula_walk(formula, ctx)
         if why is None:
-            return [b[:5] for b in blocks if b[5]]
+            return [b[:5] + ((b[5],) if levels else ()) for b in blocks if b[5] or (levels and b[6])]
     parts = _formula_parts(text)
     out = []
     for key in sorted(k for k in parts[7] if k[0] == "ref"):
@@ -921,7 +1154,8 @@ def added_blocks(formula, ctx: dict | None = None) -> list:
         lo, hi = (c1 if a1 else c1 + dcol), (c2 if a2 else c2 + dcol)
         rlo = None if r1 is None else (r1 if ar1 else r1 + drow)
         rhi = None if r2 is None else (r2 if ar2 else r2 + drow)
-        out.append((None if sh is None else sh.casefold(), min(lo, hi), max(lo, hi), rlo, rhi))
+        out.append((None if sh is None else sh.casefold(), min(lo, hi), max(lo, hi), rlo, rhi)
+                   + (((2 if key in parts[8] else 1),) if levels else ()))
     return out
 
 
@@ -931,7 +1165,8 @@ def formula_reason(formula, col: int = 0, ctx: dict | None = None) -> str | None
 
 
 QTY_LIKE = ("数量", "quantity", "qty", "体積", "容積", "重量", "質量", "面積", "volume", "weight", "mass", "area")
-NOT_QTY = ("単位", "unit", "per", "/", "比重", "密度", "density", "率", "rate", "係数", "factor")   # 単位質量 kg/m is a factor
+# 単位質量 kg/m is a factor; 単重 is the usual short form of 単位重量 in rebar lists (14 回目)
+NOT_QTY = ("単位", "unit", "per", "/", "比重", "密度", "density", "率", "rate", "係数", "factor", "単重")
 
 
 def _qty_cols(header: list) -> list:
@@ -939,27 +1174,90 @@ def _qty_cols(header: list) -> list:
     reaches one of them on another material row copies that row's quantity."""
     out = []
     for j, h in enumerate(header):
-        hs = _head_text(h)
-        if hs and _has_word(hs, QTY_LIKE) and not _has_word(hs, MONEY_WORDS + NOT_QTY):
+        fs = _head_forms(h)
+        if fs and _forms_have(fs, QTY_LIKE) and not _forms_have(fs, MONEY_WORDS + NOT_QTY):
+            out.append(j)
+    return out
+
+
+# the row's own size (面積, 長さ, 本数, 設計数量 …): another row's dimension multiplied by such a number of the row (土間 =
+# 面積 × 明細の厚さ) is that dimension reused, not a copy. A number of the row under any other header (割増, 戸数, an
+# unlabeled 1.05) times another row's 設計 or per-type share recomputes that row (14 回目の攻撃)
+SIZE_WORDS = QTY_LIKE + ("長さ", "延長", "本数", "箇所", "か所", "ヶ所", "個数", "枚数", "幅", "高さ", "設計", "正味", "length",
+                         "width", "height", "count", "net", "nett")
+
+
+def _size_cols(header: list) -> list:
+    """The columns whose header names the row's own size (see SIZE_WORDS), not money or a factor."""
+    out = []
+    for j, h in enumerate(header):
+        fs = _head_forms(h)
+        if fs and _forms_have(fs, SIZE_WORDS) and not _forms_have(fs, MONEY_WORDS + NOT_QTY):
             out.append(j)
     return out
 
 
 def _factor_cols(header: list) -> list:
     """The columns whose header names money or a factor (単価, 金額, 単位質量, 比重, 密度, 係数, 率, kg/m …): a number there
-    is never part of a material row's quantity."""
-    return [j for j, h in enumerate(header) if _has_word(_head_text(h), MONEY_WORDS + NOT_QTY)]
+    is never part of a material row's quantity unless the row's quantity adds it up."""
+    return [j for j, h in enumerate(header) if _forms_have(_head_forms(h), MONEY_WORDS + NOT_QTY)]
 
 
 HEADING = "見出しの行（数量も単位も無い）は材料の行ではない"
+NAME_PROBE_ROWS = 200                             # data rows looked at to see whether a name column holds numbers
+
+
+def _numbers_mostly(rows: list, i: int, j: int) -> bool:
+    """Are most non-empty cells of column j below row i numbers (the name column is then a rate or a code column)?"""
+    n = k = 0
+    for r in rows[i + 1:i + 1 + NAME_PROBE_ROWS]:
+        x = r[j] if j < len(r) else None
+        if x is None or str(x).strip() == "":
+            continue
+        n += 1
+        k += _num(x) is not None
+    return n > 0 and 2 * k > n
 
 
 def _find_header(rows: list[list]):
+    """(index of the header row, column of each key). When the name column's cells are mostly numbers (a rate column
+    whose header the money words miss), the next name column is taken (14 回目); if every name column holds numbers,
+    the first one is kept."""
     for i, r in enumerate(rows[:30]):            # the header is one of the first rows
         m = _header_map(r)
         if "name" in m and "quantity" in m:
+            skip = set()
+            while "name" in m and _numbers_mostly(rows, i, m["name"]) and len(skip) < 8:
+                skip.add(m["name"])
+                m2 = _header_map(r, frozenset(skip))
+                if "name" not in m2 or "quantity" not in m2:
+                    break
+                m = m2
+            if skip and ("name" not in m or m["name"] in skip or _numbers_mostly(rows, i, m["name"])):
+                m = _header_map(r)                 # every name column holds numbers: as before
             return i, m
     return None, {}
+
+
+def _pivot_rows(pvs, qc: int) -> tuple:
+    """([first row of each stretch of rows], [the reason of the first pivot table that holds the quantity cell of those
+    rows, or None]) for one sheet: the pivot tables whose columns hold the quantity column, built once per sheet (a
+    sweep over their rows), so that each row is found by bisection. Before, every row tested every pivot table
+    (14 回目の攻撃: 1,000 pivot tables × 190,000 rows held the worker three times as long). The first pivot table in
+    the workbook's order wins, as before."""
+    ivs = sorted((pv["r1"], pv["r2"], i, pv["reason"]) for i, pv in enumerate(pvs) if pv["c1"] <= qc <= pv["c2"])
+    if not ivs:
+        return (), ()
+    starts, reasons, heap, j = [], [], [], 0
+    for b in sorted({iv[0] for iv in ivs} | {iv[1] + 1 for iv in ivs}):
+        while j < len(ivs) and ivs[j][0] <= b:
+            heapq.heappush(heap, (ivs[j][2], ivs[j][1], ivs[j][3]))
+            j += 1
+        while heap and heap[0][1] < b:                 # pivot tables that end above this row
+            heapq.heappop(heap)
+        starts.append(b)
+        reasons.append(heap[0][2] if heap else None)
+    return starts, reasons
 
 
 def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: list[int] | None = None,
@@ -967,6 +1265,7 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
     hdr_i, hmap = _find_header(rows)
     if hdr_i is None:
         return {"sheet": sheet, "rows": [], "skipped": [], "error": "見出し行（名称・数量）が見つからない"}
+    pivots = _pivot_rows((fctx or {}).get("pivots", {}).get(str(sheet).casefold(), ()), hmap["quantity"])
     cands, skipped = [], []
     for i in range(hdr_i + 1, len(rows)):
         r = rows[i]
@@ -997,10 +1296,18 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
         # a formula's references are checked by the importer, which follows them through the whole workbook (one walk
         # per document, within its budget)
         fobj = (formulas[i] if formulas else {}).get(hmap["quantity"])
-        cands.append(dict(texts, quantity=q, trace=trace, row=rn, qf=fobj, ncols=ncols))
+        cand = dict(texts, quantity=q, trace=trace, row=rn, qf=fobj, ncols=ncols)
+        if pivots[0]:                            # a pivot table's cell: why it is not added (see read_xlsx)
+            k = bisect.bisect_right(pivots[0], rn) - 1
+            if k >= 0 and pivots[1][k] is not None:
+                cand["pivot"] = pivots[1][k]
+        cands.append(cand)
     return {"sheet": sheet, "rows": cands, "skipped": skipped, "qcol": hmap["quantity"],
+            # the columns that tell the rows apart (a lookup keyed on one of them returns a row's own number)
+            "keycols": sorted(hmap[k] for k in ("name", "specification", "division") if k in hmap),
             "qcols": sorted(set(_qty_cols(rows[hdr_i])) | {hmap["quantity"]}),
             "xcols": _factor_cols(rows[hdr_i]),
+            "sizecols": _size_cols(rows[hdr_i]),
             "header_row": row_numbers[hdr_i] if row_numbers else hdr_i + 1}
 
 
@@ -1059,6 +1366,14 @@ def _plain_text(el, M) -> str:
 
 MAX_NAME_CHARS = 2_000_000                        # characters of defined names (all kept within this; a cut is said)
 MAX_TABLES, MAX_ARRAYS = 1_000, 10_000            # Excel tables / array formulas of a workbook
+MAX_PIVOTS = 1_000                                # pivot tables of a workbook
+PIVOT_HEAD = 65_536                               # bytes read of a pivot part (its location / source come first)
+# a pivot table's cells summarise another table: never added (14 回目)
+R_PIVOT = "ピボットテーブル（%s）の値は足さない（元の表 %s の集計。そのシートも読んでいるので二重計上になる）"
+R_PIVOT_UNREAD = "ピボットテーブル（%s）の値は足さない（元の表 %s の集計。そのシートの数量は読んでいないので、足すべき行なら" \
+                 "元の表を確かめて手で入れる）"
+R_PIVOT_UNKNOWN = "ピボットテーブル（%s）の元の表が分からないので確かめられない（足さない）。必要なら手で入れる"
+R_PIVOT_PLACE = "ピボットテーブル（%s）の場所が分からないので、このシートの値は確かめられない（足さない）。必要なら手で入れる"
 # hidden sheets (helpers, masters, old revisions): their values are not read, their formulas are kept to see copies
 # through them. They have their own budget: when it runs out the rest of the sheet is not read, and a quantity that
 # reaches that sheet cannot be checked (it is not added); the workbook is still read
@@ -1139,6 +1454,59 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
         except ET.ParseError as e:
             raise ImportError_("Excel の部品 %s を読めない（%s）" % (name, e)) from None
 
+    def head_xml(name, want):
+        """{tag: attributes} of the first element of each wanted tag, reading at most PIVOT_HEAD bytes of the part (in
+        small pieces, counted against the budget); {} when the part is missing."""
+        found, got = {}, 0
+        try:
+            fh = z.open(name)
+        except KeyError:
+            return found
+        except (zipfile.BadZipFile, OSError, EOFError) as e:
+            raise ImportError_("Excel ファイルが壊れている（%s）" % e) from None
+        parser = ET.XMLPullParser(events=("start",))
+        try:
+            with fh:
+                while got < PIVOT_HEAD and len(found) < len(want):
+                    chunk = fh.read(min(4096, PIVOT_HEAD - got))
+                    if not chunk:
+                        break
+                    got += len(chunk)
+                    if got > budget["left"]:
+                        raise ImportError_("展開すると大きすぎる Excel ファイルは読まない（1 部品 %d MB・合計 %d MB まで）"
+                                           % (MAX_PART // 1_000_000, MAX_TOTAL // 1_000_000))
+                    parser.feed(chunk)
+                    for _ev, el in parser.read_events():
+                        tag = el.tag.rsplit("}", 1)[-1]
+                        if tag in want and tag not in found:
+                            found[tag] = dict(el.attrib)
+        except ET.ParseError as e:
+            raise ImportError_("Excel の部品 %s を読めない（%s）" % (name, e)) from None
+        except (zipfile.BadZipFile, OSError, EOFError) as e:
+            raise ImportError_("Excel ファイルが壊れている（%s）" % e) from None
+        budget["left"] -= got
+        return found
+
+    def rel_path(base, tgt):
+        """A relationship's target as a part name (relative to the folder of the part that refers to it)."""
+        parts = (base + "/" + tgt).split("/") if not tgt.startswith("/") else tgt.lstrip("/").split("/")
+        norm = []
+        for p_ in parts:
+            if p_ == "..":
+                if norm:
+                    norm.pop()
+            elif p_ and p_ != ".":
+                norm.append(p_)
+        return "/".join(norm)
+
+    def part_rels(path):
+        """[(type, target part)] of a part's relationships."""
+        rp = path.rsplit("/", 1)
+        rels_path = "%s/_rels/%s.rels" % (rp[0], rp[1]) if len(rp) == 2 else ""
+        if rels_path not in names:
+            return []
+        return [(str(r.get("Type") or ""), rel_path(rp[0], str(r.get("Target") or ""))) for r in small_xml(rels_path)]
+
     wb = small_xml("xl/workbook.xml")
     rels = small_xml("xl/_rels/workbook.xml.rels")
     main = wb.tag[1:].split("}")[0] if wb.tag.startswith("{") else NS["m"]
@@ -1185,26 +1553,54 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
             except (ValueError, IndexError):
                 continue                                   # a name of no sheet: left undefined (refused when used)
         defined.setdefault(nm.upper(), {})[scope] = txt[:MAX_FORMULA + 1]
-    tables = {}
+    tables, pivots, caches = {}, [], {}
+    # pivot caches named by the workbook (cacheId -> part), for a pivot table whose own relationship is missing
+    cache_ids = {}
+    pc = wb.find("m:pivotCaches", ns)
+    for c_ in (pc if pc is not None else []):
+        tgt = rel_target.get(c_.get("{%s}id" % rel_ns))
+        if tgt:
+            cache_ids[str(c_.get("cacheId"))] = rel_path("xl", tgt)
+
+    def read_pivot(ppath, shf):
+        """A pivot table of a sheet: its cells (with the page fields above them) and the table it summarises."""
+        if len(pivots) >= MAX_PIVOTS:
+            raise ImportError_("ピボットテーブルが多すぎる（%d まで）" % MAX_PIVOTS)
+        h = head_xml(ppath, ("pivotTableDefinition", "location"))
+        loc = h.get("location") or {}
+        blk = _ref_block(loc.get("ref"))
+        placed = blk is not None                  # a pivot whose place is not told: the whole sheet is unsure
+        c1, c2, r1, r2 = blk if placed else (0, MAX_COLS - 1, 1, MAX_ROW_NUMBER)
+        try:
+            pages = max(0, int(loc.get("rowPageCount") or 0))
+        except ValueError:
+            pages = 0
+        if pages:
+            r1, c2 = max(1, r1 - pages - 1), max(c2, c1 + 1)       # the page fields sit above the table
+        name = str((h.get("pivotTableDefinition") or {}).get("name") or "")[:40]
+        cpath = next((t for typ, t in part_rels(ppath) if typ.endswith("/pivotCacheDefinition")), None)
+        if cpath is None:
+            cpath = cache_ids.get(str((h.get("pivotTableDefinition") or {}).get("cacheId")))
+        src = None
+        if cpath and cpath in names:
+            if cpath not in caches:
+                caches[cpath] = head_xml(cpath, ("cacheSource", "worksheetSource"))
+            c = caches[cpath]
+            ws = c.get("worksheetSource")
+            if (c.get("cacheSource") or {}).get("type", "worksheet") == "worksheet" and ws \
+                    and not any(k.endswith("}id") for k in ws):
+                src = ("sheet", ws["sheet"]) if ws.get("sheet") else (("name", ws["name"]) if ws.get("name") else None)
+        pivots.append({"name": name, "sheet": shf, "c1": c1, "c2": c2, "r1": r1, "r2": r2, "source": src,
+                       "placed": placed})
 
     def read_tables(path, shf):
-        rp = path.rsplit("/", 1)
-        rels_path = "%s/_rels/%s.rels" % (rp[0], rp[1]) if len(rp) == 2 else ""
-        if rels_path not in names:
-            return
-        for r in small_xml(rels_path):
-            if not str(r.get("Type") or "").endswith("/table"):
+        for typ, tpath in part_rels(path):
+            if typ.endswith("/pivotTable"):
+                if tpath in names:
+                    read_pivot(tpath, shf)
                 continue
-            tgt = str(r.get("Target") or "")
-            parts = (rp[0] + "/" + tgt).split("/") if not tgt.startswith("/") else tgt.lstrip("/").split("/")
-            norm = []
-            for p in parts:
-                if p == "..":
-                    if norm:
-                        norm.pop()
-                elif p and p != ".":
-                    norm.append(p)
-            tpath = "/".join(norm)
+            if not typ.endswith("/table"):
+                continue
             if tpath not in names:
                 continue
             if len(tables) >= MAX_TABLES:
@@ -1403,7 +1799,55 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
             out.append({"name": sh.get("name"), "rows": rows, "numbers": numbers, "formulas": forms,
                         "hidden_rows": hidden_rows, "hidden_cols": hidden_cols.count(1)})
     return {"sheets": out, "hidden_sheets": hidden_sheets, "names": defined, "names_cut": names_cut, "tables": tables,
-            "fcells": fcells, "sheet_names": sheet_names, "cut_sheets": cut_sheets}
+            "fcells": fcells, "sheet_names": sheet_names, "cut_sheets": cut_sheets, "pivots": pivots}
+
+
+def _pivot_source(wbk: dict, src) -> str | None:
+    """The sheet (casefolded) of the table a pivot table summarises: its cache's worksheetSource sheet, or the sheet of
+    the table / defined name it names; None when it cannot be told (another workbook, a consolidation, no sheet)."""
+    if not src:
+        return None
+    kind, val = src
+    if kind == "sheet":
+        shf = str(val).casefold()
+        return shf if shf in wbk["sheet_names"] else None
+    T = wbk["tables"].get(str(val).upper())
+    if T is not None:
+        return T["sheet"]
+    text = name_target(wbk["names"], str(val).upper(), None)
+    if not text:
+        return None
+    refs = _formula_parts(text.lstrip("="))[1]
+    sheets = {(r[0] or "").casefold() for r in refs}
+    if len(sheets) != 1 or "" in sheets:
+        return None
+    shf = sheets.pop()
+    return shf if shf in wbk["sheet_names"] else None
+
+
+def _pivot_reasons(wbk: dict, qsheets: list, warnings: list) -> dict:
+    """{sheet casefolded: [pivot table area with the reason its cells are not added]} (14 回目: a pivot table was read
+    as a second bill and every material was doubled). The cells are a summary of their source: surely not added when
+    the source sheet is read here, "may belong" when it is not (hidden, or no quantity header), unchecked when the
+    source cannot be told."""
+    read_here = {str(x).casefold() for x in qsheets}
+    out, said = {}, {}
+    for pv in wbk.get("pivots") or ():
+        src = _pivot_source(wbk, pv["source"])
+        name = pv["name"] or "名前なし"
+        if not pv.get("placed", True):
+            reason = R_PIVOT_PLACE % name
+        elif src is None:
+            reason = R_PIVOT_UNKNOWN % name
+        else:
+            label = sheet_label(wbk["sheet_names"].get(src, src))
+            reason = (R_PIVOT if src in read_here else R_PIVOT_UNREAD) % (name, label)
+        out.setdefault(pv["sheet"], []).append(dict(pv, reason=reason))
+        said.setdefault(pv["sheet"], []).append(name)
+    for shf, nms in said.items():
+        warnings.append("%s：ピボットテーブル（%s）の値は足していない（元の表の集計。元の表の行を数える）"
+                        % (sheet_label(wbk["sheet_names"].get(shf, shf)), "、".join(n[:20] for n in nms[:5])))
+    return out
 
 
 def read_xlsx(data: bytes, doc_id: str) -> dict:
@@ -1432,7 +1876,8 @@ def read_xlsx(data: bytes, doc_id: str) -> dict:
     if len(qsheets) > 1:
         warnings.append("数量の表が %d シートある（%s）：同じ材料が別のシートにも載っていないか確かめる"
                         % (len(qsheets), "、".join(sheet_label(x) for x in qsheets[:6])))
+    fctx["pivots"] = _pivot_reasons(wbk, qsheets, warnings)
     return {"format": "xlsx", "warnings": warnings, "names": wbk["names"], "tables": wbk["tables"], "cells": wbk["fcells"],
-            "sheet_names": wbk["sheet_names"], "cut_sheets": wbk.get("cut_sheets", []),
+            "sheet_names": wbk["sheet_names"], "cut_sheets": wbk.get("cut_sheets", []), "pivots": fctx["pivots"],
             "sheets": [_rows_to_candidates(sh["rows"], sh["name"], doc_id, sh["numbers"], sh["formulas"], fctx)
                        for sh in wbk["sheets"]]}
