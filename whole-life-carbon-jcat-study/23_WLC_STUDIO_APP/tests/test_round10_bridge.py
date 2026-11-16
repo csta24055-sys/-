@@ -191,7 +191,10 @@ class TenthRoundBridgeTests(unittest.TestCase):
             doc, rep = bridge.build(vals, REFSET, period=60)
             self.assertEqual(tables(doc)["refrigerants"], [], name)
             self.assertFalse({m["field"] for m in rep["missing_inputs"] if m["field"].startswith("r_")}, name)
-            self.assertTrue(refl(rep)["r_life"], name)                     # 交換しない decides that B1 is 0
+            # 交換しない is what makes B1 0 here, but with the charge or the GWP unknown no life could make B1 computable
+            # and non-zero, so it is not reflected (round 12: a B1-zero decider whose partner is unknown is moot)
+            self.assertFalse(refl(rep)["r_life"], name)
+            self.assertIn("未取得", {r["field"]: r["detail"] for r in bridge.reflection_table(rep)}["r_life"], name)
             _, out = self.calc(vals)
             self.assertTrue(self.stages(out)["B1"]["complete"], name)
             self.assertNotIn("B1", out["summary"]["incomplete_stages"], name)
@@ -310,11 +313,13 @@ class TenthRoundBridgeTests(unittest.TestCase):
         self.assertFalse((out["range"] or {}).get("n_values_with_range"))
         _, out = self.calc(drop(full(o_grid_value=V("o_grid_value", 0.4, "assumption")), "o_elec_kwh"))
         self.assertFalse((out["range"] or {}).get("unknown_fields"))
-        # with the quantity the factor counts again; with a grid factor of 0 it is what makes the purchase moot
+        # with the quantity the factor counts again; a grid factor of 0 makes the purchase moot, and the unknown purchase
+        # makes the factor moot: neither is reflected (round 12), the purchase is not a gap
         _, rep = bridge.build(full(o_grid_value=V("o_grid_value", 0.4, "assumption")), REFSET, period=60)
         self.assertEqual(self.estimated(rep), {"o_grid_value"})
         _, rep = bridge.build(drop(full(o_grid_value=V("o_grid_value", 0.0)), "o_elec_kwh"), REFSET, period=60)
-        self.assertTrue(refl(rep)["o_grid_value"])
+        self.assertFalse(refl(rep)["o_grid_value"])
+        self.assertNotIn("o_elec_kwh", {m["field"] for m in rep["missing_inputs"]})
 
     def test_all_assumed_embodied_counts_only_what_can_move(self):
         vals = {k: (V(k, v.value, "assumption", v.unit) if v.state == "confirmed" else v)

@@ -266,6 +266,17 @@ class App:
             for k, x in carry.items():
                 if x and not getattr(v, k):
                     setattr(v, k, x)
+        if state == "not_applicable" and F.get("na_context"):
+            # 適用外 of a field that the calculation needs only in some projects (the grid factors, the route): refused here
+            # when the calculation would refuse it with the other inputs as they are, with the bridge's reason; accepted
+            # (and filled by the bridge) where it cannot act. A later change of the other inputs is explained by the
+            # calculation in the same words
+            trial = dict(self.projects.values(pid), **{fid: v})
+            _, rep_ = bridge.build(trial, self.refset, title="WLC Studio #%d" % pid)
+            why = (rep_.get("na_refused") or {}).get(fid)
+            if why:
+                raise ApiError(400, "「%s」は、いまの入力では「適用外」にできない（%s）。分からないときは「未取得」のままにする"
+                               % (F["label"], why))
         out = self.projects.put(pid, v).to_json()
         if fid in ("m_concrete_fdn", "m_rebar", "m_steel"):
             self.projects.withdraw_whole_candidates(pid)
@@ -393,11 +404,13 @@ class App:
         lo_vals, n = _with(vals, "low", reflected)
         # the waste rate is moved like a life when the quantities are not design quantities (said in the note)
         waste_dec = lo_vals.get("m_waste_rate") is not vals.get("m_waste_rate") and bridge.decreasing("m_waste_rate", vals)
+        # estimates whose range is not known: only statistical values and assumptions, the same set that the summary counts
+        # as estimates (a confirmed value that corrected an estimate keeps the note 「元の範囲は使わない」 = kind unknown,
+        # but it is not an estimate any more)
         unknown = [f for f, v in vals.items()
                    if f in FL.FIELDS and FL.FIELDS[f]["type"] in ("number", "integer") and isinstance(v.value, (int, float))
                    and (reflected is None or f in reflected) and f not in TOTAL_NEUTRAL
-                   and (v.uncertainty.kind == "unknown" or
-                        (v.state in ("assumption", "statistical") and v.uncertainty.kind == "none"))]
+                   and v.state in ("assumption", "statistical") and v.uncertainty.kind in ("unknown", "none")]
         n_unknown = len(unknown)
         names = "、".join(FL.FIELDS[f]["label"] for f in sorted(unknown, key=lambda f: (f != "o_grid_value", f))[:6]) + \
             ("ほか" if n_unknown > 6 else "")
