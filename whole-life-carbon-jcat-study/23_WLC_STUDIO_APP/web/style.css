@@ -92,8 +92,22 @@ table.t th, table.t td { border-bottom: 1px solid var(--line); padding: 6px 4px;
 table.t td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .bar { height: 12px; background: var(--c-result); border-radius: 4px; }
 .big { font-size: 1.8rem; font-weight: 700; }
-.toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: #2b2724; color: #fff; padding: 10px 16px; border-radius: 10px; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: 90vw; z-index: 60; }
+/* the toast is laid out across the width (16 px from each side, as wide as its words, at most 560 px) above the bottom
+   bar (--below: set by placeToast() from the bar's height, whose buttons wrap on a narrow phone), and never taller than
+   the screen leaves room for under the app bar: long words scroll inside it. A toast that carries a warning from the
+   server stays until 閉じる (it takes taps then: 閉じる and scrolling); any other lets taps through */
+.toast { --below: calc(84px + env(safe-area-inset-bottom)); position: fixed; left: 16px; right: 16px; bottom: var(--below); margin-inline: auto; width: fit-content;
+  max-width: min(560px, 100% - 32px); max-height: calc(100vh - 76px - var(--below)); max-height: calc(100dvh - 76px - var(--below));
+  display: flex; flex-direction: column; gap: 8px; background: #2b2724; color: #fff; padding: 10px 16px; border-radius: 10px;
+  opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 60; }
 .toast.show { opacity: 1; }
+.toast.show.sticky { pointer-events: auto; box-shadow: 0 4px 16px rgba(0,0,0,.3); }
+.toast-body { overflow-y: auto; min-height: 0; overscroll-behavior: contain; }
+.toast-kept { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.35); }
+.toast-close { flex: none; align-self: flex-end; min-height: 44px; min-width: 88px; padding: 6px 12px; border: 1px solid rgba(255,255,255,.6);
+  border-radius: 10px; background: transparent; color: #fff; font-weight: 600; cursor: pointer; }
+.toast-close::after { content: "閉じる"; }
+.toast-close:focus-visible { outline-color: #fff; }
 dialog { border: 0; border-radius: var(--radius); padding: 0; max-width: min(640px, 94vw); background: var(--card); color: var(--ink); }
 .dlg-body { padding: 16px; } .dlg-actions { text-align: right; margin-top: 12px; }
 svg text { font-family: inherit; fill: currentColor; }

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -100,6 +101,8 @@ const answered = (page) => page.waitForFunction(() => state.pending.size === 0 &
 const retype = async (page, fid, text) => { await page.click('#in-' + fid); await page.keyboard.press('Control+A'); await page.keyboard.type(text); };
 const view = (page) => page.evaluate(() => state.view);
 const width = (page) => page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
+// round 14: a toast that carries a warning stays until 閉じる (it takes taps): closed as a user would, before tapping under it
+const closeWarn = async (page) => { if (await page.isVisible('#toast-close')) await page.click('#toast-close'); };
 const F = {};
 
 // ui-flows#0: a row holds typed text; that row's own action is pressed, and 保存して戻る 60 ms later, while the action is
@@ -158,6 +161,7 @@ F.pendingSave = async (b) => {
 const blocked = async (b, setup) => {
   const { page, pid, errors } = await open(b);
   await setup(page, pid);
+  await closeWarn(page);
   await page.click('#to-result');
   await page.waitForFunction(() => state.view === 'result' && !!document.querySelector('#calc'));
   await page.click('#calc');
@@ -204,6 +208,7 @@ F.warnings = async (b) => {
   r.rowAction = await toasts(page);
   await retype(page, 'o_gas_m3', '321'); await page.click('#bb-hub'); await answered(page);
   r.batchView = await view(page); r.batch = await toasts(page); r.batchNow = await toastNow(page);
+  await closeWarn(page);
   await screen(page, 'operation');
   cfg.hold.o_dheat_mj = 700;
   await page.click('[data-nc="o_dheat_mj"]'); await page.waitForTimeout(60);
@@ -445,16 +450,22 @@ console.log(JSON.stringify({ blocked: missingHtml(r, true), ok: missingHtml({ ..
         self.assertIn("「地域熱供給」は「計算不能」になりました", r["pendingNow"], r)
 
     def test_warn_of_keeps_warnings_while_the_batch_runs(self):
+        # round 14: warnOf takes the action's nav (its project and act); the batch keeps only its own project's warnings
         out = node(TAKE + r"""
-var state = { busy: false, warnings: [] };
+var state = { busy: false, warnings: [], batch: null, view: 'hub', project: { id: 1, created_at: 5, fields: {} } };
 const said = [];
-function toast(msg, act) { said.push([msg, act]); }
+eval(take(/function projectKey[\s\S]*?\n}\n/));
+eval(take(/function shownKey[^\n]*\n/));
+eval(take(/const toastText = [^\n]*\n/).replace('const toastText', 'var toastText'));
+function toast(msg, act) { said.push([toastText(msg), act]); }                // as it reads when said
 eval(take(/function warnOf[\s\S]*?\n}\n/));
+eval(take(/function sayWarning\([^\n]*\n/));
 eval(take(/function sayWarnings[^\n]*\n/));
-warnOf({ warnings: ['A', '', 3] }, 7);
-warnOf({}, 7); warnOf(null, 7);
-state.busy = true; warnOf({ warnings: ['B', 'C'] }, 8);
-const kept = state.warnings.slice(), before = said.length;
+const nav = (act) => ({ key: '1@5', act, name: 'P' });
+warnOf({ warnings: ['A', '', 3] }, nav(7));
+warnOf({}, nav(7)); warnOf(null, nav(7));
+state.busy = true; state.batch = { n: 1, key: '1@5' }; warnOf({ warnings: ['B', 'C'] }, nav(8));
+const kept = state.warnings.map((x) => x.w), before = said.length;
 sayWarnings(9);
 console.log(JSON.stringify({ said, kept, before, left: state.warnings.length }));
 """)
@@ -494,8 +505,10 @@ console.log(JSON.stringify([fmt(2033, '年'), fmt(1999, '年'), fmt(60, '年'), 
         self.assertTrue(r["started"], r)
 
     def test_service_worker_cache_is_new(self):
+        # v12 in round 13; a later round moves it on (round 14: v13, checked in test_round14_ui)
         sw = (WEB / "sw.js").read_text(encoding="utf-8")
-        self.assertIn('"wlcstudio-shell-v12"', sw)
+        m = re.search(r'"wlcstudio-shell-v(\d+)"', sw)
+        self.assertTrue(m and int(m.group(1)) >= 12, sw[:300])
         self.assertNotIn('"wlcstudio-shell-v11"', sw)
 
 
