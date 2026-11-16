@@ -7,9 +7,12 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 // busy: 保存して戻る is saving row after row; stale: an answer changed this project while another view was shown (it is
 // read again before that project is drawn: state.project is always what is drawn); gen: counts such answers;
 // running: the buttons whose request is under way (by their identity, so a redrawn button is busy too);
-// pending: row actions that change a stored value and are under way (保存して戻る waits for them)
+// pending: row actions that change a stored value and are under way (保存して戻る waits for them);
+// geo: what #geo-out shows (the address and PLATEAU answers its buttons act on: kept across redraws);
+// asking: the row a question is about (drawn marked again after a redraw); cancelRows: what the rows held when the user
+// stopped 保存して戻る (taken before the view changed: the stop names each row by what is stored)
 const state = { meta: null, project: null, stack: [], view: "home", seq: 0, nav: 0, act: 0, busy: false, stale: null, gen: 0,
-  running: new Set(), pending: new Set(), lastImport: null, importing: null, noteLater: null };
+  running: new Set(), pending: new Set(), lastImport: null, importing: null, noteLater: null, geo: null, asking: null, cancelRows: null };
 
 async function api(path, opts = {}) {
   const r = await fetch("/api" + path, { headers: { "Content-Type": "application/json" }, ...opts,
@@ -30,12 +33,16 @@ function toast(msg, act = state.act) {
   toast._act = act;
   t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600 + Math.min(4000, t.textContent.length * 20));
 }
-/* a control's identity across redraws: its id, or the data attribute that names its action and row */
+/* a control's identity across redraws: its id, or the data attribute that names its action and row; a list's <summary>
+   is known by its list (details[id]) and a link by where it leads */
 const KEYS = ["data-save", "data-accept", "data-why", "data-est", "data-na", "data-later", "data-unset", "data-nc", "data-screen",
   "data-open", "data-del", "data-geo", "data-b"];
 function keyOf(el) {
   if (!el || !el.getAttribute || el === document.body) return null;
   if (el.id) return "#" + CSS.escape(el.id);
+  if (el.tagName === "SUMMARY" && el.parentElement && el.parentElement.tagName === "DETAILS" && el.parentElement.id)
+    return "#" + CSS.escape(el.parentElement.id) + " > summary";
+  if (el.tagName === "A" && el.getAttribute("href")) return `a[href="${CSS.escape(el.getAttribute("href"))}"]`;
   const a = KEYS.find((k) => el.hasAttribute(k));
   return a ? `[${a}="${CSS.escape(el.getAttribute(a))}"]` + (el.hasAttribute("data-cid") ? `[data-cid="${CSS.escape(el.dataset.cid)}"]` : "") : null;
 }
@@ -74,26 +81,41 @@ function projectKey(p) {
 function startedAt() {
   return { n: state.nav, pid: state.project ? state.project.id : null, key: projectKey(state.project), act: state.act };
 }
+/* one dialog at a time: an open one (a 根拠 table being read, a question) is never replaced or covered by a late one;
+   `show` runs once no dialog is open */
+function whenNoDialog(show) {
+  const open = document.querySelector("dialog[open]");
+  if (!open) return show();
+  open.addEventListener("close", () => setTimeout(() => whenNoDialog(show), 0), { once: true });
+}
+/* where focus goes back when a dialog closes: the element that had it, or (a redraw has replaced it meanwhile) the
+   control with the same identity */
+function focusBack(el) {
+  const key = keyOf(el);
+  return () => { const t = el && document.contains(el) ? el : key && key !== "#main" ? $(key) : null; if (t) t.focus(); };
+}
 /* an information dialog; focus goes back to `returnTo` (or the element that had it) when it closes */
 function dialog(title, html, returnTo) {
-  const d = $("#dlg"), back = returnTo || document.activeElement;
-  $("#dlg-title").textContent = title; $("#dlg-content").innerHTML = html;
-  d.addEventListener("close", () => { if (back && document.contains(back)) back.focus(); }, { once: true });
-  d.showModal();
+  whenNoDialog(() => {
+    const d = $("#dlg");
+    $("#dlg-title").textContent = title; $("#dlg-content").innerHTML = html;
+    d.addEventListener("close", focusBack(returnTo || document.activeElement), { once: true });
+    d.showModal();
+  });
 }
 /* a question with explicit choices; resolves to the chosen value, or null when cancelled (やめる, Escape) */
 function ask(title, text, choices) {
-  return new Promise((resolve) => {
+  return new Promise((resolve) => whenNoDialog(() => {
     let d = $("#ask");
     if (!d) { d = document.createElement("dialog"); d.id = "ask"; d.setAttribute("aria-labelledby", "ask-title"); document.body.appendChild(d); }
-    const back = document.activeElement;
+    const back = focusBack(document.activeElement);
     d.innerHTML = `<form method="dialog" class="dlg-body"><h2 id="ask-title">${esc(title)}</h2><p>${esc(text)}</p>
       <div class="dlg-actions">${choices.map((c) => `<button class="btn${c.primary ? " primary" : ""}" value="${esc(c.value)}">${esc(c.label)}</button>`).join(" ")}
       <button class="btn" value="">やめる</button></div></form>`;
     d.returnValue = "";
-    d.addEventListener("close", () => { if (back && document.contains(back)) back.focus(); resolve(d.returnValue || null); }, { once: true });
+    d.addEventListener("close", () => { back(); resolve(d.returnValue || null); }, { once: true });
     d.showModal();
-  });
+  }));
 }
 function fmt(v, unit) {
   if (v === null || v === undefined || v === "") return "—";
@@ -104,11 +126,17 @@ function fmt(v, unit) {
 function badge(st) { const L = state.meta.states; return `<span class="badge st-${esc(st)}">${esc(L[st] || st)}</span>`; }
 
 /* while 保存して戻る saves row after row, moving away would leave rows unsaved without notice: the first press says so,
-   a second press stops the remaining saves (they are named) and moves */
+   a second press stops the remaining saves (they are named) and moves. A second press within 400 ms of the warning is
+   the same tap (a double tap on ← or ⚙): it is ignored, so only a deliberate later press stops. What every row holds
+   is taken here, before the view changes, so that the stop can name each row by what is stored */
 function blocked() {
   if (!state.busy) return false;
-  if (state.busyWarned) { state.cancel = true; return false; }
-  state.busyWarned = true; state.act++;
+  if (state.busyWarned) {
+    if (Date.now() - state.busyWarned < 400) return true;
+    state.cancel = true; state.cancelRows = state.view === "screen" ? rowsNow() : null;
+    return false;
+  }
+  state.busyWarned = Date.now(); state.act++;
   toast("保存の途中です。終わるまで待つか、もう一度押すと残りの行を保存せずに移ります");
   return true;
 }
@@ -179,7 +207,7 @@ async function renderHome(m) {
   <div class="notice">${esc(state.meta.disclaimer)}</div>
   <div class="card"><h3 style="margin-top:0">続きから</h3>${projects.length ? projects.map((p) => `
     <div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:8px 0">
-      <div><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.structure_label)}・入力 ${p.progress.filled}/${p.progress.total}（${p.progress.percent}%）</span></div>
+      <div class="lname"><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.structure_label)}・入力 ${p.progress.filled}/${p.progress.total}（${p.progress.percent}%）</span></div>
       <button class="btn small" data-open="${p.id}">開く</button></div>`).join("") : '<p class="muted">まだプロジェクトはありません。</p>'}</div>`;
   $("#start").onclick = () => go("structures");
   $("#demo").onclick = guard($("#demo"), async () => { const r = await api("/demo", { method: "POST", body: {} }); await openProject(r.id); });
@@ -250,7 +278,7 @@ function fieldHtml(fid) {
       <div class="muted">${c.source_id ? "出典 " + esc(c.source_id) + (c.source_detail ? "：" + esc(c.source_detail) : "") : ""}</div>
       ${dependsHtml(c.depends)}
       <div class="muted">${esc(c.note || "")}</div>${d.rows}${d.warn}<button class="btn small" data-accept="${esc(fid)}" data-cid="${esc(c.id)}">この候補を採用</button></li>`; }).join("");
-  return `<div class="field" id="f-${fid}">
+  return `<div class="field${state.asking === fid ? " asking" : ""}" id="f-${fid}">
     <div class="field-head"><label for="in-${fid}">${esc(F.label)}${F.required ? ' <span class="muted">（計算に必須）</span>' : ""}</label>${badge(st)}</div>
     <div class="value">${v ? fmt(v.value, v.unit) : '<span class="muted">未取得</span>'}${f.later ? ' <span class="badge st-statistical">あとで確認</span>' : ""}</div>${unc}
     ${F.help ? `<div class="muted">${esc(F.help)}</div>` : ""}
@@ -268,22 +296,31 @@ function fieldHtml(fid) {
 
 /* a candidate read from a document: the rows it adds up, and the rows naming this field's material that it left out with
    their reason (at most 200 of each are sent). When some were left out for a reason that may be wrong (n_maybe), the
-   candidate may be too low: that is said next to 採用. Candidates without these keys (older ones, estimates) show nothing */
+   candidate may be too low: that is said next to 採用. Candidates without these keys (older ones, estimates) show nothing.
+   A left-out row may carry its quantity and unit (shown like the added rows) and `maybe` (it may belong in the total:
+   marked in words and listed first); older left-out rows without these keys show their name, place and reason only */
 function candRows(fid, c) {
+  const has = (x) => x !== undefined && x !== null && x !== "";
   const qty = (x, u) => (typeof x === "number" ? fmt(x, "") : esc(x ?? "")) + (u ? " " + esc(u) : "");
   const count = (n, xs) => (Number.isInteger(n) && n >= xs.length ? n : xs.length);
   const more = (n, xs) => (n <= xs.length ? "" : xs.length ? `<li class="muted">ほか ${n - xs.length} 行（記録は最初の ${xs.length} 行まで）</li>`
     : `<li class="muted">行の一覧は記録されていません</li>`);
-  const rows = Array.isArray(c.rows) ? c.rows : [], ex = Array.isArray(c.excluded) ? c.excluded : [];
+  const rows = Array.isArray(c.rows) ? c.rows : [], ex0 = Array.isArray(c.excluded) ? c.excluded.filter((r) => r && typeof r === "object") : [];
+  const ex = ex0.filter((r) => r.maybe === true).concat(ex0.filter((r) => r.maybe !== true));
   const nr = count(c.n_rows, rows), ne = count(c.n_excluded, ex), maybe = Number.isInteger(c.n_maybe) && c.n_maybe > 0 ? c.n_maybe : 0;
   const id = (k) => `${k}-${esc(fid)}-${esc(c.id)}`;
   let h = "";
   if (nr) h += `<details id="${id("cr")}"><summary>足した行（${nr} 行）</summary><ul class="crows">${rows.map((r) =>
     `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span> <span class="num">${qty(r.quantity, r.unit)}</span></li>`).join("")}${more(nr, rows)}</ul></details>`;
   if (ne) h += `<details id="${id("cx")}"${maybe && ex.length <= 8 ? " open" : ""}><summary>この欄の材料の行で足さなかった行（${ne} 行）</summary><ul class="crows">${ex.map((r) =>
-    `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span><div class="muted">${esc(r.reason)}</div></li>`).join("")}${more(ne, ex)}</ul></details>`;
+    `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span>${has(r.quantity) ? ` <span class="num">${qty(r.quantity, r.unit)}</span>` : ""}${
+      r.maybe === true ? ' <strong class="maybe">足すべきかもしれない</strong>' : ""}<div class="muted">${esc(r.reason)}</div></li>`).join("")}${more(ne, ex)}</ul></details>`;
   else if (c.n_excluded === 0) h += `<div class="muted">この欄の材料の行で足さなかった行：なし</div>`;
-  const warn = maybe ? `<div class="notice bad">足さなかった行のうち ${maybe} 行は、足すべき行かもしれません（理由を確かめてください）。この候補は少なめのことがあります</div>` : "";
+  // the quantity those rows would add, when every one of them is listed with a number in the candidate's unit
+  const mq = ex.filter((r) => r.maybe === true);
+  const sum = maybe && mq.length === maybe && mq.every((r) => typeof r.quantity === "number" && Number.isFinite(r.quantity) && r.unit === c.unit)
+    ? `。その ${maybe} 行の数量は計 ${fmt(mq.reduce((a, r) => a + r.quantity, 0), c.unit)}` : "";
+  const warn = maybe ? `<div class="notice bad">足さなかった行のうち ${maybe} 行は、足すべき行かもしれません（理由を確かめてください${sum}）。この候補は少なめのことがあります</div>` : "";
   return { rows: h, warn };
 }
 
@@ -382,10 +419,35 @@ function isDirty(fid) {
   if (us && us.value !== drawn(us)) return true;
   return !!(st && !st.disabled && st.value !== drawn(st));       // a state-only change (one's own value: the select is open)
 }
+/* what a row's controls hold now: its text, its unit, and its state when the state can be chosen. An action records it
+   when it is sent, so that a late answer (or 保存して戻る) can tell whether the user has changed the row since */
+function rowNow(fid) {
+  const inp = $("#in-" + fid);
+  if (!inp) return null;
+  const us = $("#unit-" + fid), st = $("#st-" + fid);
+  return { v: inp.value, u: us ? us.value : null, s: st && !st.disabled ? st.value : null };
+}
+const sameRow = (a, b) => !!a && !!b && a.v === b.v && a.u === b.u && a.s === b.s;
+/* every row of the screen as it is now, with whether it is typed and what it reads as (for a stop, before the view goes) */
+function rowsNow() {
+  const out = {};
+  document.querySelectorAll("#main [data-save]").forEach((b) => {
+    const f = b.dataset.save, x = rowNow(f);
+    if (x) out[f] = { ...x, typed: isDirty(f), iv: inputValue(f) };
+  });
+  return out;
+}
+/* the stored value of row `f` in project `p` is what row snapshot `x` reads as (value, unit, and the chosen state) */
+function storedAs(p, f, x) {
+  const v = p && p.fields && (p.fields[f] || {}).value;
+  return !!(v && x && x.iv && !x.iv.bad && !x.iv.empty && v.value === x.iv.value
+    && (x.u === null || !v.unit || v.unit === x.u) && (x.s === null || v.state === x.s));
+}
 /* save one row: "saved" | "unchanged" | "refused" | "cancelled". With batch=true nothing is re-rendered (the other rows
    keep what was typed) and a refusal's reason is returned in saveField.reason */
 async function saveField(fid, quiet = false, batch = false) {
   saveField.reason = "";
+  saveField.sent = rowNow(fid);               // what the row held when it was read (the value sent, or found unchanged)
   const nav = startedAt(), sid = state.arg;
   const say = (msg) => toast(msg, nav.act);
   const refuse = async (msg, reload = true) => {
@@ -394,10 +456,12 @@ async function saveField(fid, quiet = false, batch = false) {
     return "refused";
   };
   // a question is about one row: it names the row and the values, and the row is brought into view and marked
+  // (the mark is kept in state.asking: a late redraw while the question is open draws the row marked again)
   const askRow = async (title, text, choices) => {
     const row = $("#f-" + fid);
-    row?.scrollIntoView({ block: "center" }); row?.classList.add("asking");
-    try { return await ask(`「${state.meta.fields[fid].label}」：${title}`, text, choices); } finally { row?.classList.remove("asking"); }
+    row?.scrollIntoView({ block: "center" }); row?.classList.add("asking"); state.asking = fid;
+    try { return await ask(`「${state.meta.fields[fid].label}」：${title}`, text, choices); }
+    finally { if (state.asking === fid) state.asking = null; $("#f-" + fid)?.classList.remove("asking"); }
   };
   const shown = (x, u) => `${x}${u ? " " + u : ""}`;
   const F = state.meta.fields[fid], iv = inputValue(fid);
@@ -464,30 +528,63 @@ function bindScreen(m, sid) {
   // new button, drawn busy too). While it runs, moving away waits (see blocked()) and row actions are refused (idle())
   $("#bb-hub").onclick = async () => {
     if (state.busy) return;
-    state.act++; state.busy = true; state.busyWarned = false; state.cancel = false; busyMark($("#bb-hub"), true);
+    state.act++; state.busy = true; state.busyWarned = 0; state.cancel = false; state.cancelRows = null; busyMark($("#bb-hub"), true);
     let after = null;
     try { after = await saveAndBack(); } finally { state.busy = false; busyMark($("#bb-hub"), false); }
     if (after) await after();
     // an estimate's explanation that came while the rows were saved is shown when its screen is still there
     const n = state.noteLater; state.noteLater = null;
-    if (n && onScreen(n.nav, n.sid)) estimateNote(n);
+    if (n) estimateNote(n);
   };
   const label = (f) => "「" + state.meta.fields[f].label + "」";
-  const names = (fs) => fs.map(label).join("");
-  // 保存して戻る: every row whose input differs from what was drawn is saved like its own 保存 button. Resolves to what is
-  // to be done once state.busy is off (after a stop: read the project again and redraw what shows it)
+  const names = (fs) => [...new Set(fs)].map(label).join("");
+  // 保存して戻る: every row whose input differs from what was drawn is saved like its own 保存 button. What each row held
+  // when it was sent is recorded: a row typed or corrected while the batch was saving is saved in another pass (or, when
+  // it cannot be saved as it is, the batch stays and names it), so it never leaves with a row not saved as shown.
+  // Resolves to what is to be done once state.busy is off (after a stop: read the project again and redraw what shows it)
   const saveAndBack = async () => {
     const nav = startedAt(), pid = nav.pid, say = (msg) => toast(msg, nav.act);   // its messages are not joined to a later tap's
     const moved = () => state.cancel || state.nav !== nav.n || !state.project || state.project.id !== pid;
-    const saved = [], same = [], refused = [];
-    // a stop names every row's outcome: saved, refused (with the reason), unchanged, not sent
-    const stop = (rest) => {
+    const saved = [], same = [], refused = [], refusedRows = [], sent = {};
+    // a stop names every row's outcome: saved, refused (with the reason), unchanged, not sent. When the user stopped,
+    // blocked() took what each row held: that is compared with what is stored now, so a row stored by its own 保存 is
+    // named saved, a row corrected after it was sent is said to keep its earlier value, and a row typed meanwhile is named
+    const stop = async (rest) => {
+      const at = state.cancelRows;
+      let p = null;
+      if (at) try { p = await api("/projects/" + pid); } catch { p = null; }
+      let ok = saved, early = [], lost = rest;
+      if (p) {
+        ok = []; lost = [];
+        for (const [f, x] of Object.entries(at)) {
+          if (same.includes(f) || refusedRows.includes(f)) continue;
+          if (x.typed && storedAs(p, f, x)) ok.push(f);
+          else if (saved.includes(f)) early.push(f);
+          else if (x.typed || rest.includes(f)) lost.push(f);
+        }
+      }
       state.act++;
-      toast(!rest.length && !refused.length ? (saved.length ? `${names(saved)}を保存しました` : "保存する変更はありませんでした")
-        : "保存して戻るを途中でやめました：" + [saved.length ? names(saved) + "は保存しました" : "", ...refused,
-          same.length ? names(same) + "は変わっていないので送っていません" : "", rest.length ? names(rest) + "は保存していません" : ""]
+      toast(!lost.length && !early.length && !refused.length ? (ok.length ? `${names(ok)}を保存しました` : "保存する変更はありませんでした")
+        : "保存して戻るを途中でやめました：" + [ok.length ? names(ok) + "は保存しました" : "",
+          early.length ? names(early) + "は直す前の値を保存しました（あとで直した値は保存していません）" : "", ...refused,
+          same.length ? names(same) + "は変わっていないので送っていません" : "", lost.length ? names(lost) + "は保存していません" : ""]
           .filter(Boolean).join("。"));
       return () => refresh(sid, null, true, nav);            // the next drawing shows what is stored
+    };
+    // the batch stays on the screen: drawn from what is stored now (the saved rows become current), what is typed in the
+    // other rows stays (and in a saved row corrected after it was sent: it was not saved as shown), the reason is said
+    const stay = async (msg, fid, rest) => {
+      await loadProject(pid);
+      if (moved()) return stop(rest);
+      const keep = keepScreen(null);                   // taken after the read: what was typed meanwhile is kept too
+      const early = saved.filter((f) => !sameRow(rowNow(f), sent[f]));
+      saved.forEach((f) => { if (!early.includes(f)) delete keep.rows[f]; });
+      await render(); putBack(keep);
+      const ok = saved.filter((f) => !early.includes(f));
+      say(msg + "。戻りません" + (ok.length ? `（${names(ok)}は保存しました）` : "")
+        + (early.length ? `（${names(early)}は直す前の値を保存しました。直した値はまだ保存していません）` : ""));
+      $("#in-" + fid)?.focus();
+      return null;
     };
     const typedNow = () => [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save).filter(isDirty);
     // a row action still under way (a 保存 just pressed …) is answered first, and the screen is drawn from what it stored
@@ -518,39 +615,54 @@ function bindScreen(m, sid) {
       $("#in-" + bad[0]).focus();
       return null;
     }
-    const dirty = rows.filter(isDirty);
+    let dirty = rows.filter(isDirty);
     const snap = typedRows(null);                      // what was typed, before the first request
-    for (const [i, fid] of dirty.entries()) {
-      if (moved()) return stop(dirty.slice(i));
-      if (inputValue(fid).empty && snap[fid]) restoreTyped({ [fid]: snap[fid] });
-      const r = await saveField(fid, true, true);
-      if (r === "saved") saved.push(fid); else if (r === "unchanged") same.push(fid); else if (r === "refused") refused.push(saveField.reason);
-      // the row that was under way is named by its outcome; the rows after it were not sent
-      if (moved()) return stop((r === "cancelled" ? [fid] : []).concat(dirty.slice(i + 1)));
-      if (r === "refused" || r === "cancelled") {
+    for (let pass = 0; ; pass++) {
+      for (const [i, fid] of dirty.entries()) {
+        if (moved()) return stop(dirty.slice(i));
+        if (inputValue(fid).empty && snap[fid]) restoreTyped({ [fid]: snap[fid] });
+        const r = await saveField(fid, true, true);
+        if (r === "saved" || r === "unchanged") sent[fid] = saveField.sent;
+        if (r === "saved") { if (!saved.includes(fid)) saved.push(fid); if (same.includes(fid)) same.splice(same.indexOf(fid), 1); }
+        else if (r === "unchanged") { if (!saved.includes(fid) && !same.includes(fid)) same.push(fid); }
+        else if (r === "refused") { refused.push(saveField.reason); refusedRows.push(fid); }
+        // the row that was under way is named by its outcome; the rows after it were not sent
+        if (moved()) return stop((r === "cancelled" ? [fid] : []).concat(dirty.slice(i + 1)));
         // redraw: the saved rows, badges and candidates become current; what was typed in the others stays
-        const keep = keepScreen(null);
-        saved.forEach((f) => delete keep.rows[f]);
-        await loadProject(pid);
-        if (moved()) return stop(dirty.slice(i + 1));
-        await render(); putBack(keep);
-        const done = saved.length ? `（${names(saved)}は保存しました）` : "";
-        say((r === "refused" ? saveField.reason : `「${state.meta.fields[fid].label}」の保存をやめました`) + "。戻りません" + done);
-        $("#in-" + fid)?.focus();
-        return null;
+        if (r === "refused" || r === "cancelled")
+          return stay(r === "refused" ? saveField.reason : `「${state.meta.fields[fid].label}」の保存をやめました`, fid, dirty.slice(i + 1));
       }
+      if (moved()) return stop([]);
+      await loadProject(pid);
+      if (moved()) return stop([]);
+      // checked again just before leaving: a row typed, corrected or emptied while the rows were saved holds what was not
+      // sent. It is saved in another pass; one that cannot be saved as it is (emptied, unreadable) keeps the batch here
+      const late = rows.filter((f) => (sent[f] ? !sameRow(rowNow(f), sent[f]) : isDirty(f) || clearedInput(f) || inputValue(f).bad));
+      if (!late.length) break;
+      const lateCleared = late.filter((f) => clearedInput(f) || (sent[f] && inputValue(f).empty)), lateBad = late.filter((f) => inputValue(f).bad);
+      if (lateCleared.length) {
+        lateCleared.forEach(restoreInput);
+        return stay(`保存して戻るの間に空欄にした${names(lateCleared)}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`, lateCleared[0], []);
+      }
+      if (lateBad.length) {
+        const iv = inputValue(lateBad[0]);
+        return stay(`保存して戻るの間に入力した「${state.meta.fields[lateBad[0]].label}」は数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}。保存していません`, lateBad[0], []);
+      }
+      if (pass >= 2) return stay(`保存して戻るの間に入力が変わった${names(late)}は保存していません`, late[0], []);
+      dirty = late;
     }
-    if (moved()) return stop([]);
-    await loadProject(pid);
-    if (moved()) return stop([]);
     say(saved.length ? `${saved.length} 項目を保存しました（${names(saved)}）` : "保存する変更はありませんでした");
     state.busy = false; back();
     return null;
   };
   $("#bb-est").onclick = guard($("#bb-est"), () => estimate(sid, null));
-  // a row action: refused while 保存して戻る runs; `nav` is where it started (a late answer must not paint elsewhere)
+  // a row action: refused while 保存して戻る runs; `nav` is where it started (a late answer must not paint elsewhere) and
+  // nav.row what the row held when it was sent (its late answer keeps the row when the user has typed in it since)
   const rowAct = (b, fn, changesValue = true) => (b.onclick = guard(b, (changesValue ? track : (f) => f)(async () => {
-    if (idle()) await fn(startedAt());
+    if (!idle()) return;
+    const nav = startedAt(), row = b.closest(".field");
+    if (row) nav.row = rowNow(row.id.slice(2));
+    await fn(nav);
   })));
   m.querySelectorAll("[data-save]").forEach((b) => rowAct(b, async (nav) => {
     if ((await saveField(b.dataset.save)) === "saved") await refresh(sid, b.dataset.save, false, nav);
@@ -602,9 +714,10 @@ function bindScreen(m, sid) {
     try {
       const r = await api(`/projects/${nav.pid}/research/address`, { method: "POST", body: { query: q } });
       const o = out(); if (!o) return;                 // the screen was left: nothing is painted elsewhere
+      state.geo = { sid, addr: r.candidates, bld: null };   // what the buttons act on (kept across redraws with the list)
       o.innerHTML = r.candidates.length ? `<ul class="cands">${r.candidates.map((c, i) => `<li>${esc(c.title)} <span class="muted">（${c.lat.toFixed(5)}, ${c.lon.toFixed(5)}・${c.precision === "town" ? "町・丁目まで" : c.precision === "lot" ? "番地まで" : "地域"}）</span>
           <div class="actions"><button class="btn small" data-geo="${i}">この地点の建物を PLATEAU で探す</button></div></li>`).join("")}</ul><p class="muted">${esc(r.note)}</p>` : '<p class="muted">候補が見つかりませんでした。</p>';
-      o.querySelectorAll("[data-geo]").forEach((g) => (g.onclick = () => plateau(r.candidates[+g.dataset.geo], sid)));
+      bindGeo(o);
     } catch (e) { const o = out(); if (o) o.innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; else toast(e.message, nav.act); }
   };
   const df = $("#docfile");
@@ -653,24 +766,35 @@ function onScreen(nav, sid) {
   return state.view === "screen" && state.arg === sid && !!state.project && projectKey(state.project) === nav.key;
 }
 
+/* the buttons of #geo-out act on the answers kept in state.geo: bound when the list is drawn, and again when a redraw puts
+   the list back (keepScreen / putBack). One request per button (a double tap does not search twice) */
+function bindGeo(o) {
+  const g = state.geo;
+  if (!g || !o) return;
+  o.querySelectorAll("[data-geo]").forEach((b) => (b.onclick = guard(b, () => (g.addr[+b.dataset.geo] ? plateau(g.addr[+b.dataset.geo], g.sid) : null))));
+  o.querySelectorAll("[data-b]").forEach((x) => (x.onclick = guard(x, async () => {
+    if (!idle() || !g.bld) return;
+    const at = startedAt(), c = g.bld.c;
+    await api(`/projects/${at.pid}/research/plateau/select`, { method: "POST", body: { candidate: g.bld.list[+x.dataset.b], lat: c.lat, lon: c.lon, address: c.title } });
+    toast("候補を各項目に入れました。確認して採用してください", at.act); await refresh(g.sid, undefined, true, at);
+  })));
+}
+
 async function plateau(c, sid) {
   const nav = startedAt(), out = () => (onScreen(nav, sid) ? $("#geo-out") : null);
-  out().innerHTML += '<p class="muted">PLATEAU の建物データを読んでいます（初回は数十秒かかることがあります）…</p>';
+  // added after the list (insertAdjacentHTML, not innerHTML +=: the list's buttons keep their handlers)
+  out()?.insertAdjacentHTML("beforeend", '<p class="muted">PLATEAU の建物データを読んでいます（初回は数十秒かかることがあります）…</p>');
   try {
     const r = await api(`/projects/${nav.pid}/research/plateau`, { method: "POST", body: { lat: c.lat, lon: c.lon, address: c.title } });
     const o = out(); if (!o) return;
-    if (!r.candidates.length) { o.innerHTML += `<div class="notice">${esc(r.note || "建物が見つかりませんでした")}</div>`; return; }
+    if (!r.candidates.length) { o.insertAdjacentHTML("beforeend", `<div class="notice">${esc(r.note || "建物が見つかりませんでした")}</div>`); return; }
+    state.geo = { sid, addr: (state.geo && state.geo.addr) || [], bld: { c, list: r.candidates } };
     o.innerHTML = `<h4>近くの建物（PLATEAU）</h4><ul class="cands">${r.candidates.map((b, i) => `<li>
       <strong>${esc(b.usage || "用途不明")}</strong>・地上 ${b.storeys_above ?? "?"} 階 / 地下 ${b.storeys_below ?? "?"} 階・高さ ${b.measured_height_m ?? "?"} m・${b.contains_point ? "地点を含む" : b.distance_m + " m"}
       <div class="muted">${esc(b.address || "")}・${esc(b.structure_code || "")}・調査年 ${esc(b.survey_year || "")}・ID ${esc(b.plateau_building_id || "")}</div>
       <button class="btn small" data-b="${i}">この建物を選ぶ</button></li>`).join("")}</ul><p class="muted">${esc(r.note)}</p>`;
-    o.querySelectorAll("[data-b]").forEach((x) => (x.onclick = guard(x, async () => {
-      if (!idle()) return;
-      const at = startedAt();
-      await api(`/projects/${at.pid}/research/plateau/select`, { method: "POST", body: { candidate: r.candidates[+x.dataset.b], lat: c.lat, lon: c.lon, address: c.title } });
-      toast("候補を各項目に入れました。確認して採用してください", at.act); await refresh(sid, undefined, true, at);
-    })));
-  } catch (e) { const o = out(); if (o) o.innerHTML += `<div class="notice bad">${esc(e.message)}</div>`; else toast(e.message, nav.act); }
+    bindGeo(o);
+  } catch (e) { const o = out(); if (o) o.insertAdjacentHTML("beforeend", `<div class="notice bad">${esc(e.message)}</div>`); else toast(e.message, nav.act); }
 }
 
 async function estimate(sid, fid) {
@@ -680,15 +804,17 @@ async function estimate(sid, fid) {
     const r = await api(`/projects/${nav.pid}/estimate`, { method: "POST", body: { screen: sid, field: fid } });
     toast(r.n_proposals ? `${r.n_proposals} 件の候補を作りました（採用するまで計算には使いません）` : (r.message || "概算できる項目がありません"), nav.act);
     await refresh(sid, fid, true, nav);              // the estimate does not use the input: what was typed stays
-    if (r.messages && r.messages.length && onScreen(nav, sid)) {
-      const n = { nav, sid, fid, html: r.messages.map((x) => `<p>${esc(x)}</p>`).join("") };
-      if (state.busy) state.noteLater = n;           // not over rows being saved: after 保存して戻る, if still on this screen
-      else estimateNote(n);
-    }
+    if (r.messages && r.messages.length && onScreen(nav, sid)) estimateNote({ nav, sid, fid, html: r.messages.map((x) => `<p>${esc(x)}</p>`).join("") });
   } catch (e) { toast(e.message, nav.act); }
 }
-/* the explanation of an estimate; closing it gives focus back to 自動概算, or to where the user has gone meanwhile */
+/* the explanation of an estimate (its gist is in the toast already); closing it gives focus back to 自動概算, or to where
+   the user has gone meanwhile. It is never put over what the user has open: while 保存して戻る saves rows it waits for
+   the end of the batch (state.noteLater), and while a dialog is open (a 根拠 table, a question) it waits until that one
+   is closed. It is shown only while its screen is still there */
 function estimateNote(n) {
+  if (state.busy) { state.noteLater = n; return; }
+  if (!onScreen(n.nav, n.sid)) return;
+  if (document.querySelector("dialog[open]")) return whenNoDialog(() => estimateNote(n));
   const opener = n.fid ? $(`[data-est="${CSS.escape(n.fid)}"]`) : $("#bb-est"), cur = document.activeElement;
   const away = cur && cur !== document.body && cur !== $("#main") && cur !== opener && !(n.fid && cur.closest("#f-" + CSS.escape(n.fid)));
   dialog("自動概算の説明", n.html, away ? cur : opener);
@@ -728,15 +854,19 @@ function restoreTyped(saved) {
     if (st && x.s !== null) { if (x.unlocked) st.disabled = false; st.value = x.s; }
   }
 }
-/* everything the user has on a screen beyond the stored values: typed rows, the address being searched, open lists */
+/* everything the user has on a screen beyond the stored values: typed rows, the address being searched and its results
+   (the address / PLATEAU answers in #geo-out: drawn again with their buttons bound), open lists */
 function keepScreen(except) {
-  return { rows: typedRows(except), addr: $("#addr") ? $("#addr").value : null,
+  return { rows: typedRows(except), addr: $("#addr") ? $("#addr").value : null, geo: $("#geo-out") ? $("#geo-out").innerHTML : null,
     open: [...document.querySelectorAll("#main details[id]")].map((d) => [d.id, d.open]) };
 }
 function putBack(k) {
   restoreTyped(k.rows);
   if (k.addr !== null && $("#addr")) $("#addr").value = k.addr;
+  const g = $("#geo-out");
+  if (k.geo && g) { g.innerHTML = k.geo; bindGeo(g); }
   k.open.forEach(([id, o]) => { const d = document.getElementById(id); if (d) d.open = o; });
+  state.running.forEach((key) => busyMark($(key), true));      // a button put back whose request is under way is busy
 }
 /* after an action changed the project on the server; `nav` is where it started (startedAt). The project is read again and
    the view redrawn when it shows that project: the same screen (also after leaving and re-entering it) or the hub. Any
@@ -758,28 +888,34 @@ async function reloadShown(sid, fid, keepActed, nav) {
   await redraw(nav, fid, keepActed);
   return true;
 }
-/* draw the current view again from state.project, keeping what the user has on it (typed rows, the address, open lists,
-   the scroll) and the focus. The acted row is brought into view and focused only when the user was on that row (or
-   nowhere: body / main) and has not left the view since; otherwise the focus goes back to the element that had it (the
-   same control, found by its identity, with the caret). All in one task: no keystroke is lost */
+/* draw the current view again from state.project, keeping what the user has on it (typed rows, the address, the address
+   results, open lists, the scroll) and the focus. The acted row shows its new stored value, unless the user has changed
+   it since the action was sent (nav.row): then what they typed stays. The acted row is brought into view and focused
+   only when the user was on that row (not typing in it) or nowhere (body / main) and has not left the view since; focus
+   anywhere else (a control, a list's summary, a link, a dialog) is where the user is: the scroll stays and the focus goes
+   back to the element that had it (the same control, found by its identity, with the caret). All in one task: no
+   keystroke is lost */
 async function redraw(nav, fid, keepActed, quiet = false) {
   const same = state.nav === nav.n, had = document.activeElement, key = keyOf(had);
   let caret = null;
   try { if (had && typeof had.selectionStart === "number") caret = [had.selectionStart, had.selectionEnd]; } catch { /* no caret */ }
+  const nowhere = !had || had === document.body || had === $("#main");
   const inRow = !!(same && fid && had && had.closest && had.closest("#f-" + CSS.escape(fid)));
-  const toRow = inRow || !!(same && fid && (!key || key === "#main"));
-  const keep = state.view === "screen" ? keepScreen(same && !keepActed ? fid : null) : null;
+  const typing = inRow && /^(INPUT|SELECT|TEXTAREA)$/.test(had.tagName);     // in the acted row's own field: no jump
+  const toRow = (inRow && !typing) || !!(same && fid && nowhere);
+  const changedSince = !!(fid && nav.row && !sameRow(rowNow(fid), nav.row));
+  const keep = state.view === "screen" ? keepScreen(same && !keepActed && !changedSince ? fid : null) : null;
   const y = window.scrollY;
   await render();
   if (keep) putBack(keep);
   const el = key && key !== "#main" ? $(key) : null, usable = el && !el.disabled;
   const row = toRow && $("#f-" + CSS.escape(fid));
-  if (row) {
-    (inRow && usable ? el : row.querySelector("[data-save]") || row.querySelector("button"))?.focus({ preventScroll: true });
-    setTimeout(() => row.scrollIntoView({ block: "center" }), 0);
-  } else {
-    window.scrollTo(0, y); setTimeout(() => window.scrollTo(0, y), 0);
-    if (usable) { el.focus({ preventScroll: true }); if (caret) try { el.setSelectionRange(caret[0], caret[1]); } catch { /* not a text field */ } }
+  const target = row ? (inRow && usable ? el : row.querySelector("[data-save]") || row.querySelector("button")) : usable ? el : null;
+  if (row) setTimeout(() => row.scrollIntoView({ block: "center" }), 0);
+  else { window.scrollTo(0, y); setTimeout(() => window.scrollTo(0, y), 0); }
+  if (target) {
+    target.focus({ preventScroll: true });
+    if (target === el && caret) try { el.setSelectionRange(caret[0], caret[1]); } catch { /* not a text field */ }
   }
   if (keep && !quiet) {
     const typed = Object.keys(keep.rows).filter(isDirty);       // the same test as 保存して戻る
@@ -894,7 +1030,7 @@ async function renderSettings(m) {
   const seq = state.seq, projects = await api("/projects");
   if (state.seq !== seq) return;                  // the user has moved meanwhile
   m.innerHTML = `<div class="card"><h3 style="margin-top:0">プロジェクト</h3>${projects.map((p) => `<div class="row" style="justify-content:space-between;padding:6px 0">
-     <span>${esc(p.name)}（${esc(p.structure_label)}）</span><span class="row"><button class="btn small" data-open="${p.id}">開く</button>
+     <span class="lname">${esc(p.name)}（${esc(p.structure_label)}）</span><span class="row"><button class="btn small" data-open="${p.id}">開く</button>
      <button class="btn small" data-del="${p.id}">削除</button></span></div>`).join("") || '<p class="muted">ありません</p>'}</div>
    <div class="card"><h3 style="margin-top:0">このアプリについて</h3><p>${esc(state.meta.app_name)} ${esc(state.meta.version)}</p><p class="muted">${esc(state.meta.disclaimer)}</p>
    <p class="muted">${esc(state.meta.privacy)}</p><p class="muted">データの出典：${esc(state.meta.attribution)}</p></div>`;
