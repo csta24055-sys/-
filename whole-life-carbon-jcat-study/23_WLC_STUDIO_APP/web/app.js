@@ -10,9 +10,11 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 // pending: row actions that change a stored value and are under way (保存して戻る waits for them);
 // geo: what #geo-out shows (the address and PLATEAU answers its buttons act on: kept across redraws);
 // asking: the row a question is about (drawn marked again after a redraw); cancelRows: what the rows held when the user
-// stopped 保存して戻る (taken before the view changed: the stop names each row by what is stored)
+// stopped 保存して戻る (taken before the view changed: the stop names each row by what is stored); geoSeq: the number of
+// the latest request for #geo-out (an address search or a PLATEAU read: only its answer is shown)
 const state = { meta: null, project: null, stack: [], view: "home", seq: 0, nav: 0, act: 0, busy: false, stale: null, gen: 0,
-  running: new Set(), pending: new Set(), lastImport: null, importing: null, noteLater: null, geo: null, asking: null, cancelRows: null };
+  running: new Set(), pending: new Set(), lastImport: null, importing: null, noteLater: null, geo: null, asking: null, cancelRows: null,
+  geoSeq: 0 };
 
 async function api(path, opts = {}) {
   const r = await fetch("/api" + path, { headers: { "Content-Type": "application/json" }, ...opts,
@@ -33,8 +35,9 @@ function toast(msg, act = state.act) {
   toast._act = act;
   t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600 + Math.min(4000, t.textContent.length * 20));
 }
-/* a control's identity across redraws: its id, or the data attribute that names its action and row; a list's <summary>
-   is known by its list (details[id]) and a link by where it leads */
+/* a control's identity across redraws: its id, or the data attribute that names its action and row (with the candidate
+   it adopts, data-cid, and the #geo-out list it belongs to, data-list); a list's <summary> is known by its list
+   (details[id]) and a link by where it leads */
 const KEYS = ["data-save", "data-accept", "data-why", "data-est", "data-na", "data-later", "data-unset", "data-nc", "data-screen",
   "data-open", "data-del", "data-geo", "data-b"];
 function keyOf(el) {
@@ -44,7 +47,8 @@ function keyOf(el) {
     return "#" + CSS.escape(el.parentElement.id) + " > summary";
   if (el.tagName === "A" && el.getAttribute("href")) return `a[href="${CSS.escape(el.getAttribute("href"))}"]`;
   const a = KEYS.find((k) => el.hasAttribute(k));
-  return a ? `[${a}="${CSS.escape(el.getAttribute(a))}"]` + (el.hasAttribute("data-cid") ? `[data-cid="${CSS.escape(el.dataset.cid)}"]` : "") : null;
+  return a ? `[${a}="${CSS.escape(el.getAttribute(a))}"]` + (el.hasAttribute("data-cid") ? `[data-cid="${CSS.escape(el.dataset.cid)}"]` : "")
+    + (el.hasAttribute("data-list") ? `[data-list="${CSS.escape(el.getAttribute("data-list"))}"]` : "") : null;
 }
 const busyMark = (b, on) => { if (!b) return; if (on) { b.dataset.busy = "1"; b.setAttribute("aria-disabled", "true"); } else { delete b.dataset.busy; b.removeAttribute("aria-disabled"); } };
 /* one request at a time per button: a double tap must not send twice (and focus stays on the button). The button is
@@ -127,10 +131,15 @@ function badge(st) { const L = state.meta.states; return `<span class="badge st-
 
 /* while 保存して戻る saves row after row, moving away would leave rows unsaved without notice: the first press says so,
    a second press stops the remaining saves (they are named) and moves. A second press within 400 ms of the warning is
-   the same tap (a double tap on ← or ⚙): it is ignored, so only a deliberate later press stops. What every row holds
-   is taken here, before the view changes, so that the stop can name each row by what is stored */
+   the same tap (a double tap on ← or ⚙): it is ignored, so only a deliberate later press stops. That holds also when
+   the batch has ended between the two presses (it may have just left for the hub): the second press is still the same
+   tap, and is ignored. What every row holds is taken here, before the view changes, so that the stop can name each row
+   by what is stored */
 function blocked() {
-  if (!state.busy) return false;
+  if (!state.busy) {
+    if (state.busyWarned && Date.now() - state.busyWarned < 400) { state.busyWarned = 0; return true; }
+    return false;
+  }
   if (state.busyWarned) {
     if (Date.now() - state.busyWarned < 400) return true;
     state.cancel = true; state.cancelRows = state.view === "screen" ? rowsNow() : null;
@@ -156,8 +165,9 @@ function openProject(id) {
     state.stack = [["home", undefined]]; go("hub", undefined, false);
   });
 }
-function back() {
-  if (blocked()) return;
+/* `own`: the move of 保存して戻る itself, once its rows are saved (not a press: never taken for the second press of a tap) */
+function back(own = false) {
+  if (own !== true && blocked()) return;
   state.nav++; state.act++;
   const p = state.stack.pop(); if (p) { state.view = p[0]; state.arg = p[1]; render(); } else { state.view = "home"; render(); }
 }
@@ -298,10 +308,12 @@ function fieldHtml(fid) {
    their reason (at most 200 of each are sent). When some were left out for a reason that may be wrong (n_maybe), the
    candidate may be too low: that is said next to 採用. Candidates without these keys (older ones, estimates) show nothing.
    A left-out row may carry its quantity and unit (shown like the added rows) and `maybe` (it may belong in the total:
-   marked in words and listed first); older left-out rows without these keys show their name, place and reason only */
+   marked in words and listed first); older left-out rows without these keys show their name, place and reason only.
+   A number is kept on one line (class num); a quantity that is text (a note in the quantity column, up to 40 characters)
+   wraps like the name (class qtext), so it cannot push the card or the bottom bar past a phone's width */
 function candRows(fid, c) {
   const has = (x) => x !== undefined && x !== null && x !== "";
-  const qty = (x, u) => (typeof x === "number" ? fmt(x, "") : esc(x ?? "")) + (u ? " " + esc(u) : "");
+  const qty = (x, u) => (typeof x === "number" ? `<span class="num">${fmt(x, "")}` : `<span class="qtext">${esc(x ?? "")}`) + (u ? " " + esc(u) : "") + "</span>";
   const count = (n, xs) => (Number.isInteger(n) && n >= xs.length ? n : xs.length);
   const more = (n, xs) => (n <= xs.length ? "" : xs.length ? `<li class="muted">ほか ${n - xs.length} 行（記録は最初の ${xs.length} 行まで）</li>`
     : `<li class="muted">行の一覧は記録されていません</li>`);
@@ -311,9 +323,9 @@ function candRows(fid, c) {
   const id = (k) => `${k}-${esc(fid)}-${esc(c.id)}`;
   let h = "";
   if (nr) h += `<details id="${id("cr")}"><summary>足した行（${nr} 行）</summary><ul class="crows">${rows.map((r) =>
-    `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span> <span class="num">${qty(r.quantity, r.unit)}</span></li>`).join("")}${more(nr, rows)}</ul></details>`;
+    `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span> ${qty(r.quantity, r.unit)}</li>`).join("")}${more(nr, rows)}</ul></details>`;
   if (ne) h += `<details id="${id("cx")}"${maybe && ex.length <= 8 ? " open" : ""}><summary>この欄の材料の行で足さなかった行（${ne} 行）</summary><ul class="crows">${ex.map((r) =>
-    `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span>${has(r.quantity) ? ` <span class="num">${qty(r.quantity, r.unit)}</span>` : ""}${
+    `<li>${esc(r.name)} <span class="muted">${esc(r.trace)}</span>${has(r.quantity) ? ` ${qty(r.quantity, r.unit)}` : ""}${
       r.maybe === true ? ' <strong class="maybe">足すべきかもしれない</strong>' : ""}<div class="muted">${esc(r.reason)}</div></li>`).join("")}${more(ne, ex)}</ul></details>`;
   else if (c.n_excluded === 0) h += `<div class="muted">この欄の材料の行で足さなかった行：なし</div>`;
   // the quantity those rows would add, when every one of them is listed with a number in the candidate's unit
@@ -400,10 +412,18 @@ function clearedInput(fid) {
   const el = $("#in-" + fid);
   return !!(el && el.value.trim() === "" && drawn(el).trim() !== "");
 }
+/* …but never into the input the user is in: a key typed next would be added to the value put there (they may be
+   retyping the row). That input stays as the user left it; the message says the value was not removed */
 function restoreInput(fid) {
   const el = $("#in-" + fid);
-  if (el) el.value = drawn(el);
+  if (!el || el === document.activeElement) return;
+  el.value = drawn(el);
+  delete el.dataset.touched;                       // it shows the drawn value again, as if untouched
 }
+/* a row the user has changed since it was drawn: an input or change event on its text, unit or state (dataset.touched,
+   set in bindScreen and kept across redraws by putBack), whatever its text is now. Its text may equal the value drawn
+   (the first key of a correction, a revert, an emptied row being retyped): it is the user's all the same */
+const touchedRow = (f) => ["in-", "unit-", "st-"].some((p) => { const el = document.getElementById(p + f); return !!(el && el.dataset.touched); });
 function ownValue(cur) {
   return cur && ["user_entered", "initial_setting", "structure_card"].includes(cur.method) && !["statistical", "from_drawing"].includes(cur.state);
 }
@@ -571,23 +591,29 @@ function bindScreen(m, sid) {
           .filter(Boolean).join("。"));
       return () => refresh(sid, null, true, nav);            // the next drawing shows what is stored
     };
-    // the batch stays on the screen: drawn from what is stored now (the saved rows become current), what is typed in the
-    // other rows stays (and in a saved row corrected after it was sent: it was not saved as shown), the reason is said
-    const stay = async (msg, fid, rest) => {
+    // the batch stays on the screen, drawn from what is stored now: a saved row that still holds what was sent shows its
+    // stored value, and so does an emptied row in `cleared` (its value was not removed) unless the user is in it. Every
+    // other row the user has touched stays as it is, whatever its text (a saved row corrected after it was sent, also
+    // back to the value drawn before: it was not saved as shown). The focus and caret stay where the user is; the named
+    // row `fid` is focused only when the user is on no control of their own. The reason is said
+    const stay = async (msg, fid, rest, cleared = []) => {
       await loadProject(pid);
       if (moved()) return stop(rest);
-      const keep = keepScreen(null);                   // taken after the read: what was typed meanwhile is kept too
-      const early = saved.filter((f) => !sameRow(rowNow(f), sent[f]));
-      saved.forEach((f) => { if (!early.includes(f)) delete keep.rows[f]; });
-      await render(); putBack(keep);
+      const early = saved.filter((f) => !sameRow(rowNow(f), sent[f]) && !cleared.includes(f));
+      const drop = saved.filter((f) => !early.includes(f) && !cleared.includes(f))
+        .concat(cleared.filter((f) => $("#in-" + f) !== document.activeElement));
+      await redraw(nav, null, true, true, { drop, focus: fid });    // kept after the read: what was typed meanwhile is kept too
       const ok = saved.filter((f) => !early.includes(f));
       say(msg + "。戻りません" + (ok.length ? `（${names(ok)}は保存しました）` : "")
         + (early.length ? `（${names(early)}は直す前の値を保存しました。直した値はまだ保存していません）` : ""));
-      $("#in-" + fid)?.focus();
       return null;
     };
+    // the user is on no control of their own: nowhere, or on 保存して戻る (a named row may then be focused)
+    const atStart = () => { const a = document.activeElement; return !a || a === document.body || a === m || a.id === "bb-hub"; };
     const typedNow = () => [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save).filter(isDirty);
-    // a row action still under way (a 保存 just pressed …) is answered first, and the screen is drawn from what it stored
+    // a row action still under way (a 保存 just pressed …) is answered first, and the screen is drawn from what it stored;
+    // a row the user has touched since it was drawn stays as it is (also when its text is back to the value drawn before:
+    // that is what the screen shows, and what is saved when it differs from what is stored now)
     if (state.pending.size) {
       const before = typedNow();
       await Promise.allSettled([...state.pending]);
@@ -602,9 +628,9 @@ function bindScreen(m, sid) {
     const rows = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save);
     const cleared = rows.filter(clearedInput);
     if (cleared.length) {
-      cleared.forEach(restoreInput);
+      cleared.forEach(restoreInput);                   // not into the input the user is in (see restoreInput)
       say(`空欄にした${names(cleared)}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください。ほかの行も保存していません。戻りません`);
-      $("#in-" + cleared[0])?.focus();
+      if (atStart()) $("#in-" + cleared[0])?.focus();
       return null;
     }
     // a number that cannot be read is said before anything is saved (it is never silently dropped)
@@ -612,15 +638,17 @@ function bindScreen(m, sid) {
     if (bad.length) {
       const iv = inputValue(bad[0]);
       say(`「${state.meta.fields[bad[0]].label}」は数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}。保存していません`);
-      $("#in-" + bad[0]).focus();
+      if (atStart()) $("#in-" + bad[0]).focus();
       return null;
     }
     let dirty = rows.filter(isDirty);
-    const snap = typedRows(null);                      // what was typed, before the first request
     for (let pass = 0; ; pass++) {
       for (const [i, fid] of dirty.entries()) {
         if (moved()) return stop(dirty.slice(i));
-        if (inputValue(fid).empty && snap[fid]) restoreTyped({ [fid]: snap[fid] });
+        // a row emptied before its turn is not sent, and nothing is written into it (the user may be retyping it, or
+        // withdrawing it): the check before leaving saves what is typed in it by then, or names it when a value was
+        // drawn in it (an emptied row does not remove a value)
+        if (inputValue(fid).empty) continue;
         const r = await saveField(fid, true, true);
         if (r === "saved" || r === "unchanged") sent[fid] = saveField.sent;
         if (r === "saved") { if (!saved.includes(fid)) saved.push(fid); if (same.includes(fid)) same.splice(same.indexOf(fid), 1); }
@@ -640,10 +668,8 @@ function bindScreen(m, sid) {
       const late = rows.filter((f) => (sent[f] ? !sameRow(rowNow(f), sent[f]) : isDirty(f) || clearedInput(f) || inputValue(f).bad));
       if (!late.length) break;
       const lateCleared = late.filter((f) => clearedInput(f) || (sent[f] && inputValue(f).empty)), lateBad = late.filter((f) => inputValue(f).bad);
-      if (lateCleared.length) {
-        lateCleared.forEach(restoreInput);
-        return stay(`保存して戻るの間に空欄にした${names(lateCleared)}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`, lateCleared[0], []);
-      }
+      if (lateCleared.length)
+        return stay(`保存して戻るの間に空欄にした${names(lateCleared)}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`, lateCleared[0], [], lateCleared);
       if (lateBad.length) {
         const iv = inputValue(lateBad[0]);
         return stay(`保存して戻るの間に入力した「${state.meta.fields[lateBad[0]].label}」は数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}。保存していません`, lateBad[0], []);
@@ -652,7 +678,7 @@ function bindScreen(m, sid) {
       dirty = late;
     }
     say(saved.length ? `${saved.length} 項目を保存しました（${names(saved)}）` : "保存する変更はありませんでした");
-    state.busy = false; back();
+    state.busy = false; back(true);
     return null;
   };
   $("#bb-est").onclick = guard($("#bb-est"), () => estimate(sid, null));
@@ -706,19 +732,27 @@ function bindScreen(m, sid) {
     });
   });
   m.querySelectorAll("[data-why]").forEach((b) => (b.onclick = () => why(b.dataset.why)));
+  // a row's text, unit or state changed by the user is marked touched (see touchedRow): a redraw keeps the row as it is
+  const touch = (e) => { e.currentTarget.dataset.touched = "1"; };
+  m.querySelectorAll(".field [id^='in-'], .field [id^='unit-'], .field [id^='st-']").forEach((el) => {
+    el.addEventListener("input", touch); el.addEventListener("change", touch);
+  });
   const geo = $("#btn-geo");
   if (geo) geo.onclick = async () => {
     const q = $("#addr").value.trim(); if (!q) return toast("住所を入力してください");
-    const nav = startedAt(), out = () => (onScreen(nav, sid) ? $("#geo-out") : null);
+    // only the answer of the latest request is shown (geoSeq): an older search answered late is dropped
+    const nav = startedAt(), seq = ++state.geoSeq, out = () => (state.geoSeq === seq && onScreen(nav, sid) ? $("#geo-out") : null);
     out().innerHTML = '<p class="muted">検索中…</p>';
     try {
       const r = await api(`/projects/${nav.pid}/research/address`, { method: "POST", body: { query: q } });
-      const o = out(); if (!o) return;                 // the screen was left: nothing is painted elsewhere
-      state.geo = { sid, addr: r.candidates, bld: null };   // what the buttons act on (kept across redraws with the list)
+      const o = out(); if (!o) return;                 // the screen was left, or a newer request was made: nothing is painted
+      state.geo = { sid, seq, addr: r.candidates, bld: null };   // what the buttons act on (kept across redraws with the list)
+      // a button is known by its place and its list (data-list: see keyOf): a request of an older list does not make the
+      // same place of a new list busy
       o.innerHTML = r.candidates.length ? `<ul class="cands">${r.candidates.map((c, i) => `<li>${esc(c.title)} <span class="muted">（${c.lat.toFixed(5)}, ${c.lon.toFixed(5)}・${c.precision === "town" ? "町・丁目まで" : c.precision === "lot" ? "番地まで" : "地域"}）</span>
-          <div class="actions"><button class="btn small" data-geo="${i}">この地点の建物を PLATEAU で探す</button></div></li>`).join("")}</ul><p class="muted">${esc(r.note)}</p>` : '<p class="muted">候補が見つかりませんでした。</p>';
+          <div class="actions"><button class="btn small" data-geo="${i}" data-list="${seq}">この地点の建物を PLATEAU で探す</button></div></li>`).join("")}</ul><p class="muted">${esc(r.note)}</p>` : '<p class="muted">候補が見つかりませんでした。</p>';
       bindGeo(o);
-    } catch (e) { const o = out(); if (o) o.innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; else toast(e.message, nav.act); }
+    } catch (e) { const o = out(); if (o) o.innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; else if (state.geoSeq === seq) toast(e.message, nav.act); }
   };
   const df = $("#docfile");
   if (df) df.onchange = async () => {
@@ -774,27 +808,37 @@ function bindGeo(o) {
   o.querySelectorAll("[data-geo]").forEach((b) => (b.onclick = guard(b, () => (g.addr[+b.dataset.geo] ? plateau(g.addr[+b.dataset.geo], g.sid) : null))));
   o.querySelectorAll("[data-b]").forEach((x) => (x.onclick = guard(x, async () => {
     if (!idle() || !g.bld) return;
-    const at = startedAt(), c = g.bld.c;
-    await api(`/projects/${at.pid}/research/plateau/select`, { method: "POST", body: { candidate: g.bld.list[+x.dataset.b], lat: c.lat, lon: c.lon, address: c.title } });
-    toast("候補を各項目に入れました。確認して採用してください", at.act); await refresh(g.sid, undefined, true, at);
+    const s = startedAt(), c = g.bld.c;
+    await api(`/projects/${s.pid}/research/plateau/select`, { method: "POST", body: { candidate: g.bld.list[+x.dataset.b], lat: c.lat, lon: c.lon, address: c.title } });
+    toast("候補を各項目に入れました。確認して採用してください", s.act); await refresh(g.sid, undefined, true, s);
   })));
 }
 
+/* a PLATEAU read for an address candidate. Like an address search it is a new request for #geo-out: only the answer of
+   the latest one is shown (an older search or read answered late is dropped). The 「読んでいます」 line is one line,
+   removed on every outcome (buildings, none found, an error) */
 async function plateau(c, sid) {
-  const nav = startedAt(), out = () => (onScreen(nav, sid) ? $("#geo-out") : null);
+  const nav = startedAt(), seq = ++state.geoSeq, out = () => (state.geoSeq === seq && onScreen(nav, sid) ? $("#geo-out") : null);
+  const lines = (o) => o && o.querySelectorAll("#geo-reading, #geo-note").forEach((x) => x.remove());
+  const o0 = out(); lines(o0);
   // added after the list (insertAdjacentHTML, not innerHTML +=: the list's buttons keep their handlers)
-  out()?.insertAdjacentHTML("beforeend", '<p class="muted">PLATEAU の建物データを読んでいます（初回は数十秒かかることがあります）…</p>');
+  o0?.insertAdjacentHTML("beforeend", '<p class="muted" id="geo-reading">PLATEAU の建物データを読んでいます（初回は数十秒かかることがあります）…</p>');
   try {
     const r = await api(`/projects/${nav.pid}/research/plateau`, { method: "POST", body: { lat: c.lat, lon: c.lon, address: c.title } });
     const o = out(); if (!o) return;
-    if (!r.candidates.length) { o.insertAdjacentHTML("beforeend", `<div class="notice">${esc(r.note || "建物が見つかりませんでした")}</div>`); return; }
-    state.geo = { sid, addr: (state.geo && state.geo.addr) || [], bld: { c, list: r.candidates } };
+    lines(o);
+    if (!r.candidates.length) { o.insertAdjacentHTML("beforeend", `<div class="notice" id="geo-note">${esc(r.note || "建物が見つかりませんでした")}</div>`); return; }
+    state.geo = { sid, seq, addr: (state.geo && state.geo.addr) || [], bld: { c, list: r.candidates } };
     o.innerHTML = `<h4>近くの建物（PLATEAU）</h4><ul class="cands">${r.candidates.map((b, i) => `<li>
       <strong>${esc(b.usage || "用途不明")}</strong>・地上 ${b.storeys_above ?? "?"} 階 / 地下 ${b.storeys_below ?? "?"} 階・高さ ${b.measured_height_m ?? "?"} m・${b.contains_point ? "地点を含む" : b.distance_m + " m"}
       <div class="muted">${esc(b.address || "")}・${esc(b.structure_code || "")}・調査年 ${esc(b.survey_year || "")}・ID ${esc(b.plateau_building_id || "")}</div>
-      <button class="btn small" data-b="${i}">この建物を選ぶ</button></li>`).join("")}</ul><p class="muted">${esc(r.note)}</p>`;
+      <button class="btn small" data-b="${i}" data-list="${seq}">この建物を選ぶ</button></li>`).join("")}</ul><p class="muted">${esc(r.note)}</p>`;
     bindGeo(o);
-  } catch (e) { const o = out(); if (o) o.insertAdjacentHTML("beforeend", `<div class="notice bad">${esc(e.message)}</div>`); else toast(e.message, nav.act); }
+  } catch (e) {
+    const o = out();
+    if (o) { lines(o); o.insertAdjacentHTML("beforeend", `<div class="notice bad" id="geo-note">${esc(e.message)}</div>`); }
+    else if (state.geoSeq === seq) toast(e.message, nav.act);
+  }
 }
 
 async function estimate(sid, fid) {
@@ -810,11 +854,19 @@ async function estimate(sid, fid) {
 /* the explanation of an estimate (its gist is in the toast already); closing it gives focus back to 自動概算, or to where
    the user has gone meanwhile. It is never put over what the user has open: while 保存して戻る saves rows it waits for
    the end of the batch (state.noteLater), and while a dialog is open (a 根拠 table, a question) it waits until that one
-   is closed. It is shown only while its screen is still there */
+   is closed. While the user is in a field (typing or choosing: a modal would take the next keys) it waits until the
+   focus has been out of every field for 400 ms (checked every 200 ms: the tap that moved the focus lands first). It
+   is shown only while its screen is still there */
 function estimateNote(n) {
   if (state.busy) { state.noteLater = n; return; }
   if (!onScreen(n.nav, n.sid)) return;
   if (document.querySelector("dialog[open]")) return whenNoDialog(() => estimateNote(n));
+  const a = document.activeElement;
+  if (a && a.closest && a.closest("#main") && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName) && a.type !== "file") {
+    n.out = 0; setTimeout(() => estimateNote(n), 200); return;
+  }
+  if (n.out === 0) n.out = Date.now();
+  if (n.out && Date.now() - n.out < 400) { setTimeout(() => estimateNote(n), 200); return; }
   const opener = n.fid ? $(`[data-est="${CSS.escape(n.fid)}"]`) : $("#bb-est"), cur = document.activeElement;
   const away = cur && cur !== document.body && cur !== $("#main") && cur !== opener && !(n.fid && cur.closest("#f-" + CSS.escape(n.fid)));
   dialog("自動概算の説明", n.html, away ? cur : opener);
@@ -830,25 +882,29 @@ async function why(fid) {
     <table class="t"><tr><th>状態</th><th>値</th><th>根拠</th><th>日時</th></tr>${rows || '<tr><td colspan="4">記録はまだありません</td></tr>'}</table>`);
 }
 
-/* what was typed (and not saved) in the rows of the screen, except `except` — kept across a re-render. Typed means
-   "differs from what was drawn" (see drawn()); a unit or state chosen on an empty row is kept too */
-function typedRows(except) {
+/* what the user has in the rows of the screen, except the rows in `drop` (they are to show their stored value) — kept
+   across a re-render. One rule: every row the user has touched since it was drawn (touchedRow), whatever its text, and
+   every row whose controls differ from what was drawn (see drawn()). A row whose text equals the value drawn is kept
+   all the same when it was touched (the first key of a correction, a revert, an emptied row being retyped): the UI
+   never writes into a row the user may be editing. A unit or state chosen on an empty row is kept too */
+function typedRows(drop = []) {
   const out = {};
   document.querySelectorAll("[data-save]").forEach((b) => {
     const f = b.dataset.save;
-    if (f === except) return;
+    if (drop.includes(f)) return;
     const inp = $("#in-" + f);
     if (!inp) return;
     const us = $("#unit-" + f), st = $("#st-" + f);
-    const changed = inp.value !== drawn(inp) || (us && us.value !== drawn(us)) || (st && !st.disabled && st.value !== drawn(st));
+    const changed = touchedRow(f) || inp.value !== drawn(inp) || (us && us.value !== drawn(us)) || (st && !st.disabled && st.value !== drawn(st));
     if (changed) out[f] = { v: inp.value, u: us ? us.value : null, s: st ? st.value : null, unlocked: st ? !st.disabled : false };
   });
   return out;
 }
+/* put kept rows back after a re-render; they stay touched (a later redraw keeps them too) */
 function restoreTyped(saved) {
   for (const [f, x] of Object.entries(saved)) {
     const inp = $("#in-" + f); if (!inp) continue;
-    inp.value = x.v;
+    inp.value = x.v; inp.dataset.touched = "1";
     if (x.u !== null && $("#unit-" + f)) $("#unit-" + f).value = x.u;
     const st = $("#st-" + f);
     if (st && x.s !== null) { if (x.unlocked) st.disabled = false; st.value = x.s; }
@@ -856,8 +912,8 @@ function restoreTyped(saved) {
 }
 /* everything the user has on a screen beyond the stored values: typed rows, the address being searched and its results
    (the address / PLATEAU answers in #geo-out: drawn again with their buttons bound), open lists */
-function keepScreen(except) {
-  return { rows: typedRows(except), addr: $("#addr") ? $("#addr").value : null, geo: $("#geo-out") ? $("#geo-out").innerHTML : null,
+function keepScreen(drop = []) {
+  return { rows: typedRows(drop), addr: $("#addr") ? $("#addr").value : null, geo: $("#geo-out") ? $("#geo-out").innerHTML : null,
     open: [...document.querySelectorAll("#main details[id]")].map((d) => [d.id, d.open]) };
 }
 function putBack(k) {
@@ -888,14 +944,16 @@ async function reloadShown(sid, fid, keepActed, nav) {
   await redraw(nav, fid, keepActed);
   return true;
 }
-/* draw the current view again from state.project, keeping what the user has on it (typed rows, the address, the address
-   results, open lists, the scroll) and the focus. The acted row shows its new stored value, unless the user has changed
-   it since the action was sent (nav.row): then what they typed stays. The acted row is brought into view and focused
-   only when the user was on that row (not typing in it) or nowhere (body / main) and has not left the view since; focus
-   anywhere else (a control, a list's summary, a link, a dialog) is where the user is: the scroll stays and the focus goes
-   back to the element that had it (the same control, found by its identity, with the caret). All in one task: no
-   keystroke is lost */
-async function redraw(nav, fid, keepActed, quiet = false) {
+/* draw the current view again from state.project, keeping what the user has on it (every row touched since it was drawn,
+   the address, the address results, open lists, the scroll) and the focus. The acted row shows its new stored value,
+   unless the user has changed it since the action was sent (nav.row): then it stays as they left it, whatever its text
+   (also when it equals the value drawn before). The acted row is brought into view and focused only when the user was on
+   that row (not typing in it) or nowhere (body / main) and has not left the view since; focus anywhere else (a control,
+   a list's summary, a link, a dialog) is where the user is: the scroll stays and the focus goes back to the element that
+   had it (the same control, found by its identity, with the caret). All in one task: no keystroke is lost.
+   `opt.drop`: the rows that show their stored value (in place of the acted row); `opt.focus`: a row to bring into view and
+   focus when the user is on no control of their own (nowhere, or on 保存して戻る) */
+async function redraw(nav, fid, keepActed, quiet = false, opt = {}) {
   const same = state.nav === nav.n, had = document.activeElement, key = keyOf(had);
   let caret = null;
   try { if (had && typeof had.selectionStart === "number") caret = [had.selectionStart, had.selectionEnd]; } catch { /* no caret */ }
@@ -904,13 +962,15 @@ async function redraw(nav, fid, keepActed, quiet = false) {
   const typing = inRow && /^(INPUT|SELECT|TEXTAREA)$/.test(had.tagName);     // in the acted row's own field: no jump
   const toRow = (inRow && !typing) || !!(same && fid && nowhere);
   const changedSince = !!(fid && nav.row && !sameRow(rowNow(fid), nav.row));
-  const keep = state.view === "screen" ? keepScreen(same && !keepActed && !changedSince ? fid : null) : null;
+  const keep = state.view === "screen" ? keepScreen(opt.drop || (same && !keepActed && !changedSince && fid ? [fid] : [])) : null;
   const y = window.scrollY;
   await render();
   if (keep) putBack(keep);
   const el = key && key !== "#main" ? $(key) : null, usable = el && !el.disabled;
-  const row = toRow && $("#f-" + CSS.escape(fid));
-  const target = row ? (inRow && usable ? el : row.querySelector("[data-save]") || row.querySelector("button")) : usable ? el : null;
+  const named = opt.focus && (nowhere || key === "#bb-hub") ? $("#f-" + CSS.escape(opt.focus)) : null;
+  const row = named || (toRow && $("#f-" + CSS.escape(fid)));
+  const target = named ? $("#in-" + CSS.escape(opt.focus)) || named.querySelector("button")
+    : row ? (inRow && usable ? el : row.querySelector("[data-save]") || row.querySelector("button")) : usable ? el : null;
   if (row) setTimeout(() => row.scrollIntoView({ block: "center" }), 0);
   else { window.scrollTo(0, y); setTimeout(() => window.scrollTo(0, y), 0); }
   if (target) {
@@ -918,8 +978,10 @@ async function redraw(nav, fid, keepActed, quiet = false) {
     if (target === el && caret) try { el.setSelectionRange(caret[0], caret[1]); } catch { /* not a text field */ }
   }
   if (keep && !quiet) {
-    const typed = Object.keys(keep.rows).filter(isDirty);       // the same test as 保存して戻る
-    if (typed.length) toast(`まだ保存していない入力：${typed.map((f) => "「" + state.meta.fields[f].label + "」").join("")}`, nav.act);
+    // the same test as 保存して戻る; a kept row emptied while a value is stored is named too (its value is not removed)
+    const typed = Object.keys(keep.rows).filter((f) => isDirty(f) || clearedInput(f));
+    if (typed.length) toast(`まだ保存していない入力：${typed.map((f) => "「" + state.meta.fields[f].label + "」"
+      + (clearedInput(f) ? "（空欄：値は消えていません）" : "")).join("")}`, nav.act);
   }
 }
 

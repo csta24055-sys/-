@@ -1,7 +1,7 @@
 /* Offline shell. Static files: network first (always the current version when the server is reachable), the cache
    only as an offline fallback. API answers are never cached (no stale results). A new version of this file takes
    over at once (skipWaiting / clients.claim) and deletes the caches of earlier versions. */
-const V = "wlcstudio-shell-v10";
+const V = "wlcstudio-shell-v11";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "assets/door.svg", "assets/akabeko-placeholder.svg",
   "assets/structure-s.svg", "assets/structure-rc.svg", "assets/structure-src.svg", "assets/structure-w.svg"];
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).catch(() => {})); });

@@ -9,6 +9,7 @@ Run: cd whole-life-carbon-jcat-study && python3 -B -m unittest discover -s 23_WL
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import unittest
@@ -50,7 +51,9 @@ class EleventhRoundUiTests(unittest.TestCase):
                 # ui-flows#0: the row a late answer acts on is kept when it changed since it was sent; the caret comes back
                 "nav.row = rowNow(", "!sameRow(rowNow(fid), nav.row)", "target === el && caret",
                 # ui-flows#1: what each row held when it was sent; checked again before leaving, another pass
-                "saveField.sent = rowNow(fid)", "const late = rows.filter(", "pass >= 2", "const keep = keepScreen(null);                   // taken after the read",
+                "saveField.sent = rowNow(fid)", "const late = rows.filter(", "pass >= 2",
+                # (round 12: stay() keeps the screen through redraw(), still after the read)
+                "await redraw(nav, null, true, true, { drop, focus: fid });    // kept after the read",
                 # ui-flows#2: a stop names each row by what is stored, from what the rows held when the user stopped
                 'state.cancelRows = state.view === "screen" ? rowsNow() : null', "storedAs(p, f, x)",
                 # ui-flows#5: a double tap is one tap
@@ -77,8 +80,10 @@ class EleventhRoundUiTests(unittest.TestCase):
         self.assertIn('class="lname"', self.js)
 
     def test_service_worker_cache_is_new(self):
+        # v10 in round 11; a later round moves it on (round 12: v11, checked in test_round12_ui)
         sw = (WEB / "sw.js").read_text(encoding="utf-8")
-        self.assertIn('"wlcstudio-shell-v10"', sw)
+        m = re.search(r'"wlcstudio-shell-v(\d+)"', sw)
+        self.assertTrue(m and int(m.group(1)) >= 10, sw[:300])
         self.assertNotIn('"wlcstudio-shell-v9"', sw)
 
     def test_left_out_rows_show_quantity_and_maybe(self):
@@ -102,7 +107,8 @@ console.log(JSON.stringify({ neu, old, none }));
         self.assertIn("コンクリート打設手間", items[0])                       # the row that may belong is listed first
         self.assertIn('<span class="num">1,034 m3</span>', items[0])           # a number, shown like an added row
         self.assertIn('<strong class="maybe">足すべきかもしれない</strong>', items[0])
-        self.assertIn('<span class="num">1,034 m3</span>', items[1])           # a string quantity, escaped as it is
+        # a string quantity, escaped as it is (round 12: in a span that wraps, class qtext, not the one-line num)
+        self.assertIn('<span class="qtext">1,034 m3</span>', items[1])
         self.assertNotIn("足すべきかもしれない", items[1] + items[2])
         self.assertNotIn('class="num"', items[2])                              # no quantity: nothing shown
         self.assertIn("足さなかった行のうち 1 行は、足すべき行かもしれません", out["neu"]["warn"])   # n_maybe, as before
