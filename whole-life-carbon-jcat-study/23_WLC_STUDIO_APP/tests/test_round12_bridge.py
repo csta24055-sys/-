@@ -250,11 +250,15 @@ class TwelfthRoundBridgeTests(unittest.TestCase):
 
     # --- sweep#3: a quantity of 0 counts only when a quantity other than 0 could act in the boundary
     def test_material_quantity_zero_that_could_not_act_is_not_counted(self):
+        # (round 14: every unit the field accepts is tried. m_finish was asked in ALL, where a quantity in t acts on C2〜C4
+        # under DESIGN without the waste rate, so its 0 m2 counts there: see FourteenthRoundBridgeTests. In EMBODIED no
+        # unit acts)
         for preset, fid, unit, others, extra in (("EMBODIED", "m_rebar", "t", (10.0, 1000.0), {}),
-                                                ("ALL", "m_finish", "m2", (100.0, 5000.0), {})):
+                                                ("EMBODIED", "m_finish", "m2", (100.0, 5000.0), {})):
             vals = complete(a_stages=V("a_stages", preset), m_waste_rate=None, **dict(extra, **{fid: A(fid, 0.0, unit)}))
             self.assertNotCounted(vals, [fid], partner="0 でない数量でも")
-            self.assertSameTotal([vals] + [dict(vals, **{fid: V(fid, x, unit=unit)}) for x in others])
+            self.assertSameTotal([vals] + [dict(vals, **{fid: V(fid, x, unit=unit)}) for x in others] +
+                                 [dict(vals, **{fid: V(fid, 10.0, unit=u_)}) for u_ in FL.FIELDS[fid]["units"] if u_ != unit])
         # control: with the waste rate known the quantity 0 decides that the material is absent, and moves the total
         vals = complete(a_stages=V("a_stages", "EMBODIED"), m_rebar=A("m_rebar", 0.0, "t"))
         _, rep = bridge.build(vals, REFSET, period=60)

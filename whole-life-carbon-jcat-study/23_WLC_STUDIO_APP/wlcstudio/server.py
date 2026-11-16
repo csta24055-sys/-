@@ -38,6 +38,7 @@ from .sources.net import SourceError
 WEB = Path(__file__).resolve().parents[1] / "web"
 MAX_BODY = 40 * 1024 * 1024
 USER_STATES = ("confirmed", "assumption", "not_applicable", "not_obtained", "not_computable")
+NA_CONTEXT = tuple(f for f, F_ in FL.FIELDS.items() if F_.get("na_context"))   # 適用外 only where the value cannot act
 DISCLAIMER = ("WLC Studio は研究用の試作です。計算の核は独立に作った概念モデル（70 評価単位）で、J-CAT の複製・認定品・互換品ではありません。"
               "いま登録されている原単位は架空（研究用）なので、表示される排出量は実在の建物の値ではありません。")
 PRIVACY = ("入力・資料・住所はこの端末の中（var/）にだけ保存します。住所は検索のときだけ国土地理院に、座標は市区町村を調べるときだけ国土地理院に送り、"
@@ -143,7 +144,11 @@ class App:
                     cid = b.get("id")
                     if cid is not None and (not isinstance(cid, int) or isinstance(cid, bool)):
                         raise ApiError(400, "候補の番号が正しくない")
-                    return 200, self.projects.accept(pid, fid, _int(b.get("index"), 0), cid=cid).to_json()
+                    # adopting a candidate stores a value like a PUT: it says the same warnings (a stored 適用外 that it
+                    # makes unusable)
+                    before = self._na_before(pid, fid)
+                    stored = self.projects.accept(pid, fid, _int(b.get("index"), 0), cid=cid)
+                    return 200, self._with_na_warnings(fid, before, stored, stored.to_json())
             if rest == ["research", "address"] and method == "POST":
                 return 200, self.research_address(pid, b)
             if rest == ["research", "plateau"] and method == "POST":
@@ -277,24 +282,50 @@ class App:
             if why:
                 raise ApiError(400, "「%s」は、いまの入力では「適用外」にできない（%s）。分からないときは「未取得」のままにする"
                                % (F["label"], why))
-        out = self.projects.put(pid, v).to_json()
+        before = self._na_before(pid, fid)
+        stored = self.projects.put(pid, v)
+        out = stored.to_json()
         if fid in ("m_concrete_fdn", "m_rebar", "m_steel"):
             self.projects.withdraw_whole_candidates(pid)
         if fid == "b_structure" and state in ("confirmed", "assumption"):
             # the project's structure follows the field (estimates, PLATEAU checks and field order use it)
             self.projects.touch(pid, structure=str(value))
-        # a 適用外 stored earlier on another na_context field (accepted then because it could not act) can become unusable
-        # through this save (a purchase 0 → 1000 needs the grid factor): said now, in the calculation's words, instead of
-        # only when the next calculation stops. Built only when such a 適用外 is stored, to keep a PUT cheap
-        na_other = [f for f, F_ in FL.FIELDS.items() if F_.get("na_context") and f != fid
-                    and getattr(self.projects.current(pid, f), "state", None) == "not_applicable"]
-        if na_other:
-            _, rep_ = bridge.build(self.projects.values(pid), self.refset, title="WLC Studio #%d" % pid)
-            refused = rep_.get("na_refused") or {}
-            warnings = ["「%s」の「適用外」は、いまの入力では使えない（%s）。計算は止まる。値を入れるか「未取得」に戻す"
-                        % (FL.FIELDS[f]["label"], refused[f]) for f in na_other if refused.get(f)]
-            if warnings:
-                out["warnings"] = warnings
+        return self._with_na_warnings(fid, before, stored, out)
+
+    def _na_before(self, pid: int, fid: str) -> tuple:
+        """Before a save of `fid`: (the project's values, the 適用外 stored on the other na_context fields that the
+        calculation refuses with them: field -> the bridge's reason). (None, {}) when no other na_context field holds a
+        stored 適用外 — a save of `fid` cannot change that — so that nothing is built and a save stays cheap."""
+        if not any(f != fid and getattr(self.projects.current(pid, f), "state", None) == "not_applicable" for f in NA_CONTEXT):
+            return None, {}
+        vals = self.projects.values(pid)
+        return vals, self._na_refused(fid, vals)
+
+    def _na_refused(self, fid: str, vals: dict) -> dict:
+        """The 適用外 stored on the na_context fields other than `fid` (accepted when saved because it could not act) that
+        the calculation refuses with these values (the bridge's na_refused): field -> reason."""
+        na = [f for f in NA_CONTEXT if f != fid and getattr(vals.get(f), "state", None) == "not_applicable"]
+        if not na:
+            return {}
+        _, rep_ = bridge.build(vals, self.refset)
+        refused = rep_.get("na_refused") or {}
+        return {f: refused[f] for f in na if refused.get(f)}
+
+    def _with_na_warnings(self, fid: str, before: tuple, stored: Value, out: dict) -> dict:
+        """Every save that stores a value for the user (PUT, adopting a candidate) says, in the calculation's words, a
+        stored 適用外 of another na_context field that THIS save made unusable (a purchase 0 → 1000 needs the grid
+        factor; a boundary set at last can need the route), instead of only when the next calculation stops. One that
+        was unusable already before the save is not said again (it was said by the save that made it so, and the
+        calculation says it). `before`: _na_before; the values after the save are those values with `stored` (the
+        value the save stored) for `fid`, so the history is read once. No such 適用外: no `warnings` key."""
+        vals, refused_before = before
+        if vals is None:
+            return out
+        now = self._na_refused(fid, dict(vals, **{fid: Value.from_json(stored.to_json())}))
+        warnings = ["「%s」の「適用外」は、いまの入力では使えない（%s）。計算は止まる。値を入れるか「未取得」に戻す"
+                    % (FL.FIELDS[f]["label"], why) for f, why in now.items() if f not in refused_before]
+        if warnings:
+            out["warnings"] = warnings
         return out
 
     def research_address(self, pid: int, b: dict) -> dict:

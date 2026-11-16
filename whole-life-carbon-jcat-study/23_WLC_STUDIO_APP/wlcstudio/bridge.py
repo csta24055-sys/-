@@ -313,6 +313,23 @@ def _unknown(v: Value | None) -> bool:
     return v is None or v.state in ("not_obtained", "not_computable")
 
 
+def _unit_blocks(blocked: dict, route_word: str, w) -> str:
+    """Why a material quantity other than 0 in these units could not change the total, grouped by the reason (`blocked`:
+    unit -> "factor" / "route" / "stage", in the order of the field's units)."""
+    by = {}
+    for u_, k_ in blocked.items():
+        by.setdefault(k_, []).append(u_)
+    parts = []
+    if by.get("factor"):
+        parts.append("%s では原単位が参照セットに無い" % "・".join(by["factor"]))
+    if by.get("route"):
+        parts.append("%s では解体時の質量が分かり、解体後の処理シナリオ（%s）が要る（計算できない）" % ("・".join(by["route"]), route_word))
+    if by.get("stage"):
+        parts.append("%s では%s評価範囲のどの段階も計算できない" % ("・".join(by["stage"]),
+                                                       "施工時の廃棄率が未取得で発注量が決まらず、" if w is None else ""))
+    return "。".join(parts)
+
+
 # stages that a missing input leaves incomplete directly (used for the 「下限」 flag and the stage marks); the stages that
 # depend on these (B3 repair on A1-A3, B4 renewal on A/C, B5 rebuild on A/C when a rebuild is assumed) are added by
 # the expansion inside build()
@@ -512,20 +529,29 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     rows = []
     missing_materials = []
     # double counting: a whole-building concrete estimate already contains the foundations, an all-steel estimate
-    # (rebar and structural steel together) already contains the other steel field
+    # (rebar and structural steel together) already contains the other steel field. A figure that is surely 0 (a 0 whose
+    # stated range stays at 0: provenance.competes) contains nothing, so it neither drops nor covers the other field; a
+    # value typed in the other field next to it contradicts it, which is said (inconsistent_inputs), not dropped
     skip = {}
     covered = {}          # fields whose quantity is already inside a whole-building / all-steel figure (not missing)
     whole_c, fdn = V("m_concrete"), V("m_concrete_fdn")
-    if _is_whole(whole_c, "whole_building"):
+    if _is_whole(whole_c, "whole_building") and _competes(whole_c):
         if _competes(fdn):
             skip["m_concrete_fdn"] = "上部構造の欄に基礎を含む建物全体の%sが入っているので、基礎の行は作らない（二重計上を防ぐ）" % _whole_word(whole_c)
             d.double_count.append("コンクリート：建物全体（基礎を含む）の%sと基礎の値が両方ある。基礎の行は使っていない" % _whole_word(whole_c))
         elif _unknown(fdn):
             covered["m_concrete_fdn"] = "上部構造の欄の建物全体の%sに含まれている（行は作らない）" % _whole_word(whole_c)
+    elif _is_whole(whole_c, "whole_building") and _competes(fdn):
+        d.inconsistent.append("コンクリート：上部構造の欄の建物全体（基礎を含む）の%sが 0 なのに、基礎の欄に値がある。0 の全体量は何も"
+                              "含まないので、基礎の行はそのまま使った（二重計上にはならない）" % _whole_word(whole_c))
     rb, stl = V("m_rebar"), V("m_steel")
     for whole, other, wname, oname in ((rb, stl, "鉄筋", "鉄骨"), (stl, rb, "鉄骨", "鉄筋")):
         ofid = "m_steel" if oname == "鉄骨" else "m_rebar"
-        if _is_whole(whole, "all_steel") and ofid not in skip and ("m_rebar" if ofid == "m_steel" else "m_steel") not in skip:
+        if _is_whole(whole, "all_steel") and not _competes(whole):
+            if _competes(other):
+                d.inconsistent.append("鉄：%sの欄の鉄の全量（鉄筋＋鉄骨）の%sが 0 なのに、%sの欄に値がある。0 の全体量は何も含まないので、"
+                                      "%sの行はそのまま使った（二重計上にはならない）" % (wname, _whole_word(whole), oname, oname))
+        elif _is_whole(whole, "all_steel") and ofid not in skip and ("m_rebar" if ofid == "m_steel" else "m_steel") not in skip:
             if _competes(other):
                 skip[ofid] = "%sの欄に鉄の全量（鉄筋＋鉄骨）の%sが入っているので、%sの行は作らない（二重計上を防ぐ）" % (wname, _whole_word(whole), oname)
                 d.double_count.append("鉄：鉄の全量（%sの欄）の%sと%sの値が両方ある。%sの行は使っていない" % (wname, _whole_word(whole), oname, oname))
@@ -535,14 +561,15 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     def skipped_if_nonzero(fid, v):
         """The whole-building / all-steel figure that a quantity other than 0 of this field would be left out for (the
         guard above, run with the field at a value that is not 0), or None. A 0 is never double counted, so the guard
-        does not see it; but when every other value would be dropped, the 0 cannot change the total either."""
-        if fid == "m_concrete_fdn" and _is_whole(whole_c, "whole_building"):
+        does not see it; but when every other value would be dropped, the 0 cannot change the total either. A figure
+        that is surely 0 covers nothing (the guard above): it drops no value."""
+        if fid == "m_concrete_fdn" and _is_whole(whole_c, "whole_building") and _competes(whole_c):
             return "上部構造の欄の建物全体（基礎を含む）の%s" % _whole_word(whole_c)
         if fid in ("m_rebar", "m_steel"):
             hyp = dataclasses.replace(v, value=1.0)
             rb_, stl_ = (hyp, stl) if fid == "m_rebar" else (rb, hyp)
             for whole, other, ofid, wname in ((rb_, stl_, "m_steel", "鉄筋"), (stl_, rb_, "m_rebar", "鉄骨")):
-                if _is_whole(whole, "all_steel") and _competes(other):
+                if _is_whole(whole, "all_steel") and _competes(whole) and _competes(other):
                     return ("%sの欄の鉄の全量（鉄筋＋鉄骨）の%s" % (wname, _whole_word(whole))) if ofid == fid else None
         return None
     # can a material renewal fall inside the study period? (unknown cycle: maybe; 適用外 = no renewal; a range: its low end)
@@ -565,18 +592,19 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     basis = qb.value if _has(qb) else None
     b_state = ENGINE_STATE[qb.state] if _has(qb) else None
     route_massless = False
+
+    def _mass_row(f_, c_, u_):
+        """Would this field make a row with an installed mass? (a mass unit with a factor, as in the loop below)"""
+        v_ = V(f_)
+        if not _competes(v_) or f_ in skip or (v_.unit or u_) not in TO_KG:
+            return False
+        fac_ = P["material"].get(c_, {})
+        return bool(fac_.get(v_.unit or u_) or fac_.get("kg")) and (basis == "DESIGN" or w is not None)
     if route is None and stages is not None:
         # the route acts only through the end-of-life (installed) mass of a row (the moot rule below). When no row can
         # have one — only m3 / m2 rows (no density is assumed), or quantities that are not design quantities with the
         # waste rate unknown — the route cannot act yet: a placeholder (as for 「建設時だけ」) instead of refusing the
         # calculation, and the route stays a named gap of the end-of-life stages (route_st keeps C3 and C4)
-        def _mass_row(f_, c_, u_):
-            """Would this field make a row with an installed mass? (a mass unit with a factor, as in the loop below)"""
-            v_ = V(f_)
-            if not _competes(v_) or f_ in skip or (v_.unit or u_) not in TO_KG:
-                return False
-            fac_ = P["material"].get(c_, {})
-            return bool(fac_.get(v_.unit or u_) or fac_.get("kg")) and (basis == "DESIGN" or w is not None)
         route_massless = not any(_mass_row(f_, c_, u_) for f_, c_, _l, u_, *_ in FL.MATERIALS)
         if route_massless:
             route = "LANDFILL"
@@ -652,29 +680,50 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.skip(fid, v, skip[fid])
             continue
         if _surely_zero(v):
-            # like 0 台 and a 0 kg charge: no row, so that a nil quantity cannot leave masses or transport undetermined
-            d.use(fid, v, "数量 0：この材料の行は作らない", ["materials"])
-            # the 0 counts only when a quantity other than 0 would make a row that changes a stage in the boundary (the
-            # same test as for a row: a missing waste rate, a unit without a factor … can leave every stage unable to act)
-            qu0 = v.unit or unit
+            # like 0 台 and a 0 kg charge: no row, so that a nil quantity cannot leave masses or transport undetermined.
+            # The 0 counts only when a quantity other than 0 would make a row that changes a stage in the boundary (the
+            # same test as for a row: a missing waste rate, a unit without a factor … can leave every stage unable to act),
+            # in ANY unit the field accepts: the unit stored with a 0 is arbitrary (0 t and 0 m3 are the same nil quantity),
+            # so the 0 is not counted only when no accepted unit would let a value other than 0 act
             fac0 = P["material"].get(cls, {})
             whole_ = skipped_if_nonzero(fid, v)
+            units0 = list(FL.FIELDS[fid].get("units") or ()) or [v.unit or unit]
+            blocked_u = {}             # accepted unit -> why a value other than 0 in it could not change the total
+            if stages is not None and not whole_:
+                for u_ in units0:
+                    if not (fac0.get(u_) or (fac0.get("kg") if u_ in TO_KG else None)):
+                        blocked_u[u_] = "factor"
+                    elif needs_route(u_, cls, basis):
+                        # a row with an end-of-life mass, which needs the route (not given): such a value refuses the
+                        # calculation
+                        blocked_u[u_] = "route"
+                    elif not row_acts(u_, cls, basis) & st_set:
+                        blocked_u[u_] = "stage"
+            acting_u = [u_ for u_ in units0 if u_ not in blocked_u]
+            how0 = "数量 0：この材料の行は作らない"
+            if stages is not None and not whole_ and blocked_u and acting_u:
+                # counted (a value in another unit acts): which unit acts, and why the others would not
+                how0 += "（0 でない数量は %s なら合計に効く。%s）" % ("・".join(acting_u), _unit_blocks(blocked_u, route_word, w))
+            d.use(fid, v, how0, ["materials"])
             if stages is not None and whole_:
                 # a value other than 0 would be dropped as double counting: no row either way
                 moot.append((fid, "渡したが、0 でない値は%sに含まれるので行を作らない（二重計上を防ぐ）。数量 0 は合計を変えない"
                              % whole_))
-            elif stages is not None and not (fac0.get(qu0) or (fac0.get("kg") if qu0 in TO_KG else None)):
-                moot.append((fid, "渡したが、単位 %s の原単位が参照セットに無いので、0 でない数量でもこの材料は計算に入らない"
-                                  "（数量 0 は合計を変えない）" % qu0))
-            elif stages is not None and needs_route(qu0, cls, basis):
-                # a quantity other than 0 would give a row with an end-of-life mass, which needs the route (not given):
-                # every such value refuses the calculation
-                moot.append((fid, "渡したが、解体後の処理シナリオが%sで、0 でない数量ならこの行に解体時の質量が分かり処理シナリオが要る"
-                                  "（計算できない）ので、数量 0 は合計を変えない（処理シナリオを入れると効く）" % route_word))
-            elif stages is not None and not row_acts(qu0, cls, basis) & st_set:
-                moot.append((fid, "渡したが、%s0 でない数量でもこの材料の行は評価範囲のどの段階も計算できないので、数量 0 は"
-                                  "合計を変えない（欠けた入力を入れると効く）"
-                             % ("施工時の廃棄率が未取得で発注量が決まらず、" if w is None else "")))
+            elif stages is not None and not acting_u:
+                kinds = set(blocked_u.values())
+                if kinds == {"factor"}:
+                    moot.append((fid, "渡したが、単位 %s の原単位が参照セットに無いので、0 でない数量でもこの材料は計算に入らない"
+                                      "（数量 0 は合計を変えない）" % "・".join(blocked_u)))
+                elif kinds == {"route"}:
+                    moot.append((fid, "渡したが、解体後の処理シナリオが%sで、0 でない数量ならこの行に解体時の質量が分かり処理シナリオが要る"
+                                      "（計算できない）ので、数量 0 は合計を変えない（処理シナリオを入れると効く）" % route_word))
+                elif kinds == {"stage"}:
+                    moot.append((fid, "渡したが、%s0 でない数量でもこの材料の行は評価範囲のどの段階も計算できないので、数量 0 は"
+                                      "合計を変えない（欠けた入力を入れると効く）"
+                                 % ("施工時の廃棄率が未取得で発注量が決まらず、" if w is None else "")))
+                else:
+                    moot.append((fid, "渡したが、0 でない数量はどの単位でも、合計を変えないか計算が止まる（%s）ので、数量 0 は"
+                                      "合計を変えない（欠けた入力を入れると効く）" % _unit_blocks(blocked_u, route_word, w)))
             continue
         q, qu = float(v.value), v.unit or unit
         fac = P["material"].get(cls, {})
@@ -888,7 +937,17 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                     "質量の分かる行が無いとき、解体後の段階（C2〜C4・B4・B5）を評価範囲から外したときは適用外にできる")
             if stages is not None:
                 d.na_refused["a_eol_route"] = why_
-            d.skip("a_eol_route", route_v, "適用外にはできない（%s）：材料の行を渡せない（計算しない）" % why_)
+                d.skip("a_eol_route", route_v, "適用外にはできない（%s）：材料の行を渡せない（計算しない）" % why_)
+            elif any(_mass_row(f_, c_, u_) for f_, c_, _l, u_, *_ in FL.MATERIALS):
+                # the boundary is not given (the calculation stops for it anyway): whether the 適用外 can be used depends
+                # on it, so it is not said to be impossible (the save accepted it; setting the boundary warns if it is not)
+                d.skip("a_eol_route", route_v, "評価範囲が未取得なので、この適用外が使えるかは評価範囲で決まる（解体時の質量が分かる材料の"
+                                               "行があるので、解体後の段階（C2〜C4・B4・B5）を評価範囲に入れると処理シナリオが要る。外したときは"
+                                               "適用外にできる）：材料の行を渡せない（計算しない）")
+            else:
+                d.skip("a_eol_route", route_v, "評価範囲が未取得なので、この適用外はまだ判定していない（いまは解体時の質量が分かる材料の行が"
+                                               "無いので、評価範囲を入れても適用外のまま計算できる。質量の分かる行ができると、解体後の段階を"
+                                               "評価範囲に入れたときは処理シナリオが要る）：材料の行を渡せない（計算しない）")
         else:
             d.skip("a_eol_route", route_v, (LABEL[route_v.state] if route_v else "未取得") +
                    "：材料の行を渡せない（材料の行ごとに必須なので計算しない）")
@@ -1475,7 +1534,10 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                 "適用外にできる" % ("の範囲が 0 より上に届く" if pe == 0 else "がある"))
         if stages is not None:
             d.na_refused["o_grid_value"] = why_
-        ghow = "適用外にはできない（%s）" % why_
+            ghow = "適用外にはできない（%s）" % why_
+        else:
+            # the boundary is not given (the calculation stops for it anyway): the 適用外 is usable when B6 / B2 are left out
+            ghow = "評価範囲が未取得なので、この適用外が使えるかは評価範囲で決まる（%s）" % why_
     if gx is None:
         d.missing.append(FL.FIELDS["o_grid_value"]["label"])
         d.skip("o_grid_value", gv, ghow + "：渡していない")
@@ -1515,11 +1577,17 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         if cx == "NA":
             # filled above when A5 is outside the boundary or the site electricity is 0 / 適用外 / unknown; here it may be
             # above 0, so the factor is needed
+            elec_ = "の範囲が 0 より上に届く" if _num(V("c_site_electricity"))[0] == 0 else "がある"
             why_ = ("工事中の電力%sので、A5 の電力の分に係数が要る。工事中の電力が 0・適用外のときや、A5 を評価範囲から外したときは"
-                    "適用外にできる" % ("の範囲が 0 より上に届く" if _num(V("c_site_electricity"))[0] == 0 else "がある"))
+                    "適用外にできる" % elec_)
             if stages is not None:
                 d.na_refused["o_grid_construction"] = why_
-            chow = "適用外にはできない（%s）" % why_
+                chow = "適用外にはできない（%s）" % why_
+            else:
+                # the boundary is not given (the calculation stops for it anyway). Every boundary the screen offers has A5,
+                # so once it is set this 適用外 is refused unless the site electricity is 0: said as what setting it does
+                chow = ("評価範囲が未取得なので、この適用外はまだ判定していない（工事中の電力%sので、評価範囲を入れると A5 の電力の分に"
+                        "係数が要る。A5 はどの評価範囲にもあるので、工事中の電力が 0・適用外のときだけ適用外にできる）" % elec_)
         d.missing.append(FL.FIELDS["o_grid_construction"]["label"])
         d.skip("o_grid_construction", gc, chow + "：渡していない")
     else:

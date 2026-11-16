@@ -128,7 +128,8 @@ _f("a_eol_route", label="解体後の処理（シナリオ）", type="enum", scr
    engine=["materials[].end_of_life.routes[].route"], role="eol_route", required=True, na_context=True,
    help="材料の行ごとに必須。1 つのシナリオを全部の材料に当てる（割合 1）。「適用外」にできるのは、解体時の質量が分かる材料の行が"
         "無いとき（材料の行が無い、数量が m3・m2 の行だけ、設計数量でなく廃棄率が未取得など）や、解体後の段階（C2〜C4・B4・B5）を"
-        "評価範囲から外したときだけ。質量が分かる行ができると処理シナリオが要る。")
+        "評価範囲から外したときだけ。質量が分かる行ができると処理シナリオが要る。"
+        "評価範囲が未取得の間も受け、評価範囲を入れて使えなくなったときは、その保存で知らせる。")
 _f("a_eol_haul_km", label="解体材の運搬距離", unit="km", screen=G[0], group=G[1], category=G[2],
    engine=["end_of_life.haul_distance_km"], role="mat_common", range=(0, 2000), na_never=True)
 _f("a_reconstruction", label="大規模改修・建替えの想定", type="enum", screen=G[0], group=G[1], category=G[2],
@@ -226,11 +227,13 @@ _f("o_grid_value", label="運用時の電力の排出係数", unit="kgCO2e/kWh",
    engine=["operation.grid.kind", "operation.grid.start", "operation.grid.table"], role="grid", required=True,
    na_context=True, range=(0, 3),
    help="電気事業者の公表値などを出典つきで。評価期間中は一定として扱う。「適用外」にできるのは、係数が効かないとき（購入電力が 0・"
-        "適用外・未取得のときや、B6・B2 を評価範囲から外したとき）だけ。購入電力を 0 でない値にすると係数が要る。")
+        "適用外・未取得のときや、B6・B2 を評価範囲から外したとき）だけ。購入電力を 0 でない値にすると係数が要る。"
+        "評価範囲が未取得の間も受け、評価範囲を入れて使えなくなったときは、その保存で知らせる。")
 _f("o_grid_construction", label="工事中の電力の排出係数", unit="kgCO2e/kWh", screen=G[0], group=G[1], category=G[2],
    engine=["operation.grid.construction_value"], role="scalar", required=True, na_context=True, range=(0, 3),
    help="「適用外」にできるのは、係数が効かないとき（工事中の電力が 0・適用外・未取得のとき）だけ。工事中の電力を 0 でない値に"
-        "すると係数が要る。")
+        "すると係数が要る。"
+        "評価範囲が未取得の間も受け、評価範囲を入れて使えなくなったときは、その保存で知らせる。")
 G = ("operation", "水と廃棄物（年あたり）", "operation")
 for fid, label, unit, name in (("o_water_m3", "上水の使用量", "m3/年", "water"),
                                ("o_sewage_m3", "下水の排出量", "m3/年", "sewage"),
