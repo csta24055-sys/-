@@ -16,8 +16,9 @@ export function useAsync<T>(fn: () => Promise<T>, deps: unknown[] = []) {
   return { data, error, reload: () => setTick((t) => t + 1), setData }
 }
 
-export const Card = ({ title, children, actions, className = '' }: { title?: ReactNode; children: ReactNode; actions?: ReactNode; className?: string }) => (
-  <section className={`card ${className}`}>
+/** section: レイアウトが情報の並び順を変えるための目印（data-section / id="sec-…"）。見た目・動作には影響しない */
+export const Card = ({ title, children, actions, className = '', section }: { title?: ReactNode; children: ReactNode; actions?: ReactNode; className?: string; section?: string }) => (
+  <section className={`card ${className}`} data-section={section} id={section ? `sec-${section}` : undefined}>
     {(title || actions) && <header className="card-h"><h2>{title}</h2>{actions && <div className="card-actions">{actions}</div>}</header>}
     {children}
   </section>
@@ -35,9 +36,9 @@ export function Stat({ label, value, sub }: { label: string; value: ReactNode; s
   return <div className="stat"><div className="stat-v">{value}</div><div className="stat-l">{label}</div>{sub && <div className="stat-s">{sub}</div>}</div>
 }
 
-export function Bar({ done, total }: { done: number; total: number }) {
+export function Bar({ done, total, label }: { done: number; total: number; label?: string }) {
   const pct = total ? Math.round((100 * done) / total) : 0
-  return <div className="bar" role="progressbar" aria-valuenow={pct}><div style={{ width: `${pct}%` }} /><span>{done}/{total}（{pct}%）</span></div>
+  return <div className="bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label}><div style={{ width: `${pct}%` }} /><span>{done}/{total}（{pct}%）</span></div>
 }
 
 export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: ReactNode }) {
