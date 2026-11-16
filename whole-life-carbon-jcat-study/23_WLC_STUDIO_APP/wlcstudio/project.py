@@ -167,8 +167,14 @@ class Projects:
         return Value.from_json(json.loads(r[0])) if r else None
 
     def values(self, pid: int) -> dict[str, Value]:
+        """The value in force of every field that has one (its latest save, as current()), in the order in which the
+        fields were first saved. Only those rows are read and decoded: the earlier saves are only scanned in the index
+        (project_id, field_id) for their ids, so a save or an adoption that reads the values does not decode the whole
+        history."""
         out = {}
-        for r in self.db.execute("SELECT field_id, payload FROM field_values WHERE project_id=? ORDER BY id", (pid,)):
+        for r in self.db.execute("SELECT v.field_id, v.payload FROM field_values v JOIN "
+                                 "(SELECT MIN(id) AS first, MAX(id) AS last FROM field_values WHERE project_id=? "
+                                 "GROUP BY field_id) g ON v.id = g.last ORDER BY g.first", (pid,)):
             out[r[0]] = Value.from_json(json.loads(r[1]))
         return out
 

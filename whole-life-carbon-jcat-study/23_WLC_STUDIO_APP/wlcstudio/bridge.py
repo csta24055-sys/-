@@ -189,6 +189,13 @@ def _num(v: Value | None):
     return None, None, LABEL[v.state]
 
 
+def _open_without(stages_: tuple) -> bool:
+    """With the boundary unknown: does a boundary the screen offers (FL.STAGE_PRESETS) leave out all of these stages?
+    A stored 適用外 that only these stages need is then usable with that boundary, so it is not listed as a missing
+    required input (the boundary is listed, and stops the calculation); one that every offered boundary refuses is."""
+    return any(not set(s_) & set(stages_) for _k, _l, s_ in FL.STAGE_PRESETS)
+
+
 def _surely_zero(v: Value | None) -> bool:
     """適用外 of a na=zero field, or a value of 0 whose stated range does not reach above 0 (an assumed 0 with a range up
     to 150000 kWh is not a reason to drop the factor that the upper end needs)."""
@@ -929,7 +936,11 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                     % "、".join(by_cause["unit"][:6]), kind="material", label="運搬（A4）：質量の分からない材料")
         # the "waste" cause is already covered by the waste-rate entry (its stages include A4)
     elif any(_competes(V(f[0])) and f[0] not in skip for f in FL.MATERIALS) and route is None:
-        d.missing.append("解体後の処理シナリオ（材料の行ごとに必須）")
+        if not (stages is None and route_v is not None and route_v.state == "not_applicable"
+                and _open_without(("C2", "C3", "C4", "B4", "B5"))):
+            # (with the boundary unknown, a stored 適用外 that a boundary the screen offers accepts — one without the
+            # stages after demolition — is not a missing required input: the boundary is, and the row says the rest)
+            d.missing.append("解体後の処理シナリオ（材料の行ごとに必須）")
         if route_v is not None and route_v.state == "not_applicable":
             # 適用外 is placed (it cannot act) when no stage after demolition is in the boundary, when there is no material
             # row, or when no row has an end-of-life mass (above); here a row has one, so the route is needed
@@ -1505,6 +1516,7 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     gv, gc = V("o_grid_value"), V("o_grid_construction")
     gx, gst, ghow = _num(gv)
     g_filled = False
+    g_open = False             # a stored 適用外 that some boundary would accept, with the boundary unknown (below)
     if gx in (None, "NA") and stages is not None and not st_set & {"B6", "B2"}:
         gx, gst, ghow = 0.0, "EXPLICIT_ZERO", "B6・B2 を評価範囲から外したので、必須の年表を 0 で満たした（計算には入らない）"
         g_filled = True
@@ -1538,8 +1550,12 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         else:
             # the boundary is not given (the calculation stops for it anyway): the 適用外 is usable when B6 / B2 are left out
             ghow = "評価範囲が未取得なので、この適用外が使えるかは評価範囲で決まる（%s）" % why_
+            # a boundary the screen offers leaves them out: then not a missing required input (the boundary is one,
+            # and its row says on what it depends)
+            g_open = _open_without(("B6", "B2"))
     if gx is None:
-        d.missing.append(FL.FIELDS["o_grid_value"]["label"])
+        if not g_open:
+            d.missing.append(FL.FIELDS["o_grid_value"]["label"])
         d.skip("o_grid_value", gv, ghow + "：渡していない")
     else:
         d.item("assessment", "operation.grid.kind", "CONSTANT")
@@ -1585,10 +1601,13 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
                 chow = "適用外にはできない（%s）" % why_
             else:
                 # the boundary is not given (the calculation stops for it anyway). Every boundary the screen offers has A5,
-                # so once it is set this 適用外 is refused unless the site electricity is 0: said as what setting it does
+                # so once it is set this 適用外 is refused unless the site electricity is 0, 適用外 or unknown (each filled
+                # above): said as what setting it does. No boundary the screen offers would accept it, so it stays a
+                # missing required input (_open_without)
                 chow = ("評価範囲が未取得なので、この適用外はまだ判定していない（工事中の電力%sので、評価範囲を入れると A5 の電力の分に"
-                        "係数が要る。A5 はどの評価範囲にもあるので、工事中の電力が 0・適用外のときだけ適用外にできる）" % elec_)
-        d.missing.append(FL.FIELDS["o_grid_construction"]["label"])
+                        "係数が要る。A5 はどの評価範囲にもあるので、工事中の電力が 0・適用外・未取得のときだけ適用外にできる）" % elec_)
+        if not (cx == "NA" and stages is None and _open_without(("A5",))):
+            d.missing.append(FL.FIELDS["o_grid_construction"]["label"])
         d.skip("o_grid_construction", gc, chow + "：渡していない")
     else:
         d.item("assessment", "operation.grid.construction_value", float(cx))

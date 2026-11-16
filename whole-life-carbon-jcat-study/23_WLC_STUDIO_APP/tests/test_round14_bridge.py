@@ -3,7 +3,8 @@ same nil quantity: it is not counted only when no accepted unit would let a valu
 candidate says the same warnings as a PUT; a warning is said only by the save that makes a stored 適用外 unusable; a
 whole-building / all-steel figure that is surely 0 covers nothing (it drops no value typed in the other field); with the
 boundary unknown, a stored 適用外 of the grid factors and the route is described as depending on the boundary, not as
-impossible.
+impossible, and is a missing required input only when every boundary the screen offers refuses it; the values in force
+are read without decoding the whole history.
 
 Run: cd whole-life-carbon-jcat-study && python3 -B -m unittest discover -s 23_WLC_STUDIO_APP/tests -q
 """
@@ -336,6 +337,96 @@ class FourteenthRoundBridgeTests(unittest.TestCase):
         self.put(pid, "o_elec_kwh", {"state": "confirmed", "value": 1000})
         _, res = self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
         self.assertTrue(detail(res, "o_grid_value").startswith("適用外にはできない（購入電力があるので"))
+
+    # --- attack on round 14 (1): with the boundary unknown, a stored 適用外 that a boundary the screen offers accepts is
+    # not a missing required input (the boundary is, and stops the calculation); one that every boundary refuses is
+    def test_not_applicable_with_the_boundary_unknown_is_missing_only_when_every_boundary_refuses_it(self):
+        stages_label = "評価範囲（ライフサイクル段階）"
+        route_label = "解体後の処理シナリオ（材料の行ごとに必須）"
+        presets = [k for k, _l, _s in FL.STAGE_PRESETS]
+        cases = [("a_eol_route", dict(VOLUME_ONLY), route_label, False),                  # every boundary accepts it
+                 ("a_eol_route", dict(m_rebar=V("m_rebar", 10.0, unit="t")), route_label, False),   # 建設時まで does
+                 ("o_grid_value", dict(o_elec_kwh=V("o_elec_kwh", 1000.0)), FL.FIELDS["o_grid_value"]["label"], False),
+                 ("o_grid_construction", dict(c_site_electricity=V("c_site_electricity", 1000.0)),
+                  FL.FIELDS["o_grid_construction"]["label"], True)]                       # every boundary has A5
+        for fid, ctx, label, listed in cases:
+            with self.subTest(fid=fid, ctx=sorted(ctx)):
+                vals = complete(**dict(ctx, a_stages=V("a_stages", None, "not_obtained"), **{fid: NA(fid)}))
+                _, out = self.calc(vals)
+                self.assertEqual(out["status"], "blocked")
+                self.assertEqual(out["missing_required"], [stages_label] + ([label] if listed else []))
+                self.assertEqual(out["message"], "計算に必須の入力が足りないので計算していない（%s）" % "、".join(out["missing_required"]))
+                self.assertTrue(detail(out, fid).startswith("評価範囲が未取得なので、この適用外"), detail(out, fid))
+                # listed exactly when every boundary the screen offers refuses the same stored 適用外
+                refused = [k for k in presets
+                           if fid in bridge.build(dict(vals, a_stages=V("a_stages", k)), REFSET, period=60)[1]["na_refused"]]
+                self.assertEqual(listed, refused == presets, refused)
+                # with the boundary known, unchanged: listed exactly when the calculation refuses it
+                for k in presets:
+                    _, rep = bridge.build(dict(vals, a_stages=V("a_stages", k)), REFSET, period=60)
+                    self.assertEqual(label in rep["missing_required"], fid in rep["na_refused"], k)
+                # 未取得 of the same field stays a missing required input with the boundary unknown (unchanged)
+                _, rep = bridge.build(dict(vals, **{fid: V(fid, None, "not_obtained")}), REFSET, period=60)
+                self.assertIn(label, rep["missing_required"])
+                self.assertIn(stages_label, rep["missing_required"])
+
+    # --- attack on round 14 (2): the construction factor's text names every state of the site electricity that lets
+    # the 適用外 be used (0, 適用外 and 未取得), as its help text does
+    def test_construction_factor_with_the_boundary_unknown_names_every_state_that_allows_it(self):
+        vals = complete(a_stages=V("a_stages", None, "not_obtained"), c_site_electricity=V("c_site_electricity", 5000.0),
+                        o_grid_construction=NA("o_grid_construction"))
+        _, rep = bridge.build(vals, REFSET, period=60)
+        self.assertIn("工事中の電力が 0・適用外・未取得のときだけ適用外にできる", detail(rep, "o_grid_construction"))
+        self.assertIn("0・適用外・未取得", FL.FIELDS["o_grid_construction"]["help"])
+        # each named state lets the same stored 適用外 be used with every boundary; a site electricity above 0 does not
+        for site, ok in ((V("c_site_electricity", 0.0), True), (NA("c_site_electricity"), True),
+                         (V("c_site_electricity", None, "not_obtained"), True), (V("c_site_electricity", 5000.0), False)):
+            for k, _l, _s in FL.STAGE_PRESETS:
+                _, rep = bridge.build(dict(vals, a_stages=V("a_stages", k), c_site_electricity=site), REFSET, period=60)
+                self.assertEqual("o_grid_construction" not in rep["na_refused"], ok, (site.state, site.value, k))
+        # through the server, as the attack did: the site electricity 未取得 and the boundary 全段階 calculate
+        pid = self.project(vals)
+        self.assertEqual(self.put(pid, "c_site_electricity", {"state": "not_obtained"})[0], 200)
+        st, out = self.put(pid, "a_stages", {"state": "confirmed", "value": "ALL"})
+        self.assertEqual(st, 200)
+        self.assertNotIn("warnings", out)
+        _, res = self.app.handle("POST", "/api/projects/%d/calculate" % pid, {"period": 60})
+        self.assertEqual(res["status"], "ok", res.get("message"))
+
+    # --- attack on round 14 (3): a save reads only the values in force, not the whole history, so adopting a candidate
+    # (which now reads the values when a 適用外 is stored) does not slow down with the number of earlier saves
+    def test_values_read_only_the_rows_in_force(self):
+        P = self.app.projects
+        pid = self.project(complete(o_elec_kwh=V("o_elec_kwh", 0.0)))
+        self.assertEqual(self.put(pid, "o_grid_value", {"state": "not_applicable"})[0], 200)
+        # a long history, interleaved over fields (b_name 3,000 times, a few others changed back and forth)
+        rows = []
+        for i in range(3000):
+            v = V("b_name", "n%d" % i) if i % 50 else V("o_gas_m3", 2000.0 + i, "assumption")
+            rows.append((pid, v.field_id, json.dumps(v.to_json(), ensure_ascii=False, sort_keys=True), 0.0))
+        P.db.executemany("INSERT INTO field_values (project_id, field_id, payload, created_at) VALUES (?,?,?,?)", rows)
+        P.db.commit()
+        self.assertEqual(self.put(pid, "o_water_m3", {"state": "not_obtained"})[0], 200)
+        # the same values, in the same order, as folding the whole history
+        fold = {}
+        for r in P.db.execute("SELECT field_id, payload FROM field_values WHERE project_id=? ORDER BY id", (pid,)):
+            fold[r[0]] = json.loads(r[1])
+        now = P.values(pid)
+        self.assertEqual([(k, v.to_json()) for k, v in now.items()], [(k, Value.from_json(x).to_json()) for k, x in fold.items()])
+        self.assertEqual(now["b_name"].value, "n2999")
+        self.assertEqual(now["o_grid_value"].state, "not_applicable")
+        # only the rows in force are decoded
+        from unittest import mock
+        with mock.patch.object(Value, "from_json", wraps=Value.from_json) as fj:
+            P.values(pid)
+        self.assertEqual(fj.call_count, len(fold))
+        self.assertLess(fj.call_count, 100)
+        # adopting a candidate with that history still says its warning
+        st, out = self.accept(pid, "o_elec_kwh", Value("o_elec_kwh", "statistical", 120000.0, "kWh/年", method="stat_test",
+                                                       source_id="test-src", factor_version="v",
+                                                       uncertainty=Uncertainty("interval", 80000.0, 160000.0, 0.9)))
+        self.assertEqual(st, 200)
+        self.assertEqual(len(out.get("warnings") or []), 1, out.get("warnings"))
 
 
 if __name__ == "__main__":
