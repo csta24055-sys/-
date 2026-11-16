@@ -46,6 +46,33 @@ class ImportError_(ValueError):
     pass
 
 
+MAX_SHEET_LABEL = 31                              # Excel's limit for a sheet name: longer ones are cut where shown
+
+
+def sheet_label(name) -> str:
+    """A sheet's name as shown in a trace, a reason or a warning (the full name is kept for following references)."""
+    s = str(name)
+    return s if len(s) <= MAX_SHEET_LABEL else s[:MAX_SHEET_LABEL] + "…"
+
+
+_ASCII_WORD = re.compile(r"[a-z]+")
+
+
+@functools.lru_cache(maxsize=256)
+def _word_rx(words: tuple):
+    """One pattern for a list of header words: an English word only as a whole word (with a plural s), so that
+    "Upper floors", "Superstructure" or "Separate" never read as "per" or "rate"; other words anywhere."""
+    alts = []
+    for w in words:
+        w = w.lower()
+        alts.append(r"(?<![a-z])%s(?:e?s)?(?![a-z])" % re.escape(w) if _ASCII_WORD.fullmatch(w) else re.escape(w))
+    return re.compile("|".join(alts))
+
+
+def _has_word(hs: str, words: tuple) -> bool:
+    return _word_rx(tuple(words)).search(hs) is not None
+
+
 def _num(s):
     """A quantity cell: the same rule as the screen (a comma only as a thousands separator, no inner spaces)."""
     return number_or_reason(s)[0]
@@ -62,7 +89,7 @@ def _header_map(row: list) -> dict:
         for j, hs in enumerate(heads):
             if j in used or not hs:
                 continue
-            if key in ("name", "quantity") and any(m in hs for m in MONEY_WORDS):
+            if key in ("name", "quantity") and _has_word(hs, MONEY_WORDS):
                 continue                                   # 材料費, 材料単価, Material cost, Amount …
             for rank, w in enumerate(words):
                 w = w.lower()
@@ -188,7 +215,7 @@ def _formula_parts(f: str) -> tuple:
                 sheet = tok
                 continue
             if nxt == "(":
-                toks.append(("func", re.sub(r"^_XL(FN|WS)\.", "", tok.upper()), None))
+                toks.append(("func", re.sub(r"^(?:_XL(?:FN|WS)\.)+", "", tok.upper()), None))
             elif _CELL.fullmatch(tok):
                 c = _CELL.fullmatch(tok)
                 toks.append(("ref", (c.group(1) == "$", _col_index(c.group(2).upper()), c.group(3) == "$", int(c.group(4))), sheet))
@@ -262,100 +289,194 @@ def _formula_parts(f: str) -> tuple:
         else:
             seq.append(("val", None))                               # a number, a string, a lone row number
         k += 1
-    return frozenset(funcs), tuple(refs), tuple(names), structured, three_d, computed, tuple(nranges), _additive(seq)
+    return frozenset(funcs), tuple(refs), tuple(names), structured, three_d, computed, tuple(nranges), \
+        _additive(seq, tuple(nm for nm, _ in names))
 
 
-# functions whose value is (one of) their arguments added up or rounded: a cell in such a place is part of the value
-# (SUMPRODUCT of one range is its sum; the summed range of SUMIF / SUMIFS is added, its criteria are not)
+# How a formula's value is made of its references (see _additive). Functions whose value is (one of) their arguments
+# added up, rounded, picked or reshaped: a reference in such a place is part of the value. SUMPRODUCT adds its one
+# argument that is not a 0/1 condition (SUMPRODUCT(R), SUMPRODUCT((名称=x)*R), SUMPRODUCT(--(名称=x), R)); the summed
+# range of SUMIF / SUMIFS is added, its criteria are not; a lookup adds what it returns (INDEX, VLOOKUP, XLOOKUP …).
 _REFKINDS = ("ref", "nm", "sr", "nr")
-_ADD_ALL = frozenset(("SUM", "MAX", "MIN", "SUBTOTAL", "AGGREGATE"))
+_ADD_ALL = frozenset(("SUM", "MAX", "MIN", "SUBTOTAL", "AGGREGATE", "AVERAGE", "AVERAGEA", "MEDIAN", "MAXA", "MINA", "MODE",
+                      "MODE.SNGL", "HSTACK", "VSTACK"))
 _ADD_FIRST = frozenset(("ROUND", "ROUNDUP", "ROUNDDOWN", "TRUNC", "INT", "ABS", "N", "VALUE", "CEILING", "FLOOR", "MROUND",
-                        "CEILING.MATH", "FLOOR.MATH", "ODD", "EVEN"))
-_ADD_BRANCH = {"IF": (1, 2), "IFERROR": (0, 1), "IFNA": (0, 1), "CHOOSE": None}
+                        "CEILING.MATH", "FLOOR.MATH", "ODD", "EVEN", "LARGE", "SMALL", "INDEX", "SUMIFS", "AVERAGEIFS",
+                        "MAXIFS", "MINIFS", "DSUM", "DMAX", "DMIN", "DAVERAGE", "DGET", "FILTER", "SORT", "SORTBY", "UNIQUE",
+                        "TAKE", "DROP", "CHOOSECOLS", "CHOOSEROWS", "TOCOL", "TOROW", "TRANSPOSE", "WRAPROWS", "WRAPCOLS",
+                        "EXPAND", "ANCHORARRAY", "SINGLE"))
+_ADD_AT = {"VLOOKUP": (1,), "HLOOKUP": (1,), "XLOOKUP": (2, 3), "GROUPBY": (1,), "PIVOTBY": (2,)}
+_ADD_BRANCH = {"IF": (1, 2), "IFERROR": (0, 1), "IFNA": (0, 1)}       # CHOOSE, IFS, SWITCH: see _picked
+# functions whose value depends on their references only through a condition, a count or a position (a 0/1 mask
+# in SUMPRODUCT((名称=x)*R), ISNUMBER(SEARCH(…)), COUNTIF …): never a quantity factor
+_MASK = frozenset(("ISNUMBER", "ISTEXT", "ISNONTEXT", "ISBLANK", "ISERROR", "ISERR", "ISNA", "ISLOGICAL", "ISEVEN", "ISODD",
+                   "ISFORMULA", "ISREF", "NOT", "AND", "OR", "XOR", "EXACT", "COUNT", "COUNTA", "COUNTBLANK", "COUNTIF",
+                   "COUNTIFS", "ROW", "ROWS", "COLUMN", "COLUMNS", "LEN", "SEARCH", "FIND", "SEARCHB", "FINDB", "MATCH",
+                   "XMATCH"))
+MAX_NEST = 64                                     # Excel's limit for nested functions in one formula
+UNPARSED = ("unparsed",)                          # in _additive's answer: the formula's shape was not understood
 
 
-def _additive(seq: list) -> frozenset:
-    """The references (indices) of a formula that are ADDED into its value: alone or in a sum, rounded, chosen by IF,
-    scaled by a number (C2*1.05); not those that only multiply another reference (長さ×$G$2: G2 is a factor), that sit
-    inside a lookup or a condition (VLOOKUP, the criteria of SUMIF, the test of IF), or are raised to a power. A recursive descent over
-    the token sequence; anything it does not understand adds nothing (the reference is then simply not "added")."""
-    pos = [0]
+class _Unparsed(Exception):
+    pass
+
+
+def _picked(f: str, n: int):
+    """The argument places whose value a choosing function returns (None: not a choosing function)."""
+    if f in _ADD_BRANCH:
+        return [i for i in _ADD_BRANCH[f] if i < n]
+    if f == "CHOOSE":
+        return list(range(1, n))
+    if f == "IFS":
+        return list(range(1, n, 2))
+    if f == "SWITCH":                             # SWITCH(expr, v1, r1, v2, r2, …, default)
+        return list(range(2, n, 2)) + ([n - 1] if n > 1 and (n - 1) % 2 == 1 else [])
+    if f in ("SUMIF", "AVERAGEIF"):
+        return [2] if n == 3 else [0]
+    if f == "LOOKUP":
+        return [2] if n == 3 else [1]
+    if f in _ADD_AT:
+        return [i for i in _ADD_AT[f] if i < n]
+    return None
+
+
+def _additive(seq, names=()) -> frozenset:
+    """The references (their tokens) of a formula that are ADDED into its value: alone or in a sum, rounded, chosen by
+    IF / IFS / SWITCH / CHOOSE, returned by a lookup, scaled by a number (C2*1.05) or by a 0/1 condition
+    ((名称=x)*C2, --(名称=x)); not those that only multiply another reference (長さ×$G$2: G2 is a factor), that sit inside
+    a condition, a count or a lookup's key, or are raised to a power. A LET name is what its value is. One linear pass
+    (recursive descent, at most MAX_NEST levels); a shape it does not understand gives UNPARSED (the formula is then not
+    checked), never a guess."""
     n = len(seq)
+    depth = mx = 0
+    for t in seq:
+        if t == ("op", "("):
+            depth += 1
+            mx = max(mx, depth)
+        elif t == ("op", ")"):
+            depth -= 1
+    if mx > MAX_NEST:
+        return frozenset((UNPARSED,))
+    pos = [0]
+    env = []                                      # LET scopes: [{name: (all refs, added, mask)}]
+    E = (frozenset(), frozenset(), False)
 
-    def peek():
-        return seq[pos[0]] if pos[0] < n else ("end", None)
+    def peek(k=0):
+        return seq[pos[0] + k] if pos[0] + k < n else ("end", None)
 
     def take():
         t = peek()
         pos[0] += 1
         return t
 
-    def args():
-        out, cur = [], []
-        depth = 0
-        while pos[0] < n:
-            t = peek()
-            if t == ("op", "("):
-                depth += 1
-            elif t == ("op", ")"):
-                if depth == 0:
-                    take()
-                    break
-                depth -= 1
-            if t == ("op", ",") and depth == 0:
-                take()
-                out.append(cur)
-                cur = []
-                continue
-            cur.append(take())
-        out.append(cur)
+    def expect(op):
+        if take() != ("op", op):
+            raise _Unparsed()
+
+    def arg():                                    # an argument; an empty one (IF(A1,,B1)) is nothing
+        if peek() in (("op", ","), ("op", ")")):
+            return E
+        return cmp_()
+
+    def arglist():
+        out = [arg()]
+        while peek() == ("op", ","):
+            take()
+            out.append(arg())
+        expect(")")
         return out
+
+    def let_():                                   # LET(name1, value1, …, calculation)
+        scope = {}
+        env.append(scope)
+        try:
+            alls = set()
+            while peek()[0] == "nm" and peek(1) == ("op", ","):
+                nm = names[peek()[1]] if peek()[1] < len(names) else None
+                take()
+                take()
+                v = arg()
+                alls |= v[0]
+                scope[nm] = v
+                if take() != ("op", ","):
+                    raise _Unparsed()
+            r = arg()
+            expect(")")
+            return frozenset(alls | r[0]), r[1], r[2]
+        finally:
+            env.pop()
+
+    def call(f):
+        if f == "LET":
+            return let_()
+        res = arglist()
+        alls = frozenset().union(*(r[0] for r in res))
+        if f in _ADD_ALL:
+            return alls, frozenset().union(*(r[1] for r in res)), False
+        if f in _ADD_FIRST:
+            return alls, res[0][1], res[0][2] if f in ("N", "VALUE", "INT", "ABS", "ROUND") else False
+        if f == "SUMPRODUCT":
+            live = [r for r in res if r[0] and not r[2]]
+            return alls, (live[0][1] if len(live) == 1 else frozenset()), False
+        if f in _MASK:
+            return alls, frozenset(), True
+        pick = _picked(f, len(res))
+        if pick is not None:
+            got = [res[i] for i in pick]
+            mask = bool(alls) and all(r[2] or not r[0] for r in got) and f not in _ADD_AT and f not in ("SUMIF", "AVERAGEIF", "LOOKUP")
+            return alls, frozenset().union(*(r[1] for r in got)), mask
+        return alls, frozenset(), False
 
     def primary():
         t = take()
+        if t[0] == "nm":
+            nm = names[t[1]] if t[1] < len(names) else None
+            for scope in reversed(env):
+                if nm in scope:
+                    return scope[nm]
+            return frozenset((t,)), frozenset((t,)), False
         if t[0] in _REFKINDS:
-            return {t}, {t}
+            return frozenset((t,)), frozenset((t,)), False
+        if t[0] == "val":
+            return E
         if t[0] == "func":
-            if peek() == ("op", "("):
-                take()
-            parts = args()
-            res = [_additive_seq(a) for a in parts]
-            alls = set().union(*(r[0] for r in res)) if res else set()
-            f = t[1]
-            if f in _ADD_ALL:
-                return alls, set().union(*(r[1] for r in res)) if res else set()
-            if f == "SUMPRODUCT" and len(res) == 1:
-                return alls, res[0][1]
-            if f == "SUMIF" and len(res) in (2, 3):
-                return alls, res[-1][1] if len(res) == 3 else res[0][1]
-            if f == "SUMIFS" and len(res) >= 3:
-                return alls, res[0][1]
-            if f in _ADD_FIRST:
-                return alls, (res[0][1] if res else set())
-            if f in _ADD_BRANCH:
-                idx = _ADD_BRANCH[f]
-                pick = range(1, len(res)) if idx is None else [i for i in idx if i < len(res)]
-                return alls, set().union(*(res[i][1] for i in pick)) if pick else set()
-            return alls, set()
+            expect("(")
+            return call(t[1])
         if t == ("op", "("):
-            parts = args()
-            res = [_additive_seq(a) for a in parts]
-            if len(res) == 1:
-                return res[0]
-            return set().union(*(r[0] for r in res)), set()
-        return set(), set()
+            r = [cmp_()]
+            while peek() == ("op", ","):          # (A1:B2,D1:D9): a union of references
+                take()
+                r.append(cmp_())
+            expect(")")
+            if len(r) == 1:
+                return r[0]
+            return frozenset().union(*(x[0] for x in r)), frozenset().union(*(x[1] for x in r)), False
+        if t == ("op", "{"):                     # an array constant {1,2;3,4}: numbers only
+            while peek() != ("op", "}"):
+                if take()[0] == "end":
+                    raise _Unparsed()
+            take()
+            return E
+        raise _Unparsed()
+
+    def postfix():
+        r = primary()
+        while peek() in (("op", "%"), ("op", "#")):          # 5%, A1# (a spilled range)
+            take()
+        return r
+
+    def unary():
+        while peek() in (("op", "-"), ("op", "+"), ("op", "@")):
+            take()
+        return postfix()
 
     def factor():
-        while peek() in (("op", "-"), ("op", "+")):
+        a = unary()
+        while peek() == ("op", "^"):
             take()
-        a, d = primary()
-        while peek() in (("op", "^"),):
-            take()
-            b, _ = primary()
-            a, d = a | b, set()
-        while peek() == ("op", "%"):
-            take()
-        return a, d
+            b = unary()
+            a = (a[0] | b[0], frozenset(), False)
+        return a
 
     def term():
         fs = [(None, factor())]
@@ -364,36 +485,55 @@ def _additive(seq: list) -> frozenset:
             fs.append((op, factor()))
         if len(fs) == 1:
             return fs[0][1]
-        alls = set().union(*(f[1][0] for f in fs))
-        with_refs = [i for i, f in enumerate(fs) if f[1][0]]
-        if len(with_refs) == 1 and fs[with_refs[0]][0] != "/":
-            return alls, fs[with_refs[0]][1][1]                  # one reference scaled by numbers
-        return alls, set()
+        alls = frozenset().union(*(f[1][0] for f in fs))
+        withrefs = [f for f in fs if f[1][0]]
+        if withrefs and all(f[1][2] for f in withrefs):
+            return alls, frozenset(), True                    # a product of conditions is a condition
+        live = [f for f in withrefs if not f[1][2]]
+        if len(live) == 1 and live[0][0] != "/":
+            return alls, live[0][1][1], False                 # one reference scaled by numbers or by conditions
+        return alls, frozenset(), False
 
-    def expr():
-        a, d = term()
-        while True:
-            t = peek()
-            if t in (("op", "+"), ("op", "-")):
+    def sum_():
+        rs = [term()]
+        while peek() in (("op", "+"), ("op", "-")):
+            take()
+            rs.append(term())
+        if len(rs) == 1:
+            return rs[0]
+        withrefs = [r for r in rs if r[0]]
+        mask = bool(withrefs) and all(r[2] for r in withrefs)
+        return frozenset().union(*(r[0] for r in rs)), frozenset().union(*(r[1] for r in rs)), mask
+
+    def cat():
+        a = sum_()
+        while peek() == ("op", "&"):
+            take()
+            b = sum_()
+            a = (a[0] | b[0], frozenset(), False)
+        return a
+
+    def cmp_():
+        a = cat()
+        while peek()[0] == "op" and peek()[1] in ("=", "<", ">"):
+            op = take()[1]
+            if op in ("<", ">") and peek() in (("op", "="), ("op", ">")):
                 take()
-                b, e = term()
-                a, d = a | b, d | e
-            elif t[0] == "op" and t[1] in ("=", "<", ">", "&"):
-                take()
-                b, _ = term()
-                a, d = a | b, set()
-            else:
-                return a, d
+            b = cat()
+            a = (a[0] | b[0], frozenset(), True)
+        return a
 
-    a, d = expr()
-    return frozenset(d) if pos[0] >= n else frozenset()
-
-
-def _additive_seq(tokens: list) -> tuple:
-    """(every reference, the added references) of a part of a formula (an argument). A reference is its token:
-    ("ref", i) a cell or range, ("nm", j) a defined name, ("sr", k) a table reference, ("nr", j) a name range."""
-    alls = {t for t in tokens if t[0] in _REFKINDS}
-    return alls, set(_additive(tokens))
+    try:
+        r = cmp_()
+        while peek() == ("op", ","):                         # a name defined as a union: 明細!$C$2,明細!$C$5
+            take()
+            b = cmp_()
+            r = (r[0] | b[0], r[1] | b[1], False)
+    except (_Unparsed, IndexError):
+        return frozenset((UNPARSED,))
+    if pos[0] < n:
+        return frozenset((UNPARSED,))
+    return frozenset(r[1])
 
 
 def _formula_tuple(formula):
@@ -570,14 +710,15 @@ def _lone_block(tok, ctx, path):
     return None, blocks[0][:5]
 
 
-def _let_params(text: str) -> set:
+@functools.lru_cache(maxsize=4096)
+def _let_params(text: str) -> frozenset:
     """The parameter names of LET(name1, value1, …, calculation) and LAMBDA(param, …, body): the names at those
     places only (a workbook name used as a LET value, LET(q, 明細数量, SUM(q)), is followed). Excel writes them as
     _xlpm.x; other writers may not."""
     toks = [m.group(0) for m in _FTOK.finditer(text) if not m.group(0).isspace()]
     out = set()
     for i, tok in enumerate(toks):
-        fn = re.sub(r"^_XL(FN|WS)\.", "", tok.upper())
+        fn = re.sub(r"^(?:_XL(?:FN|WS)\.)+", "", tok.upper())
         if fn not in ("LET", "LAMBDA") or i + 1 >= len(toks) or toks[i + 1] != "(":
             continue
         args, cur, depth = [], [], 0
@@ -598,7 +739,7 @@ def _let_params(text: str) -> set:
         for k in slots:
             if len(args[k]) == 1 and (args[k][0][0].isalpha() or args[k][0][0] == "_"):
                 out.add(args[k][0].upper())
-    return out
+    return frozenset(out)
 
 
 def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset()) -> tuple:
@@ -637,6 +778,8 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
         return "範囲の端が数式で決まる（A2:INDEX(…) など）ので確かめられない。必要なら手で入れる", []
     if three_d:
         return "複数のシートにまたがる参照（3D 参照）は確かめられない。必要なら手で入れる", []
+    if UNPARSED in add:
+        return "数式の形を読めない（入れ子が %d 段より深い、または読めない書き方）ので確かめられない。必要なら手で入れる" % MAX_NEST, []
     this = (ctx.get("sheet") or "").casefold()
     out = []
     for i, (sh, a1, c1, a2, c2, ar1, r1, ar2, r2) in enumerate(refs):
@@ -747,7 +890,7 @@ def _qty_cols(header: list) -> list:
     out = []
     for j, h in enumerate(header):
         hs = str(h or "")[:MAX_TEXT].strip().lower()
-        if hs and any(w in hs for w in QTY_LIKE) and not any(m in hs for m in MONEY_WORDS + NOT_QTY):
+        if hs and _has_word(hs, QTY_LIKE) and not _has_word(hs, MONEY_WORDS + NOT_QTY):
             out.append(j)
     return out
 
@@ -755,8 +898,7 @@ def _qty_cols(header: list) -> list:
 def _factor_cols(header: list) -> list:
     """The columns whose header names money or a factor (単価, 金額, 単位質量, 比重, 密度, 係数, 率, kg/m …): a number there
     is never part of a material row's quantity."""
-    return [j for j, h in enumerate(header)
-            if any(m in str(h or "")[:MAX_TEXT].strip().lower() for m in MONEY_WORDS + NOT_QTY)]
+    return [j for j, h in enumerate(header) if _has_word(str(h or "")[:MAX_TEXT].strip().lower(), MONEY_WORDS + NOT_QTY)]
 
 
 HEADING = "見出しの行（数量も単位も無い）は材料の行ではない"
@@ -789,7 +931,7 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
         if not name and q is None:
             continue
         rn = row_numbers[i] if row_numbers else i + 1          # the sheet's own row number (gaps kept)
-        trace = "%s:%s!R%dC%d" % (doc_id, sheet, rn, (hmap["quantity"] or 0) + 1)
+        trace = "%s:%s!R%dC%d" % (doc_id, sheet_label(sheet), rn, (hmap["quantity"] or 0) + 1)
         texts = {"name": name, "unit": text("unit"), "division": text("division"), "specification": text("specification")}
         # the columns of the row that hold numbers (a formula elsewhere that adds one of them up copies part of it)
         ncols = tuple(j for j, x in enumerate(r[:MAX_COLS]) if x is not None and x != "" and _num(x) is not None)
@@ -1223,23 +1365,23 @@ def read_xlsx(data: bytes, doc_id: str) -> dict:
         warnings.append("シートを読めなかった（シートが無いか、形式が違う）")
     if wbk["hidden_sheets"]:
         warnings.append("非表示のシート（%s）の値は読んでいない（古い版を隠して残していることがある。必要なら表示してから読み込む）。"
-                        "その数式はたどって、写しを見分けるのに使う" % "、".join(str(x) for x in wbk["hidden_sheets"][:10]))
+                        "その数式はたどって、写しを見分けるのに使う" % "、".join(sheet_label(x) for x in wbk["hidden_sheets"][:10]))
     if wbk.get("cut_sheets"):
         warnings.append("非表示のシート（%s）が大きすぎるので、途中から読んでいない（セル %d 個・数式 %d 文字まで）。"
                         "そのシートを参照する数量は確かめられないので足さない"
-                        % ("、".join(wbk["sheet_names"].get(x, x) for x in wbk["cut_sheets"][:10]), MAX_HIDDEN_CELLS,
+                        % ("、".join(sheet_label(wbk["sheet_names"].get(x, x)) for x in wbk["cut_sheets"][:10]), MAX_HIDDEN_CELLS,
                            MAX_HIDDEN_FORMULA_CHARS))
     if wbk.get("names_cut"):
         warnings.append("名前の定義が多すぎるので、途中から読んでいない（%d 文字まで）。読んでいない名前を使う数量は足さない"
                         % MAX_NAME_CHARS)
     for sh in wbk["sheets"]:
         if sh["hidden_rows"]:
-            warnings.append("%s：非表示の行 %d 行は読んでいない" % (sh["name"], sh["hidden_rows"]))
+            warnings.append("%s：非表示の行 %d 行は読んでいない" % (sheet_label(sh["name"]), sh["hidden_rows"]))
         if sh.get("hidden_cols"):
-            warnings.append("%s：非表示の列 %d 列は読んでいない（古い数量の列のことがある）" % (sh["name"], sh["hidden_cols"]))
+            warnings.append("%s：非表示の列 %d 列は読んでいない（古い数量の列のことがある）" % (sheet_label(sh["name"]), sh["hidden_cols"]))
     if len(qsheets) > 1:
         warnings.append("数量の表が %d シートある（%s）：同じ材料が別のシートにも載っていないか確かめる"
-                        % (len(qsheets), "、".join(qsheets[:6])))
+                        % (len(qsheets), "、".join(sheet_label(x) for x in qsheets[:6])))
     return {"format": "xlsx", "warnings": warnings, "names": wbk["names"], "tables": wbk["tables"], "cells": wbk["fcells"],
             "sheet_names": wbk["sheet_names"], "cut_sheets": wbk.get("cut_sheets", []),
             "sheets": [_rows_to_candidates(sh["rows"], sh["name"], doc_id, sh["numbers"], sh["formulas"], fctx)
