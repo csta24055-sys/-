@@ -171,7 +171,20 @@ def stage_render(root: Path, o) -> dict:
             atomic_write(out, RD.to_markdown(blocks))
             write_json(root / "build" / "layout" / f"{name}{suffix}.json", blocks)
             written.append(str(out.relative_to(root)))
-    return {"written": written}
+    # 正本が無くなった文書（旧版の教材など）の中間ファイルと書き出しを消す。残すと次の office で旧版を再生成してしまう
+    keep = {str(Path(w).with_suffix("")).split("exports/", 1)[-1] for w in written}
+    removed = []
+    for f in sorted((root / "build" / "layout").rglob("*.json")):
+        rel = str(f.relative_to(root / "build" / "layout").with_suffix(""))
+        if rel in keep or rel.endswith("09_論文と教材の差分表"):
+            continue
+        f.unlink()
+        for ext in (".md", ".pdf", ".docx"):
+            g = root / "exports" / (rel + ext)
+            if g.exists():
+                g.unlink()
+        removed.append(rel)
+    return {"written": written, "removed_stale": removed}
 
 
 def stage_office(root: Path, o) -> dict:

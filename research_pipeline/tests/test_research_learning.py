@@ -117,3 +117,19 @@ class LearningExport(unittest.TestCase):
             pr = {r["unit_id"]: r["quadrant"] for r in read_csv(root / "learning" / "prioritization.csv")}
             self.assertEqual(set(pr), {"P1-U001", "P1-U002", "P1-U003", "P1-U004"})
             self.assertIn("LO-01", (root / "learning" / "curriculum.yaml").read_text(encoding="utf-8"))
+
+
+class OfficeFallbackFont(unittest.TestCase):
+    """第10部 10-9 ゲート L4：日本語フォントに無い簡体字を代替フォントで描き、欠字として残さない。"""
+
+    def test_simplified_chinese_uses_fallback(self):
+        from research_learning import office as OF
+        try:
+            OF.jp_font()
+        except ImportError:
+            self.skipTest("reportlab が無い環境")
+        if not OF._FALLBACK:
+            self.skipTest("代替フォントが無い環境")
+        self.assertEqual(OF.missing_glyphs([{"t": "p", "text": "梁文锋：我们的原则 ∗ ️"}]), [])
+        self.assertIn('<font name="FB">', OF._esc("我们"))
+        self.assertNotIn("FB", OF._esc("日本語の文"))

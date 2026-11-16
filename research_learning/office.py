@@ -16,10 +16,15 @@ FONT_CANDIDATES = [
     "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
 ]
 _FONT: str | None = None
+_FALLBACK: str | None = None
+# 日本語フォントに無い文字（簡体字など）を補う代替フォント（TrueType）。無ければ代替なしで検査だけ行う
+FALLBACK_CANDIDATES = ["/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc", "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"]
+# 表示に影響しない異体字セレクタは除き、フォントに無い記号は近い ASCII に置き換える
+_NORMALIZE = {"\ufe0f": "", "\ufe0e": "", "\u2217": "*"}
 
 
 def jp_font() -> str:
-    global _FONT
+    global _FONT, _FALLBACK
     if _FONT:
         return _FONT
     from reportlab.pdfbase import pdfmetrics
@@ -30,29 +35,68 @@ def jp_font() -> str:
             try:
                 pdfmetrics.registerFont(TTFont("JP", p, subfontIndex=0) if p.endswith(".ttc") else TTFont("JP", p))
                 _FONT = "JP"
-                return _FONT
+                break
             except Exception:  # noqa: BLE001
                 continue
-    pdfmetrics.registerFont(UnicodeCIDFont("HeiseiKakuGo-W5"))
-    _FONT = "HeiseiKakuGo-W5"
+    if not _FONT:
+        pdfmetrics.registerFont(UnicodeCIDFont("HeiseiKakuGo-W5"))
+        _FONT = "HeiseiKakuGo-W5"
+        return _FONT
+    for p in FALLBACK_CANDIDATES:
+        if Path(p).exists():
+            try:
+                pdfmetrics.registerFont(TTFont("FB", p, subfontIndex=0) if p.endswith(".ttc") else TTFont("FB", p))
+                _FALLBACK = "FB"
+                break
+            except Exception:  # noqa: BLE001
+                continue
     return _FONT
 
 
-def missing_glyphs(blocks: list[dict]) -> list[str]:
-    """埋め込む日本語フォントに無い文字（PDF では表示が欠ける）。文字の抽出では見つからないので別に調べる。"""
-    jp_font()
+def _cmap(name: str | None) -> dict:
+    if not name:
+        return {}
     from reportlab.pdfbase import pdfmetrics
-    face = getattr(pdfmetrics.getFont(_FONT), "face", None)
-    cmap = getattr(face, "charToGlyph", None)
-    if not cmap:
+    face = getattr(pdfmetrics.getFont(name), "face", None)
+    return getattr(face, "charToGlyph", None) or {}
+
+
+def normalize_text(s: str) -> str:
+    return "".join(_NORMALIZE.get(c, c) for c in str(s))
+
+
+def missing_glyphs(blocks: list[dict]) -> list[str]:
+    """日本語フォントにも代替フォントにも無い文字（PDF では表示が欠ける）。文字の抽出では見つからないので別に調べる。"""
+    jp_font()
+    main, fb = _cmap(_FONT), _cmap(_FALLBACK)
+    if not main:
         return []  # CID フォントなど、対応表を持たないフォントは調べない
-    text = "".join(str(b.get("text", "")) + "".join(map(str, b.get("items", []))) +
-                   "".join(str(c) for r in b.get("rows", []) for c in r) for b in blocks)
-    return sorted({c for c in text if ord(c) > 127 and ord(c) not in cmap})
+    text = normalize_text("".join(str(b.get("text", "")) + "".join(map(str, b.get("items", []))) +
+                                  "".join(str(c) for r in b.get("rows", []) for c in r) for b in blocks))
+    return sorted({c for c in text if ord(c) > 127 and ord(c) not in main and ord(c) not in fb})
 
 
 def _esc(s: str) -> str:
-    return (str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br/>"))
+    """ReportLab の段落用に変換する。日本語フォントに無く代替フォントにある文字は、代替フォントで描く。"""
+    text = normalize_text(s)
+    main, fb = (_cmap(_FONT), _cmap(_FALLBACK)) if _FONT else ({}, {})
+    out, run = [], []
+
+    def esc1(c: str) -> str:
+        return c.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br/>")
+
+    def flush():
+        if run:
+            out.append(f'<font name="{_FALLBACK}">' + "".join(run) + "</font>")
+            run.clear()
+    for c in text:
+        if main and fb and ord(c) > 127 and ord(c) not in main and ord(c) in fb:
+            run.append(esc1(c))
+        else:
+            flush()
+            out.append(esc1(c))
+    flush()
+    return "".join(out)
 
 
 def to_pdf(blocks: list[dict], path: Path, title: str, header: str = "") -> Path:

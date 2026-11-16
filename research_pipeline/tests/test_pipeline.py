@@ -179,12 +179,24 @@ class TraceRules(unittest.TestCase):
         self.assertEqual(st["stages"]["trace"]["status"], "failed")
         self.assertIn("trace", st["next_action"])
 
+    def test_render_removes_outputs_of_deleted_documents(self):
+        stale = self.root / "build" / "layout" / "education" / "old" / "gone.json"
+        stale.parent.mkdir(parents=True, exist_ok=True)
+        stale.write_text("[]", encoding="utf-8")
+        (self.root / "exports" / "education" / "old").mkdir(parents=True, exist_ok=True)
+        (self.root / "exports" / "education" / "old" / "gone.pdf").write_bytes(b"%PDF-1.4 old")
+        self.assertEqual(PL.run(self.root, opts(force=True)), 0)
+        self.assertFalse(stale.exists())
+        self.assertFalse((self.root / "exports" / "education" / "old" / "gone.pdf").exists())
+
     def test_sync_plan_versions_changed_text_and_holds_binary(self):
         self.assertEqual(PL.run(self.root, opts()), 0)
+        # office の段階は reportlab がある環境では PDF/Word も作るため、既存のバイナリ数を数えてから1件足す
+        binaries = [f for f in (self.root / "exports").rglob("*") if f.suffix in (".pdf", ".docx")]
         (self.root / "exports" / "x.pdf").write_bytes(b"%PDF-1.4 dummy")
         plan = PL.sync_plan(self.root)
         self.assertGreater(plan["queue_text"], 0)
-        self.assertEqual(plan["unsynced_binary"], 1)
+        self.assertEqual(plan["unsynced_binary"], len(binaries) + 1)
         rel = "papers/p/paper.src.md"
         size = (self.root / rel).stat().st_size
         ns = SimpleNamespace(rel=rel, dropbox_path=PL.DROPBOX_ROOT + "/" + rel, size=str(size), method="test")
