@@ -227,7 +227,7 @@ def sync_plan(root: Path) -> dict:
             unsynced.append({"rel_path": rel, "sha256": sha, "size": p.stat().st_size, "dropbox_path": "",
                              "kind": "backup", "reason": "旧版の退避コピー。同一内容が Dropbox の元のパスに保存済み（重複のため送らない）"})
             continue
-        rev = len(hist) + 1
+        rev = len({h["sha256"] for h in hist}) + 1  # 分割送信（1ファイル＝複数行）でも版番号は内容の数で数える
         target = f"{DROPBOX_ROOT}/{rel}" if rev == 1 else \
             f"{DROPBOX_ROOT}/{Path(rel).with_suffix('').as_posix()}.r{rev}{p.suffix}"
         row = {"rel_path": rel, "sha256": sha, "size": p.stat().st_size, "dropbox_path": target,
