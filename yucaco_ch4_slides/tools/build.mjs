@@ -19,6 +19,15 @@ const skipPdf = !!process.env.NO_PDF;
 fs.mkdirSync(outDir, { recursive: true });
 fs.mkdirSync(pngDir, { recursive: true });
 
+// 同梱フォント（使用文字のサブセット）に無い文字があれば警告する
+const charsetPath = path.join(root, 'src', 'assets', 'fonts', 'charset.txt');
+if (fs.existsSync(charsetPath)) {
+  const charset = new Set(fs.readFileSync(charsetPath, 'utf8'));
+  const html = fs.readFileSync(path.join(root, 'src', 'deck.html'), 'utf8').replace(/<[^>]+>/g, ' ');
+  const missing = [...new Set(html)].filter(ch => ch.trim() && !charset.has(ch) && ch.codePointAt(0) !== 0x2252);
+  if (missing.length) console.log('FONT WARNING: サブセットに無い文字があります。tools/subset_fonts.py を再実行してください:', missing.join(''));
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
 await page.goto(src, { waitUntil: 'load' });

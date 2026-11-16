@@ -51,6 +51,8 @@ for src_name, out_name in targets:
     subset.save_font(font, str(out), opts)
     print(f"{out_name}: {out.stat().st_size // 1024} KB")
 print(f"{len(text)} characters")
+# 書き出し時のチェック用に、サブセットに入れた文字を保存する
+(out_dir / "charset.txt").write_text(text, encoding="utf-8")
 
 # Noto Sans JP（Google Fonts 版）には「≒」が無いため、この記号だけ BIZ UDPゴシック（SIL OFL 1.1）から取る
 biz_dir = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else pathlib.Path("/usr/share/fonts/truetype/bizud-gothic")
