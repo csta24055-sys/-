@@ -295,7 +295,7 @@ class TenthRoundImporterTests(unittest.TestCase):
         self.assertEqual([x["name"] for x in ev["rows"]], ["コンクリート Fc24", "コンクリート Fc27"])
         self.assertEqual(ev["n_excluded"], 3)
         self.assertEqual(ev["n_maybe"], 2)          # the work row and the row without a number; not the total
-        self.assertIn("2 行は足していない", r["proposals"][0].note)
+        self.assertIn("足さなかった行 3 行。うち 2 行は足すべき行かもしれない", r["proposals"][0].note)   # (round 11 wording)
         with tempfile.TemporaryDirectory() as td:
             P = project_mod.Projects(os.path.join(td, "p.sqlite3"))
             pid = P.create("x", "RC")
@@ -311,7 +311,10 @@ class TenthRoundImporterTests(unittest.TestCase):
     # --- PDF
     @unittest.skipUnless(pdf_mod.available(), "pdftotext is not installed")
     def test_pdf_two_columns_item_numbers_and_floors(self):
-        from test_wlcstudio import _pdf
+        try:
+            from tests.test_wlcstudio import _pdf      # python3 -m unittest discover -s tests -t . (README)
+        except ImportError:
+            from test_wlcstudio import _pdf            # discover -s tests
         got = documents.read("s.pdf", base64.b64encode(_pdf(["Rebar D13   1.2 t      Concrete C30   120 m3",
                                                               "1   Concrete Fc24   80 m3", "3F slab concrete   45 m3"])).decode(), "d")
         vals = sorted((p.field_id, p.value) for p in got["proposals"])

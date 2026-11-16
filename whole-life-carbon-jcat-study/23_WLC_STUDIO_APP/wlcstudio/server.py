@@ -363,6 +363,12 @@ class App:
         maybe = sum((r.get("evidence") or {}).get(v.field_id, {}).get("n_maybe", 0) for v in good)
         if maybe:
             summary += "足さなかった行のうち %d 行は、足すべき行かもしれない（各候補の「足さなかった行」で理由を確かめる）。" % maybe
+        # a field that got no candidate although rows of its material were left out: said, so that an empty field is
+        # not taken for "nothing of that material in the file"
+        lost = [(f, x) for f, x in (r.get("left_out") or {}).items() if f in FL.FIELDS and x.get("n_maybe")]
+        if lost:
+            summary += "候補にならなかったが、足すべきかもしれない行がある材料：%s（「使わなかった行」で理由を確かめる）。" % "、".join(
+                "「%s」%d 行" % (FL.FIELDS[f]["label"], x["n_maybe"]) for f, x in lost[:8]) + ("ほか" if len(lost) > 8 else "")
         shown = r["unused"][:200]
         unused = ["%s：%s（%s）" % (u["trace"], u["name"], u["reason"]) for u in shown]
         if len(r["unused"]) > len(shown):

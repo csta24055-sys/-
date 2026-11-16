@@ -2063,7 +2063,8 @@ class EighthRoundTests(unittest.TestCase):
         from wlcstudio.importers import tabular
         q = "+".join(["QX"] * 300)
         t0 = time.perf_counter()
-        self.assertIsNone(tabular.formula_reason(q, 1, {"sheet": "S", "names": {"QX": q}}))
+        # a name that refers to itself is a circular reference (#REF! in Excel): not checked, and answered at once
+        self.assertIsNotNone(tabular.formula_reason(q, 1, {"sheet": "S", "names": {"QX": q}}))
         self.assertLess(time.perf_counter() - t0, 1.0)
         rows = "名称,数量,単位\n" + ("%s,1,m3\n" % ("ﷺ" * 298)) * 3000
         t0 = time.perf_counter()

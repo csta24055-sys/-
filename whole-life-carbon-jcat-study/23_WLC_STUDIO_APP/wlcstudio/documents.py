@@ -36,12 +36,15 @@ KEYWORDS = (  # (field, words): "re:" entries are regular expressions on the nor
                    "plastic", "ポリ", "人工木", "樹脂木")),
     ("m_board", ("石膏ボード", "せっこうボード", "gypsum board", "plasterboard", "cement board", "ケイ酸カルシウム板", "ボード",
                  "board", "gypsum")),                      # (押出成形セメント板 is masonry here)
-    ("m_masonry", ("re:(?:^|[^a-z])alc(?:[^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick")),
+    ("m_masonry", ("re:(?:^|[^a-z])alc(?:[^a-z]|$)", "ブロック", "れんが", "レンガ", "押出成形", "masonry", "brick",
+                   "re:(?:^|[^a-z])block(?:s|work)?(?![a-z])")),
     ("m_rebar", ("鉄筋", "棒鋼", "異形棒", "鉄筋コンクリート用", "溶接金網", "ワイヤーメッシュ", "主筋", "帯筋", "あばら筋", "スラブ筋",
                  "壁筋", "フープ", "スパイラル筋", "差し筋", "差筋", "補強筋", "肋筋", "スターラップ",
                  "rebar", "reinforcement", "reinforcing", "reinforcing steel", "reinforcement steel", "rebar steel",
                  "steel reinforcement", "bar reinforcement", "steel bar", "high yield", "high tensile bar", "mild steel bar",
                  "deformed bar", "deformed steel", "tor steel", "stirrup", "welded mesh", "wire mesh", "welded wire",
+                 "fabric reinforcement", "steel fabric", "welded fabric", "mesh reinforcement",
+                 "re:(?:^|[^a-z])mesh(?![a-z])(?! ?(?:fenc|screen|tray|ceiling|guard|gate|door|insect|filter|panel))",
                  "re:(?:^|[^a-z])(?:tmt|hysd)(?:[^a-z]|$)", "re:(?:^|[^a-z])sd ?[2-6][0-9]{2}",
                  "re:reinforced concrete bars?(?![a-z])")),
     ("m_concrete", ("コンクリート", "生コン", "concrete")),
@@ -57,8 +60,18 @@ KEYWORDS = (  # (field, words): "re:" entries are regular expressions on the nor
 FORM_WORDS = frozenset(("ボード", "board"))           # a form: グラスウールボード, insulation board, timber board
 ADJECTIVES = frozenset(("断熱",))                    # 断熱 before a product: アルミ断熱サッシ, 断熱ドア, ALC断熱パネル
 PRODUCT_NOUNS = ("サッシ", "窓", "ドア", "扉", "建具", "パネル", "シャッター", "カーテンウォール")
-PLACE_AFTER = ("下", "上", "裏", "廻り", "まわり", "回り", "面", "用", "際")   # コンクリート下: where it goes, not what it is
-PLACE_NOT = ("下地", "上塗", "上張", "上貼", "面材", "面積", "用材")                  # 鉄骨下地 (steel studs) is steel
+PLACE_AFTER = ("下", "上", "裏", "廻り", "まわり", "回り", "面", "際")   # コンクリート下: where it goes, not what it is
+PLACE_NOT = ("下地", "上塗", "上張", "上貼", "面材", "面積", "上屋", "上端", "下端", "上弦", "下弦", "下塗")   # 鉄骨下地, 鉄骨上屋,
+                                                                                         # 鉄筋上端筋: the material
+# 用 names a purpose only before a product of no field (鉄筋用スペーサー, コンクリート用混和剤, 鉄骨用錆止め塗料); before
+# anything else the material is the item (防水用シート, 防水用塗膜 are membranes)
+PURPOSE_PRODUCTS = ("骨材", "金物", "金具", "スペーサ", "混和", "添加", "接着", "プライマー", "釘", "ビス", "ボルト", "アンカー",
+                    "インサート", "スリーブ", "セパレータ", "型枠", "剥離", "はく離", "養生", "シール", "テープ", "目地",
+                    "補修", "塗料", "錆止", "さび止", "防錆", "塗材", "結束", "吊", "支持", "下地材")
+# English products of no field: a material after "in" is what they sit in (Waterstop in concrete, Dowel bars in concrete)
+PRODUCTS_IN_EN = ("waterstop", "water stop", "water bar", "waterbar", "dowel", "conduit", "sleeve", "hole", "bolt", "pipe",
+                  "duct", "cable", "anchor", "insert", "joint", "chase", "groove", "recess", "opening", "fixing", "box",
+                  "drain", "socket")
 _PLAIN = {}
 _RX = []
 for _fid, _ws in KEYWORDS:
@@ -102,35 +115,45 @@ def _matches(seg: str) -> list:
 
 
 def _head_of(seg: str, ms: list):
-    """The head among the keyword matches of one part, or None when every match only qualifies something else."""
-    kept = []
+    """(the head among the keyword matches of one part or None, whether the part names a product of no field). The
+    head is None when every match only qualifies something else: a place (土間コンクリート下: the next parts are looked
+    at), or a product of no field (断熱サッシ, 鉄筋用スペーサー: the name is no material)."""
+    kept, product = [], False
     for a, b, fid, w in ms:
         after = seg[b:]
         if after.startswith(PLACE_AFTER) and not after.startswith(PLACE_NOT):
-            continue                                     # 土間コンクリート下, 防水用, コンクリート面
+            continue                                     # 土間コンクリート下, コンクリート面
+        if after.startswith("用") and after[1:].lstrip().startswith(PURPOSE_PRODUCTS):
+            product = True
+            continue                                     # 鉄筋用スペーサー: a spacer, not rebar
         if w in ADJECTIVES and after.lstrip().startswith(PRODUCT_NOUNS):
+            product = True
             continue                                     # アルミ断熱サッシ: an insulated sash, not insulation
         kept.append((a, b, fid, w))
     kept = [m for m in kept if not (m[3] in FORM_WORDS and any(o[2] != m[2] and o[1] <= m[0] for o in kept))]
     if not kept:
-        return None
-    return max(kept, key=lambda m: (m[1], m[1] - m[0]))
+        return None, product
+    return max(kept, key=lambda m: (m[1], m[1] - m[0])), False
 
 
 def _parts(text: str) -> tuple:
-    """(part, follows a preposition of place / purpose?) of a lowered name, at most MAX_PARTS non-empty parts."""
-    out, pos, place = [], 0, False
+    """(part, follows a preposition of place / purpose?, the preposition before it or "") of a lowered name, at most
+    MAX_PARTS non-empty parts."""
+    out, pos, place, prep = [], 0, False, ""
     for m in _SEGSPLIT.finditer(text):
         seg = _PUNCT.sub(" ", text[pos:m.start()]).strip()
         if seg:
-            out.append((seg, place))
+            out.append((seg, place, prep))
             if len(out) >= MAX_PARTS:
                 return tuple(out)
-        place = (m.group(1) or "") in PLACE_PREP if m.group(1) else (place if not seg else False)
+        if m.group(1):
+            place, prep = m.group(1) in PLACE_PREP, m.group(1)
+        elif seg:
+            place, prep = False, ""
         pos = m.end()
     seg = _PUNCT.sub(" ", text[pos:]).strip()
     if seg and len(out) < MAX_PARTS:
-        out.append((seg, place))
+        out.append((seg, place, prep))
     return tuple(out)
 
 
@@ -138,15 +161,19 @@ def _parts(text: str) -> tuple:
 def _head(text: str) -> tuple:
     """(field or None, part index, head start, head end, parts) of an NFKC-normalised name."""
     pp = _parts(text.lower()[:MAX_NAME])
-    parts = tuple(p for p, _ in pp)
-    for i, (seg, place) in enumerate(pp):
+    parts = tuple(p for p, _, _ in pp)
+    for i, (seg, place, prep) in enumerate(pp):
         if place:
             continue                       # "… under concrete slab", "… for mortar": not what the item is
+        if prep == "in" and i and not _matches(parts[i - 1]) and any(w in parts[i - 1] for w in PRODUCTS_IN_EN):
+            return None, -1, 0, 0, parts   # "Waterstop in concrete", "Dowel bars in concrete": what it sits in
         ms = _matches(seg)
         if ms:
-            h = _head_of(seg, ms)
+            h, product = _head_of(seg, ms)
             if h is None:
-                return None, i, 0, 0, parts          # it names a product of no field (断熱サッシ) or only a place
+                if product:
+                    return None, i, 0, 0, parts      # it names a product of no field (断熱サッシ, 鉄筋用スペーサー)
+                continue                             # only a place (土間コンクリート下): the next parts may name it
             return h[2], i, h[0], h[1], parts
     return None, -1, 0, 0, parts
 
@@ -159,18 +186,26 @@ UNIT_ALIASES = {"m3": "m3", "m^3": "m3", "m**3": "m3", "立米": "m3", "立方�
                 "sqm": "m2", "sq.m": "m2"}
 QTY_UNITS = ("m3", "m2", "t", "kg")
 # rows that repeat a material quantity as work (a 内訳書 lists 加工組立・運搬・打設 with the same quantity as the material),
-# and finishing work on a material (金ごて仕上 is labour on the slab, not a finish material)
-WORK_WORDS = ("加工", "組立", "組み立て", "組立て", "運搬", "小運搬", "搬入", "荷揚げ", "荷揚", "打設", "打込", "打ち込", "圧送",
-              "ポンプ", "手間", "建方", "建て方", "製作", "養生", "締固め", "揚重", "労務", "工賃", "損料", "配筋", "型枠",
-              "溶接", "圧接", "据付", "据え付", "取付", "取り付", "敷込", "敷き込", "敷設", "試験", "金ごて", "金鏝", "木ごて",
-              "木鏝", "直押え", "刷毛引", "打放", "打ち放")
+# and finishing work on a material (金ごて仕上 is labour on the slab, not a finish material). Labour words make a row
+# work wherever they are; words that name how a material is put in place (敷込, 取付, 溶接止め, 金ごて, 打放し, 試験杭)
+# make it work only in the NAME: in the specification of a material they describe the material item (押出法ポリスチレン
+# フォーム｜床下敷込, デッキプレート｜溶接止め, 土間コンクリート｜金ごて仕上, 鋼管杭｜試験杭)
+LABOUR_WORDS = ("加工", "組立", "組み立て", "組立て", "運搬", "小運搬", "搬入", "荷揚げ", "荷揚", "打設", "打込", "打ち込", "圧送",
+                "ポンプ", "手間", "建方", "建て方", "製作", "養生", "締固め", "揚重", "労務", "工賃", "損料", "配筋", "型枠")
+METHOD_WORDS = ("溶接", "圧接", "据付", "据え付", "取付", "取り付", "敷込", "敷き込", "敷設", "試験", "金ごて", "金鏝", "木ごて",
+                "木鏝", "直押え", "刷毛引", "打放", "打ち放")
+WORK_WORDS = LABOUR_WORDS + METHOD_WORDS
 _WORKRX = re.compile("|".join(re.escape(w) for w in sorted(WORK_WORDS, key=len, reverse=True)))
+# what may follow a method word before 共 / 込 / 別途 (金ごて押え共, 溶接止め込み, 取付工共)
+METHOD_TAIL = ("押え", "押さえ", "仕上げ", "仕上", "止め", "止", "張り", "張", "貼り", "貼", "塗り", "塗", "工法", "工")
 # a work word (or a run of them: 加工組立共, 製作・建方共) followed by one of these names a product or a price that
 # includes the material (加工鉄筋, 加工済, 工場加工品, 製作金物, 型枠ブロック, 打設共, 建方込み, 運搬費込): not a work row
-PRODUCT_AFTER = ("済", "品", "材", "鉄筋", "鋼", "木", "板", "金物", "ボード", "ガラス", "ブロック", "共", "込", "含", "とも")
+PRODUCT_AFTER = ("済", "品", "材", "鉄筋", "鋼", "木", "板", "金物", "ボード", "ガラス", "ブロック", "杭", "共", "込", "含", "とも")
 # … or says that the work is priced elsewhere (建方別途, 打設費別, 加工を除く): the row is the material
 EXCLUDED_AFTER = ("別途", "は別", "別", "を除く", "除く", "除き", "抜き", "なし", "無し", "含まず", "含まない")
 _CHAIN_SEP = re.compile(r"[\s・、,＋+&]+|及び|および|と(?!も)")
+# other things a price may include, in a run with work words (製作・運搬・建方・残材処分共, 加工組立・スクラップ処分共)
+_CHAIN_MORE = re.compile(r"(?:残材|端材|スクラップ|梱包材|発生材|殻)?(?:処分|片付け|片付|清掃|後片付け)")
 _WORK_EN = re.compile(
     r"(?:plac(?:e|ed|es|ing|ement)|lay|lays|laying|laid|compact(?:s|ed|ing|ion)?|vibrat(?:e|es|ed|ing|ion)|"
     r"hoist(?:s|ed|ing)?|install(?:s|ed|ing|ation)?|unload(?:s|ed|ing)?|weld(?:s|ed|ing)?|assembl(?:e|es|ed|ing|y)|"
@@ -178,6 +213,10 @@ _WORK_EN = re.compile(
     r"cur(?:e|es|ed|ing)|transport(?:s|ed|ing|ation)?|deliver(?:y|ies|ed|ing)?|fabricat(?:e|es|ed|ing|ion)|"
     r"cut(?:s|ting)?|bend(?:s|ing)?|tying|formwork|shuttering|labou?r|trowel(?:s|led|ling)?)")
 WORK_PHRASES_EN = ("power float", "float finish", "floated finish", "trowel finish", "trowelled finish")
+# after the material, only a work NOUN makes the row work (Rebar fixing, Steel erection, Concrete pumping, Placing of
+# concrete): a participle describes the supply-and-fix item (poured against earth; cut, bent and fixed; laid in slabs;
+# fabricated and erected; delivered to site)
+_WORK_NOUN_EN = re.compile(r"[a-z]*(?:ing|ion|ment)|labou?r|formwork|shuttering|deliver(?:y|ies)|transport|assembly|pumps?|pours?")
 WORK_WORDS_EN = ("placing", "placement", "pumping", "pump", "pour", "pouring", "fixing", "erection", "erect", "erecting",
                  "fabrication", "fabricate", "fabricating", "cutting", "bending", "tying", "labour", "labor", "transport",
                  "delivery", "formwork", "curing", "installation", "hoisting")        # (examples; _WORK_EN decides)
@@ -252,15 +291,19 @@ def _chain_end(seg: str, e: int) -> int:
     while True:
         m = _CHAIN_SEP.match(seg, e)
         e2 = m.end() if m else e
-        w2 = _WORKRX.match(seg, e2)
-        if not w2:
+        w2 = _WORKRX.match(seg, e2) or _CHAIN_MORE.match(seg, e2)
+        if not w2 or w2.end() == e2:
             return e
         e = w2.end()
 
 
 @functools.lru_cache(maxsize=8192)
-def _work(n: str) -> bool:
+def _work(n: str, n_name: int | None = None) -> bool:
+    """`n` is the name, or "name ; specification" with `n_name` the number of parts of the name (the parts after
+    them are the specification)."""
     fid, hs, a, b, parts = _head(n)
+    if n_name is None:
+        n_name = len(parts)
     norm = normalise_name(n)
     toks = norm.split()                            # the whole name: "including" is where the parts split
     compact = re.sub(r"\s+", "", n)
@@ -282,6 +325,8 @@ def _work(n: str) -> bool:
             continue
         if t.endswith("ed") and head_tok is not None and i < head_tok:
             continue                               # "fabricated steelwork", "pumped concrete": the material
+        if head_tok is not None and i > head_tok and not _WORK_NOUN_EN.fullmatch(t):
+            continue                               # "concrete C20; poured against earth", "bars; cut, bent and fixed"
         if any(x in INCLUSIVE_EN for x in toks[:i]):
             continue                               # "concrete including placing and compacting"
         return True
@@ -289,12 +334,17 @@ def _work(n: str) -> bool:
         m = _WORKRX.search(seg)
         while m:
             k, e = m.span()
+            if i >= n_name and m.group(0) in METHOD_WORDS:
+                m = _WORKRX.search(seg, e)         # 床下敷込, 溶接止め, 金ごて仕上 in a material's specification
+                continue
             in_head = i == hs and k < b and e > a
             # a work word inside the head's own word, before the material, qualifies it (加工鉄筋, 型枠ブロック)
             # (but not before 仕上: 金ごて仕上・打放し仕上 are labour on the slab, no finish material)
             modifier = i == hs and e <= a and seg.rfind(" ", 0, a) < k and seg[a:b] not in ("仕上", "finish")
             end = _chain_end(seg, e)
             after = seg[end:]
+            if m.group(0) in METHOD_WORDS and after.startswith(METHOD_TAIL):
+                after = after[next(len(x) for x in METHOD_TAIL if after.startswith(x)):]   # 金ごて押え共
             if after.startswith("費"):
                 after = after[1:]                  # 運搬費込, 打設費別
             before = seg[:k].rstrip()
@@ -305,13 +355,18 @@ def _work(n: str) -> bool:
     return False
 
 
-def _is_work(name: str) -> bool:
+def _is_work(name: str, spec: str = "") -> bool:
     """A labour / process row (鉄筋加工組立, コンクリート打設手間, 鉄骨建て方, 鉄骨 搬入, 鉄骨 現場溶接, 金ごて仕上,
     Rebar fixing, Place concrete in slabs, Hoist and install steelwork, Power float finish …): it repeats the material
     quantity. Not work: a work word that qualifies the product (加工鉄筋, プレカット加工済, 工場加工品, 型枠ブロック,
     fabricated steelwork, welded mesh), a price that includes the material or the work (材工共, 打設共, 加工組立共,
     製作・建方共, 運搬費込, supply and erect, concrete including placing), work priced elsewhere (建方別途, 打設費別,
-    excluding placing, fixing by others)."""
+    excluding placing, fixing by others), and in a specification a word that says how the material is put in place
+    (床下敷込, 取付, 溶接止め, 金ごて仕上, 打放し, 試験杭) or a participle after the material (poured against earth; cut, bent and
+    fixed; laid in slabs)."""
+    if spec:
+        nm = _prep(name)
+        return _work(nm + " ; " + _prep(spec), len(_parts(nm.lower()[:MAX_NAME])))
     return _work(_prep(name))
 
 
@@ -327,6 +382,12 @@ DEMOLISH_JA = ("撤去", "解体", "はつり", "斫り", "斫", "殻", "処分"
 DEMOLISH_EN = ("demolition", "demolish", "demolished", "demolishing", "removal", "remove", "removed", "removing",
                "disposal", "dispose", "disposed", "disposing", "rubble", "debris")
 DEMOLISH_PHRASES_EN = ("break out", "breaking out", "broken out", "strip out", "stripping out", "take down", "taking down")
+_DEMRX = re.compile("|".join(re.escape(w) for w in sorted(DEMOLISH_JA, key=len, reverse=True)))
+# a removal word followed by these is a price note on a material row (端材処分共, 殻処分費別途, 処分費込み)
+NOTE_AFTER_JA = ("共", "込", "含", "とも", "別途", "は別", "別", "を除く", "除く", "除き", "なし", "無し")
+_DEM_CHAIN = re.compile(r"[\s・、,＋+&]*(?:%s|運搬|積込|積み込み|費)" % "|".join(re.escape(w) for w in DEMOLISH_JA))
+NOTE_OF_EN = ("offcuts", "off", "surplus", "waste", "packaging", "arisings", "excess", "cuttings")
+SURE, MAYBE = "sure", "maybe"
 
 
 @functools.lru_cache(maxsize=8192)
@@ -350,10 +411,13 @@ def _not_added(*texts: str) -> str | None:
     return None
 
 
+_DEDUCT_NOTE = re.compile(r"発生材(?:の)?(?:処分|運搬|積込|片付け?)+費?(?:共|込|含|とも|別途|は別|別)")
+
+
 @functools.lru_cache(maxsize=8192)
 def _deduct(n: str) -> bool:
     toks = normalise_name(n).split()
-    compact = re.sub(r"\s+", "", n)
+    compact = _DEDUCT_NOTE.sub("", re.sub(r"\s+", "", n))    # 発生材処分別途: a price note, not a credit
     return any(w in compact for w in DEDUCT_JA) or any(t in DEDUCT_EN for t in toks) or (toks[:1] == ["less"])
 
 
@@ -363,18 +427,70 @@ def _is_deduction(*texts: str) -> bool:
     return any(_deduct(_prep(t)) for t in texts)
 
 
+def _token_parts(toks: list, parts: tuple) -> list:
+    """The part index of each token of a name (None for a preposition between parts)."""
+    where, p = [None] * len(toks), 0
+    for j, seg in enumerate(parts):
+        for w in seg.split():
+            q = p
+            while q < len(toks) and toks[q] != w:
+                q += 1
+            if q < len(toks):
+                where[q], p = j, q + 1
+    return where
+
+
 @functools.lru_cache(maxsize=8192)
-def _demolish(n: str) -> bool:
+def _demolish(n: str, n_name: int | None = None):
+    """None, SURE (removal of what is there: 既存コンクリート撤去, コンクリート殻処分, Demolition of existing slab) or MAYBE (a
+    removal word only after the material, in a later part or the specification: perhaps a note on the material row).
+    Not removal: a price note (端材処分共, 殻処分費別途, 別途処分, including disposal of surplus, disposal of offcuts by
+    others)."""
+    fid, hs, _a, _b, parts = _head(n)
     norm = normalise_name(n)
     toks = norm.split()
-    compact = re.sub(r"\s+", "", n)
-    return any(w in compact for w in DEMOLISH_JA) or any(t in DEMOLISH_EN for t in toks) \
-        or any(p in norm for p in DEMOLISH_PHRASES_EN)
+    found = None
+
+    def kind(i):
+        return MAYBE if 0 <= hs < i else SURE
+
+    for i, seg in enumerate(parts):
+        for m in _DEMRX.finditer(seg):
+            e = m.end()
+            while True:
+                c = _DEM_CHAIN.match(seg, e)
+                if not c or c.end() == e:
+                    break
+                e = c.end()
+            after, before = seg[e:].lstrip(), seg[:m.start()].rstrip()
+            if after.startswith(NOTE_AFTER_JA) or before.endswith(("別途", "別")):
+                continue
+            k = kind(i)
+            if k == SURE:
+                return SURE
+            found = MAYBE
+    where = None
+    for i, t in enumerate(toks):
+        if t not in DEMOLISH_EN:
+            continue
+        nxt = toks[i + 1:i + 3]
+        if any(x in INCLUSIVE_EN for x in toks[:i]) or " ".join(nxt) in ("by others",) or nxt[:1] in (["separately"], ["elsewhere"]) \
+                or (nxt[:1] == ["of"] and toks[i + 2:i + 3] and toks[i + 2] in NOTE_OF_EN):
+            continue
+        if where is None:
+            where = _token_parts(toks, parts)
+        k = kind(where[i]) if where[i] is not None else SURE
+        if k == SURE:
+            return SURE
+        found = MAYBE
+    if any(p_ in norm for p_ in DEMOLISH_PHRASES_EN):
+        return SURE
+    return found
 
 
 def _is_demolition(*texts: str) -> bool:
     """Removal of what is there (撤去, 解体, はつり, 殻, 処分, demolition, break out, removal, disposal, rubble): not a new
-    material, never added."""
+    material, never added. A price note is not removal (端材処分共, 殻処分費別途, including disposal of surplus)."""
     return any(_demolish(_prep(t)) for t in texts)
 
 
@@ -405,22 +521,22 @@ class _Prep:
         return got
 
 
-MAX_FOLLOW_STEPS = 1_000_000          # formula cells and rows looked at per document while following quantity formulas
-
-
-class _FollowBudget(Exception):
-    pass
+MAX_FOLLOW_STEPS = 1_000_000          # formula cells, blocks and rows looked at per document while following formulas
+_FollowBudget = tabular.FollowBudget
+CUT_SHEET = "非表示のシート（%s）が大きすぎて途中から読んでいないので、そこへの参照は確かめられない。必要なら手で入れる"
 
 
 class _Cells:
     """What a quantity formula reaches, followed through the formulas of every sheet (helper cells, other columns,
     other sheets, hidden helpers, array formulas, defined names, tables). A quantity is a copy when it reaches the
-    QUANTITY of another material row: a cell in a quantity column (数量, 所要数量, 体積, 重量 …) of a row that names a
-    material in a unit its field takes, or of a total / 再掲 / work / deduction / removal row on a sheet that lists
-    materials — directly, or through formulas (a SUM subtotal kept in a spare column is followed to what it adds).
-    Typed numbers in other columns (a unit mass, a density, a lookup table beside the bill) and cells of the quantity's
-    own row (per-floor columns) are not quantities of another row.
-    Every formula cell and every range is followed once per document (the results are kept), within MAX_FOLLOW_STEPS."""
+    QUANTITY of another material row (a row that names a material in a unit its field takes, or a total / 再掲 / work /
+    deduction / removal row on a sheet that lists materials): a cell in its quantity columns (数量, 所要数量, 体積, 重量 …)
+    or a cell added into its quantity (a calculation column, per-floor columns), reached in any way; or any other number
+    of that row ADDED up by the quantity (集計!1F = 明細!C2 where C2 is a typed per-floor quantity, SUMPRODUCT, table
+    references), unless its column names money or a factor. A number of another row that is only multiplied or looked up
+    (a unit mass, a density, a lookup table beside the bill) is a factor, not a copy. Cells of the quantity's own row are
+    parts of it. Every formula cell and every range is followed once per document (the results are kept), and every
+    step, block and name expansion counts against MAX_FOLLOW_STEPS."""
 
     def __init__(self, parsed: dict):
         self.cells = parsed.get("cells") or {}
@@ -430,7 +546,9 @@ class _Cells:
         self.frows = {sh: sorted(rows) for sh, rows in self.cells.items()}
         self.fcols = {}
         self.targets, self.tcols, self.owned = {}, {}, {}
-        self.memo = {}
+        self.ncols = {}                    # (sheet, row) -> the row's numbers outside money / factor columns
+        self.cut_sheets = set(parsed.get("cut_sheets") or ())
+        self.memo, self.name_memo = {}, {}
         self.left = MAX_FOLLOW_STEPS
         self.cut = 0
 
@@ -440,18 +558,27 @@ class _Cells:
             raise _FollowBudget()
 
     def _ctx(self, sh, rn, ci):
-        return {"sheet": self.disp.get(sh, sh), "names": self.names, "tables": self.tables, "row": rn, "col": ci}
+        return {"sheet": self.disp.get(sh, sh), "names": self.names, "tables": self.tables, "row": rn, "col": ci,
+                "spend": self._spend, "name_memo": self.name_memo}
 
     def _children(self, node, fr):
+        """(child, added?) of a node. A frame is [node, children, why, rows reached, rows reached by adding, added?]."""
         if node[0] == "c":
             _k, sh, rn, ci = node
             self._spend()
-            why, blocks = tabular.formula_refs(self.cells[sh][rn][ci], self._ctx(sh, rn, ci))
+            if sh in self.cut_sheets:
+                fr[2] = (CUT_SHEET % self.disp.get(sh, sh), node)
+                return iter(())
+            why, blocks = tabular.formula_walk(self.cells[sh][rn][ci], self._ctx(sh, rn, ci))
             if why:
                 fr[2] = (why, node)
                 return iter(())
-            return iter([("b", b[0] or sh, b[1], b[2], b[3], b[4]) for b in blocks])
+            self._spend(len(blocks))
+            return iter([(("b", b[0] or sh, b[1], b[2], b[3], b[4]), b[5]) for b in blocks])
         _k, t, c1, c2, r1, r2 = node
+        if t in self.cut_sheets:
+            fr[2] = (CUT_SHEET % self.disp.get(t, t), node)
+            return iter(())
         lo = 0 if r1 is None else r1
         hi = tabular.MAX_ROW_NUMBER if r2 is None else r2
         trows, tc = self.targets.get(t), self.tcols.get(t, ())
@@ -459,12 +586,19 @@ class _Cells:
             k = bisect.bisect_left(trows, lo)
             while k < len(trows) and trows[k] <= hi and len(fr[3]) < 2:
                 self._spend()
-                cols = self.owned.get((t, trows[k]), tc)  # the quantity columns, and the cells added into them
-                j = bisect.bisect_left(cols, c1)
-                if j < len(cols) and cols[j] <= c2 and (t, trows[k]) not in fr[3]:
-                    fr[3].append((t, trows[k]))
+                key = (t, trows[k])
+                if key not in fr[3]:
+                    cols = self.owned.get(key, tc)    # the quantity columns, and the cells added into them
+                    j = bisect.bisect_left(cols, c1)
+                    if j < len(cols) and cols[j] <= c2:
+                        fr[3].append(key)
+                    elif key not in fr[4] and len(fr[4]) < 2:
+                        lc = self.ncols.get(key, ())  # another number of the row: a copy only when it is added up
+                        j = bisect.bisect_left(lc, c1)
+                        if j < len(lc) and lc[j] <= c2:
+                            fr[4].append(key)
                 k += 1
-        return self._formula_cells(t, c1, c2, lo, hi)
+        return ((c, True) for c in self._formula_cells(t, c1, c2, lo, hi))
 
     def own_parts(self, sh: str, row: int):
         """The cells of a material row that are added into its quantity (ROUND(F2), SUM(B2:D2): a calculation column,
@@ -478,7 +612,11 @@ class _Cells:
             if c in seen:
                 continue
             seen.add(c)
-            for bsh, c1, c2, r1, r2 in tabular.added_blocks(rowcells[c]):
+            try:
+                blocks = tabular.added_blocks(rowcells[c], self._ctx(sh, row, c))
+            except _FollowBudget:
+                break
+            for bsh, c1, c2, r1, r2 in blocks:
                 if (bsh is None or bsh == sh) and r1 == row and r2 == row and c2 - c1 < 256:
                     for cc in range(c1, c2 + 1):
                         owned.add(cc)
@@ -504,40 +642,47 @@ class _Cells:
             k += 1
 
     @staticmethod
-    def _merge(fr, res):
-        why, hits = res
+    def _merge(fr, res, added):
+        why, hits, adds = res
         if why and fr[2] is None:
             fr[2] = why
         for h in hits:
             if h not in fr[3] and len(fr[3]) < 2:
                 fr[3].append(h)
+        if added:                                        # numbers reached by adding stay "added" only through sums
+            for h in adds:
+                if h not in fr[4] and h not in fr[3] and len(fr[4]) < 2:
+                    fr[4].append(h)
 
     def _result(self, root):
-        """(why it cannot be checked: (text, node) or None; up to two (sheet, row) material rows reached)."""
+        """(why it cannot be checked: (text, node) or None; up to two (sheet, row) material rows whose quantity is
+        reached; up to two whose other numbers are reached by adding only)."""
         memo = self.memo
         if root in memo:
             return memo[root]
-        stack, on = [[root, None, None, []]], {root}
+        stack, on = [[root, None, None, [], [], True]], {root}
         while stack:
             fr = stack[-1]
             if fr[1] is None:
                 fr[1] = self._children(fr[0], fr)
-            child = next(fr[1], None) if fr[2] is None and len(fr[3]) < 2 else None
-            if child is None:
-                res = memo[fr[0]] = (fr[2], tuple(fr[3]))
+            nxt = next(fr[1], None) if fr[2] is None and len(fr[3]) < 2 else None
+            if nxt is None:
+                res = memo[fr[0]] = (fr[2], tuple(fr[3]), tuple(fr[4]))
                 on.discard(fr[0])
                 stack.pop()
                 if stack:
-                    self._merge(stack[-1], res)
+                    self._merge(stack[-1], res, fr[5])
                 continue
+            child, added = nxt
             got = memo.get(child)
             if got is not None:
-                self._merge(fr, got)
+                self._spend()
+                self._merge(fr, got, added)
             elif child in on:
                 fr[2] = ("循環する参照（数式が自分自身にたどり着く）は確かめられない。必要なら手で入れる", fr[0])
             else:
                 on.add(child)
-                stack.append([child, None, None, []])
+                stack.append([child, None, None, [], [], added])
         return memo[root]
 
     def copy_of(self, sh: str, row: int, col: int, qf=None):
@@ -550,12 +695,12 @@ class _Cells:
             self.frows[sh] = sorted(self.cells[sh])
             self.fcols.pop((sh, row), None)
         try:
-            why, hits = self._result(node)
+            why, hits, adds = self._result(node)
         except _FollowBudget:
             self.cut += 1
-            return ("budget", "数式のたどる先が多すぎて確かめられない（1 つの資料で %d セルまで）。必要なら手で入れる"
+            return ("budget", "数式のたどる先が多すぎて確かめられない（1 つの資料で %d 歩まで）。必要なら手で入れる"
                     % MAX_FOLLOW_STEPS)
-        others = [h for h in hits if h != (sh, row)]
+        others = [h for h in list(hits) + list(adds) if h != (sh, row)]
         if others:
             return ("copy",) + others[0]
         if why:
@@ -589,12 +734,13 @@ def sh_qcol(parsed: dict, shf: str) -> int:
 def _row_class(prep: _Prep, r: dict) -> dict:
     name, spec, div = prep(r.get("name")), prep(r.get("specification")), prep(r.get("division"))
     text = name + " ; " + spec if spec else name
+    n_name = len(_parts(name.lower()[:MAX_NAME])) if spec else None     # the parts after these are the specification
     fid = _classify(text, div)
     total = _total(name) or (_total(spec) if spec else False)
     again = _again(name) or (_again(spec) if spec else False) or (_again(div) if div else False)
     deduct = _deduct(name) or (_deduct(spec) if spec else False)
-    demolish = _demolish(name) or (_demolish(spec) if spec else False)
-    work = _work(text)
+    demolish = _demolish(text, n_name)
+    work = _work(text, n_name)
     return {"name": name, "fid": fid, "u": _unit(r.get("unit")), "total": total, "again": again, "deduct": deduct,
             "demolish": demolish, "work": work}
 
@@ -605,9 +751,10 @@ R_TOTAL = "合計・小計の行は足さない（二重計上を防ぐ）"
 R_AGAIN = "再掲・内数（うち・内訳）の行は足さない（ほかの行に含まれている。二重計上を防ぐ）"
 R_DEDUCT = "控除・差し引き（スクラップ・発生材など）の行は足さない（差し引きにもしない。必要なら手で直す）"
 R_DEMOLISH = "撤去・解体・処分の行（今ある物を取り除く。新しい材料ではない）は足さない"
+R_DEMOLISH_MAYBE = "材料の後に撤去・解体・処分の語がある（取り除く行か、材料の行の注記か分からない）ので足さない。材料の行なら手で入れる"
 R_WORK = "作業の行（加工・運搬・打設など。材料の量を繰り返す）は足さない（二重計上を防ぐ）"
 R_NEG = "負の数量は読まない（差し引きにしない）"
-SURELY_NOT = (R_TOTAL, R_AGAIN, R_DEDUCT, R_DEMOLISH, R_NEG)
+SURELY_NOT = (R_TOTAL, R_AGAIN, R_DEDUCT, R_DEMOLISH, R_NEG, tabular.HEADING)
 MAX_EVIDENCE = 200
 
 
@@ -622,12 +769,17 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
     sha = hashlib.sha256(data).hexdigest()
     warnings, unused, sums, excluded = [], [], {}, {}
 
-    def leave(fid, r_trace, r_name, reason):
-        """A row not added: listed as unused and, when it names a field's material, on that field's candidate."""
+    def leave(fid, r_trace, r_name, reason, qty=None, unit=None):
+        """A row not added: listed as unused and, when it names a field's material, on that field's candidate (with
+        its quantity and unit when it has them, so that a possible shortfall can be judged on the card)."""
         unused.append({"trace": r_trace, "name": r_name[:80], "reason": reason})
         if fid:
-            excluded.setdefault(fid, []).append({"trace": r_trace, "name": r_name[:80], "reason": reason,
-                                                 "maybe": reason not in SURELY_NOT})
+            x = {"trace": r_trace, "name": r_name[:80], "reason": reason, "maybe": reason not in SURELY_NOT}
+            if qty is not None and qty != "":
+                x["quantity"] = qty if isinstance(qty, (int, float)) else str(qty)[:40]
+            if unit:
+                x["unit"] = str(unit)[:20]
+            excluded.setdefault(fid, []).append(x)
 
     if kind in ("csv", "xlsx"):
         parsed = tabular.read_csv(data, doc_id) if kind == "csv" else tabular.read_xlsx(data, doc_id)
@@ -639,7 +791,8 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             if sh.get("error"):
                 warnings.append("%s：%s" % (sh["sheet"], sh["error"]))
             shf = str(sh["sheet"]).casefold()
-            mats, marks = [], []
+            mats, marks, nums = [], [], {}
+            xcols = set(sh.get("xcols") or ())
             for r, cand in [(x, False) for x in sh.get("skipped", [])] + [(x, True) for x in sh["rows"]]:
                 if stopped:
                     if not cand:
@@ -664,16 +817,21 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 # dimensions sheet is not a material quantity)
                 if c["fid"] and c["u"] in FL.FIELDS[c["fid"]]["units"]:
                     mats.append(r["row"])
+                    nums[r["row"]] = r.get("ncols") or ()
                 elif c["total"] or c["again"] or c["work"] or c["deduct"] or c["demolish"]:
                     marks.append(r["row"])
+                    nums[r["row"]] = r.get("ncols") or ()
                 if cand:
                     classed.append((shf, r, c))
+                elif r.get("heading"):
+                    leave(None, r["trace"], r["name"], r["reason"])   # コンクリート工事: no row of a material
                 else:
-                    leave(c["fid"], r["trace"], r["name"], r["reason"])
+                    leave(c["fid"], r["trace"], r["name"], r["reason"], r.get("qtext"), r.get("unit"))
             if mats:
                 cells.targets[shf] = sorted(set(mats + marks))
                 cells.tcols[shf] = list(sh.get("qcols") or [sh.get("qcol") or 0])
                 for rn in cells.targets[shf]:
+                    cells.ncols[(shf, rn)] = sorted(set(nums.get(rn) or ()) - xcols)
                     cells.own_parts(shf, rn)
         if stopped:
             warnings.append(stopped)
@@ -686,7 +844,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             elif c["deduct"]:
                 why = R_DEDUCT
             elif c["demolish"]:
-                why = R_DEMOLISH
+                why = R_DEMOLISH if c["demolish"] == SURE else R_DEMOLISH_MAYBE
             elif c["work"]:
                 why = R_WORK
             elif r["quantity"] < 0:
@@ -709,11 +867,11 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 elif got:
                     why = got[1]
             if why:
-                leave(c["fid"], r["trace"], c["name"], why)
+                leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit"))
                 continue
             sums.setdefault((c["fid"], c["u"]), []).append((r["quantity"], r["trace"], c["name"]))
         if cells.cut:
-            warnings.append("数式のたどる先が多すぎるので、%d 行は確かめられず足していない（1 つの資料で %d セルまで）。"
+            warnings.append("数式のたどる先が多すぎるので、%d 行は確かめられず足していない（1 つの資料で %d 歩まで）。"
                             "その行は「使わなかった行」にある" % (cells.cut, MAX_FOLLOW_STEPS))
     elif kind == "ifc":
         try:
@@ -797,7 +955,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 proposals.append(Value(fid, "from_drawing", c["quantity"], u, method="pdf_text_line", source_id=doc_id,
                                        source_detail=c["trace"], note="PDF の 1 行「%s」。寸法・合計を拾うことがあるので原本で確認" % c["line"][:60]))
         return {"kind": kind, "sha256": sha, "parsed_summary": {"n_pages": parsed["n_pages"], "n_lines": len(parsed["candidates"])},
-                "proposals": proposals, "evidence": {}, "unused": unused, "warnings": warnings}
+                "proposals": proposals, "evidence": {}, "left_out": {}, "unused": unused, "warnings": warnings}
     else:
         raise ValueError("この形式は読めない（CSV・XLSX・IFC・PDF）")
     proposals, evidence = [], {}
@@ -816,14 +974,14 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             for rows_ in dims.values():
                 for q, t, u, nm in rows_:
                     leave(fid, t, nm, "同じ材料の行の単位が混ざっていて（%s）、どれが「%s」の量か決められない：確かめて手で入れる"
-                          % (desc, label))
+                          % (desc, label), q, u)
             continue
         dim = counts[0][1]
         for other, rows_ in dims.items():
             if other != dim:
                 for q, t, u, nm in rows_:
                     leave(fid, t, nm, "同じ材料の別の行と単位の次元が違う（%s と %s）ので合計できない：確かめて手で入れる"
-                          % (u, "t" if dim == "mass" else dim))
+                          % (u, "t" if dim == "mass" else dim), q, u)
         items = dims[dim]
         if dim == "mass":
             total, u = sum(q * to_t[uu] for q, _, uu, _n in items), "t"
@@ -834,18 +992,22 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         ex = excluded.get(fid, [])
         n_maybe = sum(1 for x in ex if x["maybe"])
         note = "資料「%s」から。分類はキーワードによるので、足した行と足さなかった行を確かめる" % doc_id
-        if n_maybe:
-            note += "（この欄の材料の行のうち %d 行は足していない。足すべき行があれば、この候補は少なめ）" % n_maybe
+        if ex:
+            note += "（この欄の材料の行で足さなかった行 %d 行" % len(ex)
+            note += ("。うち %d 行は足すべき行かもしれない。そうなら、この候補は少なめ）" % n_maybe) if n_maybe else "）"
         proposals.append(Value(fid, "from_drawing", round(total, 6), u, method="%s_quantity_sum" % kind, source_id=doc_id,
                                source_detail=detail, note=note))
         evidence[fid] = {"rows": [{"trace": t, "name": nm, "quantity": q, "unit": uu} for q, t, uu, nm in items[:MAX_EVIDENCE]],
                          "n_rows": len(items),
-                         "excluded": [{"trace": x["trace"], "name": x["name"], "reason": x["reason"]} for x in ex[:MAX_EVIDENCE]],
-                         "n_excluded": len(ex), "n_maybe": n_maybe}
+                         "excluded": ex[:MAX_EVIDENCE], "n_excluded": len(ex), "n_maybe": n_maybe}
+    # rows that name a field's material although the field got no candidate (every row was left out): said in the
+    # import's summary, so that a field that stays empty is not taken for "nothing of that material in the file"
+    left_out = {fid: {"n_excluded": len(ex), "n_maybe": sum(1 for x in ex if x["maybe"]), "excluded": ex[:20]}
+                for fid, ex in excluded.items() if fid not in evidence}
     summ = {"n_rows": sum(len(s["rows"]) for s in parsed["sheets"])} if kind in ("csv", "xlsx") else \
         {"n_elements": len(parsed["elements"]), "schema": parsed["schema"]}
     if len(unused) > 2000:
         warnings.append("使わなかった行が多いので、最初の 2000 行だけを記録した（全部で %d 行）" % len(unused))
         unused = unused[:2000]
     return {"kind": kind, "sha256": sha, "parsed_summary": summ, "proposals": proposals, "evidence": evidence,
-            "unused": unused, "warnings": warnings}
+            "left_out": left_out, "unused": unused, "warnings": warnings}
