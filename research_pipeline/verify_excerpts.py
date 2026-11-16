@@ -21,46 +21,92 @@ from research_pipeline.common import file_sha256, research_root, write_csv  # no
 
 COLUMNS = ["claim_id", "source_id", "snapshot_sha256", "checked_at", "found", "detected_section",
            "ledger_position", "position_match"]
+ROLE_COLUMNS = ["role_evidence_id", "person_id", "source_id", "snapshot_sha256", "checked_at", "found",
+                "detected_section", "ledger_position", "position_match"]
 JST = timezone(timedelta(hours=9))
+
+
+def _load_snapshot(snapshots: Path, sid: str):
+    """SRC-xxxxxx.html（HTML）か SRC-xxxxxx.txt（PDF などから抽出した本文）を読む。無ければ None。"""
+    f = snapshots / f"{sid}.html"
+    if f.exists():
+        raw = f.read_text(encoding="utf-8", errors="replace")
+        vis, _ = H.extract(raw)
+        return (file_sha256(f), H.norm(vis), H.sections(raw), None)
+    f = snapshots / f"{sid}.txt"
+    if f.exists():
+        return (file_sha256(f), H.norm(f.read_text(encoding="utf-8", errors="replace")), None, "txt")
+    return None
+
+
+def _check(snap, ex: str, pos: str) -> tuple[bool, str, bool]:
+    sha, text, secs, kind = snap
+    found = H.contains(text, ex)
+    if not found:
+        return False, "", False
+    if kind == "txt":
+        # 見出し構造が無い本文: 台帳の位置（見出し）が抜粋より前に現れるかで確かめる
+        i = text.find(H.norm(ex))
+        heads = [h for h in pos.split(" / ") if H.norm(h)]
+        ok = any(0 <= text.find(H.norm(h)) <= max(i, 0) for h in heads) or pos == "冒頭"
+        return True, "(本文テキスト)", ok
+    sec = H.locate(secs, ex)
+    match = bool(sec) and any(H.norm(h) and H.norm(h) in H.norm(pos) for h in sec.split(" / "))
+    return True, sec, match
 
 
 def run(root: Path, snapshots: Path) -> dict:
     led = LG.load(root)
     cache: dict[str, tuple] = {}
-    rows, counts = [], {"checked": 0, "found": 0, "not_found": 0, "no_snapshot": 0, "position_mismatch": 0}
+    counts = {"checked": 0, "found": 0, "not_found": 0, "no_snapshot": 0, "position_mismatch": 0,
+              "role_checked": 0, "role_found": 0, "role_not_found": 0}
     now = datetime.now(JST).isoformat(timespec="seconds")
+
+    def snap_of(sid):
+        if sid not in cache:
+            cache[sid] = _load_snapshot(snapshots, sid)
+        return cache[sid]
+
+    rows = []
     for c in led.tables.get("claims", []):
         ex = c["original_language_excerpt_short"]
         if not ex:
             continue
         sid = c["source_id"]
-        if sid not in cache:
-            f = snapshots / f"{sid}.html"
-            if f.exists():
-                raw = f.read_text(encoding="utf-8", errors="replace")
-                vis, _ = H.extract(raw)
-                cache[sid] = (file_sha256(f), H.norm(vis), H.sections(raw))
-            else:
-                cache[sid] = None
-        snap = cache[sid]
+        snap = snap_of(sid)
         if snap is None:
             counts["no_snapshot"] += 1
             rows.append({"claim_id": c["claim_id"], "source_id": sid, "checked_at": now, "found": "no_snapshot",
                          "ledger_position": c["original_position"]})
             continue
-        sha, text, secs = snap
         counts["checked"] += 1
-        found = H.contains(text, ex)
-        sec = H.locate(secs, ex) if found else ""
-        pos = c["original_position"]
-        match = bool(sec) and any(H.norm(h) and H.norm(h) in H.norm(pos) for h in sec.split(" / "))
+        found, sec, match = _check(snap, ex, c["original_position"])
         counts["found" if found else "not_found"] += 1
         if found and not match:
             counts["position_mismatch"] += 1
-        rows.append({"claim_id": c["claim_id"], "source_id": sid, "snapshot_sha256": sha, "checked_at": now,
+        rows.append({"claim_id": c["claim_id"], "source_id": sid, "snapshot_sha256": snap[0], "checked_at": now,
                      "found": "true" if found else "false", "detected_section": sec,
-                     "ledger_position": pos, "position_match": "true" if match else "false"})
+                     "ledger_position": c["original_position"], "position_match": "true" if match else "false"})
     write_csv(root / "audit" / "excerpt_verification.csv", COLUMNS, rows)
+
+    rrows = []
+    for r in led.tables.get("role_evidence", []):
+        ex, sid = r["excerpt"], r["source_id"]
+        if not ex:
+            continue
+        snap = snap_of(sid)
+        if snap is None:
+            rrows.append({"role_evidence_id": r["role_evidence_id"], "person_id": r["person_id"], "source_id": sid,
+                          "checked_at": now, "found": "no_snapshot", "ledger_position": r["location"]})
+            continue
+        counts["role_checked"] += 1
+        found, sec, match = _check(snap, ex, r["location"])
+        counts["role_found" if found else "role_not_found"] += 1
+        rrows.append({"role_evidence_id": r["role_evidence_id"], "person_id": r["person_id"], "source_id": sid,
+                      "snapshot_sha256": snap[0], "checked_at": now, "found": "true" if found else "false",
+                      "detected_section": sec, "ledger_position": r["location"],
+                      "position_match": "true" if match else "false"})
+    write_csv(root / "audit" / "role_evidence_verification.csv", ROLE_COLUMNS, rrows)
     return counts
 
 
@@ -71,7 +117,7 @@ def main() -> int:
     o = ap.parse_args()
     counts = run((o.root or research_root()).resolve(), o.snapshots.resolve())
     print(counts)
-    return 1 if counts["not_found"] else 0
+    return 1 if counts["not_found"] or counts["role_not_found"] else 0
 
 
 if __name__ == "__main__":
