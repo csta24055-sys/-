@@ -283,6 +283,18 @@ class App:
         if fid == "b_structure" and state in ("confirmed", "assumption"):
             # the project's structure follows the field (estimates, PLATEAU checks and field order use it)
             self.projects.touch(pid, structure=str(value))
+        # a 適用外 stored earlier on another na_context field (accepted then because it could not act) can become unusable
+        # through this save (a purchase 0 → 1000 needs the grid factor): said now, in the calculation's words, instead of
+        # only when the next calculation stops. Built only when such a 適用外 is stored, to keep a PUT cheap
+        na_other = [f for f, F_ in FL.FIELDS.items() if F_.get("na_context") and f != fid
+                    and getattr(self.projects.current(pid, f), "state", None) == "not_applicable"]
+        if na_other:
+            _, rep_ = bridge.build(self.projects.values(pid), self.refset, title="WLC Studio #%d" % pid)
+            refused = rep_.get("na_refused") or {}
+            warnings = ["「%s」の「適用外」は、いまの入力では使えない（%s）。計算は止まる。値を入れるか「未取得」に戻す"
+                        % (FL.FIELDS[f]["label"], refused[f]) for f in na_other if refused.get(f)]
+            if warnings:
+                out["warnings"] = warnings
         return out
 
     def research_address(self, pid: int, b: dict) -> dict:
@@ -424,6 +436,12 @@ class App:
         hi_vals, _ = _with(vals, "high", reflected)
         tot, end_gaps = {}, []
         base_omitted = {m["field"] for m in (rep or {}).get("omitted_inputs") or []}
+        # gaps that are in the total but computed with an assumption, or whose split is not determined: one that appears
+        # only at an end (the per-quantity delivery factor at the upper end of a 0 km range …) is said for that end too
+        base_assumed = {(m["field"], m.get("gap")) for m in (rep or {}).get("missing_inputs") or []
+                        if m.get("gap") in ("assumed", "split")}
+        ex = (rep or {}).get("expand") or {}
+        mode_unknown = bridge._never("m_transport_mode", vals.get("m_transport_mode"))
         for side, vv in (("low", lo_vals), ("high", hi_vals)):
             doc, rep_ = bridge.build(vv, self.refset, title="WLC Studio #%d (%s)" % (pid, side), period=T)
             if rep_["missing_required"]:
@@ -437,6 +455,17 @@ class App:
                 # an end where inputs become necessary that are missing: that end is a lower bound, and it is said
                 end_gaps.append("%s端では「%s」が要るが未取得（その端は下限）" % ("下" if side == "low" else "上",
                                                                       "」「".join(m["label"] for m in new[:4])))
+            for m in rep_.get("missing_inputs") or []:
+                if m.get("gap") not in ("assumed", "split") or (m["field"], m.get("gap")) in base_assumed:
+                    continue
+                g = "%s端では%s：%s" % ("下" if side == "low" else "上",
+                                       "仮定で計算した分がある" if m["gap"] == "assumed" else "段階の内訳が決まらない分がある",
+                                       m["reason"])
+                if m["field"] == "a4_delivery_fallback" and ex.get("dist_at0") and ex.get("tkm_beyond0") and mode_unknown:
+                    # the value is 0 km (A4 = 0, the mode cannot act there); above 0 km the rows whose ordered mass is known
+                    # would be carried by tonne-km if the mode were given
+                    g += "。運搬手段が未取得（入れると、この端の質量の分かる行は運搬距離×手段のトンキロで計算する）"
+                end_gaps.append(g)
             r = self.engine.run(doc, lca_pid, T)
             res = r["results"] or {}
             tot[side] = ((res.get("SUM-03") or {}).get("value"))
