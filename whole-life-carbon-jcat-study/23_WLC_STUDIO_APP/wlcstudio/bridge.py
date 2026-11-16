@@ -821,8 +821,17 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     for cf in ("m_waste_rate", "m_reuse_rate", "m_repair_rate", "m_refresh_cycle", "m_transport_km", "m_transport_mode",
                "m_quantity_basis", "a_eol_haul_km"):
         cv = common[cf]
+        if cf == "m_transport_km" and rows and not used_tkm and fallback_rows and _has(cv) and \
+                isinstance(cv.value, (int, float)) and not (_ranged(cv) and _low_end(cv) > 0):
+            # the rows are carried by the per-quantity delivery factor: the distance's value is not used, but 0 km would
+            # make A4 0 (round 8), so a distance that may be 0 (no stated range, or a range down to 0) can change the total
+            d.use(cf, cv, "距離が 0 km でないので、数量の行は参照セットの数量あたりの配送原単位で運搬（A4）を計算した"
+                          "（距離の値そのものは使わない。0 km なら A4 は 0）", [])
+            continue
         if cf in ("m_transport_km", "m_transport_mode") and rows and not used_tkm:
-            d.skip(cf, cv, "トンキロで計算した行が無い（配送原単位を使ったか、質量・手段がそろわない）")
+            d.skip(cf, cv, "トンキロで計算した行が無い（配送原単位を使ったか、質量・手段がそろわない）" +
+                   ("。距離の範囲は 0 km を含まないので、どの値でも配送原単位のまま（合計を変えない）"
+                    if cf == "m_transport_km" and fallback_rows and _ranged(cv) and _low_end(cv) > 0 else ""))
             continue
         if cf == "m_transport_mode" and ctx["dist0"]:
             d.skip(cf, cv, "運搬距離が 0 km なので手段は効かない（A4 は 0）")

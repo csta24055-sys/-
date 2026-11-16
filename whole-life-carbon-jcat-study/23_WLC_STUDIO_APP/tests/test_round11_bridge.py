@@ -414,6 +414,21 @@ class EleventhRoundBridgeTests(unittest.TestCase):
             self.assertTrue(refl(rep)[fid], fid)
             self.assertIn(fid, self.estimated(rep))
 
+    def test_distance_with_delivery_factor_rows_is_reflected_when_it_may_be_zero(self):
+        # only m3 / m2 rows (the per-quantity delivery factor carries A4): the distance's value is not used, but 0 km
+        # makes A4 0 — so a distance that may be 0 can change the total and is reflected; a range above 0 cannot
+        base = complete(**VOLUME_ONLY)
+        t50 = self.total(dict(base, m_transport_km=V("m_transport_km", 50.0)))
+        t0 = self.total(dict(base, m_transport_km=V("m_transport_km", 0.0)))
+        self.assertNotEqual(t50, t0)
+        _, rep = bridge.build(dict(base, m_transport_km=V("m_transport_km", 50.0)), REFSET, period=60)
+        self.assertTrue(refl(rep)["m_transport_km"])
+        self.assertIn("配送原単位", detail(rep, "m_transport_km"))
+        _, rep = bridge.build(dict(base, m_transport_km=R("m_transport_km", 50.0, 10.0, 80.0)), REFSET, period=60)
+        self.assertFalse(refl(rep)["m_transport_km"])
+        self.assertIn("0 km を含まない", detail(rep, "m_transport_km"))
+        self.assertEqual(self.total(dict(base, m_transport_km=R("m_transport_km", 10.0, 10.0, 80.0))), t50)
+
 
 if __name__ == "__main__":
     unittest.main()
