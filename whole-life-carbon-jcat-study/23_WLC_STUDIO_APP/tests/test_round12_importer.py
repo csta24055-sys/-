@@ -87,6 +87,14 @@ class TwelfthRoundImporterTests(unittest.TestCase):
             self.assertEqual(got, {("m_concrete", "m3"): 100.0}, f[:20])
             self.assertIn("数式の形を読めない", reasons(r))
 
+    def test_a_sheet_name_with_a_middle_dot_is_read_unquoted(self):
+        # Excel writes LCR･LCW集計!S77 without quotes (the halfwidth katakana middle dot is allowed in a name)
+        for sheet in ("明細･A", "明細・A"):
+            summ = HDR + mrow(2, "コンクリート", "全体", n("C2", 150, "SUM(%s!C2:C3)" % sheet), "m3")
+            got, r = read(xlsx([(sheet, DETAIL), ("集計", summ)]))
+            self.assertEqual(got, {("m_concrete", "m3"): 150.0, ("m_rebar", "t"): 12.0}, sheet)
+            self.assertIn("別のシート（%s）" % sheet, reasons(r))
+
     def test_factor_headers_are_whole_words(self):
         self.assertEqual(tabular._factor_cols(["Description", "Ground floor", "Upper floors", "Superstructure", "Separate",
                                                "Qty", "Unit rate", "Rate", "kg/m", "単位質量", "Amount"]), [6, 7, 8, 9, 10])

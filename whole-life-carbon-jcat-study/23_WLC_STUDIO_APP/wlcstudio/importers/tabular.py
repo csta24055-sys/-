@@ -108,7 +108,8 @@ def _header_map(row: list) -> dict:
 MAX_FORMULA = 8192                                 # Excel's limit for the text of one formula
 # linear: strings ("" escapes a quote), quoted sheet names ('' escapes an apostrophe: 'Owner''s BoQ'!C2), words in any
 # script (内訳!B2), single characters
-_FTOK = re.compile(r'"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[\w.$\\]+|.', re.S)
+# (an unquoted sheet name may hold a katakana middle dot: LCR･LCW集計!S77 — Excel writes it without quotes)
+_FTOK = re.compile(r'"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[\w.$\\\uff65\u30fb]+|.', re.S)
 _CELL = re.compile(r"(\$?)([A-Za-z]{1,3})(\$?)(\d+)")
 MAX_NAME_FOLLOWS = 20                             # defined names followed per formula (a name may refer to itself)
 _COLWORD = re.compile(r"(\$?)([A-Za-z]{1,3})")
@@ -210,7 +211,7 @@ def _formula_parts(f: str) -> tuple:
             toks.append(("str", None, None))
             sheet = None
             continue
-        if tok[0].isalnum() or tok[0] in "_.$\\":
+        if tok[0].isalnum() or tok[0] in "_.$\\\uff65\u30fb":
             if nxt == "!":
                 sheet = tok
                 continue
@@ -348,6 +349,8 @@ def _additive(seq, names=()) -> frozenset:
     (recursive descent, at most MAX_NEST levels); a shape it does not understand gives UNPARSED (the formula is then not
     checked), never a guess."""
     n = len(seq)
+    if not n:
+        return frozenset()                        # an empty formula adds nothing
     depth = mx = 0
     for t in seq:
         if t == ("op", "("):
