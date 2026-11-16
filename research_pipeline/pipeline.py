@@ -202,12 +202,16 @@ def stage_office(root: Path, o) -> dict:
             "skipped_reason": next((v["skipped"] for v in results.values() if v.get("skipped")), "")}
 
 
+BACKUP_PREFIXES = ("revisions/2026-11-16_pre_correction/", "revisions/education_v0.1.0/", "revisions/exports_pre_correction/")
+
+
 def sync_plan(root: Path) -> dict:
     synced = {r["rel_path"]: r for r in read_csv(root / "sync" / "synced_manifest.csv")}
     by_path: dict[str, list] = {}
     for r in read_csv(root / "sync" / "synced_manifest.csv"):
         by_path.setdefault(r["rel_path"], []).append(r)
     queue, unsynced = [], []
+    synced_shas = {r["sha256"] for r in read_csv(root / "sync" / "synced_manifest.csv")}
     for p in sorted(root.rglob("*")):
         if not p.is_file() or p.suffix == ".tmp":
             continue
@@ -217,6 +221,11 @@ def sync_plan(root: Path) -> dict:
         sha = file_sha256(p)
         hist = by_path.get(rel, [])
         if any(h["sha256"] == sha for h in hist):
+            continue
+        if rel.startswith(BACKUP_PREFIXES) and sha in synced_shas:
+            # 旧版のローカル退避：同じ内容が Dropbox の元のパスに保存済みなら、重複して送らない
+            unsynced.append({"rel_path": rel, "sha256": sha, "size": p.stat().st_size, "dropbox_path": "",
+                             "kind": "backup", "reason": "旧版の退避コピー。同一内容が Dropbox の元のパスに保存済み（重複のため送らない）"})
             continue
         rev = len(hist) + 1
         target = f"{DROPBOX_ROOT}/{rel}" if rev == 1 else \
