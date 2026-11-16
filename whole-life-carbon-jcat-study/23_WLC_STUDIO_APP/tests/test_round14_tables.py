@@ -54,9 +54,9 @@ def excluded(r, fid):
     return ev.get("excluded") or left(r, fid).get("excluded") or []
 
 
-def pivot_book(source, loc="A3:B6", pages=0, data=1, hidden_source=False, rel=True, cache=True, names=None):
+def pivot_book(source, loc="A3:B6", pages=0, data=1, hidden_source=False, rel=True, cache=True, names=None, more=None):
     """明細 (a bill) and 集計 (a pivot table of it) written as minimal ECMA-376 parts: location, page fields, data
-    fields, a cache whose worksheetSource is `source` (attributes) or none."""
+    fields, a cache whose worksheetSource is `source` (attributes) or none; `more` = rows of a third sheet まとめ."""
     detail = HDR + mrow(2, "コンクリート", "Fc24", n("C2", 100), "m3") + mrow(3, "コンクリート", "Fc27", n("C3", 50), "m3") + \
         mrow(4, "鉄筋", "SD345", n("C4", 12), "t")
     top = 3
@@ -67,15 +67,16 @@ def pivot_book(source, loc="A3:B6", pages=0, data=1, hidden_source=False, rel=Tr
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("xl/workbook.xml", '<workbook %s %s><sheets><sheet name="明細" sheetId="1" r:id="rId1"%s/><sheet name="集計" '
-                   'sheetId="2" r:id="rId2"/></sheets>%s%s</workbook>'
+                   'sheetId="2" r:id="rId2"/>%s</sheets>%s%s</workbook>'
                    % (NS, RNS, ' state="hidden"' if hidden_source else "",
+                      '<sheet name="まとめ" sheetId="4" r:id="rId4"/>' if more else "",
                       "<definedNames>%s</definedNames>" % "".join('<definedName name="%s">%s</definedName>' % kv for kv in names)
                       if names else "", '<pivotCaches><pivotCache cacheId="3" r:id="rId3"/></pivotCaches>' if cache else ""))
         z.writestr("xl/_rels/workbook.xml.rels", '<Relationships xmlns="%s"><Relationship Id="rId1" Target="worksheets/sheet1.xml"/>'
-                   '<Relationship Id="rId2" Target="worksheets/sheet2.xml"/>%s</Relationships>'
+                   '<Relationship Id="rId2" Target="worksheets/sheet2.xml"/>%s%s</Relationships>'
                    % (PR, '<Relationship Id="rId3" Type="%s/pivotCacheDefinition" Target="pivotCache/pivotCacheDefinition1.xml"/>'
-                      % OR if cache else ""))
-        for i, rows in ((1, detail), (2, piv)):
+                      % OR if cache else "", '<Relationship Id="rId4" Target="worksheets/sheet4.xml"/>' if more else ""))
+        for i, rows in ((1, detail), (2, piv)) + (((4, more),) if more else ()):
             z.writestr("xl/worksheets/sheet%d.xml" % i, "<worksheet %s %s><sheetData>%s</sheetData></worksheet>" % (NS, RNS, rows))
         z.writestr("xl/worksheets/_rels/sheet2.xml.rels", '<Relationships xmlns="%s"><Relationship Id="rP" Type="%s/pivotTable" '
                    'Target="../pivotTables/pivotTable1.xml"/></Relationships>' % (PR, OR))
@@ -300,6 +301,216 @@ class FourteenthRoundTableTests(unittest.TestCase):
         cells.targets["明細"] = [2]
         cells.left = 0
         self.assertTrue(cells.reaches_same("概算", 2, 2, "m_rebar", {("明細", 2): "m_concrete"}))
+
+    # --- the attack on the fix (14 回目の攻撃)
+    def test_a_net_quantity_times_a_factor_cell_is_recomputed_not_reused(self):
+        # 明細: 数量 = 設計 × the factor in G1; 集計 recomputes the bill's own formula from 設計 and that cell: a copy
+        det = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "設計"), t("D1", "数量"), t("E1", "単位"), t("F1", "割増"),
+                  n("G1", 1.05)) + \
+            row(2, t("A2", "コンクリート"), t("B2", "Fc24"), n("C2", 100), n("D2", 105, "C2*$G$1"), t("E2", "m3")) + \
+            row(3, t("A3", "鉄筋"), t("B3", "SD345"), n("C3", 10), n("D3", 10.5, "C3*$G$1"), t("E3", "t"))
+
+        def summary(f, own=None):
+            h = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "数量"), t("D1", "単位"), t("E1", own[0] if own else "割増"),
+                    n("F1", 1.05))
+            return h + row(2, t("A2", "コンクリート"), t("B2", "Fc24"), n("C2", 105, f), t("D2", "m3"),
+                           n("E2", own[1]) if own else "")
+        for f, own in (("明細!C2*明細!$G$1", None), ("明細!C2*$F$1", None), ("明細!C2*(1+明細!$G$1-1)", None),
+                       ("明細!C2*E2", ("割増", 1.05)), ("明細!C2*E2", ("", 1.05)), ("明細!C2*E2", ("戸数", 1)),
+                       ("明細!C2*E2", ("割増率", 1.05))):
+            got, r = read(xlsx([("明細", det), ("集計", summary(f, own))]))
+            self.assertEqual(got, {("m_concrete", "m3"): 105.0, ("m_rebar", "t"): 10.5}, (f, own))
+            self.assertIn("別のシート（明細）の材料の行（2 行目）の数量を参照した値は足さない", reasons(r), (f, own))
+        # Net × (1 + waste) recomputed on an English summary; a per-type share × the number of dwellings in row 1
+        en = row(1, t("A1", "Description"), t("B1", "Net"), t("C1", "Waste"), t("D1", "Qty"), t("E1", "Unit")) + \
+            row(2, t("A2", "Ready mixed concrete C30/37"), n("B2", 100), n("C2", 0.05), n("D2", 105, "B2*(1+C2)"), t("E2", "m3"))
+        es = row(1, t("A1", "Description"), t("B1", "Qty"), t("C1", "Unit"), t("D1", "Waste"), n("E1", 0.05)) + \
+            row(2, t("A2", "Ready mixed concrete C30/37"), n("B2", 105, "Detail!B2*(1+$E$1)"), t("C2", "m3"))
+        got, _ = read(xlsx([("Detail", en), ("Summary", es)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 105.0})
+        ty = row(1, t("A1", "戸数"), n("C1", 10), n("D1", 20), n("E1", 5)) + \
+            row(2, t("A2", "名称"), t("B2", "規格"), t("C2", "Type A"), t("D2", "Type B"), t("E2", "Type C"), t("F2", "数量"),
+                t("G2", "単位")) + \
+            row(3, t("A3", "コンクリート"), t("B3", "Fc24"), n("C3", 4), n("D3", 3), n("E3", 6), n("F3", 130, "C3*$C$1+D3*$D$1+E3*$E$1"),
+                t("G3", "m3"))
+        ts = HDR + mrow(2, "コンクリート", "A型住戸分", n("C2", 40, "明細!C3*明細!$C$1"), "m3")
+        got, _ = read(xlsx([("明細", ty), ("集計", ts)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 130.0})
+        # two numbers of the row recomputed are a copy, also in columns whose header reads as a factor (Unit A, B1/1F)
+        for heads in (("Unit A", "Unit B", "Unit C"), ("B1/1F", "2F/3F", "4F/RF")):
+            ty2 = ty.replace(">Type A<", ">%s<" % heads[0]).replace(">Type B<", ">%s<" % heads[1]).replace(">Type C<", ">%s<" % heads[2])
+            for f in ("SUMPRODUCT(明細!C3:E3,明細!$C$1:$E$1)", "明細!C3*明細!$C$1+明細!D3*明細!$D$1",
+                      '(INDEX(明細!C:C,MATCH("コンクリート",明細!A:A,0))+INDEX(明細!D:D,MATCH("コンクリート",明細!A:A,0)))*1.05'):
+                ts = HDR + mrow(2, "コンクリート", "全戸", n("C2", 130, f), "m3")
+                got, _ = read(xlsx([("明細", ty2), ("集計", ts)]))
+                self.assertEqual(got, {("m_concrete", "m3"): 130.0}, (heads, f))
+        # the dimension reused with the row's own size stays added (面積 × 明細の厚さ, 長さ × 本数 × 明細の重さ)
+        slab = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "面積"), t("D1", "厚さ"), t("E1", "数量"), t("F1", "単位")) + \
+            row(2, t("A2", "スラブ コンクリート"), t("B2", "Fc24"), n("C2", 400), n("D2", 0.2), n("E2", 80, "C2*D2"), t("F2", "m3"))
+        dom = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "面積"), t("D1", "数量"), t("E1", "単位")) + \
+            row(2, t("A2", "土間コンクリート"), t("B2", "Fc21"), n("C2", 300), n("D2", 60, "C2*数量!$D$2"), t("E2", "m3"))
+        got, _ = read(xlsx([("数量", slab), ("土間", dom)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 140.0})
+        rb = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "長さ"), t("D1", "本数"), t("E1", "重さ"), t("F1", "数量"), t("G1", "単位")) + \
+            row(2, t("A2", "異形鉄筋"), t("B2", "D13 基礎"), n("C2", 6), n("D2", 1000), n("E2", 0.995), n("F2", 5.97, "C2*D2*E2/1000"),
+                t("G2", "t")) + \
+            row(3, t("A3", "異形鉄筋"), t("B3", "D13 梁"), n("C3", 5), n("D3", 1200), n("F3", 5.97, "C3*D3*$E$2/1000"), t("G3", "t"))
+        got, _ = read(xlsx([("鉄筋", rb)]))
+        self.assertAlmostEqual(got[("m_rebar", "t")], 11.94)
+
+    def test_a_unit_mass_or_waste_rate_looked_up_from_a_bill_is_a_factor(self):
+        # 追加 looks the bill's unit mass up by 規格 or 名称 and multiplies its own length: added, whatever the number of
+        # rows of the bill (the lookup returns one cell: it never counts as the dimensions of two rows)
+        for nrows in (1, 2, 3, 6):
+            for typed in (False, True):
+                for f in ("C2*XLOOKUP(B2,明細!B:B,明細!E:E)/1000", "C2*INDEX(明細!E:E,MATCH(B2,明細!B:B,0))/1000",
+                          "C2*VLOOKUP(B2,明細!B:E,4,0)/1000", "C2*VLOOKUP(\"異形鉄筋\",明細!A:E,5,0)/1000",
+                          "C2*INDEX(明細!$B$2:$E$9,MATCH(B2,明細!$B$2:$B$9,0),4)/1000",
+                          "C2*IFERROR(VLOOKUP(B2,明細!B:E,4,0),0)/1000"):
+                    m = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "長さ"), t("D1", "本数"), t("E1", "単位質量"), t("F1", "数量"),
+                            t("G1", "単位"))
+                    total = 0.0
+                    for i, (sp, um) in enumerate((("D13", 0.995), ("D10", 0.56), ("D16", 1.56), ("D19", 2.25), ("D22", 3.04),
+                                                  ("D25", 3.98))[:nrows], 2):
+                        q = round(1000 * 10 * um / 1000, 6)
+                        total += q
+                        m += row(i, t("A%d" % i, "異形鉄筋"), t("B%d" % i, sp), n("C%d" % i, 1000), n("D%d" % i, 10), n("E%d" % i, um),
+                                 n("F%d" % i, q) if typed else n("F%d" % i, q, "C%d*D%d*E%d/1000" % (i, i, i)), t("G%d" % i, "t"))
+                    a = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "長さ"), t("D1", "数量"), t("E1", "単位")) + \
+                        row(2, t("A2", "異形鉄筋 追加"), t("B2", "D13"), n("C2", 500), n("D2", 0.4975, f), t("E2", "t"))
+                    got, r = read(xlsx([("明細", m), ("追加", a)]))
+                    self.assertAlmostEqual(got[("m_rebar", "t")], total + 0.4975, msg=(nrows, typed, f))
+        # a waste rate looked up from the bill by name: a factor of 追加's own design quantity
+        w = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "設計"), t("D1", "割増率"), t("E1", "数量"), t("F1", "単位")) + \
+            row(2, t("A2", "コンクリート"), t("B2", "Fc24"), n("C2", 100), n("D2", 0.05), n("E2", 105, "C2*(1+D2)"), t("F2", "m3")) + \
+            row(3, t("A3", "鉄筋"), t("B3", "SD345"), n("C3", 10), n("D3", 0.04), n("E3", 10.4, "C3*(1+D3)"), t("F3", "t"))
+        for f in ("C2*(1+XLOOKUP(A2,明細!A:A,明細!D:D))", "C2*(1+VLOOKUP(A2,明細!A:D,4,0))"):
+            a = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "設計"), t("D1", "数量"), t("E1", "単位")) + \
+                row(2, t("A2", "コンクリート"), t("B2", "Fc21 追加"), n("C2", 20), n("D2", 21, f), t("E2", "m3"))
+            got, _ = read(xlsx([("明細", w), ("追加", a)]))
+            self.assertEqual(got, {("m_concrete", "m3"): 126.0, ("m_rebar", "t"): 10.4}, f)
+        # the bill's 設計 looked up and multiplied by a factor cell recomputes its quantity: still a copy
+        a = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "数量"), t("D1", "単位"), t("E1", "割増率"), n("F1", 0.05)) + \
+            row(2, t("A2", "コンクリート"), t("B2", "Fc24"), n("C2", 105, "XLOOKUP(A2,明細!A:A,明細!C:C)*(1+$F$1)"), t("D2", "m3"))
+        got, r = read(xlsx([("明細", w), ("集計", a)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 105.0, ("m_rebar", "t"): 10.4})
+        # the looked-up column only: a VLOOKUP whose table holds the quantity column still reaches it (a copy)
+        self.assertEqual(tabular.formula_walk("C2*VLOOKUP(B2,明細!B:E,4,0)", {"sheet": "追加"})[1][2:4],
+                         [("明細", 1, 4, None, None, 0, ()), ("明細", 4, 4, None, None, 0, ((("明細", 1, 4, None, None), "col"),))])
+        a = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "数量"), t("D1", "単位")) + \
+            row(2, t("A2", "コンクリート"), t("B2", "Fc24"), n("C2", 105, "VLOOKUP(A2,明細!A:F,3,0)*VLOOKUP(A2,明細!A:F,5,0)/100"),
+                t("D2", "m3"))
+        got, r = read(xlsx([("明細", w), ("集計", a)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 105.0, ("m_rebar", "t"): 10.4})
+
+    def test_each_row_looking_its_own_unit_mass_up_is_added(self):
+        # every row of the bill looks its own unit mass up in the bill's own column by 規格 (INDEX/MATCH, VLOOKUP with a
+        # column index, XLOOKUP): no row is a copy of another, from the third row on as well
+        for nrows in (2, 3, 4, 6):
+            for f in ("C{i}*D{i}*INDEX($E$2:$E${n},MATCH(B{i},$B$2:$B${n},0))/1000", "C{i}*D{i}*VLOOKUP(B{i},$B$2:$E${n},4,0)/1000",
+                      "C{i}*D{i}*INDEX(E:E,MATCH(B{i},B:B,0))/1000", "C{i}*D{i}*XLOOKUP(B{i},$B$2:$B${n},$E$2:$E${n})/1000"):
+                for head in ("単位質量", "kg/m", "単重", "重さ", ""):
+                    m = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "長さ"), t("D1", "本数"), t("E1", head), t("F1", "数量"),
+                            t("G1", "単位"))
+                    total = 0.0
+                    for i, (sp, um) in enumerate((("D10", 0.56), ("D13", 0.995), ("D16", 1.56), ("D19", 2.25), ("D22", 3.04),
+                                                  ("D25", 3.98))[:nrows], 2):
+                        total += 10 * um
+                        m += row(i, t("A%d" % i, "異形鉄筋"), t("B%d" % i, sp), n("C%d" % i, 1000), n("D%d" % i, 10), n("E%d" % i, um),
+                                 n("F%d" % i, 10 * um, f.format(i=i, n=nrows + 1)), t("G%d" % i, "t"))
+                    got, r = read(xlsx([("鉄筋", m)]))
+                    self.assertAlmostEqual(got[("m_rebar", "t")], total, msg=(nrows, f, head))
+                    self.assertEqual(r["evidence"]["m_rebar"]["n_excluded"], 0, (nrows, f, head))
+
+    def test_getpivotdata_reads_a_pivot_table(self):
+        OK = {("m_concrete", "m3"): 150.0, ("m_rebar", "t"): 12.0}
+        for f in ('GETPIVOTDATA("数量の合計",集計!$A$3,"名称","コンクリート")',
+                  'GETPIVOTDATA("数量の合計",集計!$A$3,"名称","コンクリート")*1.05', "_xlfn.GETPIVOTDATA(\"数量の合計\",集計!B4)",
+                  "E2*1.05"):
+            more = HDR.replace("</row>", t("E1", "参照") + "</row>") + \
+                mrow(2, "コンクリート", "", n("C2", 150, f), "m3", n("E2", 150, 'GETPIVOTDATA("数量の合計",集計!$A$3,"名称","コンクリート")'))
+            got, r = read(pivot_book({"ref": "A1:D4", "sheet": "明細"}, more=more))
+            self.assertEqual(got, OK, f)
+            ex = [x for x in excluded(r, "m_concrete") if x["trace"].startswith("d:まとめ")]
+            self.assertEqual(len(ex), 1, f)
+            self.assertIn("ピボットテーブル（ピボット表）の値は足さない（元の表 明細 の集計", ex[0]["reason"])
+            self.assertFalse(ex[0]["maybe"], f)
+        # the source of the pivot table is not read here: may belong; no pivot table at the cell named: unchecked
+        more = HDR + mrow(2, "コンクリート", "", n("C2", 150, 'GETPIVOTDATA("数量の合計",集計!$A$3,"名称","コンクリート")'), "m3")
+        got, r = read(pivot_book({"ref": "A1:D4", "sheet": "明細"}, hidden_source=True, more=more))
+        self.assertEqual(got, {})
+        self.assertEqual(left(r, "m_concrete").get("n_maybe"), 2)
+        more = HDR + mrow(2, "コンクリート", "", n("C2", 150, 'GETPIVOTDATA("数量の合計",集計!$H$30,"名称","コンクリート")'), "m3")
+        got, r = read(pivot_book({"ref": "A1:D4", "sheet": "明細"}, more=more))
+        self.assertEqual(got, OK)
+        ex = [x for x in excluded(r, "m_concrete") if x["trace"].startswith("d:まとめ")]
+        self.assertTrue(ex[0]["maybe"] and "GETPIVOTDATA" in ex[0]["reason"] and "確かめられない" in ex[0]["reason"])
+        # a direct reference to the pivot table's cell is a copy of it, as before
+        more = HDR + mrow(2, "コンクリート", "", n("C2", 150, "集計!B4"), "m3")
+        got, r = read(pivot_book({"ref": "A1:D4", "sheet": "明細"}, more=more))
+        self.assertEqual(got, OK)
+
+    def test_the_pivot_tables_of_a_sheet_are_looked_up_once(self):
+        import bisect
+        import random
+        rnd = random.Random(14)
+        for _ in range(400):                     # the first pivot table (in the workbook's order) that holds the cell
+            pvs = []
+            for i in range(rnd.randint(0, 6)):
+                r1 = rnd.randint(1, 30)
+                c1 = rnd.randint(0, 4)
+                pvs.append({"r1": r1, "r2": rnd.randint(r1, 35), "c1": c1, "c2": rnd.randint(c1, 6), "reason": "R%d" % i})
+            qc = rnd.randint(0, 6)
+            starts, why = tabular._pivot_rows(pvs, qc)
+            for rn in range(40):
+                want = next((pv["reason"] for pv in pvs if pv["r1"] <= rn <= pv["r2"] and pv["c1"] <= qc <= pv["c2"]), None)
+                k = bisect.bisect_right(starts, rn) - 1 if starts else -1
+                self.assertEqual(why[k] if k >= 0 else None, want)
+        # 1,000 pivot tables below a bill of 190,000 rows: once per sheet, then one bisection per row
+        pvs = [{"r1": 200_000 + 10 * i, "r2": 200_005 + 10 * i, "c1": 0, "c2": 3, "reason": "R"} for i in range(1000)]
+        rows = [["名称", "数量", "単位"]] + [["コンクリート", "1", "m3"]] * 190_000
+        t0 = time.perf_counter()
+        got = tabular._rows_to_candidates(rows, "明細", "d", fctx={"pivots": {"明細": [dict(p) for p in pvs]}})
+        took = time.perf_counter() - t0
+        self.assertEqual(len(got["rows"]), 190_000)
+        self.assertFalse(any(c.get("pivot") for c in got["rows"]))
+        t0 = time.perf_counter()
+        tabular._rows_to_candidates(rows, "明細", "d", fctx={"pivots": {}})
+        self.assertLess(took, 2 * (time.perf_counter() - t0) + 1.0)
+
+    def test_foundation_concrete_worked_out_from_another_material_may_belong(self):
+        det = HDR + mrow(2, "コンクリート", "Fc24 躯体", n("C2", 300), "m3") + mrow(3, "鉄骨", "SN490", n("C3", 50), "t")
+        est = row(1, t("A1", "区分"), t("B1", "名称"), t("C1", "規格"), t("D1", "数量"), t("E1", "単位"), t("F1", "比"), n("G1", 0.3)) + \
+            row(2, t("A2", "基礎"), t("B2", "基礎コンクリート"), t("C2", "概算（鉄骨×比）"), n("D2", 15, "明細!C3*$G$1"), t("E2", "m3"))
+        got, r = read(xlsx([("明細", det), ("概算", est)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 300.0, ("m_steel", "t"): 50.0})
+        ex = left(r, "m_concrete_fdn")
+        self.assertEqual(ex.get("n_maybe"), 1)
+        why = ex["excluded"][0]["reason"]
+        self.assertIn("コンクリート（上部構造）は 明細 の 2 行目で数えている", why)
+        self.assertIn("コンクリート（基礎・杭）の分なら手で入れる", why)
+        # a counted foundation row of its own field: surely not added, as before
+        det2 = det + mrow(4, "基礎コンクリート", "Fc24", n("C4", 80), "m3")
+        got, r = read(xlsx([("明細", det2), ("概算", est)]))
+        ex = left(r, "m_concrete_fdn") or r["evidence"]["m_concrete_fdn"]
+        self.assertIn("その材料は 明細 の 4 行目で数えている", ex["excluded"][0]["reason"])
+        self.assertFalse(ex["excluded"][0]["maybe"])
+
+    def test_headers_spaced_out_between_kanji(self):
+        for sep in ("\u3000", " ", "\u3000\u3000"):
+            heads = [sep.join(w) for w in ("名称", "摘要", "数量", "単位", "単価", "金額")]
+            got, r = csv_read(",".join(heads) + "\nコンクリート,Fc24,120,m3,15000,1800000\n異形鉄筋,SD345 D13,14.5,t,90000,1305000\n")
+            self.assertEqual(got, TWO, repr(sep))
+            got, r = read(xlsx([("内訳", row(1, *[t("%s1" % "ABCDEF"[j], h) for j, h in enumerate(heads)]) +
+                                 row(2, t("A2", "コンクリート"), t("B2", "Fc24"), n("C2", 120), t("D2", "m3"), n("E2", 15000)) +
+                                 row(3, t("A3", "異形鉄筋"), t("B3", "SD345 D13"), n("C3", 14.5), t("D3", "t"), n("E3", 90000)))]))
+            self.assertEqual(got, TWO, repr(sep))
+        # a spaced word reads as the word; spaces next to a letter or a number are kept
+        for w in ("単位質量", "単価", "名称", "割増率", "面積", "設計数量", "長さ"):
+            for f in (tabular._header_map, tabular._qty_cols, tabular._factor_cols, tabular._size_cols):
+                self.assertEqual(f(["名称", " ".join(w), "数量", "単位"]), f(["名称", w, "数量", "単位"]), (w, f.__name__))
+        self.assertEqual(tabular._forms("Unit 単価"), ("unit 単価",))
+        self.assertEqual(tabular._forms("数 量 (m3)")[-1], "数量 (m3)")
 
 
 if __name__ == "__main__":
