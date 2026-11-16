@@ -42,8 +42,11 @@ async function api(path, opts = {}) {
 /* `act` is the action the message belongs to: a late answer passes the act of the action that sent its request.
    A warning from the server (an answer's `warnings`, said once: an object { w, key, name } made by sayWarning, or a
    string with `warn`) makes the toast stay until the user closes it (閉じる, or Escape in it). A later action's message is
-   shown above the warnings kept, and goes after its time as usual; the warnings stay */
-function toast(msg, act = state.act, warn = false) {
+   shown above the warnings kept, and goes after its time as usual; the warnings stay.
+   `about` ({ key, name }): the project the words are about, given by 保存して戻る for its words (its stop is said once its
+   read is answered, maybe while another project, or none, is shown). Read while another project is shown, the words
+   name it; they stay when the user goes back to it (see retoast) */
+function toast(msg, act = state.act, warn = false, about = null) {
   const t = $("#toast"), T = toast;
   if (warn && typeof msg === "string") msg = { w: msg, key: shownKey(), name: "" };
   if (!t.classList.contains("show")) { T._cur = null; T._kept = []; }
@@ -53,7 +56,7 @@ function toast(msg, act = state.act, warn = false) {
   const same = !!T._cur && toast._act === act;
   if (!same) {
     if (T._cur) keepWarnings(T._cur);
-    T._cur = { act, msgs: [], warns: [], shown: shownKey() };
+    T._cur = { act, msgs: [], warns: [], shown: shownKey(), about };
   }
   if (!T._cur.msgs.some((x) => sameItem(x, msg))) T._cur.msgs.push(msg);
   if (typeof msg !== "string" && !T._cur.warns.some((x) => sameItem(x, msg))) T._cur.warns.push(msg);
@@ -66,16 +69,21 @@ const toastText = (x) => (typeof x === "string" ? x : x.key === shownKey() ? x.w
 const sameItem = (a, b) => (typeof a === "string" || typeof b === "string" ? a === b : a.w === b.w && a.key === b.key);
 function keepWarnings(cur) { cur.warns.forEach((w) => { if (!toast._kept.some((x) => sameItem(x, w))) toast._kept.push(w); }); }
 /* the toast's words as toast() left them: the current action's words (joined), then the warnings kept from earlier
-   actions. A toast that carries a warning is an alert with 閉じる; otherwise it is a status */
-function paintToast() {
-  const t = $("#toast"), T = toast, cur = T._cur ? T._cur.msgs.map(toastText).join(" ／ ") : "";
+   actions. A toast that carries a warning is an alert with 閉じる; otherwise it is a status. `quiet`: the words are put
+   only where they have changed (a toast repainted for a new view is not said again by a screen reader) */
+function paintToast(quiet = false) {
+  const t = $("#toast"), T = toast, a = T._cur && T._cur.about, sk = shownKey();
+  // words about a project (about) read while another project is shown name it, as its warnings do
+  const named = !!(a && sk && sk !== a.key), word = (x) => (named && typeof x === "string" ? `「${a.name || "別のプロジェクト"}」：${x}` : toastText(x));
+  const cur = T._cur ? T._cur.msgs.map(word).join(" ／ ") : "";
   const kept = T._kept.filter((w) => !(T._cur && T._cur.msgs.some((x) => sameItem(x, w)))).map(toastText);
   const sticky = !!(T._cur && T._cur.warns.length) || kept.length > 0;
   t.classList.toggle("sticky", sticky);
   t.setAttribute("role", sticky ? "alert" : "status"); t.setAttribute("aria-live", sticky ? "assertive" : "polite");
-  $("#toast-text").textContent = cur;
+  const put = (el, s) => { if (!quiet || el.textContent !== s) el.textContent = s; };
+  put($("#toast-text"), cur);
   const k = $("#toast-kept");
-  k.textContent = kept.length ? (cur ? "前の保存の知らせ：" : "") + kept.join(" ／ ") : ""; k.hidden = !kept.length;
+  put(k, kept.length ? (cur ? "前の保存の知らせ：" : "") + kept.join(" ／ ") : ""); k.hidden = !kept.length;
   $("#toast-close").hidden = !sticky;
   return { cur, kept };
 }
@@ -91,12 +99,14 @@ function drawToast(fresh) {
 }
 /* a view was drawn: a toast that stays (it carries warnings) names each warning's project when another project is shown
    now; when the project shown has changed since its action's words were said, those words go (they were about the
-   project shown then) and its warnings stay, named */
+   project shown then) and its warnings stay, named. Words about a project (toast's `about`) stay while that project is
+   shown (the user went back to it), and are named while another one is shown (also when they go after their time: such
+   a toast is repainted only where its words change) */
 function retoast() {
-  const t = $("#toast"), T = toast;
-  if (!t.classList.contains("show") || !t.classList.contains("sticky")) return;
-  if (T._cur && T._cur.warns.length && T._cur.shown !== shownKey()) { keepWarnings(T._cur); T._cur = null; }
-  paintToast();
+  const t = $("#toast"), T = toast, sk = shownKey(), a = T._cur && T._cur.about, sticky = t.classList.contains("sticky");
+  if (!t.classList.contains("show") || (!sticky && !a)) return;
+  if (T._cur && T._cur.warns.length && T._cur.shown !== sk && !(a && a.key === sk)) { keepWarnings(T._cur); T._cur = null; }
+  paintToast(!sticky);
 }
 /* the toast stands 12 px above the bottom bar of an input screen (its buttons wrap on a narrow phone: the bar is 64 to
    120 px high), else at the style sheet's 84 px: it never covers the bar's buttons */
@@ -243,7 +253,8 @@ function badge(st) { const L = state.meta.states; return `<span class="badge st-
    the same tap (a double tap on ← or ⚙): it is ignored, so only a deliberate later press stops. That holds also when
    the batch has ended between the two presses (it may have just left for the hub): the second press is still the same
    tap, and is ignored. What every row holds is taken here, before the view changes, so that the stop can name each row
-   by what is stored */
+   by what is stored. It is taken by the press that stops, once: a later press before the stop is answered (開く, ← from
+   the view the stop led to) is no longer on the screen, and keeps what the stopping press took */
 function blocked() {
   if (!state.busy) {
     if (state.busyWarned && Date.now() - state.busyWarned < 400) { state.busyWarned = 0; return true; }
@@ -251,7 +262,7 @@ function blocked() {
   }
   if (state.busyWarned) {
     if (Date.now() - state.busyWarned < 400) return true;
-    state.cancel = true; state.cancelRows = state.view === "screen" ? rowsNow() : null;
+    if (!state.cancel) { state.cancel = true; state.cancelRows = state.view === "screen" ? rowsNow() : null; }
     return false;
   }
   state.busyWarned = Date.now(); state.act++;
@@ -588,9 +599,15 @@ async function saveField(fid, quiet = false, batch = false) {
   saveField.sent = rowNow(fid);               // what the row held when it was read (the value sent, or found unchanged)
   const nav = startedAt(), sid = state.arg;
   const say = (msg) => toast(msg, nav.act);
-  const refuse = async (msg, reload = true) => {
+  // `offline`: the refusal is that the server cannot be reached (api() said so). The reload after it is still tried (the
+  // server may be back; the project is read again at its next drawing all the same), but its failure for the same reason
+  // is not said a second time in the same message
+  const refuse = async (msg, reload = true, offline = false) => {
     saveField.reason = msg;
-    if (!batch) { say(msg); if (reload) await refresh(sid, fid, true, nav); }
+    if (!batch) {
+      say(msg);
+      if (reload) await refresh(sid, fid, true, nav).catch((e) => { if (!(offline && e && e.offline)) throw e; });
+    }
     return "refused";
   };
   // a question is about one row: it names the row and the values, and the row is brought into view and marked
@@ -655,7 +672,7 @@ async function saveField(fid, quiet = false, batch = false) {
     }
   }
   let r;
-  try { r = await api(`/projects/${nav.pid}/fields/${fid}`, { method: "PUT", body }); } catch (e) { return refuse(`「${F.label}」：${e.message}`); }
+  try { r = await api(`/projects/${nav.pid}/fields/${fid}`, { method: "PUT", body }); } catch (e) { return refuse(`「${F.label}」：${e.message}`, true, !!e.offline); }
   warnOf(r, nav);
   return "saved";
 }
@@ -683,7 +700,9 @@ function bindScreen(m, sid) {
   // Resolves to what is to be done once state.busy is off (after a stop: read the project again and redraw what shows it)
   const saveAndBack = async () => {
     const nav = startedAt(), pid = nav.pid;
-    const say = (msg) => { toast(msg, nav.act); sayWarnings(nav.act); };   // its messages are not joined to a later tap's
+    // its messages are not joined to a later tap's; they are about its project (named when read on another one)
+    const about = { key: nav.key, name: nav.name };
+    const say = (msg) => { toast(msg, nav.act, false, about); sayWarnings(nav.act); };
     const moved = () => state.cancel || state.nav !== nav.n || !state.project || state.project.id !== pid;
     // the batch's reads of its project: taken only while its view is still there and shows its project. One answered
     // after the user has stopped it, left, or opened another project is discarded (the stop reads what is stored itself)
@@ -712,7 +731,10 @@ function bindScreen(m, sid) {
     // A row its own action decided (owed its stored value, unchanged since the action was sent: also when the action was
     // answered after the stop) is named by what is stored. Any row stored since the press by a write the batch did not send
     // is named by what is stored; when it holds what was never sent (typed after its action) it is also named not saved,
-    // and when that write stored what it held at the press (its own 保存) it is said to keep its earlier value
+    // and when that write stored what it held at the press (its own 保存) it is said to keep its earlier value: also when
+    // the row, still to be saved by the batch (rest), was put back to the value drawn, emptied or made unreadable after the
+    // press (it is no longer typed, and it is named once). Said while another project is shown (a 開く before the stop was
+    // answered), the words name their project (see toast's `about`)
     const stop = async (rest) => {
       const at = state.cancelRows;
       let p = null;
@@ -725,7 +747,7 @@ function bindScreen(m, sid) {
         for (const [f, x] of Object.entries(at)) {
           if (same.includes(f) || refusedRows.includes(f) || decided(f, x)) continue;
           if (x.typed && storedAs(p, f, x)) ok.push(f);
-          else if (saved.includes(f) || (x.typed && ownSave(f))) early.push(f);
+          else if (saved.includes(f) || ((x.typed || rest.includes(f)) && ownSave(f))) early.push(f);
           else if (x.typed || rest.includes(f)) lost.push(f);
         }
         const own = byOwn(p, ok.concat(early, same, refusedRows, saved));
@@ -737,7 +759,7 @@ function bindScreen(m, sid) {
         : "保存して戻るを途中でやめました：" + [ok.length ? names(ok) + "は保存しました" : "",
           early.length ? names(early) + "は直す前の値を保存しました（あとで直した値は保存していません）" : "", ...refused, ...to,
           same.length ? names(same) + "は変わっていないので送っていません" : "", lost.length ? names(lost) + "は保存していません" : ""]
-          .filter(Boolean).join("。"));
+          .filter(Boolean).join("。"), state.act, false, about);
       sayWarnings(state.act);
       return () => refresh(sid, null, true, nav);            // the next drawing shows what is stored
     };
@@ -1093,23 +1115,26 @@ function putBack(k) {
    other view, and any view while 保存して戻る runs, is left alone (no redraw, no focus taken): the project is read again
    when it is next drawn (state.stale), so state.project never differs from what is drawn. True when it redrew */
 async function refresh(sid, fid, keepActed = false, nav = startedAt()) {
-  if (!state.project || projectKey(state.project) !== nav.key) return false;   // another project is open: none of it is shown
+  // another project is open: none of it is shown (an action of the screen 保存して戻る runs on is still owed: see oweRow)
+  if (!state.project || projectKey(state.project) !== nav.key) return oweRow(sid, fid, keepActed, nav);
   state.stale = { pid: nav.pid, gen: ++state.gen };
   return reloadShown(sid, fid, keepActed, nav);
+}
+/* a redraw skipped while 保存して戻る saves rows on this screen: the acted row is owed what this redraw would have shown
+   (its stored value, unless the user changes it since its action was sent). The next drawing of the screen (the batch's,
+   once its row actions are answered) pays it: see owedRows. An action sent on the screen 保存して戻る runs on is owed
+   also when the user has stopped it and left meanwhile, also when another project is open by then: its stop names the
+   row by what is stored (the entry is not drawn anywhere else: owedRows drops an entry of a view left). False (nothing
+   was redrawn) */
+function oweRow(sid, fid, keepActed, nav) {
+  if (state.busy && fid && !keepActed && nav.row && ((state.nav === nav.n && onScreen(nav, sid)) || (state.batch && state.batch.n === nav.n)))
+    state.owed.set(fid, { row: nav.row, n: nav.n });
+  return false;
 }
 async function reloadShown(sid, fid, keepActed, nav) {
   const shows = () => !state.busy && !!state.project && projectKey(state.project) === nav.key
     && (state.view === "hub" || (state.view === "screen" && state.arg === sid));
-  // skipped while 保存して戻る saves rows on this screen: the acted row is owed what this redraw would have shown (its
-  // stored value, unless the user changes it since its action was sent). The next drawing of the screen (the batch's,
-  // once its row actions are answered) pays it: see owedRows. An action sent on the screen 保存して戻る runs on is owed
-  // also when the user has stopped it and left meanwhile: its stop names the row by what is stored (the entry is not drawn
-  // anywhere else: owedRows drops an entry of a view left)
-  const owe = () => {
-    if (state.busy && fid && !keepActed && nav.row && ((state.nav === nav.n && onScreen(nav, sid)) || (state.batch && state.batch.n === nav.n)))
-      state.owed.set(fid, { row: nav.row, n: nav.n });
-    return false;
-  };
+  const owe = () => oweRow(sid, fid, keepActed, nav);
   if (!shows()) return owe();
   const gen = state.gen, p = await api("/projects/" + nav.pid);
   if (!shows() || projectKey(p) !== nav.key) return owe();     // moved meanwhile: the next drawing reads it again
@@ -1285,8 +1310,15 @@ async function renderSettings(m) {
   m.querySelectorAll("[data-del]").forEach((b) => (b.onclick = guard(b, async () => {
     if (!confirm("このプロジェクトと、その入力・候補・資料の記録、計算用に変換した入力と計算の記録を削除します。元に戻せません。")) return;
     const id = +b.dataset.del;
+    // the deleted project's identity when it is the one open (a new project may get its id later)
+    const key = state.project && state.project.id === id ? projectKey(state.project) : null;
     await api("/projects/" + id, { method: "DELETE" }); toast("削除しました");
-    if (state.project && state.project.id === id) { state.project = null; state.stack = []; }
+    if (state.project && state.project.id === id && (key === null || projectKey(state.project) === key)) {
+      state.project = null; state.stack = [];
+      // the user went back to its hub, a screen or its result while the delete was on its way: a view of a project that
+      // is gone is not left on screen (it would fail at the next tap); home is shown, as after ← from a project's hub
+      if (["hub", "screen", "result"].includes(state.view)) { state.nav++; state.act++; state.view = "home"; state.arg = undefined; render(); }
+    }
     // nothing of the deleted project is kept: a new project may get its id
     if (state.lastImport && state.lastImport.pid === id) state.lastImport = null;
     if (state.stale && state.stale.pid === id) state.stale = null;

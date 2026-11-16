@@ -5,6 +5,11 @@ replace the project the user has opened meanwhile; a stopped 保存して戻る 
 stored, also when the action answers after the stop; a server that cannot be reached during use is said in Japanese
 everywhere; a tap on the door while the app is still starting opens it once it has started.
 
+Attacks on those fixes: a tap after the stop (開く B, ←) keeps the rows the stopping press took, and the acted row is
+named by its state also when another project is open by then; a row put back or emptied after its own 保存 is named once;
+a stop's words stay when the user goes back to their project, and name it while another project is shown; a 削除 answered
+after the user went back to that project's hub goes home; an unreachable server is said once for a row's 保存.
+
 The flows are run in a real browser (Playwright for node, against a server started on a free port with a temporary
 var directory) when node and Playwright are installed; the functions are also checked one by one with node.
 
@@ -314,6 +319,120 @@ const door = async (b, fail) => {
 F.doorEarly = (b) => door(b, false);
 F.doorEarlyFails = (b) => door(b, true);
 
+// attack on ui-flows#4: the same stop (未取得に戻す answered after 3 s, ⚙ twice), then one more tap before the answer:
+// 開く B in settings, or ← from settings (back to the screen)
+const stopThenMove = async (b, mode) => {
+  const { page, errors } = await home(b);
+  const p = await newProject(page, 'MoveA'), pB = await newProject(page, 'MoveB');
+  await put(page, p, 'b_height', { value: 50, unit: 'm', state: 'confirmed', method: 'user_entered' });
+  await openP(page, p); await screen(page, 'basic');
+  await hold(page, 'PUT', /fields\/b_height$/, 3000);
+  await retype(page, 'b_height', '77'); await retype(page, 'b_floors_above', '5');
+  await page.click('[data-unset="b_height"]');
+  await page.waitForTimeout(100);
+  await toasts(page);
+  await page.click('#bb-hub');
+  await page.waitForTimeout(100);
+  await page.click('#btn-settings'); await page.waitForTimeout(500); await page.click('#btn-settings');
+  await page.waitForFunction(() => state.view === 'settings' && !!document.querySelector('[data-open]'));
+  await page.click(mode === 'openB' ? `[data-open="${pB}"]` : '#btn-back');
+  const busyAtTap = await page.evaluate(() => state.busy && state.pending.size > 0);   // the tap came before the answer
+  await page.waitForFunction(() => !state.busy, null, { timeout: 15000 }); await page.waitForTimeout(500);
+  return { busyAtTap, t: await toasts(page), where: await where(page), height: await stored(page, p, 'b_height'),
+    floors: await stored(page, p, 'b_floors_above'), errors };
+};
+F.stopThenOpen = (b) => stopThenMove(b, 'openB');
+F.stopThenBack = (b) => stopThenMove(b, 'back');
+
+// attack: 建物の高さ stored as 50; 77 typed and its own 保存 (answered after 2.5 s); 保存して戻る; while it waits the row is put
+// back to 50 (or emptied); the user stops (⚙ twice) before the answer
+const revertStop = async (b, mode) => {
+  const { page, errors } = await home(b);
+  const p = await newProject(page, 'Rev' + mode);
+  await put(page, p, 'b_height', { value: 50, unit: 'm', state: 'confirmed', method: 'user_entered' });
+  await openP(page, p); await screen(page, 'basic');
+  await hold(page, 'PUT', /fields\/b_height$/, 2500);
+  await retype(page, 'b_height', '77');
+  await page.click('[data-save="b_height"]');
+  await page.waitForTimeout(100);
+  await page.click('#bb-hub');
+  await page.waitForTimeout(150);
+  if (mode === 'revert') await retype(page, 'b_height', '50');
+  else { await page.click('#in-b_height'); await page.keyboard.press('Control+A'); await page.keyboard.press('Delete'); }
+  await toasts(page);
+  await page.click('#btn-settings'); await page.waitForTimeout(500); await page.click('#btn-settings');
+  const busyAtStop = await page.evaluate(() => state.busy && state.pending.size > 0);
+  await page.waitForFunction(() => !state.busy, null, { timeout: 15000 }); await page.waitForTimeout(500);
+  return { busyAtStop, t: await toasts(page), height: await stored(page, p, 'b_height'), errors };
+};
+F.revertStop = (b) => revertStop(b, 'revert');
+F.emptyStop = (b) => revertStop(b, 'empty');
+
+// attack on ui-flows#2: A社ビル (購入電力 0 and 運用時係数 適用外 stored): 購入電力 1000 and 都市ガス 5 typed, 保存して戻る (the
+// 購入電力 PUT, which carries the warning, answers after 1.5 s), stopped with ⚙ twice. 'back': the stop's words are said in
+// settings, then ← goes back to A's 運用. 'late': the stop's read answers after 2.5 s, and B社ビル (with its own 都市ガス) is
+// opened before the stop's words are said
+const stopWarn = async (b, mode) => {
+  const { page, errors } = await home(b);
+  const pA = await newProject(page, 'A社ビル'), pB = await newProject(page, 'B社ビル');
+  await put(page, pA, 'o_elec_kwh', { value: 0, unit: 'kWh/年', state: 'confirmed', method: 'user_entered' });
+  await put(page, pA, 'o_grid_value', { value: null, state: 'not_applicable', method: 'user_entered' });
+  await put(page, pB, 'o_gas_m3', { value: 9, unit: 'm3/年', state: 'confirmed', method: 'user_entered' });
+  await openP(page, pA); await screen(page, 'operation');
+  await hold(page, 'PUT', new RegExp('projects/' + pA + '/fields/o_elec_kwh$'), 1500);
+  let slowGet = false;
+  await page.route((u) => u.pathname === '/api/projects/' + pA, async (route) => {
+    if (slowGet && route.request().method() === 'GET') await sleep(2500);
+    return route.continue();
+  });
+  await retype(page, 'o_elec_kwh', '1000'); await retype(page, 'o_gas_m3', '5');
+  await page.click('#bb-hub'); await page.waitForTimeout(150);
+  if (mode === 'late') slowGet = true;
+  await page.click('#btn-settings'); await page.waitForTimeout(500); await page.click('#btn-settings');
+  if (mode === 'late') {
+    await page.waitForFunction(() => state.view === 'settings' && !!document.querySelector('[data-open]'));
+    await page.click(`[data-open="${pB}"]`);
+  }
+  await page.waitForFunction(() => !state.busy, null, { timeout: 15000 }); await page.waitForTimeout(400);
+  const said = { ...(await where(page)), text: await toastNow(page) };
+  if (mode === 'back') { await page.click('#btn-back'); await page.waitForFunction(() => state.view === 'screen'); }
+  await page.waitForTimeout(1000);
+  const later = { ...(await where(page)), text: await toastNow(page) };
+  return { said, later, gasA: await stored(page, pA, 'o_gas_m3'), errors };
+};
+F.stopWarnBack = (b) => stopWarn(b, 'back');
+F.stopWarnLate = (b) => stopWarn(b, 'late');
+
+// attack: 削除 in settings answered after 2 s; meanwhile ← goes back to the hub of the project being deleted (DelA), or (the
+// other way) another project (DelB) is deleted while DelA's hub is back on screen
+F.deleteLate = async (b) => {
+  const { page, errors } = await home(b);
+  const out = {};
+  for (const which of ['open', 'other']) {
+    const pA = await newProject(page, 'DelA' + which), pB = await newProject(page, 'DelB' + which);
+    await openP(page, pA);
+    await page.click('#btn-settings'); await page.waitForSelector(`[data-del="${pA}"]`);
+    const del = which === 'open' ? pA : pB;
+    await hold(page, 'DELETE', new RegExp('^/api/projects/' + del + '$'), 2000);
+    await page.click(`[data-del="${del}"]`); await page.waitForTimeout(200);
+    await page.click('#btn-back'); await page.waitForFunction(() => state.view === 'hub');
+    const before = await where(page);
+    await page.waitForFunction(() => window.__toasts.includes('削除しました'), null, { timeout: 15000 });
+    await page.waitForTimeout(400);
+    const after = { ...(await where(page)), project: await page.evaluate(() => !!state.project), start: !!(await page.$('#start')) };
+    let next = null;
+    if (await page.$('[data-screen="basic"]')) {
+      await page.click('[data-screen="basic"]'); await page.waitForTimeout(800);
+      next = await page.evaluate(() => ({ view: state.view, main: document.getElementById('main').innerText.slice(0, 80) }));
+    }
+    out[which] = { before, after, next };
+    await toasts(page);
+    await page.evaluate(() => { state.stack = []; back(true); });
+    await page.waitForFunction(() => state.view === 'home' && !!document.querySelector('#start'));
+  }
+  return { ...out, errors };
+};
+
 (async () => {
   const browser = await chromium.launch();
   const out = {};
@@ -593,6 +712,102 @@ const runs = [
         self.assertIn("WLC Studio のサーバーに接続できません", r["body"], r)
         self.assertNotIn("読み込み中", r["body"], r)
         self.assertTrue(r["mainHidden"], r)
+
+    # ---- attacks on the fixes above (the second pass of round 14) ----
+
+    def test_a_later_press_keeps_the_rows_the_stopping_press_took(self):
+        out = node(TAKE + r"""
+var state = { busy: true, busyWarned: 0, act: 0, view: 'screen', cancel: false, cancelRows: null };
+function toast() {}
+let n = 0;
+function rowsNow() { return { snap: ++n, view: state.view }; }
+eval(take(/function blocked\(\)[\s\S]*?\n}\n/));
+const r = [blocked()];                                                 // the first press warns
+state.busyWarned = Date.now() - 600;
+r.push(blocked(), state.cancel, JSON.stringify(state.cancelRows));    // the press that stops, on the screen
+state.view = 'settings';
+r.push(blocked(), JSON.stringify(state.cancelRows));                  // 開く B or ← in settings before the answer
+state.view = 'screen';
+r.push(blocked(), JSON.stringify(state.cancelRows));                  // a press on the screen drawn again
+console.log(JSON.stringify(r));
+""")
+        if out is None:
+            self.skipTest("node is not installed")
+        first = '{"snap":1,"view":"screen"}'
+        self.assertEqual(out, [True, False, True, first, False, first, False, first])
+
+    def check_stop_names_the_unset_row(self, r):
+        self.assertTrue(r["busyAtTap"], r)                                  # the extra tap came before the action's answer
+        self.assertEqual(r["height"]["state"], "not_obtained", r)
+        msg = [x for x in r["t"] if "保存して戻るを途中でやめました" in x]
+        self.assertEqual(len(msg), 1, r["t"])
+        self.assertIn("「建物の高さ」は「未取得」になりました", msg[0])
+        self.assertIn("「地上階数」は保存していません", msg[0])
+        self.assertNotIn("「建物の高さ」は保存していません", msg[0])
+        self.assertNotIn("「地上階数」「建物の高さ」", msg[0])
+        self.assertEqual(r["floors"]["hist"], [], r)
+        return msg[0]
+
+    def test_stop_then_open_another_project_names_the_acted_row_by_its_state(self):
+        r = self.flow("stopThenOpen")
+        msg = self.check_stop_names_the_unset_row(r)
+        self.assertEqual(r["where"]["name"], "MoveB", r)
+        # said while MoveB is shown: the words name the project they are about (MoveB has the same rows)
+        self.assertTrue(msg.startswith("「MoveA」：保存して戻るを途中でやめました："), msg)
+
+    def test_stop_then_back_names_the_acted_row_by_its_state(self):
+        r = self.flow("stopThenBack")
+        msg = self.check_stop_names_the_unset_row(r)
+        self.assertEqual((r["where"]["view"], r["where"]["name"]), ("screen", "MoveA"), r)
+        self.assertTrue(msg.startswith("保存して戻るを途中でやめました："), msg)    # its own project shown: no name
+
+    def test_stop_names_a_row_put_back_after_its_own_save_once(self):
+        for name in ("revertStop", "emptyStop"):
+            r = self.flow(name)
+            self.assertTrue(r["busyAtStop"], (name, r))
+            self.assertEqual(r["height"]["value"], 77, (name, r))           # the row's own 保存 stored 77
+            msg = [x for x in r["t"] if "保存して戻るを途中でやめました" in x]
+            self.assertEqual(len(msg), 1, (name, r["t"]))
+            self.assertIn("「建物の高さ」は直す前の値を保存しました（あとで直した値は保存していません）", msg[0])
+            # never both saved and not saved
+            self.assertNotIn("「建物の高さ」は保存しました", msg[0])
+            self.assertNotIn("「建物の高さ」は保存していません", msg[0])
+
+    def test_stop_words_stay_on_their_project_and_name_it_elsewhere(self):
+        r = self.flow("stopWarnBack")
+        words = "保存して戻るを途中でやめました：「購入電力」は保存しました。「都市ガス」は保存していません"
+        self.assertEqual(r["said"]["view"], "settings", r)
+        self.assertTrue(r["said"]["text"].startswith(words), r)
+        self.assertIn("「A社ビル」：" + WARN_GRID, r["said"]["text"])
+        # back on A's 運用: the words are about A, and stay with its warning (they went at once before)
+        self.assertEqual((r["later"]["view"], r["later"]["name"]), ("screen", "A社ビル"), r)
+        self.assertTrue(r["later"]["text"].startswith(words + " ／ " + WARN_GRID), r)
+        self.assertEqual(r["gasA"]["hist"], [], r)
+        r = self.flow("stopWarnLate")
+        # said while B社ビル (which has its own 都市ガス) is shown: the words name A, as its warning does
+        self.assertEqual((r["said"]["view"], r["said"]["name"]), ("hub", "B社ビル"), r)
+        self.assertTrue(r["said"]["text"].startswith("「A社ビル」：" + words), r)
+        self.assertIn("「A社ビル」：" + WARN_GRID, r["said"]["text"])
+        self.assertTrue(r["later"]["text"].startswith("「A社ビル」：" + words), r)
+
+    def test_a_late_delete_of_the_project_shown_goes_home(self):
+        r = self.flow("deleteLate")
+        self.assertEqual(r["open"]["before"]["view"], "hub", r)
+        self.assertEqual(r["open"]["after"]["view"], "home", r)              # not a hub of a project that is gone
+        self.assertFalse(r["open"]["after"]["project"], r)
+        self.assertTrue(r["open"]["after"]["start"], r)
+        self.assertIsNone(r["open"]["next"], r)
+        # another project deleted: the project shown stays, and works
+        self.assertEqual((r["other"]["after"]["view"], r["other"]["after"]["name"]), ("hub", "DelAother"), r)
+        self.assertEqual(r["other"]["next"]["view"], "screen", r)
+        self.assertNotIn("表示できなかった", r["other"]["next"]["main"], r)
+
+    def test_unreachable_server_is_said_once_for_a_row_save(self):
+        r = self.flow("offlineInUse")
+        row = [x for x in r["t"] if "「都市ガス」：" in x]
+        self.assertTrue(row, r["t"])
+        for x in row:                                                       # the reload after the refusal is not said again
+            self.assertEqual(x.count("WLC Studio のサーバーに接続できません"), 1, x)
 
     def test_service_worker_cache_is_new(self):
         sw = (WEB / "sw.js").read_text(encoding="utf-8")
