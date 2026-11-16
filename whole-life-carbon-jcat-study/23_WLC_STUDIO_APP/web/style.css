@@ -112,4 +112,12 @@ ul.crows { margin: 4px 0; padding-left: 1.2em; font-size: .88rem; overflow-wrap:
 .cands ul.crows li { border: 0; border-radius: 0; padding: 0; margin: 4px 0; }
 ul.crows .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .cands .notice { margin: 6px 0; }
+/* a left-out row that may belong in the total: said in words (not by colour alone) */
+ul.crows .maybe { color: var(--s-bad); font-weight: 700; white-space: nowrap; }
+/* long names without spaces (file names, item and project names, IDs, notes) wrap instead of making the page or a dialog
+   scroll sideways at phone width: the import result, the address / PLATEAU results, candidate lines, notices, tables, the
+   result lists, the project lists (a flex item also needs min-width: 0 to shrink) and the toast */
+#doc-out, ul.unused, #geo-out, .cands li, .notice, .dlg-body, table.t th, table.t td, #res li, .lname, .toast { overflow-wrap: anywhere; }
+table.t td.num { overflow-wrap: normal; }
+.lname { min-width: 0; }
 [data-busy], input[aria-busy="true"] { cursor: progress; }
