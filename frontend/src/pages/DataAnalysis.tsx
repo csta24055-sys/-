@@ -2,7 +2,7 @@ import Papa from 'papaparse'
 import { useMemo, useState } from "react"
 import { Bar, BarChart, CartesianGrid, ErrorBar, Legend, Line, LineChart, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis } from 'recharts'
 import ChartBox from '../components/ChartBox'
-import { Card, Field, fmt, Loading, SourceRef, useAsync } from '../components/ui'
+import { Card, Field, fmt, Loading, SourceRef, TableWrap, useAsync } from '../components/ui'
 import { api, Dataset, download, STANDALONE, toCsv } from '../core/api'
 import { IO_LITERATURE, REGRESSION_LITERATURE } from '../core/literature'
 import { defaultZone, zoneTimeSeries } from '../core/models'
@@ -138,15 +138,15 @@ function Analyzer({ ds }: { ds: Dataset }) {
     <>
       <Card title={`データ: ${ds.name}`} actions={<button className="ghost small" onClick={() => download(`${ds.name}.csv`, toCsv(ds.columns, ds.rows))}>CSV出力</button>}>
         <p className="small muted">{ds.n_rows} 行／時刻列: {tcol || '検出なし'}／数値列: {nums.join(', ') || 'なし'}／由来: {ds.provenance}{ds.description ? `／${ds.description}` : ''}</p>
-        <div className="tablewrap">
+        <TableWrap>
           <table><thead><tr><th>#</th>{ds.columns.map((c) => <th key={c}>{c}</th>)}</tr></thead>
             <tbody>{ds.rows.slice(0, 12).map((r, i) => <tr key={i}><td>{i}</td>{r.map((v, j) => <td key={j}>{v === null || v === '' ? <span className="miss">欠損</span> : String(v)}</td>)}</tr>)}</tbody></table>
-        </div>
+        </TableWrap>
       </Card>
       <Card title="異常値・欠損値の検出" actions={<button className="ghost small" onClick={() => download(`${ds.name}_quality.csv`, toCsv(['列', 'n', '欠損', '欠損%', '負値', '異常値', '平均', '中央値', '標準偏差', '最小', '最大'], quality.map((q) => [q.column, q.n, q.missing, q.missing_pct.toFixed(2), q.negative, q.outliers, q.mean, q.median, q.std, q.min, q.max])))}>CSV出力</button>}>
         <p className="small muted">異常値 = ロバストZ（|x−中央値| / (1.4826·MAD)）&gt; 3.5。自動削除はせず、下のチェックで解析から除外できます。</p>
-        <div className="tablewrap"><table><thead><tr><th>列</th><th>欠損</th><th>異常値</th><th>負値</th><th>平均</th><th>中央値</th><th>最小</th><th>最大</th><th>異常行（先頭）</th></tr></thead>
-          <tbody>{quality.map((q) => <tr key={q.column}><td>{q.column}</td><td className={q.missing ? 'warn' : ''}>{q.missing}（{q.missing_pct.toFixed(1)}%）</td><td className={q.outliers ? 'warn' : ''}>{q.outliers}</td><td>{q.negative}</td><td>{fmt(q.mean)}</td><td>{fmt(q.median)}</td><td>{fmt(q.min)}</td><td>{fmt(q.max)}</td><td className="small">{q.outlier_rows.slice(0, 8).join(', ')}</td></tr>)}</tbody></table></div>
+        <TableWrap><table><thead><tr><th>列</th><th>欠損</th><th>異常値</th><th>負値</th><th>平均</th><th>中央値</th><th>最小</th><th>最大</th><th>異常行（先頭）</th></tr></thead>
+          <tbody>{quality.map((q) => <tr key={q.column}><td>{q.column}</td><td className={q.missing ? 'warn' : ''}>{q.missing}（{q.missing_pct.toFixed(1)}%）</td><td className={q.outliers ? 'warn' : ''}>{q.outliers}</td><td>{q.negative}</td><td>{fmt(q.mean)}</td><td>{fmt(q.median)}</td><td>{fmt(q.min)}</td><td>{fmt(q.max)}</td><td className="small">{q.outlier_rows.slice(0, 8).join(', ')}</td></tr>)}</tbody></table></TableWrap>
         <label className="check"><input type="checkbox" checked={dropOutliers} onChange={(e) => setDropOutliers(e.target.checked)} /> 異常値を解析から除外する</label>
       </Card>
       <Card title="時系列グラフ">

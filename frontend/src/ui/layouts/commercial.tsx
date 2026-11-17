@@ -15,9 +15,9 @@ function Top({ openPalette, openMore }: SlotProps) {
     <header className="ux-top">
       <div className="ux-brand"><span className="ux-logo" aria-hidden>◆</span><b>空気清浄度研究</b><span className="muted">成果物ハブ</span></div>
       <div className="ux-top-actions">
-        <button type="button" className="ghost ux-cmd" onClick={openPalette} aria-label="検索・操作（Ctrl+K）">⌕ 検索・操作 <kbd>Ctrl</kbd>+<kbd>K</kbd></button>
+        <button type="button" className="ghost ux-cmd" onClick={openPalette} aria-label="検索・操作（Ctrl+K）" aria-haspopup="dialog">⌕ 検索・操作 <kbd>Ctrl</kbd>+<kbd>K</kbd></button>
         <Link className="ux-btn-primary" to="/report">レポートを開く</Link>
-        <button type="button" className="ghost ux-menu-btn" onClick={openMore} aria-label="すべての機能">☰</button>
+        <button type="button" className="ghost ux-menu-btn" onClick={openMore} aria-label="すべての機能" aria-haspopup="dialog">☰</button>
       </div>
     </header>
   )
@@ -34,7 +34,7 @@ function Side({ sidebarMode, toggleSidebar }: SlotProps) {
           </div>
         ))}
       </nav>
-      <div className="ux-side-foot"><button type="button" className="ghost small ux-collapse" onClick={toggleSidebar} aria-expanded={sidebarMode !== 'icons'}>{sidebarMode === 'icons' ? '»' : '« 畳む'}</button></div>
+      <div className="ux-side-foot"><button type="button" className="ghost small ux-collapse" onClick={toggleSidebar} aria-expanded={sidebarMode !== 'icons'} aria-label={sidebarMode === 'icons' ? 'メニューを開く' : 'メニューを畳む'} title={sidebarMode === 'icons' ? 'メニューを開く' : undefined}>{sidebarMode === 'icons' ? '»' : '« 畳む'}</button></div>
     </aside>
   )
 }
@@ -74,8 +74,9 @@ export const commercial: LayoutSpec = {
   traits: ['ホームは成果物カード（レポート・計画・データ・試算）', '左レール 208px＋上部の主操作ボタン', '中密度・広い余白・角丸大きめ'],
   basis: 'design-research/C-commercial（案C アウトカム・ハブ 4.37点）',
   mobileTabs: ['/', '/data', '/report', '/settings'],
+  homeOrder: ['charts', 'stats', 'findings', 'activity', 'timeline', 'completeness'],
   defaults: { density: 'standard', card: 'shadow', radius: 'round', sidebarMode: 'expanded', sidebarPos: 'left' },
   palette: true,
-  mini: { top: 'bar', side: 'wide', aside: false, bottom: 'none', tabs: 5 },
+  mini: { top: 'bar', side: 'wide', aside: false, bottom: 'none' },
   slots: { Top, Side, HomeIntro, Bottom, More: ({ onClose }) => <MoreSheetGrouped onClose={onClose} /> },
 }

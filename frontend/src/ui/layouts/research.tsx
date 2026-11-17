@@ -24,8 +24,8 @@ function Top({ st, openPalette, openMore }: SlotProps) {
         <b aria-current="page">{cur.stage ? `段${cur.stage} ${STAGE_NAME[cur.stage]} — ` : ''}{cur.label}</b>
       </nav>
       <div className="ux-top-actions">
-        <button type="button" className="ghost ux-cmd" onClick={openPalette} aria-label="すべての機能（Ctrl+K）">コマンド <kbd>Ctrl</kbd>+<kbd>K</kbd></button>
-        <button type="button" className="ghost ux-menu-btn" onClick={openMore} aria-label="すべての機能">☰</button>
+        <button type="button" className="ghost ux-cmd" onClick={openPalette} aria-label="すべての機能（Ctrl+K）" aria-haspopup="dialog">コマンド <kbd>Ctrl</kbd>+<kbd>K</kbd></button>
+        <button type="button" className="ghost ux-menu-btn" onClick={openMore} aria-label="すべての機能" aria-haspopup="dialog">☰</button>
       </div>
     </header>
   )
@@ -51,7 +51,7 @@ function Side({ sidebarMode, toggleSidebar }: SlotProps) {
       </nav>
       <div className="ux-side-foot">
         <span className="ux-lbl small">保存先: {storeLabel}</span>
-        <button type="button" className="ghost small ux-collapse" onClick={toggleSidebar} aria-expanded={!icons}>{icons ? '»' : '« 段のリストを畳む'}</button>
+        <button type="button" className="ghost small ux-collapse" onClick={toggleSidebar} aria-expanded={!icons} aria-label={icons ? '段のリストを開く' : undefined} title={icons ? '段のリストを開く' : undefined}>{icons ? '»' : '« 段のリストを畳む'}</button>
       </div>
     </aside>
   )
@@ -106,8 +106,9 @@ export const research: LayoutSpec = {
   traits: ['左: 段のリスト（資料→解析→計算→知見→計画→レポート）', '右: 根拠パネル／下: ジョブモニター', '高密度（本文 13px）・Ctrl+K で全機能'],
   basis: 'design-research/A-research-lab（案C Pipeline Ledger 4.30点）',
   mobileTabs: ['/', '/data', '/cloud'],
+  homeOrder: ['stats', 'completeness', 'charts', 'findings', 'timeline', 'activity'],
   defaults: { density: 'compact', card: 'outline', radius: 'sharp', sidebarMode: 'expanded', sidebarPos: 'left' },
   palette: true,
-  mini: { top: 'bar', side: 'list', aside: true, bottom: 'jobs', tabs: 4 },
+  mini: { top: 'bar', side: 'list', aside: true, bottom: 'jobs' },
   slots: { Top, Side, HomeIntro, Aside, Bottom, More: ({ onClose }) => <MoreSheetGrouped onClose={onClose} /> },
 }

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api, Source, STATUS_ORDER } from '../core/api'
 import { Badge, Card, Field, Loading, SourceRef, StatusPill, useAsync } from '../components/ui'
@@ -18,6 +18,8 @@ export default function Library() {
   const [status, setStatus] = useState('')
   const [topic, setTopic] = useState('')
   const [adding, setAdding] = useState(false)
+  // キーボード（Enter）で一覧から開いたときは、詳細の見出しへフォーカスを移す（幅の狭い画面では一覧が隠れるため）
+  const focusDetail = useRef(false)
 
   const years = useMemo(() => [...new Set((sources || []).map((s) => String(s.fiscal_year ?? '不明')))].sort().reverse(), [sources])
   const filtered = useMemo(() => {
@@ -53,13 +55,14 @@ export default function Library() {
             {filtered.map((s) => (
               <li key={s.id} className={s.id === id ? 'active' : ''} onClick={() => nav(`/library/${encodeURIComponent(s.id)}`)}>
                 <div className="row"><StatusPill s={s.status} /><span className="muted small">{s.fiscal_year ?? '—'}年度・{s.kind}</span></div>
-                <div className="t">{s.title}</div>
+                {/* 行の題名をリンクとして Tab で止まれるようにする（行全体のクリックはこれまでどおり）。見た目は変えない */}
+                <div className="t" role="link" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); focusDetail.current = true; nav(`/library/${encodeURIComponent(s.id)}`) } }}>{s.title}</div>
                 <div className="muted small">{s.id}・{s.topic}</div>
               </li>
             ))}
           </ul>
         </div>
-        {id && <Detail id={id} onChanged={reload} />}
+        {id && <Detail id={id} onChanged={reload} focusOnLoad={focusDetail} />}
       </div>
       <LiteraturePanel q={q} />
     </div>
@@ -92,10 +95,15 @@ function LiteraturePanel({ q }: { q: string }) {
   )
 }
 
-function Detail({ id, onChanged }: { id: string; onChanged: () => void }) {
+function Detail({ id, onChanged, focusOnLoad }: { id: string; onChanged: () => void; focusOnLoad?: MutableRefObject<boolean> }) {
   const { data, error, reload } = useAsync(() => api.source(id), [id])
   const [notes, setNotes] = useState<string | null>(null)
   const [msg, setMsg] = useState('')
+  const title = useRef<HTMLHeadingElement>(null)
+  const loadedId = data?.source.id
+  useEffect(() => {
+    if (focusOnLoad?.current && loadedId === id && title.current) { focusOnLoad.current = false; title.current.focus() }
+  }, [loadedId, id, focusOnLoad])
   if (!data) return <div className="detail-pane"><Loading error={error} /></div>
   const s = data.source
   const save = async (patch: Partial<Source>) => {
@@ -105,7 +113,7 @@ function Detail({ id, onChanged }: { id: string; onChanged: () => void }) {
     <div className="detail-pane">
       <Link to="/library" className="back">← 一覧へ</Link>
       <Card title={<>{s.id} <StatusPill s={s.status} /></>}>
-        <h3 className="dtitle">{s.title}</h3>
+        <h3 className="dtitle" tabIndex={-1} ref={title}>{s.title}</h3>
         <dl className="meta">
           <dt>Box ID</dt><dd><code>{s.box_id}</code></dd>
           <dt>元フォルダ</dt><dd>{s.folder}（{s.folder_id}）</dd>

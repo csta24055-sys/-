@@ -22,7 +22,12 @@ export default function LayoutFrame() {
   useEffect(() => { setMore(false); setPalette(false) }, [st.pathname, spec.id])
 
   const sideMode = resolved.sidebarMode === 'icons' ? 'icons' : 'expanded'
-  const toggleSidebar = useCallback(() => ui.setCustomNow({ sidebarMode: sideMode === 'icons' ? 'expanded' : 'icons' }), [ui, sideMode])
+  const { setCustomNow } = ui
+  // そのレイアウトの既定の表示に戻るときは「自動」を保存する（明示値を残すと、ほかのレイアウトへ切り替えたときにも付いて回る）
+  const toggleSidebar = useCallback(() => {
+    const next = sideMode === 'icons' ? 'expanded' : 'icons'
+    setCustomNow({ sidebarMode: next === spec.defaults.sidebarMode ? 'auto' : next })
+  }, [setCustomNow, sideMode, spec])
   const props = { st, openMore, openPalette, sidebarMode: sideMode, toggleSidebar } as const
   const showSide = resolved.sidebarMode !== 'hidden'
   // Original で既定（左・展開）のままなら属性を付けない（改修前と同じ DOM）。「アイコンのみ」は左でも属性が要る

@@ -4,7 +4,7 @@
 import { KeyboardEvent, useRef, useState } from 'react'
 import { LAYOUTS } from './layouts/registry'
 import type { LayoutSpec } from './layouts/types'
-import { ACCENT_PRESETS, contrastRatio, Customization, DEFAULT_CUSTOM, FONT_SCALES, isDefaultCustom } from './prefs'
+import { ACCENT_PRESETS, contrastRatio, Customization, DARK_ON_ACCENT, DEFAULT_CUSTOM, FONT_SCALES, isDefaultCustom } from './prefs'
 import { useUi } from './UiPrefsContext'
 
 export function Mini({ spec }: { spec: LayoutSpec }) {
@@ -22,12 +22,30 @@ export function Mini({ spec }: { spec: LayoutSpec }) {
   )
 }
 
+/**
+ * 選択肢のグループ（role=radiogroup）のキーボード操作。ラジオボタンと同じく、Tab で止まるのはグループに 1 回だけ
+ * （選択中の項目）で、← ↑ で前、→ ↓ で次の項目へ移って選択する（端では反対側へ回る）。
+ */
+function onRadioKeys(e: KeyboardEvent<HTMLElement>) {
+  const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
+  const cur = e.target as HTMLElement
+  if (!d || cur.getAttribute('role') !== 'radio') return
+  const radios = [...e.currentTarget.querySelectorAll<HTMLElement>('[role="radio"]')]
+  const i = radios.indexOf(cur)
+  if (i < 0) return
+  e.preventDefault()
+  const next = radios[(i + d + radios.length) % radios.length]
+  next.focus(); next.click()
+}
+
 function Seg<T extends string | number>({ label, value, options, onChange }: { label: string; value: T; options: [T, string][]; onChange: (v: T) => void }) {
+  // どれも選択中でないとき（保存値が選択肢にない場合）は、先頭の項目で Tab を受ける
+  const none = !options.some(([v]) => v === value)
   return (
     <div className="ux-field">
       <span className="ux-field-l" id={`seg-${label}`}>{label}</span>
-      <div className="ux-segs" role="radiogroup" aria-labelledby={`seg-${label}`}>
-        {options.map(([v, l]) => <button key={String(v)} type="button" role="radio" aria-checked={value === v} onClick={() => onChange(v)}>{l}</button>)}
+      <div className="ux-segs" role="radiogroup" aria-labelledby={`seg-${label}`} onKeyDown={onRadioKeys}>
+        {options.map(([v, l], k) => <button key={String(v)} type="button" role="radio" aria-checked={value === v} tabIndex={value === v || (none && k === 0) ? 0 : -1} onClick={() => onChange(v)}>{l}</button>)}
       </div>
     </div>
   )
@@ -38,7 +56,12 @@ function Customizer() {
   const c = ui.effective.custom
   const set = (p: Partial<Customization>) => ui.previewCustom(p)
   const accent = c.accent
-  const ratio = accent ? contrastRatio(accent, '#ffffff') : null
+  // ライト配色では主色の上に白い文字を載せる。ダーク配色では主色を明るく調整して使い、濃い文字を載せる（UiPrefsContext / prefs.accentForScheme）。
+  // 表示する比は、実際に画面で使っている色どうしの比にする
+  const shown = ui.accentShown
+  const onAccent = ui.dark ? (ui.spec.id === 'original' ? DARK_ON_ACCENT.original : DARK_ON_ACCENT.other) : '#ffffff'
+  const ratio = accent && shown ? contrastRatio(shown, onAccent) : null
+  const presetChecked = !accent || (ACCENT_PRESETS as readonly string[]).includes(accent)
   // 開閉は利用者の操作だけで変える（初期値に戻しても閉じない）
   const [open, setOpen] = useState(() => !isDefaultCustom(c))
   return (
@@ -47,12 +70,13 @@ function Customizer() {
       <p className="small muted">変更はすぐ画面に反映されます（プレビュー）。保存するには上の「適用」を押してください。「自動」は選んだデザインの既定値です。</p>
       <div className="ux-field">
         <span className="ux-field-l" id="ux-accent-l">主色</span>
-        <div className="ux-swatches" role="radiogroup" aria-labelledby="ux-accent-l">
-          <button type="button" role="radio" aria-checked={!accent} onClick={() => set({ accent: null })} className="ux-sw-auto">自動</button>
-          {ACCENT_PRESETS.map((h) => <button key={h} type="button" role="radio" aria-checked={accent === h} aria-label={`主色 ${h}`} style={{ background: h }} className="ux-sw" onClick={() => set({ accent: h })} />)}
+        <div className="ux-swatches" role="radiogroup" aria-labelledby="ux-accent-l" onKeyDown={onRadioKeys}>
+          <button type="button" role="radio" aria-checked={!accent} tabIndex={!accent || !presetChecked ? 0 : -1} onClick={() => set({ accent: null })} className="ux-sw-auto">自動</button>
+          {ACCENT_PRESETS.map((h) => <button key={h} type="button" role="radio" aria-checked={accent === h} tabIndex={accent === h ? 0 : -1} aria-label={`主色 ${h}`} style={{ background: h }} className="ux-sw" onClick={() => set({ accent: h })} />)}
           <label className="ux-sw-custom">自由に選ぶ <input type="color" value={accent || '#0f5b5c'} onChange={(e) => set({ accent: e.target.value })} aria-label="主色を自由に選ぶ" /></label>
         </div>
-        {ratio !== null && <span className={`small ${ratio < 4.5 ? 'ux-warn' : 'muted'}`} role={ratio < 4.5 ? 'alert' : undefined}>白い文字とのコントラスト比 {ratio}:1{ratio < 4.5 ? ' — 4.5:1 未満のため、ボタンの文字が読みにくくなります。濃い色を選んでください。' : '（4.5:1 以上で読みやすい）'}</span>}
+        {ratio !== null && !ui.dark && <span className={`small ux-accent-ratio ${ratio < 4.5 ? 'ux-warn' : 'muted'}`} role={ratio < 4.5 ? 'alert' : undefined}>白い文字とのコントラスト比 {ratio}:1{ratio < 4.5 ? ' — 4.5:1 未満のため、ボタンの文字が読みにくくなります。濃い色を選んでください。' : '（4.5:1 以上で読みやすい）'}</span>}
+        {ratio !== null && ui.dark && <span className="small muted ux-accent-ratio">ダーク配色では、{shown === accent ? '選んだ色をそのまま使います' : <>選んだ色を明るく調整して使います（<code>{shown}</code>）</>}。ボタンの濃い文字とのコントラスト比 {ratio}:1（4.5:1 以上で読みやすい）</span>}
       </div>
       <Seg label="文字の大きさ" value={c.fontScale} options={FONT_SCALES.map((s) => [s, s === 1 ? '標準' : s < 1 ? '小' : s < 1.2 ? '大' : '特大'] as [number, string])} onChange={(v) => set({ fontScale: v })} />
       <Seg label="情報密度" value={c.density} options={[['auto', '自動'], ['compact', '詰める'], ['standard', '標準'], ['comfortable', 'ゆったり']]} onChange={(v) => set({ density: v })} />

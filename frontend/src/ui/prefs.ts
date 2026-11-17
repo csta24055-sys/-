@@ -95,6 +95,17 @@ export function applySelection(p: StoredPrefs, next: UiSelection, now = new Date
   return { version: 1, applied: n, history: [clone(p.applied), ...p.history].slice(0, 5), updatedAt: now }
 }
 
+/**
+ * 即時の表示操作（ヘッダーの配色切替・文字サイズ・サイドバーの開閉）: 適用中の設定だけを置き換え、履歴には積まない。
+ * 履歴（「元に戻す」）は「適用」と「Original に戻す」のときだけ積む。そうしないと、配色を数回切り替えただけで
+ * 5 件の履歴を使い切り、直前のレイアウトへ戻れなくなる。
+ */
+export function replaceApplied(p: StoredPrefs, next: UiSelection, now = new Date().toISOString()): StoredPrefs {
+  const n = sanitizeSelection(next)
+  if (sameSelection(p.applied, n)) return p
+  return { version: 1, applied: n, history: p.history, updatedAt: now }
+}
+
 /** 元に戻す：履歴の先頭を適用中の設定に戻す */
 export function undoSelection(p: StoredPrefs, now = new Date().toISOString()): StoredPrefs {
   if (!p.history.length) return p
@@ -124,4 +135,30 @@ export function contrastRatio(hexA: string, hexB: string): number {
   }
   const [a, b] = [lum(hexA), lum(hexB)].sort((x, y) => y - x)
   return Math.round(((a + 0.05) / (b + 0.05)) * 100) / 100
+}
+
+/** #rrggbb を白と混ぜる（share = 元の色の割合 0〜1）。CSS の color-mix(in srgb, 色 share, #fff) と同じ計算 */
+export function mixWithWhite(hex: string, share: number): string {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex); if (!m) return hex
+  const v = parseInt(m[1], 16), p = Math.min(1, Math.max(0, share))
+  return '#' + [(v >> 16) & 255, (v >> 8) & 255, v & 255].map((x) => Math.round(x * p + 255 * (1 - p)).toString(16).padStart(2, '0')).join('')
+}
+
+/** ダーク配色でいちばん明るい地（チップ・注記の帯）の目安。主色はこの上で読める明るさにそろえる */
+const DARK_SURFACE = '#232a32'
+/** ダーク配色で塗りボタンに載せる濃い文字（layouts.css と同じ値） */
+export const DARK_ON_ACCENT = { original: '#06201d', other: '#0b0f14' } as const
+
+/**
+ * 実際に画面で使う主色。
+ * ライト配色では選んだ色のまま（白い文字を載せる濃い色を想定）。
+ * ダーク配色では、選んだ色が暗い地の上の文字・枠線として読め、濃い文字を載せる塗りとしても読めるように、
+ * 必要なぶんだけ白に寄せる（もともと明るい色は変えない）。基準: いちばん明るい地との比が 6:1 以上
+ * （このとき、5 レイアウトのカード・チップ・選択中の行の上で 5.2:1 以上、濃い文字との比は 7:1 以上になる）。
+ * 保存する値（Customization.accent）は利用者が選んだ色のままで、ここで求めた色は保存しない。
+ */
+export function accentForScheme(hex: string, dark: boolean): string {
+  if (!dark) return hex
+  for (let p = 100; p >= 0; p -= 5) { const c = mixWithWhite(hex, p / 100); if (contrastRatio(c, DARK_SURFACE) >= 6) return c }
+  return '#ffffff'
 }

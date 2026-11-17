@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import type { HomeSection } from '../../app/homeSections'
 import type { ShellState } from '../../app/useShellState'
 import type { CardStyle, Density, LayoutId, Radius } from '../prefs'
 
@@ -38,11 +39,16 @@ export interface LayoutSpec {
   basis: string
   /** スマホの下部タブに出す項目（残りは「その他」に入る） */
   mobileTabs: string[]
+  /**
+   * ホーム（研究ダッシュボード）のブロックの並び順（情報の優先順位）。pages/Dashboard.tsx がこの順に DOM を並べる。
+   * CSS の order は使わない（Tab 順・読み上げ順が見た目と食い違うため）。Original は改修前の DOM 順（HOME_SECTIONS）のまま
+   */
+  homeOrder: HomeSection[]
   /** 利用者が「自動」を選んだときの値 */
   defaults: { density: Exclude<Density, 'auto'>; card: Exclude<CardStyle, 'auto'>; radius: Exclude<Radius, 'auto'>; sidebarMode: 'expanded' | 'icons'; sidebarPos: 'left' | 'right' }
   /** コマンドパレット（Ctrl+K）を有効にするか */
   palette: boolean
   /** 設定画面の縮小図（プレビュー）の構成 */
-  mini: { top: 'none' | 'bar' | 'band' | 'scope'; side: 'wide' | 'rail' | 'list'; aside: boolean; bottom: 'none' | 'jobs'; tabs: number }
+  mini: { top: 'none' | 'bar' | 'band' | 'scope'; side: 'wide' | 'rail' | 'list'; aside: boolean; bottom: 'none' | 'jobs' }
   slots: LayoutSlots
 }

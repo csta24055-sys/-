@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { api, Theme } from '../core/api'
-import { Card, Field, Loading, useAsync } from '../components/ui'
+import { Card, Field, Loading, TableWrap, useAsync } from '../components/ui'
 import PlanEditor from '../components/PlanEditor'
 
 const W = { importance: 0.35, novelty: 0.2, feasibility: 0.25, fit: 0.2 }
@@ -37,21 +37,22 @@ export default function ResearchPlan() {
         ))}</div>
         <span className="small muted">{msg}</span>
       </Card>
-      <div className="tablewrap">
+      <TableWrap>
         <table className="rank"><thead><tr><th>順位</th><th>ID</th><th>テーマ</th><th>期間</th><th>重要</th><th>新規</th><th>実行</th><th>適合</th><th>総合</th><th>採否</th></tr></thead>
           <tbody>{ranked.map((t, i) => (
-            <tr key={t.id} className={open === t.id ? 'active' : ''} onClick={() => setOpen(t.id)}>
+            <tr key={t.id} className={open === t.id ? 'active' : ''} onClick={() => setOpen(t.id)}
+              tabIndex={0} onKeyDown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setOpen(t.id) } }}>
               <td>{i + 1}</td><td>{t.id}</td><td>{t.name}</td><td>{t.horizon}</td>
               <td>{t.scores.importance}</td><td>{t.scores.novelty}</td><td>{t.scores.feasibility}</td><td>{t.scores.fit}</td><td><b>{total(t, w).toFixed(2)}</b></td>
               <td>{t.decision ? <span className={`pill ${t.decision === '採択' ? 'st-3' : t.decision === '不採択' ? 'st-0' : 'st-1'}`}>{t.decision}</span> : '—'}</td>
             </tr>))}</tbody></table>
-      </div>
+      </TableWrap>
       <Card title="実現可能性・新規性・設備・期間・失敗リスクの比較（2026-11 資料読解・数値検証を反映）【分析】">
-        <div className="tablewrap"><table><thead><tr><th>ID</th><th>実現可能性</th><th>新規性</th><th>必要設備</th><th>期間[月]</th><th>失敗リスク</th><th>失敗時の代替</th></tr></thead>
+        <TableWrap><table><thead><tr><th>ID</th><th>実現可能性</th><th>新規性</th><th>必要設備</th><th>期間[月]</th><th>失敗リスク</th><th>失敗時の代替</th></tr></thead>
           <tbody>{ranked.filter((t) => t.evaluation).map((t) => { const e = t.evaluation!; return (
             <tr key={t.id} onClick={() => setOpen(t.id)}><td>{t.id}</td><td>{e.feasibility}</td><td>{e.novelty}</td><td>{e.equipment}</td>
               <td>{e.months[0] === e.months[1] ? e.months[0] : `${e.months[0]}〜${e.months[1]}`}</td>
-              <td><span className={`pill ${e.failure_risk === '低' ? 'st-3' : e.failure_risk === '高' ? 'st-0' : 'st-1'}`}>{e.failure_risk}</span></td><td>{e.failure_mode}</td></tr>) })}</tbody></table></div>
+              <td><span className={`pill ${e.failure_risk === '低' ? 'st-3' : e.failure_risk === '高' ? 'st-0' : 'st-1'}`}>{e.failure_risk}</span></td><td>{e.failure_mode}</td></tr>) })}</tbody></table></TableWrap>
         <p className="small muted">スコアの変更: {ranked.filter((t) => t.evaluation?.score_change).map((t) => `${t.id} ${t.evaluation!.score_change}`).join('／') || 'なし'}</p>
       </Card>
       {ranked.filter((t) => t.id === open).map((t) => (
@@ -76,8 +77,8 @@ export default function ResearchPlan() {
         {k.hypotheses.map((h) => (
           <details key={h.id}>
             <summary><b>{h.id}</b> {h.title} <span className="pill st-1">{h.status}</span></summary>
-            <div className="tablewrap"><table><thead><tr><th>競合仮説</th><th>内容</th><th>判別方法</th></tr></thead>
-              <tbody>{h.competing.map((c) => <tr key={c.label}><td>{c.label}</td><td>{c.text}</td><td>{c.test}</td></tr>)}</tbody></table></div>
+            <TableWrap><table><thead><tr><th>競合仮説</th><th>内容</th><th>判別方法</th></tr></thead>
+              <tbody>{h.competing.map((c) => <tr key={c.label}><td>{c.label}</td><td>{c.text}</td><td>{c.test}</td></tr>)}</tbody></table></TableWrap>
             <p className="small">予想される分岐: {h.expected}</p>
             <Field label="状態を更新"><select value={h.status} onChange={async (e) => { await api.patchItem('hypothesis', h.id, { status: e.target.value }); reload() }}>
               {['未検証', '部分検証（計算）', '部分検証', '検証中', '支持', '棄却', '予測'].map((s) => <option key={s}>{s}</option>)}</select></Field>
@@ -88,11 +89,11 @@ export default function ResearchPlan() {
         <div className="roadmap">{k.roadmap.map((r) => <div key={r.phase} className="phase"><h3>{r.phase}</h3><ul>{r.items.map((i) => <li key={i}>{i}</li>)}</ul></div>)}</div>
       </Card>
       <Card title="未解決問題の更新">
-        <div className="tablewrap"><table><thead><tr><th>ID</th><th>優先</th><th>問題</th><th>状態</th></tr></thead>
+        <TableWrap><table><thead><tr><th>ID</th><th>優先</th><th>問題</th><th>状態</th></tr></thead>
           <tbody>{k.questions.map((q) => <tr key={q.id}><td>{q.id}</td><td>{q.priority}</td><td>{q.text}</td>
-            <td><select value={q.status} onChange={async (e) => { await api.patchItem('question', q.id, { status: e.target.value }); reload() }}>
-              {[...new Set([q.status, '未着手', '着手', '資料あり・未検証', '解決', '要確認（本論読了で解決可能性）'])].map((s) => <option key={s}>{s}</option>)}</select></td></tr>)}</tbody></table></div>
-        <div className="filters"><input placeholder="新しい未解決問題" value={newQ} onChange={(e) => setNewQ(e.target.value)} />
+            <td><select value={q.status} aria-label={`${q.id} の状態`} onChange={async (e) => { await api.patchItem('question', q.id, { status: e.target.value }); reload() }}>
+              {[...new Set([q.status, '未着手', '着手', '資料あり・未検証', '解決', '要確認（本論読了で解決可能性）'])].map((s) => <option key={s}>{s}</option>)}</select></td></tr>)}</tbody></table></TableWrap>
+        <div className="filters"><input placeholder="新しい未解決問題" aria-label="新しい未解決問題" value={newQ} onChange={(e) => setNewQ(e.target.value)} />
           <button disabled={!newQ} onClick={async () => { await api.addQuestion({ text: newQ }); setNewQ(''); reload() }}>追加</button></div>
       </Card>
     </div>

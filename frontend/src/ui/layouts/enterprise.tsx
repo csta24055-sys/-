@@ -24,9 +24,9 @@ function Top({ openPalette, openMore, st }: SlotProps) {
       </nav>
       <div className="ux-top-actions">
         <span className="ux-role" title="このアプリには利用者・権限の管理機能はありません">ロール: 単一利用者（権限管理なし）</span>
-        <button type="button" className="ux-cmd" onClick={openPalette} aria-label="コマンド（Ctrl+K）">コマンド <kbd>Ctrl</kbd> <kbd>K</kbd></button>
+        <button type="button" className="ux-cmd" onClick={openPalette} aria-label="コマンド（Ctrl+K）" aria-haspopup="dialog">コマンド <kbd>Ctrl</kbd> <kbd>K</kbd></button>
         <button type="button" className="ux-theme" onClick={() => ui.setCustomNow({ theme: THEME_NEXT[theme] })} aria-label={`配色: ${THEME_LABEL[theme]}（押すと切替）`}>配色: {THEME_LABEL[theme]}</button>
-        <button type="button" className="ux-menu-btn" onClick={openMore} aria-label="すべての機能">☰</button>
+        <button type="button" className="ux-menu-btn" onClick={openMore} aria-label="すべての機能" aria-haspopup="dialog">☰</button>
       </div>
       <span className="ux-sr">現在の画面: {currentNav(st.pathname).label}</span>
     </header>
@@ -37,7 +37,7 @@ function Side({ sidebarMode, toggleSidebar }: SlotProps) {
   const open = sidebarMode === 'expanded'
   return (
     <aside className="ux-side" aria-label="アプリのメニュー">
-      <button type="button" className="ux-rail-toggle" onClick={toggleSidebar} aria-expanded={open}><i aria-hidden className="ux-ico">☰</i><span className="ux-lbl-rail">{open ? '畳む' : '展開'}</span></button>
+      <button type="button" className="ux-rail-toggle" onClick={toggleSidebar} aria-expanded={open} aria-label={open ? 'メニューを畳む' : 'メニューを展開'}><i aria-hidden className="ux-ico">☰</i><span className="ux-lbl-rail">{open ? '畳む' : '展開'}</span></button>
       <nav aria-label="アプリのメニュー">
         {NAV.map((n) => <NavLink key={n.to} to={n.to} end={n.to === '/'} className="ux-navlink" title={n.label}><NavIcon item={n} /><span className="ux-lbl-rail">{open ? n.label : n.short}</span></NavLink>)}
       </nav>
@@ -70,8 +70,9 @@ export const enterprise: LayoutSpec = {
   traits: ['上部スコープバー（研究室 › 研究 › 保存先）', 'アイコンレール 76px ⇄ 展開 232px', '右に証跡列・テーマ切替・Ctrl+K'],
   basis: 'design-research/D-enterprise（案C Federated Shell 4.36点）',
   mobileTabs: ['/', '/library', '/data', '/simulator'],
+  homeOrder: ['stats', 'charts', 'completeness', 'activity', 'findings', 'timeline'],
   defaults: { density: 'standard', card: 'outline', radius: 'sharp', sidebarMode: 'icons', sidebarPos: 'left' },
   palette: true,
-  mini: { top: 'scope', side: 'rail', aside: true, bottom: 'none', tabs: 5 },
+  mini: { top: 'scope', side: 'rail', aside: true, bottom: 'none' },
   slots: { Top, Side, HomeIntro, Aside, Bottom, More: ({ onClose }) => <MoreSheetGrouped onClose={onClose} /> },
 }

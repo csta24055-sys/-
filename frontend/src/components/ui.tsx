@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CLASS_COLORS } from '../core/api'
 
@@ -50,10 +50,32 @@ export function Slider({ label, value, min, max, step, unit, onChange, hint }: {
     <div className="slider">
       <div className="slider-top"><span>{label}</span>
         <span><input type="number" value={value} step={step} onChange={(e) => onChange(Number(e.target.value))} aria-label={label} /> {unit}</span></div>
-      <input type="range" min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} onChange={(e) => onChange(Number(e.target.value))} />
+      <input type="range" min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} onChange={(e) => onChange(Number(e.target.value))} aria-label={label} />
       {hint && <div className="field-h">{hint}</div>}
     </div>
   )
+}
+
+/**
+ * 横にスクロールできる表の枠（.tablewrap）。
+ * 中身が枠からはみ出しているときだけ、キーボードで止まれる（Tab で入り、矢印キーで横にスクロールできる）ようにする。
+ * はみ出していないとき（PC の広い画面など）は属性を付けないので、余計な Tab 停止は増えず、DOM も改修前と同じになる。
+ */
+export function TableWrap({ children, label = '表（横にスクロールできます）' }: { children: ReactNode; label?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [scrolls, setScrolls] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const check = () => setScrolls(el.scrollWidth > el.clientWidth + 1)
+    check()
+    if (typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(check)
+    ro.observe(el)
+    if (el.firstElementChild) ro.observe(el.firstElementChild)
+    return () => ro.disconnect()
+  }, [])
+  return <div ref={ref} className="tablewrap" tabIndex={scrolls ? 0 : undefined} role={scrolls ? 'group' : undefined} aria-label={scrolls ? label : undefined}>{children}</div>
 }
 
 export const fmt = (v: number | null | undefined, d = 2) => (v === null || v === undefined || !Number.isFinite(v) ? '—' : Number(v).toLocaleString('ja-JP', { maximumFractionDigits: d, minimumFractionDigits: 0 }))

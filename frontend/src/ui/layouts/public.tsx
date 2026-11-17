@@ -52,7 +52,7 @@ function Side({ st }: SlotProps) {
     <aside className="ux-side" aria-label="画面の一覧">
       <h2 className="ux-side-h">画面</h2>
       <nav aria-label="すべての画面">
-        {NAV.map((n) => <NavLink key={n.to} to={n.to} end={n.to === '/'} className="ux-navlink"><NavIcon item={n} /><span className="ux-lbl">{n.label}</span></NavLink>)}
+        {NAV.map((n) => <NavLink key={n.to} to={n.to} end={n.to === '/'} className="ux-navlink" title={n.label}><NavIcon item={n} /><span className="ux-lbl">{n.label}</span></NavLink>)}
       </nav>
       <div className="ux-statebox">
         <h2>データの状態</h2>
@@ -106,8 +106,10 @@ export const pub: LayoutSpec = {
   traits: ['識別帯で「公式情報ではない」ことを明示', '上部の主要5項目＋文字サイズ切替（標準/大/特大）', 'ホームは第1層 結論から表示'],
   basis: 'design-research/B-public（案C 段階的開示3層レイヤー型 4.42点）',
   mobileTabs: ['/', '/library', '/report'],
+  // 第1層 結論（findings）→ 第2層 比較（stats・charts・timeline）→ 第3層 根拠（completeness・activity）
+  homeOrder: ['findings', 'stats', 'charts', 'timeline', 'completeness', 'activity'],
   defaults: { density: 'comfortable', card: 'outline', radius: 'standard', sidebarMode: 'expanded', sidebarPos: 'left' },
   palette: false,
-  mini: { top: 'band', side: 'list', aside: false, bottom: 'none', tabs: 4 },
+  mini: { top: 'band', side: 'list', aside: false, bottom: 'none' },
   slots: { Top, Side, HomeIntro, Bottom, More: ({ onClose }) => <MoreSheetGrouped onClose={onClose} /> },
 }

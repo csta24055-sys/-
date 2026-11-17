@@ -100,7 +100,7 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
   font-size: calc(var(--u-fs-base) * var(--u-fs-scale, 1));
 }
 :root[data-ux] body { font-size: 1rem; }
-@media (max-width: 720px) { :root[data-ux] { --u-fs-base: 14px; } :root[data-ux] body { font-size: 1rem; } }
+@media (max-width: 720px) { :root[data-ux] { --u-fs-base: 14px; } }
 
 /* 密度 */
 :root[data-density="compact"] { --u-card-pad: .65rem .8rem; --u-gap: .65rem; --u-cell-y: .2rem; --u-cell-x: .4rem; --u-ctl-h: 30px; --u-main-pad: 1rem 1.2rem 2.5rem; --u-stat-v: 1.25rem; }
@@ -164,19 +164,22 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
   :root[data-ui="commercial"]:not([data-theme="light"]) { --bg: #121512; --card: #1b201c; --fg: #e6ebe6; --muted: #a7b0a8; --line: #2f3830; --grid: #2a312b; --accent: #5cc2a9; --accent-2: #63c58f; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #171b18; --side-fg: #e6ebe6; --chip: #232a24; --sel: #1c3530; --u-focus: #8ab4f8; color-scheme: dark; }
   :root[data-ui="enterprise"]:not([data-theme="light"]) { --bg: #0f1217; --card: #171b22; --fg: #e5e7eb; --muted: #a3acb9; --line: #2d333d; --grid: #262c35; --accent: #6aa5ec; --accent-2: #5a9be6; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #141820; --side-fg: #e5e7eb; --chip: #20252e; --sel: #1a2b40; --u-scope: #0a1a26; --u-focus: #8ab4f8; color-scheme: dark; }
 }
-:root[data-ui="research"][data-theme="dark"] { --bg: #111418; --card: #1a1f25; --fg: #e6e9ed; --muted: #a4adb8; --line: #2e3640; --grid: #2a313a; --accent: #4fb8c9; --accent-2: #8ea7e0; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8a80; --side: #161a1f; --side-fg: #e6e9ed; --chip: #232a32; --sel: #16343a; --u-focus: #8ab4f8; color-scheme: dark; }
-:root[data-ui="public"][data-theme="dark"] { --bg: #0f141a; --card: #17202a; --fg: #e8edf2; --muted: #a9b6c3; --line: #33414f; --grid: #33414f; --accent: #7fb6e0; --accent-2: #6fc59a; --warn: #f0c35a; --warn-bg: #2d2614; --err: #ff9a8f; --side: #141b23; --side-fg: #e8edf2; --chip: #22303d; --sel: #1e3347; --u-focus: #f0a35a; color-scheme: dark; }
-:root[data-ui="commercial"][data-theme="dark"] { --bg: #121512; --card: #1b201c; --fg: #e6ebe6; --muted: #a7b0a8; --line: #2f3830; --grid: #2a312b; --accent: #5cc2a9; --accent-2: #63c58f; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #171b18; --side-fg: #e6ebe6; --chip: #232a24; --sel: #1c3530; --u-focus: #8ab4f8; color-scheme: dark; }
-:root[data-ui="enterprise"][data-theme="dark"] { --bg: #0f1217; --card: #171b22; --fg: #e5e7eb; --muted: #a3acb9; --line: #2d333d; --grid: #262c35; --accent: #6aa5ec; --accent-2: #5a9be6; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #141820; --side-fg: #e5e7eb; --chip: #20252e; --sel: #1a2b40; --u-scope: #0a1a26; --u-focus: #8ab4f8; color-scheme: dark; }
-/* ダーク時: 明るい主色で塗られるボタンだけを濃い文字にする。背景が透明なボタン（下部ナビ・タブ・選択肢）は各自の文字色のまま
-   （既定の塗りボタンは詳細度 0,0,1 の :where で指定し、塗りになる状態は個別に指定する） */
-:where(:root[data-ux][data-theme="dark"] .ux-shell) button { color: #0b0f14; }
-:root[data-ux][data-theme="dark"] .ux-shell :is(.tabs, .statusbar) button.on,
-:root[data-ux][data-theme="dark"] .ux-shell :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
-:root[data-ux][data-theme="dark"] .ux-shell .ux-seg button[aria-pressed="true"],
-:root[data-ux][data-theme="dark"] .ux-btn-primary,
-:root[data-ux][data-theme="dark"] .ux-pill,
-:root[data-ux][data-theme="dark"] .ux-navlink.active .ux-stage-no { color: #0b0f14; }
+/* 配色=ダーク（手動）の指定は画面（screen）だけに効かせる。印刷では各レイアウトのライトの色で紙に出す */
+@media screen {
+  :root[data-ui="research"][data-theme="dark"] { --bg: #111418; --card: #1a1f25; --fg: #e6e9ed; --muted: #a4adb8; --line: #2e3640; --grid: #2a313a; --accent: #4fb8c9; --accent-2: #8ea7e0; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8a80; --side: #161a1f; --side-fg: #e6e9ed; --chip: #232a32; --sel: #16343a; --u-focus: #8ab4f8; color-scheme: dark; }
+  :root[data-ui="public"][data-theme="dark"] { --bg: #0f141a; --card: #17202a; --fg: #e8edf2; --muted: #a9b6c3; --line: #33414f; --grid: #33414f; --accent: #7fb6e0; --accent-2: #6fc59a; --warn: #f0c35a; --warn-bg: #2d2614; --err: #ff9a8f; --side: #141b23; --side-fg: #e8edf2; --chip: #22303d; --sel: #1e3347; --u-focus: #f0a35a; color-scheme: dark; }
+  :root[data-ui="commercial"][data-theme="dark"] { --bg: #121512; --card: #1b201c; --fg: #e6ebe6; --muted: #a7b0a8; --line: #2f3830; --grid: #2a312b; --accent: #5cc2a9; --accent-2: #63c58f; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #171b18; --side-fg: #e6ebe6; --chip: #232a24; --sel: #1c3530; --u-focus: #8ab4f8; color-scheme: dark; }
+  :root[data-ui="enterprise"][data-theme="dark"] { --bg: #0f1217; --card: #171b22; --fg: #e5e7eb; --muted: #a3acb9; --line: #2d333d; --grid: #262c35; --accent: #6aa5ec; --accent-2: #5a9be6; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #141820; --side-fg: #e5e7eb; --chip: #20252e; --sel: #1a2b40; --u-scope: #0a1a26; --u-focus: #8ab4f8; color-scheme: dark; }
+  /* ダーク時: 明るい主色で塗られるボタンだけを濃い文字にする。背景が透明なボタン（下部ナビ・タブ・選択肢）は各自の文字色のまま
+     （既定の塗りボタンは詳細度 0,0,1 の :where で指定し、塗りになる状態は個別に指定する） */
+  :where(:root[data-ux][data-theme="dark"] .ux-shell) button { color: #0b0f14; }
+  :root[data-ux][data-theme="dark"] .ux-shell :is(.tabs, .statusbar) button.on,
+  :root[data-ux][data-theme="dark"] .ux-shell :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
+  :root[data-ux][data-theme="dark"] .ux-shell .ux-seg button[aria-pressed="true"],
+  :root[data-ux][data-theme="dark"] .ux-btn-primary,
+  :root[data-ux][data-theme="dark"] .ux-pill,
+  :root[data-ux][data-theme="dark"] .ux-navlink.active .ux-stage-no { color: #0b0f14; }
+}
 @media (prefers-color-scheme: dark) {
   :where(:root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell) button { color: #0b0f14; }
   :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell :is(.tabs, .statusbar) button.on,
@@ -235,7 +238,7 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 .ux-research .ux-brand b { font-size: 1rem; }
 .ux-crumb { display: flex; gap: .4rem; align-items: center; font-size: .85rem; color: var(--muted); min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .ux-crumb b { color: var(--fg); overflow: hidden; text-overflow: ellipsis; }
-.ux-stages { list-style: none; margin: 0; padding: 0; counter-reset: none; }
+.ux-stages { list-style: none; margin: 0; padding: 0; }
 .ux-stages li { position: relative; }
 .ux-stages li + li::before { content: ""; position: absolute; left: 1.15rem; top: -4px; height: 8px; border-left: 2px solid var(--line); }
 .ux-stage-no { display: inline-flex; align-items: center; justify-content: center; width: 1.45rem; height: 1.45rem; flex: none; border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); font-size: .78rem; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--card); }
@@ -323,23 +326,15 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 .ux-enterprise .stat-v { color: var(--fg); }
 .ux-enterprise .card-h h2 { font-size: 1rem; }
 
-/* ---------- ダッシュボード: レイアウトごとの情報の優先順位（同じ部品の並び順だけを変える） ---------- */
+/* ---------- ダッシュボード: レイアウトごとの情報の優先順位 ----------
+   並び順は DOM の順で決める（LayoutSpec.homeOrder → pages/Dashboard.tsx）。CSS の order は使わない
+   （order で並べ替えると、Tab 順・読み上げ順が見た目と食い違う）。ここには縦に積む指定と Public の層のラベルだけを書く */
 .ux-shell .page[data-page="dashboard"] { display: flex; flex-direction: column; }
-.ux-shell .page[data-page="dashboard"] > * { order: 50; }
-.ux-shell .page[data-page="dashboard"] > h1, .ux-shell .page[data-page="dashboard"] > .lead { order: 0; }
-.ux-research [data-section="stats"] { order: 1 !important; } .ux-research [data-section="completeness"] { order: 2 !important; } .ux-research [data-section="charts"] { order: 3 !important; }
-.ux-research [data-section="findings"] { order: 4 !important; } .ux-research [data-section="timeline"] { order: 5 !important; } .ux-research [data-section="activity"] { order: 6 !important; }
-.ux-public [data-section="findings"] { order: 1 !important; } .ux-public [data-section="stats"] { order: 2 !important; } .ux-public [data-section="charts"] { order: 3 !important; }
-.ux-public [data-section="timeline"] { order: 4 !important; } .ux-public [data-section="completeness"] { order: 5 !important; } .ux-public [data-section="activity"] { order: 6 !important; }
 .ux-public .page[data-page="dashboard"] [data-section] { position: relative; margin-top: 2.4rem; scroll-margin-top: 1rem; }
 .ux-public .page[data-page="dashboard"] [data-section]::before { position: absolute; top: -1.9rem; left: 0; font-size: .85rem; font-weight: 700; color: var(--accent); padding: .1rem .6rem; border-radius: 999px; background: var(--sel); }
 .ux-public [data-section="findings"]::before { content: "第1層 結論 — 研究でわかったこと・未解決の問題"; }
 .ux-public [data-section="stats"]::before { content: "第2層 比較 — 件数と進捗"; }
 .ux-public [data-section="completeness"]::before { content: "第3層 根拠 — 研究ごとの検証状況"; }
-.ux-commercial [data-section="charts"] { order: 1 !important; } .ux-commercial [data-section="stats"] { order: 2 !important; } .ux-commercial [data-section="findings"] { order: 3 !important; }
-.ux-commercial [data-section="activity"] { order: 4 !important; } .ux-commercial [data-section="timeline"] { order: 5 !important; } .ux-commercial [data-section="completeness"] { order: 6 !important; }
-.ux-enterprise [data-section="stats"] { order: 1 !important; } .ux-enterprise [data-section="charts"] { order: 2 !important; } .ux-enterprise [data-section="completeness"] { order: 3 !important; }
-.ux-enterprise [data-section="activity"] { order: 4 !important; } .ux-enterprise [data-section="findings"] { order: 5 !important; } .ux-enterprise [data-section="timeline"] { order: 6 !important; }
 
 /* ---------- Original にカスタマイズを付けたとき（サイドバーの位置・アイコン化・非表示） ---------- */
 .shell:not(.ux-shell)[data-sidebar^="right-"] { grid-template-columns: 1fr 236px; }
@@ -348,7 +343,7 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 .shell:not(.ux-shell)[data-sidebar="right-icons"] { grid-template-columns: 1fr 64px; }
 .shell:not(.ux-shell)[data-sidebar$="-icons"] .side { padding: 1rem .35rem; }
 .shell:not(.ux-shell)[data-sidebar$="-icons"] .side .brand div, .shell:not(.ux-shell)[data-sidebar$="-icons"] .side-foot { display: none; }
-.shell:not(.ux-shell)[data-sidebar$="-icons"] .side nav a { font-size: 0; justify-content: center; }
+.shell:not(.ux-shell)[data-sidebar$="-icons"] .side nav a { font-size: 0; justify-content: center; gap: 0; }
 .shell:not(.ux-shell)[data-sidebar$="-icons"] .side nav a i { font-size: 1.1rem; width: auto; }
 .shell:not(.ux-shell)[data-sidebar="hidden"] { grid-template-columns: 1fr; }
 .shell:not(.ux-shell)[data-sidebar="hidden"] .main { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
@@ -491,13 +486,15 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
   :root:not([data-theme="light"]) .shell:not(.ux-shell) .bar div { background: #2c645c; }
   :root:not([data-theme="light"]) .shell:not(.ux-shell) .bar span { color: var(--fg); }
 }
-:where(:root[data-theme="dark"] .shell:not(.ux-shell)) button { color: #06201d; }
-:root[data-theme="dark"] .shell:not(.ux-shell) :is(.tabs, .statusbar) button.on,
-:root[data-theme="dark"] .shell:not(.ux-shell) :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
-:root[data-theme="dark"] .shell:not(.ux-shell) .ux-seg button[aria-pressed="true"],
-:root[data-theme="dark"] .shell:not(.ux-shell) .ux-pill { color: #06201d; }
-:root[data-theme="dark"] .shell:not(.ux-shell) .bar div { background: #2c645c; }
-:root[data-theme="dark"] .shell:not(.ux-shell) .bar span { color: var(--fg); }
+@media screen {
+  :where(:root[data-theme="dark"] .shell:not(.ux-shell)) button { color: #06201d; }
+  :root[data-theme="dark"] .shell:not(.ux-shell) :is(.tabs, .statusbar) button.on,
+  :root[data-theme="dark"] .shell:not(.ux-shell) :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
+  :root[data-theme="dark"] .shell:not(.ux-shell) .ux-seg button[aria-pressed="true"],
+  :root[data-theme="dark"] .shell:not(.ux-shell) .ux-pill { color: #06201d; }
+  :root[data-theme="dark"] .shell:not(.ux-shell) .bar div { background: #2c645c; }
+  :root[data-theme="dark"] .shell:not(.ux-shell) .bar span { color: var(--fg); }
+}
 
 /* =====================================================================
    最終点検（スマホ・横向き）での修正
@@ -507,8 +504,9 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 /* Original: 高さの低い画面（スマホの横向き）で、サイドバーの下の項目と「その他」シートの上の項目に届くようにする（収まる高さでは見た目は同じ） */
 .shell:not(.ux-shell) > .side { overflow-y: auto; }
 .shell:not(.ux-shell) .sheet { max-height: 100%; overflow-y: auto; }
-/* ページ内リンク（レポートの目次など）で移動したとき、見出しが固定ヘッダーの下に隠れないようにする */
-.ux-shell .main [id] { scroll-margin-top: calc(var(--u-top-h, 0px) + .75rem); }
+/* ページ内リンク（レポートの目次など）で移動したとき、見出しが固定ヘッダーの下に隠れないようにする。
+   固定ヘッダーの高さぶんは <html> の scroll-padding-top（末尾の「アクセシビリティ監査での修正」）で取り、ここでは見出しの上の余白だけを足す */
+.ux-shell .main [id] { scroll-margin-top: .5rem; }
 /* 進捗バー: 文字を大きくしても数値が上下に切れないよう、高さを中身に合わせる */
 :root[data-ux] .bar { height: auto; min-height: 22px; display: flex; align-items: center; }
 :root[data-ux] .bar div { position: absolute; top: 0; bottom: 0; left: 0; height: auto; }
@@ -548,3 +546,93 @@ kbd { font-size: max(10px, .75em); }
 /* 年表: 文字を大きくした狭い画面でも、右の列が画面からはみ出さないようにする（長い数値表現はどこででも折り返す） */
 .ux-shell .tl-item { grid-template-columns: 4em minmax(0, 1fr); }
 .ux-shell .tl-item > * { min-width: 0; overflow-wrap: anywhere; }
+
+/* =====================================================================
+   アクセシビリティ監査（2026-11-17）での修正
+   ここの規則は、色（配色を手動で切り替えたとき）とフォーカス中の見た目だけを変える。
+   ライト配色・既定設定の Original の画素は変わらない（検査: e2e/original-regression.cjs、e2e/final-checks.cjs の a11y）。
+   ===================================================================== */
+/* Original のサイドバー: 半透明（opacity）の文字を、axe-core が sticky の祖先より下の層と判定して背景色を取り違える
+   （実測のコントラスト比は 6.9:1 と 5.1:1 で合格）。position を付けると正しく計算される。画素は変わらない */
+.shell:not(.ux-shell) .brand span, .shell:not(.ux-shell) .side-foot { position: relative; }
+
+/* 配色を手動で端末と逆にしたとき、分類バッジ（【確認事実】など）と調査状態の色も配色に合わせる。
+   styles.css では端末の配色（prefers-color-scheme）だけで切り替わるため、data-theme が付いたときの値をここで決める */
+:root[data-theme="light"] .b-fact { color: #1d6b3a; } :root[data-theme="light"] .b-claim { color: #3a5ea5; } :root[data-theme="light"] .b-analysis { color: #8a4d00; }
+:root[data-theme="light"] .b-hypo { color: #b5446e; } :root[data-theme="light"] .b-pred { color: #6b4c9a; } :root[data-theme="light"] .b-calc { color: #0f5b5c; }
+:root[data-theme="light"] .st-0 { background: #eceff0; color: #555; } :root[data-theme="light"] .st-1 { background: #e3eefa; color: #2b5b8f; } :root[data-theme="light"] .st-2 { background: #dff2ee; color: #1d6b5f; }
+@media screen {
+  :root[data-theme="dark"] .b-fact { color: #6fd39a; } :root[data-theme="dark"] .b-claim { color: #8fb3ff; } :root[data-theme="dark"] .b-analysis { color: #f0b45a; }
+  :root[data-theme="dark"] .b-hypo { color: #f38bb0; } :root[data-theme="dark"] .b-pred { color: #c3a6f0; } :root[data-theme="dark"] .b-calc { color: #5cc2b4; }
+  :root[data-theme="dark"] .st-0 { background: #333; color: #ccc; } :root[data-theme="dark"] .st-1 { background: #1f3550; color: #a9c8ef; } :root[data-theme="dark"] .st-2 { background: #173d37; color: #8fe0d1; }
+  /* Original で「配色: ダーク」を選んだとき（端末はライト）: styles.css の data-theme="dark" に無いトークンを補う
+     （値は styles.css の端末ダーク用と同じ）。無いままだと、プレビュー帯・警告の文字が明るい地に明るい文字になる */
+  :root[data-ui="original"][data-theme="dark"] { --accent-2: #3ea597; --warn: #f0a94a; --warn-bg: #2d2416; --err: #ff8b80; --side-fg: #cfe4e0; }
+}
+
+/* サイドバーを「アイコンのみ」にしたとき、Public の「データの状態」欄は幅が足りないので出さない（同じ内容は設定画面にある） */
+.ux-shell[data-sidebar$="-icons"] .ux-statebox { display: none; }
+/* 畳んだサイドバーを開くボタン（»）を、押しやすい幅にする */
+.ux-shell[data-sidebar$="-icons"] .ux-collapse { min-width: 32px; align-self: center; }
+
+/* フォーカスの輪が地の色と近くて見えにくかった所 */
+:root[data-ux][data-ui="original"] .side :focus-visible, :root[data-ux][data-ui="original"] .tabbar :focus-visible { outline-color: #fff; }   /* 濃いサイドバーの上: 1.6:1 → 12:1 */
+:root[data-ux] .ux-scopebar :focus-visible, :root[data-ux] .ux-enterprise .ux-bottom :focus-visible { outline-color: #8ab4f8; }             /* 濃いスコープバーの上: 2.3:1 → 7:1 */
+:root[data-ux] .ux-bottom :focus-visible, :root[data-ux][data-ui="original"] .tabbar :focus-visible { outline-offset: -3px; }                                                                           /* 下部ナビ: 輪が画面の下端と隣のタブに掛からないよう内側に描く */
+@media (max-width: 720px) { :root[data-ux] .ux-shell > .ux-top .ux-menu-btn:focus-visible { outline-offset: -3px; } }                         /* スマホの ☰: ヘッダーと同じ高さなので、輪が画面の上端で切れないよう内側に描く */
+/* Public の文字サイズ切替: 枠の overflow で輪が切れていたので、切り取りをやめて端のボタンの角だけ丸める */
+.ux-seg { overflow: visible; }
+.ux-seg button:last-of-type { border-radius: 0 999px 999px 0 !important; }
+@media (max-width: 720px) { .ux-public .ux-seg button:first-of-type { border-radius: 999px 0 0 999px !important; } } /* スマホでは「文字」のラベルを出さないので、先頭のボタンが左端になる */
+/* 研究計画の表の行（キーボードで選べるようにした）: 行に輪を描けないブラウザーでも分かるよう、地の色も変える */
+table.rank tr:focus-visible, :root[data-ux] table.rank tr:focus-visible { outline: 2px solid var(--u-focus, var(--accent)); outline-offset: -2px; background: var(--sel); }
+/* 本文（main）へフォーカスを移したときは輪を出さない（位置を移すだけ。Original では移している間だけ tabindex が付く） */
+.shell:not(.ux-shell) > .main:focus { outline: none; }
+
+/* 固定ヘッダー・下部ナビの下にフォーカスや移動先が隠れないよう、スクロール位置に余白を取る（表示は変わらない）。
+   スキップリンクの移動先、Shift+Tab で戻ったときの要素、レポートの目次の移動先に効く */
+:root[data-ux]:not([data-ui="original"]) { scroll-padding-top: calc(var(--u-top-h, 0px) + env(safe-area-inset-top, 0px) + 8px); }
+@media (max-width: 720px) {
+  :root[data-ux]:not([data-ui="original"]) { scroll-padding-top: calc(56px + env(safe-area-inset-top, 0px)); scroll-padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  :root[data-ux][data-ui="public"] { scroll-padding-top: 8px; }
+  /* Original の下部タブ（52px）にも同じ余白を取る */
+  :root[data-ui="original"] { scroll-padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* コマンドパレット: 該当なしの案内（role=status）。中身が空のあいだは場所を取らない */
+.ux-palette-none { margin: .5rem .6rem; }
+.ux-palette-none:empty { display: none; }
+
+/* =====================================================================
+   コードレビュー・WebKit の CI（2026-11-17）での修正
+   ===================================================================== */
+/* select: WebKit（macOS の Safari 系）は、既定の見た目（menulist）の select に高さの指定が効かない（40px のつもりが 23〜29px になる）。
+   追加 4 レイアウトでは既定の見た目をやめて枠を自前で描き、右端に矢印を付ける。これで min-height がどのエンジンでも効く。
+   矢印はライト・ダークどちらの地でも見える中間の灰色。Original（カスタマイズ付きを含む）の select は変えない */
+:root[data-ux]:not([data-ui="original"]) select:not([multiple]):not([size]) {
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.5l4.5 4.5 4.5-4.5' fill='none' stroke='%237a8591' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .6rem center; background-size: 12px 8px;
+  padding-right: 1.9rem; text-overflow: ellipsis;
+}
+@media (forced-colors: active) {
+  :root[data-ux]:not([data-ui="original"]) select:not([multiple]):not([size]) { -webkit-appearance: auto; appearance: auto; background-image: none; padding-right: .5rem; }
+}
+
+/* :root[data-ux] の共通規則（button / th, td。詳細度 0,2,1）が、より限定的な部品の指定を打ち消していた所を元に戻す */
+:root[data-ux] .ux-sw { min-height: 36px; border-radius: 50%; }                                   /* 色見本は円のまま */
+@media (max-width: 720px) { :root[data-ux] .ux-sw { min-height: 40px; } }
+:root[data-ux] .ux-bottom button { border-radius: 0; min-height: 56px; }                          /* 下部ナビの「その他」をほかのタブと同じ形に */
+:root[data-ux] .cptable td.cp { padding: 2px; } :root[data-ux] .cptable th.vert { padding: 4px 2px; } /* 完成度表の記号のセルは詰めたまま */
+@media (min-width: 721px) { :root[data-ux] button.link { min-height: 0; border-radius: 0; } }     /* リンク型のボタンは文字の高さのまま（スマホでは押しやすさのため 40px を保つ） */
+
+/* 印刷: 配色を「ダーク」に固定していても、紙にはライトの色で出す。
+   追加 4 レイアウトのダーク用トークンは @media screen の中にあるので、印刷では自動的にライトの値になる。
+   Original のダーク用トークンは styles.css（変更しない）にあるので、ここでライトの値（styles.css の :root と同じ）に戻す */
+@media print {
+  :root[data-ui="original"][data-theme="dark"] { --bg: #f4f6f5; --card: #ffffff; --fg: #1d2724; --muted: #5e6b67; --line: #dfe5e3; --grid: #e6ebe9; --accent: #0f5b5c; --side: #0f3b3c; --chip: #eef3f2; --sel: #e3f0ee; color-scheme: light; }
+  /* 主色を選んでいるとき: ダーク用に明るく調整した色（<html> の style）ではなく、選んだ色そのもので刷る */
+  :root[style*="--u-accent-user"] { --accent: var(--u-accent-user) !important; --accent-2: var(--u-accent-user) !important; --sel: var(--chip) !important; }
+  /* Original 以外でも、印刷時は本文の余白を 0 にする（styles.css の指定が骨格の指定に負けていた） */
+  .ux-shell > .main { padding: 0 !important; }
+}

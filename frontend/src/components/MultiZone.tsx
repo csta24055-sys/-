@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartBox from './ChartBox'
-import { Card, Field, fmt, Slider, useAsync } from './ui'
+import { Card, Field, fmt, Slider, TableWrap, useAsync } from './ui'
 import { api, download, toCsv } from '../core/api'
 import * as M from '../core/models'
 
@@ -61,11 +61,11 @@ export default function MultiZone() {
           {shown.map((z, i) => <Line key={z} dataKey={z} stroke={COLORS[i % COLORS.length]} dot={false} strokeWidth={1.6} isAnimationActive={false} />)}
         </LineChart></ResponsiveContainer>
       </ChartBox>
-      <div className="tablewrap"><table><thead><tr><th>室</th><th>容積 m³</th><th>最大濃度</th><th>最大時刻[分]</th><th>終了時濃度</th></tr></thead>
+      <TableWrap><table><thead><tr><th>室</th><th>容積 m³</th><th>最大濃度</th><th>最大時刻[分]</th><th>終了時濃度</th></tr></thead>
         <tbody>{zones.map((z) => {
           const s = res.series[z]; const mx = Math.max(...s); const at = res.t_h[s.indexOf(mx)] * 60
           return <tr key={z}><td>{z}</td><td>{net.volumes[z]}</td><td>{fmt(mx, 4)}</td><td>{fmt(at, 1)}</td><td>{fmt(s[s.length - 1], 4)}</td></tr>
-        })}</tbody></table></div>
+        })}</tbody></table></TableWrap>
       <Validation />
       <button className="ghost" onClick={() => download('multizone.csv', toCsv(['t_h', ...zones], res.t_h.map((t, i) => [t, ...zones.map((z) => res.series[z][i])])))}>時系列CSV</button>
     </Card>
@@ -82,19 +82,19 @@ function Validation() {
     <>
     <details open className="validation">
       <summary><b>実測による検証</b>（2020年度 実験住宅・線香2本LDK発生・粉塵計3回平均, Box 1516270811625）【計算結果】</summary>
-      <div className="tablewrap"><table><thead><tr><th>ファン</th><th>D [1/s]</th><th>β [1/h]</th><th>平均NRMSE</th><th>ピーク比（計算/実測）</th><th>レターン ピーク時刻 実測/計算 [s]</th></tr></thead>
-        <tbody>{v.cases.map((c) => <tr key={c.fan + c.D_per_s}><td>{c.fan}</td><td>{c.D_per_s}</td><td>{fmt(c.beta_per_h, 2)}</td><td className={c.mean_nrmse > 0.4 ? 'warn' : ''}>{fmt(c.mean_nrmse, 2)}</td><td>{fmt(c.mean_peak_ratio, 2)}</td><td>{fmt(c.rooms['レターン']?.t_peak_meas, 0)} / {fmt(c.rooms['レターン']?.t_peak_sim, 0)}</td></tr>)}</tbody></table></div>
+      <TableWrap><table><thead><tr><th>ファン</th><th>D [1/s]</th><th>β [1/h]</th><th>平均NRMSE</th><th>ピーク比（計算/実測）</th><th>レターン ピーク時刻 実測/計算 [s]</th></tr></thead>
+        <tbody>{v.cases.map((c) => <tr key={c.fan + c.D_per_s}><td>{c.fan}</td><td>{c.D_per_s}</td><td>{fmt(c.beta_per_h, 2)}</td><td className={c.mean_nrmse > 0.4 ? 'warn' : ''}>{fmt(c.mean_nrmse, 2)}</td><td>{fmt(c.mean_peak_ratio, 2)}</td><td>{fmt(c.rooms['レターン']?.t_peak_meas, 0)} / {fmt(c.rooms['レターン']?.t_peak_sim, 0)}</td></tr>)}</tbody></table></TableWrap>
       <p className="small muted">最適D（0〜0.0008 を探索）: 弱 {v.grid_best['弱']?.best_D}（NRMSE {fmt(v.grid_best['弱']?.best_nrmse, 2)}）、強 {v.grid_best['強']?.best_D}（NRMSE {fmt(v.grid_best['強']?.best_nrmse, 2)}）。
         Dは運転条件に依存する較正係数で、還気口の応答時刻と室間差は再現できない（F-SIM-01〜04）。</p>
     </details>
     {f && (
       <details className="validation">
         <summary><b>2022年度シミュレーションの再計算</b>（粉塵の行方・30分, 同年度の入力値, Box 1516298663163）【計算結果】</summary>
-        <div className="tablewrap"><table><thead><tr><th>粒径 μm</th><th>条件</th><th>LDK+吹抜 本アプリ/当時</th><th>非居室</th><th>集塵機</th><th>未沈着</th></tr></thead>
+        <TableWrap><table><thead><tr><th>粒径 μm</th><th>条件</th><th>LDK+吹抜 本アプリ/当時</th><th>非居室</th><th>集塵機</th><th>未沈着</th></tr></thead>
           <tbody>{f.rows.map((r) => <tr key={r.size_um + r.cond}><td>{r.size_um}</td><td>{r.fan}{r.ep ? '・EP' : ''}</td>
             <td className={Math.abs(r.diff_pt['LDK']) > 3 ? 'warn' : ''}>{fmt(r.model['LDK+吹抜'], 1)} / {fmt(r.reported['LDK'], 1)}</td>
             <td>{fmt(r.model['非居室'], 1)} / {fmt(r.reported['非居室'], 1)}</td><td>{fmt(r.model['集塵機'], 1)} / {fmt(r.reported['集塵機'], 1)}</td>
-            <td>{fmt(r.model['残留'], 1)} / {fmt(r.reported['残留'], 1)}</td></tr>)}</tbody></table></div>
+            <td>{fmt(r.model['残留'], 1)} / {fmt(r.reported['残留'], 1)}</td></tr>)}</tbody></table></TableWrap>
         <p className="small muted">EP・非居室の割合は全粒径で約1ポイント以内で再現。10 μm以上で当時の表にある「未沈着」（0.9〜5.6%）は物理的には残らず（β≥3.7×10⁻³ 1/s）、その分LDKの割合がずれる。当時の『その他』は30分後の浮遊残存と、初回ステップの損失による時間刻み依存の数値残差の和（全20シートで確認, F-SIM-13）。</p>
       </details>
     )}
