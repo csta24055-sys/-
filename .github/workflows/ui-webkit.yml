@@ -40,13 +40,13 @@ jobs:
           python scripts/build_mobile.py --target cloudflare --out frontend/dist-cf
       - name: Final checks (WebKit)
         run: |
-          python scripts/serve_static.py frontend/dist-mobile 47801 &
-          sleep 1
+          nohup python scripts/serve_static.py frontend/dist-mobile 47801 > serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -s -o /dev/null http://127.0.0.1:47801/ && break; sleep 1; done   # 配信が始まるまで待つ
           cd frontend && BROWSER=webkit OUT=../webkit-out/final WORKER=dist-cf/_worker.js node e2e/final-checks.cjs
       - name: Layout matrix — 5 layouts × desktop / iPhone / Android (WebKit)
         if: always()
         run: |
-          curl -s -o /dev/null http://127.0.0.1:47801/ || (python scripts/serve_static.py frontend/dist-mobile 47801 & sleep 1)
+          curl -s -o /dev/null http://127.0.0.1:47801/ || (nohup python scripts/serve_static.py frontend/dist-mobile 47801 > serve.log 2>&1 & sleep 3)
           cd frontend && BROWSER=webkit SHOTS=../webkit-out/ui-layouts node e2e/ui-layouts.cjs
       - name: Upload screenshots and results
         if: always()
