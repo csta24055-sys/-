@@ -1,14 +1,18 @@
 # スマホ版を Cloudflare Pages（aqros-mobile.pages.dev）へ自動公開する（任意）
 # 次の Secrets がこのリポジトリに登録されているときだけ公開する。無ければ何もしない:
-#   CLOUDFLARE_API_TOKEN（Pages 編集権限）, CLOUDFLARE_ACCOUNT_ID, AQROS_PRIVACY_PATTERNS（漏えい検査の検査語）
-# 漏えい検査に不合格なら公開しない（scripts/deploy_cloudflare.py）。
+#   CLOUDFLARE_API_TOKEN（Pages 編集権限。必須）, CLOUDFLARE_ACCOUNT_ID（アカウントが 1 つなら省略可）,
+#   AQROS_PRIVACY_PATTERNS（漏えい検査の検査語。任意）
+# 公開前の検査（どちらかに合格しないと公開しない。scripts/deploy_cloudflare.py）:
+#   - AQROS_PRIVACY_PATTERNS がある: 氏名リストでの漏えい検査（データを変えたときはこちらが必要）
+#   - 無い: 「公開するデータが、いま公開中のものと 1 バイトも違わない」ことの確認（--data-unchanged。画面だけの変更用。
+#           データが少しでも違えば公開しない）
 name: cloudflare-pages
 
 on:
   workflow_dispatch:
   push:
     branches: ["claude/air-quality-research-os-19gu2g"]
-    paths: ["frontend/**", "knowledge/**", "report/**", "deliverables/technical_report_2026-11/**", "scripts/build_mobile.py", "scripts/deploy_cloudflare.py", "scripts/privacy_patterns.py"]
+    paths: ["frontend/**", "knowledge/**", "report/**", "deliverables/technical_report_2026-11/**", "scripts/build_mobile.py", "scripts/deploy_cloudflare.py", "scripts/privacy_patterns.py", "scripts/verify_public_data_unchanged.py", ".github/workflows/cloudflare-pages.yml"]
 
 permissions:
   contents: read
@@ -26,7 +30,9 @@ jobs:
         env:
           T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           P: ${{ secrets.AQROS_PRIVACY_PATTERNS }}
-        run: echo "ok=$([ -n "$T" ] && [ -n "$P" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "ok=$([ -n "$T" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "mode=$([ -n "$P" ] && echo private-list || echo data-unchanged)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         if: steps.s.outputs.ok == 'true'
       - uses: actions/setup-node@v4
@@ -41,11 +47,16 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AQROS_PRIVACY_PATTERNS: ${{ secrets.AQROS_PRIVACY_PATTERNS }}
+          MODE: ${{ steps.s.outputs.mode }}
         run: |
           sudo apt-get install -y -qq poppler-utils > /dev/null
           pip install -r backend/requirements.txt
           (cd frontend && npm ci)
-          python scripts/deploy_cloudflare.py
+          if [ "$MODE" = "private-list" ]; then
+            python scripts/deploy_cloudflare.py
+          else
+            python scripts/deploy_cloudflare.py --data-unchanged
+          fi
       - name: Skipped
         if: steps.s.outputs.ok != 'true'
-        run: echo "Cloudflare の Secrets が未登録のため公開しません（Claude Code のセッションからは scripts/deploy_cloudflare.py で公開できます）"
+        run: echo "CLOUDFLARE_API_TOKEN が未登録のため公開しません（リポジトリの Settings → Secrets and variables → Actions に登録して、このワークフローを再実行してください）"

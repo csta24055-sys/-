@@ -953,24 +953,34 @@ async function codeReviewChecks(browser) {
       ok(scope, 'Research: サイドバーを畳んで開くと保存値は「自動」に戻り、「元に戻す」の履歴を使わない', mid.applied.custom.sidebarMode === 'icons' && p.applied.custom.sidebarMode === 'auto' && p.history.length === 0, JSON.stringify({ mid: mid.applied.custom.sidebarMode, after: p.applied.custom.sidebarMode, history: p.history.length }));
       await ctx.close();
     }
-    // 基準: 素の Original（1440×900。本文の幅 1204px）。サイドバーを変えたものは、本文の幅が同じになる画面幅で撮って .page を比べる
-    const shoot = async (custom, width, route, hideTabbar) => {
+    // 比べ方: 本文（main の中の .page）の画像を、素の Original と画素単位で比べる。
+    // 本文の位置が違うと、同じ描画でも輪郭のにじみ（アンチエイリアス）が数十画素だけ変わるので、基準の側は
+    // 「素の Original のサイドバーだけを CSS で同じ場所へ動かしたもの」にして、本文を同じ位置・同じ幅に置いて撮る。
+    // 設定でサイドバーを変えたときに、サイドバー以外の部品（角丸・余白・高さ）が変わっていれば画像が一致しない。
+    // （基準の側のサイドバーは消さずに幅だけ変える。消すと画面の層の分け方が変わり、半透明の部品のにじみが変わる）
+    const shoot = async (custom, width, route, css) => {
       const ctx = await ctxFor(browser, { viewport: { width, height: 900 }, deviceScaleFactor: 1, reducedMotion: 'reduce' }, 'original', custom);
+      if (css) await ctx.addInitScript((c) => { const add = () => { const st = document.createElement('style'); st.textContent = c; document.head.appendChild(st); }; if (document.head) add(); else document.addEventListener('DOMContentLoaded', add); }, css);
       const page = await ctx.newPage();
       await page.goto(BASE + route); await ready(page); await page.waitForSelector(ROUTE_READY[route]);
-      if (hideTabbar) await page.addStyleTag({ content: '.tabbar{visibility:hidden!important}' }); // 画面下に固定のメニューが .page の画像に写り込まないようにする
       await settle(page);
-      const info = await page.evaluate(() => { const h = document.documentElement; const st = document.querySelector('.stat'); const cp = document.querySelector('.cptable td.cp'); return { ux: h.hasAttribute('data-ux'), attrs: h.getAttributeNames().filter((a) => a.startsWith('data-')).join(' '), sidebar: document.querySelector('.shell').getAttribute('data-sidebar'), main: Math.round(document.querySelector('main').getBoundingClientRect().width), stat: st ? getComputedStyle(st).borderRadius : '', cp: cp ? getComputedStyle(cp).padding : '', pageH: Math.round(document.querySelector('.page').getBoundingClientRect().height) }; });
+      const info = await page.evaluate(() => { const h = document.documentElement; const st = document.querySelector('.stat'); const cp = document.querySelector('.cptable td.cp'); const pg = document.querySelector('main .page').getBoundingClientRect(); return { ux: h.hasAttribute('data-ux'), attrs: h.getAttributeNames().filter((a) => a.startsWith('data-')).join(' '), sidebar: document.querySelector('.shell').getAttribute('data-sidebar'), x: Math.round(pg.left), w: Math.round(pg.width), stat: st ? getComputedStyle(st).borderRadius : '', cp: cp ? getComputedStyle(cp).padding : '', pageH: Math.round(pg.height) }; });
       const png = await page.locator('main .page').screenshot({ type: 'png' });
       await ctx.close();
       return { info, png };
     };
+    const SIDEBAR_CASES = [
+      // [名前, 設定, 画面の幅（本文の幅が 1204px になる幅）, 基準の側でサイドバーだけを動かす CSS, 設定を変えた側に足す CSS]
+      ['位置=右', { sidebarPos: 'right' }, 1440, '.shell{grid-template-columns:1fr 236px!important}.side{order:2}', ''],
+      ['表示=アイコンのみ', { sidebarMode: 'icons' }, 1440 - 236 + 64, '.shell{grid-template-columns:64px 1fr!important}.side{overflow:hidden auto}', ''],
+      ['表示=隠す', { sidebarMode: 'hidden' }, 1440 - 236, '.shell{grid-template-columns:1fr!important}.side{display:none}', '.tabbar{visibility:hidden!important}'], // 画面下に固定のメニューは写さない
+      ['表示=展開（既定と同じ値を明示）', { sidebarMode: 'expanded', sidebarPos: 'left', density: 'standard', card: 'outline', radius: 'standard' }, 1440, '', ''],
+    ];
     for (const route of ['/', '/plan']) {
-      const base = await shoot({}, 1440, route, false);
-      for (const [name, custom, width] of [['位置=右', { sidebarPos: 'right' }, 1440], ['表示=アイコンのみ', { sidebarMode: 'icons' }, 1440 - 236 + 64], ['表示=隠す', { sidebarMode: 'hidden' }, 1440 - 236], ['表示=展開（既定と同じ値を明示）', { sidebarMode: 'expanded', sidebarPos: 'left', density: 'standard', card: 'outline', radius: 'standard' }, 1440]]) {
-        const v = await shoot(custom, width, route, custom.sidebarMode === 'hidden');
-        const same = v.png.equals(base.png);
-        ok(scope, `${route} サイドバーの${name}: data-ux が付かず、本文（.page）が素の Original と画素単位で同じ`, !v.info.ux && v.info.main === base.info.main && same, JSON.stringify({ attrs: v.info.attrs, sidebar: v.info.sidebar, main: `${v.info.main}/${base.info.main}`, stat: `${v.info.stat}/${base.info.stat}`, cp: `${v.info.cp}/${base.info.cp}`, pageH: `${v.info.pageH}/${base.info.pageH}`, 画像一致: same }));
+      for (const [name, custom, width, baseCss, css] of SIDEBAR_CASES) {
+        let base, v, same = false;
+        for (let t = 0; t < 2 && !same; t++) { base = await shoot({}, width, route, baseCss); v = await shoot(custom, width, route, css); same = v.png.equals(base.png); } // 負荷でグラフの描画前に撮ることがあるので 1 回だけ撮り直す
+        ok(scope, `${route} サイドバーの${name}: data-ux が付かず、本文（.page）が素の Original と画素単位で同じ`, !v.info.ux && !base.info.ux && v.info.x === base.info.x && v.info.w === base.info.w && same, JSON.stringify({ attrs: v.info.attrs, sidebar: v.info.sidebar, x: `${v.info.x}/${base.info.x}`, w: `${v.info.w}/${base.info.w}`, stat: `${v.info.stat}/${base.info.stat}`, cp: `${v.info.cp}/${base.info.cp}`, pageH: `${v.info.pageH}/${base.info.pageH}`, 画像一致: same }));
       }
     }
     // 見た目のカスタマイズ（文字・密度など）を付けたときは、これまでどおり data-ux が付く
