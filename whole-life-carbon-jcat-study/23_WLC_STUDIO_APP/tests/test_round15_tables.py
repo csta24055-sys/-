@@ -177,9 +177,19 @@ class FifteenthRoundTableTests(unittest.TestCase):
                 ex = reasons_of(r, "集計")
                 self.assertEqual(len(ex), 2, (f2, state))
                 for x in ex:
+                    if (x["name"] == "コンクリート" and f2 != "SUM(階別!B2:D2)") or (x["name"] == "鉄筋" and f3 == "階別!B3"):
+                        # summed and multiplied by a cell of its own sheet ($E$1), or only some of the cells the
+                        # counted row sums (B2:C2 of B2:D2, B3 of B3:D3): a waste allowance on the same quantity or a
+                        # part of it, or another item worked out from the same cells — perhaps a copy (16 回目: it was
+                        # sure, and the floor area × 2.5 for the walls was dropped surely; which of two rows was dropped
+                        # surely depended on the order of the sheets)
+                        self.assertTrue(x["maybe"], (f2, f3, x["reason"]))
+                        self.assertIn("材料の行（明細 の %d 行目）が数量に使ったセル（階別 " % (2 if x["name"] == "コンクリート" else 3),
+                                      x["reason"])
+                        self.assertEqual(x["quantity"], 100 if x["name"] == "コンクリート" else 10)
+                        continue
                     self.assertIn("別のシート（明細）の材料の行", x["reason"])
                     self.assertIn("が足し上げたセル（階別 ", x["reason"])
-                    # summed and multiplied by a cell of its own sheet ($E$1): the cell is a factor, still a copy
                     self.assertFalse(x["maybe"], (f2, x["reason"]))
         # more than those cells: perhaps a copy (shown with its quantity)
         got, r = read(xlsx([("階別", floors + row(4, t("A4", "追加"), n("B4", 5))), ("明細", bill),
@@ -262,13 +272,22 @@ class FifteenthRoundTableTests(unittest.TestCase):
             mrow(6, "異形鉄筋", "SD345", n("C6", 12), "t")
         hidden = lines.replace('<row r="3">', '<row r="3" hidden="1">').replace('<row r="4">', '<row r="4" hidden="1">') \
             .replace('<row r="5">', '<row r="5" hidden="1">')
-        more = summary(("普通コンクリート", "明細!C4", 30, "m3"))
         for bill in (lines, hidden):
-            got, r = read(xlsx([("明細", bill), ("まとめ", more)]))
-            self.assertEqual(got, {("m_concrete", "m3"): 100.0, ("m_rebar", "t"): 12.0})
-            x = reasons_of(r, "まとめ")[0]
-            self.assertFalse(x["maybe"])
-            self.assertIn("別のシート（明細）の材料の行（2 行目）が足し上げたセル（明細 C4）", x["reason"])
+            # (16 回目: one of the lines, or a row whose name and specification differ from the counted row's, is
+            # perhaps another item from the same cells: "may belong" with its quantity, never added. The same item
+            # summing the same lines stays a sure copy. Each formula holds the value it works out: all three lines are
+            # 100, as the counted row — 16 回目の攻撃: a sure copy must also hold the counted row's quantity)
+            for nm, f, q, sure in (("普通コンクリート", "明細!C4", 30, False), ("普通コンクリート Fc24", "明細!C4", 30, False),
+                                   ("普通コンクリート", "SUM(明細!C3:C5)", 100, False),
+                                   ("普通コンクリート Fc24", "SUM(明細!C3:C5)", 100, True),
+                                   ("普通コンクリート Fc24", "明細!C3+明細!C4+明細!C5", 100, True)):
+                got, r = read(xlsx([("明細", bill), ("まとめ", summary((nm, f, q, "m3")))]))
+                self.assertEqual(got, {("m_concrete", "m3"): 100.0, ("m_rebar", "t"): 12.0})
+                x = reasons_of(r, "まとめ")[0]
+                self.assertEqual(x["maybe"], not sure, (nm, f))
+                self.assertEqual(x["quantity"], q)
+                self.assertIn("別のシート（明細）の材料の行（2 行目）が足し上げたセル（明細 C" if sure else
+                              "材料の行（明細 の 2 行目）が数量に使ったセル（明細 C", x["reason"])
         # a hidden row that no material row sums (an old revision) is read through as before
         old = HDR + mrow(2, "普通コンクリート", "Fc24", n("C2", 100), "m3") + \
             row(3, t("A3", "普通コンクリート"), t("B3", "旧"), n("C3", 90), t("D3", "m3"), attrs=' hidden="1"')
