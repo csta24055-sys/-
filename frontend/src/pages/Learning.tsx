@@ -37,7 +37,7 @@ export default function Learning() {
     <div className="page">
       <h1>研究学習モード（2027年度の新しい学生向け）</h1>
       <p className="lead">研究の全体像 → 基礎理論 → 過去研究 → 解析方法 → テーマ比較 → 研究計画 → 実験と解析 の順に進める。各段階の確認問題に答えられたら完了にする。進捗はサーバーに保存され、再起動後も残る。</p>
-      <Card title="進捗"><Bar done={p.done.length} total={STEPS.length} /><span className="small muted">{msg}</span></Card>
+      <Card title="進捗"><Bar done={p.done.length} total={STEPS.length} label="学習の進捗" /><span className="small muted">{msg}</span></Card>
       {STEPS.map((s) => (
         <Card key={s.n} className={p.done.includes(s.n) ? 'learn done' : 'learn'} title={<label className="check"><input type="checkbox" checked={p.done.includes(s.n)} onChange={() => toggle(s.n)} /> {s.n}. {s.title}</label>}>
           <p><b>目標</b>: {s.goal}</p>

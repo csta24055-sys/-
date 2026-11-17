@@ -4,6 +4,7 @@ import { download, STANDALONE } from '../core/api'
 import { checkRepo, getSettings, hasToken, saveSettings, setToken } from '../core/cloud'
 import { kv, requestPersist, storageEstimate } from '../core/idb'
 import { exportBackup, importBackup } from '../core/local'
+import DesignSettings from '../ui/DesignSettings'
 
 const mb = (n: number) => (n / 1024 / 1024).toFixed(1) + ' MB'
 
@@ -61,6 +62,8 @@ export default function Settings() {
       <p className="lead">{STANDALONE
         ? 'このスマホ版では、研究データ・編集内容・研究計画・学習記録をこの端末の中（IndexedDB）だけに保存します。サーバーには送りません。'
         : 'サーバー版です。データはサーバー側の SQLite（private_data/ またはデスクトップ版の利用者データフォルダ）に保存されます。'}</p>
+
+      <DesignSettings />
 
       {STANDALONE && <>
         <Card title="端末内の保存状況">
