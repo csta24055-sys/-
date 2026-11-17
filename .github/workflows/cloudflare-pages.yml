@@ -1,6 +1,6 @@
 # スマホ版を Cloudflare Pages（aqros-mobile.pages.dev）へ自動公開する（任意）
 # 次の Secrets がこのリポジトリに登録されているときだけ公開する。無ければ何もしない:
-#   CLOUDFLARE_API_TOKEN（Pages 編集権限。必須）, CLOUDFLARE_ACCOUNT_ID（アカウントが 1 つなら省略可）,
+#   CLOUDFLARE_API_TOKEN または既存名 AQUOSE（Cloudflare Pages 編集権限。必須）, CLOUDFLARE_ACCOUNT_ID（アカウントが 1 つなら省略可）,
 #   AQROS_PRIVACY_PATTERNS（漏えい検査の検査語。任意）
 # 公開前の検査（どちらかに合格しないと公開しない。scripts/deploy_cloudflare.py）:
 #   - AQROS_PRIVACY_PATTERNS がある: 氏名リストでの漏えい検査（データを変えたときはこちらが必要）
@@ -28,7 +28,7 @@ jobs:
       - name: Check secrets
         id: s
         env:
-          T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          T: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.AQUOSE }}
           P: ${{ secrets.AQROS_PRIVACY_PATTERNS }}
         run: |
           echo "ok=$([ -n "$T" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
@@ -44,7 +44,7 @@ jobs:
       - name: Deploy
         if: steps.s.outputs.ok == 'true'
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.AQUOSE }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AQROS_PRIVACY_PATTERNS: ${{ secrets.AQROS_PRIVACY_PATTERNS }}
           MODE: ${{ steps.s.outputs.mode }}
@@ -59,4 +59,4 @@ jobs:
           fi
       - name: Skipped
         if: steps.s.outputs.ok != 'true'
-        run: echo "CLOUDFLARE_API_TOKEN が未登録のため公開しません（リポジトリの Settings → Secrets and variables → Actions に登録して、このワークフローを再実行してください）"
+        run: echo "CLOUDFLARE_API_TOKEN / AQUOSE が未登録のため公開しません（リポジトリの Settings → Secrets and variables → Actions に登録して、このワークフローを再実行してください）"
