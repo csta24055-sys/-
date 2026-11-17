@@ -1,0 +1,143 @@
+symbol,latex,meaning,unit,domain,group,defined_in,source_path_at_commit,source_section
+u（単位）,u\in\mathcal{U},評価単位（70 個。A13-01、B1-04、SUM-03 など）。70 個の独立な物理法則ではない,—,70 個,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/UNITS_70.md@ac291dd,表の全体
+𝒰_C,\mathcal{U}_C,C(T) に直接入る 21 単位の集合（本基盤で追加した記号。14 章 07 の構成表 COMP に現れる単位）,—,21 個,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,3. 段階の構成表（`COMP`、22 行）と段階の値
+s（段階）,s\in\mathrm{STG},ライフサイクル段階（A1-A3、A4、A5、B1〜B7、C1〜C4）。核の始点 s と別,—,14 個,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,3. 段階の構成表（`COMP`、22 行）と段階の値
+d（機器）,d,冷媒の機器（表 refrigerants の行）,—,有限集合,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+i（品目）,i,資材・設備の品目（表 materials・equipment の行）,—,有限集合,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+j（項）,j\in J_u,単位 u の核の項の番号,—,有限集合,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,1. 階層
+n（回）,n,周期事象の回の番号,—,n≥1,添字,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §2.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,2. 節点の位置
+EMIT,\mathrm{EMIT},節点スペクトルの一覧（跳び形 23 本＋区間形 1 本。specs/system.py）,—,24 本,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.3,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,4. スペクトルの一覧
+"M_{s,u}","M_{s,u}","段階×単位の 0/±1 行列（UNITS_70 の X-02 の書き方。σ_{s,u} を行列として見たもの）",—,"\{-1,0,1\}",全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/UNITS_70.md@ac291dd,X-02
+SUM-04〜06,"\mathrm{SUM04}=[A>0]\,C/A,\ \mathrm{SUM05}=[A>0]\,C/(AT),\ \mathrm{SUM06}=10^{-3}C",面積原単位・年あたり面積原単位・トン換算,kgCO2e/m²、kgCO2e/(m²·年)、tCO2e,A>0（SUM-06 は常に）,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,5. 合計・指標・比較
+Π_c(T),"\Pi_c(T)=\lceil x\rceil-1-x,\ x=T(1-\varepsilon)/c",周期事象の回数の準周期の部分（のこぎり波。区切り点の集合 Π と別）,回,"[−1,0)",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,TH-11 周期と準周期、長期の傾向
+N(T),N(T)=\sum_i\sum_{\tau\in E_i}\theta_\varepsilon(T;\tau),事象の回数（行ごと。振幅 0 の行を含む）,回,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,TH-14 合計から作る単位の時間特性
+d=fl(1−ε),d=\mathrm{fl}(1-\varepsilon),浮動小数の事象の規則の倍率（機器 d と別）,—,—,数値,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.3,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,補題
+𝓛_H[C](s),"\mathcal{L}_H[C](s)=\int_0^H e^{-sT}C(T)\,dT",有限区間のラプラス変換（s は複素変数。段階 s と別）,—,—,解析,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,TH-7 ラプラス変換（厳密）
+μ_i,\mu_i,X-10 の行の質量（重み）,kg,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,7. $C(T)$ の項ではない $T$ 依存の出力の式
+T,T,評価期間（算定に含める期間の長さ）。C(T) の引数,年,0<T\le H,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+t（実時間）,t,実時間（供用開始からの経過時間）。T とは別物,年,$t\ge0$（施工 $t<0$ は拡張でだけ）,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md@09e0765,1. 時間変数（混同しない）
+H,H,年次表の長さ（地平）。架空データでは 130,年（整数）,$H\le255$（冷媒 8 段の条件 $H<256$）,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+ε,\varepsilon,事象の規則の相対幅,—,10^{-9},時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,1. 核
+T'（T_in）,T'=T(1-\varepsilon),ゲートに使う縮めた評価期間（AGG・TIME の 1 行表の列）,年,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,6. 時間変数の扱い
+k（年セル）,k,"年セルの番号（年 y=k+1 の区間 (k,k+1]）",—,"0,1,\dots,H-1",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+y,y,年の番号,—,"1,\dots,\lceil T\rceil",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md@b93201e,0.3 基準計算の時間の規則
+Y,Y=\lceil T\rceil,最後の年,—,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md@b93201e,0.3 基準計算の時間の規則
+w_k(T),"w_k(T)=\operatorname{clip}(T-k,0,1)",年セル k の年重み（17 章の書き方）,—,"[0,1]",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,3. 完全理想方程式
+w_y(T),"w_y(T)=\operatorname{clip}(T-(y-1),0,1)",年 y の年重み（11・14 章の書き方。w_k と k=y-1 で同じ）,—,"[0,1]",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,1. 核
+τ（事象）,\tau,事象（更新・交換・改修）の時刻,年,0<\tau<H(1-\varepsilon),時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+τ_n,"\tau_n=n\,c",周期事象の時刻（浮動小数では fl(nc)）,年,"n\ge1,\ \tau_n<H(1-\varepsilon)",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,2. 節点の位置
+c_i,c_i,品目 i の更新周期（耐用年数）,年,c>0 有限（欠損・非正・無限なら事象なし）,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+C_ren,C_{\mathrm{ren}},大型改修の周期（合計 C(T) と別）,年,c>0 有限,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+y(τ),"y(\tau)=\max(1,\lceil\tau(1-\varepsilon)\rceil)",事象の年,—,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,1. 核
+k_τ,k_\tau=y(\tau)-1,事象が属する年セル,—,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,1. 時間の変数と定数
+θ_ε(T;g),"\theta_\varepsilon(T;g)=[\,g<T(1-\varepsilon)\,]",事象の規則（期間の終わりちょうどの事象は数えない）,0/1,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.2,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,2. 核
+sw(τ),\mathrm{sw}(\tau),浮動小数の規則 τ<fl(T·fl(1−ε)) が真になる最小の浮動小数 T,年,$\tau/\mathrm{fl}(1-\varepsilon)$ から数 ulp 以内,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.3,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,補題 L-2
+N_c(T),N_c(T)=\#\{n\ge1:\ nc<T(1-\varepsilon)\},周期 c の事象の回数,回,c>0,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,5. 依存の性質
+𝒟,\mathcal{D},第 11 章の定義域 valid_domain（事象の時刻が T・整数年から相対 1e-10〜1e-8 にない組）,—,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.4,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,0. 記号と定義域
+𝒟',\mathcal{D}',"𝒟 から帯 T∈(K,sw(τ)] を除いた縮めた定義域",—,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.4,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,0. 記号と定義域
+K（区間形）,K=\lceil T\rceil-1,T を含む年セル（区間形の窓）,—,"0,\dots,H-1",時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.4,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,3. 完全理想方程式
+"t_cal, Y_0",t_{\mathrm{cal}}=Y_0+t,暦年（70 単位の計算には使われない）,年,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md@09e0765,1. 時間変数（混同しない）
+τ_i（局所時間）,"\tau_i=t-t_{i,0}",工程 i の局所時間（事象の時刻 τ と同じ文字。文脈で区別）,年,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md@09e0765,1. 時間変数（混同しない）
+t_e,t_e,排出が実時間の上で置かれる時刻,年,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md@09e0765,1. 時間変数（混同しない）
+"t_end, H_c","t_{\mathrm{end}},\ H_c",気候影響の終点・時間範囲（動的な特性化の拡張。モデルには無い）,年,—,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md@09e0765,1. 時間変数（混同しない）
+D_c,D_c,施工期間（入力にあるが 70 単位の計算には使われない）,年,≥0,時間,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.1,18_DYNAMIC_LCA_EXTENSION/02_工程と時間変数.md@09e0765,1. 時間変数（混同しない）
+𝒯,\mathcal{T},表（添字集合）。行 x を持つ,—,有限集合,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.1,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+x（行）,x,表の行,—,x\in\mathcal{T},積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.1,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+𝐱,\mathbf{x},建物の入力（シナリオ）全体,—,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,1. 全体の合成
+𝓔,\mathcal{E},ステップの項の一覧,—,空でない有限列,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+t（項）,t\in\mathcal{E},項の番号（実時間 t とは無関係）,—,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+"φ_{t,k}","\varphi_{t,k}(x)",項 t の k 番目の因子（列・述語・1 列の関数）,因子による,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+out[g],"\mathrm{out}[g]=\sum_{x}\sum_{t}\prod_k\varphi_{t,k}(x)",sp ステップの結果（まとめ先 g ごとの和）,因子の積の単位,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+g（まとめ先）,g,まとめ方：行ごと・合計・参照先の行ごと,—,none/total/by,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_MSP.md@ac291dd,1. 形
+π(x),\pi(x),子表の行の親行（_parent）,—,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.1,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+c[x],c[x],列 c の行 x の値,列による,実数・文字列符号・参照・欠損,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.1,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+c[r[x]],c\big[r[x]\big],参照列 r を通した列の値（via）,列による,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.1,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+c^⟨S⟩,c^{\langle S\rangle},1 行表 S の値（of）,列による,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.1,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+[·],"[\,P\,]",述語（Iverson 記法）：真なら 1、偽または欠損なら 0,0/1,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.3,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,2. マスクと未知値の規則
+¬[·],\neg[P]=1-[P],述語の否定（欠損に当てた述語の否定は 1）,0/1,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.3,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,2. マスクと未知値の規則
+⊥,\bot,未知値（欠損）。0 とは区別する,—,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.4,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,2. マスクと未知値の規則
+ref[x]（match）,\mathrm{ref}[x]=\min\{y:\ \mathrm{on}(y)=\mathrm{keys}(x)\},最初の一致の参照（なければ ⊥）,—,行の位置,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.5,14_EQUATION_DISCLOSURE/04_マスク付き積和全方程式.md@4c38df6,1. 一般式
+inv 他,"1/a,\ 1-a,\ 1/(1-a),\ a/(1-a)",1 列の関数 inv・one_minus・inv_one_minus・ratio_one_minus,—,結果が有限でなければ欠損,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,10_TRANSFORM_STUDY/research_code/tstudy/msp.py@ca282fb,module docstring: Factors
+S（1 行表）,S,合計（total）の結果を受ける 1 行表,—,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §4.2,10_TRANSFORM_STUDY/research_code/tstudy/msp.py@ca282fb,SCALARS
+"𝒫_1, TIME, AGG, RO, 𝓘",\mathrm{RO}\circ\mathrm{AGG}\circ\mathrm{TIME}\circ\mathcal{P}_1\circ\mathcal{I},共通表・積和①・積和②a・積和②b・読み出しの合成,—,—,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,1. 全体の合成
+"ℛ(𝐱,T)","\mathcal{R}(\mathbf{x},T)",全 70 単位の全出力,出力による,0<T\le H,積和,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,1. 全体の合成
+"h(T;s,ℓ,g)","h(T;s,\ell,g)=[g<T(1-\varepsilon)]\operatorname{clip}((T-s)/\ell,0,1)",核（11・14 章の書き方。ℓ=0 なら clip は 1）,—,"[0,1]",節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,1. 核
+s（核の始点）,s,核の傾きの始まり,年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,1. 核
+ℓ,\ell,核の傾きの長さ（0 なら階段）,年,\ell\ge0,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,1. 核
+g（ゲート）,g,核のゲートの時刻（事象の時刻。−∞ ならゲートなし）,年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,1. 核
+Φ(T),"\Phi(T)=\sum_j a_j\,h(T;s_j,\ell_j,g_j)",核の重ね合わせ（スペクトルの値）,kgCO2e,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,1. 核
+a_j,a_j,振幅（T によらない。積和①の列）,kgCO2e（h の書き方）／kgCO2e または kgCO2e/年（κ の書き方）,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,2. 核
+"κ(T;s,ℓ,g,lo,hi)","\kappa=[\mathrm{lo}<T\le\mathrm{hi}]\,\theta_\varepsilon(T;g)\,r_\ell(T-s)","核（17 章の書き方。振幅を率で持つ。窓 [lo,hi] つき）",— または 年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,2. 核
+r_ℓ(x),"r_0\equiv1,\ r_\ell(x)=\operatorname{clip}(x,0,\ell)",傾きの部分（17 章）,年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.1,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,2. 核
+K_u(T),K_u(T),単位 u の節点スペクトル（23 本＋区間形 1 本）,kgCO2e,0<T\le H,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.3,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,2. 外側のマスク付き積和の中に節点スペクトルが入る形
+"c^0_j, c^1_j","(c^0_j,c^1_j)",跳び形の節点での値の跳びと傾きの跳び,"kgCO2e, kgCO2e/年",—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.3,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,2. 跳び形（標準形）
+b（跳び形）,b,跳び形の定数（D-08 の b とは別）,kgCO2e,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.3,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,2. 跳び形（標準形）
+"P0e, P1e, P0p, P1p","P^0_e,P^1_e,P^0_p,P^1_p",事象・格子の節点の累積和（ノイマイヤーの補正つき）,"kgCO2e, kgCO2e/年",—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.3,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/SPEC_KNOTS.md@ac291dd,3. 評価
+"A_k, B_k（区間形）","A_k,\ B_k","区間形の年セル k の切片と傾き（17 章の 𝒜_K, ℬ_K と同じもの）","kgCO2e, kgCO2e/年",—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.4,14_EQUATION_DISCLOSURE/03_節点スペクトル全方程式.md@4c38df6,3. 区間形
+A_0,A_0,節点形の定数（A^init+A^term）,kgCO2e,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,4. 節点形（L5）の係数
+"(P_t,Q_t)","(P_t,Q_t)",格子の節点 t での値の跳びと傾きの跳び（t は節点の位置）,"kgCO2e, kgCO2e/年",t\in\Lambda,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,4. 節点形（L5）の係数
+"(p_g,q_g)","(p_g,q_g)",事象の節点 g での寄与,"kgCO2e, kgCO2e/年",g\in E,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,4. 節点形（L5）の係数
+J_g,"J_g=p_g+q_g\,\mathrm{sw}(g)",事象の節点での C の跳び,kgCO2e,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,4. 節点形（L5）の係数
+Λ,"\Lambda\subseteq\{0,\dots,H\}",格子の節点（年の境界、規則 [t<T]）,年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,4. 節点形（L5）
+E（事象の節点）,E,事象の節点の集合（規則 θ_ε）,年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,4. 節点形（L5）
+Π,"\Pi=\{0,\dots,H\}\cup\{\mathrm{sw}(g):g\in E\}",区切り点の集合,年,—,節点,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.6,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,0. 記号と定義域
+C(T),C(T),ホールライフ合計（SUM-03）,kgCO2e,0<T\le H,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,1. 階層
+V_u(T),V_u(T)=\sum_{j\in J_u}a_j\kappa_j(T),単位 u の値（段階の述語を掛ける前。14 章の v_u(T)）,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,1. 階層
+S_s(T),"S_s(T)=\iota_s\sum_u\sigma_{s,u}\beta_{s,u}V_u(T)",段階 s の値（14 章の bs_s(T)）,kgCO2e,14 段階,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,1. 階層
+"S_1, S_2, S_3","S_1,S_2,S_3",SUM-01（アップフロント）・SUM-02（エンボディド）・SUM-03（ホールライフ）,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,5. 合計・指標・比較
+ι_s,"\iota_s\in\{0,1\}",段階 s が評価範囲にあるか（14 章の [inc_s]）,0/1,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,記法
+"σ_{s,u}","\sigma_{s,u}","構成表の符号（(B6,B2-01) だけ −1）",±1,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,3. 合成の係数
+"β_{s,u}","\beta_{s,u}=1+\mathrm{needs\_b2}\,([\mathrm{inc}_{B2}]-1)",B2 を数えるときだけ B6 から B2-01 を引く述語,0/1,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,2. 外側のマスク付き積和の中に節点スペクトルが入る形
+"STG, COMP","\mathrm{STG},\ \mathrm{COMP}",14 段階の集合と、段階×単位の構成表（22 行）,—,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,3. 段階の構成表
+"𝒰_B, 𝒰_Γ, 𝒰_Δ","\mathcal{U}_B,\mathcal{U}_\Gamma,\mathcal{U}_\Delta",年セル・原子・ゲート付き年セルの項を持つ単位の集合,—,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,3. 完全理想方程式
+A^init,A^{\mathrm{init}},初期の定数の和（A 段階、t=0）,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+A^term,A^{\mathrm{term}},廃棄時の定数の和（C 段階・X-14、t=T）,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+B^(u)_k,B^{(u)}_k,単位 u の年セル k の率（符号・述語込み）,kgCO2e/年,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+B^(B3)_*,B^{(\mathrm{B3})}_\ast,年間修繕の全年一定の率,kgCO2e/年,≥0,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+Γ^(u)_j,\Gamma^{(u)}_j,事象の原子（交換・更新・改修）,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+Δ^(u)_m,\Delta^{(u)}_m,事象の年の補正（ゲート付き年セル）,kgCO2e/年,≤0,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+R(T),R(T),冷媒の期末残存量（B1-04）,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.4,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,3. 完全理想方程式
+"𝒜_K, ℬ_K","\mathcal{A}_K,\ \mathcal{B}_K",R(T) の区間形のセル K の切片と傾き,"kgCO2e, kgCO2e/年",—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.4,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+"α^R_j, γ^R_j","\alpha^R_j,\ \gamma^R_j",R(T) の区間形の交換による戻し,"kgCO2e, kgCO2e/年",≥0,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.4,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+"M([0,T])","M([0,T])","T によらない実時間の符号付き測度の [0,T] の量",kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,TH-4 実時間の分解
+Z(T),Z(T)=A^{\mathrm{term}}+\iota_{\mathrm{B1}}R(T),評価期間の終わり t=T に置く項,kgCO2e,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,TH-4 実時間の分解
+ρ(t),\rho(t),M の密度（区分的に一定の率）,kgCO2e/年,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,TH-4 実時間の分解
+A（床面積）,A,延床面積（SUM-04・SUM-05 の分母）,m²,A>0 で指標が定義,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,14_EQUATION_DISCLOSURE/07_建物全体の統一方程式_完全版.md@4c38df6,5. 合計・指標・比較
+e_i(t),e_i(t),工程 i（17 族）の実時間の排出関数,kgCO2e/年（原子は δ）,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,18_DYNAMIC_LCA_EXTENSION/04_再構成と整合.md@09e0765,1. 再構成の式
+"e_total(t), m_j, ρ_total",e_{\mathrm{total}}(t)=\sum_j m_j\delta(t-t_j)+\rho_{\mathrm{total}}(t),工程の和（原子の質量 m_j と率）,kgCO2e/年,—,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,18_DYNAMIC_LCA_EXTENSION/04_再構成と整合.md@09e0765,1. 再構成の式
+"C_dyn(T), C_70(T)","C_{\mathrm{dyn}}(T)=\int_{[0,T]}e_{\mathrm{total}}+Z(T)",工程の再構成と 70 単位の合計（定理で等しい）,kgCO2e,0<T\le H,全体,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §7,18_DYNAMIC_LCA_EXTENSION/04_再構成と整合.md@09e0765,1. 再構成の式
+"m_{0,d}","m_{0,d}",冷媒の機器 d の初期充填量,kg,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+GWP_d,\mathrm{GWP}_d,冷媒の地球温暖化係数,kgCO2e/kg,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+r_d,r_d,冷媒の年間漏洩率,1/年,"[0,1]",入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+q_d,q_d,1 年の残存率（補充なし 1−r_d、補充あり 1）,—,"[0,1]",入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+"u_{d,k}","u_{d,k}=m_{0,d}\,q_d^{\nu_{d,k}}",年セル k の年初の冷媒残存量,kg,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+"ν_{d,k}","\nu_{d,k}",最後の交換からの年数,年（整数）,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+"χ_{d,k}","\chi_{d,k}",年セル k に機器 d の交換があるか（D-08 の p_k）,0/1,—,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+λ_loss,\lambda_{\mathrm{loss}},交換時の冷媒の損失率,—,"[0,1]",入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+η_d,\eta_d,廃棄時の冷媒の回収率,—,"[0,1]",入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+"κ_{R,d}","\kappa_{R,d}=(1-\eta_d)\mathrm{GWP}_d",冷媒の期末係数（核 κ と別）,kgCO2e/kg,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+"e_{0,i}","e_{0,i}",品目 i の初期の製造時排出,kgCO2e,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+r_i,r_i,品目 i の年間修繕率,1/年,$r_i\ge0$ で有効,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+a_i（修繕の率）,"a_i=[r_i\ge0]\,e_{0,i}\,r_i",品目 i の年間修繕の排出率,kgCO2e/年,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2. 理想方程式の係数
+u_i,u_i,品目 i の 1 回の更新の排出,kgCO2e,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+n_k,"n_k=[d_k\ge0]\,d_k",年 k の正味の買電量（d_k は発電を差し引いた量）,kWh/年,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+γ_k,\gamma_k,年 k の電力の排出係数（X-06 の系列）,kgCO2e/kWh,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+e_k,e_k,年 k の買電排出（B6-01）,kgCO2e/年,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+f_k,f_k,年 k の燃料の排出（B6-02）,kgCO2e/年,≥0,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+ρ_B2,\rho_{\mathrm{B2}},施設管理に帰属させる買電の割合（密度 ρ(t) と別）,—,"[0,1]",入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+φ（改修規模）,\varphi,"大型改修の規模（初期排出に対する割合。因子 φ_{t,k} と別）",—,"[0,1]",入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,17_WHOLE_BUILDING_TIME_THEORY/02_係数表.md@6f99266,2.1 振幅を作る入力の量
+G(T),"G(T)=\sum_k\gamma_k\,w_k(T)",電力係数の年重み付き和（X-11）,kgCO2e/kWh·年,—,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,17_WHOLE_BUILDING_TIME_THEORY/01_理想方程式.md@6f99266,7. C(T) の項ではない T 依存の出力の式
+EL(T),"EL(T)=\sum_k e_k\,w_k(T)",買電排出の積算（B2-01 の元）,kgCO2e,—,入力量,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §6,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/UNITS_70.md@ac291dd,B2-01
+N（べき零）,"(Nu)_k=(1-p_{k-1})\,q\,u_{k-1}",冷媒の状態の 1 年ずらしの行列（N^H=0）,—,—,漸化式,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md@b93201e,D-08
+b（D-08）,"b_0=m_0,\ b_k=p_{k-1}m_0",漸化式の右辺（跳び形の b とは別）,kg,—,漸化式,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md@b93201e,D-08
+p_k（D-08）,p_k,"年セル k に交換が 1 回以上あるか（= χ_{d,k}）",0/1,—,漸化式,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md@b93201e,D-08
+c^(s)_k,c^{(s)}_k=\prod_{i=0}^{s-1}(1-p_{k-1-i})q,s 年ぶんの残存の係数（倍化で作る）,—,"[0,1]",漸化式,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/DERIVATIONS.md@b93201e,D-08
+NDBL（m）,m=8,因数分解の因子の数（2^m≥H）,—,H<256 で 8,漸化式,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §5.5,10_TRANSFORM_STUDY/11_UNIFIED_SYSTEM/LIMITS.md@b93201e,2. 入力の範囲
+値の 9 成分,"(t,n,s,k,e,p,q,w,o)",表計算のセル値の表し方（型・数値・文字列符号・照合順位・エラー符号・数値読み・ワイルドカード等）。実時間 t 等とは無関係,—,—,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §5.2,15_JCAT_CONVERSION/02_変換方式.md@7df1fdd,2. 値の表し方
+F(x),F(x)=\sum_{m\ge1}[m\le x]=\lfloor x\rfloor,整数格子（x≥0）,—,x≥0,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §5.3,15_JCAT_CONVERSION/02_変換方式.md@7df1fdd,4. 節点スペクトル
+E(y)（10 進格子）,E(y)=\lfloor\log_{10}y\rfloor,10 進格子（事象の集合 E と別）,—,y>0,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §5.3,15_JCAT_CONVERSION/02_変換方式.md@7df1fdd,4. 節点スペクトル
+h(y)（半単位）,h(y)=\tfrac12 10^{E(y)-14},15 桁丸めの半単位（核 h と別）,—,—,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §5.3,15_JCAT_CONVERSION/02_変換方式.md@7df1fdd,3. 構文ごとの変換規則
+O(p),O(p)=\sum_{q\le p}[\text{空欄でない}(q)],走行カウント,—,—,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §5.3,15_JCAT_CONVERSION/02_変換方式.md@7df1fdd,4. 節点スペクトル
+Φ（ブックの合成）,\Phi=\phi_{u_K}\circ\cdots\circ\phi_{u_1},変換した規則の合成による建物全体の計算（核の Φ(T) と別）,—,—,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §5.5,15_JCAT_CONVERSION/05_建物全体への接続.md@7df1fdd,1. 方法
+x=2^e f,"x=2^e f,\ f\in[0.6875,1.4375)",2 進の分解（16 章方式 A）,—,x>0 の倍精度数,変換実験,WLC_THEORY_RESEARCH_BASE/04_マスク積和の理論.md §6.2,16_UNRESOLVED8_EXACT_APPROX/03_不可能性の証明.md@6d867ea,3. 有限精度（倍精度）としての正確な実現
+"fl(·), ulp, u","\mathrm{fl}(\cdot),\ \mathrm{ulp},\ u=2^{-53}",IEEE 倍精度への丸め、最下位桁の単位、単位丸め誤差（u は単位 u∈𝒰 と別）,—,—,数値,WLC_THEORY_RESEARCH_BASE/03_数式と記号の完全仕様.md §3.3,17_WHOLE_BUILDING_TIME_THEORY/03_時間特性の定理と証明.md@46781f2,補題 L-2

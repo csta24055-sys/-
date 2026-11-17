@@ -1,0 +1,471 @@
+{
+ "name": "WLC_THEORY_RESEARCH_BASE",
+ "version": "1.0",
+ "created_at": "2026-11-17T04:30:19Z",
+ "base_commit": "f2ea616",
+ "repository": "csta24055-sys/-",
+ "research_branch": "claude/jcat-lca-app-foundation-c33936",
+ "base_branch": "claude/wlc-theory-research-base-c33936",
+ "base_path": "whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE",
+ "description": "70 評価単位・マスク付き積和・節点スペクトル・建物全体の理想方程式・動的 LCA・証明と検証・仮説 A〜J・劣化と交換のモデルの研究基盤（アプリとは独立）。J-CAT 原版の式本文・係数・値・セル内容は含まない。",
+ "evidence_classes": {
+  "P": "数学的に証明済み",
+  "E": "厳密な算術（有理数）で標本照合済み",
+  "F": "浮動小数の計算で照合・測定済み",
+  "S": "宣言した分布で統計的に確認済み",
+  "L": "文献で支持される",
+  "H": "未検証の新しい仮説"
+ },
+ "excluded": [
+  "manifest.json（自分自身）",
+  "__pycache__",
+  "*.pyc"
+ ],
+ "n_files": 40,
+ "total_bytes": 4047346,
+ "files": [
+  {
+   "path": "00_README.md",
+   "bytes": 38685,
+   "sha256": "64b3e6d8994537a0ef73fb1820fc1c2b047978115a868a72e77430421f8b3d87",
+   "kind": "md",
+   "title": "00 README：ホールライフカーボン（WLC）理論研究基盤"
+  },
+  {
+   "path": "01_研究の経緯.md",
+   "bytes": 47376,
+   "sha256": "fac146ff6382074ddca29fa1125a9f0c3866a8724a3cb096338a2772f02589f4",
+   "kind": "md",
+   "title": "01 研究の経緯：原版の構造から 70 評価単位、マスク付き積和、時間特性へ"
+  },
+  {
+   "path": "02_70評価単位の完全台帳.md",
+   "bytes": 146234,
+   "sha256": "e268bf6fb589e053079310cdf5a1dc9d850cd8e3274daa4c3a4186afc947c6b1",
+   "kind": "md",
+   "title": "02 70 評価単位の完全台帳"
+  },
+  {
+   "path": "03_数式と記号の完全仕様.md",
+   "bytes": 70532,
+   "sha256": "fef2efa2fde9705f9f427f047e9bd670a0b32ded29120440141c34bb3c51d66d",
+   "kind": "md",
+   "title": "03 数式と記号の完全仕様"
+  },
+  {
+   "path": "04_マスク積和の理論.md",
+   "bytes": 67126,
+   "sha256": "1405c771b30bd3d16a9bf172d57330142db69bd71a37b36de6e1e5a34b478192",
+   "kind": "md",
+   "title": "04 マスク付き積和の理論：演算仕様・表現能力・変換方法・成立条件・限界"
+  },
+  {
+   "path": "05_時間スペクトルの理論.md",
+   "bytes": 82365,
+   "sha256": "60b602d9d369749f95211b3024729b3a875824756394de62c8fd935b5bf07b6d",
+   "kind": "md",
+   "title": "05 時間スペクトルの理論：時間核・節点・段差・傾き・周期・冷媒状態・誤差"
+  },
+  {
+   "path": "06_建物全体の統一方程式.md",
+   "bytes": 49989,
+   "sha256": "1eee151d3d411442ea8779f9f6ee48717ba948cd9ee596fe1b82dfb0e7f42d0c",
+   "kind": "md",
+   "title": "06 建物全体の統一方程式：70 評価単位からの再構成"
+  },
+  {
+   "path": "07_動的LCAと工程時間.md",
+   "bytes": 64169,
+   "sha256": "09314fe26d82bb27cda0e43c40c6b51827b1db742f6934b268b49f0dabc9279d",
+   "kind": "md",
+   "title": "07 動的 LCA と工程時間：実時間・評価期間・工程間の相互作用・再構成・非一意性"
+  },
+  {
+   "path": "08_証明と検証結果.md",
+   "bytes": 53932,
+   "sha256": "f6f53300a641150b38277275775d5b663293d6f6a6be9dcb0bec48288d3e7f19",
+   "kind": "md",
+   "title": "08 証明と検証結果：証明済み事項・検証件数・反例・成立範囲・計算の測定・未解決"
+  },
+  {
+   "path": "09_未解決問題と限界.md",
+   "bytes": 71322,
+   "sha256": "fb6caf5ada87d3cfa427bcebe2584c24db2bcf5a6b28642aa67fa47ab02faccb",
+   "kind": "md",
+   "title": "09 未解決問題と限界：現在の理論で説明・導出できない事項"
+  },
+  {
+   "path": "10_新しい研究仮説.md",
+   "bytes": 79326,
+   "sha256": "0fcf5c14859fa9485869f04be7b32a35e5b6e5e8cd4d42e79a138ed63635a91a",
+   "kind": "md",
+   "title": "10 新しい研究仮説：仮説 A〜J と反対仮説"
+  },
+  {
+   "path": "11_研究実験計画.md",
+   "bytes": 49616,
+   "sha256": "e0e0faecb2a67da5f39c1b50146f1f792610648602b8d66e57d9537fe2385dc3",
+   "kind": "md",
+   "title": "11 研究実験計画：仮説の比較方法・反証方法・必要なデータ"
+  },
+  {
+   "path": "12_原典とコード対応表.md",
+   "bytes": 82334,
+   "sha256": "e6e3c518071c7e6ccc569d96e6cfd27fa48bd8606f4f557a01a731da5ad81fba",
+   "kind": "md",
+   "title": "12 原典とコード対応表：式・定理・主張から原典とコードへ"
+  },
+  {
+   "path": "13_別チャット引継ぎ文.md",
+   "bytes": 54890,
+   "sha256": "846b3a222d04eb8137e511413e9ed3bd08f109d3c6ed12f9e2dba80da07293bf",
+   "kind": "md",
+   "title": "13 別チャット引継ぎ文：新しいチャットで WLC 理論研究を始めるために"
+  },
+  {
+   "path": "14_研究用データ索引.md",
+   "bytes": 58818,
+   "sha256": "00be4ee03b0f4eb6e8e22ad4afbe8fc3f7cc1ffd4fabea61a72d7951e0d3a667",
+   "kind": "md",
+   "title": "14 研究用データ索引：参照すべきデータ・コードの入口・実行方法・取得の可否・権利"
+  },
+  {
+   "path": "15_劣化・寿命・交換モデル研究開始資料.md",
+   "bytes": 80228,
+   "sha256": "de7edfa2734b3bfc27bc894def187d9a51a32d5551cf3b112dbd7e9a5fd60ef8",
+   "kind": "md",
+   "title": "15 劣化・寿命・交換モデル研究開始資料（仮説 H・I・J の出発点）"
+  },
+  {
+   "path": "NONPUBLIC_INDEX.md",
+   "bytes": 23785,
+   "sha256": "d7c2b34f74eb496cd65e7aef7c33342c012c108939595e4d0a48eec31e7b4465",
+   "kind": "md",
+   "title": "NONPUBLIC_INDEX：リポジトリの外にある非公開の検証資料の索引（内容は載せない）"
+  },
+  {
+   "path": "data/claims.csv",
+   "bytes": 268718,
+   "sha256": "67191b000971b411a7f889a1d90fd4bbd31dcf22c43ad91db0c7da0a186174e1",
+   "kind": "csv"
+  },
+  {
+   "path": "data/claims_by_source.csv",
+   "bytes": 7952,
+   "sha256": "506b300db5cc3f923d1c79a454e423fa0bf154daa20ff2e013d69121b2316f36",
+   "kind": "csv"
+  },
+  {
+   "path": "data/data_index.csv",
+   "bytes": 401928,
+   "sha256": "20b307ae84397588445b4a0d9dfe680a01c0655d84e6abab9f4f254bacc2b866",
+   "kind": "csv"
+  },
+  {
+   "path": "data/hypotheses.csv",
+   "bytes": 14071,
+   "sha256": "3f115fcfd92b5e816845d7bf06e333a65a0be0b2fd47b56a26231e911cf06275",
+   "kind": "csv"
+  },
+  {
+   "path": "data/msp_semantics_probe.json",
+   "bytes": 525,
+   "sha256": "a0daf1fb19c8dc94d798ff9f93ae3cb7b6bf50bc801eff3bdd30b72f341526df",
+   "kind": "json"
+  },
+  {
+   "path": "data/renewal_examples.json",
+   "bytes": 155422,
+   "sha256": "e2c74563d1a20d27270513ad4df9f6bad421fd4d1cfc17fc885043734bc7bacb",
+   "kind": "json"
+  },
+  {
+   "path": "data/symbols.csv",
+   "bytes": 37574,
+   "sha256": "079e3e41322b818e127c9c740b9290d0fb4782bec9231a5ed1dac3371c87c881",
+   "kind": "csv"
+  },
+  {
+   "path": "data/theorems.csv",
+   "bytes": 26014,
+   "sha256": "ae8fdd5b2846b67edf6a6793f8206e70a32842df9bde62c283c1d4cd9c5d82e7",
+   "kind": "csv"
+  },
+  {
+   "path": "data/unit_dependencies.csv",
+   "bytes": 267420,
+   "sha256": "df02509e799e5ac1b084e66c50810ad99983bf0528b4759591a298696915673e",
+   "kind": "csv"
+  },
+  {
+   "path": "data/units70.csv",
+   "bytes": 59461,
+   "sha256": "a05cdffcf246f8497011f2987aed116d989319ecfe2bf6ee375dee41751900b4",
+   "kind": "csv"
+  },
+  {
+   "path": "data/units70.json",
+   "bytes": 1110061,
+   "sha256": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3",
+   "kind": "json"
+  },
+  {
+   "path": "data/units70_inputs.csv",
+   "bytes": 17039,
+   "sha256": "d2500734bc5e7349a35f79a30f1835c42286cd15b5b0587fa8c3437337aafb3b",
+   "kind": "csv"
+  },
+  {
+   "path": "data/verification_counts.csv",
+   "bytes": 27438,
+   "sha256": "d179fcca5a544728650143d370b480610fbf701d8c8df4226740595f72cad938",
+   "kind": "csv"
+  },
+  {
+   "path": "tools/build_claims.py",
+   "bytes": 20802,
+   "sha256": "c9b099453b93e12577b0293e49cc637759699e43705829ba511f835f39c26278",
+   "kind": "py"
+  },
+  {
+   "path": "tools/build_claims_md.py",
+   "bytes": 24275,
+   "sha256": "034ca226f43096e50336c21a7449b4c86b3a84d8571f14aa6b165bd58e3da480",
+   "kind": "py"
+  },
+  {
+   "path": "tools/check_refrigerant_kernel.py",
+   "bytes": 3273,
+   "sha256": "ad46bd457766badbbc920359425dca86b1ce7c47a3588dc414729794c5b725a4",
+   "kind": "py"
+  },
+  {
+   "path": "tools/check_units70.py",
+   "bytes": 115254,
+   "sha256": "e0b4bca0bd230e4756ecf90bff199a4ed7d4f8f37954d84ce55bc2f81daa4d2c",
+   "kind": "py"
+  },
+  {
+   "path": "tools/claims_curated.py",
+   "bytes": 57447,
+   "sha256": "89cdc5248039af5ba92c7b6afd927e1c6d96ea135ef9d9a505f4b80d4e5b5281",
+   "kind": "py"
+  },
+  {
+   "path": "tools/extract_units70.py",
+   "bytes": 216216,
+   "sha256": "60fe285527d3208504dad428ce4347be568ccc0008d28acf91f8087d4da15d05",
+   "kind": "py"
+  },
+  {
+   "path": "tools/make_manifest.py",
+   "bytes": 9576,
+   "sha256": "1d630730e7178c3f05e46a5a76321c2297f154f4a3e32dbb21e2400e426c9f74",
+   "kind": "py"
+  },
+  {
+   "path": "tools/probe_msp_semantics.py",
+   "bytes": 5222,
+   "sha256": "888b5f6d34a12405e7f0b0ecb0523b67ce7370903f55df50c43e214d7fd14a10",
+   "kind": "py"
+  },
+  {
+   "path": "tools/renewal_examples.py",
+   "bytes": 27919,
+   "sha256": "886b92762e7e9fa2f01cec7ba209c1feed116737172dcfb06693ac849477d86b",
+   "kind": "py"
+  },
+  {
+   "path": "tools/units70_eval_src.py",
+   "bytes": 53012,
+   "sha256": "c23da9b273204b2806316dd81280262e5bbd50f1c55f29c67f31d3e2cc115326",
+   "kind": "py"
+  }
+ ],
+ "sources": [
+  {
+   "chapter": "README.md",
+   "path": "whole-life-carbon-jcat-study/README.md",
+   "last_commit": "4705fd3",
+   "contents": "研究フォルダ全体の目次（参照のみ）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "01_COMPLIANCE",
+   "path": "whole-life-carbon-jcat-study/01_COMPLIANCE",
+   "last_commit": "b6f0fa7",
+   "contents": "禁止事項・権利の規則（R01〜R09）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "09_APPROX_STUDY",
+   "path": "whole-life-carbon-jcat-study/09_APPROX_STUDY",
+   "last_commit": "b2b8a6e",
+   "contents": "旧研究（停止）：70 評価単位の台帳・凍結した基準計算・生成器",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "10_TRANSFORM_STUDY",
+   "path": "whole-life-carbon-jcat-study/10_TRANSFORM_STUDY",
+   "last_commit": "b93201e",
+   "contents": "変換研究：マスク付き積和・節点スペクトル・統一系（全 70 単位）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "14_EQUATION_DISCLOSURE",
+   "path": "whole-life-carbon-jcat-study/14_EQUATION_DISCLOSURE",
+   "last_commit": "4c38df6",
+   "contents": "全方程式の開示（統一系の全ステップ・全スペクトル・建物全体の式）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "15_JCAT_CONVERSION",
+   "path": "whole-life-carbon-jcat-study/15_JCAT_CONVERSION",
+   "last_commit": "fdfbc16",
+   "contents": "J-CAT 原版の 667 式の分類と変換（公開分のみ）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "16_UNRESOLVED8_EXACT_APPROX",
+   "path": "whole-life-carbon-jcat-study/16_UNRESOLVED8_EXACT_APPROX",
+   "last_commit": "6d867ea",
+   "contents": "未解決 8 件：方式 A・B、不可能性の証明（公開分のみ）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "17_WHOLE_BUILDING_TIME_THEORY",
+   "path": "whole-life-carbon-jcat-study/17_WHOLE_BUILDING_TIME_THEORY",
+   "last_commit": "e207eff",
+   "contents": "建物全体の理想方程式 C(T)・係数表・時間特性の定理と証明",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "18_DYNAMIC_LCA_EXTENSION",
+   "path": "whole-life-carbon-jcat-study/18_DYNAMIC_LCA_EXTENSION",
+   "last_commit": "46781f2",
+   "contents": "動的 LCA：17 の工程関数・再構成・非一意性",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "19_JCAT_REMAINING12",
+   "path": "whole-life-carbon-jcat-study/19_JCAT_REMAINING12",
+   "last_commit": "3a30103",
+   "contents": "原版の残り 12 式（公開分のみ）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "20_LARGE_RANDOM_VERIFICATION",
+   "path": "whole-life-carbon-jcat-study/20_LARGE_RANDOM_VERIFICATION",
+   "last_commit": "3a30103",
+   "contents": "大規模ランダム検証（10 万ケース）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "21_UNIFIED_THEORY_REPORT",
+   "path": "whole-life-carbon-jcat-study/21_UNIFIED_THEORY_REPORT",
+   "last_commit": "3a30103",
+   "contents": "統一研究報告（主張の区別）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "22_WLC_COMPLETE_TEXTBOOK",
+   "path": "whole-life-carbon-jcat-study/22_WLC_COMPLETE_TEXTBOOK",
+   "last_commit": "b28532c",
+   "contents": "教材（五つの原理）と研究記録",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "research_archive",
+   "path": "whole-life-carbon-jcat-study/research_archive",
+   "last_commit": "2ed3a78",
+   "contents": "停止した旧研究（実数方程式）の保存資料",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "12_APP_BASE",
+   "path": "whole-life-carbon-jcat-study/12_APP_BASE",
+   "last_commit": "391dada",
+   "contents": "アプリの基礎（研究基盤の対象外。指し示すだけ）",
+   "git_check": "ok"
+  },
+  {
+   "chapter": "23_WLC_STUDIO_APP",
+   "path": "whole-life-carbon-jcat-study/23_WLC_STUDIO_APP",
+   "last_commit": "f2ea616",
+   "contents": "アプリ WLC Studio（研究基盤の対象外。指し示すだけ）",
+   "git_check": "ok"
+  }
+ ],
+ "cited_commits": {
+  "01_COMPLIANCE": [
+   "79d1ff8",
+   "b6f0fa7"
+  ],
+  "02_SOURCES": [
+   "1cee506"
+  ],
+  "09_APPROX_STUDY": [
+   "43ba5d7",
+   "66186a8",
+   "b2b8a6e"
+  ],
+  "10_TRANSFORM_STUDY": [
+   "21a4a54",
+   "2f5200d",
+   "ac291dd",
+   "b93201e",
+   "bd45157",
+   "ca282fb",
+   "e0e412e",
+   "f0f8de6"
+  ],
+  "13_INPUT_CLASSIFICATION": [
+   "391dada"
+  ],
+  "14_EQUATION_DISCLOSURE": [
+   "4c38df6"
+  ],
+  "15_JCAT_CONVERSION": [
+   "7df1fdd",
+   "fdfbc16"
+  ],
+  "16_UNRESOLVED8_EXACT_APPROX": [
+   "6d867ea"
+  ],
+  "17_WHOLE_BUILDING_TIME_THEORY": [
+   "46781f2",
+   "6f99266"
+  ],
+  "18_DYNAMIC_LCA_EXTENSION": [
+   "09e0765",
+   "3b15dca",
+   "46781f2"
+  ],
+  "19_JCAT_REMAINING12": [
+   "09e0765",
+   "3a30103",
+   "48b3cbd",
+   "602cb38"
+  ],
+  "20_LARGE_RANDOM_VERIFICATION": [
+   "3a30103",
+   "e207eff"
+  ],
+  "21_UNIFIED_THEORY_REPORT": [
+   "3a30103"
+  ],
+  "22_WLC_COMPLETE_TEXTBOOK": [
+   "8a7d7ce",
+   "b28532c",
+   "c3ecb1f"
+  ],
+  "23_WLC_STUDIO_APP": [
+   "4705fd3",
+   "c3d4436"
+  ],
+  "research_archive": [
+   "2ed3a78"
+  ]
+ },
+ "generated_by": "tools/make_manifest.py"
+}
