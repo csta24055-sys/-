@@ -23,6 +23,9 @@ out_dir.mkdir(parents=True, exist_ok=True)
 html = (root / "src" / "deck.html").read_text(encoding="utf-8")
 css = (root / "src" / "deck.css").read_text(encoding="utf-8")
 chars = set(html) | set(css)
+# 保存してある旧版の原稿（archive/）も作り直せるよう、その文字も含める
+for old in (root / "archive").glob("*/deck.*"):
+    chars |= set(old.read_text(encoding="utf-8"))
 chars |= set(string.printable)
 chars |= set("０１２３４５６７８９（）「」『』【】、。・：；！？＝＋−－―〜～…‥％／×÷≦≧≒→←↑↓㎡³²①②③④⑤⑥⑦⑧⑨⑩※＊　")
 text = "".join(sorted(c for c in chars if c.isprintable() or c == "　"))

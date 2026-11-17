@@ -3,16 +3,27 @@
 原本（読み合わせ用スライド 全38ページ）の構成・研究内容・計算・図表・論理展開をそのまま保ち、
 住宅会社が商談や性能説明でそのまま使える水準の見た目と情報設計に作り直したものです。
 
-- 完成品：`output/yucaco_ch4_performance_customer.pdf`（38ページ、13.333 × 7.5 in = 原本と同じ 16:9）
-- 原稿：`src/deck.html`（1ページ = 1920 × 1080 px）と `src/deck.css`
+- **改善版（v2・最新）：`output/yucaco_ch4_performance_customer_v2.pdf`**（38ページ、13.333 × 7.5 in = 原本と同じ 16:9）
+  新版 v1 のデザインを土台に、旧版の「ひと目でわかる」説明力（数字の大きさ、文字の強弱、比較と流れの図解）を取り戻した版。
+  ページ別の変更内容と理由は [`CHANGES_v2.md`](CHANGES_v2.md)、検証の記録は [`VERIFICATION_v2.md`](VERIFICATION_v2.md)。
+- 新版（v1・前回の完成版）：`output/yucaco_ch4_performance_customer.pdf`（コミット `da210e3` のまま変更していません）
+  v1 の原稿は `archive/v1/deck.html`・`deck.css` に保存してあり、作り直すこともできます。
+- 比較：`output/compare/p01.jpg`〜`p38.jpg`（左から 旧版｜新版 v1｜改善版 v2）と `output/compare/text_metrics.md`（3つの版の文字の大きさ）
+- 原稿：`src/deck.html`（1ページ = 1920 × 1080 px）と `src/deck.css`（末尾の「v2」以降が今回の変更）
 - 素材：`src/assets/photos/`（写真 8点）、`src/assets/figures/`（原本の図 4-1・4-2・4-5）、`src/assets/fonts/`（同梱フォント）
-- 書き出し：`tools/build.mjs`
+- 書き出し：`tools/build.mjs`、比較：`tools/compare_versions.py`
 
 ## 書き出し方
 
 ```bash
-node tools/build.mjs                      # PDF と 38枚の PNG（output/pages/）を書き出す
+node tools/build.mjs                      # 改善版（v2）の PDF と 38枚の PNG（output/pages/）を書き出す
 ONLY=5,6 NO_PDF=1 node tools/build.mjs    # 指定ページの PNG だけ（確認用）
+
+# 旧版・v1・v2 を並べた比較画像と、文字の大きさの比較表を作る（旧版の PDF は手元のファイルを指定）
+python3 tools/compare_versions.py <旧版のPDF>
+
+# 保存してある v1 の原稿から v1 の PDF を作り直す（通常は不要。v1 の PDF は output/ に残してあります）
+SRC=archive/v1/deck.html OUT=yucaco_ch4_performance_customer.pdf node tools/build.mjs
 ```
 
 書き出し時に、スライドからのはみ出し・文字の切れ・フッターとの重なりを自動で検査し、結果を表示します。
@@ -33,7 +44,7 @@ python3 tools/subset_fonts.py fonts       # 「≒」だけは BIZ UDPゴシッ�
 | 枠 | 上端に濃紺の細線、左上に章ラベル（例：`4-8` 省エネの判定）、その下に見出し、下端にフッター（資料名・出典ページ・ページ番号） | どのページでも「いま何の話か」「根拠は原本の何ページか」が同じ位置で分かるようにする |
 | 余白 | 左右 120px、見出しの位置は全ページ共通 | 画面でも印刷でも、ページをめくったときに見出しが揺れない |
 | 文字 | 見出し・本文は Noto Sans JP、表紙と章扉の題字だけ Noto Serif JP（明朝） | 説明は読みやすいゴシック、資料の「顔」だけ落ち着いた明朝。数字の大きな表示もゴシックで統一 |
-| 文字の大きさ | 見出し 52px、本文 24〜28px、注記 20px、出典 15px（1920px 幅基準） | 大型画面で後ろの席から読め、A4 印刷でも本文が 10pt 以上になる |
+| 文字の大きさ | 見出し 52px、主役の数字・結論 45〜240px の太字、本文 26〜34px、注記 22px、出典 15px（1920px 幅基準。v2 で拡大） | 大型画面で後ろの席から読め、「最初に見る場所」がはっきりする。A4 印刷でも本文が 10pt 以上になる |
 | 改行 | 日本語は文節の切れ目で改行（`word-break: auto-phrase`） | 「セメン／ト」のような語の途中の改行を避ける |
 | 色 | 濃紺（枠・見出し）と青（強調）を基本に、灰色を比較対象に使う | 強調は 1ページ 1か所に絞り、数字そのものを目立たせる |
 | 情報の種類 | 原本の内容＝ラベルなし（フッターに原本ページ）、`補足`＝茶色ラベル（本にない情報）、`分析`＝緑ラベル（発表者の計算・考え）、本の中のずれ＝赤い数字 | 制度の説明・原本の引用・補足・独自分析を混同させない。色だけに頼らず必ず文字のラベルを付ける |
@@ -61,7 +72,9 @@ python3 tools/subset_fonts.py fonts       # 「≒」だけは BIZ UDPゴシッ�
 - 表紙の小見出しを「『YUCACOシステム解説読本』読み合わせ」とし、本の読み合わせであることを明確にした（YUCACO の関係団体が作った資料に見えないように）
 - 表紙の日付表記（2026.11.17 → 2026年11月17日）
 
-## ページごとの設計意図
+## ページごとの設計意図（v1 時点）
+
+v2 で配置を変えたページ（2・5・9・10・11・12・14・15・18・19 など）の現在の設計と理由は [`CHANGES_v2.md`](CHANGES_v2.md) を見てください。以下は v1 を作ったときの記録です。
 
 | p. | 内容 | 配置の理由 |
 |---|---|---|

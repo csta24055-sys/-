@@ -1,6 +1,8 @@
 // 38枚のスライドを PDF（13.333 x 7.5 in）とページごとの PNG に書き出す。
-//   node tools/build.mjs            -> output/ に PDF、PNG_DIR（既定: output/pages）に PNG
+//   node tools/build.mjs            -> output/ に改善版（v2）の PDF、PNG_DIR（既定: output/pages）に PNG
 //   ONLY=5,6 node tools/build.mjs   -> 指定ページの PNG だけ書き出す（確認用）
+//   SRC=archive/v1/deck.html OUT=yucaco_ch4_performance_customer.pdf node tools/build.mjs
+//                                   -> 保存してある v1 の原稿から v1 の PDF を作り直す（通常は不要）
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,7 +13,10 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const src = 'file://' + path.join(root, 'src', 'deck.html');
+const srcFile = path.resolve(root, process.env.SRC || path.join('src', 'deck.html'));
+const src = 'file://' + srcFile;
+// v1（前回の完成版）は output/yucaco_ch4_performance_customer.pdf に残し、v2 は別名で書き出す
+const outName = process.env.OUT || 'yucaco_ch4_performance_customer_v2.pdf';
 const outDir = path.join(root, 'output');
 const pngDir = process.env.PNG_DIR || path.join(outDir, 'pages');
 const only = process.env.ONLY ? new Set(process.env.ONLY.split(',').map(Number)) : null;
@@ -23,7 +28,7 @@ fs.mkdirSync(pngDir, { recursive: true });
 const charsetPath = path.join(root, 'src', 'assets', 'fonts', 'charset.txt');
 if (fs.existsSync(charsetPath)) {
   const charset = new Set(fs.readFileSync(charsetPath, 'utf8'));
-  const html = fs.readFileSync(path.join(root, 'src', 'deck.html'), 'utf8').replace(/<[^>]+>/g, ' ');
+  const html = fs.readFileSync(srcFile, 'utf8').replace(/<[^>]+>/g, ' ');
   const missing = [...new Set(html)].filter(ch => ch.trim() && !charset.has(ch) && ch.codePointAt(0) !== 0x2252);
   if (missing.length) console.log('FONT WARNING: サブセットに無い文字があります。tools/subset_fonts.py を再実行してください:', missing.join(''));
 }
@@ -85,7 +90,7 @@ for (let i = 0; i < slides.length; i++) {
 console.log(`png: ${only ? only.size : slides.length} page(s) -> ${pngDir}`);
 
 if (!only && !skipPdf) {
-  const pdfPath = path.join(outDir, 'yucaco_ch4_performance_customer.pdf');
+  const pdfPath = path.join(outDir, outName);
   await page.pdf({
     path: pdfPath,
     width: '1280px', height: '720px', scale: 2 / 3,
