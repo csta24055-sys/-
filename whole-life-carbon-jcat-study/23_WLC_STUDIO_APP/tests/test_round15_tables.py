@@ -275,15 +275,17 @@ class FifteenthRoundTableTests(unittest.TestCase):
         for bill in (lines, hidden):
             # (16 回目: one of the lines, or a row whose name and specification differ from the counted row's, is
             # perhaps another item from the same cells: "may belong" with its quantity, never added. The same item
-            # summing the same lines stays a sure copy)
-            for nm, f, sure in (("普通コンクリート", "明細!C4", False), ("普通コンクリート Fc24", "明細!C4", False),
-                                ("普通コンクリート", "SUM(明細!C3:C5)", False), ("普通コンクリート Fc24", "SUM(明細!C3:C5)", True),
-                                ("普通コンクリート Fc24", "明細!C3+明細!C4+明細!C5", True)):
-                got, r = read(xlsx([("明細", bill), ("まとめ", summary((nm, f, 30, "m3")))]))
+            # summing the same lines stays a sure copy. Each formula holds the value it works out: all three lines are
+            # 100, as the counted row — 16 回目の攻撃: a sure copy must also hold the counted row's quantity)
+            for nm, f, q, sure in (("普通コンクリート", "明細!C4", 30, False), ("普通コンクリート Fc24", "明細!C4", 30, False),
+                                   ("普通コンクリート", "SUM(明細!C3:C5)", 100, False),
+                                   ("普通コンクリート Fc24", "SUM(明細!C3:C5)", 100, True),
+                                   ("普通コンクリート Fc24", "明細!C3+明細!C4+明細!C5", 100, True)):
+                got, r = read(xlsx([("明細", bill), ("まとめ", summary((nm, f, q, "m3")))]))
                 self.assertEqual(got, {("m_concrete", "m3"): 100.0, ("m_rebar", "t"): 12.0})
                 x = reasons_of(r, "まとめ")[0]
                 self.assertEqual(x["maybe"], not sure, (nm, f))
-                self.assertEqual(x["quantity"], 30)
+                self.assertEqual(x["quantity"], q)
                 self.assertIn("別のシート（明細）の材料の行（2 行目）が足し上げたセル（明細 C" if sure else
                               "材料の行（明細 の 2 行目）が数量に使ったセル（明細 C", x["reason"])
         # a hidden row that no material row sums (an old revision) is read through as before

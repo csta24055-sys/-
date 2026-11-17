@@ -25,7 +25,7 @@ except ImportError:
     from test_round14_tables import excluded  # noqa: E402
     from test_round15_tables import book, summary  # noqa: E402
 
-FIDS = ("m_concrete", "m_concrete_fdn", "m_rebar", "m_steel", "m_finish", "m_masonry")
+FIDS = ("m_concrete", "m_concrete_fdn", "m_rebar", "m_steel", "m_finish", "m_masonry", "m_board")
 # a take-off with no bill header (部位｜材料｜体積) and a pivot table of it by member, with the grand total
 TAKE = row(1, t("A1", "部位"), t("B1", "材料"), t("C1", "体積")) + "".join(
     row(i, t("A%d" % i, p), t("B%d" % i, "コンクリート"), n("C%d" % i, q))
@@ -230,6 +230,108 @@ class SixteenthRoundTableTests(unittest.TestCase):
         xs = ex(r, "まとめ")
         self.assertEqual([x["maybe"] for x in xs], [True, True])
         self.assertIn("同じ材料のほかの行（まとめ の 2 行目）", [x for x in xs if x["trace"].endswith("R3C2")][0]["reason"])
+
+    # --- the attack on the round-16 fixes: the same cells added twice (the boards on both faces of a wall)
+    def test_a_row_adding_the_cells_of_a_counted_row_twice_may_belong(self):
+        wall = row(1, t("A1", "室名"), t("B1", "壁面積")) + row(2, t("A2", "事務室"), n("B2", 120)) + \
+            row(3, t("A3", "会議室"), n("B3", 40)) + row(4, t("A4", "廊下"), n("B4", 60))
+        a = ("間仕切A", HDR + mrow(2, "石膏ボード", "t12.5", n("C2", 220, "SUM(壁面積!B2:B4)"), "m2"))
+
+        def board(f, q):
+            return ("間仕切B", HDR + mrow(2, "石膏ボード", "t12.5", n("C2", q, f), "m2"))
+        # the same item from the same cells with another quantity is perhaps another item: "may belong" with its
+        # quantity in either order of the sheets, never dropped surely (the branch dropped 220 m2 or 440 m2 surely,
+        # depending on the order of the sheets: the blocks met twice are met once)
+        for f, q in (("SUM(壁面積!B2:B4)+SUM(壁面積!B2:B4)", 440), ("SUM(壁面積!B2:B4,壁面積!B2:B4)", 440),
+                     ("壁面積!B2+壁面積!B3+壁面積!B4+壁面積!B2+壁面積!B3+壁面積!B4", 440), ("SUM(壁面積!B2:B4)+10", 230),
+                     ("AVERAGE(壁面積!B2:B4)", 73.3), ("MAX(壁面積!B2:B4)", 120)):
+            for sheets, kept, other, q_other in (([a, board(f, q)], 220.0, "間仕切B", q), ([board(f, q), a], float(q), "間仕切A", 220)):
+                got, r = read(xlsx([("壁面積", wall)] + sheets))
+                self.assertEqual(got, {("m_board", "m2"): kept}, f)
+                x, = ex(r, other)
+                self.assertTrue(x["maybe"], (f, x["reason"]))
+                self.assertEqual(x["quantity"], q_other)
+                self.assertIn("が数量に使ったセル（壁面積 B2:B4）", x["reason"])
+        # the same quantity stays a sure copy (SUM, SUBTOTAL(9, …), the cells in another order)
+        for f in ("SUM(壁面積!B2:B4)", "SUBTOTAL(9,壁面積!B2:B4)", "壁面積!B4+壁面積!B3+壁面積!B2"):
+            got, r = read(xlsx([("壁面積", wall), a, board(f, 220)]))
+            self.assertEqual(got, {("m_board", "m2"): 220.0}, f)
+            x, = ex(r, "間仕切B")
+            self.assertFalse(x["maybe"], (f, x["reason"]))
+            self.assertIn("別のシート（間仕切A）の材料の行（2 行目）が足し上げたセル（壁面積 B2:B4）", x["reason"])
+        # rounded to another value (220.875 → 221): perhaps another quantity; the value itself, a sure copy
+        frac = row(1, t("A1", "室名"), t("B1", "壁面積")) + row(2, t("A2", "事務室"), n("B2", 120.25)) + \
+            row(3, t("A3", "会議室"), n("B3", 40.5)) + row(4, t("A4", "廊下"), n("B4", 60.125))
+        a2 = ("間仕切A", HDR + mrow(2, "石膏ボード", "t12.5", n("C2", 220.875, "SUM(壁面積!B2:B4)"), "m2"))
+        for f, q, sure in (("ROUND(SUM(壁面積!B2:B4),0)", 221, False), ("SUM(壁面積!B2:B4)", 220.875, True)):
+            got, r = read(xlsx([("壁面積", frac), a2, board(f, q)]))
+            self.assertEqual(got, {("m_board", "m2"): 220.875}, f)
+            x, = ex(r, "間仕切B")
+            self.assertEqual(x["maybe"], not sure, (f, x["reason"]))
+
+    # --- the attack on the round-16 fixes: a copy of a row reading a take-off's pivot table
+    def test_a_copy_of_a_pivot_reading_row_is_sure_when_its_field_is_counted(self):
+        take = row(1, t("A1", "部位"), t("B1", "材料"), t("C1", "体積")) + row(2, t("A2", "柱"), t("B2", "コンクリート"), n("C2", 60)) + \
+            row(3, t("A3", "梁"), t("B3", "コンクリート"), n("C3", 90))
+        piv = row(3, t("A3", "行ラベル"), t("B3", "合計 / 体積")) + row(4, t("A4", "コンクリート"), n("B4", 150)) + \
+            row(5, t("A5", "総計"), n("B5", 150))
+
+        def go(bill, readers, copy=("コンクリート", "まとめ!B2", 150, "m3")):
+            sheets = [("拾い", take), ("集計", piv)] + ([("明細", HDR + bill)] if bill else []) + \
+                [("まとめ", summary(*readers)), ("総括", summary(copy))]
+            return read(book(sheets, [(1, "ピボット1", "A3:B5", "拾い", "A1:C3")]))
+        one = [("コンクリート", "集計!B4", 150, "m3")]
+        many = [("コンクリート", "集計!B4", 150, "m3"), ("コンクリート", "集計!B5", 150, "m3")]
+        typed = mrow(2, "普通コンクリート", "Fc24", n("C2", 150), "m3")
+        reach = mrow(2, "普通コンクリート", "Fc24", n("C2", 150, "SUM(拾い!C2:C3)"), "m3")
+        # the field of the row read from the pivot table is counted in the bill (typed, or summing the take-off): the
+        # pivot table's value may repeat that count, so the copy is a sure copy of the row left out, as in 94bf205 —
+        # one row "may belong" on the card, not two (the branch said "add one of them by hand")
+        for bill in (typed, reach):
+            for readers in (one, many):
+                for f in ("まとめ!B2", "まとめ!B2*1", "ROUND(まとめ!B2,0)"):
+                    got, r = go(bill, readers, ("コンクリート", f, 150, "m3"))
+                    self.assertEqual(got, {("m_concrete", "m3"): 150.0})
+                    x, = ex(r, "総括")
+                    self.assertFalse(x["maybe"], (f, x["reason"]))
+                    self.assertIn("別のシート（まとめ）の材料の行（2 行目）の数量を参照した値は足さない（そのシートも読んでいる", x["reason"])
+                    self.assertTrue(all(y["maybe"] for y in ex(r, "まとめ")))
+                    self.assertEqual(r["evidence"]["m_concrete"]["n_maybe"], len(readers))
+        # its field counted nowhere (only the other field of concrete, or another material from the take-off), or the
+        # row reads the take-off too: the quantity may be counted nowhere, so the copy may belong (16 回目)
+        for bill, readers in ((mrow(2, "基礎コンクリート", "Fc21", n("C2", 40), "m3"), one),
+                              (mrow(2, "異形鉄筋", "SD345", n("C2", 18, "SUM(拾い!C2:C3)*0.12"), "t"), one),
+                              (None, [("コンクリート", "集計!B4+拾い!C3", 240, "m3")])):
+            got, r = go(bill, readers, ("コンクリート", "まとめ!B2", readers[0][2], "m3"))
+            self.assertNotIn(("m_concrete", "m3"), got)
+            x, = ex(r, "総括")
+            self.assertTrue(x["maybe"] and "足していない" in x["reason"], x)
+
+    # --- the attack on the round-16 fixes: a justified / aside row still reads the pivot table's cell
+    def test_a_justified_or_aside_row_still_reads_the_cell_of_the_pivot_table(self):
+        take = row(1, t("A1", "部位"), t("B1", "材料"), t("C1", "体積")) + row(2, t("A2", "柱"), t("B2", "コンクリート"), n("C2", 60)) + \
+            row(3, t("A3", "梁"), t("B3", "コンクリート"), n("C3", 90))
+        piv = row(3, t("A3", "行ラベル"), t("B3", "合計 / 体積")) + row(4, t("A4", "コンクリート"), n("B4", 150)) + \
+            row(5, t("A5", "総計"), n("B5", 150))
+
+        def go(*rows):
+            return read(book([("拾い", take), ("集計", piv), ("まとめ", summary(*rows))], [(1, "ピボット1", "A3:B5", "拾い", "A1:C3")]))
+        conc = ("コンクリート", "集計!B4", 150, "m3")
+        # another row reads the same cell (or a block holding it): the concrete row is not the only reader of it, and
+        # stays "may belong" as in 94bf205 (the branch added it and said the take-off was counted nowhere else)
+        for other, why in ((("鉄　　筋", "集計!B4*0.12", 18, "t"), documents.R_JUSTIFIED_MAYBE),
+                           (("鉄　　骨", "SUM(集計!B4:B5)", 300, "t"), documents.R_JUSTIFIED_MAYBE),
+                           (("Infill panels, without frames, blockwork 100mm", "集計!B4", 150, "m2"), documents.R_ASIDE_MAYBE)):
+            for rows in ((conc, other), (other, conc)):
+                got, r = go(*rows)
+                self.assertEqual(got, {}, other[0])
+                xs = ex(r, "まとめ")
+                self.assertEqual([x["maybe"] for x in xs], [True, True])
+                self.assertEqual(sorted(x["reason"] == why for x in xs), [False, True])
+                self.assertFalse([w for w in r["warnings"] if "足した" in w])
+        # it reads another cell: the concrete row is still the only reader of its cell, added as before
+        got, r = go(conc, ("鉄　　筋", "集計!B5*0.12", 18, "t"))
+        self.assertEqual(got, {("m_concrete", "m3"): 150.0})
 
 
 if __name__ == "__main__":
