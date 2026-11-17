@@ -33,8 +33,10 @@ jobs:
           pip install -r backend/requirements.txt
           (cd frontend && npm ci)
           python scripts/build_mobile.py --base /
-          # 検査用の補助ページ（配布物には入れない）: 保存されたレイアウト設定を書き換えてから目的の画面へ移る
-          cat > frontend/dist-mobile/_ci_set.html <<'EOF'
+          # 検査用の補助ページ（配布物には入れない）: 保存されたレイアウト設定を書き換えてから目的の画面へ移る。
+          # Service Worker は画面の移動をすべてアプリ本体に差し替えるので、SW が触らない api/deliverables/ の下に置く
+          mkdir -p frontend/dist-mobile/api/deliverables
+          cat > frontend/dist-mobile/api/deliverables/_ci_set.html <<'EOF'
           <!doctype html><meta charset="utf-8"><title>set</title><script>
           const p = new URLSearchParams(location.search);
           localStorage.setItem('aqros-ui-prefs-v1', JSON.stringify({ version: 1, applied: { layout: p.get('layout') || 'original', custom: JSON.parse(p.get('custom') || '{}') }, history: [], updatedAt: null }));
@@ -44,47 +46,68 @@ jobs:
           nohup python scripts/serve_static.py frontend/dist-mobile 47801 > serve.log 2>&1 &
           sleep 2
           curl -s -o /dev/null -w "served: %{http_code}\n" http://127.0.0.1:47801/
-      - name: Boot an iPhone simulator
+      - name: Pick simulators (a notch model and a small home-button model)
         id: sim
         run: |
           xcodebuild -version
-          UDID=$(xcrun simctl list devices available -j | python3 -c "
-          import json,sys
+          xcrun simctl list devices available -j | python3 -c "
+          import json,sys,re
           d=json.load(sys.stdin)['devices']
-          c=[(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone') and 'Pro' not in x['name'] and 'Plus' not in x['name']]
-          c=c or [(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone')]
-          c.sort(key=lambda t:[int(n) for n in t[0].split('iOS-')[-1].split('-')])
-          print(c[-1][1]['udid']); print(c[-1][1]['name'], c[-1][0], file=sys.stderr)")
-          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
-          xcrun simctl boot "$UDID" || true
-          xcrun simctl bootstatus "$UDID" -b
+          c=[(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone')]
+          ver=lambda k:[int(n) for n in k.split('iOS-')[-1].split('-')]
+          c.sort(key=lambda t:ver(t[0]))
+          newest=[t for t in c if ver(t[0])==ver(c[-1][0])]
+          plain=sorted([t for t in newest if re.fullmatch(r'iPhone \d+', t[1]['name'])], key=lambda t:int(t[1]['name'].split()[1]))
+          notch=(plain or [t for t in newest if 'SE' not in t[1]['name']] or newest)[-1]
+          small=next((t for t in newest if 'SE' in t[1]['name']), None)
+          print('notch='+notch[1]['udid']); print('notch_name='+notch[1]['name'])
+          print('small='+(small[1]['udid'] if small else '')); print('small_name='+(small[1]['name'] if small else ''))
+          " | tee -a "$GITHUB_OUTPUT"
       - name: Open each layout in Mobile Safari and take screenshots
         env:
-          UDID: ${{ steps.sim.outputs.udid }}
+          NOTCH: ${{ steps.sim.outputs.notch }}
+          NOTCH_NAME: ${{ steps.sim.outputs.notch_name }}
+          SMALL: ${{ steps.sim.outputs.small }}
+          SMALL_NAME: ${{ steps.sim.outputs.small_name }}
         run: |
           mkdir -p out
           B=http://127.0.0.1:47801
-          shot() { xcrun simctl io "$UDID" screenshot "out/$1.png" > /dev/null 2>&1 || true; }
-          open() { xcrun simctl openurl "$UDID" "$1"; sleep "${2:-7}"; }
-          open "$B/" 30; shot 00-first-visit            # 初回は Safari の起動と案内の表示に時間がかかる
-          for mode in light dark; do
-            xcrun simctl ui "$UDID" appearance "$mode"; sleep 2
-            for layout in original research public commercial enterprise; do
-              open "$B/_ci_set.html?layout=$layout&to=/" 8;  shot "$mode-$layout-1-home"
-              open "$B/simulator" 7;                          shot "$mode-$layout-2-simulator"
-              open "$B/report" 7;                             shot "$mode-$layout-3-report"
-              open "$B/settings" 7;                           shot "$mode-$layout-4-settings"
+          SET=$B/api/deliverables/_ci_set.html
+          run_device() {   # $1 = UDID, $2 = 出力名の接頭辞, $3 = "full" なら全画面、それ以外はホームと設定だけ
+            local UDID="$1" PRE="$2" KIND="$3"
+            shot() { xcrun simctl io "$UDID" screenshot "out/$PRE-$1.png" > /dev/null 2>&1 || true; }
+            open() { xcrun simctl openurl "$UDID" "$1"; sleep "${2:-7}"; }
+            xcrun simctl boot "$UDID" || true
+            xcrun simctl bootstatus "$UDID" -b
+            xcrun simctl ui "$UDID" appearance light
+            open "$B/" 30; shot 00-first-visit            # 初回は Safari の起動と案内の表示に時間がかかる
+            for mode in light dark; do
+              if [ "$KIND" != "full" ] && [ "$mode" = "dark" ]; then continue; fi
+              xcrun simctl ui "$UDID" appearance "$mode"; sleep 2
+              for layout in original research public commercial enterprise; do
+                open "$SET?layout=$layout&to=/" 9;  shot "$mode-$layout-1-home"
+                if [ "$KIND" = "full" ]; then
+                  open "$B/simulator" 7;            shot "$mode-$layout-2-simulator"
+                  open "$B/report" 7;               shot "$mode-$layout-3-report"
+                fi
+                open "$B/settings" 7;               shot "$mode-$layout-4-settings"
+              done
             done
-          done
-          # 文字を大きくした Public（高齢の利用者を想定）と、主色を変えた Research
-          xcrun simctl ui "$UDID" appearance light; sleep 2
-          open "$B/_ci_set.html?layout=public&custom=%7B%22fontScale%22%3A1.3%7D&to=/" 8; shot "light-public-large-text-home"
-          open "$B/_ci_set.html?layout=research&custom=%7B%22accent%22%3A%22%237a3fb0%22%7D&to=/library" 8; shot "light-research-accent-library"
-          open "$B/_ci_set.html?layout=original&to=/" 6
-          ls -la out | head -60
+            if [ "$KIND" = "full" ]; then
+              # 文字を大きくした Public（高齢の利用者を想定）と、主色を変えた Research
+              xcrun simctl ui "$UDID" appearance light; sleep 2
+              open "$SET?layout=public&custom=%7B%22fontScale%22%3A1.3%7D&to=/" 9; shot "light-public-large-text-home"
+              open "$SET?layout=research&custom=%7B%22accent%22%3A%22%237a3fb0%22%7D&to=/library" 9; shot "light-research-accent-library"
+            fi
+            xcrun simctl shutdown "$UDID" || true
+          }
+          echo "notch model: $NOTCH_NAME / small model: $SMALL_NAME" | tee out/devices.txt
+          run_device "$NOTCH" notch full
+          if [ -n "$SMALL" ]; then run_device "$SMALL" small quick; fi
+          ls out | wc -l
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ios-simulator
-          path: out/*.png
+          path: out
           retention-days: 14
