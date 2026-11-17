@@ -1,6 +1,14 @@
 """スマホ版を Cloudflare Pages（プロジェクト aqros-mobile）に公開する。
 
-  python scripts/deploy_cloudflare.py            # ビルド → 漏えい検査（不合格なら中止）→ 公開 → 公開先の応答確認
+  python scripts/deploy_cloudflare.py                    # ビルド → 漏えい検査（氏名リスト必須。不合格なら中止）→ 公開 → 公開先の応答確認
+  python scripts/deploy_cloudflare.py --data-unchanged   # 画面だけを直したとき用: 氏名リストの代わりに「公開データが公開中のものと同じ」ことを確かめてから公開
+  python scripts/deploy_cloudflare.py --dry-run          # 公開の直前まで（ビルドと検査だけ）
+
+--data-unchanged について:
+  氏名リスト（private_data/privacy_patterns.txt または AQROS_PRIVACY_PATTERNS）が手元に無い環境でも、
+  scripts/verify_public_data_unchanged.py が「アプリのコード以外の全ファイルが公開中のサイトと 1 バイトも違わない」
+  「データの元のソースが基準のブランチから変わっていない」「コードは一般パターンの検査に合格」を確かめられたときだけ公開する。
+  データが少しでも違えば中止する（その場合は氏名リストでの検査が必要）。検証の記録は frontend/dist-cf-data-unchanged.json に残る。
 
 必要な設定（値はリポジトリ・ログに出さない）:
   CLOUDFLARE_API_TOKEN   Pages 編集権限のトークン（Claude Code のクラウド環境ではプロキシが付けるので不要）
@@ -50,11 +58,26 @@ def multipart(fields: dict[str, str], files: dict[str, tuple[str, bytes, str]]) 
 
 
 def main() -> int:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--data-unchanged", action="store_true", help="氏名リストの代わりに、公開データが公開中のものと同じことを確かめる（画面だけの変更用）")
+    ap.add_argument("--dry-run", action="store_true", help="ビルドと検査だけ行い、公開しない")
+    a = ap.parse_args()
     project = os.environ.get("AQROS_CF_PROJECT", "aqros-mobile")
-    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "build_mobile.py"), "--target", "cloudflare", "--out", str(OUT), "--require-private-list"])
+    build = [sys.executable, str(ROOT / "scripts" / "build_mobile.py"), "--target", "cloudflare", "--out", str(OUT)]
+    r = subprocess.run(build + ([] if a.data_unchanged else ["--require-private-list"]))
     if r.returncode != 0:
         print("漏えい検査またはビルドに失敗したため公開しません")
         return 1
+    if a.data_unchanged:
+        v = subprocess.run([sys.executable, str(ROOT / "scripts" / "verify_public_data_unchanged.py"), str(OUT), "--live", f"https://{project}.pages.dev",
+                            "--json", str(OUT.parent / f"{OUT.name}-data-unchanged.json")])
+        if v.returncode != 0:
+            print("公開データが公開中のものと同じであることを確かめられなかったため公開しません（氏名リストでの検査が必要です）")
+            return 1
+    if a.dry_run:
+        print("dry-run: 検査に合格しました（公開はしていません）")
+        return 0
     acc = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
     if not acc:
         accs = call("GET", "/accounts?per_page=50")
