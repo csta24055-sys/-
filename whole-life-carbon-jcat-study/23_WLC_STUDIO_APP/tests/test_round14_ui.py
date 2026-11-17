@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -775,7 +776,8 @@ console.log(JSON.stringify(r));
 
     def test_stop_words_stay_on_their_project_and_name_it_elsewhere(self):
         r = self.flow("stopWarnBack")
-        words = "保存して戻るを途中でやめました：「購入電力」は保存しました。「都市ガス」は保存していません"
+        # the rows not saved are named first (round 15: the end of a long message was cut and went after its time)
+        words = "保存して戻るを途中でやめました：「都市ガス」は保存していません。「購入電力」は保存しました"
         self.assertEqual(r["said"]["view"], "settings", r)
         self.assertTrue(r["said"]["text"].startswith(words), r)
         self.assertIn("「A社ビル」：" + WARN_GRID, r["said"]["text"])
@@ -811,7 +813,9 @@ console.log(JSON.stringify(r));
 
     def test_service_worker_cache_is_new(self):
         sw = (WEB / "sw.js").read_text(encoding="utf-8")
-        self.assertIn('"wlcstudio-shell-v13"', sw)
+        m = re.search(r'"wlcstudio-shell-v(\d+)"', sw)                     # v13 or later (a later round bumps it again)
+        self.assertTrue(m, sw)
+        self.assertGreaterEqual(int(m.group(1)), 13)
         self.assertNotIn('"wlcstudio-shell-v12"', sw)
 
 

@@ -317,15 +317,19 @@ class App:
         factor; a boundary set at last can need the route), instead of only when the next calculation stops. One that
         was unusable already before the save is not said again (it was said by the save that made it so, and the
         calculation says it). `before`: _na_before; the values after the save are those values with `stored` (the
-        value the save stored) for `fid`, so the history is read once. No such 適用外: no `warnings` key."""
+        value the save stored) for `fid`, so the history is read once. No such 適用外: no `warnings` key.
+        `warning_fields`: the field each sentence is about, in the same order (the screen drops a sentence whose field
+        has been given another state since: a value saved later in the same 保存して戻る, 未取得に戻す); present exactly
+        when `warnings` is."""
         vals, refused_before = before
         if vals is None:
             return out
         now = self._na_refused(fid, dict(vals, **{fid: Value.from_json(stored.to_json())}))
-        warnings = ["「%s」の「適用外」は、いまの入力では使えない（%s）。計算は止まる。値を入れるか「未取得」に戻す"
-                    % (FL.FIELDS[f]["label"], why) for f, why in now.items() if f not in refused_before]
-        if warnings:
-            out["warnings"] = warnings
+        said = [(f, "「%s」の「適用外」は、いまの入力では使えない（%s）。計算は止まる。値を入れるか「未取得」に戻す"
+                 % (FL.FIELDS[f]["label"], why)) for f, why in now.items() if f not in refused_before]
+        if said:
+            out["warnings"] = [w for _, w in said]
+            out["warning_fields"] = [f for f, _ in said]
         return out
 
     def research_address(self, pid: int, b: dict) -> dict:
