@@ -83,23 +83,53 @@ _CJK = "\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff"
 _CJK_SPACE = re.compile("(?<=[%s])[ \u3000]+(?=[%s])" % (_CJK, _CJK))
 
 
-@functools.lru_cache(maxsize=4096)
+MAX_HEADER_CELLS = 1_024                          # non-empty cells of a row looked at for the header (15 回目)
+
+
+class HeaderWork:
+    """The header search of one document: what is known of each distinct header text, worked out once per document
+    (its forms and how well it names each key), how many cells were looked at and how many searches were made. 15 回目:
+    the forms were kept in a global cache of 4,096 texts, which a wide sheet of distinct texts thrashed, and every
+    sheet's header was searched twice over all its 16,384 columns (a 2–4 MB upload held the worker 30–45 s)."""
+    __slots__ = ("heads", "cells", "searches")
+
+    def __init__(self):
+        self.heads, self.cells, self.searches = {}, 0, 0
+
+
 def _forms(s: str) -> tuple:
     """The lowered forms of one header text that are matched: split before an upper-case letter that starts a word,
     unsplit, and split at every lower→upper change; and, when spaces stand between kanji or kana, the text without
-    those spaces (名　称 is 名称, 14 回目の攻撃). A word is found when it is found in any form."""
+    those spaces (名　称 is 名称, 14 回目の攻撃). A word is found when it is found in any form. The split and joined
+    forms are worked out only when the text has a lower→upper change or spaces between kanji (otherwise every form is
+    the plain one; 15 回目)."""
+    camel = _CAMEL_ANY.search(s) is not None          # (every _CAMEL boundary is a _CAMEL_ANY boundary)
+    if not camel and _CJK_SPACE.search(s) is None:
+        return (s.lower(),)
     out = []
-    for v in (_CAMEL.sub(" ", s), s, _CAMEL_ANY.sub(" ", s), _CJK_SPACE.sub("", s)):
+    for v in ((_CAMEL.sub(" ", s), s, _CAMEL_ANY.sub(" ", s)) if camel else (s,)) + (_CJK_SPACE.sub("", s),):
         v = v.lower()
         if v not in out:
             out.append(v)
     return tuple(out)
 
 
-def _head_forms(h) -> tuple:
+def _head_info(s: str, work: HeaderWork | None) -> tuple:
+    """(forms, score of the text for each key of HEADERS or None) of a stripped, non-empty header text, worked out once
+    per document (see _key_scores)."""
+    got = work.heads.get(s) if work is not None else None
+    if got is None:
+        fs = _forms(s)
+        got = (fs, _key_scores(fs))
+        if work is not None:
+            work.heads[s] = got
+    return got
+
+
+def _head_forms(h, work: HeaderWork | None = None) -> tuple:
     """A header cell as matched: cut, stripped, in each of its forms (see _forms); () for an empty cell."""
     s = str(h if h is not None else "")[:MAX_TEXT].strip()
-    return _forms(s) if s else ()
+    return _head_info(s, work)[0] if s else ()
 
 
 def _head_text(h) -> str:
@@ -165,38 +195,71 @@ def _num(s):
     return number_or_reason(s)[0]
 
 
-def _header_map(row: list, not_name: frozenset = frozenset()) -> dict:
-    """The column of each key: the column whose header matches the most preferred word ("Item description" is the name
-    before "Item"); an exact match only breaks a tie of the same word; money columns (材料費, Amount, MATERIALRATE …) are
-    never the name, the quantity or the unit; for the unit, an exact unit word (単位, Unit, UoM, U/M) wins over a header
-    that only contains one (Unit Rate, Unit Weight, 単位質量); a column is used for one key only. `not_name`: columns
-    not to take as the name (their cells are numbers, see _find_header)."""
-    out, used = {}, set()
-    heads = [_head_forms(h) for h in row]
-    money = [bool(f) and _money_head(f) for f in heads]
+def _key_scores(fs: tuple):
+    """For each key of HEADERS, how well one header text names it — (unit: exact unit word first,) rank of the first of
+    the key's words that it holds, 0 for an exact match — or None; None for all when it names no key. Money columns
+    (材料費, Amount, MATERIALRATE …) are never the name, the quantity or the unit; a text that only contains a unit word
+    is not the unit when it names a factor or a mass per unit (Unit Weight, 単位質量). It depends on the text only, so it
+    is worked out once per distinct text (15 回目)."""
+    money = _money_head(fs)
+    out = []
     for key, words in HEADERS.items():
-        best = None
-        for j, fs in enumerate(heads):
-            if j in used or not fs:
-                continue
-            if key in ("name", "quantity", "unit") and money[j]:
-                continue                                   # 材料費, 材料単価, Material cost, Amount, Unit Rate …
-            if key == "name" and j in not_name:
-                continue
+        sc = None
+        if not (key in ("name", "quantity", "unit") and money):     # 材料費, 材料単価, Material cost, Amount, Unit Rate …
             first = ()
             if key == "unit":
                 exact_unit = any(v in UNIT_EXACT for v in fs)
-                if not exact_unit and _forms_have(fs, UNIT_NOT):
-                    continue                               # Unit Weight, 単位質量, 単位重量: a factor, not the unit
-                first = (0 if exact_unit else 1,)
-            for rank, w in enumerate(words):
-                w = w.lower()
-                exact = w in fs
-                if exact or (len(w) > 1 and any(w in v for v in fs)):
-                    score = first + (rank, 0 if exact else 1, j)
-                    if best is None or score < best:
-                        best = score
-                    break
+                first = None if not exact_unit and _forms_have(fs, UNIT_NOT) else (0 if exact_unit else 1,)
+            if first is not None:                                  # (Unit Weight, 単位質量: a factor, not the unit)
+                for rank, w in enumerate(words):
+                    w = w.lower()
+                    exact = w in fs
+                    if exact or (len(w) > 1 and any(w in v for v in fs)):
+                        sc = first + (rank, 0 if exact else 1)
+                        break
+        out.append(sc)
+    return tuple(out) if any(x is not None for x in out) else None
+
+
+def _header_cells(row: list, work: HeaderWork | None) -> list:
+    """(column, scores) of the cells of a row that name a key, among its first MAX_HEADER_CELLS non-empty cells (15 回目:
+    a header is far narrower; a wide row of distinct texts was matched cell by cell, key by key and word by word over all
+    16,384 columns, twice per sheet)."""
+    out, k = [], 0
+    for j, h in enumerate(row):
+        if h is None:
+            continue
+        s = str(h)[:MAX_TEXT].strip()
+        if not s:
+            continue
+        k += 1
+        if k > MAX_HEADER_CELLS:
+            break
+        sc = _head_info(s, work)[1]
+        if sc is not None:
+            out.append((j, sc))
+    if work is not None:
+        work.cells += min(k, MAX_HEADER_CELLS)
+    return out
+
+
+def _header_map(row: list, not_name: frozenset = frozenset(), work: HeaderWork | None = None) -> dict:
+    """The column of each key: the column whose header matches the most preferred word ("Item description" is the name
+    before "Item"); an exact match only breaks a tie of the same word; money columns (材料費, Amount, MATERIALRATE …) are
+    never the name, the quantity or the unit; for the unit, an exact unit word (単位, Unit, UoM, U/M) wins over a header
+    that only contains one (Unit Rate, Unit Weight, 単位質量); a column is used for one key only (see _key_scores).
+    `not_name`: columns not to take as the name (their cells are numbers, see _find_header). Only the first
+    MAX_HEADER_CELLS non-empty cells of the row are looked at (15 回目)."""
+    out, used = {}, set()
+    heads = _header_cells(row, work)
+    for ki, key in enumerate(HEADERS):
+        best = None
+        for j, sc in heads:
+            if sc[ki] is None or j in used or (key == "name" and j in not_name):
+                continue
+            score = sc[ki] + (j,)
+            if best is None or score < best:
+                best = score
         if best is not None:
             out[key] = best[-1]
             used.add(best[-1])
@@ -487,7 +550,7 @@ def _additive(seq, names=()) -> tuple:
     never a guess."""
     n = len(seq)
     if not n:
-        return frozenset(), frozenset(), (), ()   # an empty formula adds nothing
+        return frozenset(), frozenset(), (), (), frozenset()   # an empty formula adds nothing
     depth = mx = 0
     for t in seq:
         if t == ("op", "("):
@@ -496,7 +559,7 @@ def _additive(seq, names=()) -> tuple:
         elif t == ("op", ")"):
             depth -= 1
     if mx > MAX_NEST:
-        return frozenset((UNPARSED,)), frozenset(), (), ()
+        return frozenset((UNPARSED,)), frozenset(), (), (), frozenset()
     pos = [0]
     env = []                                      # LET scopes: [{name: value}]
     picks = {}                                    # added token that is one looked-up cell (not summed since) -> keys
@@ -749,12 +812,15 @@ def _additive(seq, names=()) -> tuple:
             b = cmp_()
             r = (r[0] | b[0], r[1] | b[1], False, r[3] | b[3], True, r[5] | b[5])
     except (_Unparsed, IndexError):
-        return frozenset((UNPARSED,)), frozenset(), (), ()
+        return frozenset((UNPARSED,)), frozenset(), (), (), frozenset()
     if pos[0] < n:
-        return frozenset((UNPARSED,)), frozenset(), (), ()
+        return frozenset((UNPARSED,)), frozenset(), (), (), frozenset()
     added = frozenset(r[1])
     looked = tuple(sorted((t, tuple(sorted(picks.get(t, ())))) for t in dropped if t not in added and picks.get(t)))
-    return added, frozenset(r[3]) & added, looked, tuple(sorted((t, h, k) for t, (h, k) in narrow.items()))
+    # ONE: the added tokens that are a value looked up (VLOOKUP, INDEX, XLOOKUP …: one cell of what they name), not
+    # summed since (15 回目: a cell that a counted row sums is not one that it only looks up, see documents._Helpers)
+    ones = frozenset(t for t in picks if t in added)
+    return added, frozenset(r[3]) & added, looked, tuple(sorted((t, h, k) for t, (h, k) in narrow.items())), ones
 
 
 def _formula_tuple(formula):
@@ -974,7 +1040,8 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
     a product of references (面積×厚さ, SUM(…)*(1+$E$1)), 0 = not added (looked up and multiplied, tested, counted,
     a divisor); the level is true when the block is ADDED. `keys` are, for a block looked up and multiplied (level 0),
     the blocks the lookup searched with how ("col": a VLOOKUP table's first column, "row": an HLOOKUP table's first row,
-    "all": an XLOOKUP / LOOKUP array or INDEX's MATCH array), else ().
+    "all": an XLOOKUP / LOOKUP array or INDEX's MATCH array), else (). With ctx["ones"], an eighth item says whether
+    the block is a value looked up (one cell of it makes the value, 15 回目).
     A VLOOKUP / HLOOKUP / INDEX whose column (row) index is written as a whole number gives two blocks: its whole table
     at level 0 (reached: a quantity cell in it is still a copy) and the returned column (row) at the lookup's level
     (14 回目の攻撃: the whole table reached the other numbers of every row of a bill).
@@ -998,7 +1065,7 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
         return "データテーブル（What-If 分析）の値は確かめられない。必要なら手で入れる", []
     if len(text) > MAX_FORMULA:
         return "数式が長すぎて確かめられない（%d 文字まで）" % MAX_FORMULA, []
-    funcs, refs, names, structured, three_d, computed, nranges, add, summed, looked, narrow = _formula_parts(text)
+    funcs, refs, names, structured, three_d, computed, nranges, add, summed, looked, narrow, ones = _formula_parts(text)
     if structured is None:
         return "数式の括弧を読めない。必要なら手で入れる", []
     if "[" in text and _EXTREF.search(re.sub(r'"(?:[^"]|"")*"', '""', text)):
@@ -1092,6 +1159,10 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
         return tuple(out_[:MAX_KEYS])
 
     narrow = {t: (h, k) for t, h, k in narrow}
+    marks = bool(ctx.get("ones"))                       # the eighth item, when the caller asks for it
+
+    def mark(flag):
+        return (bool(flag),) if marks else ()
     out = []
     for tok in order:
         lv = level(tok)
@@ -1110,18 +1181,20 @@ def formula_walk(formula, ctx: dict | None = None, _path: frozenset = frozenset(
             if one is not None:
                 # the table is still reached (a quantity cell in it is a copy, as before); only the returned column
                 # (row) makes the value
-                out += [b + (0, ()), one + (lv, kz)]
+                out += [b + (0, ()) + mark(True), one + (lv, kz) + mark(True)]
                 continue
-        out += [b + (lv, kz) for b in blks]
+        out += [b + (lv, kz) + mark(tok in ones) for b in blks]
     for toks, more in named:
         lv = max(level(t) for t in toks)
+        one = any(t in ones for t in toks)                # (a name looked up in: one cell of what it names)
         if lv == 2:                                        # used as it is: its blocks keep their own levels
-            out += more
+            out += [tuple(b[:7]) + mark(one or (len(b) > 7 and b[7])) for b in more] if marks else more
             continue
         kz = tuple(x for t in toks if level(t) == 0 for x in keys(t))[:MAX_KEYS] if lv == 0 else ()
         for b in more:
             lv2 = min(lv, b[5])
-            out.append(tuple(b[:5]) + (lv2, ((kz + tuple(b[6]))[:MAX_KEYS] if lv2 == 0 else ())))
+            out.append(tuple(b[:5]) + (lv2, ((kz + tuple(b[6]))[:MAX_KEYS] if lv2 == 0 else ()))
+                       + mark(one or (len(b) > 7 and b[7])))
     return None, out
 
 
@@ -1169,12 +1242,12 @@ QTY_LIKE = ("数量", "quantity", "qty", "体積", "容積", "重量", "質量",
 NOT_QTY = ("単位", "unit", "per", "/", "比重", "密度", "density", "率", "rate", "係数", "factor", "単重")
 
 
-def _qty_cols(header: list) -> list:
+def _qty_cols(header: list, work: HeaderWork | None = None) -> list:
     """The columns whose header names a quantity (設計数量, 所要数量, 体積, 重量, Qty …; not money): a formula elsewhere that
     reaches one of them on another material row copies that row's quantity."""
     out = []
     for j, h in enumerate(header):
-        fs = _head_forms(h)
+        fs = _head_forms(h, work)
         if fs and _forms_have(fs, QTY_LIKE) and not _forms_have(fs, MONEY_WORDS + NOT_QTY):
             out.append(j)
     return out
@@ -1187,20 +1260,20 @@ SIZE_WORDS = QTY_LIKE + ("長さ", "延長", "本数", "箇所", "か所", "ヶ�
                          "width", "height", "count", "net", "nett")
 
 
-def _size_cols(header: list) -> list:
+def _size_cols(header: list, work: HeaderWork | None = None) -> list:
     """The columns whose header names the row's own size (see SIZE_WORDS), not money or a factor."""
     out = []
     for j, h in enumerate(header):
-        fs = _head_forms(h)
+        fs = _head_forms(h, work)
         if fs and _forms_have(fs, SIZE_WORDS) and not _forms_have(fs, MONEY_WORDS + NOT_QTY):
             out.append(j)
     return out
 
 
-def _factor_cols(header: list) -> list:
+def _factor_cols(header: list, work: HeaderWork | None = None) -> list:
     """The columns whose header names money or a factor (単価, 金額, 単位質量, 比重, 密度, 係数, 率, kg/m …): a number there
     is never part of a material row's quantity unless the row's quantity adds it up."""
-    return [j for j, h in enumerate(header) if _forms_have(_head_forms(h), MONEY_WORDS + NOT_QTY)]
+    return [j for j, h in enumerate(header) if _forms_have(_head_forms(h, work), MONEY_WORDS + NOT_QTY)]
 
 
 HEADING = "見出しの行（数量も単位も無い）は材料の行ではない"
@@ -1219,22 +1292,25 @@ def _numbers_mostly(rows: list, i: int, j: int) -> bool:
     return n > 0 and 2 * k > n
 
 
-def _find_header(rows: list[list]):
+def _find_header(rows: list[list], work: HeaderWork | None = None):
     """(index of the header row, column of each key). When the name column's cells are mostly numbers (a rate column
     whose header the money words miss), the next name column is taken (14 回目); if every name column holds numbers,
-    the first one is kept."""
+    the first one is kept. Each row is looked at in its first MAX_HEADER_CELLS non-empty cells only, and a sheet's
+    header is searched once (15 回目: read_xlsx passes it on)."""
+    work = work if work is not None else HeaderWork()
+    work.searches += 1
     for i, r in enumerate(rows[:30]):            # the header is one of the first rows
-        m = _header_map(r)
+        m = first = _header_map(r, work=work)
         if "name" in m and "quantity" in m:
             skip = set()
             while "name" in m and _numbers_mostly(rows, i, m["name"]) and len(skip) < 8:
                 skip.add(m["name"])
-                m2 = _header_map(r, frozenset(skip))
+                m2 = _header_map(r, frozenset(skip), work)
                 if "name" not in m2 or "quantity" not in m2:
                     break
                 m = m2
             if skip and ("name" not in m or m["name"] in skip or _numbers_mostly(rows, i, m["name"])):
-                m = _header_map(r)                 # every name column holds numbers: as before
+                m = first                          # every name column holds numbers: as before
             return i, m
     return None, {}
 
@@ -1261,11 +1337,23 @@ def _pivot_rows(pvs, qc: int) -> tuple:
 
 
 def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: list[int] | None = None,
-                        formulas: list[dict] | None = None, fctx: dict | None = None) -> dict:
-    hdr_i, hmap = _find_header(rows)
+                        formulas: list[dict] | None = None, fctx: dict | None = None, found: tuple | None = None,
+                        hidden: list | None = None, work: HeaderWork | None = None) -> dict:
+    """The candidate rows of one sheet. `found`: its header as _find_header gave it (read_xlsx searches once per sheet,
+    15 回目); `hidden`: for each row, the hidden columns that hold a number (their values are not read, but a formula
+    elsewhere that adds one up copies part of that row, 15 回目)."""
+    work = work if work is not None else HeaderWork()
+    hdr_i, hmap = found if found is not None else _find_header(rows, work)
     if hdr_i is None:
         return {"sheet": sheet, "rows": [], "skipped": [], "error": "見出し行（名称・数量）が見つからない"}
     pivots = _pivot_rows((fctx or {}).get("pivots", {}).get(str(sheet).casefold(), ()), hmap["quantity"])
+
+    def pivot_of(rn):                            # a pivot table's cell: why it is not added (see read_xlsx)
+        if pivots[0]:
+            k = bisect.bisect_right(pivots[0], rn) - 1
+            if k >= 0:
+                return pivots[1][k]
+        return None
     cands, skipped = [], []
     for i in range(hdr_i + 1, len(rows)):
         r = rows[i]
@@ -1282,8 +1370,12 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
         rn = row_numbers[i] if row_numbers else i + 1          # the sheet's own row number (gaps kept)
         trace = "%s:%s!R%dC%d" % (doc_id, sheet_label(sheet), rn, (hmap["quantity"] or 0) + 1)
         texts = {"name": name, "unit": text("unit"), "division": text("division"), "specification": text("specification")}
-        # the columns of the row that hold numbers (a formula elsewhere that adds one of them up copies part of it)
+        # the columns of the row that hold numbers (a formula elsewhere that adds one of them up copies part of it),
+        # with its hidden columns that hold one (15 回目: a summary of a hidden 設計数量 was added on top of the row)
         ncols = tuple(j for j, x in enumerate(r[:MAX_COLS]) if x is not None and x != "" and _num(x) is not None)
+        if hidden and hidden[i]:
+            ncols = tuple(sorted(set(ncols) | set(hidden[i])))
+        pv = pivot_of(rn)
         if q is None:
             raw = col("quantity")
             if (raw is None or str(raw).strip() == "") and not texts["unit"]:
@@ -1291,23 +1383,22 @@ def _rows_to_candidates(rows: list[list], sheet: str, doc_id: str, row_numbers: 
                 continue                         # コンクリート工事, 鉄筋工事 …: a heading, not a row left out
             why = number_or_reason(raw)[1]
             skipped.append(dict(texts, row=rn, trace=trace, qtext="" if raw is None else str(raw)[:40], ncols=ncols,
-                                reason="数量が数値でない（0 として読まない）" + ("：" + why if why else "")))
+                                reason="数量が数値でない（0 として読まない）" + ("：" + why if why else ""),
+                                **({"pivot": pv} if pv is not None else {})))
             continue
         # a formula's references are checked by the importer, which follows them through the whole workbook (one walk
         # per document, within its budget)
         fobj = (formulas[i] if formulas else {}).get(hmap["quantity"])
         cand = dict(texts, quantity=q, trace=trace, row=rn, qf=fobj, ncols=ncols)
-        if pivots[0]:                            # a pivot table's cell: why it is not added (see read_xlsx)
-            k = bisect.bisect_right(pivots[0], rn) - 1
-            if k >= 0 and pivots[1][k] is not None:
-                cand["pivot"] = pivots[1][k]
+        if pv is not None:
+            cand["pivot"] = pv
         cands.append(cand)
     return {"sheet": sheet, "rows": cands, "skipped": skipped, "qcol": hmap["quantity"],
             # the columns that tell the rows apart (a lookup keyed on one of them returns a row's own number)
             "keycols": sorted(hmap[k] for k in ("name", "specification", "division") if k in hmap),
-            "qcols": sorted(set(_qty_cols(rows[hdr_i])) | {hmap["quantity"]}),
-            "xcols": _factor_cols(rows[hdr_i]),
-            "sizecols": _size_cols(rows[hdr_i]),
+            "qcols": sorted(set(_qty_cols(rows[hdr_i], work)) | {hmap["quantity"]}),
+            "xcols": _factor_cols(rows[hdr_i], work),
+            "sizecols": _size_cols(rows[hdr_i], work),
             "header_row": row_numbers[hdr_i] if row_numbers else hdr_i + 1}
 
 
@@ -1334,15 +1425,22 @@ def read_csv(data: bytes, doc_id: str) -> dict:
     return {"format": "csv", "sheets": [_rows_to_candidates(rows, "csv", doc_id)]}
 
 
+_COL_LETTERS = re.compile(r"[A-Z]+")
+_COL_SEEN = {}                                    # column letters -> index (at most 18,278: AAA..ZZZ and shorter)
+
+
 def _col_index(ref: str) -> int:
-    m = re.match(r"[A-Z]+", ref or "")
+    m = _COL_LETTERS.match(ref or "")
     if not m or len(m.group(0)) > 3:
         raise ImportError_("セルの位置 %r を読めない（Excel の列の上限を超えている）" % ref)
     letters = m.group(0)
-    n = 0
-    for ch in letters:
-        n = n * 26 + (ord(ch) - 64)
-    return n - 1
+    n = _COL_SEEN.get(letters)
+    if n is None:
+        n = 0
+        for ch in letters:
+            n = n * 26 + (ord(ch) - 64)
+        n = _COL_SEEN[letters] = n - 1
+    return n
 
 
 def xlsx_sheets(data: bytes) -> list[tuple[str, list[list]]]:
@@ -1374,6 +1472,11 @@ R_PIVOT_UNREAD = "ピボットテーブル（%s）の値は足さない（元の
                  "元の表を確かめて手で入れる）"
 R_PIVOT_UNKNOWN = "ピボットテーブル（%s）の元の表が分からないので確かめられない（足さない）。必要なら手で入れる"
 R_PIVOT_PLACE = "ピボットテーブル（%s）の場所が分からないので、このシートの値は確かめられない（足さない）。必要なら手で入れる"
+# what the warning says of each kind of pivot table: only a source that is read here is counted (15 回目)
+PIVOT_SAID = {"read": "元の表の集計。元の表の行を数える",
+              "unread": "元の表 %s の集計。%s の数量は読んでいないので、この値はどこにも数えていない。足すべき値なら元の表を確かめて手で入れる",
+              "unknown": "元の表が分からないので、元の表の行を数えているかは確かめられない。必要なら手で入れる",
+              "place": "ピボットテーブルの場所が分からないので、このシートの値は確かめられない。必要なら手で入れる"}
 # hidden sheets (helpers, masters, old revisions): their values are not read, their formulas are kept to see copies
 # through them. They have their own budget: when it runs out the rest of the sheet is not read, and a quantity that
 # reaches that sheet cannot be checked (it is not added); the workbook is still read
@@ -1515,6 +1618,7 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
     ns = {"m": main}
     rel_ns = STRICT.get(main, REL_NS)
     M = "{%s}" % main
+    tag_c, tag_v, tag_f = M + "c", M + "v", M + "f"           # (direct children: faster than find with a path)
     shared = []
     if "xl/sharedStrings.xml" in names:
         root = None
@@ -1635,7 +1739,7 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
             hidden_sheets.append(sh.get("name"))
         if skip_hidden:
             read_tables(path, shf)
-        rows, numbers, forms = [], [], []
+        rows, numbers, forms, hidden_nums = [], [], [], []
         allf = fcells.setdefault(shf, {})
         hidden_rows = 0
         hidden_cols = bytearray(MAX_COLS)               # 1 = hidden; set by slices (no per-column loop in Python)
@@ -1688,18 +1792,25 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
             row_hidden = sheet_hidden or (skip_hidden and el.get("hidden") in ("1", "true"))
             if row_hidden and not sheet_hidden:
                 hidden_rows += 1
-            vals, fs = {}, {}
+            vals, fs, hnum = {}, {}, []
             last = -1
             n_el = 0
-            for c in el.findall("m:c", ns):
+            for c in el:
+                if c.tag != tag_c:
+                    continue
                 n_el += 1
                 ref, t = c.get("r"), c.get("t")
                 ci = _col_index(ref) if ref else last + 1     # a cell without a reference follows the previous one
                 last = ci                                     # (every element is counted, repeated or not)
                 if ci >= MAX_COLS:
                     raise ImportError_("列の位置 %s が Excel の上限を超えている" % ref)
-                v = c.find("m:v", ns)
-                f = c.find("m:f", ns)
+                v = f = None                                  # its first <v> and <f> (as find would give them)
+                for ch in c:
+                    if ch.tag == tag_v:
+                        if v is None:
+                            v = ch
+                    elif ch.tag == tag_f and f is None:
+                        f = ch
                 fobj = None
                 if f is not None:
                     text = f.text or ""
@@ -1747,7 +1858,12 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
                     fs[ci] = fobj
                     cells["chars"] += len(fobj[0])
                 if row_hidden or hidden_cols[ci]:
-                    continue                          # a hidden row / column (often an old revision): value not read
+                    # a hidden row / column (often an old revision): value not read. A number in a hidden column of a
+                    # visible row is still one of that row's numbers (its column is kept, not its value: a formula
+                    # elsewhere that adds it up copies part of the row, 15 回目)
+                    if not row_hidden and t in (None, "n") and (v is not None or f is not None):
+                        hnum.append(ci)
+                    continue
                 if t == "s" and v is not None:
                     try:
                         val = shared[int(v.text)]
@@ -1791,13 +1907,14 @@ def xlsx_workbook(data: bytes, skip_hidden: bool = True, formula_budget: int | N
                 rows.append([vals.get(j) for j in range(max(vals) + 1)])
                 numbers.append(rn)
                 forms.append({j: x for j, x in fs.items() if j in vals})
+                hidden_nums.append(tuple(hnum))
             el.clear()
             root.clear()
         if cut:
             cut_sheets.append(shf)
         if not sheet_hidden:
             out.append({"name": sh.get("name"), "rows": rows, "numbers": numbers, "formulas": forms,
-                        "hidden_rows": hidden_rows, "hidden_cols": hidden_cols.count(1)})
+                        "hidden_rows": hidden_rows, "hidden_cols": hidden_cols.count(1), "hidden_nums": hidden_nums})
     return {"sheets": out, "hidden_sheets": hidden_sheets, "names": defined, "names_cut": names_cut, "tables": tables,
             "fcells": fcells, "sheet_names": sheet_names, "cut_sheets": cut_sheets, "pivots": pivots}
 
@@ -1835,24 +1952,32 @@ def _pivot_reasons(wbk: dict, qsheets: list, warnings: list) -> dict:
     for pv in wbk.get("pivots") or ():
         src = _pivot_source(wbk, pv["source"])
         name = pv["name"] or "名前なし"
+        label = None
         if not pv.get("placed", True):
-            reason = R_PIVOT_PLACE % name
+            reason, kind = R_PIVOT_PLACE % name, "place"
         elif src is None:
-            reason = R_PIVOT_UNKNOWN % name
+            reason, kind = R_PIVOT_UNKNOWN % name, "unknown"
         else:
             label = sheet_label(wbk["sheet_names"].get(src, src))
-            reason = (R_PIVOT if src in read_here else R_PIVOT_UNREAD) % (name, label)
-        out.setdefault(pv["sheet"], []).append(dict(pv, reason=reason))
-        said.setdefault(pv["sheet"], []).append(name)
-    for shf, nms in said.items():
-        warnings.append("%s：ピボットテーブル（%s）の値は足していない（元の表の集計。元の表の行を数える）"
-                        % (sheet_label(wbk["sheet_names"].get(shf, shf)), "、".join(n[:20] for n in nms[:5])))
+            reason, kind = (R_PIVOT % (name, label), "read") if src in read_here else (R_PIVOT_UNREAD % (name, label),
+                                                                                       "unread")
+        out.setdefault(pv["sheet"], []).append(dict(pv, reason=reason, label=label, kind=kind))
+        said.setdefault((pv["sheet"], kind, label), []).append(name)
+    # the warning follows each pivot table's reason (15 回目: it said "the source rows are counted" also when the source
+    # sheet was hidden or could not be told)
+    for (shf, kind, label), nms in said.items():
+        warnings.append("%s：ピボットテーブル（%s）の値は足していない（%s）"
+                        % (sheet_label(wbk["sheet_names"].get(shf, shf)), "、".join(n[:20] for n in nms[:5]),
+                           PIVOT_SAID[kind] % ((label,) * PIVOT_SAID[kind].count("%s"))))
     return out
 
 
-def read_xlsx(data: bytes, doc_id: str) -> dict:
+def read_xlsx(data: bytes, doc_id: str, work: HeaderWork | None = None) -> dict:
     wbk = xlsx_workbook(data)
-    qsheets = [sh["name"] for sh in wbk["sheets"] if _find_header(sh["rows"])[0] is not None]
+    # each sheet's header is searched once, and passed on (15 回目: it was searched twice per sheet)
+    work = work if work is not None else HeaderWork()
+    found = [_find_header(sh["rows"], work) for sh in wbk["sheets"]]
+    qsheets = [sh["name"] for sh, fh in zip(wbk["sheets"], found) if fh[0] is not None]
     fctx = {"qsheets": qsheets, "names": wbk["names"], "tables": wbk["tables"]}
     warnings = []
     if not wbk["sheets"] and not wbk["hidden_sheets"]:
@@ -1879,5 +2004,6 @@ def read_xlsx(data: bytes, doc_id: str) -> dict:
     fctx["pivots"] = _pivot_reasons(wbk, qsheets, warnings)
     return {"format": "xlsx", "warnings": warnings, "names": wbk["names"], "tables": wbk["tables"], "cells": wbk["fcells"],
             "sheet_names": wbk["sheet_names"], "cut_sheets": wbk.get("cut_sheets", []), "pivots": fctx["pivots"],
-            "sheets": [_rows_to_candidates(sh["rows"], sh["name"], doc_id, sh["numbers"], sh["formulas"], fctx)
-                       for sh in wbk["sheets"]]}
+            "sheets": [_rows_to_candidates(sh["rows"], sh["name"], doc_id, sh["numbers"], sh["formulas"], fctx, found=fh,
+                                           hidden=sh.get("hidden_nums"), work=work)
+                       for sh, fh in zip(wbk["sheets"], found)]}

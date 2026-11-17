@@ -846,6 +846,120 @@ _GETPIVOT = re.compile("GETPIVOTDATA", re.I)
 R_GETPIVOT_UNKNOWN = "GETPIVOTDATA の参照先にピボットテーブルが見つからないので確かめられない。必要なら手で入れる"
 MAX_PENDING = 2                        # rows whose dimensions one block keeps (two rows already make a copy)
 MAX_DIM_ROWS = 8                       # rows whose single dimension a formula's frame keeps
+MAX_SOURCES = 16                       # blocks reached by adding that a formula's frame keeps (more: only flagged)
+HELPER_CELLS = 4_096                   # cells of one block kept one by one (a larger block is kept as a rectangle)
+
+
+def _col_letters(c: int) -> str:
+    s, c = "", c + 1
+    while c:
+        c, r = divmod(c - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
+def _cells_label(disp: dict, blk) -> str:
+    """明細 C3:C5, 階別 B2:D2, 階別 B:B (a block as said in a reason)."""
+    t, c1, c2, r1, r2 = blk
+    if r1 <= 1 and r2 >= tabular.MAX_ROW_NUMBER:
+        at = "%s:%s" % (_col_letters(c1), _col_letters(c2))
+    else:
+        at = "%s%d" % (_col_letters(c1), r1) + ("" if (c1, r1) == (c2, r2) else ":%s%d" % (_col_letters(c2), r2))
+    return "%s %s" % (tabular.sheet_label(disp.get(t, t)), at)
+
+
+class _Helpers:
+    """The cells that counted material rows sum from rows that are no material rows (a helper sheet with no bill header,
+    per-floor take-off 部位｜1F｜2F｜3F, hidden detail rows, lines without a unit), per material family: which counted
+    row summed each cell (15 回目: two quantities that summed the same cells of a helper sheet were both added). Small
+    blocks are kept cell by cell (and as rectangles, for a large block asked about), larger ones as rectangles only;
+    every cell kept and every rectangle looked at counts against the document's budget."""
+
+    def __init__(self, spend):
+        self.spend = spend
+        self.cells, self.small, self.big = {}, {}, {}
+
+    def add(self, fam, owner, blocks):
+        for t, c1, c2, r1, r2 in blocks:
+            key = (fam, t)
+            n = (c2 - c1 + 1) * (r2 - r1 + 1)
+            self.spend()
+            if n > HELPER_CELLS:
+                self.big.setdefault(key, []).append((c1, c2, r1, r2, owner))
+                continue
+            self.spend(n)
+            self.small.setdefault(key, []).append((c1, c2, r1, r2, owner))
+            cm = self.cells.setdefault(key, {})
+            for c in range(c1, c2 + 1):
+                for r in range(r1, r2 + 1):
+                    cm.setdefault((c, r), owner)
+
+    def cover(self, fam, blk):
+        """("all", owner) when counted rows of this family sum every cell of the block, ("some", owner) when they sum
+        some, None when none."""
+        t, c1, c2, r1, r2 = blk
+        key = (fam, t)
+        big = self.big.get(key, ())
+        cm = self.cells.get(key)
+        if not big and not cm:
+            return None
+        self.spend(len(big) + 1)
+        for a1, a2, b1, b2, ow in big:
+            if a1 <= c1 and c2 <= a2 and b1 <= r1 and r2 <= b2:
+                return ("all", ow)
+        n = (c2 - c1 + 1) * (r2 - r1 + 1)
+        if cm and n <= HELPER_CELLS:
+            self.spend(n)
+            got = [cm.get((c, r)) for c in range(c1, c2 + 1) for r in range(r1, r2 + 1)]
+            ow = next((g for g in got if g is not None), None)
+            if ow is not None:
+                return ("all" if all(g is not None for g in got) else "some", ow)
+        elif cm:                                 # a large block (a whole column …): does it meet a kept one?
+            for a1, a2, b1, b2, ow in self.small.get(key, ()):
+                self.spend()
+                if a1 <= c2 and c1 <= a2 and b1 <= r2 and r1 <= b2:
+                    return ("some", ow)
+        for a1, a2, b1, b2, ow in big:
+            if a1 <= c2 and c1 <= a2 and b1 <= r2 and r1 <= b2:
+                return ("some", ow)
+        return None
+
+
+def _helper_parts(srcs) -> list:
+    """The blocks a counted row SUMS (level 2: alone, in a sum, rounded, scaled; SUM(B2:D2)*(1+率) too): the parts of
+    its quantity, as own_parts reads a bill row's. A cell it only multiplies by another reference (面積×厚さ, 長さ ×
+    単位質量) is a dimension or a factor, and a block it looks a value up from (VLOOKUP, INDEX …) gives one cell of it:
+    neither is a part."""
+    return [b for b, lv, one in srcs if lv == 2 and not one]
+
+
+def _helper_copy(cells, helpers, fam, srcs, over):
+    """(\"all\" or \"some\", owner, a block) when the blocks a quantity reaches by adding are cells that counted rows of its
+    family sum: all of them (a copy), or only some (perhaps a copy). A single cell it only multiplies by another
+    reference that no counted row sums is a factor, and a block of formula cells that no counted row sums stands for
+    what its formulas reach; neither counts against "all". None when it meets none of those cells."""
+    hit, miss = None, False
+    for blk, lv, _one in srcs:
+        got = helpers.cover(fam, blk)
+        if got is not None:
+            if hit is None:
+                hit = (got[0], got[1], blk)
+            elif blk[0] == hit[2][0]:            # the cells met on that sheet, said as one range
+                b = hit[2]
+                hit = (hit[0], hit[1], (b[0], min(b[1], blk[1]), max(b[2], blk[2]), min(b[3], blk[3]), max(b[4], blk[4])))
+            if got[0] == "some":
+                miss = True
+            continue
+        if lv == 1 and blk[1] == blk[2] and blk[3] == blk[4]:
+            continue                                 # a factor (a rate cell, a thickness)
+        if cells.transparent(blk):
+            continue                                 # formula cells: what they reach is in srcs
+        miss = True
+    if hit is None:
+        return None
+    if miss or over:
+        return ("some", hit[1], hit[2])
+    return hit
 
 
 class _Cells:
@@ -884,6 +998,7 @@ class _Cells:
         self.cut_sheets = set(parsed.get("cut_sheets") or ())
         self.memo, self.name_memo, self.walks = {}, {}, {}
         self.fam_rows, self.same_memo = {}, {}
+        self.pv_index = {}                 # sheet -> its pivot tables by stretches of rows (see _pivot_at)
         self.last_hits = ()
         self.left = MAX_FOLLOW_STEPS
         self.cut = 0
@@ -895,7 +1010,7 @@ class _Cells:
 
     def _ctx(self, sh, rn, ci):
         return {"sheet": self.disp.get(sh, sh), "names": self.names, "tables": self.tables, "row": rn, "col": ci,
-                "spend": self._spend, "name_memo": self.name_memo}
+                "spend": self._spend, "name_memo": self.name_memo, "ones": True}
 
     def _walk(self, sh, rn, ci):
         """formula_walk of one formula cell, kept per document (a row's parts, the copy walk and the check of a copy
@@ -937,8 +1052,50 @@ class _Cells:
                 self._spend()
                 if pv["c1"] <= b[2] and b[1] <= pv["c2"] and (b[4] is None or pv["r1"] <= b[4]) \
                         and (b[3] is None or b[3] <= pv["r2"]):
-                    return (pv["reason"], node, "pivot")
+                    return (pv["reason"], node, "pivot", pv)
         return (R_GETPIVOT_UNKNOWN, node)
+
+    def _pivot_index(self, t):
+        """(first row of each stretch of rows, [(order, c1, c2) of the pivot tables over that stretch, in the workbook's
+        order]) of sheet t, built once per sheet (a sweep over the pivot tables' rows) and charged to the budget, so
+        that a block is found by bisection (15 回目)."""
+        got = self.pv_index.get(t)
+        if got is None:
+            pvs = self.pivots.get(t) or ()
+            self._spend(len(pvs) + 1)
+            ivs = sorted((pv["r1"], pv["r2"], i, pv["c1"], pv["c2"]) for i, pv in enumerate(pvs))
+            starts, active, on, j = [], [], {}, 0
+            for b in sorted({iv[0] for iv in ivs} | {iv[1] + 1 for iv in ivs}):
+                while j < len(ivs) and ivs[j][0] <= b:
+                    on[ivs[j][2]] = ivs[j]
+                    j += 1
+                for i in [i for i, iv in on.items() if iv[1] < b]:   # pivot tables that end above this row
+                    del on[i]
+                self._spend(len(on) + 1)
+                starts.append(b)
+                active.append(tuple((i, on[i][3], on[i][4]) for i in sorted(on)))
+            got = self.pv_index[t] = (starts, active)
+        return got
+
+    def _pivot_at(self, t, c1, c2, lo, hi):
+        """The first pivot table (in the workbook's order) of sheet t whose area (with its page fields) meets the block
+        c1..c2 × lo..hi, or None. Every stretch and pivot table looked at counts against the budget."""
+        if t not in self.pivots:
+            return None
+        starts, active = self._pivot_index(t)
+        k = max(bisect.bisect_right(starts, lo) - 1, 0)
+        best = None
+        while k < len(starts) and starts[k] <= hi:
+            self._spend()
+            for i, pc1, pc2 in active[k]:
+                if best is not None and i >= best:
+                    break
+                self._spend()
+                if pc1 <= c2 and c1 <= pc2:
+                    best = i
+                    break
+            k += 1
+        return self.pivots[t][best] if best is not None else None
 
     def _children(self, node, fr):
         """(child, level) of a node: 2 the child's value is summed into the node's, 1 it is a factor of a product of
@@ -961,8 +1118,9 @@ class _Cells:
             self._spend(len(blocks))
             # a value looked up from a bill by its name / 規格 / 区分 column and multiplied: one cell of one row of the
             # block, reached as a factor ("k": see _one_cell)
-            return iter([(("k", b[0] or sh, b[1], b[2], b[3], b[4]), 1) if b[5] == 0 and b[6] and self._keyed(sh, b[6])
-                         else (("b", b[0] or sh, b[1], b[2], b[3], b[4]), b[5]) for b in blocks])
+            # (the third item: the block is a value looked up, one cell of it)
+            return iter([(("k", b[0] or sh, b[1], b[2], b[3], b[4]), 1, True) if b[5] == 0 and b[6] and self._keyed(sh, b[6])
+                         else (("b", b[0] or sh, b[1], b[2], b[3], b[4]), b[5], len(b) > 7 and b[7]) for b in blocks])
         kind, t, c1, c2, r1, r2 = node
         one = kind == "k"
         if t in self.cut_sheets:
@@ -970,6 +1128,12 @@ class _Cells:
             return iter(())
         lo = 0 if r1 is None else r1
         hi = tabular.MAX_ROW_NUMBER if r2 is None else r2
+        # a block that meets a pivot table reads that summary of another table, whatever the formula does with it (a
+        # plain reference, a factor, SUM, a name, LET, GETPIVOTDATA inside a name): the pivot table's reason. Its cells
+        # are no material rows here (see read), so the material rows the block also reaches still make a copy (15 回目)
+        pv = self._pivot_at(t, c1, c2, lo, hi)
+        if pv is not None:
+            fr[2] = (pv["reason"], node, "pivot", pv)
         trows, tc = self.targets.get(t), self.tcols.get(t, ())
         if trows:
             k = bisect.bisect_left(trows, lo)
@@ -1001,7 +1165,7 @@ class _Cells:
                                 old = fr[6].get(key)
                                 fr[6][key] = (old[0] | frozenset(got), max(lv, old[1])) if old else (frozenset(got), lv)
                 k += 1
-        return ((c, 2) for c in self._formula_cells(t, c1, c2, lo, hi))
+        return ((c, 2, False) for c in self._formula_cells(t, c1, c2, lo, hi))
 
     def own_parts(self, sh: str, row: int):
         """The cells of a material row that its quantity SUMS (ROUND(F2), SUM(B2:D2), C2+D2, SUM(C2:E2)*1.05: a
@@ -1060,12 +1224,13 @@ class _Cells:
                 j += 1
             k += 1
 
-    @staticmethod
-    def _merge(fr, res, level):
-        """Merge a child's result into its parent's frame; `level` is how the child's value makes the parent's. The
-        dimensions reached keep the lowest level of the path (MAX_DIM_ROWS rows, two columns each are enough);
-        copy_of judges them (see _dim_copy)."""
-        why, hits, adds, dims = res
+    def _merge(self, fr, res, level, one=False):
+        """Merge a child's result into its parent's frame; `level` is how the child's value makes the parent's, `one`
+        whether the child is a value looked up (one cell of it). The dimensions reached keep the lowest level of the
+        path (MAX_DIM_ROWS rows, two columns each are enough); copy_of judges them (see _dim_copy). The blocks reached by
+        adding keep the lowest level of the path too, and whether a lookup is on it (MAX_SOURCES of them; more are only
+        flagged): read compares them with the cells counted rows sum (15 回目)."""
+        why, hits, adds, dims, srcs, over = res
         if why and fr[2] is None:
             fr[2] = why
         for h in hits:
@@ -1085,6 +1250,21 @@ class _Cells:
                     pend[key] = (cols, lv)
             elif len(old[0]) < 2 or lv > old[1]:
                 pend[key] = (frozenset(sorted(old[0] | cols)[:2]), max(lv, old[1]))
+        if over:
+            fr[8] = True
+        if srcs and not fr[8]:
+            mine = fr[7]
+            self._spend(len(srcs))
+            for blk, (lv, o) in srcs:
+                lv, o = min(level, lv), o or one
+                old = mine.get(blk)
+                if old is None:
+                    if len(mine) >= MAX_SOURCES:
+                        fr[8] = True
+                        break
+                    mine[blk] = (lv, o)
+                elif lv > old[0] or (old[1] and not o):
+                    mine[blk] = (max(lv, old[0]), old[1] and o)
 
     def _one_cell(self, dims: dict) -> dict:
         """The dimensions a looked-up value ("k" node) can bring: one cell of one row (a lookup returns one cell; one
@@ -1169,7 +1349,7 @@ class _Cells:
         memo = self.memo
         if root in memo:
             return memo[root]
-        stack, on = [[root, None, None, [], [], 2, {}]], {root}
+        stack, on = [self._frame(root, 2)], {root}
         while stack:
             fr = stack[-1]
             if fr[1] is None:
@@ -1177,23 +1357,72 @@ class _Cells:
             nxt = next(fr[1], None) if fr[2] is None and len(fr[3]) < 2 else None
             if nxt is None:
                 dims = fr[6] if fr[0][0] != "k" else self._one_cell(fr[6])
-                res = memo[fr[0]] = (fr[2], tuple(fr[3]), tuple(fr[4]), tuple((k, v[0], v[1]) for k, v in dims.items()))
+                res = memo[fr[0]] = (fr[2], tuple(fr[3]), tuple(fr[4]), tuple((k, v[0], v[1]) for k, v in dims.items()),
+                                     tuple(fr[7].items()), fr[8])
                 on.discard(fr[0])
                 stack.pop()
                 if stack:
-                    self._merge(stack[-1], res, fr[5])
+                    self._merge(stack[-1], res, fr[5], fr[9])
                 continue
-            child, level = nxt
+            child, level, one = nxt
             got = memo.get(child)
             if got is not None:
                 self._spend()
-                self._merge(fr, got, level)
+                self._merge(fr, got, level, one)
             elif child in on:
                 fr[2] = ("循環する参照（数式が自分自身にたどり着く）は確かめられない。必要なら手で入れる", fr[0])
             else:
                 on.add(child)
-                stack.append([child, None, None, [], [], level, {}])
+                stack.append(self._frame(child, level, one))
         return memo[root]
+
+    @staticmethod
+    def _frame(node, level, one=False):
+        """[node, children, why, rows reached, rows reached by adding, level, dimensions reached, blocks reached by
+        adding {block: (level, looked up?)}, more blocks than kept?, a value looked up?]; a block node reaches itself
+        (rows as numbers: 1 to the last)."""
+        srcs = {}
+        if node[0] != "c":
+            _k, t, c1, c2, r1, r2 = node
+            srcs[(t, c1, c2, 1 if r1 is None else r1, tabular.MAX_ROW_NUMBER if r2 is None else r2)] = (2, False)
+        return [node, None, None, [], [], level, {}, srcs, False, one]
+
+    def _on_targets(self, t, r1, r2) -> bool:
+        """Does the block's sheet list materials with a material (or marked) row in rows r1..r2? (Those rows' cells are
+        judged as parts, numbers and dimensions of the rows, not as cells a counted row sums.)"""
+        rows = self.targets.get(t)
+        if not rows:
+            return False
+        k = bisect.bisect_left(rows, r1)
+        return k < len(rows) and rows[k] <= r2
+
+    def sources(self, sh: str, row: int, col: int):
+        """After copy_of found nothing: ([(block, level, looked up?)] the quantity reaches by adding, outside its own
+        row and the material rows of quantity tables (a helper sheet, per-floor take-off, hidden detail rows, lines
+        without a unit); whether more were reached than kept). Level 2: summed (alone, in a sum, scaled by a number);
+        1: a factor of a product of references. Looked up: a lookup (VLOOKUP, INDEX …) is on the way, so one cell of
+        the block makes the value."""
+        res = self.memo.get(("c", sh, row, col))
+        if res is None:
+            return [], True
+        out = []
+        for blk, (lv, one) in res[4]:
+            t, c1, c2, r1, r2 = blk
+            self._spend()
+            if (t == sh and r1 == row and r2 == row) or self._on_targets(t, r1, r2):
+                continue
+            out.append((blk, lv, one))
+        return out, res[5]
+
+    def transparent(self, blk) -> bool:
+        """Is every cell of a (small) block a formula cell? Its formulas are followed, so what they reach stands for it."""
+        t, c1, c2, r1, r2 = blk
+        n = (c2 - c1 + 1) * (r2 - r1 + 1)
+        if n > HELPER_CELLS:
+            return False
+        rows = self.cells.get(t) or {}
+        self._spend(n)
+        return all(c in (rows.get(r) or ()) for r in range(r1, r2 + 1) for c in range(c1, c2 + 1))
 
     def _family_rows(self, t: str, fam, row_fid: dict) -> list:
         """The rows of sheet t (sorted) that name a material of this family, or a total / work row of no material."""
@@ -1242,7 +1471,8 @@ class _Cells:
         return False
 
     def copy_of(self, sh: str, row: int, col: int, qf=None):
-        """None, ("copy", sheet, row), ("unchecked", reason), ("pivot", reason) or ("budget", reason)."""
+        """None, ("copy", sheet, row), ("unchecked", reason), ("pivot", reason, pivot table or None) or ("budget",
+        reason)."""
         node = ("c", sh, row, col)
         if col not in (self.cells.get(sh, {}).get(row) or {}):
             if qf is None:
@@ -1251,7 +1481,7 @@ class _Cells:
             self.frows[sh] = sorted(self.cells[sh])
             self.fcols.pop((sh, row), None)
         try:
-            why, hits, adds, dims = self._result(node)
+            why, hits, adds, dims = self._result(node)[:4]
         except _FollowBudget:
             self.cut += 1
             return ("budget", "数式のたどる先が多すぎて確かめられない（1 つの資料で %d 歩まで）。必要なら手で入れる"
@@ -1263,8 +1493,8 @@ class _Cells:
             return ("copy",) + others[0]
         if why:
             text, at = why[:2]
-            if len(why) > 2:                     # it reads a pivot table (GETPIVOTDATA): that table's reason
-                return ("pivot", text)
+            if len(why) > 2:                     # it reads a pivot table: that table's reason
+                return ("pivot", text, why[3] if len(why) > 3 else None)
             if at == node:
                 return ("unchecked", text)
             return ("unchecked", "参照先の数式（%s）：%s" % (tabular.sheet_label(self.disp.get(at[1], at[1])), text))
@@ -1349,10 +1579,22 @@ R_DEMOLISH_MAYBE = "材料の後に撤去・解体・処分の語がある（取
 # a mark only in the specification (摘要): perhaps a note on the material row (14 回目)
 R_AGAIN_MAYBE = "規格・摘要にうち・内訳などの語がある（ほかの行の内訳か、材料の行の注記か分からない）ので足さない。材料の行なら手で入れる"
 R_DEDUCT_MAYBE = "規格・摘要に控除などの語がある（控除の行か、材料の行の値段の注記か分からない）ので足さない。材料の行なら手で入れる"
-# 内訳書による on a row of a workbook whose other sheet lists the same material (14 回目)
-R_REF_MAYBE = "規格・摘要に内訳書による・内訳別紙などの注記があり、同じ資料の別のシート（%s）に同じ材料の行がある" \
-              "（その内訳と二重になるおそれ）ので足さない。材料の行なら手で入れる"
+# 内訳書による on a row of a workbook whose other sheet counts rows of the same material (14 回目; 15 回目: only rows that
+# are counted, decided once every row is read)
+R_REF_MAYBE = "規格・摘要に内訳書による・内訳別紙などの注記があり、同じ資料の別のシート（%s）で同じ材料の行（%d 行目）を" \
+              "数えている（その内訳と二重になるおそれ）ので足さない。材料の行なら手で入れる"
 _FAMILY = {"m_concrete_fdn": "m_concrete"}     # (a breakdown may split concrete into foundation and the rest)
+# cells of rows that are not material rows (a helper sheet with no bill header, per-floor take-off, hidden detail rows)
+# that a counted row of the same material already sums (15 回目)
+R_COPY_HELPER = "別のシート（%s）の材料の行（%d 行目）が足し上げたセル（%s）を足した値は足さない（その行で数えているので" \
+                "二重計上になる）"
+R_COPY_HELPER_SAME = "同じシートの材料の行（%d 行目）が足し上げたセル（%s）を足した値は足さない（再掲・検算のおそれ）。" \
+                     "足すべき行なら手で入れる"
+R_COPY_HELPER_SOME = "材料の行（%s の %d 行目）が足し上げたセル（%s）の一部を足した値は足さない（二重計上のおそれ）。" \
+                     "足すべき行なら手で入れる"
+# a value read from a pivot table of a source that is read here, while its material is counted nowhere in the file
+R_PIVOT_REF_ALONE = "ピボットテーブル（%s）の値を参照した値は足さない（元の表 %s の集計）。この材料は資料のどこでも数えて" \
+                    "いないので、足すべき行なら元の表を確かめて手で入れる"
 R_WORK = "作業の行（加工・運搬・打設など。材料の量を繰り返す）は足さない（二重計上を防ぐ）"
 R_NEG = "負の数量は読まない（差し引きにしない）"
 R_COPY_SHEET = "別のシート（%s）の材料の行（%d 行目）の数量を参照した値は足さない（そのシートも読んでいるので二重計上になる）"
@@ -1369,7 +1611,7 @@ SURELY_NOT = (R_TOTAL, R_AGAIN, R_DEDUCT, R_DEMOLISH, R_NEG, tabular.HEADING)
 # reasons with a place in them that are surely not part of the total (a copy of what another sheet counts, a pivot
 # table of a sheet that is read)
 _SURELY_NOT_RX = re.compile("|".join("(?:%s)" % re.escape(r).replace(re.escape("%s"), ".*").replace(re.escape("%d"), r"\d+")
-                                     for r in (R_COPY_SHEET, R_COPY_SHEET_COUNTED, tabular.R_PIVOT)), re.S)
+                                     for r in (R_COPY_SHEET, R_COPY_SHEET_COUNTED, tabular.R_PIVOT, R_COPY_HELPER)), re.S)
 
 
 def _maybe(reason: str) -> bool:
@@ -1440,7 +1682,6 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         prep, cells = _Prep(), _Cells(parsed)
         classed = []                       # (sheet casefolded, row, class) of the candidate rows, in reading order
         row_fid = {}                       # (sheet casefolded, row) -> the field a material / marked row names (or None)
-        listed = {}                        # field (concrete with foundation concrete) -> sheets with a material row of it
         n_classified, stopped = 0, None
         for sh in parsed["sheets"]:
             if sh.get("error"):
@@ -1469,13 +1710,14 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 # a material row (also when this row itself is not added: a SUM subtotal, a non-numeric quantity …)
                 # in a unit its field takes: a quantity elsewhere that reaches its quantity copies it. Total / 再掲 /
                 # work / deduction / removal rows count only on a sheet that lists materials (延床面積 合計 on a
-                # dimensions sheet is not a material quantity)
-                if c["fid"] and c["u"] in FL.FIELDS[c["fid"]]["units"]:
+                # dimensions sheet is not a material quantity). A pivot table's cells are no such rows: a quantity
+                # that reaches them reads the pivot table (its reason, see _Cells._children; 15 回目)
+                if r.get("pivot"):
+                    pass
+                elif c["fid"] and c["u"] in FL.FIELDS[c["fid"]]["units"]:
                     mats.append(r["row"])
                     nums[r["row"]] = r.get("ncols") or ()
                     row_fid[(shf, r["row"])] = c["fid"]
-                    if not c["ref"]:
-                        listed.setdefault(_FAMILY.get(c["fid"], c["fid"]), set()).add(shf)
                 elif c["total"] or c["again"] or c["work"] or c["deduct"] or c["demolish"]:
                     marks.append(r["row"])
                     nums[r["row"]] = r.get("ncols") or ()
@@ -1498,9 +1740,24 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                     cells.ncols[(shf, rn)] = sorted(set(nums.get(rn) or ()) - xcols - set(cells.dims.get((shf, rn), ())))
         if stopped:
             warnings.append(stopped)
-        where, others = {}, []             # trace -> (sheet, row) of the rows added; rows that copy another material
-        for shf, r, c in classed:
+        names_ = parsed.get("sheet_names", {})
+        # the rows added (in reading order, with their place in it), rows that copy another material, rows with a
+        # reference note (内訳書による) and rows that read a pivot table of a source read here: the last three are decided
+        # once every row is read (15 回目)
+        added, others, refs, pivot_refs = [], [], [], []
+        helpers = _Helpers(cells._spend)
+
+        def helper_parts(shf, row, fid):
+            """Keep the cells an added row sums from rows that are no material rows (see _Helpers)."""
+            try:
+                srcs, _over = cells.sources(shf, row, sh_qcol(parsed, shf))
+                helpers.add(_family(fid), (shf, row), _helper_parts(srcs))
+            except _FollowBudget:
+                pass                       # (the row is added; the next rows are not checked for want of budget)
+
+        for seq, (shf, r, c) in enumerate(classed):
             why = None
+            pref = None
             if c["total"]:
                 why = R_TOTAL
             elif c["again"] == SURE:
@@ -1535,38 +1792,102 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                     elif cells.reaches_same(shf, r["row"], sh_qcol(parsed, shf), c["fid"], row_fid):
                         # it reaches a row of the same material (or a total of no material): a copy of what that sheet
                         # counts. Only rows of other materials: it may belong (鉄筋 = 明細のコンクリート × 0.12)
-                        why = R_COPY_SHEET % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
+                        why = R_COPY_SHEET % (tabular.sheet_label(names_.get(tsh, tsh)), trow)
                     else:                  # only another material's row there: decided once every row is read
-                        why = R_COPY_SHEET_OTHER % (tabular.sheet_label(parsed.get("sheet_names", {}).get(tsh, tsh)), trow)
+                        why = R_COPY_SHEET_OTHER % (tabular.sheet_label(names_.get(tsh, tsh)), trow)
                         other = (tsh, trow)
+                elif got and got[0] == "pivot" and got[2] is not None and not _maybe(got[1]):
+                    # a pivot table whose source is read here: surely not added when its material is counted (decided
+                    # once every row is read)
+                    why, pref = got[1], got[2]
                 elif got:
                     why = got[1]
+                else:
+                    # cells of rows that are no material rows, which a counted row of the same material already sums
+                    # (a helper sheet, per-floor take-off, hidden detail rows): a copy (15 回目)
+                    try:
+                        srcs, over = cells.sources(shf, r["row"], sh_qcol(parsed, shf))
+                        hk = _helper_copy(cells, helpers, _family(c["fid"]), srcs, over)
+                    except _FollowBudget:
+                        cells.cut += 1
+                        hk = ("budget",)
+                    if hk and hk[0] == "budget":
+                        why = "数式のたどる先が多すぎて確かめられない（1 つの資料で %d 歩まで）。必要なら手で入れる" % MAX_FOLLOW_STEPS
+                    elif hk:
+                        kind_, (osh, orow), blk = hk
+                        at_ = _cells_label(names_, blk)
+                        if kind_ == "some":
+                            why = R_COPY_HELPER_SOME % (tabular.sheet_label(names_.get(osh, osh)), orow, at_)
+                        elif osh == shf:
+                            why = R_COPY_HELPER_SAME % (orow, at_)
+                        else:
+                            why = R_COPY_HELPER % (tabular.sheet_label(names_.get(osh, osh)), orow, at_)
                 if other:
                     others.append((leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit")), c["fid"],
                                    other))
                     continue
-            if not why and c["ref"]:
-                # 内訳書による on a row of a workbook whose other sheet lists the same material: perhaps that breakdown
-                # (on a single sheet, or with no such row elsewhere, the note only points to another document) (14 回目)
-                ref_others = sorted(listed.get(_FAMILY.get(c["fid"], c["fid"]), set()) - {shf})
-                if ref_others:
-                    why = R_REF_MAYBE % tabular.sheet_label(parsed.get("sheet_names", {}).get(ref_others[0], ref_others[0]))
+                if pref is not None:
+                    pivot_refs.append((leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit")),
+                                       c["fid"], pref))
+                    continue
             if why:
                 leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit"))
                 continue
+            if c["ref"]:
+                # 内訳書による: decided once every row is read (listed here for now, in reading order)
+                refs.append((seq, shf, r, c, leave(c["fid"], r["trace"], c["name"], R_REF_MAYBE, r["quantity"],
+                                                   r.get("unit"))))
+                continue
+            added.append((seq, shf, r, c))
+            if r.get("qf"):
+                helper_parts(shf, r["row"], c["fid"])
+        if refs:
+            # 内訳書による / 別紙による on a row of a workbook whose other sheet COUNTS rows of the same material (コンクリート
+            # with 基礎のコンクリート): perhaps that breakdown, so "may belong", naming the counted row. Rows that are never
+            # counted (pivot table cells, copies — above all copies of this row —, total / 再掲 / work / deduction /
+            # removal rows) are no breakdown; on a single sheet, or with no such row elsewhere, the note only points to
+            # another document and the row is added (14 回目; 15 回目: the rule was fed by every row that named the
+            # material and dropped the only real row)
+            sums0 = {}
+            for _s, _shf, r, c in added:
+                sums0.setdefault((c["fid"], c["u"]), []).append((r["quantity"], r["trace"], c["name"]))
+            kept0, first = _counted_traces(sums0), {}
+            for _s, shf, r, c in added:
+                if r["trace"] in kept0:
+                    first.setdefault(_family(c["fid"]), {}).setdefault(shf, r["row"])
+            listed_now = set()                     # the entries of the rows that are added after all (taken out once)
+            for seq, shf, r, c, ents in refs:
+                elsewhere = [(s_, rw) for s_, rw in first.get(_family(c["fid"]), {}).items() if s_ != shf]
+                if elsewhere:
+                    osh, orow = elsewhere[0]
+                    for e in ents:
+                        e["reason"] = R_REF_MAYBE % (tabular.sheet_label(names_.get(osh, osh)), orow)
+                    continue
+                listed_now.update(id(e) for e in ents)
+                added.append((seq, shf, r, c))
+                if r.get("qf"):
+                    helper_parts(shf, r["row"], c["fid"])
+            if listed_now:
+                unused[:] = [u_ for u_ in unused if id(u_) not in listed_now]
+                for fid in list(excluded):
+                    excluded[fid] = [x for x in excluded[fid] if id(x) not in listed_now]
+                    if not excluded[fid]:
+                        del excluded[fid]
+            added.sort(key=lambda x: x[0])
+        where = {}                         # trace -> (field, (sheet, row)) of the rows added
+        for _s, shf, r, c in added:
             sums.setdefault((c["fid"], c["u"]), []).append((r["quantity"], r["trace"], c["name"]))
             where[r["trace"]] = (c["fid"], (shf, r["row"]))
+        kept, counted, kin = _counted_traces(sums), {}, {}
+        for t, (fid, at) in where.items():
+            if t in kept:
+                counted.setdefault(fid, at)
+                kin.setdefault(_family(fid), (fid, at))
         if others:
             # a row worked out from another material's row (鉄筋 = 明細のコンクリート × 0.12) may belong only when its own
             # field is counted nowhere in the file; when it is, the row repeats it (14 回目). When only the other field
             # of its material is counted (基礎のコンクリート next to 上部構造のコンクリート), it may still belong: that row
             # is named and the row stays "may belong" (14 回目の攻撃: the foundations were dropped without a word)
-            kept, counted, kin = _counted_traces(sums), {}, {}
-            for t, (fid, at) in where.items():
-                if t in kept:
-                    counted.setdefault(fid, at)
-                    kin.setdefault(_family(fid), (fid, at))
-            names_ = parsed.get("sheet_names", {})
             for ents, fid, (tsh, trow) in others:
                 at = counted.get(fid)
                 if at is not None:
@@ -1585,6 +1906,16 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                     e["reason"] = reason
                     if "maybe" in e:
                         e["maybe"] = _maybe(reason)
+        for ents, fid, pv in pivot_refs:
+            # a value read from a pivot table of a source read here repeats what that source counts; when its material
+            # is counted nowhere in the file (a ratio of another material, a source row left out), it may belong (15 回目)
+            if fid in counted:
+                continue
+            reason = R_PIVOT_REF_ALONE % (pv.get("name") or "名前なし", pv.get("label") or "")
+            for e in ents:
+                e["reason"] = reason
+                if "maybe" in e:
+                    e["maybe"] = _maybe(reason)
         if cells.cut:
             warnings.append("数式のたどる先が多すぎるので、%d 行は確かめられず足していない（1 つの資料で %d 歩まで）。"
                             "その行は「使わなかった行」にある" % (cells.cut, MAX_FOLLOW_STEPS))
