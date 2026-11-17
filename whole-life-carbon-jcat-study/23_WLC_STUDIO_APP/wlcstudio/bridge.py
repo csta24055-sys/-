@@ -471,17 +471,21 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     zero_by_kind = {"material": {s_ for s_, z in (("A4", dist_at0), ("C2", ctx["haul0"]), ("B3", ctx["mrep0"])) if z},
                     "equipment": {"B3"} if ctx["erep0"] else set()}
 
-    def missing(fid, stage_list, reason, kind=None, label=None, gap="omitted", ctx_over=None, advice=None):
+    def missing(fid, stage_list, reason, kind=None, label=None, gap="omitted", ctx_over=None, advice=None, with_=None):
         """Record a gap whose stages are inside the boundary. gap="omitted": not in the total (the total is a lower bound);
         gap="assumed": in the total, but computed with an assumption instead of the inputs (the stage is not determined);
         gap="split": the total is right but how it splits between stages is not determined (B2 counted inside B6).
-        `advice`: what completes it when there is more than one way (shown in the hint of its stages)."""
+        `advice`: what completes it when there is more than one way (shown in the hint of its stages).
+        `with_`: the gap (an equipment count, the rebuild scenario) that already leaves this share out; this input is
+        named with it so that the hint names all a stage needs at once, but it is no share of its own: the list of what
+        the total lacks puts it after the other gaps (16 回目)."""
         zero = zero_by_kind.get(kind, set()) | set((ctx_over or {}).get("zero", ()))
         hit = [s for s in expand_stages([s_ for s_ in stage_list if s_ not in zero], dict(ctx, **(ctx_over or {})), kind)
                if s in st_set and s not in zero]
         if hit and not any(m["field"] == fid for m in missing_inputs):
             missing_inputs.append({"field": fid, "label": label or FL.FIELDS[fid]["label"], "stages": hit, "reason": reason,
-                                   "gap": gap, "screen_field": fid in FL.FIELDS, **({"advice": advice} if advice else {})})
+                                   "gap": gap, "screen_field": fid in FL.FIELDS, **({"advice": advice} if advice else {}),
+                                   **({"with": with_} if with_ else {})})
 
     moot = []                     # (field, reason): passed, but a partner that is surely 0 makes it unable to act
     rec = V("a_reconstruction")
@@ -531,12 +535,13 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             missing("a_reconstruction", ("B5",), "大規模改修・建替えの想定が未取得（B5 は計算できない）")
             # the cycle and the share that B5 needs as well, named at once (as the refrigerant parts of B1): B5 stays as
             # marked; only the named inputs grow (the cycle can fall inside T and the share is not 0 here)
+            # (named with the scenario: the list of what the total lacks puts them after the other gaps, 16 回目)
             if cyc_never:
                 missing("a_replacement_cycle", ("B5",), "改修・建替えの周期が%s（想定を入れても、周期が無いと B5 は計算できない）"
-                        % _gap_word(V("a_replacement_cycle")))
+                        % _gap_word(V("a_replacement_cycle")), with_="a_reconstruction")
             if fra_unknown:
                 missing("a_recon_fraction", ("B5",), "改修の範囲の割合が%s（想定を入れても、割合が無いと B5 は計算できない）"
-                        % _gap_word(V("a_recon_fraction")))
+                        % _gap_word(V("a_recon_fraction")), with_="a_reconstruction")
         elif _unknown(rec) and fra0:
             d.skip("a_reconstruction", rec, "改修の範囲の割合が 0 なので、想定がどれでも B5 は 0（想定は問わない）")
         elif b5_none and not _unknown(rec):
@@ -1150,12 +1155,14 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             # the other inputs of this row that its stages need as well, named at once (as the refrigerant parts of B1):
             # the life for B4 (unknown: a renewal can fall inside T) and the mass for C3 (and B4 / B5 by the expansion),
             # by the same tests as with a count. The stages stay as the count marks them; only the named inputs grow
+            # (named with the count: the list of what the total lacks puts them after the other gaps, 16 回目)
             if _num(lv)[0] is None:
                 missing("e_%s_life" % t, ("B4",), "%s機器の耐用年数が%s（台数を入れても、耐用年数が無いと交換を数えられない）"
-                        % (tl, _gap_word(lv)), kind="equipment")
+                        % (tl, _gap_word(lv)), kind="equipment", with_="e_%s_count" % t)
             if not mass0 and not isinstance(_num(mv)[0], float):
                 missing("e_%s_mass" % t, ("C3",), "%s機器 1 台の解体時質量が%s（台数を入れても、質量が無いと解体時の処理（C3）を"
-                        "計算できない）" % (tl, _gap_word(mv)), kind="equipment", ctx_over={"b4_equipment": renew.get(trade, True)})
+                        "計算できない）" % (tl, _gap_word(mv)), kind="equipment", ctx_over={"b4_equipment": renew.get(trade, True)},
+                        with_="e_%s_count" % t)
             d.skip("e_%s_count" % t, cv, how + "：台数の欠けた設備の行を渡した（エンジンが不完全とする。この設備は合計に入っていない）")
             d.skip("e_%s_life" % t, lv, "台数が無いので渡していない")
             d.skip("e_%s_mass" % t, mv, "1 台の質量 0 を台数の欠けた仮の行に渡した（台数が無いので計算には入らない）" if mass0
@@ -1706,7 +1713,11 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.unconnected.append({"label": k, "reason": "入力画面に欄が無い：" + why})
     if missing_materials:
         d.assumed.append("未取得の材料 %d 種は行を作っていない：合計に入っていない（合計は少なめ＝下限）" % len(missing_materials))
-    other = [m for m in missing_inputs if m["field"] not in {f[0] for f in FL.MATERIALS} and m.get("gap") == "omitted"]
+    # the inputs named with a count / the scenario (`with`) come after the others: they are no shares of their own, and
+    # the first names (here and in the first lines of the screen's lower-bound notice) stay the gaps that leave a share
+    # out, as before 16 回目 (16 回目の修正への攻撃: 周期・割合・耐用年数・質量 pushed 購入電力 out of the notice)
+    other = sorted((m for m in missing_inputs if m["field"] not in {f[0] for f in FL.MATERIALS} and m.get("gap") == "omitted"),
+                   key=lambda m: "with" in m)
     if other:
         d.assumed.append("入っていない入力 %d 件（%s）の分は合計に入っていない（合計は少なめ＝下限）"
                          % (len(other), "、".join(m["label"] for m in other[:6]) + ("…" if len(other) > 6 else "")))
@@ -1751,7 +1762,8 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
     n_est = sum(1 for r in d.reflect.values() if r["reflected"] and r["state"] in ("statistical", "assumption")
                 and r["field"] not in neutral)
     n_ref = sum(by_state.values())
-    omitted = [m for m in missing_inputs if m.get("gap") == "omitted"]
+    # (stable: in the order of missing_inputs, with the inputs named with a count / the scenario after the others)
+    omitted = sorted((m for m in missing_inputs if m.get("gap") == "omitted"), key=lambda m: "with" in m)
     # stages with something left out (the total is short there) and stages computed partly with an assumption
     incomplete_stages = sorted({s for m in omitted for s in m["stages"]})
     assumed_stages = sorted({s for m in missing_inputs if m.get("gap") == "assumed" for s in m["stages"]})

@@ -152,7 +152,9 @@ class FifteenthRoundClassificationTests(unittest.TestCase):
                           "Cavity wall excl. insulation,300,m2\nCavity insulation 100mm,300,m2\n"
                           "Metal stud partition excluding plasterboard,400,m2\n")
         self.assertEqual(got, {("m_board", "m2"): 800.0, ("m_concrete_fdn", "m3"): 40.0, ("m_insulation", "m2"): 300.0})
-        self.assertEqual(sum(1 for u in r["unused"] if u["reason"].startswith("どの材料の欄にも")), 4)
+        # (16 回目：4 行は除いた材料の欄に「足すべきかもしれない」で数量とともに出る。前は使わなかった行にだけ
+        # 「どの材料の欄にも当てはまらない」で出ていた)
+        self.assertEqual(sum(1 for u in r["unused"] if u["reason"] == documents.R_PART_MAYBE), 4)
         for nm in ("Excavating trenches without concrete", "Excavation except concrete", "Excavation less concrete",
                    "Suspended ceiling system exc. boards", "Door frame excl. glass", "Earthworks exc concrete", "Hardcore ex concrete"):
             self.assertIsNone(documents._field_for(nm), nm)
@@ -331,7 +333,7 @@ class FifteenthRoundClassificationTests(unittest.TestCase):
         got, r = csv_read("名称,摘要,数量,単位\n間仕切下地,LGS 65形（石膏ボード除く）,500,m2\n石膏ボード,t12.5,500,m2\n"
                           "外壁下地,胴縁（断熱材除く）,300,m2\nグラスウール,t50,300,m2\n根切り,基礎（コンクリート除く）,60,m3\n")
         self.assertEqual(got, {("m_board", "m2"): 500.0, ("m_insulation", "m2"): 300.0})
-        self.assertEqual(sum(1 for u in r["unused"] if u["reason"].startswith("どの材料の欄にも")), 3)
+        self.assertEqual(sum(1 for u in r["unused"] if u["reason"] == documents.R_PART_MAYBE), 3)   # (16 回目)
         for name, spec in (("間仕切下地", "LGS 65形 石膏ボード別途"), ("間仕切下地", "押出法ポリスチレンフォームを除く"),
                            ("", "断熱材含まず")):
             self.assertIsNone(cls(name, spec)["fid"], (name, spec))
