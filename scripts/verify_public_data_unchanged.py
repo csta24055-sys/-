@@ -11,7 +11,7 @@
   違えば不合格にするので、その場合は従来どおり氏名リストでの検査が必要。
 
 確かめること:
-  1. 配布物のうち、アプリのコード（index.html, sw.js, assets/*.js, assets/*.css, _worker.js, _headers, 404.html）以外の全ファイルが、
+  1. 配布物のうち、アプリのコード（index.html, sw.js, ui-init.js, assets/*.js, assets/*.css, _worker.js, _headers, 404.html）以外の全ファイルが、
      公開中のサイトの同じパスのファイルと 1 バイトも違わない。data/seed.json は生成時刻（generated_at）だけを除いて同じ。
      公開中のサイトに無いファイルが増えていても不合格。
   2. データの元になるソース（knowledge/, report/, deliverables/, frontend/public/, scripts/knowledge_data.py, scripts/privacy_patterns.py）が、
@@ -32,8 +32,11 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CODE_FILES = {"index.html", "sw.js", "_worker.js", "_headers", "404.html", ".nojekyll"}
+CODE_FILES = {"index.html", "sw.js", "ui-init.js", "_worker.js", "_headers", "404.html", ".nojekyll"}
 DATA_SOURCES = ["knowledge", "report", "deliverables", "frontend/public", "scripts/knowledge_data.py", "scripts/privacy_patterns.py"]
+# frontend/public のうち、アプリのコード（データではない）。ソースの変更検査から外す
+CODE_SOURCES = ["frontend/public/sw.js", "frontend/public/ui-init.js"]
+_NOT_CODE = [f":(exclude){c}" for c in CODE_SOURCES]
 
 
 def is_code(rel: str) -> bool:
@@ -83,9 +86,9 @@ def verify(out: Path, live: str, base_ref: str) -> dict:
         if not ok:
             bad.append(rel)
     # データの元になるソースが基準のブランチから変わっていないこと
-    diff = subprocess.run(["git", "-C", str(ROOT), "diff", "--name-only", base_ref, "HEAD", "--", *DATA_SOURCES], capture_output=True, text=True)
+    diff = subprocess.run(["git", "-C", str(ROOT), "diff", "--name-only", base_ref, "HEAD", "--", *DATA_SOURCES, *_NOT_CODE], capture_output=True, text=True)
     changed_sources = [x for x in diff.stdout.splitlines() if x.strip()] if diff.returncode == 0 else None
-    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "--", *DATA_SOURCES], capture_output=True, text=True).stdout.strip().splitlines()
+    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "--", *DATA_SOURCES, *_NOT_CODE], capture_output=True, text=True).stdout.strip().splitlines()
     scan_file = out.parent / f"{out.name}-scan.json"
     scan = json.loads(scan_file.read_text(encoding="utf-8")) if scan_file.exists() else None
     code_ok = bool(scan and not scan.get("hits") and not scan.get("forbidden_names") and not scan.get("unreadable"))
