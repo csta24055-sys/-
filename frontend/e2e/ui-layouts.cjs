@@ -13,7 +13,11 @@
 //  7. Ctrl+K のコマンドパレット、壊れた保存値からの復旧
 //  8. アクセシビリティ（axe-core）: 重大（serious / critical）の違反数を Original と比較
 // 注意: iPhone は Chromium での「iPhone 13 相当（画面サイズ・UA・タッチ）」の再現であり、実機の Safari ではない。
-const { chromium, devices } = require('playwright');
+const pw = require('playwright');
+const { devices } = pw;
+// BROWSER=webkit で Safari と同じ系統のエンジン（Playwright の WebKit）を使う。既定は Chromium
+const ENGINE = process.env.BROWSER === 'webkit' ? 'webkit' : 'chromium';
+const chromium = pw[ENGINE];
 const fs = require('fs');
 const path = require('path');
 
@@ -294,7 +298,7 @@ async function customizeFlow(browser) {
   await customizeFlow(browser);
   await browser.close();
   const pass = results.filter((r) => r.pass).length;
-  fs.writeFileSync(path.join(SHOTS, 'results.json'), JSON.stringify({ base: BASE, at: new Date().toISOString(), seconds: Math.round((Date.now() - t0) / 1000), pass, total: results.length, results, a11y }, null, 1));
+  fs.writeFileSync(path.join(SHOTS, 'results.json'), JSON.stringify({ base: BASE, engine: ENGINE, at: new Date().toISOString(), seconds: Math.round((Date.now() - t0) / 1000), pass, total: results.length, results, a11y }, null, 1));
   console.log(`\n${pass}/${results.length} passed`);
   process.exit(pass === results.length ? 0 : 1);
 })().catch((e) => { console.error(e); process.exit(2); });

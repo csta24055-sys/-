@@ -1,4 +1,4 @@
-"""静的配信の確認用サーバー（GitHub Pages と同じく、存在しないパスには 404.html を返す）
+"""静的配信の確認用サーバー（GitHub Pages と同じく、存在しないパスと index.html のないフォルダーには 404.html を返す）
 
   python scripts/serve_static.py frontend/dist-mobile 47801
 """
@@ -24,6 +24,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(body)
             return
         super().send_error(code, message, explain)
+
+    def list_directory(self, path):
+        # GitHub Pages と同じく、index.html のないフォルダーは一覧を出さず 404.html（= アプリ本体）を返す。
+        # 画面の URL /data は、配信物の data/ フォルダーと同じ名前なので、一覧を出すと初回の直接アクセスで画面が開かない
+        self.send_error(404)
+        return None
 
     def log_message(self, *a):
         pass

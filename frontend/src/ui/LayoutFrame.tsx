@@ -25,8 +25,8 @@ export default function LayoutFrame() {
   const toggleSidebar = useCallback(() => ui.setCustomNow({ sidebarMode: sideMode === 'icons' ? 'expanded' : 'icons' }), [ui, sideMode])
   const props = { st, openMore, openPalette, sidebarMode: sideMode, toggleSidebar } as const
   const showSide = resolved.sidebarMode !== 'hidden'
-  // Original で既定のままなら属性を付けない（改修前と同じ DOM）
-  const sidebarAttr = original && resolved.sidebarMode !== 'hidden' && resolved.sidebarPos === 'left' ? undefined : resolved.sidebarMode === 'hidden' ? 'hidden' : `${resolved.sidebarPos}-${sideMode}`
+  // Original で既定（左・展開）のままなら属性を付けない（改修前と同じ DOM）。「アイコンのみ」は左でも属性が要る
+  const sidebarAttr = original && resolved.sidebarMode === 'expanded' && resolved.sidebarPos === 'left' ? undefined : resolved.sidebarMode === 'hidden' ? 'hidden' : `${resolved.sidebarPos}-${sideMode}`
 
   return (
     <div className={original ? 'shell' : `shell ux-shell ux-${spec.id}`} data-sidebar={sidebarAttr}>

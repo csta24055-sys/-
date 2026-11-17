@@ -1,7 +1,8 @@
 {
  "base": "http://127.0.0.1:47801",
- "at": "2026-11-16T14:34:04.984Z",
- "seconds": 115,
+ "engine": "chromium",
+ "at": "2026-11-17T02:09:09.227Z",
+ "seconds": 129,
  "pass": 186,
  "total": 186,
  "results": [
@@ -315,7 +316,7 @@
    "scope": "research/iphone",
    "name": "スマホ: 下部ナビが本文の最後を隠さない",
    "pass": true,
-   "extra": "{\"ok\":true,\"last\":572,\"navTop\":607}"
+   "extra": "{\"ok\":true,\"last\":573,\"navTop\":607}"
   },
   {
    "scope": "research/iphone",
@@ -501,7 +502,7 @@
    "scope": "enterprise/iphone",
    "name": "スマホ: 上部ヘッダーが本文に重ならず、ステータスバーの安全領域を確保",
    "pass": true,
-   "extra": "{\"ok\":true,\"headerBottom\":48,\"firstHeading\":175}"
+   "extra": "{\"ok\":true,\"headerBottom\":48,\"firstHeading\":179}"
   },
   {
    "scope": "enterprise/iphone",
@@ -681,7 +682,7 @@
    "scope": "public/android",
    "name": "スマホ: 上部ヘッダーが本文に重ならず、ステータスバーの安全領域を確保",
    "pass": true,
-   "extra": "{\"ok\":true,\"headerBottom\":123,\"firstHeading\":136}"
+   "extra": "{\"ok\":true,\"headerBottom\":107,\"firstHeading\":120}"
   },
   {
    "scope": "public/android",
@@ -795,13 +796,13 @@
    "scope": "enterprise/android",
    "name": "スマホ: 下部ナビが本文の最後を隠さない",
    "pass": true,
-   "extra": "{\"ok\":true,\"last\":747,\"navTop\":783}"
+   "extra": "{\"ok\":true,\"last\":748,\"navTop\":783}"
   },
   {
    "scope": "enterprise/android",
    "name": "スマホ: 上部ヘッダーが本文に重ならず、ステータスバーの安全領域を確保",
    "pass": true,
-   "extra": "{\"ok\":true,\"headerBottom\":48,\"firstHeading\":175}"
+   "extra": "{\"ok\":true,\"headerBottom\":48,\"firstHeading\":179}"
   },
   {
    "scope": "enterprise/android",
@@ -825,31 +826,31 @@
    "scope": "original/desktop",
    "name": "axe: 重大な違反が Original 以下",
    "pass": true,
-   "extra": "重大な違反 5 件（Original 5 件） — color-contrast(serious)"
+   "extra": "重大な違反 4 件（Original 4 件） — color-contrast(serious)"
   },
   {
    "scope": "research/desktop",
    "name": "axe: 重大な違反が Original 以下",
    "pass": true,
-   "extra": "重大な違反 0 件（Original 5 件）"
+   "extra": "重大な違反 0 件（Original 4 件）"
   },
   {
    "scope": "public/desktop",
    "name": "axe: 重大な違反が Original 以下",
    "pass": true,
-   "extra": "重大な違反 0 件（Original 5 件）"
+   "extra": "重大な違反 0 件（Original 4 件）"
   },
   {
    "scope": "commercial/desktop",
    "name": "axe: 重大な違反が Original 以下",
    "pass": true,
-   "extra": "重大な違反 0 件（Original 5 件）"
+   "extra": "重大な違反 0 件（Original 4 件）"
   },
   {
    "scope": "enterprise/desktop",
    "name": "axe: 重大な違反が Original 以下",
    "pass": true,
-   "extra": "重大な違反 0 件（Original 5 件）"
+   "extra": "重大な違反 0 件（Original 4 件）"
   },
   {
    "scope": "切替/desktop",
@@ -885,7 +886,7 @@
    "scope": "切替/desktop",
    "name": "切替で URL が変わらない",
    "pass": true,
-   "extra": "http://127.0.0.1:47801/settings"
+   "extra": "http://127.0.0.1:47811/settings"
   },
   {
    "scope": "切替/desktop",
@@ -993,7 +994,7 @@
    "scope": "切替/iphone",
    "name": "切替で URL が変わらない",
    "pass": true,
-   "extra": "http://127.0.0.1:47801/settings"
+   "extra": "http://127.0.0.1:47811/settings"
   },
   {
    "scope": "切替/iphone",
@@ -1128,7 +1129,7 @@
     {
      "id": "color-contrast",
      "impact": "serious",
-     "n": 3,
+     "n": 2,
      "sample": ".brand > div > span"
     }
    ],

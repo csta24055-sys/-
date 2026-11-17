@@ -6,7 +6,11 @@
 //
 // クラウド解析は GitHub API を模したローカルサーバー（このファイル内）で検証する。
 // 模擬サーバーはブランチ作成時に cloud/run_job.py を実際に実行して結果を返す（GitHub Actions そのものは動かさない）。
-const { chromium, devices } = require('playwright');
+const pw = require('playwright');
+const { devices } = pw;
+// BROWSER=webkit で Safari と同じ系統のエンジン（Playwright の WebKit）を使う。既定は Chromium
+const ENGINE = process.env.BROWSER === 'webkit' ? 'webkit' : 'chromium';
+const chromium = pw[ENGINE];
 const fs = require('fs');
 const http = require('http');
 const os = require('os');
@@ -253,7 +257,7 @@ async function run(dev, devName, ghPrivate) {
   await run('iphone', 'iPhone 13', true);
   await run('android', 'Pixel 7', false);
   const pass = results.filter((r) => r.pass).length;
-  fs.writeFileSync(path.join(SHOTS, 'mobile_results.json'), JSON.stringify({ base: BASE, engine: 'chromium (device emulation)', pass, total: results.length, results }, null, 1));
+  fs.writeFileSync(path.join(SHOTS, 'mobile_results.json'), JSON.stringify({ base: BASE, engine: ENGINE + ' (device emulation)', pass, total: results.length, results }, null, 1));
   console.log(`${pass}/${results.length} passed`);
   process.exit(pass === results.length ? 0 : 1);
 })().catch((e) => { console.error(e); process.exit(1); });

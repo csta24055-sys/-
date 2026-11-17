@@ -74,7 +74,7 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 /* ---------- コマンドパレット・シート（Original 以外） ---------- */
 .ux-modal-bg { position: fixed; inset: 0; background: rgba(9, 14, 20, .5); z-index: 50; display: flex; justify-content: center; align-items: flex-start; padding-top: 12vh; }
 .ux-palette { width: min(640px, 92vw); background: var(--card); color: var(--fg); border-radius: 12px; box-shadow: 0 8px 28px rgba(16,24,40,.3); padding: .6rem; }
-.ux-palette input { width: 100%; font-size: 1rem; min-height: 44px; }
+.ux-palette input { width: 100%; font-size: max(16px, 1rem); min-height: 44px; } /* 16px 未満だと iOS がフォーカス時に拡大する */
 .ux-palette ul { list-style: none; margin: .4rem 0 0; padding: 0; max-height: 55vh; overflow: auto; }
 .ux-palette li { display: flex; gap: .7rem; align-items: center; padding: .5rem .6rem; border-radius: 8px; cursor: pointer; }
 .ux-palette li.on { background: var(--sel); }
@@ -168,9 +168,24 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 :root[data-ui="public"][data-theme="dark"] { --bg: #0f141a; --card: #17202a; --fg: #e8edf2; --muted: #a9b6c3; --line: #33414f; --grid: #33414f; --accent: #7fb6e0; --accent-2: #6fc59a; --warn: #f0c35a; --warn-bg: #2d2614; --err: #ff9a8f; --side: #141b23; --side-fg: #e8edf2; --chip: #22303d; --sel: #1e3347; --u-focus: #f0a35a; color-scheme: dark; }
 :root[data-ui="commercial"][data-theme="dark"] { --bg: #121512; --card: #1b201c; --fg: #e6ebe6; --muted: #a7b0a8; --line: #2f3830; --grid: #2a312b; --accent: #5cc2a9; --accent-2: #63c58f; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #171b18; --side-fg: #e6ebe6; --chip: #232a24; --sel: #1c3530; --u-focus: #8ab4f8; color-scheme: dark; }
 :root[data-ui="enterprise"][data-theme="dark"] { --bg: #0f1217; --card: #171b22; --fg: #e5e7eb; --muted: #a3acb9; --line: #2d333d; --grid: #262c35; --accent: #6aa5ec; --accent-2: #5a9be6; --warn: #f0b45a; --warn-bg: #2d2416; --err: #ff8b80; --side: #141820; --side-fg: #e5e7eb; --chip: #20252e; --sel: #1a2b40; --u-scope: #0a1a26; --u-focus: #8ab4f8; color-scheme: dark; }
-/* ダーク時、主ボタンの白文字が明るい主色に載らないようにする */
-:root[data-ux][data-theme="dark"] .ux-shell button:not(.ghost):not(.link), :root[data-ux][data-theme="dark"] .ux-btn-primary { color: #0b0f14; }
-@media (prefers-color-scheme: dark) { :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell button:not(.ghost):not(.link), :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-btn-primary { color: #0b0f14; } }
+/* ダーク時: 明るい主色で塗られるボタンだけを濃い文字にする。背景が透明なボタン（下部ナビ・タブ・選択肢）は各自の文字色のまま
+   （既定の塗りボタンは詳細度 0,0,1 の :where で指定し、塗りになる状態は個別に指定する） */
+:where(:root[data-ux][data-theme="dark"] .ux-shell) button { color: #0b0f14; }
+:root[data-ux][data-theme="dark"] .ux-shell :is(.tabs, .statusbar) button.on,
+:root[data-ux][data-theme="dark"] .ux-shell :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
+:root[data-ux][data-theme="dark"] .ux-shell .ux-seg button[aria-pressed="true"],
+:root[data-ux][data-theme="dark"] .ux-btn-primary,
+:root[data-ux][data-theme="dark"] .ux-pill,
+:root[data-ux][data-theme="dark"] .ux-navlink.active .ux-stage-no { color: #0b0f14; }
+@media (prefers-color-scheme: dark) {
+  :where(:root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell) button { color: #0b0f14; }
+  :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell :is(.tabs, .statusbar) button.on,
+  :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
+  :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-shell .ux-seg button[aria-pressed="true"],
+  :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-btn-primary,
+  :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-pill,
+  :root[data-ux]:not([data-ui="original"]):not([data-theme="light"]) .ux-navlink.active .ux-stage-no { color: #0b0f14; }
+}
 
 /* =====================================================================
    骨格（Original 以外）
@@ -421,3 +436,115 @@ kbd { font: .75em ui-monospace, monospace; border: 1px solid currentColor; borde
 /* 進捗バーの文字（バーの塗りの上でも 4.5:1 以上） */
 :root[data-ux]:not([data-ui="original"]) .bar div { background: color-mix(in srgb, var(--accent-2) 32%, var(--card)); }
 :root[data-ux]:not([data-ui="original"]) .bar span { color: var(--fg); font-weight: 600; }
+
+/* =====================================================================
+   最終点検（iPhone / iPad の Safari を想定）での修正
+   ===================================================================== */
+/* Enterprise: 幅 721〜1000px（iPad 縦・iPhone 横）でスコープバーの中身が折り返してはみ出さないようにする */
+.ux-enterprise > .ux-top .ux-top-actions { flex-wrap: nowrap; flex: none; }
+.ux-enterprise > .ux-top .ux-scope { flex: 1 1 0; }
+@media (max-width: 1000px) { .ux-role { display: none; } }
+/* Public のホーム: 第3層のラベルがカードの overflow で切れないようにし、層へ移動したときにラベルが画面内に入るようにする */
+.ux-public .page[data-page="dashboard"] .card[data-section] { overflow: visible; }
+.ux-public .page[data-page="dashboard"] [data-section] { scroll-margin-top: calc(2.4rem + env(safe-area-inset-top, 0px)); }
+@media (max-width: 720px) {
+  /* スマホでは情報密度によらず、押せる部品の高さを Original（40px）以上にする。☰ は 44px */
+  :root[data-ux][data-density="compact"], :root[data-ux][data-density="standard"] { --u-ctl-h: 40px; }
+  .ux-menu-btn { min-height: 44px !important; align-items: center; }
+  /* プレビュー帯: ヘッダーが固定でないレイアウト（Original・Public）では画面の上端（安全領域の下）に止める */
+  .shell:not(.ux-shell), .ux-shell.ux-public { --u-top-h: env(safe-area-inset-top, 0px); }
+}
+/* 幅 721px 以上でも安全領域を避ける（iPad をホーム画面から起動したとき・ノッチのある iPhone の横向き）。
+   env() が 0 の環境（PC など）では見た目は変わらない。実機では未確認 */
+@media (min-width: 721px) {
+  .ux-research, .ux-enterprise { --u-top-h: calc(48px + env(safe-area-inset-top, 0px)); }
+  .ux-commercial { --u-top-h: calc(60px + env(safe-area-inset-top, 0px)); }
+  .ux-research > .ux-top { padding: env(safe-area-inset-top, 0px) max(1rem, env(safe-area-inset-right, 0px)) 0 max(1rem, env(safe-area-inset-left, 0px)); }
+  .ux-commercial > .ux-top { padding: env(safe-area-inset-top, 0px) max(1.2rem, env(safe-area-inset-right, 0px)) 0 max(1.2rem, env(safe-area-inset-left, 0px)); }
+  .ux-enterprise > .ux-top.ux-scopebar { padding: env(safe-area-inset-top, 0px) max(.8rem, env(safe-area-inset-right, 0px)) 0 max(.8rem, env(safe-area-inset-left, 0px)); }
+  .ux-idband { padding: calc(.35rem + env(safe-area-inset-top, 0px)) max(1.2rem, env(safe-area-inset-right, 0px)) .35rem max(1.2rem, env(safe-area-inset-left, 0px)); }
+  .ux-shell > .ux-side { padding-left: max(.5rem, env(safe-area-inset-left, 0px)); padding-bottom: max(.7rem, env(safe-area-inset-bottom, 0px)); }
+  .ux-jobbar { padding-bottom: max(.35rem, env(safe-area-inset-bottom, 0px)); }
+}
+/* color-mix() のない Safari（16.1 以前）: 透明にならないよう、同じ見た目に近い代替を当てる */
+@supports not (color: color-mix(in srgb, red, blue)) {
+  :root[data-ux]:not([data-ui="original"]) .bar div { background: var(--accent-2); opacity: .32; }
+  :root[data-card="flat"] .card, :root[data-card="flat"] .stat { background: var(--card); }
+  .ux-mini .m-side i { background: var(--m-accent); opacity: .35; }
+  .ux-mini .m-side i:first-child, .ux-mini[data-id="original"] .m-side i { opacity: 1; }
+  .ux-dcard[aria-checked="true"] { box-shadow: 0 0 0 3px var(--sel); }
+}
+
+/* =====================================================================
+   Original のコントラスト修正（色だけを変える。配置・寸法・ライト配色のボタンは改修前のまま）
+   ===================================================================== */
+/* 進捗バーの中の文字: ライトでは塗り（#2f8f83）の上で 3.9:1 だったので、文字を少し濃くして 4.9:1 にする */
+.shell:not(.ux-shell) .bar span { color: #06100e; }
+/* ダーク: 明るい主色（#5cc2b4）で塗ったボタンの白文字は 2.1:1 で読めない。濃い文字（8.0:1）にする。
+   進捗バーは塗りを暗くして、明るい文字のまま 5.6:1 にする（文字は塗りの外＝暗い地の上にも掛かるため） */
+@media (prefers-color-scheme: dark) {
+  :where(:root:not([data-theme="light"]) .shell:not(.ux-shell)) button { color: #06201d; }
+  :root:not([data-theme="light"]) .shell:not(.ux-shell) :is(.tabs, .statusbar) button.on,
+  :root:not([data-theme="light"]) .shell:not(.ux-shell) :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
+  :root:not([data-theme="light"]) .shell:not(.ux-shell) .ux-seg button[aria-pressed="true"],
+  :root:not([data-theme="light"]) .shell:not(.ux-shell) .ux-pill { color: #06201d; }
+  :root:not([data-theme="light"]) .shell:not(.ux-shell) .bar div { background: #2c645c; }
+  :root:not([data-theme="light"]) .shell:not(.ux-shell) .bar span { color: var(--fg); }
+}
+:where(:root[data-theme="dark"] .shell:not(.ux-shell)) button { color: #06201d; }
+:root[data-theme="dark"] .shell:not(.ux-shell) :is(.tabs, .statusbar) button.on,
+:root[data-theme="dark"] .shell:not(.ux-shell) :is(.ux-segs button, .ux-sw-auto)[aria-checked="true"],
+:root[data-theme="dark"] .shell:not(.ux-shell) .ux-seg button[aria-pressed="true"],
+:root[data-theme="dark"] .shell:not(.ux-shell) .ux-pill { color: #06201d; }
+:root[data-theme="dark"] .shell:not(.ux-shell) .bar div { background: #2c645c; }
+:root[data-theme="dark"] .shell:not(.ux-shell) .bar span { color: var(--fg); }
+
+/* =====================================================================
+   最終点検（スマホ・横向き）での修正
+   ===================================================================== */
+/* Original: サイドバーの位置・表示のカスタマイズは幅 721px 以上だけに効かせる（スマホではサイドバーが出ないので、本文を全幅にする） */
+@media (max-width: 720px) { .shell:not(.ux-shell)[data-sidebar] { grid-template-columns: 1fr !important; } }
+/* Original: 高さの低い画面（スマホの横向き）で、サイドバーの下の項目と「その他」シートの上の項目に届くようにする（収まる高さでは見た目は同じ） */
+.shell:not(.ux-shell) > .side { overflow-y: auto; }
+.shell:not(.ux-shell) .sheet { max-height: 100%; overflow-y: auto; }
+/* ページ内リンク（レポートの目次など）で移動したとき、見出しが固定ヘッダーの下に隠れないようにする */
+.ux-shell .main [id] { scroll-margin-top: calc(var(--u-top-h, 0px) + .75rem); }
+/* 進捗バー: 文字を大きくしても数値が上下に切れないよう、高さを中身に合わせる */
+:root[data-ux] .bar { height: auto; min-height: 22px; display: flex; align-items: center; }
+:root[data-ux] .bar div { position: absolute; top: 0; bottom: 0; left: 0; height: auto; }
+:root[data-ux] .bar span { position: relative; inset: auto; flex: 1; padding: .1rem .3rem; text-align: center; line-height: 1.25; }
+/* 追加した部品の文字は 10px 未満にしない */
+kbd { font-size: max(10px, .75em); }
+.ux-pill { font-size: max(10px, .7rem); }
+.ux-tag { font-size: max(10px, .72rem); }
+.ux-side-h { font-size: max(10px, .74rem); }
+.ux-stages .ux-lbl small { font-size: max(10px, .76rem); }
+.ux-enterprise[data-sidebar$="-icons"] .ux-navlink, .ux-enterprise[data-sidebar$="-icons"] .ux-rail-toggle { font-size: max(10px, .68rem); }
+@media (max-width: 720px) {
+  .ux-bottom a, .ux-bottom button { font-size: max(10px, .75rem); }
+  /* 文字を大きくしたとき、本文の最後が下部ナビに隠れない */
+  .ux-shell > .main { padding-bottom: calc(max(80px, 4.4rem) + env(safe-area-inset-bottom)) !important; }
+  /* Public: 識別帯を画面の全幅にする（帯と見出しは自分の左右余白を持つ） */
+  .ux-shell.ux-public > .ux-top { padding-left: 0 !important; padding-right: 0 !important; }
+  /* Public: 層のラベルは短くして 1 行に収める（幅 320px で 2 行になりカードに重なっていた） */
+  .ux-public [data-section="findings"]::before { content: "第1層 結論"; }
+  .ux-public [data-section="stats"]::before { content: "第2層 比較"; }
+  .ux-public [data-section="completeness"]::before { content: "第3層 根拠"; }
+  /* 設定「デザイン」の選択ボタンと色見本を、ほかのボタンと同じ 40px 以上にする */
+  .ux-segs button, .ux-sw-auto { min-height: 40px; min-width: 44px; }
+  .ux-sw { width: 40px; height: 40px; min-height: 40px; }
+}
+/* Research: 幅 721〜1000px（スマホ横向き・タブレット縦）では段階を 3 列 × 2 段にして、ラベルが語の途中で折れないようにする */
+@media (min-width: 721px) and (max-width: 1000px) {
+  .ux-pipeline .ux-pipe { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ux-pipe li:nth-child(4) a::before { display: none; }
+}
+/* Public: 高さの低い画面（スマホ横向き）ではヘッダーを低くする（識別帯を 1 行、上部ナビを 1 段の横スクロール） */
+@media (min-width: 721px) and (max-height: 500px) {
+  .ux-idband { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ux-topnav { flex-wrap: nowrap; overflow-x: auto; }
+  .ux-topnav a { white-space: nowrap; }
+}
+/* 年表: 文字を大きくした狭い画面でも、右の列が画面からはみ出さないようにする（長い数値表現はどこででも折り返す） */
+.ux-shell .tl-item { grid-template-columns: 4em minmax(0, 1fr); }
+.ux-shell .tl-item > * { min-width: 0; overflow-wrap: anywhere; }

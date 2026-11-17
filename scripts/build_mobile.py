@@ -166,7 +166,7 @@ export default {
     if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method Not Allowed', { status: 405, headers: SEC });
     const url = new URL(request.url);
     let p; try { p = decodeURIComponent(url.pathname); } catch { p = url.pathname; }
-    if (p.endsWith('/')) p += 'index.html';
+    if (p.endsWith('/')) p = F[p + 'index.html'] ? p + 'index.html' : '/index.html';  // /data/ のように末尾に / が付いた画面の URL もアプリ本体を返す
     let f = F[p];
     if (!f) {
       if (/\.[A-Za-z0-9]+$/.test(p)) return new Response('Not Found', { status: 404, headers: SEC });

@@ -19,7 +19,7 @@
 ## 画面デザイン（5種類のレイアウト）
 - 表示層は `frontend/src/ui/`、ナビ・ルート・シェル状態は `frontend/src/app/`。レイアウトの部品に計算・業務ロジックを書かない（`core/` と `pages/` を共有する）。
 - メニュー項目は `app/navigation.ts` だけで定義する。6種類目の追加手順と検証結果は `docs/UI_LAYOUTS.md`。
-- Original は改修前とピクセル単位で同一に保つ（`styles.css` を変えない。検査: `e2e/original-regression.cjs`）。
+- Original は `styles.css` を変えず、ライト配色では改修前とピクセル単位で同一に保つ（例外は進捗バー内の文字色。コントラスト修正は `layouts.css` 末尾。検査: `e2e/original-regression.cjs`）。公開前の点検は `e2e/final-checks.cjs`（WebKit は `.github/workflows/ui-webkit.yml`）。
 
 ## コマンド
 - テスト: `.venv/bin/python -m pytest` / `cd frontend && npm test`

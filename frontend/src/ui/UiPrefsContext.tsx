@@ -71,8 +71,10 @@ export function applyToDocument(sel: UiSelection, spec: LayoutSpec, el: HTMLElem
   if (c.fontScale !== 1) { el.setAttribute('data-fs', ''); el.style.setProperty('--u-fs-scale', String(c.fontScale)) }
   if (c.accent) {
     el.style.setProperty('--accent', c.accent)
-    el.style.setProperty('--accent-2', `color-mix(in srgb, ${c.accent} 78%, #ffffff)`)
-    el.style.setProperty('--sel', `color-mix(in srgb, ${c.accent} 14%, var(--card))`)
+    // color-mix() のない Safari（16.1 以前）では、主色そのものと、主色の薄い透過色で代用する
+    const mix = typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('color', 'color-mix(in srgb, red, blue)')
+    el.style.setProperty('--accent-2', mix ? `color-mix(in srgb, ${c.accent} 78%, #ffffff)` : c.accent)
+    el.style.setProperty('--sel', mix ? `color-mix(in srgb, ${c.accent} 14%, var(--card))` : `${c.accent}24`)
   }
 }
 
