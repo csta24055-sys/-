@@ -95,7 +95,8 @@ table.t td.num { text-align: right; font-variant-numeric: tabular-nums; }
 /* the toast is laid out across the width (16 px from each side, as wide as its words, at most 560 px) above the bottom
    bar (--below: set by placeToast() from the bar's height, whose buttons wrap on a narrow phone), and never taller than
    the screen leaves room for under the app bar: long words scroll inside it. A toast that carries a warning from the
-   server stays until 閉じる (it takes taps then: 閉じる and scrolling); any other lets taps through */
+   server, words that name rows not saved, or words too long for it (sticky) stays until 閉じる (it takes taps then:
+   閉じる and scrolling); any other lets taps through */
 .toast { --below: calc(84px + env(safe-area-inset-bottom)); position: fixed; left: 16px; right: 16px; bottom: var(--below); margin-inline: auto; width: fit-content;
   max-width: min(560px, 100% - 32px); max-height: calc(100vh - 76px - var(--below)); max-height: calc(100dvh - 76px - var(--below));
   display: flex; flex-direction: column; gap: 8px; background: #2b2724; color: #fff; padding: 10px 16px; border-radius: 10px;
