@@ -185,15 +185,18 @@ WebKit（Safari と同じ系統のエンジン）での確認は `.github/workfl
 5 レイアウト × ライト / ダーク × ホーム・設定などの画面を撮ります。撮った画面を目で見て、5 レイアウトとも上下のバー・ノッチ・下部タブと重ならずに表示されることを確かめました。
 これはシミュレーターで、**手に持った実機ではありません**（ホーム画面に追加して起動したときの挙動・ピンチ操作・キーボード表示は未検証）。
 
-### 公開の状態（2026-11-17 時点）
-- **本番（https://aqros-mobile.pages.dev）には、まだ反映していません。** 公開に必要な Cloudflare の API トークンが、作業した環境にもこのリポジトリの Secrets にも無かったためです。
-- 公開されるデータが公開中のものと 1 バイトも違わないこと（同梱データ 17 ファイル）は、最終ビルドで確かめてあります（`scripts/deploy_cloudflare.py --data-unchanged --dry-run`）。
-- 公開する方法（どちらか 1 つ）:
+### 公開の状態（2026-11-17）
+- **本番（https://aqros-mobile.pages.dev）に反映済み**（コミット 5a7c22a、Cloudflare Pages のデプロイ 87cec834、`scripts/deploy_cloudflare.py --data-unchanged`）。
+- 公開前の確認: 公開されるデータ（同梱データ 17 ファイル）が、それまで公開中だったものと 1 バイトも違わない（`data/seed.json` は生成時刻だけが違う）。
+- 公開後に公開 URL を直接開いて確認したこと（iPhone 13 相当の表示。Chromium）: アプリが開く（Original のまま）／設定の「デザイン」に 5 種類があり、
+  Research・Public・Commercial・Enterprise を順に適用できる／資料ライブラリに 95 件／Original に戻せる／ページエラー 0・失敗した通信 0／
+  配信中の `data/seed.json` が検証したビルドと同じ（収集済み資料 95・知見 145・未解決問題 13・研究テーマ候補 9）。
+- 利用者の端末内データ（IndexedDB）は、更新しても変わらないことを `e2e/upgrade.cjs`（改修前の版 → 今回の版）で確かめてある。実機の端末での更新は未確認。
+- 次に公開するとき（どちらか 1 つ）:
   1. このリポジトリの Settings → Secrets and variables → Actions に `CLOUDFLARE_API_TOKEN`（Pages の編集権限）を登録し、Actions の `cloudflare-pages` を実行する
      （`AQROS_PRIVACY_PATTERNS` が無いときは、データが公開中と同じであることを確かめてから公開する。データが少しでも違えば公開しない）。
-  2. Claude Code の環境設定に `api.cloudflare.com` 用のトークンを登録し、`.venv/bin/python scripts/deploy_cloudflare.py --data-unchanged` を実行する。
-- 公開後の確認: アプリが開く／設定に「デザイン」があり 5 種類を切り替えられる／保存済みの研究計画・メモが残っている（`e2e/upgrade.cjs` と同じ内容）。
-- 戻し方: Cloudflare Pages の管理画面で 1 つ前のデプロイに戻す（利用者の端末内データ（IndexedDB）には触れない）。
+  2. Claude Code の作業環境に `api.cloudflare.com` 用のトークンを渡し、`.venv/bin/python scripts/deploy_cloudflare.py --data-unchanged` を実行する。
+- 戻し方: Cloudflare Pages の管理画面で 1 つ前のデプロイに戻す（利用者の端末内データには触れない）。
 
 ### Original について
 - `styles.css` は変えていません。Original の修正は `layouts.css` の末尾（「Original のコントラスト修正」「最終点検（スマホ・横向き）での修正」「アクセシビリティ監査での修正」）にあります。
