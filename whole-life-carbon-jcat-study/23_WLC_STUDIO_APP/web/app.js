@@ -15,14 +15,17 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 // owed: the acted rows whose redraw was skipped while 保存して戻る ran (fid → what the row held when its action was sent,
 // and the view it was sent in): the next drawing of that screen shows their stored value (see owedRows);
 // warnings: what the answers of saves said while 保存して戻る ran on their project (said with its message, see warnOf);
-// batch: the view (nav) and project (key) of the 保存して戻る that runs; openSeq: the number of the latest 開く (only its
-// read opens a project)
+// batch: the view (nav), project (key, about) and act of the 保存して戻る that runs; openSeq: the number of the latest
+// 開く (only its read opens a project)
 const state = { meta: null, project: null, stack: [], view: "home", seq: 0, nav: 0, act: 0, busy: false, stale: null, gen: 0,
   running: new Set(), pending: new Set(), lastImport: null, importing: null, noteLater: null, geo: null, asking: null, cancelRows: null,
   geoSeq: 0, owed: new Map(), warnings: [], batch: null, openSeq: 0 };
 
 /* a request to the server. A request that cannot reach it (the browser's TypeError: the server stopped, no network) is
-   said in Japanese wherever errors are shown; the browser's own words are kept as e.detail (shown only as a detail) */
+   said in Japanese wherever errors are shown; the browser's own words are kept as e.detail (shown only as a detail).
+   The server answers JSON (its refusals carry `error`, said as they are). An answer that is not JSON (a proxy's or a
+   gateway's page, whatever its status) is never shown as it is, nor taken for a success: it is said in Japanese with its
+   HTTP status, and at most 200 characters of it are kept as e.detail */
 async function api(path, opts = {}) {
   let r, t;
   try {
@@ -35,8 +38,13 @@ async function api(path, opts = {}) {
     x.offline = true; x.detail = String((e && e.message) || e || "");
     throw x;
   }
-  let j; try { j = t ? JSON.parse(t) : {}; } catch { j = { error: t }; }
-  if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+  let j; try { j = t ? JSON.parse(t) : {}; } catch { j = null; }
+  if (j === null || typeof j !== "object" || (!r.ok && !(typeof j.error === "string" && j.error))) {
+    const x = new Error(`サーバーから読めない答え（HTTP ${r.status}）`);
+    x.unreadable = true; x.detail = String(t || "").slice(0, 4000).replace(/\s+/g, " ").trim().slice(0, 200);
+    throw x;
+  }
+  if (!r.ok) throw new Error(j.error);
   return j;
 }
 /* `act` is the action the message belongs to: a late answer passes the act of the action that sent its request.
@@ -45,7 +53,8 @@ async function api(path, opts = {}) {
    shown above the warnings kept, and goes after its time as usual; the warnings stay.
    `about` ({ key, name }): the project the words are about, given by 保存して戻る for its words (its stop is said once its
    read is answered, maybe while another project, or none, is shown). Read while another project is shown, the words
-   name it; they stay when the user goes back to it (see retoast). `hold`: words that name rows not saved (a stop or a
+   name it; they stay when the user goes back to it (see retoast). Words joined to earlier words of the same action
+   give them their project when those had none. `hold`: words that name rows not saved (a stop or a
    stay of 保存して戻る) stay until 閉じる as well, and so do words too long for the toast (they scroll inside it). A late
    answer (the act of an action older than the held words') does not replace held words: it is said after them, as it
    is (not named by their project) */
@@ -61,7 +70,8 @@ function toast(msg, act = state.act, warn = false, about = null, hold = false) {
   if (!same && !under) {
     if (T._cur) keepWarnings(T._cur);
     T._cur = { act, msgs: [], warns: [], shown: shownKey(), about, hold: false, long: false, plain: [] };
-  }
+  } else if (same && about && !T._cur.about) T._cur.about = about;   // joined: the words of one action name its project
+  // (the earlier words of the same action were said on that project's view)
   if (hold) T._cur.hold = true;
   if (!T._cur.msgs.some((x) => sameItem(x, msg))) { T._cur.msgs.push(msg); if (under && typeof msg === "string") T._cur.plain.push(msg); }
   if (typeof msg !== "string" && !T._cur.warns.some((x) => sameItem(x, msg))) T._cur.warns.push(msg);
@@ -225,15 +235,20 @@ function keyOf(el) {
 }
 const busyMark = (b, on) => { if (!b) return; if (on) { b.dataset.busy = "1"; b.setAttribute("aria-disabled", "true"); } else { delete b.dataset.busy; b.removeAttribute("aria-disabled"); } };
 /* one request at a time per button: a double tap must not send twice (and focus stays on the button). The button is
-   known by its identity, so the same button drawn again by a redraw is busy as well */
+   known by its identity, so the same button drawn again by a redraw is busy as well. A failure that its action does not
+   say itself carries the action's act and the project shown at the tap (e.act, e.where): it is said as that action's
+   words (see the unhandledrejection handler) */
 function guard(b, fn) {
   const key = keyOf(b);
   return async (...a) => {
     if (b.dataset.busy || (key && state.running.has(key))) return;
-    state.act++;
+    const act = ++state.act, where = shownKey();
     if (key) state.running.add(key);
     busyMark(b, true);
-    try { return await fn(...a); } finally { if (key) state.running.delete(key); busyMark(b, false); if (key) busyMark($(key), false); }
+    try { return await fn(...a); } catch (e) {
+      if (e && typeof e === "object" && !("act" in e)) try { e.act = act; e.where = where; } catch { /* frozen: said as a failure of no known action */ }
+      throw e;
+    } finally { if (key) state.running.delete(key); busyMark(b, false); if (key) busyMark($(key), false); }
   };
 }
 /* a row action that changes a stored value: 保存して戻る waits until it is answered */
@@ -395,8 +410,18 @@ async function render() {
   if (state.seq === seq && state.stale && state.project && state.stale.pid === state.project.id && ["hub", "screen"].includes(state.view))
     reloadShown(state.arg, null, true, startedAt());
 }
-/* a failed request inside any button handler is shown, never silently swallowed */
-window.addEventListener("unhandledrejection", (e) => { e.preventDefault(); toast((e.reason && e.reason.message) || String(e.reason)); });
+/* a failed request inside any button handler is shown, never silently swallowed. It is said with the act of the action
+   that failed (guard's e.act). A failure of no known action is said with the newest act, except while 保存して戻る runs:
+   then with an act of its own. So it is never joined to the words of a 保存して戻る of another project (they would name
+   it by that project). The one failure said with them is that of a row action of the same project pressed before it and
+   answered while it runs (保存して戻る waits for it, as for the warnings of its answer, see warnOf): it is said with the
+   batch's act and project, so that the batch's words (also those that replace older words) keep it, named elsewhere */
+window.addEventListener("unhandledrejection", (e) => {
+  e.preventDefault();
+  const x = e.reason, msg = (x && x.message) || String(x), b = state.batch, own = !!x && typeof x.act === "number";
+  if (own && state.busy && b && x.where && x.where === b.key && x.act < b.act) toast(msg, b.act, false, b.about);
+  else toast(msg, own ? x.act : state.busy ? ++state.act : state.act);
+});
 
 /* ---------- home ---------- */
 async function renderHome(m) {
@@ -468,7 +493,7 @@ function fieldHtml(fid) {
   const st = v ? v.state : "not_obtained";
   const input = F.type === "enum"
     ? `<select id="in-${fid}" aria-label="${esc(F.label)}"><option value="">選ぶ</option>${F.enum.map((e) => `<option value="${esc(e.value)}" ${v && v.value === e.value ? "selected" : ""}>${esc(e.label)}</option>`).join("")}</select>`
-    : `<input id="in-${fid}" aria-label="${esc(F.label)}" ${F.type === "number" ? 'inputmode="decimal"' : ""} value="${v && v.value !== null && typeof v.value !== "object" ? esc(v.value) : ""}" placeholder="${F.unit ? "単位：" + esc(F.unit) : ""}">`;
+    : `<input id="in-${fid}" aria-label="${esc(F.label)}" ${F.type === "number" ? 'inputmode="decimal"' : F.type === "text" ? `maxlength="${TEXT_MAX}"` : ""} value="${v && v.value !== null && typeof v.value !== "object" ? esc(v.value) : ""}" placeholder="${F.unit ? "単位：" + esc(F.unit) : ""}">`;
   const curUnit = (v && v.unit) || F.unit;
   const unitSel = F.type === "number" && (F.units || []).filter((u) => u).length > 1
     ? `<select id="unit-${fid}" aria-label="${esc(F.label)}の単位">${F.units.map((u) => `<option ${u === curUnit ? "selected" : ""}>${esc(u)}</option>`).join("")}</select>`
@@ -597,8 +622,22 @@ function inputValue(fid) {
   const raw = el.value.trim();
   if (raw === "") return { empty: true };
   if (F.type === "number") return parseNumber(raw);
+  // a text keeps at most TEXT_MAX characters, counted as the server counts them (after its trimming, see storedText):
+  // a longer one is never sent (it would be refused, or cut without a word). The input takes no more (maxlength); this
+  // holds whatever put the text there
+  if (F.type === "text") { const n = [...storedText(raw)].length; if (n > TEXT_MAX) return { bad: true, long: n }; }
   return { value: raw };
 }
+/* a text row keeps at most this many characters (the server keeps no more) */
+const TEXT_MAX = 500;
+/* what the server keeps of a text sent (it strips the ends as Python's str.strip() does: also U+001C–U+001F and U+0085,
+   which JavaScript's trim() leaves; U+FEFF, which trim() strips, is gone before it is sent). The same characters as
+   in storedAs */
+const storedText = (s) => s.replace(/^[\t-\r\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+|[\t-\r\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+$/g, "");
+/* the words for a row that cannot be saved as it is (inputValue's `bad`): a number that cannot be read, or a text longer
+   than the server keeps */
+const badWords = (fid, iv) => `「${state.meta.fields[fid].label}」は` + (iv.long ? ` ${TEXT_MAX} 字までにしてください（いま ${iv.long} 字）`
+  : `数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}`);
 /* what a control showed when the screen was drawn (the stored value then): typed / changed always means "differs from
    what was drawn", never "differs from state.project", so a reload can never turn a drawn value into a typed one */
 function drawn(el) {
@@ -656,10 +695,13 @@ function rowsNow() {
   });
   return out;
 }
-/* the stored value of row `f` in project `p` is what row snapshot `x` reads as (value, unit, and the chosen state) */
+/* the stored value of row `f` in project `p` is what row snapshot `x` reads as (value, unit, and the chosen state). A
+   text is compared as the server keeps it (its ends stripped as Python's str.strip() strips them: see storedText), so
+   that a text stored as sent is never taken for one corrected after it was sent */
 function storedAs(p, f, x) {
   const v = p && p.fields && (p.fields[f] || {}).value;
-  return !!(v && x && x.iv && !x.iv.bad && !x.iv.empty && v.value === x.iv.value
+  const kept = (s) => (typeof s === "string" ? s.replace(/^[\t-\r\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+|[\t-\r\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+$/g, "") : s);
+  return !!(v && x && x.iv && !x.iv.bad && !x.iv.empty && v.value === kept(x.iv.value)
     && (x.u === null || !v.unit || v.unit === x.u) && (x.s === null || v.state === x.s));
 }
 /* save one row: "saved" | "unchanged" | "refused" | "cancelled". With batch=true nothing is re-rendered (the other rows
@@ -700,7 +742,7 @@ async function saveField(fid, quiet = false, batch = false) {
       : "空欄は保存しません（未取得のまま。0 にはしません）");
     return "unchanged";
   }
-  if (iv.bad) return refuse("「" + F.label + "」は数値で入力してください" + (iv.why ? "（" + iv.why + "）" : ""), false);
+  if (iv.bad) return refuse(badWords(fid, iv), false);
   const value = iv.value;
   const cur = (state.project.fields[fid] || {}).value;
   const us = $("#unit-" + fid), unit = us ? us.value : ((cur && cur.unit) || F.unit);
@@ -754,7 +796,7 @@ function bindScreen(m, sid) {
   $("#bb-hub").onclick = async () => {
     if (state.busy) return;
     state.act++; state.busy = true; state.busyWarned = 0; state.cancel = false; state.cancelRows = null; busyMark($("#bb-hub"), true);
-    state.batch = { n: state.nav, key: projectKey(state.project) };
+    state.batch = { n: state.nav, key: projectKey(state.project), act: state.act, about: { key: projectKey(state.project), name: state.project.name } };
     let after = null;
     // a warning still kept (saveAndBack failed before saying its words) is said as the server said it
     try { after = await saveAndBack(); } finally { state.busy = false; busyMark($("#bb-hub"), false); sayWarnings(toast._act); state.batch = null; }
@@ -775,15 +817,21 @@ function bindScreen(m, sid) {
     const about = { key: nav.key, name: nav.name };
     // `hold`: the words name rows not saved (the batch stays): they stay until 閉じる. The warnings kept are said with
     // them, except those whose field is no longer stored as 適用外 in the batch's last read (state.project, when it is
-    // still the batch's project)
-    const say = (msg, hold = false) => {
+    // still the batch's project, and when the batch's latest read has not failed: `fresh`; else every one is said)
+    const say = (msg, hold = false, fresh = true) => {
       toast(msg, nav.act, false, about, hold);
-      sayWarnings(nav.act, projectKey(state.project) === nav.key ? state.project : null);
+      sayWarnings(nav.act, fresh && projectKey(state.project) === nav.key ? state.project : null);
     };
     const moved = () => state.cancel || state.nav !== nav.n || !state.project || state.project.id !== pid;
     // the batch's reads of its project: taken only while its view is still there and shows its project. One answered
     // after the user has stopped it, left, or opened another project is discarded (the stop reads what is stored itself)
     const read = () => loadProject(pid, (p) => !moved() && projectKey(p) === nav.key && projectKey(state.project) === nav.key);
+    // a read that failed (the server cannot be reached, or its answer cannot be read): the batch stays and says so with
+    // its words, held (see stay). Nothing is drawn again (every row keeps what is typed in it; the rows' marks are those
+    // of the last read) and the project is read again at its next drawing (state.stale)
+    const unread = (e) => { state.stale = { pid, gen: ++state.gen }; return e; };
+    const unreadWords = (e, msg) => (e.message && msg.includes(e.message) ? "。同じ理由で画面を読み直せませんでした" : `。画面を読み直せませんでした：${e.message}`)
+      + "。行の状態の表示は古いままです";
     const saved = [], same = [], refused = [], refusedRows = [], sent = {};
     // at the press: what is drawn (state.project) and what every row holds. The rows' own actions still under way (a 保存,
     // 適用外, 未取得に戻す, 計算不能, この候補を採用 just pressed) are answered while the batch runs, and their redraw is
@@ -830,7 +878,7 @@ function bindScreen(m, sid) {
         const own = byOwn(p, ok.concat(early, same, refusedRows, saved));
         ok = ok.concat(own.ok); to = own.to;
       }
-      state.act++;
+      const act = ++state.act;
       // the rows not saved are named first (a long message is read from its start), and words that name rows not saved
       // stay until 閉じる
       const short = !lost.length && !early.length && !refused.length;
@@ -839,25 +887,35 @@ function bindScreen(m, sid) {
         : "保存して戻るを途中でやめました：" + [lost.length ? names(lost) + "は保存していません" : "", ok.length ? names(ok) + "は保存しました" : "",
           early.length ? names(early) + "は直す前の値を保存しました（あとで直した値は保存していません）" : "", ...refused, ...to,
           same.length ? names(same) + "は変わっていないので送っていません" : ""]
-          .filter(Boolean).join("。"), state.act, false, about, !short);
-      sayWarnings(state.act, p && projectKey(p) === nav.key ? p : null);
-      return () => refresh(sid, null, true, nav);            // the next drawing shows what is stored
+          .filter(Boolean).join("。"), act, false, about, !short);
+      sayWarnings(act, p && projectKey(p) === nav.key ? p : null);
+      // the next drawing shows what is stored; when that read fails, its reason is said with the stop's words
+      return () => refresh(sid, null, true, nav).catch((e) => toast(e.message, act, false, about));
     };
     // the batch stays on the screen, drawn from what is stored now: a saved row that still holds what was sent shows its
     // stored value, and so does an emptied row in `cleared` (its value was not removed) unless the user is in it. Every
     // other row the user has touched stays as it is, whatever its text (a saved row corrected after it was sent, also
     // back to the value drawn before: it was not saved as shown). The focus and caret stay where the user is; the named
-    // row `fid` is focused only when the user is on no control of their own. The reason is said
-    const stay = async (msg, fid, rest, cleared = []) => {
-      await read();
+    // row `fid` is focused only when the user is on no control of their own. The reason is said. When the read fails
+    // (or `failed`, a read that has failed just before), nothing is drawn again: the words are said all the same, with the
+    // read's reason (`told`: `msg` says it already), and an emptied row in `cleared` shows again what it held (what the
+    // batch sent in it, else the value drawn)
+    const stay = async (msg, fid, rest, cleared = [], failed = null, told = false) => {
+      if (!failed) try { await read(); } catch (e) { failed = unread(e); }
       if (moved()) return stop(rest);
       const early = saved.filter((f) => !sameRow(rowNow(f), sent[f]) && !cleared.includes(f));
-      const drop = saved.filter((f) => !early.includes(f) && !cleared.includes(f))
-        .concat(cleared.filter((f) => $("#in-" + f) !== document.activeElement));
-      await redraw(nav, null, true, true, { drop, focus: fid });    // kept after the read: what was typed meanwhile is kept too
+      const refill = cleared.filter((f) => $("#in-" + f) !== document.activeElement);
+      if (!failed) {
+        const drop = saved.filter((f) => !early.includes(f) && !cleared.includes(f)).concat(refill);
+        await redraw(nav, null, true, true, { drop, focus: fid });    // kept after the read: what was typed meanwhile is kept too
+      } else {
+        refill.forEach((f) => { const el = $("#in-" + f); if (el && sent[f]) el.value = sent[f].v; else restoreInput(f); });
+        if (fid && atStart()) $("#in-" + fid)?.focus();
+      }
       const ok = saved.filter((f) => !early.includes(f));
       say(msg + "。戻りません" + (ok.length ? `（${names(ok)}は保存しました）` : "")
-        + (early.length ? `（${names(early)}は直す前の値を保存しました。直した値はまだ保存していません）` : ""), true);
+        + (early.length ? `（${names(early)}は直す前の値を保存しました。直した値はまだ保存していません）` : "")
+        + (failed ? (told ? "。行の状態の表示は古いままです" : unreadWords(failed, msg)) : ""), true, !failed);
       return null;
     };
     // the user is on no control of their own: nowhere, or on 保存して戻る (a named row may then be focused)
@@ -875,8 +933,10 @@ function bindScreen(m, sid) {
     }
     if ((state.stale && state.stale.pid === pid) || [...state.owed.values()].some((x) => x.n === nav.n)) {
       const before = typedNow();
-      await read();
+      let failed = null;
+      try { await read(); } catch (e) { failed = unread(e); }
       if (moved()) return stop(before);
+      if (failed) return stay(`保存の前に画面を読み直せませんでした：${failed.message}。どの行も保存していません`, null, before, [], failed, true);
       await redraw(nav, null, true, true);
     }
     const rows = [...m.querySelectorAll("[data-save]")].map((b) => b.dataset.save);
@@ -891,7 +951,7 @@ function bindScreen(m, sid) {
     const bad = rows.filter((f) => inputValue(f).bad);
     if (bad.length) {
       const iv = inputValue(bad[0]);
-      say(`「${state.meta.fields[bad[0]].label}」は数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}。保存していません`, true);
+      say(`${badWords(bad[0], iv)}。保存していません`, true);
       if (atStart()) $("#in-" + bad[0]).focus();
       return null;
     }
@@ -915,20 +975,24 @@ function bindScreen(m, sid) {
           return stay(r === "refused" ? saveField.reason : `「${state.meta.fields[fid].label}」の保存をやめました`, fid, dirty.slice(i + 1));
       }
       if (moved()) return stop([]);
-      await read();
+      // the read before leaving: when it fails, the batch stays (what the screens would show cannot be told), and its
+      // words name the rows saved, and those changed meanwhile as not saved (no other pass is tried)
+      let failed = null;
+      try { await read(); } catch (e) { failed = unread(e); }
       if (moved()) return stop([]);
       // checked again just before leaving: a row typed, corrected or emptied while the rows were saved holds what was not
       // sent. It is saved in another pass; one that cannot be saved as it is (emptied, unreadable) keeps the batch here
       const late = rows.filter((f) => (sent[f] ? !sameRow(rowNow(f), sent[f]) : isDirty(f) || clearedInput(f) || inputValue(f).bad));
+      if (failed && !late.length) return stay(`保存のあと画面を読み直せませんでした：${failed.message}`, null, [], [], failed, true);
       if (!late.length) break;
       const lateCleared = late.filter((f) => clearedInput(f) || (sent[f] && inputValue(f).empty)), lateBad = late.filter((f) => inputValue(f).bad);
       if (lateCleared.length)
-        return stay(`保存して戻るの間に空欄にした${names(lateCleared)}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`, lateCleared[0], [], lateCleared);
+        return stay(`保存して戻るの間に空欄にした${names(lateCleared)}は保存していません（値は消えていません）。消すときは「未取得に戻す」を押してください`, lateCleared[0], [], lateCleared, failed);
       if (lateBad.length) {
         const iv = inputValue(lateBad[0]);
-        return stay(`保存して戻るの間に入力した「${state.meta.fields[lateBad[0]].label}」は数値で入力してください${iv.why ? "（" + iv.why + "）" : ""}。保存していません`, lateBad[0], []);
+        return stay(`保存して戻るの間に入力した${badWords(lateBad[0], iv)}。保存していません`, lateBad[0], [], [], failed);
       }
-      if (pass >= 2) return stay(`保存して戻るの間に入力が変わった${names(late)}は保存していません`, late[0], []);
+      if (failed || pass >= 2) return stay(`保存して戻るの間に入力が変わった${names(late)}は保存していません`, late[0], [], [], failed);
       dirty = late;
     }
     // what the batch saved, and what the rows' own actions answered meanwhile stored ("nothing to save" only when neither)
@@ -997,8 +1061,33 @@ function bindScreen(m, sid) {
   m.querySelectorAll(".field [id^='in-'], .field [id^='unit-'], .field [id^='st-']").forEach((el) => {
     el.addEventListener("input", touch); el.addEventListener("change", touch);
   });
+  // a text row takes at most TEXT_MAX characters (maxlength): when the browser has cut an insertion (a paste, a drop, a
+  // text put in at once) to fit, how much it left out is said (an action of its own), never dropped without a word. It
+  // is measured from what the insertion would have made (beforeinput) and what it made (input); a line break counts as
+  // one character (an input turns it into a space). Text typed through an input method (composing) is not measured
+  m.querySelectorAll(".field input[maxlength]").forEach((el) => {
+    let want = -1;
+    const cut = () => {
+      const n = want - el.value.length; want = -1;
+      if (n > 0 && el.value.length >= el.maxLength - 1)
+        toast(`「${state.meta.fields[el.id.slice(3)].label}」は ${el.maxLength} 字までです。入れた文の終わりの ${n} 字は入っていません`, ++state.act);
+    };
+    el.addEventListener("beforeinput", (e) => {
+      want = -1;
+      const s = el.selectionStart, t = el.selectionEnd;
+      if (e.isComposing || !/^insert/.test(e.inputType || "") || typeof s !== "number" || typeof t !== "number") return;
+      const add = typeof e.data === "string" ? e.data : e.dataTransfer ? e.dataTransfer.getData("text/plain") : "";
+      want = el.value.length - (t - s) + add.replace(/\r\n?/g, "\n").length;
+      // an insertion the browser refused whole (the row is full) has no input event: it is measured once the event is over
+      setTimeout(() => { if (want >= 0) cut(); }, 0);
+    });
+    el.addEventListener("input", () => { if (want >= 0) cut(); });
+  });
   const geo = $("#btn-geo");
   if (geo) geo.onclick = async () => {
+    // a press is an action of its own (as a guarded button's): its words are never joined to another action's (保存して戻る
+    // may be running: they would be read as its words, and named by its project)
+    state.act++;
     const q = $("#addr").value.trim(); if (!q) return toast("住所を入力してください");
     // only the answer of the latest request is shown (geoSeq): an older search answered late is dropped
     const nav = startedAt(), seq = ++state.geoSeq, out = () => (state.geoSeq === seq && onScreen(nav, sid) ? $("#geo-out") : null);
@@ -1442,10 +1531,11 @@ async function boot() {
 }
 /* the app could not start: said in words, under the door (the offline shell keeps it), with a way to try again. The
    server cannot be reached when the request itself failed (api() says so: offline, the server stopped); any other
-   failure is the server's answer. The browser's own wording stays only as a small detail */
+   failure is the server's answer. The browser's own wording stays only as a small detail, and so does the start of an
+   answer that could not be read (a proxy's page) */
 function bootFailed(e) {
   const sp = $("#splash"), off = !!(e && (e.offline || e instanceof TypeError));
-  const msg = e && e.offline ? String(e.detail || "") : String((e && e.message) || e || "");
+  const msg = e && e.offline ? String(e.detail || "") : String((e && e.message) || e || "") + (e && e.unreadable && e.detail ? "：" + e.detail : "");
   const head = off ? "WLC Studio のサーバーに接続できません" : "WLC Studio を起動できませんでした";
   const hint = off ? "サーバーが動いているか、ネットワークを確かめてください。" : "しばらくしてから、もう一度読み込んでください。";
   const html = `<div class="boot-error" role="alert"><p><strong>${esc(head)}</strong></p><p>${esc(hint)}</p>
