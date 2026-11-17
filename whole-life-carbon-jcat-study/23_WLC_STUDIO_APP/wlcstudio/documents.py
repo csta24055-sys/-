@@ -63,6 +63,9 @@ PRODUCT_NOUNS = ("サッシ", "窓", "ドア", "扉", "建具", "パネル", "�
 PLACE_AFTER = ("下", "上", "裏", "廻り", "まわり", "回り", "面", "際")   # コンクリート下: where it goes, not what it is
 PLACE_NOT = ("下地", "上塗", "上張", "上貼", "面材", "面積", "上屋", "上端", "下端", "上弦", "下弦", "下塗")   # 鉄骨下地, 鉄骨上屋,
                                                                                          # 鉄筋上端筋: the material
+# a material followed in its word by one of these is what the item is without (石膏ボード除く, ボード別途, 断熱材含まず): like the
+# part after an English excluding word, it gives no head (15 回目の攻撃)
+JA_EXCL_AFTER = ("除く", "を除く", "除き", "を除き", "別途", "は別途", "含まず", "を含まず", "抜き")
 # X用Y is Y for X (鉄筋用スペーサー, コンクリート用砕石, モルタル用砂, 石膏ボード用パテ, 鉄骨用高力ボルト): not X. Only when Y is a
 # form of X itself is the material the item (防水用シート, 防水用塗膜 are membranes, 断熱用ボード insulation); when Y is another
 # material, Y is the head anyway (防水用モルタル is mortar). X用 alone names a purpose (the next parts may name the item)
@@ -162,9 +165,53 @@ PLACE_PREP = frozenset(("to", "for", "on", "at", "into", "from", "under", "benea
 # plasterboard", "Excavation for pile caps excl. concrete" name no material (14 回目 let the excluded material be the
 # head), and the excluded part does not choose the foundation card either ("Concrete C30 excl. pile caps") (15 回目)
 EXCL_PREP = frozenset(("excluding", "excl", "excl.", "exc", "exc.", "without", "except", "less", "ex"))
+# … also right after an opening bracket or , ; : - with no space ("Metal stud partition (excluding plasterboard)",
+# "Cavity wall,excl. insulation"), and the excluded part goes on over a list (", … and …") up to the bracket that
+# closes it, a ";" or the end: "Metal stud partition excl. plasterboard, insulation" names neither (15 回目の攻撃)
+_EXCL_WORDS = ("excluding", "excl.", "excl", "exc.", "exc", "without", "except", "less", "ex")
+_EXCL_AFTER_CHARS = "(（[［{｛【〔「『<＜,;，；、:：-‐－–—"
+# (… and an excluding word followed by a colon, or a dotted one followed by the word at once: "excl.: plasterboard",
+# "(excl.plasterboard)")
 _SEGSPLIT = re.compile(r"[,;，；、()（）\[\]［］{}｛｝【】〔〕「」『』<>＜＞]+|\s+(%s)\s+"
-                       % "|".join(tuple(re.escape(w) for w in PREP_DOT) + _PREP
-                                  + ("without", "except", "less", "exc", "ex")))
+                       r"|(?:(?<=[%s])|(?<=\s))(%s)(?:\s+|[:：]\s*|(?<=\.)(?=[a-z]))"
+                       % ("|".join(tuple(re.escape(w) for w in PREP_DOT) + _PREP
+                                   + ("without", "except", "less", "exc", "ex")),
+                          re.escape(_EXCL_AFTER_CHARS), "|".join(re.escape(w) for w in _EXCL_WORDS)))
+_OPENING, _CLOSING = "(（[［{｛【〔「『<＜", ")）]］}｝】〕」』>＞"
+# … but not where the word does not exclude: "ex 50 x 200" (the nominal size of sawn timber), "ex works / stock / mill /
+# plant / site" (where it comes from), "not less than 75mm" (a minimum), "less than 1m2", "except as noted",
+# "except where …" (15 回目の攻撃)
+EX_FROM = frozenset(("works", "stock", "mill", "plant", "site"))
+_WORD_AFTER = re.compile(r"\s*([^\s,;:()（）\[\]［］]+)")
+_WORD_BEFORE = re.compile(r"([a-z]+)\W*$")
+ASIDE = "?"            # (the preposition of a part after an aside set off by commas, see _parts)
+_ASIDE_HINT = re.compile(r"[,，、]\s*(?:excluding|excl|exc|without|except|less|ex)(?![a-z])")
+
+
+def _after_aside(text: str) -> bool:
+    """Whether the head of a name comes from a part after an aside set off by commas ("Infill panels, without frames,
+    blockwork 100mm", "Metal stud partition, excl. plasterboard, insulation"): perhaps the item, perhaps more of what is
+    excluded (15 回目の攻撃)."""
+    low = text.lower()[:MAX_NAME]
+    if not _ASIDE_HINT.search(low):
+        return False
+    fid, i = _head(text)[:2]
+    pp = _parts(low)
+    return fid is not None and 0 <= i < len(pp) and pp[i][2] == ASIDE
+
+
+def _excludes(w: str, text: str, m) -> bool:
+    """Whether the excluding word w (matched by m in text) excludes here (see EX_FROM)."""
+    if w not in ("ex", "less", "except"):
+        return True
+    nx = _WORD_AFTER.match(text, m.end())
+    nxt = nx.group(1).rstrip(".") if nx else ""
+    if w == "ex":
+        return not (nxt[:1].isdigit() or nxt in EX_FROM)
+    if w == "less":
+        pv = _WORD_BEFORE.search(text, max(0, m.start() - 12), m.start())
+        return nxt != "than" and not (pv and pv.group(1) in ("not", "no"))
+    return nxt not in ("as", "where")
 
 
 def _matches(seg: str) -> list:
@@ -188,7 +235,12 @@ def _head_of(seg: str, ms: list):
     head is None when every match only qualifies something else: a place (土間コンクリート下: the next parts are looked
     at), or a product of no field (断熱サッシ, 鉄筋用スペーサー: the name is no material)."""
     kept, product, purposes = [], False, []
+    # a material that the word itself excludes (石膏ボード除く, 断熱材を除く, ボード別途, 押出法ポリスチレンフォーム含まず) is no
+    # head: every keyword of that word before the excluding ending is left out (15 回目の攻撃)
+    cut = [(seg.rfind(" ", 0, a) + 1, b) for a, b, _f, _w in ms if seg.startswith(JA_EXCL_AFTER, b)]
     for a, b, fid, w in ms:
+        if cut and any(s <= a and b <= e for s, e in cut):
+            continue                                     # 間仕切下地｜LGS 65形（石膏ボード除く）: not a board
         after = seg[b:]
         if after.startswith(PLACE_AFTER) and not after.startswith(PLACE_NOT):
             continue                                     # 土間コンクリート下, コンクリート面
@@ -214,20 +266,51 @@ def _head_of(seg: str, ms: list):
     return max(kept, key=lambda m: (m[1], m[1] - m[0])), False
 
 
+@functools.lru_cache(maxsize=8192)
 def _parts(text: str) -> tuple:
     """(part, follows a preposition of place / purpose or an excluding word?, the preposition before it or "") of a
-    lowered name, at most MAX_PARTS non-empty parts."""
+    lowered name, at most MAX_PARTS non-empty parts. A part after an aside set off by commas ("Infill panels, without
+    frames, blockwork 100mm") has the preposition ASIDE: it may name the item or go on with what is excluded."""
     out, pos, place, prep = [], 0, False, ""
+    # (the excluding word whose part goes on, the bracket depth it stands in, whether it came right after a comma; the
+    # depth of an aside that ended at a comma (-1: none); whether the last split was a run of commas)
+    excl, edepth, ecomma, aside, depth, comma = "", 0, False, -1, 0, False
     for m in _SEGSPLIT.finditer(text):
+        w = m.group(1) or m.group(2)
+        if w in EXCL_PREP and not _excludes(w, text, m):
+            continue                       # (ex 50 x 200, not less than, except as noted: no part ends here)
         seg = _PUNCT.sub(" ", text[pos:m.start()]).strip()
         if seg:
             out.append((seg, place, prep))
             if len(out) >= MAX_PARTS:
                 return tuple(out)
-        if m.group(1):
-            place, prep = m.group(1) in PLACE_PREP or m.group(1) in EXCL_PREP, m.group(1)
-        elif seg:
-            place, prep = False, ""
+        ended = False
+        if not w:                          # a run of punctuation: the bracket that closes the excluded part, or a ";"
+            for ch in m.group(0):          # in it, ends it (a comma does not: a list of what is excluded; but an
+                if ch in _OPENING:         # excluding word right after a comma ends at the next one, and what
+                    depth += 1             # follows is perhaps the item: ASIDE)
+                elif ch in _CLOSING:
+                    depth = max(0, depth - 1)
+                    if excl and depth < edepth:
+                        excl, ended = "", True
+                    if depth < aside:
+                        aside, ended = -1, True
+                elif ch in ";；":
+                    if excl and depth <= edepth:
+                        excl, ended = "", True
+                    if 0 <= aside and depth <= aside:
+                        aside, ended = -1, True
+                elif ch in ",，、" and excl and ecomma and depth <= edepth:
+                    excl, ended, aside = "", True, edepth
+        elif w in EXCL_PREP and not excl:
+            excl, edepth, ecomma = w, depth, comma and not seg
+        comma = not w and all(ch in ",，、" for ch in m.group(0))
+        if excl:
+            place, prep = True, excl       # (a list after the excluding word: excl. plasterboard, insulation)
+        elif w:
+            place, prep = w in PLACE_PREP, w
+        elif seg or ended:
+            place, prep = False, ASIDE if aside >= 0 else ""
         pos = m.end()
     seg = _PUNCT.sub(" ", text[pos:]).strip()
     if seg and len(out) < MAX_PARTS:
@@ -381,15 +464,26 @@ _TOKEN = re.compile(r"[^\s,，、。・/／_\-‐－–—:：;；()（）\[\]�
 # where the reach of an inclusive word (including, incl., inc.) ends: a part separator — ; , 、 。 a bracket, a colon
 # that is not between two digits (1:3 mortar), a dash with a space beside it (cast-in-place is one word). "Plasterboard
 # incl. screws; fix", "Blockwork incl. mortar (labour)": the work word is outside what is included (15 回目)
-_CLAUSE_SEP = re.compile(r"[;；,，、。()（）\[\]［］{}｛｝【】「」『』<>＜＞]|(?<!\d)[:：]|[:：](?!\d)|\s[\-‐－–—]|[\-‐－–—]\s")
+# … and a line break (a cell written on two lines: "Plasterboard 12.5mm incl. screws⏎Fix") or a full stop that ends a
+# sentence (followed by a space or the end, and not the dot of incl. inc. excl. exc. no. nr. approx.: "Reinforcement incl.
+# tying wire. Fix") (15 回目の攻撃)
+_CLAUSE_SEP = re.compile(r"[;；,，、。()（）\[\]［］{}｛｝【】「」『』<>＜＞\r\n]|(?<!\d)[:：]|[:：](?!\d)|\s[\-‐－–—]|[\-‐－–—]\s"
+                         r"|\.(?=\s|$)(?<!\bincl\.)(?<!\binc\.)(?<!\bexcl\.)(?<!\bexc\.)(?<!\bno\.)(?<!\bnr\.)"
+                         r"(?<!\bapprox\.)")
+# the reach of a spelled including before a removal word ("Floor tiles including adhesive, grout and disposal" is a
+# note): only ";" and a round bracket end it, so that the list of what is included keeps its last item (15 回目の攻撃:
+# the commas and dashes of _CLAUSE_SEP made that list a removal). Not a line break: within one part of the name a
+# removal word after it would be a sure removal ("Plasterboard includes screws⏎disposal"); after ";" or a bracket it is
+# in a later part, "maybe" at most
+_DEM_CLAUSE_SEP = re.compile(r"[;；()（）]")
 
 
-def _clauses(n: str, n_toks: int) -> list:
-    """The clause of each word of normalise_name(n) (the part between two separators of _CLAUSE_SEP it stands in).
+def _clauses(n: str, n_toks: int, sep=_CLAUSE_SEP) -> list:
+    """The clause of each word of normalise_name(n) (the part between two separators of `sep` it stands in).
     When the words do not line up with normalise_name's (they always do), every word is its own clause (no word is
     then within an inclusive word's reach)."""
     low = unicodedata.normalize("NFKC", (n or "")[:MAX_NAME]).lower()[:MAX_NAME]
-    cuts = [m.start() for m in _CLAUSE_SEP.finditer(low)]
+    cuts = [m.start() for m in sep.finditer(low)]
     out = [bisect.bisect_right(cuts, m.start()) for m in _TOKEN.finditer(low)]
     return out if len(out) == n_toks else list(range(n_toks))
 
@@ -772,8 +866,10 @@ def _not_added(*texts: str) -> str | None:
 _DEDUCT_NOTE = re.compile(r"発生材(?:の)?(?:処分|運搬|積込|片付け?)+費?(?:共|込|含|とも|別途|は別|別)")
 # in a specification (摘要), a price note: スクラップ控除別途, スクラップ控除なし, 控除後 … (14 回目); with は / を between
 # (スクラップ控除は別途, 控除を含む) and せず, しない, 含まず, 済, 済み (スクラップ控除せず, 控除済) (15 回目)
-_DEDUCT_PRICE = re.compile(r"(?:(?:売却|評価|買取|引取)益?)?控除(?:は|を)?(?:別途|なし|無し|共|含む|込み?|後|せず|しない|含まず|済み?)")
-#                            (スクラップ評価控除後, スクラップ売却益控除別途: the same price note)
+_DEDUCT_PRICE = re.compile(r"(?:(?:売却|評価|買取|引取|有価)(?:益|額|代|分|価格|物)?)?控除(?:は|を)?"
+                           r"(?:別途|なし|無し|共|含む|込み?|後|せず|しない|含まず|済み?)")
+#                            (スクラップ評価控除後, スクラップ売却益控除別途, スクラップ評価額控除後, 有価物控除なし: the same
+#                            price note, 15 回目の攻撃)
 # … but not on a row that names the scrap itself (鉄筋スクラップ, 鉄くず; not スクラップ処分, a price note on work)
 _SCRAP_NAME = re.compile(r"(?:スクラップ|くず|屑)(?!\s*(?:処分|運搬|積込|積み込|片付|搬出))")
 # … and a reference to another document, not a breakdown row (14 回目)
@@ -795,13 +891,33 @@ def _scrap_sale(n: str) -> bool:
 
 
 @functools.lru_cache(maxsize=8192)
+def _scrap_itself(n: str) -> bool:
+    """Whether a name names the scrap itself: its first scrap word is in the word of its material or before it, or it
+    names no material (鉄筋スクラップ, スクラップ 鉄筋, スクラップ買取, 鉄くず). A scrap word after the material in a later word
+    is a note on the material row, as in a specification (one name column: 異形鉄筋 SD345 D13 スクラップ買取共) (15 回目の
+    攻撃)."""
+    fid, hi, _a, b, parts = _head(n)
+    for j, seg in enumerate(parts):
+        m = _SCRAP_NAME.search(seg)
+        if m:
+            if fid is None or hi < 0 or j < hi:
+                return True
+            if j > hi:
+                return False
+            we = seg.find(" ", b)
+            return m.start() < (len(seg) if we < 0 else we)
+    return False
+
+
+@functools.lru_cache(maxsize=8192)
 def _deduct(n: str, spec: bool = False) -> bool:
     toks = normalise_name(n).split()
     compact = _DEDUCT_NOTE.sub("", re.sub(r"\s+", "", n))    # 発生材処分別途: a price note, not a credit
     if spec:
         compact = _DEDUCT_PRICE.sub("", compact)
+    # (a sale after the scrap: in a name only when the name is the scrap itself, 15 回目の攻撃)
     return any(w in compact for w in DEDUCT_JA) or any(t in DEDUCT_EN for t in toks) or (toks[:1] == ["less"]) \
-        or _scrap_sale(compact)
+        or (_scrap_sale(compact) and (spec or _scrap_itself(n)))
 
 
 @functools.lru_cache(maxsize=8192)
@@ -915,9 +1031,10 @@ def _demolish(n: str, n_name: int | None = None):
     # is a note by NOTE_OF_EN) (14 回目)
     j_incl = next((j for j, x in enumerate(toks) if x in INCLUSIVE_EN), None)
     note_ok = j_incl is not None and not existing
-    # … and only within what follows it, up to the next separator, as for work words (15 回目: Floor tiles including
-    # adhesive; take up and dispose is the removal)
-    clause = _clauses(n, len(toks)) if note_ok else None
+    # … and only within what follows it, up to the next ";" or round bracket (15 回目: Floor tiles including adhesive;
+    # take up and dispose is the removal; a comma, a dash or a line break does not end it: including adhesive, grout and
+    # disposal is the note, 15 回目の攻撃)
+    clause = _clauses(n, len(toks), _DEM_CLAUSE_SEP) if note_ok else None
     if note_ok and "existing" in toks[:j_incl]:      # … in a part that says what the item is, not where it goes
         where = _token_parts(toks, parts)            # (Floor tiles to existing floor including disposal: new tiles)
         place = [pl for _s, pl, _p in _parts(n.lower()[:MAX_NAME])]
@@ -963,7 +1080,16 @@ class _Prep:
     """NFKC of each distinct text once per document, within a character budget (an upload must not hold the worker)."""
 
     def __init__(self, budget: int = MAX_PREP_CHARS):
-        self.cache, self.left = {}, budget
+        self.cache, self.left, self.charged = {}, budget, set()
+
+    def charge(self, s: str) -> None:
+        """Charge a text read once more (a closed-up text, read again for its marks) to the same budget, once per
+        distinct text (15 回目の攻撃)."""
+        if s not in self.charged:
+            self.charged.add(s)
+            self.left -= len(s)
+            if self.left < 0:
+                raise _Budget()
 
     def __call__(self, s) -> str:
         s = (s or "")[:MAX_NAME]
@@ -1450,8 +1576,13 @@ def _marks(name: str, spec: str, div: str) -> tuple:
     # shapes of the specification are no price note there (14 回目). It is a deduction whatever the specification says
     # (スクラップ｜鉄筋 D13, 鉄筋スクラップ alone): "maybe", and sure with a deduction word or a sale after the scrap
     # (鉄筋スクラップ｜売却, スクラップ買取｜鉄骨) (15 回目)
-    if _SCRAP_NAME.search(name):
+    if _SCRAP_NAME.search(name) and _scrap_itself(name):
         deduct = SURE if _deduct(name) or (spec and (_deduct(spec) or _scrap_sale(name + " " + spec))) else MAYBE
+    elif _SCRAP_NAME.search(name):
+        # … but a scrap word after the material in a later word of a one-column name is a note on the material row, as
+        # in a specification (異形鉄筋 SD345 D13 スクラップ買取共, 鉄骨 SN490B スクラップ評価額別途): "maybe" at most, never
+        # sure by the sale word (sure only by a deduction word of the name, as before 15 回目) (15 回目の攻撃)
+        deduct = SURE if _deduct(name) else MAYBE
     else:
         deduct = SURE if _deduct(name) else (MAYBE if spec and _deduct(spec, True) else None)
     return total, again, deduct, _demolish(text, n_name), _work(text, n_name)
@@ -1467,6 +1598,9 @@ def _row_class(prep: _Prep, r: dict) -> dict:
     fid = _classify(text, div)
     total, again, deduct, demolish, work = _marks(name, spec, div)
     if (name, spec, div) != (shown, spec0, div0):
+        for closed, written in ((name, shown), (spec, spec0), (div, div0)):
+            if closed != written:
+                prep.charge(closed)            # (the second reading is charged to the budget: 15 回目の攻撃)
         t0, a0, d0, m0, w0 = _marks(shown, spec0, div0)
         total, work = total or t0, work or w0
         again, deduct, demolish = _stronger(again, a0), _stronger(deduct, d0), _stronger(demolish, m0)
@@ -1477,9 +1611,15 @@ def _row_class(prep: _Prep, r: dict) -> dict:
             fid = "m_concrete"                 # (… also a note written 内　杭, which closes up into one word: 15 回目)
     u = _unit(r.get("unit"))
     fid = _block_as_concrete(fid, text, div, u)
+    scrap = None
+    if deduct == MAYBE and _SCRAP_NAME.search(name):        # (the maybe is the scrap name's)
+        scrap = R_SCRAP_MAYBE if _scrap_itself(name) else R_SCRAP_NOTE_MAYBE
+    # a name that is only one space-justified material word, with no specification (鉄　　骨, 鉄　　筋 on a 科目別 sheet): the
+    # usual 内訳書 writes the summary of a material so; it may repeat the detail rows (15 回目の攻撃)
+    just = bool(fid) and not spec0.strip() and bool(_JUSTIFIED.fullmatch(shown.strip()))
     return {"name": shown, "fid": fid, "u": u, "total": total, "again": again, "deduct": deduct,
             "demolish": demolish, "work": work, "ref": bool(spec0 and _AGAIN_REF.search(spec0)),
-            "scrap": deduct == MAYBE and bool(_SCRAP_NAME.search(name))}     # (the maybe is the scrap name's)
+            "scrap": scrap, "just": just, "aside": bool(fid) and _after_aside(text)}
 
 
 _BLOCK_WORD = re.compile(r"(?i)blocks?|ブロック")
@@ -1517,6 +1657,15 @@ R_AGAIN_MAYBE = "規格・摘要にうち・内訳などの語がある（ほか
 R_DEDUCT_MAYBE = "規格・摘要に控除などの語がある（控除の行か、材料の行の値段の注記か分からない）ので足さない。材料の行なら手で入れる"
 # a row whose name is the scrap itself, with no deduction or sale word (15 回目)
 R_SCRAP_MAYBE = "名前がスクラップ・くずの行（スクラップの控除・売却か、材料の行か分からない）なので足さない。材料の行なら手で入れる"
+# … and a scrap note after the material in a one-column name (異形鉄筋 SD345 D13 スクラップ買取共) (15 回目の攻撃)
+R_SCRAP_NOTE_MAYBE = "名前の材料の後にスクラップの注記がある（スクラップの控除・売却の行か、材料の行の値段の注記か分からない）" \
+                     "ので足さない。材料の行なら手で入れる"
+# the material named after an excluding word set off by commas: the rest of what is excluded, or the item (15 回目の攻撃)
+R_ASIDE_MAYBE = "読点の後の除く語（excluding・without など）のさらに読点の後に材料の名前がある（除く物の続きか、この行の材料か" \
+                "分からない）ので足さない。この行の材料なら手で入れる"
+# a name that is only one space-justified material word, with no specification (15 回目の攻撃)
+R_JUSTIFIED_MAYBE = "字間をそろえた科目名だけの行（鉄　　骨 など。規格の無い集計の行で、明細の行と二重になるかもしれない）" \
+                    "なので足さない。材料の行なら手で入れる"
 # 内訳書による on a row of a workbook whose other sheet lists the same material (14 回目)
 R_REF_MAYBE = "規格・摘要に内訳書による・内訳別紙などの注記があり、同じ資料の別のシート（%s）に同じ材料の行がある" \
               "（その内訳と二重になるおそれ）ので足さない。材料の行なら手で入れる"
@@ -1539,6 +1688,10 @@ R_IFC_EXISTING = "IFC の部材の状態（Status）が既存（EXISTING）：�
 R_IFC_TEMPORARY = "IFC の部材の状態（Status）が仮設（TEMPORARY）：建物に残らない部材かもしれないので足さない。" \
                   "残る部材なら手で入れる"
 R_IFC_STATUS = {"DEMOLISH": R_IFC_DEMOLISH, "EXISTING": R_IFC_EXISTING, "TEMPORARY": R_IFC_TEMPORARY}
+# … and a part with no status of its own, of a whole with that status (15 回目の攻撃)
+R_IFC_STATUS_WORD = {"DEMOLISH": "解体（DEMOLISH）", "EXISTING": "既存（EXISTING）", "TEMPORARY": "仮設（TEMPORARY）"}
+R_IFC_PART = "IFC でこの部材を含む部材（%s）の状態（Status）が%s：この部材には状態の記録が無いが、同じく新しい材料ではない" \
+             "かもしれないので足さない。新しい部材なら手で入れる"
 SURELY_NOT = (R_TOTAL, R_AGAIN, R_DEDUCT, R_DEMOLISH, R_NEG, tabular.HEADING, R_IFC_DEMOLISH, R_IFC_EXISTING)
 # reasons with a place in them that are surely not part of the total (a copy of what another sheet counts, a pivot
 # table of a sheet that is read)
@@ -1685,7 +1838,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 why = R_DEMOLISH
             elif c["again"] or c["deduct"]:    # a mark only in the specification (14 回目): "maybe", unless negative
                 why = R_NEG if r["quantity"] < 0 else R_AGAIN_MAYBE if c["again"] else \
-                    R_SCRAP_MAYBE if c.get("scrap") else R_DEDUCT_MAYBE
+                    c.get("scrap") or R_DEDUCT_MAYBE
             elif c["demolish"]:
                 why = R_DEMOLISH_MAYBE
             elif c["work"]:
@@ -1726,6 +1879,10 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                 ref_others = sorted(listed.get(_FAMILY.get(c["fid"], c["fid"]), set()) - {shf})
                 if ref_others:
                     why = R_REF_MAYBE % tabular.sheet_label(parsed.get("sheet_names", {}).get(ref_others[0], ref_others[0]))
+            if not why and c.get("just"):
+                why = R_JUSTIFIED_MAYBE        # 鉄　　骨 alone: perhaps the summary of the detail rows (15 回目の攻撃)
+            if not why and c.get("aside"):
+                why = R_ASIDE_MAYBE            # Infill panels, without frames, blockwork 100mm (15 回目の攻撃)
             if why:
                 leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit"))
                 continue
@@ -1797,6 +1954,11 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             if why is None and e["name"]:
                 dem = _both(_demolish, _prep(e["name"]))
                 why = R_DEMOLISH if dem == SURE else R_DEMOLISH_MAYBE if dem else None
+            if why is None and e.get("part_of"):
+                # a part (IfcRelAggregates, IfcRelNests) with no status of its own, of a whole that is DEMOLISH, EXISTING
+                # or TEMPORARY: perhaps the same (the panels of a curtain wall that is taken down) (15 回目の攻撃)
+                po = e["part_of"]
+                why = R_IFC_PART % (("%s %s" % (po["type"], po["name"]))[:60], R_IFC_STATUS_WORD.get(po["status"], ""))
             if why:
                 if picked:
                     leave(fid, picked[1]["trace"], label, why, picked[1]["value"], picked[0])

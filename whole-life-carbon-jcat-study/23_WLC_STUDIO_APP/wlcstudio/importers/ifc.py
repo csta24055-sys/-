@@ -4,7 +4,9 @@ For each building element (IfcWall, IfcSlab, IfcBeam, IfcColumn, IfcFooting, Ifc
 IfcStair, IfcRoof, IfcCovering, IfcCurtainWall, IfcDoor, IfcWindow, IfcRailing, IfcReinforcingBar ...)
 we read: GlobalId, name, quantities from IfcElementQuantity (volume, area, weight, length, count), the
 associated material names (IfcRelAssociatesMaterial) and the renovation status of Pset_<…>Common.Status when it is
-DEMOLISH, EXISTING or TEMPORARY (the element is then no new material). Every number keeps the element's STEP id and
+DEMOLISH, EXISTING or TEMPORARY (the element is then no new material), set on the element or else on its type
+(IfcRelDefinesByType); an element with neither that is part of a whole with such a status (IfcRelAggregates,
+IfcRelNests) carries that whole as 'part_of'. Every number keeps the element's STEP id and
 GlobalId as its trace. Geometry is NOT measured: an element without quantity sets yields no number
 (listed as 'no_quantities'), never 0.
 """
@@ -38,7 +40,14 @@ _PSET_COMMON = re.compile(r"pset_\w*common", re.I)
 _STATUS_ARG = re.compile(r"\s*'\s*status\s*'", re.I)
 _PSET_NAME = re.compile(r"\s*'(?:[^']|'')*'\s*,\s*(?:\$|#\d+)\s*,\s*'pset_\w*common'\s*,", re.I)
 STATUS_OUT = {"DEMOLISH": "DEMOLISH", "DEMOLISHED": "DEMOLISH", "EXISTING": "EXISTING", "TEMPORARY": "TEMPORARY"}
-_STATUS_RANK = {"DEMOLISH": 3, "EXISTING": 2, "TEMPORARY": 1}
+# ("SET": a Status of any other value, NEW, OTHER …: the object has a status of its own, which its type's or its whole's
+# does not replace)
+_STATUS_RANK = {"DEMOLISH": 3, "EXISTING": 2, "TEMPORARY": 1, "SET": 0}
+# an element with no status of its own takes its type's (IfcRelDefinesByType → HasPropertySets: a type's property sets
+# apply to every occurrence that does not set the property itself), and an element with neither may be part of a whole
+# (IfcRelAggregates, IfcRelNests: the panels of an IfcCurtainWall) whose status is DEMOLISH, EXISTING or TEMPORARY: it is
+# then listed as perhaps the same ("part_of") (15 回目の攻撃)
+PART_RELS = ("IFCRELAGGREGATES", "IFCRELNESTS")
 
 
 def _split_args(s: str) -> list:
@@ -209,8 +218,8 @@ def parse(text: str, doc_id: str) -> dict:
             raise ValueError("IFC の状態（Status）の記録が多すぎる（%d 個まで）" % MAX_STATUS)
 
     def status_of(p: int):
-        """The status that leaves an element out (DEMOLISH, EXISTING, TEMPORARY) given by the Pset_…Common p, or None
-        (once per property set; every property looked at costs)."""
+        """The status that leaves an element out (DEMOLISH, EXISTING, TEMPORARY) given by the Pset_…Common p, "SET"
+        for a Status of another value, or None (once per property set; every property looked at costs)."""
         if p in pstatus:
             return pstatus[p]
         got, seen = None, 0
@@ -223,15 +232,43 @@ def parse(text: str, doc_id: str) -> dict:
             if len(pa) < 3 or _str(pa[0]).strip().lower() != "status":
                 continue
             for v in re.findall(r"'((?:[^']|'')*)'|\.([A-Z_]+)\.", pa[2])[:MAX_NAMES]:
-                s = STATUS_OUT.get(re.sub(r"[\s_\-]+", "", (v[0] or v[1])).upper())
-                if s and _STATUS_RANK[s] > _STATUS_RANK.get(got, 0):
+                s = STATUS_OUT.get(re.sub(r"[\s_\-]+", "", (v[0] or v[1])).upper(), "SET")
+                if _STATUS_RANK[s] > _STATUS_RANK.get(got, -1):
                     got = s
             seen += 1
             if seen >= MAX_STATUS_PROPS or got == "DEMOLISH":
                 break                                # (a set has one Status; DEMOLISH is the strongest)
         pstatus[p] = got
         return got
+
+    def stronger(have, s):
+        return s if s is not None and _STATUS_RANK[s] > _STATUS_RANK.get(have, -1) else have
+    ostatus, tstatus, typesets, parent = {}, {}, {}, {}   # own status, the type's status of an object, of a type; whole
     for eid, (typ, args) in ents.items():
+        if typ == "IFCRELDEFINESBYTYPE":
+            a = _split_args(args)
+            objs, ts = list(dict.fromkeys(_refs(a[4]))) if len(a) > 5 else [], _refs(a[5]) if len(a) > 5 else []
+            t = ts[0] if ts else None
+            if t not in typesets:
+                got = None
+                if t in ents:                        # (HasPropertySets is the type's sixth attribute)
+                    ta = _split_args(ents[t][1])
+                    for p in dict.fromkeys(_refs(ta[5]) if len(ta) > 5 else ()):
+                        spend_status()
+                        if p in psets:
+                            got = stronger(got, status_of(p))
+                typesets[t] = got
+            for o in (objs if typesets[t] else ()):
+                spend_status()
+                tstatus[o] = stronger(tstatus.get(o), typesets[t])
+            continue
+        if typ in PART_RELS:
+            a = _split_args(args)
+            whole, objs = (_refs(a[4]) if len(a) > 5 else [])[:1], _refs(a[5]) if len(a) > 5 else []
+            for o in (objs if whole else ()):
+                spend_status()
+                parent.setdefault(o, whole[0])
+            continue
         if typ == "IFCRELDEFINESBYPROPERTIES":
             a = _split_args(args)
             objs, pdef = list(dict.fromkeys(_refs(a[4]))), list(dict.fromkeys(_refs(a[5])))   # a repeated ref adds nothing
@@ -240,7 +277,8 @@ def parse(text: str, doc_id: str) -> dict:
                     s = status_of(p)
                     for o in (objs if s else ()):
                         spend_status()                       # (every pair tried costs, as for the quantities)
-                        if o in elements and _STATUS_RANK[s] > _STATUS_RANK.get(elements[o]["status"], 0):
+                        ostatus[o] = stronger(ostatus.get(o), s)
+                        if o in elements and s != "SET" and _STATUS_RANK[s] > _STATUS_RANK.get(elements[o]["status"], 0):
                             elements[o]["status"] = s
                     continue
                 if p in qsets:
@@ -287,6 +325,44 @@ def parse(text: str, doc_id: str) -> dict:
                     for n in names:
                         if n and n not in have and len(have) < MAX_NAMES:
                             have.append(n)
+    give, wholes = {}, {}
+
+    def giving(x):
+        """(status, whole) that the whole x passes to its parts: its own or its type's status (DEMOLISH, EXISTING,
+        TEMPORARY), else its own whole's; None when there is none or the nearest says otherwise (NEW …). Each whole is
+        looked at once (memoised); every step costs."""
+        path, seen, got = [], set(), None
+        while x is not None:
+            if x in give:
+                got = give[x]
+                break
+            if x in seen:
+                break                                # (a loop of wholes: nothing)
+            spend_status()
+            seen.add(x)
+            path.append(x)
+            st = ostatus.get(x) or tstatus.get(x)
+            if st is not None:
+                got = (st, x) if st != "SET" else None
+                break
+            x = parent.get(x)
+        for y in path:
+            give[y] = got
+        return got
+    for eid, e in elements.items():
+        if ostatus.get(eid) is not None:
+            continue                                 # (its own status, as read above)
+        if tstatus.get(eid) is not None:
+            if tstatus[eid] != "SET":
+                e["status"] = tstatus[eid]           # (its type's: the element sets none of its own)
+            continue
+        got = giving(parent[eid]) if eid in parent else None
+        if got:
+            w = got[1]
+            if w not in wholes:
+                wa = _split_args(ents[w][1]) if w in ents else []
+                wholes[w] = {"step_id": w, "type": ents[w][0] if w in ents else "", "name": _str(wa[2]) if len(wa) > 2 else ""}
+            e["part_of"] = dict(wholes[w], status=got[0])
     els = sorted(elements.values(), key=lambda e: e["step_id"])
     return {"format": "ifc", "schema": schema, "n_entities": len(ents), "elements": els, "unit_notes": unit_notes,
             "unit_factors": {k: v for k, v in defaults.items()},

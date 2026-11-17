@@ -94,6 +94,24 @@ class FifteenthRoundClassificationTests(unittest.TestCase):
         self.assertEqual(documents._demolish(documents._prep("Floor tiles including adhesive; take up and dispose")),
                          documents.MAYBE)
         self.assertFalse(documents._is_demolition("In situ concrete C30, including disposal"))
+        # a line break in the cell (Alt+Enter) and a full stop that ends a sentence end the reach too (15 回目の攻撃)
+        rows = [("Plasterboard 12.5mm; supply", 500, "m2"), ("Plasterboard 12.5mm incl. screws\nFix", 500, "m2"),
+                ("High yield reinforcement bars", 30, "t"), ("Reinforcement incl. tying wire.\nFix", 30, "t"),
+                ("Blockwork 100mm", 800, "m2"), ("Blockwork 100mm incl. mortar. Labour", 800, "m2")]
+        x = row(1, t("A1", "Description"), t("B1", "Qty"), t("C1", "Unit"))
+        for i, (nm, q, u) in enumerate(rows, 2):
+            x += row(i, t("A%d" % i, nm), n("B%d" % i, q), t("C%d" % i, u))
+        got, r = read(xlsx([("BoQ", x)]))
+        self.assertEqual(got, {("m_board", "m2"): 500.0, ("m_rebar", "t"): 30.0, ("m_masonry", "m2"): 800.0})
+        self.assertEqual(sorted((x[1], x[3]) for x in excluded(r) if x[2] == documents.R_WORK[:12]),
+                         [(30.0, True), (500.0, True), (800.0, True)])
+        got, _ = pdf_read(["Plasterboard 12.5mm incl. screws. Fix   500 m2", "Plasterboard 12.5mm   300 m2"])
+        self.assertEqual(got, [("m_board", 300.0)])
+        # (the dot of an abbreviation does not end it; and, &, / stay within it)
+        for nm in ("Concrete C30 incl. approx. 5% waste and placing", "Concrete C30 incl. no. 3 pours and placing",
+                   "Plasterboard 12.5mm incl. screws and fixing", "Plasterboard 12.5mm incl. screws & fixing",
+                   "Plasterboard 12.5mm incl. screws / fixing", "Concrete C30 Incl. placing and compacting"):
+            self.assertFalse(documents._is_work(nm), nm)
 
     # --- 2. 撤去後 新設 is the new material only when nothing but listed words follow it (attacks 1)
     def test_removal_then_new_installation_with_any_other_word_stays_removal(self):
@@ -262,6 +280,164 @@ class FifteenthRoundClassificationTests(unittest.TestCase):
         # cut to: only the listed objects (14 回目); "cut to shape" stays work so that cutting what is there is not added
         self.assertTrue(documents._is_work("Existing concrete slab; cut to shape and make good"))
         self.assertTrue(documents._is_work("High yield steel bars; cut to schedule"))
+
+    # ===== the problems an independent attack found in the fixes above (15 回目の攻撃) =====
+
+    # --- an excluding word right after a bracket or , ; : - , and the list after it (attacks 2, 15 回目の攻撃)
+    def test_excluding_word_after_a_bracket_and_its_list(self):
+        got, r = csv_read("Description,Qty,Unit\nMetal stud partition (excluding plasterboard),400,m2\nPlasterboard 12.5mm,800,m2\n"
+                          "Excavation for pile caps (excl. concrete),60,m3\nConcrete C30/37 in pile caps,40,m3\n"
+                          "Cavity wall (excl. insulation),300,m2\nCavity insulation 100mm,300,m2\n")
+        self.assertEqual(got, {("m_board", "m2"): 800.0, ("m_concrete_fdn", "m3"): 40.0, ("m_insulation", "m2"): 300.0})
+        got, r = csv_read("Description,Qty,Unit\n\"Metal stud partition excl. plasterboard, insulation\",400,m2\n"
+                          "Plasterboard 12.5mm,800,m2\nMineral wool insulation 50mm,400,m2\n")
+        self.assertEqual(got, {("m_board", "m2"): 800.0, ("m_insulation", "m2"): 400.0})
+        for nm in ("Metal stud partition [excl. plasterboard]", "Metal stud partition,excl. plasterboard",
+                   "Metal stud partition:excluding plasterboard", "Metal stud partition -excl. plasterboard",
+                   "Metal stud partition; excl.: plasterboard", "Metal stud partition (excl.plasterboard)",
+                   "Suspended ceiling grid excl. tiles, insulation", "Curtain walling framing excl. glass, insulation",
+                   "Cavity wall excluding insulation, blockwork", "Metal stud partition (excl. plasterboard, insulation)",
+                   "Excavation for pile caps excluding formwork, concrete and reinforcement"):
+            self.assertIsNone(documents._field_for(nm), nm)
+        # the bracket or ";" that closes the excluded part ends it; the excluded part does not choose the foundation card
+        for nm, fid in (("Metal stud partition (excl. plasterboard), insulation 50mm", "m_insulation"),
+                        ("Metal stud partition excl. plasterboard; insulation 50mm", "m_insulation"),
+                        ("Concrete C30/37 in slabs (excluding foundations, pile caps)", "m_concrete"),
+                        ("Plasterboard 12.5mm-excluding concrete, reinforcement", "m_board")):
+            self.assertEqual(documents._field_for(nm), fid, nm)
+        # an aside set off by commas: the material after it is perhaps the item, perhaps more of what is excluded
+        got, r = csv_read("Description,Qty,Unit\n\"Infill panels, without frames, blockwork 100mm\",200,m2\n"
+                          "Blockwork 100mm,300,m2\n")
+        self.assertEqual(got, {("m_masonry", "m2"): 300.0})
+        self.assertEqual([(x[1], x[2], x[3]) for x in excluded(r)], [(200.0, documents.R_ASIDE_MAYBE[:12], True)])
+
+    # --- ex <size>, ex works, not less than, except as noted do not exclude (15 回目の攻撃)
+    def test_ex_size_and_not_less_than_keep_the_material(self):
+        got, r = csv_read("Description,Qty,Unit\nFloor joists ex 50 x 200 sawn softwood,12,m3\n"
+                          "Rafters ex 50 x 150 treated softwood,8,m3\nLining of not less than 15mm plasterboard,500,m2\n"
+                          "Topping not less than 75mm concrete,30,m3\n")
+        self.assertEqual(got, {("m_timber", "m3"): 20.0, ("m_board", "m2"): 500.0, ("m_concrete", "m3"): 30.0})
+        for nm, fid in (("Sections ex stock structural steel S355", "m_steel"), ("Units ex works precast concrete", "m_concrete"),
+                        ("Bars ex mill high yield steel", "m_steel"), ("Panels less than 1m2 plasterboard", "m_board"),
+                        ("Lintels except as noted precast concrete", "m_concrete"), ("Fascia board ex 25 x 225 softwood", "m_timber"),
+                        ("Timber (ex 50x100)", "m_timber")):
+            self.assertEqual(documents._field_for(nm), fid, nm)
+        # the excluding senses stay as decided (15 回目)
+        for nm in ("Hardcore ex concrete", "Excavation less concrete", "Excavation except concrete"):
+            self.assertIsNone(documents._field_for(nm), nm)
+
+    # --- a Japanese excluding ending after a material word (15 回目の攻撃)
+    def test_japanese_excluding_ending_gives_no_head(self):
+        got, r = csv_read("名称,摘要,数量,単位\n間仕切下地,LGS 65形（石膏ボード除く）,500,m2\n石膏ボード,t12.5,500,m2\n"
+                          "外壁下地,胴縁（断熱材除く）,300,m2\nグラスウール,t50,300,m2\n根切り,基礎（コンクリート除く）,60,m3\n")
+        self.assertEqual(got, {("m_board", "m2"): 500.0, ("m_insulation", "m2"): 300.0})
+        self.assertEqual(sum(1 for u in r["unused"] if u["reason"].startswith("どの材料の欄にも")), 3)
+        for name, spec in (("間仕切下地", "LGS 65形 石膏ボード別途"), ("間仕切下地", "押出法ポリスチレンフォームを除く"),
+                           ("", "断熱材含まず")):
+            self.assertIsNone(cls(name, spec)["fid"], (name, spec))
+        self.assertEqual(cls("軽量鉄骨天井下地", "19形（ボード別途）")["fid"], "m_steel")     # (the name's own material)
+        # another material of the part is the head; the endings not listed change nothing
+        self.assertEqual(cls("外壁", "ALC 100 塗装別途")["fid"], "m_masonry")
+        for spec in ("石膏ボード共", "石膏ボード込み", "石膏ボード t12.5", "石膏ボード 別途"):
+            self.assertEqual(cls("間仕切下地", "LGS 65形 " + spec)["fid"], "m_board", spec)
+
+    # --- a scrap word after the material in a one-column name is a note: maybe at most (15 回目の攻撃)
+    def test_scrap_note_after_the_material_is_never_sure(self):
+        got, r = csv_read("名称,数量,単位\n異形鉄筋 SD345 D13 スクラップ買取共,30,t\n鉄骨 SN490B スクラップ評価額別途,50,t\n"
+                          "異形鉄筋 SD345 D19 スクラップ精算別途,20,t\n")
+        self.assertEqual(got, {})
+        self.assertEqual(sorted((x[1], x[2], x[3]) for x in excluded(r)),
+                         [(20.0, documents.R_SCRAP_NOTE_MAYBE[:12], True), (30.0, documents.R_SCRAP_NOTE_MAYBE[:12], True),
+                          (50.0, documents.R_SCRAP_NOTE_MAYBE[:12], True)])
+        # (a PDF line is a candidate to check, as before 15 回目: the line's name is no deduction)
+        self.assertFalse(documents._is_deduction("異形鉄筋 SD345 D13 スクラップ買取共"))
+        self.assertTrue(documents._is_deduction("鉄筋スクラップ 売却"))
+        # a price note with 評価額・売却額・有価物 … before 控除後 is the material row
+        got, r = csv_read("名称,摘要,数量,単位\n異形鉄筋,SD345 D13 スクラップ評価額控除後,30,t\n鉄骨,SN490B スクラップ売却額控除後,50,t\n"
+                          "異形鉄筋,SD345 D19 スクラップ評価控除後,20,t\n")
+        self.assertEqual(got, {("m_rebar", "t"): 50.0, ("m_steel", "t"): 50.0})
+        for spec in ("スクラップ有価物控除なし", "スクラップ買取価格控除後", "スクラップ引取額控除別途", "スクラップ売却代控除後"):
+            self.assertFalse(cls("異形鉄筋", "SD345 " + spec, "t")["deduct"], spec)
+        # the scrap itself stays the deduction (15 回目)
+        for name in ("鉄筋スクラップ 売却", "スクラップ買取", "鋼材くず 売却"):
+            self.assertEqual(cls(name, "", "t")["deduct"], documents.SURE, name)
+        self.assertEqual(cls("異形鉄筋 SD345 D13 スクラップ控除後", "", "t")["deduct"], documents.SURE)   # (控除 in the name)
+
+    # --- a spelled including keeps its last item when that is the disposal (15 回目の攻撃)
+    def test_including_list_keeps_its_disposal_note(self):
+        got, r = csv_read("Description,Qty,Unit\n\"Floor tiles 300x300 including adhesive, grout and disposal\",600,m2\n"
+                          "\"Carpet tiles including underlay, gripper and disposal\",400,m2\n"
+                          "Plasterboard 12.5mm includes screws - disposal,500,m2\n")
+        self.assertEqual(got, {("m_finish", "m2"): 1000.0, ("m_board", "m2"): 500.0})
+        for nm in ("Floor tiles including adhesive, disposal", "Floor tiles including adhesive: disposal",
+                   "Plasterboard 12.5mm includes screws\ndisposal"):
+            self.assertIsNone(documents._demolish(documents._prep(nm)), nm)
+        self.assertEqual(documents._demolish(documents._prep("Floor tiles including adhesive (disposal)")), documents.MAYBE)
+
+    # --- a space-justified material name alone, with no specification: perhaps a summary (15 回目の攻撃)
+    def test_justified_name_alone_is_perhaps_a_summary(self):
+        def sheet(rows):
+            x = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "数量"), t("D1", "単位"))
+            for i, (nm, sp, q, u) in enumerate(rows, 2):
+                x += row(i, t("A%d" % i, nm), t("B%d" % i, sp) if sp else "", n("C%d" % i, q), t("D%d" % i, u))
+            return x
+        got, r = read(xlsx([("科目別", sheet([("鉄　　骨", "", 50, "t"), ("鉄　　筋", "", 30, "t")])),
+                            ("細目", sheet([("鉄骨", "SN490B", 50, "t"), ("異形鉄筋", "SD345 D13", 30, "t")]))]))
+        self.assertEqual(got, {("m_steel", "t"): 50.0, ("m_rebar", "t"): 30.0})
+        self.assertEqual(sorted((x[1], x[2], x[3]) for x in excluded(r)),
+                         [(30.0, documents.R_JUSTIFIED_MAYBE[:12], True), (50.0, documents.R_JUSTIFIED_MAYBE[:12], True)])
+        self.assertFalse(cls("鉄　　骨", "SN490B", "t")["just"])        # (with a specification: the material row, 15 回目)
+
+    # --- IFC: the status of the element's type, and of the whole it is part of (15 回目の攻撃)
+    def test_ifc_status_of_the_type_and_of_the_whole(self):
+        txt = "\n".join([
+            "ISO-10303-21;", "HEADER;FILE_SCHEMA(('IFC4'));ENDSEC;", "DATA;",
+            "#10=IFCCURTAINWALL('cw1',$,'Existing curtain wall',$,$,$,$,$,$);",
+            "#11=IFCPLATE('pl1',$,'Panel',$,$,$,$,$,$);", "#12=IFCPLATE('pl2',$,'Panel',$,$,$,$,$,$);",
+            "#14=IFCPLATE('pl3',$,'New panel',$,$,$,$,$,$);",
+            "#13=IFCRELAGGREGATES('ag',$,$,$,#10,(#11,#12,#14));",
+            "#20=IFCQUANTITYAREA('NetArea',$,$,40.0,$);", "#21=IFCELEMENTQUANTITY('q1',$,'Qto',$,$,(#20));",
+            "#22=IFCRELDEFINESBYPROPERTIES('r1',$,$,$,(#11,#12,#14),#21);",
+            "#40=IFCPROPERTYSINGLEVALUE('Status',$,IFCLABEL('DEMOLISH'),$);",
+            "#41=IFCPROPERTYSET('p1',$,'Pset_CurtainWallCommon',$,(#40));",
+            "#42=IFCRELDEFINESBYPROPERTIES('r4',$,$,$,(#10),#41);",
+            "#43=IFCPROPERTYSINGLEVALUE('Status',$,IFCLABEL('NEW'),$);",
+            "#44=IFCPROPERTYSET('p3',$,'Pset_PlateCommon',$,(#43));",
+            "#45=IFCRELDEFINESBYPROPERTIES('r6',$,$,$,(#14),#44);",
+            "#30=IFCMATERIAL('Glass',$,$);", "#31=IFCRELASSOCIATESMATERIAL('m1',$,$,$,(#10,#11,#12,#14),#30);",
+            "#50=IFCWALL('w1',$,'Wall',$,$,$,$,$);", "#58=IFCWALL('w2',$,'Wall 2',$,$,$,$,$);",
+            "#51=IFCWALLTYPE('wt1',$,'Wall type',$,$,(#53),$,$,$,.STANDARD.);",
+            "#52=IFCPROPERTYSINGLEVALUE('Status',$,IFCLABEL('EXISTING'),$);",
+            "#53=IFCPROPERTYSET('p2',$,'Pset_WallCommon',$,(#52));",
+            "#54=IFCRELDEFINESBYTYPE('rt',$,$,$,(#50,#58),#51);",
+            "#59=IFCPROPERTYSINGLEVALUE('Status',$,IFCLABEL('NEW'),$);",
+            "#60=IFCPROPERTYSET('p4',$,'Pset_WallCommon',$,(#59));",
+            "#61=IFCRELDEFINESBYPROPERTIES('r7',$,$,$,(#58),#60);",
+            "#55=IFCQUANTITYVOLUME('NetVolume',$,$,12.0,$);", "#56=IFCELEMENTQUANTITY('q2',$,'Qto',$,$,(#55));",
+            "#57=IFCRELDEFINESBYPROPERTIES('r5',$,$,$,(#50,#58),#56);",
+            "#62=IFCMATERIAL('Concrete C30/37',$,$);", "#63=IFCRELASSOCIATESMATERIAL('m2',$,$,$,(#50,#58),#62);",
+            "ENDSEC;", "END-ISO-10303-21;"]) + "\n"
+        got, r = read(txt.encode(), "a.ifc")
+        # the panel marked NEW is added; the wall whose own status is NEW is added (its type's EXISTING does not apply)
+        self.assertEqual(got, {("m_glass", "m2"): 40.0, ("m_concrete", "m3"): 12.0})
+        ex = excluded(r)
+        self.assertEqual(sorted(x[1:] for x in ex if x[0] == "IFCPLATE Panel"),
+                         [(40.0, documents.R_IFC_PART[:12], True)] * 2)
+        self.assertIn(("IFCWALL Wall", 12.0, documents.R_IFC_EXISTING[:12], False), ex)
+        parsed = ifc.parse(txt, "d")
+        by = {e["step_id"]: e for e in parsed["elements"]}
+        self.assertEqual((by[11]["part_of"]["status"], by[11]["part_of"]["step_id"]), ("DEMOLISH", 10))
+        self.assertNotIn("part_of", by[14])
+        self.assertEqual((by[50]["status"], by[58]["status"]), ("EXISTING", None))
+
+    # --- the closed-up texts are read a second time: they are charged to the character budget (15 回目の攻撃)
+    def test_closed_up_texts_are_charged_to_the_budget(self):
+        p = documents._Prep(1000)
+        documents._row_class(p, {"name": "鉄　　骨", "specification": "加　工", "division": "", "unit": "t"})
+        self.assertEqual(p.left, 1000 - len("鉄　　骨") - len("加　工") - len("鉄骨") - len("加工"))
+        p = documents._Prep(9)
+        with self.assertRaises(documents._Budget):
+            documents._row_class(p, {"name": "鉄　　骨", "specification": "加　工", "division": "", "unit": "t"})
 
 
 if __name__ == "__main__":
