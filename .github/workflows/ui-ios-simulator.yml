@@ -1,0 +1,90 @@
+# 5 種類の UI レイアウトを、iOS シミュレーターの本物の Mobile Safari で開いて画面を撮る。
+# ビルドしたスマホ版を macOS ランナー上で配信し（シミュレーターはホストの 127.0.0.1 に届く）、レイアウトごとに
+# ホーム・シミュレーター・設定をライト／ダークで撮影して成果物（ios-simulator）に残す。合否の自動判定はしない（目で確かめる用）。
+# これはシミュレーターでの確認で、iPhone の実機での確認ではない。公開はしない。
+name: ui-ios-simulator
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/multi-ui-design-system-l5isn2", "claude/air-quality-research-os-19gu2g"]
+    paths: ["frontend/src/ui/**", "frontend/src/app/**", "frontend/index.html", ".github/workflows/ui-ios-simulator.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-ios-simulator-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20", cache: npm, cache-dependency-path: frontend/package-lock.json }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13", cache: pip, cache-dependency-path: backend/requirements.txt }
+      - name: Build and serve the mobile PWA
+        run: |
+          brew install poppler > /dev/null
+          pip install -r backend/requirements.txt
+          (cd frontend && npm ci)
+          python scripts/build_mobile.py --base /
+          # 検査用の補助ページ（配布物には入れない）: 保存されたレイアウト設定を書き換えてから目的の画面へ移る
+          cat > frontend/dist-mobile/_ci_set.html <<'EOF'
+          <!doctype html><meta charset="utf-8"><title>set</title><script>
+          const p = new URLSearchParams(location.search);
+          localStorage.setItem('aqros-ui-prefs-v1', JSON.stringify({ version: 1, applied: { layout: p.get('layout') || 'original', custom: JSON.parse(p.get('custom') || '{}') }, history: [], updatedAt: null }));
+          location.replace(p.get('to') || '/');
+          </script>
+          EOF
+          nohup python scripts/serve_static.py frontend/dist-mobile 47801 > serve.log 2>&1 &
+          sleep 2
+          curl -s -o /dev/null -w "served: %{http_code}\n" http://127.0.0.1:47801/
+      - name: Boot an iPhone simulator
+        id: sim
+        run: |
+          xcodebuild -version
+          UDID=$(xcrun simctl list devices available -j | python3 -c "
+          import json,sys
+          d=json.load(sys.stdin)['devices']
+          c=[(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone') and 'Pro' not in x['name'] and 'Plus' not in x['name']]
+          c=c or [(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone')]
+          c.sort(key=lambda t:[int(n) for n in t[0].split('iOS-')[-1].split('-')])
+          print(c[-1][1]['udid']); print(c[-1][1]['name'], c[-1][0], file=sys.stderr)")
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+      - name: Open each layout in Mobile Safari and take screenshots
+        env:
+          UDID: ${{ steps.sim.outputs.udid }}
+        run: |
+          mkdir -p out
+          B=http://127.0.0.1:47801
+          shot() { xcrun simctl io "$UDID" screenshot "out/$1.png" > /dev/null 2>&1 || true; }
+          open() { xcrun simctl openurl "$UDID" "$1"; sleep "${2:-7}"; }
+          open "$B/" 30; shot 00-first-visit            # 初回は Safari の起動と案内の表示に時間がかかる
+          for mode in light dark; do
+            xcrun simctl ui "$UDID" appearance "$mode"; sleep 2
+            for layout in original research public commercial enterprise; do
+              open "$B/_ci_set.html?layout=$layout&to=/" 8;  shot "$mode-$layout-1-home"
+              open "$B/simulator" 7;                          shot "$mode-$layout-2-simulator"
+              open "$B/report" 7;                             shot "$mode-$layout-3-report"
+              open "$B/settings" 7;                           shot "$mode-$layout-4-settings"
+            done
+          done
+          # 文字を大きくした Public（高齢の利用者を想定）と、主色を変えた Research
+          xcrun simctl ui "$UDID" appearance light; sleep 2
+          open "$B/_ci_set.html?layout=public&custom=%7B%22fontScale%22%3A1.3%7D&to=/" 8; shot "light-public-large-text-home"
+          open "$B/_ci_set.html?layout=research&custom=%7B%22accent%22%3A%22%237a3fb0%22%7D&to=/library" 8; shot "light-research-accent-library"
+          open "$B/_ci_set.html?layout=original&to=/" 6
+          ls -la out | head -60
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-simulator
+          path: out/*.png
+          retention-days: 14
