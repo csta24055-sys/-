@@ -1,0 +1,15 @@
+# Render Blueprint: WLC Studio public demo (free Web Service, Docker). Research / trial version only.
+services:
+  - type: web
+    name: wlc-studio
+    runtime: docker
+    plan: free
+    branch: claude/jcat-lca-app-foundation-c33936
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: WLCSTUDIO_PUBLIC_DEMO
+        value: "1"
+      - key: WLCSTUDIO_OFFLINE
+        value: "1"

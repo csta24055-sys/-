@@ -15,6 +15,7 @@ import base64
 import dataclasses
 import ipaddress
 import json
+import os
 import mimetypes
 import re
 import sys
@@ -37,6 +38,13 @@ from .sources.net import SourceError
 
 WEB = Path(__file__).resolve().parents[1] / "web"
 MAX_BODY = 40 * 1024 * 1024
+# Public demo (WLCSTUDIO_PUBLIC_DEMO=1, for a hosted demo such as Render): accept the host's name instead of loopback
+# only, keep the same-origin check for writes, and refuse document uploads and address lookups (no private files
+# or personal data come in). Every visitor shares the same data, which a restart wipes: fictional buildings only.
+PUBLIC_DEMO = os.environ.get("WLCSTUDIO_PUBLIC_DEMO") == "1"
+PUBLIC_REFUSED = re.compile(r"^/api/projects/\d+/(documents|research)(/|$)")
+PUBLIC_REFUSED_MSG = ("公開デモでは資料の読み込みと住所の調査は使えない（非公開の資料や個人の情報を受け取らないため）。"
+                      "値は画面で入力するか、自動概算を使う")
 USER_STATES = ("confirmed", "assumption", "not_applicable", "not_obtained", "not_computable")
 NA_CONTEXT = tuple(f for f, F_ in FL.FIELDS.items() if F_.get("na_context"))   # 適用外 only where the value cannot act
 DISCLAIMER = ("WLC Studio は研究用の試作です。計算の核は独立に作った概念モデル（70 評価単位）で、J-CAT の複製・認定品・互換品ではありません。"
@@ -876,6 +884,22 @@ def make_handler(app, port: int):
 
         def _guard(self) -> bool:
             host = self.headers.get("Host", "")
+            if PUBLIC_DEMO:
+                if not host:
+                    self._send(400, {"error": "Host が無い"})
+                    return False
+                if self.command in ("POST", "PUT", "DELETE"):
+                    origin = self.headers.get("Origin")
+                    if origin is not None and urllib.parse.urlparse(origin).netloc != host:
+                        self._send(403, {"error": "別のサイトからの書き込みは受け付けない"})
+                        return False
+                    if self.command != "DELETE" and not (self.headers.get("Content-Type", "").startswith("application/json")):
+                        self._send(415, {"error": "JSON で送る"})
+                        return False
+                    if PUBLIC_REFUSED.match(urllib.parse.urlparse(self.path).path):
+                        self._send(403, {"error": PUBLIC_REFUSED_MSG})
+                        return False
+                return True
             if host not in allowed_hosts:
                 self._send(421, {"error": "この Host は受け付けない（ローカル専用）"})
                 return False
@@ -953,7 +977,7 @@ def make_handler(app, port: int):
 
 def serve(var: str | Path, host: str = "127.0.0.1", port: int = 8770, keep_uploads: bool = False) -> None:
     try:
-        if not ipaddress.ip_address(host).is_loopback:
+        if not PUBLIC_DEMO and not ipaddress.ip_address(host).is_loopback:
             raise SystemExit("ループバック（127.0.0.1 / ::1）以外では起動しない。認証の無いこの版を外部に公開しないこと（docs/security.md）")
     except ValueError:
         if host != "localhost":
