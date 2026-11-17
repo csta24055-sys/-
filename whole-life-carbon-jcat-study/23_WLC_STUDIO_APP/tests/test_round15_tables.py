@@ -7,6 +7,7 @@ import io
 import os
 import sys
 import unittest
+from unittest import mock
 import zipfile
 
 sys.dont_write_bytecode = True
@@ -205,23 +206,49 @@ class FifteenthRoundTableTests(unittest.TestCase):
         self.assertEqual(got, {("m_concrete_fdn", "m3"): 30.0, ("m_concrete", "m3"): 15.0})
 
     def test_the_cells_counted_rows_sum_are_kept_within_the_budget(self):
-        steps = [0]
-
-        def spend(k=1):
-            steps[0] += k
-        h = documents._Helpers(spend)
-        h.add("c", ("明細", 2), [("階別", 1, 3, 2, 2)])                            # B2:D2, cell by cell
-        h.add("c", ("明細", 3), [("階別", 5, 5, 1, tabular.MAX_ROW_NUMBER)])       # F:F, one rectangle
-        self.assertEqual(h.cover("c", ("階別", 1, 3, 2, 2)), ("all", ("明細", 2)))
-        self.assertEqual(h.cover("c", ("階別", 2, 2, 2, 2)), ("all", ("明細", 2)))
-        self.assertEqual(h.cover("c", ("階別", 1, 4, 2, 2)), ("some", ("明細", 2)))
+        # (rewritten after the attack on the fix: the cells were kept and looked at one by one on the walk's budget;
+        # now rectangles, on a budget of their own)
+        S_, M_, C_ = documents.PART_SURE, documents.PART_MAYBE, documents.PART_CHOSEN
+        h = documents._Helpers()
+        h.add("c", ("明細", 2), [(("階別", 1, 3, 2, 2), S_)])                        # B2:D2
+        h.add("c", ("明細", 3), [(("階別", 5, 5, 1, tabular.MAX_ROW_NUMBER), S_)])   # F:F
+        h.add("c", ("明細", 4), [(("階別", 1, 1, 3, 3), S_), (("階別", 2, 2, 3, 3), S_), (("階別", 3, 3, 3, 3), S_)])
+        h.add("c", ("明細", 5), [(("階別", 7, 7, 9, 9), M_)])                       # one cell: perhaps only
+        h.add("c", ("明細", 6), [(("拾い", 2, 2, 2, 4), C_)])                       # SUMIF's sum range: chosen
+        self.assertEqual(h.cover("c", ("階別", 1, 3, 2, 2)), ("all", ("明細", 2), S_))
+        self.assertEqual(h.cover("c", ("階別", 2, 2, 2, 2)), ("all", ("明細", 2), S_))
+        self.assertEqual(h.cover("c", ("階別", 1, 4, 2, 2)), ("some", ("明細", 2), C_))
         self.assertIsNone(h.cover("c", ("階別", 4, 4, 2, 2)))
         self.assertIsNone(h.cover("other", ("階別", 1, 3, 2, 2)))                  # another material
-        self.assertEqual(h.cover("c", ("階別", 1, 1, 1, tabular.MAX_ROW_NUMBER)), ("some", ("明細", 2)))   # B:B
-        self.assertEqual(h.cover("c", ("階別", 5, 5, 10, 20)), ("all", ("明細", 3)))
-        self.assertEqual(h.cover("c", ("階別", 5, 6, 10, 10)), ("some", ("明細", 3)))
-        # every cell kept and looked at, and every rectangle looked at, is charged: a whole column costs one step
-        self.assertLess(steps[0], 40)
+        self.assertEqual(h.cover("c", ("階別", 1, 1, 1, tabular.MAX_ROW_NUMBER))[0], "some")   # B:B
+        self.assertEqual(h.cover("c", ("階別", 5, 5, 10, 20)), ("all", ("明細", 3), S_))
+        self.assertEqual(h.cover("c", ("階別", 5, 6, 10, 10)), ("some", ("明細", 3), C_))
+        self.assertEqual(h.cover("c", ("階別", 1, 3, 3, 3)), ("all", ("明細", 4), S_))      # B3+C3+D3 together
+        self.assertEqual(h.cover("c", ("階別", 7, 7, 9, 9)), ("all", ("明細", 5), M_))
+        # cells another criterion chose are no match for cells chosen by a criterion; a plain sum of them is
+        self.assertIsNone(h.cover("c", ("拾い", 2, 2, 2, 4), picked=True))
+        self.assertEqual(h.cover("c", ("拾い", 2, 2, 2, 4)), ("all", ("明細", 6), C_))
+        # each rectangle kept and looked at costs steps of a budget of its own, not one per cell: a block of 4,000 cells
+        # costs a few steps, a whole column too
+        self.assertLess(documents.HELPER_STEPS - h.left, 150)
+        for n_ in (1, 4, 4000, tabular.MAX_ROW_NUMBER - 1):
+            h2 = documents._Helpers()
+            h2.add("c", ("明細", 2), [(("拾い", 2, 2, 2, 1 + n_), S_)])
+            h2.cover("c", ("拾い", 2, 2, 2, 1 + n_))
+            h2.cover("c", ("拾い", 3, 3, 2, 1 + n_))
+            self.assertLess(documents.HELPER_STEPS - h2.left, 12, n_)
+        # 19,000 counted rows that each sum a cell of their own: each costs a few steps, not one per cell kept
+        h3 = documents._Helpers()
+        for i in range(19000):
+            self.assertIsNone(h3.cover("c", ("拾い", 1, 1, i + 2, i + 2)))
+            h3.add("c", ("明細", i + 2), [(("拾い", 1, 1, i + 2, i + 2), M_)])
+        self.assertLess(documents.HELPER_STEPS - h3.left, 19000 * 4)
+        big = documents._Helpers(budget=50)
+        with self.assertRaises(documents._HelperBudget):
+            for i in range(100):
+                big.add("c", ("明細", i), [(("拾い", 2, 2, 2, 4001), S_)])
+                big.cover("c", ("拾い", 2, 2, 100 + i, 100 + i))
+        self.assertTrue(big.full)
         # a value looked up from a helper table is no part of the row that looks it up (two lookups with other keys
         # are not copies of each other)
         table = row(1, t("A1", "部位"), t("B1", "数")) + row(2, t("A2", "Fc24"), n("B2", 100)) + row(3, t("A3", "Fc27"), n("B3", 50))
@@ -290,7 +317,8 @@ class FifteenthRoundTableTests(unittest.TestCase):
         parsed = tabular.read_xlsx(xlsx([("S1", wide), ("S2", HDR + mrow(2, "コンクリート", "", n("C2", 100), "m3"))]), "d", work)
         self.assertEqual(work.searches, 2)                         # once per sheet
         # 30 rows of the wide sheet, each looked at in its first 1,024 non-empty cells, then the bill's header row
-        self.assertLessEqual(work.cells, 30 * tabular.MAX_HEADER_CELLS + 4)
+        # (+ the bill's header row: its header, quantity, size and factor columns)
+        self.assertLessEqual(work.cells, 30 * tabular.MAX_HEADER_CELLS + 4 * 4)
         self.assertLessEqual(len(work.heads), width + 4)           # each distinct text worked out once
         self.assertEqual([s.get("error") for s in parsed["sheets"]], ["見出し行（名称・数量）が見つからない", None])
         self.assertFalse(hasattr(tabular._forms, "cache_info"))    # no global cache of header texts
@@ -298,6 +326,220 @@ class FifteenthRoundTableTests(unittest.TestCase):
         for k, found in ((tabular.MAX_HEADER_CELLS - 3, True), (tabular.MAX_HEADER_CELLS, False)):
             head = ["x%d" % i for i in range(k)] + ["名称", "数量", "単位"]
             self.assertEqual(tabular._find_header([head, ["コンクリート"] * k + ["コンクリート", "1", "m3"]])[0] == 0, found, k)
+
+        # (after the attack on the fix) the quantity / size / factor columns look at the same first cells of the header
+        # row and work out no key scores; the cells of all sheets together are bounded (counted, not timed: the sheets are
+        # given as read, without their XML)
+        def workbook(sheets):
+            return {"sheets": [{"name": nm, "rows": rows, "numbers": list(range(1, len(rows) + 1)), "formulas": [{}] * len(rows),
+                                "hidden_rows": 0, "hidden_cols": 0, "hidden_nums": [()] * len(rows), "hidden_heads": []}
+                               for nm, rows in sheets],
+                    "hidden_sheets": [], "names": {}, "tables": {}, "fcells": {}, "sheet_names": {nm.casefold(): nm for nm, _ in sheets},
+                    "cut_sheets": [], "pivots": [], "names_cut": False}
+        # 30 sheets whose header row is 16,384 cells wide (名称｜数量｜単位 and 16,381 distinct texts), one material row each
+        wide = [("S%d" % s, [["名称", "数量", "単位"] + ["Ab%dCd%d" % (s, j) for j in range(16381)], ["コンクリート", "1", "m3"]])
+                for s in range(30)]
+        work = tabular.HeaderWork()
+        with mock.patch.object(tabular, "xlsx_workbook", lambda data: workbook(wide)):
+            parsed = tabular.read_xlsx(b"", "d", work)
+        self.assertEqual(sum(len(s["rows"]) for s in parsed["sheets"]), 30)
+        self.assertLessEqual(work.cells, 30 * 4 * tabular.MAX_HEADER_CELLS)      # header, quantity, size, factor columns
+        self.assertLessEqual(work.scored, 30 * tabular.MAX_HEADER_CELLS)         # key scores: the header map's cells only
+        # 32 sheets of 30 rows × 1,024 distinct texts and no header: the search stops once MAX_HEADER_WORK cells are seen
+        flat = [("S%d" % s, [["T%dx%dy%d" % (s, r, j) for j in range(1024)] for r in range(30)]) for s in range(32)]
+        work = tabular.HeaderWork()
+        with mock.patch.object(tabular, "xlsx_workbook", lambda data: workbook(flat)):
+            parsed = tabular.read_xlsx(b"", "d", work)
+        self.assertLessEqual(work.cells, tabular.MAX_HEADER_WORK + 30 * tabular.MAX_HEADER_CELLS)
+        self.assertLess(work.searches, 32)
+        skipped = [s for s in parsed["sheets"] if s.get("unsearched")]
+        self.assertEqual(len(skipped) + work.searches, 32)
+        self.assertTrue(any("見出しを探すセルが多すぎるので、残りの %d シート" % len(skipped) in w for w in parsed["warnings"]))
+
+    # --- after the attack on the fix: conditional sums and scaled drivers are no cells a counted row sums
+    def test_conditional_sums_and_scaled_drivers_are_no_cells_a_row_sums(self):
+        take = row(1, t("A1", "部位"), t("B1", "種別"), t("C1", "体積")) + row(2, t("A2", "柱"), t("B2", "Fc24"), n("C2", 10)) + \
+            row(3, t("A3", "梁"), t("B3", "Fc24"), n("C3", 20)) + row(4, t("A4", "基礎"), t("B4", "Fc21"), n("C4", 30))
+        for a, b in (('SUMIF(拾い!B2:B4,"Fc24",拾い!C2:C4)', 'SUMIF(拾い!B2:B4,"Fc21",拾い!C2:C4)'),
+                     ('SUMIF(拾い!B:B,"Fc24",拾い!C:C)', 'SUMIF(拾い!B:B,"Fc21",拾い!C:C)'),
+                     ('SUMIFS(拾い!C2:C4,拾い!B2:B4,"Fc24")', 'SUMIFS(拾い!C2:C4,拾い!B2:B4,"Fc21")'),
+                     ('SUMPRODUCT((拾い!B2:B4="Fc24")*拾い!C2:C4)', 'SUMPRODUCT((拾い!B2:B4="Fc21")*拾い!C2:C4)'),
+                     ('SUMPRODUCT(--(拾い!B2:B4="Fc24"),拾い!C2:C4)', 'SUMPRODUCT(--(拾い!B2:B4="Fc21"),拾い!C2:C4)'),
+                     ('SUM(FILTER(拾い!C2:C4,拾い!B2:B4="Fc24"))', 'SUM(FILTER(拾い!C2:C4,拾い!B2:B4="Fc21"))'),
+                     ('SUMIF(拾い!B2:B4,B2,拾い!C2:C4)', 'SUMIF(拾い!B2:B4,B2,拾い!C2:C4)')):
+            for name2, want in (("コンクリート", {("m_concrete", "m3"): 60.0}),
+                                ("基礎コンクリート", {("m_concrete", "m3"): 30.0, ("m_concrete_fdn", "m3"): 30.0})):
+                got, r = read(xlsx([("拾い", take), ("躯体", HDR + mrow(2, "コンクリート", "Fc24", n("C2", 30, a), "m3")),
+                                    ("基礎", HDR + mrow(2, name2, "Fc21", n("C2", 30, b), "m3"))]))
+                self.assertEqual(got, want, (a, name2))
+                self.assertFalse(reasons_of(r, "基礎"), a)
+            got, r = read(xlsx([("拾い", take), ("明細", HDR + mrow(2, "コンクリート", "Fc24", n("C2", 30, a), "m3") +
+                                                 mrow(3, "コンクリート", "Fc21", n("C3", 30, b.replace("B2,", "B3,")), "m3"))]))
+            self.assertEqual(got, {("m_concrete", "m3"): 60.0}, a)
+        # a whole take-off summed again where a counted row chose some of its cells: perhaps a double count
+        got, r = read(xlsx([("拾い", take), ("躯体", HDR + mrow(2, "コンクリート", "Fc24", n("C2", 30, 'SUMIF(拾い!B2:B4,"Fc24",拾い!C2:C4)'), "m3")),
+                            ("集計", HDR + mrow(2, "コンクリート", "", n("C2", 60, "SUM(拾い!C2:C4)"), "m3"))]))
+        self.assertEqual(got, {("m_concrete", "m3"): 30.0})
+        x = reasons_of(r, "集計")[0]
+        self.assertTrue(x["maybe"] and "数量に使ったセル（拾い C2:C4）" in x["reason"] and x["quantity"] == 60)
+        # 4,000 take-off lines and 300 SUMIFs of distinct keys over them: every row is added (as before round 15), and
+        # the bookkeeping does not use up the budget of the other rows (a copy on another sheet, a typed rebar row)
+        mats = [("普通コンクリート", "m3", "m_concrete"), ("異形鉄筋", "t", "m_rebar"), ("鉄骨", "t", "m_steel")]
+        lines = row(1, t("A1", "部位"), t("B1", "キー"), t("C1", "数量")) + "".join(
+            row(i + 2, t("B%d" % (i + 2), "k%d" % (i % 300)), n("C%d" % (i + 2), 1)) for i in range(4000))
+        summ = HDR + "".join(mrow(i + 2, mats[i % 3][0], "k%d" % i, n("C%d" % (i + 2), len(range(i, 4000, 300)),
+                                                                         'SUMIF(拾い!$B$2:$B$4001,"k%d",拾い!$C$2:$C$4001)' % i), mats[i % 3][1])
+                             for i in range(300))
+        bill = HDR + mrow(2, "屋根鋼板", "t0.4", n("C2", 300), "m2") + mrow(3, "断熱材", "t50", n("C3", 300), "m2")
+        last = HDR + mrow(2, "断熱材", "", n("C2", 300, "明細!C3*1"), "m2") + mrow(3, "異形鉄筋", "差し筋", n("C3", 2.5, "ROUND(2.5*1,1)"), "t")
+        got, r = read(xlsx([("拾い", lines), ("集計", summ), ("明細", bill), ("まとめ", last)]))
+        for k, (_nm, u, fid) in enumerate(mats):
+            self.assertEqual(got[(fid, u)], sum(len(range(i, 4000, 300)) for i in range(k, 300, 3)) + (2.5 if fid == "m_rebar" else 0))
+        self.assertFalse(reasons_of(r, "集計"))
+        self.assertFalse([w for w in r["warnings"] if "多すぎる" in w])
+        self.assertEqual([x["maybe"] for x in excluded(r, "m_insulation")], [False])          # まとめ!R2: a copy, as before
+        # a shared area or factor cell scaled by a number (延床面積 × 0.6, 12.5 × 戸数, 1200 × 単位質量 / 1000) is a
+        # driver, not a part: the other rows that scale it are added (as before round 15)
+        cond = row(1, t("A1", "項目"), t("B1", "値")) + row(2, t("A2", "延床面積"), n("B2", 1000)) + row(3, t("A3", "戸数"), n("B3", 40))
+        got, r = read(xlsx([("条件", cond), ("躯体", HDR + mrow(2, "普通コンクリート", "Fc24", n("C2", 600, "条件!B2*0.6"), "m3") +
+                                              mrow(3, "鉄筋", "SD345", n("C3", 100, "条件!B2*0.1"), "t")),
+                            ("基礎", HDR + mrow(2, "基礎コンクリート", "Fc21", n("C2", 150, "条件!B2*0.15"), "m3"))]))
+        self.assertEqual(got, {("m_concrete", "m3"): 600.0, ("m_rebar", "t"): 100.0, ("m_concrete_fdn", "m3"): 150.0})
+        got, r = read(xlsx([("条件", cond), ("住戸", HDR + mrow(2, "コンクリート", "住戸 床", n("C2", 500, "12.5*条件!B3"), "m3")),
+                            ("共用", HDR + mrow(2, "コンクリート", "共用廊下", n("C2", 80, "2*条件!B3"), "m3"))]))
+        self.assertEqual(got, {("m_concrete", "m3"): 580.0})
+        haya = row(1, t("A1", "径"), t("B1", "単位質量")) + row(2, t("A2", "D10"), n("B2", 0.56)) + row(3, t("A3", "D13"), n("B3", 0.995))
+        got, r = read(xlsx([("早見", haya), ("基礎", HDR + mrow(2, "異形鉄筋", "D13", n("C2", 1.194, "1200*早見!$B$3/1000"), "t")),
+                            ("躯体", HDR + mrow(2, "異形鉄筋", "D13", n("C2", 0.796, "800*早見!$B$3/1000"), "t"))]))
+        self.assertAlmostEqual(got[("m_rebar", "t")], 1.99)
+        # a single cell summed as it is, or cells scaled by a number, are parts only perhaps: a second row "may belong"
+        floors = row(1, t("A1", "部位"), t("B1", "1F"), t("C1", "2F"), t("D1", "3F")) + \
+            row(2, t("A2", "躯体"), n("B2", 40), n("C2", 30), n("D2", 30))
+        for f1, f2, q in (("階別!B2", "階別!B2", 40), ("SUM(階別!B2:D2)*1.05", "SUM(階別!B2:D2)", 100)):
+            got, r = read(xlsx([("階別", floors), ("明細", HDR + mrow(2, "コンクリート", "", n("C2", 40, f1), "m3")),
+                                ("集計", HDR + mrow(2, "コンクリート", "", n("C2", q, f2), "m3"))]))
+            self.assertEqual(len(got), 1)
+            x = reasons_of(r, "集計")[0]
+            self.assertTrue(x["maybe"] and "数量に使ったセル" in x["reason"], (f1, x["reason"]))
+
+    # --- after the attack on the fix: a hidden factor column
+    def test_a_hidden_factor_or_money_column_is_no_number_of_its_row(self):
+        cols = '<cols><col min="5" max="5" hidden="1" width="0"/></cols>'
+        for head, f, q in (("割増率", "40*明細!E2", 42), ("単価", "ROUND(明細!E2/18000*40,0)", 40), ("単位質量", "明細!E2*40", 42)):
+            e2 = 18000 if head == "単価" else 1.05
+            bill = row(1, t("A1", "名称"), t("B1", "規格"), t("C1", "数量"), t("D1", "単位"), t("E1", head)) + \
+                mrow(2, "コンクリート", "Fc24", n("C2", 100), "m3", n("E2", e2)) + mrow(3, "鉄筋", "D13", n("C3", 12), "t", n("E3", 1.04))
+            out = HDR + mrow(2, "土間コンクリート", "Fc18", n("C2", q, f), "m3")
+            for pre in ({"明細": cols}, {}):            # hidden or not, the same answer
+                got, r = read(xlsx([("明細", bill), ("外構", out)], pre=pre))
+                self.assertEqual(got, {("m_concrete", "m3"): 100.0 + q, ("m_rebar", "t"): 12.0}, (head, pre))
+            same = bill + mrow(4, "土間コンクリート", "Fc18", n("C4", q, f.replace("明細!", "")), "m3")
+            got, r = read(xlsx([("明細", same)], pre={"明細": cols}))
+            self.assertEqual(got[("m_concrete", "m3")], 100.0 + q, head)
+        # a hidden column whose header names no factor is still one of the row's numbers (設計数量: a copy)
+        wb = tabular.xlsx_workbook(xlsx([("明細", row(1, t("A1", "名称"), t("C1", "数量"), t("D1", "単位"), t("E1", "割増率")) +
+                                          mrow(2, "コンクリート", "", n("C2", 100), "m3", n("E2", 1.05)))], pre={"明細": cols}))
+        self.assertEqual(wb["sheets"][0]["hidden_heads"][0], {4: "割増率"})
+        self.assertEqual(wb["sheets"][0]["rows"][0][4:], [])                    # (its text is not a value of the row)
+
+    # --- after the attack on the fix: pivot tables met while walking
+    def test_a_pivot_tables_label_used_as_a_key_does_not_hide_the_copy(self):
+        bill = HDR + mrow(2, "コンクリート", "Fc24", n("C2", 100), "m3") + mrow(3, "鉄筋", "D13", n("C3", 12), "t")
+        old = HDR + mrow(2, "コンクリート", "Fc24", n("C2", 90), "m3")
+        piv = row(3, t("A3", "行ラベル"), t("B3", "合計 / 数量")) + row(4, t("A4", "コンクリート"), n("B4", 90)) + \
+            row(5, t("A5", "総計"), n("B5", 90))
+        for f in ("SUMIF(明細!A:A,前回集計!A4,明細!C:C)", '明細!C2+0*COUNTIF(前回集計!A:A,"x")'):
+            got, r = read(book([("明細", bill), ("旧明細", old, True), ("前回集計", piv), ("まとめ", summary(("コンクリート", f, 100, "m3")))],
+                               [(2, "前回", "A3:B5", "旧明細")]))
+            self.assertEqual(got, {("m_concrete", "m3"): 100.0, ("m_rebar", "t"): 12.0}, f)
+            x = reasons_of(r, "まとめ")[0]
+            self.assertFalse(x["maybe"], f)
+            self.assertIn("別のシート（明細）の材料の行（2 行目）", x["reason"])
+
+    def test_a_pivot_of_a_take_off_sheet_read_by_one_row_is_counted(self):
+        take = row(1, t("A1", "部位"), t("B1", "材料"), t("C1", "体積")) + row(2, t("A2", "柱"), t("B2", "コンクリート"), n("C2", 60)) + \
+            row(3, t("A3", "梁"), t("B3", "コンクリート"), n("C3", 90))
+        piv = row(3, t("A3", "行ラベル"), t("B3", "合計 / 体積")) + row(4, t("A4", "コンクリート"), n("B4", 150))
+
+        def go(rows, hidden=False, more=None):
+            sheets = [("拾い", take, hidden), ("集計", piv), ("まとめ", summary(*rows))] + ([("明細", more)] if more else [])
+            return read(book(sheets, [(1, "ピボット1", "A3:B4", "拾い", "A1:C3")]))
+        for f in ("集計!B4", "集計!B4*1.05", "ROUND(集計!B4,0)"):
+            got, r = go([("コンクリート", f, 150, "m3")])
+            self.assertEqual(list(got), [("m_concrete", "m3")], f)
+            self.assertFalse(reasons_of(r, "まとめ"))
+            self.assertTrue(any("まとめ の 2 行目はピボットテーブル（ピボット1）の値を参照している" in w for w in r["warnings"]))
+        # otherwise "may belong", with its quantity: two rows read the cell, the source is hidden, a counted row reaches
+        # the source (whatever its material), another row counts the material, the row reads more than the cell
+        for rows, hidden, more in (([("コンクリート", "集計!B4", 150, "m3"), ("コンクリート", "集計!B4", 150, "m3")], False, None),
+                                   ([("コンクリート", "集計!B4", 150, "m3")], True, None),
+                                   ([("コンクリート", "集計!B4", 150, "m3")], False, HDR + mrow(2, "コンクリート", "", n("C2", 150, "SUM(拾い!C2:C3)"), "m3")),
+                                   ([("コンクリート", "集計!B4", 150, "m3")], False, HDR + mrow(2, "鉄筋", "", n("C2", 60, "拾い!C2"), "t")),
+                                   ([("コンクリート", "集計!B4", 150, "m3")], False, HDR + mrow(2, "コンクリート", "Fc18", n("C2", 30), "m3")),
+                                   ([("コンクリート", "集計!B4+拾い!C3", 240, "m3")], False, None)):
+            got, r = go(rows, hidden, more)
+            ex = reasons_of(r, "まとめ")
+            self.assertTrue(ex and all(x["maybe"] and "ピボットテーブル（ピボット1）" in x["reason"] for x in ex), (rows, hidden, more))
+            self.assertFalse([w for w in r["warnings"] if "足した" in w])
+
+    def test_a_value_read_from_a_pivot_table_names_its_material_family(self):
+        detail = HDR + mrow(2, "コンクリート", "Fc24", n("C2", 100), "m3") + mrow(3, "コンクリート", "Fc27", n("C3", 50), "m3") + \
+            mrow(4, "鉄筋", "D13", n("C4", 12), "t")
+        got, r = read(pivot_book(COMPACT, "A3:B6", summary(("基礎コンクリート", "集計!B4", 150, "m3")), detail=detail))
+        self.assertEqual(got, OK)
+        x = reasons_of(r, "まとめ")[0]
+        self.assertFalse(x["maybe"])
+        self.assertNotIn("どこでも数えていない", x["reason"])
+
+    # --- after the attack on the fix: a copy of a row left out as "may belong"
+    def test_a_copy_of_a_row_left_out_as_may_belong_may_belong_too(self):
+        top = row(1, t("A1", "名称"), t("B1", "摘要"), t("C1", "数量"), t("D1", "単位")) + \
+            row(2, t("A2", "普通コンクリート"), t("B2", "Fc24 S18 別紙による"), n("C2", 300), t("D2", "m3"))
+        sub = row(1, t("A1", "名称"), t("B1", "摘要"), t("C1", "数量"), t("D1", "単位")) + \
+            row(2, t("A2", "普通コンクリート"), n("C2", 300, "躯体!C2"), t("D2", "m3")) + \
+            row(3, t("A3", "土間コンクリート"), t("B3", "Fc18"), n("C3", 40), t("D3", "m3"))
+        got, r = read(xlsx([("躯体", top), ("内訳", sub)]))
+        self.assertEqual(got, {("m_concrete", "m3"): 40.0})
+        x = reasons_of(r, "内訳")[0]
+        self.assertTrue(x["maybe"] and "別のシート（躯体）の材料の行（2 行目）" in x["reason"] and "足していない" in x["reason"])
+        self.assertNotIn("二重計上になる", x["reason"])
+        self.assertTrue(all(x["maybe"] for x in reasons_of(r, "躯体")))
+        # a copy that also reaches a counted row stays a sure copy (異形鉄筋（割増 5%） = B2*1.05 copies the counted row 2)
+        bill = row(1, t("A1", "名称"), t("B1", "数量"), t("C1", "単位")) + row(2, t("A2", "異形鉄筋"), n("B2", 10), t("C2", "t")) + \
+            row(3, t("A3", "異形鉄筋（割増 5%）"), n("B3", 10.5, "B2*1.05"), t("C3", "t"))
+        got, r = read(xlsx([("明細", bill), ("集計", row(1, t("A1", "名称"), t("B1", "数量"), t("C1", "単位")) +
+                                              row(2, t("A2", "鉄筋"), n("B2", 10.5, "明細!B3"), t("C2", "t")))]))
+        self.assertEqual(got, {("m_rebar", "t"): 10.0})
+        self.assertFalse(reasons_of(r, "集計")[0]["maybe"])
+
+
+def book(sheets, pivots):
+    """Sheets [(name, rows xml[, hidden])] and pivot tables [(sheet index, name, location, source sheet[, source ref])]."""
+    sheets = [(s + (False,))[:3] for s in sheets]
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("xl/workbook.xml", '<workbook %s %s><sheets>%s</sheets><pivotCaches>%s</pivotCaches></workbook>'
+                   % (NS, RNS, "".join('<sheet name="%s" sheetId="%d" r:id="rId%d"%s/>' % (nm, i + 1, i + 1, ' state="hidden"' if h else "")
+                                       for i, (nm, _r, h) in enumerate(sheets)),
+                      "".join('<pivotCache cacheId="%d" r:id="rC%d"/>' % (k + 1, k + 1) for k in range(len(pivots)))))
+        z.writestr("xl/_rels/workbook.xml.rels", '<Relationships xmlns="%s">%s%s</Relationships>'
+                   % (PR, "".join('<Relationship Id="rId%d" Target="worksheets/sheet%d.xml"/>' % (i + 1, i + 1) for i in range(len(sheets))),
+                      "".join('<Relationship Id="rC%d" Type="%s/pivotCacheDefinition" Target="pivotCache/pivotCacheDefinition%d.xml"/>'
+                              % (k + 1, OR, k + 1) for k in range(len(pivots)))))
+        for i, (_nm, rows, _h) in enumerate(sheets):
+            z.writestr("xl/worksheets/sheet%d.xml" % (i + 1), "<worksheet %s %s><sheetData>%s</sheetData></worksheet>" % (NS, RNS, rows))
+        for k, pv in enumerate(pivots):
+            si, name, loc, src = pv[:4]
+            ref = pv[4] if len(pv) > 4 else "A1:D4"
+            z.writestr("xl/worksheets/_rels/sheet%d.xml.rels" % (si + 1), '<Relationships xmlns="%s"><Relationship Id="rP" '
+                       'Type="%s/pivotTable" Target="../pivotTables/pivotTable%d.xml"/></Relationships>' % (PR, OR, k + 1))
+            z.writestr("xl/pivotTables/pivotTable%d.xml" % (k + 1), '<pivotTableDefinition %s name="%s" cacheId="%d"><location ref="%s" '
+                       'firstHeaderRow="1" firstDataRow="1" firstDataCol="1"/></pivotTableDefinition>' % (NS, name, k + 1, loc))
+            z.writestr("xl/pivotTables/_rels/pivotTable%d.xml.rels" % (k + 1), '<Relationships xmlns="%s"><Relationship Id="rC" Type="%s/'
+                       'pivotCacheDefinition" Target="../pivotCache/pivotCacheDefinition%d.xml"/></Relationships>' % (PR, OR, k + 1))
+            z.writestr("xl/pivotCache/pivotCacheDefinition%d.xml" % (k + 1), '<pivotCacheDefinition %s %s><cacheSource type="worksheet">'
+                       '<worksheetSource ref="%s" sheet="%s"/></cacheSource></pivotCacheDefinition>' % (NS, RNS, ref, src))
+    return buf.getvalue()
 
 
 if __name__ == "__main__":
