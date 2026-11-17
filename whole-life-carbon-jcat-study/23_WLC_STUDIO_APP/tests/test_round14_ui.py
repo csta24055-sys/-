@@ -697,7 +697,8 @@ const runs = [
         self.assertEqual(out["down"], {"message": jp, "detail": "Failed to fetch", "offline": True})
         self.assertEqual(out["body cut"], {"message": jp, "detail": "network error", "offline": True})
         self.assertEqual(out["refused"], {"message": "理由", "detail": None, "offline": False})
-        self.assertEqual(out["500 text"], {"message": "Internal", "detail": None, "offline": False})
+        # an answer that is not JSON is never shown as it is (round 16): said with its status, its start kept as a detail
+        self.assertEqual(out["500 text"], {"message": "サーバーから読めない答え（HTTP 500）", "detail": "Internal", "offline": False})
         self.assertEqual(out["ok"], {"ok": {"a": 1}})
 
     # ---- ui-flows#8: a tap on the door while the app starts is kept ----
