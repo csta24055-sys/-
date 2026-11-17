@@ -182,6 +182,11 @@ _OPENING, _CLOSING = "(（[［{｛【〔「『<＜", ")）]］}｝】〕」』>�
 # plant / site" (where it comes from), "not less than 75mm" (a minimum), "less than 1m2", "except as noted",
 # "except where …" (15 回目の攻撃)
 EX_FROM = frozenset(("works", "stock", "mill", "plant", "site"))
+# … nor less / ex joined by a hyphen to a word of letters before it: one word (Frame-less, Seam-less, Stain-less, Co-ex),
+# whose next words name the item (15 回目 split there, and the glass of "Frame-less glass balustrade" got no field) (16 回目)
+HYPHEN_WORDS = frozenset(("less", "ex"))
+_DASHES = "-‐－–—"
+_HYPHEN_STEM = re.compile(r"(?<![a-z0-9.])[a-z]+$")    # (a word of letters only right before the dash: not 12.5mm-less)
 _WORD_AFTER = re.compile(r"\s*([^\s,;:()（）\[\]［］]+)")
 _WORD_BEFORE = re.compile(r"([a-z]+)\W*$")
 ASIDE = "?"            # (the preposition of a part after an aside set off by commas, see _parts)
@@ -201,7 +206,11 @@ def _after_aside(text: str) -> bool:
 
 
 def _excludes(w: str, text: str, m) -> bool:
-    """Whether the excluding word w (matched by m in text) excludes here (see EX_FROM)."""
+    """Whether the excluding word w (matched by m in text) excludes here (see EX_FROM, HYPHEN_WORDS)."""
+    if w in HYPHEN_WORDS:
+        s = m.start(1) if m.group(1) else m.start(2)
+        if s >= 2 and text[s - 1] in _DASHES and _HYPHEN_STEM.search(text, 0, s - 1):
+            return False                   # (frame-less, co-ex: part of the word)
     if w not in ("ex", "less", "except"):
         return True
     nx = _WORD_AFTER.match(text, m.end())
@@ -814,6 +823,15 @@ DEMOLISH_JA = ("撤去", "解体", "はつり", "斫り", "斫", "殻", "処分"
 DEMOLISH_EN = ("demolition", "demolish", "demolished", "demolishing", "removal", "remove", "removed", "removing",
                "disposal", "dispose", "disposed", "disposing", "rubble", "debris")
 DEMOLISH_PHRASES_EN = ("break out", "breaking out", "broken out", "strip out", "stripping out", "take down", "taking down")
+# … matched as whole words (not strip outlet), and where they stand: in a part of place or after the material at most
+# "maybe" (Plasterboard 12.5mm; take down ceiling: perhaps a note on the material row). Followed by one of these words
+# they name a room or place, not removal: no removal in a part of place or after the material ("Carpet tiles to
+# break-out area"), and "maybe" elsewhere ("Break-out area: carpet tiles"). 15 回目 made every one a sure removal, also
+# in IFC names (16 回目)
+DEMOLISH_PLACE_EN = ("area", "room", "space", "zone", "lounge", "bay")
+_DEM_PHRASE = re.compile(r"(?<![a-z0-9])(?:%s)s?(?![a-z0-9])(\s+(?:%s)s?(?![a-z0-9]))?"
+                         % ("|".join(re.escape(p) for p in DEMOLISH_PHRASES_EN),
+                            "|".join(re.escape(p) for p in DEMOLISH_PLACE_EN)))
 _DEMRX = re.compile("|".join(re.escape(w) for w in sorted(DEMOLISH_JA, key=len, reverse=True)))
 # a removal word followed by these is a price note on a material row (端材処分共, 殻処分費別途, 処分費込み)
 NOTE_AFTER_JA = ("共", "込", "含", "とも", "別途", "は別", "別", "を除く", "除く", "除き", "なし", "無し")
@@ -981,15 +999,13 @@ def _seq_new(parts: tuple, i: int, seg: str, e: int, cut: bool = False, raw: str
 
 
 @functools.lru_cache(maxsize=8192)
-def _demolish(n: str, n_name: int | None = None):
-    """None, SURE (removal of what is there: 既存コンクリート撤去, コンクリート殻処分, Demolition of existing slab) or MAYBE (a
-    removal word only after the material, in a later part or the specification: perhaps a note on the material row).
-    Not removal: a price note (端材処分共, 殻処分費別途, 別途処分, including disposal of surplus, disposal of offcuts by
-    others)."""
+def _dem_kind(n: str, n_name: int | None = None) -> tuple:
+    """(_demolish's answer, whether its MAYBE comes only from a removal phrase that names a room or place: Break-out
+    area: carpet tiles) (16 回目)."""
     fid, hs, _a, _b, parts = _head(n)
     norm = normalise_name(n)
     toks = norm.split()
-    found = None
+    found, other = None, False
     existing = 0 <= hs < len(parts) and ("既存" in parts[hs][:_a] or "existing" in parts[hs][:_a].split())
 
     def kind(i):
@@ -1022,8 +1038,8 @@ def _demolish(n: str, n_name: int | None = None):
                 continue                         # 端材処分共, 別途処分: a price note
             k = kind(i)
             if k == SURE:
-                return SURE
-            found = MAYBE
+                return SURE, False
+            found, other = MAYBE, True
     where = None
     # "including disposal" is a note on the material row, but not on a row of what is there (Existing floor tiles
     # including disposal, Floor tiles (existing) including removal). incl. / inc. with their dot are no such note here:
@@ -1053,11 +1069,47 @@ def _demolish(n: str, n_name: int | None = None):
             where = _token_parts(toks, parts)
         k = kind(where[i]) if where[i] is not None else SURE
         if k == SURE:
-            return SURE
-        found = MAYBE
-    if any(p_ in norm for p_ in DEMOLISH_PHRASES_EN):
-        return SURE
-    return found
+            return SURE, False
+        found, other = MAYBE, True
+    by_place = False
+    for m in _DEM_PHRASE.finditer(norm):
+        # where the phrase stands: in a part of place (or an excluded part), or after the material's head word (16 回目)
+        if where is None:
+            where = _token_parts(toks, parts)
+        q = len(norm[:m.start()].split())
+        j = where[q] if q < len(where) else None
+        in_place = j is not None and _parts(n.lower()[:MAX_NAME])[j][1]
+        head_end = None
+        if 0 <= hs < len(parts) and _b > _a:
+            nth = len(parts[hs][:_b].split())
+            mine = [x for x, p_ in enumerate(where) if p_ == hs]
+            head_end = mine[nth - 1] if 0 < nth <= len(mine) else None
+        after = head_end is not None and q > head_end
+        if m.group(1):                   # break-out area, strip out zone: the name of a place
+            if not (in_place or after) or existing:
+                found, by_place = MAYBE, True    # (Break-out area: carpet tiles; Existing slab, break out area)
+            continue
+        if (in_place or after) and not existing:
+            found, other = MAYBE, True   # (Plasterboard 12.5mm; take down ceiling: perhaps a note on the material row)
+            continue
+        return SURE, False
+    return found, found == MAYBE and by_place and not other
+
+
+def _demolish(n: str, n_name: int | None = None):
+    """None, SURE (removal of what is there: 既存コンクリート撤去, コンクリート殻処分, Demolition of existing slab) or MAYBE (a
+    removal word only after the material, in a later part or the specification: perhaps a note on the material row).
+    Not removal: a price note (端材処分共, 殻処分費別途, 別途処分, including disposal of surplus, disposal of offcuts by
+    others)."""
+    return _dem_kind(n, n_name)[0]
+
+
+def _dem_place(forms) -> bool:
+    """Whether every MAYBE of _demolish over these (name, specification) forms (closed up and as written) comes only from
+    a removal phrase that names a room or place (16 回目)."""
+    kinds = {_dem_kind(nm + " ; " + sp if sp else nm, len(_parts(nm.lower()[:MAX_NAME])) if sp else None)
+             for nm, sp in forms}
+    return any(k == MAYBE for k, _f in kinds) and all(f for k, f in kinds if k == MAYBE)
 
 
 def _is_demolition(*texts: str) -> bool:
@@ -1976,6 +2028,18 @@ def _marks(name: str, spec: str, div: str) -> tuple:
     return total, again, deduct, _demolish(text, n_name), _work(text, n_name)
 
 
+# ordinary words that start with 内 (16 回目): a name or division cell that is one space-justified run closing up into
+# exactly one of them (内　　壁, 内　部, 内　装, 内　装　材, 内　法) has its 内 only as written: perhaps a letter of the word,
+# perhaps the breakdown mark (15 回目 kept every such 内 sure, and 内　　壁｜石膏ボード was surely left out)
+NAI_CELLS = ("内壁", "内部", "内装", "内装材", "内法")
+
+
+def _nai_cell(s: str) -> bool:
+    """Whether a name or division cell as written is one space-justified run that closes up into a word of NAI_CELLS."""
+    t = s.strip() if s and "内" in s else ""
+    return bool(t) and bool(_JUSTIFIED.fullmatch(t)) and _SPACES.sub("", t) in NAI_CELLS
+
+
 def _row_class(prep: _Prep, r: dict) -> dict:
     shown, spec0, div0 = prep(r.get("name")), prep(r.get("specification")), prep(r.get("division"))
     # the material is read with each space-justified run closed up (鉄　　骨, ガ　ラ　ス); the marks are looked for in the
@@ -1985,12 +2049,21 @@ def _row_class(prep: _Prep, r: dict) -> dict:
     text = name + " ; " + spec if spec else name
     fid = _classify(text, div)
     total, again, deduct, demolish, work = _marks(name, spec, div)
+    nai = False
     if (name, spec, div) != (shown, spec0, div0):
         for closed, written in ((name, shown), (spec, spec0), (div, div0)):
             if closed != written:
                 prep.charge(closed)            # (the second reading is charged to the budget: 15 回目の攻撃)
         t0, a0, d0, m0, w0 = _marks(shown, spec0, div0)
         total, work = total or t0, work or w0
+        if a0 == SURE and again != SURE and (_nai_cell(shown) or _nai_cell(div0)):
+            # the mark as written, without the 内 of such a cell (内　　壁, 内　部): when only that 内 makes it sure, the row
+            # is "maybe" with its quantity, never sure. Not in a specification, a one-column name or a PDF line, and an
+            # explicit mark stays sure (内　壁　内　訳 closes up into no word of NAI_CELLS) (16 回目)
+            a1 = SURE if (not _nai_cell(shown) and _again(shown)) or (div0 and not _nai_cell(div0) and _again(div0)) \
+                else (_again_spec(spec0) if spec0 else None)
+            nai = a1 != SURE
+            a0 = MAYBE if nai else a0
         again, deduct, demolish = _stronger(again, a0), _stronger(deduct, d0), _stronger(demolish, m0)
     if again and spec and fid == "m_concrete_fdn":
         n_name = len(_parts(name.lower()[:MAX_NAME]))
@@ -2005,9 +2078,47 @@ def _row_class(prep: _Prep, r: dict) -> dict:
     # a name that is only one space-justified material word, with no specification (鉄　　骨, 鉄　　筋 on a 科目別 sheet): the
     # usual 内訳書 writes the summary of a material so; it may repeat the detail rows (15 回目の攻撃)
     just = bool(fid) and not spec0.strip() and bool(_JUSTIFIED.fullmatch(shown.strip()))
+    # a removal "maybe" that comes only from a phrase naming a room or place (Break-out area: carpet tiles) (16 回目)
+    dplace = demolish == MAYBE and _dem_place(((name, spec), (shown, spec0)))
+    # the safety net (16 回目): a row with no field and no mark whose name or specification names a material in some part
+    # (after an excluding word, in a part of place or purpose, before 除く・別途) of a field that takes the row's unit. Read
+    # once more per row, at most MAX_PARTS parts of MAX_NAME characters (not charged to the document's budget)
+    net = None
+    if not fid and u and not (total or again or deduct or demolish or work):
+        net = _named_anywhere(text, div, lambda f: u in FL.FIELDS[f]["units"])
     return {"name": shown, "fid": fid, "u": u, "total": total, "again": again, "deduct": deduct,
             "demolish": demolish, "work": work, "ref": bool(spec0 and _AGAIN_REF.search(spec0)),
-            "scrap": scrap, "just": just, "aside": bool(fid) and _after_aside(text)}
+            "scrap": scrap, "just": just, "aside": bool(fid) and _after_aside(text), "nai": nai, "dplace": dplace,
+            "net": net}
+
+
+_JA_EXCL_RX = re.compile("|".join(re.escape(w) for w in sorted(JA_EXCL_AFTER, key=len, reverse=True)))
+
+
+def _named_anywhere(text: str, div: str, fits):
+    """The safety net for a row that names no field (16 回目): the field of the first material that a part of the name or
+    specification names (also a part after an excluding word: excl. plasterboard; a part of place or purpose: under
+    concrete slab; a material before a Japanese excluding ending: 石膏ボード除く) and for which fits(field) holds (the row's
+    unit is one of the field's). The row is then listed on that field's card as "may belong", with its quantity, instead
+    of only among the rows not used. A product of no field (鉄筋用スペーサー, 断熱サッシ) names none."""
+    return next((f for f in _named_fields(text, div) if fits(f)), None)
+
+
+@functools.lru_cache(maxsize=8192)
+def _named_fields(text: str, div: str) -> tuple:
+    """The fields that the parts of a name name, in order (see _named_anywhere; at most MAX_PARTS parts of MAX_NAME
+    characters, as _head reads it)."""
+    low, out = text.lower()[:MAX_NAME], []
+    fdn = any(w in normalise_name(div) + " " + low for w in FOUNDATION_WORDS)
+    for seg, _place, _prep in _parts(low):
+        seg = _JA_EXCL_RX.sub(" ", seg)
+        ms = _matches(seg)
+        h = _head_of(seg, ms)[0] if ms else None
+        if h is not None:
+            fid = "m_concrete_fdn" if h[2] == "m_concrete" and fdn else h[2]
+            if fid not in out:
+                out.append(fid)
+    return tuple(out)
 
 
 _BLOCK_WORD = re.compile(r"(?i)blocks?|ブロック")
@@ -2054,6 +2165,18 @@ R_ASIDE_MAYBE = "読点の後の除く語（excluding・without など）のさ�
 # a name that is only one space-justified material word, with no specification (15 回目の攻撃)
 R_JUSTIFIED_MAYBE = "字間をそろえた科目名だけの行（鉄　　骨 など。規格の無い集計の行で、明細の行と二重になるかもしれない）" \
                     "なので足さない。材料の行なら手で入れる"
+# a name or division cell that is only a space-justified 内 word (内　　壁, 内　部, 内　装): the 内 may be a letter of the
+# word or the breakdown mark (16 回目)
+R_AGAIN_NAI_MAYBE = "名前・区分の欄が字間をそろえた「内」の語だけ（内　　壁・内　部 など。内訳の印か、語の 1 字か分からない）" \
+                    "なので足さない。材料の行なら手で入れる"
+# a removal phrase that is the name of a room or place (break-out area, strip out zone) before the material, or in a name
+# with no material (16 回目)
+R_DEMOLISH_PLACE_MAYBE = "撤去の語（break out・strip out など）が部屋・場所の名前（break-out area など）にある（取り除く行か、" \
+                         "その場所の新しい材料の行か分からない）ので足さない。材料の行なら手で入れる"
+# a row that names no field, while a material word is in a part after an excluding word, in a part of place or purpose,
+# or before a Japanese excluding ending, and the row's unit is one of that material's (16 回目: the safety net)
+R_PART_MAYBE = "材料の名前が、除く物・置く場所・用途などを言う部分（excluding・without・under・for などの後や、除く・別途の前）" \
+               "にだけある（この行の材料か分からない）ので足さない。この行の材料なら手で入れる"
 # 内訳書による on a row of a workbook whose other sheet counts rows of the same material (14 回目; 15 回目: only rows that
 # are counted, decided once every row is read)
 R_REF_MAYBE = "規格・摘要に内訳書による・内訳別紙などの注記があり、同じ資料の別のシート（%s）で同じ材料の行（%d 行目）を" \
@@ -2287,6 +2410,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
 
         for seq, (shf, r, c) in enumerate(classed):
             why = None
+            lf = c["fid"]                  # (the field whose card lists the row if it is left out)
             pref = None
             sure_copy = None               # (sheet, row) of the row this one surely copies, the rows it reaches,
             left_why = None                # … and its reason when none of them is counted (see `copies`)
@@ -2299,10 +2423,10 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             elif c["demolish"] == SURE:
                 why = R_DEMOLISH
             elif c["again"] or c["deduct"]:    # a mark only in the specification (14 回目): "maybe", unless negative
-                why = R_NEG if r["quantity"] < 0 else R_AGAIN_MAYBE if c["again"] else \
-                    c.get("scrap") or R_DEDUCT_MAYBE
+                why = R_NEG if r["quantity"] < 0 else (R_AGAIN_NAI_MAYBE if c.get("nai") else R_AGAIN_MAYBE) \
+                    if c["again"] else c.get("scrap") or R_DEDUCT_MAYBE
             elif c["demolish"]:
-                why = R_DEMOLISH_MAYBE
+                why = R_DEMOLISH_PLACE_MAYBE if c.get("dplace") else R_DEMOLISH_MAYBE
             elif c["work"]:
                 why = R_WORK
             elif r["quantity"] < 0:
@@ -2310,7 +2434,10 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             elif r.get("pivot"):
                 why = r["pivot"]           # a pivot table's cell: a summary of another table (14 回目)
             elif c["fid"] is None:
-                why = "どの材料の欄にも当てはまらない"
+                # … but a material named in some part whose field takes the row's unit: on that field's card as "may
+                # belong", with its quantity (16 回目: the safety net)
+                lf = c.get("net")
+                why = R_PART_MAYBE if lf else "どの材料の欄にも当てはまらない"
             elif c["u"] not in FL.FIELDS[c["fid"]]["units"]:
                 f_ = FL.FIELDS[c["fid"]]
                 why = "単位 %r は「%s」に使えない（%s）。必要なら換算して手で入れる" % (r["unit"], f_["label"], "・".join(f_["units"]))
@@ -2411,7 +2538,7 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
             if not why and c.get("aside"):
                 why = R_ASIDE_MAYBE            # Infill panels, without frames, blockwork 100mm (15 回目の攻撃)
             if why:
-                ents = status[(shf, r["row"])] = leave(c["fid"], r["trace"], c["name"], why, r["quantity"], r.get("unit"))
+                ents = status[(shf, r["row"])] = leave(lf, r["trace"], c["name"], why, r["quantity"], r.get("unit"))
                 if sure_copy:
                     copies.append((ents, sure_copy[0], sure_copy[1], left_why, _family(c["fid"])))
                 continue
@@ -2647,19 +2774,48 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
         except UnicodeDecodeError:
             text = data.decode("latin-1")
         parsed = ifc.parse(text, doc_id)
+        want = {"m3": "volume", "m2": "area", "kg": "weight", "t": "weight"}
+
+        def ifc_why(e):
+            """Why an element is no new material whatever its material, or None: by its status (Pset_…Common.Status
+            DEMOLISH / EXISTING surely, TEMPORARY perhaps), by its name as a table row is (既存壁 撤去, Existing slab - to
+            be demolished) (15 回目), or by the status of the whole it is part of (15 回目の攻撃)."""
+            why = R_IFC_STATUS.get(e.get("status"))
+            if why is None and e["name"]:
+                en_ = _prep(e["name"])
+                dem = _both(_demolish, en_)
+                why = R_DEMOLISH if dem == SURE else None if not dem else \
+                    R_DEMOLISH_PLACE_MAYBE if _dem_place(((en_, ""), (_justify(en_), ""))) else R_DEMOLISH_MAYBE
+            if why is None and e.get("part_of"):
+                # a part (IfcRelAggregates, IfcRelNests) with no status of its own, of a whole that is DEMOLISH, EXISTING
+                # or TEMPORARY: perhaps the same (the panels of a curtain wall that is taken down) (15 回目の攻撃)
+                po = e["part_of"]
+                why = R_IFC_PART % (("%s %s" % (po["type"], po["name"]))[:60], R_IFC_STATUS_WORD.get(po["status"], ""))
+            return why
+
         for e in parsed["elements"]:
             mats = " ".join(e["materials"]) + " " + e["name"]
-            fid = _field_for(mats, "footing" if e["type"] in ("IFCFOOTING", "IFCPILE") else "")
+            fdiv = "footing" if e["type"] in ("IFCFOOTING", "IFCPILE") else ""
+            fid = _field_for(mats, fdiv)
             if e["type"] in ("IFCREINFORCINGBAR", "IFCREINFORCINGMESH"):
                 fid = "m_rebar"
             elif fid == "m_masonry" and e["type"] in ("IFCFOOTING", "IFCPILE") and _concrete_block(_justify(_prep(mats))):
                 fid = "m_concrete_fdn"           # a concrete block footing (anchor / thrust block) is foundation concrete
             label = "%s %s" % (e["type"], e["name"])
+            net = False
             if fid is None:
-                unused.append({"trace": "%s:#%d" % (doc_id, e["step_id"]), "name": label,
-                               "reason": "材料名から分類できない（%s）" % ("・".join(e["materials"]) or "材料の記録なし")})
-                continue
-            want = {"m3": "volume", "m2": "area", "kg": "weight", "t": "weight"}
+                # the safety net (16 回目), only after the status check: an element with no status or removal reason whose
+                # materials or name name a material in some part, with a quantity that material's field takes, is listed
+                # on that card as "may belong". One with such a reason stays among the elements not used, as before
+                kinds_ = {x["kind"] for x in e["quantities"]}
+                if ifc_why(e) is None:
+                    fid = _named_anywhere(_justify(_prep(mats)), _justify(_prep(fdiv)),
+                                          lambda f: any(want[u] in kinds_ for u in FL.FIELDS[f]["units"]))
+                if fid is None:
+                    unused.append({"trace": "%s:#%d" % (doc_id, e["step_id"]), "name": label,
+                                   "reason": "材料名から分類できない（%s）" % ("・".join(e["materials"]) or "材料の記録なし")})
+                    continue
+                net = True
             picked = None
             for u in FL.FIELDS[fid]["units"]:
                 q = [x for x in e["quantities"] if x["kind"] == want[u]]
@@ -2668,18 +2824,9 @@ def read(name: str, data_b64: str, doc_id: str) -> dict:
                     q.sort(key=lambda x: 0 if "net" in x["name"].lower() else 1)
                     picked = (u if u != "t" else "kg", q[0])
                     break
-            # an element that is there, or is taken away, is no new material: by its status (Pset_…Common.Status
-            # DEMOLISH / EXISTING surely, TEMPORARY perhaps), or by its name as a table row is (既存壁 撤去, Existing slab -
-            # to be demolished) (15 回目)
-            why = R_IFC_STATUS.get(e.get("status"))
-            if why is None and e["name"]:
-                dem = _both(_demolish, _prep(e["name"]))
-                why = R_DEMOLISH if dem == SURE else R_DEMOLISH_MAYBE if dem else None
-            if why is None and e.get("part_of"):
-                # a part (IfcRelAggregates, IfcRelNests) with no status of its own, of a whole that is DEMOLISH, EXISTING
-                # or TEMPORARY: perhaps the same (the panels of a curtain wall that is taken down) (15 回目の攻撃)
-                po = e["part_of"]
-                why = R_IFC_PART % (("%s %s" % (po["type"], po["name"]))[:60], R_IFC_STATUS_WORD.get(po["status"], ""))
+            # an element that is there, or is taken away, is no new material (see ifc_why); a material of the safety net
+            # "may belong"
+            why = ifc_why(e) or (R_PART_MAYBE if net else None)
             if why:
                 if picked:
                     leave(fid, picked[1]["trace"], label, why, picked[1]["value"], picked[0])
