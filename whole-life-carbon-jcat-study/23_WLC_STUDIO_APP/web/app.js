@@ -46,7 +46,9 @@ async function api(path, opts = {}) {
    `about` ({ key, name }): the project the words are about, given by 保存して戻る for its words (its stop is said once its
    read is answered, maybe while another project, or none, is shown). Read while another project is shown, the words
    name it; they stay when the user goes back to it (see retoast). `hold`: words that name rows not saved (a stop or a
-   stay of 保存して戻る) stay until 閉じる as well, and so do words too long for the toast (they scroll inside it) */
+   stay of 保存して戻る) stay until 閉じる as well, and so do words too long for the toast (they scroll inside it). A late
+   answer (the act of an action older than the held words') does not replace held words: it is said after them, as it
+   is (not named by their project) */
 function toast(msg, act = state.act, warn = false, about = null, hold = false) {
   const t = $("#toast"), T = toast;
   if (warn && typeof msg === "string") msg = { w: msg, key: shownKey(), name: "" };
@@ -55,14 +57,15 @@ function toast(msg, act = state.act, warn = false, about = null, hold = false) {
   // late answer is never joined to a newer action's message (the old test toast._act === state.act took the act of the
   // newest action for every message). Of the earlier action's words only its warnings stay
   const same = !!T._cur && toast._act === act;
-  if (!same) {
+  const under = !same && !!T._cur && T._cur.hold && act < T._cur.act;
+  if (!same && !under) {
     if (T._cur) keepWarnings(T._cur);
-    T._cur = { act, msgs: [], warns: [], shown: shownKey(), about, hold: false };
+    T._cur = { act, msgs: [], warns: [], shown: shownKey(), about, hold: false, long: false, plain: [] };
   }
   if (hold) T._cur.hold = true;
-  if (!T._cur.msgs.some((x) => sameItem(x, msg))) T._cur.msgs.push(msg);
+  if (!T._cur.msgs.some((x) => sameItem(x, msg))) { T._cur.msgs.push(msg); if (under && typeof msg === "string") T._cur.plain.push(msg); }
   if (typeof msg !== "string" && !T._cur.warns.some((x) => sameItem(x, msg))) T._cur.warns.push(msg);
-  T._act = act;
+  if (!under) T._act = act;
   drawToast(true);
 }
 /* a toast's item: a message (a string), or a warning { w, key, name }: said as it is while its project is shown, and with
@@ -74,11 +77,14 @@ function keepWarnings(cur) { cur.warns.forEach((w) => { if (!toast._kept.some((x
    actions. A toast that carries a warning is an alert with 閉じる; otherwise it is a status, with 閉じる when its words
    stay (hold, or too long for it). `quiet`: the words and marks are put only where they have changed (a toast repainted
    for a new view is not said again by a screen reader; a project's name put before its words is still written).
-   `own`: the current words stay until 閉じる (no timer) */
+   `own`: the current words stay until 閉じる (no timer). Words once too long for the toast stay so (`long`): the room
+   changes from view to view (the bottom bar of an input screen), and words that fit on the next view would otherwise
+   be left with neither 閉じる nor a timer */
 function paintToast(quiet = false) {
   const t = $("#toast"), T = toast, a = T._cur && T._cur.about, sk = shownKey();
   // words about a project (about) read while another project is shown name it, as its warnings do
-  const named = !!(a && sk && sk !== a.key), word = (x) => (named && typeof x === "string" ? `「${a.name || "別のプロジェクト"}」：${x}` : toastText(x));
+  const named = !!(a && sk && sk !== a.key);
+  const word = (x) => (named && typeof x === "string" && !T._cur.plain.includes(x) ? `「${a.name || "別のプロジェクト"}」：${x}` : toastText(x));
   const cur = T._cur ? T._cur.msgs.map(word).join(" ／ ") : "";
   const kept = T._kept.filter((w) => !(T._cur && T._cur.msgs.some((x) => sameItem(x, w)))).map(toastText);
   const warned = !!(T._cur && T._cur.warns.length) || kept.length > 0;
@@ -88,7 +94,9 @@ function paintToast(quiet = false) {
   put($("#toast-text"), cur);
   const k = $("#toast-kept");
   put(k, kept.length ? (cur ? "前の保存の知らせ：" : "") + kept.join(" ／ ") : ""); hide(k, !kept.length);
-  const own = !!(T._cur && (T._cur.warns.length || T._cur.hold)) || toastOverflows(), sticky = warned || own;
+  const over = toastOverflows();
+  if (T._cur && over) T._cur.long = true;
+  const own = !!(T._cur && (T._cur.warns.length || T._cur.hold || T._cur.long)) || over, sticky = warned || own;
   if (t.classList.contains("sticky") !== sticky) t.classList.toggle("sticky", sticky);
   mark(t, "role", warned ? "alert" : "status"); mark(t, "aria-live", warned ? "assertive" : "polite");
   hide($("#toast-close"), !sticky);
@@ -121,26 +129,31 @@ function drawToast(fresh) {
 /* a view was drawn: a toast that stays (it carries warnings) names each warning's project when another project is shown
    now; when the project shown has changed since its action's words were said, those words go (they were about the
    project shown then) and its warnings stay, named. Words about a project (toast's `about`) stay while that project is
-   shown (the user went back to it), and are named while another one is shown (also when they go after their time). The
-   toast is repainted only where its words change (it is not said again at each view); words that no longer fit (a name
-   put before them) stay until 閉じる */
+   shown (the user went back to it), and are named while another one is shown (also when they go after their time);
+   words that name rows not saved (hold) stay, named, also when warnings were said with them. The toast is repainted
+   only where its words change (it is not said again at each view); words that no longer fit (a name put before them)
+   stay until 閉じる */
 function retoast() {
   const t = $("#toast"), T = toast, sk = shownKey(), a = T._cur && T._cur.about, sticky = t.classList.contains("sticky");
   if (!t.classList.contains("show") || (!sticky && !a)) return;
-  if (T._cur && T._cur.warns.length && T._cur.shown !== sk && !(a && a.key === sk)) { keepWarnings(T._cur); T._cur = null; }
+  if (T._cur && T._cur.warns.length && !T._cur.hold && T._cur.shown !== sk && !(a && a.key === sk)) { keepWarnings(T._cur); T._cur = null; }
   if (paintToast(true).own) clearTimeout(T._t);
 }
-/* field `f` of project `key` has just been stored with another state than 適用外 (a value, 未取得 …): a warning that its
-   適用外 cannot be used no longer holds. It goes from those kept for 保存して戻る and from the toast (quietly; the toast
-   closes when nothing is left, and words left without a warning go after their time) */
-function settleWarnings(key, f) {
-  const T = toast, t = $("#toast"), gone = (x) => typeof x !== "string" && x.key === key && x.f === f;
-  state.warnings = state.warnings.filter((x) => !(x.f === f && x.nav.key === key));
+/* field `f` of project `key` has just been stored with another state than 適用外 (a value, 未取得 …) at `at` (the answer's
+   updated_at, the server's time of that write): a warning that its 適用外 cannot be used no longer holds. It goes from
+   those kept for 保存して戻る and from the toast (quietly; the toast closes when nothing is left, and words left without a
+   warning go after their time, or stay when they are still too long). A write stored before the warning's own write (a
+   late answer of an earlier save of the field) does not answer it: the warning was said with the field 適用外 after it */
+function settleWarnings(key, f, at = null) {
+  const older = (x) => typeof at === "number" && typeof x.at === "number" && at < x.at;
+  const T = toast, t = $("#toast"), gone = (x) => typeof x !== "string" && x.key === key && x.f === f && !older(x);
+  state.warnings = state.warnings.filter((x) => !(x.f === f && x.nav.key === key && !older(x)));
   if (!t.classList.contains("show") || !(T._kept.some(gone) || (T._cur && T._cur.msgs.some(gone)))) return;
   T._kept = T._kept.filter((x) => !gone(x));
   if (T._cur) { T._cur.msgs = T._cur.msgs.filter((x) => !gone(x)); T._cur.warns = T._cur.warns.filter((x) => !gone(x)); }
   if (T._cur && !T._cur.msgs.length) T._cur = null;
   if (!T._cur && !T._kept.length) return closeToast();
+  if (T._cur) T._cur.long = false;                           // fewer words: whether they fit is measured again
   timeToast(paintToast(true));
 }
 /* the toast stands 12 px above the bottom bar of an input screen (its buttons wrap on a narrow phone: the bar is 64 to
@@ -178,19 +191,21 @@ function shownKey() { return state.project && ["hub", "screen", "result"].includ
    for the hub): see sayWarnings. Said while another project (or none) is shown, a warning names its project: it is never
    joined to a 保存して戻る of another project, nor taken for one about the project shown. Each warning carries the field
    it is about (`warning_fields`, same order): a write answered with another state than 適用外 for that field (a value
-   saved later in the same 保存して戻る, 未取得に戻す, a candidate adopted) takes back the warnings about it (settleWarnings) */
+   saved later in the same 保存して戻る, 未取得に戻す, a candidate adopted) takes back the warnings about it (settleWarnings),
+   when it was stored after the write that said them (each warning keeps its answer's updated_at) */
 function warnOf(r, nav) {
-  if (r && typeof r.field_id === "string" && typeof r.state === "string" && r.state !== "not_applicable") settleWarnings(nav.key, r.field_id);
+  const at = r && typeof r.updated_at === "number" ? r.updated_at : null;
+  if (r && typeof r.field_id === "string" && typeof r.state === "string" && r.state !== "not_applicable") settleWarnings(nav.key, r.field_id, at);
   const fs = r && Array.isArray(r.warning_fields) ? r.warning_fields : [];
   const ws = (r && Array.isArray(r.warnings) ? r.warnings : []).map((w, i) => ({ w, f: typeof fs[i] === "string" ? fs[i] : null }))
     .filter((x) => typeof x.w === "string" && x.w.trim());
-  if (state.busy && state.batch && state.batch.key === nav.key) state.warnings.push(...ws.map((x) => ({ w: x.w, f: x.f, nav })));
-  else ws.forEach((x) => sayWarning(x.w, nav, nav.act, x.f));
+  if (state.busy && state.batch && state.batch.key === nav.key) state.warnings.push(...ws.map((x) => ({ w: x.w, f: x.f, at, nav })));
+  else ws.forEach((x) => sayWarning(x.w, nav, nav.act, x.f, at));
 }
-function sayWarning(w, nav, act, f = null) { toast({ w, key: nav.key, name: nav.name, f }, act); }
+function sayWarning(w, nav, act, f = null, at = null) { toast({ w, key: nav.key, name: nav.name, f, at }, act); }
 /* the warnings kept while 保存して戻る ran, joined to its message (`act`: the act of that message). `p`: the batch's last
    read of its project (or null): a warning whose field is no longer stored as 適用外 there is not said (see storedNa) */
-function sayWarnings(act, p = null) { state.warnings.splice(0).filter((x) => !(p && x.f && x.nav.key === projectKey(p) && !storedNa(p, x.f))).forEach((x) => sayWarning(x.w, x.nav, act, x.f)); }
+function sayWarnings(act, p = null) { state.warnings.splice(0).filter((x) => !(p && x.f && x.nav.key === projectKey(p) && !storedNa(p, x.f))).forEach((x) => sayWarning(x.w, x.nav, act, x.f, x.at)); }
 /* field `f` is stored as 適用外 in project read `p` */
 const storedNa = (p, f) => ((((p && p.fields) || {})[f] || {}).value || {}).state === "not_applicable";
 /* a control's identity across redraws: its id, or the data attribute that names its action and row (with the candidate

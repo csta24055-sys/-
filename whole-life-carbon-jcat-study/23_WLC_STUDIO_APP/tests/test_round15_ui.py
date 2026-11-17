@@ -7,6 +7,12 @@ stop names it); words too long for the toast, and the words of 保存して戻�
 and can be scrolled (the rows not saved are named first); a failed read of the stored result is said on the result
 screen; a toast that stays is not written again (said again) at every view.
 
+The fix-up of those fixes (an attack on them): words once too long for the toast stay with 閉じる on a later view where
+they fit (they were left with neither 閉じる nor a timer); a late answer is said after the words that name rows not saved,
+it does not replace them; the late answer of an earlier save of a field (stored before the warning's write: the answers'
+updated_at) does not take back a warning about its 適用外; words that name rows not saved stay, named, on another
+project's view also when a warning was said with them.
+
 The flows are run in a real browser (Playwright for node, against a server started on a free port with a temporary
 var directory) when node and Playwright are installed; the functions are also checked one by one with node.
 
@@ -352,6 +358,197 @@ F.quietViews = async (b) => {
   const onA = await box(page);
   await openP(page, pB); await page.waitForTimeout(200);
   return { counts, onA, onB: await box(page), mutB: await page.evaluate(() => window.__mut), errors };
+};
+
+// ---- the fix-up of the round-15 screens (an attack on the fixes) ----
+// the app at home with the toast's timers watched (window.__live: the timers still to come)
+async function watched(browser, vp) {
+  const { ctx, page, errors } = await page0(browser, vp);
+  await page.addInitScript(() => {
+    const st = window.setTimeout, ct = window.clearTimeout; window.__live = new Set();
+    window.setTimeout = (fn, ms, ...a) => { const id = st(() => { window.__live.delete(id); if (typeof fn === 'function') fn(...a); }, ms); window.__live.add(id); return id; };
+    window.clearTimeout = (id) => { window.__live.delete(id); ct(id); };
+  });
+  await page.goto(BASE + '/');
+  await page.waitForFunction(() => typeof state !== 'undefined' && !!state.meta && !!document.getElementById('splash').onclick);
+  await page.click('#splash');
+  await page.waitForSelector('#main:not([hidden]) #demo');
+  return { ctx, page, errors };
+}
+// the toast now, with whether its timer is still to come
+const tnow = (page) => page.evaluate(() => {
+  const t = document.getElementById('toast'), b = document.getElementById('toast-body'), shown = t.classList.contains('show');
+  return { shown, sticky: t.classList.contains('sticky'), close: !document.getElementById('toast-close').hidden, taps: getComputedStyle(t).pointerEvents,
+    timed: !!toast._t && window.__live.has(toast._t), over: b.scrollHeight > b.clientHeight + 1, role: t.getAttribute('role'),
+    text: shown ? document.getElementById('toast-text').textContent : '', all: shown ? t.textContent : '' };
+});
+// fix-up 1: words too long on an input screen (its bottom bar wraps on a narrow phone), shown next on a view where they
+// fit: never left shown with neither 閉じる nor a timer. (a) every numeric row of 設備 saved by 保存して戻る at 375 x 548;
+// (b) 「まだ保存していない入力」 of 17 rows at 320 x 568, then ← to the hub and 基本情報; (c) the same rule over lengths,
+// kinds and paths through the app's own functions
+F.stuckToast = async (b) => {
+  const out = {};
+  {
+    const { ctx, page, errors } = await watched(b, { width: 375, height: 548 });
+    const p = await newProject(page, 'StuckA');
+    await openP(page, p); await screen(page, 'equipment');
+    const rows = await page.evaluate(() => [...document.querySelectorAll('#main [data-save]')].map((x) => x.dataset.save).filter((f) => state.meta.fields[f].type === 'number'));
+    // a count, a life, a mass: 1, 2, 3 …; a rate (no unit): 0.1 (within its range)
+    for (const [i, f] of rows.entries()) await page.evaluate(([f, i]) => { const e = document.getElementById('in-' + f); e.value = state.meta.fields[f].unit ? String(i + 1) : '0.1'; e.dispatchEvent(new Event('input')); }, [f, i]);
+    await page.evaluate(() => { window.__first = null; const d = window.drawToast; window.drawToast = function (x) { d(x); if (!window.__first) window.__first = { view: state.view, over: (() => { const b = document.getElementById('toast-body'); return b.scrollHeight > b.clientHeight + 1; })() }; }; });
+    await page.click('#bb-hub'); await answered(page);
+    out.a = { rows: rows.length, first: await page.evaluate(() => window.__first), hub: await tnow(page) };
+    if (out.a.hub.close) await page.click('#toast-close'); else await page.evaluate(() => closeToast());
+    await page.waitForTimeout(200);
+    out.a.closed = await tnow(page);
+    out.a.errors = errors;
+    await ctx.close();
+  }
+  {
+    const { ctx, page, errors } = await watched(b, { width: 320, height: 568 });
+    const p = await newProject(page, 'StuckB');
+    await openP(page, p); await screen(page, 'equipment');
+    const rows = await page.evaluate(() => [...document.querySelectorAll('#main [data-save]')].map((x) => x.dataset.save).filter((f) => state.meta.fields[f].type === 'number').slice(0, 17));
+    for (const [i, f] of rows.entries()) await page.evaluate(([f, v]) => { const e = document.getElementById('in-' + f); e.value = v; e.dispatchEvent(new Event('input')); }, [f, String(i + 1)]);
+    await page.click(`[data-save="${rows[0]}"]`); await answered(page);
+    const onScreen = await tnow(page);
+    await page.click('#btn-back'); await page.waitForFunction(() => state.view === 'hub'); await page.waitForTimeout(200);
+    const hub = await tnow(page);
+    await page.evaluate(() => go('screen', 'basic')); await page.waitForFunction(() => state.view === 'screen'); await page.waitForTimeout(200);
+    const basic = await tnow(page);
+    await page.keyboard.press('Escape');                                // Escape outside the toast closes nothing
+    await page.focus('#toast-close'); await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+    out.b = { onScreen, hub, basic, closed: await tnow(page), errors };
+    await ctx.close();
+  }
+  for (const [w, h] of [[320, 568], [375, 548]]) {
+    const { ctx, page, errors } = await watched(b, { width: w, height: h });
+    const p = await newProject(page, 'StuckC');
+    await openP(page, p);
+    out['c' + w] = await page.evaluate(async () => {
+      const P = state.project, key = projectKey(P), r = { steps: 0, stuck: [], overThenFits: 0 };
+      const to = async (v) => { state.nav++; state.act++; state.view = v[0]; state.arg = v[1]; await render(); };
+      const now = () => { const t = document.getElementById('toast'), b = document.getElementById('toast-body');
+        return { shown: t.classList.contains('show'), sticky: t.classList.contains('sticky'), close: !document.getElementById('toast-close').hidden,
+          timed: !!toast._t && window.__live.has(toast._t), over: toastOverflows() }; };       // measured without 閉じる
+      for (const first of [['screen', 'equipment'], ['hub', undefined]]) for (let k = 2; k <= 20; k += 2) for (const kind of ['plain', 'about']) {
+        await to(first); closeToast();
+        const msg = 'まだ保存していない入力：' + '「空調機器の耐用年数」'.repeat(k);
+        if (kind === 'plain') toast(msg, 50); else toast(msg, 50, false, { key, name: P.name });
+        const seen = [now()];
+        for (const v of [['hub', undefined], ['screen', 'basic'], ['hub', undefined]]) { await to(v); seen.push(now()); }
+        seen.forEach((s, i) => { r.steps++; if (s.shown && !s.timed && !(s.sticky && s.close)) r.stuck.push([first[0], k, kind, i]); });
+        if (seen[0].over && seen.slice(1).some((s) => !s.over)) r.overThenFits++;
+      }
+      closeToast();
+      return r;
+    });
+    out['c' + w].errors = errors;
+    await ctx.close();
+  }
+  return out;
+};
+
+// fix-up 2: a late answer (架空デモを開く answered after B's 保存して戻る was stopped with ⚙ ⚙) does not replace the stop's
+// words that name rows not saved; and the rule through toast() itself (older, same and newer acts, a warning)
+F.lateOverHeld = async (b) => {
+  const { page, errors } = await watched(b);
+  const pB = await newProject(page, 'HeldB');
+  await page.evaluate(() => render()); await page.waitForSelector(`[data-open="${pB}"]`);
+  await hold(page, 'POST', /\/api\/demo$/, 5000);
+  await page.click('#demo'); await page.waitForTimeout(150);
+  await page.click(`[data-open="${pB}"]`); await page.waitForFunction((p) => state.view === 'hub' && state.project.id === p, pB);
+  await screen(page, 'operation');
+  await retype(page, 'o_gas_m3', '5'); await retype(page, 'o_oil_l', '7'); await retype(page, 'o_water_m3', '300');
+  await hold(page, 'PUT', /\/fields\/o_gas_m3$/, 1500);
+  await page.click('#bb-hub'); await page.waitForTimeout(300);
+  await page.click('#btn-settings'); await page.waitForTimeout(600); await page.click('#btn-settings');
+  await page.waitForFunction(() => !state.busy && document.getElementById('toast-text').textContent.includes('途中でやめました'));
+  const stop = await tnow(page);
+  await page.waitForFunction(() => document.getElementById('toast-text').textContent.includes('を作りました'), null, { timeout: 15000 });
+  await page.waitForTimeout(300);
+  const after = await tnow(page);
+  const st = { gas: await stored(page, pB, 'o_gas_m3'), oil: await stored(page, pB, 'o_oil_l'), water: await stored(page, pB, 'o_water_m3') };
+  // the rule itself, on B's hub
+  await openP(page, pB);
+  const rule = await page.evaluate(() => {
+    const P = state.project, about = { key: projectKey(P), name: P.name }, W = { w: '「運用時の電力の排出係数」の「適用外」は、いまの入力では使えない（甲）', key: projectKey(P), name: P.name };
+    const HELD = '保存して戻るを途中でやめました：「都市ガス」は保存していません', LATE = '「架空デモ」を作りました（開いていません。ホームの「続きから」から開けます）';
+    const text = () => document.getElementById('toast-text').textContent, sticky = () => document.getElementById('toast').classList.contains('sticky');
+    const r = {};
+    closeToast(); toast(HELD, 10, false, about, true); toast(LATE, 5); toast('まだ保存していない入力：「鉄筋」', 5);
+    r.older = [text(), sticky()];
+    toast('変更はありません', 20); r.newer = [text(), sticky()];               // a newer action's words replace them (as before)
+    closeToast(); toast(HELD, 10, false, about, true); toast(W, 5); r.olderWarn = [text(), sticky(), document.getElementById('toast').getAttribute('role')];
+    closeToast(); toast('2 項目を保存しました', 10, false, about); toast(LATE, 5); r.notHeld = [text()];   // not held: replaced (as before)
+    closeToast();
+    return r;
+  });
+  return { stop, after, stored: st, rule, errors };
+};
+
+// fix-up 3: the answer of an earlier save of the factor (its value 0.45, stored before the user made it 適用外 again) comes
+// after the warning that the later purchase made about the 適用外: the warning stays. And the rule through warnOf itself,
+// with the server's write times
+F.lateSettle = async (b) => {
+  const { page, errors } = await watched(b);
+  const p = await newProject(page, 'LateSettle');
+  await put(page, p, 'o_elec_kwh', { value: 0, unit: 'kWh/年', state: 'confirmed', method: 'user_entered' });
+  await openP(page, p); await screen(page, 'operation');
+  let n = 0;
+  await page.route((u) => /\/fields\/o_grid_value$/.test(u.pathname), async (route) => {
+    if (route.request().method() !== 'PUT' || ++n !== 1) return route.continue();
+    const resp = await route.fetch(); await sleep(3000); return route.fulfill({ response: resp });   // stored now, answered late
+  });
+  await retype(page, 'o_grid_value', '0.45'); await page.click('[data-save="o_grid_value"]'); await page.waitForTimeout(300);
+  await page.click('[data-na="o_grid_value"]'); await page.waitForTimeout(500);
+  await retype(page, 'o_elec_kwh', '1000'); await page.click('[data-save="o_elec_kwh"]');
+  await page.waitForFunction(() => document.getElementById('toast-text').textContent.includes('いまの入力では使えない'));
+  const warned = await tnow(page);
+  await answered(page); await page.waitForTimeout(300);
+  const late = await tnow(page);
+  const factor = await stored(page, p, 'o_grid_value');
+  const rule = await page.evaluate(() => {
+    const P = state.project, nav = { n: 1, pid: P.id, key: projectKey(P), act: 70, name: P.name };
+    const W = (at) => ({ field_id: 'o_elec_kwh', state: 'confirmed', ...(at === null ? {} : { updated_at: at }), warnings: ['WX'], warning_fields: ['o_grid_value'] });
+    const S = (st, at) => ({ field_id: 'o_grid_value', state: st, ...(at === null ? {} : { updated_at: at }) });
+    const shown = () => document.getElementById('toast').classList.contains('show') && document.getElementById('toast-text').textContent.includes('WX');
+    const r = {};
+    for (const [k, w, s] of [['older', 2, S('confirmed', 1)], ['newer', 2, S('confirmed', 3)], ['olderUnset', 2, S('not_obtained', 1)],
+      ['newerUnset', 2, S('not_obtained', 3)], ['noTime', null, S('confirmed', null)], ['answerNoTime', 2, S('confirmed', null)], ['same', 2, S('confirmed', 2)]]) {
+      closeToast(); state.warnings = []; state.busy = false; state.batch = null;
+      warnOf(W(w), nav); warnOf(s, nav); r[k] = shown();
+      // kept for 保存して戻る (said at its end): the same rule
+      closeToast(); state.busy = true; state.batch = { n: 1, key: nav.key };
+      warnOf(W(w), nav); warnOf(s, nav); r[k + 'Batch'] = state.warnings.map((x) => x.w);
+      state.busy = false; state.batch = null; state.warnings = [];
+    }
+    closeToast();
+    return r;
+  });
+  return { warned, late, factor, rule, errors };
+};
+
+// fix-up 4: A's 保存して戻る stopped (⚙ ⚙) while its slow purchase PUT carries a warning: the stop names a row not saved and
+// says the warning; then B is opened: the words naming the row not saved stay, named by A
+F.heldNamedElsewhere = async (b) => {
+  const { page, errors } = await watched(b);
+  const pA = await newProject(page, 'HeldA'), pB = await newProject(page, 'HeldOther');
+  await put(page, pA, 'o_elec_kwh', { value: 0, unit: 'kWh/年', state: 'confirmed', method: 'user_entered' });
+  await put(page, pA, 'o_grid_value', { value: null, state: 'not_applicable', method: 'user_entered' });
+  await openP(page, pA); await screen(page, 'operation');
+  await hold(page, 'PUT', new RegExp('projects/' + pA + '/fields/o_elec_kwh$'), 1500);
+  await retype(page, 'o_elec_kwh', '1000'); await retype(page, 'o_gas_m3', '5');
+  await page.click('#bb-hub'); await page.waitForTimeout(150);
+  await page.click('#btn-settings'); await page.waitForTimeout(500); await page.click('#btn-settings');
+  await answered(page);
+  const said = await tnow(page);
+  const where0 = await where(page);
+  await page.click(`[data-open="${pB}"]`);                           // the list of projects in 設定 await page.waitForFunction((p) => state.view === 'hub' && state.project.id === p, pB);
+  await page.waitForTimeout(1000);
+  const onB = await tnow(page);
+  await openP(page, pA); await page.waitForTimeout(200);
+  return { where0, said, onB, onA: await tnow(page), gas: await stored(page, pA, 'o_gas_m3'), errors };
 };
 
 (async () => {
@@ -725,6 +922,116 @@ eval(take(/async function openMade[\s\S]*?\n}\n/));
         self.assertTrue(r["onA"]["all"].startswith(WARN_GRID), r)
         self.assertTrue(r["onB"]["all"].startswith("「QuietA」：" + WARN_GRID), r)  # another project: named (written)
         self.assertGreater(r["mutB"], 0, r)
+
+    # ---- the fix-up of the round-15 screens: what an attack on the fixes found ----
+
+    def test_words_too_long_on_a_screen_are_never_left_without_close_or_timer(self):
+        r = self.flow("stuckToast")
+        a = r["a"]
+        self.assertEqual(a.pop("errors"), [], "page errors")
+        self.assertGreaterEqual(a["rows"], 15, a)
+        self.assertEqual(a["first"], {"view": "screen", "over": True}, a)      # too long on 設備 (its bottom bar wraps)
+        h = a["hub"]
+        self.assertTrue(h["text"].startswith("%d 項目を保存しました（" % a["rows"]), h)
+        self.assertTrue(h["shown"] and h["sticky"] and h["close"], h)          # it had neither 閉じる nor a timer on the hub
+        self.assertEqual(h["taps"], "auto", h)
+        self.assertFalse(a["closed"]["shown"], a)
+        b = r["b"]
+        self.assertEqual(b.pop("errors"), [], "page errors")
+        self.assertTrue(b["onScreen"]["text"].startswith("まだ保存していない入力："), b)
+        self.assertTrue(b["onScreen"]["sticky"] and b["onScreen"]["over"], b)
+        for k in ("hub", "basic"):
+            self.assertTrue(b[k]["shown"] and b[k]["sticky"] and b[k]["close"], (k, b[k]))   # neither 閉じる nor a timer before
+            self.assertEqual(b[k]["text"], b["onScreen"]["text"], k)
+        self.assertFalse(b["closed"]["shown"], b)                               # Escape in it closes it
+        exercised = 0
+        for w in ("c320", "c375"):
+            c = r[w]
+            self.assertEqual(c.pop("errors"), [], "page errors")
+            self.assertEqual(c["stuck"], [], (w, c))                             # shown with neither 閉じる nor a timer
+            self.assertEqual(c["steps"], 160, c)
+            exercised += c["overThenFits"]
+        self.assertGreater(exercised, 0, r)                                     # some words were too long, then fitted
+
+    def test_a_late_answer_does_not_replace_words_naming_rows_not_saved(self):
+        r = self.flow("lateOverHeld")
+        held = "「灯油・重油」「上水の使用量」は保存していません"
+        s = r["stop"]
+        self.assertTrue(s["text"].startswith(STOP) and held in s["text"], s)
+        self.assertTrue(s["sticky"] and s["close"], s)
+        a = r["after"]
+        made = "「架空デモ（RC・事務所・seed 4201）」" + MADE
+        self.assertIn(held, a["text"], a)                                       # it was replaced by the late notice
+        self.assertIn(made, a["text"], a)
+        self.assertLess(a["text"].index(held), a["text"].index(made), a)
+        self.assertNotIn("「HeldB」：「架空デモ", a["all"], a)
+        self.assertTrue(a["sticky"] and a["close"], a)
+        self.assertEqual((r["stored"]["gas"]["value"], r["stored"]["oil"]["value"], r["stored"]["water"]["value"]), (5, None, None), r)
+        HELD = "保存して戻るを途中でやめました：「都市ガス」は保存していません"
+        LATE = "「架空デモ」を作りました（開いていません。ホームの「続きから」から開けます）"
+        rule = r["rule"]
+        self.assertEqual(rule["older"], [HELD + " ／ " + LATE + " ／ まだ保存していない入力：「鉄筋」", True])
+        self.assertEqual(rule["newer"], ["変更はありません", False])            # a newer action's words replace them, as before
+        self.assertEqual(rule["olderWarn"], [HELD + " ／ 「運用時の電力の排出係数」の「適用外」は、いまの入力では使えない（甲）", True, "alert"])
+        self.assertEqual(rule["notHeld"], [LATE])                                # words that are not held: replaced, as before
+
+    def test_a_late_answer_of_an_earlier_save_does_not_take_back_a_warning(self):
+        r = self.flow("lateSettle")
+        self.assertIn(WARN_GRID, r["warned"]["all"], r)
+        self.assertEqual(r["warned"]["role"], "alert", r)
+        self.assertEqual(r["factor"]["state"], "not_applicable", r)
+        late = r["late"]
+        self.assertTrue(late["shown"] and late["sticky"] and late["close"], late)   # the 0.45 answer closed it before
+        self.assertIn(WARN_GRID, late["all"], late)
+        # the rule: a write stored before the warning's write (an earlier updated_at) does not settle it; a later one, one
+        # at the same time and one without times settle it as before; the same for the warnings kept for 保存して戻る
+        self.assertEqual({k: v for k, v in r["rule"].items() if not k.endswith("Batch")},
+                         {"older": True, "newer": False, "olderUnset": True, "newerUnset": False, "noTime": False, "answerNoTime": False, "same": False})
+        self.assertEqual({k: v for k, v in r["rule"].items() if k.endswith("Batch")},
+                         {"olderBatch": ["WX"], "newerBatch": [], "olderUnsetBatch": ["WX"], "newerUnsetBatch": [], "noTimeBatch": [],
+                          "answerNoTimeBatch": [], "sameBatch": []})
+
+    def test_write_answers_carry_the_time_of_their_write(self):
+        td = tempfile.TemporaryDirectory()
+        app = App(td.name)
+        try:
+            def put(pid, fid, body):
+                return app.handle("PUT", "/api/projects/%d/fields/%s" % (pid, fid), body)
+            pid = app.projects.create("r15t", "RC")
+            times = []
+            for fid, body in (("o_elec_kwh", {"state": "confirmed", "value": 0}), ("o_grid_value", {"state": "confirmed", "value": 0.45}),
+                              ("o_grid_value", {"state": "not_applicable"}), ("o_elec_kwh", {"state": "confirmed", "value": 1000})):
+                st, out = put(pid, fid, body)
+                self.assertEqual(st, 200, out)
+                self.assertIsInstance(out["updated_at"], float, out)
+                times.append(out["updated_at"])
+            self.assertEqual(out.get("warning_fields"), ["o_grid_value"], out)
+            self.assertEqual(times, sorted(times))
+            self.assertEqual(len(set(times)), len(times))                       # the screen orders the answers by it
+            cid = app.projects.propose(pid, Value("o_gas_m3", "from_drawing", 9.0, "m3/年", method="document",
+                                                  source_id="doc1-test.csv", source_detail="Sheet1!B3"), "test")
+            st, out = app.handle("POST", "/api/projects/%d/fields/o_gas_m3/accept" % pid, {"id": cid})
+            self.assertEqual(st, 200, out)
+            self.assertGreater(out["updated_at"], times[-1], out)
+        finally:
+            app.engine.close()
+            app.projects.close()
+            td.cleanup()
+
+    def test_words_naming_rows_not_saved_stay_on_another_project_with_a_warning(self):
+        r = self.flow("heldNamedElsewhere")
+        self.assertEqual(r["where0"]["view"], "settings", r)
+        s = r["said"]
+        self.assertTrue(s["text"].startswith(STOP) and "「都市ガス」は保存していません" in s["text"], s)
+        self.assertIn(WARN_GRID, s["all"], s)
+        b = r["onB"]
+        self.assertTrue(b["shown"] and b["sticky"] and b["close"], b)
+        self.assertTrue(b["text"].startswith("「HeldA」：" + STOP), b)          # it was dropped, only the warning stayed
+        self.assertIn("「都市ガス」は保存していません", b["text"], b)
+        self.assertIn("「HeldA」：" + WARN_GRID, b["all"], b)
+        a = r["onA"]
+        self.assertTrue(a["text"].startswith(STOP) and "「都市ガス」は保存していません" in a["text"], a)
+        self.assertIsNone(r["gas"]["value"], r)
 
     def test_service_worker_cache_is_new(self):
         sw = (WEB / "sw.js").read_text(encoding="utf-8")
