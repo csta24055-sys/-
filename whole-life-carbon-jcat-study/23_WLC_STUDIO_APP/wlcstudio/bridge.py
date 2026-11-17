@@ -320,6 +320,13 @@ def _unknown(v: Value | None) -> bool:
     return v is None or v.state in ("not_obtained", "not_computable")
 
 
+def _gap_word(v: Value | None) -> str:
+    """How a missing input is named in a gap's reason: 未取得 / 計算不能, or a stored 適用外 of a field that cannot be absent."""
+    if v is None:
+        return "未取得"
+    return "適用外（無いということが無い項目）" if v.state == "not_applicable" else LABEL[v.state]
+
+
 def _unit_blocks(blocked: dict, route_word: str, w) -> str:
     """Why a material quantity other than 0 in these units could not change the total, grouped by the reason (`blocked`:
     unit -> "factor" / "route" / "stage", in the order of the field's units)."""
@@ -361,6 +368,11 @@ def expand_stages(stages, ctx: dict, kind: str | None = None) -> list:
     return [s_ for s_ in FL.STAGES_ALL if s_ in x]
 
 
+# how a stored 適用外 on a field that cannot be absent (na_never: refused on save, but saved before that) is said: it is
+# read as 未取得 (the bridge, the progress of the inputs)
+NA_NEVER_WORD = "適用外（無いということが無い項目なので、未取得として扱う）"
+
+
 def _never(fid: str, v) -> bool:
     """not obtained, not computable, or 適用外 on a field that cannot be absent (na_never): treated as missing."""
     return v is None or v.state in ("not_obtained", "not_computable") or \
@@ -385,6 +397,9 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         v = V(fid)
         x, st, how = _num(v) if FL.FIELDS[fid]["type"] in ("number", "integer") else (
             (v.value, ENGINE_STATE[v.state], LABEL[v.state]) if v and v.state in HAS_VALUE else (None, None, LABEL[v.state] if v else "未取得"))
+        if v is not None and v.state == "not_applicable" and FL.FIELDS[fid].get("na_never"):
+            # a stored 適用外 on a field that cannot be absent (saved before it was refused): missing, as 未取得
+            x, how = None, NA_NEVER_WORD
         if x == "NA":
             if FL.FIELDS[fid]["na"] == "zero":
                 d.item(cat, key, 0.0 if FL.FIELDS[fid]["type"] == "number" else 0)
@@ -436,7 +451,8 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
         d.use("a_stages", sv, LABEL[sv.state], ["boundary.included_lifecycle_stages"])
     else:
         d.missing.append("評価範囲（ライフサイクル段階）")
-        d.skip("a_stages", sv, "未設定：計算しない（段階が空だとエンジンは 0 を返すため）")
+        d.skip("a_stages", sv, (NA_NEVER_WORD if sv is not None and sv.state == "not_applicable" else "未設定")
+               + "：計算しない（段階が空だとエンジンは 0 を返すため）")
     st_set = set(stages or ())
 
     ctx = {"b5": False, "b4_material": True, "b4_equipment": True, "b1_replacement": True, "b2_moot": False,
@@ -513,6 +529,14 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             d.skip(f, V(f), "改修・建替えを想定していない（または想定が未取得）ので渡さない")
         if _unknown(rec) and cyc_in and not fra0:
             missing("a_reconstruction", ("B5",), "大規模改修・建替えの想定が未取得（B5 は計算できない）")
+            # the cycle and the share that B5 needs as well, named at once (as the refrigerant parts of B1): B5 stays as
+            # marked; only the named inputs grow (the cycle can fall inside T and the share is not 0 here)
+            if cyc_never:
+                missing("a_replacement_cycle", ("B5",), "改修・建替えの周期が%s（想定を入れても、周期が無いと B5 は計算できない）"
+                        % _gap_word(V("a_replacement_cycle")))
+            if fra_unknown:
+                missing("a_recon_fraction", ("B5",), "改修の範囲の割合が%s（想定を入れても、割合が無いと B5 は計算できない）"
+                        % _gap_word(V("a_recon_fraction")))
         elif _unknown(rec) and fra0:
             d.skip("a_reconstruction", rec, "改修の範囲の割合が 0 なので、想定がどれでも B5 は 0（想定は問わない）")
         elif b5_none and not _unknown(rec):
@@ -1123,6 +1147,15 @@ def build(values: dict[str, Value], refset: dict, title: str = "WLC Studio proje
             missing("e_%s_count" % t, EQUIPMENT_STAGES, "%s機器の台数が未取得（本当に無いと分かっているときだけ「適用外」）" % tl, kind="equipment",
                     ctx_over={"b4_equipment": renew.get(trade, True), "zero": ("C3",) if mass0 else ()})
             eq_gap_renew.append(renew.get(trade, True))
+            # the other inputs of this row that its stages need as well, named at once (as the refrigerant parts of B1):
+            # the life for B4 (unknown: a renewal can fall inside T) and the mass for C3 (and B4 / B5 by the expansion),
+            # by the same tests as with a count. The stages stay as the count marks them; only the named inputs grow
+            if _num(lv)[0] is None:
+                missing("e_%s_life" % t, ("B4",), "%s機器の耐用年数が%s（台数を入れても、耐用年数が無いと交換を数えられない）"
+                        % (tl, _gap_word(lv)), kind="equipment")
+            if not mass0 and not isinstance(_num(mv)[0], float):
+                missing("e_%s_mass" % t, ("C3",), "%s機器 1 台の解体時質量が%s（台数を入れても、質量が無いと解体時の処理（C3）を"
+                        "計算できない）" % (tl, _gap_word(mv)), kind="equipment", ctx_over={"b4_equipment": renew.get(trade, True)})
             d.skip("e_%s_count" % t, cv, how + "：台数の欠けた設備の行を渡した（エンジンが不完全とする。この設備は合計に入っていない）")
             d.skip("e_%s_life" % t, lv, "台数が無いので渡していない")
             d.skip("e_%s_mass" % t, mv, "1 台の質量 0 を台数の欠けた仮の行に渡した（台数が無いので計算には入らない）" if mass0

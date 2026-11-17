@@ -88,13 +88,13 @@ _f("b_name", label="建物名称", type="text", screen=G[0], group=G[1], categor
 _f("b_address", label="所在地", type="text", screen=G[0], group=G[1], category=G[2], engine=[], role="record", private=True,
    help="住所は自動調査に使うだけで、計算と書き出しには使わない。")
 _f("b_use", label="主な用途", type="enum", enum=USES, screen=G[0], group=G[1], category=G[2],
-   engine=["project.building_use", "project.use_area_breakdown"], role="use", required=True,
+   engine=["project.building_use", "project.use_area_breakdown"], role="use", required=True, na_never=True,
    help="延床面積と組み合わせて、用途別面積（エンジンの必須入力）になる。")
 _f("b_structure", label="構造", type="enum", enum=[(s["id"], s["label"]) for s in STRUCTURES], screen=G[0], group=G[1],
    category=G[2], engine=["project.structure_type"], role="scalar")
 _f("b_gfa", label="延床面積", unit="m2", screen=G[0], group=G[1], category=G[2],
    engine=["project.gross_floor_area", "project.use_area_breakdown"], role="gfa", required=True, estimable=True,
-   range=(1, 3e6), help="PLATEAU の屋根面積×階数は推定であり、延床面積の記録ではない。")
+   range=(1, 3e6), na_never=True, help="PLATEAU の屋根面積×階数は推定であり、延床面積の記録ではない。")
 _f("b_floors_above", label="地上階数", type="integer", unit="階", screen=G[0], group=G[1], category=G[2],
    engine=["project.floors_above"], role="scalar", estimable=True, range=(1, 200))
 _f("b_floors_below", label="地下階数", type="integer", unit="階", screen=G[0], group=G[1], category=G[2],
@@ -122,7 +122,7 @@ _f("g_borehole", label="近くのボーリング調査（国土地盤情報）",
 G = ("basic", "評価の条件", "assessment")
 _f("a_stages", label="評価範囲（ライフサイクル段階）", type="enum", screen=G[0], group=G[1], category=G[2],
    enum=[(k, lab) for k, lab, _ in STAGE_PRESETS], engine=["boundary.included_lifecycle_stages"], role="stages",
-   required=True, help="これが無いと、エンジンはどの段階も合計しない（0 になる）ので必須。")
+   required=True, na_never=True, help="これが無いと、エンジンはどの段階も合計しない（0 になる）ので必須。")
 _f("a_eol_route", label="解体後の処理（シナリオ）", type="enum", screen=G[0], group=G[1], category=G[2],
    enum=[("RECYCLE", "再資源化"), ("PROCESSING", "中間処理"), ("LANDFILL", "埋立"), ("REUSE", "再使用")],
    engine=["materials[].end_of_life.routes[].route"], role="eol_route", required=True, na_context=True,
