@@ -564,7 +564,10 @@ class App:
                 self._range(vals, T, r["lca_project_id"], pid, rep, base_total)
             if out["range"] and out["summary"]["lower_bound"]:
                 out["range"]["lower_bound"] = True
-                out["range"]["note"] += "入っていない入力があるので、両端とも下限（本当の合計は上端より大きいことがある）。"
+                # with ends shown, the screen labels them 「範囲（両端とも下限）」: the note says only what the label does not.
+                # With no ends (no stated range, or an end that cannot be computed) there are no ends to speak of
+                out["range"]["note"] += "入っていない入力があるので、%s。" % (
+                    "合計は下限" if out["range"]["low_t"] is None else "本当の合計は上端より大きいことがある")
         self.projects.save_run(pid, run["id"], rep["input_hash"], T, out["status"], out)
         return out
 

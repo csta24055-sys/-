@@ -359,6 +359,8 @@ class Projects:
         for fid, F in FL.FIELDS.items():
             v = vals.get(fid)
             st = v.state if v else "not_obtained"
+            if st == "not_applicable" and F.get("na_never"):
+                st = "not_obtained"            # a stored 適用外 on a field that cannot be absent: counted as 未取得, as the bridge
             by_state[st] += 1
             by_screen[F["screen"]]["total"] += 1
             done = st in HAS_VALUE or st == "not_applicable"
@@ -369,6 +371,9 @@ class Projects:
         return {"filled": filled, "total": total, "percent": round(100 * filled / total) if total else 0,
                 "later": len(later), "by_screen": by_screen, **by_state,
                 "note": "入力が埋まった割合であって、精度ではない。"}
+
+
+TEXT_MAX = 500          # characters of a text value (after the spaces at both ends are removed); longer is refused
 
 
 def _normalise(F: dict, v: Value) -> Value:
@@ -417,6 +422,10 @@ def _normalise(F: dict, v: Value) -> Value:
     else:
         if not isinstance(v.value, (str, int, float)) or isinstance(v.value, bool):
             raise ProjectError("「%s」は文字で入れる" % F["label"])
-        v.value = str(v.value).strip()[:500]
+        text = str(v.value).strip()
+        if len(text) > TEXT_MAX:
+            # refused with the reason (a 400 on a save), instead of cutting it silently
+            raise ProjectError("「%s」は %d 字までで入れる（いまは %d 字）" % (F["label"], TEXT_MAX, len(text)))
+        v.value = text
         v.unit = ""
     return v
