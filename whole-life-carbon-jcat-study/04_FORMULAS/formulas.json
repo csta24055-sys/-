@@ -1,0 +1,868 @@
+{
+  "schema_version": "1.0",
+  "purpose": "独立ソフトの演算ロジック。公式J-CATの個別Excel式の転載・完全再現ではない",
+  "count": 53,
+  "formulae": [
+    {
+      "id": "SYS-01",
+      "stage": "PRE",
+      "name": "入力数値の状態判定",
+      "expression": "value_state = OBSERVED | ESTIMATE | EXPLICIT_ZERO | MISSING | DERIVED",
+      "inputs": [
+        "PROVENANCE.source_type",
+        "PROVENANCE.data_quality"
+      ],
+      "output": "screen:validation",
+      "notes": "不明とゼロの分離、計算停止条件を明示",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SYS-02",
+      "stage": "PRE",
+      "name": "単位整合性検証",
+      "expression": "factor_denominator_unit == quantity_unit after documented conversion",
+      "inputs": [
+        "MATERIAL.quantity",
+        "MATERIAL.quantity_unit",
+        "FACTOR.factor_unit"
+      ],
+      "output": "screen:validation",
+      "notes": "換算根拠がなければ不合格",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SYS-03",
+      "stage": "PRE",
+      "name": "係数権限ゲート",
+      "expression": "usable(factor) = license_allows(actual_intended_use)",
+      "inputs": [
+        "FACTOR.factor_license",
+        "FACTOR.factor_source_url"
+      ],
+      "output": "screen:validation",
+      "notes": "ライセンス不明の係数は適用しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SYS-04",
+      "stage": "PRE",
+      "name": "延床面積との面積整合",
+      "expression": "A_total = sum(use_area_by_function)",
+      "inputs": [
+        "PROJECT.use_area_breakdown",
+        "PROJECT.gross_floor_area"
+      ],
+      "output": "output:data_checks",
+      "notes": "用途別面積と合計の整合検査",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A13-01",
+      "stage": "A1-A3",
+      "name": "資材製造排出量（単位・境界確認後）",
+      "expression": "E_material_kgCO2e = sum_i( Q_i_native_unit * EF_i_kgCO2e_per_native_unit )",
+      "inputs": [
+        "MATERIAL.quantity",
+        "MATERIAL.quantity_unit",
+        "FACTOR.factor_value",
+        "FACTOR.factor_stages"
+      ],
+      "output": "output:stage.A1-A3",
+      "notes": "独自取得・適法な原単位のみ",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A13-02",
+      "stage": "A1-A3",
+      "name": "複合材の構成比からの推計",
+      "expression": "EF_composite = sum_j(mass_fraction_j * EF_component_j)",
+      "inputs": [
+        "MATERIAL.material_specification",
+        "FACTOR.factor_id"
+      ],
+      "output": "output:stage.A1-A3",
+      "notes": "質量比合計が1であること。配合データの権利・単位を確認",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A13-03",
+      "stage": "A1-A3",
+      "name": "EPD/商品固有値",
+      "expression": "E_product = declared_quantity * authorized_product_specific_EF",
+      "inputs": [
+        "MATERIAL.additional_epd_reference",
+        "MATERIAL.quantity",
+        "FACTOR.factor_boundary"
+      ],
+      "output": "output:stage.A1-A3",
+      "notes": "EPDの対象段階・宣言単位・有効期限が一致するときのみ",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A13-04",
+      "stage": "A1-A3",
+      "name": "未数量工事項目の推定",
+      "expression": "E_unquantified = independent_estimate_model(cost_share, declared_scope, licensed_factor)",
+      "inputs": [
+        "MATERIAL.unquantified_cost_ratio",
+        "FACTOR.factor_id",
+        "PROVENANCE.source_type"
+      ],
+      "output": "output:stage.A1-A3",
+      "notes": "J-CAT固有倍率の流用禁止。推定モデル未設計",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A13-05",
+      "stage": "A1-A3",
+      "name": "数量による端材の扱い",
+      "expression": "Q_ordered = Q_installed / (1 - waste_fraction)",
+      "inputs": [
+        "MATERIAL.quantity",
+        "MATERIAL.waste_rate",
+        "MATERIAL.quantity_basis"
+      ],
+      "output": "output:material_quantity",
+      "notes": "設計数量と発注数量の二重計上を防ぐ。適用範囲は要定義",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A4-01",
+      "stage": "A4",
+      "name": "質量距離ベースの輸送",
+      "expression": "E_transport = sum_i( transported_tonnes_i * km_i * authorized_EF_kgCO2e_per_tkm_i )",
+      "inputs": [
+        "TRANSPORT.transported_mass",
+        "TRANSPORT.distance",
+        "TRANSPORT.mode",
+        "TRANSPORT.transport_factor_id"
+      ],
+      "output": "output:stage.A4",
+      "notes": "輸送モードと往復/片道、積載率、積算済み係数との重複を確認",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A4-02",
+      "stage": "A4",
+      "name": "製品別輸送負荷",
+      "expression": "E_delivery = sum_i(Q_i * authorized_transport_EF_i)",
+      "inputs": [
+        "MATERIAL.quantity",
+        "TRANSPORT.transport_factor_id"
+      ],
+      "output": "output:stage.A4",
+      "notes": "A1-A3の係数境界にA4が含まれていないこと",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A5-01",
+      "stage": "A5",
+      "name": "仮設電気",
+      "expression": "E_site_power = site_kWh * licensed_grid_EF",
+      "inputs": [
+        "CONSTRUCTION.site_electricity",
+        "OPERATION.grid_factor_scenario_id"
+      ],
+      "output": "output:stage.A5",
+      "notes": "施工時年度・地域の係数",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A5-02",
+      "stage": "A5",
+      "name": "施工燃料",
+      "expression": "E_site_fuels = sum_f(volume_f * authorized_EF_f)",
+      "inputs": [
+        "CONSTRUCTION.site_diesel",
+        "CONSTRUCTION.site_gas",
+        "FACTOR.factor_id"
+      ],
+      "output": "output:stage.A5",
+      "notes": "L,m3,MJなどの単位換算が必要",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A5-03",
+      "stage": "A5",
+      "name": "工事廃棄物",
+      "expression": "E_construction_waste = sum_w(mass_w * licensed_processing_EF_w)",
+      "inputs": [
+        "CONSTRUCTION.site_waste_mass",
+        "FACTOR.factor_id"
+      ],
+      "output": "output:stage.A5",
+      "notes": "C1-C4と同じ廃棄物を二重計上しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "A5-04",
+      "stage": "A5",
+      "name": "工事負荷の合計",
+      "expression": "E_A5 = E_site_power + E_site_fuels + E_construction_waste + E_other_verified_site",
+      "inputs": [
+        "CONSTRUCTION.site_electricity",
+        "CONSTRUCTION.site_diesel",
+        "CONSTRUCTION.site_waste_mass"
+      ],
+      "output": "output:stage.A5",
+      "notes": "積み残し工種を別管理",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B1-01",
+      "stage": "B1",
+      "name": "物質のCO2e充填量",
+      "expression": "M_CO2e_initial = sum_g(charge_kg_g * GWP_g)",
+      "inputs": [
+        "REFRIGERANT.charge_mass",
+        "REFRIGERANT.gwp"
+      ],
+      "output": "output:refrigerant_inventory",
+      "notes": "充填量は排出量ではない。GWPの時点と対象ガスを記録",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B1-02",
+      "stage": "B1",
+      "name": "使用期間の漏洩",
+      "expression": "E_operational_leakage = sum_year,sum_g(remaining_mass_g,y * annual_leak_rate_g,y * GWP_g)",
+      "inputs": [
+        "REFRIGERANT.charge_mass",
+        "REFRIGERANT.annual_leak_rate",
+        "REFRIGERANT.gwp",
+        "BOUNDARY.study_period"
+      ],
+      "output": "output:stage.B1",
+      "notes": "漏洩後の残存量・補充・交換をシナリオで管理",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B1-03",
+      "stage": "B1",
+      "name": "更新時の漏洩",
+      "expression": "E_replacement_loss = sum_events(loss_mass_event * GWP_at_event)",
+      "inputs": [
+        "REFRIGERANT.replacement_loss_rate",
+        "REFRIGERANT.refrigerant_change_years",
+        "REFRIGERANT.gwp"
+      ],
+      "output": "output:stage.B1",
+      "notes": "同じイベントをB4/Cと重複しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B1-04",
+      "stage": "B1/C",
+      "name": "廃棄時未回収量",
+      "expression": "E_eol_refrigerant = remaining_mass * (1 - recovery_fraction) * GWP",
+      "inputs": [
+        "REFRIGERANT.end_of_life_recovery_rate",
+        "REFRIGERANT.gwp"
+      ],
+      "output": "output:refrigerant_eol",
+      "notes": "B1・Cどちらに含むか境界規約を明示",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B2-01",
+      "stage": "B2",
+      "name": "施設管理に帰属させる運用負荷",
+      "expression": "E_management = E_eligible_operations * management_share",
+      "inputs": [
+        "OPERATION.facility_management_ratio",
+        "OPERATION.electricity_per_year"
+      ],
+      "output": "output:stage.B2",
+      "notes": "B6との二重計上を防ぐ。独立した勘定境界必要",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B3-01",
+      "stage": "B3",
+      "name": "年間修繕",
+      "expression": "E_repairs = sum_year,sum_component( repair_activity_y * authorized_repair_EF )",
+      "inputs": [
+        "MATERIAL.repair_rate",
+        "MATERIAL.material_life",
+        "EQUIPMENT.equipment_repair_rate"
+      ],
+      "output": "output:stage.B3",
+      "notes": "単純な初期量比例は推定法であり実測修繕と区別",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B3-02",
+      "stage": "B3",
+      "name": "期間中の反復修繕（推計）",
+      "expression": "E_repairs_approx = E_eligible_initial * annual_repair_ratio * study_years",
+      "inputs": [
+        "MATERIAL.repair_rate",
+        "BOUNDARY.study_period"
+      ],
+      "output": "output:stage.B3",
+      "notes": "修繕対象の範囲・資材・用途の独立根拠必要",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B4-01",
+      "stage": "B4",
+      "name": "更新イベント年の生成",
+      "expression": "replacement_years = { y | y = n*service_life and 0 < y < study_period }",
+      "inputs": [
+        "EQUIPMENT.equipment_service_life",
+        "BOUNDARY.study_period"
+      ],
+      "output": "output:replacement_schedule",
+      "notes": "境界年と建替年の扱いを明記。等号判定は検証対象",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B4-02",
+      "stage": "B4",
+      "name": "機器・資材更新負荷",
+      "expression": "E_replacements = sum_event(E_new_manufacturing + E_delivery + E_installation + E_disposal_at_event)",
+      "inputs": [
+        "EQUIPMENT.equipment_quantity",
+        "EQUIPMENT.replacement_event_list",
+        "FACTOR.factor_id"
+      ],
+      "output": "output:stage.B4",
+      "notes": "更新に伴う各段階と初期製造を区分",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B4-03",
+      "stage": "B4",
+      "name": "交換回数の概算",
+      "expression": "N = count( n | n positive_integer and n*cycle < T )",
+      "inputs": [
+        "MATERIAL.refresh_cycles",
+        "BOUNDARY.study_period"
+      ],
+      "output": "output:replacement_count",
+      "notes": "Tちょうどの交換を含むか要検証",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B5-01",
+      "stage": "B5",
+      "name": "大型改修・建替イベント",
+      "expression": "E_refurbishment = sum_event(E_added + E_removed + E_processes)",
+      "inputs": [
+        "BOUNDARY.replacement_cycle",
+        "BOUNDARY.reconstruction_scenario"
+      ],
+      "output": "output:stage.B5",
+      "notes": "新築と建替のAステージが重複しない境界管理",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B6-01",
+      "stage": "B6",
+      "name": "年間買電排出",
+      "expression": "E_elec_y = bought_kWh_y * authorized_EF_grid_y",
+      "inputs": [
+        "OPERATION.electricity_per_year",
+        "OPERATION.grid_factor_scenario_id",
+        "BOUNDARY.study_start_year"
+      ],
+      "output": "output:stage.B6",
+      "notes": "年度別係数、market/location基準を明記",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B6-02",
+      "stage": "B6",
+      "name": "燃料の年間排出",
+      "expression": "E_fuels_y = sum_f(annual_consumption_f,y * authorized_EF_f,y)",
+      "inputs": [
+        "OPERATION.gas_per_year",
+        "OPERATION.oil_per_year",
+        "OPERATION.district_heat_per_year"
+      ],
+      "output": "output:stage.B6",
+      "notes": "排出係数に含まれる上流/燃焼の境界を確認",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B6-03",
+      "stage": "B6",
+      "name": "評価年数の積算",
+      "expression": "E_B6 = sum_{y=1}^{study_period}( E_elec_y + E_fuels_y + E_other_eligible_y )",
+      "inputs": [
+        "BOUNDARY.study_period",
+        "OPERATION.grid_factor_scenario_id"
+      ],
+      "output": "output:stage.B6",
+      "notes": "期間は整数年または月按分とし、日付基準を揃える",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B6-04",
+      "stage": "B6",
+      "name": "オンサイト発電の扱い",
+      "expression": "net_grid_import_kWh = max(0, consumption_kWh - eligible_self_used_generation_kWh)",
+      "inputs": [
+        "OPERATION.onsite_generation_per_year",
+        "OPERATION.onsite_export_per_year",
+        "OPERATION.electricity_per_year"
+      ],
+      "output": "output:energy_balance",
+      "notes": "証書・売電分と自家消費分を独立記録。排出削減を自動二重加算しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B7-01",
+      "stage": "B7",
+      "name": "上水利用排出",
+      "expression": "E_water_y = water_m3_y * authorized_water_EF",
+      "inputs": [
+        "WATER_WASTE.water_per_year",
+        "WATER_WASTE.water_factor_id"
+      ],
+      "output": "output:stage.B7",
+      "notes": "採用するシステム境界のステージに一致させる",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B7-02",
+      "stage": "B7",
+      "name": "下水処理排出",
+      "expression": "E_sewage_y = sewage_m3_y * authorized_sewage_EF",
+      "inputs": [
+        "WATER_WASTE.sewage_per_year",
+        "WATER_WASTE.sewage_factor_id"
+      ],
+      "output": "output:stage.B7",
+      "notes": "上水と下水の両方を一つの係数で重複計上しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B7-03",
+      "stage": "B7",
+      "name": "一般廃棄物排出",
+      "expression": "E_waste_y = municipal_waste_kg_y * authorized_waste_EF",
+      "inputs": [
+        "WATER_WASTE.municipal_waste_per_year",
+        "WATER_WASTE.waste_factor_id"
+      ],
+      "output": "output:stage.B7",
+      "notes": "処理施設や排出対象段階に応じ適正区分へ",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "B7-04",
+      "stage": "B7",
+      "name": "評価期間積算",
+      "expression": "E_B7 = sum_y(E_water_y + E_sewage_y + E_waste_y)",
+      "inputs": [
+        "WATER_WASTE.water_per_year",
+        "WATER_WASTE.sewage_per_year",
+        "BOUNDARY.study_period"
+      ],
+      "output": "output:stage.B7",
+      "notes": "水・廃棄物の対象境界は設計選択",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "C1-01",
+      "stage": "C1",
+      "name": "解体作業排出",
+      "expression": "E_demolition = sum_a(activity_a * authorized_process_EF_a)",
+      "inputs": [
+        "END_OF_LIFE.demolition_activity",
+        "END_OF_LIFE.demolition_factor_id"
+      ],
+      "output": "output:stage.C1",
+      "notes": "現場燃料をA5と混同しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "C2-01",
+      "stage": "C2",
+      "name": "廃棄物搬出",
+      "expression": "E_waste_transport = waste_tonnes * haul_km * authorized_EF",
+      "inputs": [
+        "END_OF_LIFE.waste_transport_mass",
+        "END_OF_LIFE.waste_transport_distance"
+      ],
+      "output": "output:stage.C2",
+      "notes": "片道・往復・処分場などの計算境界",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "C3-01",
+      "stage": "C3",
+      "name": "廃棄物処理",
+      "expression": "E_processing = sum_route( allocated_mass_route * authorized_treatment_EF_route )",
+      "inputs": [
+        "END_OF_LIFE.waste_treatment_route",
+        "END_OF_LIFE.waste_recycle_fraction",
+        "END_OF_LIFE.eol_factor_ids"
+      ],
+      "output": "output:stage.C3",
+      "notes": "C3とDでリサイクル便益を重複計上しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "C4-01",
+      "stage": "C4",
+      "name": "最終処分",
+      "expression": "E_landfill = disposed_mass * licensed_landfill_EF",
+      "inputs": [
+        "END_OF_LIFE.landfill_quantity",
+        "END_OF_LIFE.eol_factor_ids"
+      ],
+      "output": "output:stage.C4",
+      "notes": "処理後の残渣率と最終処分量の整合",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "C-05",
+      "stage": "C1-C4",
+      "name": "資材の質量収支",
+      "expression": "mass_to_reuse + mass_to_recycle + mass_to_process + mass_to_landfill <= mass_eol_adjusted",
+      "inputs": [
+        "END_OF_LIFE.waste_reuse_fraction",
+        "END_OF_LIFE.waste_recycle_fraction",
+        "MATERIAL.quantity"
+      ],
+      "output": "output:data_checks",
+      "notes": "ロス・水分・保管量がある場合の許容誤差を仕様化",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "STO-01",
+      "stage": "MEMO",
+      "name": "木材の炭素貯蔵",
+      "expression": "stored_biogenic_carbon = measured_dry_mass * declared_biogenic_carbon_fraction * molecular_mass_ratio_CO2_C",
+      "inputs": [
+        "MATERIAL.timber_quantity",
+        "MATERIAL.material_specification"
+      ],
+      "output": "output:carbon_storage_memo",
+      "notes": "排出総量へ自動控除しない。炭素計上の規格・ライセンス要確認",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "STO-02",
+      "stage": "MEMO",
+      "name": "コンクリート炭酸化等の取り扱い",
+      "expression": "stored_or_absorbed_CO2 = measured_activity * verified_uptake_EF",
+      "inputs": [
+        "MATERIAL.concrete_volume",
+        "FACTOR.factor_id"
+      ],
+      "output": "output:carbon_uptake_memo",
+      "notes": "測定値・境界・期間・量の独立根拠必要",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-01",
+      "stage": "SUM",
+      "name": "アップフロント",
+      "expression": "E_upfront = E_A1A3 + E_A4 + E_A5",
+      "inputs": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output": "output:upfront",
+      "notes": "未算入項目・工程別内訳を明記",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-02",
+      "stage": "SUM",
+      "name": "エンボディド",
+      "expression": "E_embodied = E_A1A3 + E_A4 + E_A5 + E_B1toB5 + E_C1toC4",
+      "inputs": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output": "output:embodied",
+      "notes": "運用B6/B7をここに二重計上しない。B1の境界に注意",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-03",
+      "stage": "SUM",
+      "name": "ホールライフ",
+      "expression": "E_WLC = sum(E_included_stages_A1_to_C4)",
+      "inputs": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output": "output:total_wlc",
+      "notes": "選択した段階の結果のみ加算",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-04",
+      "stage": "SUM",
+      "name": "延べ床面積当たり",
+      "expression": "Intensity_area = E_WLC_kgCO2e / floor_area_m2",
+      "inputs": [
+        "PROJECT.gross_floor_area"
+      ],
+      "output": "output:wlc_kgco2e_per_m2",
+      "notes": "床面積は正の有限値",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-05",
+      "stage": "SUM",
+      "name": "年平均・床面積当たり",
+      "expression": "Intensity_annual = E_WLC_kgCO2e / (floor_area_m2 * study_years)",
+      "inputs": [
+        "PROJECT.gross_floor_area",
+        "BOUNDARY.study_period"
+      ],
+      "output": "output:wlc_kgco2e_per_m2_year",
+      "notes": "評価期間が0なら禁止",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-06",
+      "stage": "SUM",
+      "name": "t-CO2e換算",
+      "expression": "WLC_tCO2e = WLC_kgCO2e / 1000",
+      "inputs": [
+        "BOUNDARY.results_gas_scope"
+      ],
+      "output": "output:wlc_tco2e",
+      "notes": "tとkgの混同に注意",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-07",
+      "stage": "SUM",
+      "name": "段階別割合",
+      "expression": "stage_share = stage_total / overall_total",
+      "inputs": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output": "output:stage_share",
+      "notes": "総量0や負値に対する特例",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "SUM-08",
+      "stage": "SUM",
+      "name": "改善案との差分",
+      "expression": "delta = proposal_total - baseline_total; saving_pct=(baseline-proposal)/baseline",
+      "inputs": [
+        "BOUNDARY.baseline_scenario"
+      ],
+      "output": "output:scenario_comparison",
+      "notes": "面積、期間、境界、係数バージョンが一致する場合のみ比較",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "QA-01",
+      "stage": "QA",
+      "name": "相互排他の境界",
+      "expression": "sum(components_per_source_without_double_counting) == stage_total",
+      "inputs": [
+        "BOUNDARY.included_lifecycle_stages"
+      ],
+      "output": "output:data_checks",
+      "notes": "A4/A5/B6/B7等に重複がないこと",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "QA-02",
+      "stage": "QA",
+      "name": "時間境界検査",
+      "expression": "all_event_years >= 0 and all_event_years < study_years",
+      "inputs": [
+        "BOUNDARY.study_period",
+        "EQUIPMENT.replacement_event_list"
+      ],
+      "output": "output:data_checks",
+      "notes": "基準年を0とするか1とするか固定",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "QA-03",
+      "stage": "QA",
+      "name": "出典ゲート",
+      "expression": "all_used_factors.have_allowed_licenses == true",
+      "inputs": [
+        "FACTOR.factor_license",
+        "FACTOR.factor_source_url"
+      ],
+      "output": "output:data_checks",
+      "notes": "他者の公式ファクターを無許諾で流用しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    },
+    {
+      "id": "QA-04",
+      "stage": "QA",
+      "name": "用途別面積の検算",
+      "expression": "abs(area_total - sum(areas_by_use)) <= declared_tolerance",
+      "inputs": [
+        "PROJECT.gross_floor_area",
+        "PROJECT.use_area_breakdown"
+      ],
+      "output": "output:data_checks",
+      "notes": "数値を勝手に補正しない",
+      "status": "CONCEPTUAL_INDEPENDENT_DRAFT",
+      "jcat_verbatim": false,
+      "validation": "NOT_EXECUTED",
+      "license": "independently_designed_logic_only"
+    }
+  ]
+}
