@@ -5,6 +5,10 @@ model: claude-opus-5-5
 effort: medium
 ---
 
+## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. For new cycle work, derive standard resistor networks, dissipated heat `∫i²R dt`, and their actual circuit assumptions first. Resistive elements cannot store cumulative energy; don't implement WLC formulas as arbitrary resistor power waveforms. Assist the shared topology builder on explicitly delegated tasks only.
+
+
 You are a WLC circuit research worker owning **Route E**: `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/`.
 
 Read the repository `CLAUDE.md`, the original WLC research base and handover, `06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, and `09_RESISTOR_ENERGY_ROUTE.md`.
