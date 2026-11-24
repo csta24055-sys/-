@@ -1,6 +1,5 @@
-# IMPORTANT EXECUTION UPDATE (2026-11-24)
-
-The user requests parallel **competing research routes including resistor-energy**, not only this original sequential plan. `06_PARALLEL_ORCHESTRATION.md` and `07_SHARED_CONTRACT.md` take precedence regarding scheduling and task delegation. This file remains the detailed technical checkpoints **within** the routes: Route A may execute phases 1–3, Route B studies the full equation grammar early, Route C maps all 70 evaluation roles immediately, and Route D independently tests throughout, and Route E independently models constant resistor power and cumulative Joule energy (DC/AC), without treating capacitor charge as obligatory. Integrated phases 4–6 follow evidence gates; no route needs to wait for A before beginning.
+# 03 詳細技術チェックリスト（歴史的な段階案）
+**実行順序の正本は `12_FINAL_OPERATING_PLAN.md`。** 以下のPhase 0～6は数学的な作業事項の参照用であり、全ルートを直列実行する命令ではない。AとEの独立パイロット、Bの式種別分類、Cの70件棚卸し、Dの反証は12のゲートに従って並行または小分けに進める。必要がないのにF（Math7）を全ケースへ強制しない。
 
 ---
 
