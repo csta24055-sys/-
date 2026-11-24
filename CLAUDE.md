@@ -15,6 +15,8 @@ For any WLC/circuit task, read, in order:
 9. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/07_SHARED_CONTRACT.md` — fixed names, units, boundaries and route outputs.
 10. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/08_AUTONOMOUS_START.md` — one-message start instructions.
 11. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/09_RESISTOR_ENERGY_ROUTE.md` — **independent Joule-heating route**, a user-prioritized alternative to capacitor charging.
+12. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md` — stage-specific model allocation.
+13. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/11_MATH7_INTEGRATION.md` — Math7 access, modes, scope and 7-engine limitations.
 
 Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統一方程式.md`, `07_動的LCAと工程時間.md`, `09_未解決問題と限界.md`, and `15_劣化・寿命・交換モデル研究開始資料.md` before formal conclusions.
 
@@ -35,6 +37,13 @@ Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統�
 - **Each worker owns only its route subfolder** under `WLC_CIRCUIT_RESEARCH/routes/`; coordinator alone edits shared files and the future `integration/` folder. Do not let concurrent agents change a shared branch HEAD or commit in one shared checkout. Separate branch/session work is preferable for independent writes.
 - A, B and E attempt different constructive routes, C independently maps all 70 unit roles (21 direct, 49 other), D tests and challenges all routes. Integrate supported results only after meeting a documented compatibility/verification gate. Unsupported mapping, non-existence and hybrid exceptions are valid findings, not prompts for unending retries.
 - Do not block on routine approvals; act within documented permissions, execute tests, record status and counterexamples. The presence of instructions or named agents does not mean the research sessions are running.
+
+## Math7 numerical-symbolic research bridge (user requested)
+- The **same repository name** `csta24055-sys/-` has distinct relevant refs: main has existing `math_tools_v2/`, `math_interop_v0/`, and `.github/workflows/math-ir-efficient.yml`, while this WLC branch does not. Use safe **read-only fetch/temporary source checkout** rather than attaching the same repository with extra privileges or switching an active worktree.
+- Delegate Math7 integration to `.claude/agents/wlc-math7-orchestrator.md` (Opus 5.5 Medium), owning only `WLC_CIRCUIT_RESEARCH/routes/F_math7_bridge/`. Verify five Python engines in the Math7 Cloud environment; use the **existing main-branch GitHub Actions workflow** for SageMath and MATLAB only through permitted authorized paths (web UI if Claude API is 403).
+- `portable-full` is a restricted 7-engine **algebraic Math IR** regression, NOT 7-engine support for arbitrary WLC integrals/step functions. The `lca-operators` integration/time/masked-sum/spectrum mode is Python-only until new adapters are actually implemented and independently checked.
+- Never silently change permissions, attach repos with broader access, inject tokens or trigger Actions without user authorization. Action source being present does not prove Sage/MATLAB actually ran.
+- Prioritize read-only mathematical verification, and avoid writing source/fixtures into `main` or original research branches.
 
 ## Non-negotiable boundaries
 - Never edit `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/`, existing research chapters 09–23, the original `research_archive/`, or the WLC Studio application. Treat all as immutable references.
