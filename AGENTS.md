@@ -5,3 +5,5 @@ Read `CLAUDE.md` and the specifications under `whole-life-carbon-jcat-study/WLC_
 Scope: independent mathematical modeling of building whole-life carbon as electrical equivalent circuits (current sources, integrating capacitors, clocks, thresholds, switches and state variables). Keep the original WLC theory base and WLC Studio unchanged.
 
 Use synthetic data only. Treat electronic equivalence as a formal modeling choice, not physical identity. Compare against original reference equations and preserve all uncertainties, especially timing, terminal terms, equipment overlap, refrigerant and numerical boundary behavior. Log verified evidence and counterexamples. Work only on a new research branch.
+
+Also consult `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` and `csta24055-sys/lastdance4-tree-` (`main`, relevant A3/A6/A9 classification branches) as read-only **navigation** to relevant work in `csta24055-sys/lastdance`. For equations rely on the original WLC research base and independent verification, not the classification index.
