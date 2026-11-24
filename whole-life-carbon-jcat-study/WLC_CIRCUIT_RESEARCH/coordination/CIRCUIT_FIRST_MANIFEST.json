@@ -1,0 +1,47 @@
+{
+  "schema": "wlc-circuit-run-manifest/1.0",
+  "cycle": "circuit_first (cycle 2)",
+  "created_at": "2026-11-24",
+  "repository": "csta24055-sys/-",
+  "research_branch": "claude/wlc-equivalent-circuit-20261124",
+  "start_head": "a92465e (cycle-1 final ae85a59 + 10 user commits adding docs 13/14/15, circuit_first/README.md, updated agents; fast-forwarded)",
+  "objective_docs": {
+    "15_FLEXIBLE_REORDERING_CONTRACT.md": "d88c3f5b894f1cb6627cc8514b6d890781e624ee64f3533445e32480e8f97807",
+    "13_CIRCUIT_FIRST_OBJECTIVE.md": "4029bcca7f02cbd7bf7eb3f71797649ec68a4081e7d0fd6fa228abecbe12786a",
+    "14_SEQUENTIAL_CASCADE_HYPOTHESIS.md": "a6a44f75bba5b02744baf137c348b03bbe410039986848f40be7413285573373",
+    "12_FINAL_OPERATING_PLAN.md": "35bf2479ce6b34a8cfab903dbdd932a37e26ee1da7a7e8c860f1a45e60fe9d81",
+    "07_SHARED_CONTRACT.md": "3f75b6a04dd11e4aabfbb6fc2d52a96fcd8a3cd52b2779a7619f013738fe9f7b"
+  },
+  "read_only": [
+    "cycle-1 records: routes/, integration/, coordination/{architecture.md,ARCHITECTURE_ERRATA.md,RUN_MANIFEST.json,SUMMARY_CYCLE1.md,next_cycle.md}",
+    "WLC_THEORY_RESEARCH_BASE/",
+    "chapters 09-23",
+    "research_archive/",
+    "WLC Studio",
+    "Math7 on main"
+  ],
+  "write_scope": [
+    "circuit_first/",
+    "coordination/circuit_first_architecture.md",
+    "coordination/CIRCUIT_FIRST_MANIFEST.json and other new cycle-2 coordination files"
+  ],
+  "old_G5_EXP_1_to_5": "ON_HOLD (not auto-resumed, per docs 13/14/15)",
+  "coordinator_session": {
+    "model": "claude-fable-5-2",
+    "effort": "high",
+    "source": "get_session (session_context.model, last_served_model, effort_level) at cycle start",
+    "note": "session was created as claude-opus-5-5 and switched by the user to claude-fable-5-2 during cycle 1"
+  },
+  "agent_definitions_note": "Agent files were updated by the user after this session started (new wlc-circuit-first-builder; new top sections in architect/verifier). Subagents are told to read their on-disk definition because the session may hold the earlier version.",
+  "phases": {
+    "S1_design": "IN_PROGRESS (wlc-architect, frontmatter claude-fable-5-2/high)",
+    "S2_implementation": "NOT_RUN",
+    "S3_independent_verification": "NOT_RUN",
+    "S4_integration_and_save": "NOT_RUN"
+  },
+  "engines": {
+    "SageMath": "NOT_RUN",
+    "MATLAB": "NOT_RUN"
+  },
+  "execution_log": []
+}
