@@ -1,0 +1,251 @@
+{
+ "schema": "math-ir/0.1",
+ "cases": [
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "NEG_walsh_value_wrong_expected",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "k"
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "pow",
+              "args": [
+               {
+                "op": "symbol",
+                "name": "I0"
+               },
+               {
+                "op": "integer",
+                "value": "2"
+               }
+              ]
+             },
+             {
+              "op": "symbol",
+              "name": "R"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "w"
+         }
+        ]
+       },
+       {
+        "op": "integer",
+        "value": "20"
+       }
+      ]
+     },
+     {
+      "op": "integer",
+      "value": "35"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "w",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "w": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "100"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "NEG_walsh_residual_vs_wrong",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "symbol",
+              "name": "k"
+             },
+             {
+              "op": "mul",
+              "args": [
+               {
+                "op": "pow",
+                "args": [
+                 {
+                  "op": "symbol",
+                  "name": "I0"
+                 },
+                 {
+                  "op": "integer",
+                  "value": "2"
+                 }
+                ]
+               },
+               {
+                "op": "symbol",
+                "name": "R"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "op": "symbol",
+            "name": "w"
+           }
+          ]
+         },
+         {
+          "op": "integer",
+          "value": "20"
+         }
+        ]
+       },
+       {
+        "op": "integer",
+        "value": "35"
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "-1"
+       },
+       {
+        "op": "integer",
+        "value": "55"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "w",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "w": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "100"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  }
+ ]
+}

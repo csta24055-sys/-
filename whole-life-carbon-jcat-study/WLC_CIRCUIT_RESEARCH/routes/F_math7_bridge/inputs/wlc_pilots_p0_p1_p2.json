@@ -1,0 +1,2116 @@
+{
+ "schema": "math-ir/0.1",
+ "cases": [
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t0",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "0"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "0"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t1",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "1"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "0"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t9p999999",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "rational",
+     "numerator": "9999999",
+     "denominator": "1000000"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "0"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t10",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "10"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "1"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t10p000001",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "rational",
+     "numerator": "10000001",
+     "denominator": "1000000"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "1"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t20",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "20"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "2"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t20p000001",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "rational",
+     "numerator": "20000001",
+     "denominator": "1000000"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "2"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t30",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "30"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "3"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t40",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "40"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "4"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "2"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P0_right_t60",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "4"
+           },
+           {
+            "op": "symbol",
+            "name": "t"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "60"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "6"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "3"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P1_sub_right_t20",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "add",
+            "args": [
+             {
+              "op": "integer",
+              "value": "100"
+             },
+             {
+              "op": "mul",
+              "args": [
+               {
+                "op": "integer",
+                "value": "4"
+               },
+               {
+                "op": "symbol",
+                "name": "t"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "20"
+             },
+             {
+              "op": "symbol",
+              "name": "n10"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "35"
+           },
+           {
+            "op": "symbol",
+            "name": "n20"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "50"
+         },
+         {
+          "op": "symbol",
+          "name": "nR"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "-1"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "sigma"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "55"
+           },
+           {
+            "op": "symbol",
+            "name": "nR"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "nR",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "sigma",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "20"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "2"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    },
+    "nR": {
+     "op": "integer",
+     "value": "1"
+    },
+    "sigma": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P1_sub_right_t60",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "add",
+            "args": [
+             {
+              "op": "integer",
+              "value": "100"
+             },
+             {
+              "op": "mul",
+              "args": [
+               {
+                "op": "integer",
+                "value": "4"
+               },
+               {
+                "op": "symbol",
+                "name": "t"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "20"
+             },
+             {
+              "op": "symbol",
+              "name": "n10"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "35"
+           },
+           {
+            "op": "symbol",
+            "name": "n20"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "50"
+         },
+         {
+          "op": "symbol",
+          "name": "nR"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "-1"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "sigma"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "55"
+           },
+           {
+            "op": "symbol",
+            "name": "nR"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "nR",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "sigma",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "60"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "6"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "3"
+    },
+    "nR": {
+     "op": "integer",
+     "value": "1"
+    },
+    "sigma": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P1_add_right_t20",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "add",
+            "args": [
+             {
+              "op": "integer",
+              "value": "100"
+             },
+             {
+              "op": "mul",
+              "args": [
+               {
+                "op": "integer",
+                "value": "4"
+               },
+               {
+                "op": "symbol",
+                "name": "t"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "20"
+             },
+             {
+              "op": "symbol",
+              "name": "n10"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "35"
+           },
+           {
+            "op": "symbol",
+            "name": "n20"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "50"
+         },
+         {
+          "op": "symbol",
+          "name": "nR"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "-1"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "sigma"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "55"
+           },
+           {
+            "op": "symbol",
+            "name": "nR"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "nR",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "sigma",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "20"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "2"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    },
+    "nR": {
+     "op": "integer",
+     "value": "1"
+    },
+    "sigma": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P1_add_right_t60",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "add",
+            "args": [
+             {
+              "op": "integer",
+              "value": "100"
+             },
+             {
+              "op": "mul",
+              "args": [
+               {
+                "op": "integer",
+                "value": "4"
+               },
+               {
+                "op": "symbol",
+                "name": "t"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "20"
+             },
+             {
+              "op": "symbol",
+              "name": "n10"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "35"
+           },
+           {
+            "op": "symbol",
+            "name": "n20"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "50"
+         },
+         {
+          "op": "symbol",
+          "name": "nR"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "-1"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "sigma"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "55"
+           },
+           {
+            "op": "symbol",
+            "name": "nR"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "nR",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "sigma",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "t": {
+     "op": "integer",
+     "value": "60"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "6"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "3"
+    },
+    "nR": {
+     "op": "integer",
+     "value": "1"
+    },
+    "sigma": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P2_right_t20",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "integer",
+            "value": "100"
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "4"
+             },
+             {
+              "op": "symbol",
+              "name": "m"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "3"
+           },
+           {
+            "op": "symbol",
+            "name": "q"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "m",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "q",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "m": {
+     "op": "integer",
+     "value": "10"
+    },
+    "q": {
+     "op": "integer",
+     "value": "10"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "2"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P2_right_t30",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "integer",
+            "value": "100"
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "4"
+             },
+             {
+              "op": "symbol",
+              "name": "m"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "3"
+           },
+           {
+            "op": "symbol",
+            "name": "q"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "m",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "q",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "m": {
+     "op": "integer",
+     "value": "10"
+    },
+    "q": {
+     "op": "integer",
+     "value": "20"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "3"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "P2_right_t60",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "integer",
+            "value": "100"
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "integer",
+              "value": "4"
+             },
+             {
+              "op": "symbol",
+              "name": "m"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "integer",
+            "value": "3"
+           },
+           {
+            "op": "symbol",
+            "name": "q"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "m",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "q",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "m": {
+     "op": "integer",
+     "value": "10"
+    },
+    "q": {
+     "op": "integer",
+     "value": "50"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "6"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "3"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  }
+ ]
+}

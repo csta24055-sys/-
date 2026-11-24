@@ -1,0 +1,22 @@
+[
+ {
+  "case_id": "NEG_walsh_value_wrong_expected",
+  "identity": "walsh window, WRONG expected 55",
+  "expected": "55",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.walsh_window_t20_kg minus 1/25",
+  "note": "NEGATIVE CONTROL: deliberately wrong",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "NEG_walsh_residual_vs_wrong",
+  "identity": "value - 55 must be 0 (it is 1/25)",
+  "expected": "0",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "residual against deliberately wrong value",
+  "note": "NEGATIVE CONTROL: residual form",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ }
+]

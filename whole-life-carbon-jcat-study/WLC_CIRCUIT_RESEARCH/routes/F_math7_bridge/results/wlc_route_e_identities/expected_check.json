@@ -1,0 +1,358 @@
+{
+ "input": "wlc_route_e_identities.json",
+ "math7_result_sha256": "192e72fc16c706758ace182a52dc0fe6f5e964fb82dfd00dae12636732751f6d",
+ "math7_input_sha256": "c401ebb1485e0df277b58455cd9dee35b364c01446b13e681f66f9a3891efed6",
+ "mode": "python-five",
+ "engine_coverage": [
+  "SymPy",
+  "NumPy",
+  "SciPy",
+  "mpmath",
+  "DuckDB"
+ ],
+ "engine_versions": {
+  "DuckDB": "1.4.1",
+  "NumPy": "2.2.6-default",
+  "SciPy": "1.15.3",
+  "SymPy": "1.14.0",
+  "mpmath": "1.3.0"
+ },
+ "cases": [
+  {
+   "case_id": "E_power_W",
+   "unit": "1",
+   "expected": "12",
+   "math7_exact": "12",
+   "numpy_hex": "0x1.8000000000000p+3",
+   "mpmath_decimal": "12.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "basics.P_W"
+  },
+  {
+   "case_id": "E_joule_5s_J",
+   "unit": "1",
+   "expected": "60",
+   "math7_exact": "60",
+   "numpy_hex": "0x1.e000000000000p+5",
+   "mpmath_decimal": "60.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "basics.E_5s_J"
+  },
+  {
+   "case_id": "E_kappa_5s_kg",
+   "unit": "kgCO2e",
+   "expected": "20",
+   "math7_exact": "20",
+   "numpy_hex": "0x1.4000000000000p+4",
+   "mpmath_decimal": "20.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "basics.kappa_kg_per_J * basics.E_5s_J"
+  },
+  {
+   "case_id": "E_ac_5periods_J",
+   "unit": "1",
+   "expected": "60",
+   "math7_exact": "60",
+   "numpy_hex": "0x1.e000000000000p+5",
+   "mpmath_decimal": "60.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "basics.ac_5periods_J"
+  },
+  {
+   "case_id": "E_thermal_E60_J",
+   "unit": "1",
+   "expected": "720",
+   "math7_exact": "720",
+   "numpy_hex": "0x1.6800000000000p+9",
+   "mpmath_decimal": "720.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "thermal.E60_J"
+  },
+  {
+   "case_id": "E_cross_sq_rho1",
+   "unit": "1",
+   "expected": "2800",
+   "math7_exact": "2800",
+   "numpy_hex": "0x1.5e00000000000p+11",
+   "mpmath_decimal": "2800.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.cross_table.equal_aligned.cross_kg squared"
+  },
+  {
+   "case_id": "E_cross_sq_rho1_2",
+   "unit": "1",
+   "expected": "700",
+   "math7_exact": "700",
+   "numpy_hex": "0x1.5e00000000000p+9",
+   "mpmath_decimal": "700.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.cross_table.widths_w_4w.cross_kg squared"
+  },
+  {
+   "case_id": "E_cross_sq_rho1_3",
+   "unit": "1",
+   "expected": "2800/9",
+   "math7_exact": "2800/9",
+   "numpy_hex": "0x1.371c71c71c71cp+8",
+   "mpmath_decimal": "311.111111111111111111111111111111111111",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.cross_table.widths_w_9w.cross_kg squared"
+  },
+  {
+   "case_id": "E_cross_sq_rho0",
+   "unit": "1",
+   "expected": "0",
+   "math7_exact": "0",
+   "numpy_hex": "0x0.0p+0",
+   "mpmath_decimal": "0.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.cross_table.walsh_pair.cross_kg squared"
+  },
+  {
+   "case_id": "HE4_convert_then_integrate_t20",
+   "unit": "kgCO2e",
+   "expected": "70",
+   "math7_exact": "70",
+   "numpy_hex": "0x1.1800000000000p+6",
+   "mpmath_decimal": "70.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "HE4.20.convert_then_integrate"
+  },
+  {
+   "case_id": "HE4_meter_current_t20",
+   "unit": "kgCO2e",
+   "expected": "60",
+   "math7_exact": "60",
+   "numpy_hex": "0x1.e000000000000p+5",
+   "mpmath_decimal": "60.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "HE4.20.meter_then_convert_current"
+  },
+  {
+   "case_id": "HE4_meter_initial_t20",
+   "unit": "kgCO2e",
+   "expected": "80",
+   "math7_exact": "80",
+   "numpy_hex": "0x1.4000000000000p+6",
+   "mpmath_decimal": "80.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "HE4.20.meter_then_convert_initial"
+  },
+  {
+   "case_id": "HE4_convert_then_integrate_t60",
+   "unit": "kgCO2e",
+   "expected": "190",
+   "math7_exact": "190",
+   "numpy_hex": "0x1.7c00000000000p+7",
+   "mpmath_decimal": "190.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "HE4.60.convert_then_integrate"
+  },
+  {
+   "case_id": "HE4_meter_current_t60",
+   "unit": "kgCO2e",
+   "expected": "180",
+   "math7_exact": "180",
+   "numpy_hex": "0x1.6800000000000p+7",
+   "mpmath_decimal": "180.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "HE4.60.meter_then_convert_current"
+  },
+  {
+   "case_id": "HE4_meter_initial_t60",
+   "unit": "kgCO2e",
+   "expected": "240",
+   "math7_exact": "240",
+   "numpy_hex": "0x1.e000000000000p+7",
+   "mpmath_decimal": "240.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "HE4.60.meter_then_convert_initial"
+  },
+  {
+   "case_id": "E_walsh_window_t20",
+   "unit": "kgCO2e",
+   "expected": "1376/25",
+   "math7_exact": "1376/25",
+   "numpy_hex": "0x1.b851eb851eb85p+5",
+   "mpmath_decimal": "55.04",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.walsh_window_t20_kg"
+  },
+  {
+   "case_id": "E_walsh_P0_after_60w",
+   "unit": "kgCO2e",
+   "expected": "14126/25",
+   "math7_exact": "14126/25",
+   "numpy_hex": "0x1.1a851eb851eb8p+9",
+   "mpmath_decimal": "565.04",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.walsh_P0_G_after_60_plus_w"
+  }
+ ],
+ "duckdb_groups": {
+  "1": {
+   "duckdb_exact_sum": "41968/9",
+   "expected_sum": "41968/9",
+   "verdict": "PASS"
+  },
+  "kgCO2e": {
+   "duckdb_exact_sum": "36502/25",
+   "expected_sum": "36502/25",
+   "verdict": "PASS"
+  }
+ },
+ "overall": "PASS"
+}

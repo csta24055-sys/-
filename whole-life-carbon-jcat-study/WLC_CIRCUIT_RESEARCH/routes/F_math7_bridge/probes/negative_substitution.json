@@ -1,0 +1,39 @@
+{
+ "schema": "math-ir/0.1",
+ "cases": [
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "probe",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "symbol",
+      "name": "x"
+     },
+     {
+      "op": "integer",
+      "value": "1"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "x",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "x": {
+     "op": "integer",
+     "value": "-2"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  }
+ ]
+}

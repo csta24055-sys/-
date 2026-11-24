@@ -1,0 +1,353 @@
+{
+ "input": "wlc_pilots_p0_p1_p2.json",
+ "math7_result_sha256": "24b4371afa8f68711b6e468bcfed4a3e1fbcaad3634f7b76e69553eaf2d4d044",
+ "math7_input_sha256": "284461dc6806aa929ce78efa948c9fbfe69a5e6d24c5fc7596b93540504069d2",
+ "mode": "python-five",
+ "engine_coverage": [
+  "SymPy",
+  "NumPy",
+  "SciPy",
+  "mpmath",
+  "DuckDB"
+ ],
+ "engine_versions": {
+  "DuckDB": "1.4.1",
+  "NumPy": "2.2.6-default",
+  "SciPy": "1.15.3",
+  "SymPy": "1.14.0",
+  "mpmath": "1.3.0"
+ },
+ "cases": [
+  {
+   "case_id": "P0_right_t0",
+   "unit": "kgCO2e",
+   "expected": "100",
+   "math7_exact": "100",
+   "numpy_hex": "0x1.9000000000000p+6",
+   "mpmath_decimal": "100.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=0].value"
+  },
+  {
+   "case_id": "P0_right_t1",
+   "unit": "kgCO2e",
+   "expected": "104",
+   "math7_exact": "104",
+   "numpy_hex": "0x1.a000000000000p+6",
+   "mpmath_decimal": "104.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=1].value"
+  },
+  {
+   "case_id": "P0_right_t9p999999",
+   "unit": "kgCO2e",
+   "expected": "34999999/250000",
+   "math7_exact": "34999999/250000",
+   "numpy_hex": "0x1.17ffff79c8430p+7",
+   "mpmath_decimal": "139.999996",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=9.999999].value"
+  },
+  {
+   "case_id": "P0_right_t10",
+   "unit": "kgCO2e",
+   "expected": "160",
+   "math7_exact": "160",
+   "numpy_hex": "0x1.4000000000000p+7",
+   "mpmath_decimal": "160.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=10].value"
+  },
+  {
+   "case_id": "P0_right_t10p000001",
+   "unit": "kgCO2e",
+   "expected": "40000001/250000",
+   "math7_exact": "40000001/250000",
+   "numpy_hex": "0x1.4000008637bd0p+7",
+   "mpmath_decimal": "160.000004",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=10.000001].value"
+  },
+  {
+   "case_id": "P0_right_t20",
+   "unit": "kgCO2e",
+   "expected": "255",
+   "math7_exact": "255",
+   "numpy_hex": "0x1.fe00000000000p+7",
+   "mpmath_decimal": "255.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=20].value"
+  },
+  {
+   "case_id": "P0_right_t20p000001",
+   "unit": "kgCO2e",
+   "expected": "63750001/250000",
+   "math7_exact": "63750001/250000",
+   "numpy_hex": "0x1.fe00008637bd0p+7",
+   "mpmath_decimal": "255.000004",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=20.000001].value"
+  },
+  {
+   "case_id": "P0_right_t30",
+   "unit": "kgCO2e",
+   "expected": "315",
+   "math7_exact": "315",
+   "numpy_hex": "0x1.3b00000000000p+8",
+   "mpmath_decimal": "315.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=30].value"
+  },
+  {
+   "case_id": "P0_right_t40",
+   "unit": "kgCO2e",
+   "expected": "410",
+   "math7_exact": "410",
+   "numpy_hex": "0x1.9a00000000000p+8",
+   "mpmath_decimal": "410.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=40].value"
+  },
+  {
+   "case_id": "P0_right_t60",
+   "unit": "kgCO2e",
+   "expected": "565",
+   "math7_exact": "565",
+   "numpy_hex": "0x1.1a80000000000p+9",
+   "mpmath_decimal": "565.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P0,convention=right,t=60].value"
+  },
+  {
+   "case_id": "P1_sub_right_t20",
+   "unit": "kgCO2e",
+   "expected": "250",
+   "math7_exact": "250",
+   "numpy_hex": "0x1.f400000000000p+7",
+   "mpmath_decimal": "250.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P1-substitute,convention=right,t=20].value"
+  },
+  {
+   "case_id": "P1_sub_right_t60",
+   "unit": "kgCO2e",
+   "expected": "560",
+   "math7_exact": "560",
+   "numpy_hex": "0x1.1800000000000p+9",
+   "mpmath_decimal": "560.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P1-substitute,convention=right,t=60].value"
+  },
+  {
+   "case_id": "P1_add_right_t20",
+   "unit": "kgCO2e",
+   "expected": "305",
+   "math7_exact": "305",
+   "numpy_hex": "0x1.3100000000000p+8",
+   "mpmath_decimal": "305.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P1-additional,convention=right,t=20].value"
+  },
+  {
+   "case_id": "P1_add_right_t60",
+   "unit": "kgCO2e",
+   "expected": "615",
+   "math7_exact": "615",
+   "numpy_hex": "0x1.3380000000000p+9",
+   "mpmath_decimal": "615.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/A_waveform/results/points.json",
+   "source_key": "rows[case=P1-additional,convention=right,t=60].value"
+  },
+  {
+   "case_id": "P2_right_t20",
+   "unit": "kgCO2e",
+   "expected": "245",
+   "math7_exact": "245",
+   "numpy_hex": "0x1.ea00000000000p+7",
+   "mpmath_decimal": "245.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/points.json",
+   "source_key": "rows[case=P2,convention=right,t=20].value"
+  },
+  {
+   "case_id": "P2_right_t30",
+   "unit": "kgCO2e",
+   "expected": "295",
+   "math7_exact": "295",
+   "numpy_hex": "0x1.2700000000000p+8",
+   "mpmath_decimal": "295.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/points.json",
+   "source_key": "rows[case=P2,convention=right,t=30].value"
+  },
+  {
+   "case_id": "P2_right_t60",
+   "unit": "kgCO2e",
+   "expected": "515",
+   "math7_exact": "515",
+   "numpy_hex": "0x1.0180000000000p+9",
+   "mpmath_decimal": "515.0",
+   "per_engine": {
+    "SymPy": "PASS",
+    "NumPy": "PASS",
+    "mpmath": "PASS",
+    "SciPy": "N/A",
+    "F_Fraction": "PASS",
+    "F_mpmath60": "PASS"
+   },
+   "verdict": "PASS",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/points.json",
+   "source_key": "rows[case=P2,convention=right,t=60].value"
+  }
+ ],
+ "duckdb_groups": {
+  "kgCO2e": {
+   "duckdb_exact_sum": "1312250001/250000",
+   "expected_sum": "1312250001/250000",
+   "verdict": "PASS"
+  }
+ },
+ "overall": "PASS"
+}

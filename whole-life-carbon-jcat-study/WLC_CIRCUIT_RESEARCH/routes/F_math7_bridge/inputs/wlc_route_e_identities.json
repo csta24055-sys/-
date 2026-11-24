@@ -1,0 +1,1702 @@
+{
+ "schema": "math-ir/0.1",
+ "cases": [
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_power_W",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "pow",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "I0"
+       },
+       {
+        "op": "integer",
+        "value": "2"
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "R"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_joule_5s_J",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "pow",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "I0"
+         },
+         {
+          "op": "integer",
+          "value": "2"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "R"
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "t": {
+     "op": "integer",
+     "value": "5"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_kappa_5s_kg",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "k"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "pow",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "I0"
+           },
+           {
+            "op": "integer",
+            "value": "2"
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "R"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "t": {
+     "op": "integer",
+     "value": "5"
+    },
+    "k": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_ac_5periods_J",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "pow",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "Irms"
+         },
+         {
+          "op": "integer",
+          "value": "2"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "R"
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "Irms",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "Irms": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "t": {
+     "op": "integer",
+     "value": "5"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_thermal_E60_J",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "pow",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "I0"
+         },
+         {
+          "op": "integer",
+          "value": "2"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "R"
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "t": {
+     "op": "integer",
+     "value": "60"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_cross_sq_rho1",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "4"
+         },
+         {
+          "op": "symbol",
+          "name": "A1"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "A2"
+       }
+      ]
+     },
+     {
+      "op": "pow",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "rho"
+       },
+       {
+        "op": "integer",
+        "value": "2"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "A1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "A2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "rho",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "A1": {
+     "op": "integer",
+     "value": "20"
+    },
+    "A2": {
+     "op": "integer",
+     "value": "35"
+    },
+    "rho": {
+     "op": "integer",
+     "value": "1"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_cross_sq_rho1_2",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "4"
+         },
+         {
+          "op": "symbol",
+          "name": "A1"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "A2"
+       }
+      ]
+     },
+     {
+      "op": "pow",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "rho"
+       },
+       {
+        "op": "integer",
+        "value": "2"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "A1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "A2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "rho",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "A1": {
+     "op": "integer",
+     "value": "20"
+    },
+    "A2": {
+     "op": "integer",
+     "value": "35"
+    },
+    "rho": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "2"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_cross_sq_rho1_3",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "4"
+         },
+         {
+          "op": "symbol",
+          "name": "A1"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "A2"
+       }
+      ]
+     },
+     {
+      "op": "pow",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "rho"
+       },
+       {
+        "op": "integer",
+        "value": "2"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "A1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "A2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "rho",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "A1": {
+     "op": "integer",
+     "value": "20"
+    },
+    "A2": {
+     "op": "integer",
+     "value": "35"
+    },
+    "rho": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_cross_sq_rho0",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "4"
+         },
+         {
+          "op": "symbol",
+          "name": "A1"
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "A2"
+       }
+      ]
+     },
+     {
+      "op": "pow",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "rho"
+       },
+       {
+        "op": "integer",
+        "value": "2"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "A1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "A2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "rho",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "A1": {
+     "op": "integer",
+     "value": "20"
+    },
+    "A2": {
+     "op": "integer",
+     "value": "35"
+    },
+    "rho": {
+     "op": "integer",
+     "value": "0"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "HE4_convert_then_integrate_t20",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "k1"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "pow",
+            "args": [
+             {
+              "op": "symbol",
+              "name": "I0"
+             },
+             {
+              "op": "integer",
+              "value": "2"
+             }
+            ]
+           },
+           {
+            "op": "symbol",
+            "name": "R"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "m"
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "k2"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "pow",
+            "args": [
+             {
+              "op": "symbol",
+              "name": "I0"
+             },
+             {
+              "op": "integer",
+              "value": "2"
+             }
+            ]
+           },
+           {
+            "op": "symbol",
+            "name": "R"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "q"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "m",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "q",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k1": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "k2": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "4"
+    },
+    "m": {
+     "op": "integer",
+     "value": "10"
+    },
+    "q": {
+     "op": "integer",
+     "value": "10"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "HE4_meter_current_t20",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "k2"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "pow",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "I0"
+           },
+           {
+            "op": "integer",
+            "value": "2"
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "R"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k2": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "4"
+    },
+    "t": {
+     "op": "integer",
+     "value": "20"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "HE4_meter_initial_t20",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "k1"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "pow",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "I0"
+           },
+           {
+            "op": "integer",
+            "value": "2"
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "R"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k1": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "t": {
+     "op": "integer",
+     "value": "20"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "HE4_convert_then_integrate_t60",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "k1"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "pow",
+            "args": [
+             {
+              "op": "symbol",
+              "name": "I0"
+             },
+             {
+              "op": "integer",
+              "value": "2"
+             }
+            ]
+           },
+           {
+            "op": "symbol",
+            "name": "R"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "m"
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "symbol",
+          "name": "k2"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "pow",
+            "args": [
+             {
+              "op": "symbol",
+              "name": "I0"
+             },
+             {
+              "op": "integer",
+              "value": "2"
+             }
+            ]
+           },
+           {
+            "op": "symbol",
+            "name": "R"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "symbol",
+        "name": "q"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "m",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "q",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k1": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "k2": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "4"
+    },
+    "m": {
+     "op": "integer",
+     "value": "10"
+    },
+    "q": {
+     "op": "integer",
+     "value": "50"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "HE4_meter_current_t60",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "k2"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "pow",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "I0"
+           },
+           {
+            "op": "integer",
+            "value": "2"
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "R"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k2",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k2": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "4"
+    },
+    "t": {
+     "op": "integer",
+     "value": "60"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "HE4_meter_initial_t60",
+   "expression": {
+    "op": "mul",
+    "args": [
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "symbol",
+        "name": "k1"
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "pow",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "I0"
+           },
+           {
+            "op": "integer",
+            "value": "2"
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "R"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "symbol",
+      "name": "t"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k1",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "t",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k1": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "t": {
+     "op": "integer",
+     "value": "60"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_walsh_window_t20",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "symbol",
+            "name": "k"
+           },
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "pow",
+              "args": [
+               {
+                "op": "symbol",
+                "name": "I0"
+               },
+               {
+                "op": "integer",
+                "value": "2"
+               }
+              ]
+             },
+             {
+              "op": "symbol",
+              "name": "R"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "op": "symbol",
+          "name": "w"
+         }
+        ]
+       },
+       {
+        "op": "integer",
+        "value": "20"
+       }
+      ]
+     },
+     {
+      "op": "integer",
+      "value": "35"
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "w",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "w": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "100"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  },
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "E_walsh_P0_after_60w",
+   "expression": {
+    "op": "add",
+    "args": [
+     {
+      "op": "add",
+      "args": [
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "integer",
+          "value": "100"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "op": "mul",
+            "args": [
+             {
+              "op": "symbol",
+              "name": "k"
+             },
+             {
+              "op": "mul",
+              "args": [
+               {
+                "op": "pow",
+                "args": [
+                 {
+                  "op": "symbol",
+                  "name": "I0"
+                 },
+                 {
+                  "op": "integer",
+                  "value": "2"
+                 }
+                ]
+               },
+               {
+                "op": "symbol",
+                "name": "R"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "op": "add",
+            "args": [
+             {
+              "op": "integer",
+              "value": "60"
+             },
+             {
+              "op": "symbol",
+              "name": "w"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "op": "mul",
+        "args": [
+         {
+          "op": "integer",
+          "value": "20"
+         },
+         {
+          "op": "symbol",
+          "name": "n10"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "op": "mul",
+      "args": [
+       {
+        "op": "integer",
+        "value": "35"
+       },
+       {
+        "op": "symbol",
+        "name": "n20"
+       }
+      ]
+     }
+    ]
+   },
+   "symbols": [
+    {
+     "name": "I0",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "R",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "k",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "w",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n10",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    },
+    {
+     "name": "n20",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "I0": {
+     "op": "integer",
+     "value": "2"
+    },
+    "R": {
+     "op": "integer",
+     "value": "3"
+    },
+    "k": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "3"
+    },
+    "w": {
+     "op": "rational",
+     "numerator": "1",
+     "denominator": "100"
+    },
+    "n10": {
+     "op": "integer",
+     "value": "6"
+    },
+    "n20": {
+     "op": "integer",
+     "value": "3"
+    }
+   },
+   "unit": "kgCO2e",
+   "exact": true
+  }
+ ]
+}

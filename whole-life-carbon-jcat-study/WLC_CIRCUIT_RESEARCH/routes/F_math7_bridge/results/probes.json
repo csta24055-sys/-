@@ -1,0 +1,266 @@
+{
+ "integer": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/integer.json <scratch>/probe_integer"
+ },
+ "rational": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/rational.json <scratch>/probe_rational"
+ },
+ "negative_rational": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/negative_rational.json <scratch>/probe_negative_rational"
+ },
+ "symbol_add": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/symbol_add.json <scratch>/probe_symbol_add"
+ },
+ "mul": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/mul.json <scratch>/probe_mul"
+ },
+ "pow_int_0": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/pow_int_0.json <scratch>/probe_pow_int_0"
+ },
+ "pow_int_8": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/pow_int_8.json <scratch>/probe_pow_int_8"
+ },
+ "subtraction_as_add_mul_minus1": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/subtraction_as_add_mul_minus1.json <scratch>/probe_subtraction_as_add_mul_minus1"
+ },
+ "division_by_rational_constant": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/division_by_rational_constant.json <scratch>/probe_division_by_rational_constant"
+ },
+ "depth_18": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 1 cases, 7 Python nodes",
+  "command": "math7 prepare probes/depth_18.json <scratch>/probe_depth_18"
+ },
+ "twenty_cases": {
+  "accepted": true,
+  "exit": 0,
+  "output": "PORTABLE PREPARE: PASS 20 cases, 102 Python nodes",
+  "command": "math7 prepare probes/twenty_cases.json <scratch>/probe_twenty_cases"
+ },
+ "sub": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: sub",
+  "command": "math7 prepare probes/sub.json <scratch>/probe_sub"
+ },
+ "div": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: div",
+  "command": "math7 prepare probes/div.json <scratch>/probe_div"
+ },
+ "neg": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: neg",
+  "command": "math7 prepare probes/neg.json <scratch>/probe_neg"
+ },
+ "pow_negative_exponent": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Exponent outside 0..8",
+  "command": "math7 prepare probes/pow_negative_exponent.json <scratch>/probe_pow_negative_exponent"
+ },
+ "pow_exponent_9": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Exponent outside 0..8",
+  "command": "math7 prepare probes/pow_exponent_9.json <scratch>/probe_pow_exponent_9"
+ },
+ "pow_rational_exponent_sqrt": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Only integer exponents supported",
+  "command": "math7 prepare probes/pow_rational_exponent_sqrt.json <scratch>/probe_pow_rational_exponent_sqrt"
+ },
+ "pow_symbol_exponent": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Only integer exponents supported",
+  "command": "math7 prepare probes/pow_symbol_exponent.json <scratch>/probe_pow_symbol_exponent"
+ },
+ "sqrt": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: sqrt",
+  "command": "math7 prepare probes/sqrt.json <scratch>/probe_sqrt"
+ },
+ "sin": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: sin",
+  "command": "math7 prepare probes/sin.json <scratch>/probe_sin"
+ },
+ "cos": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: cos",
+  "command": "math7 prepare probes/cos.json <scratch>/probe_cos"
+ },
+ "exp": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: exp",
+  "command": "math7 prepare probes/exp.json <scratch>/probe_exp"
+ },
+ "pi_constant": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: pi",
+  "command": "math7 prepare probes/pi_constant.json <scratch>/probe_pi_constant"
+ },
+ "floor": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: floor",
+  "command": "math7 prepare probes/floor.json <scratch>/probe_floor"
+ },
+ "frac": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: frac",
+  "command": "math7 prepare probes/frac.json <scratch>/probe_frac"
+ },
+ "min": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: min",
+  "command": "math7 prepare probes/min.json <scratch>/probe_min"
+ },
+ "max": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: max",
+  "command": "math7 prepare probes/max.json <scratch>/probe_max"
+ },
+ "abs": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: abs",
+  "command": "math7 prepare probes/abs.json <scratch>/probe_abs"
+ },
+ "lt_comparison": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: lt",
+  "command": "math7 prepare probes/lt_comparison.json <scratch>/probe_lt_comparison"
+ },
+ "piecewise": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: piecewise",
+  "command": "math7 prepare probes/piecewise.json <scratch>/probe_piecewise"
+ },
+ "integral": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: integral",
+  "command": "math7 prepare probes/integral.json <scratch>/probe_integral"
+ },
+ "sum_masked": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: sum",
+  "command": "math7 prepare probes/sum_masked.json <scratch>/probe_sum_masked"
+ },
+ "add_ternary": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Only binary operations supported",
+  "command": "math7 prepare probes/add_ternary.json <scratch>/probe_add_ternary"
+ },
+ "float_literal": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported AST operation: float",
+  "command": "math7 prepare probes/float_literal.json <scratch>/probe_float_literal"
+ },
+ "noncanonical_rational_2_4": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Noncanonical rational",
+  "command": "math7 prepare probes/noncanonical_rational_2_4.json <scratch>/probe_noncanonical_rational_2_4"
+ },
+ "depth_19": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Expression too deep",
+  "command": "math7 prepare probes/depth_19.json <scratch>/probe_depth_19"
+ },
+ "unit_J": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unknown unit; fail closed",
+  "command": "math7 prepare probes/unit_J.json <scratch>/probe_unit_J"
+ },
+ "unit_kg": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unknown unit; fail closed",
+  "command": "math7 prepare probes/unit_kg.json <scratch>/probe_unit_kg"
+ },
+ "exact_false": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Exact arithmetic required",
+  "command": "math7 prepare probes/exact_false.json <scratch>/probe_exact_false"
+ },
+ "symbol_domain_real": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Unsupported variable domain",
+  "command": "math7 prepare probes/symbol_domain_real.json <scratch>/probe_symbol_domain_real"
+ },
+ "negative_substitution": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Nonnegative assumption violated",
+  "command": "math7 prepare probes/negative_substitution.json <scratch>/probe_negative_substitution"
+ },
+ "missing_substitution": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Substitution mismatch",
+  "command": "math7 prepare probes/missing_substitution.json <scratch>/probe_missing_substitution"
+ },
+ "twenty_one_cases": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Case count must be 1..20",
+  "command": "math7 prepare probes/twenty_one_cases.json <scratch>/probe_twenty_one_cases"
+ },
+ "extra_field_expected": {
+  "accepted": false,
+  "exit": 2,
+  "output": "PORTABLE_ERROR: Invalid fields at envelope",
+  "command": "math7 prepare probes/extra_field_expected.json <scratch>/probe_extra_field_expected"
+ }
+}

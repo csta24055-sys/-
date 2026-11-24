@@ -1,0 +1,172 @@
+[
+ {
+  "case_id": "E_power_W",
+  "identity": "I0^2*R = 12 W",
+  "expected": "12",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "basics.P_W",
+  "note": "",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_joule_5s_J",
+  "identity": "I0^2*R*t at t=5 = 60 J",
+  "expected": "60",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "basics.E_5s_J",
+  "note": "",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_kappa_5s_kg",
+  "identity": "kappa*I0^2*R*t = 20 kg",
+  "expected": "20",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "basics.kappa_kg_per_J * basics.E_5s_J",
+  "note": "expected is the product of two published values (no single published '20')",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_ac_5periods_J",
+  "identity": "Irms^2*R*t at t=5 (sin terms cancel at whole periods)",
+  "expected": "60",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "basics.ac_5periods_J",
+  "note": "the trigonometric cancellation sin(2wt+2phi)-sin(2phi)=0 at t in Z is NOT checked: sin is outside Math IR 0.1",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_thermal_E60_J",
+  "identity": "I0^2*R*60 = 720 J",
+  "expected": "720",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "thermal.E60_J",
+  "note": "",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_cross_sq_rho1",
+  "identity": "(2*sqrt(A1*A2)*rho)^2 = 4*A1*A2*rho^2  [kg^2]",
+  "expected": "2800",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.cross_table.equal_aligned.cross_kg squared",
+  "note": "sqrt not in IR: only the SQUARED identity is checked; sign/branch and the L2 inner product giving rho are not checked; unit label '1' because kg^2 is not an allowed unit",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_cross_sq_rho1_2",
+  "identity": "(2*sqrt(A1*A2)*rho)^2 = 4*A1*A2*rho^2  [kg^2]",
+  "expected": "700",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.cross_table.widths_w_4w.cross_kg squared",
+  "note": "sqrt not in IR: only the SQUARED identity is checked; sign/branch and the L2 inner product giving rho are not checked; unit label '1' because kg^2 is not an allowed unit",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_cross_sq_rho1_3",
+  "identity": "(2*sqrt(A1*A2)*rho)^2 = 4*A1*A2*rho^2  [kg^2]",
+  "expected": "2800/9",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.cross_table.widths_w_9w.cross_kg squared",
+  "note": "sqrt not in IR: only the SQUARED identity is checked; sign/branch and the L2 inner product giving rho are not checked; unit label '1' because kg^2 is not an allowed unit",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_cross_sq_rho0",
+  "identity": "(2*sqrt(A1*A2)*rho)^2 = 4*A1*A2*rho^2  [kg^2]",
+  "expected": "0",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.cross_table.walsh_pair.cross_kg squared",
+  "note": "sqrt not in IR: only the SQUARED identity is checked; sign/branch and the L2 inner product giving rho are not checked; unit label '1' because kg^2 is not an allowed unit",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "HE4_convert_then_integrate_t20",
+  "identity": "k1*P*min(t,10) + k2*P*max(t-10,0)",
+  "expected": "70",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "HE4.20.convert_then_integrate",
+  "note": "m,q computed outside IR",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "HE4_meter_current_t20",
+  "identity": "kappa(t)*P*t (kappa(t)=1/4, t>=10)",
+  "expected": "60",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "HE4.20.meter_then_convert_current",
+  "note": "branch kappa(t)=1/4 selected outside IR (no comparator)",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "HE4_meter_initial_t20",
+  "identity": "(1/3)*P*t",
+  "expected": "80",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "HE4.20.meter_then_convert_initial",
+  "note": "",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "HE4_convert_then_integrate_t60",
+  "identity": "k1*P*min(t,10) + k2*P*max(t-10,0)",
+  "expected": "190",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "HE4.60.convert_then_integrate",
+  "note": "m,q computed outside IR",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "HE4_meter_current_t60",
+  "identity": "kappa(t)*P*t (kappa(t)=1/4, t>=10)",
+  "expected": "180",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "HE4.60.meter_then_convert_current",
+  "note": "branch kappa(t)=1/4 selected outside IR (no comparator)",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "HE4_meter_initial_t60",
+  "identity": "(1/3)*P*t",
+  "expected": "240",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "HE4.60.meter_then_convert_initial",
+  "note": "",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_walsh_window_t20",
+  "identity": "kappa*I0^2*R*w + 20 + 35 (cross terms = 0 assumed)",
+  "expected": "1376/25",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.walsh_window_t20_kg",
+  "note": "orthogonality / zero-mean of the Walsh pulses (the vanishing cross integrals) is NOT checked; only the remaining arithmetic is",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ },
+ {
+  "case_id": "E_walsh_P0_after_60w",
+  "identity": "100 + kappa*P*(60+w) + 20*6 + 35*3",
+  "expected": "14126/25",
+  "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+  "key": "D_pass1.walsh_P0_G_after_60_plus_w",
+  "note": "counts supplied; cross terms assumed 0",
+  "source_sha256": "715ee8d03751beca7c78989bac4b0cf78138ff6b22cf3bc9077efddbf3df567f",
+  "source_git_blob_at_HEAD": "7e81614df9f7f917817cd22e96dab66500fb9502"
+ }
+]

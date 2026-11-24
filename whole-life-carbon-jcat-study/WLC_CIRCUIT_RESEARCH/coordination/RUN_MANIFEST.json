@@ -30,18 +30,18 @@
     "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
     "G2": "DONE for A/E/C/B route self-tests (all re-run by coordinator); A/E fix pass running",
     "G3": "DONE (D passes 1-4: A, E, B, C, fix passes and integration all independently checked)",
-    "F": "NOT_RUN",
+    "F": "DONE locally (five Python engines, restricted Math IR arithmetic only); SageMath/MATLAB NOT_RUN; seven-engine run BLOCKED pending user decision",
     "G4": "DONE - ACCEPT-WITH-CONDITIONS by D pass 4 (doc housekeeping pending); overall research status PARTIAL",
     "G5": "NOT_RUN"
   },
   "engines": {
-    "SymPy": "RUN (route E analytic integrals; math7-check PASS) 1.14.0",
-    "NumPy": "RUN (route E) 2.2.6",
-    "SciPy": "RUN (route E quadrature) 1.15.3",
-    "mpmath": "RUN (route E 40-digit quadrature) 1.3.0",
-    "DuckDB": "AVAILABLE 1.4.1 (math7-check PASS)",
-    "SageMath": "NOT_RUN (not installed in cloud VM; Actions not dispatched)",
-    "MATLAB": "NOT_RUN (not installed in cloud VM; Actions not dispatched)"
+    "SymPy": "RUN 1.14.0 (route E analytic; route F 34/34 cases)",
+    "NumPy": "RUN 2.2.6 (route E; route F 34/34 re-rendering SymPy exact value)",
+    "SciPy": "RUN 1.15.3 (route E quadrature; in Math7 only the fixed x^2 reference)",
+    "mpmath": "RUN 1.3.0 (route E 40-digit quadrature; route F 34/34)",
+    "DuckDB": "RUN 1.4.1 (route F 3/3 unit groups)",
+    "SageMath": "NOT_RUN (not installed locally; no workflow dispatched)",
+    "MATLAB": "NOT_RUN (not installed locally; no workflow dispatched)"
   },
   "execution_log": [
     {
@@ -511,6 +511,56 @@
         }
       },
       "status": "DONE"
+    },
+    {
+      "phase": "F",
+      "route": "F_math7_bridge",
+      "actor": "wlc-math7-orchestrator (subagent)",
+      "frontmatter": "claude-opus-5-5 / medium",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "c72fa7f",
+      "math7_main_sha": "c35403703202cec53d75300f42489927f71baf1d",
+      "command": "bash code/run_all.sh <scratch>  (math7 prepare / verify-python / audit-python + route F expected-value comparator)",
+      "route_result": "34/34 encodable identities PASS on local Python engines; negative control: Math7 PASS (internal consistency only), route F comparator FAIL as intended; 44 IR probes (11 accepted, 33 rejected)",
+      "coordinator_rerun": "reproduced 2026-11-24: both positive inputs PASS (17+17 cases), negative control comparator FAIL",
+      "restricted_ir": {
+        "accepted": [
+          "integer",
+          "rational",
+          "symbol (substituted, nonnegative rational)",
+          "binary add",
+          "binary mul",
+          "pow with integer exponent 0..8"
+        ],
+        "rejected": [
+          "sub",
+          "div",
+          "neg",
+          "sqrt",
+          "sin",
+          "cos",
+          "exp",
+          "pi",
+          "floor",
+          "frac",
+          "min",
+          "max",
+          "abs",
+          "lt",
+          "piecewise",
+          "integral",
+          "sum"
+        ]
+      },
+      "limits": "Only SymPy evaluates each case inside Math7; NumPy/mpmath re-render its exact value. Event counts, branch choices, kernels, refrigerant recurrence, masked sum-products are NOT checked. Not a seven-engine validation of the WLC model.",
+      "no_actions_dispatched": true,
+      "usage": {
+        "subagent_tokens": 172649,
+        "tool_uses": 37,
+        "duration_s": 425
+      },
+      "status": "DONE_LOCAL / 7-ENGINE NOT_RUN"
     }
   ],
   "setup_audit": {
@@ -519,7 +569,7 @@
     "synthetic_closed_form_sanity": "PASS",
     "audit_python_executed_in_claude": "PASS (73 config checks; static wiring + toy identities only)",
     "actual_model_routing": "NOT_VERIFIED",
-    "actual_7_engine_wlc_validation": "NOT_RUN"
+    "actual_7_engine_wlc_validation": "NOT_RUN (BLOCKED: workflow accepts only math_tools_v2/examples/*.json on the branch it runs on; fixture would have to be added on main or a branch cut from main and started manually by the user)"
   },
   "note": "Manifest initially describes setup only. Agents must write actual run records; never treat static checks as experiments.",
   "research_head_at_start": "4f394d1c0059f8eaf3b54215cbd52e0adc2e4745",

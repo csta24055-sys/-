@@ -1,0 +1,32 @@
+$ math7 prepare <F>/inputs/wlc_pilots_p0_p1_p2.json <scratch>/out_wlc_pilots_p0_p1_p2
+PORTABLE PREPARE: PASS 17 cases, 87 Python nodes
+exit=0
+$ math7 verify-python <scratch>/out_wlc_pilots_p0_p1_p2
+PORTABLE VERIFY: PASS 17 cases, 5 engines, 87 Python cache hits
+exit=0
+$ math7 audit-python <scratch>/out_wlc_pilots_p0_p1_p2
+PORTABLE VERIFY: PASS 17 cases, 5 engines, 87 Python cache hits
+PASS tamper rejected: rehashed cached approximation
+PORTABLE AUDIT: PASS full source reconstruction
+exit=0
+$ math7-py -B code/check_results.py inputs/wlc_pilots_p0_p1_p2.json inputs/wlc_pilots_p0_p1_p2.expected.json <out> results/wlc_pilots_p0_p1_p2/expected_check.json
+PASS P0_right_t0 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t1 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t9p999999 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t10 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t10p000001 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t20 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t20p000001 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t30 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t40 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P0_right_t60 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P1_sub_right_t20 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P1_sub_right_t60 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P1_add_right_t20 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P1_add_right_t60 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P2_right_t20 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P2_right_t30 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS P2_right_t60 {'SymPy': 'PASS', 'NumPy': 'PASS', 'mpmath': 'PASS', 'SciPy': 'N/A', 'F_Fraction': 'PASS', 'F_mpmath60': 'PASS'}
+PASS DuckDB group kgCO2e {'duckdb_exact_sum': '1312250001/250000', 'expected_sum': '1312250001/250000', 'verdict': 'PASS'}
+ROUTE-F EXPECTED-VALUE CHECK: PASS
+exit=0

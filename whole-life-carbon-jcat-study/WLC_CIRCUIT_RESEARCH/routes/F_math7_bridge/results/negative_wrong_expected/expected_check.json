@@ -1,0 +1,73 @@
+{
+ "input": "negative_wrong_expected.json",
+ "math7_result_sha256": "8c17e49c2dd5a8beca8823d68adf6f1656d43585dbd6af1880726d8ec88a35ec",
+ "math7_input_sha256": "a14cfce584b5bcc368f4e20cac097376ec07b67f29732fe01fa0250850af4ba9",
+ "mode": "python-five",
+ "engine_coverage": [
+  "SymPy",
+  "NumPy",
+  "SciPy",
+  "mpmath",
+  "DuckDB"
+ ],
+ "engine_versions": {
+  "DuckDB": "1.4.1",
+  "NumPy": "2.2.6-default",
+  "SciPy": "1.15.3",
+  "SymPy": "1.14.0",
+  "mpmath": "1.3.0"
+ },
+ "cases": [
+  {
+   "case_id": "NEG_walsh_value_wrong_expected",
+   "unit": "kgCO2e",
+   "expected": "55",
+   "math7_exact": "1376/25",
+   "numpy_hex": "0x1.b851eb851eb85p+5",
+   "mpmath_decimal": "55.04",
+   "per_engine": {
+    "SymPy": "FAIL",
+    "NumPy": "FAIL",
+    "mpmath": "FAIL",
+    "SciPy": "N/A",
+    "F_Fraction": "FAIL",
+    "F_mpmath60": "FAIL"
+   },
+   "verdict": "FAIL",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "D_pass1.walsh_window_t20_kg minus 1/25"
+  },
+  {
+   "case_id": "NEG_walsh_residual_vs_wrong",
+   "unit": "1",
+   "expected": "0",
+   "math7_exact": "1/25",
+   "numpy_hex": "0x1.47ae147ae147bp-5",
+   "mpmath_decimal": "0.04",
+   "per_engine": {
+    "SymPy": "FAIL",
+    "NumPy": "FAIL",
+    "mpmath": "FAIL",
+    "SciPy": "N/A",
+    "F_Fraction": "FAIL",
+    "F_mpmath60": "FAIL"
+   },
+   "verdict": "FAIL",
+   "source": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/E_resistor_energy/results/e_numbers.json",
+   "source_key": "residual against deliberately wrong value"
+  }
+ ],
+ "duckdb_groups": {
+  "kgCO2e": {
+   "duckdb_exact_sum": "1376/25",
+   "expected_sum": "55",
+   "verdict": "FAIL"
+  },
+  "1": {
+   "duckdb_exact_sum": "1/25",
+   "expected_sum": "0",
+   "verdict": "FAIL"
+  }
+ },
+ "overall": "FAIL"
+}

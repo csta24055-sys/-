@@ -1,0 +1,18 @@
+$ math7 prepare <F>/inputs/negative_wrong_expected.json <scratch>/out_negative_wrong_expected
+PORTABLE PREPARE: PASS 2 cases, 12 Python nodes
+exit=0
+$ math7 verify-python <scratch>/out_negative_wrong_expected
+PORTABLE VERIFY: PASS 2 cases, 5 engines, 12 Python cache hits
+exit=0
+$ math7 audit-python <scratch>/out_negative_wrong_expected
+PORTABLE VERIFY: PASS 2 cases, 5 engines, 12 Python cache hits
+PASS tamper rejected: rehashed cached approximation
+PORTABLE AUDIT: PASS full source reconstruction
+exit=0
+$ math7-py -B code/check_results.py inputs/negative_wrong_expected.json inputs/negative_wrong_expected.expected.json <out> results/negative_wrong_expected/expected_check.json
+FAIL NEG_walsh_value_wrong_expected {'SymPy': 'FAIL', 'NumPy': 'FAIL', 'mpmath': 'FAIL', 'SciPy': 'N/A', 'F_Fraction': 'FAIL', 'F_mpmath60': 'FAIL'}
+FAIL NEG_walsh_residual_vs_wrong {'SymPy': 'FAIL', 'NumPy': 'FAIL', 'mpmath': 'FAIL', 'SciPy': 'N/A', 'F_Fraction': 'FAIL', 'F_mpmath60': 'FAIL'}
+FAIL DuckDB group kgCO2e {'duckdb_exact_sum': '1376/25', 'expected_sum': '55', 'verdict': 'FAIL'}
+FAIL DuckDB group 1 {'duckdb_exact_sum': '1/25', 'expected_sum': '0', 'verdict': 'FAIL'}
+ROUTE-F EXPECTED-VALUE CHECK: FAIL
+exit=1

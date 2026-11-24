@@ -1,0 +1,57 @@
+{
+ "schema": "math-ir/0.1",
+ "cases": [
+  {
+   "schema": "math-ir/0.1",
+   "case_id": "probe",
+   "expression": {
+    "op": "piecewise",
+    "args": [
+     [
+      {
+       "op": "integer",
+       "value": "1"
+      },
+      {
+       "op": "lt",
+       "args": [
+        {
+         "op": "symbol",
+         "name": "x"
+        },
+        {
+         "op": "integer",
+         "value": "10"
+        }
+       ]
+      }
+     ],
+     [
+      {
+       "op": "integer",
+       "value": "2"
+      },
+      true
+     ]
+    ]
+   },
+   "symbols": [
+    {
+     "name": "x",
+     "domain": "rational",
+     "constraints": [
+      "nonnegative"
+     ]
+    }
+   ],
+   "substitution": {
+    "x": {
+     "op": "integer",
+     "value": "2"
+    }
+   },
+   "unit": "1",
+   "exact": true
+  }
+ ]
+}
