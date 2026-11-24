@@ -1,18 +1,10 @@
-# Autonomous parallel start is now the preferred entrypoint
+# 04 過去の開始指示（旧版）
+このファイルは2026-11-24までの単一路線の開始文書を置き換える**互換案内**で、現在の実行指示ではない。
 
-**For a new Claude Code session, use `08_AUTONOMOUS_START.md`.** It starts 4 independent investigations. The instructions below remain the original compact single-route prompt for legacy workflows and details.
+Claude Codeで実際に研究を開始するときは、
+1. リポジトリ `csta24055-sys/-` を開く
+2. ブランチ `claude/wlc-equivalent-circuit-20261124` を選ぶ
+3. `CLAUDE.md` と `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/12_FINAL_OPERATING_PLAN.md` を読む
+4. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/08_AUTONOMOUS_START.md` の短い起動文を使用する
 
-# Short Claude start prompt
-
-このリポジトリのブランチ `claude/wlc-equivalent-circuit-20261124` を使って、ホールライフカーボンを電気回路へ等価写像する数理研究を、設計と数値検証まで進めてください。
-
-最初にリポジトリ直下の `CLAUDE.md` と `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/00_START_HERE.md`〜`03_EXECUTION_PLAN.md` を読み、必須の既存WLC理論資料と引継ぎ文を参照してください。
-
-最重要の着想は「初期値＋連続積分＋階段状の更新」を、初期電荷＋連続電流＋交換パルスとして積算し、**設備ごとの異なる交換周期を、共通の電気的入力・別々のコンデンサ応答・しきい値・リセットにより発生させる**こと。空調10年、配管20年の架空例から始め、20年目の同時交換や大改修も検証する。単純な交流入力の物理を誤魔化さず、必要なら整流・制御電源を明示する。
-
-次に、内部状態を保存しつつ等価回路をどこまで縮約できるか、計算上の利点が実際にあるかを、独立した数式と数値計算で確かめてください。既存の70単位と研究成果は破壊せず、結果はこの研究フォルダに保存してください。
-
-確認済み、未確認、反例、必要な外部データを区別する。提案書だけで終わらず、再実行可能なコード・検証・測定結果を作成する。ただし検証されないことを成功と表現しない。
-
-
-また、`05_SOURCE_MAP.md` を読み、別リポジトリ `csta24055-sys/lastdance4-tree-` の Yes/No 分類ツリー（特にA3の数理計算、A6の検証、A9の仕様・研究資料）で関連する既存資産を探し、必要な場合は役割IDを介して `csta24055-sys/lastdance` の原コードを直接確認してください。分類ツリーの記述だけを数学的な証明と誤認しないこと。WLC計算の数理根拠は `WLC_THEORY_RESEARCH_BASE` を優先し、すべて読み取り専用としてください。
+既存の数理・元アプリ・Math7/mainを保護し、研究結果は実行した部分だけ記録する。旧単一ルート指示文を復活させて12と二重実行しない。
