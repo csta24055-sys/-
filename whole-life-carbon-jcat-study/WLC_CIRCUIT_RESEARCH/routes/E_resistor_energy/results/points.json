@@ -706,286 +706,1248 @@
   "convention": "right",
   "t": "0",
   "value": "100/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "1",
   "value": "104/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "9.999999",
   "value": "34999999/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "10",
   "value": "160/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "10.000001",
   "value": "40000001/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "19.999999",
   "value": "49999999/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "20",
   "value": "250/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "20.000001",
   "value": "62500001/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "30",
   "value": "310/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "40",
   "value": "405/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-substitute",
   "convention": "right",
   "t": "60",
   "value": "560/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "right",
+  "t": "10.000000005",
+  "value": "8000000001/50000000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "right",
+  "t": "10.00000002",
+  "value": "2000000001/12500000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "0",
+  "value": "100/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "1",
+  "value": "104/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "9.999999",
+  "value": "34999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "10",
+  "value": "140/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "10.000001",
+  "value": "40000001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "19.999999",
+  "value": "49999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "20",
+  "value": "200/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "20.000001",
+  "value": "62500001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "30",
+  "value": "290/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "40",
+  "value": "350/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "60",
+  "value": "505/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "10.000000005",
+  "value": "8000000001/50000000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "left",
+  "t": "10.00000002",
+  "value": "2000000001/12500000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "0",
+  "value": "100/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "1",
+  "value": "104/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "9.999999",
+  "value": "34999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "10",
+  "value": "140/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "10.000001",
+  "value": "40000001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "19.999999",
+  "value": "49999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "20",
+  "value": "200/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "20.000001",
+  "value": "62500001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "30",
+  "value": "290/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "40",
+  "value": "350/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "60",
+  "value": "505/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "10.000000005",
+  "value": "7000000001/50000000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-substitute",
+  "convention": "orig",
+  "t": "10.00000002",
+  "value": "2000000001/12500000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "0",
   "value": "100/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "1",
   "value": "104/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "9.999999",
   "value": "34999999/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "10",
   "value": "160/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "10.000001",
   "value": "40000001/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "19.999999",
   "value": "49999999/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "20",
   "value": "305/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "20.000001",
   "value": "76250001/250000",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "30",
   "value": "365/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "40",
   "value": "460/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P1-additional",
   "convention": "right",
   "t": "60",
   "value": "615/1",
-  "realization": "E-R1 + one-shot external addition at t=20",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
   "states": [
    4,
    0,
    3,
-   0
-  ]
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "right",
+  "t": "10.000000005",
+  "value": "8000000001/50000000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "right",
+  "t": "10.00000002",
+  "value": "2000000001/12500000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "0",
+  "value": "100/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "1",
+  "value": "104/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "9.999999",
+  "value": "34999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "10",
+  "value": "140/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "10.000001",
+  "value": "40000001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "19.999999",
+  "value": "49999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "20",
+  "value": "200/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "20.000001",
+  "value": "76250001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "30",
+  "value": "345/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "40",
+  "value": "405/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "60",
+  "value": "560/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "10.000000005",
+  "value": "8000000001/50000000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "left",
+  "t": "10.00000002",
+  "value": "2000000001/12500000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "0",
+  "value": "100/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "1",
+  "value": "104/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "9.999999",
+  "value": "34999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "10",
+  "value": "140/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "10.000001",
+  "value": "40000001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "19.999999",
+  "value": "49999999/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "20",
+  "value": "200/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "20.000001",
+  "value": "76250001/250000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "30",
+  "value": "345/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "40",
+  "value": "405/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "60",
+  "value": "560/1",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "10.000000005",
+  "value": "7000000001/50000000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
+ },
+ {
+  "case": "P1-additional",
+  "convention": "orig",
+  "t": "10.00000002",
+  "value": "2000000001/12500000",
+  "realization": "E-R1 event-driven circuit + 1 external table entry (tau=20) and comparator; equals closed form joule.p1",
+  "states": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "checks": {
+   "circuit_eq_closed_form": true
+  }
  },
  {
   "case": "P2",

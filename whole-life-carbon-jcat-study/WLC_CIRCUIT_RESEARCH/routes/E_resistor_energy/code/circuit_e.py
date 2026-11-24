@@ -23,8 +23,11 @@ class ER1:
     STATES_SEPARATE = (4, 0, 2, 0)
     STATES_MERGED = (3, 0, 2, 0)
     STATES_EF_SWITCH = (4, 1, 2, 0)
+    STATES_P1 = (4, 0, 3, 1)          # + one external table entry (20, amount) + comparator
+    STATES_P1_MERGED = (3, 0, 3, 1)
+    P1_AMOUNT = {"substitute": Fr(-5), "additional": Fr(50)}
 
-    def __init__(self, conv="right", ef_step=False):
+    def __init__(self, conv="right", ef_step=False, p1=None):
         self.conv = conv
         self.ef_step = ef_step
         self.rate = (1 - EPS) if conv == "orig" else Fr(1)   # slowed clock => orig convention
@@ -35,6 +38,10 @@ class ER1:
         self.x = {n: Fr(0) for n, _, _ in CLOCKS}
         self.flag = 0           # P2: first AC replacement done
         self.ops = 0
+        # P1: one-shot external table entry (tau=20, amount), compared against the same
+        # (possibly slowed) time base as the clocks, so `orig` maps it to 20/(1-eps).
+        self.table = [(Fr(20), self.P1_AMOUNT[p1])] if p1 else []
+        self.xt = Fr(0)         # time base seen by the table comparator (rate as clocks)
 
     def p(self):
         return I0 * I0 * R      # constant DC operating current through the resistor
@@ -47,6 +54,7 @@ class ER1:
         self.Ycarb += self.kappa() * self.p() * dt
         for n in self.x:
             self.x[n] += self.rate * dt
+        self.xt += self.rate * dt
         self.now += dt
         self.ops += 1
 
@@ -63,12 +71,17 @@ class ER1:
         assert t >= self.now
         while True:
             dts = {n: (c - self.x[n]) / self.rate for n, c, _ in CLOCKS}
+            for tau, _ in self.table:
+                dts["table"] = (tau - self.xt) / self.rate
             nxt = min(dts.values())
             if self.now + nxt < t or (self.now + nxt == t and self.conv == "right"):
                 self._advance(nxt)
                 for n, c, _ in CLOCKS:
                     if self.x[n] == c:
                         self._fire(n)
+                if self.table and self.xt == self.table[0][0]:
+                    self.S += self.table.pop(0)[1]
+                    self.ops += 1
             else:
                 self._advance(t - self.now)
                 return self.readout()
@@ -78,8 +91,8 @@ class ER1:
         return G0 + op + self.S
 
 
-def g_er1(t, conv="right", ef_step=False):
-    return ER1(conv, ef_step).run_to(Fr(t))
+def g_er1(t, conv="right", ef_step=False, p1=None):
+    return ER1(conv, ef_step, p1).run_to(Fr(t))
 
 
 def resistor_only_observable(t):

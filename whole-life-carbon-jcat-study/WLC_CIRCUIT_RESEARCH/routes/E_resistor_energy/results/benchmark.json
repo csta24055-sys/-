@@ -1,21 +1,122 @@
 {
  "closed_form_Fraction": {
-  "median_s": 0.004058476999944105,
+  "median_s": 0.004259888999968098,
   "peak_bytes": 120928
  },
  "ER1_hybrid_per_query": {
-  "median_s": 0.042791671000031783,
-  "peak_bytes": 121952
+  "median_s": 0.04521040999998149,
+  "peak_bytes": 122080
  },
  "ER1_hybrid_sorted_sweep": {
-  "median_s": 0.01724088700007087,
-  "peak_bytes": 130248
+  "median_s": 0.017492280000169558,
+  "peak_bytes": 130376
  },
- "fixed_step_dt1e-3_float(100 pts)": {
-  "median_s": 0.07323143999997228,
-  "peak_bytes": 1912,
-  "max_abs_err_kg": 3.086597644141875e-10
+ "true_fixed_step_dt1e-3_sweep": {
+  "median_s": 0.01621378999971057,
+  "peak_bytes": 102344
  },
+ "true_fixed_step_errors": {
+  "0.01": {
+   "event_instants": {
+    "10": {
+     "value": 140.0000000000005,
+     "exact": 160.0,
+     "err": 19.99999999999949
+    },
+    "20": {
+     "value": 235.00000000000202,
+     "exact": 255.0,
+     "err": 19.999999999997982
+    },
+    "30": {
+     "value": 295.0000000000035,
+     "exact": 315.0,
+     "err": 19.999999999996476
+    },
+    "40": {
+     "value": 390.000000000005,
+     "exact": 410.0,
+     "err": 19.999999999994998
+    },
+    "60": {
+     "value": 545.0000000000081,
+     "exact": 565.0,
+     "err": 19.99999999999193
+    }
+   },
+   "contract_max_err": 35.00000400000201,
+   "random_points_err_gt_1kg": 2,
+   "random_max_err": 35.01292000000501,
+   "random_max_err_excluding_gt_1kg": 0.01999999999679858
+  },
+  "0.001": {
+   "event_instants": {
+    "10": {
+     "value": 140.00000000000136,
+     "exact": 160.0,
+     "err": 19.999999999998636
+    },
+    "20": {
+     "value": 235.0000000000029,
+     "exact": 255.0,
+     "err": 19.9999999999971
+    },
+    "30": {
+     "value": 295.0000000000044,
+     "exact": 315.0,
+     "err": 19.999999999995623
+    },
+    "40": {
+     "value": 390.0000000000059,
+     "exact": 410.0,
+     "err": 19.99999999999409
+    },
+    "60": {
+     "value": 544.9999999996805,
+     "exact": 565.0,
+     "err": 20.00000000031946
+    }
+   },
+   "contract_max_err": 35.00000400000289,
+   "random_points_err_gt_1kg": 0,
+   "random_max_err": 0.0019999999953483893,
+   "random_max_err_excluding_gt_1kg": 0.0019999999953483893
+  },
+  "0.0001": {
+   "event_instants": {
+    "10": {
+     "value": 139.99999999993648,
+     "exact": 160.0,
+     "err": 20.000000000063523
+    },
+    "20": {
+     "value": 200.00000000028535,
+     "exact": 255.0,
+     "err": 54.999999999714646
+    },
+    "30": {
+     "value": 294.99999999984476,
+     "exact": 315.0,
+     "err": 20.00000000015524
+    },
+    "40": {
+     "value": 354.99999999927786,
+     "exact": 410.0,
+     "err": 55.00000000072214
+    },
+    "60": {
+     "value": 510.00000000142836,
+     "exact": 565.0,
+     "err": 54.99999999857164
+    }
+   },
+   "contract_max_err": 55.000003999714636,
+   "random_points_err_gt_1kg": 0,
+   "random_max_err": 0.00020000003843279046,
+   "random_max_err_excluding_gt_1kg": 0.00020000003843279046
+  }
+ },
+ "true_fixed_step_note": "float stepping of meter AND clocks; event fires at first step end with clock>=period, clock reset to 0 (overshoot dropped); value at t = state after round(t/dt) steps",
  "exact_agreement_hybrid_vs_closed_form": true,
  "states": {
   "closed_form": "(0,0,0,0) + formula",
@@ -36,6 +137,18 @@
    1,
    1,
    6
+  ],
+  "ER1_P1": [
+   4,
+   0,
+   3,
+   1
+  ],
+  "true_fixed_step": [
+   4,
+   0,
+   2,
+   0
   ]
  },
  "env": {

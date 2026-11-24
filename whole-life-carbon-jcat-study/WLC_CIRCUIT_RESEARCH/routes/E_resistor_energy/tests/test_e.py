@@ -71,14 +71,22 @@ class T0Basics(unittest.TestCase):
 
 class T1_HE1(unittest.TestCase):
     def test_contract_points_all_conventions(self):
+        # expected side independent of joule.n_events: explicit P0 event list up to t=60
+        ev = [(Fr(10 * k), Fr(20)) for k in range(1, 7)] + [(Fr(20 * k), Fr(35)) for k in range(1, 4)]
+        eps = Fr(1, 10**9)
+        cnt = {"right": lambda tau, t: tau <= t, "left": lambda tau, t: tau < t,
+               "orig": lambda tau, t: tau < t * (1 - eps)}
         for t in CONTRACT + EXTRA:
+            tf = Fr(t)
             for conv in J.CONVENTIONS:
+                exp = 100 + 4 * tf + sum((A for tau, A in ev if cnt[conv](tau, tf)), Fr(0))
                 a = J.g_dc(t, conv)
-                self.assertEqual(a, J.p0_fixture(t, conv), (t, conv))
-                self.assertEqual(fr(a), C.g_er1(t, conv), (t, conv))   # exact, Fraction
-                self.assertLess(abs(Q.g_dc_mp(t, conv) - mp.mpf(a.p) / a.q), TOL, (t, conv))
+                self.assertEqual(fr(a), exp, (t, conv))
+                self.assertEqual(C.g_er1(t, conv), exp, (t, conv))      # exact, Fraction
+                self.assertLess(abs(Q.g_dc_mp(t, conv) - mp.mpf(exp.numerator) / exp.denominator),
+                                TOL, (t, conv))
                 if t not in EXTRA:   # float64 cannot resolve the eps band reliably
-                    self.assertLess(abs(Q.g_dc_scipy(t, conv) - float(a)), TOL, (t, conv))
+                    self.assertLess(abs(Q.g_dc_scipy(t, conv) - float(exp)), TOL, (t, conv))
 
     def test_declared_table_values(self):
         exp = {"right": [100, 104, "139.999996", 160, "160.000004", "199.999996", 255,
@@ -198,26 +206,34 @@ class T3_HE3(unittest.TestCase):
             self.assertGreater(abs(err_sym), TOL)              # fails the 1e-9 H-E1 gate
 
     def test_bound_and_tightness(self):
-        rng = random.Random(20261124)
-        om = 2 * mp.pi
-        for phi in (0, mp.pi / 4, mp.mpf("1.234"), mp.pi / 2):
-            b = 4 * (1 + abs(mp.sin(2 * phi))) / (2 * om)
-            self.assertLessEqual(b, 4 / om + mp.mpf(10) ** -30)
-            worst = 0
-            for _ in range(400):
-                t = mp.mpf(rng.uniform(0, 60))
-                err = abs(4 * (-(mp.sin(2 * om * t + 2 * phi) - mp.sin(2 * phi)) / (2 * om)))
-                self.assertLessEqual(err, b + mp.mpf(10) ** -30)
-                worst = max(worst, err)
-            self.assertGreater(worst, 0.95 * b)                # bound is (nearly) attained
-        # exact attainment phi=0 at t=3/8: error = r/(2 omega)
-        self.assertEqual(simplify(J.to_kg(J.e_ac_closed(Rational(3, 8))) - 4 * Rational(3, 8)
-                                  - 1 / pi), 0)
-        # quadrature cross-check of the closed form at a random off-lattice point
-        t = "37.123456"
-        self.assertLess(abs(Q.e_ac_mp(t, phi=mp.mpf("1.234"))
-                            - mp.mpf(str(N(J.e_ac_closed(Rational(t), phi=Rational("1.234")), 35)))),
-                        1e-25)
+        """Numerical search over t and phi with SciPy quadrature (not the closed form):
+        sup_t |kappa E - 4t| must equal 4(1+|sin 2phi|)/(2 omega); global sup 4/omega."""
+        import math
+        from scipy.optimize import minimize_scalar
+        for om in (2 * math.pi, 3.0):
+            per = math.pi / om                     # ripple period
+            t0 = 37.0
+            glob = 0.0
+            for j in range(24):
+                phi = math.pi * j / 24
+                E0 = Q.e_ac_scipy(t0, omega=om, phi=phi)
+                f = lambda t: (E0 + Q.squad(lambda x: 3 * (2 * math.sqrt(2) * math.sin(om * x + phi)) ** 2,
+                                            t0, t, epsabs=1e-13, epsrel=1e-13)[0]) / 3 - 4 * t
+                grid = [t0 + per * k / 60 for k in range(61)]
+                vals = [abs(f(t)) for t in grid]
+                k = max(range(61), key=vals.__getitem__)
+                lo, hi = grid[max(k - 1, 0)], grid[min(k + 1, 60)]
+                r = minimize_scalar(lambda t: -abs(f(t)), bounds=(lo, hi), method="bounded",
+                                    options=dict(xatol=1e-12))
+                best = max(vals[k], -r.fun)
+                bound = 4 * (1 + abs(math.sin(2 * phi))) / (2 * om)
+                self.assertLessEqual(best, bound + 1e-9, (om, phi))
+                self.assertGreater(best, bound - 1e-8, (om, phi))   # attained
+                glob = max(glob, best)
+            self.assertLessEqual(glob, 4 / om + 1e-9)
+            self.assertGreater(glob, 4 / om * 0.99)                  # phi near pi/4 on the grid
+        # exact attainment phi=0 at t=3/8: error = r/(2 omega) = 1/pi, checked by mpmath quad
+        self.assertLess(abs(Q.e_ac_mp(mp.mpf(3) / 8) / 3 - mp.mpf(3) / 2 - 1 / mp.pi), 1e-30)
 
     def test_full_periods_any_phase(self):
         for phi in (0, Rational(1, 3), pi / 4):
@@ -241,6 +257,99 @@ class T4_HE4(unittest.TestCase):
         for t, v in ((10, 160), (20, 245), (60, 515)):
             wrong = 100 + J.op_meter_then_convert(t) + J.event_sum(Rational(t), "right")
             self.assertEqual(J.p2_fixture(t) - wrong, 10)
+
+
+class T5_DPass1(unittest.TestCase):
+    """Fixes requested by route D pass 1 (items 1-4)."""
+
+    def test_event_cross_term_is_2sqrtAA_rho(self):
+        w = Rational(1, 100)
+        rect, nz = J.rect, J.normalize
+        cases = {  # name: (shape_a, support_a, shape_b, support_b, expected rho)
+            "equal_aligned": (rect(20, 20 + w), (20, 20 + w), rect(20, 20 + w), (20, 20 + w), 1),
+            "widths_w_4w": (rect(20, 20 + w), (20, 20 + w), rect(20, 20 + 4 * w), (20, 20 + 4 * w), Rational(1, 2)),
+            "half_overlap": (rect(20, 20 + w), (20, 20 + w), rect(20 + w / 2, 20 + 3 * w / 2), (20 + w / 2, 20 + 3 * w / 2), Rational(1, 2)),
+            "widths_w_9w": (rect(20, 20 + w), (20, 20 + w), rect(20, 20 + 9 * w), (20, 20 + 9 * w), Rational(1, 3)),
+            "interleaved": (rect(20, 20 + w), (20, 20 + w), rect(20 + w, 20 + 2 * w), (20 + w, 20 + 2 * w), 0),
+            "walsh_pair": (J.walsh(20, w, J.WALSH_AC), (20, 20 + w), J.walsh(20, w, J.WALSH_PIPE), (20, 20 + w), 0),
+            "walsh_vs_rect": (J.walsh(20, w, J.WALSH_AC), (20, 20 + w), rect(20, 20 + w), (20, 20 + w), 0),
+            "rect_vs_half_walsh": (rect(20, 20 + w), (20, 20 + w), J.walsh(20, w, (1, 1, 1, -1)), (20, 20 + w), Rational(1, 2)),
+        }
+        lo, hi = 19, 21
+        for name, (fa, sa, fb, sb, r_exp) in cases.items():
+            ia, ib = nz(fa, 20, *sa), nz(fb, 35, *sb)
+            r = J.rho(fa, fb, lo, hi)
+            self.assertEqual(simplify(r - r_exp), 0, name)
+            c = J.cross_kg_shapes(ia, ib, lo, hi)
+            self.assertEqual(simplify(c - 2 * sqrt(20 * 35) * r_exp), 0, name)
+            self.assertLessEqual(float(abs(c)), float(20 * sqrt(7)) + 1e-12, name)   # Cauchy-Schwarz
+            # independent quadrature on the same configuration
+            def pcs(shape_sa):
+                f, (a, b) = shape_sa
+                n = 40
+                pts = [a + (b - a) * Rational(k, n) for k in range(n + 1)]
+                return [(float(pts[k]), float(pts[k + 1]), float(f.subs(J.s, (pts[k] + pts[k + 1]) / 2)))
+                        for k in range(n)]
+            pa, pb = Q.norm_pieces(pcs((fa, sa)), 20), Q.norm_pieces(pcs((fb, sb)), 35)
+            cq = Q.shared_kg_mp([pa, pb], lo, hi) - Q.separate_kg_mp([pa, pb], lo, hi)
+            self.assertLess(abs(cq - mp.mpf(str(N(c, 30)))), 1e-9, name)
+        self.assertEqual(simplify(2 * sqrt(700) * Rational(1, 2) - sqrt(700)), 0)   # 26.4575
+
+    def test_shared_resistor_walsh_and_interleaved(self):
+        w = Rational(1, 100)
+        dc = J.rect(0, 61, J.I0)
+        # Walsh-orthogonal zero-mean pulses at t=20 on ONE resistor: window energy 4w+55
+        ia = J.normalize(J.walsh(20, w, J.WALSH_AC), 20, 20, 20 + w)
+        ib = J.normalize(J.walsh(20, w, J.WALSH_PIPE), 35, 20, 20 + w)
+        self.assertEqual(J.shared_resistor_kg([dc, ia, ib], 20, 20 + w), 4 * w + 55)
+        pa = Q.norm_pieces(Q.walsh_pieces(20, "0.01", J.WALSH_AC), 20)
+        pb = Q.norm_pieces(Q.walsh_pieces(20, "0.01", J.WALSH_PIPE), 35)
+        pdc = [(mp.mpf(0), mp.mpf(61), mp.mpf(2))]
+        self.assertLess(abs(Q.shared_kg_mp([pdc, pa, pb], 20, mp.mpf("20.01")) - (mp.mpf("0.04") + 55)), 1e-25)
+        self.assertEqual(Q.charge_mp(pa, 20, 21), 0)          # zero net charge: invisible to route A
+        # whole P0 with Walsh pulses on one resistor: exact at every readout outside windows
+        comps = J.p0_walsh_components(w)
+        for t, conv in ((Rational(5), "right"), (20 + w, "right"), (Rational(30) - w, "right"),
+                        (60 + w, "right")):
+            g = J.G0 + J.shared_resistor_kg(comps, 0, t)
+            self.assertEqual(g, J.p0_fixture(t, conv), t)
+        # ... but NOT inside a window (orthogonality holds only over the whole window)
+        t_in = 20 + w / 4
+        g_in = J.G0 + J.shared_resistor_kg(comps, 0, t_in)
+        sep_in = J.G0 + J.separate_kg(comps, 0, t_in)
+        self.assertNotEqual(simplify(g_in - sep_in), 0)
+        # time-interleaved rectangular pulses: event x event term 0, DC x pulse remains
+        ra = J.normalize(J.rect(20, 20 + w), 20, 20, 20 + w)
+        rb = J.normalize(J.rect(20 + w, 20 + 2 * w), 35, 20 + w, 20 + 2 * w)
+        self.assertEqual(J.cross_kg_shapes(ra, rb, 19, 21), 0)
+        dcx = J.shared_resistor_kg([dc, ra, rb], 19, 21) - J.separate_kg([dc, ra, rb], 19, 21)
+        self.assertEqual(simplify(dcx - 4 * sqrt(20 * w) - 4 * sqrt(35 * w)), 0)
+        # orthogonality is w.r.t. the ACTUAL operating current: AC op current breaks it
+        iop = sqrt(2) * J.I0 * sin(2 * pi * J.s)
+        c_ac = J.cross_kg_shapes(iop, ia, 20, 20 + w)
+        self.assertNotEqual(simplify(c_ac), 0)
+        self.assertLess(abs(float(c_ac)), 0.1)                 # 0.0397 kg at w=0.01
+
+    def test_p1_event_driven_circuit(self):
+        ts = CONTRACT + EXTRA + ["20.00000001", "20.00000002"]
+        for pol in ("substitute", "additional"):
+            amt = Fr(-5) if pol == "substitute" else Fr(50)
+            for conv in J.CONVENTIONS:
+                for t in ts:
+                    a = J.p1(t, pol, conv)
+                    self.assertEqual(C.g_er1(t, conv, p1=pol), fr(a), (pol, conv, t))
+            self.assertEqual([C.g_er1(t, p1=pol) for t in (20, 40)],
+                             [255 + amt, 410 + amt])
+        self.assertEqual(C.ER1.STATES_P1, (4, 0, 3, 1))
+
+    def test_true_fixed_step_misses_events(self):
+        qs = CONTRACT
+        exact = {t: float(J.p0_fixture(t)) for t in qs}
+        for dt in (1e-2, 1e-3):
+            out = Q.fixed_step_true(dt, qs)
+            errs = {t: abs(out[t] - exact[t]) for t in qs}
+            self.assertGreater(max(errs.values()), 19.9)          # a full event charge
+            self.assertAlmostEqual(out["10"], 140.0, delta=1e-6)   # G(10)=140, not 160
 
 
 if __name__ == "__main__":

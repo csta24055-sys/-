@@ -122,6 +122,51 @@
    "meter_then_convert_initial": "240"
   }
  },
+ "D_pass1": {
+  "w": "1/100",
+  "cross_table": {
+   "equal_aligned": {
+    "rho": "1",
+    "cross_kg": "20*sqrt(7)",
+    "cross_decimal": "52.9150262212918118"
+   },
+   "widths_w_4w": {
+    "rho": "1/2",
+    "cross_kg": "10*sqrt(7)",
+    "cross_decimal": "26.4575131106459059"
+   },
+   "half_overlap": {
+    "rho": "1/2",
+    "cross_kg": "10*sqrt(7)",
+    "cross_decimal": "26.4575131106459059"
+   },
+   "widths_w_9w": {
+    "rho": "1/3",
+    "cross_kg": "20*sqrt(7)/3",
+    "cross_decimal": "17.6383420737639373"
+   },
+   "interleaved": {
+    "rho": "0",
+    "cross_kg": "0",
+    "cross_decimal": "0"
+   },
+   "walsh_pair": {
+    "rho": "0",
+    "cross_kg": "0",
+    "cross_decimal": "0"
+   },
+   "rect_vs_walsh(1,1,1,-1)": {
+    "rho": "1/2",
+    "cross_kg": "10*sqrt(7)",
+    "cross_decimal": "26.4575131106459059"
+   }
+  },
+  "walsh_window_t20_kg": "1376/25",
+  "walsh_P0_G_after_60_plus_w": "14126/25",
+  "walsh_cross_inside_window_t20_plus_w_over_4_kg": "14.2675781291329",
+  "walsh_vs_AC_operating_current_cross_kg": "-0.0397154779564489",
+  "walsh_pulse_net_charge_C": "0"
+ },
  "thermal": {
   "theta60": "11.9999999999989",
   "E60_J": "720"

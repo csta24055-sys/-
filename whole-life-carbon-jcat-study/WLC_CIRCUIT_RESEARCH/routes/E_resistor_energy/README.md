@@ -20,6 +20,10 @@ claims it is new. Route A (capacitor charge) is a separate, competing representa
 | `E_R(t) = ∫ p_R` [J] | dissipated energy, needs a meter/integrator | resistor temperature (bounded with heat loss), `Q²/(2C)` |
 | `κ E_R` [kgCO2e] | synthetic carbon proxy | real electricity-carbon accounting |
 
+Several currents in one resistor: `∫(Σi_k)²R = Σ∫i_k²R + 2R Σ_{j<k}∫i_j i_k`; the event×event
+part is `2√(A_iA_j)·ρ` (ρ = L² cosine of the shapes). Additive iff the cross integrals vanish at the
+readout (e.g. separate resistors, or L²-orthogonal zero-mean pulses — which carry no charge).
+
 AC: `i = √2·I_rms·sin(ωt+φ)` ⇒ `E = I_rms²R[t − (sin(2ωt+2φ) − sin 2φ)/(2ω)]` — linear secular term
 plus a bounded ripple at 2ω; exact over whole periods for any φ; no rectification needed.
 
@@ -33,12 +37,14 @@ A resistor stores nothing (`p` at t=1 equals `p` at t=30); **the integrator is t
 | table-driven (H=60) meter + pointer + comparator + 6 (time, kg) rows | (1,1,1,6) | table grows with horizon |
 | P2 via EF gain switch | (4,1,2,0) | integrator then stores carbon, not joules |
 | H-E2 fix: separate resistors, summed power, one meter | (4,0,2,0) + pulse timers | resistors add no state |
+| H-E2 alt.: one resistor, Walsh-orthogonal zero-mean pulses | (4,0,2,0) + sub-window timers [H] | exact only at readouts outside windows |
+| P1 (one renovation table entry) | (4,0,3,1) | merged (3,0,3,1) |
 
 ## Layout
 - `code/joule.py` SymPy analytic oracle; `code/quad_check.py` mpmath(dps 40)/SciPy quadrature
   (waveforms re-coded numerically, events counted by loop); `code/circuit_e.py` E-R1 hybrid
   event-driven realisation in exact `Fraction`; `code/make_results.py` writes `results/*.json`.
-- `tests/test_e.py` (unittest, 20 tests). Results: `results/test_log.txt`, `points.json`,
+- `tests/test_e.py` (unittest, 24 tests, incl. D pass 1 fixes). Results: `results/test_log.txt`, `points.json`,
   `e_numbers.json`, `benchmark.json`. Verdicts in `STATUS.md`, evidence classes in `claims.md`.
 
 ```

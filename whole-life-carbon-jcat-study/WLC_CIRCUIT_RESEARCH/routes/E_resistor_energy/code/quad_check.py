@@ -107,3 +107,56 @@ def op_meter_then_convert_mp(t):
     t = mp.mpf(t)
     E = _mpquad(lambda x: R * I0 ** 2, mp.mpf(0), t)
     return (mp.mpf(1) / 3 if t < 10 else mp.mpf(1) / 4) * E
+
+
+# ---------------- D pass 1: numeric shapes on one resistor (independent re-coding) -------
+def shape_fn(pieces):
+    """pieces: list of (a, b, value); current = sum of values whose [a,b) contains x."""
+    return lambda x: sum((v for a, b, v in pieces if a <= x < b), mp.mpf(0))
+
+
+def norm_pieces(pieces, A_kg):
+    e = sum((mp.mpf(v) ** 2 * (mp.mpf(b) - mp.mpf(a)) for a, b, v in pieces), mp.mpf(0)) * R
+    amp = mp.sqrt(mp.mpf(A_kg) / KAPPA / e)
+    return [(mp.mpf(a), mp.mpf(b), amp * v) for a, b, v in pieces]
+
+
+def walsh_pieces(a, w, signs):
+    a = mp.mpf(a); w = mp.mpf(w); n = len(signs)
+    return [(a + w * k / n, a + w * (k + 1) / n, sg) for k, sg in enumerate(signs)]
+
+
+def shared_kg_mp(piece_lists, lo, hi):
+    fs = [shape_fn(p) for p in piece_lists]
+    br = sorted({x for p in piece_lists for a, b, _ in p for x in (a, b)})
+    return KAPPA * _mpquad(lambda x: R * sum(f(x) for f in fs) ** 2, mp.mpf(lo), mp.mpf(hi), breaks=br)
+
+
+def separate_kg_mp(piece_lists, lo, hi):
+    return sum(shared_kg_mp([p], lo, hi) for p in piece_lists)
+
+
+def charge_mp(pieces, lo, hi):
+    f = shape_fn(pieces)
+    br = sorted({x for a, b, _ in pieces for x in (a, b)})
+    return _mpquad(f, mp.mpf(lo), mp.mpf(hi), breaks=br)
+
+
+def fixed_step_true(dt, queries, horizon=60.0):
+    """TRUE fixed-step integration in float: every step advances E (+p dt) and both clocks
+    (+dt); an event fires at the first step end where the clock >= its period (then reset).
+    The value at query t is the state after k = round(t/dt) steps. No closed-form floor."""
+    qs = sorted((float(t), t) for t in queries)
+    out = {}; E = 0.0; S_ = 0.0; xA = 0.0; xP = 0.0; k = 0; j = 0
+    nmax = int(round(horizon / dt))
+    while j < len(qs) and int(round(qs[j][0] / dt)) == 0:
+        out[qs[j][1]] = 100.0; j += 1
+    while k < nmax and j < len(qs):
+        E += 12.0 * dt; xA += dt; xP += dt; k += 1
+        if xA >= 10.0:
+            xA = 0.0; S_ += 20.0
+        if xP >= 20.0:
+            xP = 0.0; S_ += 35.0
+        while j < len(qs) and int(round(qs[j][0] / dt)) == k:
+            out[qs[j][1]] = 100.0 + E / 3.0 + S_; j += 1
+    return out

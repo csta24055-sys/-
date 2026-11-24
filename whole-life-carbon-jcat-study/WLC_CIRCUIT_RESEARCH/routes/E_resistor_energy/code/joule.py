@@ -189,3 +189,88 @@ def thermal_rise(t, P=12, R_th=1, C_th=2):
     """C_th dtheta/dt = P - theta/R_th, theta(0)=0 -> bounded, not linear."""
     from sympy import exp
     return P * R_th * (1 - exp(-Rational(t) / (R_th * C_th)))
+
+
+# ---------------- D pass 1: general pulse shapes on ONE shared resistor -----------------
+def rect(a, b, amp=1):
+    """Indicator-shaped current amp on [a, b) (piecewise constant, exact)."""
+    return Piecewise((amp, (s >= a) & (s < b)), (0, True))
+
+
+def walsh(a, w, signs):
+    """Zero-mean (if sum(signs)=0) Walsh-type shape on [a, a+w): equal sub-intervals."""
+    n = len(signs)
+    return sum((rect(a + Rational(k, n) * w, a + Rational(k + 1, n) * w, sg)
+                for k, sg in enumerate(signs)), S(0))
+
+
+def _pw_breaks(expr):
+    from sympy.core.relational import Relational
+    out = set()
+    for r in expr.atoms(Relational):
+        for side in (r.lhs, r.rhs):
+            if side.is_number:
+                out.add(side)
+    return out
+
+
+def seg_integrate(expr, lo, hi):
+    """Exact int_lo^hi expr ds for expressions built from rect/walsh Piecewise pieces
+    (possibly times smooth functions): split at every Piecewise breakpoint, resolve each
+    Piecewise by its branch at the segment midpoint, integrate the smooth rest exactly."""
+    lo, hi = S(lo), S(hi)
+    pts = sorted({lo, hi} | {b for b in _pw_breaks(expr) if lo < b < hi})
+    tot = S(0)
+    for a, b in zip(pts[:-1], pts[1:]):
+        mid = (a + b) / 2
+        res = expr.replace(lambda e: isinstance(e, Piecewise),
+                           lambda e: next(v for v, c in e.args if bool(c.subs(s, mid))))
+        tot += integrate(res, (s, a, b))
+    return tot
+
+
+def l2(f, g, lo, hi):
+    return seg_integrate(f * g, lo, hi)
+
+
+def normalize(shape, A_kg, lo, hi, kappa=KAPPA, R_=R):
+    """Scale a shape so that int i^2 R = A/kappa (the event's energy alone)."""
+    return sqrt(kg_to_joule(A_kg, kappa) / (R_ * l2(shape, shape, lo, hi))) * shape
+
+
+def rho(f, g, lo, hi):
+    """L2 cosine (normalized overlap) of two current shapes."""
+    return simplify(l2(f, g, lo, hi) / sqrt(l2(f, f, lo, hi) * l2(g, g, lo, hi)))
+
+
+def cross_kg_shapes(i1, i2, lo, hi, kappa=KAPPA, R_=R):
+    """kappa * 2 R int i1 i2: the non-additive part of int (i1+i2)^2 R."""
+    return simplify(to_kg(2 * R_ * l2(i1, i2, lo, hi), kappa))
+
+
+def shared_resistor_kg(components, lo, hi, kappa=KAPPA, R_=R):
+    """kappa * int (sum_k i_k)^2 R over [lo, hi]  (one resistor carries all currents)."""
+    tot = sum(components, S(0))
+    return simplify(to_kg(seg_integrate(tot ** 2 * R_, lo, hi), kappa))
+
+
+def separate_kg(components, lo, hi, kappa=KAPPA, R_=R):
+    """sum_k kappa * int i_k^2 R (separate resistors / powers summed first)."""
+    return simplify(sum((to_kg(seg_integrate(c ** 2 * R_, lo, hi), kappa) for c in components), S(0)))
+
+
+WALSH_AC = (1, 1, -1, -1)    # zero mean, orthogonal to WALSH_PIPE and to DC on the window
+WALSH_PIPE = (1, -1, 1, -1)
+WALSH_AC_ALONE = (1, -1)
+
+
+def p0_walsh_components(w, horizon=HORIZON):
+    """DC operating current + every P0 event as a zero-mean Walsh pulse on [tau, tau+w)."""
+    comps = [rect(0, horizon + 1, I0)]
+    for k in range(1, horizon // 10 + 1):
+        tau = 10 * k
+        both = tau % 20 == 0
+        comps.append(normalize(walsh(tau, w, WALSH_AC if both else WALSH_AC_ALONE), 20, tau, tau + w))
+        if both:
+            comps.append(normalize(walsh(tau, w, WALSH_PIPE), 35, tau, tau + w))
+    return comps

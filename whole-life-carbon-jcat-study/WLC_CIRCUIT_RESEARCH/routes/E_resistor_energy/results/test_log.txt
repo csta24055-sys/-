@@ -1,4 +1,4 @@
-# cmd: PYTHONDONTWRITEBYTECODE=1 math7-py -B -m unittest discover -s tests -v ; cwd=routes/E_resistor_energy ; HEAD=5a2f898 ; 2026-11-24T04:33:43Z
+# cmd: PYTHONDONTWRITEBYTECODE=1 math7-py -B -m unittest discover -s tests -v ; cwd=routes/E_resistor_energy ; HEAD=3646856 ; 2026-11-24T05:06:07Z
 test_ac_power_vs_energy_and_2w_ripple (test_e.T0Basics.test_ac_power_vs_energy_and_2w_ripple) ... ok
 test_ac_rms2_five_periods_60J (test_e.T0Basics.test_ac_rms2_five_periods_60J) ... ok
 test_dc_12W_60J (test_e.T0Basics.test_dc_12W_60J) ... ok
@@ -14,13 +14,18 @@ test_finite_pulse_cannot_jump (test_e.T2_HE2.test_finite_pulse_cannot_jump) ... 
 test_numeric_widths_and_quadrature (test_e.T2_HE2.test_numeric_widths_and_quadrature) ... ok
 test_polarity_counterexample (test_e.T2_HE2.test_polarity_counterexample) ... ok
 test_symbolic_cross_terms (test_e.T2_HE2.test_symbolic_cross_terms) ... ok
-test_bound_and_tightness (test_e.T3_HE3.test_bound_and_tightness) ... ok
+test_bound_and_tightness (test_e.T3_HE3.test_bound_and_tightness)
+Numerical search over t and phi with SciPy quadrature (not the closed form): ... ok
 test_full_periods_any_phase (test_e.T3_HE3.test_full_periods_any_phase) ... ok
 test_lattice_exact (test_e.T3_HE3.test_lattice_exact) ... ok
 test_off_lattice_contract_points (test_e.T3_HE3.test_off_lattice_contract_points) ... ok
 test_convert_then_integrate_vs_meter_then_convert (test_e.T4_HE4.test_convert_then_integrate_vs_meter_then_convert) ... ok
+test_event_cross_term_is_2sqrtAA_rho (test_e.T5_DPass1.test_event_cross_term_is_2sqrtAA_rho) ... ok
+test_p1_event_driven_circuit (test_e.T5_DPass1.test_p1_event_driven_circuit) ... ok
+test_shared_resistor_walsh_and_interleaved (test_e.T5_DPass1.test_shared_resistor_walsh_and_interleaved) ... ok
+test_true_fixed_step_misses_events (test_e.T5_DPass1.test_true_fixed_step_misses_events) ... ok
 
 ----------------------------------------------------------------------
-Ran 20 tests in 2.220s
+Ran 24 tests in 16.932s
 
 OK
