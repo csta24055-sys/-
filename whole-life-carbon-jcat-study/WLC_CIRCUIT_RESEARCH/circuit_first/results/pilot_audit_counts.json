@@ -1,0 +1,54 @@
+{
+ "hiddenness": {
+  "h": "0",
+  "W_in": 49,
+  "W_out": 0,
+  "W_in_parts": {
+   "data_elements": 8,
+   "kcl_additions": 25,
+   "comparators": 4,
+   "diodes": 0,
+   "switches": 12
+  },
+  "construction_ops": {
+   "W1": 8,
+   "W2": 2,
+   "W3": 8,
+   "W4": 4,
+   "GREY": 0
+  },
+  "grey_items": []
+ },
+ "state_counts": {
+  "continuous_states": 13,
+  "by_cell": {
+   "timebase": 3,
+   "bus": 3,
+   "packet": 3,
+   "clock": 4
+  },
+  "boolean_bits": 12,
+  "sequencers": 6,
+  "element_kinds": {
+   "V": 4,
+   "OA": 7,
+   "C": 13,
+   "R": 5,
+   "CMP": 4,
+   "SW": 12,
+   "SEQ": 6,
+   "CNT": 1,
+   "POR": 1
+  },
+  "elements": 53
+ },
+ "schema_signature": [
+  "('bus', ())",
+  "('clock', (('out', 'group'), ('reset', 'packet'), ('src', 'railn')))",
+  "('flow', (('dst', 'bus'), ('src', 'rail')))",
+  "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'group')))",
+  "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'por')))",
+  "('rails', ())",
+  "('timebase', ())"
+ ]
+}

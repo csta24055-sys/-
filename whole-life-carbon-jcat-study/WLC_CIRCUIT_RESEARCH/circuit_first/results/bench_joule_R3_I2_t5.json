@@ -1,0 +1,131 @@
+{
+ "analytic": {
+  "P_W": 12,
+  "E_J": 60
+ },
+ "metered_E": "60",
+ "audit": {
+  "records": 4,
+  "kcl_max": 0,
+  "law_max": 0,
+  "kcl_skipped": 0,
+  "law_skipped": 0,
+  "jump_kcl_max": 0,
+  "jump_tellegen_max": 0,
+  "jump_cap_energy_max": 0,
+  "tellegen_total": 0.0,
+  "storage_vs_meter_max": 0.0
+ },
+ "dump": {
+  "netlist": [
+   {
+    "name": "I1",
+    "kind": "I",
+    "a": "0",
+    "b": "a",
+    "I": "2"
+   },
+   {
+    "name": "R",
+    "kind": "R",
+    "a": "a",
+    "b": "0",
+    "G": "1/3"
+   }
+  ],
+  "exact": true,
+  "states": [],
+  "records": [
+   {
+    "t": "0",
+    "tag": "post:init",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "a": "6"
+    },
+    "i": {
+     "I1": "2",
+     "R": "2"
+    },
+    "s": {},
+    "ds": {}
+   },
+   {
+    "t": "0",
+    "tag": "arrive",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "a": "6"
+    },
+    "i": {
+     "I1": "2",
+     "R": "2"
+    },
+    "s": {},
+    "ds": {}
+   },
+   {
+    "t": "5/2",
+    "tag": "mid",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "a": "6"
+    },
+    "i": {
+     "I1": "2",
+     "R": "2"
+    },
+    "s": {},
+    "ds": {}
+   },
+   {
+    "t": "5",
+    "tag": "arrive",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "a": "6"
+    },
+    "i": {
+     "I1": "2",
+     "R": "2"
+    },
+    "s": {},
+    "ds": {}
+   }
+  ],
+  "jumps": [],
+  "events": [],
+  "meters": {
+   "absorbed_energy_continuous": {
+    "I1": "-60",
+    "R": "60"
+   },
+   "absorbed_energy_jumps_linear_path": {
+    "I1": "0",
+    "R": "0"
+   },
+   "charge_continuous": {
+    "I1": "10",
+    "R": "10"
+   },
+   "charge_jumps": {
+    "I1": "0",
+    "R": "0"
+   }
+  },
+  "readouts": [],
+  "stats": {
+   "component_modes": 1,
+   "global_modes": 1,
+   "segments": 1,
+   "instants": 2,
+   "micro_steps": 1,
+   "jumps_nonzero": 0,
+   "inexact_events": 0
+  }
+ }
+}

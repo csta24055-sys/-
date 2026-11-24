@@ -1,6 +1,6 @@
 # Circuit-first research (corrected primary objective)
 
-**Current status: not implemented / not tested.** This directory is reserved for a fresh, genuinely circuit-first approach, *not* a continuation of the old Ψ per-unit netlist.
+**Current status (2026-11-24): stage A (engine + CF1 benches, pilot CF2, state changes CF3) implemented and run by the builder — see `STATUS.md`; independent verification and stage B NOT_RUN.** This directory is reserved for a fresh, genuinely circuit-first approach, *not* a continuation of the old Ψ per-unit netlist.
 
 Read `../13_CIRCUIT_FIRST_OBJECTIVE.md` and `../12_FINAL_OPERATING_PLAN.md`.
 

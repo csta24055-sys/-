@@ -1,0 +1,124 @@
+{
+ "pilot": {
+  "C(30)": "295",
+  "hiddenness": {
+   "h": "0",
+   "W_in": 50,
+   "W_out": 0,
+   "W_in_parts": {
+    "data_elements": 8,
+    "kcl_additions": 26,
+    "comparators": 4,
+    "diodes": 0,
+    "switches": 12
+   },
+   "construction_ops": {
+    "W1": 8,
+    "W2": 2,
+    "W3": 8,
+    "W4": 4,
+    "GREY": 0
+   },
+   "grey_items": []
+  },
+  "state_counts": {
+   "continuous_states": 13,
+   "by_cell": {
+    "timebase": 3,
+    "bus": 3,
+    "packet": 3,
+    "clock": 4
+   },
+   "boolean_bits": 12,
+   "sequencers": 6,
+   "element_kinds": {
+    "V": 4,
+    "OA": 7,
+    "C": 13,
+    "R": 7,
+    "CMP": 4,
+    "SW": 12,
+    "SEQ": 6,
+    "CNT": 1,
+    "POR": 1
+   },
+   "elements": 55
+  },
+  "signature": [
+   "('bus', ())",
+   "('clock', (('out', 'group'), ('reset', 'packet'), ('src', 'railn')))",
+   "('flow', (('dst', 'bus'), ('src', 'rail')))",
+   "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'group')))",
+   "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'por')))",
+   "('rails', ())",
+   "('timebase', ())"
+  ]
+ },
+ "full": {
+  "C(30)": "7065999986090500008856/8999999982000000009",
+  "hiddenness": {
+   "h": "0",
+   "W_in": 114,
+   "W_out": 0,
+   "W_in_parts": {
+    "data_elements": 16,
+    "kcl_additions": 59,
+    "comparators": 6,
+    "diodes": 0,
+    "switches": 33
+   },
+   "construction_ops": {
+    "W1": 16,
+    "W2": 4,
+    "W3": 15,
+    "W4": 7,
+    "GREY": 0
+   },
+   "grey_items": []
+  },
+  "state_counts": {
+   "continuous_states": 19,
+   "by_cell": {
+    "timebase": 3,
+    "bus": 5,
+    "packet": 4,
+    "clock": 4,
+    "yearcell": 2,
+    "age": 1
+   },
+   "boolean_bits": 20,
+   "sequencers": 15,
+   "element_kinds": {
+    "V": 6,
+    "OA": 13,
+    "C": 19,
+    "R": 16,
+    "CMP": 6,
+    "SW": 33,
+    "SEQ": 15,
+    "CNT": 1,
+    "POR": 1,
+    "SR": 5,
+    "GATE": 18,
+    "DFF": 1
+   },
+   "elements": 134
+  },
+  "signature": [
+   "('age', (('reset', 'group'), ('src', 'railn')))",
+   "('bus', ())",
+   "('clock', (('out', 'group'), ('reset', 'packet'), ('src', 'railn')))",
+   "('explicit', (('out', 'group'), ('src', 'global_ramp')))",
+   "('flow', (('ctrl', 'latch'), ('dst', 'bus'), ('src', 'rail')))",
+   "('flow', (('dst', 'bus'), ('src', 'age')))",
+   "('flow', (('dst', 'bus'), ('src', 'rail')))",
+   "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'explicit')))",
+   "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'group')))",
+   "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'por')))",
+   "('rails', ())",
+   "('repair_amp', (('dst', 'group_summer'), ('src', 'rail')))",
+   "('timebase', ())",
+   "('yearcell', (('dst', 'bus'), ('src', 'group_summer'), ('trig', 'group+tick')))"
+  ]
+ }
+}

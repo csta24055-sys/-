@@ -1,0 +1,147 @@
+{
+ "v": "3/2",
+ "E": "9/2",
+ "audit": {
+  "records": 4,
+  "kcl_max": 0,
+  "law_max": 0,
+  "kcl_skipped": 0,
+  "law_skipped": 0,
+  "jump_kcl_max": 0,
+  "jump_tellegen_max": 0,
+  "jump_cap_energy_max": 0,
+  "tellegen_total": 0.0,
+  "storage_vs_meter_max": 0.0
+ },
+ "dump": {
+  "netlist": [
+   {
+    "name": "I",
+    "kind": "I",
+    "a": "0",
+    "b": "c",
+    "I": "2"
+   },
+   {
+    "name": "C",
+    "kind": "C",
+    "a": "c",
+    "b": "0",
+    "C": "4",
+    "v0": 0
+   }
+  ],
+  "exact": true,
+  "states": [
+   "C"
+  ],
+  "records": [
+   {
+    "t": "0",
+    "tag": "post:init",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "c": "0"
+    },
+    "i": {
+     "I": "2",
+     "C": "2"
+    },
+    "s": {
+     "C": "0"
+    },
+    "ds": {
+     "C": "1/2"
+    }
+   },
+   {
+    "t": "0",
+    "tag": "arrive",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "c": "0"
+    },
+    "i": {
+     "I": "2",
+     "C": "2"
+    },
+    "s": {
+     "C": "0"
+    },
+    "ds": {
+     "C": "1/2"
+    }
+   },
+   {
+    "t": "3/2",
+    "tag": "mid",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "c": "3/4"
+    },
+    "i": {
+     "I": "2",
+     "C": "2"
+    },
+    "s": {
+     "C": "3/4"
+    },
+    "ds": {
+     "C": "1/2"
+    }
+   },
+   {
+    "t": "3",
+    "tag": "arrive",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "c": "3/2"
+    },
+    "i": {
+     "I": "2",
+     "C": "2"
+    },
+    "s": {
+     "C": "3/2"
+    },
+    "ds": {
+     "C": "1/2"
+    }
+   }
+  ],
+  "jumps": [],
+  "events": [],
+  "meters": {
+   "absorbed_energy_continuous": {
+    "I": "-9/2",
+    "C": "9/2"
+   },
+   "absorbed_energy_jumps_linear_path": {
+    "I": "0",
+    "C": "0"
+   },
+   "charge_continuous": {
+    "I": "6",
+    "C": "6"
+   },
+   "charge_jumps": {
+    "I": "0",
+    "C": "0"
+   }
+  },
+  "readouts": [],
+  "stats": {
+   "component_modes": 1,
+   "global_modes": 1,
+   "segments": 1,
+   "instants": 2,
+   "micro_steps": 1,
+   "jumps_nonzero": 0,
+   "inexact_events": 0
+  }
+ }
+}

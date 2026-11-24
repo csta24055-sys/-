@@ -1,0 +1,51 @@
+{
+ "engine/__init__.py": [
+  "mna",
+  "netlist",
+  "sim"
+ ],
+ "engine/audit.py": [
+  "__future__",
+  "fractions"
+ ],
+ "engine/linalg.py": [
+  "__future__",
+  "fractions",
+  "math"
+ ],
+ "engine/logic.py": [
+  "__future__",
+  "netlist"
+ ],
+ "engine/mna.py": [
+  "__future__",
+  "fractions",
+  "netlist"
+ ],
+ "engine/netlist.py": [
+  "__future__",
+  "dataclasses",
+  "fractions",
+  "typing"
+ ],
+ "engine/sim.py": [
+  "__future__",
+  "fractions",
+  "logic",
+  "math",
+  "mna",
+  "netlist"
+ ],
+ "adapter.py": [
+  "__future__",
+  "dataclasses",
+  "engine",
+  "fractions"
+ ],
+ "model.py": [
+  "__future__",
+  "adapter",
+  "engine",
+  "fractions"
+ ]
+}

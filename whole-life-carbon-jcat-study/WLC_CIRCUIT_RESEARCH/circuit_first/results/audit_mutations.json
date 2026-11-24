@@ -1,0 +1,65 @@
+{
+ "clock_slope_one": {
+  "T": "2000000001/200000000",
+  "conv": "original",
+  "observable": "C",
+  "expected": "7000000001/50000000",
+  "unmutated": "7000000001/50000000",
+  "mutated": "8000000001/50000000",
+  "detected": true
+ },
+ "no_lookahead": {
+  "T": "21/2",
+  "conv": "original",
+  "observable": "B3",
+  "expected": "13/2",
+  "unmutated": "13/2",
+  "mutated": "7",
+  "detected": true
+ },
+ "exclusion_per_event": {
+  "T": "7/2",
+  "conv": "original",
+  "observable": "B3",
+  "expected": "1/2",
+  "unmutated": "1/2",
+  "mutated": "-5/2",
+  "detected": true
+ },
+ "sequential_simultaneous": {
+  "T": "20",
+  "conv": "right",
+  "observable": "C",
+  "expected": "250",
+  "unmutated": "250",
+  "mutated": "305",
+  "detected": true
+ },
+ "lookahead_strict": {
+  "T": "25",
+  "conv": "right",
+  "observable": "B3",
+  "expected": "15",
+  "unmutated": "15",
+  "mutated": "16",
+  "detected": true
+ },
+ "age_not_reset": {
+  "T": "25",
+  "conv": "right",
+  "observable": "B6",
+  "expected": "625/4",
+  "unmutated": "625/4",
+  "mutated": "1025/4",
+  "detected": true
+ },
+ "readout_order_swapped": {
+  "T": "10",
+  "conv": "left",
+  "observable": "C",
+  "expected": "140",
+  "unmutated": "140",
+  "mutated": "160",
+  "detected": true
+ }
+}

@@ -1,0 +1,250 @@
+{
+ "v_final": "2",
+ "energy_lost": "15",
+ "audit": {
+  "records": 5,
+  "kcl_max": 0,
+  "law_max": 0,
+  "kcl_skipped": 0,
+  "law_skipped": 0,
+  "jump_kcl_max": 0,
+  "jump_tellegen_max": 0,
+  "jump_cap_energy_max": 0,
+  "tellegen_total": 0.0,
+  "storage_vs_meter_max": 0.0
+ },
+ "dump": {
+  "netlist": [
+   {
+    "name": "C1",
+    "kind": "C",
+    "a": "a",
+    "b": "0",
+    "C": "2",
+    "v0": "5"
+   },
+   {
+    "name": "C2",
+    "kind": "C",
+    "a": "b",
+    "b": "0",
+    "C": "3",
+    "v0": "0"
+   },
+   {
+    "name": "S",
+    "kind": "SW",
+    "a": "a",
+    "b": "b",
+    "ctrl": "por",
+    "invert": false
+   },
+   {
+    "name": "POR",
+    "kind": "POR",
+    "out": "por",
+    "priority": 5
+   }
+  ],
+  "exact": true,
+  "states": [
+   "C1",
+   "C2"
+  ],
+  "records": [
+   {
+    "t": "0",
+    "tag": "post:init",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "a": "5",
+     "b": "0"
+    },
+    "i": {
+     "C1": "0",
+     "C2": "0",
+     "S": "0"
+    },
+    "s": {
+     "C1": "5",
+     "C2": "0"
+    },
+    "ds": {
+     "C1": "0",
+     "C2": "0"
+    }
+   },
+   {
+    "t": "0",
+    "tag": "arrive",
+    "closed": [],
+    "diode_on": [],
+    "v": {
+     "a": "5",
+     "b": "0"
+    },
+    "i": {
+     "C1": "0",
+     "C2": "0",
+     "S": "0"
+    },
+    "s": {
+     "C1": "5",
+     "C2": "0"
+    },
+    "ds": {
+     "C1": "0",
+     "C2": "0"
+    }
+   },
+   {
+    "t": "0",
+    "tag": "post:logic",
+    "closed": [
+     "S"
+    ],
+    "diode_on": [],
+    "v": {
+     "a": "2",
+     "b": "2"
+    },
+    "i": {
+     "C1": "0",
+     "C2": "0",
+     "S": "0"
+    },
+    "s": {
+     "C1": "2",
+     "C2": "2"
+    },
+    "ds": {
+     "C1": "0",
+     "C2": "0"
+    }
+   },
+   {
+    "t": "1/2",
+    "tag": "mid",
+    "closed": [
+     "S"
+    ],
+    "diode_on": [],
+    "v": {
+     "a": "2",
+     "b": "2"
+    },
+    "i": {
+     "C1": "0",
+     "C2": "0",
+     "S": "0"
+    },
+    "s": {
+     "C1": "2",
+     "C2": "2"
+    },
+    "ds": {
+     "C1": "0",
+     "C2": "0"
+    }
+   },
+   {
+    "t": "1",
+    "tag": "arrive",
+    "closed": [
+     "S"
+    ],
+    "diode_on": [],
+    "v": {
+     "a": "2",
+     "b": "2"
+    },
+    "i": {
+     "C1": "0",
+     "C2": "0",
+     "S": "0"
+    },
+    "s": {
+     "C1": "2",
+     "C2": "2"
+    },
+    "ds": {
+     "C1": "0",
+     "C2": "0"
+    }
+   }
+  ],
+  "jumps": [
+   {
+    "t": "0",
+    "reason": "logic",
+    "Q": {
+     "C1": "-6",
+     "C2": "6",
+     "S": "6"
+    },
+    "W_absorbed": {
+     "C1": "-21",
+     "C2": "6",
+     "S": "15"
+    },
+    "switch_loss_linear_path": "15",
+    "gauge_dependent_terms": [],
+    "delta_stored_C": "-15",
+    "s_minus": {
+     "C1": "5",
+     "C2": "0"
+    },
+    "s_plus": {
+     "C1": "2",
+     "C2": "2"
+    }
+   }
+  ],
+  "events": [
+   {
+    "t": "0",
+    "type": "por",
+    "name": "POR"
+   },
+   {
+    "t": "0",
+    "type": "edge",
+    "signal": "por",
+    "value": true
+   }
+  ],
+  "meters": {
+   "absorbed_energy_continuous": {
+    "C1": "0",
+    "C2": "0",
+    "S": "0"
+   },
+   "absorbed_energy_jumps_linear_path": {
+    "C1": "-21",
+    "C2": "6",
+    "S": "15"
+   },
+   "charge_continuous": {
+    "C1": "0",
+    "C2": "0",
+    "S": "0"
+   },
+   "charge_jumps": {
+    "C1": "-6",
+    "C2": "6",
+    "S": "6"
+   }
+  },
+  "readouts": [],
+  "stats": {
+   "component_modes": 3,
+   "global_modes": 2,
+   "segments": 1,
+   "instants": 2,
+   "micro_steps": 2,
+   "jumps_nonzero": 1,
+   "inexact_events": 0
+  }
+ }
+}
