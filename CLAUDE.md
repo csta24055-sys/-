@@ -14,6 +14,7 @@ For any WLC/circuit task, read, in order:
 8. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md` — **current primary autonomous execution policy**.
 9. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/07_SHARED_CONTRACT.md` — fixed names, units, boundaries and route outputs.
 10. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/08_AUTONOMOUS_START.md` — one-message start instructions.
+11. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/09_RESISTOR_ENERGY_ROUTE.md` — **independent Joule-heating route**, a user-prioritized alternative to capacitor charging.
 
 Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統一方程式.md`, `07_動的LCAと工程時間.md`, `09_未解決問題と限界.md`, and `15_劣化・寿命・交換モデル研究開始資料.md` before formal conclusions.
 
@@ -23,10 +24,10 @@ Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統�
 - Prioritize the WLC theory base for formulas and validity, not ability-tree descriptions.
 
 ## Parallel execution policy (supersedes serial phase ordering only)
-- Prefer **four independent research routes A waveform, B formula-network, C 70-unit map, D independent verifier**, as specified by `06_PARALLEL_ORCHESTRATION.md`. Do not wait for A before starting B or C. Launch concurrently when supported; otherwise interleave.
-- Project subagents `.claude/agents/wlc-waveform.md`, `wlc-formula-network.md`, `wlc-unit-mapper.md`, `wlc-verifier.md` define route-specific behavior. In independent sessions verify you have checked out a project-seeded route branch. Unrelated worktrees may start from `main`; never presume a newly created worktree contains this research.
+- Prefer **five independent research routes A capacitor/waveform, B formula-network, C 70-unit map, D independent verifier, and E resistor/Joule-energy**, as specified by `06_PARALLEL_ORCHESTRATION.md`. Launch concurrently when supported; otherwise interleave. Crucially, **Route E starts from cumulative resistor dissipation `E_R(t)=∫i²R dt` rather than capacitor charge**. Do not require E to adopt A's capacitor approach.
+- Project subagents `.claude/agents/wlc-waveform.md`, `wlc-formula-network.md`, `wlc-unit-mapper.md`, `wlc-verifier.md`, `wlc-resistor-energy.md` define route-specific behavior. In independent sessions verify you have checked out a project-seeded route branch. Unrelated worktrees may start from `main`; never presume a newly created worktree contains this research.
 - **Each worker owns only its route subfolder** under `WLC_CIRCUIT_RESEARCH/routes/`; coordinator alone edits shared files and the future `integration/` folder. Do not let concurrent agents change a shared branch HEAD or commit in one shared checkout. Separate branch/session work is preferable for independent writes.
-- A and B attempt different constructive routes, C independently maps all 70 unit roles (21 direct, 49 other), D tests and challenges them. Integrate supported results only after meeting a documented compatibility/verification gate. Unsupported mapping, non-existence and hybrid exceptions are valid findings, not prompts for unending retries.
+- A, B and E attempt different constructive routes, C independently maps all 70 unit roles (21 direct, 49 other), D tests and challenges all routes. Integrate supported results only after meeting a documented compatibility/verification gate. Unsupported mapping, non-existence and hybrid exceptions are valid findings, not prompts for unending retries.
 - Do not block on routine approvals; act within documented permissions, execute tests, record status and counterexamples. The presence of instructions or named agents does not mean the research sessions are running.
 
 ## Non-negotiable boundaries
