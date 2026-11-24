@@ -25,8 +25,14 @@ Do **not** merely remark that WLC time curves resemble circuit waveforms. Recons
 
 **Critical separation:** the independent 70-unit synthetic model is not a conversion of the official J-CAT equations. 21 units directly contribute to the total, 49 have auxiliary/logic/aggregation roles. Existing verified claims concern a restricted mathematical domain, not real-building predictive accuracy.
 
+## Second research navigation source
+The user also wants the earlier **GitHub research classification tree** taken into account:
+- `csta24055-sys/lastdance4-tree-` (`main`): the Yes/No role finder (2,100 roles), especially A3 computation, A6 verification and A9 knowledge/specification.
+- `csta24055-sys/lastdance`: underlying code referenced by the ability tree, to be consulted only when a role is actually relevant.
+- `05_SOURCE_MAP.md`: exact instructions to trace these sources back to file/role/commit. This index is NOT evidence that the WLC math is valid; all math claims remain tied to the WLC theory base and independent tests.
+
 ## What to deliver
 A formal circuit grammar, clear schematics, calibration table, 2-equipment pilot, independent baseline and circuit simulations, reproducible boundary/overlap tests, counterexamples, model reduction experiments, complexity benchmark, and a concise report of novel *verified* implications. Study new mathematical claims only after checking original theory and prior art.
 
 ## Start order
-Read `01_FORMAL_MODEL.md` → `02_VERIFICATION_PLAN.md` → `03_EXECUTION_PLAN.md`; use `04_CLAUDE_START_PROMPT.md` as the short future-session instruction. New logs and code go into this folder only. No original files altered.
+Read `01_FORMAL_MODEL.md` → `02_VERIFICATION_PLAN.md` → `03_EXECUTION_PLAN.md`; read `05_SOURCE_MAP.md` and use `04_CLAUDE_START_PROMPT.md` as the short future-session instruction. New logs and code go into this folder only. No original files altered.
