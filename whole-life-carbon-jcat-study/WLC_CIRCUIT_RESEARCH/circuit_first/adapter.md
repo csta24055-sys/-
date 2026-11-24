@@ -86,3 +86,30 @@ EPD validity date comparison, composite Σ fraction and |Σ − 1| ≤ 1e-6, gri
 per building are in `results/stageB_S3e.json` → runs[].counts (`grey_by_kind`). Negative values: see
 DESIGN_DEVIATIONS D18. Original convention: D16 (counting rule; firings at τ/(1−ε); continuous quantities
 undilated). The stage-A cells degradation / efficiency switch use the dilated firing time (declared).
+
+---
+# Stage C: configuration that is not circuit law (counted per building)
+These are discrete decisions over labels. They are made before the run as wiring or static switch states, not by
+element laws:
+* factor look-up by id;
+* licence check;
+* stage-list match;
+* unit-conversion look-up (row table first, no chaining);
+* factor source priority EPD → composite → generic;
+* missing / out-of-range values (refcalc's skip rules);
+* group keys (equal periods, equal explicit lists);
+* the stage set ι.
+
+| building | factor source EPD / composite / generic / unresolved | EPD declined | W2 look-ups and equality groupings | W3 predicates | W4 enumerations | GREY predicates |
+|---|---|---|---|---|---|---|
+| S | 15 / 51 / 134 / 0 | 4 | 8 479 | 9 389 | 933 | 449 |
+| M | 142 / 638 / 1 220 / 0 | 31 | 86 987 | 89 083 | 3 055 | 5 678 |
+| E0 | 16 / 56 / 128 / 0 | 5 | 8 518 | 8 791 | 278 | 481 |
+| E1 | 14 / 50 / 136 / 0 | 5 | 8 658 | 8 845 | 280 | 497 |
+| E2 | 15 / 52 / 133 / 0 | 6 | 8 218 | 9 868 | 1 580 | 362 |
+
+GREY items are the composite Σ fractions and the |Σ−1| ≤ 1e-6 test, the EPD validity date comparison, and the grid
+step order. No element value is grey. In crossbar v2 each element value is still one W1 (data × constant, or a pot
+segment). The choice between the rail-first and root form for DESIGN rows uses only W2/W3 information (which
+factor ids are present, whether a repair rate is positive). Signed values: see D18. η = 1: see D22. Duplicate
+years: see D24.

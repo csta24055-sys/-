@@ -2689,31 +2689,31 @@
     99.9
    ],
    "T_excluded_valid_domain": [],
-   "seconds": 1.2687387466430664,
+   "seconds": 0.2353370189666748,
    "times": {
-    "amp_build": 0.1329810619354248,
-    "dc_solve": 0.9189958572387695,
-    "core_build": 0.00035953521728515625,
-    "hybrid": 0.20357441902160645
+    "amp_build": 0.053852081298828125,
+    "dc_solve": 0.10404062271118164,
+    "core_build": 0.0003037452697753906,
+    "hybrid": 0.07369875907897949
    },
    "sim_stats": {
-    "component_modes": 26,
+    "component_modes": 27,
     "rebuilds": 441,
     "instants": 205,
     "micro_steps": 440,
     "jumps_nonzero": 284
    },
    "counts": {
-    "h": 0.08048037282667145,
-    "h_amp": 0.08052367288378766,
+    "h": 0.0803651333452658,
+    "h_amp": 0.0804083094555874,
     "h_time": 0.0,
-    "W_in_amp": 5127,
+    "W_in_amp": 5135,
     "W_in_time": 3,
     "W_out_amp": 449,
     "W_out_time": 0,
     "W_in_broad": {
-     "amp": 11452,
-     "time": 49
+     "amp": 8927,
+     "time": 51
     },
     "control_not_counted_in_h": {
      "priority_classes": 5,
@@ -2722,17 +2722,17 @@
      "gates": 0,
      "comparators": 2,
      "W2_lookups_and_equality_groupings": 8434,
-     "W3_predicates": 7713,
+     "W3_predicates": 8113,
      "W4_enumerations": 278
     },
     "ops_by_layer": {
      "amp": {
-      "W1": 3309,
+      "W1": 3254,
       "W2": 8434,
-      "W3": 7713,
+      "W3": 8113,
       "W4": 278,
       "GREY": 449,
-      "data_elements": 3309
+      "data_elements": 3254
      }
     },
     "grey_by_kind": {
@@ -2741,34 +2741,34 @@
      "EPD validity": 19
     },
     "crossbar": {
-     "elements": 9132,
-     "opamps": 2364,
+     "elements": 5386,
+     "opamps": 1083,
      "capacitors": 0,
      "comparators": 0,
      "switches": 0,
      "diodes": 0,
      "bits": 0,
-     "kcl_additions": 8143,
-     "vg_additions": 1818
+     "kcl_additions": 5673,
+     "vg_additions": 1881
     },
     "core": {
-     "elements": 98,
-     "opamps": 20,
-     "capacitors": 28,
+     "elements": 101,
+     "opamps": 21,
+     "capacitors": 29,
      "comparators": 2,
      "switches": 20,
      "diodes": 0,
      "bits": 10,
-     "kcl_additions": 27,
+     "kcl_additions": 29,
      "vg_additions": 1
     },
     "dc": {
-     "equations": 7536,
-     "peeled": 7536,
+     "equations": 3761,
+     "peeled": 3761,
      "dense_block": 0,
      "kcl_residual": "0",
-     "elements": 9132,
-     "opamps": 2364
+     "elements": 5386,
+     "opamps": 1083
     },
     "size": {
      "N_c_periodic_groups": 0,
@@ -2811,31 +2811,31 @@
     99.9
    ],
    "T_excluded_valid_domain": [],
-   "seconds": 9.644541025161743,
+   "seconds": 3.9074714183807373,
    "times": {
-    "amp_build": 2.2511885166168213,
-    "dc_solve": 7.1637678146362305,
-    "core_build": 0.0008187294006347656,
-    "hybrid": 0.093841552734375
+    "amp_build": 1.3887991905212402,
+    "dc_solve": 2.405212163925171,
+    "core_build": 0.0003478527069091797,
+    "hybrid": 0.07218527793884277
    },
    "sim_stats": {
-    "component_modes": 26,
+    "component_modes": 27,
     "rebuilds": 441,
     "instants": 205,
     "micro_steps": 440,
     "jumps_nonzero": 284
    },
    "counts": {
-    "h": 0.0985797827903091,
-    "h_amp": 0.09858493029084643,
+    "h": 0.09998940790170532,
+    "h_amp": 0.09999470367035644,
     "h_time": 0.0,
-    "W_in_amp": 51789,
+    "W_in_amp": 50979,
     "W_in_time": 3,
     "W_out_amp": 5664,
     "W_out_time": 0,
     "W_in_broad": {
-     "amp": 123457,
-     "time": 49
+     "amp": 91552,
+     "time": 51
     },
     "control_not_counted_in_h": {
      "priority_classes": 5,
@@ -2844,17 +2844,17 @@
      "gates": 0,
      "comparators": 2,
      "W2_lookups_and_equality_groupings": 86933,
-     "W3_predicates": 78699,
+     "W3_predicates": 82699,
      "W4_enumerations": 2610
     },
     "ops_by_layer": {
      "amp": {
-      "W1": 32615,
+      "W1": 31435,
       "W2": 86933,
-      "W3": 78699,
+      "W3": 82699,
       "W4": 2610,
       "GREY": 5664,
-      "data_elements": 32615
+      "data_elements": 31435
      }
     },
     "grey_by_kind": {
@@ -2863,34 +2863,34 @@
      "EPD validity": 173
     },
     "crossbar": {
-     "elements": 99151,
-     "opamps": 26494,
+     "elements": 52776,
+     "opamps": 10852,
      "capacitors": 0,
      "comparators": 0,
      "switches": 0,
      "diodes": 0,
      "bits": 0,
-     "kcl_additions": 90842,
-     "vg_additions": 19174
+     "kcl_additions": 60117,
+     "vg_additions": 19544
     },
     "core": {
-     "elements": 98,
-     "opamps": 20,
-     "capacitors": 28,
+     "elements": 101,
+     "opamps": 21,
+     "capacitors": 29,
      "comparators": 2,
      "switches": 20,
      "diodes": 0,
      "bits": 10,
-     "kcl_additions": 27,
+     "kcl_additions": 29,
      "vg_additions": 1
     },
     "dc": {
-     "equations": 80472,
-     "peeled": 80472,
+     "equations": 33908,
+     "peeled": 33908,
      "dense_block": 0,
      "kcl_residual": "0",
-     "elements": 99151,
-     "opamps": 26494
+     "elements": 52776,
+     "opamps": 10852
     },
     "size": {
      "N_c_periodic_groups": 0,
@@ -2933,31 +2933,31 @@
     99.9
    ],
    "T_excluded_valid_domain": [],
-   "seconds": 0.7207753658294678,
+   "seconds": 0.3587915897369385,
    "times": {
-    "amp_build": 0.05953240394592285,
-    "dc_solve": 0.3699362277984619,
-    "core_build": 0.00042939186096191406,
-    "hybrid": 0.23120951652526855
+    "amp_build": 0.05462217330932617,
+    "dc_solve": 0.10953092575073242,
+    "core_build": 0.0002598762512207031,
+    "hybrid": 0.13208937644958496
    },
    "sim_stats": {
-    "component_modes": 26,
+    "component_modes": 27,
     "rebuilds": 441,
     "instants": 205,
     "micro_steps": 440,
     "jumps_nonzero": 284
    },
    "counts": {
-    "h": 0.08474277660324173,
-    "h_amp": 0.084787590340208,
+    "h": 0.08558718861209964,
+    "h_amp": 0.08563290012462169,
     "h_time": 0.0,
-    "W_in_amp": 5192,
+    "W_in_amp": 5136,
     "W_in_time": 3,
     "W_out_amp": 481,
     "W_out_time": 0,
     "W_in_broad": {
-     "amp": 11529,
-     "time": 49
+     "amp": 8957,
+     "time": 51
     },
     "control_not_counted_in_h": {
      "priority_classes": 5,
@@ -2966,17 +2966,17 @@
      "gates": 0,
      "comparators": 2,
      "W2_lookups_and_equality_groupings": 8475,
-     "W3_predicates": 7770,
+     "W3_predicates": 8170,
      "W4_enumerations": 273
     },
     "ops_by_layer": {
      "amp": {
-      "W1": 3350,
+      "W1": 3248,
       "W2": 8475,
-      "W3": 7770,
+      "W3": 8170,
       "W4": 273,
       "GREY": 481,
-      "data_elements": 3350
+      "data_elements": 3248
      }
     },
     "grey_by_kind": {
@@ -2985,34 +2985,34 @@
      "EPD validity": 21
     },
     "crossbar": {
-     "elements": 9118,
-     "opamps": 2354,
+     "elements": 5396,
+     "opamps": 1088,
      "capacitors": 0,
      "comparators": 0,
      "switches": 0,
      "diodes": 0,
      "bits": 0,
-     "kcl_additions": 8179,
-     "vg_additions": 1842
+     "kcl_additions": 5709,
+     "vg_additions": 1888
     },
     "core": {
-     "elements": 98,
-     "opamps": 20,
-     "capacitors": 28,
+     "elements": 101,
+     "opamps": 21,
+     "capacitors": 29,
      "comparators": 2,
      "switches": 20,
      "diodes": 0,
      "bits": 10,
-     "kcl_additions": 27,
+     "kcl_additions": 29,
      "vg_additions": 1
     },
     "dc": {
-     "equations": 7490,
-     "peeled": 7490,
+     "equations": 3752,
+     "peeled": 3752,
      "dense_block": 0,
      "kcl_residual": "0",
-     "elements": 9118,
-     "opamps": 2354
+     "elements": 5396,
+     "opamps": 1088
     },
     "size": {
      "N_c_periodic_groups": 0,
@@ -3055,31 +3055,31 @@
     99.9
    ],
    "T_excluded_valid_domain": [],
-   "seconds": 0.49054718017578125,
+   "seconds": 0.4177989959716797,
    "times": {
-    "amp_build": 0.09276294708251953,
-    "dc_solve": 0.23525047302246094,
-    "core_build": 0.00029397010803222656,
-    "hybrid": 0.15099596977233887
+    "amp_build": 0.08782029151916504,
+    "dc_solve": 0.19126296043395996,
+    "core_build": 0.0002636909484863281,
+    "hybrid": 0.13094401359558105
    },
    "sim_stats": {
-    "component_modes": 26,
+    "component_modes": 27,
     "rebuilds": 441,
     "instants": 205,
     "micro_steps": 440,
     "jumps_nonzero": 284
    },
    "counts": {
-    "h": 0.08723889766543795,
-    "h_amp": 0.087284861257464,
+    "h": 0.08967881631180079,
+    "h_amp": 0.08972738761509298,
     "h_time": 0.0,
-    "W_in_amp": 5197,
+    "W_in_amp": 5042,
     "W_in_time": 3,
     "W_out_amp": 497,
     "W_out_time": 0,
     "W_in_broad": {
-     "amp": 11815,
-     "time": 49
+     "amp": 8744,
+     "time": 51
     },
     "control_not_counted_in_h": {
      "priority_classes": 5,
@@ -3088,17 +3088,17 @@
      "gates": 0,
      "comparators": 2,
      "W2_lookups_and_equality_groupings": 8615,
-     "W3_predicates": 7824,
+     "W3_predicates": 8224,
      "W4_enumerations": 275
     },
     "ops_by_layer": {
      "amp": {
-      "W1": 3350,
+      "W1": 3186,
       "W2": 8615,
-      "W3": 7824,
+      "W3": 8224,
       "W4": 275,
       "GREY": 497,
-      "data_elements": 3350
+      "data_elements": 3186
      }
     },
     "grey_by_kind": {
@@ -3107,34 +3107,34 @@
      "EPD validity": 19
     },
     "crossbar": {
-     "elements": 9562,
-     "opamps": 2497,
+     "elements": 5251,
+     "opamps": 1048,
      "capacitors": 0,
      "comparators": 0,
      "switches": 0,
      "diodes": 0,
      "bits": 0,
-     "kcl_additions": 8465,
-     "vg_additions": 1847
+     "kcl_additions": 5558,
+     "vg_additions": 1856
     },
     "core": {
-     "elements": 98,
-     "opamps": 20,
-     "capacitors": 28,
+     "elements": 101,
+     "opamps": 21,
+     "capacitors": 29,
      "comparators": 2,
      "switches": 20,
      "diodes": 0,
      "bits": 10,
-     "kcl_additions": 27,
+     "kcl_additions": 29,
      "vg_additions": 1
     },
     "dc": {
-     "equations": 7939,
-     "peeled": 7939,
+     "equations": 3646,
+     "peeled": 3646,
      "dense_block": 0,
      "kcl_residual": "0",
-     "elements": 9562,
-     "opamps": 2497
+     "elements": 5251,
+     "opamps": 1048
     },
     "size": {
      "N_c_periodic_groups": 0,
@@ -3177,31 +3177,31 @@
     99.9
    ],
    "T_excluded_valid_domain": [],
-   "seconds": 1.1373822689056396,
+   "seconds": 0.3087272644042969,
    "times": {
-    "amp_build": 0.10804939270019531,
-    "dc_solve": 0.3300049304962158,
-    "core_build": 0.0003066062927246094,
-    "hybrid": 0.684028148651123
+    "amp_build": 0.11166620254516602,
+    "dc_solve": 0.12060952186584473,
+    "core_build": 0.0002472400665283203,
+    "hybrid": 0.06735849380493164
    },
    "sim_stats": {
-    "component_modes": 26,
+    "component_modes": 27,
     "rebuilds": 441,
     "instants": 205,
     "micro_steps": 440,
     "jumps_nonzero": 284
    },
    "counts": {
-    "h": 0.06810912511759172,
-    "h_amp": 0.06814759036144578,
+    "h": 0.06866464339908952,
+    "h_amp": 0.06870373884987664,
     "h_time": 0.0,
-    "W_in_amp": 4950,
+    "W_in_amp": 4907,
     "W_in_time": 3,
     "W_out_amp": 362,
     "W_out_time": 0,
     "W_in_broad": {
-     "amp": 11470,
-     "time": 49
+     "amp": 8580,
+     "time": 51
     },
     "control_not_counted_in_h": {
      "priority_classes": 5,
@@ -3210,17 +3210,17 @@
      "gates": 0,
      "comparators": 2,
      "W2_lookups_and_equality_groupings": 8176,
-     "W3_predicates": 7540,
+     "W3_predicates": 7940,
      "W4_enumerations": 275
     },
     "ops_by_layer": {
      "amp": {
-      "W1": 3223,
+      "W1": 3138,
       "W2": 8176,
-      "W3": 7540,
+      "W3": 7940,
       "W4": 275,
       "GREY": 362,
-      "data_elements": 3223
+      "data_elements": 3138
      }
     },
     "grey_by_kind": {
@@ -3229,34 +3229,34 @@
      "sum fraction": 52
     },
     "crossbar": {
-     "elements": 9455,
-     "opamps": 2504,
+     "elements": 5266,
+     "opamps": 1080,
      "capacitors": 0,
      "comparators": 0,
      "switches": 0,
      "diodes": 0,
      "bits": 0,
-     "kcl_additions": 8247,
-     "vg_additions": 1727
+     "kcl_additions": 5442,
+     "vg_additions": 1769
     },
     "core": {
-     "elements": 98,
-     "opamps": 20,
-     "capacitors": 28,
+     "elements": 101,
+     "opamps": 21,
+     "capacitors": 29,
      "comparators": 2,
      "switches": 20,
      "diodes": 0,
      "bits": 10,
-     "kcl_additions": 27,
+     "kcl_additions": 29,
      "vg_additions": 1
     },
     "dc": {
-     "equations": 7944,
-     "peeled": 7944,
+     "equations": 3754,
+     "peeled": 3754,
      "dense_block": 0,
      "kcl_residual": "0",
-     "elements": 9455,
-     "opamps": 2504
+     "elements": 5266,
+     "opamps": 1080
     },
     "size": {
      "N_c_periodic_groups": 0,

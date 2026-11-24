@@ -1,0 +1,188 @@
+{
+ "rule": "Stage C: amplitude-crossbar census before (v1: one stage per data factor per row, explicit\ninverters) and after (v2: lazy minimal realisation), with the L1 lower bound.\n\nL1 counting rule (stated in DESIGN_DEVIATIONS D21): with the factor order fixed (factor rail\nfirst, then conversion, then row factors; DESIGN rows may use the shared q/(1-w) root) and\nsharing by structural identity, every product of >= 2 data factors that must exist AS A VOLTAGE\n(operand of a further product, or a junction input whose last factor cannot be a conductance)\nneeds one active output (L1), and every sum whose voltage is sampled or multiplied needs one\nsumming junction. LB = number of such distinct expressions (polarity ignored). The realisation\nreaches LB + (expressions needed in both polarities). Single-data voltages are sources (0 op-amps).\n",
+ "S": {
+  "id": "SYN-RC-office-S-T60-seed101",
+  "before_v1": {
+   "elements": 13404,
+   "opamps": 3393,
+   "opamps_per_material_equipment_row": 13.05,
+   "pure_inverters": 868,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.38,
+   "taps": 354
+  },
+  "after_v2": {
+   "elements": 8148,
+   "opamps": 1593,
+   "opamps_per_material_equipment_row": 6.126923076923077,
+   "pure_inverters": 0,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.56,
+   "taps": 354,
+   "realisation": {
+    "stages": 825,
+    "junctions": 768,
+    "sources": 295,
+    "passive_branches": 1854,
+    "unit_branches": 1985,
+    "polarity_duplicates": 131
+   },
+   "L1_lower_bound": 1462,
+   "gap_polarity": 131
+  },
+  "common_taps_equal": true,
+  "common_taps": 354
+ },
+ "M": {
+  "id": "SYN-RC-office-M-T60-seed102",
+  "before_v1": {
+   "elements": 134335,
+   "opamps": 33798,
+   "opamps_per_material_equipment_row": 12.999230769230769,
+   "pure_inverters": 10043,
+   "rows_materials_equipment": 2600,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 6.48,
+   "taps": 1843
+  },
+  "after_v2": {
+   "elements": 77150,
+   "opamps": 14468,
+   "opamps_per_material_equipment_row": 5.564615384615385,
+   "pure_inverters": 0,
+   "rows_materials_equipment": 2600,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 4.61,
+   "taps": 1843,
+   "realisation": {
+    "stages": 8156,
+    "junctions": 6312,
+    "sources": 754,
+    "passive_branches": 18611,
+    "unit_branches": 20690,
+    "polarity_duplicates": 728
+   },
+   "L1_lower_bound": 13740,
+   "gap_polarity": 728
+  },
+  "common_taps_equal": true,
+  "common_taps": 1843
+ },
+ "E0": {
+  "id": "SYN-S-office-S-T60-seed378919968",
+  "before_v1": {
+   "elements": 13189,
+   "opamps": 3273,
+   "opamps_per_material_equipment_row": 12.588461538461539,
+   "pure_inverters": 870,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.37,
+   "taps": 222
+  },
+  "after_v2": {
+   "elements": 7849,
+   "opamps": 1453,
+   "opamps_per_material_equipment_row": 5.588461538461538,
+   "pure_inverters": 0,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.24,
+   "taps": 222,
+   "realisation": {
+    "stages": 808,
+    "junctions": 645,
+    "sources": 281,
+    "passive_branches": 1874,
+    "unit_branches": 1977,
+    "polarity_duplicates": 111
+   },
+   "L1_lower_bound": 1342,
+   "gap_polarity": 111
+  },
+  "common_taps_equal": true,
+  "common_taps": 222
+ },
+ "E1": {
+  "id": "SYN-S-residential-S-T60-seed207512442",
+  "before_v1": {
+   "elements": 13197,
+   "opamps": 3273,
+   "opamps_per_material_equipment_row": 12.588461538461539,
+   "pure_inverters": 878,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.49,
+   "taps": 232
+  },
+  "after_v2": {
+   "elements": 7854,
+   "opamps": 1456,
+   "opamps_per_material_equipment_row": 5.6,
+   "pure_inverters": 0,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.23,
+   "taps": 232,
+   "realisation": {
+    "stages": 820,
+    "junctions": 636,
+    "sources": 293,
+    "passive_branches": 1862,
+    "unit_branches": 1964,
+    "polarity_duplicates": 119
+   },
+   "L1_lower_bound": 1337,
+   "gap_polarity": 119
+  },
+  "common_taps_equal": true,
+  "common_taps": 232
+ },
+ "E2": {
+  "id": "SYN-S-school-S-T100-seed990107243",
+  "before_v1": {
+   "elements": 13624,
+   "opamps": 3549,
+   "opamps_per_material_equipment_row": 13.65,
+   "pure_inverters": 865,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.54,
+   "taps": 509
+  },
+  "after_v2": {
+   "elements": 8353,
+   "opamps": 1748,
+   "opamps_per_material_equipment_row": 6.723076923076923,
+   "pure_inverters": 0,
+   "rows_materials_equipment": 260,
+   "dense_block": 0,
+   "kcl_residual": "0",
+   "seconds": 0.27,
+   "taps": 509,
+   "realisation": {
+    "stages": 826,
+    "junctions": 922,
+    "sources": 305,
+    "passive_branches": 1860,
+    "unit_branches": 1863,
+    "polarity_duplicates": 136
+   },
+   "L1_lower_bound": 1612,
+   "gap_polarity": 136
+  },
+  "common_taps_equal": true,
+  "common_taps": 509
+ }
+}

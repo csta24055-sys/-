@@ -17,17 +17,18 @@ from engine.hybrid import Hybrid
 
 
 def simulate_building(scn, T_list, convention="original", blocks=ab.ALL_BLOCKS, units=Units(), mutations=(),
-                      record=False, accumulators=True):
+                      record=False, accumulators=True, crossbar="v2"):
     t0 = time.time()
     L = ab.LayeredLedger()
     L.layer = "amp"
-    A, amp = ab.build_amplitudes(scn, L, units, blocks, mutations)
+    A, amp = ab.build_amplitudes(scn, L, units, blocks, mutations, crossbar)
     iota = set(scn.boundary.included_lifecycle_stages)
     op_parts = None
     if "OP" in blocks:
         pending, elec, info = ab.operation(None, A, scn, L, iota, None)
         op_parts = (pending, elec)
     ref_parts = ab.refrigerant_amp(A, scn, L) if "REF" in blocks else None
+    A.finalize()
     t1 = time.time()
     volts, cur, dcinfo = solve_dc(A.nl)
     dc_res = kcl_residual(A.nl, volts, cur)
@@ -126,6 +127,8 @@ def audit_counts(out):
             "h_time": float(Fraction(g_time, w_in_time + g_time) if (w_in_time + g_time) else 0),
             "W_in_amp": w_in_amp, "W_in_time": w_in_time, "W_out_amp": g_amp, "W_out_time": g_time,
             "W_in_broad": broad, "control_not_counted_in_h": control_census(out["core"].nl, L, (0, 100)),
+            "configuration_not_circuit_law": dict(out["amp"].get("config", {}), skipped=out["amp"].get("skipped", {})),
+            "crossbar_realisation": getattr(out["A"], "stats", None),
             "ops_by_layer": L.by_layer, "grey_by_kind": grey,
             "crossbar": amp, "core": core, "dc": out["dc"], "size": sc}
 

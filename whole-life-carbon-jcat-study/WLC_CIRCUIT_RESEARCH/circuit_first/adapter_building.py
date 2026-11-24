@@ -226,6 +226,20 @@ class AmpNet:
         self.opamps += 1
         return Sig(o, -sign)
 
+    def ratio(self, sig, r):
+        """sig * r/(1-r): inverting stage with both segments of one pot."""
+        return self.stage(sig, pot_complement(r, R0), r * R0, "unquantified")
+
+    def source_rail(self, name, x):
+        node = f"a.{name}"
+        v = x * self.u.V0
+        self.L.data_element()
+        self.nl.V(f"a.F{name}", node, "0", v.value, cell="factor_rail")
+        return Sig(node, 1)
+
+    def finalize(self):
+        return None
+
     def export(self, sig, name, want_sign=1):
         if sig is None:
             return None
@@ -235,25 +249,220 @@ class AmpNet:
         return name
 
 
+
+
+class VSig:
+    """Lazy product expression: a root (rail / junction) followed by multiplicative factors."""
+    __slots__ = ("factors",)
+
+    def __init__(self, factors):
+        self.factors = tuple(factors)
+
+
+class Junction:
+    __slots__ = ("items", "cell", "jid")
+
+    def __init__(self, items, cell, jid):
+        self.items, self.cell, self.jid = items, cell, jid
+
+
+class LazyAmpNet(AmpNet):
+    """Crossbar v2 (stage C): the semantic layer builds product EXPRESSIONS; `finalize`
+    realises them with the least structure natural to the element laws:
+      * a voltage node is created only for a product that must exist as a voltage, once per
+        (expression, polarity), shared by every consumer (prefix sharing: factor x conversion,
+        composite factors, route sums, row amplitudes reused by several sums);
+      * the LAST data factor of a term is the input conductance of the destination summing
+        junction (passive two-factor form: rail voltage x quantity conductance, Ohm + KCL);
+      * a voltage of ONE data factor is an independent source (value x V0, W1), never a stage;
+      * polarity is carried by complementary rails (+/-V sources are free) and by choosing the
+        polarity of every node from the parity of the inverting stages behind it: no op-amp
+        exists only to flip a sign (an expression needed in both polarities costs one extra
+        stage, counted as the 'polarity gap').
+    Distributivity is used only for linear summation of terms that share the remaining
+    factors; it is NOT used across validity masks (rows are masked before any sum), across the
+    diode (core), or across per-row stage splits (each stage sum keeps its own junction)."""
+
+    def __init__(self, scn, L, u):
+        AmpNet.__init__(self, scn, L, u)
+        self.unit_rail = VSig([("rail", "unit", None)])
+        self.rail_vals = {}
+        self.cache = {}
+        self.jcount = 0
+        self.pending_exports = []
+        self.stats = {"stages": 0, "junctions": 0, "sources": 0, "passive_branches": 0,
+                      "unit_branches": 0, "polarity_duplicates": 0}
+        self._keys_by_sign = {}
+
+    # expressions --------------------------------------------------------------
+    def factor_rail(self, fid, value):
+        if fid not in self.rail_vals:
+            self.rail_vals[fid] = T(self.L, value, f"factor[{fid}]")
+        return VSig([("rail", fid, None)])
+
+    def source_rail(self, name, x):
+        self.rail_vals[name] = x
+        return VSig([("rail", name, None)])
+
+    def derived_rail(self, rec, conv):
+        rail = self.factor_rail(rec.factor_id, rec.value)
+        if conv is None:
+            return rail
+        self.L.note("W2", "derived rail key")
+        return VSig(rail.factors + (("conv", ("conv", conv.value), conv),))
+
+    def mul(self, sig, x, cell, div=None, scale=Fraction(1)):
+        return VSig(sig.factors + (("q", ("q", id(x), id(div), scale), x, div, scale),))
+
+    def ratio(self, sig, r):
+        return VSig(sig.factors + (("ratio", ("ratio", id(r)), r),))
+
+    def design_chain(self, rail_sig, q, w):
+        """DESIGN basis: q_ord = q/(1-w) is ONE row root (unit rail -> pot stage), shared by all
+        terms of the row (manufacture, delivery, installation, repair); the conversions follow,
+        and the factor value is the last (passive) conductance. Composite factors (a junction
+        root) keep the rail-first order."""
+        fs = rail_sig.factors
+        if fs[0][0] != "rail" or fs[0][1] == "unit":
+            return VSig(fs + (("q", ("q", id(q), id(w), Fraction(1)), q, w, Fraction(1)),))
+        fid = fs[0][1]
+        root = (("rail", "unit", None), ("q", ("qd", id(q), id(w)), q, w, Fraction(1)))
+        fv = self.rail_vals[fid]
+        return VSig(root + fs[1:] + (("q", ("fv", fid), fv, None, Fraction(1)),))
+
+    def sum(self, items, cell):
+        items = [(s, w) for s, w in items if s is not None]
+        if not items:
+            return None
+        self.jcount += 1
+        J = Junction(items, cell, self.jcount)
+        return VSig([("junc", ("junc", J.jid), J)])
+
+    def export(self, sig, name, want_sign=1):
+        if sig is None:
+            return None
+        self.pending_exports.append((sig, name, want_sign))
+        return name
+
+    # realisation ----------------------------------------------------------------
+    def _key(self, factors):
+        return tuple(f[1] for f in factors)
+
+    def _source(self, label, x, sign):
+        node = self.fresh("src")
+        v = x * (sign * self.u.V0)
+        self.L.data_element()
+        self.nl.V(f"{node}.V", node, "0", v.value, cell="factor_rail")
+        self.stats["sources"] += 1
+        return node
+
+    def node(self, factors, sign):
+        key = (self._key(factors), sign)
+        if key in self.cache:
+            return self.cache[key]
+        k0 = self._key(factors)
+        if (k0, -sign) in self.cache:
+            self.stats["polarity_duplicates"] += 1
+        f = factors[-1]
+        if len(factors) == 1:
+            if f[0] == "rail":
+                if f[1] == "unit":
+                    node = self.fresh("unit")
+                    self.nl.V(f"{node}.V", node, "0", sign * self.u.V0, cell="rails")
+                else:
+                    node = self._source(f[1], self.rail_vals[f[1]], sign)
+            else:
+                node = self._junction(f[2], sign)
+        elif len(factors) == 2 and factors[0][1] == "unit" and f[0] in ("q", "conv") \
+                and (f[0] == "conv" or f[3] is None):
+            x = f[2]
+            scale = f[4] if f[0] == "q" else Fraction(1)
+            node = self._source("u", x, sign) if scale == 1 else self._source_scaled(x, scale, sign)
+        else:
+            inp = self.node(factors[:-1], -sign)
+            if f[0] == "conv":
+                R_in, R_f = R0, f[2] * R0
+            elif f[0] == "q":
+                R_in = pot_complement(f[3], R0) if f[3] is not None else R0
+                R_f = f[2] * (f[4] * R0)
+            else:  # ratio r/(1-r)
+                R_in, R_f = pot_complement(f[2], R0), f[2] * R0
+            x, o = self.fresh("x"), self.fresh("o")
+            self.nl.R(f"{x}.Rin", inp, x, R=self._v(R_in), cell="stage")
+            self.nl.R(f"{x}.Rf", x, o, R=self._v(R_f), cell="stage")
+            self.nl.opamp(f"{x}.A", "0", x, o, cell="stage")
+            self.opamps += 1
+            self.stats["stages"] += 1
+            node = o
+        self.cache[key] = node
+        return node
+
+    def _source_scaled(self, x, scale, sign):
+        node = self.fresh("src")
+        v = x * (sign * scale * self.u.V0)
+        self.L.data_element()
+        self.nl.V(f"{node}.V", node, "0", v.value, cell="factor_rail")
+        self.stats["sources"] += 1
+        return node
+
+    def _junction(self, J, out_sign):
+        x, o = self.fresh("sx"), self.fresh("so")
+        Gu = self.u.Gu
+        for V, w in J.items:
+            fs = V.factors
+            last = fs[-1]
+            full_key = (self._key(fs), -out_sign)
+            if w is None and len(fs) >= 2 and full_key not in self.cache and \
+                    (last[0] == "conv" or (last[0] == "q" and last[3] is None)):
+                src = self.node(fs[:-1], -out_sign)          # passive: last factor as conductance
+                G = last[2] * Gu if last[0] == "conv" else last[2] * (last[4] * Gu)
+                self.stats["passive_branches"] += 1
+            else:
+                src = self.node(fs, -out_sign)
+                G = (w * Gu) if w is not None else Gu
+                self.stats["unit_branches"] += 1
+            self.nl.R(f"{x}.{self.fresh('g')}", src, x, G=self._v(G), cell=J.cell)
+        self.nl.R(f"{x}.Rf", x, o, R=R0, cell=J.cell)
+        self.nl.opamp(f"{x}.A", "0", x, o, cell=J.cell)
+        self.opamps += 1
+        self.stats["junctions"] += 1
+        return o
+
+    def finalize(self):
+        """Realise the exported expressions. Repair sums first, so that row amplitudes that
+        must exist as voltages anyway are reused by the other sums instead of duplicated."""
+        order = sorted(self.pending_exports, key=lambda e: (0 if e[1].startswith("NA.") else 1))
+        for sig, name, sign in order:
+            self.exports[name] = (self.node(sig.factors, sign), sign)
+        self.pending_exports = []
+
+
 # ----------------------------------------------------------------- amplitude rows
 
 
-def q_ord_chain(A, rail_sig, row, q, w, cell):
+def q_ord_chain(A, rail_sig, row, q, w, cell, root_form=False):
     """rail * q_ord: q/(1-w) for DESIGN, q otherwise (one stage)."""
     if row.quantity_basis == "DESIGN":
         A.L.note("W2", "basis DESIGN")
+        if root_form and hasattr(A, "design_chain"):
+            return A.design_chain(rail_sig, q, w)
         return A.mul(rail_sig, q, cell, div=w)
     A.L.note("W2", "basis ORDERED/AS_BUILT")
     return A.mul(rail_sig, q, cell)
 
 
-def build_amplitudes(scn, L, u, blocks, mutations=()):
-    A = AmpNet(scn, L, u)
+def build_amplitudes(scn, L, u, blocks, mutations=(), crossbar="v2"):
+    A = AmpNet(scn, L, u) if crossbar == "v1" else LazyAmpNet(scn, L, u)
     out = {"init": {s: [] for s in ("A1-A3", "A4", "A5")}, "term": {s: [] for s in ("C1", "C2", "C3", "C4")},
            "groups": {}, "repair_free": [], "skipped": {}}
 
     def skip(k):
         out["skipped"][k] = out["skipped"].get(k, 0) + 1
+
+    out["config"] = {}
+
+    def cfg(k):
+        out["config"][k] = out["config"].get(k, 0) + 1
 
     def group(key):
         return out["groups"].setdefault(key, {"u": [], "rep": [], "rows": 0})
@@ -264,9 +473,14 @@ def build_amplitudes(scn, L, u, blocks, mutations=()):
         q = T(L, row.quantity, lab + ".q")
         w = T(L, row.waste_rate, lab + ".w")
         qok = nonneg(q) and in_01_open_right(w)
+        # structure choice (no data arithmetic): shared q/(1-w) root only when it saves stages
+        n_terms = 1 + (row.transport.delivery_factor_id is not None) + (row.installation_factor_id is not None)
+        rr0 = T(L, row.repair_rate, lab + ".repair(structure)")
+        root_form = n_terms - (1 if (nonneg(rr0) and positive(rr0)) else 0) >= 2
         a13 = None
         # factor resolution: EPD -> composite -> generic (wiring decisions)
         rail = None
+        src_kind = None
         epd = row.epd
         if epd is not None:
             L.note("W2", "epd declaration")
@@ -274,10 +488,14 @@ def build_amplitudes(scn, L, u, blocks, mutations=()):
             if rec is not None and epd.declared_stages == rec.stages and epd.declared_unit == rec.unit \
                     and epd.valid_until == rec.valid_until and rec.valid_until is not None:
                 L.note("GREY", "EPD validity date comparison (two inputs)")
-                if rec.valid_until >= scn.project.assessment_date:
+                if (rec.valid_until > scn.project.assessment_date) if "epd_strict" in mutations \
+                        else (rec.valid_until >= scn.project.assessment_date):
                     hit = A.lookup(epd.factor_id, "A1-A3", row.quantity_unit, row.conversions)
                     if hit is not None:
                         rail = A.derived_rail(*hit)
+                        src_kind = "EPD"
+            if rail is None:
+                cfg("EPD declined")
         if rail is None and row.composition is not None:
             parts, ok = [], True
             fsum = None
@@ -297,26 +515,31 @@ def build_amplitudes(scn, L, u, blocks, mutations=()):
             if ok and conv is not False:
                 comp_rail = A.sum(parts, "composite")               # -sum f_j conv_j frac_j
                 rail = A.mul(comp_rail, conv, "derived_rail") if conv is not None else comp_rail
+                src_kind = "COMPOSITE"
         elif rail is None:
             hit = A.lookup(row.factor_id, "A1-A3", row.quantity_unit, row.conversions)
             if hit is not None:
                 rail = A.derived_rail(*hit)
+                src_kind = "GENERIC"
+        cfg("factor source " + (src_kind or "UNRESOLVED"))
+        if not qok:
+            cfg("quantity/waste rate invalid (row skipped)")
         if rail is not None and qok and positive(q):
-            a13 = q_ord_chain(A, rail, row, q, w, "mfg")
+            a13 = q_ord_chain(A, rail, row, q, w, "mfg", root_form)
         elif rail is None or not qok:
             skip("A13")
         # unquantified scope ratio r/(1-r): inverting stage with the two pot segments
         ucr = T(L, row.unquantified_cost_ratio, lab + ".ucr")
         a1304 = None
         if a13 is not None and in_01_open(ucr):
-            a1304 = A.stage(a13, pot_complement(ucr, R0), ucr * R0, "unquantified")
+            a1304 = A.ratio(a13, ucr)
         # transport A4
         tr = row.transport
         a4 = None
         if tr.delivery_factor_id is not None:
             hit = A.lookup(tr.delivery_factor_id, "A4", row.quantity_unit, row.conversions)
             if hit is not None and qok and positive(q):
-                a4 = q_ord_chain(A, A.derived_rail(*hit), row, q, w, "transport")
+                a4 = q_ord_chain(A, A.derived_rail(*hit), row, q, w, "transport", root_form)
         else:
             hit = A.lookup(tr.factor_id, "A4", "tkm")
             m, d = T(L, tr.mass_t, lab + ".tr.mass"), T(L, tr.distance_km, lab + ".tr.dist")
@@ -327,7 +550,7 @@ def build_amplitudes(scn, L, u, blocks, mutations=()):
         if row.installation_factor_id is not None:
             hit = A.lookup(row.installation_factor_id, "A5", row.quantity_unit, row.conversions)
             if hit is not None and qok and positive(q):
-                inst = q_ord_chain(A, A.derived_rail(*hit), row, q, w, "installation")
+                inst = q_ord_chain(A, A.derived_rail(*hit), row, q, w, "installation", root_form)
         # end of life C2 / C3 / C4
         eol = row.end_of_life
         mk = T(L, eol.mass_kg, lab + ".eol.mass")
@@ -428,11 +651,7 @@ def build_amplitudes(scn, L, u, blocks, mutations=()):
         conv = A.convert("kWh", gu)
         L.note("W3", "grid licence")
         if conv is not False and scn.operation.grid.licence_status in ALLOWED_LICENCE:
-            node = "a.grid_cv"
-            v = T(L, scn.operation.grid.construction_value, "grid.construction_value") * u.V0
-            L.data_element()
-            A.nl.V("a.Fcv", node, "0", v.value, cell="factor_rail")
-            r = Sig(node, 1)
+            r = A.source_rail("grid_cv", T(L, scn.operation.grid.construction_value, "grid.construction_value"))
             if conv is not None:
                 r = A.mul(r, conv, "derived_rail")
             if "AC" in blocks:
@@ -480,7 +699,8 @@ def build_amplitudes(scn, L, u, blocks, mutations=()):
         if b.reconstruction_scenario != "NONE" and ratio(phi) and positive(phi):
             inc = set(b.included_lifecycle_stages)
             base = A.sum([(sums[s], None) for s in ("A1-A3", "A4", "A5", "C1", "C2", "C3", "C4")
-                          if sums[s] is not None and ("iota_upstream_b5" not in mutations or s in inc)], "b5_base")
+                          if sums[s] is not None and ("iota_upstream_b5" not in mutations or s in inc)
+                          and not (s == "A4" and "b5_without_A4" in mutations)], "b5_base")
             if base is not None:
                 out["b5"] = A.export(A.mul(base, phi, "b5_base"), "N.B5")
     return A, out
@@ -652,7 +872,8 @@ def _bank(B, tag, prof, L, src_pos, src_neg, dst, Gs, cell, label, gate_sig=None
         if slope.value != 0:
             neg = slope.value < 0
             for b in COUNTER_BITS:
-                G = slope * (Gs * (-(2 ** b) if neg else 2 ** b))
+                wb = 2 ** b + (1 if (b == 7 and "mdac_msb_plus1" in B.mut) else 0)
+                G = slope * (Gs * (-wb if neg else wb))
                 branch(f"{tag}.m{b}", src_neg if neg else src_pos, G, f"yr{b}")
         return "LINEAR_TREND"
     for k, v in enumerate(prof.table):
@@ -815,11 +1036,12 @@ def grid_bank(B, grid, L, src_neg, src_pos, dst, Gu):
         latches = []
         for i, sp in enumerate(steps):
             L.note("W4", "grid step")
+            # step start index (data) -> reference source k*V0 (W1); comparator of the undilated
+            # absolute-time ramp switches at t = k, in the tick batch (no Python bit decoding)
             q = f"gr.L{i}"
-            if sp.from_index == 0:
-                nl.latch(f"{q}.l", "ZERO", "ZERO", q, init=True, cell="grid")
-            else:
-                nl.latch(f"{q}.l", B.decode(sp.from_index), "ZERO", q, cell="grid")
+            k = Tracked(Fraction(sp.from_index), f"grid.step[{i}].from_index", L)
+            nl.V(f"{q}.Vr", f"{q}.r", "0", B.val(k * B.u.V0), cell="grid")
+            nl.comparator(f"{q}.cmp", B.uramp, f"{q}.r", q, priority=PRIO["tick"], cell="grid")
             latches.append(q)
         for i, sp in enumerate(steps):
             v = T(L, sp.value, f"grid.step[{i}]")
@@ -862,6 +1084,9 @@ def build_core(scn, L, u, convention, blocks, amp, A, tapv, op_parts, ref_parts,
     B = Core(u, eps, L, mutations)
     B.rails()
     gramp = B.timebase()
+    # undilated absolute-time ramp v = V0 t / tau_y (never reset), always present
+    xu, B.uramp = B.integrator("tb.u", u.Gu * u.tau_y, "timebase")
+    B.nl.R("tb.u.G", "railn", xu, G=u.Gu, cell="timebase")
     B.nl.power_on("por", "por", priority=PRIO["por"])
     iota = set(scn.boundary.included_lifecycle_stages)
     Cpk = 1 / (u.gamma * u.V0)
@@ -882,7 +1107,7 @@ def build_core(scn, L, u, convention, blocks, amp, A, tapv, op_parts, ref_parts,
     if "EV" in blocks:
         for gi, (key, g) in enumerate(sorted(amp["groups"].items(), key=lambda kv: str(kv[0]))):
             gt = f"g{gi}"
-            fires = []
+            fires, xpk = [], []
             if key[0] == "P":
                 fires.append(B.clock(f"{gt}.clk", Tracked(key[1], f"{gt}.period", L)))
             else:
@@ -890,11 +1115,15 @@ def build_core(scn, L, u, convention, blocks, amp, A, tapv, op_parts, ref_parts,
                     Y = Tracked(y, f"{gt}.year[{k}]", L)
                     if positive(Y):
                         fires.append(B.explicit(f"{gt}.x{k}", Y, gramp))
+                # explicit lists: one renewal packet per listed year, so that a duplicated year is
+                # two renewals (refcalc semantics) although its comparators fire as one set
+                xpk = list(fires)
             fire = B.OR(f"{gt}.fire", fires)
             group_signals[gt] = {"fire": fire, "key": key, "rows": g["rows"]}
             if g.get("N_U"):
                 node = B.tap(g["N_U"], tapv[g["N_U"]])
-                B.packet(f"pk.{gt}", Cpk, node, B.bus("B4"), fire, v0=tapv[g["N_U"]])
+                for k, trig in enumerate(xpk if key[0] == "X" else [fire]):
+                    B.packet(f"pk.{gt}.{k}", Cpk, node, B.bus("B4"), trig, v0=tapv[g["N_U"]])
                 B.cell("packet", "group", src="tap", dst="bus", trig="group")
             if g.get("N_A"):
                 year_cell(B, gt, B.tap(g["N_A"], tapv[g["N_A"]]), fire, "B3")
@@ -977,6 +1206,10 @@ def refrigerant_core(B, scn, L, parts, tapv, gramp):
         fires, Es = [], []
         if d.change_years is not None:
             L.note("W3", "explicit change years present")
+            L.note("W2", "duplicate-year check (equality of list elements)")
+            if len(set(d.change_years)) != len(d.change_years):
+                raise ValueError(f"refrigerants[{i}].change_years has a duplicated year: two replacement events in one "
+                                 "instant are not supported by the refrigerant cell (rejected, not merged)")
             for k, y in enumerate(d.change_years):
                 Y = T(L, y, f"rf[{i}].year[{k}]")
                 if not positive(Y):
@@ -1064,7 +1297,8 @@ def refrigerant_core(B, scn, L, parts, tapv, gramp):
         nl.switch(f"{tg}.m0.St", ma, m0n, f"{tg}.m0trk", cell="refrigerant")
         nl.switch(f"{tg}.m0.Sd", ma, xm, f"{tg}.m0dmp", cell="refrigerant")
         nl.gate(f"{tg}.shg", "OR", [f"{tg}.sh1", f"{tg}.sh2"], f"{tg}.sh", cell="refrigerant")
-        nl.gate(f"{tg}.hsg", "OR", [f"{tg}.hs1", f"{tg}.hs2", f"{tg}.hs3"], f"{tg}.hs", cell="refrigerant")
+        nl.gate(f"{tg}.hsg", "OR", [f"{tg}.hs1", f"{tg}.hs2"] + ([f"{tg}.hs3"] if "init_before_leak" in B.mut else []),
+                f"{tg}.hs", cell="refrigerant")
         # power-on: m0 packet, then the first year-start sample
         nl.sequencer(f"{tg}.por", "por", {f"{tg}.m0off3": False, f"{tg}.m0dmp3": False, f"{tg}.hs1": False},
                      [{f"{tg}.m0off3": True}, {f"{tg}.m0dmp3": True}, {f"{tg}.m0dmp3": False},
@@ -1093,7 +1327,8 @@ def refrigerant_core(B, scn, L, parts, tapv, gramp):
                          [{}, {f"{tg}.pp.dmp": True}, {f"{tg}.pp.dmp": False}], cell="refrigerant")
         # terminal residual R(T) = (1 - eta) gwp m(T): readout packet into the B1 readout bus
         eta = T(L, d.end_of_life_recovery_rate, f"rf[{i}].eta")
-        if ratio(eta) and Hg is not None:
+        # eta = 1 (valid): residual (1-eta)=0, the branch is omitted (W3), never a 0-ohm element
+        if ratio(eta) and Hg is not None and in_01_open_right(eta):
             o1 = inv_stage("eta", mp, pot_complement(eta, R0))      # -V0 (1-eta) m
             o2 = inv_stage("rg", o1, p["gwp"] * R0)                   # +V0 (1-eta) gwp m
             dst = b1 if "terminal_into_integrator" in B.mut else B.z("B1")

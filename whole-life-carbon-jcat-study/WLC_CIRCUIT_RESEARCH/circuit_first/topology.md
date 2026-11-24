@@ -140,3 +140,50 @@ Readout: `S_s = γ (q_bus,s + q_z,s)` for s ∈ ι, `C = Σ S_s`, `Z = γ Σ q_z
 ## B.3 Measured sizes (original convention; `results/stageB_S3e.json` → runs[].counts)
 See STATUS.md for the table (crossbar elements and op-amps, core elements, comparators, bits, capacitor states
 versus N_c, N_x, N_r, H).
+
+---
+# Stage C: final crossbar (v2) and changes to the core
+
+## C.1 Crossbar v2 (`LazyAmpNet`, default; v1 selectable with `crossbar="v1"`)
+Each amplitude term is a product of data factors. The realisation rules are D21:
+* the factor rail is a ±V source;
+* conversion, the second-to-last row factor, DESIGN q/(1−w) and r/(1−r) become stages only if the product must
+  be a voltage;
+* the last factor is the junction input conductance.
+
+Equations: stage `v_out = −(R_f/R_in)·v_in`; junction `v_out = −R_f·Σ_k G_k v_k`; source `v = x·V0`.
+
+What is shared:
+* factor rails, one per factor id, across materials, equipment, site, demolition and operation;
+* derived rails, one per (factor, conversion);
+* the composite factor junction per row;
+* route sums per row;
+* each row amplitude node, created once and used by the initial sum (t = 0), the renewal group sum (every
+  firing), the repair sum (flow) and, through the stage sums, the B5 base and the terminal readout;
+* one clock per distinct period across materials and equipment (core).
+
+## C.2 Census (`results/stageC_crossbar.json`)
+| building | v1 op-amps / elements | v2 op-amps / elements | v2 op-amps per material+equipment row | L1 bound | gap (both polarities) |
+|---|---|---|---|---|---|
+| S | 3 393 / 13 404 | 1 593 / 8 148 | 6.1 | 1 462 | 131 |
+| M | 33 798 / 134 335 | 14 468 / 77 150 | 5.5 | 13 740 | 728 |
+| E0 | 3 273 / 13 189 | 1 453 / 7 849 | 5.6 | 1 342 | 111 |
+| E1 | 3 273 / 13 197 | 1 456 / 7 854 | 5.6 | 1 337 | 119 |
+| E2 | 3 549 / 13 624 | 1 748 / 8 353 | 6.7 | 1 612 | 136 |
+
+There are 0 pure inverters in v2 (868 in v1 on S). All tap voltages common to v1 and v2 are equal exactly.
+
+## C.3 Operations that do not commute
+These are preserved:
+* validity masks before any sum;
+* rectifier before multiplication and integration;
+* leak before replacement and reset within a year;
+* readout before tick before firings, and the post phase last;
+* terminal packets never into the integrators;
+* ι only at the readout (and the static ρ steering);
+* per-stage junctions kept separate.
+
+## C.4 Core changes
+* An undilated absolute-time ramp `tb.u` is always present. STEPWISE grid steps are comparators against it (D23).
+* Explicit-list groups have one renewal packet per listed year (D24).
+* The refrigerant residual branch is omitted for η = 1 (D22).

@@ -154,3 +154,62 @@ L1: the architecture's homogeneity argument has a gap (conclusion supported by t
 sketch, still [H]). The stage-A bench is renamed `test_L1_homogeneity_only`. L3: an ideal DC current source into a
 grounded capacitor integrates exactly (P0). An active element is needed for conductance-coded rates and full
 SC charge transfer, not for integration as such.
+
+---
+# Stage C (V2 fixes and amplitude-layer reduction)
+
+## D21 Crossbar v2: least structure natural to the element laws (replaces the per-row transcription)
+The semantic layer (which row, which factor, which skip rule) is unchanged. It now builds lazy product
+expressions. `LazyAmpNet.finalize` realises only what the laws require:
+* **Passive two-factor form:** the last data factor of a term is the input conductance of the destination summing
+  junction (rail voltage × quantity conductance: Ohm + KCL, no op-amp).
+* **One voltage per expression:** a voltage node exists only for a product that must be a voltage (operand of a
+  further product, or a junction input whose last factor cannot be a conductance). It is created once per
+  (expression, polarity) and shared by every consumer: factor × conversion, composite factors, route sums, and
+  row amplitudes reused by the initial, renewal and repair sums.
+* **Sources, not stages:** a voltage of one data factor (m0 of a refrigerant charge, a conversion of the unit rail)
+  is an independent source.
+* **No sign inverters:** complementary rails (±V sources) and a per-node polarity chosen from the parity of
+  inverting stages replace pure inverters. Measured: 0 inverters (v1: 868 on S).
+* **DESIGN rows:** q/(1−w) is either per term (rail first) or one shared row root (unit rail → pot stage) with the
+  factor as the last conductance, whichever has fewer stages. This is a structure decision on counted W3
+  predicates; no data arithmetic.
+* **Where distributivity is NOT used:**
+  - across validity masks (a masked row never enters a sum);
+  - across the diode of the electricity chain (rectify, then multiply, then integrate);
+  - across per-stage sums (every observed stage keeps its own junction);
+  - across rows with different remaining factors.
+* **L1 bound (counting rule in `tests/compare_crossbar.py`):** with the factor order fixed and sharing by
+  structural identity, each distinct expression that must exist as a voltage needs ≥ 1 active output, and each
+  sampled or multiplied sum needs one junction. The realisation equals the bound plus the expressions needed in
+  both polarities (the remaining gap).
+* **Value sharing was not used:** equal-valued quantities could share a node by W2 key equality, but the synthetic
+  data has almost no repeated values (196 of 200 transport distances are distinct on S).
+* **Verification:** the v1 path is kept (`crossbar="v1"`) for comparison. All common tap voltages are exactly equal
+  (v1 vs v2) on S, M, E0, E1, E2.
+
+## D22 (V2-D1) η = 1 and closed pot endpoints
+The refrigerant residual branch is omitted when 1−η = 0 (W3); it is never a 0 Ω element. Other pot sites are
+guarded by construction: q/(1−w) needs 0 ≤ w < 1, r/(1−r) needs 0 < r < 1, and ρ is a stage gain (ρ = 0 → no
+branch). All 31 tstudy edge scenarios run and match refcalc (≤ 2.8e-14). `life_near_divisor` has no usable T in the
+candidate list (all knife edges).
+
+## D23 (V2-D2) STEPWISE grid without Python bit decoding
+Each step start index k is a reference source k·V0 (W1). A comparator of an undilated absolute-time ramp
+(`tb.u`, always present) switches the step at t = k, in the tick batch. Counter decoders remain only for TABLE
+entries, where the address is the enumeration index (W4), not a data value.
+
+## D24 (V2-D5) Duplicate years in one explicit list
+refcalc counts them as two events. Equipment: one renewal packet per listed year (comparators of equal years fire
+as one set, packets still book twice); the B3 year exclusion is once (one year). Checked against the oracle
+(`test_v2_fixes::test_D5_duplicate_years`). Refrigerant: a duplicated change year raises ValueError (two events in
+one instant are not supported by the device cell). The generator never produces duplicates.
+
+## D25 Merged netlist and full template
+* (d) Crossbar + core as ONE netlist (tap sources removed, tap nodes joined to the op-amp outputs) on a truncated
+  building: readouts identical to the split run (`test_stageB::MergedNetlist`). See STATUS.md for the run result.
+* (e) The fixed N_max template exists for the stage-A cell family (initial packets, constant flows, periodic clocks
+  and renewal packets, stage buses). For the full building it is NOT_RUN: input-kind variants are built as
+  different cells (profile kind TABLE / LINEAR_TREND / CONSTANT, grid kind with comparators or decoders, explicit vs
+  periodic groups and refrigerant devices, top-up or not). A template would need every variant per slot with
+  enable switches, plus a crossbar template with per-row slot chains. Not done in this pass.

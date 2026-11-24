@@ -120,3 +120,40 @@ class SmallBuilding(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+@unittest.skipUnless(os.environ.get("CF_SLOW") == "1", "slow (~7 min): run with CF_SLOW=1")
+class MergedNetlist(unittest.TestCase):
+    def test_crossbar_and_core_as_one_netlist(self):
+        """Part 3(d): crossbar + core as ONE netlist (tap sources removed, core tap nodes joined
+        to the crossbar op-amp outputs) gives exactly the same readouts as the split run, so the
+        D12 split is only a solving strategy."""
+        from engine import Netlist
+        from model_building import simulate_building
+        s, baseline, scenarios = _small_building()
+        s.materials, s.equipment, s.refrigerants = s.materials[:3], s.equipment[:2], s.refrigerants[:1]
+        Ts = [F(15, 2), F(20), F(333, 10)]
+        # OP (year banks) excluded here: without tap sources its table branches hang off non-fixed
+        # op-amp outputs and form one large component per tick (solver cost, not semantics)
+        blocks = ("AC", "EV", "REF")
+        split = simulate_building(s, Ts, "original", blocks)
+        A, B = split["A"], split["core"]
+        rename = {f"t.{name}": node for name, (node, sg) in A.exports.items()}
+        nl = Netlist()
+        for e in A.nl.elements:
+            nl.add(copy.copy(e))
+        for e in B.nl.elements:
+            if e.name.startswith("tap."):
+                continue
+            e2 = copy.copy(e)
+            for attr in ("a", "b", "inp", "inn", "out", "plus", "minus", "cp", "cn"):
+                if hasattr(e2, attr) and getattr(e2, attr) in rename:
+                    setattr(e2, attr, rename[getattr(e2, attr)])
+            nl.add(e2)
+        caps = [c for lst in B.readout_caps.values() for c in lst]
+        h = Hybrid(nl).run(max(Ts), [{"t": T, "priority": 0, "label": T, "signal": "rd", "caps": caps} for T in Ts])
+        for snap, ref in zip(h.readouts, split["sim"].readouts):
+            self.assertEqual(snap["s"], ref["s"])
+        save("stageC_merged_netlist.json", {"blocks": list(blocks), "elements_merged": len(nl.elements), "crossbar": len(A.nl.elements),
+                                            "core": len(B.nl.elements), "taps_removed": len(rename),
+                                            "readouts_identical": True, "T": [str(T) for T in Ts]})
