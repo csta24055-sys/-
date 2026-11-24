@@ -45,6 +45,9 @@ Owns `routes/D_verification/`.
 - Compare different representations by equality/absolute+relative error/domain, operation count, memory, runtime and internal state dimensionality; report if result only redisplays existing equations.
 - Try circuit reduction/state elimination only while preserving the requested observables and future event schedules; counterexamples are valuable.
 
+## Model/effort ownership
+See `10_MODEL_ROUTING.md`. Start with strategic architect Fable 5.2 High, delegate A/B/C/E implementation to Opus 5.5 Medium, D independent verifier and final evidence integrator to Opus 5.5 High, then Fable 5.2 High replanning. The orchestration is via explicit subagents and actual tasks; no GitHub file automatically starts sessions. Keep startup model selection and individual delegated execution distinct.
+
 ## Coordination
 1. Coordinator reads and records base Git commit and source restrictions, then **launches A, B, C, D and E concurrently** if tool/runtime supports independent workers; else progress routes interleaved without blocking or asking for arbitrary approvals.
 2. Each route writes only inside its own `routes/<route>/` directory. This allows same-repository subagents with disjoint writes; never have multiple agents commit or edit shared top-level files concurrently.
