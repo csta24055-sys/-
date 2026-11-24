@@ -5,3 +5,5 @@ For the WLC equivalent-circuit project, follow `CLAUDE.md` and `whole-life-carbo
 For parallel task delegation and distinct research approaches, read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, and `08_AUTONOMOUS_START.md`. Keep A/B/C/D in independent branches or route-scoped directories; do not silently merge unverified claims.
 
 The user explicitly adds a fifth **resistor Joule-heating/accumulated-energy** route E (`09_RESISTOR_ENERGY_ROUTE.md`): compare E_R(t)=∫i(t)^2 R(t)dt (linear for constant I and R) to capacitor-charge accumulation. Resistor energy is dissipated, not stored; do not conflate instantaneous power, cumulative heat, resistor temperature, and WLC. Route D independently checks E.
+
+For Claude Code run-model phase routing see `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md`. This is a Claude-specific configuration; other agents should preserve the evidence gates, not pretend to use unavailable models.
