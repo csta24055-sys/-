@@ -1,0 +1,154 @@
+{
+ "whole_scenario": {
+  "scenario": "SYN-RC-office-M-T60-seed102",
+  "n_T": 300,
+  "step": 0.25,
+  "T_max": 60.0,
+  "n_devices": 40,
+  "n_no_topup": 8,
+  "B1-04": {
+   "SH": {
+    "max_rel_integer_T": 0.0,
+    "max_rel_fractional_T": 0.0,
+    "worst": {
+     "rel": 0.0,
+     "T": null
+    },
+    "n_integer": 60,
+    "n_fractional": 240
+   },
+   "RC-b (RC in cell, S/H resets)": {
+    "max_rel_integer_T": 1.9405043619699393e-16,
+    "max_rel_fractional_T": 0.00013602150229271418,
+    "worst": {
+     "rel": 0.00013602150229271418,
+     "T": 0.5
+    },
+    "n_integer": 60,
+    "n_fractional": 240
+   },
+   "RC-a (physical RC, reset at event)": {
+    "max_rel_integer_T": 0.004676678381272111,
+    "max_rel_fractional_T": 0.004619990750695394,
+    "worst": {
+     "rel": 0.004676678381272111,
+     "T": 36.0
+    },
+    "n_integer": 60,
+    "n_fractional": 240
+   }
+  },
+  "B1-02": {
+   "SH": {
+    "max_rel_integer_T": 0.0,
+    "max_rel_fractional_T": 0.0,
+    "worst": {
+     "rel": 0.0,
+     "T": null
+    },
+    "n_integer": 60,
+    "n_fractional": 240
+   },
+   "RC-b (RC in cell, S/H resets)": {
+    "max_rel_integer_T": 2.1712176244484784e-16,
+    "max_rel_fractional_T": 0.004924885970021296,
+    "worst": {
+     "rel": 0.004924885970021296,
+     "T": 0.25
+    },
+    "n_integer": 60,
+    "n_fractional": 240
+   }
+  },
+  "single_device_illustration": {
+   "r": 0.141,
+   "q": 0.859,
+   "RC_time_constant_years": 6.579537925327978,
+   "in_cell_at_half_year": {
+    "linear(model)": 0.9295,
+    "RC": 0.9268225288586807,
+    "rel_diff": -0.0028805499099723852
+   },
+   "at_whole_year": {
+    "linear(model)": 0.859,
+    "RC": 0.859
+   }
+  }
+ },
+ "single_device": {
+  "scenario": "SYN-RC-office-M-T60-seed102/single-no-topup-device",
+  "n_T": 242,
+  "step": 0.25,
+  "T_max": 60.0,
+  "n_devices": 1,
+  "n_no_topup": 1,
+  "B1-04": {
+   "SH": {
+    "max_rel_integer_T": 0.0,
+    "max_rel_fractional_T": 0.0,
+    "worst": {
+     "rel": 0.0,
+     "T": null
+    },
+    "n_integer": 60,
+    "n_fractional": 182
+   },
+   "RC-b (RC in cell, S/H resets)": {
+    "max_rel_integer_T": 1.1131636314022804e-15,
+    "max_rel_fractional_T": 0.0028805499099736984,
+    "worst": {
+     "rel": 0.0028805499099736984,
+     "T": 26.5
+    },
+    "n_integer": 60,
+    "n_fractional": 182
+   },
+   "RC-a (physical RC, reset at event)": {
+    "max_rel_integer_T": 8.207263894810097e-09,
+    "max_rel_fractional_T": 0.0028805499099738576,
+    "worst": {
+     "rel": 0.0028805499099738576,
+     "T": 23.5
+    },
+    "n_integer": 60,
+    "n_fractional": 182
+   }
+  },
+  "B1-02": {
+   "SH": {
+    "max_rel_integer_T": 0.0,
+    "max_rel_fractional_T": 0.0,
+    "worst": {
+     "rel": 0.0,
+     "T": null
+    },
+    "n_integer": 60,
+    "n_fractional": 182
+   },
+   "RC-b (RC in cell, S/H resets)": {
+    "max_rel_integer_T": 4.3823708868067735e-16,
+    "max_rel_fractional_T": 0.05769575970291564,
+    "worst": {
+     "rel": 0.05769575970291564,
+     "T": 0.25
+    },
+    "n_integer": 60,
+    "n_fractional": 182
+   }
+  },
+  "single_device_illustration": {
+   "r": 0.141,
+   "q": 0.859,
+   "RC_time_constant_years": 6.579537925327978,
+   "in_cell_at_half_year": {
+    "linear(model)": 0.9295,
+    "RC": 0.9268225288586807,
+    "rel_diff": -0.0028805499099723852
+   },
+   "at_whole_year": {
+    "linear(model)": 0.859,
+    "RC": 0.859
+   }
+  }
+ }
+}

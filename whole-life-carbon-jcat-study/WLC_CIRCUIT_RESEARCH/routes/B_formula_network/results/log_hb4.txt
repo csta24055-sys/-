@@ -1,0 +1,823 @@
+{
+ "program_steps": {
+  "P1": 1528,
+  "TIME": 95,
+  "AGG": 166
+ },
+ "scenarios": {
+  "SYN-RC-office-S-T60-seed101": {
+   "B4-02": {
+    "msp": {
+     "pieces": 1201,
+     "merged_shapes": 483,
+     "irreducible_params": 966,
+     "knots_stored": 1201,
+     "knot_params_stored": 3603,
+     "per_T_ops_knot": 17,
+     "p1_static_steps_of_group": 73,
+     "p1_group": "AMPLITUDES+EVENTS",
+     "emit_declarations": 2
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 728,
+       "gain": 1,
+       "cmp": 483,
+       "sum": 90,
+       "gate": 483,
+       "sum_inputs": 1255,
+       "table_entries": 0
+      },
+      "params": 729,
+      "nodes": 1786,
+      "state_tuple": [
+       0,
+       0,
+       483,
+       0
+      ],
+      "src_nodes_with_fanout": 189,
+      "params_if_no_fanout": 1637,
+      "per_T_evals_memoryless": 1786,
+      "sweep_segments_to_H": null
+     }
+    ],
+    "smaller_than_irreducible": [
+     "clip: circuit params 729 < irreducible 966 (without source fan-out: 1637)"
+    ]
+   },
+   "B5-01": {
+    "msp": {
+     "pieces": 0,
+     "merged_shapes": 0,
+     "irreducible_params": 0,
+     "knots_stored": 0,
+     "knot_params_stored": 0,
+     "per_T_ops_knot": 6,
+     "p1_static_steps_of_group": 73,
+     "p1_group": "AMPLITUDES+EVENTS",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 1,
+       "sum_inputs": 0,
+       "table_entries": 0
+      },
+      "params": 1,
+      "nodes": 2,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 1,
+      "per_T_evals_memoryless": 2,
+      "sweep_segments_to_H": null
+     }
+    ],
+    "smaller_than_irreducible": []
+   },
+   "B6-03": {
+    "msp": {
+     "pieces": 130,
+     "merged_shapes": 130,
+     "irreducible_params": 260,
+     "knots_stored": 260,
+     "knot_params_stored": 780,
+     "per_T_ops_knot": 15,
+     "p1_static_steps_of_group": 224,
+     "p1_group": "OPERATION",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "params": 260,
+      "nodes": 522,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 260,
+      "per_T_evals_memoryless": 522,
+      "sweep_segments_to_H": null
+     },
+     {
+      "mode": "integrator",
+      "primitives": {
+       "sweep": 1,
+       "src": 129,
+       "cmp": 129,
+       "sum": 1,
+       "table": 1,
+       "int": 1,
+       "sum_inputs": 129,
+       "table_entries": 130
+      },
+      "params": 259,
+      "nodes": 262,
+      "state_tuple": [
+       1,
+       1,
+       129,
+       130
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 259,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 130
+     }
+    ],
+    "smaller_than_irreducible": [
+     "integrator: circuit params 259 < irreducible 260 (without source fan-out: 259)"
+    ]
+   },
+   "B7-04": {
+    "msp": {
+     "pieces": 130,
+     "merged_shapes": 130,
+     "irreducible_params": 260,
+     "knots_stored": 260,
+     "knot_params_stored": 780,
+     "per_T_ops_knot": 15,
+     "p1_static_steps_of_group": 224,
+     "p1_group": "OPERATION",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "params": 260,
+      "nodes": 522,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 260,
+      "per_T_evals_memoryless": 522,
+      "sweep_segments_to_H": null
+     },
+     {
+      "mode": "integrator",
+      "primitives": {
+       "sweep": 1,
+       "src": 129,
+       "cmp": 129,
+       "sum": 1,
+       "table": 1,
+       "int": 1,
+       "sum_inputs": 129,
+       "table_entries": 130
+      },
+      "params": 259,
+      "nodes": 262,
+      "state_tuple": [
+       1,
+       1,
+       129,
+       130
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 259,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 130
+     }
+    ],
+    "smaller_than_irreducible": [
+     "integrator: circuit params 259 < irreducible 260 (without source fan-out: 259)"
+    ]
+   },
+   "B3-01": {
+    "msp": {
+     "pieces": 1299,
+     "merged_shapes": 424,
+     "irreducible_params": 1270,
+     "knots_stored": 1858,
+     "knot_params_stored": 5574,
+     "per_T_ops_knot": 27,
+     "p1_static_steps_of_group": 73,
+     "p1_group": "AMPLITUDES+EVENTS",
+     "emit_declarations": 4
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 778,
+       "gain": 424,
+       "cmp": 423,
+       "sum": 128,
+       "clip": 125,
+       "gate": 423,
+       "int": 1,
+       "sum_inputs": 905,
+       "table_entries": 0
+      },
+      "params": 1202,
+      "nodes": 2303,
+      "state_tuple": [
+       1,
+       0,
+       423,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 1202,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 1
+     }
+    ],
+    "smaller_than_irreducible": [
+     "clip: circuit params 1202 < irreducible 1270 (without source fan-out: 1202)"
+    ]
+   },
+   "B1-03": {
+    "msp": {
+     "pieces": 26,
+     "merged_shapes": 26,
+     "irreducible_params": 52,
+     "knots_stored": 26,
+     "knot_params_stored": 78,
+     "per_T_ops_knot": 11,
+     "p1_static_steps_of_group": 66,
+     "p1_group": "REFRIGERANT",
+     "emit_declarations": 2
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 31,
+       "gain": 1,
+       "cmp": 26,
+       "gate": 26,
+       "sum": 1,
+       "sum_inputs": 26,
+       "table_entries": 0
+      },
+      "params": 32,
+      "nodes": 86,
+      "state_tuple": [
+       0,
+       0,
+       26,
+       0
+      ],
+      "src_nodes_with_fanout": 5,
+      "params_if_no_fanout": 53,
+      "per_T_evals_memoryless": 86,
+      "sweep_segments_to_H": null
+     }
+    ],
+    "smaller_than_irreducible": [
+     "clip: circuit params 32 < irreducible 52 (without source fan-out: 53)"
+    ]
+   },
+   "B1-02": {
+    "msp": {
+     "pieces": 650,
+     "merged_shapes": 130,
+     "irreducible_params": 260,
+     "knots_stored": 1300,
+     "knot_params_stored": 3900,
+     "per_T_ops_knot": 17,
+     "p1_static_steps_of_group": 66,
+     "p1_group": "REFRIGERANT",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "params": 260,
+      "nodes": 522,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 260,
+      "per_T_evals_memoryless": 522,
+      "sweep_segments_to_H": null
+     },
+     {
+      "mode": "integrator",
+      "primitives": {
+       "sweep": 1,
+       "src": 129,
+       "cmp": 129,
+       "sum": 1,
+       "table": 1,
+       "int": 1,
+       "sum_inputs": 129,
+       "table_entries": 130
+      },
+      "params": 259,
+      "nodes": 262,
+      "state_tuple": [
+       1,
+       1,
+       129,
+       130
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 259,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 130
+     }
+    ],
+    "smaller_than_irreducible": [
+     "integrator: circuit params 259 < irreducible 260 (without source fan-out: 259)"
+    ]
+   },
+   "refrigerant B1-02/03/04 (raw automaton vs P1 REFRIGERANT + knots + interval)": {
+    "msp": {
+     "p1_static_steps_REFRIGERANT": 66,
+     "time_static_steps_B1": 8,
+     "emit_declarations_B1": 7,
+     "rows_device_x_year_table": 650,
+     "knots_stored_B1-02": 1300,
+     "knots_stored_B1-03": 26,
+     "interval_B1-04_n": 130,
+     "seconds_eval_knots+interval_for_grid": 3.312500030006049e-05
+    },
+    "circuit": {
+     "devices_active": 5,
+     "state_tuple": [
+      20,
+      11,
+      155,
+      56
+     ],
+     "primitives": {
+      "cmp": 155,
+      "sh": 15,
+      "int": 5,
+      "gain": 25,
+      "gate": 10,
+      "sum": 18,
+      "src": 20,
+      "counter": 6
+     },
+     "template_instances_per_device": 19,
+     "seconds_build+sweep_for_grid": 0.00024699899995539454,
+     "boundary_updates_to_reach_T": "ceil(T)-1 (sequential)"
+    }
+   }
+  },
+  "SYN-RC-office-M-T60-seed102": {
+   "B4-02": {
+    "msp": {
+     "pieces": 11326,
+     "merged_shapes": 2697,
+     "irreducible_params": 5394,
+     "knots_stored": 11326,
+     "knot_params_stored": 33978,
+     "per_T_ops_knot": 20,
+     "p1_static_steps_of_group": 73,
+     "p1_group": "AMPLITUDES+EVENTS",
+     "emit_declarations": 2
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 5181,
+       "gain": 1,
+       "cmp": 2697,
+       "sum": 310,
+       "gate": 2697,
+       "sum_inputs": 11333,
+       "table_entries": 0
+      },
+      "params": 5182,
+      "nodes": 10887,
+      "state_tuple": [
+       0,
+       0,
+       2697,
+       0
+      ],
+      "src_nodes_with_fanout": 1994,
+      "params_if_no_fanout": 13523,
+      "per_T_evals_memoryless": 10887,
+      "sweep_segments_to_H": null
+     }
+    ],
+    "smaller_than_irreducible": [
+     "clip: circuit params 5182 < irreducible 5394 (without source fan-out: 13523)"
+    ]
+   },
+   "B5-01": {
+    "msp": {
+     "pieces": 1,
+     "merged_shapes": 1,
+     "irreducible_params": 2,
+     "knots_stored": 1,
+     "knot_params_stored": 3,
+     "per_T_ops_knot": 7,
+     "p1_static_steps_of_group": 73,
+     "p1_group": "AMPLITUDES+EVENTS",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 2,
+       "gain": 1,
+       "cmp": 1,
+       "gate": 1,
+       "sum_inputs": 0,
+       "table_entries": 0
+      },
+      "params": 3,
+      "nodes": 6,
+      "state_tuple": [
+       0,
+       0,
+       1,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 3,
+      "per_T_evals_memoryless": 6,
+      "sweep_segments_to_H": null
+     }
+    ],
+    "smaller_than_irreducible": []
+   },
+   "B6-03": {
+    "msp": {
+     "pieces": 130,
+     "merged_shapes": 130,
+     "irreducible_params": 260,
+     "knots_stored": 260,
+     "knot_params_stored": 780,
+     "per_T_ops_knot": 15,
+     "p1_static_steps_of_group": 224,
+     "p1_group": "OPERATION",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "params": 260,
+      "nodes": 522,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 260,
+      "per_T_evals_memoryless": 522,
+      "sweep_segments_to_H": null
+     },
+     {
+      "mode": "integrator",
+      "primitives": {
+       "sweep": 1,
+       "src": 129,
+       "cmp": 129,
+       "sum": 1,
+       "table": 1,
+       "int": 1,
+       "sum_inputs": 129,
+       "table_entries": 130
+      },
+      "params": 259,
+      "nodes": 262,
+      "state_tuple": [
+       1,
+       1,
+       129,
+       130
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 259,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 130
+     }
+    ],
+    "smaller_than_irreducible": [
+     "integrator: circuit params 259 < irreducible 260 (without source fan-out: 259)"
+    ]
+   },
+   "B7-04": {
+    "msp": {
+     "pieces": 130,
+     "merged_shapes": 130,
+     "irreducible_params": 260,
+     "knots_stored": 260,
+     "knot_params_stored": 780,
+     "per_T_ops_knot": 15,
+     "p1_static_steps_of_group": 224,
+     "p1_group": "OPERATION",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "params": 260,
+      "nodes": 522,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 260,
+      "per_T_evals_memoryless": 522,
+      "sweep_segments_to_H": null
+     },
+     {
+      "mode": "integrator",
+      "primitives": {
+       "sweep": 1,
+       "src": 129,
+       "cmp": 129,
+       "sum": 1,
+       "table": 1,
+       "int": 1,
+       "sum_inputs": 129,
+       "table_entries": 130
+      },
+      "params": 259,
+      "nodes": 262,
+      "state_tuple": [
+       1,
+       1,
+       129,
+       130
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 259,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 130
+     }
+    ],
+    "smaller_than_irreducible": [
+     "integrator: circuit params 259 < irreducible 260 (without source fan-out: 259)"
+    ]
+   },
+   "B3-01": {
+    "msp": {
+     "pieces": 11864,
+     "merged_shapes": 2378,
+     "irreducible_params": 7132,
+     "knots_stored": 16706,
+     "knot_params_stored": 50118,
+     "per_T_ops_knot": 33,
+     "p1_static_steps_of_group": 73,
+     "p1_group": "AMPLITUDES+EVENTS",
+     "emit_declarations": 4
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 4685,
+       "gain": 2378,
+       "cmp": 2377,
+       "sum": 129,
+       "clip": 126,
+       "gate": 2377,
+       "int": 1,
+       "sum_inputs": 4814,
+       "table_entries": 0
+      },
+      "params": 7063,
+      "nodes": 12074,
+      "state_tuple": [
+       1,
+       0,
+       2377,
+       0
+      ],
+      "src_nodes_with_fanout": 1,
+      "params_if_no_fanout": 7064,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 1
+     }
+    ],
+    "smaller_than_irreducible": [
+     "clip: circuit params 7063 < irreducible 7132 (without source fan-out: 7064)"
+    ]
+   },
+   "B1-03": {
+    "msp": {
+     "pieces": 291,
+     "merged_shapes": 231,
+     "irreducible_params": 522,
+     "knots_stored": 332,
+     "knot_params_stored": 996,
+     "per_T_ops_knot": 21,
+     "p1_static_steps_of_group": 66,
+     "p1_group": "REFRIGERANT",
+     "emit_declarations": 2
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 268,
+       "gain": 61,
+       "cmp": 171,
+       "gate": 231,
+       "sum": 88,
+       "clip": 53,
+       "sum_inputs": 425,
+       "table_entries": 0
+      },
+      "params": 329,
+      "nodes": 873,
+      "state_tuple": [
+       0,
+       0,
+       171,
+       0
+      ],
+      "src_nodes_with_fanout": 42,
+      "params_if_no_fanout": 507,
+      "per_T_evals_memoryless": 873,
+      "sweep_segments_to_H": null
+     }
+    ],
+    "smaller_than_irreducible": [
+     "clip: circuit params 329 < irreducible 522 (without source fan-out: 507)"
+    ]
+   },
+   "B1-02": {
+    "msp": {
+     "pieces": 5200,
+     "merged_shapes": 130,
+     "irreducible_params": 260,
+     "knots_stored": 10400,
+     "knot_params_stored": 31200,
+     "per_T_ops_knot": 20,
+     "p1_static_steps_of_group": 66,
+     "p1_group": "REFRIGERANT",
+     "emit_declarations": 1
+    },
+    "circuit": [
+     {
+      "mode": "clip",
+      "primitives": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "params": 260,
+      "nodes": 522,
+      "state_tuple": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 260,
+      "per_T_evals_memoryless": 522,
+      "sweep_segments_to_H": null
+     },
+     {
+      "mode": "integrator",
+      "primitives": {
+       "sweep": 1,
+       "src": 129,
+       "cmp": 129,
+       "sum": 1,
+       "table": 1,
+       "int": 1,
+       "sum_inputs": 129,
+       "table_entries": 130
+      },
+      "params": 259,
+      "nodes": 262,
+      "state_tuple": [
+       1,
+       1,
+       129,
+       130
+      ],
+      "src_nodes_with_fanout": 0,
+      "params_if_no_fanout": 259,
+      "per_T_evals_memoryless": null,
+      "sweep_segments_to_H": 130
+     }
+    ],
+    "smaller_than_irreducible": [
+     "integrator: circuit params 259 < irreducible 260 (without source fan-out: 259)"
+    ]
+   },
+   "refrigerant B1-02/03/04 (raw automaton vs P1 REFRIGERANT + knots + interval)": {
+    "msp": {
+     "p1_static_steps_REFRIGERANT": 66,
+     "time_static_steps_B1": 8,
+     "emit_declarations_B1": 7,
+     "rows_device_x_year_table": 5200,
+     "knots_stored_B1-02": 10400,
+     "knots_stored_B1-03": 332,
+     "interval_B1-04_n": 190,
+     "seconds_eval_knots+interval_for_grid": 4.383999976198538e-05
+    },
+    "circuit": {
+     "devices_active": 40,
+     "state_tuple": [
+      160,
+      81,
+      360,
+      471
+     ],
+     "primitives": {
+      "cmp": 360,
+      "sh": 120,
+      "int": 40,
+      "gain": 200,
+      "gate": 80,
+      "sum": 123,
+      "src": 160,
+      "counter": 41
+     },
+     "template_instances_per_device": 19,
+     "seconds_build+sweep_for_grid": 0.0009277829999518872,
+     "boundary_updates_to_reach_T": "ceil(T)-1 (sequential)"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,36 @@
+[SYN-RC-office-S-T60-seed101] H=130, 25 T points, integer event times present: [10.0, 20.0, 29.0]
+[SYN-RC-office-M-T60-seed102] H=130, 34 T points, integer event times present: [10.0, 20.0, 29.0]
+A13-01 [DC source]                            n= 50 fail=0 max_rel_ref=1.98e-16 max_rel_msp=0.00e+00 unasserted=9
+A13-03 [DC source]                            n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+A13-04 [DC source]                            n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+A4-01 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+A4-02 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+A5-04 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+B1-02 [P1 cells]                              n= 41 fail=0 max_rel_ref=5.98e-16 max_rel_msp=2.22e-16 unasserted=18
+B1-02 [raw S/H automaton]                     n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=1.93e-11 unasserted=9
+B1-02 [raw S/H, no late reset]                n=  0 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=59
+B1-03 [P1 pieces]                             n= 50 fail=0 max_rel_ref=6.66e-16 max_rel_msp=1.78e-16 unasserted=9
+B1-03 [raw S/H automaton]                     n= 50 fail=0 max_rel_ref=6.50e-16 max_rel_msp=5.35e-16 unasserted=9
+B1-04 [P1 jump pieces]                        n= 41 fail=0 max_rel_ref=5.74e-16 max_rel_msp=5.67e-16 unasserted=18
+B1-04 [msp interval]                          n= 41 fail=0 max_rel_ref=1.93e-16 max_rel_msp=0.00e+00 unasserted=18
+B1-04 [raw S/H automaton]                     n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=3.03e-02 unasserted=9
+B1-04 [raw S/H, no late reset]                n=  0 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=59
+B2-01 [gain x year cells]                     n= 50 fail=0 max_rel_ref=4.57e-16 max_rel_msp=6.63e-16 unasserted=9
+B3-01 [P1 pieces]                             n= 50 fail=0 max_rel_ref=1.15e-13 max_rel_msp=2.98e-16 unasserted=9
+B4-01 n_events [raw comparator bank]          n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+B4-02 [P1 pieces]                             n= 50 fail=0 max_rel_ref=1.99e-15 max_rel_msp=1.77e-16 unasserted=9
+B5-01 [P1 pieces]                             n= 50 fail=0 max_rel_ref=1.43e-16 max_rel_msp=0.00e+00 unasserted=9
+B6-03 [P1 pieces, integrator]                 n= 50 fail=0 max_rel_ref=5.34e-16 max_rel_msp=6.23e-16 unasserted=9
+B6-03 [P1 pieces]                             n= 50 fail=0 max_rel_ref=5.56e-16 max_rel_msp=6.30e-16 unasserted=9
+B7-04 [P1 pieces, integrator]                 n= 50 fail=0 max_rel_ref=6.06e-16 max_rel_msp=9.82e-16 unasserted=9
+B7-04 [P1 pieces]                             n= 50 fail=0 max_rel_ref=3.46e-16 max_rel_msp=1.15e-15 unasserted=9
+C1-01 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+C2-01 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+C3-01 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+C4-01 [DC source]                             n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+SUM-03 [gain + summing node]                  n= 50 fail=0 max_rel_ref=2.33e-14 max_rel_msp=2.50e-05 unasserted=9
+SUM-05 [external digital division]            n= 50 fail=0 max_rel_ref=2.32e-14 max_rel_msp=2.50e-05 unasserted=9
+SUM-06 [gain 0.001]                           n= 50 fail=0 max_rel_ref=2.33e-14 max_rel_msp=2.50e-05 unasserted=9
+X-01 [DC source]                              n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+X-14 [DC source]                              n= 50 fail=0 max_rel_ref=0.00e+00 max_rel_msp=0.00e+00 unasserted=9
+meta {"head": "4f5808b24cb7c47a05bf75a5f8c8d4b7f5b23ca1", "frozen_trees": {"refcalc": "8976efea85c313e5e723fadf12382e02b3202913", "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec", "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"}, "python": "3.13.18", "machine": "x86_64", "tolerance_rel": 1e-09, "seconds": 24.349819430000025, "pycache_in_frozen_trees": []}

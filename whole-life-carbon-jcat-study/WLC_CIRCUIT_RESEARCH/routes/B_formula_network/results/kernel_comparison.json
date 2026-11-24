@@ -1,0 +1,4245 @@
+{
+ "meta": {
+  "head": "4f5808b24cb7c47a05bf75a5f8c8d4b7f5b23ca1",
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  },
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "tolerance_rel": 1e-09,
+  "seconds": 24.349819430000025,
+  "pycache_in_frozen_trees": []
+ },
+ "summary": {
+  "B4-02 [P1 pieces]": {
+   "n": 50,
+   "max_rel_ref_asserted": 1.9893155953436923e-15,
+   "max_rel_msp_asserted": 1.7698911578225652e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.2640377355601097e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 4.446007598032667e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.714129061869196e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 3.539782315645131e-16,
+     "rel_msp": 1.7698911578225652e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 3.3830155396004586e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 2.0060945956537202e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 9.036204168992692e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.3158885047001895e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "atom (event, theta_eps)"
+  },
+  "B5-01 [P1 pieces]": {
+   "n": 50,
+   "max_rel_ref_asserted": 1.4321348735191365e-16,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "atom (event, theta_eps)"
+  },
+  "B6-03 [P1 pieces]": {
+   "n": 50,
+   "max_rel_ref_asserted": 5.555528217230518e-16,
+   "max_rel_msp_asserted": 6.296483498739928e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.7695746768860257e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 2.4185502163279294e-16,
+     "rel_msp": 1.2092751081639642e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.9433204093868854e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 1.3349671914598027e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "year cell w_k"
+  },
+  "B6-03 [P1 pieces, integrator]": {
+   "n": 50,
+   "max_rel_ref_asserted": 5.339868761252934e-16,
+   "max_rel_msp_asserted": 6.231400932695274e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.769574676886026e-16,
+     "rel_msp": 3.5391493537720515e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.2092751081639647e-16,
+     "rel_msp": 2.4185502163279284e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.9433204093868854e-16,
+     "rel_msp": 3.886640818773772e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 2.8472321660288665e-16,
+     "rel_msp": 2.8472321660288665e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 5.339868765839211e-16,
+     "rel_msp": 4.004901574379407e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 2.0771335503961365e-16,
+     "rel_msp": 2.0771335503961365e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 3.2302469468542615e-16,
+     "rel_msp": 3.2302469468542615e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 4.587493675115062e-16,
+     "rel_msp": 4.587493675115062e-16
+    }
+   ],
+   "kind": "year cell w_k"
+  },
+  "B7-04 [P1 pieces]": {
+   "n": 50,
+   "max_rel_ref_asserted": 3.460085669792187e-16,
+   "max_rel_msp_asserted": 1.1457170993569004e-15,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.30032775863912e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.7300428340133528e-16,
+     "rel_msp": 1.7300428340133528e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.1498230493728122e-16,
+     "rel_msp": 2.2996460987456244e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 3.245568216731279e-16,
+     "rel_msp": 1.62278410836564e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 3.031007685930965e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.1245867334201541e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.659315543539118e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.5427254865688707e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "year cell w_k"
+  },
+  "B7-04 [P1 pieces, integrator]": {
+   "n": 50,
+   "max_rel_ref_asserted": 6.062015365367088e-16,
+   "max_rel_msp_asserted": 9.820432280202004e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.3003277586391198e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.7300428340133528e-16,
+     "rel_msp": 1.7300428340133528e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 3.449469148118437e-16,
+     "rel_msp": 4.599292197491249e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 4.868352325096919e-16,
+     "rel_msp": 3.24556821673128e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 6.06201537186193e-16,
+     "rel_msp": 3.031007685930966e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 4.4983469336806165e-16,
+     "rel_msp": 3.3737602002604626e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 1.6593155435391176e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 3.0854509731377415e-16,
+     "rel_msp": 1.542725486568871e-16
+    }
+   ],
+   "kind": "year cell w_k"
+  },
+  "B3-01 [P1 pieces]": {
+   "n": 50,
+   "max_rel_ref_asserted": 1.1451240369417224e-13,
+   "max_rel_msp_asserted": 2.976930879350212e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 9.858193042138247e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.730906262780055e-14,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 6.1164411961036435e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 2.0949429436906608e-14,
+     "rel_msp": 1.3873794329077516e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 6.552963852975243e-15,
+     "rel_msp": 1.9857466221137235e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 7.249267689979638e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 7.689324542327417e-15,
+     "rel_msp": 1.3980590076958834e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 2.2399907205684092e-14,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 2.703971221596488e-15,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "density min(T,H) + gated year cell"
+  },
+  "B1-03 [P1 pieces]": {
+   "n": 50,
+   "max_rel_ref_asserted": 6.657340897840819e-16,
+   "max_rel_msp_asserted": 1.7782176478031518e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 2.24056206076134e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.8512496099561832e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 5.32364588541639e-16,
+     "rel_msp": 1.7745486284721305e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 1.9995825232419154e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.7462662077605149e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 4.6328023904043015e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 5.353821528640051e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "atom + gated year cell (from P1 amplitudes)"
+  },
+  "B1-02 [P1 cells]": {
+   "n": 41,
+   "max_rel_ref_asserted": 5.982935949481347e-16,
+   "max_rel_msp_asserted": 2.2196965565998167e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 1.6203784855076764e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.6203784846974872e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 2.2350048075967946e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 3.3525072097189384e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 1.4155615660233445e-16,
+     "rel_msp": 1.415561566023344e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 2.8311231306815893e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000007",
+     "label": "band_in",
+     "rel_ref": 9.45151043831516e-14,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 2.0457814791673195e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.0000000075",
+     "label": "band_in",
+     "rel_ref": 1.9251290478718355e-11,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 1.913837406173088e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 2.861397526715975e-16,
+     "rel_msp": 1.430698763357988e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 5.722795050530341e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.0000000135",
+     "label": "band_in",
+     "rel_ref": 2.4959455118541613e-12,
+     "rel_msp": 2.1233054120356707e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 4.2466108219885253e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 1.9797995530754824e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.9797995521121213e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "year cell (P1 state amplitudes u_dk)"
+  },
+  "B1-04 [P1 jump pieces]": {
+   "n": 41,
+   "max_rel_ref_asserted": 5.738879482316649e-16,
+   "max_rel_msp_asserted": 5.66729240981146e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 1.1479528476673205e-16,
+     "rel_msp": 1.1479528476673205e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.1479528476673205e-16,
+     "rel_msp": 1.1479528476673205e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 1.1479528476673205e-16,
+     "rel_msp": 1.1479528476673205e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.1479528476673205e-16,
+     "rel_msp": 1.1479528476673205e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 1.1479528476673205e-16,
+     "rel_msp": 1.1479528476673205e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.1479528476673205e-16,
+     "rel_msp": 1.1479528476673205e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 3.825919654953946e-16,
+     "rel_msp": 1.9129598274769725e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 3.8259196550301263e-16,
+     "rel_msp": 3.8259196550301263e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000007",
+     "label": "band_in",
+     "rel_ref": 1.798979635619575e-13,
+     "rel_msp": 0.001213393476921761
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 1.934119230900224e-16,
+     "rel_msp": 1.934119230900224e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.0000000075",
+     "label": "band_in",
+     "rel_ref": 1.5865369613395077e-11,
+     "rel_msp": 0.0303001535339939
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 5.645120346038852e-16,
+     "rel_msp": 3.7634135640259007e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 3.709345568633695e-16,
+     "rel_msp": 3.709345568633695e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.8546727844408492e-16,
+     "rel_msp": 3.709345568881699e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.0000000135",
+     "label": "band_in",
+     "rel_ref": 1.434034552747581e-11,
+     "rel_msp": 0.00747758112758382
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 3.8079873803562095e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 3.839973026630228e-16,
+     "rel_msp": 1.9199865133151138e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 3.839973026862711e-16,
+     "rel_msp": 1.919986513431355e-16
+    }
+   ],
+   "kind": "jump form of the terminal residual R(T)"
+  },
+  "B1-04 [msp interval]": {
+   "n": 41,
+   "max_rel_ref_asserted": 1.9280367627751845e-16,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 1.912959827476973e-16,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000007",
+     "label": "band_in",
+     "rel_ref": 0.0012148675891498612,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.0000000075",
+     "label": "band_in",
+     "rel_ref": 0.031246940616269075,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 1.8817067820129509e-16,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.8546727844408492e-16,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.0000000135",
+     "label": "band_in",
+     "rel_ref": 0.007533916585721658,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 3.8079873803562095e-16,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 1.919986513315114e-16,
+     "rel_msp": null
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.9199865134313554e-16,
+     "rel_msp": null
+    }
+   ],
+   "kind": "oracle-vs-oracle: msp interval form vs refcalc"
+  },
+  "B1-02 [raw S/H automaton]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 1.9251290478347746e-11,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.6203784846974874e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 3.3525072097189393e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 2.8311231306815903e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 2.045781479167319e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.9138374061730884e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 5.722795050530344e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 4.246610821988524e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.9797995521121208e-16
+    }
+   ],
+   "kind": "sample-hold + reset + switched integrator"
+  },
+  "B1-03 [raw S/H automaton]": {
+   "n": 50,
+   "max_rel_ref_asserted": 6.504034047364243e-16,
+   "max_rel_msp_asserted": 5.353821528640054e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.12028103038067e-16,
+     "rel_msp": 1.1202810303806698e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.8512496099561837e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 3.549097256944261e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.9995825232419157e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.7462662077605146e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 1.5442674634681004e-16,
+     "rel_msp": 3.0885349269362023e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 5.353821528640054e-16
+    }
+   ],
+   "kind": "sample-hold + reset + switched integrator"
+  },
+  "B1-04 [raw S/H automaton]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.030300153518609256,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.8817067820129504e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.8546727844408495e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 3.807987380356208e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.919986513431355e-16
+    }
+   ],
+   "kind": "sample-hold + reset + switched integrator"
+  },
+  "B1-02 [raw S/H, no late reset]": {
+   "n": 0,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "0.5",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "1.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "7.3",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 2.2196965565998167e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "9.999999",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.6203786483557307e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000002",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000001",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.6203783242800336e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "19.999999",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.620378486317866e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 1.6203784855076767e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.6203784846974874e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000004",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 1.620378483077109e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.000001",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.6203784052989457e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 2.235004807596795e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 3.3525072097189393e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000057999998",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 1.117502402122144e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.5",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 2.1971233712784624e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "30.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 2.1605046484238214e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "40.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "59.999999",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 2.1605046844322328e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "60.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 2.1605046484238214e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "100.25",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 5.172280455079472e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "130.0",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 5.982935949481351e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "0.5",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "1.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "7.3",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 1.920168760987741e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "9.999999",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.4155617038418475e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 2.8311231334117866e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 2.831123132046688e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 2.8311231306815903e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000002",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 1.415561563975697e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000001",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000007",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 9.451510438314267e-14
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 1.8923478682297706e-13,
+     "rel_msp": 1.8943936497089374e-13
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000027999999",
+     "label": "band_out",
+     "rel_ref": 3.7826499513293976e-13,
+     "rel_msp": 3.7826499513293976e-13
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.0000000075",
+     "label": "band_in",
+     "rel_ref": 1.2641136277025615e-05,
+     "rel_msp": 1.2641155528072735e-05
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 1.2641174866037391e-05,
+     "rel_msp": 1.264117486584601e-05
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000029999999",
+     "label": "band_out",
+     "rel_ref": 1.2641213542158035e-05,
+     "rel_msp": 1.2641213541966654e-05
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "19.999999",
+     "label": "contract",
+     "rel_ref": 0.008434072521018965,
+     "rel_msp": 0.008434072521019107
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.0",
+     "label": "contract",
+     "rel_ref": 0.008434073547421407,
+     "rel_msp": 0.008434073547421267
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 0.008434073556743759,
+     "rel_msp": 0.008434073556743334
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.00843407356606568,
+     "rel_msp": 0.008434073566065112
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000004",
+     "label": "band_out",
+     "rel_ref": 0.008434073584709819,
+     "rel_msp": 0.008434073584709819
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.000001",
+     "label": "contract",
+     "rel_ref": 0.008434074479627983,
+     "rel_msp": 0.00843407447962784
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.0000000135",
+     "label": "band_in",
+     "rel_ref": 0.012043947293479676,
+     "rel_msp": 0.01204394729594577
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.012043947300894878,
+     "rel_msp": 0.012043947300895298
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000053999997",
+     "label": "band_out",
+     "rel_ref": 0.012043947310793508,
+     "rel_msp": 0.012043947310793508
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 0.012672959439133906,
+     "rel_msp": 0.012672959439134102
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.01267295944218822,
+     "rel_msp": 0.012672959442188415
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000057999998",
+     "label": "band_out",
+     "rel_ref": 0.012672959448297435,
+     "rel_msp": 0.012672959448297045
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.5",
+     "label": "extra",
+     "rel_ref": 0.0127765483720669,
+     "rel_msp": 0.0127765483720669
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "30.0",
+     "label": "contract",
+     "rel_ref": 0.012876773909655723,
+     "rel_msp": 0.012876773909655723
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "40.0",
+     "label": "contract",
+     "rel_ref": 0.01982107031942945,
+     "rel_msp": 0.019821070319429313
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "59.999999",
+     "label": "extra",
+     "rel_ref": 0.024771129485318445,
+     "rel_msp": 0.024771129485318445
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "60.0",
+     "label": "contract",
+     "rel_ref": 0.024771129481809373,
+     "rel_msp": 0.024771129481809
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "100.25",
+     "label": "extra",
+     "rel_ref": 0.030913745697109495,
+     "rel_msp": 0.030913745697109717
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "130.0",
+     "label": "extra",
+     "rel_ref": 0.03269157785511787,
+     "rel_msp": 0.03269157785511787
+    }
+   ],
+   "kind": "ablation: comparator events after their cell closed are ignored"
+  },
+  "B1-04 [raw S/H, no late reset]": {
+   "n": 0,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "0.5",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "1.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "7.3",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "9.999999",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000002",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.000001",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "19.999999",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000004",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.000001",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000057999998",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.5",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "30.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "40.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "59.999999",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "60.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "100.25",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "130.0",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "0.5",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "1.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "7.3",
+     "label": "extra",
+     "rel_ref": 0.0,
+     "rel_msp": 1.8890974699371535e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "9.999999",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.9129598191684084e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.0",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 1.9129598274388824e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000000005",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 1.9129598274769725e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000002",
+     "label": "band_out",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.000001",
+     "label": "contract",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000007",
+     "label": "band_in",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0012133934767420815
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0012133934765899631,
+     "rel_msp": 0.0012133934765899631
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000027999999",
+     "label": "band_out",
+     "rel_ref": 0.0012133934762857267,
+     "rel_msp": 0.0012133934762857267
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.0000000075",
+     "label": "band_in",
+     "rel_ref": 0.0011915904027919718,
+     "rel_msp": 0.03145563854926533
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.03145563853488225,
+     "rel_msp": 0.03145563853488243
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000029999999",
+     "label": "band_out",
+     "rel_ref": 0.031455638506116636,
+     "rel_msp": 0.03145563850611682
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "19.999999",
+     "label": "contract",
+     "rel_ref": 0.02205798561103399,
+     "rel_msp": 0.02205798561103399
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.0",
+     "label": "contract",
+     "rel_ref": 0.022057984225143098,
+     "rel_msp": 0.022057984225143098
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000001",
+     "label": "band_in",
+     "rel_ref": 0.022057984212160334,
+     "rel_msp": 0.022057984212160334
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.022057984199177753,
+     "rel_msp": 0.02205798419917757
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000004",
+     "label": "band_out",
+     "rel_ref": 0.022057984173212225,
+     "rel_msp": 0.022057984173212225
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.000001",
+     "label": "contract",
+     "rel_ref": 0.022057982926873086,
+     "rel_msp": 0.022057982926873266
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.0000000135",
+     "label": "band_in",
+     "rel_ref": 0.014230337498510869,
+     "rel_msp": 0.021601510108946103
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.021601510083823196,
+     "rel_msp": 0.02160151008382357
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000053999997",
+     "label": "band_out",
+     "rel_ref": 0.021601510033578124,
+     "rel_msp": 0.021601510033578124
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000014500003",
+     "label": "band_in",
+     "rel_ref": 0.01920331750798034,
+     "rel_msp": 0.019203317507980527
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.019203317485762133,
+     "rel_msp": 0.01920331748576232
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000057999998",
+     "label": "band_out",
+     "rel_ref": 0.0192033174413261,
+     "rel_msp": 0.019203317441326292
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.5",
+     "label": "extra",
+     "rel_ref": 0.018435574195254417,
+     "rel_msp": 0.018435574195254607
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "30.0",
+     "label": "contract",
+     "rel_ref": 0.017664611814023255,
+     "rel_msp": 0.017664611814023443
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "40.0",
+     "label": "contract",
+     "rel_ref": 0.023007750449975856,
+     "rel_msp": 0.02300775044997604
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "59.999999",
+     "label": "extra",
+     "rel_ref": 0.0219913670568917,
+     "rel_msp": 0.021991367056891892
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "60.0",
+     "label": "contract",
+     "rel_ref": 0.021991365433098493,
+     "rel_msp": 0.021991365433098684
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "100.25",
+     "label": "extra",
+     "rel_ref": 0.02698360373275346,
+     "rel_msp": 0.02698360373275346
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "130.0",
+     "label": "extra",
+     "rel_ref": 0.027286406969485536,
+     "rel_msp": 0.027286406969485536
+    }
+   ],
+   "kind": "ablation: comparator events after their cell closed are ignored"
+  },
+  "B2-01 [gain x year cells]": {
+   "n": 50,
+   "max_rel_ref_asserted": 4.568948356161881e-16,
+   "max_rel_msp_asserted": 6.627571692128747e-16,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.51064549740122e-16,
+     "rel_msp": 3.0212909948024406e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.4696301527024043e-16,
+     "rel_msp": 2.9392603054048095e-16
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 4.000137987989312e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 1.2302348735769996e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 2.308577058777706e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.8045586588260675e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 2.827765192113497e-16,
+     "rel_msp": 2.827765192113497e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "T-independent gain on a year-cell kernel"
+  },
+  "B4-01 n_events [raw comparator bank]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "count kernel sum of theta_eps"
+  },
+  "A13-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 1.9780853144457974e-16,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.9780853144457974e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 1.9780853144457974e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 1.9780853144457974e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.9780853144457974e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 1.9780853144457974e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 1.9780853144457974e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "A13-03 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "A13-04 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "X-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "A4-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "A4-02 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "A5-04 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "C1-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "C2-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "C3-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "X-14 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "C4-01 [DC source]": {
+   "n": 50,
+   "max_rel_ref_asserted": 0.0,
+   "max_rel_msp_asserted": 0.0,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 0.0,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "constant"
+  },
+  "SUM-03 [gain + summing node]": {
+   "n": 50,
+   "max_rel_ref_asserted": 2.3282967503977637e-14,
+   "max_rel_msp_asserted": 2.497796617149185e-05,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 8.288713033944966e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.5015087168461239e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 6.203410135110429e-16,
+     "rel_msp": 2.067803378370144e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.6814596686983134e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 6.546735003181337e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 7.813040780518297e-16,
+     "rel_msp": 1.5626081561036601e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.0791074543575684e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 2.9689163647213006e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 4.39489357116602e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "outer masked sum (stage x unit 0/+-1 matrix)"
+  },
+  "SUM-06 [gain 0.001]": {
+   "n": 50,
+   "max_rel_ref_asserted": 2.327863659484371e-14,
+   "max_rel_msp_asserted": 2.4977966171481923e-05,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 8.094446322211881e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.4663171062950428e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 6.058017710068778e-16,
+     "rel_msp": 2.0193392366895935e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.6420504577131968e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 6.393295901544275e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 7.629922637224899e-16,
+     "rel_msp": 1.5259845274449808e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.0538158733960628e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 3.0108451715548043e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 6.437832379637725e-16,
+     "rel_msp": 0.0
+    }
+   ],
+   "kind": "gain"
+  },
+  "SUM-05 [external digital division]": {
+   "n": 50,
+   "max_rel_ref_asserted": 2.321312577876336e-14,
+   "max_rel_msp_asserted": 2.497796617152885e-05,
+   "n_fail": 0,
+   "unasserted": [
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 9.482201210920174e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.4990926276587078e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-S-T60-seed101",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 6.860081908045402e-16,
+     "rel_msp": 1.3720163816090813e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "10.00000001",
+     "label": "knife",
+     "rel_ref": 1.6654952909138194e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "14.000000014000001",
+     "label": "knife",
+     "rel_ref": 7.659907722548565e-16,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "15.000000015000001",
+     "label": "knife",
+     "rel_ref": 7.83559674715019e-16,
+     "rel_msp": 1.3059327911916991e-16
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "20.00000002",
+     "label": "knife",
+     "rel_ref": 1.0521610542095315e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "27.000000027000002",
+     "label": "knife",
+     "rel_ref": 3.0920062698025357e-15,
+     "rel_msp": 0.0
+    },
+    {
+     "scenario": "SYN-RC-office-M-T60-seed102",
+     "T": "29.000000029000002",
+     "label": "knife",
+     "rel_ref": 5.325827609851347e-16,
+     "rel_msp": 1.7752758699504485e-16
+    }
+   ],
+   "kind": "division by the sweep variable: NOT in G (class d)"
+  }
+ },
+ "runs": [
+  {
+   "scenario": "SYN-RC-office-S-T60-seed101",
+   "H": 130,
+   "grid": [
+    [
+     "0.5",
+     "extra"
+    ],
+    [
+     "1.0",
+     "contract"
+    ],
+    [
+     "7.3",
+     "extra"
+    ],
+    [
+     "9.999999",
+     "contract"
+    ],
+    [
+     "10.0",
+     "contract"
+    ],
+    [
+     "10.000000005",
+     "band_in"
+    ],
+    [
+     "10.00000001",
+     "knife"
+    ],
+    [
+     "10.00000002",
+     "band_out"
+    ],
+    [
+     "10.000001",
+     "contract"
+    ],
+    [
+     "19.999999",
+     "contract"
+    ],
+    [
+     "20.0",
+     "contract"
+    ],
+    [
+     "20.00000001",
+     "band_in"
+    ],
+    [
+     "20.00000002",
+     "knife"
+    ],
+    [
+     "20.00000004",
+     "band_out"
+    ],
+    [
+     "20.000001",
+     "contract"
+    ],
+    [
+     "29.000000014500003",
+     "band_in"
+    ],
+    [
+     "29.000000029000002",
+     "knife"
+    ],
+    [
+     "29.000000057999998",
+     "band_out"
+    ],
+    [
+     "29.5",
+     "extra"
+    ],
+    [
+     "30.0",
+     "contract"
+    ],
+    [
+     "40.0",
+     "contract"
+    ],
+    [
+     "59.999999",
+     "extra"
+    ],
+    [
+     "60.0",
+     "contract"
+    ],
+    [
+     "100.25",
+     "extra"
+    ],
+    [
+     "130.0",
+     "extra"
+    ]
+   ],
+   "costs": {
+    "B4-02 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 728,
+      "gain": 1,
+      "cmp": 483,
+      "sum": 90,
+      "gate": 483,
+      "sum_inputs": 1255,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "atom": 1201,
+      "const": 0,
+      "gcell": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 44650,
+     "seconds": 0.008290570999633928
+    },
+    "B5-01 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 1,
+      "sum_inputs": 0,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 50,
+     "seconds": 0.00019675699968502158
+    },
+    "B6-03 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 130,
+      "sum": 131,
+      "clip": 130,
+      "gain": 130,
+      "sum_inputs": 390,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 13050,
+     "seconds": 0.002890738000132842
+    },
+    "B6-03 [P1 pieces, integrator]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 129,
+      "cmp": 129,
+      "sum": 1,
+      "table": 1,
+      "int": 1,
+      "sum_inputs": 129,
+      "table_entries": 130
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 45326,
+     "seconds": 0.00443687899996803
+    },
+    "B7-04 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 130,
+      "sum": 131,
+      "clip": 130,
+      "gain": 130,
+      "sum_inputs": 390,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 13050,
+     "seconds": 0.002210621999893192
+    },
+    "B7-04 [P1 pieces, integrator]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 129,
+      "cmp": 129,
+      "sum": 1,
+      "table": 1,
+      "int": 1,
+      "sum_inputs": 129,
+      "table_entries": 130
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 45326,
+     "seconds": 0.004430899999988469
+    },
+    "B3-01 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 778,
+      "gain": 424,
+      "cmp": 423,
+      "sum": 128,
+      "clip": 125,
+      "gate": 423,
+      "int": 1,
+      "sum_inputs": 905,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "density": 230,
+      "gcell": 1069,
+      "const": 0,
+      "atom": 0,
+      "cell": 0
+     },
+     "evals": 115150,
+     "seconds": 0.01654506400018363
+    },
+    "B1-03 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 31,
+      "gain": 1,
+      "cmp": 26,
+      "gate": 26,
+      "sum": 1,
+      "sum_inputs": 26,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "atom": 26,
+      "const": 0,
+      "gcell": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 2150,
+     "seconds": 0.0004829149997931381
+    },
+    "B1-02 [P1 cells]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 130,
+      "sum": 131,
+      "clip": 130,
+      "gain": 130,
+      "sum_inputs": 390,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "cell": 650,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 13050,
+     "seconds": 0.0024724199997763208
+    },
+    "B1-04 [P1 jump pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 5,
+      "sum": 1,
+      "sum_inputs": 5,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "const": 5,
+      "atom": 0,
+      "gcell": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 175
+    },
+    "refrigerant S/H automaton": {
+     "primitives": {
+      "cmp": 155,
+      "sh": 15,
+      "int": 5,
+      "gain": 25,
+      "gate": 10,
+      "sum": 18,
+      "src": 20,
+      "counter": 6
+     },
+     "state_tuple": [
+      20,
+      11,
+      155,
+      56
+     ],
+     "seconds": 0.00022933299987926148,
+     "unexpected": []
+    },
+    "B4-01 count [raw comparator bank]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 167,
+      "gain": 1,
+      "cmp": 167,
+      "sum": 1,
+      "sum_inputs": 332,
+      "table_entries": 0
+     },
+     "n_event_times": 332
+    }
+   },
+   "t_oracle_s": 1.456484120999903,
+   "integer_event_times": [
+    5.0,
+    6.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    13.0,
+    14.0,
+    15.0,
+    16.0,
+    17.0,
+    18.0,
+    19.0,
+    20.0,
+    21.0,
+    22.0,
+    23.0,
+    24.0,
+    25.0,
+    26.0,
+    27.0,
+    28.0,
+    29.0,
+    30.0,
+    31.0,
+    32.0,
+    33.0,
+    34.0,
+    35.0,
+    36.0,
+    38.0,
+    39.0,
+    40.0,
+    42.0,
+    43.0,
+    44.0,
+    45.0,
+    46.0,
+    47.0,
+    48.0,
+    49.0,
+    50.0,
+    51.0,
+    52.0,
+    53.0,
+    54.0,
+    55.0,
+    56.0,
+    57.0,
+    58.0,
+    59.0,
+    60.0,
+    62.0,
+    63.0,
+    64.0,
+    65.0,
+    66.0,
+    68.0,
+    69.0,
+    70.0,
+    72.0,
+    73.0,
+    75.0,
+    76.0,
+    77.0,
+    78.0,
+    80.0,
+    81.0,
+    84.0,
+    85.0,
+    86.0,
+    87.0,
+    88.0,
+    90.0,
+    91.0,
+    92.0,
+    93.0,
+    95.0,
+    96.0,
+    98.0,
+    99.0,
+    100.0,
+    102.0,
+    104.0,
+    105.0,
+    106.0,
+    108.0,
+    109.0,
+    110.0,
+    112.0,
+    114.0,
+    115.0,
+    116.0,
+    117.0,
+    118.0,
+    119.0,
+    120.0,
+    121.0,
+    123.0,
+    124.0,
+    125.0,
+    126.0,
+    128.0,
+    129.0
+   ]
+  },
+  {
+   "scenario": "SYN-RC-office-M-T60-seed102",
+   "H": 130,
+   "grid": [
+    [
+     "0.5",
+     "extra"
+    ],
+    [
+     "1.0",
+     "contract"
+    ],
+    [
+     "7.3",
+     "extra"
+    ],
+    [
+     "9.999999",
+     "contract"
+    ],
+    [
+     "10.0",
+     "contract"
+    ],
+    [
+     "10.000000005",
+     "band_in"
+    ],
+    [
+     "10.00000001",
+     "knife"
+    ],
+    [
+     "10.00000002",
+     "band_out"
+    ],
+    [
+     "10.000001",
+     "contract"
+    ],
+    [
+     "14.000000007",
+     "band_in"
+    ],
+    [
+     "14.000000014000001",
+     "knife"
+    ],
+    [
+     "14.000000027999999",
+     "band_out"
+    ],
+    [
+     "15.0000000075",
+     "band_in"
+    ],
+    [
+     "15.000000015000001",
+     "knife"
+    ],
+    [
+     "15.000000029999999",
+     "band_out"
+    ],
+    [
+     "19.999999",
+     "contract"
+    ],
+    [
+     "20.0",
+     "contract"
+    ],
+    [
+     "20.00000001",
+     "band_in"
+    ],
+    [
+     "20.00000002",
+     "knife"
+    ],
+    [
+     "20.00000004",
+     "band_out"
+    ],
+    [
+     "20.000001",
+     "contract"
+    ],
+    [
+     "27.0000000135",
+     "band_in"
+    ],
+    [
+     "27.000000027000002",
+     "knife"
+    ],
+    [
+     "27.000000053999997",
+     "band_out"
+    ],
+    [
+     "29.000000014500003",
+     "band_in"
+    ],
+    [
+     "29.000000029000002",
+     "knife"
+    ],
+    [
+     "29.000000057999998",
+     "band_out"
+    ],
+    [
+     "29.5",
+     "extra"
+    ],
+    [
+     "30.0",
+     "contract"
+    ],
+    [
+     "40.0",
+     "contract"
+    ],
+    [
+     "59.999999",
+     "extra"
+    ],
+    [
+     "60.0",
+     "contract"
+    ],
+    [
+     "100.25",
+     "extra"
+    ],
+    [
+     "130.0",
+     "extra"
+    ]
+   ],
+   "costs": {
+    "B4-02 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 5181,
+      "gain": 1,
+      "cmp": 2697,
+      "sum": 310,
+      "gate": 2697,
+      "sum_inputs": 11333,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "atom": 11326,
+      "const": 0,
+      "gcell": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 370158,
+     "seconds": 0.07810449399994468
+    },
+    "B5-01 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 2,
+      "gain": 1,
+      "cmp": 1,
+      "gate": 1,
+      "sum_inputs": 0,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "atom": 1,
+      "const": 0,
+      "gcell": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 204,
+     "seconds": 0.0014941009999347443
+    },
+    "B6-03 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 130,
+      "sum": 131,
+      "clip": 130,
+      "gain": 130,
+      "sum_inputs": 390,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 17748,
+     "seconds": 0.002956819999781146
+    },
+    "B6-03 [P1 pieces, integrator]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 129,
+      "cmp": 129,
+      "sum": 1,
+      "table": 1,
+      "int": 1,
+      "sum_inputs": 129,
+      "table_entries": 130
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 50042,
+     "seconds": 0.0049303109999527805
+    },
+    "B7-04 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 130,
+      "sum": 131,
+      "clip": 130,
+      "gain": 130,
+      "sum_inputs": 390,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 17748,
+     "seconds": 0.0028120500001023174
+    },
+    "B7-04 [P1 pieces, integrator]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 129,
+      "cmp": 129,
+      "sum": 1,
+      "table": 1,
+      "int": 1,
+      "sum_inputs": 129,
+      "table_entries": 130
+     },
+     "pieces_by_kind": {
+      "cell": 130,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 50042,
+     "seconds": 0.004815397000129451
+    },
+    "B3-01 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 4685,
+      "gain": 2378,
+      "cmp": 2377,
+      "sum": 129,
+      "clip": 126,
+      "gate": 2377,
+      "int": 1,
+      "sum_inputs": 4814,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "density": 2183,
+      "gcell": 9681,
+      "const": 0,
+      "atom": 0,
+      "cell": 0
+     },
+     "evals": 821032,
+     "seconds": 0.11266120299978866
+    },
+    "B1-03 [P1 pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 268,
+      "gain": 61,
+      "cmp": 171,
+      "gate": 231,
+      "sum": 88,
+      "clip": 53,
+      "sum_inputs": 425,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "atom": 231,
+      "gcell": 60,
+      "const": 0,
+      "cell": 0,
+      "density": 0
+     },
+     "evals": 29682,
+     "seconds": 0.006114288999924611
+    },
+    "B1-02 [P1 cells]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 130,
+      "sum": 131,
+      "clip": 130,
+      "gain": 130,
+      "sum_inputs": 390,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "cell": 5200,
+      "const": 0,
+      "atom": 0,
+      "gcell": 0,
+      "density": 0
+     },
+     "evals": 17748,
+     "seconds": 0.00440522000008059
+    },
+    "B1-04 [P1 jump pieces]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 242,
+      "sum": 135,
+      "gain": 191,
+      "cmp": 60,
+      "gate": 120,
+      "clip": 130,
+      "sum_inputs": 554,
+      "table_entries": 0
+     },
+     "pieces_by_kind": {
+      "const": 40,
+      "cell": 1040,
+      "atom": 60,
+      "gcell": 60,
+      "density": 0
+     },
+     "evals": 29886
+    },
+    "refrigerant S/H automaton": {
+     "primitives": {
+      "cmp": 360,
+      "sh": 120,
+      "int": 40,
+      "gain": 200,
+      "gate": 80,
+      "sum": 123,
+      "src": 160,
+      "counter": 41
+     },
+     "state_tuple": [
+      160,
+      81,
+      360,
+      471
+     ],
+     "seconds": 0.001469782999720337,
+     "unexpected": []
+    },
+    "B4-01 count [raw comparator bank]": {
+     "netlist": {
+      "sweep": 1,
+      "src": 819,
+      "gain": 1,
+      "cmp": 819,
+      "sum": 1,
+      "sum_inputs": 3439,
+      "table_entries": 0
+     },
+     "n_event_times": 3439
+    }
+   },
+   "t_oracle_s": 18.406295912999667,
+   "integer_event_times": [
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    13.0,
+    14.0,
+    15.0,
+    16.0,
+    17.0,
+    18.0,
+    19.0,
+    20.0,
+    21.0,
+    22.0,
+    23.0,
+    24.0,
+    25.0,
+    26.0,
+    27.0,
+    28.0,
+    29.0,
+    30.0,
+    31.0,
+    32.0,
+    33.0,
+    34.0,
+    35.0,
+    36.0,
+    37.0,
+    38.0,
+    39.0,
+    40.0,
+    41.0,
+    42.0,
+    43.0,
+    44.0,
+    45.0,
+    46.0,
+    47.0,
+    48.0,
+    49.0,
+    50.0,
+    51.0,
+    52.0,
+    53.0,
+    54.0,
+    55.0,
+    56.0,
+    57.0,
+    58.0,
+    59.0,
+    60.0,
+    61.0,
+    62.0,
+    63.0,
+    64.0,
+    65.0,
+    66.0,
+    67.0,
+    68.0,
+    69.0,
+    70.0,
+    71.0,
+    72.0,
+    73.0,
+    74.0,
+    75.0,
+    76.0,
+    77.0,
+    78.0,
+    79.0,
+    80.0,
+    81.0,
+    82.0,
+    83.0,
+    84.0,
+    85.0,
+    86.0,
+    87.0,
+    88.0,
+    89.0,
+    90.0,
+    91.0,
+    92.0,
+    93.0,
+    94.0,
+    95.0,
+    96.0,
+    97.0,
+    98.0,
+    99.0,
+    100.0,
+    101.0,
+    102.0,
+    103.0,
+    104.0,
+    105.0,
+    106.0,
+    107.0,
+    108.0,
+    109.0,
+    110.0,
+    111.0,
+    112.0,
+    113.0,
+    114.0,
+    115.0,
+    116.0,
+    117.0,
+    118.0,
+    119.0,
+    120.0,
+    121.0,
+    122.0,
+    123.0,
+    124.0,
+    125.0,
+    126.0,
+    127.0,
+    128.0,
+    129.0
+   ]
+  }
+ ]
+}
