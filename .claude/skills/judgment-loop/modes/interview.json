@@ -1,0 +1,67 @@
+{
+  "mode": "interview",
+  "label": "面接専用（単一の応募先。既存の面接カード・専門性確認資料を基準とする）",
+  "review_prompt": "jobdoc",
+  "baseline_required": true,
+  "baseline_hint": "面接カードと専門性確認資料を `ref add` で登録し、Claude が必要部分だけを artifacts/baseline/ に抜粋してから開始する",
+  "policy_char_limit": 7000,
+  "policies_common": {
+    "QUALITY_GATES.md": ["__intro__", "リスク重み付け"],
+    "DECISION.md": ["優先順位"],
+    "AUTOMATION.md": ["複数AIの役割"]
+  },
+  "task_types": {
+    "deep_questions": {
+      "label": "深掘り質問の作成",
+      "rubric": [
+        "面接カードの各記述に対し、面接官が実際に掘り下げそうな質問になっているか（なぜ・具体例・役割・結果・学び）",
+        "質問の狙い（何を確認したい質問か）が明記されているか",
+        "応募先の業務・課題（根拠台帳の資料）と結びついた質問が含まれるか",
+        "本人の承認済み事実の範囲外を前提にした質問がないか"
+      ],
+      "policies": {
+        "COGNITIVE_PLAYBOOK.md": ["相手の理解"],
+        "INTERPRETATION.md": ["第4層"]
+      }
+    },
+    "answer_improve": {
+      "label": "回答の改善",
+      "rubric": [
+        "質問に正面から答え、結論→根拠→具体例の順で伝わるか",
+        "本人の役割・行動・結果が承認済み事実と一致し、誇張がないか",
+        "短すぎて文脈が欠落していないか／長すぎて要点が埋もれていないか",
+        "応募先についての記述が根拠台帳の資料と時点に裏付けられているか",
+        "面接カードの記述と矛盾しないか"
+      ],
+      "policies": {
+        "COGNITIVE_PLAYBOOK.md": ["相手の理解", "思考のバイアス"],
+        "INTERPRETATION.md": ["第3層"]
+      }
+    },
+    "mock_interview": {
+      "label": "模擬面接",
+      "rubric": [
+        "質問→回答→追質問の流れが現実の面接に近いか",
+        "追質問で崩れる回答（根拠不足・矛盾・抽象的）を特定しているか",
+        "改善点が次の練習で検証できる形になっているか"
+      ],
+      "policies": {
+        "FORECAST_AND_VERIFY.md": ["反証テスト"],
+        "COGNITIVE_PLAYBOOK.md": ["相手の理解"]
+      }
+    },
+    "contradiction_check": {
+      "label": "矛盾の検証",
+      "rubric": [
+        "面接カード・専門性確認資料・各回答の間で、事実・数値・時期・役割の食い違いがないか",
+        "承認済み事実と異なる記述、出典のない記述を列挙しているか",
+        "食い違いごとに、どちらが正しいかの根拠または本人確認の要否を示しているか"
+      ],
+      "policies": {
+        "INTERPRETATION.md": ["第3層"],
+        "KNOWLEDGE_MEMORY.md": ["新しい情報が来たとき"],
+        "FORECAST_AND_VERIFY.md": ["反証テスト"]
+      }
+    }
+  }
+}

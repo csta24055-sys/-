@@ -1,0 +1,78 @@
+{
+  "mode": "jobhunt",
+  "label": "就活全体（複数の応募先の調査・適合分析・ES・面接・応募戦略）",
+  "review_prompt": "jobdoc",
+  "baseline_required": false,
+  "baseline_hint": "応募先の一覧はワークスペース作成時に --target で非公開ホームにだけ登録する",
+  "policy_char_limit": 7000,
+  "policies_common": {
+    "QUALITY_GATES.md": ["__intro__", "リスク重み付け"],
+    "DECISION.md": ["優先順位"],
+    "AUTOMATION.md": ["複数AIの役割"]
+  },
+  "task_types": {
+    "company_research": {
+      "label": "企業研究",
+      "rubric": [
+        "事業・数値・方針の記述がすべて根拠台帳の公式資料（IR・統合報告書・公式サイト・官公庁資料）に紐づくか",
+        "数値に時点（年度・発表日）があり、古い情報を現在形で書いていないか",
+        "事実・推測・本人の解釈が区別されているか",
+        "未調査の論点が明記されているか"
+      ],
+      "policies": {
+        "INTERPRETATION.md": ["第3層", "第4層"],
+        "KNOWLEDGE_MEMORY.md": ["新しい情報が来たとき"]
+      }
+    },
+    "fit_analysis": {
+      "label": "本人との適合分析",
+      "rubric": [
+        "本人側の根拠が承認済み事実だけで構成されているか",
+        "企業側の根拠が根拠台帳に紐づくか",
+        "適合だけでなく不適合・リスク・弱点も示しているか",
+        "複数社の比較で評価基準がそろっているか"
+      ],
+      "policies": {
+        "DECISION.md": ["競合案の採点"],
+        "COGNITIVE_PLAYBOOK.md": ["思考のバイアス"]
+      }
+    },
+    "es_review": {
+      "label": "ES",
+      "rubric": [
+        "設問に正面から答え、文字数制限を守っているか",
+        "本人の経験が承認済み事実と一致し、誇張がないか",
+        "その企業でなければならない理由が根拠台帳に基づくか",
+        "読み手が文脈を補わなくても理解できるか"
+      ],
+      "policies": {
+        "COGNITIVE_PLAYBOOK.md": ["相手の理解", "思考のバイアス"],
+        "INTERPRETATION.md": ["第3層"]
+      }
+    },
+    "interview_prep": {
+      "label": "面接準備",
+      "rubric": [
+        "想定質問と回答が ES・企業研究と矛盾しないか",
+        "深掘り質問への耐性（具体例・数値・役割）があるか",
+        "企業固有の論点（根拠台帳）を踏まえているか"
+      ],
+      "policies": {
+        "COGNITIVE_PLAYBOOK.md": ["相手の理解"],
+        "FORECAST_AND_VERIFY.md": ["反証テスト"]
+      }
+    },
+    "strategy": {
+      "label": "応募戦略",
+      "rubric": [
+        "締切・選考段階など時点情報の出典と確認日があるか",
+        "優先順位の理由が明示され、代案と切替条件があるか",
+        "応募・送信などの最終行動は本人が行う前提になっているか"
+      ],
+      "policies": {
+        "DECISION.md": ["競合案の採点", "最小作業の定義"],
+        "FORECAST_AND_VERIFY.md": ["実行前予測"]
+      }
+    }
+  }
+}

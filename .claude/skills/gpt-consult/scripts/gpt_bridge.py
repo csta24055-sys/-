@@ -92,6 +92,17 @@ SYSTEM_PROMPTS = {
         "(4) realistic alternatives with trade-offs, (5) a concrete recommendation. Be specific to the "
         "provided context and say what information is missing."
     ),
+    "jobdoc": (
+        "You are an independent reviewer of job-hunting documents (entry sheets, interview answers, company "
+        "research, fit analyses) prepared by another AI agent (Claude Code) for a student. Judge them as a "
+        "skeptical interviewer and fact-checker would. Check: (1) every claim about the candidate is supported by "
+        "the provided candidate facts, with no exaggeration of roles, results or qualifications; (2) every claim "
+        "about an organization is supported by the provided evidence entries (source URL, date, locator) and its "
+        "time point is clear; (3) the answer actually responds to the question and survives follow-up questions; "
+        "(4) internal consistency across documents; (5) the reader can understand it without missing context. "
+        "Cite fact IDs and evidence IDs. Never invent facts, sources or achievements. Never suggest submitting "
+        "applications, sending messages or publishing anything."
+    ),
 }
 
 LANG_HINT = {"ja": "Respond in Japanese.", "en": "Respond in English."}
@@ -264,8 +275,10 @@ class Context:
         return "\n\n".join(f"<<<{label}>>>\n{text}\n<<<end {label}>>>" for label, text in self.parts)
 
 
-def build_payload(cfg: dict, mode: str, prompt: str, ctx: Context) -> dict:
-    instructions = SYSTEM_PROMPTS[mode] + " " + LANG_HINT.get(cfg["language"], "")
+def build_payload(cfg: dict, mode: str, prompt: str, ctx: Context, text_format: dict | None = None,
+                  extra_instructions: str = "") -> dict:
+    """text_format: Responses API の text.format（例: {"type": "json_schema", ...}）。指定時のみ付与。"""
+    instructions = SYSTEM_PROMPTS[mode] + " " + extra_instructions + " " + LANG_HINT.get(cfg["language"], "")
     prompt, n = redact(prompt)
     ctx.redactions += n
     body = f"## Request\n{prompt.strip()}"
@@ -285,6 +298,8 @@ def build_payload(cfg: dict, mode: str, prompt: str, ctx: Context) -> dict:
     }
     if cfg.get("reasoning_effort"):
         payload["reasoning"] = {"effort": cfg["reasoning_effort"]}
+    if text_format:
+        payload["text"] = {"format": text_format}
     return payload
 
 
@@ -460,7 +475,8 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--show-payload", action="store_true", help="dry-run 時に送信予定の全文を表示")
         sp.add_argument("--json", action="store_true", help="結果を JSON で出力")
 
-    for name, help_ in (("ask", "GPT へ質問"), ("review", "コードレビュー"), ("design", "設計評価")):
+    for name, help_ in (("ask", "GPT へ質問"), ("review", "コードレビュー"), ("design", "設計評価"),
+                        ("jobdoc", "就活資料（ES・面接回答・企業研究）のレビュー")):
         common(sub.add_parser(name, help=help_))
 
     g = sub.add_parser("get", help="保存済み応答を ID で取得（--store で作成したもの。生成は行わない）")

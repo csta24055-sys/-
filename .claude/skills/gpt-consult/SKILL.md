@@ -37,6 +37,7 @@ description: OpenAI GPT（Responses API）にセカンドオピニオンを求�
 | 質問 | `gpt_bridge.py ask "質問" [-f FILE]...` |
 | コードレビュー | `gpt_bridge.py review "観点" (-f FILE... \| --diff \| --diff-base REF)` |
 | 設計評価 | `gpt_bridge.py design "設計の説明" [-f docs/design.md]` |
+| 就活資料レビュー（ES・面接回答・企業研究） | `gpt_bridge.py jobdoc "観点" -f path` ※反復させる場合は judgment-loop スキル |
 | 直前の回答を再表示（無料） | `gpt_bridge.py last` |
 | 保存済み応答の取得（`--store` で作成したもの） | `gpt_bridge.py get resp_...` |
 | 本日の使用量（無料） | `gpt_bridge.py usage` |

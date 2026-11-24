@@ -152,6 +152,19 @@ class TestDryRunAndSend(Base):
         self.assertEqual(len(set(payloads.values())), 3)
         self.assertIn("Japanese", payloads["ask"])
 
+    def test_jobdoc_mode_and_text_format(self):
+        rec = Recorder(fake_response())
+        self.run_main(["jobdoc", "ES を見て", "--send"], opener=rec)
+        body = json.loads(rec.requests[0].data)
+        self.assertIn("job-hunting documents", body["instructions"])
+        self.assertNotIn("text", body)
+        cfg = gb.load_config(self.root)
+        fmt = {"type": "json_schema", "name": "x", "strict": True, "schema": {"type": "object"}}
+        p = gb.build_payload(cfg, "jobdoc", "q", gb.Context(cfg, self.root), text_format=fmt,
+                             extra_instructions="EXTRA-RULE")
+        self.assertEqual(p["text"], {"format": fmt})
+        self.assertIn("EXTRA-RULE", p["instructions"])
+
     def test_prompt_from_stdin(self):
         rec = Recorder(fake_response())
         self.run_main(["ask", "-", "--send"], opener=rec, stdin="標準入力の質問")
