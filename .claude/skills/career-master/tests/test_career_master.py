@@ -175,5 +175,61 @@ class TestBuildTrainer(unittest.TestCase):
                 self.assertNotIn(needle, page)                         # 外部通信なし
 
 
+class TestExportReviewRuns(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.home = Path(self.tmp.name) / "home"
+        self.env = dict(os.environ, JUDGMENT_LOOP_HOME=str(self.home))
+
+        def run(name, events, iters):
+            d = self.home / "workspaces" / "w" / "runs" / name
+            d.mkdir(parents=True)
+            (d / "state.json").write_text(json.dumps({"id": name, "goal": "g", "status": "done", "usage": {"calls": 0}}))
+            (d / "history.jsonl").write_text("\n".join(json.dumps(e) for e in events))
+            for n, files in iters.items():
+                i = d / "iterations" / n
+                i.mkdir(parents=True)
+                for fn, obj in files.items():
+                    (i / fn).write_text(obj if isinstance(obj, str) else json.dumps(obj, ensure_ascii=False))
+
+        verdict = {"verdict": "REVISE", "summary": "s", "issues": [{"severity": "P1"}],
+                   "next_actions": [{"id": "A1", "action": "直す"}], "questions_for_user": []}
+        run("r-failed", [{"event": "review_send", "iteration": 1}, {"event": "review_error", "iteration": 1, "error": "HTTP 429"}],
+            {"001": {"submission.json": {"artifacts": ["a.md"]}, "packet_part1.txt": "p"}})
+        run("r-indep", [{"event": "review", "iteration": 1, "source": "claude-independent"}],
+            {"001": {"submission.json": {"artifacts": ["a.md"]}, "verdict.json": verdict,
+                     "decisions.json": [{"id": "A1", "decision": "accepted", "reason": "確認した", "checked": "a.md:3"}]}})
+        run("r-gpt", [{"event": "review_send", "iteration": 1}, {"event": "review", "iteration": 1, "source": "gpt-x"}],
+            {"001": {"verdict.json": verdict}})
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_kinds_are_kept_apart(self):
+        out = Path(self.tmp.name) / "out"
+        r = subprocess.run([sys.executable, str(SCRIPTS / "export_review_runs.py"), "--out", str(out)],
+                           env=self.env, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        text = (out / "review_runs_index.md").read_text(encoding="utf-8")
+        rows = {l.split("|")[1].strip(): l for l in text.splitlines() if l.startswith("| w/")}
+        self.assertIn("gpt-send-failed", rows["w/r-failed"])
+        self.assertIn("判定なし", rows["w/r-failed"])
+        self.assertIn("成功 0／失敗 1", rows["w/r-failed"])
+        self.assertIn("claude-independent", rows["w/r-indep"])
+        self.assertNotIn("gpt-send", rows["w/r-indep"])
+        self.assertIn("gpt-send（gpt-x）", rows["w/r-gpt"])
+        self.assertIn("成功 1／失敗 0", rows["w/r-gpt"])
+        self.assertIn("| A1 | 直す | accepted | 確認した | a.md:3 |", text)
+        self.assertTrue((out / "runs" / "w" / "r-failed" / "iterations" / "001" / "packet_part1.txt").exists())
+
+    def test_refuses_git_worktree(self):
+        repo = Path(self.tmp.name) / "repo"
+        (repo / ".git").mkdir(parents=True)
+        r = subprocess.run([sys.executable, str(SCRIPTS / "export_review_runs.py"), "--out", str(repo / "x")],
+                           env=self.env, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 2)
+        self.assertFalse((repo / "x").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

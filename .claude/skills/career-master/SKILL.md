@@ -6,7 +6,7 @@ description: 就職活動の準備を、原資料に戻れる証拠台帳・面�
 # career-master: 就活準備の運用
 
 非公開ホーム: `$JUDGMENT_LOOP_HOME/career_master`（既定 `~/.judgment-loop/career_master`）。以下 `M`。
-道具: `python3 .claude/skills/career-master/scripts/chat_index.py`（会話索引）、`build_trainer.py`（練習ページ生成）。
+道具: `python3 .claude/skills/career-master/scripts/chat_index.py`（会話索引）、`build_trainer.py`（練習ページ生成）、`export_review_runs.py --out M/06_ai_review_runs`（レビュー記録の一覧と写し）。
 反復とモデルの使い分けは `.claude/skills/judgment-loop` と `.claude/skills/career-model-router` を使う。
 
 ## 守ること
@@ -59,4 +59,5 @@ description: 就職活動の準備を、原資料に戻れる証拠台帳・面�
 ## レビューの扱い
 
 - GPT が使えるとき: judgment-loop の承認予算の範囲で `review --send`。
+- レビューのたびに `export_review_runs.py --out M/06_ai_review_runs` で一覧を更新する（GPT 実送信・送信失敗・代替レビュー・模擬を区別して出る）。
 - 使えないとき（残高切れなど）: 作成担当とは別の独立したエージェントにパケット全文を渡し、同じ JSON 形式の判定を `review --mock <file> --mock-source claude-independent` で取り込む。報告では必ず「GPT 未レビュー」と書く。模擬の成功を本番通信の成功と書かない。
