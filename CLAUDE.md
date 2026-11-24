@@ -1,5 +1,11 @@
 # WLC電気等価回路の研究 — Claude Code プロジェクト指示
 
+## 【追加の最優先仮説：WLCの計算順序そのものを段階型回路へ】
+**必ず `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md` も読む。** 13の回路第一原理案と**並列の有力候補**として、元の `I→P1→TIME→AGG→RO` という演算依存順、さらに建設→供用・交換→解体の実時間順を、**同じ少数の本物の回路素子／状態遷移を段階的に通過させる共通構造**へ変換できないか調べる。
+「70単位が70個の直列素子」ではない。標準回路に基づく段階接続（カスケード）と物理的な直列R/C/L（同一電流・時定数）は別仮説。両方をKCL/KVLで比較し、元の70値を任意波形電源に貼るだけなら不成功。旧G5 EXP-1〜5を自動起動しない。
+
+---
+
 ## 【最新の最優先研究目的・2026-11-24】
 **必ず `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` を先に読む。**
 
