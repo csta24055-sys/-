@@ -1,35 +1,72 @@
-# VERDICT — DRAFT (builder self-assessment; NOT a verdict)
+# VERDICT（最終）— 回路第一サイクル
 
-The verdict belongs to the independent verifier (`circuit_first/verification/`). The V1 verdicts on stage A are in
-`verification/VERDICTS.md`. This draft lists the builder's own block levels for stages A + B so they can be checked.
+**総合判定：PARTIAL（部分成功）。** 設計書 `coordination/circuit_first_architecture.md` §6 の規則による（CF1〜CF4 PASS、CF5 PARTIAL：隠蔽率 h=0.029〜0.061 が 0.02<h≤0.25 の帯、建物全体の固定テンプレート NOT_RUN）。独立検証 V3 の推奨「PARTIAL (strong)」と一致する。"strong" は CF1〜CF4 が PASS であることを示す検証者の付記であり、規則上の別区分ではない。
+ユーザーの成功基準に対する答え：**回路として正しく、入出力は保存され、時間・状態と集計の層は回路法則に沿って統一的に再編成できた。しかし振幅層は原典の行ごとの積の構造を保ったままで、より統一的な形にはなっていない。原典の照合・優先順位・除外の論理は回路法則の外の「構成」として残った。状態は削減されず、速度は遅い。**
 
-| block | level claimed | basis | stage-B evidence |
-|---|---|---|---|
-| crossbar v2: ±V factor rails, passive rail×conductance terms, stages only for products that must be voltages, summing junctions | P0 (rails, R) + P1 (stages/junctions) | Ohm, KCL; op-amps S 3 393 → 1 593 (L1 bound 1 462, gap 131 = both-polarity expressions), 0 inverters | S3a max 9.2e-16 |
-| pot segments for 1/(1−w), r/(1−r), (1−η) | P0 | complementary pot segments | — |
-| taps (crossbar outputs into the core) | P0 by substitution | stiff ideal op-amp outputs as sources (D12; merged run NOT_RUN) | — |
-| stage buses, readout buses | P1 | integrators (accumulator sink = solving strategy) | — |
-| packets (initial, terminal readout, renewal, B5, negative one-year) | P1 + H | Δq = C·v, phase sequencers | S3a/S3c |
-| clocks, explicit comparators, time base, shared look-ahead P, refrigerant early comparators | H | comparators, latches, counter; booleans only | event counts equal |
-| year banks / MDAC / decoders | P0 + H | switched conductances selected by the counter | S3b |
-| electricity net purchase | P1 + ideal diode (P0) | KCL, VCCS, diode clamp | S3b; diode mutation detected |
-| ρ split with ι_B2 steering | P1 + static switch | charge conservation | S3b, ι subsets |
-| year cell (B3) | H | flying capacitor, negative packet, S/S′/P booleans | S3c B3 5.9e-14 |
-| refrigerant device (B1) | H | integrator, sample-hold, constant leak/drain, packets, reset | S3d 3.4e-15 |
-| adapter | h = 0.029–0.061 (GREY = composite fraction sums, EPD date, grid step order; no element value grey) | `results/stageB_S3e.json` | PARTIAL band (0.02 < h ≤ 0.25) |
-| readout | γ × charge, sums over ι | — | — |
+本書はビルダーの草稿（`96df403` 時点、git に残る）を置き換える。統合担当：自己申告 `claude-opus-5-5`（effort はセッション内から観測不能、定義ファイル上は high）。架空データのみ。根拠の詳細は `coordination/circuit_first_integration.md`。
 
-Stage C: V2-D1..D5 fixed. All stage-B comparisons were re-run with crossbar v2: C(T) ≤ 1.1e-14, coverage 1.0,
-and 30 runnable edge scenarios ≤ 2.8e-14. The merged single-netlist test passes on a tiny building (AC, EV, REF).
-The full-building template is NOT_RUN.
+## 1. 作ったもの
+原始入力（係数・換算表・資材/設備行・冷媒機器・年次プロファイル・周期・明示年・ι・T）だけから2つのネットリストを生成する。(α) **振幅クロスバー**：±係数レール（独立DC源）、数量コンダクタンス、オペアンプ段、加算接合点だけの静的網で、全建物で同じ署名を持つ。(β) **ライフサイクル・コア**：共有時間基準、周期ごとに1つの積分発火時計、電荷パケット、年セル、冷媒セル、14段階バス、読出しバスからなるハイブリッド回路で、実時間 0→T を走らせる。読出しは γ×電荷の和だけ。事象時刻・回数・年は比較器が発見し、外から与えていない。`refcalc` は試験でのみ呼ぶ（AST 検査済み）。セル型は約26種（検証者の集計、§7 参照）。70単位・14段に戻した構造ではない。
 
-Self-assessment:
-* Overall level **H** (limited hybrid). No F block was found by the builder.
-* Coverage is 1.0 of |C(T)| on 5 buildings × 10 T, inside 1e-9.
-* By architecture §6 the result would be **PARTIAL** only because h > 0.02, which is entirely composite and EPD
-  predicates. Another reason is that the full-building N_max template is NOT_RUN.
-* Control that h does not count is substantial: thousands of sequencer phase steps and tens of thousands of W2
-  look-ups (STATUS.md census).
+## 2. レベル（V3 最終表、`verification/VERDICTS.md` V3 §5）
+| ブロック | レベル |
+|---|---|
+| クロスバーのレール・源、受動2因子積 | P0 |
+| クロスバーの積段・加算接合点 | P1 |
+| タップ（置換定理、統合ネットリストで一致） | P0 |
+| 段階バス・読出しバス | P1 |
+| パケット | P1＋H |
+| 時計・比較器・時間基準・先読み P | H |
+| 年バンク（表・MDAC） | P0＋H |
+| 電力系（KCL・ダイオード） | P1＋P0 |
+| ρ 分流 | P1＋静的スイッチ |
+| 年セル（B3）・冷媒（B1） | H |
+| アダプタ | 構成（W2/W3/W4）＋GREY 述語（S 449、E5 593、M 5,678）。F ブロックなし |
+| **全体** | **H** |
 
-NOT_RUN: full-building N_max template, merged crossbar+core run, in-band values, AGG ratios, decision/reference units,
-SPICE, Math7.
+## 3. 8つの受入れ質問
+| 質問 | 答え | 根拠 |
+|---|---|---|
+| 最終結果は一致するか | はい（試験した有効域）。新規 917/917 点が 1e-9 以内、C 最大相対誤差 5.0e-14、段階最大 2.4e-13（B3）、事象回数一致、異常終了 0 | `verification/results/v3_oracle_summary.json` |
+| T を変えても正しいか | はい、0.3≤T≤130(=H)、整数年事象の ±1e-6 を含む。1回の走行で16〜17個の T を読む。帯内 T は NOT_RUN | 同上、V3 §5 |
+| 資材・設備をまたぐ共有は本物か | 時間・集計層は本物（共有時間基準、周期ごとの時計、共有バス）。振幅層は部分的（共有レールと行ノードの分配 1,217 節点、ただし行ごと構造で、値が同一の出力 66 個が重複） | `verification/results/v3_crossbar.json` |
+| 交換・劣化・修繕・同時事象 | 合成モデルにあるものはすべて可。冷媒の同一年重複は明示的に拒否（原典の形式定義域内での機能喪失）。劣化・効率変化は段階Aのセルのみで、原典オラクルがない | `v3_probes.json`、V1 `fresh_cases.json` |
+| 組替えで失った情報 | 必要な観測量は失っていない（14段階、C、Z（B1-04 含む）、M、回数、事象時刻、交換後状態）。表現しないもの：単位別小計、年別系列、スキップ/完了フラグ、AGG 比 | V3 §5 Q5 |
+| KCL/KVL と R/C 法則 | 満たす。残差は厳密に 0（段階B 小建物ダンプ 89,096 KCL 検査）、クロスバー独立再解、独立シミュレータで部分網一致、統合ネットリスト＝分割実行 | `v2_residuals.json`、`v3_crossbar.json`、`v2_subnet.json`、`v3_merged_rerun.json` |
+| ブラックボックスか | WLC の値を源に隠していない（源は ±(原始入力1個)×V0）。ただし原典の行ごとの制御構造と照合・優先・除外の論理は Python 側の配線構成として再現（S で W2 8,479・W3 9,389・GREY 449、公開・計数済み） | `v3_audit.json`、`results/stageB_S3e.json` |
+| 回路で統一した範囲と外部制御 | 統一：積（オーム×KCL）、符号付き和、積分、パケット、ρ 分流、整流、複数 T の読出し。制御（H）：時計・比較器・年セル・冷媒・シーケンサ（S で 1,030 個・4,306 位相段・701 ビット）。構成（回路法則外）：照合・優先順位・欠損/除外・群キー | V3 §5 表 |
+
+## 4. ゲート
+CF1 法則ベンチ **PASS**／CF2 パイロット **PASS**（右 160/255/315/410、左・原典 140/200/295/355）／CF3 状態変化 **PASS**（36 ケース 699 点）／CF4 合成建物 **PASS（試験した有効域）**（帯内 T と冷媒重複年は NOT_RUN／未対応）／CF5 監査 **PARTIAL**（h が PARTIAL 帯、建物全体の固定テンプレート NOT_RUN、変異はビルダー 12/12・検証者 11/11（非等価のみ））／CF6 限界 **記述あり**。
+
+## 5. 隠蔽率 h（`results/stageB_S3e.json`、S と E1 は V3 が再計算で一致）
+| 建物 | S | M | E0 | E1 | E2 |
+|---|---|---|---|---|---|
+| h（振幅／時間） | 0.041（0.055／0） | 0.061（0.068／0.0014） | 0.051 | 0.053 | 0.029 |
+
+W_out はすべて GREY 述語（組成の質量比の累積和と |Σ−1|≤1e-6、EPD 期限比較、系統段の順序）。**h が数えないもの**：シミュレータが無償で与える制御（優先度クラス6＋後処理相、零長シーケンサ位相、S で 1,030 シーケンサ・4,306 位相段・1,738 ゲート）、構成の照合・述語・列挙（S で W2 8,479・W3 9,389・W4 933）。段階Cで h が下がった一因は、受動データ・コンダクタンスを W_in に数えたこと（分母の増加）であり、隠れた仕事が減ったことだけによるのではない。
+
+## 6. 層ごとの賛否
+| 層 | 「より統一的で回路に自然な系へ再編成」に賛成 | 反対 |
+|---|---|---|
+| 振幅 | 積を素子法則の自然な形で実現（受動オーム×KCL、共有 ± レール、反転器 0、オペアンプを行あたり約13→約6）。厳密・独立再解済み | 原典の単位式と因子順に従う行ごとの網のまま。共有は同一性だけ（値が同一の重複 66）。ビルダーの「L1 下界」は自己参照的で最小値ではない。行数に比例 |
+| 時間・状態 | 年・事象のループが動力学になった。周期ごとの時計が全行種に共用、パケット・年セル・冷媒セル、1走行で複数 T。境界規約も厳密 | 制御が重い（S で 1,030 シーケンサ・4,306 位相段・701 ビット）。コンデンサの約81%が実装上の付帯。状態削減なし。時間伸長（ε）は宣言した規約 |
+| 読出し・集計 | KCL バスが AGG の和を置換。Z と M を分離。ι はスイッチと読出しで実現。厳密 | AGG 比は未着手。単位別内訳は表現しない（要件外） |
+| 構成 | 公開・計数済み（W2/W3/W4/GREY）。WLC の値は隠していない | 原典の照合・優先・除外の論理（S で約1.7万操作）は転写であり統一ではない。ラベル照合の限界により回路法則にはなりえない。GREY 述語を H へ移していない |
+
+## 7. 限界（証拠区分）
+- **L1**：正のコンダクタンスと独立源の網で c·G₁G₂ と恒等的に等しい応答はない → 追加のデータ因子ごとに能動素子が要る。[H]（検証者の多重アフィン証明の骨子＝[P] 候補、第二の査読なし）。設計書の同次性の論証には欠落。
+- **L2**：固定時刻で切り替わる LTI 網は不連続点の間で解析的 → 状態依存の事象時刻にはしきい値素子が要る。[L]。純粋な直列 R–L–C（S3）は (a)〜(e) で不成立。
+- **L3（訂正）**：レール→R→接地 C は厳密な積分器ではない。理想電流源→C は受動で厳密。能動素子が要るのはコンダクタンス符号化の率と仮想接地への全電荷転送。[L]/[E]。
+- **ラベル照合**：固定トポロジーの応答は素子値の連続（有理）関数なので、離散ラベル上の選択は構成でしか実現できない。[H]（論証、未査読）。
+- **比**：2信号の比は非線形能動除算器が要り、素子カタログの外。[H]。
+- **G(t) と C(T)**：バスは実時間の M([0,t])、Z は読出し。G(t) を物理的排出として主張しない。
+- **周期ごとに時計1つが必要か**：一般の下界は GAP [H]。
+- **ジュール熱∝電荷**：単一レール・同符号のパイロットだけで成立、全体では不成立。[E]＋骨子。
+
+## 8. NOT_RUN
+帯内 T；建物全体の固定 N_max テンプレート；OP ブロックを含む統合ネットリスト；L1 計数への反構成の構築とオラクル照合；ベンチマーク L、評価 E3・E6；建物全体コアの独立シミュレータ再実行；AGG 比・判定/参考/内訳単位；建物のエネルギー計器；SPICE・実機；Math7（SageMath・MATLAB を含む）；L1 証明骨子の第二査読；GREY 述語の回路化；冷媒の同一年重複（未対応）；文書 15 §5 の「共有抵抗の交差項」専用の反証試験（該当する試験は見つからない）；劣化・効率変化の原典オラクル（存在しない）。
+
+## 9. 主張すること／しないこと
+**主張する**：架空の合成建物の試験した有効域で、標準の素子法則（KCL/KVL・オーム・容量・スイッチ・比較器）と限定した制御から、原典と同じ C(T)・14段階・Z・M・事象回数を独立に生成するハイブリッド回路が存在し、その時間・集計層は原典の順序から自由に再編成されている（[E]、有限標本）。
+**主張しない**：新規性；速度向上（S 規模で回路 13〜21 秒、`refcalc` 0.6〜1.2 秒。パイロットは台帳の約1.3万倍遅い）；状態数の削減；実建物の排出精度；全入力に対する証明（[P] は存在しない）。本研究は架空係数の独立70単位モデルに対するもので、**J-CAT 原版 667 式の変換実験とは無関係**。サイクル1の EXP-1〜5 は保留のまま。
