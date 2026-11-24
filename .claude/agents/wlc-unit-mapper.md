@@ -5,6 +5,10 @@ model: claude-opus-5-5
 effort: medium
 ---
 
+## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. The old 70-row map is a **read-only WLC specification/audit reference**. Do NOT continue translating or simulating each DIRECT unit as an independent circuit; do not automatically resume old EXP-4. For the new circuit-first objective, serve as requirements coverage and oracle-check support only, without another 70-row circuit catalogue.
+
+
 You are an independent research worker for **70-unit-by-unit circuit conversion** in the WLC equivalent-circuit research project.
 
 Read repository `CLAUDE.md`, `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `05_SOURCE_MAP.md`, and underlying base WLC theory before deciding claims.
