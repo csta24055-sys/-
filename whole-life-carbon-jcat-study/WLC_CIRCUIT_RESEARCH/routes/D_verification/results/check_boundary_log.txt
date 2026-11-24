@@ -1,0 +1,122 @@
+A rows 490 mismatches 0
+E rows 83 mismatches 0
+{'t': '0', 'right': '100/1', 'left': '100/1', 'orig': '100/1'}
+{'t': '1', 'right': '104/1', 'left': '104/1', 'orig': '104/1'}
+{'t': '9.999999', 'right': '34999999/250000', 'left': '34999999/250000', 'orig': '34999999/250000'}
+{'t': '10', 'right': '160/1', 'left': '140/1', 'orig': '140/1'}
+{'t': '10.000001', 'right': '40000001/250000', 'left': '40000001/250000', 'orig': '40000001/250000'}
+{'t': '19.999999', 'right': '49999999/250000', 'left': '49999999/250000', 'orig': '49999999/250000'}
+{'t': '20', 'right': '255/1', 'left': '200/1', 'orig': '200/1'}
+{'t': '20.000001', 'right': '63750001/250000', 'left': '63750001/250000', 'orig': '63750001/250000'}
+{'t': '30', 'right': '315/1', 'left': '295/1', 'orig': '295/1'}
+{'t': '40', 'right': '410/1', 'left': '355/1', 'orig': '355/1'}
+{'t': '60', 'right': '565/1', 'left': '510/1', 'orig': '510/1'}
+{'t': '10.000000005', 'right': '8000000001/50000000', 'left': '8000000001/50000000', 'orig': '7000000001/50000000'}
+{'t': '10.00000002', 'right': '2000000001/12500000', 'left': '2000000001/12500000', 'orig': '2000000001/12500000'}
+{'t': '10.00000001', 'right': '4000000001/25000000', 'left': '4000000001/25000000', 'orig': '3500000001/25000000'}
+{'t': '10/(1-1e-9)', 'right': '159999999880/999999999', 'left': '159999999880/999999999', 'orig': '139999999900/999999999'}
+{
+"at_10": [
+"160/1",
+"140/1",
+"140/1"
+],
+"at_band_end_10/(1-eps)": [
+"159999999880/999999999",
+"159999999880/999999999",
+"139999999900/999999999"
+],
+"just_after_band_end": [
+"39999999970000000999999999/249999999750000000000000",
+"39999999970000000999999999/249999999750000000000000",
+"39999999970000000999999999/249999999750000000000000"
+],
+"finding": "right and orig differ on the CLOSED band [10, 10/(1-eps)] (orig excludes the event at T=10/(1-eps) itself because the rule is strict); architecture S1.2 and A claim A-3 write the half-open [nc, nc/(1-eps))"
+}
+{
+"0.1": {
+"n_events_to_60": 600,
+"fl(n*c)!=fl(exact n*c)": 217,
+"floor(t/c)!=n at exact event instants": 196,
+"event fl(n*c) NOT counted at t=fl(n*c exact) (right conv)": 217,
+"repeated-addition clock != fl(n*c)": 586,
+"examples_floor": [
+{
+"n": 3,
+"t": "0.3",
+"floor(t/c)": 2,
+"exact": 3
+},
+{
+"n": 6,
+"t": "0.6",
+"floor(t/c)": 5,
+"exact": 6
+},
+{
+"n": 7,
+"t": "0.7",
+"floor(t/c)": 6,
+"exact": 7
+},
+{
+"n": 12,
+"t": "1.2",
+"floor(t/c)": 11,
+"exact": 12
+}
+]
+},
+"0.7": {
+"n_events_to_60": 85,
+"fl(n*c)!=fl(exact n*c)": 37,
+"floor(t/c)!=n at exact event instants": 0,
+"event fl(n*c) NOT counted at t=fl(n*c exact) (right conv)": 0,
+"repeated-addition clock != fl(n*c)": 75,
+"examples_floor": []
+},
+"10/3": {
+"n_events_to_60": 18,
+"fl(n*c)!=fl(exact n*c)": 4,
+"floor(t/c)!=n at exact event instants": 3,
+"event fl(n*c) NOT counted at t=fl(n*c exact) (right conv)": 4,
+"repeated-addition clock != fl(n*c)": 8,
+"examples_floor": [
+{
+"n": 7,
+"t": "23.333333333333332",
+"floor(t/c)": 6,
+"exact": 7
+},
+{
+"n": 11,
+"t": "36.666666666666664",
+"floor(t/c)": 10,
+"exact": 11
+},
+{
+"n": 14,
+"t": "46.666666666666664",
+"floor(t/c)": 13,
+"exact": 14
+}
+]
+},
+"orig_knife_edge_10.00000001": {
+"float t*(1-eps)": "10.000000000000002",
+"float counts event": true,
+"exact value": "3500000001/25000000",
+"exact counts event": false
+},
+"knife_points_float_vs_exact": {
+"10.000000005": {
+"float_counts_10": false,
+"exact_counts_10": false
+},
+"10.00000002": {
+"float_counts_10": true,
+"exact_counts_10": true
+}
+}
+}
+['P1 row t=0: realization label says E-R1 but make_results.py:37 writes value=J.p1(t,pol) (closed form); no E circuit implements P1', '... 22 P1 rows affected']

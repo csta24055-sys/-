@@ -1,0 +1,200 @@
+{
+ "P1": {
+  "substitute": {
+   "events_at_20": [
+    [
+     "RENOV",
+     "50",
+     "renovation"
+    ]
+   ],
+   "duplicate_item_time_pairs": 0,
+   "G": {
+    "19.999999": "49999999/250000",
+    "20": "250/1",
+    "20.000001": "62500001/250000",
+    "30": "310/1",
+    "40": "405/1",
+    "60": "560/1"
+   },
+   "G_left_20": "200/1",
+   "G_orig_20": "200/1",
+   "G20_over_200_random_ledger_orders": [
+    "250/1"
+   ],
+   "next_AC_after_20": "30",
+   "next_PIPE_after_20": "40"
+  },
+  "additional": {
+   "events_at_20": [
+    [
+     "AC",
+     "20",
+     "base"
+    ],
+    [
+     "PIPE",
+     "35",
+     "base"
+    ],
+    [
+     "RENOV",
+     "50",
+     "renovation"
+    ]
+   ],
+   "duplicate_item_time_pairs": 0,
+   "G": {
+    "19.999999": "49999999/250000",
+    "20": "305/1",
+    "20.000001": "76250001/250000",
+    "30": "365/1",
+    "40": "460/1",
+    "60": "615/1"
+   },
+   "G_left_20": "200/1",
+   "G_orig_20": "200/1",
+   "G20_over_200_random_ledger_orders": [
+    "305/1"
+   ],
+   "next_AC_after_20": "30",
+   "next_PIPE_after_20": "40"
+  },
+  "naive_sequential_G20_by_order": {
+   "RENOV-AC-PIPE": "250/1",
+   "RENOV-PIPE-AC": "250/1",
+   "AC-RENOV-PIPE": "270/1",
+   "AC-PIPE-RENOV": "305/1",
+   "PIPE-RENOV-AC": "285/1",
+   "PIPE-AC-RENOV": "305/1"
+  },
+  "naive_distinct_values": [
+   "250/1",
+   "270/1",
+   "285/1",
+   "305/1"
+  ],
+  "P1prime_renovation_at_15_declared_by_D": {
+   "substitute": {
+    "events_le_60": [
+     [
+      "10",
+      "AC"
+     ],
+     [
+      "15",
+      "RENOV"
+     ],
+     [
+      "25",
+      "AC"
+     ],
+     [
+      "35",
+      "AC"
+     ],
+     [
+      "35",
+      "PIPE"
+     ],
+     [
+      "45",
+      "AC"
+     ],
+     [
+      "55",
+      "AC"
+     ],
+     [
+      "55",
+      "PIPE"
+     ]
+    ],
+    "G": {
+     "15": "230/1",
+     "20": "250/1",
+     "25": "290/1",
+     "35": "385/1",
+     "60": "560/1"
+    }
+   },
+   "additional": {
+    "events_le_60": [
+     [
+      "10",
+      "AC"
+     ],
+     [
+      "15",
+      "RENOV"
+     ],
+     [
+      "25",
+      "AC"
+     ],
+     [
+      "35",
+      "AC"
+     ],
+     [
+      "35",
+      "PIPE"
+     ],
+     [
+      "45",
+      "AC"
+     ],
+     [
+      "55",
+      "AC"
+     ],
+     [
+      "55",
+      "PIPE"
+     ]
+    ],
+    "G": {
+     "15": "230/1",
+     "20": "250/1",
+     "25": "290/1",
+     "35": "385/1",
+     "60": "560/1"
+    }
+   }
+  },
+  "P1prime_note": "At a non-coincident renovation time nothing is superseded, so substitute == additional; clocks restart at 15: AC 25,35,...; PIPE 35,55. This is a D-declared variant, not 07/architecture."
+ },
+ "P2": {
+  "declared": {
+   "9.5": "138/1",
+   "9.999999": "34999999/250000",
+   "10": "160/1",
+   "10.000001": "160000003/1000000",
+   "20": "245/1",
+   "30": "295/1",
+   "40": "380/1",
+   "60": "515/1"
+  },
+  "left": {
+   "10": "140/1",
+   "20": "190/1",
+   "10.000001": "160000003/1000000"
+  },
+  "alt_year_cell_rounding": {
+   "9.5": "275/2",
+   "10": "159/1",
+   "20": "244/1",
+   "30": "294/1",
+   "40": "379/1",
+   "60": "514/1"
+  },
+  "alt_switch_late": {
+   "10": "160/1",
+   "20": "255/1",
+   "30": "305/1",
+   "40": "390/1",
+   "60": "525/1"
+  },
+  "note": "Routes A and E report P2 = 160/245/295/380/515 at 10/20/30/40/60, equal to 'declared' and different from year-cell rounding (159/244/294/379/514) and late switch -> no silent rounding."
+ }
+}

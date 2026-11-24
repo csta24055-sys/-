@@ -1,0 +1,227 @@
+{
+ "merged_clocks": {
+  "P0_jump_sizes": {
+   "10": "20",
+   "20": "55",
+   "30": "20",
+   "40": "55",
+   "50": "20",
+   "60": "55"
+  },
+  "distinct_jump_sizes": [
+   "20",
+   "55"
+  ],
+  "general_argument": "A single clock with one charge A produces jumps of size A at every firing instant; P0 has jumps 20 (t=10) and 55 (t=20) -> no (c, A) works, for ANY c>0.",
+  "architecture_periods": {
+   "30": {
+    "n(10)": 0,
+    "n(20)": 0,
+    "A from t=10": "None",
+    "A from t=20": "None",
+    "feasible": false
+   },
+   "15": {
+    "n(10)": 0,
+    "n(20)": 1,
+    "A from t=10": "None",
+    "A from t=20": "75",
+    "feasible": false
+   },
+   "20/3": {
+    "n(10)": 1,
+    "n(20)": 3,
+    "A from t=10": "20",
+    "A from t=20": "25",
+    "feasible": false
+   }
+  }
+ },
+ "px_fixed_schedule": {
+  "Px_event_phases_mod_20_up_to_200": [
+   "0",
+   "7",
+   "17"
+  ],
+  "periodic_pattern_reproduces_Px_jumps_to_200": true,
+  "early_reset_at_s": {
+   "3": {
+    "tail_phases(mod20,amount)": [
+     [
+      "0",
+      "35"
+     ],
+     [
+      "3",
+      "20"
+     ],
+     [
+      "13",
+      "20"
+     ]
+    ],
+    "transient_events_not_in_periodic_pattern": [],
+    "single_clock_comparators_needed": 3
+   },
+   "7": {
+    "tail_phases(mod20,amount)": [
+     [
+      "0",
+      "35"
+     ],
+     [
+      "7",
+      "20"
+     ],
+     [
+      "17",
+      "20"
+     ]
+    ],
+    "transient_events_not_in_periodic_pattern": [],
+    "single_clock_comparators_needed": 3
+   },
+   "19/2": {
+    "tail_phases(mod20,amount)": [
+     [
+      "0",
+      "35"
+     ],
+     [
+      "19/2",
+      "20"
+     ],
+     [
+      "39/2",
+      "20"
+     ]
+    ],
+    "transient_events_not_in_periodic_pattern": [],
+    "single_clock_comparators_needed": 3
+   },
+   "13": {
+    "tail_phases(mod20,amount)": [
+     [
+      "0",
+      "35"
+     ],
+     [
+      "3",
+      "20"
+     ],
+     [
+      "13",
+      "20"
+     ]
+    ],
+    "transient_events_not_in_periodic_pattern": [
+     "10"
+    ],
+    "single_clock_comparators_needed": 4
+   },
+   "37/2": {
+    "tail_phases(mod20,amount)": [
+     [
+      "0",
+      "35"
+     ],
+     [
+      "17/2",
+      "20"
+     ],
+     [
+      "37/2",
+      "20"
+     ]
+    ],
+    "transient_events_not_in_periodic_pattern": [
+     "10"
+    ],
+    "single_clock_comparators_needed": 4
+   }
+  }
+ },
+ "online_reset": {
+  "hist(reset@7) at 7 -> 20 (13y)": "107",
+  "nominal at 7 -> 20 (13y)": "127",
+  "hist(reset@7) at 7 -> 18 (11y)": "64",
+  "nominal at 10 -> 21 (11y)": "99",
+  "hist 13y vs nominal@10 13y": [
+   "107",
+   "107"
+  ],
+  "2D_family_states_sampled": 2346,
+  "2D_family_future_collisions": 0,
+  "lower_bound_status": "[H] proof draft (claims.md D-9): under continuity of the state in (s,t) on an open set without internal events, an injective continuous map R^2 -> R^d needs d>=2 (invariance of domain). Sampled family: all futures distinct."
+ },
+ "online_two_continuous_states": {
+  "exact_vs_oracle_for_reset_times": {
+   "3": true,
+   "7": true,
+   "19/2": true,
+   "13": true,
+   "37/2": true,
+   "31": true
+  },
+  "state_tuple": [
+   2,
+   2,
+   2,
+   0
+  ],
+  "note": "continuous dimension 2 is achievable (accumulator replaced by counters); with the D-9 lower bound (>=2, [H]) the continuous minimum for the online class is 2, not 3. Tuples trade continuous states for unbounded counters, so a 4-tuple is not a total order of complexity."
+ },
+ "single_accumulator": {
+  "P0": {
+   "exact_on_contract_points+7,17,27": true,
+   "table_entries_H60(impulse instants + rate changes)": 6,
+   "state_tuple": [
+    1,
+    1,
+    1,
+    6
+   ]
+  },
+  "P1-substitute": {
+   "exact_on_contract_points+7,17,27": true,
+   "table_entries_H60(impulse instants + rate changes)": 6,
+   "state_tuple": [
+    1,
+    1,
+    1,
+    6
+   ]
+  },
+  "P1-additional": {
+   "exact_on_contract_points+7,17,27": true,
+   "table_entries_H60(impulse instants + rate changes)": 6,
+   "state_tuple": [
+    1,
+    1,
+    1,
+    6
+   ]
+  },
+  "P2": {
+   "exact_on_contract_points+7,17,27": true,
+   "table_entries_H60(impulse instants + rate changes)": 7,
+   "state_tuple": [
+    1,
+    1,
+    1,
+    7
+   ]
+  },
+  "Px": {
+   "exact_on_contract_points+7,17,27": true,
+   "table_entries_H60(impulse instants + rate changes)": 9,
+   "state_tuple": [
+    1,
+    1,
+    1,
+    9
+   ]
+  },
+  "note": "A single accumulator suffices whenever the schedule (which instants, which amounts, which rates) is supplied from outside; the clocks/comparators only GENERATE the schedule. The table grows linearly with horizon H, so this is a trade of continuous state for external memory, not a reduction."
+ }
+}

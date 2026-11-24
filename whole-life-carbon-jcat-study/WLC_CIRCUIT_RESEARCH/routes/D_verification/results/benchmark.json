@@ -1,0 +1,327 @@
+{
+ "env": {
+  "python": "3.13.18",
+  "implementation": "CPython",
+  "machine": "x86_64",
+  "platform": "Linux-6.18.44-fc-v819-x86_64-with-glibc2.39",
+  "seed": 20261124,
+  "n_points": 100011,
+  "point_set": "11 contract points + 1e5 uniform k/1e6 in [0,60]"
+ },
+ "correctness": {
+  "a_frac==oracle": true,
+  "b_frac==oracle": true,
+  "c_query==oracle": true,
+  "c_sweep==oracle": true,
+  "a_float_max_abs_err": 5.684341886080802e-14,
+  "b_float_max_abs_err": 5.684341886080802e-14
+ },
+ "fixed_step_errors": {
+  "0.01": {
+   "max_abs_err_all": 55.000000000007276,
+   "n_points_err_gt_1kg": 75,
+   "max_abs_err_excluding_err_gt_1kg": 8.86188900039997e-11,
+   "contract_points": {
+    "0": {
+     "value": 100.0,
+     "exact": 100.0,
+     "err": 0.0
+    },
+    "1": {
+     "value": 104.00000000000061,
+     "exact": 104.0,
+     "err": 6.110667527536862e-13
+    },
+    "9.999999": {
+     "value": 139.99999600000268,
+     "exact": 139.999996,
+     "err": 2.6716406864579767e-12
+    },
+    "10": {
+     "value": 140.00000000000267,
+     "exact": 160.0,
+     "err": 19.99999999999733
+    },
+    "10.000001": {
+     "value": 140.00000400000266,
+     "exact": 160.000004,
+     "err": 19.99999999999733
+    },
+    "19.999999": {
+     "value": 199.99999599999273,
+     "exact": 199.999996,
+     "err": 7.275957614183426e-12
+    },
+    "20": {
+     "value": 199.99999999999272,
+     "exact": 255.0,
+     "err": 55.000000000007276
+    },
+    "20.000001": {
+     "value": 235.0000039999927,
+     "exact": 255.000004,
+     "err": 20.000000000007276
+    },
+    "30": {
+     "value": 295.0000000000062,
+     "exact": 315.0,
+     "err": 19.999999999993804
+    },
+    "40": {
+     "value": 355.0000000000317,
+     "exact": 410.0,
+     "err": 54.99999999996828
+    },
+    "60": {
+     "value": 545.0000000000887,
+     "exact": 565.0,
+     "err": 19.999999999911324
+    }
+   },
+   "boundary_note": "an event is detected at the first step end with clock>=period: late by <dt (or one step early/late from float accumulation); queries inside that lag are off by the full event charge (20 or 55 kg)"
+  },
+  "0.001": {
+   "max_abs_err_all": 55.0000000000928,
+   "n_points_err_gt_1kg": 9,
+   "max_abs_err_excluding_err_gt_1kg": 8.664073902764358e-10,
+   "contract_points": {
+    "0": {
+     "value": 100.0,
+     "exact": 100.0,
+     "err": 0.0
+    },
+    "1": {
+     "value": 104.00000000000487,
+     "exact": 104.0,
+     "err": 4.874323167314287e-12
+    },
+    "9.999999": {
+     "value": 139.99999600000666,
+     "exact": 139.999996,
+     "err": 6.650680006714538e-12
+    },
+    "10": {
+     "value": 140.00000000000665,
+     "exact": 160.0,
+     "err": 19.99999999999335
+    },
+    "10.000001": {
+     "value": 140.00000400000667,
+     "exact": 160.000004,
+     "err": 19.99999999999332
+    },
+    "19.999999": {
+     "value": 199.99999599990718,
+     "exact": 199.999996,
+     "err": 9.282530299969949e-11
+    },
+    "20": {
+     "value": 199.9999999999072,
+     "exact": 255.0,
+     "err": 55.0000000000928
+    },
+    "20.000001": {
+     "value": 235.0000039999072,
+     "exact": 255.000004,
+     "err": 20.000000000092797
+    },
+    "30": {
+     "value": 295.0000000000422,
+     "exact": 315.0,
+     "err": 19.999999999957822
+    },
+    "40": {
+     "value": 390.000000000298,
+     "exact": 410.0,
+     "err": 19.999999999702027
+    },
+    "60": {
+     "value": 545.0000000008664,
+     "exact": 565.0,
+     "err": 19.999999999133593
+    }
+   },
+   "boundary_note": "an event is detected at the first step end with clock>=period: late by <dt (or one step early/late from float accumulation); queries inside that lag are off by the full event charge (20 or 55 kg)"
+  },
+  "0.0001": {
+   "max_abs_err_all": 54.999999998205965,
+   "n_points_err_gt_1kg": 7,
+   "max_abs_err_excluding_err_gt_1kg": 3.499394551909063e-09,
+   "contract_points": {
+    "0": {
+     "value": 100.0,
+     "exact": 100.0,
+     "err": 0.0
+    },
+    "1": {
+     "value": 103.99999999999105,
+     "exact": 104.0,
+     "err": 8.952838470577262e-12
+    },
+    "9.999999": {
+     "value": 139.99999600037296,
+     "exact": 139.999996,
+     "err": 3.729496711457614e-10
+    },
+    "10": {
+     "value": 140.00000000037298,
+     "exact": 160.0,
+     "err": 19.999999999627022
+    },
+    "10.000001": {
+     "value": 140.00000400037297,
+     "exact": 160.000004,
+     "err": 19.999999999627022
+    },
+    "19.999999": {
+     "value": 199.99999600179405,
+     "exact": 199.999996,
+     "err": 1.7940351426659618e-09
+    },
+    "20": {
+     "value": 200.00000000179404,
+     "exact": 255.0,
+     "err": 54.999999998205965
+    },
+    "20.000001": {
+     "value": 200.00000400179405,
+     "exact": 255.000004,
+     "err": 54.999999998205936
+    },
+    "30": {
+     "value": 295.0000000032151,
+     "exact": 315.0,
+     "err": 19.99999999678488
+    },
+    "40": {
+     "value": 355.0000000034994,
+     "exact": 410.0,
+     "err": 54.999999996500605
+    },
+    "60": {
+     "value": 510.0000000034994,
+     "exact": 565.0,
+     "err": 54.999999996500605
+    }
+   },
+   "boundary_note": "an event is detected at the first step end with clock>=period: late by <dt (or one step early/late from float accumulation); queries inside that lag are off by the full event charge (20 or 55 kg)"
+  }
+ },
+ "op_counts_per_query": {
+  "a_closed_form": 9,
+  "b_knots_bisect": 7,
+  "c_hybrid_per_query": 41.45,
+  "c_hybrid_mean_segments_per_query": 3.495,
+  "c_hybrid_sorted_sweep(total ops / n)": 22.61,
+  "d_fixed_step_dt=0.01_sweep(total ops / n)": 22.15,
+  "d_fixed_step_dt=0.01_per_query(ops, t=60)": 54000,
+  "d_fixed_step_dt=0.001_sweep(total ops / n)": 27.01,
+  "d_fixed_step_dt=0.001_per_query(ops, t=60)": 540000,
+  "d_fixed_step_dt=0.0001_sweep(total ops / n)": 75.6,
+  "d_fixed_step_dt=0.0001_per_query(ops, t=60)": 5400000
+ },
+ "timings": {
+  "a_closed_form_Fraction": {
+   "median_s": 0.5166376380002475,
+   "min_s": 0.46789966899996216,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 11995504,
+   "per_point_us": 5.165808141106954
+  },
+  "a_closed_form_float": {
+   "median_s": 0.01505961600014416,
+   "min_s": 0.010997545999998692,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 3198888,
+   "per_point_us": 0.15057959624585454
+  },
+  "b_knots_bisect_Fraction": {
+   "median_s": 0.3489138670001921,
+   "min_s": 0.3156456659999094,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 11995504,
+   "per_point_us": 3.4887549069621553
+  },
+  "b_knots_bisect_float": {
+   "median_s": 0.010892166000303405,
+   "min_s": 0.010778816000311053,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 3198864,
+   "per_point_us": 0.10890967993824084
+  },
+  "c_hybrid_per_query_Fraction": {
+   "median_s": 2.0416571230002774,
+   "min_s": 1.9949187700003677,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 11995792,
+   "per_point_us": 20.414325654180814
+  },
+  "c_hybrid_sorted_sweep_Fraction": {
+   "median_s": 1.2398522559997218,
+   "min_s": 1.2112722780002514,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 15987480,
+   "per_point_us": 12.397158872521242
+  },
+  "oracle_d_ledger_sweep_Fraction(reference, not a contender)": {
+   "median_s": 1.0455660760003411,
+   "min_s": 0.9195962440003314,
+   "reps": 3,
+   "tracemalloc_peak_bytes": 1297184,
+   "per_point_us": 104.55660760003411
+  },
+  "d_fixed_step_float_dt=0.01_sorted_sweep": {
+   "median_s": 0.042872649999935675,
+   "min_s": 0.04152978799993434,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 7190344,
+   "per_point_us": 0.4286793452713769
+  },
+  "d_fixed_step_float_dt=0.001_sorted_sweep": {
+   "median_s": 0.05493023999997604,
+   "min_s": 0.05341371100030301,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 7190344,
+   "per_point_us": 0.5492419833815885
+  },
+  "d_fixed_step_float_dt=0.0001_sorted_sweep": {
+   "median_s": 0.12376476200006437,
+   "min_s": 0.10577778300012142,
+   "reps": 5,
+   "tracemalloc_peak_bytes": 7190344,
+   "per_point_us": 1.2375114937363325
+  }
+ },
+ "states": {
+  "a_closed_form": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "b_knots_bisect_H60": [
+   0,
+   0,
+   0,
+   6
+  ],
+  "c_hybrid": [
+   3,
+   0,
+   2,
+   0
+  ],
+  "d_fixed_step": [
+   3,
+   0,
+   2,
+   0
+  ],
+  "note": "(continuous, discrete/counters, comparator thresholds, external table entries); simulator time not counted; closed form keeps no state but needs floor; knots table grows with horizon H"
+ },
+ "verdict": {
+  "closed_form_Fraction_vs_best_hybrid_speed_ratio": 2.399848878217285,
+  "knots_Fraction_vs_closed_form_Fraction": 0.6753551064354025,
+  "circuit_speed_gain": false
+ }
+}

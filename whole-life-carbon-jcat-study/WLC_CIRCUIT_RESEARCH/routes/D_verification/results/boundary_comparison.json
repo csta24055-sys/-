@@ -1,0 +1,481 @@
+{
+ "boundary_table_P0": [
+  {
+   "t": "0",
+   "right": "100/1",
+   "left": "100/1",
+   "orig": "100/1"
+  },
+  {
+   "t": "1",
+   "right": "104/1",
+   "left": "104/1",
+   "orig": "104/1"
+  },
+  {
+   "t": "9.999999",
+   "right": "34999999/250000",
+   "left": "34999999/250000",
+   "orig": "34999999/250000"
+  },
+  {
+   "t": "10",
+   "right": "160/1",
+   "left": "140/1",
+   "orig": "140/1"
+  },
+  {
+   "t": "10.000001",
+   "right": "40000001/250000",
+   "left": "40000001/250000",
+   "orig": "40000001/250000"
+  },
+  {
+   "t": "19.999999",
+   "right": "49999999/250000",
+   "left": "49999999/250000",
+   "orig": "49999999/250000"
+  },
+  {
+   "t": "20",
+   "right": "255/1",
+   "left": "200/1",
+   "orig": "200/1"
+  },
+  {
+   "t": "20.000001",
+   "right": "63750001/250000",
+   "left": "63750001/250000",
+   "orig": "63750001/250000"
+  },
+  {
+   "t": "30",
+   "right": "315/1",
+   "left": "295/1",
+   "orig": "295/1"
+  },
+  {
+   "t": "40",
+   "right": "410/1",
+   "left": "355/1",
+   "orig": "355/1"
+  },
+  {
+   "t": "60",
+   "right": "565/1",
+   "left": "510/1",
+   "orig": "510/1"
+  },
+  {
+   "t": "10.000000005",
+   "right": "8000000001/50000000",
+   "left": "8000000001/50000000",
+   "orig": "7000000001/50000000"
+  },
+  {
+   "t": "10.00000002",
+   "right": "2000000001/12500000",
+   "left": "2000000001/12500000",
+   "orig": "2000000001/12500000"
+  },
+  {
+   "t": "10.00000001",
+   "right": "4000000001/25000000",
+   "left": "4000000001/25000000",
+   "orig": "3500000001/25000000"
+  },
+  {
+   "t": "10/(1-1e-9)",
+   "right": "159999999880/999999999",
+   "left": "159999999880/999999999",
+   "orig": "139999999900/999999999"
+  }
+ ],
+ "exact_limits_P0": [
+  {
+   "a": "10",
+   "conv": "right",
+   "left_limit": "140/1",
+   "value": "160/1",
+   "right_limit": "160/1"
+  },
+  {
+   "a": "10",
+   "conv": "left",
+   "left_limit": "140/1",
+   "value": "140/1",
+   "right_limit": "160/1"
+  },
+  {
+   "a": "10",
+   "conv": "orig",
+   "left_limit": "140/1",
+   "value": "140/1",
+   "right_limit": "140/1"
+  },
+  {
+   "a": "10/(1-eps)",
+   "conv": "orig",
+   "left_limit": "139999999900/999999999",
+   "value": "139999999900/999999999",
+   "right_limit": "159999999880/999999999"
+  },
+  {
+   "a": "20",
+   "conv": "right",
+   "left_limit": "200/1",
+   "value": "255/1",
+   "right_limit": "255/1"
+  },
+  {
+   "a": "20",
+   "conv": "left",
+   "left_limit": "200/1",
+   "value": "200/1",
+   "right_limit": "255/1"
+  },
+  {
+   "a": "20",
+   "conv": "orig",
+   "left_limit": "200/1",
+   "value": "200/1",
+   "right_limit": "200/1"
+  },
+  {
+   "a": "20/(1-eps)",
+   "conv": "orig",
+   "left_limit": "199999999880/999999999",
+   "value": "199999999880/999999999",
+   "right_limit": "254999999825/999999999"
+  },
+  {
+   "a": "30",
+   "conv": "right",
+   "left_limit": "295/1",
+   "value": "315/1",
+   "right_limit": "315/1"
+  },
+  {
+   "a": "30",
+   "conv": "left",
+   "left_limit": "295/1",
+   "value": "295/1",
+   "right_limit": "315/1"
+  },
+  {
+   "a": "30",
+   "conv": "orig",
+   "left_limit": "295/1",
+   "value": "295/1",
+   "right_limit": "295/1"
+  },
+  {
+   "a": "30/(1-eps)",
+   "conv": "orig",
+   "left_limit": "98333333275/333333333",
+   "value": "98333333275/333333333",
+   "right_limit": "104999999935/333333333"
+  },
+  {
+   "a": "40",
+   "conv": "right",
+   "left_limit": "355/1",
+   "value": "410/1",
+   "right_limit": "410/1"
+  },
+  {
+   "a": "40",
+   "conv": "left",
+   "left_limit": "355/1",
+   "value": "355/1",
+   "right_limit": "410/1"
+  },
+  {
+   "a": "40",
+   "conv": "orig",
+   "left_limit": "355/1",
+   "value": "355/1",
+   "right_limit": "355/1"
+  },
+  {
+   "a": "40/(1-eps)",
+   "conv": "orig",
+   "left_limit": "354999999805/999999999",
+   "value": "354999999805/999999999",
+   "right_limit": "409999999750/999999999"
+  },
+  {
+   "a": "60",
+   "conv": "right",
+   "left_limit": "510/1",
+   "value": "565/1",
+   "right_limit": "565/1"
+  },
+  {
+   "a": "60",
+   "conv": "left",
+   "left_limit": "510/1",
+   "value": "510/1",
+   "right_limit": "565/1"
+  },
+  {
+   "a": "60",
+   "conv": "orig",
+   "left_limit": "510/1",
+   "value": "510/1",
+   "right_limit": "510/1"
+  },
+  {
+   "a": "60/(1-eps)",
+   "conv": "orig",
+   "left_limit": "169999999910/333333333",
+   "value": "169999999910/333333333",
+   "right_limit": "188333333225/333333333"
+  }
+ ],
+ "orig_band": {
+  "at_10": [
+   "160/1",
+   "140/1",
+   "140/1"
+  ],
+  "at_band_end_10/(1-eps)": [
+   "159999999880/999999999",
+   "159999999880/999999999",
+   "139999999900/999999999"
+  ],
+  "just_after_band_end": [
+   "39999999970000000999999999/249999999750000000000000",
+   "39999999970000000999999999/249999999750000000000000",
+   "39999999970000000999999999/249999999750000000000000"
+  ],
+  "finding": "right and orig differ on the CLOSED band [10, 10/(1-eps)] (orig excludes the event at T=10/(1-eps) itself because the rule is strict); architecture S1.2 and A claim A-3 write the half-open [nc, nc/(1-eps))"
+ },
+ "route_A_comparison": {
+  "file": "routes/A_waveform/results/points.json",
+  "rows_compared": 490,
+  "mismatches": [],
+  "rows_by_case_realization_conv": {
+   "P0|oracle|right": 25,
+   "P0|R1|right": 25,
+   "P0|R2|right": 25,
+   "P0|R3|right": 25,
+   "P0|R3k|right": 25,
+   "P0|oracle|left": 25,
+   "P0|R1|left": 25,
+   "P0|R2|left": 25,
+   "P0|R3|left": 25,
+   "P0|R3k|left": 25,
+   "P0|oracle|orig": 25,
+   "P0|R1|orig": 25,
+   "P0|R2|orig": 25,
+   "P0|R3|orig": 25,
+   "P1-substitute|R1|right": 14,
+   "P1-additional|R1|right": 14,
+   "P2|R1|right": 14,
+   "Px|R1|right": 14,
+   "Px|R3i-single-clock|right": 14,
+   "P1-substitute|R1|left": 14,
+   "P1-additional|R1|left": 14,
+   "P2|R1|left": 14,
+   "Px|R1|left": 14,
+   "Px|R3i-single-clock|left": 14
+  }
+ },
+ "route_E_comparison": {
+  "file": "routes/E_resistor_energy/results/points.json",
+  "rows_compared": 83,
+  "mismatches": [],
+  "ac_rows": [
+   {
+    "t": "0",
+    "E_value_decimal": "100.0000000000000000000000",
+    "D": "100.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "1",
+    "E_value_decimal": "104.0000000000000000000000",
+    "D": "104.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "9.999999",
+    "E_value_decimal": "139.9999999999999998947242",
+    "D": "139.9999999999999998947242",
+    "E_dev": "4.00000e-6",
+    "D_dev": "4.0e-6",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "10",
+    "E_value_decimal": "160.0000000000000000000000",
+    "D": "160.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "10.000001",
+    "E_value_decimal": "160.0000000000000001052758",
+    "D": "160.0000000000000001052758",
+    "E_dev": "-4.00000e-6",
+    "D_dev": "-4.0e-6",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "19.999999",
+    "E_value_decimal": "199.9999999999999998947242",
+    "D": "199.9999999999999998947242",
+    "E_dev": "4.00000e-6",
+    "D_dev": "4.0e-6",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "20",
+    "E_value_decimal": "255.0000000000000000000000",
+    "D": "255.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "20.000001",
+    "E_value_decimal": "255.0000000000000001052758",
+    "D": "255.0000000000000001052758",
+    "E_dev": "-4.00000e-6",
+    "D_dev": "-4.0e-6",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "30",
+    "E_value_decimal": "315.0000000000000000000000",
+    "D": "315.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "40",
+    "E_value_decimal": "410.0000000000000000000000",
+    "D": "410.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   },
+   {
+    "t": "60",
+    "E_value_decimal": "565.0000000000000000000000",
+    "D": "565.0",
+    "E_dev": "0",
+    "D_dev": "0.0",
+    "decimal_agree_1e-20": true,
+    "exactness_agree": true
+   }
+  ],
+  "provenance_notes": [
+   "P1 row t=0: realization label says E-R1 but make_results.py:37 writes value=J.p1(t,pol) (closed form); no E circuit implements P1",
+   "... 22 P1 rows affected"
+  ]
+ },
+ "float_slip_through": {
+  "0.1": {
+   "n_events_to_60": 600,
+   "fl(n*c)!=fl(exact n*c)": 217,
+   "floor(t/c)!=n at exact event instants": 196,
+   "event fl(n*c) NOT counted at t=fl(n*c exact) (right conv)": 217,
+   "repeated-addition clock != fl(n*c)": 586,
+   "examples_floor": [
+    {
+     "n": 3,
+     "t": "0.3",
+     "floor(t/c)": 2,
+     "exact": 3
+    },
+    {
+     "n": 6,
+     "t": "0.6",
+     "floor(t/c)": 5,
+     "exact": 6
+    },
+    {
+     "n": 7,
+     "t": "0.7",
+     "floor(t/c)": 6,
+     "exact": 7
+    },
+    {
+     "n": 12,
+     "t": "1.2",
+     "floor(t/c)": 11,
+     "exact": 12
+    }
+   ]
+  },
+  "0.7": {
+   "n_events_to_60": 85,
+   "fl(n*c)!=fl(exact n*c)": 37,
+   "floor(t/c)!=n at exact event instants": 0,
+   "event fl(n*c) NOT counted at t=fl(n*c exact) (right conv)": 0,
+   "repeated-addition clock != fl(n*c)": 75,
+   "examples_floor": []
+  },
+  "10/3": {
+   "n_events_to_60": 18,
+   "fl(n*c)!=fl(exact n*c)": 4,
+   "floor(t/c)!=n at exact event instants": 3,
+   "event fl(n*c) NOT counted at t=fl(n*c exact) (right conv)": 4,
+   "repeated-addition clock != fl(n*c)": 8,
+   "examples_floor": [
+    {
+     "n": 7,
+     "t": "23.333333333333332",
+     "floor(t/c)": 6,
+     "exact": 7
+    },
+    {
+     "n": 11,
+     "t": "36.666666666666664",
+     "floor(t/c)": 10,
+     "exact": 11
+    },
+    {
+     "n": 14,
+     "t": "46.666666666666664",
+     "floor(t/c)": 13,
+     "exact": 14
+    }
+   ]
+  },
+  "orig_knife_edge_10.00000001": {
+   "float t*(1-eps)": "10.000000000000002",
+   "float counts event": true,
+   "exact value": "3500000001/25000000",
+   "exact counts event": false
+  },
+  "knife_points_float_vs_exact": {
+   "10.000000005": {
+    "float_counts_10": false,
+    "exact_counts_10": false
+   },
+   "10.00000002": {
+    "float_counts_10": true,
+    "exact_counts_10": true
+   }
+  }
+ }
+}
