@@ -1,0 +1,270 @@
+{
+ "phi": {
+  "n_points": 20011,
+  "rows": {
+   "(a) closed form Fraction": {
+    "us_per_point": 4.410563490079483,
+    "n_points": 20011,
+    "tracemalloc_peak_bytes": 2412976,
+    "state_tuple": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "(a') closed form float": {
+    "us_per_point": 0.12061711058451871,
+    "n_points": 20011,
+    "tracemalloc_peak_bytes": 650920,
+    "max_abs_err_kg": 5.684341886080802e-14
+   },
+   "(b) knots+bisect Fraction": {
+    "us_per_point": 3.0972442656581873,
+    "n_points": 20011,
+    "tracemalloc_peak_bytes": 2412976,
+    "state_tuple": [
+     0,
+     0,
+     0,
+     7
+    ]
+   },
+   "(c) route D ledger oracle per query": {
+    "us_per_point": 91.15450599983888,
+    "n_points": 2000,
+    "tracemalloc_peak_bytes": 268608
+   },
+   "(d) hybrid charge, one sorted sweep": {
+    "us_per_point": 18.873320673633796,
+    "n_points": 20011,
+    "tracemalloc_peak_bytes": 4436620,
+    "exact_vs_closed": true,
+    "ops": {
+     "segments": 20009,
+     "events": 6,
+     "fired_items": 9
+    },
+    "state_tuple": [
+     3,
+     0,
+     2,
+     0
+    ]
+   },
+   "(d') hybrid joule, one sorted sweep": {
+    "us_per_point": 21.781040477754967,
+    "n_points": 20011,
+    "tracemalloc_peak_bytes": 5747388,
+    "exact_vs_closed": true,
+    "ops": {
+     "segments": 20009,
+     "events": 6,
+     "fired_items": 9
+    },
+    "state_tuple": [
+     4,
+     0,
+     2,
+     0
+    ]
+   },
+   "(e) hybrid charge, per query from t=0": {
+    "us_per_point": 54.702778500086424,
+    "n_points": 2000,
+    "tracemalloc_peak_bytes": 257752,
+    "ops_at_t=59": {
+     "segments": 6,
+     "events": 5,
+     "fired_items": 7
+    }
+   }
+  }
+ },
+ "psi": {
+  "scenario": "SYN-RC-hospital-M-T30-seed571520556",
+  "n_T": 200,
+  "rows": {
+   "(p) composed circuit, one sorted sweep": {
+    "ms_per_T": 5.097533315001783,
+    "tracemalloc_peak_bytes": 6993948,
+    "netlists": {
+     "B3-01": {
+      "netlist": {
+       "sweep": 1,
+       "src": 4677,
+       "gain": 2397,
+       "cmp": 2396,
+       "sum": 129,
+       "clip": 126,
+       "gate": 2396,
+       "int": 1,
+       "sum_inputs": 4806,
+       "table_entries": 0
+      },
+      "pieces_by_kind": {
+       "density": 2156,
+       "gcell": 10013,
+       "const": 0,
+       "atom": 0,
+       "cell": 0
+      },
+      "evals": 4849200
+     },
+     "B4-02": {
+      "netlist": {
+       "sweep": 1,
+       "src": 5211,
+       "gain": 1,
+       "cmp": 2771,
+       "sum": 293,
+       "gate": 2771,
+       "sum_inputs": 11920,
+       "table_entries": 0
+      },
+      "pieces_by_kind": {
+       "atom": 11985,
+       "const": 0,
+       "gcell": 0,
+       "cell": 0,
+       "density": 0
+      },
+      "evals": 2209600
+     },
+     "B5-01": {
+      "netlist": {
+       "sweep": 1,
+       "src": 1,
+       "sum_inputs": 0,
+       "table_entries": 0
+      },
+      "pieces_by_kind": {
+       "const": 0,
+       "atom": 0,
+       "gcell": 0,
+       "cell": 0,
+       "density": 0
+      },
+      "evals": 400
+     },
+     "B6-03": {
+      "netlist": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "pieces_by_kind": {
+       "cell": 130,
+       "const": 0,
+       "atom": 0,
+       "gcell": 0,
+       "density": 0
+      },
+      "evals": 104400
+     },
+     "B7-04": {
+      "netlist": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "pieces_by_kind": {
+       "cell": 130,
+       "const": 0,
+       "atom": 0,
+       "gcell": 0,
+       "density": 0
+      },
+      "evals": 104400
+     },
+     "EL->B2-01": {
+      "netlist": {
+       "sweep": 1,
+       "src": 130,
+       "sum": 131,
+       "clip": 130,
+       "gain": 130,
+       "sum_inputs": 390,
+       "table_entries": 0
+      },
+      "pieces_by_kind": {
+       "cell": 130,
+       "const": 0,
+       "atom": 0,
+       "gcell": 0,
+       "density": 0
+      },
+      "evals": 104400
+     },
+     "refrigerant": {
+      "primitives": {
+       "cmp": 371,
+       "sh": 120,
+       "int": 40,
+       "gain": 200,
+       "gate": 80,
+       "sum": 123,
+       "src": 160,
+       "counter": 41
+      },
+      "state_tuple": [
+       160,
+       81,
+       371,
+       482
+      ],
+      "unexpected": []
+     }
+    }
+   },
+   "(p1) composed circuit, fresh build+sweep per T": {
+    "ms_per_T": 443.80545169997276,
+    "n_T": 10
+   },
+   "(q) msp unified.System.at per T (built once)": {
+    "ms_per_T": 17.731915514996217,
+    "tracemalloc_peak_bytes": 4793213
+   },
+   "(r) refcalc per T": {
+    "ms_per_T": 376.89988639995136,
+    "n_T": 10
+   },
+   "(s) canon KF exact knot form per T (built once)": {
+    "ms_per_T": 0.0070267350020003505,
+    "build_seconds": 0.748396154999682,
+    "n_terms": 30706
+   },
+   "agreement": {
+    "max_rel_composed_vs_msp": 5.478153211134844e-16,
+    "max_rel_composed_vs_canon": 2.1229381083702772e-16
+   }
+  }
+ },
+ "meta": {
+  "head": "2ae99ce54cf13dc66d0eb16835beaf2cc20855a0",
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "inputs_sha256": {
+   "routes/B_formula_network/code/grammar.py": "18d6f0cef4768dd154a6a6814b2f2416a7f70a04d0734f93dc83442c14e41817",
+   "routes/D_verification/code/oracle_d.py": "a256a5b8b862850b257861a270c1a4a80465d2489544c6da7ff7e83fc2521a37",
+   "routes/A_waveform/results/points.json": "d6e494c1d48bcbe407849aac4ef03db8f8cdc5d1f166141bfdfa709fb9792a23",
+   "../WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3"
+  },
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  },
+  "seconds": 92.74212788500063,
+  "reps": 5,
+  "pycache_after": []
+ }
+}

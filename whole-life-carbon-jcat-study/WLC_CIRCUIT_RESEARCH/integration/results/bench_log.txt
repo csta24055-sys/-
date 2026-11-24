@@ -1,0 +1,13 @@
+phi (a) closed form Fraction {'us_per_point': 4.410563490079483, 'n_points': 20011, 'tracemalloc_peak_bytes': 2412976, 'state_tuple': (0, 0, 0, 0)}
+phi (a') closed form float {'us_per_point': 0.12061711058451871, 'n_points': 20011, 'tracemalloc_peak_bytes': 650920, 'max_abs_err_kg': 5.684341886080802e-14}
+phi (b) knots+bisect Fraction {'us_per_point': 3.0972442656581873, 'n_points': 20011, 'tracemalloc_peak_bytes': 2412976, 'state_tuple': (0, 0, 0, 7)}
+phi (c) route D ledger oracle per query {'us_per_point': 91.15450599983888, 'n_points': 2000, 'tracemalloc_peak_bytes': 268608}
+phi (d) hybrid charge, one sorted sweep {'us_per_point': 18.873320673633796, 'n_points': 20011, 'tracemalloc_peak_bytes': 4436620, 'exact_vs_closed': True, 'ops': {'segments': 20009, 'events': 6, 'fired_items': 9}, 'state_tuple': (3, 0, 2, 0)}
+phi (d') hybrid joule, one sorted sweep {'us_per_point': 21.781040477754967, 'n_points': 20011, 'tracemalloc_peak_bytes': 5747388, 'exact_vs_closed': True, 'ops': {'segments': 20009, 'events': 6, 'fired_items': 9}, 'state_tuple': (4, 0, 2, 0)}
+phi (e) hybrid charge, per query from t=0 {'us_per_point': 54.702778500086424, 'n_points': 2000, 'tracemalloc_peak_bytes': 257752, 'ops_at_t=59': {'segments': 6, 'events': 5, 'fired_items': 7}}
+psi (p) composed circuit, one sorted sweep {'ms_per_T': 5.097533315001783, 'tracemalloc_peak_bytes': 6993948}
+psi (p1) composed circuit, fresh build+sweep per T {'ms_per_T': 443.80545169997276, 'n_T': 10}
+psi (q) msp unified.System.at per T (built once) {'ms_per_T': 17.731915514996217, 'tracemalloc_peak_bytes': 4793213}
+psi (r) refcalc per T {'ms_per_T': 376.89988639995136, 'n_T': 10}
+psi (s) canon KF exact knot form per T (built once) {'ms_per_T': 0.0070267350020003505, 'build_seconds': 0.748396154999682, 'n_terms': 30706}
+psi agreement {'max_rel_composed_vs_msp': 5.478153211134844e-16, 'max_rel_composed_vs_canon': 2.1229381083702772e-16}

@@ -1,0 +1,494 @@
+{
+ "meta": {
+  "head": "2ae99ce54cf13dc66d0eb16835beaf2cc20855a0",
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "inputs_sha256": {
+   "routes/B_formula_network/code/grammar.py": "18d6f0cef4768dd154a6a6814b2f2416a7f70a04d0734f93dc83442c14e41817",
+   "routes/D_verification/code/oracle_d.py": "a256a5b8b862850b257861a270c1a4a80465d2489544c6da7ff7e83fc2521a37",
+   "routes/A_waveform/results/points.json": "d6e494c1d48bcbe407849aac4ef03db8f8cdc5d1f166141bfdfa709fb9792a23",
+   "../WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3"
+  },
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  },
+  "seconds": 55.4040516670002,
+  "pycache_after": []
+ },
+ "phi": {
+  "points": 2118,
+  "cases": [
+   {
+    "case": "P0",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     2,
+     0
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     2,
+     0
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P0",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     2,
+     0
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     2,
+     0
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P0",
+    "conv": "orig",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     2,
+     0
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     2,
+     0
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P1-substitute",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-substitute",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-substitute",
+    "conv": "orig",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-additional",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P1-additional",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P1-additional",
+    "conv": "orig",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P1-substitute'(tau_R=15)",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2119,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-substitute'(tau_R=15)",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2119,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-substitute'(tau_R=15)",
+    "conv": "orig",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2119,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-additional'(tau_R=15)",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2119,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-additional'(tau_R=15)",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2119,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P1-additional'(tau_R=15)",
+    "conv": "orig",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2119,
+     "events": 6,
+     "fired_items": 7
+    }
+   },
+   {
+    "case": "P2",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     1,
+     2,
+     0
+    ],
+    "state_tuple_joule": [
+     4,
+     1,
+     2,
+     0
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "P2",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     1,
+     2,
+     0
+    ],
+    "state_tuple_joule": [
+     4,
+     1,
+     2,
+     0
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2118,
+     "events": 6,
+     "fired_items": 9
+    }
+   },
+   {
+    "case": "Px",
+    "conv": "right",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2120,
+     "events": 9,
+     "fired_items": 8
+    }
+   },
+   {
+    "case": "Px",
+    "conv": "left",
+    "n_points": 2118,
+    "n_mismatch_both_realizations": 0,
+    "state_tuple_charge": [
+     3,
+     0,
+     3,
+     1
+    ],
+    "state_tuple_joule": [
+     4,
+     0,
+     3,
+     1
+    ],
+    "ops_last_sweep_joule": {
+     "segments": 2120,
+     "events": 9,
+     "fired_items": 8
+    }
+   }
+  ],
+  "mismatches": [],
+  "orig_rejection": {
+   "P2": "raises ValueError",
+   "Px": "raises ValueError"
+  },
+  "A_points_rows_compared": {
+   "n": 595,
+   "mismatch": 0,
+   "examples": []
+  },
+  "gamma_Ccap_invariance": {
+   "gamma=1,C=1": {
+    "G(40)": "410",
+    "V": "410",
+    "E_cap": "84050"
+   },
+   "gamma=5,C=2": {
+    "G(40)": "410",
+    "V": "41",
+    "E_cap": "1681"
+   },
+   "gamma=1/7,C=3": {
+    "G(40)": "410",
+    "V": "2870/3",
+    "E_cap": "4118450/3"
+   }
+  },
+  "joule_3ohm_2A_5s_J": "60",
+  "P1_additional_G20_over_orderings": [
+   "305"
+  ],
+  "total_mismatch": 0
+ }
+}

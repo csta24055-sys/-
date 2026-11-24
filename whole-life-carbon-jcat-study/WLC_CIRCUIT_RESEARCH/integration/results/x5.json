@@ -1,0 +1,106 @@
+{
+ "meta": {
+  "head": "2ae99ce54cf13dc66d0eb16835beaf2cc20855a0",
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "inputs_sha256": {
+   "routes/B_formula_network/code/grammar.py": "18d6f0cef4768dd154a6a6814b2f2416a7f70a04d0734f93dc83442c14e41817",
+   "routes/D_verification/code/oracle_d.py": "a256a5b8b862850b257861a270c1a4a80465d2489544c6da7ff7e83fc2521a37",
+   "routes/A_waveform/results/points.json": "d6e494c1d48bcbe407849aac4ef03db8f8cdc5d1f166141bfdfa709fb9792a23",
+   "../WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3"
+  },
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  },
+  "seconds": 55.4040516670002,
+  "pycache_after": []
+ },
+ "x5": {
+  "scenario": "EV9",
+  "scenario_id": "SYN-RC-hospital-M-T30-seed571520556",
+  "B1_included": true,
+  "rows": [
+   {
+    "T": 0.5,
+    "C_canon": 62387885.5130488,
+    "M([0,T])": 59006549.78698165,
+    "Z(T)": 3381335.726067148,
+    "C-M==Z (exact)": true,
+    "Z!=0": true,
+    "h_used": "1/1000000",
+    "dC/dT==rho+Z' (exact, forward difference on one affine piece)": true,
+    "dC/dT!=rho": true,
+    "Z'": -5844.714291197138,
+    "C_composed(float)": 62387885.51304879,
+    "rel(C_composed, C_canon)": 1.1942351524905417e-16,
+    "rel(C_composed - M, Z)": 1.2394366975929285e-15
+   },
+   {
+    "T": 5.3,
+    "C_canon": 70834259.44167718,
+    "M([0,T])": 67474170.2209046,
+    "Z(T)": 3360089.2207725686,
+    "C-M==Z (exact)": true,
+    "Z!=0": true,
+    "h_used": "1/1000000",
+    "dC/dT==rho+Z' (exact, forward difference on one affine piece)": true,
+    "dC/dT!=rho": true,
+    "Z'": -3188.2415662076532,
+    "C_composed(float)": 70834259.44167717,
+    "rel(C_composed, C_canon)": 2.1036658406963128e-16,
+    "rel(C_composed - M, Z)": 2.494547799421855e-15
+   },
+   {
+    "T": 12.25,
+    "C_canon": 84594764.9104677,
+    "M([0,T])": 81249515.99850951,
+    "Z(T)": 3345248.9119581887,
+    "C-M==Z (exact)": true,
+    "Z!=0": true,
+    "h_used": "1/1000000",
+    "dC/dT==rho+Z' (exact, forward difference on one affine piece)": true,
+    "dC/dT!=rho": true,
+    "Z'": -1553.4029370409346,
+    "C_composed(float)": 84594764.91046768,
+    "rel(C_composed, C_canon)": 1.761475572349962e-16,
+    "rel(C_composed - M, Z)": 3.3408189314210966e-15
+   },
+   {
+    "T": 29.5,
+    "C_canon": 121329030.31346214,
+    "M([0,T])": 117965002.44158477,
+    "Z(T)": 3364027.871877372,
+    "C-M==Z (exact)": true,
+    "Z!=0": true,
+    "h_used": "1/1000000",
+    "dC/dT==rho+Z' (exact, forward difference on one affine piece)": true,
+    "dC/dT!=rho": true,
+    "Z'": -3770.783677143691,
+    "C_composed(float)": 121329030.31346214,
+    "rel(C_composed, C_canon)": 0.0,
+    "rel(C_composed - M, Z)": 9.689661130349271e-16
+   },
+   {
+    "T": 47.9,
+    "C_canon": 170579843.4632041,
+    "M([0,T])": 167232693.4532231,
+    "Z(T)": 3347150.00998098,
+    "C-M==Z (exact)": true,
+    "Z!=0": true,
+    "h_used": "1/100000000",
+    "dC/dT==rho+Z' (exact, forward difference on one affine piece)": true,
+    "dC/dT!=rho": true,
+    "Z'": -2139.8055292453055,
+    "C_composed(float)": 170579843.4632041,
+    "rel(C_composed, C_canon)": 0.0,
+    "rel(C_composed - M, Z)": 2.7824345244113237e-16
+   }
+  ],
+  "n_masses": 22353,
+  "n_densities": 10601,
+  "n_terminal_terms": 477,
+  "note": "Psi identity on the 70-unit model; it does NOT relate the Phi pilot P0 to this scenario."
+ }
+}

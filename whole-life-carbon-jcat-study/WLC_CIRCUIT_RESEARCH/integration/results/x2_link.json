@@ -1,0 +1,128 @@
+{
+ "meta": {
+  "head": "2ae99ce54cf13dc66d0eb16835beaf2cc20855a0",
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "inputs_sha256": {
+   "routes/B_formula_network/code/grammar.py": "18d6f0cef4768dd154a6a6814b2f2416a7f70a04d0734f93dc83442c14e41817",
+   "routes/D_verification/code/oracle_d.py": "a256a5b8b862850b257861a270c1a4a80465d2489544c6da7ff7e83fc2521a37",
+   "routes/A_waveform/results/points.json": "d6e494c1d48bcbe407849aac4ef03db8f8cdc5d1f166141bfdfa709fb9792a23",
+   "../WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3"
+  },
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  },
+  "seconds": 55.4040516670002,
+  "pycache_after": []
+ },
+ "x2_link": {
+  "rows": [
+   {
+    "T": "1.0",
+    "B_theta_eps_netlist(float)": 104.0,
+    "Phi_hybrid_orig(exact at float T)": "104",
+    "rel": 0.0
+   },
+   {
+    "T": "9.999999",
+    "B_theta_eps_netlist(float)": 139.999996,
+    "Phi_hybrid_orig(exact at float T)": "19703247806795967/140737488355328",
+    "rel": 0.0
+   },
+   {
+    "T": "10.0",
+    "B_theta_eps_netlist(float)": 140.0,
+    "Phi_hybrid_orig(exact at float T)": "140",
+    "rel": 0.0
+   },
+   {
+    "T": "10.000000005",
+    "B_theta_eps_netlist(float)": 140.00000002000002,
+    "Phi_hybrid_orig(exact at float T)": "9851624186280335/70368744177664",
+    "rel": 0.0
+   },
+   {
+    "T": "10.000000009999999",
+    "B_theta_eps_netlist(float)": 140.00000004,
+    "Phi_hybrid_orig(exact at float T)": "19703248375375419/140737488355328",
+    "rel": 0.0
+   },
+   {
+    "T": "10.00000001",
+    "B_theta_eps_netlist(float)": 160.00000004,
+    "Phi_hybrid_orig(exact at float T)": "5629499535620495/35184372088832",
+    "rel": 0.0
+   },
+   {
+    "T": "10.000000010000003",
+    "B_theta_eps_netlist(float)": 160.00000004,
+    "Phi_hybrid_orig(exact at float T)": "22517998142481981/140737488355328",
+    "rel": 0.0
+   },
+   {
+    "T": "10.00000002",
+    "B_theta_eps_netlist(float)": 160.00000008,
+    "Phi_hybrid_orig(exact at float T)": "22517998148111479/140737488355328",
+    "rel": 0.0
+   },
+   {
+    "T": "10.000001",
+    "B_theta_eps_netlist(float)": 160.000004,
+    "Phi_hybrid_orig(exact at float T)": "22517998699802433/140737488355328",
+    "rel": 0.0
+   },
+   {
+    "T": "19.999999",
+    "B_theta_eps_netlist(float)": 199.999996,
+    "Phi_hybrid_orig(exact at float T)": "14073748554057823/70368744177664",
+    "rel": 0.0
+   },
+   {
+    "T": "20.0",
+    "B_theta_eps_netlist(float)": 200.0,
+    "Phi_hybrid_orig(exact at float T)": "200",
+    "rel": 0.0
+   },
+   {
+    "T": "20.000001",
+    "B_theta_eps_netlist(float)": 255.000004,
+    "Phi_hybrid_orig(exact at float T)": "17944030046779297/70368744177664",
+    "rel": 0.0
+   },
+   {
+    "T": "30.0",
+    "B_theta_eps_netlist(float)": 295.0,
+    "Phi_hybrid_orig(exact at float T)": "295",
+    "rel": 0.0
+   },
+   {
+    "T": "40.0",
+    "B_theta_eps_netlist(float)": 355.0,
+    "Phi_hybrid_orig(exact at float T)": "355",
+    "rel": 0.0
+   },
+   {
+    "T": "47.9",
+    "B_theta_eps_netlist(float)": 441.6,
+    "Phi_hybrid_orig(exact at float T)": "15537418714428211/35184372088832",
+    "rel": 0.0
+   },
+   {
+    "T": "59.5",
+    "B_theta_eps_netlist(float)": 508.0,
+    "Phi_hybrid_orig(exact at float T)": "508",
+    "rel": 0.0
+   },
+   {
+    "T": "60.0",
+    "B_theta_eps_netlist(float)": 510.0,
+    "Phi_hybrid_orig(exact at float T)": "510",
+    "rel": 0.0
+   }
+  ],
+  "max_rel": 0.0,
+  "note": "same float T on both sides; B applies the model's float rule tau < fl(T*(1-eps)), the hybrid the real rule. They may differ only within ~1 ulp of tau/(1-eps); observed max_rel above."
+ }
+}

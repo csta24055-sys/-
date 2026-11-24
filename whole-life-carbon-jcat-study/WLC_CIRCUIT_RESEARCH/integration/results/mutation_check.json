@@ -1,0 +1,33 @@
+{
+ "M1_no_supersession_P1sub_G20": {
+  "mutant": "305",
+  "oracle": "250",
+  "detected": true
+ },
+ "M2_orig_external_unslowed_G(20.00000001)": {
+  "mutant": "6250000001/25000000",
+  "oracle": "5000000001/25000000",
+  "detected": true
+ },
+ "M3_beta_ignored_EV9noB2_T30_rel_err": {
+  "rel_err": 0.014661001589265232,
+  "detected": true
+ },
+ "M4_no_late_reset_EV9_worst_rel_err_SUM03": {
+  "rel_err": 0.0008902477240334283,
+  "detected": true
+ },
+ "all_detected": true,
+ "meta": {
+  "head": "2ae99ce54cf13dc66d0eb16835beaf2cc20855a0",
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "inputs_sha256": {
+   "routes/B_formula_network/code/grammar.py": "18d6f0cef4768dd154a6a6814b2f2416a7f70a04d0734f93dc83442c14e41817",
+   "routes/D_verification/code/oracle_d.py": "a256a5b8b862850b257861a270c1a4a80465d2489544c6da7ff7e83fc2521a37",
+   "routes/A_waveform/results/points.json": "d6e494c1d48bcbe407849aac4ef03db8f8cdc5d1f166141bfdfa709fb9792a23",
+   "../WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3"
+  },
+  "pycache_after": []
+ }
+}

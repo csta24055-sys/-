@@ -1,0 +1,115 @@
+{
+ "meta": {
+  "head": "2ae99ce54cf13dc66d0eb16835beaf2cc20855a0",
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "inputs_sha256": {
+   "routes/B_formula_network/code/grammar.py": "18d6f0cef4768dd154a6a6814b2f2416a7f70a04d0734f93dc83442c14e41817",
+   "routes/D_verification/code/oracle_d.py": "a256a5b8b862850b257861a270c1a4a80465d2489544c6da7ff7e83fc2521a37",
+   "routes/A_waveform/results/points.json": "d6e494c1d48bcbe407849aac4ef03db8f8cdc5d1f166141bfdfa709fb9792a23",
+   "../WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3"
+  },
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  },
+  "seconds": 55.4040516670002,
+  "pycache_after": []
+ },
+ "psi_integrator_cells_EV9": {
+  "cases": [
+   {
+    "scenario": "EV9",
+    "scenario_id": "SYN-RC-hospital-M-T30-seed571520556",
+    "T_used": [
+     0.5,
+     1.0,
+     5.3,
+     9.999999,
+     10.0,
+     10.000001,
+     12.25,
+     19.999999,
+     20.0,
+     20.000001,
+     29.5,
+     30.0,
+     33.3,
+     47.9,
+     60.0,
+     75.5,
+     99.0,
+     129.5
+    ],
+    "T_skipped_domain": [],
+    "included_stages": [
+     "A1-A3",
+     "A4",
+     "A5",
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B5",
+     "B6",
+     "B7",
+     "C1",
+     "C2",
+     "C3",
+     "C4"
+    ],
+    "n_comp_rows": 22,
+    "n_direct_units": 21,
+    "n_comparisons": 648,
+    "max_rel": {
+     "total": 5.5083375978951975e-14,
+     "stage": 2.627050529666167e-13,
+     "unit": 2.627050529666167e-13
+    },
+    "worst_unit": [
+     "B3-01",
+     75.5
+    ],
+    "control_naive_21_sources": {
+     "max_rel_err_vs_SUM03": 0.01566444422722604,
+     "min_rel_err_vs_SUM03": 0.000642213622604084,
+     "max_rel(naive-C, B2-01)": 1.0514507716857842e-13
+    },
+    "stage_keys_equal_refcalc": true,
+    "cell_mode": "integrator",
+    "seconds_composed_sweep": 0.5342931909999606,
+    "seconds_refcalc_all_T": 7.8709206409994295,
+    "refrigerant_state_tuple": [
+     160,
+     81,
+     371,
+     482
+    ],
+    "refrigerant_unexpected": [],
+    "C_values": {
+     "0.5": 62387885.51304879,
+     "1.0": 63208317.45785455,
+     "5.3": 70834259.44167717,
+     "9.999999": 79201606.56695585,
+     "10.0": 79201608.15756433,
+     "10.000001": 80147931.58633156,
+     "12.25": 84594764.9104677,
+     "19.999999": 100566130.15459068,
+     "20.0": 100566131.62055227,
+     "20.000001": 101634388.41009633,
+     "29.5": 121329030.31346214,
+     "30.0": 122146621.75496325,
+     "33.3": 139338143.03209686,
+     "47.9": 170579843.4632041,
+     "60.0": 196681428.35920054,
+     "75.5": 246714344.70503703,
+     "99.0": 319861288.2214811,
+     "129.5": 417886666.3839757
+    }
+   }
+  ],
+  "tol_rel": 1e-09,
+  "max_rel_overall": 2.627050529666167e-13
+ }
+}
