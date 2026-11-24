@@ -1,0 +1,26 @@
+# cmd: PYTHONDONTWRITEBYTECODE=1 math7-py -B -m unittest discover -s tests -v ; cwd=routes/E_resistor_energy ; HEAD=5a2f898 ; 2026-11-24T04:33:43Z
+test_ac_power_vs_energy_and_2w_ripple (test_e.T0Basics.test_ac_power_vs_energy_and_2w_ripple) ... ok
+test_ac_rms2_five_periods_60J (test_e.T0Basics.test_ac_rms2_five_periods_60J) ... ok
+test_dc_12W_60J (test_e.T0Basics.test_dc_12W_60J) ... ok
+test_resistor_alone_is_not_a_memory (test_e.T0Basics.test_resistor_alone_is_not_a_memory) ... ok
+test_temperature_is_not_cumulative_energy (test_e.T0Basics.test_temperature_is_not_cumulative_energy) ... ok
+test_units_kappa_required (test_e.T0Basics.test_units_kappa_required) ... ok
+test_contract_points_all_conventions (test_e.T1_HE1.test_contract_points_all_conventions) ... ok
+test_declared_table_values (test_e.T1_HE1.test_declared_table_values) ... ok
+test_left_right_limits_at_events (test_e.T1_HE1.test_left_right_limits_at_events) ... ok
+test_p1_and_p2 (test_e.T1_HE1.test_p1_and_p2) ... ok
+test_ac_operating_current_cross (test_e.T2_HE2.test_ac_operating_current_cross) ... ok
+test_finite_pulse_cannot_jump (test_e.T2_HE2.test_finite_pulse_cannot_jump) ... ok
+test_numeric_widths_and_quadrature (test_e.T2_HE2.test_numeric_widths_and_quadrature) ... ok
+test_polarity_counterexample (test_e.T2_HE2.test_polarity_counterexample) ... ok
+test_symbolic_cross_terms (test_e.T2_HE2.test_symbolic_cross_terms) ... ok
+test_bound_and_tightness (test_e.T3_HE3.test_bound_and_tightness) ... ok
+test_full_periods_any_phase (test_e.T3_HE3.test_full_periods_any_phase) ... ok
+test_lattice_exact (test_e.T3_HE3.test_lattice_exact) ... ok
+test_off_lattice_contract_points (test_e.T3_HE3.test_off_lattice_contract_points) ... ok
+test_convert_then_integrate_vs_meter_then_convert (test_e.T4_HE4.test_convert_then_integrate_vs_meter_then_convert) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.220s
+
+OK

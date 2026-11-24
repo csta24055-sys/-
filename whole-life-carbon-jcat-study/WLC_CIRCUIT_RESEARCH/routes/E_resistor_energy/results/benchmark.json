@@ -1,0 +1,48 @@
+{
+ "closed_form_Fraction": {
+  "median_s": 0.004058476999944105,
+  "peak_bytes": 120928
+ },
+ "ER1_hybrid_per_query": {
+  "median_s": 0.042791671000031783,
+  "peak_bytes": 121952
+ },
+ "ER1_hybrid_sorted_sweep": {
+  "median_s": 0.01724088700007087,
+  "peak_bytes": 130248
+ },
+ "fixed_step_dt1e-3_float(100 pts)": {
+  "median_s": 0.07323143999997228,
+  "peak_bytes": 1912,
+  "max_abs_err_kg": 3.086597644141875e-10
+ },
+ "exact_agreement_hybrid_vs_closed_form": true,
+ "states": {
+  "closed_form": "(0,0,0,0) + formula",
+  "ER1_separate": [
+   4,
+   0,
+   2,
+   0
+  ],
+  "ER1_merged_register": [
+   3,
+   0,
+   2,
+   0
+  ],
+  "table_driven_H60": [
+   1,
+   1,
+   1,
+   6
+  ]
+ },
+ "env": {
+  "python": "3.13.18",
+  "machine": "x86_64",
+  "platform": "Linux-6.18.44-fc-v819-x86_64-with-glibc2.39",
+  "seed": 12345,
+  "n_points": 1000
+ }
+}

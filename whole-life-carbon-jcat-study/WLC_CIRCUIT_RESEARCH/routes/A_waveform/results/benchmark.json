@@ -1,0 +1,49 @@
+{
+ "n_points": 2000,
+ "seed": 20261124,
+ "python": "3.13.18",
+ "machine": "x86_64",
+ "platform": "Linux-6.18.44-fc-v819-x86_64-with-glibc2.39",
+ "results": {
+  "closed_form_Fraction": {
+   "median_s": 0.02056739199997537,
+   "min_s": 0.020228180000003704,
+   "reps": 5,
+   "per_point_us": 10.283695999987685,
+   "tracemalloc_peak_bytes": 240416
+  },
+  "closed_form_float": {
+   "median_s": 0.0006586890001472057,
+   "min_s": 0.0006258889998207451,
+   "reps": 5,
+   "per_point_us": 0.32934450007360283,
+   "tracemalloc_peak_bytes": 62064
+  },
+  "R1_event_driven_Fraction": {
+   "median_s": 0.09357334599985734,
+   "min_s": 0.09036717799995131,
+   "reps": 5,
+   "per_point_us": 46.78667299992867,
+   "tracemalloc_peak_bytes": 241904
+  },
+  "R2_impulse_free_Fraction": {
+   "median_s": 0.07208388599997306,
+   "min_s": 0.07177316800016342,
+   "reps": 5,
+   "per_point_us": 36.04194299998653,
+   "tracemalloc_peak_bytes": 241368
+  },
+  "R3_single_clock_Fraction": {
+   "median_s": 0.03951580299985835,
+   "min_s": 0.03478684100014107,
+   "reps": 5,
+   "per_point_us": 19.757901499929176,
+   "tracemalloc_peak_bytes": 240688
+  },
+  "R1_ops": {
+   "mean_segments_per_point": 3.5715,
+   "max_segments": 6
+  }
+ },
+ "R1_equals_oracle_first500": true
+}

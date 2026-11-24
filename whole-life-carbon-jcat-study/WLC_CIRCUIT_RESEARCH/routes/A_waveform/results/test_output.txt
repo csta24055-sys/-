@@ -1,0 +1,37 @@
+# command: cd routes/A_waveform && PYTHONDONTWRITEBYTECODE=1 python3 -B tests/test_a.py -v
+# date: 2026-11-24T04:33:26Z  python: Python 3.13.18  HEAD: 5a2f898
+test_fullwave_half_integer_multiple_exact_COUNTEREXAMPLE (__main__.AC.test_fullwave_half_integer_multiple_exact_COUNTEREXAMPLE)
+Ripple f(u)=1-cos u-2u/pi vanishes at u in {0, pi/2, pi} only (f''=cos u: ... ok
+test_fullwave_integer_multiple_exact (__main__.AC.test_fullwave_integer_multiple_exact)
+c = m * h (m integer): hits exactly at n c (to float precision). ... ok
+test_fullwave_non_multiple_error_below_half_period (__main__.AC.test_fullwave_non_multiple_error_below_half_period) ... ok
+test_rectified_operational_ripple (__main__.AC.test_rectified_operational_ripple) ... ok
+test_zero_mean_ac_negative (__main__.AC.test_zero_mean_ac_negative) ... ok
+test_contract_points_all_conventions (__main__.HA1_Exact.test_contract_points_all_conventions) ... ok
+test_float_knife (__main__.HA1_Exact.test_float_knife)
+float agrees with exact at the two chosen points; 10.00000001 is the ... ok
+test_knife_points_exact (__main__.HA1_Exact.test_knife_points_exact) ... ok
+test_limits_at_event_times (__main__.HA1_Exact.test_limits_at_event_times) ... ok
+test_reset_semantics (__main__.HA1_Exact.test_reset_semantics)
+right: x=0 at tau; left: x=1 held at tau; orig: x<1 just after tau. ... ok
+test_scale_invariance_and_separation (__main__.HA1_Exact.test_scale_invariance_and_separation)
+G readout invariant in (gamma, C_cap); V, P_in, E_cap are not carbon. ... ok
+test_r2_equals_r1 (__main__.HA2_ImpulseFree.test_r2_equals_r1) ... ok
+test_sawtooth_bounded (__main__.HA2_ImpulseFree.test_sawtooth_bounded)
+residual 20 xA + 35 xP in [0,55) (right) / (0,55] (left, t>0). ... ok
+test_slope (__main__.HA2_ImpulseFree.test_slope) ... ok
+test_merged_clock_capacitors_fail (__main__.HA3_StateCount.test_merged_clock_capacitors_fail)
+Merging the two clock caps into one (parallel same I -> 30, parallel summed ... ok
+test_online_reset_needs_two_phases (__main__.HA3_StateCount.test_online_reset_needs_two_phases)
+With the reset time as an ONLINE input, the state must hold both phases: ... ok
+test_px_fixed_schedule_single_clock_COUNTEREXAMPLE (__main__.HA3_StateCount.test_px_fixed_schedule_single_clock_COUNTEREXAMPLE)
+Px as a FIXED, known schedule IS reproduced by ONE clock (period 20, ... ok
+test_r3_single_clock_p0 (__main__.HA3_StateCount.test_r3_single_clock_p0) ... ok
+test_p1_order_invariance_and_naive_counterexample (__main__.P1_P2.test_p1_order_invariance_and_naive_counterexample) ... ok
+test_p1_policies (__main__.P1_P2.test_p1_policies) ... ok
+test_p2 (__main__.P1_P2.test_p2) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.338s
+
+OK

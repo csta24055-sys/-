@@ -1,0 +1,13 @@
+source_path,claim_or_unit_id,target_circuit_construct,status,validation
+07_SHARED_CONTRACT.md#P0,P0 G(t) right tau<=t,R1 accumulator+2 reset clocks+impulses,exact,tests/test_a.py HA1 (Fraction)
+07_SHARED_CONTRACT.md#P0,P0 left tau<t,R1 with clock held at x=1 at threshold,exact,tests/test_a.py HA1
+coordination/architecture.md#1.3;WLC_THEORY_RESEARCH_BASE 17.TH-11a,orig tau<T(1-eps),R1 left clocks with rate (1-eps)/c (horizon readout),exact,tests/test_a.py HA1 knife points
+07_SHARED_CONTRACT.md#P0,stairs=ramp-sawtooth,R2 ramp integrator + summing amp - clock sawtooths,exact,tests/test_a.py HA2
+coordination/architecture.md#2 H-A3,P0 single superperiod,R3/R3i one clock (20) comparators 1/2 and 1,exact,tests/test_a.py HA3
+coordination/architecture.md#1.2 Px,Px fixed schedule,R3i one clock (20) comparators 7/20 17/20 1,exact,tests/test_a.py HA3 counterexample
+coordination/architecture.md#1.2 Px,Px online reset,R1 two clocks + external reset,exact,tests/test_a.py px_r1 vs oracle
+coordination/architecture.md#1.2 P1,P1 substitute/additional,R1 + external renovation event + set-rule suppression,exact,tests/test_a.py P1
+coordination/architecture.md#1.2 P2,P2 rate 4->3,R1 + mode latch switching controlled current source,exact,tests/test_a.py P2
+01_FORMAL_MODEL.md#Shared excitation,zero-mean AC clock,ideal capacitor driven by I0 sin wt,unsupported,tests/test_a.py AC negative
+01_FORMAL_MODEL.md#Shared excitation,full-wave rectified clock,|I0 sin wt| into clock cap + comparator,conditional,tests/test_a.py AC (float; exact iff c/h in Z/2 else error < h)
+01_FORMAL_MODEL.md#Circuit grammar,merged clock capacitor (parallel/series),single clock cap period 30/15/6.667,unsupported,tests/test_a.py merged clocks

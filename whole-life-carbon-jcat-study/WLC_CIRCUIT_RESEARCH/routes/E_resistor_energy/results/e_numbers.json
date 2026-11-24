@@ -1,0 +1,129 @@
+{
+ "basics": {
+  "P_W": "12",
+  "E_5s_J": "60",
+  "ac_5periods_J": "60",
+  "kappa_kg_per_J": "1/3",
+  "kappa_kg_per_kWh": "1200000 (synthetic scaling only)"
+ },
+ "HE2": {
+  "symbolic": {
+   "dc_ac_pulse": "8*sqrt(5)*sqrt(w)",
+   "dc_pipe_pulse": "4*sqrt(35)*sqrt(w)",
+   "simultaneous_ac_pipe": "20*sqrt(7)"
+  },
+  "limit_w0_after20": "(2*sqrt(5) + sqrt(35))**2 + 200",
+  "limit_w0_after60": "60*sqrt(7) + 565",
+  "widths": [
+   {
+    "w": "1e-6",
+    "dc_ac_pulse_kg": "0.0178885438200",
+    "dc_pipe_pulse_kg": "0.0236643191324",
+    "simultaneous_kg": "52.9150262212918",
+    "G_single_after20": "307.974471628064",
+    "G_single_after20_mpquad": "307.974471628064",
+    "G_separate_after20": "255.000004000000",
+    "G_single_after60": "723.923406884193",
+    "G_single_after20_reversed_pipe": "202.097090547216",
+    "ac_operating_cross_t10_kg": "7.94767e-8"
+   },
+   {
+    "w": "1e-4",
+    "dc_ac_pulse_kg": "0.178885438200",
+    "dc_pipe_pulse_kg": "0.236643191324",
+    "simultaneous_kg": "52.9150262212918",
+    "G_single_after20": "308.509840289016",
+    "G_single_after20_mpquad": "308.509840289016",
+    "G_separate_after20": "255.000400000000",
+    "G_single_after60": "725.528720867047",
+    "G_single_after20_reversed_pipe": "202.206501463784",
+    "ac_operating_cross_t10_kg": "7.94767e-5"
+   },
+   {
+    "w": "1e-2",
+    "dc_ac_pulse_kg": "1.78885438200",
+    "dc_pipe_pulse_kg": "2.36643191324",
+    "simultaneous_kg": "52.9150262212918",
+    "G_single_after20": "313.899166898531",
+    "G_single_after20_mpquad": "313.899166898531",
+    "G_separate_after20": "255.040000000000",
+    "G_single_after60": "741.617500695594",
+    "G_single_after20_reversed_pipe": "203.336250629468",
+    "ac_operating_cross_t10_kg": "0.0794506"
+   },
+   {
+    "w": "1",
+    "dc_ac_pulse_kg": "17.8885438200",
+    "dc_pipe_pulse_kg": "23.6643191324",
+    "simultaneous_kg": "52.9150262212918",
+    "G_single_after20": "371.356432993687",
+    "G_single_after20_mpquad": "371.356432993687",
+    "G_separate_after20": "259.000000000000",
+    "G_single_after60": "906.069298981061",
+    "G_single_after20_reversed_pipe": "218.197742286306",
+    "ac_operating_cross_t10_kg": "0"
+   }
+  ]
+ },
+ "HE3": {
+  "kappaE_minus_4t_kg": {
+   "9.999999": {
+    "sympy": "3.9999999998947242197e-6",
+    "mpquad": "3.9999999998947242197e-6"
+   },
+   "10": {
+    "sympy": "0",
+    "mpquad": "0.0"
+   },
+   "10.000001": {
+    "sympy": "-3.9999999998947242197e-6",
+    "mpquad": "-3.9999999998947242197e-6"
+   },
+   "19.999999": {
+    "sympy": "3.9999999998947242197e-6",
+    "mpquad": "3.9999999998947242197e-6"
+   },
+   "20.000001": {
+    "sympy": "-3.9999999998947242197e-6",
+    "mpquad": "-3.9999999998947242197e-6"
+   },
+   "0.375": {
+    "sympy": "0.31830988618379067154",
+    "mpquad": "0.31830988618379067154"
+   }
+  },
+  "bound": "sup_t |kappaE-4t| = 4(1+|sin2phi|)/(2omega) <= 4/omega; phi=0: 1/pi=0.318310 at t=3/8",
+  "lattice_phi0": "t in Z/4 (omega=2pi)"
+ },
+ "HE4": {
+  "9.999999": {
+   "convert_then_integrate": "9999999/250000",
+   "meter_then_convert_current": "9999999/250000",
+   "meter_then_convert_initial": "9999999/250000"
+  },
+  "10": {
+   "convert_then_integrate": "40",
+   "meter_then_convert_current": "30",
+   "meter_then_convert_initial": "40"
+  },
+  "20": {
+   "convert_then_integrate": "70",
+   "meter_then_convert_current": "60",
+   "meter_then_convert_initial": "80"
+  },
+  "40": {
+   "convert_then_integrate": "130",
+   "meter_then_convert_current": "120",
+   "meter_then_convert_initial": "160"
+  },
+  "60": {
+   "convert_then_integrate": "190",
+   "meter_then_convert_current": "180",
+   "meter_then_convert_initial": "240"
+  }
+ },
+ "thermal": {
+  "theta60": "11.9999999999989",
+  "E60_J": "720"
+ }
+}
