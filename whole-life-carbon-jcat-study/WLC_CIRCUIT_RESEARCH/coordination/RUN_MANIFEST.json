@@ -27,7 +27,7 @@
   "verification_support": "F_math7_bridge",
   "phases": {
     "G0": "PASS",
-    "G1": "NOT_RUN",
+    "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
     "G2": "NOT_RUN",
     "G3": "NOT_RUN",
     "F": "NOT_RUN",
@@ -69,6 +69,25 @@
         ]
       },
       "status": "PASS"
+    },
+    {
+      "phase": "G1",
+      "actor": "wlc-architect (subagent)",
+      "frontmatter": "claude-fable-5-2 / high",
+      "actual_model": "claude-fable-5-2 (self-reported by subagent runtime)",
+      "actual_effort": "NOT_VERIFIED (not observable from inside subagent)",
+      "date": "2026-11-24",
+      "output": "coordination/architecture.md",
+      "ran": [
+        "tstudy.baseline.assert_frozen() smoke on SYN-RC-office-S-T60-seed101 (70 units, 5 horizons) [F]"
+      ],
+      "usage": {
+        "subagent_tokens": 180332,
+        "tool_uses": 15,
+        "duration_s": 426
+      },
+      "status": "DONE",
+      "note": "Declares P1/P2/Px fixture values left open by 07; three boundary conventions; cross gates X1-X5."
     }
   ],
   "setup_audit": {
