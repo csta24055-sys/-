@@ -1,3 +1,8 @@
+# 最新の研究目的訂正（2026-11-24）
+本研究の主目的は **R/C/LとKCL/KVLの普通の回路法則から共有の回路モデルを先に導き、WLCの全体的な計算を70単位ごとの再翻訳なしに表現できるか**である。研究開始前に `13_CIRCUIT_FIRST_OBJECTIVE.md` を読む。サイクル1のB/CマッピングとG5 `coordination/next_cycle.md` は履歴資料。旧計画を自動再開しない。
+
+---
+
 # WLC electrical equivalent-circuit research — START HERE
 
 **Status: pre-research design scaffold, 2026-11-24.** This is an intended research protocol, not a completed result.
