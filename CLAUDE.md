@@ -11,6 +11,9 @@ For any WLC/circuit task, read, in order:
 5. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/02_VERIFICATION_PLAN.md`
 6. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/03_EXECUTION_PLAN.md`
 7. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` — cross-repository source navigation.
+8. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md` — **current primary autonomous execution policy**.
+9. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/07_SHARED_CONTRACT.md` — fixed names, units, boundaries and route outputs.
+10. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/08_AUTONOMOUS_START.md` — one-message start instructions.
 
 Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統一方程式.md`, `07_動的LCAと工程時間.md`, `09_未解決問題と限界.md`, and `15_劣化・寿命・交換モデル研究開始資料.md` before formal conclusions.
 
@@ -18,6 +21,13 @@ Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統�
 - `csta24055-sys/lastdance4-tree-` (`main`) is the Yes/No classification/index of 2,100 development roles. It is **not** the original WLC source or a mathematical proof. Search relevant A3 (math), A6 (verification), A9 (knowledge), optionally A2 (classification), then follow exact role/source references into `csta24055-sys/lastdance` only if needed.
 - Use `WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` to keep source repo, branch, file path, role/claim IDs and verification status separately documented.
 - Prioritize the WLC theory base for formulas and validity, not ability-tree descriptions.
+
+## Parallel execution policy (supersedes serial phase ordering only)
+- Prefer **four independent research routes A waveform, B formula-network, C 70-unit map, D independent verifier**, as specified by `06_PARALLEL_ORCHESTRATION.md`. Do not wait for A before starting B or C. Launch concurrently when supported; otherwise interleave.
+- Project subagents `.claude/agents/wlc-waveform.md`, `wlc-formula-network.md`, `wlc-unit-mapper.md`, `wlc-verifier.md` define route-specific behavior. In independent sessions verify you have checked out a project-seeded route branch. Unrelated worktrees may start from `main`; never presume a newly created worktree contains this research.
+- **Each worker owns only its route subfolder** under `WLC_CIRCUIT_RESEARCH/routes/`; coordinator alone edits shared files and the future `integration/` folder. Do not let concurrent agents change a shared branch HEAD or commit in one shared checkout. Separate branch/session work is preferable for independent writes.
+- A and B attempt different constructive routes, C independently maps all 70 unit roles (21 direct, 49 other), D tests and challenges them. Integrate supported results only after meeting a documented compatibility/verification gate. Unsupported mapping, non-existence and hybrid exceptions are valid findings, not prompts for unending retries.
+- Do not block on routine approvals; act within documented permissions, execute tests, record status and counterexamples. The presence of instructions or named agents does not mean the research sessions are running.
 
 ## Non-negotiable boundaries
 - Never edit `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/`, existing research chapters 09–23, the original `research_archive/`, or the WLC Studio application. Treat all as immutable references.
@@ -29,7 +39,7 @@ Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統�
 - An unrectified, zero-mean AC input does not create monotonic accumulated charge in an ideal capacitor. Use a separately justified clock/rectifier/integrator/trigger scheme where appropriate.
 - Follow the base evidence tags [P] proof, [E] exact rational samples, [F] numerical comparisons, [S] statistical, [L] literature, [H] hypothesis. Document domain and provenance; self-authored proofs await independent review.
 - Python checks: `python3 -B` with `PYTHONDONTWRITEBYTECODE=1`; no network or repository writes from tests. Preserve original test oracles.
-- Start with the two-equipment pilot, not an unsupported claim of mapping all 70 units.
+- Route A starts with the two-equipment pilot. Routes B and C may **independently begin** broad formula/70-unit taxonomy from the outset; don't claim full equivalence before tests.
 
 ## Delivery definition
 A task is not finished merely because diagrams or text exist. Deliver derivation, independent reference computation, tests including event boundaries and overlapping replacements, explicit counterexamples, limitations, operation-count/memory/time comparison, and a short understandable summary. If a phase is incomplete, state precisely what is missing.
