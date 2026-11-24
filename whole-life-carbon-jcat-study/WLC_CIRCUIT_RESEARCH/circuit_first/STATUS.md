@@ -11,11 +11,12 @@ Date 2026-11-24. Branch `claude/wlc-equivalent-circuit-20261124`.
 ## Commands
 ```
 cd whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/circuit_first
-PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B -m unittest discover -s tests -p 'test_*.py'   # 54 tests: 53 OK + 1 skipped (slow), ~90 s
+PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B -m unittest discover -s tests -p 'test_*.py'   # 57 tests: 56 OK + 1 skipped (slow), ~91 s
 CF_SLOW=1 PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B -m unittest tests/test_stageB.py           # + merged-netlist test (~7 min)
 PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B tests/compare_refcalc.py S3a|S3b|S3c|S3d
 PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B tests/compare_stageB_e.py full|mutations
 PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B tests/compare_crossbar.py                       # v1 vs v2 census
+PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B tests/compare_closing.py                        # refcalc vs circuit time, value duplicates
 ```
 Log: `results/test_log.txt`. No `__pycache__`.
 
@@ -59,8 +60,13 @@ Buildings S, M, E0, E1, E2 (as in stage B); 10 T each (1 … 99.9); ι subsets o
   - sharing is by structural identity;
   - each distinct expression that must be a voltage needs one active output, and each sampled or multiplied sum
     needs one junction.
-* Remaining gap: expressions needed in both polarities. Value-equality sharing was not used: the data has almost
-  no repeated values.
+* Remaining gap: expressions needed in both polarities.
+* Sharing key, as built: structural (factor id; (factor id, conversion value); object identity of the row
+  quantity; one junction per sum).
+* Value sharing was not used. My earlier statement that sharing by value "gives nothing" is withdrawn:
+  - On S, 66 op-amp outputs duplicate another output's value (1 593 op-amps, 1 527 distinct values; E1 also 66).
+  - The main cause is identical composite recipes (51 composite rows, 15 distinct recipes).
+  - Value-keyed sharing is NOT_RUN.
 * No reduction changed an observable. The failed attempt was the q/(1−w) root form for every DESIGN row. It gave
   1 661 instead of 1 605 op-amps, so it is used only per row when it is cheaper (final 1 593).
 
@@ -92,6 +98,25 @@ Buildings S, M, E0, E1, E2 (as in stage B); 10 T each (1 … 99.9); ι subsets o
 Control census and configuration counts not covered by h are in adapter.md (stage C table) and
 `results/stageB_S3e.json`. h stays in the PARTIAL band (0.02 < h ≤ 0.25); all of it is GREY predicates.
 
+## Closing pass
+| item | outcome | evidence |
+|---|---|---|
+| resistor cross term (contract 15 §5, architecture §5.6(7)) | **ADDED, PASS** | `tests/test_bench_crossterm.py` (3 tests), exact arithmetic, engine meters vs closed forms; details below |
+| cell-type count / stage labels | **FIXED** | headers of topology.md, adapter.md and DESIGN_DEVIATIONS.md now cover stages A–C. Stage-A model: 10 cell types; building model: 22 cell tags (8 crossbar, 15 core, `rails` shared) |
+| D12 merged run | **FIXED** | now "passed on a cut-down building (OP block not executed)" |
+| value-sharing claim | **CORRECTED** | 66 value duplicates on S reproduced; sharing key stated (D21, topology C.1) |
+| pilot element count | **FIXED: 54** | V 4, OA 7, C 13, R 5, E 1, CMP 4, SW 12, SEQ 6, CNT 1, POR 1. The 54th is the divider VCVS `tb.div`, unconditional since D19. CF3 "full" is 132 (was 134 in the stage-A table) |
+| "refcalc 0.02 s on S" | **WITHDRAWN, replaced by measurement** | `results/closing_timing_and_duplicates.json`, same 10 usable T as the circuit run: refcalc 0.31 s (S) and 0.34 s (E1), best of 3; circuit 13.8 s (S) and 6.5 s (E1). No speed claim |
+
+Cross-term bench results:
+- DC: shared R = (i₁+i₂)²Rt; separate = i₁²Rt + i₂²Rt; the difference is 2i₁i₂Rt, including a negative case.
+- Pulsed, with comparators on a ramp: overlap cross term 48 = 2·3·4·2·1; simultaneous 96; disjoint and touching 0.
+  The identity cross² = 4E₁E₂ρ² holds with ρ = overlap/√(w₁w₂).
+- Model level: every pilot datapath resistor runs rail → op-amp virtual ground, and no resistor joins two summing
+  nodes. Datapath heat is additive over input subsets: 410 = 100 + 160 + 150, the same as C. The built circuit
+  therefore has no cross term.
+- Results: `results/bench_crossterm_{dc,pulsed,model}.json`.
+
 ## NOT_RUN / limits
 * Full-building N_max template.
 * The OP block in the merged run.
@@ -100,4 +125,5 @@ Control census and configuration counts not covered by h are in adapter.md (stag
 * SPICE / hardware; Math7.
 * Building energy meters.
 * Refrigerant duplicate change years: rejected, not supported.
-* No speed claim.
+* Value-keyed amplitude sharing (−66 op-amps possible on S).
+* No speed claim: refcalc is faster (0.31 s vs 13.8 s on S).

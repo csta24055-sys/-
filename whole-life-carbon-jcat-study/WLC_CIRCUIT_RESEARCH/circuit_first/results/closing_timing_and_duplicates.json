@@ -1,0 +1,66 @@
+{
+ "doc": "Closing pass measurements (oracle imported here only, after assert_frozen):\n1. wall time of the frozen refcalc versus the circuit (S3e, all blocks, original convention) on\n   the SAME usable-T list per building (refcalc: one run per T, best of 3 repetitions);\n2. value-duplicate op-amp outputs in crossbar v2 (equal DC voltage at distinct op-amp outputs),\n   i.e. what value-keyed sharing could still remove; the v2 sharing key is structural (factor id,\n   conversion value, object identity of row quantities, one junction per sum call).\nWrites results/closing_timing_and_duplicates.json.",
+ "frozen": {
+  "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+  "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+  "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+ },
+ "timing": {
+  "S": {
+   "T_list": [
+    1,
+    7.5,
+    20,
+    33.3,
+    42.5,
+    59.9,
+    60,
+    60.1,
+    75,
+    99.9
+   ],
+   "n_T": 10,
+   "refcalc_seconds_best_of_3": 0.3101554759996361,
+   "circuit_seconds": 13.77921328299999
+  },
+  "E1": {
+   "T_list": [
+    1,
+    7.5,
+    20,
+    33.3,
+    42.5,
+    59.9,
+    60,
+    60.1,
+    75,
+    99.9
+   ],
+   "n_T": 10,
+   "refcalc_seconds_best_of_3": 0.34002968200002215,
+   "circuit_seconds": 6.484584427998925
+  }
+ },
+ "value_duplicates": {
+  "S": {
+   "opamps": 1593,
+   "distinct_output_values": 1527,
+   "removable_by_value_sharing": 66,
+   "outputs_in_duplicate_classes_by_cell": {
+    "composite": 52,
+    "stage": 40,
+    "eol_routes": 11
+   }
+  },
+  "E1": {
+   "opamps": 1456,
+   "distinct_output_values": 1390,
+   "removable_by_value_sharing": 66,
+   "outputs_in_duplicate_classes_by_cell": {
+    "stage": 44,
+    "composite": 47,
+    "eol_routes": 17
+   }
+  }
+ }
+}

@@ -1,9 +1,20 @@
-# Shared topology (stage A: S0–S2) — rails, time base, event groups, buses
+# Shared topology (stages A, B, C) — rails, time base, event groups, buses, crossbar, core
 
-Status: implemented and executed for CF1–CF3 (stage A). Every statement here is [E] for the
-executed finite cases listed in `STATUS.md`, otherwise [H]. Not drawn as the 70-unit
-partition: the circuit is a fixed **catalogue of 10 cell types** instantiated per input row
-(W4) and joined to shared rails, one time base and one bus per observed stage.
+Status: implemented and executed for CF1–CF3 (stage A, sections 1–6), the full synthetic building
+(stage B, sections B.*), and the final crossbar v2 / core changes (stage C, sections C.*). Every
+statement here is [E] for the executed finite cases listed in `STATUS.md`, otherwise [H]. Not drawn
+as the 70-unit partition. The circuit is a fixed cell catalogue instantiated per input row (W4) and
+joined to shared rails, one time base and one bus per observed stage.
+
+Cell-type count, final state (counted from the `cell` tags of the dumped netlists):
+- stage-A model (`adapter.py`): **10 cell types** (section 2);
+- building model (`adapter_building.py`, `results/stageB_netlists_{S,E1}.json`): **22 cell tags**,
+  identical on S and E1:
+  - 8 crossbar tags: rails, factor_rail, composite, stage, eol_routes, group_sum, repair_sum, stage_sum;
+  - 15 core tags: rails, timebase, clock, logic, bus, packet, yearcell, yearbank, explicit, grid, elec,
+    split, refrigerant, tap, readout;
+  - `rails` is shared by both, and `tap` / `readout` are interface cells;
+  - one untagged element (the power-on `por`).
 Base commit `e4c6d20`. Model actually run: self-reported `claude-opus-5-5`; effort not observable.
 
 ## 1. Element laws used (engine, WLC-agnostic)
@@ -84,7 +95,7 @@ pilot) and `C(T)` (original convention) are separate runs/conventions, not one q
 | essential dynamic states | 7 (3 stage charges, 2 clock phases, year phase, global time); packet/reset caps sit at a source voltage except inside zero-length phases | — |
 | boolean bits | 12 (8-bit year counter + 4 comparator outputs) | 20 |
 | sequencers | 6 | 15 |
-| elements total | 53 | 134 |
+| elements total | 54 (42 analog + 12 digital; incl. the always-present divider VCVS `tb.div`, D19) | 132 |
 Scaling [H]: clocks ∝ number of distinct W2 keys (periods), not rows; packets ∝ amount rows;
 explicit comparators ∝ listed years; one year cell per group with repair; time base constant.
 
@@ -161,6 +172,16 @@ What is shared:
 * each row amplitude node, created once and used by the initial sum (t = 0), the renewal group sum (every
   firing), the repair sum (flow) and, through the stage sums, the B5 base and the terminal readout;
 * one clock per distinct period across materials and equipment (core).
+
+Sharing key, as built: structural, not value.
+- factor id for rails;
+- (factor id, conversion value) for derived rails;
+- object identity `id(x)` of the tracked input for row factors;
+- a fresh junction per `sum` call.
+
+Equal values from different rows are therefore not merged. On S, 66 op-amp outputs duplicate another output's
+value, mostly identical composite recipes (51 composite rows, 15 distinct recipes; `results/closing_timing_and_duplicates.json`,
+DESIGN_DEVIATIONS D21).
 
 ## C.2 Census (`results/stageC_crossbar.json`)
 | building | v1 op-amps / elements | v2 op-amps / elements | v2 op-amps per material+equipment row | L1 bound | gap (both polarities) |

@@ -1,4 +1,6 @@
-# Adapter: primitive inputs → element values, wiring, observables (stage A)
+# Adapter: primitive inputs → element values, wiring, observables (stages A, B, C)
+
+Sections 1–4: the stage-A adapter (`adapter.py`). "Stage B": the building adapter (`adapter_building.py`). "Stage C": crossbar v2 and the configuration census.
 
 Not a per-unit circuit list. The adapter (`adapter.py`) maps whole-scenario primitive inputs
 onto the fixed cell catalogue of `topology.md`. All data values are wrapped in the counting

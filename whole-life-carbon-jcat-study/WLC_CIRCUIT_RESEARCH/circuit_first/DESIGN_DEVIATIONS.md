@@ -1,4 +1,4 @@
-# Design deviations from `coordination/circuit_first_architecture.md` (stage A)
+# Design deviations from `coordination/circuit_first_architecture.md` (stages A, B, C; D1–D25)
 
 Each item: what the architecture says, what was found, evidence, what was implemented.
 Builder findings are [E] on the executed cases, not reviewed yet.
@@ -87,8 +87,14 @@ buildings every equation was peeled, dense block 0, KCL residual exactly 0). The
 sampled op-amp output as a grounded ideal source valued by that DC solution (`tap.*` elements). This is the
 substitution theorem for a stiff ideal op-amp output; it is a solving strategy, not a computation outside element
 laws. Both netlists and the tap map are dumped (`results/stageB_netlists_{S,E1}.json`) so an outside simulator can
-re-run: crossbar DC → taps → core. A merged single-netlist run was NOT done (the crossbar would form
-components of thousands of unknowns in the hybrid solver).
+re-run: crossbar DC → taps → core.
+
+Merged single-netlist run (stage C, D25): **passed on a cut-down building (OP block not executed)**.
+- Setup: tap sources removed and tap nodes joined to the crossbar op-amp outputs; 3 materials, 2 equipment rows,
+  1 refrigerant device; blocks AC, EV and REF.
+- Result: readouts identical to the split run (`results/stageC_merged_netlist.json`; `CF_SLOW=1`, about 7 min).
+- Why the run is cut down: without tap sources the static crossbar becomes one large component re-solved at every
+  event, which is too costly for full buildings and for the OP block.
 
 ## D13 (engine) Boundary nodes and accumulator sinks in `engine/hybrid.py`
 Solving strategies, declared: (a) nodes held by a grounded ideal source are boundary nodes (known potential),
@@ -142,7 +148,12 @@ supported (rails are signed sources). Zero values build no branch (value-equival
 
 ## D19 (V1-D3, V1-D4) Repair stage per (group, stage); one netlist for every convention
 One year cell per (event group, stage). The look-ahead divider is a VCVS of gain ρ (ρ = 0 allowed), so
-right/left/original build the same netlist (53 elements each). The signature is now derived from the netlist graph
+right/left/original build the same netlist: **54 elements each** (42 analog, 12 digital), counted from the netlist in
+the closing pass (`results/pilot_audit_counts.json` → `state_counts.elements`). The 54 elements are:
+- V 4, OA 7, C 13, R 5, E 1, CMP 4, SW 12, SEQ 6, CNT 1, POR 1.
+
+The earlier text said 53, the stage-A count carried over. The 54th element is the divider VCVS `tb.div`, which this
+item made unconditional. The signature is now derived from the netlist graph
 (`model.netlist_signature`). The N_max identical-netlist test runs for the stage-A cell family
 (`tests/test_nmax.py`): unused slots are disabled by static switches, and the W2 grouping becomes a static
 item×clock selection matrix. For the full building the N_max template is NOT_RUN: cell variants differ by input
@@ -183,8 +194,20 @@ expressions. `LazyAmpNet.finalize` realises only what the laws require:
   structural identity, each distinct expression that must exist as a voltage needs ≥ 1 active output, and each
   sampled or multiplied sum needs one junction. The realisation equals the bound plus the expressions needed in
   both polarities (the remaining gap).
-* **Value sharing was not used:** equal-valued quantities could share a node by W2 key equality, but the synthetic
-  data has almost no repeated values (196 of 200 transport distances are distinct on S).
+* **Sharing key actually used: structural, not value.**
+  - factor rails by factor id;
+  - derived rails by (factor id, conversion value);
+  - row-quantity factors by the object identity of the tracked input (`id(x)`);
+  - every `sum` call creates its own junction (fresh id).
+* **Value sharing was not used, and it is not worthless.** The earlier statement that the data "has almost no
+  repeated values" is withdrawn; the verifier refuted it, and the closing pass reproduced the count
+  (`tests/compare_closing.py` → `results/closing_timing_and_duplicates.json`).
+  - On S, 1 593 op-amp outputs take only 1 527 distinct DC values, so 66 op-amps could be removed by value-keyed
+    sharing. E1 gives the same 66.
+  - Duplicate classes by cell on S: composite 52, stage 40, eol_routes 11.
+  - The main source is identical composite recipes: 51 composite rows but 15 distinct recipes, each row building
+    its own junction.
+  - Value-keyed sharing (a W2 key on the recipe or value) would bring S to about 1 527 op-amps. It is NOT_RUN.
 * **Verification:** the v1 path is kept (`crossbar="v1"`) for comparison. All common tap voltages are exactly equal
   (v1 vs v2) on S, M, E0, E1, E2.
 

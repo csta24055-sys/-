@@ -35,9 +35,9 @@
   "agent_definitions_note": "Agent files were updated by the user after this session started (new wlc-circuit-first-builder; new top sections in architect/verifier). Subagents are told to read their on-disk definition because the session may hold the earlier version.",
   "phases": {
     "S1_design": "DONE (design only; every prediction and lemma [H])",
-    "S2_implementation": "DONE by builder (stages A, B, C); stage C independent recheck NOT_RUN yet",
+    "S2_implementation": "DONE (stages A, B, C + closing pass)",
     "S3_independent_verification": "DONE (V1 stage A, V2 stage B, V3 stage C) - recommended final verdict PARTIAL (strong)",
-    "S4_integration_and_save": "NOT_RUN"
+    "S4_integration_and_save": "DONE (circuit_first/VERDICT.md final, coordination/circuit_first_integration.md + coordinator addendum)"
   },
   "engines": {
     "SageMath": "NOT_RUN",
@@ -309,6 +309,52 @@
       },
       "recommended_final_verdict": "PARTIAL (strong)",
       "status": "DONE"
+    },
+    {
+      "phase": "S4_integration_and_save",
+      "actor": "wlc-integrator (subagent)",
+      "frontmatter": "claude-opus-5-5 / high",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "30ab47d",
+      "output": [
+        "circuit_first/VERDICT.md (final, replaces builder draft)",
+        "coordination/circuit_first_integration.md (sections 1-12; section 12 lists nine document disagreements)"
+      ],
+      "findings": [
+        "required cross-term failure test missing (doc 15 section 5)",
+        "stale headers in topology.md / adapter.md, stale D12",
+        "builder claim about repeated values refuted by V3",
+        "\"refcalc 0.02 s\" had no result file"
+      ],
+      "usage": {
+        "subagent_tokens": 258796,
+        "tool_uses": 40,
+        "duration_s": 444
+      },
+      "status": "DONE"
+    },
+    {
+      "phase": "S2_implementation",
+      "stage": "closing pass after integration",
+      "actor": "wlc-circuit-first-builder (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "b69328e",
+      "changes": [
+        "tests/test_bench_crossterm.py (3 tests: shared vs separate resistors, pulsed overlap, model-level additivity)",
+        "headers and D12 corrected",
+        "value-sharing statement withdrawn (66 duplicate op-amp outputs on S reproduced)",
+        "pilot netlist = 54 elements in every convention",
+        "refcalc timing measured: S 0.31 s vs circuit 13.8 s; E1 0.34 s vs 6.5 s (same 10 T)"
+      ],
+      "recheck_by_verifier": "NOT_RUN",
+      "usage": {
+        "subagent_tokens": 159935,
+        "tool_uses": 31,
+        "duration_s": 356
+      },
+      "status": "DONE"
     }
   ],
   "verifier_write_location": "circuit_first/verification/ (decided by coordinator; cycle-1 routes/ and integration/ stay read-only)",
@@ -318,5 +364,35 @@
     "refrigerant ordering at integer tick": "readout -> year tick -> fire (architecture 5.4/5.6), to be confirmed against the oracle in tests",
     "reading a flying year-cell capacitor": "only via an explicit readout switch/charge transfer that is an element-law operation and is counted",
     "V_hi=256*V0": "accepted with the declared domain H<256"
-  }
+  },
+  "overall_verdict": "PARTIAL (architecture rule: CF1-CF4 PASS, CF5 PARTIAL, CF6 present; verifier V3 recommendation \"PARTIAL (strong)\")",
+  "corrections": [
+    "An earlier manifest entry quoted \"refcalc 0.02 s\" for building S from the builder report; it had no result file and is withdrawn. Measured: 0.31 s for 10 T (builder closing pass), 0.6-1.2 s for 16-17 T (verifier)."
+  ],
+  "final_test_sweep": {
+    "date": "2026-11-24",
+    "by": "coordinator (claude-fable-5-2 high)",
+    "python": "3.13.18",
+    "results": {
+      "circuit_first/tests (live tree, final)": "57 tests: 56 OK, 1 skipped (slow merged-netlist test, CF_SLOW=1; not re-run by coordinator; run once by verifier, PASS in 415 s)",
+      "verification test_v1 on snapshot 4c5f375": "7/7 OK (math7-py)",
+      "verification test_v2 on snapshot 80ec2de": "5/5 OK (math7-py)",
+      "verification test_v3 on snapshot 96df403": "3/3 OK (math7-py)"
+    },
+    "note": "verifier tests are tied to their snapshots because they reproduce defects that were later fixed; snapshots are git-archive extractions of the named commits.",
+    "read_only_check": "git diff a92465e..HEAD shows no change outside circuit_first/ and coordination/; cycle-1 routes/, integration/ and cycle-1 coordination files unchanged; no __pycache__ in the study tree"
+  },
+  "not_run": [
+    "SageMath",
+    "MATLAB",
+    "Math7 cross-checks (no workflow dispatched)",
+    "SPICE / hardware",
+    "in-band T",
+    "full-building fixed N_max template",
+    "merged single netlist incl. OP block",
+    "value-keyed sharing / factor-grouped crossbar (counted by verifier, not built)",
+    "AGG ratios and decision/reference units",
+    "second review of the L1 proof sketch",
+    "verifier recheck of the closing pass"
+  ]
 }
