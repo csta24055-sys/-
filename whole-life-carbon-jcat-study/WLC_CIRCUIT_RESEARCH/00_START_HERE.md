@@ -34,5 +34,5 @@ The user also wants the earlier **GitHub research classification tree** taken in
 ## What to deliver
 A formal circuit grammar, clear schematics, calibration table, 2-equipment pilot, independent baseline and circuit simulations, reproducible boundary/overlap tests, counterexamples, model reduction experiments, complexity benchmark, and a concise report of novel *verified* implications. Study new mathematical claims only after checking original theory and prior art.
 
-## Start order
-Read `01_FORMAL_MODEL.md` → `02_VERIFICATION_PLAN.md` → `03_EXECUTION_PLAN.md`; read `05_SOURCE_MAP.md` and use `04_CLAUDE_START_PROMPT.md` as the short future-session instruction. New logs and code go into this folder only. No original files altered.
+## Start order（最終更新）
+研究実行時は、`CLAUDE.md` → `12_FINAL_OPERATING_PLAN.md` → `07_SHARED_CONTRACT.md` を短く読み、その担当に必要な資料だけを参照する。**03は技術チェックリスト、04は過去の開始プロンプト、06は研究分担の説明**であり、実行順序はすべて12が優先する。各担当の成果を `routes/<role>/` に隔離し、統合は検証済みの結果に限る。新しい研究以外は変更しない。
