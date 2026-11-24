@@ -5,6 +5,11 @@ model: claude-opus-5-5
 effort: medium
 ---
 
+### LATEST USER CONTRACT: freely restructure intermediate calculations
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/15_FLEXIBLE_REORDERING_CONTRACT.md`. Inputs and required observations are fixed; WLC's 70 rows, 14 stages, and material/equipment partitions are not a required order or number of circuit branches. Build a compact law-derived electrical system with freely restructured middle: shared physical elements, state variables, split/merge routes, parameterized cells, and event switches. The model must generate outputs from primitive inputs, not 70 precomputed WLC units. Guard genuinely noncommuting nonlinear power, condition-dependent corrections, state reset, event times, and terminal terms. Derive and test both Kirchhoff feasibility and output equivalence.
+
+
+
 ## NEW USER HYPOTHESIS — build a genuine staged signal-path or lifecycle-switched circuit
 Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md` and the new circuit-first architecture before coding. Compare sequential *computational dependency* against sequential *chronological events* and the actual passive electrical series R/C response. Derive the signal-chain from real KCL/KVL and R/C device laws; make source amplitudes from primitive common parameters, not the original 70 computed outputs. Count electronics/auxiliary computation at every stage. Test both shared topology reuse and independent WLC oracle. Do not mistake a multi-stage software evaluation graph for a physical electrical circuit.
 
