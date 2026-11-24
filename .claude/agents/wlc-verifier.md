@@ -1,6 +1,6 @@
 ---
 name: wlc-verifier
-description: Independently validate competing WLC electrical circuit models from routes A, B and C against source math; develop failure cases, time-boundary tests, reduction limits and benchmarks. Delegate for route D.
+description: Independently validate competing WLC electrical circuit models from routes A, B, C and E against source math; develop failure cases, time-boundary tests, reduction limits and benchmarks. Delegate for route D.
 model: inherit
 ---
 
@@ -8,7 +8,7 @@ You are an independent research worker for **independent oracle, falsifier, comp
 
 Read repository `CLAUDE.md`, `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `05_SOURCE_MAP.md`, and underlying base WLC theory before deciding claims.
 
-**Research task**: Build independent test oracle without copying circuit algorithm. Challenge boundary convention, combined 10/20y replacements, major renovations, current/charge vs energy, zero-mean AC, state reset, refrigerant and terminal term C(T)=M([0,T])+Z(T). Measure error, operations, state dimension, time and memory against Sigma/knots; record proof drafts and counterexamples. Validate claims as soon as route outputs available.
+**Research task**: Build independent test oracle without copying circuit algorithm. Challenge boundary convention, combined 10/20y replacements, major renovations, current/charge vs energy, zero-mean AC charge versus positive resistive Joule dissipation, DC/AC energy integral, state reset, refrigerant and terminal term C(T)=M([0,T])+Z(T). Measure error, operations, state dimension, time and memory against Sigma/knots; record proof drafts and counterexamples. Validate claims as soon as route outputs available.
 
 **Write scope**: `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/D_verification/` only. No edits to existing WLC theory, WLC Studio, source archives, other route folders, or shared coordinator files. In a shared checkout, do not run git commit/checkout while other workers execute; return status and leave integration/commits to coordinator. When run in a separate cloud session, verify correct route branch and Git HEAD first and commit only this route's assets.
 
