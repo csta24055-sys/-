@@ -4,11 +4,18 @@
   "review_prompt": "jobdoc",
   "baseline_required": true,
   "baseline_hint": "面接カードと専門性確認資料を `ref add` で登録し、Claude が必要部分だけを artifacts/baseline/ に抜粋してから開始する",
-  "policy_char_limit": 7000,
+  "policy_char_limit": 20000,
   "policies_common": {
-    "QUALITY_GATES.md": ["__intro__", "リスク重み付け"],
-    "DECISION.md": ["優先順位"],
-    "AUTOMATION.md": ["複数AIの役割"]
+    "QUALITY_GATES.md": [
+      "__intro__",
+      "リスク重み付け"
+    ],
+    "DECISION.md": [
+      "優先順位"
+    ],
+    "AUTOMATION.md": [
+      "複数AIの役割"
+    ]
   },
   "task_types": {
     "deep_questions": {
@@ -20,8 +27,12 @@
         "本人の承認済み事実の範囲外を前提にした質問がないか"
       ],
       "policies": {
-        "COGNITIVE_PLAYBOOK.md": ["相手の理解"],
-        "INTERPRETATION.md": ["第4層"]
+        "COGNITIVE_PLAYBOOK.md": [
+          "相手の理解"
+        ],
+        "INTERPRETATION.md": [
+          "第4層"
+        ]
       }
     },
     "answer_improve": {
@@ -34,8 +45,13 @@
         "面接カードの記述と矛盾しないか"
       ],
       "policies": {
-        "COGNITIVE_PLAYBOOK.md": ["相手の理解", "思考のバイアス"],
-        "INTERPRETATION.md": ["第3層"]
+        "COGNITIVE_PLAYBOOK.md": [
+          "相手の理解",
+          "思考のバイアス"
+        ],
+        "INTERPRETATION.md": [
+          "第3層"
+        ]
       }
     },
     "mock_interview": {
@@ -46,8 +62,12 @@
         "改善点が次の練習で検証できる形になっているか"
       ],
       "policies": {
-        "FORECAST_AND_VERIFY.md": ["反証テスト"],
-        "COGNITIVE_PLAYBOOK.md": ["相手の理解"]
+        "FORECAST_AND_VERIFY.md": [
+          "反証テスト"
+        ],
+        "COGNITIVE_PLAYBOOK.md": [
+          "相手の理解"
+        ]
       }
     },
     "contradiction_check": {
@@ -58,9 +78,60 @@
         "食い違いごとに、どちらが正しいかの根拠または本人確認の要否を示しているか"
       ],
       "policies": {
-        "INTERPRETATION.md": ["第3層"],
-        "KNOWLEDGE_MEMORY.md": ["新しい情報が来たとき"],
-        "FORECAST_AND_VERIFY.md": ["反証テスト"]
+        "INTERPRETATION.md": [
+          "第3層"
+        ],
+        "KNOWLEDGE_MEMORY.md": [
+          "新しい情報が来たとき"
+        ],
+        "FORECAST_AND_VERIFY.md": [
+          "反証テスト"
+        ]
+      }
+    },
+    "final_prep": {
+      "label": "面接最終対策（プレゼン・個別面接・グループワーク・当日）",
+      "rubric": [
+        "提出済みシートと矛盾せず、本人の事実（F-ID）と都の公式資料（E-ID）で裏付けられているか",
+        "選考形式（プレゼン3〜5分・個別面接・グループワーク50分）に合った、当日そのまま使える形になっているか",
+        "想定質問の意図に正面から答え、深掘り・反論に耐えるか（研究段階・志望度・用語の正確さ等）",
+        "回答の長さ・発言順序・具体性・非言語の指示が実践可能か",
+        "学校名・研究室名など禁止事項を守っているか、誇張がないか"
+      ],
+      "policies": {
+        "COGNITIVE_PLAYBOOK.md": [
+          "相手の理解",
+          "思考のバイアス"
+        ],
+        "INTERPRETATION.md": [
+          "第3層",
+          "第4層"
+        ],
+        "FORECAST_AND_VERIFY.md": [
+          "反証テスト"
+        ]
+      }
+    },
+    "plan": {
+      "label": "計画（研究・対策計画そのもの）",
+      "rubric": [
+        "目的・成功条件・期限に対して計画が合理的で、優先順位が正しいか",
+        "見落とし・反証・代替案があるか",
+        "事実と仮説・既存実績と将来計画が区別されているか",
+        "各成果物に検証可能な受入条件があるか"
+      ],
+      "policies": {
+        "DECISION.md": [
+          "競合案の採点",
+          "最小作業の定義"
+        ],
+        "FORECAST_AND_VERIFY.md": [
+          "実行前予測",
+          "反証テスト"
+        ],
+        "KNOWLEDGE_MEMORY.md": [
+          "新しい情報が来たとき"
+        ]
       }
     }
   }

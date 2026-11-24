@@ -634,6 +634,55 @@ def bridge_cfg(s: dict) -> dict:
     return cfg
 
 
+def budget_path() -> Path:
+    return H() / "budget.json"
+
+
+def cmd_budget_set(a):
+    """全実行で共有する包括予算（ユーザーの承認発言を記録）。各実行の approve とあわせて両方を満たす必要がある。"""
+    if not a.user_quote.strip():
+        raise LoopError("--user-quote にユーザーの承認発言を記録してください")
+    exp = parse_time(a.expires)
+    for k in ("max_calls", "max_input_tokens", "max_output_tokens"):
+        if getattr(a, k) < 1:
+            raise LoopError(f"--{k.replace('_', '-')} は正の整数")
+    b = read_json(budget_path(), {"used": {"calls": 0, "input_tokens": 0, "output_tokens": 0}})
+    b.update({"model": a.model, "max_calls": a.max_calls, "max_input_tokens": a.max_input_tokens,
+              "max_output_tokens": a.max_output_tokens, "data": [x for x in a.data.split(",") if x],
+              "expires": exp.isoformat(timespec="seconds"), "user_quote": a.user_quote, "set_at": iso()})
+    write_json(budget_path(), b)
+    out(b)
+
+
+def check_global_budget(est_in: int, worst_out: int, n_parts: int, model: str, classes: list[str]) -> None:
+    b = read_json(budget_path(), {})
+    if not b:
+        return
+    u = b["used"]
+    if now() > parse_time(b["expires"]):
+        raise LoopError(f"包括予算の期限 {b['expires']} を過ぎています")
+    if model != b["model"]:
+        raise LoopError("包括予算で承認されたモデルと異なります")
+    bad = set(classes) - set(b["data"])
+    if bad:
+        raise LoopError(f"包括予算で承認されていないデータ区分: {sorted(bad)}")
+    if u["calls"] + n_parts > b["max_calls"]:
+        raise LoopError(f"包括予算の呼び出し回数を超えます（{u['calls']} + {n_parts} > {b['max_calls']}）")
+    if u["input_tokens"] + est_in > b["max_input_tokens"]:
+        raise LoopError(f"包括予算の入力トークンを超えます（{u['input_tokens']} + {est_in} > {b['max_input_tokens']}）")
+    if u["output_tokens"] + worst_out > b["max_output_tokens"]:
+        raise LoopError(f"包括予算の出力トークンを超えます（{u['output_tokens']} + {worst_out} > {b['max_output_tokens']}）")
+
+
+def charge_global(calls: int = 0, inp: int = 0, outp: int = 0) -> None:
+    b = read_json(budget_path(), {})
+    if b:
+        b["used"]["calls"] += calls
+        b["used"]["input_tokens"] += inp
+        b["used"]["output_tokens"] += outp
+        write_json(budget_path(), b)
+
+
 def check_budget(s: dict, est_in: int, cfg: dict, n_parts: int = 1) -> None:
     ap = s.get("approval")
     if not ap:
@@ -650,6 +699,7 @@ def check_budget(s: dict, est_in: int, cfg: dict, n_parts: int = 1) -> None:
     if u["input_tokens"] + est_in > ap["max_input_tokens"]:
         raise LoopError(f"入力トークン予算を超えます（使用 {u['input_tokens']} + 見込み {est_in} > {ap['max_input_tokens']}）")
     worst_out = ap["output_tokens_per_call"] * n_parts
+    check_global_budget(est_in, worst_out, n_parts, cfg["model"], ap.get("data", []))
     if u["output_tokens"] + worst_out > ap["max_output_tokens"]:
         raise LoopError(f"出力トークン予算を超えます（使用 {u['output_tokens']} + 最大 {worst_out} > {ap['max_output_tokens']}）")
     if ap.get("max_usd") is not None:
@@ -720,6 +770,7 @@ def apply_verdict(d: Path, s: dict, v: dict, source: str) -> None:
 
 def _send_one(d: Path, s: dict, cfg: dict, payload: dict, est_in: int, idir: Path, part: int, opener) -> str:
     s["usage"]["calls"] += 1          # 送信前に計上（落ちても過小計上しない）
+    charge_global(calls=1)
     s["status"] = "reviewing"
     save_state(d, s, "review_send", part=part, estimated_input_tokens=est_in)
     (idir / f"packet_part{part}.txt").write_text(payload["instructions"] + "\n\n" + payload["input"], encoding="utf-8")
@@ -727,6 +778,7 @@ def _send_one(d: Path, s: dict, cfg: dict, payload: dict, est_in: int, idir: Pat
         res = gb.send(cfg, payload, opener)
     except gb.BridgeError as e:
         s["usage"]["input_tokens"] += est_in
+        charge_global(inp=est_in)
         s["status"] = "awaiting_review"
         s["last_error"] = str(e)
         save_state(d, s, "review_error", error=str(e), part=part)
@@ -735,6 +787,7 @@ def _send_one(d: Path, s: dict, cfg: dict, payload: dict, est_in: int, idir: Pat
     it_out = res.get("output_tokens") or payload["max_output_tokens"]
     s["usage"]["input_tokens"] += it_in
     s["usage"]["output_tokens"] += it_out
+    charge_global(inp=it_in, outp=it_out)
     ap = s["approval"]
     if ap.get("price_in_per_mtok") is not None:
         s["usage"]["usd"] += (it_in * ap["price_in_per_mtok"] + it_out * ap["price_out_per_mtok"]) / 1e6
@@ -993,7 +1046,8 @@ def cmd_status(a):
                                                                           "max_output_tokens", "max_usd", "expires")},
                      "last_verdict": s["last_verdict"], "last_error": s["last_error"],
                      "next": instruction(s)["message"]})
-    out({"halted": (H() / "STOP").exists(), "runs": rows})
+    out({"halted": (H() / "STOP").exists(), "global_budget": read_json(budget_path(), None) if budget_path().exists() else None,
+         "runs": rows})
 
 
 def cmd_history(a):
@@ -1120,6 +1174,15 @@ def build_parser() -> argparse.ArgumentParser:
     x.add_argument("--task-type", required=True)
     x.add_argument("--goal", required=True)
     x.add_argument("--max-iterations", type=int, default=3)
+
+    x = sp("budget-set", cmd_budget_set, "全実行で共有する包括予算を記録（ユーザーの承認発言をそのまま）")
+    x.add_argument("--model", required=True)
+    x.add_argument("--max-calls", type=int, required=True)
+    x.add_argument("--max-input-tokens", type=int, required=True)
+    x.add_argument("--max-output-tokens", type=int, required=True)
+    x.add_argument("--data", required=True)
+    x.add_argument("--expires", required=True)
+    x.add_argument("--user-quote", required=True)
 
     x = sp("approve", cmd_approve, "包括承認を記録（回数・予算・送信データ・期限）")
     run_sel(x)

@@ -4,11 +4,18 @@
   "review_prompt": "jobdoc",
   "baseline_required": false,
   "baseline_hint": "応募先の一覧はワークスペース作成時に --target で非公開ホームにだけ登録する",
-  "policy_char_limit": 7000,
+  "policy_char_limit": 20000,
   "policies_common": {
-    "QUALITY_GATES.md": ["__intro__", "リスク重み付け"],
-    "DECISION.md": ["優先順位"],
-    "AUTOMATION.md": ["複数AIの役割"]
+    "QUALITY_GATES.md": [
+      "__intro__",
+      "リスク重み付け"
+    ],
+    "DECISION.md": [
+      "優先順位"
+    ],
+    "AUTOMATION.md": [
+      "複数AIの役割"
+    ]
   },
   "task_types": {
     "company_research": {
@@ -20,8 +27,13 @@
         "未調査の論点が明記されているか"
       ],
       "policies": {
-        "INTERPRETATION.md": ["第3層", "第4層"],
-        "KNOWLEDGE_MEMORY.md": ["新しい情報が来たとき"]
+        "INTERPRETATION.md": [
+          "第3層",
+          "第4層"
+        ],
+        "KNOWLEDGE_MEMORY.md": [
+          "新しい情報が来たとき"
+        ]
       }
     },
     "fit_analysis": {
@@ -33,8 +45,12 @@
         "複数社の比較で評価基準がそろっているか"
       ],
       "policies": {
-        "DECISION.md": ["競合案の採点"],
-        "COGNITIVE_PLAYBOOK.md": ["思考のバイアス"]
+        "DECISION.md": [
+          "競合案の採点"
+        ],
+        "COGNITIVE_PLAYBOOK.md": [
+          "思考のバイアス"
+        ]
       }
     },
     "es_review": {
@@ -46,8 +62,13 @@
         "読み手が文脈を補わなくても理解できるか"
       ],
       "policies": {
-        "COGNITIVE_PLAYBOOK.md": ["相手の理解", "思考のバイアス"],
-        "INTERPRETATION.md": ["第3層"]
+        "COGNITIVE_PLAYBOOK.md": [
+          "相手の理解",
+          "思考のバイアス"
+        ],
+        "INTERPRETATION.md": [
+          "第3層"
+        ]
       }
     },
     "interview_prep": {
@@ -58,8 +79,12 @@
         "企業固有の論点（根拠台帳）を踏まえているか"
       ],
       "policies": {
-        "COGNITIVE_PLAYBOOK.md": ["相手の理解"],
-        "FORECAST_AND_VERIFY.md": ["反証テスト"]
+        "COGNITIVE_PLAYBOOK.md": [
+          "相手の理解"
+        ],
+        "FORECAST_AND_VERIFY.md": [
+          "反証テスト"
+        ]
       }
     },
     "strategy": {
@@ -70,8 +95,35 @@
         "応募・送信などの最終行動は本人が行う前提になっているか"
       ],
       "policies": {
-        "DECISION.md": ["競合案の採点", "最小作業の定義"],
-        "FORECAST_AND_VERIFY.md": ["実行前予測"]
+        "DECISION.md": [
+          "競合案の採点",
+          "最小作業の定義"
+        ],
+        "FORECAST_AND_VERIFY.md": [
+          "実行前予測"
+        ]
+      }
+    },
+    "plan": {
+      "label": "就活全体の戦略・研究計画",
+      "rubric": [
+        "6対象それぞれの目的・期限・優先順位が合理的か",
+        "調査軸が企業固有の重要論点を網羅し、定石に偏っていないか",
+        "実績形成計画が捏造でなく実行可能で、評価との因果仮説と検証方法があるか",
+        "事実と仮説が区別され、更新・再計算の仕組みがあるか"
+      ],
+      "policies": {
+        "DECISION.md": [
+          "競合案の採点",
+          "最小作業の定義"
+        ],
+        "FORECAST_AND_VERIFY.md": [
+          "実行前予測",
+          "反証テスト"
+        ],
+        "COGNITIVE_PLAYBOOK.md": [
+          "思考のバイアス"
+        ]
       }
     }
   }
