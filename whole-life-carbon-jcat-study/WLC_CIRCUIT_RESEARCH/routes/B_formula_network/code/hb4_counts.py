@@ -86,7 +86,37 @@ def refrigerant_family(scn, sy, usage, Ts):
     years_rows = tabs.nrows("refrigerants.years") if "refrigerants.years" in sy.tabs.rows else None
     time_steps = [s["out"] for s in m["unified"].P_TIME.steps if s["out"].startswith(("t.b12", "t.b13", "t.b14", "t.b1_"))]
     nd = len(rc.devs)
-    return {
+    # ---- D pass-2 item: the MERGED knot form (amplitudes of equal shapes summed across devices) ----
+    merged = {}
+    for unit in ("B1-02", "B1-03", "B1-04"):
+        mp = m["rampstep"].merge([p for p in sy.pieces.get(unit, []) if p.amp != 0.0])
+        ks = m["knots"].KnotSpectrum([m["rampstep"].Piece(a, s_, l_, g_) for (s_, l_, g_), a in mp.items() if a != 0.0])
+        ne, nl = len(set(ks.ev_keys)), len(set(ks.la_keys))
+        merged[unit] = {"distinct_event_knots": ne, "distinct_lattice_knots": nl, "coefficients": 1 + 2 * (ne + nl),
+                        "unmerged_pieces": len(sy.pieces.get(unit, [])), "unmerged_knots": sy.K[unit].n_knots}
+    merged_total = sum(v["coefficients"] for v in merged.values())
+    tup = rc.state_tuple()
+    n_ev = sum(1 for e in rc.timeline if e[2] == "cmp")
+    distinct_numbers = 4 * nd + (1 + 2 * nd) + n_ev + 6 * nd    # states + event times once + 6 params/device; cell thresholds are integers
+    # random access: one fresh replay from T=0 per query vs one knot evaluation per unit per query
+    import random
+    rnd = random.Random(20261124)
+    Tq = [rnd.uniform(0.01, 60.0) for _ in range(200)]
+    def med(f, n=5):
+        ts = []
+        for _ in range(n):
+            t0 = time.perf_counter(); f(); ts.append(time.perf_counter() - t0)
+        return sorted(ts)[n // 2]
+    t_auto_ra = med(lambda: [rc.sweep([T]) for T in Tq])
+    t_auto_sorted = med(lambda: rc.sweep(Tq))
+    t_knot_ra = med(lambda: [(sy.I14.value(T), sy.K["B1-02"].value(T), sy.K["B1-03"].value(T)) for T in Tq])
+    tradeoff = {"merged_knot_coefficients_B1-02+03+04": merged_total, "automaton_numbers_tuple_sum": sum(tup),
+                "automaton_distinct_numbers_(event_times_counted_once)": distinct_numbers,
+                "seconds_median5_200_random_T": {"automaton_fresh_replay_each_T": t_auto_ra,
+                                                  "automaton_one_sorted_sweep": t_auto_sorted,
+                                                  "msp_knots+interval_random_access": t_knot_ra},
+                "random_access_ratio_automaton/knots": t_auto_ra / t_knot_ra}
+    return {"merged_knot_form": merged, "time_memory_tradeoff": tradeoff,
         "msp": {"p1_static_steps_REFRIGERANT": usage["REFRIGERANT"].get("step:sp", 0) + usage["REFRIGERANT"].get("step:match", 0),
                 "time_static_steps_B1": len(time_steps), "emit_declarations_B1": sum(1 for e in m["system"].EMIT if e["spectrum"].startswith("B1-")),
                 "rows_device_x_year_table": years_rows,

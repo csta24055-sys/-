@@ -34,7 +34,7 @@ def v(*kernels):
         else:
             parts.append(f"{k}: n={d['n']} fail={d['n_fail']} max_rel_vs_refcalc={d['max_rel_ref_asserted']:.1e} "
                          f"max_rel_vs_msp={d['max_rel_msp_asserted']:.1e}")
-    return "; ".join(parts) + " (S,M benchmark scenarios; tests/test_oracle.py)"
+    return "; ".join(parts) + " (benchmark S, M + out-of-sample EV3, EV11; tests/test_oracle.py)"
 
 
 def h3():
@@ -89,7 +89,7 @@ ROWS = [
      "in the T sweep it is a constant; in real time it moves with the horizon (TH-4), so it is not a capacitor charge",
      "conditional", v("C1-01 [DC source]", "C4-01 [DC source]", "X-14 [DC source]") + "; Phi/X5 NOT_RUN (route D)", "[F]", "(0,0,0,1)"),
     ("K10", "year cell w_k(T)=clip(T-k,0,1) (single)", S03, "§3.2; §5.1", "a*clip(T-k,0,1)", "B6-03, B7-04, B1-02, EL, G",
-     "summing node T + src(-k) -> clip -> gain a", "b", "clip is a saturating (active) element; kink at k and k+1 (H-B2 excludes passive LTI RC)",
+     "summing node T + src(-k) -> clip -> gain a", "b", "class relative to G: in G the saturation is the clip block (op-amp realisation); physically an ideal-diode clipper (nonlinear passive) or a switch closed on (k,k+1] between a DC current source and a capacitor (time-varying passive) also gives w_k exactly; only LTI RC with sources analytic on (0,inf) is excluded (H-B2)",
      "exact", v("B6-03 [P1 pieces]", "B7-04 [P1 pieces]", "B1-02 [P1 cells]"), "[F]", "(0,0,0,2)"),
     ("K11", "year-cell superposition sum_k B_k w_k(T)", S06, "§4.2 U_B", "sum_k B_k w_k(T)", "B6-03, B7-04",
      "external table of per-cell currents indexed by a comparator-bank counter k(T) -> ONE integrator (switched current source)", "c",
@@ -112,18 +112,18 @@ ROWS = [
     ("K16", "refrigerant state recurrence u_dk = chi m0 + (1-chi) q u_d,k-1 (switched affine, D-08)", S03, "§5.5", "u_{d,k}",
      "B1-02/03/04 state", "sample-hold per device (gain q at each cell boundary, reset switch to m0 on a counted event)", "c",
      "not time-invariant linear (TH-9); needs reset; continuous RC cannot reset", "exact",
-     v("B1-02 [raw S/H automaton]", "B1-04 [raw S/H automaton]"), "[F]", "(1,1,0,0) per device"),
+     v("B1-02 [raw S/H automaton]", "B1-04 [raw S/H automaton]"), "[F]", "per device (1,1,0,0); the shared cell counter and its H-1 thresholds are counted once in the K19 totals"),
     ("K17", "refrigerant leak B1-02 = sum u_dk r GWP w_k", S03, "§5.5", "sum_{d,k} u r GWP w_k(T)", "B1-02",
      "VCCS (gain r) on the held state into an integrator reset each cell; S/H accumulator of closed cells", "c", "state-dependent current", "exact",
-     v("B1-02 [raw S/H automaton]", "B1-02 [P1 cells]"), "[F]", "(2,0,0,0) per device"),
+     v("B1-02 [raw S/H automaton]", "B1-02 [P1 cells]"), "[F]", "per device (2,0,0,0) (Lyr integrator + acc_e S/H)"),
     ("K18", "replacement loss B1-03 (atom + gated cell with state amplitude)", S03, "§5.5 (D-08 f)", "lambda GWP u_before", "B1-03",
      "comparator-gated sample of the held state minus the in-cell integrator; S/H accumulator", "c", "amplitude depends on T until the cell closes",
-     "exact", v("B1-03 [raw S/H automaton]", "B1-03 [P1 pieces]"), "[F]", "(1,1,#events,0) per device"),
+     "exact", v("B1-03 [raw S/H automaton]", "B1-03 [P1 pieces]"), "[F]", "per device (1,1,#events of the device,0) (acc_b13 S/H + n_cur counter)"),
     ("K19", "refrigerant terminal residual R(T) interval form (Z part, iota_B1 R)", S03, "§5.4", "A_K + B_K (T-K) + sum theta (alpha + gamma (T-K))", "B1-04",
      "S/H + reset + switched integrator with LATE reset when a comparator fires after its cell closed (integer tau)", "c",
-     "reproduces the model's recomputation of history at each T; the msp interval form deviates in the band (K, sw(tau)]",
-     "exact", v("B1-04 [raw S/H automaton]") + "; inside band (K,sw] also matched (outside D'); ablation without late reset: "
-     + (f"max rel {max(u['rel_ref'] for u in K['summary']['B1-04 [raw S/H, no late reset]']['unasserted']):.2e}" if K else "NOT_RUN"), "[F]", "(4,2,H-1+#events,#events+6) per device"),
+     "reproduces the model's recomputation of history at each T; the msp interval form deviates in the open band (K, sw(tau)) (03 5.4; 03 3.4 excludes the closed (K, sw] conservatively)",
+     "exact", v("B1-04 [raw S/H automaton]") + "; inside the open band (K,sw(tau)) also matched (outside D'); ablation without late reset (scenario-dependent; D saw up to 0.97): "
+     + (f"max rel {max(u['rel_ref'] for u in K['summary']['B1-04 [raw S/H, no late reset]']['unasserted']):.2e}" if K else "NOT_RUN"), "[F]", "TOTALS for nd devices, n_ev events (grammar.RefrigerantCircuit.state_tuple): (4nd, 1+2nd, (H-1)+n_ev, n_ev+6nd); cell counter (1) and its H-1 thresholds shared; BM-M (160,81,360,471)"),
     ("K20", "continuous RC discharge as a realisation of R(T) (alternative to K19)", S03, "§5.4-5.5 (H-B3)", "m0 q^(T-t_reset), exp(-1/RC)=q",
      "B1-04, B1-02", "passive RC (+ reset switch)", "a", "matches at whole years only; the model is linear inside a cell",
      "approximate", h3(), "[F]", "(1,0,0,0) per device"),
@@ -172,7 +172,7 @@ ROWS = [
      "not in G", "e", "outside the 70-unit model; masked sum-product cannot represent them as reals ([P] in source)", "unsupported",
      "out of scope, NOT_RUN", "[P] source / [H] here", "-"),
     ("K37", "passive LTI RC realisation of any kinked/jumping kernel (H-B2)", S03, "§5.1; TH-1, TH-7", "exp-polynomial = kernel on interval with knot?",
-     "K10, K13, K14", "passive RC with analytic sources", "e", "real-analytic response vs piecewise-linear kernel with knot (identity theorem)",
+     "K10, K13, K14", "lumped LTI RC with sources analytic on (0,inf)", "e", "class e RELATIVE TO the LTI/analytic-source restriction, not a physical impossibility: real-analytic response vs piecewise-linear kernel with a knot (identity theorem); switched or ideal-diode passive networks and a switch + charged capacitor do reproduce kinks/jumps (classes b/c in G)",
      "unsupported", h2(), "[H] proof sketch pending D", "-"),
 ]
 

@@ -391,6 +391,27 @@
         "compose_check.py not re-run in this pass (inputs unchanged; results/hc*.json provenance 5a2f898)"
       ],
       "status": "ACCEPT_WITH_CONDITIONS_MET"
+    },
+    {
+      "phase": "G3",
+      "route": "B_formula_network",
+      "pass": "fix after D pass 2",
+      "actor": "wlc-formula-network (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "7de1065 (results regenerated at a0bb507)",
+      "route_result": "17/17 tests OK (was 16); 2,928 asserted comparisons on 4 scenarios incl. out-of-sample EV3/EV11, worst 1.87e-13",
+      "coordinator_rerun": "17/17 OK",
+      "items": {
+        "1 H-B4 refrigerant restated as time-memory trade-off (merged knots 1,063 vs automaton 1,072; automaton 56-343x slower random access)": "FIXED",
+        "2 H-B2 scoped to lumped LTI RC with analytic sources; ramp term added": "FIXED",
+        "3 band wording": "FIXED",
+        "4 K19 tuple totals": "FIXED",
+        "5 magnitude assertions + out-of-sample scenarios": "FIXED",
+        "6 K26/K28/K30/K32/K33": "NOT_RUN"
+      },
+      "disputed": "none",
+      "status": "ACCEPT_WITH_CONDITIONS_MET (H-B1 remains PARTIAL: four kinds NOT_RUN)"
     }
   ],
   "setup_audit": {

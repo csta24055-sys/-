@@ -28,7 +28,8 @@ EXTRA_T = [0.5, 7.3, 29.5, 59.999999, 100.25, 130.0]
 
 def band_points(tau: float) -> list[tuple[float, str]]:
     """Points around an integer event time tau (architecture 1.2):
-    band_in   tau*(1+5e-10)  inside [tau, tau/(1-eps)): the original does NOT count the event yet
+    band_in   tau*(1+5e-10)  inside the closed real band [tau, tau/(1-eps)] (floats: [tau, sw(tau)) with
+              sw(tau) = fl(tau/(1-eps)) the first float that counts): the original does NOT count the event yet
     knife     tau*(1+1e-9)   the float knife edge (real arithmetic: not counted; float: counted) -> undefined
     band_out  tau*(1+2e-9)   just after the band: counted"""
     return [(tau * (1 + 5e-10), "band_in"), (tau * (1 + 1e-9), "knife"), (tau * (1 + 2e-9), "band_out")]
@@ -53,7 +54,8 @@ def integer_event_times(sy, scn) -> list[float]:
 
 def refrigerant_band_taus(scn, H: int, n: int = 3) -> list[float]:
     """Integer event times of refrigerant devices WITHOUT top-up (where the reset changes the state): the
-    band (K, sw(tau)] of these events is where the canonical / interval forms are known to deviate (03 3.4)."""
+    open band (K, sw(tau)) of these events is where the interval form is observed to deviate (03 5.4; 03 3.4
+    excludes the closed (K, sw(tau)] conservatively from D')."""
     taus = set()
     for dev in scn.refrigerants:
         if dev.top_up:
@@ -91,7 +93,8 @@ PIECE_KERNELS = {
     "B1-02": "year cell (P1 state amplitudes u_dk)",
 }
 # kernels whose P1 amplitudes encode the refrigerant state assuming every event is counted (canonical form):
-# they are expected to differ from refcalc inside the band (K, sw(tau)] (outside D')
+# they are expected to differ from refcalc inside the open band (K, sw(tau)) (outside D'; 03 3.4 excludes (K, sw]).
+# B1-02 [P1 cells] in the band is NOT relied upon: D measured 8.9e-10 there on EV6, close to the 1e-9 tolerance.
 BAND_SENSITIVE = {"B1-02 [P1 cells]", "B1-04 [msp interval]", "B1-04 [P1 jump pieces]"}
 
 
@@ -230,7 +233,7 @@ def main():
     t0 = time.perf_counter()
     res_dir = os.path.join(O.ROUTE, "results")
     os.makedirs(res_dir, exist_ok=True)
-    runs = [run_scenario(s) for s in O.representative_scenarios(("S", "M"))]
+    runs = [run_scenario(s) for s in O.representative_scenarios(("S", "M")) + O.out_of_sample_scenarios()]
     summ = summarise(runs)
     meta = {"head": O.head_sha(), "frozen_trees": O.setup()["trees"], "python": platform.python_version(),
             "machine": platform.machine(), "tolerance_rel": TOL, "seconds": time.perf_counter() - t0,

@@ -376,6 +376,40 @@
     ]
    },
    "refrigerant B1-02/03/04 (raw automaton vs P1 REFRIGERANT + knots + interval)": {
+    "merged_knot_form": {
+     "B1-02": {
+      "distinct_event_knots": 0,
+      "distinct_lattice_knots": 131,
+      "coefficients": 263,
+      "unmerged_pieces": 650,
+      "unmerged_knots": 1300
+     },
+     "B1-03": {
+      "distinct_event_knots": 26,
+      "distinct_lattice_knots": 0,
+      "coefficients": 53,
+      "unmerged_pieces": 26,
+      "unmerged_knots": 26
+     },
+     "B1-04": {
+      "distinct_event_knots": 0,
+      "distinct_lattice_knots": 0,
+      "coefficients": 1,
+      "unmerged_pieces": 5,
+      "unmerged_knots": 0
+     }
+    },
+    "time_memory_tradeoff": {
+     "merged_knot_coefficients_B1-02+03+04": 317,
+     "automaton_numbers_tuple_sum": 242,
+     "automaton_distinct_numbers_(event_times_counted_once)": 87,
+     "seconds_median5_200_random_T": {
+      "automaton_fresh_replay_each_T": 0.007754506000310357,
+      "automaton_one_sorted_sweep": 0.0003321289996165433,
+      "msp_knots+interval_random_access": 0.00013954899986856617
+     },
+     "random_access_ratio_automaton/knots": 55.56833805769956
+    },
     "msp": {
      "p1_static_steps_REFRIGERANT": 66,
      "time_static_steps_B1": 8,
@@ -384,7 +418,7 @@
      "knots_stored_B1-02": 1300,
      "knots_stored_B1-03": 26,
      "interval_B1-04_n": 130,
-     "seconds_eval_knots+interval_for_grid": 3.312500030006049e-05
+     "seconds_eval_knots+interval_for_grid": 2.7105999834020622e-05
     },
     "circuit": {
      "devices_active": 5,
@@ -405,7 +439,7 @@
       "counter": 6
      },
      "template_instances_per_device": 19,
-     "seconds_build+sweep_for_grid": 0.00024699899995539454,
+     "seconds_build+sweep_for_grid": 0.00023246299952006666,
      "boundary_updates_to_reach_T": "ceil(T)-1 (sequential)"
     }
    }
@@ -785,6 +819,40 @@
     ]
    },
    "refrigerant B1-02/03/04 (raw automaton vs P1 REFRIGERANT + knots + interval)": {
+    "merged_knot_form": {
+     "B1-02": {
+      "distinct_event_knots": 0,
+      "distinct_lattice_knots": 131,
+      "coefficients": 263,
+      "unmerged_pieces": 5200,
+      "unmerged_knots": 10400
+     },
+     "B1-03": {
+      "distinct_event_knots": 171,
+      "distinct_lattice_knots": 37,
+      "coefficients": 417,
+      "unmerged_pieces": 291,
+      "unmerged_knots": 332
+     },
+     "B1-04": {
+      "distinct_event_knots": 60,
+      "distinct_lattice_knots": 131,
+      "coefficients": 383,
+      "unmerged_pieces": 1200,
+      "unmerged_knots": 2241
+     }
+    },
+    "time_memory_tradeoff": {
+     "merged_knot_coefficients_B1-02+03+04": 1063,
+     "automaton_numbers_tuple_sum": 1072,
+     "automaton_distinct_numbers_(event_times_counted_once)": 712,
+     "seconds_median5_200_random_T": {
+      "automaton_fresh_replay_each_T": 0.05764990099942224,
+      "automaton_one_sorted_sweep": 0.0021048629996585078,
+      "msp_knots+interval_random_access": 0.00016795500050648116
+     },
+     "random_access_ratio_automaton/knots": 343.24611250379303
+    },
     "msp": {
      "p1_static_steps_REFRIGERANT": 66,
      "time_static_steps_B1": 8,
@@ -793,7 +861,7 @@
      "knots_stored_B1-02": 10400,
      "knots_stored_B1-03": 332,
      "interval_B1-04_n": 190,
-     "seconds_eval_knots+interval_for_grid": 4.383999976198538e-05
+     "seconds_eval_knots+interval_for_grid": 4.606299989973195e-05
     },
     "circuit": {
      "devices_active": 40,
@@ -814,7 +882,7 @@
       "counter": 41
      },
      "template_instances_per_device": 19,
-     "seconds_build+sweep_for_grid": 0.0009277829999518872,
+     "seconds_build+sweep_for_grid": 0.0009921750006469665,
      "boundary_updates_to_reach_T": "ceil(T)-1 (sequential)"
     }
    }

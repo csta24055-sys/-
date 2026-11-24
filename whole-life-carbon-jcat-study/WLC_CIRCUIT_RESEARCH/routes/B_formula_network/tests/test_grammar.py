@@ -21,7 +21,7 @@ class TestPrimitives(unittest.TestCase):
         net = G.Net()
         out = net.gate(net.theta(10.0), net.src(20.0))
         self.assertEqual(net.value(10.0, out), 0.0)            # event at T is not counted
-        self.assertEqual(net.value(10.000000005, out), 0.0)    # inside the band [10, 10/(1-eps))
+        self.assertEqual(net.value(10.000000005, out), 0.0)    # inside the closed real band [10, 10/(1-eps)] (float: < sw(10))
         self.assertEqual(net.value(10.00000002, out), 20.0)    # after the band
         self.assertEqual(net.value(9.999999, out), 0.0)
         self.assertEqual(net.value(10.000001, out), 20.0)

@@ -16,7 +16,8 @@ RUNS = SUMMARY = None
 def setUpModule():
     global RUNS, SUMMARY
     import route_b_experiments as X
-    RUNS = [X.run_scenario(s, log=lambda *a: None) for s in O.representative_scenarios(("S", "M"))]
+    RUNS = [X.run_scenario(s, log=lambda *a: None)
+            for s in O.representative_scenarios(("S", "M")) + O.out_of_sample_scenarios()]
     SUMMARY = X.summarise(RUNS)
 
 
@@ -49,17 +50,39 @@ class TestKernels(unittest.TestCase):
             labels = {l for _, l in run["grid"]}
             self.assertTrue({"contract", "band_in", "band_out", "knife"} <= labels)
 
-    def test_automaton_matches_refcalc_inside_band_where_interval_form_does_not(self):
-        rows = [r for run in RUNS for r in run["rows"] if r["label"] == "band_in" and r["scenario"].endswith("seed102")]
-        sh = {r["T"]: r["rel_ref"] for r in rows if r["kernel"] == "B1-04 [raw S/H automaton]"}
-        iv = {r["T"]: r["rel_ref"] for r in rows if r["kernel"] == "B1-04 [msp interval]"}
-        self.assertTrue(all(v <= 1e-12 for v in sh.values()))
-        self.assertGreater(max(iv.values()), 1e-3)     # known deviation of the interval form (03 3.4), observed
+    # measured magnitudes (deterministic floats; recorded in results/points.json). Tolerance: relative 1e-6.
+    # scenario suffix -> (msp interval B1-04 max rel in band_in, ablation B1-04 max rel, ablation B1-02 max rel)
+    MEASURED = {"seed102": (0.031246940616269075, 0.03145563853488225, 0.03269157785511787),
+                "seed659283900": (0.002668299017858878, 0.046251665148593656, 0.007283005256158638),
+                "seed101": (0.0, 0.0, 0.0), "seed697085186": (0.0, 0.0, 0.0)}
 
-    def test_late_reset_ablation_is_a_counterexample(self):
-        rows = [r for run in RUNS for r in run["rows"] if r["kernel"] == "B1-04 [raw S/H, no late reset]"]
-        self.assertGreater(max(r["rel_ref"] for r in rows), 1e-2)
+    def _max(self, sid, kernel, labels=None):
+        vals = [r["rel_ref"] for run in RUNS for r in run["rows"] if r["scenario"].endswith(sid) and r["kernel"] == kernel
+                and (labels is None or r["label"] in labels)]
+        self.assertTrue(vals)
+        return max(vals)
 
+    def _close(self, got, want):
+        self.assertLessEqual(abs(got - want), 1e-6 * abs(want) + 1e-15, (got, want))
+
+    def test_out_of_sample_scenarios_present(self):
+        ids = [run["scenario"] for run in RUNS]
+        self.assertIn("SYN-S-hospital-M-T60-seed659283900", ids)
+        self.assertIn("SYN-RC-warehouse-S-T75-seed697085186", ids)
+
+    def test_band_magnitudes_automaton_vs_interval_form(self):
+        for sid, (iv, _, _) in self.MEASURED.items():
+            with self.subTest(scenario=sid):
+                self.assertEqual(self._max(sid, "B1-04 [raw S/H automaton]", {"band_in"}), 0.0)
+                self._close(self._max(sid, "B1-04 [msp interval]", {"band_in"}), iv)
+                # at T = tau(1+1e-9) = sw(tau) the interval form agrees again: the deviating set is the OPEN band (K, sw)
+                self.assertLessEqual(self._max(sid, "B1-04 [msp interval]", {"knife"}), 1e-15)
+
+    def test_late_reset_ablation_magnitudes(self):
+        for sid, (_, a4, a2) in self.MEASURED.items():
+            with self.subTest(scenario=sid):
+                self._close(self._max(sid, "B1-04 [raw S/H, no late reset]"), a4)
+                self._close(self._max(sid, "B1-02 [raw S/H, no late reset]"), a2)
 
 if __name__ == "__main__":
     unittest.main()

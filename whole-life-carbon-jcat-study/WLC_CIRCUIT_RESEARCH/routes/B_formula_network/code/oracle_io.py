@@ -64,6 +64,16 @@ def representative_scenarios(names=("S", "M")):
     return [bm[n] for n in names]
 
 
+OUT_OF_SAMPLE = (3, 11)      # evaluation_set(12) indices: EV3 hospital-M (21 no-top-up devices), EV11 warehouse-S;
+                             # disjoint from the benchmark S/M and from route D's EV6/EV10
+
+
+def out_of_sample_scenarios(idx=OUT_OF_SAMPLE):
+    """Out-of-sample scenarios of the frozen generator's evaluation set (seed 720002), never used to design route B."""
+    ev = setup()["scenarios"].evaluation_set(12)
+    return [ev[i] for i in idx]
+
+
 def reference_at(scn, T: float) -> dict:
     """refcalc results of all 70 units with the study period replaced by T."""
     m = setup()
