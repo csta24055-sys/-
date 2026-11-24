@@ -1,3 +1,7 @@
+# Autonomous parallel start is now the preferred entrypoint
+
+**For a new Claude Code session, use `08_AUTONOMOUS_START.md`.** It starts 4 independent investigations. The instructions below remain the original compact single-route prompt for legacy workflows and details.
+
 # Short Claude start prompt
 
 このリポジトリのブランチ `claude/wlc-equivalent-circuit-20261124` を使って、ホールライフカーボンを電気回路へ等価写像する数理研究を、設計と数値検証まで進めてください。
