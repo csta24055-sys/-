@@ -23,6 +23,12 @@ Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統�
 - Use `WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` to keep source repo, branch, file path, role/claim IDs and verification status separately documented.
 - Prioritize the WLC theory base for formulas and validity, not ability-tree descriptions.
 
+## Mandatory model / effort orchestration
+- Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md` **before launching work**. This project starts at Fable 5.2 High through `.claude/settings.json`. Delegate **architecture and re-planning** to `wlc-architect` and `wlc-replanner` (Fable 5.2 High); **implementation and simulation** to the four independent route workers (Opus 5.5 Medium); **independent verification** to `wlc-verifier` (Opus 5.5 High); **evidence integration** to `wlc-integrator` (Opus 5.5 High).
+- Sequence P0 (architecture) → P1/P2 (A/B/C/E parallel execution) → P3 (D verification) → P4 (integration) → P5 (Fable review/replanning). Iterate selectively after actual evidence. Do not accidentally have all subagents inherit the startup model.
+- Validate actual selected models/efforts in logs; if subscription/provider disallows requested models, record fallback and notify rather than claiming success. Project config is not an ongoing daemon and does not start subagents automatically. Each agent must be invoked.
+- Where session-level/CLI overrides take precedence over frontmatter, inspect and report mismatches.
+
 ## Parallel execution policy (supersedes serial phase ordering only)
 - Prefer **five independent research routes A capacitor/waveform, B formula-network, C 70-unit map, D independent verifier, and E resistor/Joule-energy**, as specified by `06_PARALLEL_ORCHESTRATION.md`. Launch concurrently when supported; otherwise interleave. Crucially, **Route E starts from cumulative resistor dissipation `E_R(t)=∫i²R dt` rather than capacitor charge**. Do not require E to adopt A's capacitor approach.
 - Project subagents `.claude/agents/wlc-waveform.md`, `wlc-formula-network.md`, `wlc-unit-mapper.md`, `wlc-verifier.md`, `wlc-resistor-energy.md` define route-specific behavior. In independent sessions verify you have checked out a project-seeded route branch. Unrelated worktrees may start from `main`; never presume a newly created worktree contains this research.
