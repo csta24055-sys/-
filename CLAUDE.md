@@ -10,8 +10,14 @@ For any WLC/circuit task, read, in order:
 4. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/01_FORMAL_MODEL.md`
 5. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/02_VERIFICATION_PLAN.md`
 6. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/03_EXECUTION_PLAN.md`
+7. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` — cross-repository source navigation.
 
 Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統一方程式.md`, `07_動的LCAと工程時間.md`, `09_未解決問題と限界.md`, and `15_劣化・寿命・交換モデル研究開始資料.md` before formal conclusions.
+
+## Additional read-only reference repository
+- `csta24055-sys/lastdance4-tree-` (`main`) is the Yes/No classification/index of 2,100 development roles. It is **not** the original WLC source or a mathematical proof. Search relevant A3 (math), A6 (verification), A9 (knowledge), optionally A2 (classification), then follow exact role/source references into `csta24055-sys/lastdance` only if needed.
+- Use `WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` to keep source repo, branch, file path, role/claim IDs and verification status separately documented.
+- Prioritize the WLC theory base for formulas and validity, not ability-tree descriptions.
 
 ## Non-negotiable boundaries
 - Never edit `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/`, existing research chapters 09–23, the original `research_archive/`, or the WLC Studio application. Treat all as immutable references.
