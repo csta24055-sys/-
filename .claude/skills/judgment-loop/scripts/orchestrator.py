@@ -837,8 +837,8 @@ def cmd_review(a, opener=None):
 
     raws, sources = [], []
     if a.mock is not None:
-        raw = Path(a.mock).read_text(encoding="utf-8")
-        raws, sources = [raw] * len(payloads), ["mock"] * len(payloads)
+        # 代替入力は全パートを読んだ1件の判定として扱う（パート数だけ重複適用しない）
+        raws, sources = [Path(a.mock).read_text(encoding="utf-8")], [a.mock_source or "mock"]
     else:
         ap = s.get("approval") or {}
         not_ok = set(pkt["classes"]) - set(ap.get("data", []))
@@ -1226,7 +1226,8 @@ def build_parser() -> argparse.ArgumentParser:
     x = sp("review", cmd_review, "GPT の独立レビュー（既定は dry-run）")
     run_sel(x)
     x.add_argument("--send", action="store_true", help="実際に送信（有料・承認範囲内のみ）")
-    x.add_argument("--mock", help="GPT の出力テキストの代わりに使うファイル（試験用・無料）")
+    x.add_argument("--mock", help="GPT の出力テキストの代わりに使うファイル（試験用、または GPT が使えないときの代替レビュー）")
+    x.add_argument("--mock-source", help="--mock の出所を履歴に残すラベル（例: claude-independent）。GPT レビューとは区別して記録される")
     x.add_argument("--show-packet", action="store_true")
     x.add_argument("--policies", choices=["selected", "full"], default="selected",
                    help="selected=作業種別に必要な節（既定） / full=判断基準を全文")

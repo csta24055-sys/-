@@ -71,6 +71,7 @@ GPT 呼び出しは `.claude/skills/gpt-consult` の gpt_bridge を再利用す�
 - `blocked` / `needs_user`: GPT の `questions_for_user` や本人にしかできない作業をユーザーに伝える。回答を得たら `O resume --note`。
 - `stalled`: 同じ指摘が繰り返されている。状況を報告し方針を確認。
 - `limit_reached`: 承認範囲の上限。結果を報告し、続けるなら追加承認で `O extend`。
+- GPT が使えない（残高切れ HTTP 429 `insufficient_quota` など）: ユーザーに補充を依頼する（本人にしかできない）。急ぐ場合は、作成担当とは別の独立したエージェントに `review --show-packet` の全文を渡して同じ JSON 形式の判定を書かせ、`O review --mock <file> --mock-source claude-independent` で取り込む。この場合は必ず「GPT 未レビュー」と報告する。
 - エラー（exit 3）: 状態は `awaiting_review` に戻っている。原因を確認し、承認範囲内なら 1 回だけ再送。通信中に落ちたら `O recover`。
 
 ## 報告の形

@@ -399,6 +399,20 @@ class TestApprovalAndBudget(Base):
         self.assertEqual(len(r["next_actions"]), info["parts"])   # 統合（id は p1-A1, p2-A1, …）
         self.assertTrue(all(a["decision"] is None for a in r["next_actions"]))  # 行範囲付きでも対象として有効
 
+    def test_mock_on_split_packet_applies_once_with_source_label(self):
+        self.start()
+        self.write_art("\n".join(f"行{i:04d} {'あ' * 40}" for i in range(1, 1201)))
+        self.approve("--max-input-per-call", "20000", "--max-calls", "20", "--max-input-tokens", "500000",
+                     "--max-output-tokens", "400000")
+        self.submit()
+        r = self.ok("review", "--mock", self.mock(verdict("REVISE", actions=[("A1", "具体化", "answers.md")]), "m.json"),
+                    "--mock-source", "claude-independent")
+        self.assertGreater(r["parts"], 1)
+        self.assertEqual([a["id"] for a in r["next_actions"]], ["A1"])     # 重複しない
+        st = self.state()
+        self.assertEqual(st["last_verdict"]["source"], "claude-independent")
+        self.assertEqual(st["usage"]["calls"], 0)                          # 代替入力は予算を使わない
+
     def test_policies_full_option(self):
         self.start()
         self.submit()
