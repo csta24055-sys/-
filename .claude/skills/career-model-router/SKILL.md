@@ -9,11 +9,13 @@ effort: high
 最初に .claude/career-model-routing.json を読み、以下の名前付きサブエージェントを**明示的に呼び出して**段階ごとに仕事を委任する。
 
 1. 全体計画・戦略の設計：career-strategy-architect (Fable 5.2 / high)
-2. 一次資料の探索・検証：career-evidence-researcher (Opus 5.5 / medium)
-3. 研究成果物の構築：career-artifact-builder (Opus 5.5 / high)
-4. GPTへ引継ぎ・レビュー送信・応答保存：career-gpt-handoff (Opus 5.5 / high)
-5. GPT応答による次の全体計画：career-replan-director (Fable 5.2 / high)
+2. 一次資料の探索・検証：career-evidence-researcher (Fable 5.2 / high)
+3. 研究成果物の構築：career-artifact-builder (Fable 5.2 / high)
+4. 独立レビュー：作成担当とは別の Claude エージェント (Fable 5.2 / high) に成果物と根拠台帳を渡して検査させる。**GPT への送信は行わない**（下の「2026-11-25 の変更」）。career-gpt-handoff は、ユーザーが GPT レビューの再開を明示したときだけ使う
+5. レビュー結果による次の全体計画：career-replan-director (Fable 5.2 / high)
 6. REVISEなら新計画に基づいて2または3へ戻る。PASSなら根拠確認して完了判定。
+
+**2026-11-25 の変更（ユーザー指示）:** 全段階を Fable 5.2 / high で行う。GPT の評価・指示は使わない（`.claude/career-model-routing.json` の `gpt_review.enabled=false`）。独立レビューの結果を GPT レビューと書かない。
 
 **モデルの指定方法:** このSkill自体はFable 5.2 High（現在のターン限り）。各段階のモデルは .claude/agents/ にある subagent の `model` と `effort` frontmatter によって切り替える。JSONのみでは自動でモデルは変わらない。
 
