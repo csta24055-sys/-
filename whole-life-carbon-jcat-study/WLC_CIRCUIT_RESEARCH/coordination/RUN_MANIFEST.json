@@ -28,11 +28,11 @@
   "phases": {
     "G0": "PASS",
     "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
-    "G2": "DONE for A/E/C/B route self-tests (all re-run by coordinator); A/E fix pass running",
+    "G2": "DONE (A, E, B, C implemented; fixes after D applied)",
     "G3": "DONE (D passes 1-4: A, E, B, C, fix passes and integration all independently checked)",
     "F": "DONE locally (five Python engines, restricted Math IR arithmetic only); SageMath/MATLAB NOT_RUN; seven-engine run BLOCKED pending user decision",
     "G4": "DONE - ACCEPT-WITH-CONDITIONS by D pass 4; doc conditions 1-2 closed; overall research status PARTIAL",
-    "G5": "NOT_RUN"
+    "G5": "DONE (coordination/next_cycle.md, coordination/SUMMARY_CYCLE1.md)"
   },
   "engines": {
     "SymPy": "RUN 1.14.0 (route E analytic; route F 34/34 cases)",
@@ -572,6 +572,33 @@
       "route_result": "17/17 tests OK; documentation only, no new experiments",
       "coordinator_rerun": "17/17 OK",
       "status": "DONE"
+    },
+    {
+      "phase": "G5",
+      "actor": "wlc-replanner (subagent)",
+      "frontmatter": "claude-fable-5-2 / high",
+      "actual_model": "claude-fable-5-2 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "f64581f",
+      "output": [
+        "coordination/next_cycle.md (written by replanner)",
+        "coordination/SUMMARY_CYCLE1.md (text returned by replanner because the harness refused its report-file write; saved by the coordinator, who checked the performance figures against integration/benchmark.md and widened one error range to cover all three measurements)"
+      ],
+      "usage": {
+        "subagent_tokens": 247462,
+        "tool_uses": 23,
+        "duration_s": 702
+      },
+      "status": "DONE",
+      "open_user_decisions": [
+        "Math7 seven-engine run / adapter",
+        "reviewer for D-9",
+        "run EXP-5 once or close the performance line now",
+        "aging model for P3",
+        "whether cycle 2 is the last",
+        "SPICE or physical circuit",
+        "accept G0 on Opus 5.5 medium or rerun"
+      ]
     }
   ],
   "setup_audit": {
@@ -582,7 +609,7 @@
     "actual_model_routing": "NOT_VERIFIED",
     "actual_7_engine_wlc_validation": "NOT_RUN (BLOCKED: workflow accepts only math_tools_v2/examples/*.json on the branch it runs on; fixture would have to be added on main or a branch cut from main and started manually by the user)"
   },
-  "note": "Manifest initially describes setup only. Agents must write actual run records; never treat static checks as experiments.",
+  "note": "Cycle 1 complete. Overall PARTIAL. SageMath/MATLAB NOT_RUN; no GitHub Actions workflow was dispatched; nothing outside WLC_CIRCUIT_RESEARCH/ was modified.",
   "research_head_at_start": "4f394d1c0059f8eaf3b54215cbd52e0adc2e4745",
   "coordinator_session": {
     "requested_model": "claude-fable-5-2 high (plan 12 §3 G0)",
@@ -611,5 +638,21 @@
     "07_SHARED_CONTRACT.md": "3f75b6a04dd11e4aabfbb6fc2d52a96fcd8a3cd52b2779a7619f013738fe9f7b",
     "WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3",
     "WLC_THEORY_RESEARCH_BASE/manifest.json": "569fd3dababb7dcea5173342e308449a1d7e04e6c68f4f22e1c1385a1d0be045"
+  },
+  "overall_status": "PARTIAL",
+  "final_test_sweep": {
+    "date": "2026-11-24",
+    "by": "coordinator (claude-fable-5-2 high)",
+    "python": "3.13.18",
+    "results": {
+      "routes/A_waveform": "27/27 OK",
+      "routes/E_resistor_energy": "24/24 OK",
+      "routes/B_formula_network": "17/17 OK",
+      "routes/C_70_units": "16/16 OK",
+      "routes/D_verification": "25/25 OK",
+      "integration": "17/17 OK",
+      "routes/F_math7_bridge": "run_all.sh reproduced: 34/34 positive cases PASS, negative control comparator FAIL as intended"
+    },
+    "read_only_trees_unchanged": "git status clean outside WLC_CIRCUIT_RESEARCH; no __pycache__ in the study tree"
   }
 }
