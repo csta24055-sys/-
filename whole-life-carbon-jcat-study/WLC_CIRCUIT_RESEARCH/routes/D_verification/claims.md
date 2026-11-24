@@ -49,3 +49,10 @@ Not claimed: any statement about C_WLC(T), Z(T), refrigerant, the 70-unit model,
 | D-16 (corrected) | Rectified clock: \|τ_n − nc\| ≤ (h/2)(m + \|g(φ)\|) ≤ m·h = 0.21051h, sharp for irrational c/h. The pass-1 value m·h/2 = 0.10526h holds only for φ∈{0, π/2}. The exactness condition is unchanged. | [H] derivation + [F] (28 rows, n≤400; 60 random cases, ratio ≤ 1) | p3_recheck.json A16_bound_dispute |
 | D-31 | A's fixed realizations and E's ER1 (incl. P1) match D on 20,044 fresh points per convention, and the regenerated points.json files match 595/595 (A) and 139/139 (E). | [E] | p3_recheck.json |
 | D-32 | X5 rests on 5 in-domain T (not 1). D's pass-2 hand-back statement is corrected. | [E] | `results/p3_x5_domain_check.txt` |
+
+## Pass 4 (HEAD c72fa7f)
+| id | claim | class | evidence |
+|---|---|---|---|
+| D-33 | The integration's Φ hybrid equals D's rational ledger on 353,940 fresh comparisons. They cover P1′ at τ_R=13/27 under D's declared semantics, Px at 3/13/23.5, P2, both realizations with varied (γ,C) and (R,κ), all supported conventions and the closed-band endpoints. | [E] | `results/p4_integration.json` phi |
+| D-34 | The integration's Ψ composition and D's exact composition match refcalc on EV0/EV7 (with a stage subset and no-B2): total ≤6.5e-15, units ≤3.2e-14. C-1n holds: naive − SUM-03 = B2-01 to ≤3.2e-13. | [F] | p4_integration.json psi |
+| D-35 | X5 on EV7 at 6 T with jump-free steps: C−M=Z exactly; dC/dT=ρ+Z′≠ρ; Z′<0; C(0+)≠A^init. | [E] | p4_integration.json x5_EV7 |

@@ -138,3 +138,26 @@ The conditions are listed in `VERDICTS.md`.
   - Caveat: 'substitute' is encoded as a net −5 entry.
 - **G4:** A **ACCEPT**; E **ACCEPT-WITH-CONDITIONS** (see VERDICTS pass 3).
 - **Pass-3 NOT_RUN:** routes B/C; the Walsh design as an implemented circuit; a formal written review of the [H] items listed in VERDICTS pass 3.
+
+---
+
+# Pass 4: G4 integration re-verification and B/C fix-pass review (HEAD c72fa7f)
+- **Run conditions:**
+  - Model: self-reported claude-opus-5-5; the effort level cannot be observed from inside the session.
+  - `assert_frozen` passed. No `__pycache__` anywhere. No git operations; only `routes/D_verification/` was written.
+  - `integration/` and the route folders were only read or executed read-only. The integration test suite was not rerun, to avoid writing there.
+- **Commands:**
+  - `PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 math7-py -B code/p4_integration.py` (79 s) → `results/p4_integration.json`, `p4_integration_log.txt`
+  - B and C suites rerun → `results/p4_route_[BC]_tests_rerun.txt` (17/17, 16/16 OK)
+- **Results (details in VERDICTS pass 4):**
+  - Φ: 0 mismatches on 353,940 fresh comparisons (P1′ at τ_R=13/27, Px at 3/13/23.5, both realizations, all supported conventions, closed-band endpoints).
+  - Ψ: EV0/EV7 plus a stage subset and a no-B2 case match refcalc and D's exact composition (≤6.5e-15 total, ≤3.2e-14 units).
+  - C-1n executed: naive minus SUM-03 = B2-01 to ≤3.2e-13.
+  - X5 on EV7 at 6 T, with steps that cross no jump: PASS.
+  - X2 link: difference 0.
+  - Benchmark ratios reproduced (5.6× Φ, 850× Ψ).
+  - B and C fixes all confirmed.
+- **Recommendations:**
+  - Integration: ACCEPT-WITH-CONDITIONS (update the evidence_index/STATUS/coverage/N1 statuses that pass 4 has made outdated).
+  - B: ACCEPT. C: ACCEPT. A: ACCEPT. E: ACCEPT-WITH-CONDITIONS.
+- **Open items:** the consolidated table is at the end of VERDICTS pass 4.

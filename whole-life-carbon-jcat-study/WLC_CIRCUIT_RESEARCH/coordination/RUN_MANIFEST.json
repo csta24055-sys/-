@@ -29,9 +29,9 @@
     "G0": "PASS",
     "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
     "G2": "DONE for A/E/C/B route self-tests (all re-run by coordinator); A/E fix pass running",
-    "G3": "DONE for A/E (pass 1 + recheck pass 3) and B/C (pass 2); B/C fix passes not yet re-reviewed by D",
+    "G3": "DONE (D passes 1-4: A, E, B, C, fix passes and integration all independently checked)",
     "F": "NOT_RUN",
-    "G4": "DONE (integration self-tested and re-run by coordinator); D re-verification of integration NOT_RUN yet",
+    "G4": "DONE - ACCEPT-WITH-CONDITIONS by D pass 4 (doc housekeeping pending); overall research status PARTIAL",
     "G5": "NOT_RUN"
   },
   "engines": {
@@ -482,6 +482,35 @@
       },
       "recheck_by_D": "NOT_RUN",
       "status": "PARTIAL_OVERALL"
+    },
+    {
+      "phase": "G3/G4",
+      "route": "D_verification",
+      "pass": 4,
+      "scope": "independent re-verification of G4 integration; review of B and C fix passes",
+      "actor": "wlc-verifier (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "c72fa7f",
+      "commands": [
+        "PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 math7-py -B code/p4_integration.py",
+        "B and C suites rerun read-only (17/17, 16/16)"
+      ],
+      "results": "routes/D_verification/VERDICTS.md (pass 4), results/p4_integration.json",
+      "headline": {
+        "phi": "116 case x convention x realization combos, 353,940 fresh points, 0 mismatches",
+        "psi": "unused scenarios EV0/EV7 + stage subsets: total vs refcalc <=6.5e-15, units <=3.2e-14",
+        "bridge": "X5 exact on EV7 at 6 T; X2 link exact at 15 points",
+        "benchmark_reproduced": "phi 5.6x slower than knots+bisect; psi ~850x slower than canon knot form",
+        "recommendations": {
+          "integration": "ACCEPT-WITH-CONDITIONS (update four outdated statements; note untested B2-01 share-source edge; overall stays PARTIAL)",
+          "A": "ACCEPT",
+          "E": "ACCEPT-WITH-CONDITIONS",
+          "B": "ACCEPT (H-B1 overall PARTIAL)",
+          "C": "ACCEPT (MAPPING constructs [H])"
+        }
+      },
+      "status": "DONE"
     }
   ],
   "setup_audit": {

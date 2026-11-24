@@ -195,3 +195,96 @@ Evidence: `results/p3_recheck.json` from `code/p3_recheck.py`, plus `results/p3_
 - **Route A:** A-3 general, A-6 all-t, A-10 necessity, A-16 iff/phase derivation (A's convexity argument f''=cos u is consistent with D's executions; D has not written a review).
 - **Route E:** the Walsh-design state/threshold count; E-3c is elementary (D executed it, no written review).
 - **Routes B/C:** outside this pass.
+
+---
+
+# Pass 4: independent re-verification of the G4 integration and of the B/C fix passes
+**Inputs.**
+- HEAD `c72fa7f`. Frozen trees asserted (refcalc `8976efea…`, synth `55caf5cd…`, common `ad3d0b7e…`).
+- `git diff 06e0943 HEAD` is empty for B's `grammar.py` and for D's `oracle_d.py`.
+
+**Evidence.**
+- `results/p4_integration.json`, produced by `code/p4_integration.py` (79 s). Integration modules are loaded only as probes.
+- B and C suites rerun read-only: B 17/17 OK, C 16/16 OK (`results/p4_route_[BC]_tests_rerun.txt`).
+- The integration's own suite was not rerun by D, to avoid writing under `integration/`; its log shows 17/17 OK.
+
+## 1. Φ side (`integration/code/phi_hybrid.py`)
+| check | verdict | numbers |
+|---|---|---|
+| Imports no route code | CONFIRMED | AST imports: `__future__`, `dataclasses`, `fractions` only |
+| Fresh cases vs D's rational ledger | **PASS, 0 mismatches** | 116 combinations of case × convention × realization, 353,940 points in total (seed 5151; every event time ±1e-12; under orig also τ/(1−ε) and ±1e-15). Cases: P0; P2; P1 with τ_R = 20, **13** and **27** under both policies; Px with t_early = **3**, **13** and **23.5**. Conventions: right/left, plus orig for P0/P1. Realizations: charge (γ,C)=(1,1) and (3/7,5); joule (R,κ)=(3,1/3) and (5,2/7). |
+| D's declared P1′ semantics | — | See the semantics statement below. |
+| P1′ hand values | CONFIRMED | Substitute, τ_R=13, t=40: 405. Additional, τ_R=27, t=40: 405. Substitute, τ_R=27, t=60: 560. Hand value = D = integration. |
+| Test expectations not self-produced | CONFIRMED | `tests/test_integration.py` expected values are literals, D's oracle or A's published rows. The ledger and state tuples are literals. |
+
+**D's declared P1′ semantics** (`code/p4_integration.py` docstring):
+- The renovation at τ_R charges 50 and restarts both item cycles from τ_R.
+- 'substitute' removes only same-instant item charges. Off-coincidence, substitute therefore equals additional.
+- Pre-empted later replacements are never charged.
+
+## 2. Ψ side (`integration/code/psi_compose.py`)
+| check | verdict | numbers |
+|---|---|---|
+| Unused scenarios **EV0** (`SYN-S-office-S-T60-seed378919968`) and **EV7** (`SYN-RC-residential-S-T75-seed106550363`); EV7 without B2 (β=ι_B2); EV0 restricted to {A1-A3, B1, B2, B6, C1, C3} | **PASS** | 19 T per case, all inside `valid_domain`. They include 8 near-event T per case at τ(1±3e-8), just outside the knife window. Integration total vs refcalc ≤6.5e-15; stages ≤3.2e-14; the 21 unit values ≤3.2e-14. D's exact composition vs refcalc ≤6.5e-15. Integration vs D total ≤2.2e-16. The refrigerant automaton raised no `unexpected` events. |
+| C-1n (21 DIRECT summed as independent +1 sources) | **CONFIRMED** (D now executed it) | Naive sum minus SUM-03 = B2-01 to ≤3.2e-13 relative. The naive sum is off by 0.073–3.07 % (EV0) and 0.071–1.64 % (EV7). This matches C's 0.14–3.7 % range in order. |
+
+## 3. Bridge
+| check | verdict | numbers |
+|---|---|---|
+| X5 on **EV7**, 6 usable T (2.3, 7.7, 15.5, 33.3, 41.7, 58.2) | **PASS** | Each forward step h = min(1e-6, half the distance to the next breakpoint) contains **no** breakpoint of C, Z or M; 546 breakpoints were listed. At every T: C−M=Z exactly; Z ≈ 3.6e5 ≠ 0; dC/dT = ρ+Z′ exactly; dC/dT ≠ ρ; Z′ ∈ [−432, −405] < 0. C(0+) = 4,638,513.8 ≠ A^init = 4,274,705.9. C vs refcalc ≤4.8e-15. |
+| X2 link | PASS | The integration's Φ orig hybrid equals D's rational value and B's θ_ε netlist (difference 0.0) at all 15 X2 points, including fl(10/(1−ε)) and sw(10)−1 ulp. |
+
+## 4. Integration documents audit
+| item | finding |
+|---|---|
+| Evidence classes | No [P] anywhere. No [H] item is promoted. Gate verdicts use the 12 §5 vocabulary: G1/G2/G4/G5 PASS on declared domains, G3 PARTIAL, and G4 "PASS (measured), result negative". No item that is NOT_RUN is reported as PASS. |
+| evidence_index.md mapping | Correct against VERDICTS passes 1–3 (spot-checked I-1…I-25). **Now outdated:** I-18 "C-1n NOT_RUN by D", STATUS "D has not re-verified this integration", coverage "C-1n NOT_RUN" and next_experiments N1. Pass 4 executed all of these. |
+| `mutation_check.py` | Meaningful. M2 (orig without moving external events) is exactly A's real pass-1 defect; M4 (no late reset) is B's documented failure mode; M1 and M3 are plausible ledger/β defects. Suggested additions (not defects): a right↔left strictness swap, a P2 latch with year-cell rounding (−1 kg, D-8), and a float clock for a non-integer period (D-5). |
+| Benchmark reproducibility | **Reproduced to order of magnitude.** Φ: hybrid sorted sweep 19.7 µs/pt vs knots+bisect 3.53 µs/pt, **5.6×** (integration 6.1×). Ψ on EV9 (200 T, D seed 77): composed sweep 6.76 ms/T vs canon KF 0.0080 ms/T, **850×** (integration ~730×). |
+| Minor (untested edge) | `psi_compose.py:53-55` takes the B2-01 share from `scn.operation.facility_management_ratio` with its own [0,1] check, not from msp's `b21.share`. B2-01 matches refcalc on every tested scenario, but an invalid-share scenario was not tested. |
+
+## 5. B and C fix passes (after D pass 2)
+| item | verdict | evidence |
+|---|---|---|
+| B #1: H-B4 merged-knot count and random-access timing | CONFIRMED | `B/results/hb4_counts.json` BM-M: merged 263 + 417 + 383 = 1,063 vs automaton 1,072. The difference from D's 1,025 is B1-04 in jump form (60 event knots) vs interval form (41): a count definition, not a disagreement. B's 343× (M) / 56× (S) random-access ratios are the same order as D's ~100×. |
+| B #2: H-B2 LTI scope; ramp term in `hb2_passive.py`; K10/K37 labels | CONFIRMED | The basis now has a ramp column. Jump sup error ≥ 0.5004 (bound 0.5); kink 0.094 → 0.019. K10's justification names the ideal-diode and switched passive counterexamples and "relative to 𝒢". |
+| B #3: band wording | CONFIRMED | No half-open "[τ, τ/(1−ε))" string remains in `route_b_experiments.py` or `test_grammar.py`. |
+| B #4: K19 tuple | CONFIRMED | Totals (4nd, 1+2nd, (H−1)+n_ev, n_ev+6nd), with the shared counter noted; BM-M gives (160,81,360,471). |
+| B #5: magnitude assertions; EV3/EV11 out of sample | CONFIRMED | `oracle_io.OUT_OF_SAMPLE = (3, 11)`; tests assert measured magnitudes (relative 1e-6); suite 17/17 OK when rerun by D. |
+| C #1: full `time_form_text` | CONFIRMED | 70 rows, **0** mismatches with units70.json (exact string). |
+| C #2: [H] labelling; rank caveat | CONFIRMED | The `construct_class_tuple_evidence` column carries [H] on 70/70 rows; the rank ≠ state caveat is in claims/README. C suite 16/16 OK when rerun. |
+
+## Final recommendations (this cycle)
+- **G4 integration: ACCEPT-WITH-CONDITIONS.**
+  - Accept the composed Φ hybrid (both realizations) and the composed Ψ node over B's kernels with C's rule, joined only via X5 and X2, on the declared domains.
+  - Conditions:
+    1. Update evidence_index I-18, the STATUS "D has not re-verified" line, coverage "C-1n NOT_RUN" and next_experiments N1 to reflect pass 4.
+    2. Keep the share source (`psi_compose.py:53-55`) noted as untested for invalid shares.
+    3. The research status stays PARTIAL (G3 PARTIAL; [H] items unreviewed; K26/K28/K30/K32/K33 NOT_RUN).
+- **Route B: ACCEPT** (6 kernel kinds, late-reset automaton, restated H-B4/H-B2). H-B1 overall stays PARTIAL.
+- **Route C: ACCEPT** (inventory, independently verified composition, exact ranks, replay counterexample, full MAPPING text). The constructs remain [H]; C-2 detector and C-4/C-6 stay route-only.
+- Route A stays ACCEPT and route E stays ACCEPT-WITH-CONDITIONS, both from pass 3.
+
+## Consolidated open items, whole study (end of this cycle)
+| item | owner | status | what would close it |
+|---|---|---|---|
+| D-9: ≥2 continuous states under online reset (invariance-of-domain draft) | D | [H], unreviewed | written review by a non-author (N2) |
+| D-10 minimality (2 clocks + 2 counters) | D | realization [E]; minimality [H] | depends on D-9 |
+| D-16 closed form \|τ_n−nc\| ≤ (h/2)(m+\|g(φ)\|) | D | [H] derivation; [F] sharp | review + mpmath 50-digit search |
+| D-12 ρ cross-term formula | D/E | re-derived independently by E; no formal review | formal review |
+| D-24 H-B2 review argument; B's rescoped H-B2 | D/B | [L]/[H] | review by B or a third party |
+| D-4 closed band, general statement | D | [E] on P0, elementary [H] | review |
+| A-3 general, A-6 all-t identity, A-10 necessity, A-16 iff/phase derivation | A | [H] | review (N2) |
+| E-3c bound derivation; E Walsh-design state cost | E | [H] (E-3c executed by D, cost unimplemented) | review; implement N8 |
+| H-B1 kinds K26/K28/K30/K32/K33 | B | NOT_RUN | N3 |
+| H-B3 RC-a/RC-b continuous-decay numbers | B | route-only [F]; NOT_RUN by D | D re-run |
+| C-2 signature detector, C-4 role checks, C-6 placement | C | route-only [F]; NOT_RUN by D | D re-run |
+| C MAPPING per-unit constructs and 4-tuples for DIRECT 21 | C | [H], unsimulated | N4 |
+| Refrigerant band behaviour beyond 6 scenarios; floats near (not at) integer events | B/D | OPEN (03 §3.4 unverified) | N6 |
+| Non-integer-period Φ pilot (float slip-through D-5) | — | OPEN / NOT_RUN | N7 |
+| Walsh orthogonal-pulse circuit implemented | E | NOT_RUN | N8 |
+| X5 on all 12 evaluation scenarios; is Z′<0 generic? | — | X5 shown on EV6, EV7, EV9 only | N9 |
+| Invalid-share scenario for B2-01 in `psi_compose` | integration | untested | one edge-scenario run |
+| SPICE/physical circuits | all | NOT_RUN | — |
+| SageMath/MATLAB/Math7 seven-engine checks | F | NOT_RUN (no workflow dispatched) | N5, with user approval |
+| Real-building validation; J-CAT 667-formula experiment | — | out of scope (gate 5) | — |
