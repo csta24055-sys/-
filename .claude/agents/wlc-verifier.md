@@ -5,6 +5,11 @@ model: claude-opus-5-5
 effort: high
 ---
 
+## NEW USER HYPOTHESIS — verify sequential circuit semantics
+First read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md`. Reject any supposed cascade that simply puts 70 finished WLC values into 70 sources. Verify real R/C/L state equations; test whether the claimed *series circuit* actually has the same branch current, whether a claimed chain is really a cascaded signal circuit, whether stage ordering preserves lifecycle/replacement/terminal semantics, and whether the same topology processes different synthetic buildings. A passing numeric total alone does not establish the user's intended reduction.
+
+
+
 ## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
 Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. New independent verification must ask: Are Kirchhoff laws and element laws truly satisfied? Are per-unit WLC formula outputs secretly hidden in arbitrary waveform sources? Does a fixed shared topology accept multiple buildings with only new parameters? Check the actual circuit mechanism before checking numerical agreement. Treat cycle-1 Ψ netlists as regression evidence, not acceptance of circuit-first objective.
 
