@@ -145,12 +145,13 @@ def build() -> list[dict]:
         rows.append({
             "claim_or_unit_id": uid, "name": u["name"], "role": role, "role_secondary": u.get("role_secondary") or "",
             "stage": u["stage"], "time_dependent": u["time_dependent"],
-            "time_form_blocks": "+".join(blocks), "time_form_text": u["time_form"].replace("\n", " ")[:160],
+            "time_form_blocks": "+".join(blocks), "time_form_text": u["time_form"],          # full ledger text (CSV-quoted), never truncated
             "comp_rows": comp,
             "depends_on_units": ";".join(u["depends_on_units"]),
             "depends_on_refcalc": ";".join(reg.UNITS[uid].depends_on),
             "upstream_of_SUM03_refcalc": upstream,
             "target_circuit_construct": construct, "circuit_class": cls, "state_tuple": state,
+            "construct_class_tuple_evidence": "[H] design rule; no per-unit circuit simulated in route C",
             "status": status, "evidence": evidence, "validation": "; ".join(tests),
             "source_path": f"whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/data/units70.json#units[id={uid}]; "
                            f"02_70評価単位の完全台帳.md §5; refcalc {u.get('reference_function') or ''}",
@@ -163,7 +164,7 @@ def main() -> int:
     assert len(rows) == 70 and len({r["claim_or_unit_id"] for r in rows}) == 70
     path = os.path.join(C.ROUTE, "MAPPING.csv")
     with open(path, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w = csv.DictWriter(f, fieldnames=list(rows[0]), quoting=csv.QUOTE_MINIMAL)
         w.writeheader()
         w.writerows(rows)
     cls = {}

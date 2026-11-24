@@ -43,6 +43,14 @@ fixed linear read-out of accumulator outputs must span — a lower bound on inde
 under that read-out assumption, not a minimal-realisation theorem.
 
 ## Circuit vocabulary of MAPPING.csv
+**Read first:** the columns `target_circuit_construct`, `circuit_class` and `state_tuple` are **[H] design
+rules**. Route C simulated no per-unit circuit; each row repeats this in `construct_class_tuple_evidence`.
+`time_form_text` holds the full ledger `time_form`, untruncated and CSV-quoted (newlines kept). It is
+tested against units70.json.
+The H-C3 rank is **not a minimal state count**. It counts the independent T-varying waveforms that a fixed
+linear read-out needs. Each waveform still needs its own knot schedule (comparator thresholds or table
+entries, thousands for B3-01 and B4-02). A total of rank 1 does not mean one capacitor is enough.
+
 Class: (a) passive, (b) active (summing/inverting/gain/divider amplifiers, integrators with constant source),
 (c) switched/hybrid (comparators, table-switched sources, resets, sample-hold), (d) external digital,
 (e) unsupported.  State 4-tuple `(continuous, discrete/counters, comparator thresholds, table entries)`,

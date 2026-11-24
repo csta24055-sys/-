@@ -370,6 +370,27 @@
         "duration_s": 1299
       },
       "status": "DONE"
+    },
+    {
+      "phase": "G3",
+      "route": "C_70_units",
+      "pass": "fix after D pass 2",
+      "actor": "wlc-unit-mapper (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "7de1065",
+      "route_result": "16/16 tests OK (was 15); MAPPING.csv regenerated, 70 rows, full time_form_text (5 rows had been truncated)",
+      "coordinator_rerun": "16/16 OK",
+      "items": {
+        "1 truncation": "FIXED",
+        "2 [H] design-rule labelling and rank caveat": "FIXED",
+        "3 record D results": "FIXED",
+        "4 dependency differences as observation": "RECORDED"
+      },
+      "not_run": [
+        "compose_check.py not re-run in this pass (inputs unchanged; results/hc*.json provenance 5a2f898)"
+      ],
+      "status": "ACCEPT_WITH_CONDITIONS_MET"
     }
   ],
   "setup_audit": {

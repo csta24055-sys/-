@@ -164,6 +164,18 @@ class Artifacts(unittest.TestCase):
             if "NOT_RUN" in r["validation"] and "PASS" not in r["validation"] and "CONSISTENT" not in r["validation"]:
                 self.assertEqual(r["status"], "unverified")
 
+    def test_mapping_full_time_form(self):
+        p = os.path.join(C.ROUTE, "MAPPING.csv")
+        if not os.path.exists(p):
+            self.skipTest("MAPPING.csv not generated (run code/build_mapping.py)")
+        with open(p, encoding="utf-8", newline="") as f:
+            rows = list(csv.DictReader(f))
+        self.assertEqual(len(rows), 70)
+        ub = C.unit_by_id()
+        for r in rows:
+            self.assertEqual(r["time_form_text"], ub[r["claim_or_unit_id"]]["time_form"], r["claim_or_unit_id"])
+            self.assertTrue(r["construct_class_tuple_evidence"].startswith("[H]"))
+
     def test_results_verdicts(self):
         for n in ("hc1", "hc2", "hc3", "hc4"):
             p = os.path.join(C.RESULTS, f"{n}.json")
