@@ -1,0 +1,394 @@
+{
+ "n_units": 70,
+ "ids_unique": true,
+ "ids_equal_refcalc_registry": true,
+ "role_counts": {
+  "DECISION": 9,
+  "DIRECT": 21,
+  "AUXILIARY": 15,
+  "REFERENCE": 10,
+  "AGGREGATE": 9,
+  "BREAKDOWN": 6
+ },
+ "role_counts_json_field": {
+  "DECISION": 9,
+  "DIRECT": 21,
+  "AUXILIARY": 15,
+  "REFERENCE": 10,
+  "AGGREGATE": 9,
+  "BREAKDOWN": 6
+ },
+ "role_members_consistent": true,
+ "n_comp_rows": 22,
+ "n_comp_units": 21,
+ "comp_rows": [
+  [
+   "A13-01",
+   "A1-A3",
+   1,
+   "1"
+  ],
+  [
+   "A13-03",
+   "A1-A3",
+   1,
+   "1"
+  ],
+  [
+   "A13-04",
+   "A1-A3",
+   1,
+   "1"
+  ],
+  [
+   "A4-01",
+   "A4",
+   1,
+   "1"
+  ],
+  [
+   "A4-02",
+   "A4",
+   1,
+   "1"
+  ],
+  [
+   "A5-04",
+   "A5",
+   1,
+   "1"
+  ],
+  [
+   "B1-02",
+   "B1",
+   1,
+   "1"
+  ],
+  [
+   "B1-03",
+   "B1",
+   1,
+   "1"
+  ],
+  [
+   "B1-04",
+   "B1",
+   1,
+   "1"
+  ],
+  [
+   "B2-01",
+   "B2",
+   1,
+   "1"
+  ],
+  [
+   "B2-01",
+   "B6",
+   -1,
+   "iota_B2"
+  ],
+  [
+   "B3-01",
+   "B3",
+   1,
+   "1"
+  ],
+  [
+   "B4-02",
+   "B4",
+   1,
+   "1"
+  ],
+  [
+   "B5-01",
+   "B5",
+   1,
+   "1"
+  ],
+  [
+   "B6-03",
+   "B6",
+   1,
+   "1"
+  ],
+  [
+   "B7-04",
+   "B7",
+   1,
+   "1"
+  ],
+  [
+   "C1-01",
+   "C1",
+   1,
+   "1"
+  ],
+  [
+   "C2-01",
+   "C2",
+   1,
+   "1"
+  ],
+  [
+   "C3-01",
+   "C3",
+   1,
+   "1"
+  ],
+  [
+   "C4-01",
+   "C4",
+   1,
+   "1"
+  ],
+  [
+   "X-01",
+   "A1-A3",
+   1,
+   "1"
+  ],
+  [
+   "X-14",
+   "C3",
+   1,
+   "1"
+  ]
+ ],
+ "comp_units_equal_DIRECT": true,
+ "n_comp_edges_dependencies_csv": 22,
+ "comp_stages": [
+  "A1-A3",
+  "A4",
+  "A5",
+  "B1",
+  "B2",
+  "B3",
+  "B4",
+  "B5",
+  "B6",
+  "B7",
+  "C1",
+  "C2",
+  "C3",
+  "C4"
+ ],
+ "refcalc_stages": [
+  "A1-A3",
+  "A4",
+  "A5",
+  "B1",
+  "B2",
+  "B3",
+  "B4",
+  "B5",
+  "B6",
+  "B7",
+  "C1",
+  "C2",
+  "C3",
+  "C4"
+ ],
+ "non_trivial_rows": [
+  [
+   "B2-01",
+   "B6",
+   -1,
+   "iota_B2"
+  ]
+ ],
+ "direct_blocks_from_text": {
+  "A13-01": [
+   "const_t0"
+  ],
+  "A13-03": [
+   "const_t0"
+  ],
+  "A13-04": [
+   "const_t0"
+  ],
+  "A4-01": [
+   "const_t0"
+  ],
+  "A4-02": [
+   "const_t0"
+  ],
+  "A5-04": [
+   "const_t0"
+  ],
+  "B1-02": [
+   "year_cell"
+  ],
+  "B1-03": [
+   "atom",
+   "gated_year_cell"
+  ],
+  "B1-04": [
+   "interval"
+  ],
+  "B2-01": [
+   "year_cell"
+  ],
+  "B3-01": [
+   "density",
+   "gated_year_cell"
+  ],
+  "B4-02": [
+   "atom"
+  ],
+  "B5-01": [
+   "atom"
+  ],
+  "B6-03": [
+   "year_cell"
+  ],
+  "B7-04": [
+   "year_cell"
+  ],
+  "C1-01": [
+   "const_tT"
+  ],
+  "C2-01": [
+   "const_tT"
+  ],
+  "C3-01": [
+   "const_tT"
+  ],
+  "C4-01": [
+   "const_tT"
+  ],
+  "X-01": [
+   "const_t0"
+  ],
+  "X-14": [
+   "const_tT"
+  ]
+ },
+ "block_type_unit_counts": {
+  "const_t0": 7,
+  "year_cell": 4,
+  "atom": 3,
+  "gated_year_cell": 2,
+  "interval": 1,
+  "density": 1,
+  "const_tT": 5
+ },
+ "n_distinct_block_types": 7,
+ "direct_multi_block_units": [
+  "B1-03",
+  "B3-01"
+ ],
+ "refcalc_closure_SUM03_by_role": {
+  "DIRECT": [
+   "A13-01",
+   "A13-03",
+   "A13-04",
+   "A4-01",
+   "A4-02",
+   "A5-04",
+   "B1-02",
+   "B1-03",
+   "B1-04",
+   "B2-01",
+   "B3-01",
+   "B4-02",
+   "B5-01",
+   "B6-03",
+   "B7-04",
+   "C1-01",
+   "C2-01",
+   "C3-01",
+   "C4-01",
+   "X-01",
+   "X-14"
+  ],
+  "AUXILIARY": [
+   "A13-02",
+   "A13-05",
+   "A5-01",
+   "A5-02",
+   "A5-03",
+   "B4-01",
+   "B4-03",
+   "B6-01",
+   "B6-02",
+   "B6-04",
+   "B7-01",
+   "B7-02",
+   "B7-03",
+   "X-06",
+   "X-15"
+  ],
+  "AGGREGATE": [
+   "X-02"
+  ]
+ },
+ "n_time_dependent": 37,
+ "n_direct_time_dependent": 9,
+ "ledger_vs_refcalc_dep_differences": {
+  "A13-03": {
+   "ledger_only": [],
+   "refcalc_only": [
+    "A13-02"
+   ]
+  },
+  "X-05": {
+   "ledger_only": [
+    "X-04"
+   ],
+   "refcalc_only": [
+    "A13-01",
+    "A13-03",
+    "A13-04",
+    "A4-01",
+    "A4-02",
+    "A5-01",
+    "A5-02",
+    "A5-03",
+    "B1-02",
+    "B1-03",
+    "B1-04",
+    "B2-01",
+    "B3-01",
+    "B4-02",
+    "B5-01",
+    "B6-03",
+    "B7-04",
+    "C1-01",
+    "C2-01",
+    "C3-01",
+    "C4-01",
+    "X-01",
+    "X-14"
+   ]
+  },
+  "X-07": {
+   "ledger_only": [
+    "B2-01"
+   ],
+   "refcalc_only": []
+  }
+ },
+ "architecture_H_claims": {
+  "21 DIRECT + 49 others": true,
+  "COMP 22 rows": true,
+  "AUX/DEC/REF/AGG/BRK = 15/9/10/9/6": true,
+  "7 block types": true,
+  "const(t=0) 7 units": true,
+  "const(t=T) 5 units": true,
+  "B2-01 in B2 (+1) and B6 (-iota_B2)": true
+ },
+ "provenance": {
+  "git_head": "e182105c52019a4abe07fbdd61eb0e057b257f93",
+  "git_branch": "claude/wlc-equivalent-circuit-20261124",
+  "units70_json_sha256": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3",
+  "unit_dependencies_csv_sha256": "df02509e799e5ac1b084e66c50810ad99983bf0528b4759591a298696915673e",
+  "python": "3.13.18",
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  }
+ },
+ "elapsed_s": 0.02282102100002703
+}

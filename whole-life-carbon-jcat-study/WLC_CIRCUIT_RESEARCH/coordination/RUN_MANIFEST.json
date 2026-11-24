@@ -28,8 +28,8 @@
   "phases": {
     "G0": "PASS",
     "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
-    "G2": "IN_PROGRESS (A, E route-self-tests done and re-run by coordinator; C running; B not started)",
-    "G3": "NOT_RUN",
+    "G2": "IN_PROGRESS (A, E, C route-self-tests done and re-run by coordinator; B running)",
+    "G3": "IN_PROGRESS (D pass 1 on A/E running)",
     "F": "NOT_RUN",
     "G4": "NOT_RUN",
     "G5": "NOT_RUN"
@@ -143,6 +143,44 @@
         "subagent_tokens": 165797,
         "tool_uses": 25,
         "duration_s": 552
+      },
+      "status": "PASS_CANDIDATE_PENDING_D"
+    },
+    {
+      "phase": "G2",
+      "route": "C_70_units",
+      "actor": "wlc-unit-mapper (subagent)",
+      "frontmatter": "claude-opus-5-5 / medium",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "5a2f898",
+      "commands": [
+        "PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B code/compose_check.py",
+        "... code/build_mapping.py",
+        "... -m unittest discover -s tests -v"
+      ],
+      "route_result": "15/15 tests OK; assert_frozen passed before/after",
+      "coordinator_rerun": "15/15 OK (2026-11-24)",
+      "results": "routes/C_70_units/results/",
+      "verdicts": {
+        "inventory": "70 units; 21 DIRECT + 15/9/10/9/6; COMP 22 rows - matches architecture",
+        "H-C1": "route PASS [F] 105 cases, max rel err 3.6e-16 (caveat: refcalc X-02 implements same composition rule; not an independent proof)",
+        "H-C2": "route PASS; 7 block types cover but do not partition DIRECT 21 (23 memberships); weak for B1-03/B1-04/B3-01",
+        "H-C3": "core claim PASS (total rank 1); architect numeric \"7\" refuted in 2 of 3 scenarios (stage rank 6/6/7)",
+        "H-C4": "route PASS (one executed example per non-DIRECT role)"
+      },
+      "not_run": [
+        "per-unit circuit simulation",
+        "exact Fraction H-C1",
+        "L scenario for H-C2/H-C3",
+        "knife-edge T",
+        "gate X5"
+      ],
+      "independent_check_by_D": "NOT_RUN",
+      "usage": {
+        "subagent_tokens": 242701,
+        "tool_uses": 43,
+        "duration_s": 1024
       },
       "status": "PASS_CANDIDATE_PENDING_D"
     }

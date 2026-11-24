@@ -1,0 +1,142 @@
+{
+ "hypothesis": "H-C4",
+ "verdict": "PASS",
+ "per_scenario": {
+  "SYN-RC-office-S-T60-seed101@T30": {
+   "C": 18384353.896210264,
+   "examples": {
+    "AUXILIARY:A5-01": {
+     "identity": "A5-04 = A5-01 + A5-02 + A5-03",
+     "rel_err_identity": 0.0,
+     "add_A5-01_as_source_rel_change_of_C": 0.0009905238988982812,
+     "add_A5-01_as_source_abs_kgCO2e": 18210.1419,
+     "upstream_of_SUM03": true,
+     "why_wrong": "already inside A5-04 (DIRECT); adding it counts temporary electricity twice"
+    },
+    "AUXILIARY:B4-01": {
+     "keys": [
+      "events",
+      "n_events"
+     ],
+     "n_events": 61,
+     "has_kgCO2e_value": false,
+     "why_wrong": "event grid (times, count); no kgCO2e value; feeds B4-02/B3-01 as schedule"
+    },
+    "DECISION:SYS-01": {
+     "keys": [
+      "counts",
+      "ok",
+      "violations"
+     ],
+     "has_kgCO2e_value": false,
+     "upstream_of_SUM03": false,
+     "n_units_needed_for_SUM03": 37,
+     "C_without_SYS01_equals_C": true,
+     "SYS-01_computed_in_min_run": false,
+     "why_wrong": "reports counts/ok; masks act inside each unit's own predicates; adding counts is dimensionally void"
+    },
+    "REFERENCE:B3-02": {
+     "B3-02_over_B3-01": 1.0236169449010628,
+     "add_as_source_rel_change_of_C": 0.10532919050771505,
+     "upstream_of_SUM03": false,
+     "why_wrong": "second estimator of the same repair stage; adding it counts B3 about twice"
+    },
+    "AGGREGATE:SUM-03": {
+     "add_as_source_rel_change_of_C": 1.0,
+     "SUM05_times_area_T_rel_err_vs_C": 0.0,
+     "upstream_of_SUM03": false,
+     "why_wrong": "it is the summing-node output (feedback would double C); SUM-04..07 are read-out arithmetic"
+    },
+    "BREAKDOWN:X-07": {
+     "sum_by_year_rel_err_vs_C": 6.079012054750277e-16,
+     "value_rel_err_vs_C": 6.079012054750277e-16,
+     "X-08_rel_err_vs_B4-02": 1.714129061869196e-16,
+     "X-09_rel_err_vs_C3+C4": 1.239993060040474e-16,
+     "add_X-07_as_source_rel_change_of_C": 0.9999999999999994,
+     "upstream_of_SUM03": false,
+     "why_wrong": "branch-current read-out of the total; adding it doubles C"
+    },
+    "ALL70_value_fields_as_sources": {
+     "n_units_with_numeric_value": 44,
+     "sum_over_C": 6.689894727528793,
+     "note": "mixes kgCO2e, tCO2e, per-m2, kg-mass; shown only to quantify the error of '70 currents'"
+    }
+   }
+  },
+  "SYN-RC-office-M-T60-seed102@T30": {
+   "C": 68944726.28264259,
+   "examples": {
+    "AUXILIARY:A5-01": {
+     "identity": "A5-04 = A5-01 + A5-02 + A5-03",
+     "rel_err_identity": 0.0,
+     "add_A5-01_as_source_rel_change_of_C": 0.0028266860780773594,
+     "add_A5-01_as_source_abs_kgCO2e": 194885.09794,
+     "upstream_of_SUM03": true,
+     "why_wrong": "already inside A5-04 (DIRECT); adding it counts temporary electricity twice"
+    },
+    "AUXILIARY:B4-01": {
+     "keys": [
+      "events",
+      "n_events"
+     ],
+     "n_events": 609,
+     "has_kgCO2e_value": false,
+     "why_wrong": "event grid (times, count); no kgCO2e value; feeds B4-02/B3-01 as schedule"
+    },
+    "DECISION:SYS-01": {
+     "keys": [
+      "counts",
+      "ok",
+      "violations"
+     ],
+     "has_kgCO2e_value": false,
+     "upstream_of_SUM03": false,
+     "n_units_needed_for_SUM03": 37,
+     "C_without_SYS01_equals_C": true,
+     "SYS-01_computed_in_min_run": false,
+     "why_wrong": "reports counts/ok; masks act inside each unit's own predicates; adding counts is dimensionally void"
+    },
+    "REFERENCE:B3-02": {
+     "B3-02_over_B3-01": 1.012469544062216,
+     "add_as_source_rel_change_of_C": 0.1465452850923978,
+     "upstream_of_SUM03": false,
+     "why_wrong": "second estimator of the same repair stage; adding it counts B3 about twice"
+    },
+    "AGGREGATE:SUM-03": {
+     "add_as_source_rel_change_of_C": 1.0,
+     "SUM05_times_area_T_rel_err_vs_C": 0.0,
+     "upstream_of_SUM03": false,
+     "why_wrong": "it is the summing-node output (feedback would double C); SUM-04..07 are read-out arithmetic"
+    },
+    "BREAKDOWN:X-07": {
+     "sum_by_year_rel_err_vs_C": 3.025847921400597e-15,
+     "value_rel_err_vs_C": 2.80971592701484e-15,
+     "X-08_rel_err_vs_B4-02": 1.2928969041318075e-16,
+     "X-09_rel_err_vs_C3+C4": 1.4894389382218545e-15,
+     "add_X-07_as_source_rel_change_of_C": 1.0000000000000029,
+     "upstream_of_SUM03": false,
+     "why_wrong": "branch-current read-out of the total; adding it doubles C"
+    },
+    "ALL70_value_fields_as_sources": {
+     "n_units_with_numeric_value": 44,
+     "sum_over_C": 7.055382939830273,
+     "note": "mixes kgCO2e, tCO2e, per-m2, kg-mass; shown only to quantify the error of '70 currents'"
+    }
+   }
+  }
+ },
+ "refcalc_closure_SUM03_size": 37,
+ "provenance": {
+  "git_head": "e182105c52019a4abe07fbdd61eb0e057b257f93",
+  "git_branch": "claude/wlc-equivalent-circuit-20261124",
+  "units70_json_sha256": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3",
+  "unit_dependencies_csv_sha256": "df02509e799e5ac1b084e66c50810ad99983bf0528b4759591a298696915673e",
+  "python": "3.13.18",
+  "frozen_trees": {
+   "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+   "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+   "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+  }
+ },
+ "elapsed_s": 0.4221180080000977
+}
