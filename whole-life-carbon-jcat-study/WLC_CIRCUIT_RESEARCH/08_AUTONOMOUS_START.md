@@ -1,5 +1,8 @@
 # 08 One-message autonomous research start (Japanese)
 
+【最優先：モデルと工程の切り替え】
+まず `10_MODEL_ROUTING.md` を読み、全体計画は `wlc-architect`（Fable 5.2 High）、A/B/C/Eの実装・数値計算は各担当（Opus 5.5 Medium）、Dの独立検証は `wlc-verifier`（Opus 5.5 High）、成果の比較・統合は `wlc-integrator`（Opus 5.5 High）、最後の次期研究計画は `wlc-replanner`（Fable 5.2 High）に委任してください。各エージェントの `model` / `effort` を適用し、実際の起動モデルを記録してください。設定だけで実行済みと扱わず、モデルにアクセスできなければ代替使用と制約を明記してください。
+
 GitHub リポジトリ `csta24055-sys/-` の `claude/wlc-equivalent-circuit-20261124` を出発点として、ホールライフカーボンの電気等価回路研究を**5本の独立ルートで並行**して進めてください。
 
 最初に `CLAUDE.md`、`WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`、`07_SHARED_CONTRACT.md`、`05_SOURCE_MAP.md` と既存理論 `WLC_THEORY_RESEARCH_BASE/00_README.md`・`13_別チャット引継ぎ文.md` を読み、元の理論と制約を確認してください。
