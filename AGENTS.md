@@ -1,17 +1,9 @@
-# Agent instructions for WLC equivalent-circuit research
+# WLC研究エージェント共通ガイド
 
-Read `CLAUDE.md` and the specifications under `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/` first.
+最初にリポジトリ直下の `CLAUDE.md` と `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/12_FINAL_OPERATING_PLAN.md` を読む。**実行順序・書込み先・モデル別段階は12が正本**。共通変数は `07_SHARED_CONTRACT.md`。
 
-Scope: independent mathematical modeling of building whole-life carbon as electrical equivalent circuits (current sources, integrating capacitors, clocks, thresholds, switches and state variables). Keep the original WLC theory base and WLC Studio unchanged.
+A＝コンデンサ・時間波形、B＝方程式全体系、C＝70単位の役割写像、D＝独立検証、E＝抵抗／ジュール熱、F＝Math7検証支援。各担当は指定の `routes/<route>/` のみ変更し、原WLC研究・Math7のmain・WLC Studio・他担当のファイルを変更しない。
 
-Use synthetic data only. Treat electronic equivalence as a formal modeling choice, not physical identity. Compare against original reference equations and preserve all uncertainties, especially timing, terminal terms, equipment overlap, refrigerant and numerical boundary behavior. Log verified evidence and counterexamples. Work only on a new research branch.
+数理同値性、反例、時刻境界、変数の単位、CO₂の物理的排出時刻とWLC評価期間の区別を必須とする。合格判定は独立した実行記録に基づく。機密・再配布不可の資料や個人情報を公開リポジトリに保存しない。
 
-Also consult `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` and `csta24055-sys/lastdance4-tree-` (`main`, relevant A3/A6/A9 classification branches) as read-only **navigation** to relevant work in `csta24055-sys/lastdance`. For equations rely on the original WLC research base and independent verification, not the classification index.
-
-
-## Parallel WLC research
-Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `08_AUTONOMOUS_START.md`. Five project subagents under `.claude/agents/wlc-*.md` address A capacitor/waveform, B formulas, C 70-unit coverage, D independent validation, and E resistor/Joule-energy. Their output directories are disjoint. Same-checkout agents must not commit/checkout concurrently. In separate cloud sessions check out the correct route branch seeded from this project branch. Original theory and apps stay unchanged. Do not assert these files automatically start sessions.
-
-
-## Model switching by work phase
-Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md`. Fable 5.2 High is for strategic architecture and re-planning, Opus 5.5 Medium for A/B/C/E implementation, and Opus 5.5 High for D independent checks and verified integration. Delegate as explicit subagents, confirm actual models and ensure no shared branch/checkout contention.
+同じチェックアウトで複数エージェントがgit checkout/commitすることは禁止。参照する別ブランチは読み取り専用。必要に応じたサブエージェント委任は可能だが、保存された設定だけで研究開始・計算完了とは扱わない。
