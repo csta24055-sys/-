@@ -1,61 +1,35 @@
-# Project instructions — WLC equivalent-circuit research
+# WLC電気等価回路の研究 — Claude Code プロジェクト指示
 
-This branch is an isolated research workspace for constructing and testing **electrical equivalent circuits for building whole-life carbon (WLC)**.
+このブランチは、架空係数の独立WLC数理モデルを電気回路の支配方程式へ写像し、**実際に検証・比較・縮約**するための隔離研究環境。アプリ開発ではない。波形が似ているだけでは達成ではない。
 
-## Mandatory startup
-For any WLC/circuit task, read, in order:
-1. `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/00_README.md`
-2. `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/13_別チャット引継ぎ文.md`
-3. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/00_START_HERE.md`
-4. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/01_FORMAL_MODEL.md`
-5. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/02_VERIFICATION_PLAN.md`
-6. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/03_EXECUTION_PLAN.md`
-7. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` — cross-repository source navigation.
-8. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md` — **current primary autonomous execution policy**.
-9. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/07_SHARED_CONTRACT.md` — fixed names, units, boundaries and route outputs.
-10. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/08_AUTONOMOUS_START.md` — one-message start instructions.
-11. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/09_RESISTOR_ENERGY_ROUTE.md` — **independent Joule-heating route**, a user-prioritized alternative to capacitor charging.
-12. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md` — stage-specific model allocation.
-13. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/11_MATH7_INTEGRATION.md` — Math7 access, modes, scope and 7-engine limitations.
+## 起動直後（最優先・短い読込）
+1. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/12_FINAL_OPERATING_PLAN.md` — **唯一の現行実行計画・分担・合否ゲート**。
+2. `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/07_SHARED_CONTRACT.md` — 変数・単位・イベント境界・成果形式。
+3. 最初の統括担当は `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/00_README.md` と `13_別チャット引継ぎ文.md` から根拠と前提を確認する。式の導出時には該当原文へ戻る。
 
-Read the base's `05_時間スペクトルの理論.md`, `06_建物全体の統一方程式.md`, `07_動的LCAと工程時間.md`, `09_未解決問題と限界.md`, and `15_劣化・寿命・交換モデル研究開始資料.md` before formal conclusions.
+**全員が初回に00〜11の全文を読む必要はない**。各研究担当は `12_FINAL_OPERATING_PLAN.md` 2節の表にある**自分に必要な資料だけ**確認する。06は研究ルート詳細、10はモデル割当、11はMath7連携、05は出典探索のときに読む。古い03・04・08の順次実施や長文を実行命令の上位に置かない。
 
-## Additional read-only reference repository
-- `csta24055-sys/lastdance4-tree-` (`main`) is the Yes/No classification/index of 2,100 development roles. It is **not** the original WLC source or a mathematical proof. Search relevant A3 (math), A6 (verification), A9 (knowledge), optionally A2 (classification), then follow exact role/source references into `csta24055-sys/lastdance` only if needed.
-- Use `WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` to keep source repo, branch, file path, role/claim IDs and verification status separately documented.
-- Prioritize the WLC theory base for formulas and validity, not ability-tree descriptions.
+## 作業範囲
+- GitHub：`csta24055-sys/-`、研究開始ブランチ：`claude/wlc-equivalent-circuit-20261124`。
+- 新規書込みは `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/` の中だけ。各担当はそれぞれ `routes/A_waveform/`、`B_formula_network/`、`C_70_units/`、`D_verification/`、`E_resistor_energy/`、`F_math7_bridge/` に隔離する。統括は `coordination/`、統合担当は `integration/` のみ。
+- **読み取り専用**：`WLC_THEORY_RESEARCH_BASE/`、元の第09〜23章、`research_archive/`、WLC Studio、J-CAT原資料、Math7の既存コード、他リポジトリの分類ツリー・ソース。
+- 基盤は架空の70評価単位モデルであり、21単位のみ直接集計、残る49は補助／指標等。J-CAT原版667式の変換実験と同じものではない。架空計算の一致は実建物の排出精度を証明しない。
+- 公式・契約上再配布できないJ-CAT原版数式、係数、セル、資料、非公開データ、個人情報、トークンなどを公開GitHubへ書かない。
 
-## Mandatory model / effort orchestration
-- Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md` **before launching work**. This project starts at Fable 5.2 High through `.claude/settings.json`. Delegate **architecture and re-planning** to `wlc-architect` and `wlc-replanner` (Fable 5.2 High); **implementation and simulation** to the four independent route workers (Opus 5.5 Medium); **independent verification** to `wlc-verifier` (Opus 5.5 High); **evidence integration** to `wlc-integrator` (Opus 5.5 High).
-- Sequence P0 (architecture) → P1/P2 (A/B/C/E parallel execution) → P3 (D verification) → P4 (integration) → P5 (Fable review/replanning). Iterate selectively after actual evidence. Do not accidentally have all subagents inherit the startup model.
-- Validate actual selected models/efforts in logs; if subscription/provider disallows requested models, record fallback and notify rather than claiming success. Project config is not an ongoing daemon and does not start subagents automatically. Each agent must be invoked.
-- Where session-level/CLI overrides take precedence over frontmatter, inspect and report mismatches.
+## 数学上の厳守
+- 実時間排出量 `G(t)` と評価期間WLC `C_WLC(T)=M([0,T])+Z(T)` を区別。`dC_WLC/dT` を実排出率と自動同一視しない。
+- A：コンデンサの電荷・電圧の積算。E：抵抗の電力 `I²R` の**時間積分**として累積ジュール熱量。後者は抵抗の温度でもコンデンサの蓄電エネルギーでもない。
+- 異なる交換周期やリセット時の設備状態を保持する必要がある場合、単一コンデンサの合成容量に情報を失わせない。受動R/Cに全式を無理に押し込まない。
+- 計算の見かけの置換だけで性能・新規性・省エネを主張しない。成立範囲、単位、イベント境界、独立オラクル、計算量・状態数、反例を記録。
+- 証拠区分 `[P][E][F][S][L][H]` と出典コミットを遵守。新証明は独立確認前に確立済みと扱わない。
 
-## Parallel execution policy (supersedes serial phase ordering only)
-- Prefer **five independent research routes A capacitor/waveform, B formula-network, C 70-unit map, D independent verifier, and E resistor/Joule-energy**, as specified by `06_PARALLEL_ORCHESTRATION.md`. Launch concurrently when supported; otherwise interleave. Crucially, **Route E starts from cumulative resistor dissipation `E_R(t)=∫i²R dt` rather than capacitor charge**. Do not require E to adopt A's capacitor approach.
-- Project subagents `.claude/agents/wlc-waveform.md`, `wlc-formula-network.md`, `wlc-unit-mapper.md`, `wlc-verifier.md`, `wlc-resistor-energy.md` define route-specific behavior. In independent sessions verify you have checked out a project-seeded route branch. Unrelated worktrees may start from `main`; never presume a newly created worktree contains this research.
-- **Each worker owns only its route subfolder** under `WLC_CIRCUIT_RESEARCH/routes/`; coordinator alone edits shared files and the future `integration/` folder. Do not let concurrent agents change a shared branch HEAD or commit in one shared checkout. Separate branch/session work is preferable for independent writes.
-- A, B and E attempt different constructive routes, C independently maps all 70 unit roles (21 direct, 49 other), D tests and challenges all routes. Integrate supported results only after meeting a documented compatibility/verification gate. Unsupported mapping, non-existence and hybrid exceptions are valid findings, not prompts for unending retries.
-- Do not block on routine approvals; act within documented permissions, execute tests, record status and counterexamples. The presence of instructions or named agents does not mean the research sessions are running.
+## 担当・モデルの切り替え
+現行の研究管理：`12_FINAL_OPERATING_PLAN.md`。全体設計・実証後の再計画は **Fable 5.2 High**、A/B/C/E実装とMath7補助は **Opus 5.5 Medium**、Dの独立検証と最終統合は **Opus 5.5 High**。具体的な `.claude/agents/wlc-*.md` には `model` と `effort` を設定済み。各担当は必要になった時だけ起動し、全部を一度に起動して消費枠を浪費しない。
 
-## Math7 numerical-symbolic research bridge (user requested)
-- The **same repository name** `csta24055-sys/-` has distinct relevant refs: main has existing `math_tools_v2/`, `math_interop_v0/`, and `.github/workflows/math-ir-efficient.yml`, while this WLC branch does not. Use safe **read-only fetch/temporary source checkout** rather than attaching the same repository with extra privileges or switching an active worktree.
-- Delegate Math7 integration to `.claude/agents/wlc-math7-orchestrator.md` (Opus 5.5 Medium), owning only `WLC_CIRCUIT_RESEARCH/routes/F_math7_bridge/`. Verify five Python engines in the Math7 Cloud environment; use the **existing main-branch GitHub Actions workflow** for SageMath and MATLAB only through permitted authorized paths (web UI if Claude API is 403).
-- `portable-full` is a restricted 7-engine **algebraic Math IR** regression, NOT 7-engine support for arbitrary WLC integrals/step functions. The `lca-operators` integration/time/masked-sum/spectrum mode is Python-only until new adapters are actually implemented and independently checked.
-- Never silently change permissions, attach repos with broader access, inject tokens or trigger Actions without user authorization. Action source being present does not prove Sage/MATLAB actually ran.
-- Prioritize read-only mathematical verification, and avoid writing source/fixtures into `main` or original research branches.
+Claude Codeの設定ファイルを置いただけでは実行・自動モデル変更・GitHub Actions起動を保証しない。実際に使われたモデル・effortと実行結果を確認し、代替・未実行は明示。複数担当は専用フォルダを使い、**同じチェックアウトで並列git checkout/commitをしない**。Git操作は統括が直列化する。
 
-## Non-negotiable boundaries
-- Never edit `whole-life-carbon-jcat-study/WLC_THEORY_RESEARCH_BASE/`, existing research chapters 09–23, the original `research_archive/`, or the WLC Studio application. Treat all as immutable references.
-- Put new work only under `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/` on a dedicated research branch. Never push the experiment to `main` or to the preserved source branches.
-- No licensed J-CAT formula bodies, coefficients, values, cell addresses, original documents, restricted data, personal identifiers, or credentials in GitHub. Only use independent synthetic examples and authorized public data.
-- Distinguish cumulative **actual-time emissions** `G(t)` from the existing **evaluation-horizon-dependent WLC model** `C(T)=M([0,T])+Z(T)`. Do not infer actual release timing from a WLC total alone.
-- A waveform resemblance or a capacitor analogy is **not** a novel discovery. Measure exact equivalence, assumptions, state requirements, approximation error, runtime, and usefulness against the existing canonical model.
-- One single capacitor can accumulate the sum of currents but cannot preserve independently different replacement ages without additional state/control logic.
-- An unrectified, zero-mean AC input does not create monotonic accumulated charge in an ideal capacitor. Use a separately justified clock/rectifier/integrator/trigger scheme where appropriate.
-- Follow the base evidence tags [P] proof, [E] exact rational samples, [F] numerical comparisons, [S] statistical, [L] literature, [H] hypothesis. Document domain and provenance; self-authored proofs await independent review.
-- Python checks: `python3 -B` with `PYTHONDONTWRITEBYTECODE=1`; no network or repository writes from tests. Preserve original test oracles.
-- Route A starts with the two-equipment pilot. Routes B and C may **independently begin** broad formula/70-unit taxonomy from the outset; don't claim full equivalence before tests.
+## Math7の事実
+**同じリポジトリの `main` ブランチ**にある `math_tools_v2/` と `math_interop_v0/` を読み取り専用・別作業領域から参照する。研究ブランチには当該本体はない。`portable-full` は制限付き数式の7エンジン照合、`lca-operators` は現状Python専用。7エンジン全てに任意WLC式を処理させるには追加の検証可能なアダプターが必要。API 403時にトークン埋込みや権限迂回をしない。ユーザーが求めていないGitHub Actionsは勝手に起動しない。
 
-## Delivery definition
-A task is not finished merely because diagrams or text exist. Deliver derivation, independent reference computation, tests including event boundaries and overlapping replacements, explicit counterexamples, limitations, operation-count/memory/time comparison, and a short understandable summary. If a phase is incomplete, state precisely what is missing.
+## 完了報告
+各ルートの `STATUS.md`、コード・試験結果・反例・モデル/入力/出典SHA・実測ベンチマークを提示する。**NOT_RUN**をPASSにしない。統合が不可能なら理由と限界を報告する。再計画を何度も作るより有効な反証・検証に時間を使う。
