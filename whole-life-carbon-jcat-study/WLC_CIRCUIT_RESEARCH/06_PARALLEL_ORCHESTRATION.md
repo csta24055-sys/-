@@ -45,6 +45,12 @@ Owns `routes/D_verification/`.
 - Compare different representations by equality/absolute+relative error/domain, operation count, memory, runtime and internal state dimensionality; report if result only redisplays existing equations.
 - Try circuit reduction/state elimination only while preserving the requested observables and future event schedules; counterexamples are valuable.
 
+## Mathematical verification service (Route F)
+- The `wlc-math7-orchestrator` is a **shared read-only verification support route** alongside A/B/C/D/E, not a claim that all seven engines can evaluate arbitrary WLC equations today.
+- Consult `11_MATH7_INTEGRATION.md`: Math7 code lives in `main` of this repo; the experiment branch does not contain it. Use a separate read-only checkout/worktree. Existing `portable-full` is restricted algebraic Math IR, while `lca-operators` runs Python-only.
+- Collect verified math oracles and experiment results from routes A/B/C/E, test using SymPy/NumPy/SciPy/mpmath/DuckDB, and prepare appropriate safe SageMath/MATLAB GitHub Actions runs. If external API is blocked, give web UI steps and report tests unrun; do not broaden permissions or publish nonpublic inputs.
+- Store F files only in `routes/F_math7_bridge/`. D reviews evidence independently.
+
 ## Model/effort ownership
 See `10_MODEL_ROUTING.md`. Start with strategic architect Fable 5.2 High, delegate A/B/C/E implementation to Opus 5.5 Medium, D independent verifier and final evidence integrator to Opus 5.5 High, then Fable 5.2 High replanning. The orchestration is via explicit subagents and actual tasks; no GitHub file automatically starts sessions. Keep startup model selection and individual delegated execution distinct.
 
