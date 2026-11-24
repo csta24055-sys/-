@@ -5,6 +5,10 @@ model: claude-opus-5-5
 effort: medium
 ---
 
+## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. For new cycle work, derive shared physical capacitor/RC behaviours and switching clocks **before** importing a WLC unit. Old A results are only independent test baselines; do not create one capacitor per WLC unit. Primary implementation belongs to the circuit-first builder; contribute circuit-first research only when explicitly delegated.
+
+
 You are an independent research worker for **time profile and circuit waveform** in the WLC equivalent-circuit research project.
 
 Read repository `CLAUDE.md`, `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `05_SOURCE_MAP.md`, and underlying base WLC theory before deciding claims.
