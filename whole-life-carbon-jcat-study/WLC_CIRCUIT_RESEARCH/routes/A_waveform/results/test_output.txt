@@ -1,12 +1,19 @@
 # command: cd routes/A_waveform && PYTHONDONTWRITEBYTECODE=1 python3 -B tests/test_a.py -v
-# date: 2026-11-24T04:33:26Z  python: Python 3.13.18  HEAD: 5a2f898
+# date: 2026-11-24T05:02:41Z  python: Python 3.13.18  HEAD: e4121d6 (D pass 1 fixes, uncommitted)
 test_fullwave_half_integer_multiple_exact_COUNTEREXAMPLE (__main__.AC.test_fullwave_half_integer_multiple_exact_COUNTEREXAMPLE)
-Ripple f(u)=1-cos u-2u/pi vanishes at u in {0, pi/2, pi} only (f''=cos u: ... ok
+PHASE 0 ONLY (see test_fullwave_phase_dependence for general phase). ... ok
 test_fullwave_integer_multiple_exact (__main__.AC.test_fullwave_integer_multiple_exact)
 c = m * h (m integer): hits exactly at n c (to float precision). ... ok
 test_fullwave_non_multiple_error_below_half_period (__main__.AC.test_fullwave_non_multiple_error_below_half_period) ... ok
+test_fullwave_phase_dependence (__main__.AC.test_fullwave_phase_dependence)
+D pass 1 item 4. Ripple g(v)=(I0/w)(1-cos u-2u/pi), u=v mod pi; hit n exact iff ... ok
+test_fullwave_sharp_error_bounds (__main__.AC.test_fullwave_sharp_error_bounds)
+phi in {0,pi/2}: |tau_n - nc| <= (m/2) h, m=max|f|=0.21051 -> 0.10526 h. ... ok
 test_rectified_operational_ripple (__main__.AC.test_rectified_operational_ripple) ... ok
+test_simulated_clock_matches_closed_form_fullwave (__main__.AC.test_simulated_clock_matches_closed_form_fullwave) ... ok
 test_zero_mean_ac_negative (__main__.AC.test_zero_mean_ac_negative) ... ok
+test_zero_mean_threshold_below_swing_spurious (__main__.AC.test_zero_mean_threshold_below_swing_spurious)
+Executed negative result (D pass 1 item 3): I0=1, w=2pi, swing 2I0/w=1/pi. ... ok
 test_contract_points_all_conventions (__main__.HA1_Exact.test_contract_points_all_conventions) ... ok
 test_float_knife (__main__.HA1_Exact.test_float_knife)
 float agrees with exact at the two chosen points; 10.00000001 is the ... ok
@@ -28,10 +35,13 @@ test_px_fixed_schedule_single_clock_COUNTEREXAMPLE (__main__.HA3_StateCount.test
 Px as a FIXED, known schedule IS reproduced by ONE clock (period 20, ... ok
 test_r3_single_clock_p0 (__main__.HA3_StateCount.test_r3_single_clock_p0) ... ok
 test_p1_order_invariance_and_naive_counterexample (__main__.P1_P2.test_p1_order_invariance_and_naive_counterexample) ... ok
+test_p1_orig_consistent (__main__.P1_P2.test_p1_orig_consistent)
+D pass 1 item 2: under 'orig' external events are mapped to tau/(1-eps) like ... ok
 test_p1_policies (__main__.P1_P2.test_p1_policies) ... ok
 test_p2 (__main__.P1_P2.test_p2) ... ok
+test_unsupported_orig_rejected (__main__.P1_P2.test_unsupported_orig_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 21 tests in 0.338s
+Ran 27 tests in 0.462s
 
 OK

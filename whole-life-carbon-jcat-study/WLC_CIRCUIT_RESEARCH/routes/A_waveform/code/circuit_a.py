@@ -61,6 +61,16 @@ class R1:
                  sequential_order=None):
         self.clocks, self.G0, self.rates = list(clocks), F(G0), [F(r) for r in rates]
         self.mode_latch_clock = mode_latch_clock
+        if conv not in (RIGHT, LEFT, ORIG):
+            raise ValueError(f"unsupported convention {conv!r}")
+        if mode_latch_clock and conv == ORIG:
+            raise ValueError("mode latch (P2) under 'orig' is not defined (no oracle)")
+        # ORIG counts an event at tau iff tau < T(1-eps)  <=>  tau/(1-eps) < T.
+        # Clocks are slowed by (1-eps); external events must be mapped the same way,
+        # otherwise a renovation fires at physical 20 while the clocks fire at
+        # 20/(1-eps) (D pass 1 defect: P1-additional@30 gave 290, oracle 345).
+        if conv == ORIG:
+            ext = [ExtEvent(e.time / (1 - EPS), e.charge, e.resets, e.replaces, e.kind) for e in ext]
         self.ext = sorted(ext, key=lambda e: e.time)
         self.conv, self.policy = conv, policy
         self.gamma, self.C_cap = F(gamma), F(C_cap)
@@ -170,11 +180,15 @@ def p1_r1(policy, conv=RIGHT, sequential_order=None):
 
 
 def p2_r1(conv=RIGHT):
+    if conv == ORIG:
+        raise ValueError("P2 under 'orig' is not defined (oracle g_p2 is right/left only)")
     return R1([Clock("A", 10, 20, conv), Clock("P", 20, 35, conv)], rates=(F(4), F(3)),
               mode_latch_clock="A", conv=conv)
 
 
 def px_r1(conv=RIGHT, t_early=7):
+    if conv == ORIG:
+        raise ValueError("Px under 'orig' is not defined (oracle g_px is right/left only)")
     early = ExtEvent(t_early, 20, resets=("A",), kind="early_ac")
     return R1([Clock("A", 10, 20, conv), Clock("P", 20, 35, conv)], ext=[early], conv=conv)
 
@@ -252,10 +266,15 @@ class R3i:
     theta=1 is the reset threshold; impulses into accumulator Q. States (Q, x).
     Used for P0 ([(1/2,20),(1,55)]) and the FIXED Px schedule ([(7/20,20),(17/20,20),(1,35)])."""
 
-    def __init__(self, thresholds, L=F(20), G0=F(100), r=F(4), conv=RIGHT):
+    def __init__(self, thresholds, L=F(20), G0=F(100), r=F(4), conv=RIGHT, eps=EPS):
+        if conv not in (RIGHT, LEFT, ORIG):
+            raise ValueError(f"unsupported convention {conv!r}")
         self.th = sorted((F(a), F(b)) for a, b in thresholds)
-        assert self.th[-1][0] == 1
+        if self.th[-1][0] != 1:
+            raise ValueError("last comparator must be the reset threshold 1")
         self.L, self.G0, self.r, self.conv = F(L), F(G0), F(r), conv
+        # ORIG: left semantics + clock slowed by (1-eps) (the ramp is NOT slowed)
+        self.nu = (1 - F(eps)) / self.L if conv == ORIG else 1 / self.L
 
     def states(self):
         return (2, 0, len(self.th), 0)
@@ -263,7 +282,7 @@ class R3i:
     def G(self, t):
         t = F(t)
         strict = self.conv in (LEFT, ORIG)
-        nu = 1 / self.L
+        nu = self.nu
         now, x, Q = F(0), F(0), self.G0
         while True:
             nxt = [(th, A) for th, A in self.th if th > x]
@@ -299,40 +318,84 @@ def single_clock_fit(period, t_points=(10, 20), G_targets=(160, 140 + 40 + 75)):
 
 
 # ---------------- AC clocks (float; transcendental) ----------------
-def q_fullwave(t, I0, w):
+def q_fullwave(t, I0, w):  # phase 0 (kept for the ripple test)
     """Charge from |I0 sin(w t)| into an ideal capacitor, Q(0)=0."""
     k = math.floor(w * t / math.pi)
     return (I0 / w) * (2 * k + 1 - math.cos(w * t - k * math.pi))
 
 
-def hit_fullwave(level, I0, w):
-    """First time q_fullwave reaches `level` (closed form; Q strictly increasing)."""
+def _P_fullwave(v, I0, w):
+    """Antiderivative of I0|sin v| in the phase variable v (divided by w): monotone."""
+    k = math.floor(v / math.pi)
+    return (I0 / w) * (2 * k + 1 - math.cos(v - k * math.pi))
+
+
+def q_fullwave_phase(t, I0, w, phi=0.0):
+    """Charge from |I0 sin(w t + phi)|, Q(0)=0."""
+    return _P_fullwave(w * t + phi, I0, w) - _P_fullwave(phi, I0, w)
+
+
+def _inv_P_fullwave(p, I0, w):
     per_half = 2 * I0 / w
-    k = math.floor(level / per_half)
-    rem = level - k * per_half
+    k = math.floor(p / per_half)
+    rem = p - k * per_half
     u = math.acos(max(-1.0, min(1.0, 1 - rem * w / I0)))
-    return (k * math.pi + u) / w
+    return k * math.pi + u
 
 
-def q_zero_mean(t, I0, w):
-    """Unrectified I0 sin(w t) into ideal capacitor: Q = (I0/w)(1 - cos w t), bounded."""
-    return (I0 / w) * (1 - math.cos(w * t))
+def hit_fullwave(level, I0, w, phi=0.0):
+    """First time q_fullwave_phase reaches `level` (closed form; Q strictly increasing)."""
+    v = _inv_P_fullwave(level + _P_fullwave(phi, I0, w), I0, w)
+    return (v - phi) / w
 
 
-def ac_clock_count(t, c, w, rect="full"):
-    """Clock with threshold Q_th=1 (reset to 0 at the exact hit, i.e. subtract threshold),
-    AC amplitude chosen so that the RECTIFIED mean current is 1/c.
-    full : count = #{n>=1 : hit(n) <= t}   (cumulative, no drift since reset at exact hit)
-    zero : unrectified; charge never exceeds 2 I0/w, count 0 if 2 I0/w < 1."""
+def q_zero_mean(t, I0, w, phi=0.0):
+    """Unrectified I0 sin(w t + phi) into ideal capacitor: Q=(I0/w)(cos phi - cos(w t+phi))."""
+    return (I0 / w) * (math.cos(phi) - math.cos(w * t + phi))
+
+
+def simulate_clock(t_end, charge_fn, theta=1.0, reset="subtract", clamp=False, dt=1e-3):
+    """Actually integrate a clock capacitor fed by a current whose antiderivative is
+    `charge_fn(t)` (exact increments per step), comparator at `theta`.
+    reset='subtract': q <- q - theta at the hit;  reset='zero': q <- 0 at the hit
+    (identical when the hit is located exactly). clamp=True: an ideal diode keeps q>=0
+    (applied per step: approximate at the dt scale). Crossing times by bisection.
+    Returns the list of hit times."""
+    hits, t, q = [], 0.0, 0.0
+    while t < t_end:
+        t2 = min(t + dt, t_end)
+        dq = charge_fn(t2) - charge_fn(t)
+        if q + dq >= theta:
+            lo, hi = t, t2
+            for _ in range(60):
+                mid = 0.5 * (lo + hi)
+                if q + charge_fn(mid) - charge_fn(t) >= theta:
+                    hi = mid
+                else:
+                    lo = mid
+            hits.append(hi)
+            q = (q + charge_fn(hi) - charge_fn(t)) - theta if reset == "subtract" else 0.0
+            t = hi
+            continue
+        q += dq
+        if clamp and q < 0:
+            q = 0.0
+        t = t2
+    return hits
+
+
+def ac_clock_count(t, c, w, rect="full", phi=0.0):
+    """Clock with threshold 1, AC amplitude chosen so that the RECTIFIED mean current is 1/c.
+    full : closed-form hits (reset at exact hit == subtract threshold, no drift)
+    zero : unrectified current actually integrated by simulate_clock (no hard-coded 0)."""
     I0 = math.pi / (2 * c)       # mean of |I0 sin| is 2 I0/pi = 1/c
     if rect == "full":
         n = 0
-        while hit_fullwave(n + 1, I0, w) <= t:
+        while hit_fullwave(n + 1, I0, w, phi) <= t:
             n += 1
         return n
     if rect == "zero":
-        assert 2 * I0 / w < 1, "this negative test uses a threshold above the AC charge swing"
-        return 0
+        return len(simulate_clock(t, lambda s: q_zero_mean(s, I0, w, phi), 1.0))
     raise ValueError(rect)
 
 
@@ -347,7 +410,8 @@ class R3k:
     States (1,1,2,0): continuous state traded for an unbounded discrete counter."""
 
     def __init__(self, conv=RIGHT):
-        assert conv in (RIGHT, LEFT)
+        if conv not in (RIGHT, LEFT):
+            raise ValueError("R3k implemented for right/left only")
         self.conv = conv
 
     def states(self):

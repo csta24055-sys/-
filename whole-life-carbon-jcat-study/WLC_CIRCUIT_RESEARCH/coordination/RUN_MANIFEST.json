@@ -279,6 +279,33 @@
         "duration_s": 1554
       },
       "status": "PARTIAL_PENDING_D"
+    },
+    {
+      "phase": "G3",
+      "route": "A_waveform",
+      "pass": "fix after D pass 1",
+      "actor": "wlc-waveform (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "e4121d6",
+      "route_result": "27/27 tests OK (was 21); points.json 595 rows, 0 mismatches vs route oracle",
+      "coordinator_rerun": "27/27 OK",
+      "items": {
+        "1 R3i orig eps": "FIXED",
+        "2 P1 under orig": "FIXED",
+        "3 zero-mean AC clock": "FIXED (disputes D sub-note on reset-to-zero counting)",
+        "4 A-16 phase": "FIXED (disputes D bound for general phase: ~0.2105h vs 0.10526h)",
+        "5 closed band wording": "FIXED",
+        "6 minimality wording": "FIXED",
+        "7 tautological tests": "FIXED"
+      },
+      "recheck_by_D": "NOT_RUN",
+      "usage": {
+        "subagent_tokens": 202142,
+        "tool_uses": 13,
+        "duration_s": 277
+      },
+      "status": "FIXED_PENDING_D_RECHECK"
     }
   ],
   "setup_audit": {

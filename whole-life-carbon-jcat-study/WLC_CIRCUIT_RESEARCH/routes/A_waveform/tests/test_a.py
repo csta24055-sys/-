@@ -132,8 +132,10 @@ class HA2_ImpulseFree(unittest.TestCase):
                     self.assertEqual(r2.G(F(t)), r1.G(F(t)))
 
     def test_slope(self):
-        self.assertEqual(C.p0_r2(R).slope, F(4) + F(20, 10) + F(35, 20))   # 7.75
-        self.assertEqual(C.p0_r2(OR).slope, 4 + (1 - O.EPS) * F(15, 4))
+        # independently stated expected values (not recomputed from the same formula)
+        self.assertEqual(C.p0_r2(R).slope, F("7.75"))
+        self.assertEqual(C.p0_r2(L).slope, F("7.75"))
+        self.assertEqual(C.p0_r2(OR).slope, F("7.74999999625"))    # 7.75 - 3.75e-9
 
     def test_sawtooth_bounded(self):
         """residual 20 xA + 35 xP in [0,55) (right) / (0,55] (left, t>0)."""
@@ -155,14 +157,19 @@ class HA3_StateCount(unittest.TestCase):
             for t in pts:
                 with self.subTest(conv=conv, t=t):
                     self.assertEqual(r3.G(F(t)), O.g_p0(F(t), conv))
-                    if conv != OR:
-                        self.assertEqual(r3i.G(F(t)), O.g_p0(F(t), conv))
+                    self.assertEqual(r3i.G(F(t)), O.g_p0(F(t), conv))   # incl. orig (D pass 1 item 1)
         for conv in (R, L):
             r3k = C.R3k(conv)
             for t in pts:
                 with self.subTest(conv=conv, t=t, real="R3k"):
                     self.assertEqual(r3k.G(F(t)), O.g_p0(F(t), conv))
         self.assertEqual(C.R3k().states(), (1, 1, 2, 0))
+        # D pass 1 item 1: hand value at the knife point, orig, single clock
+        self.assertEqual(C.R3i([(F(1, 2), 20), (1, 55)], conv=OR).G(F("10.000000005")), F("140.00000002"))
+        with self.assertRaises(ValueError):
+            C.R3k(OR)
+        with self.assertRaises(ValueError):
+            C.R3i([(F(1, 2), 20), (1, 55)], conv="bogus")
         self.assertEqual(C.R3().states(), (2, 0, 2, 0))
         self.assertEqual(C.p0_r1().states(), (3, 0, 2, 0))
         self.assertEqual(C.p0_r2().states(), (3, 0, 2, 0))
@@ -229,10 +236,41 @@ class P1_P2(unittest.TestCase):
         self.assertEqual(O.g_p1(40, R, "additional"), 460)
         self.assertEqual(O.g_p1(20, L, "substitute"), 200)
 
+    def test_p1_orig_consistent(self):
+        """D pass 1 item 2: under 'orig' external events are mapped to tau/(1-eps) like
+        the clocks. Hand: additional@30 = 295 + 50 = 345; substitute@20.00000001 =
+        100 + 80.00000004 + 20 = 200.00000004 (20.00000001(1-1e-9) < 20: nothing at 20)."""
+        self.assertEqual(C.p1_r1("additional", OR).G(30), 345)
+        self.assertEqual(C.p1_r1("substitute", OR).G(F("20.00000001")), F("200.00000004"))
+        pts = O.CONTRACT_POINTS + O.KNIFE_POINTS + ["20.00000001", "20.00000003"]
+        pts += [F(20) / (1 - O.EPS) + d for d in (-D, 0, D)]
+        for pol in ("substitute", "additional"):
+            for t in pts:
+                with self.subTest(pol=pol, t=t):
+                    self.assertEqual(C.p1_r1(pol, OR).G(F(t)), O.g_p1(F(t), OR, pol))
+
+    def test_unsupported_orig_rejected(self):
+        for fn in (lambda: C.p2_r1(OR), lambda: C.px_r1(OR),
+                   lambda: C.R1([], conv="bogus")):
+            with self.assertRaises(ValueError):
+                fn()
+
     def test_p1_order_invariance_and_naive_counterexample(self):
         import itertools
-        # set semantics: order is not an input -> trivially invariant; check the
-        # naive sequential implementation instead
+        # (a) the SET rule, actually permuted: clock-list order x split renovation
+        # (two external entries 30+20 at t=20, listed in both orders), both policies
+        for pol, expect in (("substitute", 250), ("additional", 305)):
+            vals = set()
+            for clocks in itertools.permutations(["A", "P"]):
+                for parts in ((30, 20), (20, 30)):
+                    ks = [C.Clock(n, 10 if n == "A" else 20, 20 if n == "A" else 35) for n in clocks]
+                    ext = [C.ExtEvent(20, a, resets=("A", "P"), replaces=("A", "P"), kind="renovation")
+                           for a in parts]
+                    r = C.R1(ks, ext=ext, policy=pol)
+                    vals.add((r.G(20), r.G(F(20) - D), r.G(F(20) + D), r.G(40)))
+            self.assertEqual(len(vals), 1, (pol, vals))
+            self.assertEqual(vals.pop()[0], expect)
+        # (b) naive sequential implementation
         res = {}
         for order in itertools.permutations(["renovation", "A", "P"]):
             res[order] = C.p1_r1("additional", R, sequential_order=list(order)).G(20)
@@ -269,11 +307,74 @@ class AC(unittest.TestCase):
         qmax = max(C.q_zero_mean(k / 1000, I0, self.W) for k in range(60001))
         self.assertLessEqual(qmax, 2 * I0 / self.W + 1e-15)
         self.assertLess(qmax, 1.0)                       # never reaches clock threshold
+        # integrated (simulate_clock), not hard-coded
         self.assertEqual(C.ac_clock_count(60, c, self.W, "zero"), 0)
+        self.assertEqual(len(C.simulate_clock(60, lambda s: C.q_zero_mean(s, I0, self.W), 1.0)), 0)
         # mean charge over a full period does not grow
         self.assertAlmostEqual(C.q_zero_mean(10.0, I0, self.W), 0.0, delta=1e-12)
         # an AC-driven clock therefore fails G(10)=160
         self.assertEqual(100 + 4 * 10 + 20 * C.ac_clock_count(10, c, self.W, "zero"), 140)
+
+    def test_zero_mean_threshold_below_swing_spurious(self):
+        """Executed negative result (D pass 1 item 3): I0=1, w=2pi, swing 2I0/w=1/pi.
+        theta=0.1: cumulative charge reaches levels 0.1, 0.2, 0.3 < 1/pi in the first
+        half cycle, 0.4 never -> 3 counts in 10 yr with subtract-reset; reset-to-zero at
+        the exact hit is the same rule (3). A diode-clamped clock (q>=0) restarts every
+        cycle -> 3 per cycle = 30. Counts are set by amplitude/frequency/threshold, not c."""
+        q = lambda s: C.q_zero_mean(s, 1.0, self.W)
+        sub = C.simulate_clock(10, q, 0.1, "subtract")
+        self.assertEqual(len(sub), 3)
+        self.assertTrue(all(h < 0.5 for h in sub))
+        self.assertEqual(len(C.simulate_clock(10, q, 0.1, "zero")), 3)
+        self.assertEqual(len(C.simulate_clock(10, q, 0.1, "subtract", clamp=True)), 30)
+        q2 = lambda s: C.q_zero_mean(s, 1.0, 2 * self.W)
+        self.assertEqual(len(C.simulate_clock(10, q2, 0.1, "subtract")), 1)   # swing 1/(2pi)
+        self.assertEqual(len(C.simulate_clock(10, q, 0.2, "subtract")), 1)
+
+    def test_simulated_clock_matches_closed_form_fullwave(self):
+        I0 = math.pi / 20
+        hs = C.simulate_clock(60, lambda s: C.q_fullwave_phase(s, I0, self.W, 0.3), 1.0)
+        self.assertEqual(len(hs), 6)
+        for n, hit in enumerate(hs, 1):
+            self.assertAlmostEqual(hit, C.hit_fullwave(n, I0, self.W, 0.3), delta=1e-9)
+
+    def test_fullwave_phase_dependence(self):
+        """D pass 1 item 4. Ripple g(v)=(I0/w)(1-cos u-2u/pi), u=v mod pi; hit n exact iff
+        f(u0+n*pi*c/h)=f(u0), u0=phi mod pi. Integer c/h: exact for every phi.
+        c/h in 1/2+Z: exact iff f(u0+pi/2)=f(u0) <=> sin u0+cos u0=1 <=> u0 in {0,pi/2}."""
+        h = 0.5
+        for phi in (0.0, math.pi / 2, math.pi / 4, 0.3, 1.0):
+            for ch, exact in ((20, True), (20.5, phi in (0.0, math.pi / 2))):
+                c = ch * h
+                I0 = math.pi / (2 * c)
+                err = max(abs(C.hit_fullwave(n, I0, self.W, phi) - n * c) for n in range(1, 41))
+                with self.subTest(phi=phi, ch=ch):
+                    if exact:
+                        self.assertLess(err, 1e-6)      # sqrt-conditioned near current zeros
+                    else:
+                        self.assertGreater(err, 0.04)
+
+    def test_fullwave_sharp_error_bounds(self):
+        """phi in {0,pi/2}: |tau_n - nc| <= (m/2) h, m=max|f|=0.21051 -> 0.10526 h.
+        General phi: <= m h = 0.21051 h (ripple can swing from min to max). Observed
+        0.2097 h at phi=asin(2/pi), c/h=20.25, which exceeds 0.10526 h."""
+        h = 0.5
+        m = math.sqrt(1 - 4 / math.pi**2) + 2 * math.asin(2 / math.pi) / math.pi - 1
+        self.assertAlmostEqual(m, 0.2105136623530186, places=12)
+        rng = random.Random(1)
+        w0 = wg = 0.0
+        for _ in range(3000):
+            c = rng.uniform(1, 15); I0 = math.pi / (2 * c); phi = rng.uniform(0, math.pi)
+            for n in range(1, 6):
+                w0 = max(w0, abs(C.hit_fullwave(n, I0, self.W, 0.0) - n * c) / h)
+                wg = max(wg, abs(C.hit_fullwave(n, I0, self.W, phi) - n * c) / h)
+        self.assertLessEqual(w0, m / 2 + 1e-9)
+        self.assertGreater(w0, 0.99 * m / 2)
+        self.assertLessEqual(wg, m + 1e-9)
+        self.assertGreater(wg, m / 2 * 1.5)
+        c = 20.25 * h; I0 = math.pi / (2 * c)
+        e = max(abs(C.hit_fullwave(n, I0, self.W, math.asin(2 / math.pi)) - n * c) for n in range(1, 41))
+        self.assertGreater(e / h, m / 2)
 
     def test_fullwave_integer_multiple_exact(self):
         """c = m * h (m integer): hits exactly at n c (to float precision)."""
@@ -285,9 +386,9 @@ class AC(unittest.TestCase):
         self.assertEqual(C.ac_clock_count(59.999999, 10.0, self.W), 5)
 
     def test_fullwave_half_integer_multiple_exact_COUNTEREXAMPLE(self):
-        """Ripple f(u)=1-cos u-2u/pi vanishes at u in {0, pi/2, pi} only (f''=cos u:
-        convex on [0,pi/2], concave on [pi/2,pi]). Hence hits are exact at every n c iff
-        c/h is in (1/2)Z, not only for integer c/h. c = 10.25 = 20.5 h is exact."""
+        """PHASE 0 ONLY (see test_fullwave_phase_dependence for general phase).
+        Ripple f(u)=1-cos u-2u/pi vanishes at u in {0, pi/2, pi} only (f''=cos u).
+        At phi=0 hits are exact at every n c iff c/h in (1/2)Z: c = 10.25 = 20.5 h."""
         c = 10.25
         I0 = math.pi / (2 * c)
         for n in range(1, 7):

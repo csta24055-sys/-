@@ -42,10 +42,17 @@ def points():
                  ("R3", C.R3(conv).G, C.R3(conv).states())]
         if conv != O.ORIG:
             reals.append(("R3k", C.R3k(conv).G, C.R3k(conv).states()))
+        r3i = C.R3i([(F(1, 2), 20), (1, 55)], conv=conv)
+        reals.append(("R3i", r3i.G, r3i.states()))
         for name, g, st in reals:
             for t in ts:
                 rows.append({"case": "P0", "convention": conv, "t": dec(t), "value": frac(g(t)),
                              "realization": name, "states": list(st)})
+    for t in [F(x) for x in O.CONTRACT_POINTS + O.KNIFE_POINTS + ["20.00000001"]] + [F(20) / (1 - O.EPS)]:
+        for pol in ("substitute", "additional"):
+            c = C.p1_r1(pol, O.ORIG)
+            rows.append({"case": f"P1-{pol}", "convention": O.ORIG, "t": dec(t), "value": frac(c.G(t)),
+                         "realization": "R1", "states": list(c.states()), "oracle": frac(O.g_p1(t, O.ORIG, pol))})
     for conv in (O.RIGHT, O.LEFT):
         for t in [F(x) for x in O.CONTRACT_POINTS] + [F(x) for x in ("7", "17", "27")]:
             for pol in ("substitute", "additional"):
@@ -103,7 +110,7 @@ def bench(n=2000, reps=5, seed=20261124):
 if __name__ == "__main__":
     rows, mism, flt = points()
     with open(os.path.join(OUT, "points.json"), "w") as f:
-        json.dump({"source_commit": "5a2f898", "units": "kgCO2e (illustrative), t in years",
+        json.dump({"source_commit": "e4121d6 (D pass 1 fixes)", "units": "kgCO2e (illustrative), t in years",
                    "rows": rows, "n_rows": len(rows), "n_mismatch_vs_oracle": len(mism),
                    "float_at_knife_edge_10.00000001": flt,
                    "exact_at_knife_edge_10.00000001": {c: frac(O.g_p0(F(O.KNIFE_EDGE_UNDEFINED), c)) for c in O.CONVENTIONS}},
