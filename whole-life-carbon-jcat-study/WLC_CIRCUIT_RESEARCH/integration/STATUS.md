@@ -14,7 +14,7 @@
   - the code of `D/oracle_d.py`, `D/p2_gates.py`, `D/p2_common.py`, `B/grammar.py`, `B/oracle_io.py`, `B/route_b_experiments.py` and `C/common.py` (only the parts needed).
   - Input sha256 values are in `results/*.json` → `meta.inputs_sha256`.
 - **Review status of the inputs.**
-  - The B and C fix passes after D pass 2 (`013b1e5`, `a0bb507`) were **not re-reviewed by D**. Their restated wording is treated as route-self-reported.
+  - At the time of the G4 run, the B and C fix passes (`013b1e5`, `a0bb507`) had not been re-reviewed. **D pass 4 (HEAD `6585f4a`) has since confirmed both:** B is ACCEPT, with H-B1 overall still PARTIAL; C is ACCEPT, with the MAPPING constructs still [H].
   - B's `grammar.py`, which the composed model uses, is byte-identical to the version D reviewed (`git diff 06e0943 HEAD` is empty for this file).
   - C's code changed only in `build_mapping.py` (the truncation fix).
 
@@ -48,7 +48,7 @@ The route suites were **not** re-run by the integration. The coordinator's re-ru
 | Φ vs A's published rows | 595/595 equal |
 | X2 link: Φ (orig) vs B's θ_ε netlist | max rel 0.0 at 17 T |
 | Ψ vs refcalc on EV2, EV9, EV9-noB2 (1,926 comparisons: total, stages, 21 DIRECT units) | max rel 2.6e-13 |
-| C-1n control (NOT_RUN by D) | executed: the naive 21-source sum is off by 0.056–1.6 %, and the error equals B2-01 |
+| C-1n control | executed: the naive 21-source sum is off by 0.056–1.6 %, and the error equals B2-01. D pass 4 confirmed it on EV0/EV7 (0.073–3.07 % / 0.071–1.64 %; = B2-01 to ≤3.2e-13) |
 | X5 on EV9, 5 T | exact; Z′ < 0; dC/dT ≠ ρ |
 | Mutations (no supersession, orig without moving external events, β ignored, no late reset) | all 4 detected |
 | Benchmark | no speed gain against the best direct baseline: Φ 6.1× slower than knots; Ψ about 730× slower per query than the canon knot form |
@@ -75,7 +75,7 @@ The route suites were **not** re-run by the integration. The coordinator's re-ru
 | 5. No conflation with the J-CAT 667-formula experiment; fiction is not real-building validation | **PASS** | Only the fictional pilots and the 70-unit synth model were used; no real-building, novelty or energy-saving claim is made |
 
 ## Overall verdict
-- **G4 integration: PASS on the declared common domains.**
+- **G4 integration: PASS on the declared common domains.** D's pass-4 recommendation is **ACCEPT-WITH-CONDITIONS**. Its conditions 1 and 2 are closed by the documentation pass; condition 3 (status stays PARTIAL) is kept.
   - A composed Φ hybrid (two realizations) and a composed Ψ summing node over verified kernels are tested against non-composed oracles.
   - They are joined only through X5, which is exact on EV9.
 - **Research status overall: PARTIAL.**
@@ -83,9 +83,24 @@ The route suites were **not** re-run by the integration. The coordinator's re-ru
   - Gate 3 is PARTIAL.
   - The [H] items are unreviewed.
   - C's per-unit MAPPING constructs are unsimulated.
-  - D has **not** re-verified this integration (plan 12 §3 G4 asks for it: NOT_RUN, see `next_experiments.md` N1).
   - The seven-engine check is NOT_RUN.
 - **No "optimized equivalent circuit" is claimed.** The circuit forms reproduce the same values with no smaller information-preserving state and no speed gain.
+
+## D pass 4 re-verification (documentation update, HEAD `6585f4a`)
+Source: `routes/D_verification/VERDICTS.md` pass 4 and `routes/D_verification/results/p4_integration.json`. No new experiment was run in this update.
+- **D's recommendation for G4: ACCEPT-WITH-CONDITIONS.**
+  - Φ: 353,940 fresh points (116 case × convention × realization combinations, seed 5151; also τ_R ∈ {13, 27} and Px t_early ∈ {3, 13, 23.5}), 0 mismatches against D's ledger.
+  - Ψ: EV0 and EV7 (plus EV7 without B2 and an EV0 stage subset), ≤3.2e-14 against refcalc.
+  - X5 is exact on EV7 at 6 T, and the X2 link gives 0.0.
+  - The benchmark was reproduced at 5.6× (Φ) and ~850× (Ψ); the integration's own figures were 6.1× and ~730×.
+- **Conditions from D, and their status after this pass:**
+  1. Update I-18, the "not re-verified" line in STATUS, C-1n in coverage and N1 in next_experiments: **closed** by this pass.
+  2. Keep the share source noted as untested for invalid shares: **closed (recorded)**, see the untested edge below and `disagreements.md` §4.
+  3. Research status stays PARTIAL: **kept**.
+- **Untested edge.** `code/psi_compose.py:53-55` takes the B2-01 share from `scn.operation.facility_management_ratio`, with its own [0,1] check, instead of msp's `b21.share`. It matches refcalc on every scenario tested (EV2, EV9, EV0, EV7), but no invalid-share scenario has been tried.
+- **Open items.** D's consolidated open-items table for the whole study is in `routes/D_verification/VERDICTS.md` pass 4 ("Consolidated open items"). It is referenced here, not copied.
+- **Gate verdicts are unchanged.** D's pass-4 evidence adds scenarios and points but does not change any gate. Gate 3 stays PARTIAL, and the overall research status stays PARTIAL.
+- **Test re-run after the documentation edits:** see `results/test_log.txt`.
 
 ## Files
 `composed_model.md`, `evidence_index.md`, `coverage.md`, `disagreements.md`, `benchmark.md`, `next_experiments.md`; `code/{int_common,phi_hybrid,psi_compose,run_integration,mutation_check,bench_int}.py`; `tests/test_integration.py`; `results/*.json`, `*_log.txt`.

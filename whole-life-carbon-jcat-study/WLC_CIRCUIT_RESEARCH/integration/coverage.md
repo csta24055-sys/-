@@ -1,5 +1,7 @@
 # Coverage (G4)
 
+D pass 4 (`routes/D_verification/VERDICTS.md` pass 4, `routes/D_verification/results/p4_integration.json`) independently re-verified the composed model; see `STATUS.md`.
+
 Legend:
 - ✔ executed and passing in that route
 - ✔D independently re-computed by D
@@ -42,7 +44,7 @@ All data are fictional.
 | Late-reset refrigerant automaton | ✔ | — | ✔D | ✔I EV2, EV9 (mutation M4 detected) |
 | Automaton matches inside the open band (K, sw(τ)) | ✔ 4 scenarios | — | ✔D 2 scenarios | ✗ no band points in the integration grid |
 | Composition = one summing node over COMP | ✔ (SUM-03) | ✔ 105 cases | ✔D X4 exact composition | ✔I EV2, EV9, EV9-noB2 (+ stages) |
-| Naive 21-source sum wrong by B2-01 (C-1n) | — | ○ | NOT_RUN | ✔I EV2, EV9 |
+| Naive 21-source sum wrong by B2-01 (C-1n) | — | ○ | ✔D pass 4 (EV0, EV7) | ✔I EV2, EV9 |
 | Inventory 70 / 21 / 22 COMP | — | ✔ | ✔D | ✔I (22 rows, 21 units asserted) |
 | Exact ranks; rank ≠ state | — | ✔ | ✔D exact | — |
 | Annual-table replay counterexample | — | ✔ | ✔D | — |
@@ -51,7 +53,7 @@ All data are fictional.
 | C-6 t=0 vs t=T placement unobservable | — | ○ | NOT_RUN | ✗ |
 | Per-unit circuit for DIRECT 21 | B constructs only | MAPPING [H], NOT_RUN | — | ✔I **B's constructs** for all 21 DIRECT units vs refcalc unit values; **C's MAPPING constructs and tuples ✗** |
 | H-B2 LTI RC impossibility | ✔ illustration | — | ✔D textbook [L] | — |
-| H-B4 refrigerant state vs merged knots | ✔ (restated, self-reported) | — | ✔D (refuted "less state") | ✔I timing only (`benchmark.json`) |
+| H-B4 refrigerant state vs merged knots | ✔ (restated; confirmed by D pass 4) | — | ✔D (refuted "less state") | ✔I timing only (`benchmark.json`) |
 | K26, K28, K30, K32, K33 | ✗ NOT_RUN | — | ✗ | ✗ |
 | Scenario L for kernels | ✗ | H-C1 only | ✗ | ✗ |
 | SUM-05 (division by T), shares, `match`, inv | class d (not in 𝒢) | — | — | ✗ (outside the composed domain) |
@@ -62,11 +64,12 @@ All data are fictional.
 | X1 A vs E | PASS | ✔I only that both realizations give identical exact values (outside pulse windows; no pulses used) |
 | X2 A/Φ vs B θ_ε | PASS | ✔I through the composed Φ code, max rel 0.0 at 17 T |
 | X3 B kinds ⊇ C DIRECT time forms | PASS (set level) | not re-run |
-| X4 C vs refcalc | PASS (EV6, EV10, BM-S + subsets) | ✔I EV2, EV9, EV9-noB2 |
-| X5 C − M = Z | PASS (EV6, 5 T) | ✔I EV9, 5 T |
+| X4 C vs refcalc | PASS (EV6, EV10, BM-S + subsets; pass 4 also EV0, EV7 via the composed node) | ✔I EV2, EV9, EV9-noB2 |
+| X5 C − M = Z | PASS (EV6, 5 T; pass 4 EV7, 6 T) | ✔I EV9, 5 T |
 
 ## NOT covered by anyone (explicit)
 - A physical/SPICE circuit for any part: every realization here is an exact event-driven hybrid model or a 𝒢 netlist interpreter.
-- Any formal review of the [H] items (see `next_experiments.md` E1).
+- Any formal review of the [H] items (see `next_experiments.md` N2).
+- B2-01 with an invalid share: `psi_compose.py:53-55` reads the share from `scn.operation.facility_management_ratio` (with its own [0,1] check), not from msp's `b21.share`. No invalid-share scenario was tested (D pass 4 minor).
 - Seven-engine (SageMath + MATLAB) checks of any WLC identity: NOT_RUN.
 - Real buildings, J-CAT original formulas: out of scope (gate 5).

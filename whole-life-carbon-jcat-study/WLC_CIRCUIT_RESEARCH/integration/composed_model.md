@@ -39,6 +39,7 @@ This module imports no route code. It is one hybrid automaton with two interchan
   - B2-01 is a gain ρ_B2 on the EL year-cell netlist.
   - B1-02/03/04 come from the late-reset S/H automaton fed with raw inputs.
 - **Composition** follows route C's rule (H-C1/X4), re-written here: one weighted summing node per stage over the 22 COMP rows in `units70.json` (σ, β∈{1, ι_B2}, excluded stages absent), then one total node.
+- **B2-01 share source:** `psi_compose.py:53-55` reads ρ_B2 from `scn.operation.facility_management_ratio`, with its own [0,1] check, not from msp's `b21.share`. It matches refcalc on every tested scenario. An invalid share is untested (D pass 4 minor; `next_experiments.md` N11).
 - **Why this is a composition and not a new circuit:** the kernels are B's and the summing rule is C's. Only the join, the scenarios and the oracle comparisons are new.
 
 ## 4. Bridge
@@ -59,6 +60,8 @@ This module imports no route code. It is one hybrid automaton with two interchan
 | X5 on EV9 | 5/5 exact identity; Z′ ∈ [−5,845, −1,553] | `x5.json` |
 | Mutations M1–M4 (no supersession, orig without moving external events, β ignored, no late reset) | **all detected** (305 vs 250; 250.00000004 vs 200.00000004; 1.47 %; 8.9e-4) | `mutation_check.json` |
 | Unit tests | **17/17 OK** (16 s) | `results/test_log.txt` |
+
+**Independent re-verification:** D pass 4 (`routes/D_verification/VERDICTS.md` pass 4, `results/p4_integration.json`) recommends **ACCEPT-WITH-CONDITIONS**. Φ: 353,940 fresh points, 0 mismatches. Ψ: EV0/EV7 ≤3.2e-14. X5 exact on EV7 at 6 T. Benchmark reproduced at 5.6× / ~850×.
 
 ## 6. Commands
 ```

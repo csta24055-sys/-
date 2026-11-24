@@ -9,7 +9,7 @@ Domain codes:
 "Integration re-check" means a new execution in `integration/` against an oracle other than the composed code.
 Review status of the inputs:
 - D reviewed A and E in passes 1 and 3, and B and C in pass 2.
-- The **B and C fix passes after D pass 2 were not re-reviewed by D.** Their restated wording is route-self-reported and marked **(self-reported)**.
+- D pass 4 (HEAD `6585f4a`; `routes/D_verification/VERDICTS.md` pass 4, `routes/D_verification/results/p4_integration.json`) **confirmed the B and C fix passes**: B is ACCEPT, with H-B1 overall still PARTIAL; C is ACCEPT, with the MAPPING constructs still [H]. D pass 4 also re-verified this integration: ACCEPT-WITH-CONDITIONS.
 - B's `grammar.py` is byte-identical to the version D reviewed (`git diff 06e0943 HEAD` is empty).
 
 ## Integrated (accepted and verified)
@@ -32,14 +32,15 @@ Review status of the inputs:
 | I-15 | The six C(T) kernel kinds (constant, atom θ_ε, year cell, gated cell, density, B2-01 gain) are exact 𝒢 netlists in float agreement with refcalc | H-B1 (six kinds) | p2 H-B1 CONFIRMED for six kinds, PARTIAL overall; D-20 | B `code/grammar.py`, `results/kernel_comparison.json`; D `p2_check_b.json` | [F] | Ψ | `psi.json`: EV2/EV9 unit values ≤2.6e-13 |
 | I-16 | The late-reset S/H automaton reproduces B1-02/03/04 from raw inputs. Without the late reset it fails inside 𝒟′ | H-B3 (S/H part) | p2 CONFIRMED; D-22 | B `grammar.py` RefrigerantCircuit; D `p2_check_b.json` | [F] | Ψ | `psi.json` (EV2, EV9), `refrigerant_unexpected = []`; mutation M4 detected (8.9e-4 on SUM-03) |
 | I-17 | C(T) is one weighted summing node over the 22 COMP rows of units70.json (β = ι_B2 on (B6, B2-01)) | C-1 = H-C1 | p2 C-1 CONFIRMED independently (X4); D-25 | C `results/hc1.json`; D `p2_check_c.json` | [F] | Ψ | `psi.json`: EV2/EV9/EV9-noB2, SUM-03 ≤5.5e-14, stages ≤2.6e-13; mutation M3 detected |
-| I-18 | Summing the 21 DIRECT units as independent sources is wrong by exactly B2-01 | C-1n | **NOT_RUN by D** | C `results/hc1.json` | [F] | Ψ | **Executed here**: wrong by 0.056–1.6 %, = B2-01 to ≤3.3e-13 (EV2, EV9) |
+| I-18 | Summing the 21 DIRECT units as independent sources is wrong by exactly B2-01 | C-1n | **D pass 4 CONFIRMED**: naive sum − SUM-03 = B2-01 to ≤3.2e-13; off by 0.073–3.07 % (EV0) and 0.071–1.64 % (EV7) | C `results/hc1.json`; D `results/p4_integration.json` | [F] | Ψ | Executed here: wrong by 0.056–1.6 %, = B2-01 to ≤3.3e-13 (EV2, EV9) |
 | I-19 | Exact ranks: total 1, stage 6/6/7, DIRECT 7/8/9. **Rank ≠ state** | C-3, C-3x | p2 C-3 CONFIRMED exactly; D-26 | D `p2_check_c.json` | [E] | Ψ | Not re-executed |
 | I-20 | Annual tables lose event timing (replay counterexample) | C-2r | p2 CONFIRMED; D-27 | D `p2_check_c.json` | [F] | Ψ | Not re-executed |
 | I-21 | X2: P0 in the orig convention equals B's θ_ε netlist | A-3/H-B1 | X2 PASS both sides; D-28 | D `p2_gates.json` | [E]/[F] | Φ↔Ψ | `x2_link.json`: Φ hybrid vs B netlist, max rel 0.0 at 17 T |
 | I-22 | X5: C − M([0,T]) = Z(T) ≠ 0; dC/dT = ρ + Z′ ≠ ρ; Z′ < 0 | (gate) | X5 PASS (EV6, 5 T); D-29, D-32 | D `p2_gates.json` | [E] | Φ↔Ψ (Ψ only) | `x5.json`: EV9, 5 T, exact; the composed C fits the identity to ≤3.4e-15 |
-| I-23 | H-B2: lumped LTI RC with analytic sources cannot equal a kinked or jumping kernel. Switched or ideal-diode passive networks can, so the class labels are relative to 𝒢 | H-B2 (rescoped) | p2 CONFIRMED-as-textbook; D-24 [L]/[H] (not reviewed by B) | B `claims.md` (self-reported rescope) | [L] | Ψ | Not re-executed |
-| I-24 | Refrigerant: the automaton and the merged knot form are the same order of stored numbers (1,025 or 1,063 vs 1,072); random access is about 100× faster with knots (time–memory trade-off) | H-B4 (restated, self-reported) | p2 "less state" REFUTED as a metric artefact; D-23 | D `p2_hb4.json`; B `results/hb4_counts.json` | [F] | Ψ | `benchmark.json` (canon KF vs composed sweep) |
-| I-25 | No circuit path is faster than the direct Σ/knot form | A-18, E-5, H-B4 | D-18 | D `benchmark.json` | [F] | Φ, Ψ | `benchmark.json` (this run) |
+| I-23 | H-B2: lumped LTI RC with analytic sources cannot equal a kinked or jumping kernel. Switched or ideal-diode passive networks can, so the class labels are relative to 𝒢 | H-B2 (rescoped) | p2 CONFIRMED-as-textbook; D-24 [L]/[H] (not reviewed by B); p4 B #2 rescope CONFIRMED | B `claims.md`; D `p4_integration.json` bc_fixes | [L] | Ψ | Not re-executed |
+| I-24 | Refrigerant: the automaton and the merged knot form are the same order of stored numbers (1,025 or 1,063 vs 1,072); random access is about 100× faster with knots (time–memory trade-off) | H-B4 (restated) | p2 "less state" REFUTED as a metric artefact; D-23; p4 B #1 restatement CONFIRMED (1,063 vs 1,025 is a count definition: B1-04 jump vs interval form) | D `p2_hb4.json`; B `results/hb4_counts.json` | [F] | Ψ | `benchmark.json` (canon KF vs composed sweep) |
+| I-25 | No circuit path is faster than the direct Σ/knot form | A-18, E-5, H-B4 | D-18; p4 reproduced the integration benchmark (Φ 5.6×, Ψ ~850×) | D `benchmark.json`, `p4_integration.json` bench | [F] | Φ, Ψ | `benchmark.json` (this run) |
+| I-26 | The composed G4 model is re-verified by D with its own code: Φ 353,940 fresh points (116 case × convention × realization combinations, incl. τ_R ∈ {13, 27} and Px t_early ∈ {3, 13, 23.5}) with 0 mismatches; Ψ on EV0/EV7 (+ EV7 without B2, EV0 stage subset) ≤3.2e-14 vs refcalc; X5 exact on EV7 at 6 T; X2 link 0.0 | (integration) | **p4 ACCEPT-WITH-CONDITIONS** | `routes/D_verification/VERDICTS.md` pass 4, `routes/D_verification/results/p4_integration.json` | [E] (Φ), [F] (Ψ) | Φ, Ψ, Φ↔Ψ | — |
 
 ## Not integrated (reason)
 | item | reason |

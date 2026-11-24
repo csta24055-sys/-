@@ -40,19 +40,18 @@ Status words used below:
 | Architecture early stop (2) "drop the single shared resistor" | REFUTED: interleaved or Walsh-orthogonal pulses are additive at readouts outside windows; exactness at every t is impossible under a DC operating current | ERRATA #5; D-13; E p3 (6b) |
 | E "fixed-step dt=1e-3 max err 3.1e-10" | Withdrawn: true fixed-step integration misses a full 20/55 kg at event instants. E's 2/0/0 and D's 75/9/7 differ only by point-set size and query rule | p3 (8) |
 | E STATUS "P1 reproduced by circuit" (batch 1) | Was the closed form. Fixed: implemented in `circuit_e.py` | p1, p3 (7) |
-| H-B4 refrigerant "stores less state" | REFUTED as a metric artefact (unmerged table). Merged knots 1,025 (D/canon) or 1,063 (B's count) vs automaton 1,072; time–memory trade-off | ERRATA #9; D-23; B (self-reported restatement) |
+| H-B4 refrigerant "stores less state" | REFUTED as a metric artefact (unmerged table). Merged knots 1,025 (D/canon) or 1,063 (B's count) vs automaton 1,072; time–memory trade-off | ERRATA #9; D-23; B restatement confirmed by D pass 4 |
 | H-B2 "passive RC cannot…" | Must say lumped **LTI** with analytic sources: switched and ideal-diode passive networks reproduce kinks and jumps; the class labels are relative to 𝒢 | D-24 (not reviewed by B) |
 | H-C3 "14 stages need 7 signals" | Scenario-dependent (6/6/7); rank = number of T-varying stages; rank ≠ state | ERRATA #6; D-26 |
 | H-C2 "7 types cover DIRECT 21" | Covering, not partition (23 memberships); B2-01 labelled year_cell (C) vs K21 gain × cells (B) | ERRATA #7; X3 |
 | Architecture §1.2: float points 10.000000005 / 10.00000002 are "inside 𝒟′" | Both are in `valid_domain`'s knife window when an event at 10 exists; Φ-only points | ERRATA #8 |
 
 ## 4. Open disputes and unresolved items
-- **B merged-knot count 1,063 vs D canon 1,025** (B1-04 jump form: 60 vs 41 event knots). Both are the same order as the automaton's 1,072, so the verdict does not change. OPEN (minor count definition).
+- **B merged-knot count 1,063 vs D canon 1,025.** D pass 4 confirmed this is a count definition: B counts B1-04 in jump form (60 event knots), canon in interval form (41). Both are the same order as the automaton's 1,072. RESOLVED (D p4 B #1).
 - **Unreviewed [H] items:** D-9, D-10 minimality, D-16 closed form, D-24, D-12 (re-derived by E, no formal review), A-3/A-6/A-10/A-16 general statements, the E Walsh cost estimate, E-3c. None is promoted. OPEN.
-- **B and C fix passes after D pass 2 were not re-reviewed by D:**
-  - B's restated H-B4 numbers (1,063; 343× / 56× random access), the regenerated H-B2 illustration (ramp column), the EV3/EV11 out-of-sample results and the K19 tuple totals;
-  - C's regenerated MAPPING (full time-form text, the [H] column).
-  - These are route-self-reported. The integration only re-executed B's unchanged `grammar.py` (byte-identical to D's reviewed version) on two new scenarios.
+- **B and C fix passes after D pass 2.** D pass 4 confirmed them (`routes/D_verification/VERDICTS.md` pass 4 §5). Confirmed for B: the H-B4 restatement (1,063; 343× / 56×), the H-B2 ramp column and LTI scope, the band wording, the K19 totals and the EV3/EV11 assertions. Confirmed for C: the full time-form text (0 mismatches over 70 rows) and the [H] column. B is ACCEPT, with H-B1 overall PARTIAL; C is ACCEPT, with the constructs [H]. RESOLVED.
+- **Untested edge in the composed Ψ code (D pass 4 minor).** `code/psi_compose.py:53-55` takes the B2-01 share from `scn.operation.facility_management_ratio`, with its own [0,1] check, not from msp's `b21.share`. It matches refcalc on every tested scenario (EV2, EV9; D: EV0, EV7), but no scenario with a missing or out-of-range share was tried. OPEN (untested).
+- **Consolidated open items** for the whole study: see `routes/D_verification/VERDICTS.md` pass 4, table "Consolidated open items". It is referenced here, not duplicated.
 - **timechar docstring** writes M([0,T)), while `RT.M` counts sw(τ) ≤ T (closed, 03 §7). Documentation inconsistency in frozen code; not edited. OPEN (record only).
 - **Ledger vs refcalc dependency lists differ** for A13-03, X-05 and X-07 (C observation). The SUM-03 closure is unchanged. OPEN (record only).
 - **C(T) kinds beyond SUM-03:** K26/K28/K30/K32/K33 are NOT_RUN, so H-B1 stays PARTIAL.
