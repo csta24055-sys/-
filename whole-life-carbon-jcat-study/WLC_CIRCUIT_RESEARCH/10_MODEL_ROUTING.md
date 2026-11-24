@@ -7,10 +7,13 @@ The researcher requests **different models/effort per phase**, with no repeated 
 |---|---|---|---|---|
 | P0 strategic architecture | `wlc-architect` | `claude-fable-5-2` | `high` | Read WLC theory, review A/B/C/D/E scope, design falsifiable work plan, select mathematical paths and interfaces |
 | P1–P2 implementation/simulation | `wlc-waveform`, `wlc-formula-network`, `wlc-unit-mapper`, `wlc-resistor-energy` | `claude-opus-5-5` | `medium` | Independently derive mappings, write code and synthetic tests, simulate equipment timing and resistor/capacitor alternatives |
+| P2.5 mathematical bridge | `wlc-math7-orchestrator` | `claude-opus-5-5` | `medium` | Use five locally available Python engines and authorized main-branch Math7 workflow; build an adapter for WLC cases only as separately tested research, report Sage/MATLAB NOT RUN if unavailable |
 | P3 independent validation | `wlc-verifier` | `claude-opus-5-5` | `high` | Oracle, falsification, time boundaries, cross-route comparison, performance and claims |
 | P4 evidence-based synthesis | `wlc-integrator` | `claude-opus-5-5` | `high` | Collect validated results, resolve definition/scale/branch/commit conflicts, integrate only verified equivalences |
 | P5 new global planning | `wlc-replanner` | `claude-fable-5-2` | `high` | Review accepted proofs, failures, performance and unresolved issues, decide next cycle |
 | Repeat P1–P5 if and only if open questions and budget justify another concrete experiment. | | | | |
+
+Read `11_MATH7_INTEGRATION.md` before delegating mathematical calculations. The Math7 source is on this repo's **main** branch, not on the WLC research branch. Existing seven-engine workflow supports only restricted algebraic cases; LCA operator calculations remain Python-only until adapters are validated. A GitHub API 403 in Claude Cloud cannot be treated as evidence that the math code is broken.
 
 ## Practical Claude Code configuration
 - `.claude/settings.json` selects `claude-fable-5-2` with `effortLevel: high` as the **project startup default**, NOT a locked global model and NOT a switcher for an already-running main conversation.
