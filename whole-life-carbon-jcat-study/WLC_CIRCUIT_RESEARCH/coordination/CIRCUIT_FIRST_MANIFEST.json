@@ -34,7 +34,7 @@
   },
   "agent_definitions_note": "Agent files were updated by the user after this session started (new wlc-circuit-first-builder; new top sections in architect/verifier). Subagents are told to read their on-disk definition because the session may hold the earlier version.",
   "phases": {
-    "S1_design": "IN_PROGRESS (wlc-architect, frontmatter claude-fable-5-2/high)",
+    "S1_design": "DONE (design only; every prediction and lemma [H])",
     "S2_implementation": "NOT_RUN",
     "S3_independent_verification": "NOT_RUN",
     "S4_integration_and_save": "NOT_RUN"
@@ -43,5 +43,32 @@
     "SageMath": "NOT_RUN",
     "MATLAB": "NOT_RUN"
   },
-  "execution_log": []
+  "execution_log": [
+    {
+      "phase": "S1_design",
+      "actor": "wlc-architect (subagent)",
+      "frontmatter": "claude-fable-5-2 / high",
+      "actual_model": "claude-fable-5-2 (self-reported)",
+      "actual_effort": "NOT_VERIFIED (not observable inside subagent)",
+      "base_sha": "a92465e (objective docs) / 13dcbe5 at time of writing",
+      "output": "coordination/circuit_first_architecture.md",
+      "selection": "directions (1) common law-based model + (3) lifecycle switched circuit merged into three structures: amplitude crossbar (alpha), time/state core (beta), readout (gamma); (2) cascade absorbed as the within-instant signal path; passive series RLC (S3) rejected by argument",
+      "seeds_from_coordinator": {
+        "i": "refined (factor rails; homogeneity lemma L1)",
+        "ii": "refuted as general carrier (Ohm multiplication and Joule proportionality cannot coexist on the same element; heat loses sign)",
+        "iii": "adopted with boundary look-ahead rules",
+        "iv": "equivalent but not simpler; sample-hold + constant-current drain chosen",
+        "v": "adopted",
+        "vi": "adopted, B2 replaced by potentiometer current split"
+      },
+      "note": "The scratch check in the design (5,173 points, 4.2e-15) was run by the architect, not by the coordinator, although the document labels it 統括の走り書き検算; scripts are not in the repository; it is not evidence until the verifier redoes it.",
+      "usage": {
+        "subagent_tokens": 302704,
+        "tool_uses": 35,
+        "duration_s": 1143
+      },
+      "status": "DONE"
+    }
+  ],
+  "verifier_write_location": "circuit_first/verification/ (decided by coordinator; cycle-1 routes/ and integration/ stay read-only)"
 }
