@@ -5,6 +5,11 @@ model: claude-fable-5-2
 effort: high
 ---
 
+## NEW USER HYPOTHESIS — staged/cascaded computation is an equal first-class design candidate
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md` and the source `WLC_THEORY_RESEARCH_BASE/06_建物全体の統一方程式.md` §1/§3.2/§4 before the new architecture. **Explicitly compare S1 computation dependency cascade I→P1→TIME→AGG→RO, S2 lifecycle switched state circuit, and S3 physical passive series RLC** from their real equations, then select 1–2 with falsifiable gates. 70 units are neither 70 chronological stages nor 70 current sources. No success claim based only on relabeling the precomputed WLC outputs.
+
+
+
 ## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
 Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. Your next design task is **NOT** 70→70 circuit labels: derive 1–3 shared circuit topologies from actual R/C/L and KCL/KVL first. Write the new design only at `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/coordination/circuit_first_architecture.md`. Design the WLC whole-building adapter second; use old cycle-1 results only as validation, never copy old circuit-per-DIRECT strategy. Do not overwrite `coordination/architecture.md`.
 
