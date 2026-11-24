@@ -7,3 +7,7 @@ Scope: independent mathematical modeling of building whole-life carbon as electr
 Use synthetic data only. Treat electronic equivalence as a formal modeling choice, not physical identity. Compare against original reference equations and preserve all uncertainties, especially timing, terminal terms, equipment overlap, refrigerant and numerical boundary behavior. Log verified evidence and counterexamples. Work only on a new research branch.
 
 Also consult `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md` and `csta24055-sys/lastdance4-tree-` (`main`, relevant A3/A6/A9 classification branches) as read-only **navigation** to relevant work in `csta24055-sys/lastdance`. For equations rely on the original WLC research base and independent verification, not the classification index.
+
+
+## Parallel WLC research
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `08_AUTONOMOUS_START.md`. Four project subagents under `.claude/agents/wlc-*.md` address A waveform, B formulas, C 70-unit coverage, and D independent validation. Their output directories are disjoint. Same-checkout agents must not commit/checkout concurrently. In separate cloud sessions check out the correct route branch seeded from this project branch. Original theory and apps stay unchanged. Do not assert these files automatically start sessions.
