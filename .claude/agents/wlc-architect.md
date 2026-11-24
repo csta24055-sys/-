@@ -5,6 +5,11 @@ model: claude-fable-5-2
 effort: high
 ---
 
+### LATEST USER CONTRACT: unconstrained internal topology subject to semantics
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/15_FLEXIBLE_REORDERING_CONTRACT.md` first. **The 70 units, 14 stages, material-vs-equipment grouping, and I→P1→TIME→AGG implementation sequence are NOT constraints on the circuit's internal node count or ordering.** Preserve primitive input meaning, final required outputs, event causality, time/units/conditional signs, but freely re-group, topologically reorder independent computation, fuse common dynamics across groups, split/merge signal paths. Design standard electrical topology and law-first order, not a relay of the WLC's pre-existing pipeline. Specify which operations do not commute and what observables are preserved.
+
+
+
 ## NEW USER HYPOTHESIS — staged/cascaded computation is an equal first-class design candidate
 Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md` and the source `WLC_THEORY_RESEARCH_BASE/06_建物全体の統一方程式.md` §1/§3.2/§4 before the new architecture. **Explicitly compare S1 computation dependency cascade I→P1→TIME→AGG→RO, S2 lifecycle switched state circuit, and S3 physical passive series RLC** from their real equations, then select 1–2 with falsifiable gates. 70 units are neither 70 chronological stages nor 70 current sources. No success claim based only on relabeling the precomputed WLC outputs.
 
