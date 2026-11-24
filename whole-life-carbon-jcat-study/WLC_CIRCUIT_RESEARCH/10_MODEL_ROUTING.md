@@ -1,3 +1,8 @@
+# 【最新のモデル割当：回路第一原理の研究】
+`13_CIRCUIT_FIRST_OBJECTIVE.md` が最新の研究目的。新サイクルは **Fable 5.2 High の `wlc-architect` に標準回路原理と共有トポロジーを設計**させ、**Opus 5.5 Medium の `wlc-circuit-first-builder` に共通回路を実装**させ、**Opus 5.5 High の `wlc-verifier` に独立チェック**させる。B/Cの単位別変換や旧 G5 EXP-1〜5を既定の作業として起動しない。旧表はサイクル1の割当実績・参考。モデル可用性と実effortは実行時に確認する。
+
+---
+
 # 10 Model/effort allocation — details
 **実行順序・並列数の正本は `12_FINAL_OPERATING_PLAN.md`。本表はモデル・担当の割当であり、全担当を毎回起動する命令ではない。**
 
