@@ -14,3 +14,6 @@ Your task: source Math7 on `main` via read-only Git operations in a **separate t
 Write only under `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/F_math7_bridge/`: code, fixtures (safe synthetic/public), STATUS.md, results, and source/engine provenance. Do not change original WLC base, `math_tools_v2` on main, or WLC Studio; no secrets, external authorization bypass, automatic privileged mode changes, or unapproved workflow launches. Explain API 403 separately from available Git clone/read.
 
 Report PASS / FAIL / NOT RUN distinctly, and if an engine unavailable give a safe manual GitHub Actions UI path rather than guessing.
+
+
+**Execution precedence:** `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/12_FINAL_OPERATING_PLAN.md` is the current execution authority. Read this short runbook and `07_SHARED_CONTRACT.md` once, then only role-relevant sources. Avoid rereading all old documents, duplicating independent model calculations, or launching heavy tools when a simpler exact oracle answers the question. Preserve explicit result/NOT_RUN status. Shorthand document names refer to the `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/` directory.
