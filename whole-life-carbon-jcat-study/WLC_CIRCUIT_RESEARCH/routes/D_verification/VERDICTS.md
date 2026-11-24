@@ -145,3 +145,53 @@ Verdict: **CONFIRMED-as-textbook for LTI; GAP in scope wording.**
     2. Mark `time_form_text` as truncated.
     3. C-2's signature detector and C-4 are not independently re-checked by D.
     4. Rank statements must keep the "rank ≠ state" caveat.
+
+---
+
+# Pass 3: re-check of the route A/E fixes after pass 1, and settlement of disputes
+Inputs: HEAD `7de1065`; route A and E files as committed in `3646856` and `3df4712`. Routes B and C were not assessed (their working-tree edits are in progress and were not read).
+Evidence: `results/p3_recheck.json` from `code/p3_recheck.py`, plus `results/p3_x5_domain_check.txt`. A's suites (27/27 OK) and E's suites (24/24 OK) were rerun read-only (`results/p3_route_*_tests_rerun.txt`). D's own suite: 25/25 OK (`results/test_log_pass3.txt`).
+
+## Erratum on D's pass-2 report (X5)
+- In the pass-2 hand-back report (not in the files), D wrote that X5 rested on T=0.5 only and that `p2_gates.py:82` was buggy. **That statement was wrong, and the coordinator is right.**
+  - `scenarios.valid_domain` returns a list of REASONS; an empty list means the point is usable.
+  - All five T (0.5, 5.3, 12.25, 30.5, 47.9) return `[]` on EV6, so they are inside the domain (`results/p3_x5_domain_check.txt`).
+  - `results/p2_gates.json` has 5 X5 rows. The VERDICTS ("At 5 T") and STATUS pass-2 texts were already correct.
+- The helper is renamed `in_domain` → `domain_violations`, with a docstring saying that an empty list means usable; the skip line is commented.
+- `p2_gates.py` was rerun after the rename. Its output is byte-identical to the pass-2 result (the copy is kept as `results/p2_gates_pass2_original.json`).
+
+## Route A fixes
+| item | verdict | decisive evidence |
+|---|---|---|
+| (1) R3i honours ε under orig; P1 under orig fires at τ/(1−ε); unsupported combinations raise | CONFIRMED | Fresh point set: 20,044 points per convention (seed 3030, plus knife points, limits, τ/(1−ε) and +1e-12 offsets), 0 mismatches for R1, R2, R3, R3i(P0), p1_r1 (both policies, all 3 conventions), R3k, px_r1, p2_r1 and R3i(Px). Exact closed-band endpoints at τ ∈ {10, 20, 40}: at τ/(1−ε) and at τ/(1−ε) ± 1e-15, R3i-orig = D P0-orig and p1_r1-orig = D P1-orig for both policies. `p2_r1(orig)`, `px_r1(orig)`, `R3k(orig)`, `R3i(conv='foo')`, `p0_r1('foo')` and `g_p2(orig)` all raise ValueError. |
+| (2) zero-mean clock: dispute over D's sub-note | **A is right; D's pass-1 sub-note is withdrawn** | D's own event-exact simulator (I0=1, ω=2π, θ=0.1, 10 y): subtract-reset 3, reset-to-zero 3, reset-to-zero with diode clamp 30, subtract with clamp 30 (ω=4π: 1 / 20). This agrees with A's `simulate_clock` (3/3/30/30). Analytic check: at an exact hit q=θ, so subtracting θ and zeroing are the same operation. In the first half-cycle the hits satisfy cos ωt_k = 1 − kθω/I0 ≥ −1, which gives k=3. Afterwards the unclamped offset never returns to θ; a clamp restarts every cycle, so 3 per cycle. |
+| (3) A-16 bound: dispute | **A is right; D's pass-1 bound (m·h/2) was correct only for φ∈{0, π/2}.** D adds a closed form. | **Closed form** (D, [H] derivation): \|τ_n − nc\| = c·\|d(τ_n)\| with d = (I0/ω)[g(ωt+φ) − g(φ)], where g(u) = H(u) − 2u/π is π-periodic with range [−m, m] and m = √(1−4/π²) + 2·asin(2/π)/π − 1 = 0.2105137. Hence **\|τ_n − nc\| ≤ (h/2)(m + \|g(φ)\|) ≤ m·h**. The bound is sharp for irrational c/h and equals m·h/2 = 0.10526h at φ∈{0, π/2}, and m·h = 0.21051h at φ = asin(2/π) or π − asin(2/π). Execution: 28 (φ, c/h) rows with n ≤ 400 are all within the bound, attained to ~1e-6 for irrational c/h. At φ=asin(2/π), c/h=20.25 the error is **0.209736h**, matching A's 0.2097h. Across 60 random cases the max ratio to the bound is 0.99999998. The phase condition for exactness (c/h∈ℤ for any phase; c/h∈½+ℤ only for φ∈{0, π/2}) is unchanged and agreed. |
+| (4) replaced tests; regenerated points.json | CONFIRMED | The slope test now uses literals (7.75, 7.74999999625); the zero-mean tests integrate via `simulate_clock`; the set rule is actually permuted; the sharp-bound test samples φ. No tautology found. `points.json`: **595/595 rows match D, 0 mismatches**. A's 27 tests pass when rerun. Residual (minor): `test_fullwave_sharp_error_bounds` checks only the global m·h, not the per-phase closed form. |
+
+## Route E fixes
+| item | verdict | decisive evidence |
+|---|---|---|
+| (5) cross term 2√(A₁A₂)·ρ | CONFIRMED (all 7 rows) | D's exact bookkeeping: equal aligned ρ=1 → 52.9150262213; widths w,4w → ½, 26.4575131106; half overlap → ½, 26.4575; widths w,9w → ⅓, 17.6383420738; rect vs Walsh(1,1,1,−1) → ½, 26.4575; interleaved → 0; Walsh pair → 0. |
+| (6a) inside-window cross 14.2676 kg at t=20+w/4 (w=0.01) | CONFIRMED | 14.26757813 = event×event 13.22875656 + DC×pulse 1.038821574 |
+| (6b) exactness at every t is impossible under a DC operating current | CONFIRMED (one-line proof) | d/dt of the cross term is 2κR·I0·i_p(t), which must vanish for all t, so i_p = 0 a.e. Event pulses would also need disjoint supports. |
+| (6c) AC operating current vs Walsh AC pulse, −0.0397 kg at w=0.01 | CONFIRMED | D's quadrature gives −0.03971547796 kg |
+| (7) P1 in `circuit_e.py`, tuple (4,0,3,1) | CONFIRMED values; one ledger caveat | ER1 P1, both policies × 3 conventions, on 20,044 points each: 0 mismatches. The tuple (4,0,3,1) / merged (3,0,3,1) now agrees with A's counting rule. **Caveat:** E encodes 'substitute' as a net −5 table entry while the AC@20 and pipe@20 clocks still fire (ledger S(20) = 20+20+35−5 = 70). D's separate ledger is {AC@10 20, RENOV@20 50} = 70: same total, different ledger content. Per-ledger readouts and renovation at a non-coincident time (restart semantics) are not supported by this encoding. |
+| (8) true fixed-step table; 2/0/0 vs D's 75/9/7 | CONFIRMED; the difference is explained | E's rule (state after round(t/dt) steps, reset-to-zero) and D's rule (floor steps + interpolation, subtract) were both run on both point sets. E's 1,000 points: E 2/0/0, D 1/0/0. D's 100,011 points: E 232/31/7, D 75/9/7. The counts scale with the size of the point set (about 100×) and depend on the query rule (rounding to the nearest step also misses queries up to half a step before the detected event). Contract points under E's rule: G(10)=140, G(20)=235/235/200, G(40)=390/390/355, G(60)=545/545/510 at dt=1e-2/1e-3/1e-4 (E's table reproduced). |
+| (9) regenerated points.json | CONFIRMED | **139/139 rows match D, 0 mismatches**, including the AC rows to 1e-20. E's 24 tests pass when rerun. ER1 P0 (3 conventions) and P2 on 20,044 points: 0 mismatches. |
+
+## Updated G4 recommendations
+- **Route A: ACCEPT** for H-A1, H-A2, P1/P2/Px, R3/R3i/R3k, the convention ⇔ reset mapping (closed band), and the AC results, with the phase-dependent condition and bound as now stated.
+  - Remaining [H] wording, not a condition on the values: A-3 general statement, A-6 all-t identity, A-10 necessity (pointer to D-9), and the A-16 derivations.
+- **Route E: ACCEPT-WITH-CONDITIONS.** E-1 (incl. P1/P2), E-2 with ρ, E-3, E-4, the fixed-step table and the Walsh qualifications are accepted. Conditions:
+  1. 'substitute' must be documented as a net −5 entry, not a separate ledger; it does not cover non-coincident renovation restarts.
+  2. The cost of the Walsh/orthogonal-pulse design is an [H] estimate only, not implemented.
+
+## [H] items still lacking a reviewer other than their author
+- **D-9** (lower bound ≥2 continuous states, online reset): no reviewer.
+- **D-10** minimality (the realization is [E]; minimality relies on D-9): no reviewer.
+- **D-16** closed form (h/2)(m+|g(φ)|), new in pass 3: no reviewer. A independently found the global m·h and the φ∈{0, π/2} case, which is partial independent agreement.
+- **D-24** (H-B2 review argument): not reviewed by B yet.
+- **D-12** (ρ formula): **independently re-derived by E**. The formula has a second author, but there is no formal review.
+- **Route A:** A-3 general, A-6 all-t, A-10 necessity, A-16 iff/phase derivation (A's convexity argument f''=cos u is consistent with D's executions; D has not written a review).
+- **Route E:** the Walsh-design state/threshold count; E-3c is elementary (D executed it, no written review).
+- **Routes B/C:** outside this pass.

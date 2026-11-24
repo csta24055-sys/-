@@ -113,3 +113,28 @@ The conditions are listed in `VERDICTS.md`.
 - **Route C:** the H-C2 signature detector; C-1n; C-4 role checks; C-6.
 - **Other:** SageMath/MATLAB/Math7 seven-engine runs; any real-building validation.
 - **Not tested:** band behaviour for floats near (but not equal to) integer event times, which 03 §3.4 lists as unverified.
+
+---
+
+# Pass 3: re-check of the A/E fixes; disputes settled (HEAD 7de1065)
+- Model, self-reported: claude-opus-5-5. The effort level cannot be observed from inside the session. No git operations; only `routes/D_verification/` was written; no `__pycache__` anywhere. Routes B and C were not assessed: their working-tree edits are in progress by those routes.
+- Commands:
+  ```
+  PYTHONDONTWRITEBYTECODE=1 math7-py -B code/p3_recheck.py          # 93 s -> results/p3_recheck.json, p3_recheck_log.txt
+  PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B code/p2_gates.py   # rerun after helper rename: byte-identical output
+  PYTHONDONTWRITEBYTECODE=1 math7-py -B -m unittest discover -s tests -v       # 25 tests OK (results/test_log_pass3.txt)
+  python3 -B A_waveform/tests/test_a.py ; (E) math7-py -B -m unittest discover -s tests   # 27 OK / 24 OK
+  ```
+- **X5 erratum:** D's pass-2 hand-back statement that X5 rested on T=0.5 only was wrong. All 5 T are inside the domain (`results/p3_x5_domain_check.txt`). The helper is renamed `domain_violations`. The VERDICTS/STATUS pass-2 text ("At 5 T", PASS) stands.
+- **Route A:** all fixes CONFIRMED (0 mismatches on 20,044 fresh points × all realizations and conventions; 595/595 points.json rows match).
+  - Zero-mean clock dispute: **A right** (3/3/30). D's sub-note is withdrawn.
+  - A-16 bound dispute: **A right**. D's m·h/2 holds only at φ∈{0, π/2}. D's new closed form is \|τ_n−nc\| ≤ (h/2)(m+\|g(φ)\|) ≤ 0.21051h (sharp; 0.209736h at φ=asin(2/π), c/h=20.25).
+- **Route E:** all fixes CONFIRMED.
+  - ρ table: 7/7 rows.
+  - Walsh qualifications: 14.2676 kg, the impossibility of exactness at every t, and −0.0397 kg, all confirmed.
+  - P1 circuit: 0 mismatches.
+  - Fixed-step count difference explained by point-set size and query rule.
+  - points.json: 139/139 rows match.
+  - Caveat: 'substitute' is encoded as a net −5 entry.
+- **G4:** A **ACCEPT**; E **ACCEPT-WITH-CONDITIONS** (see VERDICTS pass 3).
+- **Pass-3 NOT_RUN:** routes B/C; the Walsh design as an implemented circuit; a formal written review of the [H] items listed in VERDICTS pass 3.

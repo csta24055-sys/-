@@ -79,7 +79,7 @@ def x5():
     A_term = sum(term_const.values(), Fr(0))
     rows = []
     for T in (0.5, 5.3, 12.25, 30.5, 47.9):
-        if C.in_domain(scn, T):
+        if C.domain_violations(scn, T):          # skip only points WITH violation reasons (empty list = usable)
             continue
         Cv, Mv, Zv = kf(T), rt.M(Fr(T)), zkf(T)
         h = 1e-6

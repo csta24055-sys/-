@@ -91,7 +91,7 @@ def check6(canon, population):
     for tag, scn in cases:
         ev = Evaluator(scn, canon, population)
         for T in Ts:
-            dom = C.in_domain(scn, T)
+            dom = C.domain_violations(scn, T)
             r = C.ref(scn, T)
             stage, tot, V = ev.compose(T, rows)
             can_tot = sum((t.amp * t.h(T) for t in ev.can.terms), Fr(0))

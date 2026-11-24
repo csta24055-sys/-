@@ -41,3 +41,11 @@ Not claimed: any statement about C_WLC(T), Z(T), refrigerant, the 70-unit model,
 | D-28 | X2 B side. B's θ_ε netlist on the P0 pieces equals D's rational orig ledger at every float T tested. fl(10/(1−ε)) = sw(10) lies 0.46 ulp above the real endpoint. | [E]/[F] | `results/p2_gates.json` X2 |
 | D-29 | X5 on EV6: C−M=Z exactly; dC/dT=ρ+Z′ exactly with Z′<0; C(0+) = A^init + A^term + R(0+) ≠ A^init. Z was rebuilt independently by D. | [E] (canon/timechar exact Fractions) + [F] vs refcalc | `p2_gates.json` X5 |
 | D-30 | Self-found oracle error, fixed and rerun: applying the amplitude-form kernel to canon's rate-form Terms mis-scaled the density (B3-01) by 1/H. The first run gave 1–21 % composition errors. The run-1 log is kept. | record | `results/p2_check_c_log_run1_density_convention_bug.txt` |
+
+## Pass 3 corrections and additions (HEAD 7de1065)
+| id | claim | class | evidence |
+|---|---|---|---|
+| D-15 (corrected) | A zero-mean AC clock with a threshold below the swing gives 3 counts in 10 y (I0=1, ω=2π, θ=0.1) with either subtract-reset or reset-to-zero (identical at an exact hit); with an ideal-diode clamp it gives 30. The pass-1 sub-note "reset-to-zero would count once per positive half-cycle" is **withdrawn**. | [F] | `results/p3_recheck.json` A_zero_mean_dispute |
+| D-16 (corrected) | Rectified clock: \|τ_n − nc\| ≤ (h/2)(m + \|g(φ)\|) ≤ m·h = 0.21051h, sharp for irrational c/h. The pass-1 value m·h/2 = 0.10526h holds only for φ∈{0, π/2}. The exactness condition is unchanged. | [H] derivation + [F] (28 rows, n≤400; 60 random cases, ratio ≤ 1) | p3_recheck.json A16_bound_dispute |
+| D-31 | A's fixed realizations and E's ER1 (incl. P1) match D on 20,044 fresh points per convention, and the regenerated points.json files match 595/595 (A) and 139/139 (E). | [E] | p3_recheck.json |
+| D-32 | X5 rests on 5 in-domain T (not 1). D's pass-2 hand-back statement is corrected. | [E] | `results/p3_x5_domain_check.txt` |

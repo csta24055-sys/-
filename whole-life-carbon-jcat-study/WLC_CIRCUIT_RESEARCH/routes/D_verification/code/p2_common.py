@@ -85,7 +85,8 @@ def ref(scn, T):
     return m["baseline"].run_reference(m["scenarios"].with_period(scn, float(T)))
 
 
-def in_domain(scn, T) -> list:
+def domain_violations(scn, T) -> list:
+    """REASONS why (scn, T) is outside scenarios.valid_domain; an EMPTY list means usable (inside the domain)."""
     m = frozen()
     return m["scenarios"].valid_domain(m["scenarios"].with_period(scn, float(T)))
 

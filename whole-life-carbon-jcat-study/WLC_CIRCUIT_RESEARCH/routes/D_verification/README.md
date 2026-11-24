@@ -30,6 +30,8 @@ kgCO2e, t in years. The orig convention is a horizon rule for C(T), applied only
 | `code/p2_check_c.py` | pass 2: independent composition (X4), exact ranks, MAPPING spot check, year-table replay, X3 |
 | `code/p2_gates.py` | pass 2: gates X2 (B side) and X5 |
 | `tests/test_d_pass2.py` | 6 hand-value tests of the pass-2 oracle |
+| `code/p3_recheck.py` | pass 3: re-check of the A/E fixes, zero-mean clock and A-16 bound disputes, E ρ/Walsh/P1/fixed-step |
+| `tests/test_d_pass3.py` | 2 pass-3 tests (zero-mean clock rules, phase-dependent bound) |
 
 ## Reproduce (no network)
 ```

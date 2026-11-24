@@ -1,0 +1,31 @@
+test_exact_limits (test_d.Boundary.test_exact_limits) ... ok
+test_float_slip_through_c01 (test_d.Boundary.test_float_slip_through_c01) ... ok
+test_orig_band_is_closed (test_d.Boundary.test_orig_band_is_closed)
+right vs orig differ at T=10/(1-eps) itself (architecture/A-3 wrote half-open). ... ok
+test_random_vs_hand (test_d.Boundary.test_random_vs_hand) ... ok
+test_table_exact (test_d.Boundary.test_table_exact) ... ok
+test_naive_sequential_values (test_d.Events.test_naive_sequential_values) ... ok
+test_p1_hand (test_d.Events.test_p1_hand) ... ok
+test_p1_no_double_count_and_order_free (test_d.Events.test_p1_no_double_count_and_order_free) ... ok
+test_p2_hand_and_not_year_cell (test_d.Events.test_p2_hand_and_not_year_cell) ... ok
+test_px_and_restart (test_d.Events.test_px_and_restart) ... ok
+test_cross_term_equal_width (test_d.JouleAC.test_cross_term_equal_width) ... ok
+test_cross_term_unequal_width_halves (test_d.JouleAC.test_cross_term_unequal_width_halves) ... ok
+test_rectified_half_integer_phase (test_d.JouleAC.test_rectified_half_integer_phase) ... ok
+test_walsh_single_resistor_additive (test_d.JouleAC.test_walsh_single_resistor_additive) ... ok
+test_merged_clock_any_period_impossible (test_d.States.test_merged_clock_any_period_impossible) ... ok
+test_online_futures (test_d.States.test_online_futures) ... ok
+test_px_is_20_periodic (test_d.States.test_px_is_20_periodic) ... ok
+test_p0_pieces_equal_rational_orig (test_d_pass2.Kernels.test_p0_pieces_equal_rational_orig) ... ok
+test_rate_form_matches_amplitude_form (test_d_pass2.Kernels.test_rate_form_matches_amplitude_form) ... ok
+test_shapes (test_d_pass2.Kernels.test_shapes) ... ok
+test_exact_rank (test_d_pass2.Rank.test_exact_rank) ... ok
+test_integer_event_band (test_d_pass2.Refrigerant.test_integer_event_band) ... ok
+test_no_event (test_d_pass2.Refrigerant.test_no_event) ... ok
+test_rectified_bound_phase (test_d_pass3.Pass3.test_rectified_bound_phase) ... ok
+test_zero_mean_clock_rules (test_d_pass3.Pass3.test_zero_mean_clock_rules) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.287s
+
+OK

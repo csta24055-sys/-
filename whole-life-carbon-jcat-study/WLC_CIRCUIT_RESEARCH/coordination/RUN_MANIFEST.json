@@ -29,7 +29,7 @@
     "G0": "PASS",
     "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
     "G2": "DONE for A/E/C/B route self-tests (all re-run by coordinator); A/E fix pass running",
-    "G3": "IN_PROGRESS (D pass 1 A/E and pass 2 B/C done; pass 3 recheck of A/E/B/C fixes pending)",
+    "G3": "DONE for A/E (pass 1 + recheck pass 3) and B/C (pass 2); B/C fix passes not yet re-reviewed by D",
     "F": "NOT_RUN",
     "G4": "NOT_RUN",
     "G5": "NOT_RUN"
@@ -412,6 +412,44 @@
       },
       "disputed": "none",
       "status": "ACCEPT_WITH_CONDITIONS_MET (H-B1 remains PARTIAL: four kinds NOT_RUN)"
+    },
+    {
+      "phase": "G3",
+      "route": "D_verification",
+      "pass": 3,
+      "scope": "recheck of route A and E fixes; disputes; X5 erratum",
+      "actor": "wlc-verifier (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "7de1065",
+      "commands": [
+        "PYTHONDONTWRITEBYTECODE=1 math7-py -B code/p3_recheck.py",
+        "code/p2_gates.py (rerun after rename)",
+        "unittest discover -s tests"
+      ],
+      "route_result": "25/25 tests OK; A 27/27 and E 24/24 rerun read-only",
+      "coordinator_rerun": "25/25 OK (2026-11-24)",
+      "headline": {
+        "A": "ACCEPT - all fixes confirmed, 0 mismatches on 20,044 fresh points per convention and 595/595 published rows",
+        "E": "ACCEPT-WITH-CONDITIONS - fixes confirmed, 139/139 rows; conditions: document \"substitute\" as a net -5 table entry (non-coincident renovation restart not representable); Walsh-pulse design cost is an [H] estimate",
+        "disputes": "A right on both (zero-mean clock firing counts 3/3/30; rectified-clock bound m*h=0.21051h for general phase). D withdrew two pass-1 statements.",
+        "X5": "D confirms coordinator check: 5 in-domain points; helper renamed domain_violations; rerun byte-identical",
+        "unreviewed_H": [
+          "D-9 lower bound of 2 continuous states under online reset",
+          "D-10",
+          "D-16 closed form of rectified-clock bound",
+          "D-24",
+          "D-12 rho formula (re-derived by E, no formal review)",
+          "A-3/A-6/A-10/A-16 general statements",
+          "E Walsh design cost, E-3c bound"
+        ]
+      },
+      "usage": {
+        "subagent_tokens": 578745,
+        "tool_uses": 14,
+        "duration_s": 451
+      },
+      "status": "DONE"
     }
   ],
   "setup_audit": {

@@ -91,7 +91,7 @@ def run_scn(tag, scn, B):
     Brc0 = B.RefrigerantCircuit(scn, H, late_reset=False).sweep(Ts)
     for T in Ts:
         lab = G[T]
-        dom = C.in_domain(scn, T)
+        dom = C.domain_violations(scn, T)
         band = band_of(T, evs)
         base = {"scenario": tag, "T": repr(T), "label": lab, "valid_domain_reasons": dom[:2],
                 "in_excluded_band": bool(band), "band_taus": band[:3]}
