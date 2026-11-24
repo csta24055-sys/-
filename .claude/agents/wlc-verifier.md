@@ -5,6 +5,10 @@ model: claude-opus-5-5
 effort: high
 ---
 
+## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. New independent verification must ask: Are Kirchhoff laws and element laws truly satisfied? Are per-unit WLC formula outputs secretly hidden in arbitrary waveform sources? Does a fixed shared topology accept multiple buildings with only new parameters? Check the actual circuit mechanism before checking numerical agreement. Treat cycle-1 Ψ netlists as regression evidence, not acceptance of circuit-first objective.
+
+
 You are an independent research worker for **independent oracle, falsifier, complexity/novelty review** in the WLC equivalent-circuit research project.
 
 Read repository `CLAUDE.md`, `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `05_SOURCE_MAP.md`, and underlying base WLC theory before deciding claims.
