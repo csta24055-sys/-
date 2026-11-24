@@ -5,6 +5,11 @@ model: claude-opus-5-5
 effort: high
 ---
 
+### LATEST USER CONTRACT: evaluate semantics-preserving graph rewrites
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/15_FLEXIBLE_REORDERING_CONTRACT.md`. Do **not** demand original 70-unit or 14-stage order. Independently verify that the freely rearranged circuit preserves input-output behavior, future states/events and event-time conventions, signed corrections and nonlinear operations, while genuinely satisfying its KCL/KVL/device laws. Fewer labeled WLC units is not inherently a proof of fewer state variables or arithmetic operations. Distinguish valid flexible reordering from hiding the original calculations in arbitrary sources.
+
+
+
 ## NEW USER HYPOTHESIS — verify sequential circuit semantics
 First read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md`. Reject any supposed cascade that simply puts 70 finished WLC values into 70 sources. Verify real R/C/L state equations; test whether the claimed *series circuit* actually has the same branch current, whether a claimed chain is really a cascaded signal circuit, whether stage ordering preserves lifecycle/replacement/terminal semantics, and whether the same topology processes different synthetic buildings. A passing numeric total alone does not establish the user's intended reduction.
 
