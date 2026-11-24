@@ -29,7 +29,7 @@
     "G0": "PASS",
     "G1": "DONE (design only; all numeric predictions [H] until routes/D recompute)",
     "G2": "DONE for A/E/C/B route self-tests (all re-run by coordinator); A/E fix pass running",
-    "G3": "IN_PROGRESS (D pass 1 on A/E done; A/E fixes pending; B/C not yet verified by D)",
+    "G3": "IN_PROGRESS (D pass 1 A/E and pass 2 B/C done; pass 3 recheck of A/E/B/C fixes pending)",
     "F": "NOT_RUN",
     "G4": "NOT_RUN",
     "G5": "NOT_RUN"
@@ -332,6 +332,44 @@
         "duration_s": 488
       },
       "status": "FIXED_PENDING_D_RECHECK"
+    },
+    {
+      "phase": "G3",
+      "route": "D_verification",
+      "pass": 2,
+      "scope": "routes B and C, gates X2(B side), X3, X4, X5",
+      "actor": "wlc-verifier (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "06e0943",
+      "commands": [
+        "python3 -B code/p2_check_b.py",
+        "code/p2_hb4.py",
+        "code/p2_gates.py",
+        "code/p2_check_c.py",
+        "math7-py -B -m unittest discover -s tests"
+      ],
+      "route_result": "23/23 tests OK; assert_frozen passed in every script",
+      "coordinator_rerun": "23/23 OK (2026-11-24)",
+      "results": "routes/D_verification/VERDICTS.md (pass 2), results/p2_*.json",
+      "headline": {
+        "gates": {
+          "X1": "PASS (pass 1)",
+          "X2": "PASS both sides (float knife edge 10.00000001 recorded as undefined)",
+          "X3": "PASS at set level (7 block types on both sides; 27 B kinds have no C block type)",
+          "X4": "PASS (independent composition <=3.3e-14; non-refrigerant amplitudes still from msp)",
+          "X5": "PASS on 1 scenario (EV6), 5 T points, exact Fractions"
+        },
+        "B": "ACCEPT-WITH-CONDITIONS: H-B1 six kernels confirmed out-of-sample (<=4.8e-13); late-reset automaton confirmed; H-B4 refrigerant \"less state\" REFUTED as metric artefact (merged knot form 1,025 coefficients vs automaton 1,072; random access ~100x faster for knots); H-B2 must be scoped to LTI networks with analytic sources",
+        "C": "ACCEPT-WITH-CONDITIONS: inventory, composition, exact ranks 1 / 6-6-7 / 7-8-9, replay counterexample confirmed; MAPPING constructs stay [H]"
+      },
+      "coordinator_note": "D final report said X5 rests on T=0.5 only and that a conditional bug remains in p2_gates.py:82. Coordinator checked: scenarios.valid_domain returns a list of REASONS (empty = usable), so `if C.in_domain(...): continue` correctly skips only unusable points; all five T (0.5, 5.3, 12.25, 30.5, 47.9) return [] and all five rows are in results/p2_gates.json and VERDICTS.md. The function name is misleading, the logic is not a bug. X5 recorded as PASS on 5 points of one scenario.",
+      "usage": {
+        "subagent_tokens": 522179,
+        "tool_uses": 60,
+        "duration_s": 1299
+      },
+      "status": "DONE"
     }
   ],
   "setup_audit": {

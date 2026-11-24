@@ -1,0 +1,111 @@
+{
+ "runs": [
+  {
+   "scenario": "SYN-RC-office-M-T60-seed102",
+   "H": 130,
+   "merged_knot_form": {
+    "B1-02": {
+     "lattice_knots": 131,
+     "event_knots": 0,
+     "coefficients": 263,
+     "msp_pieces_stored": 5200,
+     "msp_knots_stored": 10400
+    },
+    "B1-03": {
+     "lattice_knots": 37,
+     "event_knots": 171,
+     "coefficients": 417,
+     "msp_pieces_stored": 291,
+     "msp_knots_stored": 332
+    },
+    "B1-04": {
+     "lattice_knots": 131,
+     "event_knots": 41,
+     "coefficients": 345,
+     "msp_pieces_stored": 1200,
+     "msp_knots_stored": 2241
+    }
+   },
+   "B_automaton_state_tuple": [
+    160,
+    81,
+    360,
+    471
+   ],
+   "B_automaton_numbers_total": 1072,
+   "seconds_median5": {
+    "B_automaton_random_access(200 fresh sweeps)": 0.08660490200009008,
+    "B_automaton_sorted_sweep(200 T)": 0.0021840200001861376,
+    "merged_knot_form_exact_Fraction(3 units x 200 T)": 0.0032948590001069533,
+    "msp_knots+interval_float(3 units x 200 T)": 0.00014138400001684204
+   },
+   "build_seconds": {
+    "B_automaton_build": 0.00018308500011698925,
+    "canon_build_and_KF(3 units)": 0.041847557999972196
+   },
+   "tracemalloc_peak_bytes": {
+    "B_automaton_build+sorted_sweep": 73568,
+    "merged_KF_build(3 units)": 307928
+   },
+   "merged_vs_automaton_max_rel": {
+    "B1-02": 2.0558465798263558e-16,
+    "B1-03": 3.9944045387044916e-16,
+    "B1-04": 3.7977968680553053e-16
+   }
+  },
+  {
+   "scenario": "SYN-RC-office-M-T50-seed389633541",
+   "H": 130,
+   "merged_knot_form": {
+    "B1-02": {
+     "lattice_knots": 131,
+     "event_knots": 0,
+     "coefficients": 263,
+     "msp_pieces_stored": 5200,
+     "msp_knots_stored": 10400
+    },
+    "B1-03": {
+     "lattice_knots": 5,
+     "event_knots": 39,
+     "coefficients": 89,
+     "msp_pieces_stored": 462,
+     "msp_knots_stored": 482
+    },
+    "B1-04": {
+     "lattice_knots": 131,
+     "event_knots": 5,
+     "coefficients": 273,
+     "msp_pieces_stored": 2668,
+     "msp_knots_stored": 4988
+    }
+   },
+   "B_automaton_state_tuple": [
+    160,
+    81,
+    447,
+    558
+   ],
+   "B_automaton_numbers_total": 1246,
+   "seconds_median5": {
+    "B_automaton_random_access(200 fresh sweeps)": 0.10750171700010469,
+    "B_automaton_sorted_sweep(200 T)": 0.0024344419998669764,
+    "merged_knot_form_exact_Fraction(3 units x 200 T)": 0.0033084020001297176,
+    "msp_knots+interval_float(3 units x 200 T)": 0.00015194199977486278
+   },
+   "build_seconds": {
+    "B_automaton_build": 0.0002343979999750445,
+    "canon_build_and_KF(3 units)": 0.04315670999994836
+   },
+   "tracemalloc_peak_bytes": {
+    "B_automaton_build+sorted_sweep": 78408,
+    "merged_KF_build(3 units)": 186764
+   },
+   "merged_vs_automaton_max_rel": {
+    "B1-02": 3.5882503879511723e-16,
+    "B1-03": 3.0832614972417323e-16,
+    "B1-04": 3.6204513088073354e-16
+   }
+  }
+ ],
+ "note": "msp's 5,200-row table / 10,400 knots are UNMERGED per-device pieces. Merged per unit, the random-access form needs O(H + #events) coefficients. The automaton's tuple is the state at one T plus its event/threshold tables; random access needs a replay from T=0."
+}

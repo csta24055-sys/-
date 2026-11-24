@@ -26,3 +26,18 @@ Domain: fictional P0/P1/P2/Px (07, architecture §1.2), t∈[0,60] unless stated
 | D-19 | Single accumulator suffices iff the schedule (instants, amounts, rates) is supplied externally; table entries grow with horizon (P0 6, P2 7, Px 9 at H=60); state (1,1,1,n) | [E] | `states_check.json` `single_accumulator` |
 
 Not claimed: any statement about C_WLC(T), Z(T), refrigerant, the 70-unit model, routes B/C, X2 B-side, X3–X5 (NOT_RUN in this pass).
+
+## Pass 2 (routes B/C, gates X2–X5; HEAD 06e0943; frozen trees asserted)
+| id | claim | class | evidence |
+|---|---|---|---|
+| D-20 | D's kernel evaluator, written from 03 §5.1 in both forms (amplitude h and rate κ), and D's exact refrigerant recurrence, written from 03 §5.5 and the refcalc docstrings using raw inputs, reproduce refcalc on EV6/EV10. The worst cases are 4.8e-13 (B3-01) in 𝒟′ and ≤1.1e-15 for the refrigerant units, including inside the band. | [F] (exact Fraction evaluation compared with float refcalc) | `results/p2_check_b.json`; `tests/test_d_pass2.py` |
+| D-21 | For integer refrigerant events, msp's interval form deviates from refcalc on (K, sw(τ)) and agrees at T = sw(τ). The observed maximum is 1.24 relative (B1-04, EV10). The deviation is confined to the open band of 03 §5.4. | [F] | `p2_check_b.json` `B1-04_at_switch_point` |
+| D-22 | An S/H automaton without late reset fails by O(1) inside 𝒟′ (up to 0.97 for B1-04, 1.0 for B1-03, 0.87 for B1-02), not only in the band. | [F] | `p2_check_b.json` |
+| D-23 | The merged knot form of B1-02/03/04 stores about as many numbers as B's automaton: 1,025 vs 1,072 on BM-M and 625 vs 1,246 on EV6. Random access is about 100× faster. "Less state" is therefore an artefact of comparing against unmerged per-device storage. | [F] | `results/p2_hb4.json` |
+| D-24 | H-B2 review. The claim holds for LTI networks with analytic sources (identity theorem; textbook). Kinks are reproduced exactly by switched passive networks and by ideal-diode (nonlinear passive) networks; an ideal switch with a charged capacitor gives jumps. | [L]/[H] argument (no new computation) | VERDICTS pass 2 |
+| D-25 | The 22 COMP rows in units70.json equal `specs/system.py` COMP_ROWS. D's exact composition reproduces refcalc SUM-03 within 3.3e-14 and X-02 within 2.2e-13 on 5 cases × 9 T. The cases include β=ι_B2 with B2 excluded and a 4-stage subset. | [F] | `results/p2_check_c.json` check6 |
+| D-26 | Exact rational ranks modulo constants on 240 T: total 1; stage 6/6/7/7; DIRECT 7/8/9/9 (BM-S/BM-M/edge/EV6). Each equals the number of T-varying columns. | [E] (exact arithmetic on the sampled values) | `p2_check_c.json` check7 |
+| D-27 | Year-table replay: B1-02 is exact; B3-01 is off by 0.15–0.56 %; B1-03, B4-02 and B5-01 are grossly wrong. | [F] | `p2_check_c.json` check9 |
+| D-28 | X2 B side. B's θ_ε netlist on the P0 pieces equals D's rational orig ledger at every float T tested. fl(10/(1−ε)) = sw(10) lies 0.46 ulp above the real endpoint. | [E]/[F] | `results/p2_gates.json` X2 |
+| D-29 | X5 on EV6: C−M=Z exactly; dC/dT=ρ+Z′ exactly with Z′<0; C(0+) = A^init + A^term + R(0+) ≠ A^init. Z was rebuilt independently by D. | [E] (canon/timechar exact Fractions) + [F] vs refcalc | `p2_gates.json` X5 |
+| D-30 | Self-found oracle error, fixed and rerun: applying the amplitude-form kernel to canon's rate-form Terms mis-scaled the density (B3-01) by 1/H. The first run gave 1–21 % composition errors. The run-1 log is kept. | record | `results/p2_check_c_log_run1_density_convention_bug.txt` |

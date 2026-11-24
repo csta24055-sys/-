@@ -62,3 +62,54 @@ Peaks are dominated by the 1e5-element output list. Best circuit path is 2.4× s
 - A: qualify A-3 (closed band), A-16 (phase), A-10 (2 continuous + counters achievable); guard R3i/R1 against `orig` with external events; replace the hard-coded zero-mean clock with a simulated one; add a set-rule permutation test.
 - E: implement P1 in E-R1 or relabel; relabel the fixed-step benchmark; restate E-2b with ρ; keep orthogonal-excitation single-resistor designs open.
 - Coordinator: fix architecture §1.2 band wording and early-stop (2); run D pass 2 on B/C (X2 B-side, X3–X5, Z(T), refrigerant) when those routes finish.
+
+---
+
+# Pass 2: routes B and C, gates X2 (B side), X3, X4, X5
+
+## Setup
+- **Git and frozen code:** HEAD `06e0943faf47756ca0197034eaf2048bf27c8334`, verified before work. `tstudy.baseline.assert_frozen()` passed in every pass-2 script (refcalc `8976efea…`, synth `55caf5cd…`, common `ad3d0b7e…`). No `__pycache__` was found in the frozen trees before or after any run (checked in code and by `find`). No git operations were performed, and routes A and E were not assessed.
+- **Model:** self-reported claude-opus-5-5. The effort level cannot be observed from inside the session (high was intended).
+- **Scenarios** (out of sample for both routes): EV6 `SYN-RC-office-M-T50-seed389633541` and EV10 `SYN-RC-retail-S-T100-seed169387912`, taken from `evaluation_set`. Benchmark S/M and edge `rebuild_within_period` were used only to re-measure a route's own number.
+
+## Commands
+```
+cd /home/user/-/whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/D_verification
+export PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0
+python3 -B code/p2_check_b.py    # 56 s  -> results/p2_check_b.json, p2_check_b_log.txt
+python3 -B code/p2_hb4.py        # 10 s  -> results/p2_hb4.json
+python3 -B code/p2_gates.py      # 11 s  -> results/p2_gates.json
+python3 -B code/p2_check_c.py    # 4 min -> results/p2_check_c.json (run 1 had a D oracle bug, see below)
+math7-py -B -m unittest discover -s tests -v     # 23 tests OK -> results/test_log_pass2.txt
+```
+
+## Results (details in `VERDICTS.md` pass 2, `claims.md` D-20..D-30)
+| check | status | headline |
+|---|---|---|
+| B (1) kernels re-derived and compared with refcalc and grammar.py on new scenarios/grid | PASS | D vs refcalc ≤4.8e-13 in 𝒟′; B's netlists vs D ≤8.2e-16; automaton vs D ≤8.2e-16 |
+| B (2) late reset; band agreement; which oracle is the reference | PASS (B's claims confirmed, magnitudes larger) | Without late reset the error is up to 0.97 relative inside 𝒟′. In the band the automaton equals refcalc, while msp's interval form is off by up to 1.24 and agrees at T=sw(τ). refcalc is the reference (03 §3.2/§3.4). The band is a documented unresolved boundary, not a defect. |
+| B (3) H-B2 review | CONFIRMED-as-textbook / GAP | The claim needs "LTI" and analytic sources. Switched or ideal-diode passive networks realise kinks exactly. The illustration basis is not a superset of RC responses (it lacks the T term). |
+| B (4) H-B4 refrigerant "less state" | REFUTED as stated (metric artefact) | Merged knot form 1,025 vs automaton 1,072 numbers (BM-M); random access 100× slower for the automaton |
+| B (5) test audit, boundary handling | no tautology; weak points | Tests run only on benchmark S/M (no out-of-sample scenario); B1-02 [P1 cells] in the band sits at 8.9e-10, close to the 1e-9 tolerance; boundary points are correctly declared outside 𝒟 |
+| C (6) = X4 independent composition | PASS | Exact D composition vs refcalc ≤3.3e-14 (stage ≤2.2e-13), 5 cases × 9 T, including β=ι_B2 and a stage subset. COMP rows in units70.json are identical to specs COMP_ROWS. |
+| C (7) ranks | PASS (exact) | 1 / 6,6,7(,7) / 7,8,9(,9) = number of T-varying columns. The rank is not a state count. |
+| C (8) MAPPING spot check | PASS with 1 flag | 70 rows; role counts match; 10 sampled rows match. `time_form_text` is truncated to 160 chars (`build_mapping.py:148`). Design columns are correctly labelled [H]. |
+| C (9) year-table replay | PASS | B1-02 exact; B3-01 0.15–0.56 % |
+| X2 B-side | PASS | B's θ_ε netlist = D's rational ledger at every float T; the closed endpoint 10/(1−ε) has no float representative (sw(10) is 0.46 ulp above it) |
+| X3 | PASS (set level) | Same 7 block types on both sides; one-sided items listed (27 B-only non-shape kinds; B2-01 labelling) |
+| X5 | PASS | C−M=Z exactly; Z′<0; dC/dT≠ρ; C(0+)≠A^init (EV6) |
+
+## D's own error, recorded
+In run 1 of `p2_check_c.py`, D applied the amplitude-form kernel h (density amplitude a·H) to canon.py's rate-form Terms (density amplitude a). That mis-scaled B3-01 by 1/H and gave false 1–21 % composition errors. It was fixed by adding `h_rate` (03 §5.1, second form) with a unit test, and the script was rerun. The run-1 log is kept as `results/p2_check_c_log_run1_density_convention_bug.txt`. No route was blamed for this.
+
+## G4 recommendations
+- **B: ACCEPT-WITH-CONDITIONS**, covering the six kernels and the late-reset automaton.
+- **C: ACCEPT-WITH-CONDITIONS**, covering the inventory, the composition (independently verified), the exact ranks and the replay counterexample.
+
+The conditions are listed in `VERDICTS.md`.
+
+## Pass-2 NOT_RUN
+- **Route B:** K26/K28/K30/K32 netlists (B's own NOT_RUN); the RC-a/RC-b numbers (H-B3 continuous part); B's step counts 1,528/95/166.
+- **Route C:** the H-C2 signature detector; C-1n; C-4 role checks; C-6.
+- **Other:** SageMath/MATLAB/Math7 seven-engine runs; any real-building validation.
+- **Not tested:** band behaviour for floats near (but not equal to) integer event times, which 03 §3.4 lists as unverified.

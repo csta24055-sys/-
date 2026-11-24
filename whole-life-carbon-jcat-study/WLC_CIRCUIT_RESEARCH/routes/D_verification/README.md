@@ -23,11 +23,22 @@ kgCO2e, t in years. The orig convention is a horizon rule for C(T), applied only
 | `code/bench.py` | gate-4 benchmark (a) closed form, (b) knots+bisect, (c) D's hybrid circuit, (d) fixed-step |
 | `code/run_all.py` | regenerates every `results/*` file |
 | `tests/test_d.py` | 17 unittest cases with hand-written expected values |
+| `code/p2_common.py` | pass 2: read-only frozen-code loader (`assert_frozen` first, `__pycache__` check), scenario choice |
+| `code/p2_oracle_kernels.py` | pass 2 oracle: kernels in both 03 §5.1 forms, exact refrigerant recurrence from raw inputs, P0 as kernel pieces |
+| `code/p2_check_b.py` | pass 2: route B kernels/automaton vs D vs refcalc vs msp on EV6/EV10 (B's grammar loaded only as a probe) |
+| `code/p2_hb4.py` | pass 2: refrigerant state/memory/time, merged knot form vs automaton |
+| `code/p2_check_c.py` | pass 2: independent composition (X4), exact ranks, MAPPING spot check, year-table replay, X3 |
+| `code/p2_gates.py` | pass 2: gates X2 (B side) and X5 |
+| `tests/test_d_pass2.py` | 6 hand-value tests of the pass-2 oracle |
 
 ## Reproduce (no network)
 ```
 cd whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/routes/D_verification
 PYTHONDONTWRITEBYTECODE=1 math7-py -B -m unittest discover -s tests -v   # 17 tests
 PYTHONDONTWRITEBYTECODE=1 math7-py -B code/run_all.py                    # ~2.5 min, writes results/
+# pass 2 (frozen original code; stops if assert_frozen fails)
+export PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0
+python3 -B code/p2_check_b.py; python3 -B code/p2_hb4.py; python3 -B code/p2_gates.py   # ~1.5 min
+python3 -B code/p2_check_c.py                                                         # ~4 min
 ```
 Dependencies: oracle, events, states, bench: Python 3.13 stdlib only. `check_joule_ac.py`, `check_boundary.py` (E's AC rows) and `probe_routes.py` (E's modules) need math7-py (mpmath 1.3.0; SymPy 1.14.0 via E's code).

@@ -1,0 +1,501 @@
+{
+ "c6": {
+  "comp_rows_units70_json": 22,
+  "comp_rows_specs_system": 22,
+  "comp_rows_identical(stage,unit,sign)": true,
+  "non_trivial_beta": [
+   [
+    "B6",
+    "B2-01",
+    -1,
+    "iota_B2"
+   ]
+  ],
+  "worst_in_domain": {
+   "total_vs_refcalc": 3.277001821385952e-14,
+   "stage_vs_refcalc": 2.1771892512738045e-13,
+   "total_vs_canon": 0.0,
+   "refcalc_fraction_sum_vs_SUM03": 3.6234957100293477e-16
+  },
+  "all_stage_keys_equal": true
+ },
+ "c7": {
+  "grid": "T = 0.25..60 step 0.25 (240)",
+  "direct_units": 21,
+  "scenarios": {
+   "BM-S": {
+    "scenario": "SYN-RC-office-S-T60-seed101",
+    "exact_rank_mod_const_total": 1,
+    "exact_rank_mod_const_stage14": 6,
+    "exact_rank_mod_const_direct21": 7,
+    "float_rank_stage14(rtol 1e-9/1e-6)": [
+     6,
+     6
+    ],
+    "float_rank_direct21(rtol 1e-9/1e-6)": [
+     7,
+     7
+    ],
+    "T_varying_stages": [
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B6",
+     "B7"
+    ],
+    "T_varying_direct_units": [
+     "B1-02",
+     "B1-03",
+     "B2-01",
+     "B3-01",
+     "B4-02",
+     "B6-03",
+     "B7-04"
+    ],
+    "seconds": 2.7
+   },
+   "BM-M": {
+    "scenario": "SYN-RC-office-M-T60-seed102",
+    "exact_rank_mod_const_total": 1,
+    "exact_rank_mod_const_stage14": 6,
+    "exact_rank_mod_const_direct21": 8,
+    "float_rank_stage14(rtol 1e-9/1e-6)": [
+     6,
+     6
+    ],
+    "float_rank_direct21(rtol 1e-9/1e-6)": [
+     8,
+     8
+    ],
+    "T_varying_stages": [
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B6",
+     "B7"
+    ],
+    "T_varying_direct_units": [
+     "B1-02",
+     "B1-03",
+     "B1-04",
+     "B2-01",
+     "B3-01",
+     "B4-02",
+     "B6-03",
+     "B7-04"
+    ],
+    "seconds": 21.5
+   },
+   "EV6": {
+    "scenario": "SYN-RC-office-M-T50-seed389633541",
+    "exact_rank_mod_const_total": 1,
+    "exact_rank_mod_const_stage14": 7,
+    "exact_rank_mod_const_direct21": 9,
+    "float_rank_stage14(rtol 1e-9/1e-6)": [
+     7,
+     7
+    ],
+    "float_rank_direct21(rtol 1e-9/1e-6)": [
+     9,
+     9
+    ],
+    "T_varying_stages": [
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B5",
+     "B6",
+     "B7"
+    ],
+    "T_varying_direct_units": [
+     "B1-02",
+     "B1-03",
+     "B1-04",
+     "B2-01",
+     "B3-01",
+     "B4-02",
+     "B5-01",
+     "B6-03",
+     "B7-04"
+    ],
+    "seconds": 28.1
+   },
+   "EDGE-rebuild": {
+    "scenario": "EDGE-rebuild_within_period",
+    "exact_rank_mod_const_total": 1,
+    "exact_rank_mod_const_stage14": 7,
+    "exact_rank_mod_const_direct21": 9,
+    "float_rank_stage14(rtol 1e-9/1e-6)": [
+     7,
+     7
+    ],
+    "float_rank_direct21(rtol 1e-9/1e-6)": [
+     9,
+     9
+    ],
+    "T_varying_stages": [
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B5",
+     "B6",
+     "B7"
+    ],
+    "T_varying_direct_units": [
+     "B1-02",
+     "B1-03",
+     "B1-04",
+     "B2-01",
+     "B3-01",
+     "B4-02",
+     "B5-01",
+     "B6-03",
+     "B7-04"
+    ],
+    "seconds": 1.6
+   }
+  },
+  "interpretation": "rank = dimension of the span of the sampled waveforms (lower bound on the span of the functions). It bounds the number of independent accumulator OUTPUTS a fixed linear read-out needs; it does not bound the realization state: every piecewise-linear waveform still needs its knots (comparators/table entries), and rank 1 for the total does not mean one capacitor reproduces C(T) without the 1e3-1e4 knot schedule."
+ },
+ "c8": {
+  "n_rows": 70,
+  "role_counts_mapping": {
+   "DECISION": 9,
+   "DIRECT": 21,
+   "AUXILIARY": 15,
+   "REFERENCE": 10,
+   "AGGREGATE": 9,
+   "BREAKDOWN": 6
+  },
+  "role_counts_units70": {
+   "DECISION": 9,
+   "DIRECT": 21,
+   "AUXILIARY": 15,
+   "REFERENCE": 10,
+   "AGGREGATE": 9,
+   "BREAKDOWN": 6
+  },
+  "sample_seed": 20261124,
+  "rows_with_status_exact_or_verified": [],
+  "rows_whose_evidence_lacks_[H]_for_design_columns": [],
+  "status_counts": {
+   "conditional": 30,
+   "unverified": 40
+  },
+  "circuit_simulation_NOT_RUN_marked_on_DIRECT": 21
+ },
+ "c8_sample": [
+  [
+   "B4-01",
+   true,
+   {}
+  ],
+  [
+   "SYS-01",
+   true,
+   {}
+  ],
+  [
+   "A13-02",
+   true,
+   {}
+  ],
+  [
+   "B1-03",
+   false,
+   {
+    "time_form_text": false
+   }
+  ],
+  [
+   "X-07",
+   true,
+   {}
+  ],
+  [
+   "X-10",
+   true,
+   {}
+  ],
+  [
+   "B3-01",
+   false,
+   {
+    "time_form_text": false
+   }
+  ],
+  [
+   "SUM-08",
+   true,
+   {}
+  ],
+  [
+   "B6-03",
+   true,
+   {}
+  ],
+  [
+   "B6-02",
+   true,
+   {}
+  ]
+ ],
+ "x3": {
+  "C_block_types_of_21_DIRECT": [
+   "atom",
+   "const_t0",
+   "const_tT",
+   "density",
+   "gated_year_cell",
+   "interval",
+   "year_cell"
+  ],
+  "B_kernel_kinds_mapped_to_block_types": [
+   "atom",
+   "const_t0",
+   "const_tT",
+   "density",
+   "gated_year_cell",
+   "interval",
+   "year_cell"
+  ],
+  "types_only_in_C": [],
+  "types_only_in_B": [],
+  "B_kinds_with_no_C_block_type": {
+   "K01": "masked sum-product sp (row products of data columns, T-independent, P1",
+   "K02": "grouping total / by (scatter-add)",
+   "K03": "static predicates/masks on data (present, range, eq, le, not)",
+   "K04": "one-column functions inv, one_minus, inv_one_minus, ratio_one_minus",
+   "K05": "match (first keyed look-up, min over row positions)",
+   "K06": "template expansion use",
+   "K07": "common index I (flatten, tokenise, product, distinct, sorted, event la",
+   "K15": "count N(T)=sum theta_eps (event counters, mis.* counts, N.b42)",
+   "K16": "refrigerant state recurrence u_dk = chi m0 + (1-chi) q u_d,k-1 (switch",
+   "K20": "continuous RC discharge as a realisation of R(T) (alternative to K19)",
+   "K21": "T-independent scalar times T-dependent kernel (B2-01 = share EL(T); X-",
+   "K22": "outer composition stage x unit 0/+-1 matrix with beta, iota (S_s, SUM-",
+   "K23": "division by a constant (SUM-04 = S3/A, SUM-06 = S3/1000)",
+   "K24": "division by the sweep variable (SUM-05 = S3/(A T))",
+   "K25": "ratio of two T-dependent signals (share_s = bs_s/S3) and SUM-08 rho",
+   "K26": "T-dependent predicates in AGG ([S3>0], #{bs<0}=0, complete(T))",
+   "K27": "conditional branches if/elif/else as exclusive masks",
+   "K28": "max/min/abs via masks",
+   "K29": "nilpotent-shift resolvent by doubling prod(I+N^{2^i}), H<256",
+   "K30": "knot form L5 (truncated powers [t<T](P+QT), theta(p+qT))",
+   "K31": "jump form KnotSpectrum (prefix sums + binary search)",
+   "K32": "real-time decomposition C=M([0,T])+Z(T), dC/dT=rho+Z'",
+   "K33": "per-year series and cumulative lists (by_year, X-07)",
+   "K34": "missing values bot propagation, strings, enums, violation lists",
+   "K35": "float knife edge of theta_eps (relative 1e-10..1e-8 window; T=tau(1+1e",
+   "K36": "non-integer powers / log10 (J-CAT conversion experiment only)",
+   "K37": "passive LTI RC realisation of any kinked/jumping kernel (H-B2)"
+  },
+  "kind_to_block_map_used(D's reading)": {
+   "K08": "const_t0",
+   "K09": "const_tT",
+   "K10": "year_cell",
+   "K11": "year_cell",
+   "K12": "density",
+   "K13": "atom",
+   "K14": "gated_year_cell",
+   "K19": "interval",
+   "K17": "year_cell",
+   "K18": "atom+gated_year_cell"
+  }
+ },
+ "x3_units": {
+  "A13-01": [
+   [],
+   []
+  ],
+  "A13-03": [
+   [],
+   []
+  ],
+  "A13-04": [
+   [],
+   []
+  ],
+  "A4-01": [
+   [],
+   []
+  ],
+  "A4-02": [
+   [],
+   []
+  ],
+  "A5-04": [
+   [],
+   []
+  ],
+  "B1-02": [
+   [],
+   []
+  ],
+  "B1-03": [
+   [],
+   []
+  ],
+  "B1-04": [
+   [],
+   []
+  ],
+  "B2-01": [
+   [
+    "year_cell"
+   ],
+   []
+  ],
+  "B3-01": [
+   [],
+   []
+  ],
+  "B4-02": [
+   [],
+   []
+  ],
+  "B5-01": [
+   [],
+   []
+  ],
+  "B6-03": [
+   [],
+   []
+  ],
+  "B7-04": [
+   [],
+   []
+  ],
+  "C1-01": [
+   [],
+   []
+  ],
+  "C2-01": [
+   [],
+   []
+  ],
+  "C3-01": [
+   [],
+   []
+  ],
+  "C4-01": [
+   [],
+   []
+  ],
+  "X-01": [
+   [],
+   []
+  ],
+  "X-14": [
+   [],
+   []
+  ]
+ },
+ "c9": {
+  "BM-S": {
+   "B1-02": {
+    "max_rel": 4.489360308413133e-16,
+    "max_abs_over_scale": 4.330030193083232e-16,
+    "n_rel_gt_1e-9": 0,
+    "n": 240
+   },
+   "B1-03": {
+    "max_rel": 54.50307130625,
+    "max_abs_over_scale": 0.312172267600644,
+    "n_rel_gt_1e-9": 60,
+    "n": 240
+   },
+   "B3-01": {
+    "max_rel": 0.005590692155406653,
+    "max_abs_over_scale": 0.001308690114147329,
+    "n_rel_gt_1e-9": 213,
+    "n": 240
+   },
+   "B4-02": {
+    "max_rel": 9467.244948522506,
+    "max_abs_over_scale": 0.044878687669303065,
+    "n_rel_gt_1e-9": 224,
+    "n": 240
+   },
+   "B5-01": {
+    "max_rel": 0.0,
+    "max_abs_over_scale": 0.0,
+    "n_rel_gt_1e-9": 0,
+    "n": 240
+   }
+  },
+  "BM-M": {
+   "B1-02": {
+    "max_rel": 4.9429961596207e-16,
+    "max_abs_over_scale": 3.841775417691851e-16,
+    "n_rel_gt_1e-9": 0,
+    "n": 240
+   },
+   "B1-03": {
+    "max_rel": 383.81789896875,
+    "max_abs_over_scale": 0.11519492692388397,
+    "n_rel_gt_1e-9": 184,
+    "n": 240
+   },
+   "B3-01": {
+    "max_rel": 0.0025748013824226836,
+    "max_abs_over_scale": 0.0012031898340780845,
+    "n_rel_gt_1e-9": 224,
+    "n": 240
+   },
+   "B4-02": {
+    "max_rel": 15630.296493925589,
+    "max_abs_over_scale": 0.0739028555141782,
+    "n_rel_gt_1e-9": 224,
+    "n": 240
+   },
+   "B5-01": {
+    "max_rel": 0.0,
+    "max_abs_over_scale": 0.0,
+    "n_rel_gt_1e-9": 0,
+    "n": 240
+   }
+  },
+  "EDGE-rebuild": {
+   "B1-02": {
+    "max_rel": 6.458863917524602e-16,
+    "max_abs_over_scale": 6.394209509849094e-16,
+    "n_rel_gt_1e-9": 0,
+    "n": 240
+   },
+   "B1-03": {
+    "max_rel": 21108.83782432999,
+    "max_abs_over_scale": 0.2610463299543349,
+    "n_rel_gt_1e-9": 32,
+    "n": 240
+   },
+   "B3-01": {
+    "max_rel": 0.0015351881526552346,
+    "max_abs_over_scale": 0.0005611725103480778,
+    "n_rel_gt_1e-9": 77,
+    "n": 240
+   },
+   "B4-02": {
+    "max_rel": 3086.452920035824,
+    "max_abs_over_scale": 0.14537233152500176,
+    "n_rel_gt_1e-9": 88,
+    "n": 240
+   },
+   "B5-01": {
+    "max_rel": 2931765.275309271,
+    "max_abs_over_scale": 0.43749999999999994,
+    "n_rel_gt_1e-9": 8,
+    "n": 240
+   }
+  }
+ },
+ "sec": 221.4
+}
+
+real	3m42.472s
+user	3m41.566s
+sys	0m0.218s
