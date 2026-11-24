@@ -1,17 +1,18 @@
-# 10 Model/effort switching and multi-stage handoff — 2026-11-24
+# 10 Model/effort allocation — details
+**実行順序・並列数の正本は `12_FINAL_OPERATING_PLAN.md`。本表はモデル・担当の割当であり、全担当を毎回起動する命令ではない。**
 
 ## User-approved research routing
-The researcher requests **different models/effort per phase**, with no repeated manual model picking:
+The researcher requests **different models/effort per phase**. Start agents only as needed by the audited gates; do not repeat expensive planning or validation without new evidence:
 
 | Phase | Agent | Model | Effort | Job |
 |---|---|---|---|---|
 | P0 strategic architecture | `wlc-architect` | `claude-fable-5-2` | `high` | Read WLC theory, review A/B/C/D/E scope, design falsifiable work plan, select mathematical paths and interfaces |
 | P1–P2 implementation/simulation | `wlc-waveform`, `wlc-formula-network`, `wlc-unit-mapper`, `wlc-resistor-energy` | `claude-opus-5-5` | `medium` | Independently derive mappings, write code and synthetic tests, simulate equipment timing and resistor/capacitor alternatives |
-| P2.5 mathematical bridge | `wlc-math7-orchestrator` | `claude-opus-5-5` | `medium` | Use five locally available Python engines and authorized main-branch Math7 workflow; build an adapter for WLC cases only as separately tested research, report Sage/MATLAB NOT RUN if unavailable |
+| F on-demand mathematical bridge | `wlc-math7-orchestrator` | `claude-opus-5-5` | `medium` | Use five locally available Python engines and authorized main-branch Math7 workflow; build an adapter for WLC cases only as separately tested research, report Sage/MATLAB NOT RUN if unavailable |
 | P3 independent validation | `wlc-verifier` | `claude-opus-5-5` | `high` | Oracle, falsification, time boundaries, cross-route comparison, performance and claims |
 | P4 evidence-based synthesis | `wlc-integrator` | `claude-opus-5-5` | `high` | Collect validated results, resolve definition/scale/branch/commit conflicts, integrate only verified equivalences |
 | P5 new global planning | `wlc-replanner` | `claude-fable-5-2` | `high` | Review accepted proofs, failures, performance and unresolved issues, decide next cycle |
-| Repeat P1–P5 if and only if open questions and budget justify another concrete experiment. | | | | |
+| Repeat only when new independent evidence or a concrete unresolved claim justifies another experiment. | | | | |
 
 Read `11_MATH7_INTEGRATION.md` before delegating mathematical calculations. The Math7 source is on this repo's **main** branch, not on the WLC research branch. Existing seven-engine workflow supports only restricted algebraic cases; LCA operator calculations remain Python-only until adapters are validated. A GitHub API 403 in Claude Cloud cannot be treated as evidence that the math code is broken.
 
