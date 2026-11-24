@@ -1,0 +1,56 @@
+{
+  "schema": "wlc-circuit-run-manifest/1.0",
+  "created_at": "2026-11-24",
+  "kind": "initial_setup_status_only",
+  "repository": "csta24055-sys/-",
+  "research_branch": "claude/wlc-equivalent-circuit-20261124",
+  "source_branches": {
+    "independent_wlc_theory": {
+      "ref": "claude/wlc-theory-research-base-c33936",
+      "sha": "9416a1bbb3c48d6fd9589789dcb045c0eb6e03be",
+      "read_only": true
+    },
+    "math7": {
+      "ref": "main",
+      "sha": "c35403703202cec53d75300f42489927f71baf1d",
+      "read_only": true
+    }
+  },
+  "operating_plan": "whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/12_FINAL_OPERATING_PLAN.md",
+  "experimental_routes": [
+    "A_waveform",
+    "B_formula_network",
+    "C_70_units",
+    "D_verification",
+    "E_resistor_energy"
+  ],
+  "verification_support": "F_math7_bridge",
+  "phases": {
+    "G0": "NOT_RUN",
+    "G1": "NOT_RUN",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "F": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "G5": "NOT_RUN"
+  },
+  "engines": {
+    "SymPy": "NOT_RUN",
+    "NumPy": "NOT_RUN",
+    "SciPy": "NOT_RUN",
+    "mpmath": "NOT_RUN",
+    "DuckDB": "NOT_RUN",
+    "SageMath": "NOT_RUN",
+    "MATLAB": "NOT_RUN"
+  },
+  "execution_log": [],
+  "setup_audit": {
+    "github_agent_frontmatter": "PASS_9_OF_9",
+    "documentation_exists": "PASS",
+    "synthetic_closed_form_sanity": "PASS",
+    "audit_python_executed_in_claude": "NOT_RUN",
+    "actual_model_routing": "NOT_VERIFIED",
+    "actual_7_engine_wlc_validation": "NOT_RUN"
+  },
+  "note": "Manifest initially describes setup only. Agents must write actual run records; never treat static checks as experiments."
+}
