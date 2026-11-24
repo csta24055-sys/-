@@ -1,10 +1,10 @@
-# 06 Parallel research orchestration — four independent ways to circuit WLC
+# 06 Parallel research orchestration — five independent ways to circuit WLC
 Status: task architecture, **not validated research**. User intent: let Claude investigate broadly and autonomously; do not lock the whole effort to a single favored equivalence.
 
 ## High-level question
 Can the existing independent, synthetic WLC model be **represented, evaluated, or reduced** using electrical circuit mathematics in a way that adds real analytical/computational value? Evaluate competing constructions rather than forcing every expression into ordinary R/C elements.
 
-## Four concurrently explored routes
+## Five concurrently explored routes
 
 ### Route A — start with the TIME PROFILE, not 70 separate formulas
 Owns `routes/A_waveform/`.
@@ -30,23 +30,31 @@ Owns `routes/C_70_units/`.
 - Explore whether common circuit subassemblies can replace many units without loss of inputs, timing or calculation boundary.
 - Deliver machine-readable matrix + scripts + tests, with unresolved/blocked classifications clearly separated from failures.
 
+### Route E — start from RESISTOR JOULE HEATING instead of capacitor charge
+Owns `routes/E_resistor_energy/`.
+- Independently investigate the user's core insight: constant current through a fixed resistor `P_R=I²R` dissipates energy at a constant rate, so cumulative `E_R(t)=E_R(0)+I²Rt` is linear in time, without requiring the capacitor-based starting analogy.
+- For sinusoidal AC, derive `P(t)=I_rms²R[1−cos(2ωt)]` and `E_R(t)=E_R(0)+I_rms²R[t−sin(2ωt)/(2ω)]`. Compare its rising energy integral to capacitor charge accumulation; distinguish instantaneous power, cumulative heat/energy, temperature, electric current and stored electric energy.
+- Apply a declared, correctly dimensioned emissions factor to obtain synthetic operational carbon only under calibrated conditions; use actual load and time-varying factor where applicable. Do not force discrete material/repair carbon into literal resistor heat.
+- Test DC, AC, multiple resistive sources, finite pulse events, dynamic load/emissions, and whether resistor-plus-energy-meter is smaller or more accurate than capacitor-plus-current-source and existing sum/integrator equations. A resistor dissipates energy but doesn't remember its cumulative value.
+- Follow `09_RESISTOR_ENERGY_ROUTE.md`. Produce independent executable tests, explicit counterexamples and benchmark.
+
 ### Route D — an INDEPENDENT verifier and reducer
 Owns `routes/D_verification/`.
 - Build an independent oracle, fixtures and rigorous cross-route test/benchmark harness; do not import the same algorithm from a proposed circuit to calculate reference values.
-- Falsify incorrect modeling of sawtooth/ramp, overlapping replacements, thresholds, states/efficiency, double counting, terminal Z(T), floating-point boundary slivers and AC charge behavior.
+- Falsify incorrect modeling of sawtooth/ramp, overlapping replacements, thresholds, states/efficiency, double counting, terminal Z(T), floating-point boundary slivers, AC charge behavior **and resistor DC/AC energy claims (Route E)**.
 - Compare different representations by equality/absolute+relative error/domain, operation count, memory, runtime and internal state dimensionality; report if result only redisplays existing equations.
 - Try circuit reduction/state elimination only while preserving the requested observables and future event schedules; counterexamples are valuable.
 
 ## Coordination
-1. Coordinator reads and records base Git commit and source restrictions, then **launches A, B, C and D concurrently** if tool/runtime supports independent workers; else progress routes interleaved without blocking or asking for arbitrary approvals.
+1. Coordinator reads and records base Git commit and source restrictions, then **launches A, B, C, D and E concurrently** if tool/runtime supports independent workers; else progress routes interleaved without blocking or asking for arbitrary approvals.
 2. Each route writes only inside its own `routes/<route>/` directory. This allows same-repository subagents with disjoint writes; never have multiple agents commit or edit shared top-level files concurrently.
 3. If using distinct independent cloud sessions, use separate route branches seeded from this project branch. Do not assume a new worktree is based on the correct ref: verify `git rev-parse HEAD`, ensure instructions and files exist, and switch to the correct route branch before running.
-4. A and B pursue **distinct proof/implementation routes**. C must independently cover the 70 units, not just copy B's conclusion. D challenges all routes and preserves a separate oracle. Agents should ask the coordinator only when external authorization/irreversible action is required.
+4. A, B and E pursue **distinct proof/implementation routes**. C must independently cover the 70 units, not just copy B's conclusion. D challenges all routes and preserves a separate oracle. Agents should ask the coordinator only when external authorization/irreversible action is required.
 5. Stop conditions are evidence-based, not 'keep trying until it passes'. A counterexample or mathematically impossible mapping is a valid result. Avoid wasting effort on trivial relabeling.
-6. **Integration gate:** After A has reproducible continuous/discrete pilot and B has a verified constructive mapping for supported arithmetic/time classes (or precisely scoped exceptions), compare their observable outputs and units; integrate only validated pieces. C continues in parallel and later fills coverage gaps. D independently checks any merged candidate.
+6. **Integration gate:** After A has reproducible continuous/discrete pilot and B has a verified constructive mapping for supported arithmetic/time classes (or precisely scoped exceptions), compare their observable outputs and units; integrate only validated pieces. C and E continue in parallel; C fills coverage gaps. D independently checks any merged candidate.
 7. Avoid deadlock when B cannot represent all equations: a hybrid model with explicit non-R/C components or a proof of non-representability can be a correct endpoint. Do not label this as full conversion.
 8. Preserve the original WLC source; do not modify application or J-CAT original code. New evidence and experiments only here. Do not commit sensitive/restricted inputs.
-9. At the end provide: comparative matrix A/B/C, verified integrated prototype (if justified), failures/counterexamples, state/complexity benchmark, next steps, exact Git branch/commit paths. State whether parallel sessions **actually ran**, rather than merely being configured.
+9. At the end provide: comparative matrix A/B/C/E, verified integrated prototype (if justified), failures/counterexamples, state/complexity benchmark, next steps, exact Git branch/commit paths. State whether parallel sessions **actually ran**, rather than merely being configured.
 
 ## How autonomous is this?
 - A file in GitHub is an instruction **when a Claude Code session reads it**, not a running background service. Setup does not initiate execution.
