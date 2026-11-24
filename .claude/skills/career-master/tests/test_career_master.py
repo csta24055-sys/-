@@ -231,5 +231,41 @@ class TestExportReviewRuns(unittest.TestCase):
         self.assertFalse((repo / "x").exists())
 
 
+class TestBuildHub(unittest.TestCase):
+    def test_single_offline_file(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = Path(t)
+            (t / "a.md").write_text("# 表題\n\n本文 **太字** と `a|b` と <script>alert(1)</script>\n\n"
+                                    "| 項目 | 値 |\n|---|---|\n| x | `p|q` |\n| y | 2 |\n\n- 一\n- 二\n  - 入れ子\n\n1. 壱\n2. 弐\n\n```\n<b>code</b>\n```\n", encoding="utf-8")
+            (t / "b.md").write_text("## 二枚目\n\n> 引用\n", encoding="utf-8")
+            out = t / "hub.html"
+            r = subprocess.run([sys.executable, str(SCRIPTS / "build_hub.py"), str(out), "--title", "試験",
+                                "--page", f"一=" + str(t / "a.md"), "--page", "二=" + str(t / "b.md")], capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            h = out.read_text(encoding="utf-8")
+            self.assertEqual(h.count("<section>"), 2)
+            self.assertIn("<strong>太字</strong>", h)
+            self.assertIn("<code>a|b</code>", h)
+            self.assertIn("<td><code>p|q</code></td>", h)          # コード内の縦棒で列を割らない
+            self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", h)  # 本文の HTML は無害化
+            self.assertIn("&lt;b&gt;code&lt;/b&gt;", h)
+            self.assertIn("<ol><li>壱</li><li>弐</li></ol>", h)
+            self.assertIn("入れ子", h)
+            self.assertNotRegex(h, r"(src|href)=\"https?://")          # 外部読み込みなし
+            self.assertNotIn("<script src", h)
+
+    def test_refuses_git_worktree_and_missing_file(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = Path(t)
+            (t / "repo" / ".git").mkdir(parents=True)
+            (t / "a.md").write_text("x", encoding="utf-8")
+            r = subprocess.run([sys.executable, str(SCRIPTS / "build_hub.py"), str(t / "repo" / "o.html"), "--page", "a=" + str(t / "a.md")],
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 2)
+            r = subprocess.run([sys.executable, str(SCRIPTS / "build_hub.py"), str(t / "o.html"), "--page", "a=" + str(t / "none.md")],
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

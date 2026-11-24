@@ -6,7 +6,7 @@ description: 就職活動の準備を、原資料に戻れる証拠台帳・面�
 # career-master: 就活準備の運用
 
 非公開ホーム: `$JUDGMENT_LOOP_HOME/career_master`（既定 `~/.judgment-loop/career_master`）。以下 `M`。
-道具: `python3 .claude/skills/career-master/scripts/chat_index.py`（会話索引）、`build_trainer.py`（練習ページ生成）、`export_review_runs.py --out M/06_ai_review_runs`（レビュー記録の一覧と写し）。
+道具: `python3 .claude/skills/career-master/scripts/chat_index.py`（会話索引）、`build_trainer.py`（練習ページ生成）、`export_review_runs.py --out M/06_ai_review_runs`（レビュー記録の一覧と写し）、`build_hub.py <out.html> --title … --page "名前=path.md" …`（複数の資料をスマホ用の1ファイルにまとめる。通信なし）。
 反復とモデルの使い分けは `.claude/skills/judgment-loop` と `.claude/skills/career-model-router` を使う。
 
 ## 守ること
@@ -39,6 +39,7 @@ description: 就職活動の準備を、原資料に戻れる証拠台帳・面�
 | 「面接対策を始めて／練習ページを作って」 | 最終パック（Markdown）を確認 → `build_trainer.py <pack.md> <out.html> --title "…"` → スマホ幅のブラウザで動作確認 → ファイルをユーザーへ送る |
 | 「面接が終わった／聞かれたことを記録して」 | ユーザーの記録を `03_…/debrief_<日付>.md` に保存 → 事実は台帳へ → 次の面接用にパックと弱点表を更新 |
 | 「（応募先）の資料を更新して」 | 公式ページを再取得（公式のみ、根拠台帳に URL・取得日・該当箇所）→ パケットを更新 → judgment-loop でレビュー → 採否を記録 |
+| 「資料をスマホで読みたい／ハブを作り直して」 | `build_hub.py` で 優先順位表・カレンダー・本人への質問・各応募先パケット・使い方 を1つの HTML にまとめ、スマホ幅で確認してファイルとして送る |
 | 「就活全体の優先順位を更新して」 | 締切・選考段階・本人の最新の意向・職種要件の一致・弱点・必要時間・情報の確かさで並べ直し、変更点と理由を残す（上書きせず版を足す） |
 | 「過去の会話から〜を探して」 | `chat_index.py search … --role user` で本人発言を探し、`show` で前後を確認。引用は日付と位置つきで台帳へ。AI 側の発言は本人の事実として扱わない |
 | 「停止」「再開」「状況は？」 | judgment-loop の pause / resume / status。`M/checkpoints/progress.jsonl` も見る |
