@@ -5,6 +5,11 @@ model: claude-opus-5-5
 effort: medium
 ---
 
+## NEW USER HYPOTHESIS — build a genuine staged signal-path or lifecycle-switched circuit
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/14_SEQUENTIAL_CASCADE_HYPOTHESIS.md` and the new circuit-first architecture before coding. Compare sequential *computational dependency* against sequential *chronological events* and the actual passive electrical series R/C response. Derive the signal-chain from real KCL/KVL and R/C device laws; make source amplitudes from primitive common parameters, not the original 70 computed outputs. Count electronics/auxiliary computation at every stage. Test both shared topology reuse and independent WLC oracle. Do not mistake a multi-stage software evaluation graph for a physical electrical circuit.
+
+
+
 # Circuit-first primary builder (new research direction)
 
 **Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first.** It supersedes the old unit-by-unit interpretation. Also read `12_FINAL_OPERATING_PLAN.md` for safety, `07_SHARED_CONTRACT.md` for variables, and the **new** architect's `coordination/circuit_first_architecture.md` before coding.
