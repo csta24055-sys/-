@@ -1,10 +1,11 @@
-# 06 Parallel research orchestration — five independent ways to circuit WLC
+# 06 Research route definitions — independent approaches A/B/C/D/E and support F
+**本書は研究内容・担当の詳細であり、実行順序と並列数は `12_FINAL_OPERATING_PLAN.md` が優先。** A/Eは異なる回路の小型実証、Bは数式種別、Cは70単位の台帳、Dは独立検証、Fは必要時の数式処理支援。初回から全研究をフル実装しない。
 Status: task architecture, **not validated research**. User intent: let Claude investigate broadly and autonomously; do not lock the whole effort to a single favored equivalence.
 
 ## High-level question
 Can the existing independent, synthetic WLC model be **represented, evaluated, or reduced** using electrical circuit mathematics in a way that adds real analytical/computational value? Evaluate competing constructions rather than forcing every expression into ordinary R/C elements.
 
-## Five concurrently explored routes
+## Five independently explored routes (scheduled in small batches)
 
 ### Route A — start with the TIME PROFILE, not 70 separate formulas
 Owns `routes/A_waveform/`.
@@ -55,7 +56,7 @@ Owns `routes/D_verification/`.
 See `10_MODEL_ROUTING.md`. Start with strategic architect Fable 5.2 High, delegate A/B/C/E implementation to Opus 5.5 Medium, D independent verifier and final evidence integrator to Opus 5.5 High, then Fable 5.2 High replanning. The orchestration is via explicit subagents and actual tasks; no GitHub file automatically starts sessions. Keep startup model selection and individual delegated execution distinct.
 
 ## Coordination
-1. Coordinator reads and records base Git commit and source restrictions, then **launches A, B, C, D and E concurrently** if tool/runtime supports independent workers; else progress routes interleaved without blocking or asking for arbitrary approvals.
+1. Coordinator records the baseline SHA, then follows the small-batch research gates in `12_FINAL_OPERATING_PLAN.md`. Do not start all five heavy agents just because parallelism is possible; schedule A/E pilots and B/C inventories first, with D independent tests as results appear. If separate execution contexts and quotas permit, run a bounded batch concurrently, otherwise interleave without blocking on routine approvals.
 2. Each route writes only inside its own `routes/<route>/` directory. This allows same-repository subagents with disjoint writes; never have multiple agents commit or edit shared top-level files concurrently.
 3. If using distinct independent cloud sessions, use separate route branches seeded from this project branch. Do not assume a new worktree is based on the correct ref: verify `git rev-parse HEAD`, ensure instructions and files exist, and switch to the correct route branch before running.
 4. A, B and E pursue **distinct proof/implementation routes**. C must independently cover the 70 units, not just copy B's conclusion. D challenges all routes and preserves a separate oracle. Agents should ask the coordinator only when external authorization/irreversible action is required.
