@@ -1,7 +1,7 @@
 {
   "schema": "wlc-circuit-run-manifest/1.0",
   "created_at": "2026-11-24",
-  "kind": "initial_setup_status_only",
+  "kind": "research_run",
   "repository": "csta24055-sys/-",
   "research_branch": "claude/wlc-equivalent-circuit-20261124",
   "source_branches": {
@@ -26,7 +26,7 @@
   ],
   "verification_support": "F_math7_bridge",
   "phases": {
-    "G0": "NOT_RUN",
+    "G0": "PASS",
     "G1": "NOT_RUN",
     "G2": "NOT_RUN",
     "G3": "NOT_RUN",
@@ -35,22 +35,78 @@
     "G5": "NOT_RUN"
   },
   "engines": {
-    "SymPy": "NOT_RUN",
-    "NumPy": "NOT_RUN",
-    "SciPy": "NOT_RUN",
-    "mpmath": "NOT_RUN",
-    "DuckDB": "NOT_RUN",
-    "SageMath": "NOT_RUN",
-    "MATLAB": "NOT_RUN"
+    "SymPy": "AVAILABLE 1.14.0 (math7-check PASS)",
+    "NumPy": "AVAILABLE 2.2.6 (math7-check PASS)",
+    "SciPy": "AVAILABLE 1.15.3 (math7-check PASS)",
+    "mpmath": "AVAILABLE 1.3.0 (math7-check PASS)",
+    "DuckDB": "AVAILABLE 1.4.1 (math7-check PASS)",
+    "SageMath": "NOT_RUN (not installed in cloud VM; Actions not dispatched)",
+    "MATLAB": "NOT_RUN (not installed in cloud VM; Actions not dispatched)"
   },
-  "execution_log": [],
+  "execution_log": [
+    {
+      "phase": "G0",
+      "actor": "coordinator",
+      "actual_model": "claude-opus-5-5",
+      "effort": "medium",
+      "date": "2026-11-24",
+      "commands": [
+        "python3 -B tools/audit_project_plan.py",
+        "math7-check",
+        "git fetch origin main --depth=1",
+        "git fetch origin claude/wlc-theory-research-base-c33936 --depth=1",
+        "git diff --stat FETCH_HEAD HEAD -- WLC_THEORY_RESEARCH_BASE 09_APPROX_STUDY 10_TRANSFORM_STUDY 17_WHOLE_BUILDING_TIME_THEORY"
+      ],
+      "results": {
+        "audit_project_plan": "CONFIG PASS 73 checks",
+        "math7_check": "PASS 6 cases, 5 Python engines; SageMath/MATLAB not checked",
+        "main_sha": "c35403703202cec53d75300f42489927f71baf1d (matches manifest)",
+        "theory_branch_sha": "9416a1bbb3c48d6fd9589789dcb045c0eb6e03be (matches manifest)",
+        "theory_base_and_ch09_10_17_diff_vs_theory_branch": "empty (byte-identical)",
+        "original_oracle_code_present": [
+          "09_APPROX_STUDY/research_code/refcalc/",
+          "10_TRANSFORM_STUDY/research_code/tstudy/msp.py"
+        ]
+      },
+      "status": "PASS"
+    }
+  ],
   "setup_audit": {
     "github_agent_frontmatter": "PASS_9_OF_9",
     "documentation_exists": "PASS",
     "synthetic_closed_form_sanity": "PASS",
-    "audit_python_executed_in_claude": "NOT_RUN",
+    "audit_python_executed_in_claude": "PASS (73 config checks; static wiring + toy identities only)",
     "actual_model_routing": "NOT_VERIFIED",
     "actual_7_engine_wlc_validation": "NOT_RUN"
   },
-  "note": "Manifest initially describes setup only. Agents must write actual run records; never treat static checks as experiments."
+  "note": "Manifest initially describes setup only. Agents must write actual run records; never treat static checks as experiments.",
+  "research_head_at_start": "4f394d1c0059f8eaf3b54215cbd52e0adc2e4745",
+  "coordinator_session": {
+    "requested_model": "claude-fable-5-2 high (plan 12 §3 G0)",
+    "configured_model_at_creation": "claude-opus-5-5 / effort medium",
+    "model_history": [
+      {
+        "when": "2026-11-24T04:16Z session start .. G0 checks",
+        "session_context_model": "claude-opus-5-5",
+        "last_served_model": "claude-opus-5-5",
+        "effort": "medium",
+        "source": "get_session"
+      },
+      {
+        "when": "2026-11-24T04:20Z onward (user_switched_model)",
+        "session_context_model": "claude-fable-5-2",
+        "last_served_model": "claude-fable-5-2",
+        "effort": "high",
+        "source": "get_session external_metadata.user_switched_model"
+      }
+    ],
+    "match": "PARTIAL: G0 commands were executed while the session was Opus 5.5 medium; from the G0 record-keeping step onward the coordinator matches the requested Fable 5.2 High.",
+    "note": "Subagent actual models are recorded per run in execution_log; frontmatter alone is not treated as proof."
+  },
+  "input_hashes_sha256": {
+    "12_FINAL_OPERATING_PLAN.md": "644770e07991ab083b449b828b989a88838d152261d40822a9fe3ba78aaccbf5",
+    "07_SHARED_CONTRACT.md": "3f75b6a04dd11e4aabfbb6fc2d52a96fcd8a3cd52b2779a7619f013738fe9f7b",
+    "WLC_THEORY_RESEARCH_BASE/data/units70.json": "b582348186e61d56be59dc5522b86550d4cc5967a4cd0a8972cf8dc3b8a414a3",
+    "WLC_THEORY_RESEARCH_BASE/manifest.json": "569fd3dababb7dcea5173342e308449a1d7e04e6c68f4f22e1c1385a1d0be045"
+  }
 }
