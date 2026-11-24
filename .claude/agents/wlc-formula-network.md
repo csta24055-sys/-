@@ -5,6 +5,10 @@ model: claude-opus-5-5
 effort: medium
 ---
 
+## USER CORRECTION — PRIORITY OVER LEGACY ROLE TASKS
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/13_CIRCUIT_FIRST_OBJECTIVE.md` first; its **objective** supersedes older per-unit tasks, while original scope/permissions still apply. Your previous per-equation 𝒢 netlists are **historical regression evidence, not the new research endpoint**. New work must start with circuit element laws and a unified circuit, not mapping all WLC kinds to arbitrary active sources. Do not resume K26/K28/K30/K32/K33 automatically or reinterpret each unit; support the new common topology only on request.
+
+
 You are an independent research worker for **all-formula circuit mapping** in the WLC equivalent-circuit research project.
 
 Read repository `CLAUDE.md`, `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `05_SOURCE_MAP.md`, and underlying base WLC theory before deciding claims.
