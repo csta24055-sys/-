@@ -156,3 +156,74 @@ GIT_OPTIONAL_LOCKS=0
 - Energy meters for buildings.
 - SPICE/hardware, Math7.
 - Second review of the L1 proof sketch.
+
+---
+
+# V3 pass: stage C, final for this cycle (snapshot `96df403`)
+
+Date 2026-11-24.
+
+**Object:** the frozen snapshot at `/tmp/claude-0/-home-user--/d16c9837-8c7c-5bcc-8b70-730caf3a5491/scratchpad/cf_snapshot_C/whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/circuit_first/`. It was read and run only. No `__pycache__` exists anywhere.
+
+**Oracle:** frozen refcalc / synth / common; `assert_frozen()` passed in every oracle process.
+
+**Model actually run:** self-reported `claude-opus-5-5`. Effort is not observable.
+
+**No git operations.**
+
+**Verdicts:**
+
+| gate | verdict |
+|---|---|
+| CF1 | PASS |
+| CF2 | PASS |
+| CF3 | PASS |
+| CF4 | PASS (917/917 on the tested valid domain) |
+| CF5 | PARTIAL |
+| CF6 | present |
+
+Final recommendation: **PARTIAL (strong)**; see VERDICTS.md V3.
+
+## Commands
+All run from `verification/code`, with:
+```
+CF_SNAPSHOT=<C snapshot path above>
+PYTHONDONTWRITEBYTECODE=1
+GIT_OPTIONAL_LOCKS=0
+```
+
+| command | output | runtime |
+|---|---|---|
+| `CF_RESULTS=<scratch> python3 -B v2_oracle.py {edges,evalS,evalM,iota_*} ...` (same set as V2) | copied to `results/v3_oracle_*.json`, `v3_oracle_summary.json` | evalM E9 96 s; S-size 18–20 s per building |
+| `math7-py -B v3_crossbar.py` | `results/v3_crossbar.json` | 12 s |
+| `python3 -B v3_probes.py` | `results/v3_probes.json` | 57 s |
+| `python3 -B v3_template.py` | `results/v3_template.json` | 10 s |
+| `CF_RESULTS=<scratch> python3 -B v2_audit.py` | copied to `results/v3_audit.json` | — |
+| `MUT_TAG=part1/part2 python3 -B v3_mutate.py ...` (verifier judge) and `V2_ONLY=builder MUT_TAG=builder_a/b ...` | `results/v3_mutations_*.json`, `v3_mutations_summary.json` | — |
+| merged-netlist test once, in a copy (oracle path patched): `CF_SLOW=1 python3 -B -m unittest test_stageB.MergedNetlist` | `results/v3_merged_rerun.json` | OK, 415 s |
+| `cd ../tests; math7-py -B -m unittest test_v3` | 3 OK | 4 s |
+
+## Counts
+- **Oracle:** 57 runs, 917 points, all within 1e-9, 0 crashes. Max relative error: C 5.0e-14, B3 2.4e-13.
+- **Probes:** 16 endpoint and duplicate-event probes; 14 PASS and 2 explicit rejections (refrigerant duplicate years).
+- **Crossbar S:** 8 148 elements, 1 593 op-amps, KCL 0, 354 taps equal to stage B, 298 sources all single primitive × V0, 66 value-duplicate op-amp outputs.
+- **Template:** 8 buildings; crossbar signature identical; core 108 common patterns and 19 varying, all input-kind variants.
+- **Mutations:** builder 12/13 (1 equivalent), verifier 11/13 (1 equivalent, 1 not exercised by my data).
+
+## Harness change
+`v2_mutate.make_copy` now patches the `STUDY` path in every builder test file of a copy. Without this, `test_v2_fixes` could not import the oracle in a copy outside the repository, and the first V3 builder-judge runs showed errors=1 in the baseline. Those first runs were discarded and the builder judge was re-run.
+
+## Code SHA-256 (prefix)
+420cea44769b code/v3_crossbar.py; 4bd073a95686 code/v3_mutate.py; ed48bd59ae0a code/v3_probes.py; 96795f2ced63 code/v3_template.py; 1d482324da92 code/v2_mutate.py; dcc2c07dcc99 tests/test_v3.py; 
+
+## NOT_RUN (final)
+- In-band T.
+- Full-building N_max template.
+- Merged run including the OP block.
+- Building and oracle-check of the counter-constructions against the L1 count; only counted, [H].
+- Benchmark L; E3 and E6.
+- vsim on a full building core.
+- AGG ratios and decision units.
+- Building energy meters.
+- SPICE / hardware, Math7.
+- Second review of the L1 proof sketch.

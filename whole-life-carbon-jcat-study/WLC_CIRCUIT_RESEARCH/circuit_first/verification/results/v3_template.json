@@ -1,0 +1,400 @@
+{
+ "frozen": {
+  "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+  "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+  "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+ },
+ "crossbar_signature_identical": true,
+ "core_signature_identical": false,
+ "core_patterns_common": 108,
+ "core_patterns_varying": 19,
+ "varying_patterns": {
+  "('C', (('a', (('C', 'a'), ('OA', 'inn'), ('R', 'b'))), ('b', (('C', 'b'), ('CMP', 'plus'), ('OA', 'out')))))": [
+   "E7"
+  ],
+  "('C', (('a', (('C', 'a'), ('OA', 'inn'), ('R', 'b'))), ('b', (('C', 'b'), ('OA', 'out')))))": [
+   "E0",
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E8",
+   "S"
+  ],
+  "('CMP', (('plus', (('C', 'b'), ('CMP', 'plus'), ('E', 'cp'), ('OA', 'out'))), ('minus', (('CMP', 'minus'), ('V', 'a')))))": [
+   "E0",
+   "E1",
+   "E4",
+   "E5",
+   "E7",
+   "E8",
+   "S"
+  ],
+  "('CMP', (('plus', (('C', 'b'), ('CMP', 'plus'), ('OA', 'out'))), ('minus', (('CMP', 'minus'), ('V', 'a')))))": [
+   "E7"
+  ],
+  "('GATE', 'AND', False)": [
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E7",
+   "E8"
+  ],
+  "('OA', (('inp', ('GND',)), ('inn', (('C', 'a'), ('OA', 'inn'), ('R', 'b'))), ('out', (('C', 'b'), ('CMP', 'plus'), ('OA', 'out')))))": [
+   "E7"
+  ],
+  "('OA', (('inp', ('GND',)), ('inn', (('C', 'a'), ('OA', 'inn'), ('R', 'b'))), ('out', (('C', 'b'), ('OA', 'out')))))": [
+   "E0",
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E8",
+   "S"
+  ],
+  "('OA', (('inp', ('GND',)), ('inn', (('OA', 'inn'), ('R', 'a'), ('R', 'b'))), ('out', (('OA', 'out'), ('R', 'b')))))": [
+   "E0",
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E7",
+   "S"
+  ],
+  "('OA', (('inp', ('GND',)), ('inn', (('OA', 'inn'), ('R', 'a'), ('R', 'b'))), ('out', (('OA', 'out'), ('R', 'b'), ('SW', 'a')))))": [
+   "E8"
+  ],
+  "('OA', (('inp', ('GND',)), ('inn', (('OA', 'inn'), ('R', 'a'), ('R', 'b'), ('SW', 'b'))), ('out', (('CMP', 'minus'), ('OA', 'out'), ('R', 'b')))))": [
+   "E8"
+  ],
+  "('R', (('a', (('OA', 'inn'), ('OA', 'out'), ('R', 'a'))), ('b', (('R', 'b'), ('SW', 'a')))))": [
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E7",
+   "E8"
+  ],
+  "('R', (('a', (('OA', 'inn'), ('R', 'a'), ('R', 'b'))), ('b', (('OA', 'out'), ('R', 'b')))))": [
+   "E0",
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E7",
+   "S"
+  ],
+  "('R', (('a', (('OA', 'inn'), ('R', 'a'), ('R', 'b'))), ('b', (('OA', 'out'), ('R', 'b'), ('SW', 'a')))))": [
+   "E8"
+  ],
+  "('R', (('a', (('OA', 'inn'), ('R', 'a'), ('R', 'b'), ('SW', 'b'))), ('b', (('CMP', 'minus'), ('OA', 'out'), ('R', 'b')))))": [
+   "E8"
+  ],
+  "('R', (('a', (('R', 'a'), ('V', 'a'))), ('b', (('OA', 'inn'), ('R', 'a'), ('R', 'b'), ('SW', 'b')))))": [
+   "E8"
+  ],
+  "('SW', (('a', (('OA', 'out'), ('R', 'b'), ('SW', 'a'))), ('b', (('R', 'a'), ('SW', 'b')))))": [
+   "E8"
+  ],
+  "('SW', (('a', (('R', 'b'), ('SW', 'a'))), ('b', (('C', 'a'), ('OA', 'inn'), ('SW', 'a'), ('SW', 'b')))))": [
+   "E1",
+   "E2",
+   "E4",
+   "E5",
+   "E7",
+   "E8"
+  ],
+  "('SW', (('a', (('R', 'b'), ('SW', 'a'))), ('b', (('OA', 'inn'), ('R', 'a'), ('R', 'b'), ('SW', 'b')))))": [
+   "E8"
+  ],
+  "('V', (('a', (('CMP', 'minus'), ('V', 'a'))), ('b', ('GND',))))": [
+   "E0",
+   "E1",
+   "E4",
+   "E5",
+   "E7",
+   "E8",
+   "S"
+  ]
+ },
+ "wl_count_free_core_identical": false,
+ "wl_core": {
+  "S": "f8a5ed95d4ca1bbe",
+  "E0": "895975e962e8a473",
+  "E1": "65881cb78cec725f",
+  "E2": "bb291ed03173e29c",
+  "E4": "fd2c7c65e8c6ea91",
+  "E5": "7f08bbff51df31b3",
+  "E7": "1aff696513810be9",
+  "E8": "6f740867127f0cac"
+ },
+ "multiplicities": {
+  "S": {
+   "crossbar_elements": 8148,
+   "core_elements": 10028,
+   "core_kind_counts": {
+    "V": 392,
+    "OA": 390,
+    "C": 1031,
+    "R": 1086,
+    "CMP": 201,
+    "SW": 3663,
+    "SEQ": 1030,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 1738,
+    "SR": 339,
+    "DFF": 153,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E0": {
+   "crossbar_elements": 7849,
+   "core_elements": 5370,
+   "core_kind_counts": {
+    "V": 239,
+    "OA": 270,
+    "C": 644,
+    "R": 367,
+    "CMP": 121,
+    "SW": 1862,
+    "SEQ": 621,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 956,
+    "SR": 195,
+    "DFF": 90,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E1": {
+   "crossbar_elements": 7854,
+   "core_elements": 5559,
+   "core_kind_counts": {
+    "V": 259,
+    "OA": 274,
+    "C": 665,
+    "R": 311,
+    "CMP": 128,
+    "SW": 1919,
+    "SEQ": 662,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 1022,
+    "SR": 218,
+    "DFF": 96,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E2": {
+   "crossbar_elements": 8353,
+   "core_elements": 15185,
+   "core_kind_counts": {
+    "V": 547,
+    "OA": 559,
+    "C": 1526,
+    "R": 1892,
+    "CMP": 298,
+    "SW": 5762,
+    "SEQ": 1501,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 2396,
+    "SR": 479,
+    "DFF": 220,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E4": {
+   "crossbar_elements": 8207,
+   "core_elements": 8199,
+   "core_kind_counts": {
+    "V": 362,
+    "OA": 384,
+    "C": 986,
+    "R": 490,
+    "CMP": 185,
+    "SW": 2874,
+    "SEQ": 964,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 1499,
+    "SR": 307,
+    "DFF": 143,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E5": {
+   "crossbar_elements": 8280,
+   "core_elements": 8627,
+   "core_kind_counts": {
+    "V": 370,
+    "OA": 405,
+    "C": 1044,
+    "R": 505,
+    "CMP": 187,
+    "SW": 3030,
+    "SEQ": 1012,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 1595,
+    "SR": 320,
+    "DFF": 154,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E7": {
+   "crossbar_elements": 8183,
+   "core_elements": 7921,
+   "core_kind_counts": {
+    "V": 360,
+    "OA": 366,
+    "C": 938,
+    "R": 476,
+    "CMP": 193,
+    "SW": 2768,
+    "SEQ": 919,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 1464,
+    "SR": 295,
+    "DFF": 137,
+    "G": 1,
+    "D": 1
+   }
+  },
+  "E8": {
+   "crossbar_elements": 8287,
+   "core_elements": 8218,
+   "core_kind_counts": {
+    "V": 390,
+    "OA": 362,
+    "C": 956,
+    "R": 469,
+    "CMP": 217,
+    "SW": 2891,
+    "SEQ": 982,
+    "CNT": 1,
+    "E": 1,
+    "POR": 1,
+    "GATE": 1473,
+    "SR": 335,
+    "DFF": 138,
+    "G": 1,
+    "D": 1
+   }
+  }
+ },
+ "input_kinds": {
+  "S": {
+   "gas": "LINEAR_TREND",
+   "oil": "TABLE",
+   "dh": "LINEAR_TREND",
+   "water": "TABLE",
+   "sewage": "TABLE",
+   "mwaste": "TABLE",
+   "elec": "TABLE",
+   "gen": "LINEAR_TREND",
+   "exp": "LINEAR_TREND",
+   "grid": "CONSTANT"
+  },
+  "E0": {
+   "gas": "LINEAR_TREND",
+   "oil": "LINEAR_TREND",
+   "dh": "LINEAR_TREND",
+   "water": "LINEAR_TREND",
+   "sewage": "LINEAR_TREND",
+   "mwaste": "LINEAR_TREND",
+   "elec": "LINEAR_TREND",
+   "gen": "LINEAR_TREND",
+   "exp": "LINEAR_TREND",
+   "grid": "CONSTANT"
+  },
+  "E1": {
+   "gas": "CONSTANT",
+   "oil": "CONSTANT",
+   "dh": "CONSTANT",
+   "water": "CONSTANT",
+   "sewage": "CONSTANT",
+   "mwaste": "CONSTANT",
+   "elec": "CONSTANT",
+   "gen": "CONSTANT",
+   "exp": "CONSTANT",
+   "grid": "CONSTANT"
+  },
+  "E2": {
+   "gas": "TABLE",
+   "oil": "TABLE",
+   "dh": "TABLE",
+   "water": "TABLE",
+   "sewage": "TABLE",
+   "mwaste": "TABLE",
+   "elec": "TABLE",
+   "gen": "TABLE",
+   "exp": "TABLE",
+   "grid": "TABLE"
+  },
+  "E4": {
+   "gas": "LINEAR_TREND",
+   "oil": "LINEAR_TREND",
+   "dh": "LINEAR_TREND",
+   "water": "LINEAR_TREND",
+   "sewage": "LINEAR_TREND",
+   "mwaste": "LINEAR_TREND",
+   "elec": "LINEAR_TREND",
+   "gen": "LINEAR_TREND",
+   "exp": "LINEAR_TREND",
+   "grid": "CONSTANT"
+  },
+  "E5": {
+   "gas": "LINEAR_TREND",
+   "oil": "LINEAR_TREND",
+   "dh": "LINEAR_TREND",
+   "water": "LINEAR_TREND",
+   "sewage": "LINEAR_TREND",
+   "mwaste": "LINEAR_TREND",
+   "elec": "LINEAR_TREND",
+   "gen": "LINEAR_TREND",
+   "exp": "LINEAR_TREND",
+   "grid": "CONSTANT"
+  },
+  "E7": {
+   "gas": "LINEAR_TREND",
+   "oil": "LINEAR_TREND",
+   "dh": "LINEAR_TREND",
+   "water": "LINEAR_TREND",
+   "sewage": "LINEAR_TREND",
+   "mwaste": "LINEAR_TREND",
+   "elec": "LINEAR_TREND",
+   "gen": "LINEAR_TREND",
+   "exp": "LINEAR_TREND",
+   "grid": "STEPWISE"
+  },
+  "E8": {
+   "gas": "LINEAR_TREND",
+   "oil": "LINEAR_TREND",
+   "dh": "LINEAR_TREND",
+   "water": "LINEAR_TREND",
+   "sewage": "LINEAR_TREND",
+   "mwaste": "LINEAR_TREND",
+   "elec": "LINEAR_TREND",
+   "gen": "LINEAR_TREND",
+   "exp": "LINEAR_TREND",
+   "grid": "LINEAR_DECLINE_TO_FLOOR"
+  }
+ }
+}

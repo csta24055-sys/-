@@ -289,3 +289,210 @@ What does not:
 - The full-building netlist is not one fixed template.
 
 The cycle has therefore produced a valid, auditable hybrid circuit that reproduces the WLC system. It has not produced a more unified formulation of the amplitude calculation than the original's own product structure. Fixing V2-D1 is required before CF4 can be PASS.
+
+---
+
+# V3 verdicts (final pass of this cycle): stage C, snapshot `96df403`
+
+**Object:** the frozen snapshot at `/tmp/claude-0/-home-user--/d16c9837-8c7c-5bcc-8b70-730caf3a5491/scratchpad/cf_snapshot_C/whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/circuit_first/`. It was only read and run; no `__pycache__` was written.
+**Oracle:** the frozen refcalc/synth/common. `assert_frozen()` passed in every oracle process; the oracle was imported only in my own `code/v2_*.py`, `code/v3_*.py` and `tests/test_v3.py`.
+**Model:** self-reported `claude-opus-5-5`. Effort is not observable.
+
+## 1. V2 defects
+
+| defect | status | evidence |
+|---|---|---|
+| V2-D1 (η = 1 → 0 Ω crash) | **FIXED** | `EDGE-recovery_extremes` now runs. All **31** edge scenarios pass in my harness (501 points, max C 5.4e-15, B3 2.8e-14). Endpoint probes for every complement site against refcalc (`v3_probes.json`): ρ ∈ {0, 1}, unquantified ratio r ∈ {0, 1}, waste rate w ∈ {0, 0.999999}, recovery rate η ∈ {0, 1}, each at 5 T — all **PASS**, max 1.1e-14. I confirmed that each variant changes the oracle's values (e.g. ρ = 1 moves 1.9e6 from B6 to B2), so the probes are not vacuous. |
+| V2-D2 (STEPWISE step index decoded in Python) | **FIXED** | The step start index is now a reference source k·V0 (W1) feeding a comparator on the undilated ramp `tb.u` (`adapter_building.py:1037-1047`). The only remaining Python bit extraction is `decode(k)` (`:781`), used only for TABLE entries, where k is the enumeration index (W4), not a data value. Raw `from_index` is read only in the counted predicates (`== 0` W3, `<` GREY, `:1011-1014`). The raw-field probe on S and E1 found **0** operations on raw values. |
+| V2-D3 (dangling `hs3`) | **FIXED** | 0 boolean inputs without a driver in the full S core netlist. |
+| V2-D4 (three surviving mutants) | **FIXED** | The builder's updated suite now kills B04 (B5 base without A4), B09 (MDAC MSB) and B10 (EPD strict). Final scores in §6. |
+| V2-D5 (duplicate explicit years) | **FIXED for equipment; capability limit for refrigerant** | Equipment [14, 14] and [5.2, 5.7] match refcalc. Refrigerant [5.2, 5.7] (two different events in one year) matches refcalc. Refrigerant exact duplicates ([5, 5], [2.5, 2.5, 7]) raise an explicit ValueError. refcalc accepts them: `units_b.py:308-325` counts them in `events_in_year`, resets twice, and books a second loss of m0. `valid_domain` does not exclude them. So the rejection is **a lost capability inside the formal source domain**, but outside the generator's range. It is explicit, not silent. |
+
+## 2. Reduced crossbar (v2)
+
+**(a) Independent re-solution.** My solver (`v2_crossbar.solve`) found 0 unknowns after propagation and a KCL residual of exactly **0**:
+
+| building | elements | op-amps | taps |
+|---|---|---|---|
+| S | 8 148 | 1 593 | 354 |
+| E1 | 7 854 | 1 456 | 232 |
+| E5 | 8 280 | 1 607 | 357 |
+
+All 354 (S) and 232 (E1) taps are **identical** to the stage-B taps I verified in V2 from the B2 dumps: same names, same exact values, none missing or extra. All taps also equal this snapshot's v1 path (S, E1, E5).
+
+**(b) Oracle harness with crossbar v2,** on my V2 set: E4, E5, E7, E8, E9 (M size), 31 edge scenarios, 7 ι subsets, 17 adversarial T.
+- **57 runs, 917 points, all within 1e-9, 0 crashes**, B4/B5 event counts equal.
+- Max relative error: C 5.0e-14, M 5.1e-14, Z 3.2e-16, B3 2.4e-13, every other stage ≤ 7.2e-15 (`v3_oracle_*.json`, `v3_oracle_summary.json`).
+- B5 events are present in E5, rebuild_within_period and refurbishment_divides_period.
+- No T fell in a band. The 52 exclusions are all `valid_domain` knife edges at 129.999999.
+
+**(c) Audit of the reduction** (`v3_crossbar.json`, `v3_audit.json`):
+- **Sources are genuine.** Of the 298 independent sources on S, 3 are ±V0 and 295 equal ±(one primitive input)×V0. There are **0** pre-combined products. The same holds for E1 and E5.
+- **No multiplication moved into the adapter.** The raw-field probe saw 0 operations on 7 330 float + 303 int fields. Ledger GREY is unchanged (S 449: 379 composite running sums, 51 |Σ−1| tests, 19 EPD dates); every other data operation is W1.
+- h = 0.041 on S and 0.053 on E1, still in the PARTIAL band. W_in rose (S 7 685) because passive data conductances now count as in-circuit work.
+- **The passive two-factor form is real.** S has 2 134 resistors running from an independent source straight into a virtual-ground junction (Ohm + KCL, no op-amp).
+- **Op-amps by cell on S:** stage 825, eol_routes 375, group_sum 171, repair_sum 153, composite 62, stage_sum 7. That is **6.13 per row** on S and 5.6 on E1 (v1: 13.0).
+- **Inverters:** 0 op-amps are tagged inverter. My structural criterion (one input resistor equal to the feedback resistor) finds 54 unit-gain stages on S. These are data stages whose value is exactly 1 (a conversion or quantity of 1), not sign inverters. They could be plain wires under a W3 predicate.
+- **Sharing by structure is real but incomplete.** 1 217 source/op-amp-output nodes fan out to ≥ 2 consumers (max 116). However, **66 op-amp outputs on S carry a voltage identical to another output's (37 value classes).** They are mostly identical composite recipes: 51 composite rows use only 15 distinct (factor, fraction) recipes. Sharing is keyed by object identity (`adapter_building.py:315`, `id(x)`), not by W2 value keys, so equal recipes are built more than once. The builder's statement that the data has "almost no repeated values" is not true for composites.
+
+**(d) The "L1 lower bound" (1 462 on S) is not a proven minimum.**
+
+What the rule is: `tests/compare_crossbar.py:43` defines the bound as stages + junctions − polarity duplicates of the builder's *own* expression graph. It assumes:
+- a fixed factor order (rail → conversion → row factors);
+- sharing only by structural identity;
+- one active output per expression that must be a voltage;
+- one junction per sampled or multiplied sum.
+
+Within realizations of exactly that expression graph it is a valid lower bound, and almost tight; the remaining gap is the polarity duplicates. Over all W1-legal realizations it is **not** a lower bound. Three counter-constructions on S, counted from the data and the netlist but **not built or oracle-checked** ([H]):
+1. **Value-keyed sharing** of identical composite recipes removes up to the **66** duplicate op-amp outputs measured in the netlist.
+2. **Re-ordering the factors.** For tkm transport rows (m·d·f, 166 rows) and C2 haul rows (m·(d/1000)·f, 200 rows):
+   - encode d or d/1000 as a W1 source;
+   - put m as a conductance into one junction per (factor, destination);
+   - let that junction's output reach the destination through f as a conductance.
+
+   This needs 145 + 157 = **302** active outputs instead of 366 (one per row). The gain is small only because almost every row has its own renewal group, i.e. its own destination.
+3. The 54 unit-value stages could be wires.
+
+Together these give an expression graph whose own count is about 1 332, below 1 462. L1 itself only says that a product of two conductance-coded inputs cannot be made passively. The minimum number of active elements over all realizations is an open combinatorial problem.
+
+**(e) Structure numbers.** Crossbar op-amps per material/equipment row: S 6.13, E1 5.6, E5 6.18 (v1 ≈ 13). Pure sign inverters: 0. Fan-out ≥ 2: 1 217 nodes (S), 1 229 (E1). Value-duplicate op-amp outputs: 66 (S), 66 (E1), 92 (E5).
+
+## 3. Merged single netlist
+
+**I re-ran the test once:** `CF_SLOW=1`, `tests/test_stageB.py::MergedNetlist`, in a copy whose only change is the oracle path. Result: **OK in 415 s** (`v3_merged_rerun.json`). The merged netlist has 570 elements = 203 crossbar + 383 core − 16 removed tap sources. It contains no `tap.*` element: the tap nodes are renamed to the crossbar's op-amp-output or source nodes. Its readouts are identical to the split run at T = 7.5, 20 and 33.3. The building is a truncated S (3 materials, 2 equipment rows, 1 refrigerant device), blocks AC, EV and REF.
+
+**OP-block exclusion.** The stated reason is solver cost. That is plausible: without tap sources, every year-bank branch hangs off a non-fixed op-amp output, so the crossbar joins the core components and is re-solved at every event. I found no semantic reason against including it, but the merged run with OP was not executed.
+
+**Is the D12 split adequately justified?** Yes, as a solving strategy for ideal op-amps:
+- the substitution theorem;
+- my V2/V3 independent crossbar solutions equal every tap;
+- no node is shared between core and crossbar;
+- the merged run is equal for AC, EV and REF.
+
+The OP block remains covered by argument only. A realization with finite output impedance would break the split.
+
+## 4. Parameter-only reuse ("same circuit, parameters changed")
+
+From netlists I built for S, E0, E1, E2, E4, E5, E7 and E8 (`v3_template.json`):
+- **Crossbar:** the netlist-derived signature (the builder's count-free local signature) is **identical for all 8**.
+- **Core:** 108 element patterns are common; **19 vary**. Every varying pattern is an **input-kind variant**, not building-specific structure:
+  - grid kind STEPWISE (comparator on the `tb.u` ramp: E7 only);
+  - grid kind LINEAR_DECLINE_TO_FLOOR (floor comparator, switched decline branch: E8);
+  - grid kind TABLE (no reference sources and comparators: E2);
+  - refrigerant non-top-up / loss variants (single-input AND gate, drain and correction switches: absent in S and E0);
+  - refrigerant explicit change years (reference source feeding a comparator: absent in E2).
+- **What varies with size** is only multiplicity: core 5 370 – 15 185 elements, crossbar 7 849 – 8 353, clocks per distinct period, packets per group, branches per TABLE entry.
+- My WL colour sets (count-free but multi-hop) differ for all 8 buildings, so no two buildings share one netlist.
+
+**Status: NOT met in the strict sense** (one fixed netlist, only element values and static switches changing). It is **met at the level of a shared cell catalogue with fixed connection rules**: the same cell types and wiring rules, cell multiplicities set by the input lists, and cell variants set by input kinds.
+
+A strict template would need:
+- N_max slots per cell kind;
+- every kind variant per slot, behind enable switches (bank kinds, grid kinds, refrigerant periodic/explicit/top-up);
+- per-row crossbar slot chains with factor-selection switch matrices (label matching becomes switch configuration);
+- an item × clock selection matrix for the groups.
+
+It exists only for the stage-A cell family (`test_nmax`).
+
+## 5. Final acceptance frame
+
+### Eight questions (final state)
+
+| Q | answer |
+|---|---|
+| Q1 Do the required final results match the original WLC? | **Yes.** 917/917 fresh points within 1e-9 (C 5.0e-14, worst stage 2.4e-13), plus the builder's set. Event counts are equal. 0 crashes across all 31 edge scenarios and 5 evaluation scenarios. |
+| Q2 Still correct when T changes? | **Yes** for 0.3 ≤ T ≤ 130 = H, including ±1e-6 around integer-year events. 16–17 horizons are read in one run, and the terminal term never contaminates later horizons. In-band T is NOT_RUN. |
+| Q3 Does cross-material/equipment sharing genuinely hold? | **Yes for time and aggregation**: one time base, one clock per distinct period serving materials and equipment, shared buses. **Partly for amplitudes**: shared factor rails and row nodes (1 217 nodes with fan-out ≥ 2), but the structure is still per-row, and 66 value-identical duplicates remain. |
+| Q4 Replacement periods, degradation, repair, simultaneous events? | **Yes** for everything in the synthetic model, including duplicate equipment years and two refrigerant events in one year. Exact duplicate refrigerant years are rejected (explicit). Degradation and efficiency exist only in the stage-A cells. |
+| Q5 Is information lost by the re-ordering? | **No required observable is lost** (14 stages, C, Z incl. B1-04, M, counts, event times, post-replacement state). Not represented: unit-level totals, per-year series, skip/completeness flags (adapter side), AGG ratios. |
+| Q6 Are real KCL/KVL and R/C laws satisfied? | **Yes.** Exact zero residuals; independent crossbar solutions; vsim = hybrid = sim on sub-networks; the merged netlist equals the split run. |
+| Q7 Is the original calculation hidden in a black box? | **No WLC value sits in a source**: sources are single primitives × V0, and taps are circuit solutions I reproduced. **But refcalc's per-row control flow and look-up/priority/skip logic is reproduced as configuration.** On S that is ≈ 8 466 W2 and ≈ 8 660 W3 operations plus 449 counted GREY predicates. This is done in the open and counted. |
+| Q8 What is unified as circuit and what needs external control? | See the table below. |
+
+### Unified as circuit / needs control logic / configuration that is not circuit law / not attempted
+
+| unified as circuit law | needs control logic (H) | configuration, not circuit law | not attempted |
+|---|---|---|---|
+| Amplitude products: Ohm × KCL (passive two-factor form) and one op-amp stage per further data factor (P1). Signed sums by KCL. Shared ± factor rails. Pot segments. | Integrate-and-fire clocks, explicit comparators, look-ahead P, refrigerant early comparators. | Factor / unit / stage / licence look-ups and EPD → composite → generic priority (W2). | AGG ratios and shares. |
+| Integration of flows into stage buses. Charge packets (initial, renewal, B5, terminal). ρ steering. Diode max(0, ·). Charge-conserving switching. | Year cells, refrigerant sample-hold, reset and loss sequences, readout pulse (1 030 sequencers with 4 306 phase steps, 701 bits, 6 priority classes plus the post phase on S). | refcalc's skip / missing-value / validity predicates (W3). The q/(1−w) root-form choice. | Decision / reference / breakdown units. |
+| Several horizons per run; M and Z kept apart. | Counter-decoded TABLE banks, MDAC trend banks, stepwise and floor comparators. | GREY predicates (composite Σ = 1 within 1e-6, EPD date, step order). These are realizable as H (window comparator) but not done. | In-band T. Full-building fixed template. Refrigerant duplicate years. Merged run with the OP block. SPICE / Math7. |
+
+### Level per block (final)
+
+| block | level |
+|---|---|
+| Crossbar rails / sources | P0 |
+| Crossbar passive products | P0 |
+| Crossbar product stages and junctions | P1 |
+| Taps | P0 (validated substitution; merged run equal) |
+| Buses | P1 |
+| Packets | P1 + H |
+| Clocks, comparators, time base | H |
+| Year banks | P0 + H |
+| Electricity chain | P1 + P0 diode |
+| ρ split | P1 + static switch |
+| Year cells | H |
+| Refrigerant | H |
+| Adapter | configuration plus 449–593 GREY predicates; **no F block** |
+| **Overall** | **H** |
+
+### Essential vs overhead state (S, core)
+- 1 031 capacitors. About 190 carry information needed for future outputs: 14 stage charges, ~163 clock phases, 2 × 5 refrigerant m and m_start, the year phase and time.
+- The remaining **≈ 81 %** are implementation overhead: packet, reset, copy and hold capacitors that sit at reconstructible values between events.
+- 701 bits.
+- Merging equal periods is lossless; merging near-equal periods is detected (mutant B07).
+- Whether one clock per distinct period is necessary is still **[H]/GAP**.
+
+### Limits (stated mathematically)
+- **L1.** No node voltage, branch current or source current of a network of positive conductances and independent sources equals c·G1·G2 identically.
+  - Status: my multi-affine MNA proof sketch is a **[P]-candidate**. **It has had no second review.**
+  - Consequence: every extra conductance-coded data factor needs an active element unless it is re-encoded as a source value. Re-encoding as a source is allowed but costs a source, and exactly one factor per term can be a source.
+- **L2 (textbook).** An LTI R/L/C network with fixed-time source switching is analytic between source discontinuities. Event times that depend on state therefore need threshold elements.
+- **L3 (corrected).** "Rail → R → grounded C" is not an exact integrator. An ideal DC current source into a grounded C is (P0). What actually needs an active element is the fixed-potential summing node: conductance-coded rates, and full charge transfer of packets into a virtual ground.
+- **Label matching.** At fixed topology the response is a continuous (rational) function of element values. A selection over discrete labels can therefore only be configuration (wiring or switches set before the run).
+- **Ratios.** x/y of two circuit signals needs a nonlinear active divider, which is outside the catalogue.
+- **In-band.** For T in (K, sw(τ)] the circuit follows the canonical semantics. It is not claimed equal to refcalc there, and was not tested.
+- **G(t) vs C(T).** Buses hold M([0,t]) in real time with dilated event counting. Z is a readout. C(T) = M + Z is read for many T in one run. The circuit makes no G(t)-as-physical-emission claim.
+
+### Gate verdicts (final)
+
+| gate | verdict |
+|---|---|
+| CF1 law benches | **PASS** |
+| CF2 pilot | **PASS** |
+| CF3 state changes | **PASS** |
+| CF4 synthetic buildings vs refcalc | **PASS** on the tested valid domain (917/917, 0 crashes). Reservations: in-band T and refrigerant duplicate years are NOT_RUN or unsupported. |
+| CF5 audit | **PARTIAL**: h 0.041–0.053 (PARTIAL band by §6); full-building template NOT_RUN; mutation suites strong (§6). |
+| CF6 limits | **PRESENT** |
+
+### FINAL recommended verdict for the cycle
+
+**PARTIAL (strong).** The WLC system has been reproduced by a valid, exact, auditable hybrid circuit. The time/state and aggregation layers were re-organized in a circuit-natural way. The amplitude layer was made leaner but keeps the original's per-row product structure, and the original's configuration logic remains outside circuit law.
+
+| layer | for "re-organized into a more unified, circuit-natural system" | against |
+|---|---|---|
+| **Amplitude** | Products are now realized by element laws in their natural form: passive Ohm × KCL, ± factor rails as shared independent sources, no sign inverters, op-amps cut from 13 to about 6 per row, shared sub-products as single fanned-out nodes. It is exact and independently re-solved. | Still a per-row network that follows refcalc's unit formulas and factor order. Sharing is by identity only (66 value duplicates on S). The "L1 bound" is self-referential, not a minimum. It scales with rows; it is not a unified law. |
+| **Time / state** | Genuine re-organization: loops over years and events became dynamics. One clock per period serves all row kinds, with packets, year cells, refrigerant cells and multiple horizons per run. Exact, with correct boundary conventions. | Heavy control (1 030 sequencers, 4 306 phase steps, 701 bits); ≈ 81 % capacitor overhead; no state reduction; the time dilation is a declared convention. |
+| **Readout / aggregation** | KCL buses replace the AGG sums. Z and M are kept apart. ι works through switches and readout. Exact. | AGG ratios are not attempted. The unit breakdown is not represented (not required). |
+| **Configuration** | Executed openly and counted (W2/W3/W4/GREY). No WLC value is hidden. | refcalc's look-up, priority and skip logic (≈ 17 000 operations per S-size building) is transcribed, not unified. By the label-matching limit it cannot be circuit law. GREY predicates are not moved into H. |
+
+Speed is secondary and negative: about 13–21 s per S-size building against about 0.6–1 s for refcalc over 16 T.
+
+### Open items for a next cycle (ordered by value)
+1. **Value-keyed sharing and factor-grouped crossbar realizations.** Merge identical recipes; build per-(factor, destination) junctions. Pair this with a real lower-bound argument, or proof, for a declared realization class, to settle what is truly minimal.
+2. **Full-building fixed template (N_max).** Input-kind variants as enable-switched slots, factor selection as switch matrices. This is what the user's "same circuit, parameters only" criterion needs.
+3. **State reduction.** Derive year-cell and packet values from shared state; share clocks of commensurate periods through dividers; work on the lower bound for the clock count (GAP).
+4. **GREY predicates into H** (window comparators), and support for duplicate refrigerant years.
+5. **Second independent review** of the L1 proof sketch; L2/L3 errata into the architecture.
+6. **Scope decision** on in-band T and AGG ratios (a divider would be needed).
+7. **Merged run including the OP block**, and a finite-gain / SPICE robustness check of the substitution.
+8. Math7 cross-engine checks.
+
+## 6. Mutation (final)
+
+**Stage B** (`v3_mutations_summary.json`). Anchors were re-targeted to the v2 path; two new crossbar-specific mutants were added.
+- **Builder's updated suite: 12/13 caught.** The miss is X1 (scale dropped on a passive branch), which is **equivalent**: the only scaled factor, haul mass/1000 at `adapter_building.py:561`, is never the last (passive) factor. That makes it **12/12 non-equivalent**; V2 was 8/11.
+- **Verifier oracle harness: 11/13.** The misses are X1 (equivalent) and B10 (EPD `>=`/`>`), which my data never exercises because no valid_until equals the assessment date; the builder's test constructs that case. That makes it **11/11 non-equivalent** on the mutants my data can expose.
+- Both judges pass the baseline. In the copies, every builder test file's `STUDY` path was patched to the real frozen tree, because the copies live outside the git repository. This is a harness-only change.
+
+**Stage A on B2 (from V2):** 17/19 (2 equivalent). Not re-run on C; stage-A code paths are covered by the builder's suite, which passes.

@@ -1,0 +1,234 @@
+{
+ "rho=0.0": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 3.3
+ },
+ "rho=1.0": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.2
+ },
+ "unquantified_ratio=0.0": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 3.9
+ },
+ "unquantified_ratio=1.0": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 5.2
+ },
+ "waste_rate=0.0": {
+  "status": "PASS",
+  "max_rel": 1.0161623696689252e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.4
+ },
+ "waste_rate=0.999999": {
+  "status": "PASS",
+  "max_rel": 1.0746530674662783e-14,
+  "worst": [
+   60.000001,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.1
+ },
+ "recovery=0.0": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.1
+ },
+ "recovery=1.0": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 3.2
+ },
+ "refrigerant_change_years=[5.2, 5.7]": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.5
+ },
+ "refrigerant_change_years=[5.0, 6.0]": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.3
+ },
+ "refrigerant_change_years=[5.0, 5.0]": {
+  "status": "CRASH/REJECT",
+  "error": "ValueError: refrigerants[0].change_years has a duplicated year: two replacement events in one instant are not supported by the refrigerant cell (rejected, not merged)",
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 0.0
+ },
+ "refrigerant_change_years=[2.5, 2.5, 7.0]": {
+  "status": "CRASH/REJECT",
+  "error": "ValueError: refrigerants[0].change_years has a duplicated year: two replacement events in one instant are not supported by the refrigerant cell (rejected, not merged)",
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 0.0
+ },
+ "equipment_events=[14.0, 14.0]": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.2
+ },
+ "equipment_events=[5.2, 5.7]": {
+  "status": "PASS",
+  "max_rel": 1.070555378329447e-14,
+  "worst": [
+   33.3,
+   "B3"
+  ],
+  "T": [
+   5.5,
+   6.000001,
+   7.25,
+   33.3,
+   60.000001
+  ],
+  "valid_domain_at_given_T": [],
+  "seconds": 4.3
+ },
+ "D3_dangling_signals_S_core": [],
+ "D3_n_dangling": 0
+}

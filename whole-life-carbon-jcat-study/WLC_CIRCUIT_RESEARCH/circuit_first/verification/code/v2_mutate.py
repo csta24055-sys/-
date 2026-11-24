@@ -60,11 +60,16 @@ def make_copy(name):
     shutil.copytree(SNAP, dst, ignore=shutil.ignore_patterns("__pycache__"))
     # harness adaptation only: point the builder's oracle path at the real frozen tree (the
     # copy lives outside the git repository, so tstudy's frozen-tree git check needs the real path)
-    tp = os.path.join(dst, "tests", "test_stageB.py")
-    src = open(tp).read()
     old = 'STUDY = os.path.normpath(os.path.join(ROOT, "..", ".."))'
-    assert src.count(old) == 1
-    open(tp, "w").write(src.replace(old, f"STUDY = {REPO_STUDY!r}"))
+    patched = 0
+    for fn in sorted(os.listdir(os.path.join(dst, "tests"))):     # every builder test/compare file with the path
+        tp = os.path.join(dst, "tests", fn)
+        if fn.endswith(".py"):
+            src = open(tp).read()
+            if src.count(old) == 1:
+                open(tp, "w").write(src.replace(old, f"STUDY = {REPO_STUDY!r}"))
+                patched += 1
+    assert patched >= 1
     return root, dst
 
 

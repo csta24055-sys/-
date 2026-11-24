@@ -1,0 +1,88 @@
+{
+ "B07_near_equal_periods_merged": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=1, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_audit.Audit.test_adapter_static_rules.test_adapter_static_rules"
+   ],
+   "seconds": 87.8
+  }
+ },
+ "B08_readout_bus_not_emptied": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=3, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_v2_fixes.V2Fixes.test_D5_duplicate_years.test_D5_duplicate_years",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 82.2
+  }
+ },
+ "B09_mdac_msb_weight": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=1, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D2_stepwise_grid_and_D4_mdac_msb.test_D2_stepwise_grid_and_D4_mdac_msb"
+   ],
+   "seconds": 86.0
+  }
+ },
+ "B10_epd_validity_strict": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=1, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D4_epd_validity_inclusive.test_D4_epd_validity_inclusive"
+   ],
+   "seconds": 83.6
+  }
+ },
+ "B11_year_cell_tick_commit_skipped": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=3, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_v2_fixes.V2Fixes.test_D5_duplicate_years.test_D5_duplicate_years",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 74.1
+  }
+ },
+ "X2_design_root_ignores_waste": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=5, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_v2_fixes.V2Fixes.test_D4_b5_base_includes_A4.test_D4_b5_base_includes_A4",
+    "test_v2_fixes.V2Fixes.test_D4_epd_validity_inclusive.test_D4_epd_validity_inclusive",
+    "test_v2_fixes.V2Fixes.test_D5_duplicate_years.test_D5_duplicate_years",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 79.4
+  }
+ }
+}

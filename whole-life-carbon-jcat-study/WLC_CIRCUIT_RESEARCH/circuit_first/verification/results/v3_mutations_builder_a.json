@@ -1,0 +1,113 @@
+{
+ "BASELINE": {
+  "applied": true,
+  "file": null,
+  "builder_suite": {
+   "ran": 54,
+   "result": "OK",
+   "caught": false,
+   "failing": [],
+   "seconds": 86.9
+  }
+ },
+ "B01_conversion_skipped": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=5, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_v2_fixes.V2Fixes.test_D4_b5_base_includes_A4.test_D4_b5_base_includes_A4",
+    "test_v2_fixes.V2Fixes.test_D4_epd_validity_inclusive.test_D4_epd_validity_inclusive",
+    "test_v2_fixes.V2Fixes.test_D5_duplicate_years.test_D5_duplicate_years",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 81.4
+  }
+ },
+ "B02_wrong_rail_transport_delivery": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=4, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_v2_fixes.V2Fixes.test_D4_b5_base_includes_A4.test_D4_b5_base_includes_A4",
+    "test_v2_fixes.V2Fixes.test_D5_duplicate_years.test_D5_duplicate_years",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 80.3
+  }
+ },
+ "B03_rho_leg_into_B2": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=3, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_v2_fixes.V2Fixes.test_D2_stepwise_grid_and_D4_mdac_msb.test_D2_stepwise_grid_and_D4_mdac_msb",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 86.2
+  }
+ },
+ "B04_b5_base_without_A4": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=1, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D4_b5_base_includes_A4.test_D4_b5_base_includes_A4"
+   ],
+   "seconds": 84.8
+  }
+ },
+ "B05_refrigerant_top_up_ignored": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=2, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 88.1
+  }
+ },
+ "B06_refrigerant_reset_short_removed": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "failures=2, skipped=1",
+   "caught": true,
+   "failing": [
+    "test_v2_fixes.V2Fixes.test_D1_recovery_rate_one.test_D1_recovery_rate_one",
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 84.0
+  }
+ },
+ "X1_passive_branch_drops_scale": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 54,
+   "result": "OK",
+   "caught": false,
+   "failing": [],
+   "seconds": 79.7
+  }
+ }
+}

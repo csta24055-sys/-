@@ -1,0 +1,747 @@
+{
+ "frozen": {
+  "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+  "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+  "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+ },
+ "imports": {
+  "adapter_building.py": [
+   "__future__",
+   "fractions",
+   "adapter",
+   "engine",
+   "engine.dc"
+  ],
+  "model_building.py": [
+   "__future__",
+   "time",
+   "fractions",
+   "adapter_building",
+   "adapter",
+   "engine.dc",
+   "engine.hybrid",
+   "engine.netlist",
+   "model"
+  ],
+  "adapter_nmax.py": [
+   "__future__",
+   "fractions",
+   "adapter"
+  ],
+  "adapter.py": [
+   "__future__",
+   "dataclasses",
+   "fractions",
+   "engine"
+  ],
+  "model.py": [
+   "__future__",
+   "fractions",
+   "adapter",
+   "engine",
+   "engine.netlist",
+   "engine.netlist",
+   "engine.netlist",
+   "engine.netlist",
+   "engine.netlist"
+  ],
+  "engine/__init__.py": [
+   ".netlist",
+   ".sim",
+   ".mna"
+  ],
+  "engine/audit.py": [
+   "__future__",
+   "fractions"
+  ],
+  "engine/dc.py": [
+   "__future__",
+   "fractions",
+   ".",
+   ".netlist"
+  ],
+  "engine/hybrid.py": [
+   "__future__",
+   "heapq",
+   "fractions",
+   "math",
+   ".",
+   ".mna",
+   ".netlist",
+   ".logic",
+   ".sim"
+  ],
+  "engine/linalg.py": [
+   "__future__",
+   "math",
+   "fractions"
+  ],
+  "engine/logic.py": [
+   "__future__",
+   ".netlist"
+  ],
+  "engine/mna.py": [
+   "__future__",
+   "fractions",
+   ".",
+   ".netlist"
+  ],
+  "engine/netlist.py": [
+   "__future__",
+   "dataclasses",
+   "fractions",
+   "typing"
+  ],
+  "engine/sim.py": [
+   "__future__",
+   "math",
+   "fractions",
+   "math",
+   ".",
+   ".logic",
+   ".mna",
+   ".netlist"
+  ]
+ },
+ "import_findings": [
+  [
+   "adapter_building.py",
+   955,
+   "dynamic"
+  ],
+  [
+   "adapter_building.py",
+   955,
+   "__import__('engine')"
+  ]
+ ],
+ "adapter_building_scan": {
+  "loop": 51,
+  ".value": 28
+ },
+ "adapter_building_scan_detail": [
+  [
+   61,
+   ".value",
+   "x.value"
+  ],
+  [
+   68,
+   ".value",
+   "x.value"
+  ],
+  [
+   75,
+   ".value",
+   "x.value"
+  ],
+  [
+   84,
+   ".value",
+   "x.value"
+  ],
+  [
+   85,
+   ".value",
+   "x.value"
+  ],
+  [
+   86,
+   ".value",
+   "x.value"
+  ],
+  [
+   93,
+   ".value",
+   "x.value"
+  ],
+  [
+   100,
+   ".value",
+   "x.value"
+  ],
+  [
+   107,
+   ".value",
+   "x.value"
+  ],
+  [
+   142,
+   "loop",
+   "list(extra) + list(self.scn.unit_conversions)"
+  ],
+  [
+   172,
+   ".value",
+   "v.value"
+  ],
+  [
+   188,
+   ".value",
+   "x.value"
+  ],
+  [
+   203,
+   ".value",
+   "rec.value"
+  ],
+  [
+   206,
+   ".value",
+   "conv.value"
+  ],
+  [
+   214,
+   "loop",
+   "items"
+  ],
+  [
+   219,
+   "loop",
+   "items"
+  ],
+  [
+   237,
+   ".value",
+   "v.value"
+  ],
+  [
+   308,
+   ".value",
+   "rec.value"
+  ],
+  [
+   312,
+   ".value",
+   "conv.value"
+  ],
+  [
+   334,
+   "loop",
+   "items"
+  ],
+  [
+   349,
+   "loop",
+   "factors"
+  ],
+  [
+   355,
+   ".value",
+   "v.value"
+  ],
+  [
+   404,
+   ".value",
+   "v.value"
+  ],
+  [
+   411,
+   "loop",
+   "J.items"
+  ],
+  [
+   435,
+   "loop",
+   "order"
+  ],
+  [
+   456,
+   "loop",
+   "('A1-A3', 'A4', 'A5')"
+  ],
+  [
+   456,
+   "loop",
+   "('C1', 'C2', 'C3', 'C4')"
+  ],
+  [
+   470,
+   "loop",
+   "enumerate(scn.materials)"
+  ],
+  [
+   502,
+   "loop",
+   "enumerate(row.composition)"
+  ],
+  [
+   513,
+   ".value",
+   "dev.value"
+  ],
+  [
+   513,
+   "binop",
+   "10 ** 6"
+  ],
+  [
+   564,
+   "loop",
+   "((False, 'C3'), (True, 'C4'))"
+  ],
+  [
+   566,
+   "loop",
+   "enumerate(eol.routes)"
+  ],
+  [
+   581,
+   "loop",
+   "(a13, a1304)"
+  ],
+  [
+   586,
+   "loop",
+   "(('C2', c2), ('C3', c3), ('C4', c4))"
+  ],
+  [
+   593,
+   ".value",
+   "rc.value"
+  ],
+  [
+   600,
+   "loop",
+   "(a13, a4, inst, c2, c3, c4)"
+  ],
+  [
+   603,
+   "loop",
+   "enumerate(scn.equipment)"
+  ],
+  [
+   612,
+   "loop",
+   "((eq.delivery_factor_id, 'A4'), (eq.installation_factor_id, 'A5'))"
+  ],
+  [
+   630,
+   "loop",
+   "eq.replacement_event_list"
+  ],
+  [
+   631,
+   ".value",
+   "y.value"
+  ],
+  [
+   631,
+   "loop",
+   "yrs"
+  ],
+  [
+   635,
+   ".value",
+   "sl.value"
+  ],
+  [
+   643,
+   "loop",
+   "[x01] + extra + [x14]"
+  ],
+  [
+   659,
+   "loop",
+   "enumerate(site.fuels)"
+  ],
+  [
+   665,
+   "loop",
+   "enumerate(site.waste_streams)"
+  ],
+  [
+   672,
+   "loop",
+   "enumerate(end.demolition_activities)"
+  ],
+  [
+   678,
+   "loop",
+   "enumerate(end.waste_hauls)"
+  ],
+  [
+   686,
+   "loop",
+   "list(out['init'].items()) + list(out['term'].items())"
+  ],
+  [
+   687,
+   "loop",
+   "lst"
+  ],
+  [
+   689,
+   "loop",
+   "out['groups'].items()"
+  ],
+  [
+   690,
+   "loop",
+   "g['u']"
+  ],
+  [
+   701,
+   "loop",
+   "('A1-A3', 'A4', 'A5', 'C1', 'C2', 'C3', 'C4')"
+  ],
+  [
+   752,
+   ".value",
+   "x.value"
+  ],
+  [
+   779,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   781,
+   "binop",
+   "k >> b & 1"
+  ],
+  [
+   781,
+   "binop",
+   "k >> b"
+  ],
+  [
+   872,
+   ".value",
+   "slope.value"
+  ],
+  [
+   873,
+   ".value",
+   "slope.value"
+  ],
+  [
+   874,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   875,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   879,
+   "loop",
+   "enumerate(prof.table)"
+  ],
+  [
+   901,
+   "loop",
+   "((op.gas, op.gas_factor_id, 'B6', 'gas'), (op.oil, op.oil_factor_id, '"
+  ],
+  [
+   939,
+   "loop",
+   "pending"
+  ],
+  [
+   950,
+   "loop",
+   "elec.items()"
+  ],
+  [
+   1007,
+   ".value",
+   "st.value"
+  ],
+  [
+   1007,
+   ".value",
+   "fl.value"
+  ],
+  [
+   1012,
+   "loop",
+   "zip(steps[:-1], steps[1:])"
+  ],
+  [
+   1023,
+   "loop",
+   "enumerate(grid.table)"
+  ],
+  [
+   1037,
+   "loop",
+   "enumerate(steps)"
+  ],
+  [
+   1046,
+   "loop",
+   "enumerate(steps)"
+  ],
+  [
+   1047,
+   ".value",
+   "sp.value"
+  ],
+  [
+   1063,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   1065,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   1072,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   1074,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   1094,
+   "loop",
+   "('A1-A3', 'A4', 'A5')"
+  ],
+  [
+   1099,
+   "loop",
+   "('C1', 'C2', 'C3', 'C4')"
+  ],
+  [
+   1108,
+   "loop",
+   "enumerate(sorted(amp['groups'].items(), key=lambda kv: str(kv[0])))"
+  ],
+  [
+   1114,
+   "loop",
+   "enumerate(key[1])"
+  ],
+  [
+   1125,
+   "loop",
+   "enumerate(xpk if key[0] == 'X' else [fire])"
+  ],
+  [
+   1147,
+   "loop",
+   "STAGES"
+  ],
+  [
+   1156,
+   "loop",
+   "enumerate(scn.refrigerants)"
+  ],
+  [
+   1178,
+   "loop",
+   "enumerate(parts or [])"
+  ],
+  [
+   1213,
+   "loop",
+   "enumerate(d.change_years)"
+  ],
+  [
+   1219,
+   "binop",
+   "(1 - eps) ** 2"
+  ],
+  [
+   1230,
+   "binop",
+   "(1 - eps) ** 2"
+  ]
+ ],
+ "S": {
+  "raw_field_ops": {
+   "_wrapped_float_fields": 7330,
+   "_wrapped_int_fields": 303,
+   "_check_type_quantity": "LF"
+  },
+  "raw_field_op_sites": {},
+  "netlist_counts": {
+   "crossbar_elements": 8148,
+   "crossbar_opamps": 1593,
+   "crossbar_inverters": 0,
+   "crossbar_vg_additions": 3071,
+   "core_elements": 10028,
+   "core_vg_additions": 1655,
+   "core_comparators": 201,
+   "core_diodes": 1,
+   "core_capacitors": 1031,
+   "core_opamps": 390,
+   "core_switches": 3663,
+   "sequencers": 1030,
+   "sequencer_phase_steps": 4306,
+   "gates": 1738,
+   "latches_dff": 492,
+   "priority_classes_incl_readout": [
+    0,
+    5,
+    10,
+    20,
+    30,
+    "readout 0/100",
+    "post phase"
+   ]
+  },
+  "builder_counts": {
+   "h": 0.04058206796818511,
+   "h_amp": 0.0552003934103762,
+   "h_time": 0.0,
+   "W_in_amp": 7685,
+   "W_in_time": 2930,
+   "W_out_amp": 449,
+   "W_out_time": 0
+  },
+  "builder_ledger_by_layer": {
+   "amp": {
+    "W1": 4614,
+    "W2": 8466,
+    "W3": 8660,
+    "W4": 283,
+    "GREY": 449,
+    "data_elements": 4614
+   },
+   "time": {
+    "W1": 1073,
+    "W2": 13,
+    "W3": 729,
+    "W4": 650,
+    "GREY": 0,
+    "data_elements": 1073
+   }
+  },
+  "grey_by_kind": {
+   "composite: running sum of mass fractions": 379,
+   "sum fraction": 51,
+   "EPD validity": 19
+  },
+  "control": {
+   "priority_classes": 6,
+   "sequencers": 1030,
+   "sequencer_phase_steps": 4306,
+   "gates": 1738,
+   "comparators": 201,
+   "W2_lookups_and_equality_groupings": 8479,
+   "W3_predicates": 9389,
+   "W4_enumerations": 933
+  },
+  "rows": {
+   "materials": 200,
+   "equipment": 60,
+   "refrigerants": 5,
+   "fuels": 3,
+   "site_waste": 6,
+   "demolition": 4,
+   "hauls": 5,
+   "factors": 253,
+   "composite_rows": 51,
+   "numeric_fields": 7633
+  },
+  "size": {
+   "N_c_periodic_groups": 161,
+   "N_x_explicit_events": 22,
+   "N_r_devices": 5,
+   "groups": 171
+  }
+ },
+ "E1": {
+  "raw_field_ops": {
+   "_wrapped_float_fields": 7377,
+   "_wrapped_int_fields": 298,
+   "_check_type_quantity": "LF"
+  },
+  "raw_field_op_sites": {},
+  "netlist_counts": {
+   "crossbar_elements": 7854,
+   "crossbar_opamps": 1456,
+   "crossbar_inverters": 0,
+   "crossbar_vg_additions": 3190,
+   "core_elements": 5559,
+   "core_vg_additions": 632,
+   "core_comparators": 128,
+   "core_diodes": 1,
+   "core_capacitors": 665,
+   "core_opamps": 274,
+   "core_switches": 1919,
+   "sequencers": 662,
+   "sequencer_phase_steps": 2777,
+   "gates": 1022,
+   "latches_dff": 314,
+   "priority_classes_incl_readout": [
+    0,
+    5,
+    10,
+    20,
+    30,
+    "readout 0/100",
+    "post phase"
+   ]
+  },
+  "builder_counts": {
+   "h": 0.05329758713136729,
+   "h_amp": 0.059944518152213244,
+   "h_time": 0.0,
+   "W_in_amp": 7794,
+   "W_in_time": 1034,
+   "W_out_amp": 497,
+   "W_out_time": 0
+  },
+  "builder_ledger_by_layer": {
+   "amp": {
+    "W1": 4604,
+    "W2": 8647,
+    "W3": 8771,
+    "W4": 280,
+    "GREY": 497,
+    "data_elements": 4604
+   },
+   "time": {
+    "W1": 273,
+    "W2": 11,
+    "W3": 74,
+    "W4": 0,
+    "GREY": 0,
+    "data_elements": 273
+   }
+  },
+  "grey_by_kind": {
+   "composite: running sum of mass fractions": 428,
+   "sum fraction": 50,
+   "EPD validity": 19
+  },
+  "control": {
+   "priority_classes": 6,
+   "sequencers": 662,
+   "sequencer_phase_steps": 2777,
+   "gates": 1022,
+   "comparators": 128,
+   "W2_lookups_and_equality_groupings": 8658,
+   "W3_predicates": 8845,
+   "W4_enumerations": 280
+  },
+  "rows": {
+   "materials": 200,
+   "equipment": 60,
+   "refrigerants": 5,
+   "fuels": 2,
+   "site_waste": 6,
+   "demolition": 3,
+   "hauls": 4,
+   "factors": 253,
+   "composite_rows": 50,
+   "numeric_fields": 7675
+  },
+  "size": {
+   "N_c_periodic_groups": 95,
+   "N_x_explicit_events": 19,
+   "N_r_devices": 5,
+   "groups": 106
+  }
+ }
+}

@@ -43,3 +43,22 @@ Scope: fictional stage-A scenarios only; agreement says nothing about real-build
 | V2-10 | Stage-B mutations: builder unit suite 8/11, verifier oracle harness 10/11 (1 equivalent). | [E] | `v2_mutations_summary.json` |
 
 Scope: fictional synthetic scenarios only, inside `valid_domain` and outside the bands. This says nothing about real buildings or J-CAT. No novelty or speed claim.
+
+---
+
+# V3 claims (snapshot 96df403, stage C)
+
+| # | claim | tag | evidence |
+|---|---|---|---|
+| V3-1 | With crossbar v2 the circuit reproduces refcalc on 917 fresh points across 57 runs: evaluation E4/E5/E7/E8/E9, all 31 edge scenarios, 7 ι subsets, 17 adversarial T. Every stage, C, Z and M is within 1e-9 (C 5.0e-14), event counts are equal, and there are no crashes. | [E] | `v3_oracle_*.json` |
+| V3-2 | Endpoint values of every complement site (ρ, r, w, η at 0 and 1 / 0.999999) match refcalc. Exact duplicate refrigerant change years are rejected although refcalc and valid_domain accept them. | [E] | `v3_probes.json` |
+| V3-3 | The reduced crossbars of S and E1, solved independently, have zero KCL residual and taps identical to the V2-verified stage-B taps. Every independent source is ±(one primitive)×V0 or ±V0. | [E] | `v3_crossbar.json` |
+| V3-4 | No arithmetic on raw inputs. GREY is unchanged (predicates only). No multiplication moved into the adapter. | [E] | `v3_audit.json` |
+| V3-5 | 66 op-amp outputs on S duplicate another output's voltage, because sharing is by identity, not by value key (identical composite recipes). | [E] | `v3_crossbar.py` analysis |
+| V3-6 | The builder's "L1 lower bound" is the expression count of its own fixed-order, identity-shared graph. A W1-legal factor-grouped and value-shared realization would need about 1 332 expressions on S (< 1 462). | count [E]; realization unbuilt [H] | VERDICTS V3 §2(d) |
+| V3-7 | The merged crossbar + core single netlist (truncated S, no OP block) equals the split run. | [E] | `v3_merged_rerun.json` |
+| V3-8 | Across 8 buildings the crossbar signature is identical. All 19 varying core patterns are input-kind variants. No strict fixed template exists for the full building. | [E] | `v3_template.json` |
+| V3-9 | Final mutation scores: builder 12/12 non-equivalent, verifier 11/11 non-equivalent (on the mutants my data can expose). | [E] | `v3_mutations_summary.json` |
+| V3-10 | L1 conclusion: [P]-candidate, still without a second review. | [H] → [P]-candidate | VERDICTS V1/V3 |
+
+Scope: fictional synthetic data only. No claim about real buildings, J-CAT, novelty or speed.
