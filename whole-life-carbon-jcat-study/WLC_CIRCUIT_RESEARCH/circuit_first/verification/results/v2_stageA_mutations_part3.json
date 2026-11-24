@@ -1,0 +1,64 @@
+{
+ "summary": {
+  "mutations": 6,
+  "applied": 3,
+  "caught": 3,
+  "not_caught": []
+ },
+ "detail": {
+  "M13_repair_stage_gain_2": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=6",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D3_mixed_stage_repair_group.test_D3_mixed_stage_repair_group",
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_v1_fixes.V1Fixes.test_D7_substituted_renovation_counts_as_renewal.test_D7_substituted_renovation_counts_as_renewal",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_repair_year_exclusion.test_repair_year_exclusion"
+   ],
+   "seconds": 41.2
+  },
+  "M14_current_source_sign": {
+   "applied": true,
+   "file": "engine/mna.py",
+   "ran": 47,
+   "result": "failures=3",
+   "caught": true,
+   "failing_tests": [
+    "test_bench_dynamic.DynamicBenches.test_constant_current_integration.test_constant_current_integration",
+    "test_bench_static.StaticBenches.test_divider_and_parallel.test_divider_and_parallel",
+    "test_bench_static.StaticBenches.test_joule_constant_current.test_joule_constant_current"
+   ],
+   "seconds": 45.9
+  },
+  "M15_lookahead_priority_after_fire": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=3",
+   "caught": true,
+   "failing_tests": [
+    "test_pilot.Pilot.test_event_discovery_and_stages.test_event_discovery_and_stages",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_repair_year_exclusion.test_repair_year_exclusion"
+   ],
+   "seconds": 43.7
+  },
+  "M16_initial_packets_on_first_tick": {
+   "applied": false,
+   "occurrences": 0
+  },
+  "M17_group_repair_stage_from_last_row": {
+   "applied": false,
+   "occurrences": 0
+  },
+  "M18_renewal_ignores_substituting_renovation": {
+   "applied": false,
+   "occurrences": 0
+  }
+ }
+}

@@ -1,0 +1,150 @@
+{
+ "BASELINE": {
+  "applied": true,
+  "file": null,
+  "builder_suite": {
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing": [],
+   "seconds": 42.9
+  }
+ },
+ "B01_conversion_skipped": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "errors=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 29.3
+  }
+ },
+ "B02_wrong_rail_transport_delivery": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 43.6
+  }
+ },
+ "B03_rho_leg_into_B2": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 42.4
+  }
+ },
+ "B04_b5_base_without_A4": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing": [],
+   "seconds": 43.2
+  }
+ },
+ "B05_refrigerant_top_up_ignored": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 50.2
+  }
+ },
+ "B06_refrigerant_reset_short_removed": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 45.4
+  }
+ },
+ "B07_near_equal_periods_merged": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_audit.Audit.test_adapter_static_rules.test_adapter_static_rules"
+   ],
+   "seconds": 42.1
+  }
+ },
+ "B08_readout_bus_not_emptied": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 42.9
+  }
+ },
+ "B09_mdac_msb_weight": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing": [],
+   "seconds": 40.8
+  }
+ },
+ "B10_epd_validity_strict": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing": [],
+   "seconds": 42.3
+  }
+ },
+ "B11_year_cell_tick_commit_skipped": {
+  "applied": true,
+  "file": "adapter_building.py",
+  "builder_suite": {
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing": [
+    "test_stageB.SmallBuilding.test_accumulators_residuals_and_reference.test_accumulators_residuals_and_reference"
+   ],
+   "seconds": 41.0
+  }
+ }
+}

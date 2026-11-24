@@ -1,0 +1,6020 @@
+{
+ "summary": {
+  "cases": 36,
+  "pass": 36,
+  "fail": [],
+  "points": 699,
+  "event_checks_pass": true,
+  "year_checks_pass": true
+ },
+ "cases": [
+  {
+   "case": "pilot_07_points",
+   "pass": true,
+   "n_points": 31,
+   "seconds": 0.72,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "0",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "104",
+     "ledger_C": "104",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "34999999/250000",
+     "ledger_C": "34999999/250000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "160",
+     "ledger_C": "160",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10000001/1000000",
+     "circuit_C": "40000001/250000",
+     "ledger_C": "40000001/250000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "19999999/1000000",
+     "circuit_C": "49999999/250000",
+     "ledger_C": "49999999/250000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "255",
+     "ledger_C": "255",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20000001/1000000",
+     "circuit_C": "63750001/250000",
+     "ledger_C": "63750001/250000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "315",
+     "ledger_C": "315",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "410",
+     "ledger_C": "410",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "60",
+     "circuit_C": "565",
+     "ledger_C": "565",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "104",
+     "ledger_C": "104",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "34999999/250000",
+     "ledger_C": "34999999/250000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "140",
+     "ledger_C": "140",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10000001/1000000",
+     "circuit_C": "40000001/250000",
+     "ledger_C": "40000001/250000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "19999999/1000000",
+     "circuit_C": "49999999/250000",
+     "ledger_C": "49999999/250000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "200",
+     "ledger_C": "200",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20000001/1000000",
+     "circuit_C": "63750001/250000",
+     "ledger_C": "63750001/250000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "295",
+     "ledger_C": "295",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "40",
+     "circuit_C": "355",
+     "ledger_C": "355",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "60",
+     "circuit_C": "510",
+     "ledger_C": "510",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "104",
+     "ledger_C": "104",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "34999999/250000",
+     "ledger_C": "34999999/250000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "140",
+     "ledger_C": "140",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10000001/1000000",
+     "circuit_C": "40000001/250000",
+     "ledger_C": "40000001/250000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "19999999/1000000",
+     "circuit_C": "49999999/250000",
+     "ledger_C": "49999999/250000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "200",
+     "ledger_C": "200",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20000001/1000000",
+     "circuit_C": "63750001/250000",
+     "ledger_C": "63750001/250000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "295",
+     "ledger_C": "295",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "355",
+     "ledger_C": "355",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "60",
+     "circuit_C": "510",
+     "ledger_C": "510",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "pilot_extra_T",
+   "pass": true,
+   "n_points": 18,
+   "seconds": 3.05,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1/2",
+     "circuit_C": "102",
+     "ledger_C": "102",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "333/10",
+     "circuit_C": "1641/5",
+     "ledger_C": "1641/5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "59999999/1000000",
+     "circuit_C": "127499999/250000",
+     "ledger_C": "127499999/250000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "60000001/1000000",
+     "circuit_C": "141250001/250000",
+     "ledger_C": "141250001/250000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "100",
+     "circuit_C": "875",
+     "ledger_C": "875",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "255",
+     "circuit_C": "2040",
+     "ledger_C": "2040",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1/2",
+     "circuit_C": "102",
+     "ledger_C": "102",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "333/10",
+     "circuit_C": "1641/5",
+     "ledger_C": "1641/5",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "59999999/1000000",
+     "circuit_C": "127499999/250000",
+     "ledger_C": "127499999/250000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "60000001/1000000",
+     "circuit_C": "141250001/250000",
+     "ledger_C": "141250001/250000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "100",
+     "circuit_C": "820",
+     "ledger_C": "820",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "255",
+     "circuit_C": "2040",
+     "ledger_C": "2040",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1/2",
+     "circuit_C": "102",
+     "ledger_C": "102",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "333/10",
+     "circuit_C": "1641/5",
+     "ledger_C": "1641/5",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "59999999/1000000",
+     "circuit_C": "127499999/250000",
+     "ledger_C": "127499999/250000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "60000001/1000000",
+     "circuit_C": "141250001/250000",
+     "ledger_C": "141250001/250000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "100",
+     "circuit_C": "820",
+     "ledger_C": "820",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "255",
+     "circuit_C": "2040",
+     "ledger_C": "2040",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "pilot_items_reversed",
+   "pass": true,
+   "n_points": 6,
+   "seconds": 0.33,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "160",
+     "ledger_C": "160",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "255",
+     "ledger_C": "255",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "410",
+     "ledger_C": "410",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "140",
+     "ledger_C": "140",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "200",
+     "ledger_C": "200",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "355",
+     "ledger_C": "355",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "periods_7_3_and_11_5",
+   "pass": true,
+   "n_points": 33,
+   "seconds": 1.07,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/3",
+     "circuit_C": "9",
+     "ledger_C": "9",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "11/5",
+     "circuit_C": "208/35",
+     "ledger_C": "208/35",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "7",
+     "circuit_C": "27",
+     "ledger_C": "27",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "11",
+     "circuit_C": "292/7",
+     "ledger_C": "292/7",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "22",
+     "circuit_C": "605/7",
+     "ledger_C": "605/7",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "231/10",
+     "circuit_C": "869/10",
+     "ledger_C": "869/10",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "33",
+     "circuit_C": "918/7",
+     "ledger_C": "918/7",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "231/5",
+     "circuit_C": "909/5",
+     "ledger_C": "909/5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "55",
+     "circuit_C": "1523/7",
+     "ledger_C": "1523/7",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "60",
+     "circuit_C": "1650/7",
+     "ledger_C": "1650/7",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "77",
+     "circuit_C": "307",
+     "ledger_C": "307",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "11/5",
+     "circuit_C": "33/35",
+     "ledger_C": "33/35",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7",
+     "circuit_C": "24",
+     "ledger_C": "24",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "11",
+     "circuit_C": "257/7",
+     "ledger_C": "257/7",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "22",
+     "circuit_C": "570/7",
+     "ledger_C": "570/7",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "231/10",
+     "circuit_C": "869/10",
+     "ledger_C": "869/10",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "33",
+     "circuit_C": "883/7",
+     "ledger_C": "883/7",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "231/5",
+     "circuit_C": "884/5",
+     "ledger_C": "884/5",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "55",
+     "circuit_C": "1488/7",
+     "ledger_C": "1488/7",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "60",
+     "circuit_C": "1650/7",
+     "ledger_C": "1650/7",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "77",
+     "circuit_C": "299",
+     "ledger_C": "299",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "11/5",
+     "circuit_C": "33/35",
+     "ledger_C": "33/35",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7",
+     "circuit_C": "24",
+     "ledger_C": "24",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "11",
+     "circuit_C": "257/7",
+     "ledger_C": "257/7",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "22",
+     "circuit_C": "570/7",
+     "ledger_C": "570/7",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "231/10",
+     "circuit_C": "869/10",
+     "ledger_C": "869/10",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "33",
+     "circuit_C": "883/7",
+     "ledger_C": "883/7",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "231/5",
+     "circuit_C": "884/5",
+     "ledger_C": "884/5",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "55",
+     "circuit_C": "1488/7",
+     "ledger_C": "1488/7",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "60",
+     "circuit_C": "1650/7",
+     "ledger_C": "1650/7",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "77",
+     "circuit_C": "299",
+     "ledger_C": "299",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "tiny_period_1_1000",
+   "pass": true,
+   "n_points": 12,
+   "seconds": 5.4,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1/1000",
+     "circuit_C": "1/1000",
+     "ledger_C": "1/1000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "1/2",
+     "circuit_C": "1/2",
+     "ledger_C": "1/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20001/20000",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1/1000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1/2",
+     "circuit_C": "499/1000",
+     "ledger_C": "499/1000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "999/1000",
+     "ledger_C": "999/1000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20001/20000",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1/1000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1/2",
+     "circuit_C": "499/1000",
+     "ledger_C": "499/1000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "999/1000",
+     "ledger_C": "999/1000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20001/20000",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "quad_simultaneous_perm0",
+   "pass": true,
+   "n_points": 15,
+   "seconds": 1.39,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "6",
+     "circuit_C": "90",
+     "ledger_C": "90",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "134",
+     "ledger_C": "134",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "24",
+     "circuit_C": "218",
+     "ledger_C": "218",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "quad_simultaneous_perm6",
+   "pass": true,
+   "n_points": 15,
+   "seconds": 1.36,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "6",
+     "circuit_C": "90",
+     "ledger_C": "90",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "134",
+     "ledger_C": "134",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "24",
+     "circuit_C": "218",
+     "ledger_C": "218",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "quad_simultaneous_perm12",
+   "pass": true,
+   "n_points": 15,
+   "seconds": 1.47,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "6",
+     "circuit_C": "90",
+     "ledger_C": "90",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "134",
+     "ledger_C": "134",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "24",
+     "circuit_C": "218",
+     "ledger_C": "218",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "quad_simultaneous_perm18",
+   "pass": true,
+   "n_points": 15,
+   "seconds": 1.37,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "6",
+     "circuit_C": "90",
+     "ledger_C": "90",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "134",
+     "ledger_C": "134",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "24",
+     "circuit_C": "218",
+     "ledger_C": "218",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "6",
+     "circuit_C": "79",
+     "ledger_C": "79",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "119",
+     "ledger_C": "119",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "24",
+     "circuit_C": "203",
+     "ledger_C": "203",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "49/2",
+     "circuit_C": "439/2",
+     "ledger_C": "439/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "25",
+     "circuit_C": "221",
+     "ledger_C": "221",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_restart_7/2_13",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.36,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_restart_10",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.36,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_restart_9999999/1000000",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.4,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_restart_5_15",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.34,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_keep_7/2_13",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.32,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_keep_10",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.28,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_keep_9999999/1000000",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.31,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_keep_5_15",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.31,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "47/2",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "35",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "47/2",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "35",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "0",
+     "ledger_C": "0",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9999999/1000000",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "60",
+     "ledger_C": "60",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "47/2",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "80",
+     "ledger_C": "80",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "35",
+     "circuit_C": "100",
+     "ledger_C": "100",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "degradation_right_left",
+   "pass": true,
+   "n_points": 14,
+   "seconds": 0.32,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "5",
+     "circuit_C": "105/4",
+     "ledger_C": "105/4",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "7",
+     "circuit_C": "241/4",
+     "ledger_C": "241/4",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "149/2",
+     "ledger_C": "149/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "17",
+     "circuit_C": "581/4",
+     "ledger_C": "581/4",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "23/2",
+     "circuit_C": "1333/16",
+     "ledger_C": "1333/16",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "25",
+     "circuit_C": "773/4",
+     "ledger_C": "773/4",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "659/2",
+     "ledger_C": "659/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "105/4",
+     "ledger_C": "105/4",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7",
+     "circuit_C": "161/4",
+     "ledger_C": "161/4",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "149/2",
+     "ledger_C": "149/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "17",
+     "circuit_C": "501/4",
+     "ledger_C": "501/4",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "23/2",
+     "circuit_C": "1333/16",
+     "ledger_C": "1333/16",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "25",
+     "circuit_C": "773/4",
+     "ledger_C": "773/4",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "40",
+     "circuit_C": "659/2",
+     "ledger_C": "659/2",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "degradation_original_eps",
+   "pass": true,
+   "n_points": 8,
+   "seconds": 0.53,
+   "rows": [
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "105/4",
+     "ledger_C": "105/4",
+     "match": true,
+     "ledger_undilated_C": "105/4",
+     "rel_dev_from_undilated": 0.0,
+     "abs_dev_from_undilated": 0.0
+    },
+    {
+     "conv": "original",
+     "T": "7",
+     "circuit_C": "161/4",
+     "ledger_C": "161/4",
+     "match": true,
+     "ledger_undilated_C": "161/4",
+     "rel_dev_from_undilated": 0.0,
+     "abs_dev_from_undilated": 0.0
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "74499999865000000085/999999998000000001",
+     "ledger_C": "74499999865000000085/999999998000000001",
+     "match": true,
+     "ledger_undilated_C": "149/2",
+     "rel_dev_from_undilated": 1.8791946360402684e-10,
+     "abs_dev_from_undilated": 1.40000000385e-08
+    },
+    {
+     "conv": "original",
+     "T": "17",
+     "circuit_C": "500999998956000000641/3999999992000000004",
+     "ledger_C": "500999998956000000641/3999999992000000004",
+     "match": true,
+     "ledger_undilated_C": "501/4",
+     "rel_dev_from_undilated": 8.383233521756487e-11,
+     "abs_dev_from_undilated": -1.0499999986e-08
+    },
+    {
+     "conv": "original",
+     "T": "23/2",
+     "circuit_C": "1332999997474000001585/15999999968000000016",
+     "ledger_C": "1332999997474000001585/15999999968000000016",
+     "match": true,
+     "ledger_undilated_C": "1333/16",
+     "rel_dev_from_undilated": 1.0502625696324081e-10,
+     "abs_dev_from_undilated": 8.75000003325e-09
+    },
+    {
+     "conv": "original",
+     "T": "25",
+     "circuit_C": "257666666160000000395/1333333330666666668",
+     "ledger_C": "257666666160000000395/1333333330666666668",
+     "match": true,
+     "ledger_undilated_C": "773/4",
+     "rel_dev_from_undilated": 3.363518818111255e-11,
+     "abs_dev_from_undilated": 6.500000116e-09
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "329499999460000000640/999999998000000001",
+     "ledger_C": "329499999460000000640/999999998000000001",
+     "match": true,
+     "ledger_undilated_C": "659/2",
+     "rel_dev_from_undilated": 3.611532641836115e-10,
+     "abs_dev_from_undilated": 1.190000005485e-07
+    },
+    {
+     "conv": "original",
+     "T": "100",
+     "circuit_C": "839499998650000003100/999999998000000001",
+     "ledger_C": "839499998650000003100/999999998000000001",
+     "match": true,
+     "ledger_undilated_C": "1679/2",
+     "rel_dev_from_undilated": 3.9189994391721264e-10,
+     "abs_dev_from_undilated": 3.2900000291850003e-07
+    }
+   ]
+  },
+  {
+   "case": "efficiency_change_left",
+   "pass": true,
+   "n_points": 4,
+   "seconds": 0.07,
+   "rows": [
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "10",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "75",
+     "ledger_C": "75",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "140",
+     "ledger_C": "140",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "efficiency_change_original_eps",
+   "pass": true,
+   "n_points": 5,
+   "seconds": 0.32,
+   "rows": [
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "20",
+     "ledger_C": "20",
+     "match": true,
+     "ledger_undilated_C": "20",
+     "rel_dev_from_undilated": 0.0,
+     "abs_dev_from_undilated": 0.0
+    },
+    {
+     "conv": "original",
+     "T": "10",
+     "circuit_C": "40",
+     "ledger_C": "40",
+     "match": true,
+     "ledger_undilated_C": "40",
+     "rel_dev_from_undilated": 0.0,
+     "abs_dev_from_undilated": 0.0
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "74999999935/999999999",
+     "ledger_C": "74999999935/999999999",
+     "match": true,
+     "ledger_undilated_C": "75",
+     "rel_dev_from_undilated": 1.3333333346666666e-10,
+     "abs_dev_from_undilated": 1.000000001e-08
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "139999999870/999999999",
+     "ledger_C": "139999999870/999999999",
+     "match": true,
+     "ledger_undilated_C": "140",
+     "rel_dev_from_undilated": 7.14285715e-11,
+     "abs_dev_from_undilated": 1.000000001e-08
+    },
+    {
+     "conv": "original",
+     "T": "100",
+     "circuit_C": "489999999520/999999999",
+     "ledger_C": "489999999520/999999999",
+     "match": true,
+     "ledger_undilated_C": "490",
+     "rel_dev_from_undilated": 2.0408163285714287e-11,
+     "abs_dev_from_undilated": 1.000000001e-08
+    }
+   ]
+  },
+  {
+   "case": "repair_period_1",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.3,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "repair_period_4/3",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.37,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4/3",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "repair_period_2/5",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.71,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4/3",
+     "circuit_C": "3",
+     "ledger_C": "3",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "2",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5000000001/1000000000",
+     "circuit_C": "12000000001/1000000000",
+     "ledger_C": "12000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "500000001/100000000",
+     "circuit_C": "1200000001/100000000",
+     "ledger_C": "1200000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "21/2",
+     "circuit_C": "26",
+     "ledger_C": "26",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "30",
+     "ledger_C": "30",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "37",
+     "ledger_C": "37",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4/3",
+     "circuit_C": "3",
+     "ledger_C": "3",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "2",
+     "circuit_C": "4",
+     "ledger_C": "4",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5000000001/1000000000",
+     "circuit_C": "12000000001/1000000000",
+     "ledger_C": "12000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "500000001/100000000",
+     "circuit_C": "1200000001/100000000",
+     "ledger_C": "1200000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "21/2",
+     "circuit_C": "26",
+     "ledger_C": "26",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "29",
+     "ledger_C": "29",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "37",
+     "ledger_C": "37",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4/3",
+     "circuit_C": "3",
+     "ledger_C": "3",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "2",
+     "circuit_C": "4",
+     "ledger_C": "4",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5000000001/1000000000",
+     "circuit_C": "12000000001/1000000000",
+     "ledger_C": "12000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "500000001/100000000",
+     "circuit_C": "1200000001/100000000",
+     "ledger_C": "1200000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "21/2",
+     "circuit_C": "26",
+     "ledger_C": "26",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "29",
+     "ledger_C": "29",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "37",
+     "ledger_C": "37",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "repair_period_5/2",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.35,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "repair_period_5",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.29,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "1",
+     "circuit_C": "1",
+     "ledger_C": "1",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4/3",
+     "circuit_C": "4/3",
+     "ledger_C": "4/3",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "2",
+     "circuit_C": "2",
+     "ledger_C": "2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5",
+     "circuit_C": "5",
+     "ledger_C": "5",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "5000000001/1000000000",
+     "circuit_C": "5000000001/1000000000",
+     "ledger_C": "5000000001/1000000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "500000001/100000000",
+     "circuit_C": "500000001/100000000",
+     "ledger_C": "500000001/100000000",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "21/2",
+     "circuit_C": "21/2",
+     "ledger_C": "21/2",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "12",
+     "ledger_C": "12",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "repair_explicit_and_renovation_groups",
+   "pass": true,
+   "n_points": 27,
+   "seconds": 0.99,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "7/2",
+     "circuit_C": "15/2",
+     "ledger_C": "15/2",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4",
+     "circuit_C": "8",
+     "ledger_C": "8",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "8",
+     "circuit_C": "16",
+     "ledger_C": "16",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9",
+     "circuit_C": "18",
+     "ledger_C": "18",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "11",
+     "circuit_C": "30",
+     "ledger_C": "30",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "23/2",
+     "circuit_C": "31",
+     "ledger_C": "31",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "14",
+     "circuit_C": "36",
+     "ledger_C": "36",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "15",
+     "circuit_C": "38",
+     "ledger_C": "38",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7/2",
+     "circuit_C": "7",
+     "ledger_C": "7",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4",
+     "circuit_C": "8",
+     "ledger_C": "8",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "8",
+     "circuit_C": "16",
+     "ledger_C": "16",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9",
+     "circuit_C": "18",
+     "ledger_C": "18",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "11",
+     "circuit_C": "22",
+     "ledger_C": "22",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "23/2",
+     "circuit_C": "31",
+     "ledger_C": "31",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "14",
+     "circuit_C": "36",
+     "ledger_C": "36",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "15",
+     "circuit_C": "38",
+     "ledger_C": "38",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7/2",
+     "circuit_C": "7",
+     "ledger_C": "7",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4",
+     "circuit_C": "8",
+     "ledger_C": "8",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "8",
+     "circuit_C": "16",
+     "ledger_C": "16",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9",
+     "circuit_C": "18",
+     "ledger_C": "18",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "11",
+     "circuit_C": "22",
+     "ledger_C": "22",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "23/2",
+     "circuit_C": "31",
+     "ledger_C": "31",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "14",
+     "circuit_C": "36",
+     "ledger_C": "36",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "15",
+     "circuit_C": "38",
+     "ledger_C": "38",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "renovation_substituted_13",
+   "pass": true,
+   "n_points": 24,
+   "seconds": 0.76,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "222",
+     "ledger_C": "222",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "23",
+     "circuit_C": "282",
+     "ledger_C": "282",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "33",
+     "circuit_C": "377",
+     "ledger_C": "377",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "405",
+     "ledger_C": "405",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "43",
+     "circuit_C": "437",
+     "ledger_C": "437",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "50",
+     "circuit_C": "465",
+     "ledger_C": "465",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "172",
+     "ledger_C": "172",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "23",
+     "circuit_C": "262",
+     "ledger_C": "262",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "33",
+     "circuit_C": "322",
+     "ledger_C": "322",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "40",
+     "circuit_C": "405",
+     "ledger_C": "405",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "43",
+     "circuit_C": "417",
+     "ledger_C": "417",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "50",
+     "circuit_C": "465",
+     "ledger_C": "465",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "172",
+     "ledger_C": "172",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "23",
+     "circuit_C": "262",
+     "ledger_C": "262",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "33",
+     "circuit_C": "322",
+     "ledger_C": "322",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "405",
+     "ledger_C": "405",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "43",
+     "circuit_C": "417",
+     "ledger_C": "417",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "50",
+     "circuit_C": "465",
+     "ledger_C": "465",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "renovation_additional_13",
+   "pass": true,
+   "n_points": 24,
+   "seconds": 0.81,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "222",
+     "ledger_C": "222",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "305",
+     "ledger_C": "305",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "23",
+     "circuit_C": "317",
+     "ledger_C": "317",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "33",
+     "circuit_C": "377",
+     "ledger_C": "377",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "460",
+     "ledger_C": "460",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "43",
+     "circuit_C": "472",
+     "ledger_C": "472",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "50",
+     "circuit_C": "520",
+     "ledger_C": "520",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "172",
+     "ledger_C": "172",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "23",
+     "circuit_C": "317",
+     "ledger_C": "317",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "33",
+     "circuit_C": "377",
+     "ledger_C": "377",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "40",
+     "circuit_C": "405",
+     "ledger_C": "405",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "43",
+     "circuit_C": "472",
+     "ledger_C": "472",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "50",
+     "circuit_C": "500",
+     "ledger_C": "500",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "172",
+     "ledger_C": "172",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "23",
+     "circuit_C": "317",
+     "ledger_C": "317",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "33",
+     "circuit_C": "377",
+     "ledger_C": "377",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "405",
+     "ledger_C": "405",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "43",
+     "circuit_C": "472",
+     "ledger_C": "472",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "50",
+     "circuit_C": "500",
+     "ledger_C": "500",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "renovation_substituted_7_33",
+   "pass": true,
+   "n_points": 24,
+   "seconds": 0.83,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7",
+     "circuit_C": "178",
+     "ledger_C": "178",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "202",
+     "ledger_C": "202",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "23",
+     "circuit_C": "262",
+     "ledger_C": "262",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "33",
+     "circuit_C": "407",
+     "ledger_C": "407",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "435",
+     "ledger_C": "435",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "43",
+     "circuit_C": "467",
+     "ledger_C": "467",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "50",
+     "circuit_C": "495",
+     "ledger_C": "495",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "202",
+     "ledger_C": "202",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "23",
+     "circuit_C": "262",
+     "ledger_C": "262",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "33",
+     "circuit_C": "357",
+     "ledger_C": "357",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "40",
+     "circuit_C": "435",
+     "ledger_C": "435",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "43",
+     "circuit_C": "447",
+     "ledger_C": "447",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "50",
+     "circuit_C": "495",
+     "ledger_C": "495",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "202",
+     "ledger_C": "202",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "23",
+     "circuit_C": "262",
+     "ledger_C": "262",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "33",
+     "circuit_C": "357",
+     "ledger_C": "357",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "435",
+     "ledger_C": "435",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "43",
+     "circuit_C": "447",
+     "ledger_C": "447",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "50",
+     "circuit_C": "495",
+     "ledger_C": "495",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "renovation_additional_7_33",
+   "pass": true,
+   "n_points": 24,
+   "seconds": 0.81,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "7",
+     "circuit_C": "178",
+     "ledger_C": "178",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "13",
+     "circuit_C": "222",
+     "ledger_C": "222",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "305",
+     "ledger_C": "305",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "23",
+     "circuit_C": "317",
+     "ledger_C": "317",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "33",
+     "circuit_C": "427",
+     "ledger_C": "427",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "510",
+     "ledger_C": "510",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "43",
+     "circuit_C": "522",
+     "ledger_C": "522",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "50",
+     "circuit_C": "570",
+     "ledger_C": "570",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "13",
+     "circuit_C": "222",
+     "ledger_C": "222",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "23",
+     "circuit_C": "317",
+     "ledger_C": "317",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "33",
+     "circuit_C": "377",
+     "ledger_C": "377",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "40",
+     "circuit_C": "455",
+     "ledger_C": "455",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "43",
+     "circuit_C": "522",
+     "ledger_C": "522",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "50",
+     "circuit_C": "550",
+     "ledger_C": "550",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "7",
+     "circuit_C": "128",
+     "ledger_C": "128",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "13",
+     "circuit_C": "222",
+     "ledger_C": "222",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "23",
+     "circuit_C": "317",
+     "ledger_C": "317",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "33",
+     "circuit_C": "377",
+     "ledger_C": "377",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "455",
+     "ledger_C": "455",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "43",
+     "circuit_C": "522",
+     "ledger_C": "522",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "50",
+     "circuit_C": "550",
+     "ledger_C": "550",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "renovations_permuted_two",
+   "pass": true,
+   "n_points": 8,
+   "seconds": 0.55,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "250",
+     "ledger_C": "250",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "295",
+     "ledger_C": "295",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "40",
+     "circuit_C": "390",
+     "ledger_C": "390",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "50",
+     "circuit_C": "450",
+     "ledger_C": "450",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "20",
+     "circuit_C": "200",
+     "ledger_C": "200",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "290",
+     "ledger_C": "290",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "40",
+     "circuit_C": "335",
+     "ledger_C": "335",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "50",
+     "circuit_C": "430",
+     "ledger_C": "430",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "builder_full_scenario_unchecked_by_builder_right",
+   "pass": true,
+   "n_points": 6,
+   "seconds": 1.63,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "2159/6",
+     "ledger_C": "2159/6",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "51/2",
+     "circuit_C": "102197/144",
+     "ledger_C": "102197/144",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "30",
+     "circuit_C": "7237/9",
+     "ledger_C": "7237/9",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "2045/6",
+     "ledger_C": "2045/6",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "51/2",
+     "circuit_C": "102197/144",
+     "ledger_C": "102197/144",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "30",
+     "circuit_C": "7066/9",
+     "ledger_C": "7066/9",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "builder_full_scenario_original",
+   "pass": true,
+   "n_points": 3,
+   "seconds": 1.02,
+   "rows": [
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "1022499997982500001095/2999999994000000003",
+     "ledger_C": "1022499997982500001095/2999999994000000003",
+     "match": true,
+     "ledger_undilated_C": "2045/6",
+     "rel_dev_from_undilated": 2.6894865650366748e-11,
+     "abs_dev_from_undilated": 9.166666709166667e-09
+    },
+    {
+     "conv": "original",
+     "T": "51/2",
+     "circuit_C": "102196999800866000122337/143999999712000000144",
+     "ledger_C": "102196999800866000122337/143999999712000000144",
+     "match": true,
+     "ledger_undilated_C": "102197/144",
+     "rel_dev_from_undilated": 5.1469221510024754e-11,
+     "abs_dev_from_undilated": 3.6527777990694446e-08
+    },
+    {
+     "conv": "original",
+     "T": "30",
+     "circuit_C": "7065999986090500008856/8999999982000000009",
+     "ledger_C": "7065999986090500008856/8999999982000000009",
+     "match": true,
+     "ledger_undilated_C": "7066/9",
+     "rel_dev_from_undilated": 3.148882001627512e-11,
+     "abs_dev_from_undilated": 2.4722222470555558e-08
+    }
+   ]
+  },
+  {
+   "case": "signed_inputs_negative_amount_and_rate",
+   "pass": true,
+   "n_points": 2,
+   "seconds": 0.11,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "10",
+     "circuit_C": "135",
+     "ledger_C": "135",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "20",
+     "circuit_C": "185",
+     "ledger_C": "185",
+     "match": true
+    }
+   ]
+  },
+  {
+   "case": "explicit_only_no_period",
+   "pass": true,
+   "n_points": 15,
+   "seconds": 0.22,
+   "rows": [
+    {
+     "conv": "right",
+     "T": "3",
+     "circuit_C": "13",
+     "ledger_C": "13",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "4",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "17/2",
+     "circuit_C": "32",
+     "ledger_C": "32",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "9",
+     "circuit_C": "32",
+     "ledger_C": "32",
+     "match": true
+    },
+    {
+     "conv": "right",
+     "T": "12",
+     "circuit_C": "38",
+     "ledger_C": "38",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "4",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "17/2",
+     "circuit_C": "24",
+     "ledger_C": "24",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "9",
+     "circuit_C": "32",
+     "ledger_C": "32",
+     "match": true
+    },
+    {
+     "conv": "left",
+     "T": "12",
+     "circuit_C": "38",
+     "ledger_C": "38",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "3",
+     "circuit_C": "6",
+     "ledger_C": "6",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "4",
+     "circuit_C": "15",
+     "ledger_C": "15",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "17/2",
+     "circuit_C": "24",
+     "ledger_C": "24",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "9",
+     "circuit_C": "32",
+     "ledger_C": "32",
+     "match": true
+    },
+    {
+     "conv": "original",
+     "T": "12",
+     "circuit_C": "38",
+     "ledger_C": "38",
+     "match": true
+    }
+   ]
+  }
+ ],
+ "events": {
+  "irr/right": {
+   "pass": true,
+   "items": {
+    "p73": {
+     "circuit": [
+      "7/3",
+      "14/3",
+      "7",
+      "28/3",
+      "35/3",
+      "14",
+      "49/3",
+      "56/3",
+      "21",
+      "70/3",
+      "77/3",
+      "28",
+      "91/3",
+      "98/3",
+      "35",
+      "112/3",
+      "119/3",
+      "42",
+      "133/3",
+      "140/3",
+      "49",
+      "154/3",
+      "161/3",
+      "56",
+      "175/3"
+     ],
+     "ledger": [
+      "7/3",
+      "14/3",
+      "7",
+      "28/3",
+      "35/3",
+      "14",
+      "49/3",
+      "56/3",
+      "21",
+      "70/3",
+      "77/3",
+      "28",
+      "91/3",
+      "98/3",
+      "35",
+      "112/3",
+      "119/3",
+      "42",
+      "133/3",
+      "140/3",
+      "49",
+      "154/3",
+      "161/3",
+      "56",
+      "175/3"
+     ],
+     "match": true
+    },
+    "p115": {
+     "circuit": [
+      "11/5",
+      "22/5",
+      "33/5",
+      "44/5",
+      "11",
+      "66/5",
+      "77/5",
+      "88/5",
+      "99/5",
+      "22",
+      "121/5",
+      "132/5",
+      "143/5",
+      "154/5",
+      "33",
+      "176/5",
+      "187/5",
+      "198/5",
+      "209/5",
+      "44",
+      "231/5",
+      "242/5",
+      "253/5",
+      "264/5",
+      "55",
+      "286/5",
+      "297/5"
+     ],
+     "ledger": [
+      "11/5",
+      "22/5",
+      "33/5",
+      "44/5",
+      "11",
+      "66/5",
+      "77/5",
+      "88/5",
+      "99/5",
+      "22",
+      "121/5",
+      "132/5",
+      "143/5",
+      "154/5",
+      "33",
+      "176/5",
+      "187/5",
+      "198/5",
+      "209/5",
+      "44",
+      "231/5",
+      "242/5",
+      "253/5",
+      "264/5",
+      "55",
+      "286/5",
+      "297/5"
+     ],
+     "match": true
+    }
+   }
+  },
+  "irr/original": {
+   "pass": true,
+   "items": {
+    "p73": {
+     "circuit": [
+      "7000000000/2999999997",
+      "14000000000/2999999997",
+      "7000000000/999999999",
+      "28000000000/2999999997",
+      "35000000000/2999999997",
+      "14000000000/999999999",
+      "49000000000/2999999997",
+      "56000000000/2999999997",
+      "7000000000/333333333",
+      "70000000000/2999999997",
+      "77000000000/2999999997",
+      "28000000000/999999999",
+      "91000000000/2999999997",
+      "98000000000/2999999997",
+      "35000000000/999999999",
+      "112000000000/2999999997",
+      "119000000000/2999999997",
+      "14000000000/333333333",
+      "133000000000/2999999997",
+      "140000000000/2999999997",
+      "49000000000/999999999",
+      "154000000000/2999999997",
+      "161000000000/2999999997",
+      "56000000000/999999999",
+      "175000000000/2999999997"
+     ],
+     "ledger": [
+      "7000000000/2999999997",
+      "14000000000/2999999997",
+      "7000000000/999999999",
+      "28000000000/2999999997",
+      "35000000000/2999999997",
+      "14000000000/999999999",
+      "49000000000/2999999997",
+      "56000000000/2999999997",
+      "7000000000/333333333",
+      "70000000000/2999999997",
+      "77000000000/2999999997",
+      "28000000000/999999999",
+      "91000000000/2999999997",
+      "98000000000/2999999997",
+      "35000000000/999999999",
+      "112000000000/2999999997",
+      "119000000000/2999999997",
+      "14000000000/333333333",
+      "133000000000/2999999997",
+      "140000000000/2999999997",
+      "49000000000/999999999",
+      "154000000000/2999999997",
+      "161000000000/2999999997",
+      "56000000000/999999999",
+      "175000000000/2999999997"
+     ],
+     "match": true
+    },
+    "p115": {
+     "circuit": [
+      "2200000000/999999999",
+      "4400000000/999999999",
+      "2200000000/333333333",
+      "8800000000/999999999",
+      "11000000000/999999999",
+      "4400000000/333333333",
+      "15400000000/999999999",
+      "17600000000/999999999",
+      "2200000000/111111111",
+      "22000000000/999999999",
+      "24200000000/999999999",
+      "8800000000/333333333",
+      "28600000000/999999999",
+      "30800000000/999999999",
+      "11000000000/333333333",
+      "35200000000/999999999",
+      "37400000000/999999999",
+      "4400000000/111111111",
+      "41800000000/999999999",
+      "44000000000/999999999",
+      "15400000000/333333333",
+      "48400000000/999999999",
+      "50600000000/999999999",
+      "17600000000/333333333",
+      "55000000000/999999999",
+      "57200000000/999999999",
+      "2200000000/37037037"
+     ],
+     "ledger": [
+      "2200000000/999999999",
+      "4400000000/999999999",
+      "2200000000/333333333",
+      "8800000000/999999999",
+      "11000000000/999999999",
+      "4400000000/333333333",
+      "15400000000/999999999",
+      "17600000000/999999999",
+      "2200000000/111111111",
+      "22000000000/999999999",
+      "24200000000/999999999",
+      "8800000000/333333333",
+      "28600000000/999999999",
+      "30800000000/999999999",
+      "11000000000/333333333",
+      "35200000000/999999999",
+      "37400000000/999999999",
+      "4400000000/111111111",
+      "41800000000/999999999",
+      "44000000000/999999999",
+      "15400000000/333333333",
+      "48400000000/999999999",
+      "50600000000/999999999",
+      "17600000000/333333333",
+      "55000000000/999999999",
+      "57200000000/999999999",
+      "2200000000/37037037"
+     ],
+     "match": true
+    }
+   }
+  },
+  "triple/right": {
+   "pass": true,
+   "items": {
+    "a": {
+     "circuit": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16",
+      "18",
+      "20",
+      "22",
+      "24"
+     ],
+     "ledger": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16",
+      "18",
+      "20",
+      "22",
+      "24"
+     ],
+     "match": true
+    },
+    "b": {
+     "circuit": [
+      "3",
+      "6",
+      "9",
+      "12",
+      "15",
+      "18",
+      "21",
+      "24"
+     ],
+     "ledger": [
+      "3",
+      "6",
+      "9",
+      "12",
+      "15",
+      "18",
+      "21",
+      "24"
+     ],
+     "match": true
+    },
+    "c": {
+     "circuit": [
+      "4",
+      "8",
+      "12",
+      "16",
+      "20",
+      "24"
+     ],
+     "ledger": [
+      "4",
+      "8",
+      "12",
+      "16",
+      "20",
+      "24"
+     ],
+     "match": true
+    },
+    "d": {
+     "circuit": [
+      "6",
+      "12",
+      "18",
+      "24"
+     ],
+     "ledger": [
+      "6",
+      "12",
+      "18",
+      "24"
+     ],
+     "match": true
+    }
+   }
+  },
+  "triple/original": {
+   "pass": true,
+   "items": {
+    "a": {
+     "circuit": [
+      "2000000000/999999999",
+      "4000000000/999999999",
+      "2000000000/333333333",
+      "8000000000/999999999",
+      "10000000000/999999999",
+      "4000000000/333333333",
+      "14000000000/999999999",
+      "16000000000/999999999",
+      "2000000000/111111111",
+      "20000000000/999999999",
+      "22000000000/999999999",
+      "8000000000/333333333"
+     ],
+     "ledger": [
+      "2000000000/999999999",
+      "4000000000/999999999",
+      "2000000000/333333333",
+      "8000000000/999999999",
+      "10000000000/999999999",
+      "4000000000/333333333",
+      "14000000000/999999999",
+      "16000000000/999999999",
+      "2000000000/111111111",
+      "20000000000/999999999",
+      "22000000000/999999999",
+      "8000000000/333333333"
+     ],
+     "match": true
+    },
+    "b": {
+     "circuit": [
+      "1000000000/333333333",
+      "2000000000/333333333",
+      "1000000000/111111111",
+      "4000000000/333333333",
+      "5000000000/333333333",
+      "2000000000/111111111",
+      "7000000000/333333333",
+      "8000000000/333333333"
+     ],
+     "ledger": [
+      "1000000000/333333333",
+      "2000000000/333333333",
+      "1000000000/111111111",
+      "4000000000/333333333",
+      "5000000000/333333333",
+      "2000000000/111111111",
+      "7000000000/333333333",
+      "8000000000/333333333"
+     ],
+     "match": true
+    },
+    "c": {
+     "circuit": [
+      "4000000000/999999999",
+      "8000000000/999999999",
+      "4000000000/333333333",
+      "16000000000/999999999",
+      "20000000000/999999999",
+      "8000000000/333333333"
+     ],
+     "ledger": [
+      "4000000000/999999999",
+      "8000000000/999999999",
+      "4000000000/333333333",
+      "16000000000/999999999",
+      "20000000000/999999999",
+      "8000000000/333333333"
+     ],
+     "match": true
+    },
+    "d": {
+     "circuit": [
+      "2000000000/333333333",
+      "4000000000/333333333",
+      "2000000000/111111111",
+      "8000000000/333333333"
+     ],
+     "ledger": [
+      "2000000000/333333333",
+      "4000000000/333333333",
+      "2000000000/111111111",
+      "8000000000/333333333"
+     ],
+     "match": true
+    }
+   }
+  },
+  "reno/right": {
+   "pass": true,
+   "items": {
+    "B": {
+     "circuit": [
+      "40"
+     ],
+     "ledger": [
+      "40"
+     ],
+     "match": true
+    },
+    "A": {
+     "circuit": [
+      "10",
+      "40",
+      "50"
+     ],
+     "ledger": [
+      "10",
+      "40",
+      "50"
+     ],
+     "match": true
+    }
+   }
+  },
+  "reno/original": {
+   "pass": true,
+   "items": {
+    "B": {
+     "circuit": [
+      "40000000000/999999999"
+     ],
+     "ledger": [
+      "40000000000/999999999"
+     ],
+     "match": true
+    },
+    "A": {
+     "circuit": [
+      "10000000000/999999999",
+      "40000000000/999999999"
+     ],
+     "ledger": [
+      "10000000000/999999999",
+      "40000000000/999999999"
+     ],
+     "match": true
+    }
+   }
+  },
+  "explicit/right": {
+   "pass": true,
+   "items": {
+    "A": {
+     "circuit": [
+      "7/2",
+      "13",
+      "23",
+      "33"
+     ],
+     "ledger": [
+      "7/2",
+      "13",
+      "23",
+      "33"
+     ],
+     "match": true
+    }
+   }
+  },
+  "explicit/original": {
+   "pass": true,
+   "items": {
+    "A": {
+     "circuit": [
+      "3500000000/999999999",
+      "13000000000/999999999",
+      "23000000000/999999999",
+      "11000000000/333333333"
+     ],
+     "ledger": [
+      "3500000000/999999999",
+      "13000000000/999999999",
+      "23000000000/999999999",
+      "11000000000/333333333"
+     ],
+     "match": true
+    }
+   }
+  }
+ },
+ "years": {
+  "5/2/right": {
+   "circuit": [
+    3,
+    5,
+    8,
+    10,
+    13,
+    15
+   ],
+   "ledger": [
+    3,
+    5,
+    8,
+    10,
+    13,
+    15
+   ],
+   "pass": true
+  },
+  "5/2/left": {
+   "circuit": [
+    3,
+    5,
+    8,
+    10,
+    13,
+    15
+   ],
+   "ledger": [
+    3,
+    5,
+    8,
+    10,
+    13,
+    15
+   ],
+   "pass": true
+  },
+  "5/2/original": {
+   "circuit": [
+    3,
+    5,
+    8,
+    10,
+    13
+   ],
+   "ledger": [
+    3,
+    5,
+    8,
+    10,
+    13
+   ],
+   "pass": true
+  },
+  "4/3/right": {
+   "circuit": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    14,
+    15
+   ],
+   "ledger": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    14,
+    15
+   ],
+   "pass": true
+  },
+  "4/3/left": {
+   "circuit": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    14,
+    15
+   ],
+   "ledger": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    14,
+    15
+   ],
+   "pass": true
+  },
+  "4/3/original": {
+   "circuit": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    14,
+    15
+   ],
+   "ledger": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    14,
+    15
+   ],
+   "pass": true
+  },
+  "1/right": {
+   "circuit": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "ledger": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "pass": true
+  },
+  "1/left": {
+   "circuit": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "ledger": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "pass": true
+  },
+  "1/original": {
+   "circuit": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "ledger": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "pass": true
+  }
+ }
+}

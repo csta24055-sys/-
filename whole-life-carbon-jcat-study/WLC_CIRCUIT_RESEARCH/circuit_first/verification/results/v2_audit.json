@@ -1,0 +1,707 @@
+{
+ "frozen": {
+  "refcalc": "8976efea85c313e5e723fadf12382e02b3202913",
+  "synth": "55caf5cd40db34e195678656e61d3ebdd65308ec",
+  "common": "ad3d0b7eff1501655f35132d416159611d0ab1cd"
+ },
+ "imports": {
+  "adapter_building.py": [
+   "__future__",
+   "fractions",
+   "adapter",
+   "engine",
+   "engine.dc"
+  ],
+  "model_building.py": [
+   "__future__",
+   "time",
+   "fractions",
+   "adapter_building",
+   "adapter",
+   "engine.dc",
+   "engine.hybrid",
+   "engine.netlist",
+   "model"
+  ],
+  "adapter_nmax.py": [
+   "__future__",
+   "fractions",
+   "adapter"
+  ],
+  "adapter.py": [
+   "__future__",
+   "dataclasses",
+   "fractions",
+   "engine"
+  ],
+  "model.py": [
+   "__future__",
+   "fractions",
+   "adapter",
+   "engine",
+   "engine.netlist",
+   "engine.netlist",
+   "engine.netlist",
+   "engine.netlist",
+   "engine.netlist"
+  ],
+  "engine/__init__.py": [
+   ".netlist",
+   ".sim",
+   ".mna"
+  ],
+  "engine/audit.py": [
+   "__future__",
+   "fractions"
+  ],
+  "engine/dc.py": [
+   "__future__",
+   "fractions",
+   ".",
+   ".netlist"
+  ],
+  "engine/hybrid.py": [
+   "__future__",
+   "heapq",
+   "fractions",
+   "math",
+   ".",
+   ".mna",
+   ".netlist",
+   ".logic",
+   ".sim"
+  ],
+  "engine/linalg.py": [
+   "__future__",
+   "math",
+   "fractions"
+  ],
+  "engine/logic.py": [
+   "__future__",
+   ".netlist"
+  ],
+  "engine/mna.py": [
+   "__future__",
+   "fractions",
+   ".",
+   ".netlist"
+  ],
+  "engine/netlist.py": [
+   "__future__",
+   "dataclasses",
+   "fractions",
+   "typing"
+  ],
+  "engine/sim.py": [
+   "__future__",
+   "math",
+   "fractions",
+   "math",
+   ".",
+   ".logic",
+   ".mna",
+   ".netlist"
+  ]
+ },
+ "import_findings": [
+  [
+   "adapter_building.py",
+   734,
+   "dynamic"
+  ],
+  [
+   "adapter_building.py",
+   734,
+   "__import__('engine')"
+  ]
+ ],
+ "adapter_building_scan": {
+  "loop": 46,
+  ".value": 24
+ },
+ "adapter_building_scan_detail": [
+  [
+   61,
+   ".value",
+   "x.value"
+  ],
+  [
+   68,
+   ".value",
+   "x.value"
+  ],
+  [
+   75,
+   ".value",
+   "x.value"
+  ],
+  [
+   84,
+   ".value",
+   "x.value"
+  ],
+  [
+   85,
+   ".value",
+   "x.value"
+  ],
+  [
+   86,
+   ".value",
+   "x.value"
+  ],
+  [
+   93,
+   ".value",
+   "x.value"
+  ],
+  [
+   100,
+   ".value",
+   "x.value"
+  ],
+  [
+   107,
+   ".value",
+   "x.value"
+  ],
+  [
+   142,
+   "loop",
+   "list(extra) + list(self.scn.unit_conversions)"
+  ],
+  [
+   172,
+   ".value",
+   "v.value"
+  ],
+  [
+   188,
+   ".value",
+   "x.value"
+  ],
+  [
+   203,
+   ".value",
+   "rec.value"
+  ],
+  [
+   206,
+   ".value",
+   "conv.value"
+  ],
+  [
+   214,
+   "loop",
+   "items"
+  ],
+  [
+   219,
+   "loop",
+   "items"
+  ],
+  [
+   252,
+   "loop",
+   "('A1-A3', 'A4', 'A5')"
+  ],
+  [
+   252,
+   "loop",
+   "('C1', 'C2', 'C3', 'C4')"
+  ],
+  [
+   261,
+   "loop",
+   "enumerate(scn.materials)"
+  ],
+  [
+   284,
+   "loop",
+   "enumerate(row.composition)"
+  ],
+  [
+   295,
+   ".value",
+   "dev.value"
+  ],
+  [
+   295,
+   "binop",
+   "10 ** 6"
+  ],
+  [
+   341,
+   "loop",
+   "((False, 'C3'), (True, 'C4'))"
+  ],
+  [
+   343,
+   "loop",
+   "enumerate(eol.routes)"
+  ],
+  [
+   358,
+   "loop",
+   "(a13, a1304)"
+  ],
+  [
+   363,
+   "loop",
+   "(('C2', c2), ('C3', c3), ('C4', c4))"
+  ],
+  [
+   370,
+   ".value",
+   "rc.value"
+  ],
+  [
+   377,
+   "loop",
+   "(a13, a4, inst, c2, c3, c4)"
+  ],
+  [
+   380,
+   "loop",
+   "enumerate(scn.equipment)"
+  ],
+  [
+   389,
+   "loop",
+   "((eq.delivery_factor_id, 'A4'), (eq.installation_factor_id, 'A5'))"
+  ],
+  [
+   407,
+   "loop",
+   "eq.replacement_event_list"
+  ],
+  [
+   408,
+   ".value",
+   "y.value"
+  ],
+  [
+   408,
+   "loop",
+   "yrs"
+  ],
+  [
+   412,
+   ".value",
+   "sl.value"
+  ],
+  [
+   420,
+   "loop",
+   "[x01] + extra + [x14]"
+  ],
+  [
+   434,
+   ".value",
+   "v.value"
+  ],
+  [
+   440,
+   "loop",
+   "enumerate(site.fuels)"
+  ],
+  [
+   446,
+   "loop",
+   "enumerate(site.waste_streams)"
+  ],
+  [
+   453,
+   "loop",
+   "enumerate(end.demolition_activities)"
+  ],
+  [
+   459,
+   "loop",
+   "enumerate(end.waste_hauls)"
+  ],
+  [
+   467,
+   "loop",
+   "list(out['init'].items()) + list(out['term'].items())"
+  ],
+  [
+   468,
+   "loop",
+   "lst"
+  ],
+  [
+   470,
+   "loop",
+   "out['groups'].items()"
+  ],
+  [
+   471,
+   "loop",
+   "g['u']"
+  ],
+  [
+   482,
+   "loop",
+   "('A1-A3', 'A4', 'A5', 'C1', 'C2', 'C3', 'C4')"
+  ],
+  [
+   532,
+   ".value",
+   "x.value"
+  ],
+  [
+   559,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   561,
+   "binop",
+   "k >> b & 1"
+  ],
+  [
+   561,
+   "binop",
+   "k >> b"
+  ],
+  [
+   652,
+   ".value",
+   "slope.value"
+  ],
+  [
+   653,
+   ".value",
+   "slope.value"
+  ],
+  [
+   654,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   655,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   655,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   658,
+   "loop",
+   "enumerate(prof.table)"
+  ],
+  [
+   680,
+   "loop",
+   "((op.gas, op.gas_factor_id, 'B6', 'gas'), (op.oil, op.oil_factor_id, '"
+  ],
+  [
+   718,
+   "loop",
+   "pending"
+  ],
+  [
+   729,
+   "loop",
+   "elec.items()"
+  ],
+  [
+   786,
+   ".value",
+   "st.value"
+  ],
+  [
+   786,
+   ".value",
+   "fl.value"
+  ],
+  [
+   791,
+   "loop",
+   "zip(steps[:-1], steps[1:])"
+  ],
+  [
+   802,
+   "loop",
+   "enumerate(grid.table)"
+  ],
+  [
+   816,
+   "loop",
+   "enumerate(steps)"
+  ],
+  [
+   824,
+   "loop",
+   "enumerate(steps)"
+  ],
+  [
+   825,
+   ".value",
+   "sp.value"
+  ],
+  [
+   841,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   843,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   850,
+   "loop",
+   "COUNTER_BITS"
+  ],
+  [
+   852,
+   "binop",
+   "2 ** b"
+  ],
+  [
+   869,
+   "loop",
+   "('A1-A3', 'A4', 'A5')"
+  ],
+  [
+   874,
+   "loop",
+   "('C1', 'C2', 'C3', 'C4')"
+  ],
+  [
+   883,
+   "loop",
+   "enumerate(sorted(amp['groups'].items(), key=lambda kv: str(kv[0])))"
+  ],
+  [
+   889,
+   "loop",
+   "enumerate(key[1])"
+  ],
+  [
+   918,
+   "loop",
+   "STAGES"
+  ],
+  [
+   927,
+   "loop",
+   "enumerate(scn.refrigerants)"
+  ],
+  [
+   949,
+   "loop",
+   "enumerate(parts or [])"
+  ],
+  [
+   980,
+   "loop",
+   "enumerate(d.change_years)"
+  ],
+  [
+   986,
+   "binop",
+   "(1 - eps) ** 2"
+  ],
+  [
+   997,
+   "binop",
+   "(1 - eps) ** 2"
+  ]
+ ],
+ "S": {
+  "raw_field_ops": {
+   "_wrapped_float_fields": 7330,
+   "_wrapped_int_fields": 303,
+   "_check_type_quantity": "LF"
+  },
+  "raw_field_op_sites": {},
+  "netlist_counts": {
+   "crossbar_elements": 13404,
+   "crossbar_opamps": 3393,
+   "crossbar_inverters": 868,
+   "crossbar_vg_additions": 2997,
+   "core_elements": 9977,
+   "core_vg_additions": 1643,
+   "core_comparators": 201,
+   "core_diodes": 1,
+   "core_capacitors": 1018,
+   "core_opamps": 389,
+   "core_switches": 3639,
+   "sequencers": 1018,
+   "sequencer_phase_steps": 4258,
+   "gates": 1738,
+   "latches_dff": 492,
+   "priority_classes_incl_readout": [
+    0,
+    5,
+    10,
+    20,
+    30,
+    "readout 0/100",
+    "post phase"
+   ]
+  },
+  "builder_counts": {
+   "h": 0.0452894896106516,
+   "h_amp": 0.06417953116066323,
+   "h_time": 0.0,
+   "W_in_amp": 6547,
+   "W_in_time": 2918,
+   "W_out_amp": 449,
+   "W_out_time": 0
+  },
+  "builder_ledger_by_layer": {
+   "amp": {
+    "W1": 3550,
+    "W2": 8466,
+    "W3": 8260,
+    "W4": 283,
+    "GREY": 449,
+    "data_elements": 3550
+   },
+   "time": {
+    "W1": 1073,
+    "W2": 10,
+    "W3": 724,
+    "W4": 650,
+    "GREY": 0,
+    "data_elements": 1073
+   }
+  },
+  "grey_by_kind": {
+   "composite: running sum of mass fractions": 379,
+   "sum fraction": 51,
+   "EPD validity": 19
+  },
+  "control": {
+   "priority_classes": 6,
+   "sequencers": 1018,
+   "sequencer_phase_steps": 4258,
+   "gates": 1738,
+   "comparators": 201,
+   "W2_lookups_and_equality_groupings": 8476,
+   "W3_predicates": 8984,
+   "W4_enumerations": 933
+  },
+  "rows": {
+   "materials": 200,
+   "equipment": 60,
+   "refrigerants": 5,
+   "fuels": 3,
+   "site_waste": 6,
+   "demolition": 4,
+   "hauls": 5,
+   "factors": 253,
+   "composite_rows": 51,
+   "numeric_fields": 7633
+  },
+  "size": {
+   "N_c_periodic_groups": 161,
+   "N_x_explicit_events": 22,
+   "N_r_devices": 5,
+   "groups": 171
+  }
+ },
+ "E1": {
+  "raw_field_ops": {
+   "_wrapped_float_fields": 7377,
+   "_wrapped_int_fields": 298,
+   "_check_type_quantity": "LF"
+  },
+  "raw_field_op_sites": {},
+  "netlist_counts": {
+   "crossbar_elements": 13197,
+   "crossbar_opamps": 3273,
+   "crossbar_inverters": 878,
+   "crossbar_vg_additions": 3148,
+   "core_elements": 5524,
+   "core_vg_additions": 624,
+   "core_comparators": 128,
+   "core_diodes": 1,
+   "core_capacitors": 656,
+   "core_opamps": 273,
+   "core_switches": 1903,
+   "sequencers": 654,
+   "sequencer_phase_steps": 2745,
+   "gates": 1022,
+   "latches_dff": 314,
+   "priority_classes_incl_readout": [
+    0,
+    5,
+    10,
+    20,
+    30,
+    "readout 0/100",
+    "post phase"
+   ]
+  },
+  "builder_counts": {
+   "h": 0.060184063937999514,
+   "h_amp": 0.06872234513274336,
+   "h_time": 0.0,
+   "W_in_amp": 6735,
+   "W_in_time": 1026,
+   "W_out_amp": 497,
+   "W_out_time": 0
+  },
+  "builder_ledger_by_layer": {
+   "amp": {
+    "W1": 3587,
+    "W2": 8647,
+    "W3": 8371,
+    "W4": 280,
+    "GREY": 497,
+    "data_elements": 3587
+   },
+   "time": {
+    "W1": 273,
+    "W2": 10,
+    "W3": 69,
+    "W4": 0,
+    "GREY": 0,
+    "data_elements": 273
+   }
+  },
+  "grey_by_kind": {
+   "composite: running sum of mass fractions": 428,
+   "sum fraction": 50,
+   "EPD validity": 19
+  },
+  "control": {
+   "priority_classes": 6,
+   "sequencers": 654,
+   "sequencer_phase_steps": 2745,
+   "gates": 1022,
+   "comparators": 128,
+   "W2_lookups_and_equality_groupings": 8657,
+   "W3_predicates": 8440,
+   "W4_enumerations": 280
+  },
+  "rows": {
+   "materials": 200,
+   "equipment": 60,
+   "refrigerants": 5,
+   "fuels": 2,
+   "site_waste": 6,
+   "demolition": 3,
+   "hauls": 4,
+   "factors": 253,
+   "composite_rows": 50,
+   "numeric_fields": 7675
+  },
+  "size": {
+   "N_c_periodic_groups": 95,
+   "N_x_explicit_events": 19,
+   "N_r_devices": 5,
+   "groups": 106
+  }
+ }
+}

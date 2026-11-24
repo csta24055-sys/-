@@ -53,6 +53,10 @@ MUTATIONS = {
     "M16_initial_packets_on_first_tick": ("adapter.py",
                                           'B.packet(f"pk.init.{row[\'id\']}", B.val(A / (u.gamma * u.V0)), "rail", x, "por", v0=u.V0)',
                                           'B.packet(f"pk.init.{row[\'id\']}", B.val(A / (u.gamma * u.V0)), "rail", x, "tick", v0=u.V0)'),
+    "M16b_initial_packets_on_first_tick_B2": ("adapter.py", 'B.signed_packet(f"pk.init.{row[\'id\']}", A, B.bus(row["stage"]), "por")',
+                                              'B.signed_packet(f"pk.init.{row[\'id\']}", A, B.bus(row["stage"]), "tick")'),
+    "M18b_renewal_ignores_substituting_renovation_B2": ("adapter.py", 'replaced = B.OR(f"{gt}.repl", [ev] + ([] if "substitution_not_renewal" in B.mut else sub_fires))',
+                                                        'replaced = B.OR(f"{gt}.repl", [ev])'),
     "M17_group_repair_stage_from_last_row": ("adapter.py", 'stage = rows[0]["repair"]["stage"]', 'stage = rows[-1]["repair"]["stage"]'),
     "M18_renewal_ignores_substituting_renovation": ("adapter.py", 'replaced = B.OR(f"{gt}.repl", [ev] + sub_fires)',
                                                     'replaced = B.OR(f"{gt}.repl", [ev])'),
@@ -65,14 +69,22 @@ def run_one(name, rel, old, new):
         shutil.rmtree(dst)
     shutil.copytree(SNAP, dst, ignore=shutil.ignore_patterns("results", "__pycache__"))
     os.makedirs(os.path.join(dst, "results"))
+    tp = os.path.join(dst, "tests", "test_stageB.py")      # V2: harness path fix (copy lives outside the repo)
+    if os.path.exists(tp):
+        t_src = open(tp).read()
+        t_old = 'STUDY = os.path.normpath(os.path.join(ROOT, "..", ".."))'
+        if t_src.count(t_old) == 1:
+            open(tp, "w").write(t_src.replace(t_old, 'STUDY = "/home/user/-/whole-life-carbon-jcat-study"'))
+    if rel is None:
+        rel, old, new = "README.md", "", ""
     p = os.path.join(dst, rel)
     src = open(p).read()
-    n = src.count(old)
+    n = src.count(old) if old else 1
     if n != 1:
         return {"applied": False, "occurrences": n}
     open(p, "w").write(src.replace(old, new))
     t0 = time.time()
-    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", GIT_OPTIONAL_LOCKS="0")
     try:
         cp = subprocess.run([sys.executable, "-B", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"],
                             cwd=os.path.join(dst, "tests"), capture_output=True, text=True, timeout=900, env=env)
@@ -94,6 +106,9 @@ def main():
     os.makedirs(SCRATCH, exist_ok=True)
     only = set(os.environ.get("MUT_ONLY", "").split(",")) - {""}
     out = {}
+    if os.environ.get("MUT_BASELINE"):
+        out["BASELINE"] = run_one("BASELINE", None, "", "")
+        print("BASELINE", out["BASELINE"]["result"], flush=True)
     for name, (rel, old, new) in MUTATIONS.items():
         if only and name not in only:
             continue

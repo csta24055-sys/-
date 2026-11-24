@@ -1,0 +1,124 @@
+{
+ "S": {
+  "solve": {
+   "elements": 13404,
+   "R": 9783,
+   "V": 228,
+   "OA": 3393,
+   "other_kinds": {},
+   "propagation_rounds": 3,
+   "unknown_after_propagation": 0,
+   "kcl_nodes_checked": 3393,
+   "kcl_max_residual": "0",
+   "opamp_max_residual": "0"
+  },
+  "taps_checked": 354,
+  "tap_mismatches": [],
+  "n_tap_mismatches": 0,
+  "nodes_shared_between_crossbar_and_core": [],
+  "n_shared_nodes": 0,
+  "census": {
+   "opamps_by_cell": {
+    "inverter": 868,
+    "eol_routes": 750,
+    "haul": 410,
+    "transport": 366,
+    "equipment": 206,
+    "mfg": 200,
+    "group_sum": 171,
+    "repair_sum": 153,
+    "installation": 92,
+    "derived_rail": 67,
+    "composite": 51,
+    "unquantified": 33,
+    "site": 10,
+    "stage_sum": 7,
+    "refrigerant": 5,
+    "demolition": 4
+   },
+   "factor_rails": 227,
+   "factor_rail_fanout_top10": [
+    116,
+    89,
+    80,
+    56,
+    32,
+    27,
+    26,
+    26,
+    26,
+    26
+   ],
+   "factor_rail_fanout_median": 4,
+   "row_product_output_fanout_hist": {
+    "1": 994,
+    "2": 862,
+    "3": 187,
+    "4": 28
+   },
+   "taps": 354,
+   "crossbar_nodes_exported_more_than_once": 2
+  }
+ },
+ "E1": {
+  "solve": {
+   "elements": 13197,
+   "R": 9694,
+   "V": 230,
+   "OA": 3273,
+   "other_kinds": {},
+   "propagation_rounds": 3,
+   "unknown_after_propagation": 0,
+   "kcl_nodes_checked": 3273,
+   "kcl_max_residual": "0",
+   "opamp_max_residual": "0"
+  },
+  "taps_checked": 232,
+  "tap_mismatches": [],
+  "n_tap_mismatches": 0,
+  "nodes_shared_between_crossbar_and_core": [],
+  "n_shared_nodes": 0,
+  "census": {
+   "opamps_by_cell": {
+    "inverter": 878,
+    "eol_routes": 744,
+    "haul": 408,
+    "transport": 371,
+    "equipment": 204,
+    "mfg": 200,
+    "group_sum": 106,
+    "installation": 101,
+    "repair_sum": 96,
+    "derived_rail": 67,
+    "composite": 50,
+    "unquantified": 24,
+    "site": 9,
+    "stage_sum": 7,
+    "refrigerant": 5,
+    "demolition": 3
+   },
+   "factor_rails": 229,
+   "factor_rail_fanout_top10": [
+    107,
+    97,
+    86,
+    49,
+    36,
+    35,
+    34,
+    33,
+    32,
+    27
+   ],
+   "factor_rail_fanout_median": 4,
+   "row_product_output_fanout_hist": {
+    "1": 1136,
+    "2": 736,
+    "3": 176,
+    "4": 16
+   },
+   "taps": 232,
+   "crossbar_nodes_exported_more_than_once": 2
+  }
+ }
+}

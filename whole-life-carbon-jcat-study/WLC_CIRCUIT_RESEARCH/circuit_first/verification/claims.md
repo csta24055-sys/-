@@ -24,3 +24,22 @@ Tags: [P] proven in a declared domain (needs an independent review first), [E] e
 
 Scope: fictional stage-A scenarios only; agreement says nothing about real-building accuracy or about the 70-unit model
 (CF4 NOT_RUN). No novelty claim.
+
+---
+
+# V2 claims (snapshot 80ec2de, stage B)
+
+| # | claim | tag | evidence |
+|---|---|---|---|
+| V2-1 | On 57 building runs and 901 (scenario, T) points (evaluation E4, E5, E7, E8, E9; 31 tstudy edge scenarios; 7 ι subsets; 17 adversarial T from 0.3 to 130), the circuit reproduces the frozen refcalc. C(T), all 14 stages, Z, M and the B4/B5 event counts agree within 1e-9 (max C 5.0e-14, max stage 2.4e-13 in B3). | [E] | `results/v2_oracle_*.json` |
+| V2-2 | A valid-domain scenario with refrigerant recovery rate η = 1 crashes the building adapter (ZeroDivisionError). | [E] (counterexample) | `v2_oracle_edges.json`, `tests/test_v2.py` |
+| V2-3 | The stage-B small-building dump satisfies KCL, element laws, impulse KCL, charge balance and continuity exactly. The crossbars of S and E1 solved independently reproduce every core tap exactly. A 353-element E1 core sub-network re-simulated by the verifier's simulator is state-identical to hybrid.py (accumulators on and off). | [E] | `v2_residuals.json`, `v2_crossbar.json`, `v2_subnet.json` |
+| V2-4 | Crossbar → taps → core is a one-way substitution: no shared node, and taps are grounded ideal sources. For ideal op-amp outputs it is exact; it is not valid for finite output impedance. | [E] + textbook | `v2_crossbar.json` |
+| V2-5 | hybrid.py's boundary-node and accumulator-sink strategies are exact consequences of the element laws under the structural conditions the engine checks. | proof sketch + [E] | VERDICTS V2; `v2_subnet.json`, `v2_hybrid_vs_sim.json` |
+| V2-6 | No arithmetic, comparison or conversion is applied to raw scenario numbers outside the counting type (7 633 fields, S; E1 similar). Element values are primitive inputs × building-independent constants or circuit DC solutions. | [E] | `v2_audit.json` |
+| V2-7 | The amplitude crossbar transcribes refcalc's per-row unit formulas and look-up/skip logic: one op-amp stage per data factor, 26 % pure inverters, ≈12.8 op-amps per row on S. The time and aggregation layers are a genuine re-organization: shared clocks per distinct period, packets, year cells, KCL buses. | [E] (counts) + judgement | VERDICTS V2 |
+| V2-8 | About 19 % of the 1 018 core capacitors on S carry information needed for future outputs; the rest hold values that can be reconstructed. One clock per distinct period being necessary remains [H]. | [E] counts; lower bound [H] | VERDICTS V2 |
+| V2-9 | V1-D1…D7 are fixed: comparator falling crossing in both engines (including adversarial probes), signed inputs, per-stage repair, convention-independent netlist, declaration of the dilation, narrow W_in, and tests (stage-A mutation score 17/19, 2 equivalent). | [E] | `v2_d1_probe.json`, `v2_fresh_cases_on_B2.json`, `v2_stageA_*` |
+| V2-10 | Stage-B mutations: builder unit suite 8/11, verifier oracle harness 10/11 (1 equivalent). | [E] | `v2_mutations_summary.json` |
+
+Scope: fictional synthetic scenarios only, inside `valid_domain` and outside the bands. This says nothing about real buildings or J-CAT. No novelty or speed claim.

@@ -48,8 +48,8 @@ def num(x):
     raise TypeError(repr(x))
 
 
-ANALOG = ("R", "C", "V", "I", "OA", "SW")
-UNSUPPORTED = ("L", "D", "E", "G", "F", "H")
+ANALOG = ("R", "C", "V", "I", "OA", "SW", "E", "G")
+UNSUPPORTED = ("L", "D", "F", "H")
 
 
 class Net:
@@ -73,6 +73,8 @@ class Net:
                     addn(n)
             elif k in ANALOG:
                 addn(e["a"]); addn(e["b"])
+                if k in ("E", "G"):
+                    addn(e["cp"]); addn(e["cn"])
             elif k == "CMP":
                 addn(e["plus"]); addn(e["minus"])
         self.nidx = {n: i for i, n in enumerate(self.nodes)}
@@ -92,50 +94,69 @@ class Net:
 
 
 class Reduced:
-    """RREF of M (rows x ncols) with the row transformation E (E M = R)."""
+    """Sparse RREF of M (rows x ncols) with the row transformation E (E M = R).
+    Rows are dicts; pivot = shortest candidate row (limits fill-in). Exact Fractions."""
 
     def __init__(self, M, ncols):
         m = len(M)
-        A = [list(r) + [Fr(int(i == k)) for k in range(m)] for i, r in enumerate(M)]
-        piv = []
-        r = 0
+        A = [{c: v for c, v in enumerate(r) if v != 0} for r in M]
+        E = [{i: Fr(1)} for i in range(m)]
+        colidx = {}
+        for i, r in enumerate(A):
+            for c in r:
+                colidx.setdefault(c, set()).add(i)
+        pivoted = [False] * m
+        piv_of_row = {}
         for c in range(ncols):
-            p = None
-            for i in range(r, m):
-                if A[i][c] != 0:
-                    p = i
-                    break
-            if p is None:
+            cand = [i for i in colidx.get(c, ()) if not pivoted[i]]
+            if not cand:
                 continue
-            A[r], A[p] = A[p], A[r]
-            inv = 1 / A[r][c]
-            A[r] = [x * inv for x in A[r]]
-            for i in range(m):
-                if i != r and A[i][c] != 0:
-                    f = A[i][c]
-                    A[i] = [x - f * y for x, y in zip(A[i], A[r])]
-            piv.append(c)
-            r += 1
-            if r == m:
-                break
-        self.rank = r
-        self.piv = piv
-        self.R = [row[:ncols] for row in A]
-        self.E = [row[ncols:] for row in A]
+            p = min(cand, key=lambda i: (len(A[i]), i))
+            inv = 1 / A[p][c]
+            A[p] = {k: v * inv for k, v in A[p].items()}
+            E[p] = {k: v * inv for k, v in E[p].items()}
+            for i in list(colidx.get(c, ())):
+                if i == p:
+                    continue
+                f = A[i].get(c)
+                if not f:
+                    continue
+                Ai, Ei = A[i], E[i]
+                for k, v in A[p].items():
+                    nv = Ai.get(k, 0) - f * v
+                    if nv:
+                        if k not in Ai:
+                            colidx.setdefault(k, set()).add(i)
+                        Ai[k] = nv
+                    elif k in Ai:
+                        del Ai[k]
+                        colidx[k].discard(i)
+                for k, v in E[p].items():
+                    nv = Ei.get(k, 0) - f * v
+                    if nv:
+                        Ei[k] = nv
+                    elif k in Ei:
+                        del Ei[k]
+            pivoted[p] = True
+            piv_of_row[p] = c
         self.ncols = ncols
-        pivset = set(piv)
-        self.free = [c for c in range(ncols) if c not in pivset]
-        self.det = {}
-        for i, c in enumerate(piv):
-            self.det[c] = all(self.R[i][f] == 0 for f in self.free)
+        self.piv_rows = piv_of_row                      # row -> pivot column
+        self.nonpiv = [i for i in range(m) if not pivoted[i]]
+        pivcols = set(piv_of_row.values())
+        self.rank = len(pivcols)
+        self.E = E
+        self.free = [c for c in range(ncols) if c not in pivcols]
+        free = set(self.free)
+        self.det = {c: not (set(A[i]) & free) for i, c in piv_of_row.items()}
 
     def solve(self, rhs):
         """Particular solution (free = 0) and consistency residual."""
-        rr = [sum((e * b for e, b in zip(row, rhs) if e != 0 and b != 0), Fr(0)) for row in self.E]
-        incons = [rr[i] for i in range(self.rank, len(rr)) if rr[i] != 0]
+        def rr(i):
+            return sum((v * rhs[k] for k, v in self.E[i].items() if rhs[k] != 0), Fr(0))
+        incons = [x for x in (rr(i) for i in self.nonpiv) if x != 0]
         x = [Fr(0)] * self.ncols
-        for i, c in enumerate(self.piv):
-            x[c] = rr[i]
+        for i, c in self.piv_rows.items():
+            x[c] = rr(i)
         return x, incons
 
     def determined(self, c):
@@ -255,7 +276,7 @@ class VSim:
         out = []
         for e in self.net.els:
             k = e["kind"]
-            if k in ("V", "C", "OA") or (k == "SW" and e["name"] in closed):
+            if k in ("V", "C", "OA", "E") or (k == "SW" and e["name"] in closed):
                 out.append(e)
         return out
 
@@ -304,6 +325,15 @@ class VSim:
                     kcl[p][vc(p)] += G
                     if q != "0":
                         kcl[p][vc(q)] -= G
+            elif k == "G":
+                gm = num(e["gm"])
+                for nd_, sg in ((e["a"], 1), (e["b"], -1)):
+                    if nd_ == "0":
+                        continue
+                    if e["cp"] != "0":
+                        kcl[nd_][vc(e["cp"])] += sg * gm
+                    if e["cn"] != "0":
+                        kcl[nd_][vc(e["cn"])] -= sg * gm
         for e in aux:
             jc = col[("j", e["name"])]
             if e["kind"] == "OA":
@@ -328,6 +358,12 @@ class VSim:
                     r[vc(b, pre)] -= 1
                 if e["kind"] == "C" and pre == "dv":
                     r[col[("du", e["name"])]] -= 1
+                if e["kind"] == "E":
+                    g_ = num(e["gain"])
+                    if vc(e["cp"], pre) is not None:
+                        r[vc(e["cp"], pre)] -= g_
+                    if vc(e["cn"], pre) is not None:
+                        r[vc(e["cn"], pre)] += g_
                 kinds.append((pre, e["name"]))
         for c in n.caps:
             r = row()
@@ -346,6 +382,14 @@ class VSim:
                         r[col[("dv", p)]] += G
                         if q != "0":
                             r[col[("dv", q)]] -= G
+                if e["kind"] == "G":
+                    gm = num(e["gm"])
+                    sg = 1 if e["a"] == nd else (-1 if e["b"] == nd else 0)
+                    if sg:
+                        if e["cp"] != "0":
+                            r[col[("dv", e["cp"])]] += sg * gm
+                        if e["cn"] != "0":
+                            r[col[("dv", e["cn"])]] -= sg * gm
             for e in aux:
                 c = col[("dj", e["name"])]
                 if e["kind"] == "OA":
@@ -464,6 +508,12 @@ class VSim:
                     r[col[("v", b)]] -= 1
                 if e["kind"] == "C":
                     r[col[("u", e["name"])]] -= 1
+                if e["kind"] == "E":
+                    g_ = num(e["gain"])
+                    if e["cp"] != "0":
+                        r[col[("v", e["cp"])]] -= g_
+                    if e["cn"] != "0":
+                        r[col[("v", e["cn"])]] += g_
                 rows.append(r); kinds.append(("br", e["name"]))
             # post-jump static consistency of the NEW mode with FINITE currents j+ (resistor
             # KCL included): the state after the impulse must admit a continuous solution.
@@ -483,6 +533,14 @@ class VSim:
                             r[col[("v", p)]] += G
                             if q != "0":
                                 r[col[("v", q)]] -= G
+                    if e["kind"] == "G":
+                        gm = num(e["gm"])
+                        sg = 1 if e["a"] == nd else (-1 if e["b"] == nd else 0)
+                        if sg:
+                            if e["cp"] != "0":
+                                r[col[("v", e["cp"])]] += sg * gm
+                            if e["cn"] != "0":
+                                r[col[("v", e["cn"])]] -= sg * gm
                 for e in aux:
                     jc = col[("j", e["name"])]
                     if e["kind"] == "OA":
@@ -651,10 +709,21 @@ class VSim:
         cur_closed = self.closed()
         guard = 0
         late_fall = set()
+        pending_snap = []
         while True:
             guard += 1
             if guard > 20000:
                 raise RuntimeError("instant does not terminate")
+            if not self.active_seq and pending_snap:
+                # readout with a control pulse: snapshot after the pulse's sequences, then lower it
+                for obj in pending_snap:
+                    self._snap(obj)
+                low = {obj["signal"]: False for obj in pending_snap if obj.get("signal")}
+                pending_snap = []
+                if low:
+                    self.settle(low)
+                    cur_closed = self.change_mode("logic", cur_closed)
+                continue
             if self.active_seq:
                 ch = {}
                 nxt = []
@@ -698,10 +767,11 @@ class VSim:
             for _, kind, obj, w in batch:
                 if kind == "read":
                     obj["done"] = True
-                    self.snaps.append({"t": self.t, "label": obj["label"], "priority": obj["priority"],
-                                       "u": {c["name"]: self.u[i] for i, c in enumerate(self.net.caps)},
-                                       "sig": dict(self.sig), "heat": dict(self.heat),
-                                       "n_jumps": len(self.jumps)})
+                    if obj.get("signal"):
+                        ch[obj["signal"]] = True
+                        pending_snap.append(obj)
+                    else:
+                        self._snap(obj)
                 elif kind == "cmp":
                     ch[obj["out"]] = w
                     self.events.append((self.t, "cmp", obj["name"], w))
@@ -717,6 +787,12 @@ class VSim:
                     self.events.append((self.t, "seq", s["name"], True))
                 cur_closed = self.change_mode("logic", cur_closed)
         self.instant_states.append((self.t, list(self.u)))
+
+    def _snap(self, obj):
+        self.snaps.append({"t": self.t, "label": obj["label"], "priority": obj["priority"],
+                           "u": {c["name"]: self.u[i] for i, c in enumerate(self.net.caps)},
+                           "sig": dict(self.sig), "heat": dict(self.heat), "n_jumps": len(self.jumps),
+                           "counters": dict(self.cval)})
 
     def advance(self, m, us, vs, js, h):
         """Exact polynomial advance by h with continuous energy meters (absorbed v*i)."""
@@ -767,7 +843,8 @@ class VSim:
 
     def run(self, t_end, readouts=()):
         t_end = Fr(t_end)
-        rds = [{"t": Fr(r[0]), "priority": r[1], "label": r[2] if len(r) > 2 else None} for r in readouts]
+        rds = [{"t": Fr(r[0]), "priority": r[1], "label": r[2] if len(r) > 2 else None,
+                "signal": r[3] if len(r) > 3 else None} for r in readouts]
         # initial consistent state (charge-conserving init jump, not counted in energy)
         cl = self.closed()
         u_new, Q, J = self.jump(cl)

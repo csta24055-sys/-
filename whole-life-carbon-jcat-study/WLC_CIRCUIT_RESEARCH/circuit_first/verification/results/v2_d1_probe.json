@@ -1,0 +1,89 @@
+{
+ "gated_fall": {
+  "expected_charge": 1,
+  "sim": {
+   "charge": "1",
+   "counter": null
+  },
+  "hybrid": {
+   "charge": "1",
+   "counter": null
+  },
+  "vsim": {
+   "charge": "1",
+   "counter": null
+  }
+ },
+ "gated_rise": {
+  "expected_charge": 2,
+  "sim": {
+   "charge": "2",
+   "counter": null
+  },
+  "hybrid": {
+   "charge": "2",
+   "counter": null
+  },
+  "vsim": {
+   "charge": "2",
+   "counter": null
+  }
+ },
+ "touch_above": {
+  "expected_charge": 3,
+  "sim": {
+   "charge": "3",
+   "counter": 1
+  },
+  "hybrid": {
+   "charge": "3",
+   "counter": 1
+  },
+  "vsim": {
+   "charge": "3",
+   "counter": 1
+  }
+ },
+ "touch_below": {
+  "expected_charge": 0,
+  "sim": {
+   "charge": "0",
+   "counter": 1
+  },
+  "hybrid": {
+   "charge": "0",
+   "counter": 1
+  },
+  "vsim": {
+   "charge": "0",
+   "counter": 1
+  }
+ },
+ "rise_fall_and": {
+  "expected_charge": 0,
+  "sim": {
+   "charge": "0",
+   "counter": 1
+  },
+  "hybrid": {
+   "charge": "0",
+   "counter": 1
+  },
+  "vsim": {
+   "charge": "0",
+   "counter": 1
+  }
+ },
+ "self_feedback": {
+  "expected_charge": null,
+  "sim": {
+   "error": "RuntimeError: event loop does not terminate"
+  },
+  "hybrid": {
+   "error": "RuntimeError: event loop does not terminate"
+  },
+  "vsim": {
+   "error": "RuntimeError: instant does not terminate"
+  }
+ }
+}

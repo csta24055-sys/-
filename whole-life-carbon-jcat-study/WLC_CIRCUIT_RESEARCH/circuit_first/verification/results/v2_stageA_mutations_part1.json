@@ -1,0 +1,116 @@
+{
+ "summary": {
+  "mutations": 8,
+  "applied": 8,
+  "caught": 6,
+  "not_caught": [
+   "BASELINE",
+   "M05_clock_reset_to_zero_not_subtract"
+  ]
+ },
+ "detail": {
+  "BASELINE": {
+   "applied": true,
+   "file": "README.md",
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing_tests": [],
+   "seconds": 43.8
+  },
+  "M01_swap_tick_fire_priority": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=1",
+   "caught": true,
+   "failing_tests": [
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected"
+   ],
+   "seconds": 44.5
+  },
+  "M02_no_charge_conservation_at_switch": {
+   "applied": true,
+   "file": "engine/sim.py",
+   "ran": 47,
+   "result": "failures=24",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D2_signed_inputs.test_D2_signed_inputs",
+    "test_v1_fixes.V1Fixes.test_D3_mixed_stage_repair_group.test_D3_mixed_stage_repair_group",
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_v1_fixes.V1Fixes.test_D7_ramps_exactly_zero_after_reset.test_D7_ramps_exactly_zero_after_reset",
+    "test_v1_fixes.V1Fixes.test_D7_substituted_renovation_counts_as_renewal.test_D7_substituted_renovation_counts_as_renewal",
+    "test_bench_switched.SwitchedBenches.test_charge_sharing_ideal_switch.test_charge_sharing_ideal_switch",
+    "test_pilot.Pilot.test_contract_boundary_points.test_contract_boundary_points",
+    "test_cf3.CF3.test_degradation_resets_at_replacement.test_degradation_resets_at_replacement",
+    "test_pilot.Pilot.test_event_discovery_and_stages.test_event_discovery_and_stages",
+    "test_cf3.CF3.test_explicit_early_replacement.test_explicit_early_replacement",
+    "test_audit.Audit.test_full_solution_cf3.test_full_solution_cf3"
+   ],
+   "seconds": 21.3
+  },
+  "M03_negative_packet_polarity_flipped": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=5",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D3_mixed_stage_repair_group.test_D3_mixed_stage_repair_group",
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_repair_year_exclusion.test_repair_year_exclusion"
+   ],
+   "seconds": 41.6
+  },
+  "M04a_rho_eps_not_2eps": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=3",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_repair_year_exclusion.test_repair_year_exclusion"
+   ],
+   "seconds": 42.4
+  },
+  "M04b_rho_first_order_2eps": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=2",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected"
+   ],
+   "seconds": 43.4
+  },
+  "M04c_eps_1e-8": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=2",
+   "caught": true,
+   "failing_tests": [
+    "test_pilot.Pilot.test_event_discovery_and_stages.test_event_discovery_and_stages",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected"
+   ],
+   "seconds": 43.4
+  },
+  "M05_clock_reset_to_zero_not_subtract": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing_tests": [],
+   "seconds": 43.6
+  }
+ }
+}

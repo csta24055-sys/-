@@ -36,7 +36,7 @@
   "phases": {
     "S1_design": "DONE (design only; every prediction and lemma [H])",
     "S2_implementation": "DONE by builder (stage A + stage B S3a-S3e + V1 fixes); re-run by coordinator; stage B independent verification NOT_RUN yet",
-    "S3_independent_verification": "IN_PROGRESS (V1 on stage A snapshot 4c5f375 done; stage B not yet verified)",
+    "S3_independent_verification": "IN_PROGRESS (V1 stage A and V2 stage B done; builder fix pass and V3 recheck pending)",
     "S4_integration_and_save": "NOT_RUN"
   },
   "engines": {
@@ -205,6 +205,46 @@
         "duration_s": 4353
       },
       "status": "STAGE_B_DONE_PENDING_VERIFIER"
+    },
+    {
+      "phase": "S3_independent_verification",
+      "pass": "V2 (stage B frozen snapshot 80ec2de)",
+      "actor": "wlc-verifier (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "command": "cd circuit_first/verification/tests && CF_SNAPSHOT=<extraction of 80ec2de> PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 math7-py -B -m unittest test_v2",
+      "route_result": "5/5 verifier tests OK (1 reproduces the V2-D1 crash)",
+      "coordinator_rerun": "5/5 OK (2026-11-24)",
+      "gates": {
+        "CF1": "PASS",
+        "CF2": "PASS",
+        "CF3": "PASS",
+        "CF4": "PARTIAL (901/901 points within 1e-9 on scenarios unused by the builder; one valid-domain crash; in-band NOT_RUN)",
+        "CF5": "PARTIAL (h 0.045 S / 0.060 E1; full-building fixed template NOT_RUN)",
+        "CF6": "present"
+      },
+      "headline": {
+        "oracle": "evaluation E4, E5, E7, E8, E9 + 31 edge scenarios + 7 stage subsets, 17 T incl. +-1e-6 around integer-year events: C(T) 5.0e-14, M 5.1e-14, Z 3.2e-16, worst stage B3 2.4e-13; event counts equal",
+        "laws": "89,096 KCL checks exactly 0 on the stage-B dump; crossbars re-solved independently (354 / 232 taps exact); 353-element core sub-network re-run exactly",
+        "black_box": "no WLC value in any source; zero arithmetic on 7,633 raw scenario fields; but adapter_building.py:260-497 follows the original control structure row by row as counted wiring configuration (8,476 look-ups, 8,984 predicates, 449 grey predicates on S)",
+        "structure": "time and aggregation layers are a genuine circuit re-organization; amplitude layer is a transcription of per-row product formulas into op-amp stages (3,393 op-amps for 265 rows on S, 26 % pure sign inverters, about twice the L1 minimum); about 19 % of capacitors carry needed information",
+        "speed": "no gain (16-21 s vs 0.6-1 s on 16 T for an S-size building)",
+        "mutations": "stage B: builder suite 8/11, verifier harness 10/11; stage A 17/19 (2 equivalent)"
+      },
+      "defects": [
+        "V2-D1 recovery rate eta=1 builds a 0-ohm feedback resistor -> ZeroDivisionError (must fix)",
+        "V2-D2 stepwise grid step index bit-decoded in Python uncounted",
+        "V2-D3 dangling input",
+        "V2-D4 builder suite misses 3 mutants",
+        "V2-D5 duplicate explicit years unguarded"
+      ],
+      "recommended_overall_verdict": "PARTIAL",
+      "usage_cumulative": {
+        "subagent_tokens": 660658,
+        "tool_uses": 94,
+        "duration_s": 1845
+      },
+      "status": "DONE"
     }
   ],
   "verifier_write_location": "circuit_first/verification/ (decided by coordinator; cycle-1 routes/ and integration/ stay read-only)",

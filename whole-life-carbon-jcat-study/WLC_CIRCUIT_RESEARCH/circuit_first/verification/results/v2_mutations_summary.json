@@ -1,0 +1,202 @@
+{
+ "BASELINE": {
+  "builder_caught": false,
+  "builder_result": "OK",
+  "verifier_caught": false,
+  "verifier_max": {},
+  "verifier_noB2": {}
+ },
+ "B01_conversion_skipped": {
+  "builder_caught": true,
+  "builder_result": "errors=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "A1-A3": 0.9331508461705369,
+   "A4": 0.00102444407573573,
+   "A5": 0.03184607467907381,
+   "B3": 0.9122598379561353,
+   "B4": 0.9426996040485105,
+   "B5": 0.005115732026804591,
+   "C": 0.9385656933555783,
+   "M": 0.9387936122662203
+  },
+  "verifier_noB2": {
+   "A1-A3": 0.005952077480008754,
+   "A4": 0.00102444407573573,
+   "A5": 0.0268751261261338,
+   "B3": 0.004487887342961244,
+   "B4": 0.3917276060900973,
+   "B5": 0.005115732026804591,
+   "C": 0.004893212735681741,
+   "M": 0.0052152903043725905
+  }
+ },
+ "B02_wrong_rail_transport_delivery": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "A4": 142.3546159378192,
+   "B4": 0.9458132824649159,
+   "B5": 0.6992251907914909,
+   "C": 0.9414762574822044,
+   "M": 0.9415293513701329
+  },
+  "verifier_noB2": {
+   "A4": 20.380793078759805,
+   "B4": 0.4694423341642169,
+   "B5": 0.0950642026791168,
+   "C": 0.6576777111039885,
+   "M": 0.7338462950174948
+  }
+ },
+ "B03_rho_leg_into_B2": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B2": 1.0,
+   "B6": 0.1362481779802223
+  },
+  "verifier_noB2": {
+   "B6": 0.09853983948885839,
+   "C": 0.03449956756838475,
+   "M": 0.03510621501922771
+  }
+ },
+ "B04_b5_base_without_A4": {
+  "builder_caught": false,
+  "builder_result": "OK",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B5": 0.05291401436503232,
+   "C": 0.013381721146432936,
+   "M": 0.013496184268568875
+  },
+  "verifier_noB2": {
+   "B5": 0.05291401436503232,
+   "C": 0.007406238081192409,
+   "M": 0.007440197844999425
+  }
+ },
+ "B05_refrigerant_top_up_ignored": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B1": 0.7967580995592233,
+   "C": 0.05597709500904124,
+   "Z": 0.2244258473994778,
+   "M": 0.05390319861454636
+  },
+  "verifier_noB2": {
+   "B1": 0.26285195002670636,
+   "C": 0.012670997740331676,
+   "Z": 0.051873336073438456,
+   "M": 0.012479400843904866
+  }
+ },
+ "B06_refrigerant_reset_short_removed": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B1": 99.03436564005658,
+   "C": 0.2711483383050224,
+   "Z": 74.9402973283445,
+   "M": 0.23266341394598752
+  },
+  "verifier_noB2": {
+   "B1": 3.9797493252387603,
+   "C": 0.08126673691782531,
+   "Z": 1.0900251640963776,
+   "M": 0.06206406677986092
+  }
+ },
+ "B07_near_equal_periods_merged": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B3": 0.07546284369174246,
+   "B4": 0.010676604126768277,
+   "C": 0.003520151924995278,
+   "M": 0.003536292849257826,
+   "event_mismatch": 5
+  },
+  "verifier_noB2": {
+   "B3": 0.0006521812854959914,
+   "B4": 0.010676604126768277,
+   "C": 0.003520151924995278,
+   "M": 0.003536292849257826,
+   "event_mismatch": 1
+  }
+ },
+ "B08_readout_bus_not_emptied": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B1": 0.9444899574870846,
+   "B3": 800001.0020198065,
+   "C1": 5.0,
+   "C2": 5.000000000000002,
+   "C3": 5.000000000000002,
+   "C4": 5.000000000000001,
+   "C": 0.1774314158935253,
+   "Z": 5.17243297983389,
+   "M": 0.01580828342661333
+  },
+  "verifier_noB2": {
+   "B1": 0.8201659955279712,
+   "B3": 0.13361310950837912,
+   "C1": 5.0,
+   "C2": 5.000000000000001,
+   "C3": 5.000000000000002,
+   "C4": 5.000000000000001,
+   "C": 0.1774314158935253,
+   "Z": 5.000043174819967,
+   "M": 0.01580828342661333
+  }
+ },
+ "B09_mdac_msb_weight": {
+  "builder_caught": false,
+  "builder_result": "OK",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B2": 5.290431798076989e-05,
+   "B6": 2.915732164900683e-05,
+   "B7": 5.864097550713745e-05,
+   "C": 1.0146509356046352e-05,
+   "M": 1.0193034063653584e-05
+  },
+  "verifier_noB2": {
+   "B6": 3.1324066429399335e-05,
+   "B7": 2.3568761091356038e-05,
+   "C": 1.0146509356046352e-05,
+   "M": 1.0193034063653584e-05
+  }
+ },
+ "B10_epd_validity_strict": {
+  "builder_caught": false,
+  "builder_result": "OK",
+  "verifier_caught": false,
+  "verifier_max": {},
+  "verifier_noB2": {}
+ },
+ "B11_year_cell_tick_commit_skipped": {
+  "builder_caught": true,
+  "builder_result": "failures=1",
+  "verifier_caught": true,
+  "verifier_max": {
+   "B3": 0.8579645542363513,
+   "C": 0.1550683803103179,
+   "M": 0.15714444460116989
+  },
+  "verifier_noB2": {
+   "B3": 0.37329314927607254,
+   "C": 0.10665050809287903,
+   "M": 0.10868070132029219
+  }
+ }
+}

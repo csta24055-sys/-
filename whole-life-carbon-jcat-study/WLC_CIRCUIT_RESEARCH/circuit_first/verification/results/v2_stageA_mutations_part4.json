@@ -1,0 +1,43 @@
+{
+ "summary": {
+  "mutations": 2,
+  "applied": 2,
+  "caught": 2,
+  "not_caught": []
+ },
+ "detail": {
+  "M16b_initial_packets_on_first_tick_B2": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=10",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D2_signed_inputs.test_D2_signed_inputs",
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_pilot.Pilot.test_contract_boundary_points.test_contract_boundary_points",
+    "test_pilot.Pilot.test_event_discovery_and_stages.test_event_discovery_and_stages",
+    "test_pilot.Pilot.test_headline_values.test_headline_values",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_renovation_policies.test_renovation_policies",
+    "test_nmax.NMax.test_same_netlist_and_same_results.test_same_netlist_and_same_results",
+    "test_cf3.CF3.test_simultaneous_set_order_invariance.test_simultaneous_set_order_invariance",
+    "test_pilot.Pilot.test_single_rail_joule_audit.test_single_rail_joule_audit"
+   ],
+   "seconds": 38.2
+  },
+  "M18b_renewal_ignores_substituting_renovation_B2": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=3",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_v1_fixes.V1Fixes.test_D7_substituted_renovation_counts_as_renewal.test_D7_substituted_renovation_counts_as_renewal",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected"
+   ],
+   "seconds": 43.2
+  }
+ }
+}

@@ -197,26 +197,44 @@ def check(dump, tol_float=1e-9):
         for nm, q in Q.items():
             if nm in caps and nm not in sm and q != 0:
                 _absmax(acc, "jump_cap", q, (j["t"], nm, "impulse without state change"), viol, tol)
-    # continuity between instants (exact dumps)
+    # continuity between instants (exact dumps). Jumps recorded at time ta are applied in order
+    # to the last record at ta (dumps that record only arrivals: hybrid.py); the segment is then
+    # advanced with the derivative recorded at the arrival tb (exact for linear segments) or by
+    # the trapezoid rule with both end derivatives (exact for quadratic segments).
     if exact:
         recs = dump["records"]
+        jumps_at = {}
+        for jp in dump["jumps"]:
+            jumps_at.setdefault(str(jp["t"]), []).append(jp)
+        cnt["jump_chain_breaks"] = 0
+        first_at = {}
+        hybrid_style = not any(r["tag"].startswith("post:") and r["tag"] != "post:init" for r in recs)
+        for r in recs:
+            first_at.setdefault(r["t"], r)
         for a, b in zip(recs[:-1], recs[1:]):
             ta, tb = num(a["t"]), num(b["t"])
-            if tb == ta:
+            if tb == ta or b["tag"] == "mid":
                 continue
-            if b["tag"] == "mid":
-                continue
+            if hybrid_style:
+                a = first_at[a["t"]]
             cnt["cont_pairs"] += 1
             h = tb - ta
+            sa = {k: num(x) for k, x in a["s"].items()}
+            js = jumps_at.get(a["t"], []) if a["tag"] in ("arrive", "post:init") else []
+            for jp in js:
+                for nm, x in jp["s_minus"].items():
+                    if sa.get(nm) != num(x):
+                        cnt["jump_chain_breaks"] += 1
+                for nm, x in jp["s_plus"].items():
+                    sa[nm] = num(x)
             for nm, x in a["s"].items():
-                xa, xb, d = num(x), num(b["s"][nm]), num(a["ds"][nm])
-                pred = xa + d * h
-                if pred != xb:
-                    # derivative may itself vary (higher-order segment): compare with end derivative
-                    d2 = num(b["ds"][nm])
-                    if xa + (d + d2) / 2 * h == xb and d != d2:
-                        cnt["cont_nonconst"] += 1
-                        continue
-                    _absmax(acc, "continuity", pred - xb, (a["t"], b["t"], nm), viol, tol)
+                xa, xb = sa[nm], num(b["s"][nm])
+                d_a, d_b = num(a["ds"][nm]), num(b["ds"][nm])
+                if (not js and xa + d_a * h == xb) or xa + d_b * h == xb:
+                    continue
+                if xa + (d_a + d_b) / 2 * h == xb and not js:
+                    cnt["cont_nonconst"] += 1
+                    continue
+                _absmax(acc, "continuity", (xa + d_b * h) - xb, (a["t"], b["t"], nm), viol, tol)
     return {"exact": exact, "max": {k: (float(v) if not exact else v) for k, v in acc.items()},
             "counts": cnt, "violations": viol}

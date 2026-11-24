@@ -1,0 +1,111 @@
+{
+ "summary": {
+  "mutations": 7,
+  "applied": 7,
+  "caught": 6,
+  "not_caught": [
+   "M06_SR_set_wins"
+  ]
+ },
+ "detail": {
+  "M06_SR_set_wins": {
+   "applied": true,
+   "file": "engine/logic.py",
+   "ran": 47,
+   "result": "OK",
+   "caught": false,
+   "failing_tests": [],
+   "seconds": 44.1
+  },
+  "M07_readout_ignores_yearcell_tap": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=4",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D3_mixed_stage_repair_group.test_D3_mixed_stage_repair_group",
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_repair_year_exclusion.test_repair_year_exclusion"
+   ],
+   "seconds": 42.2
+  },
+  "M08_no_substitution_suppression": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=2",
+   "caught": true,
+   "failing_tests": [
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected",
+    "test_cf3.CF3.test_renovation_policies.test_renovation_policies"
+   ],
+   "seconds": 42.9
+  },
+  "M09_comparator_strict": {
+   "applied": true,
+   "file": "engine/sim.py",
+   "ran": 47,
+   "result": "failures=23",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D1_gated_integrator_both_directions.test_D1_gated_integrator_both_directions",
+    "test_v1_fixes.V1Fixes.test_D2_signed_inputs.test_D2_signed_inputs",
+    "test_v1_fixes.V1Fixes.test_D3_mixed_stage_repair_group.test_D3_mixed_stage_repair_group",
+    "test_v1_fixes.V1Fixes.test_D7_explicit_event_at_band_edge.test_D7_explicit_event_at_band_edge",
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_v1_fixes.V1Fixes.test_D7_ramps_exactly_zero_after_reset.test_D7_ramps_exactly_zero_after_reset",
+    "test_v1_fixes.V1Fixes.test_D7_substituted_renovation_counts_as_renewal.test_D7_substituted_renovation_counts_as_renewal",
+    "test_pilot.Pilot.test_contract_boundary_points.test_contract_boundary_points",
+    "test_cf3.CF3.test_degradation_resets_at_replacement.test_degradation_resets_at_replacement",
+    "test_cf3.CF3.test_efficiency_change_after_replacement.test_efficiency_change_after_replacement",
+    "test_pilot.Pilot.test_event_discovery_and_stages.test_event_discovery_and_stages",
+    "test_cf3.CF3.test_explicit_early_replacement.test_explicit_early_replacement"
+   ],
+   "seconds": 19.7
+  },
+  "M10_impulsive_energy_left_value": {
+   "applied": true,
+   "file": "engine/sim.py",
+   "ran": 47,
+   "result": "failures=6",
+   "caught": true,
+   "failing_tests": [
+    "test_bench_switched.SwitchedBenches.test_charge_sharing_ideal_switch.test_charge_sharing_ideal_switch",
+    "test_audit.Audit.test_full_solution_cf3.test_full_solution_cf3",
+    "test_pilot.Pilot.test_full_solution_dump_and_residuals.test_full_solution_dump_and_residuals",
+    "test_bench_switched.SwitchedBenches.test_integrate_and_fire.test_integrate_and_fire",
+    "test_bench_switched.SwitchedBenches.test_sc_packet_and_heat.test_sc_packet_and_heat",
+    "test_pilot.Pilot.test_single_rail_joule_audit.test_single_rail_joule_audit"
+   ],
+   "seconds": 39.3
+  },
+  "M11_set_semantics_off_one_per_batch": {
+   "applied": true,
+   "file": "engine/sim.py",
+   "ran": 47,
+   "result": "failures=2",
+   "caught": true,
+   "failing_tests": [
+    "test_bench_switched.SwitchedBenches.test_integrate_and_fire.test_integrate_and_fire",
+    "test_cf3.CF3.test_simultaneous_set_order_invariance.test_simultaneous_set_order_invariance"
+   ],
+   "seconds": 45.7
+  },
+  "M12_age_slope_sign": {
+   "applied": true,
+   "file": "adapter.py",
+   "ran": 47,
+   "result": "failures=4",
+   "caught": true,
+   "failing_tests": [
+    "test_v1_fixes.V1Fixes.test_D7_full_scenario_value_right.test_D7_full_scenario_value_right",
+    "test_v1_fixes.V1Fixes.test_D7_substituted_renovation_counts_as_renewal.test_D7_substituted_renovation_counts_as_renewal",
+    "test_cf3.CF3.test_degradation_resets_at_replacement.test_degradation_resets_at_replacement",
+    "test_audit.Mutations.test_mutations_detected.test_mutations_detected"
+   ],
+   "seconds": 38.6
+  }
+ }
+}
