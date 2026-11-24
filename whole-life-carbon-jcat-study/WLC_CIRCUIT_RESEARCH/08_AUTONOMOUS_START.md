@@ -3,6 +3,9 @@
 【最優先：モデルと工程の切り替え】
 まず `10_MODEL_ROUTING.md` を読み、全体計画は `wlc-architect`（Fable 5.2 High）、A/B/C/Eの実装・数値計算は各担当（Opus 5.5 Medium）、Dの独立検証は `wlc-verifier`（Opus 5.5 High）、成果の比較・統合は `wlc-integrator`（Opus 5.5 High）、最後の次期研究計画は `wlc-replanner`（Fable 5.2 High）に委任してください。各エージェントの `model` / `effort` を適用し、実際の起動モデルを記録してください。設定だけで実行済みと扱わず、モデルにアクセスできなければ代替使用と制約を明記してください。
 
+【追加：7数式エンジンの活用】
+`11_MATH7_INTEGRATION.md` を読み、`wlc-math7-orchestrator`（Opus 5.5 Medium）へ数式検証を委任する。Math7原本は同じ `csta24055-sys/-` の **mainブランチ** にある `math_tools_v2/`・`math_interop_v0/` と `math-ir-efficient.yml`。WLC研究ブランチにあると誤認せず、mainのコードを読み取り専用で別ディレクトリに取得する。5つのPythonエンジンは必要に応じて直接検証に使い、SageMathとMATLABは既存のGitHub Actionsで確認する。既存の `portable-full` は制限付き代数式のみで、WLCの一般的な積分・時間関数の7エンジン検証には未対応。新しい変換器が必要なら研究Fとして実装・検証する。API 403では正当な手動GitHub Actions手順を示し、権限強化や秘密鍵追加で回避しない。結果が実際に実行されなければ PASS と記録しない。
+
 GitHub リポジトリ `csta24055-sys/-` の `claude/wlc-equivalent-circuit-20261124` を出発点として、ホールライフカーボンの電気等価回路研究を**5本の独立ルートで並行**して進めてください。
 
 最初に `CLAUDE.md`、`WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`、`07_SHARED_CONTRACT.md`、`05_SOURCE_MAP.md` と既存理論 `WLC_THEORY_RESEARCH_BASE/00_README.md`・`13_別チャット引継ぎ文.md` を読み、元の理論と制約を確認してください。
