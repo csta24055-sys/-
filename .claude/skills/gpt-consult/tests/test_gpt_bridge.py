@@ -119,7 +119,7 @@ class TestDryRunAndSend(Base):
         self.assertNotIn("authorization", {k.lower() for k, _ in req.header_items()})
         body = json.loads(req.data)
         self.assertEqual(body["model"], "gpt-6.2-sol")
-        self.assertEqual(body["max_output_tokens"], 2000)
+        self.assertEqual(body["max_output_tokens"], 8000)
         self.assertFalse(body["store"])
         self.assertIn("2:     return a - b", body["input"])
         self.assertIn("a - b は誤り", out)
@@ -178,11 +178,16 @@ class TestLimits(Base):
         self.assertEqual(code, 2)
         self.assertIn("max_input_chars", err)
 
-    def test_file_truncation(self):
+    def test_oversize_file_is_error_unless_truncate(self):
         (self.root / ".gpt-bridge.json").write_text(json.dumps({"max_file_chars": 100}))
         (self.root / "big.py").write_text("x = 1\n" * 500)
-        _, out, _ = self.run_main(["ask", "q", "-f", "big.py"])
+        code, _, err = self.run_main(["ask", "q", "-f", "big.py"])
+        self.assertEqual(code, 2)                      # 黙って切り詰めない
+        self.assertIn("max_file_chars", err)
+        _, out, _ = self.run_main(["ask", "q", "-f", "big.py", "--truncate"])
         self.assertTrue(any("切り詰め" in n for n in json.loads(out)["notes"]))
+        _, out, _ = self.run_main(["ask", "q", "-f", "big.py", "--max-file-chars", "100000"])
+        self.assertEqual(json.loads(out)["notes"], [])
 
     def test_output_token_cap(self):
         code, _, err = self.run_main(["ask", "q", "--max-output-tokens", "999999"])

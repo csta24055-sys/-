@@ -361,17 +361,50 @@ class TestApprovalAndBudget(Base):
         e = self.bad(2, "review", "--send", opener=Recorder())
         self.assertIn("費用予算", e)
 
-    def test_hard_caps(self):
+    def test_no_fixed_caps_but_explicit_positive_limits(self):
+        self.start(n=50)
+        r = self.approve("--max-iterations", "50", "--max-calls", "500", "--max-input-tokens", "30000000",
+                         "--max-output-tokens", "5000000", "--output-tokens-per-call", "32000",
+                         "--expires", "2027-06-30T23:59:00+09:00")
+        self.assertEqual(r["approval"]["max_calls"], 500)          # 固定上限なし（承認値が上限）
+        self.bad(2, "approve", "--model", "m", "--max-iterations", "3", "--max-calls", "0",
+                 "--max-input-tokens", "1", "--max-output-tokens", "1", "--output-tokens-per-call", "1",
+                 "--data", "policies", "--expires", "2026-11-25T00:00", "--user-quote", "ok")   # 無制限・0 は不可
+        self.bad(2, "approve", "--model", "m", "--max-iterations", "3", "--max-calls", "1",
+                 "--max-input-tokens", "1", "--max-output-tokens", "100", "--output-tokens-per-call", "200",
+                 "--data", "policies", "--expires", "2026-11-25T00:00", "--user-quote", "ok")   # 1 回 > 合計
+        self.bad(2, "approve", "--model", "m", "--max-iterations", "3", "--max-calls", "1",
+                 "--max-input-tokens", "1", "--max-output-tokens", "1", "--output-tokens-per-call", "1",
+                 "--data", "policies", "--expires", "2026-11-25T00:00", "--user-quote", " ")
+
+    def test_split_review_never_truncates(self):
         self.start()
-        self.bad(2, "approve", "--model", "m", "--max-iterations", "99", "--max-calls", "1",
-                  "--max-input-tokens", "1", "--max-output-tokens", "1", "--data", "policies",
-                  "--expires", "2026-11-25T00:00", "--user-quote", "ok")
-        self.bad(2, "approve", "--model", "m", "--max-iterations", "3", "--max-calls", "1",
-                  "--max-input-tokens", "1", "--max-output-tokens", "1", "--data", "policies",
-                  "--expires", "2027-01-30T00:00", "--user-quote", "ok")
-        self.bad(2, "approve", "--model", "m", "--max-iterations", "3", "--max-calls", "1",
-                  "--max-input-tokens", "1", "--max-output-tokens", "1", "--data", "policies",
-                  "--expires", "2026-11-25T00:00", "--user-quote", " ")
+        lines = [f"行{i:04d} 内容{'あ' * 40}" for i in range(1, 1201)]
+        self.write_art("\n".join(lines))
+        self.approve("--max-input-per-call", "20000", "--max-calls", "20", "--max-input-tokens", "500000", "--max-output-tokens", "400000")
+        self.submit()
+        o = self.ok("review", "--show-packet")
+        meta, packets = o.split("\n}\n", 1)
+        info = json.loads(meta + "\n}")
+        self.assertGreater(info["parts"], 1)
+        for i in (1, 600, 1200):                                  # 全行がどこかのパートに含まれる
+            self.assertIn(f"行{i:04d}", packets)
+        self.assertNotIn("TRUNCATED", packets)
+        v1 = verdict("REVISE", actions=[("A1", "具体化", "answers.md (lines 1-300)")],
+                     issues=[("I1", "P2", "answers.md (lines 1-300)", "x")])
+        rec = Recorder(*[api_ok(v1)] * info["parts"])
+        r = self.ok("review", "--send", opener=rec)
+        self.assertEqual(len(rec.requests), info["parts"])
+        self.assertEqual(self.state()["usage"]["calls"], info["parts"])
+        self.assertEqual(len(r["next_actions"]), info["parts"])   # 統合（id は p1-A1, p2-A1, …）
+        self.assertTrue(all(a["decision"] is None for a in r["next_actions"]))  # 行範囲付きでも対象として有効
+
+    def test_policies_full_option(self):
+        self.start()
+        self.submit()
+        o = self.ok("review", "--policies", "full", "--show-packet")
+        self.assertIn("DUMMY-QG-UNSELECTED", o)
+        self.assertIn("DUMMY-AUTO-LEVELS", o)
 
     def test_halt_blocks_review(self):
         self.start()

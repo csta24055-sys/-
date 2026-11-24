@@ -47,10 +47,9 @@ except ImportError:  # pragma: no cover
 VERSION = "1.0.0"
 JST = ZoneInfo("Asia/Tokyo")
 
-# 包括承認でも超えられない上限（無制限の呼び出しを構造的に防ぐ）
-HARD_MAX_ITERATIONS = 20
-HARD_MAX_CALLS = 50
-HARD_MAX_DAYS = 14
+# 固定の上限は置かない。回数・トークン・費用・期限・1 回の入力量はすべて包括承認（approve）で
+# ユーザーが決めた値が上限になる。承認に数値がない「無制限」の送信は構造的にできない。
+DEFAULT_INPUT_PER_CALL = 200_000   # 1 回の送信に載せる文字数の目安（超える場合は分割レビュー）
 DATA_CLASSES = ("policies", "artifacts", "baseline", "facts", "evidence")
 TERMINAL = ("done", "stopped")
 LOOP_STOPPED = ("paused", "blocked", "needs_user", "stalled", "limit_reached")
@@ -327,8 +326,8 @@ def cmd_evidence_add(a):
     for k in ("claim", "title", "locator", "excerpt"):
         if not getattr(a, k).strip():
             raise LoopError(f"--{k} は必須です")
-    if len(a.excerpt) > 600:
-        raise LoopError("--excerpt は該当箇所の抜粋（600 文字以内）にしてください")
+    if len(a.excerpt) > 2000:
+        raise LoopError("--excerpt は該当箇所の抜粋（2000 文字以内）。長い場合は箇所ごとに分けて登録してください")
     ev = read_jsonl(d / "evidence.jsonl")
     rec = {"id": _next_id("E", [e["id"] for e in ev]), "claim": a.claim, "url": a.url, "title": a.title,
            "retrieved": a.retrieved, "locator": a.locator, "excerpt": a.excerpt, "tool": a.tool,
@@ -383,8 +382,8 @@ def cmd_start(a):
     mode_cfg = load_mode(info["mode"])
     if a.task_type not in mode_cfg["task_types"]:
         raise LoopError(f"作業種別が不正です: {a.task_type}（{', '.join(mode_cfg['task_types'])}）")
-    if not 1 <= a.max_iterations <= HARD_MAX_ITERATIONS:
-        raise LoopError(f"--max-iterations は 1〜{HARD_MAX_ITERATIONS}")
+    if a.max_iterations < 1:
+        raise LoopError("--max-iterations は 1 以上")
     active = [read_json(p) for p in w.glob("runs/*/state.json")]
     if any(s["status"] not in TERMINAL for s in active):
         raise LoopError("このワークスペースには進行中の実行があります（stop で終了するか resume してください）")
@@ -420,21 +419,20 @@ def cmd_approve(a):
     exp = parse_time(a.expires)
     if exp <= now():
         raise LoopError("期限が過去です")
-    if exp > now() + dt.timedelta(days=HARD_MAX_DAYS):
-        raise LoopError(f"承認期限は最長 {HARD_MAX_DAYS} 日です")
-    if not 1 <= a.max_iterations <= HARD_MAX_ITERATIONS:
-        raise LoopError(f"--max-iterations は 1〜{HARD_MAX_ITERATIONS}")
-    if not 1 <= a.max_calls <= HARD_MAX_CALLS:
-        raise LoopError(f"--max-calls は 1〜{HARD_MAX_CALLS}")
-    if a.output_tokens_per_call > gb.DEFAULTS["max_output_tokens_cap"]:
-        raise LoopError(f"--output-tokens-per-call は {gb.DEFAULTS['max_output_tokens_cap']} 以下")
+    for k in ("max_iterations", "max_calls", "max_input_tokens", "max_output_tokens", "output_tokens_per_call",
+              "max_input_per_call"):
+        if getattr(a, k) < 1:
+            raise LoopError(f"--{k.replace('_', '-')} は正の整数（無制限は指定できません）")
+    if a.output_tokens_per_call > a.max_output_tokens:
+        raise LoopError("--output-tokens-per-call が出力合計の上限を超えています")
     if a.max_usd is not None and (a.price_in is None or a.price_out is None):
         raise LoopError("--max-usd を使うには --price-in / --price-out（100 万トークンあたり USD）が必要です")
     s["max_iterations"] = a.max_iterations
     s["approval"] = {
         "model": a.model, "max_iterations": a.max_iterations, "max_calls": a.max_calls,
         "max_input_tokens": a.max_input_tokens, "max_output_tokens": a.max_output_tokens,
-        "output_tokens_per_call": a.output_tokens_per_call, "max_usd": a.max_usd,
+        "output_tokens_per_call": a.output_tokens_per_call, "max_input_per_call": a.max_input_per_call,
+        "max_usd": a.max_usd,
         "price_in_per_mtok": a.price_in, "price_out_per_mtok": a.price_out,
         "data": data, "expires": exp.isoformat(timespec="seconds"), "snapshots": a.snapshots,
         "user_quote": a.user_quote, "approved_at": iso(),
@@ -451,17 +449,19 @@ def cmd_extend(a):
         raise LoopError("--user-quote にユーザーの追加承認発言を記録してください")
     ap = s["approval"]
     if a.max_iterations:
-        if not s["iteration"] <= a.max_iterations <= HARD_MAX_ITERATIONS:
-            raise LoopError(f"--max-iterations は現在の反復 {s['iteration']}〜{HARD_MAX_ITERATIONS}")
+        if a.max_iterations < s["iteration"]:
+            raise LoopError(f"--max-iterations は現在の反復 {s['iteration']} 以上")
         ap["max_iterations"] = s["max_iterations"] = a.max_iterations
-    if a.max_calls:
-        if not ap["max_calls"] <= a.max_calls <= HARD_MAX_CALLS:
-            raise LoopError(f"--max-calls は {ap['max_calls']}〜{HARD_MAX_CALLS}")
-        ap["max_calls"] = a.max_calls
+    for k in ("max_calls", "max_input_tokens", "max_output_tokens"):
+        v = getattr(a, k)
+        if v:
+            if v < ap[k]:
+                raise LoopError(f"--{k.replace('_', '-')} は現在値 {ap[k]} 以上（減らす場合は approve し直す）")
+            ap[k] = v
     if a.expires:
         exp = parse_time(a.expires)
-        if exp > now() + dt.timedelta(days=HARD_MAX_DAYS):
-            raise LoopError(f"承認期限は最長 {HARD_MAX_DAYS} 日です")
+        if exp <= now():
+            raise LoopError("期限が過去です")
         ap["expires"] = exp.isoformat(timespec="seconds")
     ap.setdefault("extensions", []).append({"at": iso(), "user_quote": a.user_quote})
     if s["status"] == "limit_reached" and s["iteration"] < s["max_iterations"]:
@@ -564,13 +564,14 @@ def _data_class(rel: str) -> str:
     return "baseline" if rel.startswith("baseline/") else "artifacts"
 
 
-def build_review(d: Path, s: dict) -> dict:
+def build_review(d: Path, s: dict, policies: str = "selected", budget: int | None = None) -> dict:
+    """GPT へ送る本文を組み立てる。1 回の送信予算を超える場合は成果物を分割し、複数パートにする（切り詰めない）。"""
     w = ws_dir(s["workspace"])
     mode_cfg = load_mode(s["mode"])
     idir = it_dir(d, s["iteration"])
     sub = read_json(idir / "submission.json")
-    pol_text, pol_refs, pol_missing = rv.extract_policies(
-        H() / "policies", policy_selection(mode_cfg, s["task_type"]), mode_cfg["policy_char_limit"])
+    sel = rv.all_policy_selection(H() / "policies") if policies == "full" else policy_selection(mode_cfg, s["task_type"])
+    pol_text, pol_refs, pol_missing = rv.extract_policies(H() / "policies", sel, mode_cfg["policy_char_limit"])
     all_facts = visible_facts(s["workspace"])
     facts, blocked_facts = [], []
     for fid in sub["facts"]:
@@ -592,17 +593,28 @@ def build_review(d: Path, s: dict) -> dict:
         if pv.exists():
             v = read_json(pv)
             prev = {"verdict": v["verdict"], "summary": v["summary"], "decisions": read_json(pd, [])}
-    text, notes = rv.build_packet(run=s, mode_cfg=mode_cfg, policy_text=pol_text, policy_refs=pol_refs,
-                                  facts=facts, evidence=evidence, artifacts=artifacts, submission=sub,
-                                  previous=prev, artifact_char_limit=20000)
-    text, n_terms = apply_redact_terms(text)
+    common = dict(run=s, mode_cfg=mode_cfg, policy_text=pol_text, policy_refs=pol_refs, facts=facts,
+                  evidence=evidence, submission=sub, previous=prev)
+    budget = budget or (s.get("approval") or {}).get("max_input_per_call") or DEFAULT_INPUT_PER_CALL
+    shell, _ = rv.build_packet(**common, artifacts=[])
+    art_budget = budget - len(shell) - len(rv.REVIEW_CONTRACT) - 3000
+    if art_budget < 2000:
+        raise LoopError(f"成果物以外（判断基準・事実・根拠・記録）だけで 1 回の送信予算 {budget} 文字を使い切ります。"
+                        "引用する事実・根拠を絞るか、承認の max_input_per_call を見直してください")
+    groups = rv.split_artifacts(artifacts, art_budget)
+    texts, notes = [], []
+    for i, g in enumerate(groups, 1):
+        t, n = rv.build_packet(**common, artifacts=g, part=(i, len(groups)))
+        t, n_terms = apply_redact_terms(t)
+        texts.append(t)
+        notes += n
     classes = {"policies"} if pol_text else set()
     classes |= {_data_class(r) for r in sub["artifacts"]}
     if facts:
         classes.add("facts")
     if evidence:
         classes.add("evidence")
-    return {"text": text, "classes": sorted(classes), "policy_refs": pol_refs, "policy_missing": pol_missing,
+    return {"parts": texts, "classes": sorted(classes), "policy_refs": pol_refs, "policy_missing": pol_missing,
             "notes": notes, "redacted_terms": n_terms, "mode_cfg": mode_cfg}
 
 
@@ -612,14 +624,17 @@ def bridge_cfg(s: dict) -> dict:
     if ap:
         cfg["model"] = ap["model"]
         cfg["max_output_tokens"] = ap["output_tokens_per_call"]
-    cfg["max_input_chars"] = max(cfg["max_input_chars"], 120000)
+        cfg["max_output_tokens_cap"] = max(cfg["max_output_tokens_cap"], ap["output_tokens_per_call"])
+        cfg["max_calls_per_day"] = max(cfg["max_calls_per_day"], ap["max_calls"])  # 回数は承認側で管理
+    cfg["max_input_chars"] = max(cfg["max_input_chars"],
+                                 2 * (ap.get("max_input_per_call") or DEFAULT_INPUT_PER_CALL))
     cfg["retries"] = 0  # AUTOMATION: 失敗時の自動再試行なし（再試行は承認範囲内で明示的に）
     cfg["store"] = False
     gb.validate_config(cfg)
     return cfg
 
 
-def check_budget(s: dict, est_in: int, cfg: dict) -> None:
+def check_budget(s: dict, est_in: int, cfg: dict, n_parts: int = 1) -> None:
     ap = s.get("approval")
     if not ap:
         raise LoopError("有料のレビュー送信には包括承認（approve）が必要です")
@@ -630,27 +645,32 @@ def check_budget(s: dict, est_in: int, cfg: dict) -> None:
     if s["iteration"] > ap["max_iterations"]:
         raise LoopError("承認された反復回数を超えています")
     u = s["usage"]
-    if u["calls"] >= ap["max_calls"]:
-        raise LoopError(f"承認された呼び出し回数 {ap['max_calls']} に達しました")
+    if u["calls"] + n_parts > ap["max_calls"]:
+        raise LoopError(f"承認された呼び出し回数を超えます（使用 {u['calls']} + 今回 {n_parts} > {ap['max_calls']}）")
     if u["input_tokens"] + est_in > ap["max_input_tokens"]:
         raise LoopError(f"入力トークン予算を超えます（使用 {u['input_tokens']} + 見込み {est_in} > {ap['max_input_tokens']}）")
-    if u["output_tokens"] + ap["output_tokens_per_call"] > ap["max_output_tokens"]:
-        raise LoopError(f"出力トークン予算を超えます（使用 {u['output_tokens']} + 最大 {ap['output_tokens_per_call']} > {ap['max_output_tokens']}）")
+    worst_out = ap["output_tokens_per_call"] * n_parts
+    if u["output_tokens"] + worst_out > ap["max_output_tokens"]:
+        raise LoopError(f"出力トークン予算を超えます（使用 {u['output_tokens']} + 最大 {worst_out} > {ap['max_output_tokens']}）")
     if ap.get("max_usd") is not None:
-        worst = u["usd"] + (est_in * ap["price_in_per_mtok"] + ap["output_tokens_per_call"] * ap["price_out_per_mtok"]) / 1e6
+        worst = u["usd"] + (est_in * ap["price_in_per_mtok"] + worst_out * ap["price_out_per_mtok"]) / 1e6
         if worst > ap["max_usd"]:
             raise LoopError(f"費用予算を超える可能性があります（最悪 ${worst:.4f} > ${ap['max_usd']}）")
 
 
 def _fingerprint(v: dict) -> list:
-    return sorted({f"{i['target_file']}|{i['severity']}|{i['rule_ref']}" for i in v["issues"]})
+    return sorted({f"{_strip_part(i['target_file'])}|{i['severity']}|{i['rule_ref']}" for i in v["issues"]})
+
+
+def _strip_part(tf: str) -> str:
+    return re.sub(r"\s*\(lines \d+-\d+\)\s*$", "", tf.strip())
 
 
 def screen_action(act: dict, ws: Path) -> str | None:
     """GPT の指示を機械的に審査する。問題があれば自動不採用の理由を返す。"""
     if FORBIDDEN_ACTION.search(act["action"]):
         return "禁止操作（応募・送信・公開・main 変更等）を含むため自動不採用"
-    tf = act["target_file"].strip()
+    tf = _strip_part(act["target_file"])
     if tf in ("", "-", "N/A", "none"):
         return None
     rel = tf[4:] if tf.startswith("NEW:") else tf
@@ -698,79 +718,98 @@ def apply_verdict(d: Path, s: dict, v: dict, source: str) -> None:
         finalize_decisions(d, s)  # すべて自動不採用なら Claude の判断待ちを飛ばす
 
 
+def _send_one(d: Path, s: dict, cfg: dict, payload: dict, est_in: int, idir: Path, part: int, opener) -> str:
+    s["usage"]["calls"] += 1          # 送信前に計上（落ちても過小計上しない）
+    s["status"] = "reviewing"
+    save_state(d, s, "review_send", part=part, estimated_input_tokens=est_in)
+    (idir / f"packet_part{part}.txt").write_text(payload["instructions"] + "\n\n" + payload["input"], encoding="utf-8")
+    try:
+        res = gb.send(cfg, payload, opener)
+    except gb.BridgeError as e:
+        s["usage"]["input_tokens"] += est_in
+        s["status"] = "awaiting_review"
+        s["last_error"] = str(e)
+        save_state(d, s, "review_error", error=str(e), part=part)
+        raise LoopError(f"GPT 呼び出しに失敗しました（状態は awaiting_review に戻しました）: {e}", 3)
+    it_in = res.get("input_tokens") or est_in
+    it_out = res.get("output_tokens") or payload["max_output_tokens"]
+    s["usage"]["input_tokens"] += it_in
+    s["usage"]["output_tokens"] += it_out
+    ap = s["approval"]
+    if ap.get("price_in_per_mtok") is not None:
+        s["usage"]["usd"] += (it_in * ap["price_in_per_mtok"] + it_out * ap["price_out_per_mtok"]) / 1e6
+    s.setdefault("review_ids", []).append(res.get("id"))
+    s["status"] = "awaiting_review"
+    save_state(d, s, "review_received", part=part, response_id=res.get("id"), model=res.get("model"),
+               input_tokens=it_in, output_tokens=it_out)
+    if res.get("status") == "incomplete":
+        (idir / f"raw_output_part{part}.txt").write_text(res["text"], encoding="utf-8")
+        s["last_error"] = f"応答が途中で終了: {res.get('incomplete_reason')}"
+        save_state(d, s, "review_error", error=s["last_error"], part=part)
+        raise LoopError(s["last_error"] + "（承認範囲内で output-tokens-per-call を増やすか、分割を細かくする）", 3)
+    return res["text"], f"gpt:{res.get('model') or cfg['model']}:{res.get('id')}"
+
+
 def cmd_review(a, opener=None):
     d, s = resolve_run(a)
     if (H() / "STOP").exists():
         raise LoopError("全体停止（STOP）中のためレビューしません")
     if s["status"] != "awaiting_review":
         raise LoopError(f"review できる状態ではありません: {s['status']}")
-    pkt = build_review(d, s)
+    pkt = build_review(d, s, a.policies, a.input_per_call)
     idir = it_dir(d, s["iteration"])
     mode_cfg = pkt["mode_cfg"]
     cfg = bridge_cfg(s)
-    ctx = gb.Context(cfg, gb.repo_root())
-    payload = gb.build_payload(cfg, mode_cfg["review_prompt"], pkt["text"], ctx,
-                               text_format=rv.TEXT_FORMAT, extra_instructions=rv.REVIEW_CONTRACT)
-    est_in = len(payload["instructions"]) + len(payload["input"])  # 日本語は概ね 1 文字 ≤ 1 トークン（保守的）
-    summary = {"run": s["id"], "iteration": s["iteration"], "model": cfg["model"],
+    payloads, redactions = [], 0
+    for t in pkt["parts"]:
+        ctx = gb.Context(cfg, gb.repo_root())
+        payloads.append(gb.build_payload(cfg, mode_cfg["review_prompt"], t, ctx,
+                                         text_format=rv.TEXT_FORMAT, extra_instructions=rv.REVIEW_CONTRACT))
+        redactions += ctx.redactions
+    # 日本語は概ね 1 文字 ≤ 1 トークン（保守的な見積もり）
+    ests = [len(p["instructions"]) + len(p["input"]) for p in payloads]
+    summary = {"run": s["id"], "iteration": s["iteration"], "model": cfg["model"], "parts": len(payloads),
                "data_classes": pkt["classes"], "policy_refs": pkt["policy_refs"],
-               "policy_missing": pkt["policy_missing"], "estimated_input_tokens": est_in,
-               "max_output_tokens": payload["max_output_tokens"], "redactions": ctx.redactions,
+               "policy_missing": pkt["policy_missing"], "estimated_input_tokens": sum(ests),
+               "max_output_tokens_per_call": payloads[0]["max_output_tokens"], "redactions": redactions,
                "redacted_terms": pkt["redacted_terms"], "notes": pkt["notes"], "usage": s["usage"]}
 
     if a.mock is None and not a.send:
         summary["dry_run"] = True
         out(summary)
         if a.show_packet:
-            print(payload["instructions"] + "\n\n" + payload["input"])
+            for p in payloads:
+                print(p["instructions"] + "\n\n" + p["input"])
         return
 
+    raws, sources = [], []
     if a.mock is not None:
         raw = Path(a.mock).read_text(encoding="utf-8")
-        source = "mock"
+        raws, sources = [raw] * len(payloads), ["mock"] * len(payloads)
     else:
         ap = s.get("approval") or {}
         not_ok = set(pkt["classes"]) - set(ap.get("data", []))
         if ap and not_ok:
             raise LoopError(f"承認されていないデータ区分を送ろうとしています: {sorted(not_ok)}")
-        check_budget(s, est_in, cfg)
-        s["usage"]["calls"] += 1          # 送信前に計上（落ちても過小計上しない）
-        s["status"] = "reviewing"
-        save_state(d, s, "review_send", estimated_input_tokens=est_in, data_classes=pkt["classes"])
-        (idir / "packet.txt").write_text(payload["instructions"] + "\n\n" + payload["input"], encoding="utf-8")
-        try:
-            res = gb.send(cfg, payload, opener)
-        except gb.BridgeError as e:
-            s["usage"]["input_tokens"] += est_in
-            s["status"] = "awaiting_review"
-            s["last_error"] = str(e)
-            save_state(d, s, "review_error", error=str(e))
-            raise LoopError(f"GPT 呼び出しに失敗しました（状態は awaiting_review に戻しました）: {e}", 3)
-        it_in = res.get("input_tokens") or est_in
-        it_out = res.get("output_tokens") or payload["max_output_tokens"]
-        s["usage"]["input_tokens"] += it_in
-        s["usage"]["output_tokens"] += it_out
-        ap = s["approval"]
-        if ap.get("price_in_per_mtok") is not None:
-            s["usage"]["usd"] += (it_in * ap["price_in_per_mtok"] + it_out * ap["price_out_per_mtok"]) / 1e6
-        raw = res["text"]
-        source = f"gpt:{res.get('model') or cfg['model']}:{res.get('id')}"
-        if res.get("status") == "incomplete":
-            s["status"] = "awaiting_review"
-            s["last_error"] = f"応答が途中で終了: {res.get('incomplete_reason')}"
-            (idir / "raw_output.txt").write_text(raw, encoding="utf-8")
-            save_state(d, s, "review_error", error=s["last_error"])
-            raise LoopError(s["last_error"] + "（成果物を絞るか、承認範囲内で出力上限を見直す）", 3)
+        check_budget(s, sum(ests), cfg, len(payloads))
+        for i, (p, est) in enumerate(zip(payloads, ests), 1):
+            raw, src = _send_one(d, s, cfg, p, est, idir, i, opener)
+            raws.append(raw)
+            sources.append(src)
 
-    try:
-        v = rv.validate_verdict(rv.parse_model_text(raw))
-    except rv.VerdictError as e:
-        (idir / "raw_output.txt").write_text(raw, encoding="utf-8")
-        s["status"] = "awaiting_review"
-        s["last_error"] = f"構造化出力が不正: {e}"
-        save_state(d, s, "review_error", error=s["last_error"], source=source)
-        raise LoopError(s["last_error"] + "（raw_output.txt に保存。状態は awaiting_review）", 3)
-    apply_verdict(d, s, v, source)
+    verdicts = []
+    for i, raw in enumerate(raws, 1):
+        try:
+            verdicts.append(rv.validate_verdict(rv.parse_model_text(raw)))
+        except rv.VerdictError as e:
+            (idir / f"raw_output_part{i}.txt").write_text(raw, encoding="utf-8")
+            (idir / "raw_output.txt").write_text(raw, encoding="utf-8")
+            s["status"] = "awaiting_review"
+            s["last_error"] = f"構造化出力が不正（part {i}）: {e}"
+            save_state(d, s, "review_error", error=s["last_error"], source=sources[i - 1])
+            raise LoopError(s["last_error"] + "（raw_output に保存。状態は awaiting_review）", 3)
+    v = rv.merge_verdicts(verdicts)
+    apply_verdict(d, s, v, ",".join(sorted(set(sources))))
     out({**summary, "verdict": v["verdict"], "summary": v["summary"], "status": s["status"],
          "issues": v["issues"], "next_actions": s["pending_actions"],
          "blocked_reason": v["blocked_reason"], "questions_for_user": v["questions_for_user"],
@@ -1089,7 +1128,9 @@ def build_parser() -> argparse.ArgumentParser:
     x.add_argument("--max-calls", type=int, required=True)
     x.add_argument("--max-input-tokens", type=int, required=True)
     x.add_argument("--max-output-tokens", type=int, required=True, help="全呼び出しの出力トークン合計の上限")
-    x.add_argument("--output-tokens-per-call", type=int, default=3000)
+    x.add_argument("--output-tokens-per-call", type=int, default=16000)
+    x.add_argument("--max-input-per-call", type=int, default=DEFAULT_INPUT_PER_CALL,
+                   help="1 回の送信に載せる文字数の目安。超える成果物は分割レビュー（切り詰めない）")
     x.add_argument("--max-usd", type=float)
     x.add_argument("--price-in", type=float, help="入力 100 万トークンあたり USD")
     x.add_argument("--price-out", type=float, help="出力 100 万トークンあたり USD")
@@ -1101,6 +1142,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_sel(x)
     x.add_argument("--max-iterations", type=int)
     x.add_argument("--max-calls", type=int)
+    x.add_argument("--max-input-tokens", type=int)
+    x.add_argument("--max-output-tokens", type=int)
     x.add_argument("--expires")
     x.add_argument("--user-quote", required=True)
 
@@ -1122,6 +1165,9 @@ def build_parser() -> argparse.ArgumentParser:
     x.add_argument("--send", action="store_true", help="実際に送信（有料・承認範囲内のみ）")
     x.add_argument("--mock", help="GPT の出力テキストの代わりに使うファイル（試験用・無料）")
     x.add_argument("--show-packet", action="store_true")
+    x.add_argument("--policies", choices=["selected", "full"], default="selected",
+                   help="selected=作業種別に必要な節（既定） / full=判断基準を全文")
+    x.add_argument("--input-per-call", type=int, help="この回だけ 1 回の送信文字数の目安を変える")
     x = sp("decide", cmd_decide, "GPT の指示の採否を記録（Claude の検証結果）")
     run_sel(x)
     x.add_argument("--action", required=True)

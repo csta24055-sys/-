@@ -32,12 +32,12 @@ DEFAULTS = {
     "model": "gpt-6.2-sol",
     "api_base": "https://api.openai.com/v1",
     "language": "ja",
-    "max_output_tokens": 2000,
-    "max_output_tokens_cap": 8000,
-    "max_input_chars": 60000,
-    "max_file_chars": 20000,
-    "max_files": 20,
-    "max_calls_per_day": 20,
+    "max_output_tokens": 8000,
+    "max_output_tokens_cap": 32000,
+    "max_input_chars": 400000,
+    "max_file_chars": 200000,
+    "max_files": 100,
+    "max_calls_per_day": 200,
     "timeout_sec": 120,
     "retries": 1,
     "store": False,
@@ -199,8 +199,8 @@ def _looks_binary(data: bytes) -> bool:
 # ---------------------------------------------------------------- context building
 
 class Context:
-    def __init__(self, cfg: dict, root: Path):
-        self.cfg, self.root = cfg, root
+    def __init__(self, cfg: dict, root: Path, truncate: bool = False):
+        self.cfg, self.root, self.truncate = cfg, root, truncate
         self.parts: list[tuple[str, str]] = []   # (label, text)
         self.notes: list[str] = []
         self.redactions = 0
@@ -210,7 +210,11 @@ class Context:
         self.redactions += n
         limit = self.cfg["max_file_chars"]
         if len(text) > limit:
-            self.notes.append(f"{label}: {len(text)} 文字 → 先頭 {limit} 文字に切り詰め")
+            if not self.truncate:   # 黙って欠落させない。行範囲指定・分割送信・上限変更で対処させる
+                raise BridgeError(f"{label}: {len(text)} 文字が max_file_chars={limit} を超えます。"
+                                  "行範囲（path:START-END）で分割するか --max-file-chars を上げてください"
+                                  "（切り詰めてよい場合のみ --truncate）")
+            self.notes.append(f"{label}: {len(text)} 文字 → 先頭 {limit} 文字に切り詰め（--truncate 指定）")
             text = text[:limit] + f"\n... [TRUNCATED at {limit} chars]"
         self.parts.append((label, text))
 
@@ -466,6 +470,8 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--model")
         sp.add_argument("--max-output-tokens", type=int)
         sp.add_argument("--max-input-chars", type=int)
+        sp.add_argument("--max-file-chars", type=int)
+        sp.add_argument("--truncate", action="store_true", help="上限超過のファイルを切り詰めてよい（既定はエラー）")
         sp.add_argument("--reasoning-effort", choices=["minimal", "low", "medium", "high"])
         sp.add_argument("--lang", choices=["ja", "en"])
         sp.add_argument("--store", action="store_true", help="OpenAI 側に応答を保存（後で get 可能）")
@@ -495,7 +501,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 def apply_cli(cfg: dict, a: argparse.Namespace) -> dict:
     for attr, key in (("model", "model"), ("max_output_tokens", "max_output_tokens"),
-                      ("max_input_chars", "max_input_chars"), ("reasoning_effort", "reasoning_effort"),
+                      ("max_input_chars", "max_input_chars"), ("max_file_chars", "max_file_chars"),
+                      ("reasoning_effort", "reasoning_effort"),
                       ("lang", "language")):
         v = getattr(a, attr, None)
         if v is not None:
@@ -536,7 +543,7 @@ def main(argv: list[str] | None = None, opener=None, stdin=None) -> int:
         prompt = stdin.read() if a.prompt == "-" else a.prompt
         if not prompt.strip():
             raise BridgeError("質問内容が空です")
-        ctx = Context(cfg, root)
+        ctx = Context(cfg, root, truncate=a.truncate)
         for spec in a.file:
             m = re.fullmatch(r"(.+?):(\d+-\d+)", spec)
             ctx.add_file(m.group(1) if m else spec, m.group(2) if m else None, a.allow_outside)

@@ -66,9 +66,15 @@ def extract_policies(policy_dir: Path, selection: dict, char_limit: int) -> tupl
             parts.append(f"[{ref}]\n{sec['text']}")
             refs.append(ref)
     text = "\n\n".join(parts)
+    # 切り詰めない。char_limit は目安で、超えた場合は呼び出し側に注記させる（黙って欠落させない）
     if len(text) > char_limit:
-        text = text[:char_limit] + f"\n...[判断基準の抜粋を {char_limit} 文字で切り詰め]"
+        missing.append(f"(注記) 判断基準の抜粋が目安 {char_limit} 文字を超過: {len(text)} 文字（全文を送信）")
     return text, refs, missing
+
+
+def all_policy_selection(policy_dir: Path) -> dict:
+    """判断基準を全文送る場合の選択（--policies full）"""
+    return {p.name: ["*"] for p in sorted(policy_dir.glob("*.md"))}
 
 
 # ------------------------------------------------------------------ 構造化出力スキーマ
@@ -205,18 +211,67 @@ def parse_model_text(text: str) -> dict:
 
 # ------------------------------------------------------------------ パケット組立
 
-def number_lines(text: str, limit: int) -> tuple[str, bool]:
-    lines = text.splitlines()
-    body = "\n".join(f"{i:>4}: {ln}" for i, ln in enumerate(lines, 1))
-    if len(body) > limit:
-        return body[:limit] + f"\n...[TRUNCATED at {limit} chars]", True
-    return body, False
+def number_lines(text: str, start: int = 1) -> str:
+    return "\n".join(f"{i:>5}: {ln}" for i, ln in enumerate(text.splitlines(), start))
+
+
+def split_artifacts(artifacts: list[tuple[str, str]], budget: int) -> list[list[tuple[str, str, int]]]:
+    """成果物を 1 回の送信予算（文字数）に収まるパートへ分割する。切り詰めはせず、
+    大きなファイルは行範囲で分割し、全行がいずれかのパートに必ず含まれる。"""
+    budget = max(budget, 2000)
+    pieces: list[tuple[str, str, int]] = []
+    for rel, text in artifacts:
+        lines = text.splitlines()
+        if len(number_lines(text)) <= budget:
+            pieces.append((rel, text, 1))
+            continue
+        chunk, size, start = [], 0, 1
+        for i, ln in enumerate(lines, 1):
+            add = len(ln) + 8
+            if chunk and size + add > budget:
+                pieces.append((f"{rel} (lines {start}-{i - 1})", "\n".join(chunk), start))
+                chunk, size, start = [], 0, i
+            chunk.append(ln)
+            size += add
+        if chunk:
+            pieces.append((f"{rel} (lines {start}-{start + len(chunk) - 1})", "\n".join(chunk), start))
+    parts: list[list[tuple[str, str, int]]] = [[]]
+    used = 0
+    for p in pieces:
+        n = len(number_lines(p[1], p[2])) + len(p[0]) + 40
+        if parts[-1] and used + n > budget:
+            parts.append([])
+            used = 0
+        parts[-1].append(p)
+        used += n
+    return parts
+
+
+def merge_verdicts(verdicts: list[dict]) -> dict:
+    """分割レビューの結果を統合する。最も厳しい判定を採用し、指摘・次作業は全件残す。"""
+    if len(verdicts) == 1:
+        return verdicts[0]
+    order = {"BLOCKED": 2, "REVISE": 1, "PASS": 0}
+    merged = {"verdict": max((v["verdict"] for v in verdicts), key=order.get),
+              "summary": " / ".join(f"[part{i + 1}] {v['summary']}" for i, v in enumerate(verdicts)),
+              "gate_results": [], "issues": [], "next_actions": [],
+              "blocked_reason": " / ".join(v["blocked_reason"] for v in verdicts if v["blocked_reason"]) or None,
+              "forecast_delta": " / ".join(v["forecast_delta"] for v in verdicts),
+              "questions_for_user": [q for v in verdicts for q in v["questions_for_user"]],
+              "_normalization_notes": [n for v in verdicts for n in v.get("_normalization_notes", [])]}
+    for i, v in enumerate(verdicts, 1):
+        merged["gate_results"] += [{**g, "reason": f"[part{i}] {g['reason']}"} for g in v["gate_results"]]
+        merged["issues"] += [{**x, "id": f"p{i}-{x['id']}"} for x in v["issues"]]
+        merged["next_actions"] += [{**a, "id": f"p{i}-{a['id']}",
+                                    "addresses": [f"p{i}-{t}" for t in a["addresses"]]} for a in v["next_actions"]]
+    merged["next_actions"].sort(key=lambda a: a["priority"])
+    return merged
 
 
 def build_packet(*, run: dict, mode_cfg: dict, policy_text: str, policy_refs: list[str],
-                 facts: list[dict], evidence: list[dict], artifacts: list[tuple[str, str]],
-                 submission: dict, previous: dict | None, artifact_char_limit: int) -> tuple[str, list[str]]:
-    """GPT へ送る本文を組み立てる。戻り値: (本文, 注記)"""
+                 facts: list[dict], evidence: list[dict], artifacts: list[tuple[str, str, int]],
+                 submission: dict, previous: dict | None, part: tuple[int, int] = (1, 1)) -> tuple[str, list[str]]:
+    """GPT へ送る本文を組み立てる（切り詰めなし）。戻り値: (本文, 注記)"""
     notes = []
     tt = mode_cfg["task_types"][run["task_type"]]
     out = [
@@ -242,11 +297,12 @@ def build_packet(*, run: dict, mode_cfg: dict, policy_text: str, policy_refs: li
             out.append(f"- {e['id']}: {e['claim']}\n  資料名: {e['title']} / URL: {e['url']} / 取得日: "
                        f"{e['retrieved']} / 該当箇所: {e['locator']}\n  抜粋: {e['excerpt']}")
     out += ["", "## 成果物（行番号付き）"]
-    for rel, text in artifacts:
-        body, cut = number_lines(text, artifact_char_limit)
-        if cut:
-            notes.append(f"{rel} を {artifact_char_limit} 文字で切り詰め")
-        out.append(f"<<<artifact: {rel}>>>\n{body}\n<<<end {rel}>>>")
+    if part[1] > 1:
+        out.append(f"（分割レビュー {part[0]}/{part[1]}：成果物が大きいため分割して送っている。このパートに含まれる成果物・行範囲だけを評価し、"
+                   "他パートの内容を推測で補わないこと。全体に関わる問題は気づいた範囲で指摘してよい）")
+        notes.append(f"分割レビュー {part[0]}/{part[1]}")
+    for label, text, start in artifacts:
+        out.append(f"<<<artifact: {label}>>>\n{number_lines(text, start)}\n<<<end {label}>>>")
     out += ["", "## Claude の実行記録",
             f"- 要約: {submission.get('summary', '')}",
             f"- 実施内容: {submission.get('log', '')}",

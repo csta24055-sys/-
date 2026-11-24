@@ -81,12 +81,12 @@ python3 $B get resp_xxx  # --store で保存した応答を取得（生成なし
 | キー | 既定 | 環境変数 |
 |---|---|---|
 | `model` | `gpt-6.2-sol` | `GPT_BRIDGE_MODEL` |
-| `max_calls_per_day` | 20 | `GPT_BRIDGE_MAX_CALLS_PER_DAY` |
-| `max_input_chars` | 60000 | `GPT_BRIDGE_MAX_INPUT_CHARS` |
-| `max_file_chars` | 20000（超過分は切り詰め） | — |
-| `max_files` | 20 | — |
-| `max_output_tokens` | 2000 | `GPT_BRIDGE_MAX_OUTPUT_TOKENS` |
-| `max_output_tokens_cap` | 8000（これを超える指定は拒否） | — |
+| `max_calls_per_day` | 200 | `GPT_BRIDGE_MAX_CALLS_PER_DAY` |
+| `max_input_chars` | 400000 | `GPT_BRIDGE_MAX_INPUT_CHARS` |
+| `max_file_chars` | 200000（超過はエラー。`--truncate` 指定時のみ切り詰め） | — |
+| `max_files` | 100 | — |
+| `max_output_tokens` | 8000 | `GPT_BRIDGE_MAX_OUTPUT_TOKENS` |
+| `max_output_tokens_cap` | 32000（これを超える指定は拒否） | — |
 | `language` | `ja` | `GPT_BRIDGE_LANGUAGE` |
 | `store` | `false`（OpenAI 側に応答を保存しない） | — |
 | `reasoning_effort` | なし | — |

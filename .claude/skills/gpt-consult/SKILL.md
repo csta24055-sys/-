@@ -49,9 +49,10 @@ description: OpenAI GPT（Responses API）にセカンドオピニオンを求�
 
 ## 上限（既定値。`.gpt-bridge.json` / 環境変数 / CLI で変更）
 
-- 1 日あたり呼び出し回数 `max_calls_per_day=20`（超えると拒否）
-- 入力合計 `max_input_chars=60000`、1 ファイル `max_file_chars=20000`（超過分は切り詰め）、`max_files=20`
-- 出力 `max_output_tokens=2000`（上限 `max_output_tokens_cap=8000`）
+- 1 日あたり呼び出し回数 `max_calls_per_day=200`（超えると拒否）
+- 入力合計 `max_input_chars=400000`、1 ファイル `max_file_chars=200000`（超過はエラー。行範囲で分割するか上限を上げる。`--truncate` 指定時のみ切り詰め）、`max_files=100`
+- 出力 `max_output_tokens=8000`（上限 `max_output_tokens_cap=32000`）
+- 反復作業・大量資料のレビューは judgment-loop（承認予算で管理・分割送信）を使う
 
 ## エラー時
 
