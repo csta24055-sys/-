@@ -57,7 +57,7 @@ def frontmatter(path: Path) -> dict[str, str]:
     for line in block.splitlines():
         if ":" in line:
             key, value = line.split(":", 1)
-            result[key.strip()] = value.strip().strip("'\\"")
+            result[key.strip()] = value.strip()
     return result
 
 
