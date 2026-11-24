@@ -1,6 +1,6 @@
 # IMPORTANT EXECUTION UPDATE (2026-11-24)
 
-The user requests parallel **competing research routes**, not only this original sequential plan. `06_PARALLEL_ORCHESTRATION.md` and `07_SHARED_CONTRACT.md` take precedence regarding scheduling and task delegation. This file remains the detailed technical checkpoints **within** the routes: Route A may execute phases 1–3, Route B studies the full equation grammar early, Route C maps all 70 evaluation roles immediately, and Route D independently tests throughout. Integrated phases 4–6 follow evidence gates; no route needs to wait for A before beginning.
+The user requests parallel **competing research routes including resistor-energy**, not only this original sequential plan. `06_PARALLEL_ORCHESTRATION.md` and `07_SHARED_CONTRACT.md` take precedence regarding scheduling and task delegation. This file remains the detailed technical checkpoints **within** the routes: Route A may execute phases 1–3, Route B studies the full equation grammar early, Route C maps all 70 evaluation roles immediately, and Route D independently tests throughout, and Route E independently models constant resistor power and cumulative Joule energy (DC/AC), without treating capacitor charge as obligatory. Integrated phases 4–6 follow evidence gates; no route needs to wait for A before beginning.
 
 ---
 
