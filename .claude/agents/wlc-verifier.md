@@ -17,3 +17,6 @@ Do not simply restate the plan: create reproducible synthetic code, tests, resul
 
 
 Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md` and respect this role's assigned execution phase. Your explicit model is **claude-opus-5-5** at **high** effort. If your actual model/effort differs because of tool/provider overrides, report this fact rather than claiming the intended setting succeeded.
+
+
+**Execution precedence:** `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/12_FINAL_OPERATING_PLAN.md` is the current execution authority. Read this short runbook and `07_SHARED_CONTRACT.md` once, then only role-relevant sources. Avoid rereading all old documents, duplicating independent model calculations, or launching heavy tools when a simpler exact oracle answers the question. Preserve explicit result/NOT_RUN status. Shorthand document names refer to the `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/` directory.
