@@ -11,3 +11,7 @@ Also consult `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/05_SOURCE_MAP.md
 
 ## Parallel WLC research
 Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/06_PARALLEL_ORCHESTRATION.md`, `07_SHARED_CONTRACT.md`, `08_AUTONOMOUS_START.md`. Five project subagents under `.claude/agents/wlc-*.md` address A capacitor/waveform, B formulas, C 70-unit coverage, D independent validation, and E resistor/Joule-energy. Their output directories are disjoint. Same-checkout agents must not commit/checkout concurrently. In separate cloud sessions check out the correct route branch seeded from this project branch. Original theory and apps stay unchanged. Do not assert these files automatically start sessions.
+
+
+## Model switching by work phase
+Read `whole-life-carbon-jcat-study/WLC_CIRCUIT_RESEARCH/10_MODEL_ROUTING.md`. Fable 5.2 High is for strategic architecture and re-planning, Opus 5.5 Medium for A/B/C/E implementation, and Opus 5.5 High for D independent checks and verified integration. Delegate as explicit subagents, confirm actual models and ensure no shared branch/checkout contention.
