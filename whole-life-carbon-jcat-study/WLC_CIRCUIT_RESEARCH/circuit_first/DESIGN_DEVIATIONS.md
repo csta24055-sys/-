@@ -67,3 +67,90 @@ detected with the reverse order (clocks first: 305 vs 250). Mutation tests shoul
 ## D10 Degradation under ε > 0
 The age reset happens at the late firing `τ/(1−ε)`. This is a convention of the circuit; degradation
 was validated only with ε = 0 (right/left). No oracle exists for it yet.
+
+---
+# Stage B (S3a–S3e) and V1 fixes
+
+## D11 (engine, V1-D1) Comparator equality semantics — FIXED
+Defect found by the independent verifier and reproduced here (gated integrator: charge 3 instead of 1 in BOTH
+`sim.py` and the new `hybrid.py`). Rule now: during an instant a comparator at y = 0 is high (this is what the
+shared look-ahead comparator needs when the tick resets the year ramp to exactly 0); after all priority classes
+of the instant are processed, a "post phase" switches every comparator with y = 0 and y falling just after the
+instant to low AT THAT INSTANT (before time advances); it cannot re-rise in the same instant. Bench
+`tests/test_v1_fixes.py::test_D1_gated_integrator_both_directions` (falling 1, rising 2, both simulators, audited
+dump). All stage-B results in `results/stageB_*.json` were produced after this fix.
+
+## D12 (structure) Crossbar / core split with amplitude taps (substitution theorem)
+The amplitude crossbar (rails, conversions, one inverting stage per extra data factor, summing junctions) is a
+static network: it is solved once by `engine/dc.py` (exact, sparse elimination in dependency order; on all tested
+buildings every equation was peeled, dense block 0, KCL residual exactly 0). The lifecycle core sees each
+sampled op-amp output as a grounded ideal source valued by that DC solution (`tap.*` elements). This is the
+substitution theorem for a stiff ideal op-amp output; it is a solving strategy, not a computation outside element
+laws. Both netlists and the tap map are dumped (`results/stageB_netlists_{S,E1}.json`) so an outside simulator can
+re-run: crossbar DC → taps → core. A merged single-netlist run was NOT done (the crossbar would form
+components of thousands of unknowns in the hybrid solver).
+
+## D13 (engine) Boundary nodes and accumulator sinks in `engine/hybrid.py`
+Solving strategies, declared: (a) nodes held by a grounded ideal source are boundary nodes (known potential),
+so the network splits into small components; (b) an op-amp integrator tagged `accumulator` (non-inverting input
+grounded, one feedback capacitor, optional reset switches, nothing else on its output) is solved as a sink: its
+virtual ground is a known-potential node and its capacitor charge = integral + impulses of all currents into it
+(KCL at the virtual ground + capacitor law). Equivalence checked: accumulators on/off identical on a truncated
+building (`test_stageB.py::SmallBuilding`), and the off-run's full dump has KCL / element-law / impulse-KCL
+residuals exactly 0. Speed effect on benchmark S events: 96 s → 5 s. No behaviour is computed outside element
+laws; these strategies are not counted in W_out.
+
+## D14 (B3) Negative one-year packet (D3) confirmed for the full building
+In the synthetic model every B3 group rate is Σ e0·r of constant row amplitudes (A13 or X-01 row values × repair
+rate): constant within each year. So the pending year cell was not needed anywhere (coordinator decision 2).
+Year-cell charge is read only through an explicit readout transfer (copy capacitor sampled at the readout,
+dumped into the B3 readout integrator), as coordinator decision 4 requires.
+
+## D15 (B1) Refrigerant: tick-time look-ahead
+§5.5 needs "an event of this device belongs to the closing year" AT the tick. Periodic devices use an exact
+per-device early comparator y = κ·v_global + c·(v_ramp − V0) ≥ 0, κ = ε(2−ε)/(1−ε)², i.e. remaining time to the
+firing ≤ κ·elapsed time (holds for every n, unlike the §5.4 rule; D1). Each periodic device has its own copy of
+the global ramp, so it does not merge with other components. Explicit change years use the global-ramp early
+comparator (exact, absolute). At such a tick: pending loss sample (the year-end charge), reset to m0, year-start
+sample; the pending packet is dumped at the firing (P = 1). Mid-year (P = 0) events: loss packet from the live
+charge, reset, and a correction flow −λ·GWP·r·m_start until the tick (non-top-up), so the booked loss equals the
+year-end charge. During the zero-length sampling phase the drain is gated off (otherwise the mode is
+non-nilpotent: hold and charge in one loop). Duplicate event years inside one device list would merge into one
+set firing (not present in the tested scenarios; limitation).
+
+## D16 (convention, V1-D5) What the original convention means in the circuit
+The source (WLC_THEORY_RESEARCH_BASE/03 §3.2, eq. at line 101) states a counting rule: an event at τ counts iff
+τ < T(1−ε). The circuit realises it as a firing at τ/(1−ε) with a readout before firings at T. Year ticks, year
+banks, flows, leaks and drains are NOT dilated. In the full building, the firing time affects only quantities that
+do not depend on where in the year the firing is: whole-year B3 exclusion, refrigerant loss and reset (packet plus
+correction flow = year-end value). So the dilation is invisible there, and the oracle comparison decides it:
+relative ≤ 6e-14 on all tested T. The stage-A-only cells degradation and efficiency switch DO see the dilation
+(≤ 3.9e-10 relative, verifier). They have no source counterpart and are declared as "dilated" in adapter.md.
+In-band T ∈ (K, sw(τ)] (source §D′) are excluded from the comparison by construction of the T list.
+
+## D17 Ordering at an integer tick (coordinator decision 3)
+readout → year tick → fire was implemented. It is confirmed by the oracle at integer T (20, 60, 75, 100)
+with integer-year equipment replacement lists and refrigerant change years. Event counts are equal for every
+scenario and T.
+
+## D18 (V1-D2) Signed inputs
+Stage-A adapter: negative amounts and rates are now supported (negative-polarity packet; flow from the −V0 rail).
+Negative repair base/rate and negative degradation slope are rejected with ValueError. Building adapter:
+negatives follow refcalc's own skip rules (nonneg checks are part of the specification and are counted W3); a
+negative year-bank/grid value raises ValueError (outside the valid domain); factor values of either sign are
+supported (rails are signed sources). Zero values build no branch (value-equivalent, counted W3).
+
+## D19 (V1-D3, V1-D4) Repair stage per (group, stage); one netlist for every convention
+One year cell per (event group, stage). The look-ahead divider is a VCVS of gain ρ (ρ = 0 allowed), so
+right/left/original build the same netlist (53 elements each). The signature is now derived from the netlist graph
+(`model.netlist_signature`). The N_max identical-netlist test runs for the stage-A cell family
+(`tests/test_nmax.py`): unused slots are disabled by static switches, and the W2 grouping becomes a static
+item×clock selection matrix. For the full building the N_max template is NOT_RUN: cell variants differ by input
+kind (profile kind, grid kind, explicit-list length, refrigerant periodic/explicit), so a template would need
+every variant with enable switches.
+
+## D20 Lemma notes (from the verifier, see coordination/CIRCUIT_FIRST_ERRATA.md)
+L1: the architecture's homogeneity argument has a gap (conclusion supported by the verifier's multi-affine
+sketch, still [H]). The stage-A bench is renamed `test_L1_homogeneity_only`. L3: an ideal DC current source into a
+grounded capacitor integrates exactly (P0). An active element is needed for conductance-coded rates and full
+SC charge transfer, not for integration as such.

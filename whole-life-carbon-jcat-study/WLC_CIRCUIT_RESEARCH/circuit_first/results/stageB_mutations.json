@@ -1,0 +1,143 @@
+{
+ "init_before_leak": {
+  "scenario": "SYN-S-school-S-T100-seed990107243",
+  "rows": [
+   {
+    "T": 33.3,
+    "stage": "B1",
+    "refcalc": 18557.762248276944,
+    "unmutated": 18557.762248276944,
+    "mutated": 18628.32249497145,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 0.0038021958547861568
+   },
+   {
+    "T": 59.9,
+    "stage": "B1",
+    "refcalc": 30041.194857299466,
+    "unmutated": 30041.19485729946,
+    "mutated": 30252.590954795414,
+    "unmutated_rel": 2.421993415623247e-16,
+    "mutated_rel": 0.0070368738161086415
+   }
+  ],
+  "unmutated_passes": true,
+  "detected": true
+ },
+ "refrigerant_rc_decay": {
+  "scenario": "SYN-S-school-S-T100-seed990107243",
+  "rows": [
+   {
+    "T": 33.3,
+    "stage": "B1",
+    "refcalc": 18557.762248276944,
+    "unmutated": 18557.762248276944,
+    "mutated": 18368.521343383552,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 0.0101973989299794
+   },
+   {
+    "T": 59.9,
+    "stage": "B1",
+    "refcalc": 30041.194857299466,
+    "unmutated": 30041.19485729946,
+    "mutated": 29841.98213107194,
+    "unmutated_rel": 2.421993415623247e-16,
+    "mutated_rel": 0.006631318333835157
+   }
+  ],
+  "unmutated_passes": true,
+  "detected": true
+ },
+ "rho_always_subtracted": {
+  "scenario": "SYN-RC-office-S-T60-seed101",
+  "rows": [
+   {
+    "T": 33.3,
+    "stage": "B6",
+    "refcalc": 8880914.138835926,
+    "unmutated": 8880914.138835926,
+    "mutated": 8208245.276877546,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 0.0757432006933636
+   },
+   {
+    "T": 60,
+    "stage": "B6",
+    "refcalc": 16171147.481863534,
+    "unmutated": 16171147.481863536,
+    "mutated": 14935575.677683141,
+    "unmutated_rel": 1.1518323924260625e-16,
+    "mutated_rel": 0.07640594494398908
+   }
+  ],
+  "unmutated_passes": true,
+  "detected": true
+ },
+ "iota_upstream_b5": {
+  "scenario": "SYN-S-office-S-T60-seed378919968",
+  "rows": [
+   {
+    "T": 99.9,
+    "stage": "B5",
+    "refcalc": 1060451.442923329,
+    "unmutated": 1060451.442923329,
+    "mutated": 1038311.6950383328,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 0.020877663029967648
+   }
+  ],
+  "unmutated_passes": true,
+  "detected": true
+ },
+ "diode_after_integration": {
+  "scenario": "SYN-RC-office-S-T60-seed101",
+  "rows": [
+   {
+    "T": 33.3,
+    "stage": "B6",
+    "refcalc": 1981746.3238781733,
+    "unmutated": 1981746.3238781733,
+    "mutated": -14276264.4530084,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 8.203880880712573
+   },
+   {
+    "T": 60,
+    "stage": "B6",
+    "refcalc": 3498616.15693642,
+    "unmutated": 3498616.1569364197,
+    "mutated": -25411474.524662156,
+    "unmutated_rel": 1.3309870715154354e-16,
+    "mutated_rel": 8.263293080688747
+   }
+  ],
+  "unmutated_passes": true,
+  "detected": true
+ },
+ "terminal_into_integrator": {
+  "scenario": "SYN-RC-office-S-T60-seed101",
+  "rows": [
+   {
+    "T": 33.3,
+    "stage": "C3",
+    "refcalc": 214984.65668745068,
+    "unmutated": 214984.65668745068,
+    "mutated": 214984.65668745068,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 0.0
+   },
+   {
+    "T": 60,
+    "stage": "C3",
+    "refcalc": 214984.65668745068,
+    "unmutated": 214984.65668745068,
+    "mutated": 429969.31337490137,
+    "unmutated_rel": 0.0,
+    "mutated_rel": 1.0
+   }
+  ],
+  "unmutated_passes": true,
+  "detected": true
+ }
+}

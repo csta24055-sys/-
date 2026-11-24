@@ -126,7 +126,7 @@ def residuals(dump):
                     upd("law_max", vab - num(e["gain"]) * (cp - cn), (rec["t"], name, "vcvs"))
             elif k == "G":
                 cp, cn = v.get(e["cp"]), v.get(e["cn"])
-                if cp is not None and cn is not None:
+                if cp is not None and cn is not None and cur is not None:
                     upd("law_max", cur - num(e["gm"]) * (cp - cn), (rec["t"], name, "vccs"))
             elif k == "F":
                 upd("law_max", cur - num(e["gain"]) * i[e["ctrl"]], (rec["t"], name, "cccs"))
@@ -141,6 +141,14 @@ def residuals(dump):
                     sums[node] = sums.get(node, 0) + sg * q
         for node, val in sums.items():
             upd("jump_kcl_max", val, (j["t"], "jumpnode", node))
+        if "W_absorbed" not in j:          # simulators that log impulse charges only
+            sm = {k: num(x) for k, x in j["s_minus"].items()}
+            sp = {k: num(x) for k, x in j["s_plus"].items()}
+            for name in sp:
+                e = byname[name]
+                if e["kind"] == "C":
+                    upd("jump_kcl_max", num(e["C"]) * (sp[name] - sm[name]) - Q.get(name, 0), (j["t"], name, "capQ"))
+            continue
         W = {k: num(x) for k, x in j["W_absorbed"].items()}
         if all(w is not None for w in W.values()):
             upd("jump_tellegen_max", sum(W.values()), (j["t"], "tellegen"))

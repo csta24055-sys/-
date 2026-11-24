@@ -3,23 +3,38 @@
   "C(30)": "295",
   "hiddenness": {
    "h": "0",
-   "W_in": 50,
+   "W_in": 22,
    "W_out": 0,
+   "W_in_broad": 49,
    "W_in_parts": {
     "data_elements": 8,
-    "kcl_additions": 26,
+    "virtual_ground_additions": 4,
     "comparators": 4,
     "diodes": 0,
-    "switches": 12
+    "datapath_switches": 6
+   },
+   "W_in_broad_parts": {
+    "kcl_additions_all_nodes": 25,
+    "all_switches": 12
    },
    "construction_ops": {
     "W1": 8,
     "W2": 2,
-    "W3": 8,
+    "W3": 6,
     "W4": 4,
     "GREY": 0
    },
-   "grey_items": []
+   "grey_items": [],
+   "control_not_counted_in_h": {
+    "priority_classes": 6,
+    "sequencers": 6,
+    "sequencer_phase_steps": 24,
+    "gates": 0,
+    "comparators": 4,
+    "W2_lookups_and_equality_groupings": 2,
+    "W3_predicates": 6,
+    "W4_enumerations": 4
+   }
   },
   "state_counts": {
    "continuous_states": 13,
@@ -35,14 +50,15 @@
     "V": 4,
     "OA": 7,
     "C": 13,
-    "R": 7,
+    "R": 5,
     "CMP": 4,
     "SW": 12,
     "SEQ": 6,
     "CNT": 1,
+    "E": 1,
     "POR": 1
    },
-   "elements": 55
+   "elements": 54
   },
   "signature": [
    "('bus', ())",
@@ -58,23 +74,38 @@
   "C(30)": "7065999986090500008856/8999999982000000009",
   "hiddenness": {
    "h": "0",
-   "W_in": 114,
+   "W_in": 43,
    "W_out": 0,
+   "W_in_broad": 110,
    "W_in_parts": {
-    "data_elements": 16,
-    "kcl_additions": 59,
+    "data_elements": 15,
+    "virtual_ground_additions": 8,
     "comparators": 6,
     "diodes": 0,
-    "switches": 33
+    "datapath_switches": 14
+   },
+   "W_in_broad_parts": {
+    "kcl_additions_all_nodes": 56,
+    "all_switches": 33
    },
    "construction_ops": {
-    "W1": 16,
-    "W2": 4,
-    "W3": 15,
+    "W1": 15,
+    "W2": 5,
+    "W3": 16,
     "W4": 7,
     "GREY": 0
    },
-   "grey_items": []
+   "grey_items": [],
+   "control_not_counted_in_h": {
+    "priority_classes": 6,
+    "sequencers": 15,
+    "sequencer_phase_steps": 62,
+    "gates": 18,
+    "comparators": 6,
+    "W2_lookups_and_equality_groupings": 5,
+    "W3_predicates": 16,
+    "W4_enumerations": 7
+   }
   },
   "state_counts": {
    "continuous_states": 19,
@@ -92,17 +123,18 @@
     "V": 6,
     "OA": 13,
     "C": 19,
-    "R": 16,
+    "R": 13,
     "CMP": 6,
     "SW": 33,
     "SEQ": 15,
     "CNT": 1,
+    "E": 1,
     "POR": 1,
     "SR": 5,
     "GATE": 18,
     "DFF": 1
    },
-   "elements": 134
+   "elements": 132
   },
   "signature": [
    "('age', (('reset', 'group'), ('src', 'railn')))",
@@ -111,7 +143,6 @@
    "('explicit', (('out', 'group'), ('src', 'global_ramp')))",
    "('flow', (('ctrl', 'latch'), ('dst', 'bus'), ('src', 'rail')))",
    "('flow', (('dst', 'bus'), ('src', 'age')))",
-   "('flow', (('dst', 'bus'), ('src', 'rail')))",
    "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'explicit')))",
    "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'group')))",
    "('packet', (('dst', 'bus'), ('src', 'rail'), ('trig', 'por')))",

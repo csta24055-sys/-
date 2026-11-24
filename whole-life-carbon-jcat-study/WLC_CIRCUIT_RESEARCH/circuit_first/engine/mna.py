@@ -94,8 +94,13 @@ AUX_TYPES = (VSource, Switch, Diode, Capacitor, VCVS, CCVS, OpAmp)
 class ComponentMode:
     """Linear analysis of one connected component in one mode."""
 
-    def __init__(self, nodes, elements, state_index, exact):
+    def __init__(self, nodes, elements, state_index, exact, fixed=None):
+        """`fixed`: optional {node: voltage} of boundary nodes whose potential is imposed
+        from outside (e.g. by a grounded ideal source); they get the equation v = value
+        and no KCL row (their KCL determines only the imposing source's current)."""
         self.exact = exact
+        fixed = fixed or {}
+        self.fixed = dict(fixed)
         Z = la.zero_like(exact)
         O = la.one_like(exact)
         self.nodes = list(nodes)
@@ -125,16 +130,22 @@ class ComponentMode:
             return len(rows) - 1
 
         for n in self.nodes:
-            row_of_node[n] = newrow()
+            if n not in fixed:
+                row_of_node[n] = newrow()
+        for n in self.nodes:
+            if n in fixed:
+                r = newrow()
+                rows[r][col[("v", n)]] = O
+                r0[r] = fixed[n]
 
         def kcl(node, c, val):
-            if node == GND:
+            if node == GND or node in fixed:
                 return
             r = row_of_node[node]
             rows[r][c] = rows[r][c] + val
 
         def kcl_rhs(node, val):  # known current leaving node into element -> rhs -val
-            if node == GND:
+            if node == GND or node in fixed:
                 return
             r = row_of_node[node]
             r0[r] = r0[r] - val
@@ -182,9 +193,9 @@ class ComponentMode:
             elif isinstance(e, Inductor):
                 k = self.state_local[e.name]
                 # known current s_k leaving a into the inductor -> rhs
-                if e.a != GND:
+                if e.a != GND and e.a not in fixed:
                     Rm[row_of_node[e.a]][k] = Rm[row_of_node[e.a]][k] - O
-                if e.b != GND:
+                if e.b != GND and e.b not in fixed:
                     Rm[row_of_node[e.b]][k] = Rm[row_of_node[e.b]][k] + O
             if isinstance(e, AUX_TYPES):
                 jc = col[("j", e.name)]

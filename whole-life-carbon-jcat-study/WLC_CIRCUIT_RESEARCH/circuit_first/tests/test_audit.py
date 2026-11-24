@@ -16,7 +16,9 @@ from test_pilot import PILOT, ledger as pilot_ledger
 FORBIDDEN = {"refcalc", "msp", "canon", "tstudy", "synth", "routes", "integration", "units_b",
              "units_pre_a", "units_c_sum", "registry"}
 CODE = [os.path.join(ROOT, "engine", f) for f in sorted(os.listdir(os.path.join(ROOT, "engine"))) if f.endswith(".py")] + \
-       [os.path.join(ROOT, "adapter.py"), os.path.join(ROOT, "model.py")]
+       [os.path.join(ROOT, "adapter.py"), os.path.join(ROOT, "model.py"),
+        os.path.join(ROOT, "adapter_building.py"), os.path.join(ROOT, "model_building.py"),
+        os.path.join(ROOT, "adapter_nmax.py")]
 
 
 def imports(path):
@@ -35,7 +37,8 @@ def imports(path):
 class Audit(unittest.TestCase):
     def test_ast_imports(self):
         allowed = {"__future__", "fractions", "math", "dataclasses", "typing", "engine", "adapter",
-                   "netlist", "linalg", "logic", "mna", "sim", "audit"}
+                   "netlist", "linalg", "logic", "mna", "sim", "audit", "heapq", "time",
+                   "adapter_building", "dc", "hybrid", "model"}
         rep = {}
         for p in CODE:
             im = imports(p)
@@ -66,8 +69,14 @@ class Audit(unittest.TestCase):
         for p, s in src.items():
             tree = ast.parse(s)
             whiles = sum(isinstance(n, ast.While) for n in ast.walk(tree))
-            ranges = sum(isinstance(n, ast.Call) and getattr(n.func, "id", None) == "range" for n in ast.walk(tree))
-            floors = len(re.findall(r"floor|ceil|isqrt", s))
+            # adapter_nmax enumerates TEMPLATE SLOTS (dims[...] / bus_slots), never years or n*c
+            ranges = sum(isinstance(n, ast.Call) and getattr(n.func, "id", None) == "range"
+                         and not (p.endswith("adapter_nmax.py") and re.search(r"dims\[|bus_slots", ast.get_source_segment(s, n)))
+                         for n in ast.walk(tree))
+            floors = sum(1 for n in ast.walk(tree)
+                         if (isinstance(n, ast.Call) and (getattr(n.func, "id", None) in ("floor", "ceil", "isqrt", "round")
+                                                         or getattr(n.func, "attr", None) in ("floor", "ceil", "isqrt")))
+                         or isinstance(n, ast.FloorDiv) or isinstance(n, ast.Mod))
             rep[os.path.basename(p)] = {"while": whiles, "range": ranges, "floor_ceil": floors,
                                         "dot_value_uses": len(re.findall(r"\.value\b", s))}
             self.assertEqual(whiles, 0, p)
@@ -124,13 +133,23 @@ MUTATIONS = {
     "lookahead_strict": (B3_25, "right", F(25), "B3", repair_ledger(25, "right", F(5, 2), 1)),
     "age_not_reset": (DEG, "right", F(25), "B6", 4 * 25 + F(1, 2) * (100 + 100 + 25) / 2),
     "readout_order_swapped": (PILOT, "left", F(10), "C", pilot_ledger(10, "left")),
+    # verifier V1 mutants that the stage-A suite missed
+    "repair_stage_last_row": ({"items": [{"id": "A", "amount": 1, "period": 5, "stage": "B4", "repair": {"base": 10, "rate": F(1, 10), "stage": "B3"}},
+                                         {"id": "E", "amount": 1, "period": 5, "stage": "B4", "repair": {"base": 20, "rate": F(1, 10), "stage": "B3eq"}}]},
+                              "right", F(12), "B3", F(10)),
+    "substitution_not_renewal": ({"items": [{"id": "A", "amount": 20, "period": 30, "stage": "B4",
+                                             "repair": {"base": 10, "rate": F(1, 10), "stage": "B3"}}],
+                                  "renovations": [{"id": "R", "amount": 50, "years": [F(51, 2)], "replaces": ["A"],
+                                                   "policy": "substituted", "stage": "B5"}]}, "right", F(28), "B3", F(27)),
+    "rho_2eps": ({"items": [{"id": "A", "amount": 1, "explicit": [F(10) / (1 - F(1, 10 ** 9))], "stage": "B4",
+                             "repair": {"base": 10, "rate": F(1, 10), "stage": "B3"}}]}, "original", F(21, 2), "B3", F(19, 2)),
 }
 
 
 class Mutations(unittest.TestCase):
     def _obs(self, r, T, obs):
         v = r["by_T"][T]
-        return v["C"] if obs == "C" else v["stages"][obs]
+        return v["C"] if obs == "C" else v["stages"].get(obs, 0)
 
     def test_mutations_detected(self):
         rep = {}

@@ -90,9 +90,10 @@ class StaticBenches(unittest.TestCase):
         sim, rec = solve(nl)
         return {k: i(rec, k) for k in G}, {n: v(rec, n) for n in "abc"}
 
-    def test_L1_homogeneity(self):
-        """L1: passive R network with independent sources. Voltage-source drive: scaling all
-        G by lam scales every current by lam (degree 1, never lam^2). Sources enter linearly."""
+    def test_L1_homogeneity_only(self):
+        """Homogeneity check ONLY (not a proof of lemma L1): voltage-source drive scales every
+        current by lam when all G are scaled by lam; sources enter linearly. Degree-1 homogeneity
+        does not by itself exclude products G1*G2/G0 (verifier V1: argument gap); L1 stays [H]."""
         base_i, base_v = self._ladder()
         lam = F(3)
         i3, v3 = self._ladder(lam=lam)

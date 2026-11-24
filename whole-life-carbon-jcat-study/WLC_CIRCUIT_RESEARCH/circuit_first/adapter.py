@@ -16,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from fractions import Fraction
 
-from engine import Netlist
+from engine import VCVS, Netlist
 
 # ----------------------------------------------------------------- operation counting
 
@@ -103,6 +103,20 @@ def w3_positive(x: "Tracked | None") -> bool:
         return False
     x.ledger.note("W3", f"positive({x.label})")
     return x.value > 0
+
+
+def w3_sign(x):
+    """W3: sign of a single input (-1, 0, +1); None counts as absent (0)."""
+    if x is None:
+        return 0
+    x.ledger.note("W3", f"sign({x.label})")
+    return (x.value > 0) - (x.value < 0)
+
+
+def require_nonneg(x, what):
+    """Inputs whose circuit realisation needs a non-negative value: reject explicitly."""
+    if x is not None and w3_sign(x) < 0:
+        raise ValueError(f"{what}: negative value {x.value} not supported by this cell (rejected, not dropped)")
 
 
 def w3_nonneg(x):
@@ -218,6 +232,27 @@ class Builder:
             self.datapath.update(names)
         return f"{tag}.Cs"
 
+    def signed_packet(self, tag, A, dst_x, trig, cell="packet"):
+        """Amount packet from the rail: positive amount -> C = A/(gamma V0); negative amount ->
+        C = A * (-1/(gamma V0)) with swapped plates at dump (charge -|A|/gamma). Zero -> no cell."""
+        sg = w3_sign(A)
+        if sg == 0:
+            return None
+        u = self.u
+        C = self.val(A * (sg / (u.gamma * u.V0)))
+        return self.packet(tag, C, "rail", dst_x, trig, polarity=sg, v0=u.V0, cell=cell)
+
+    def signed_flow(self, name, rate, dst, cell="flow"):
+        """Constant flow: G = |rate|/(gamma tau V0) from the +rail (rate > 0) or -rail (rate < 0)."""
+        sg = w3_sign(rate)
+        if sg == 0:
+            return None
+        u = self.u
+        src = "rail" if sg > 0 else "railn"
+        self.nl.R(name, src, dst, G=self.val(rate * (sg / (u.gamma * u.tau_y * u.V0))), cell=cell)
+        self.datapath.add(name)
+        return name
+
     def short(self, tag, a, b, trig, cell, **kw):
         sig = f"{tag}.sh"
         self.nl.switch(f"{tag}.Ssh", a, b, sig, cell=cell, **kw)
@@ -249,11 +284,10 @@ class Builder:
         # with rho = eps(2-eps)/(1-eps): at a late firing t_f = tau/(1-eps), P = 1 iff the
         # last tick K satisfies K >= tau(1-eps), i.e. the event belongs to the closed year K.
         rho = eps * (2 - eps) / (1 - eps)
-        if rho == 0:
-            pref = "0"
-        else:
-            pref = "tb.pref"
-            nl.pot("tb.div", og, pref, "0", Fraction(1), 1 - rho, cell="timebase")
+        if "rho_2eps" in self.mut:
+            rho = 2 * eps
+        pref = "tb.pref"     # always instantiated (gain rho may be 0): same netlist for every convention
+        nl.add(VCVS("tb.div", pref, "0", og, "0", rho, tags={"cell": "timebase"}))
         if "lookahead_strict" in self.mut:
             nl.comparator("tb.P", o, pref, "Pn", priority=PRIO["early"], cell="timebase")
             nl.gate("tb.Pinv", "NOT", ["Pn"], "P", cell="timebase")
@@ -337,11 +371,8 @@ def build(scn: dict, units: Units = Units(), convention: str = "right", mutation
     for row in scn.get("initial", []):
         L.note("W4", "initial row")
         A = _wrap(L, row["amount"], f"init[{row['id']}].amount")
-        if not w3_positive(A):
-            continue
-        x = B.bus(row["stage"])
-        B.packet(f"pk.init.{row['id']}", B.val(A / (u.gamma * u.V0)), "rail", x, "por", v0=u.V0)
-        B.cell("packet", f"init.{row['id']}", src="rail", dst="bus", trig="por")
+        if B.signed_packet(f"pk.init.{row['id']}", A, B.bus(row["stage"]), "por") is not None:
+            B.cell("packet", "init", src="rail", dst="bus", trig="por")
 
     # ---- renovation comparators (explicit years), their own packets
     reno_fire = {}      # renovation id -> fire signal
@@ -357,9 +388,8 @@ def build(scn: dict, units: Units = Units(), convention: str = "right", mutation
         rf = B.OR(f"rv.{rv['id']}.fire", fires)
         reno_fire[rv["id"]] = rf
         A = _wrap(L, rv.get("amount"), f"reno[{rv['id']}].amount")
-        if w3_positive(A):
-            B.packet(f"pk.rv.{rv['id']}", B.val(A / (u.gamma * u.V0)), "rail", B.bus(rv["stage"]), rf, v0=u.V0)
-            B.cell("packet", f"rv.{rv['id']}", src="rail", dst="bus", trig="explicit")
+        if B.signed_packet(f"pk.rv.{rv['id']}", A, B.bus(rv["stage"]), rf) is not None:
+            B.cell("packet", "renovation", src="rail", dst="bus", trig="explicit")
 
     # ---- items grouped by W2 key into shared clocks / event groups
     groups = {}
@@ -370,9 +400,10 @@ def build(scn: dict, units: Units = Units(), convention: str = "right", mutation
         ex = [_wrap(L, y, f"item[{it['id']}].explicit") for y in it.get("explicit", [])]
         subs = sorted(rv["id"] for rv in scn.get("renovations", [])
                       if rv.get("policy") == "substituted" and it["id"] in rv.get("replaces", []))
-        key = w2_key(L, P if w3_positive(P) else None, ex, it.get("explicit_policy", "restart"), tuple(subs))
+        Pv = P if w3_positive(P) else None       # missing / non-positive period: no periodic events (rule)
+        key = w2_key(L, Pv, ex, it.get("explicit_policy", "restart"), tuple(subs))
         if key not in groups:
-            groups[key] = {"period": P if w3_positive(P) else None, "explicit": ex,
+            groups[key] = {"period": Pv, "explicit": ex,
                            "policy": it.get("explicit_policy", "restart"), "subs": subs, "items": []}
             order.append(key)
         groups[key]["items"].append(it)
@@ -405,20 +436,24 @@ def build(scn: dict, units: Units = Units(), convention: str = "right", mutation
             pk = f"{gt}.pk"
         else:
             pk = ev
-        replaced = B.OR(f"{gt}.repl", [ev] + sub_fires)        # item renewed (own or renovation)
+        replaced = B.OR(f"{gt}.repl", [ev] + ([] if "substitution_not_renewal" in B.mut else sub_fires))
         group_signals[gt] = {"fire": replaced, "items": [it["id"] for it in g["items"]]}
         # per-item packets (W4: one per row)
         repair_rows = []
         for it in g["items"]:
             A = _wrap(L, it.get("amount"), f"item[{it['id']}].amount")
-            if w3_positive(A):
-                B.packet(f"pk.it.{it['id']}", B.val(A / (u.gamma * u.V0)), "rail", B.bus(it["stage"]), pk, v0=u.V0)
-                B.cell("packet", f"it.{it['id']}", src="rail", dst="bus", trig="group")
+            if B.signed_packet(f"pk.it.{it['id']}", A, B.bus(it["stage"]), pk) is not None:
+                B.cell("packet", "item", src="rail", dst="bus", trig="group")
                 item_seq[it["id"]] = f"pk.it.{it['id']}.seq"
             if it.get("repair"):
                 repair_rows.append(it)
-        if repair_rows:
-            _repair_group(B, gt, repair_rows, replaced)
+        by_stage = {}
+        for it in repair_rows:                      # W2: one year cell per (group, stage)
+            L.note("W2", "repair stage key")
+            key = "all" if "repair_stage_last_row" in B.mut else it["repair"]["stage"]
+            by_stage.setdefault(key, []).append(it)
+        for si, (st, rows) in enumerate(by_stage.items()):
+            _repair_group(B, f"{gt}.s{si}", rows, replaced)
         group_signals[gt]["replaced"] = replaced
 
     # ---- continuous flows (W4: one per row)
@@ -437,22 +472,19 @@ def build(scn: dict, units: Units = Units(), convention: str = "right", mutation
             B.nl.latch(f"fl.{fl['id']}.lat", group_signals[gt]["replaced"], "ZERO", lat, cell="flow")
             r2 = _wrap(L, fl.get("rate_after"), f"flow[{fl['id']}].rate_after")
             for nm, rate, inv in (("b", r, True), ("a", r2, False)):
-                if not w3_nonneg(rate):
+                if B.signed_flow(f"fl.{fl['id']}.{nm}.G", rate, f"fl.{fl['id']}.{nm}.n") is None:
                     continue
-                B.nl.R(f"fl.{fl['id']}.{nm}.G", "rail", f"fl.{fl['id']}.{nm}.n",
-                       G=B.val(rate / (u.gamma * u.tau_y * u.V0)), cell="flow")
                 B.nl.switch(f"fl.{fl['id']}.{nm}.S", f"fl.{fl['id']}.{nm}.n", x, lat, invert=inv, cell="flow")
-                B.datapath.update({f"fl.{fl['id']}.{nm}.G", f"fl.{fl['id']}.{nm}.S"})
+                B.datapath.add(f"fl.{fl['id']}.{nm}.S")
             B.cell("flow", fl["id"], src="rail", dst="bus", ctrl="latch")
-        elif w3_nonneg(r):
-            B.nl.R(f"fl.{fl['id']}.G", "rail", x, G=B.val(r / (u.gamma * u.tau_y * u.V0)), cell="flow")
-            B.datapath.add(f"fl.{fl['id']}.G")
-            B.cell("flow", fl["id"], src="rail", dst="bus")
+        elif B.signed_flow(f"fl.{fl['id']}.G", r, x) is not None:
+            B.cell("flow", "flow", src="rail", dst="bus")
         if fl.get("degradation"):                    # rate grows with age since replacement
             d = fl["degradation"]
             L.note("W2", "degradation->item")
             gt = item_group[d["item"]]
             slope = _wrap(L, d["slope"], f"flow[{fl['id']}].slope")
+            require_nonneg(slope, f"flow[{fl['id']}].degradation.slope")
             tag = f"age.{fl['id']}"
             xa, oa = B.integrator(tag, u.Gu * u.tau_y, "age")
             B.nl.R(f"{tag}.G", "railn", xa, G=u.Gu, cell="age")
@@ -474,7 +506,7 @@ def _repair_group(B: Builder, gt, rows, fire):
     P=1 event (belongs to the year that just closed): negative packet of one year's flow.
     """
     u, nl, L = B.u, B.nl, B.L
-    stage = rows[0]["repair"]["stage"]
+    stage = rows[-1 if "repair_stage_last_row" in B.mut else 0]["repair"]["stage"]          # all rows of this call share one stage (caller groups by stage)
     bx = B.bus(stage)
     xs, NA = f"{gt}.rp.sum.x", f"{gt}.rp.NA"
     nl.opamp(f"{gt}.rp.sum.A", "0", xs, NA, cell="repair_amp")
@@ -482,6 +514,8 @@ def _repair_group(B: Builder, gt, rows, fire):
     for it in rows:
         e0 = _wrap(L, it["repair"]["base"], f"item[{it['id']}].repair.base")
         r = _wrap(L, it["repair"]["rate"], f"item[{it['id']}].repair.rate")
+        require_nonneg(e0, f"item[{it['id']}].repair.base")
+        require_nonneg(r, f"item[{it['id']}].repair.rate")
         if not (w3_nonneg(e0) and w3_nonneg(r)):
             continue
         x1, o1 = f"{gt}.rp.{it['id']}.x", f"{gt}.rp.{it['id']}.o"

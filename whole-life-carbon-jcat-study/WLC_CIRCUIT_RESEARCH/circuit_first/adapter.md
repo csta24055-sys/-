@@ -53,3 +53,36 @@ Listed for the verifier's bypass search.
 Factor rails and derived rails, multi-factor amplitude rows, year banks / MDAC, diode
 rectification of net purchased energy, `ρ` split B2⇄B6, refrigerant cell, terminal packets
 `z_s`, `ι` switches, ratio readouts, N_max same-netlist padding.
+
+---
+# Stage B: building adapter (`adapter_building.py`)
+
+Primitive input: the raw fields of the synthetic `Scenario` object (factor records, conversion tables, material /
+equipment rows, refrigerant devices, construction site, annual profiles, grid scenario, demolition, boundary ι, T).
+The adapter reads them through `Tracked` (exact binary value of each float) and the same W1–W4 ledger, now kept
+per layer (`amp` = crossbar, `time` = core). Read only the dataclass definitions and refcalc / 03 texts to learn
+the meaning. No refcalc structure, event list, year loop or per-unit value is computed. The only loops are row
+enumerations (W4) and the fixed 8 counter bit positions `COUNTER_BITS`.
+
+| input | meaning | → circuit | op |
+|---|---|---|---|
+| factor record (value, unit, stages, licence) | kgCO2e per unit | factor rail source (value × V0); stage / licence / unit match decides the wiring | W1, W2, W3 |
+| unit conversions (scenario table and row-specific) | multiplier | derived rail stage, R_f = factor × R0 | W1, W2 |
+| material quantity, basis, waste rate | q_ord | stage with R_f = q R0 and R_in = (1−w)R0 (pot) for DESIGN | W1, pot W1, W3 |
+| EPD declaration, composition, generic factor | factor resolution order | wiring; EPD date comparison and Σ fraction ≈ 1 are GREY predicates | W2, GREY |
+| transport, end of life, installation, unquantified ratio | A4 / C2–C4 / renewal A5 / A13-04 | stages per data factor, route summing junctions, pot r/(1−r) | W1 |
+| refresh cycle / service life / explicit list | renewal schedule | W2 group key → one clock or explicit comparators per group | W2, W3 |
+| repair rate | B3 rate e0·r | summing weight r·G_u into the group repair node | W1 |
+| equipment, site, demolition, hauls | X-01, delivery, installation, X-14, A5, C1, C2 | stages / sums | W1 |
+| annual profiles (kind, base, slope, table) | year banks | conductances value × Gs (W1 each entry, MDAC bits slope × 2^b) | W1, W2, W3, W4 |
+| grid scenario | grid bank | as above; well-formedness predicates (start ≥ floor, step order) are GREY | W1, GREY |
+| facility-management ratio | ρ | stage gain ρ; ι_B2 → static steering switch | W1, W3 |
+| reconstruction scenario, scope φ, cycle | B5 | clock + φ stage | W1, W2, W3 |
+| refrigerant charge, GWP, leak, loss, recovery, top-up, change years / life | B1 cells | W1 per element value; (1−η) as pot segment | W1, W3 |
+| included stages ι | readout set; ρ steering | readout + static switch | W3 |
+
+Grey operations (all are predicates on two inputs or sums of fractions; none produces an element value):
+EPD validity date comparison, composite Σ fraction and |Σ − 1| ≤ 1e-6, grid start ≥ floor, grid step order. Counts
+per building are in `results/stageB_S3e.json` → runs[].counts (`grey_by_kind`). Negative values: see
+DESIGN_DEVIATIONS D18. Original convention: D16 (counting rule; firings at τ/(1−ε); continuous quantities
+undilated). The stage-A cells degradation / efficiency switch use the dilated firing time (declared).

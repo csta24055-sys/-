@@ -208,6 +208,7 @@ class Simulator:
             self.sol.charge_jump[e.name] = la.zero_like(exact)
         self.t = _conv(0, exact)
         self.seq_active = []
+        self._fell_post = set()
         self.por_done = False
         self.mode = None
 
@@ -372,6 +373,8 @@ class Simulator:
         if kind == "cmp":
             ds = self._derivs_now(form, 1)
             y = ds[0]
+            if y == 0 and obj.name in self._fell_post:
+                return self._sign_after_now(form) > 0
             return y >= 0
         if kind == "don":
             return self._sign_after_now(form) >= 0
@@ -384,6 +387,7 @@ class Simulator:
         if self.record:
             self._record("arrive")
         forced = set(forced)
+        self._fell_post = set()
         guard = 0
         while True:
             guard += 1
@@ -437,6 +441,22 @@ class Simulator:
             for r in readouts:
                 if r["t"] == self.t and not r.get("done"):
                     pending.append((r["priority"], "read", r, None))
+            if not pending:
+                # post phase: a comparator sitting at y = 0 that falls just after this instant
+                # is switched low NOW (before time advances), not at the next event
+                cands = []
+                for kind, obj, form in self.monitors():
+                    if kind == "cmp" and form is not None and self.logic.sig[obj.out] \
+                            and obj.name not in self._fell_post:
+                        y = self._derivs_now(form, 1)[0]
+                        if y == 0 and self._sign_after_now(form) < 0:
+                            cands.append((obj.priority, "cmp", obj, False))
+                if cands:
+                    pm = min(c[0] for c in cands)
+                    for c in cands:
+                        if c[0] == pm:
+                            pending.append(c)
+                            self._fell_post.add(c[2].name)
             if not pending:
                 break
             pmin = min(p[0] for p in pending)

@@ -10,7 +10,7 @@ from fractions import Fraction
 
 from adapter import CONVENTIONS, Units, build
 from engine import Simulator
-from engine.netlist import Capacitor, Comparator, Diode, Switch
+from engine.netlist import Capacitor, Comparator, Diode, Sequencer, Switch
 
 
 def simulate(scn, T_list, convention="right", units=Units(), mutations=(), record=False):
@@ -84,26 +84,96 @@ def _frac(s):
 # ----------------------------------------------------------------- audits
 
 
-def hiddenness(built):
-    """h = W_out / (W_in + W_out) with the counting rules of architecture section 4."""
+def _vg_additions(nl):
+    """KCL additions at virtual-ground summing nodes only: (inputs - 1) per op-amp inverting
+    input, inputs = incident elements other than the op-amp and its feedback element(s)."""
+    from engine.netlist import OpAmp
+    inc = {}
+    for e in nl.analog():
+        for n in e.nodes():
+            inc.setdefault(n, []).append(e)
+    adds = 0
+    for e in nl.analog():
+        if isinstance(e, OpAmp) and e.inn != "0":
+            others = [x for x in inc.get(e.inn, []) if x is not e]
+            fb = [x for x in others if e.out in x.nodes()]
+            adds += max(0, len(others) - len(fb) - 1)
+    return adds
+
+
+def control_census(nl, ledger=None, readout_priorities=()):
+    """Control the simulator provides and h does not count (reported next to h)."""
+    from engine.netlist import Gate, PowerOn
+    prios = {e.priority for e in nl.digital() if isinstance(e, (Comparator, PowerOn))} | set(readout_priorities)
+    out = {"priority_classes": len(prios),
+           "sequencers": sum(1 for e in nl.digital() if isinstance(e, Sequencer)),
+           "sequencer_phase_steps": sum(len(e.steps) for e in nl.digital() if isinstance(e, Sequencer)),
+           "gates": sum(1 for e in nl.digital() if isinstance(e, Gate)),
+           "comparators": sum(1 for e in nl.digital() if isinstance(e, Comparator))}
+    if ledger is not None:
+        out.update({"W2_lookups_and_equality_groupings": ledger.counts["W2"], "W3_predicates": ledger.counts["W3"],
+                    "W4_enumerations": ledger.counts["W4"]})
+    return out
+
+
+def hiddenness(built, readout_priorities=(0, 100)):
+    """h = W_out / (W_in + W_out). W_in (narrow, as recomputed by the verifier): data-valued
+    elements + KCL additions at virtual-ground summing nodes + comparators + diodes + data-path
+    switches. The broad count of stage A (every node's fan-out, every switch) is reported too."""
     nl = built.netlist
     deg = {}
     for e in nl.analog():
         for n in e.nodes():
             if n != "0":
                 deg[n] = deg.get(n, 0) + 1
-    kcl_adds = sum(max(0, d - 2) for d in deg.values())
+    kcl_broad = sum(max(0, d - 2) for d in deg.values())
     n_cmp = sum(1 for e in nl.digital() if isinstance(e, Comparator))
     n_dio = sum(1 for e in nl.analog() if isinstance(e, Diode))
     n_sw = sum(1 for e in nl.analog() if isinstance(e, Switch))
+    n_sw_data = sum(1 for e in nl.analog() if isinstance(e, Switch) and e.name in built.datapath)
     L = built.ledger
-    W_in = L.data_elements + kcl_adds + n_cmp + n_dio + n_sw
+    vg = _vg_additions(nl)
+    W_in = L.data_elements + vg + n_cmp + n_dio + n_sw_data
+    W_in_broad = L.data_elements + kcl_broad + n_cmp + n_dio + n_sw
     W_out = L.counts["GREY"]
     return {"h": Fraction(W_out, W_in + W_out) if (W_in + W_out) else Fraction(0),
-            "W_in": W_in, "W_out": W_out,
-            "W_in_parts": {"data_elements": L.data_elements, "kcl_additions": kcl_adds,
-                           "comparators": n_cmp, "diodes": n_dio, "switches": n_sw},
-            "construction_ops": dict(L.counts), "grey_items": list(L.grey_items)}
+            "W_in": W_in, "W_out": W_out, "W_in_broad": W_in_broad,
+            "W_in_parts": {"data_elements": L.data_elements, "virtual_ground_additions": vg,
+                           "comparators": n_cmp, "diodes": n_dio, "datapath_switches": n_sw_data},
+            "W_in_broad_parts": {"kcl_additions_all_nodes": kcl_broad, "all_switches": n_sw},
+            "construction_ops": dict(L.counts), "grey_items": list(L.grey_items),
+            "control_not_counted_in_h": control_census(nl, L, readout_priorities)}
+
+
+def netlist_signature(nl):
+    """Signature derived from the netlist graph itself (not from declared metadata): the set,
+    modulo multiplicity and values, of (element kind, labels of its terminal nodes), where a node
+    label is the set of (kind, terminal role) incident on it; plus the boolean element kinds."""
+    from engine.netlist import (DFF, Counter, Gate, OpAmp, PowerOn, SRLatch, Sequencer as Seq)
+    roles = {}
+
+    def terms(e):
+        if isinstance(e, OpAmp):
+            return [("inp", e.inp), ("inn", e.inn), ("out", e.out)]
+        if isinstance(e, Comparator):
+            return [("plus", e.plus), ("minus", e.minus)]
+        return [("a", e.a), ("b", e.b)] + ([("cp", e.cp), ("cn", e.cn)] if hasattr(e, "cp") else [])
+    els = nl.analog() + [e for e in nl.digital() if isinstance(e, Comparator)]
+    for e in els:
+        for r, n in terms(e):
+            roles.setdefault(n, set()).add((e.kind, r))
+    lab = {n: ("GND",) if n == "0" else tuple(sorted(v)) for n, v in roles.items()}
+    sig = set()
+    for e in els:
+        sig.add((e.kind, tuple((r, lab[n]) for r, n in terms(e))))
+    for e in nl.digital():
+        if isinstance(e, Gate):
+            sig.add(("GATE", e.op, len(e.inputs) > 1))
+        elif isinstance(e, (SRLatch, DFF, Counter, PowerOn)):
+            sig.add((e.kind,))
+        elif isinstance(e, Seq):
+            sig.add(("SEQ", len(e.steps)))
+    return frozenset(sig)
 
 
 def schema_signature(built):

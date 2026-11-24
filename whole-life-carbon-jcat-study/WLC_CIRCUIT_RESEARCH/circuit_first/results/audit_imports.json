@@ -8,6 +8,21 @@
   "__future__",
   "fractions"
  ],
+ "engine/dc.py": [
+  "__future__",
+  "fractions",
+  "netlist"
+ ],
+ "engine/hybrid.py": [
+  "__future__",
+  "fractions",
+  "heapq",
+  "logic",
+  "math",
+  "mna",
+  "netlist",
+  "sim"
+ ],
  "engine/linalg.py": [
   "__future__",
   "fractions",
@@ -46,6 +61,26 @@
   "__future__",
   "adapter",
   "engine",
+  "fractions"
+ ],
+ "adapter_building.py": [
+  "__future__",
+  "adapter",
+  "engine",
+  "fractions"
+ ],
+ "model_building.py": [
+  "__future__",
+  "adapter",
+  "adapter_building",
+  "engine",
+  "fractions",
+  "model",
+  "time"
+ ],
+ "adapter_nmax.py": [
+  "__future__",
+  "adapter",
   "fractions"
  ]
 }

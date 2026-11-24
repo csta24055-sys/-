@@ -35,7 +35,7 @@
   "agent_definitions_note": "Agent files were updated by the user after this session started (new wlc-circuit-first-builder; new top sections in architect/verifier). Subagents are told to read their on-disk definition because the session may hold the earlier version.",
   "phases": {
     "S1_design": "DONE (design only; every prediction and lemma [H])",
-    "S2_implementation": "IN_PROGRESS (stage A S0-S2 done and re-run by coordinator; stage B S3a-S3e not started)",
+    "S2_implementation": "DONE by builder (stage A + stage B S3a-S3e + V1 fixes); re-run by coordinator; stage B independent verification NOT_RUN yet",
     "S3_independent_verification": "IN_PROGRESS (V1 on stage A snapshot 4c5f375 done; stage B not yet verified)",
     "S4_integration_and_save": "NOT_RUN"
   },
@@ -153,6 +153,58 @@
         "duration_s": 2124
       },
       "status": "DONE"
+    },
+    {
+      "phase": "S2_implementation",
+      "stage": "B (S3a-S3e full synthetic building) + V1 fixes",
+      "actor": "wlc-circuit-first-builder (same subagent resumed)",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "base_sha": "4c5f375 / 6e93fc8",
+      "commands": [
+        "PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s tests -p 'test_*.py'",
+        "PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 python3 -B tests/compare_refcalc.py S3a|S3b|S3c|S3d",
+        "... tests/compare_stageB_e.py full|mutations"
+      ],
+      "route_result": "47/47 tests OK",
+      "coordinator_rerun": "47/47 OK (2026-11-24, ~47 s)",
+      "results": "circuit_first/results/ (about 23 MB incl. netlist and full-solution dumps)",
+      "headline": {
+        "vs_refcalc": "5 buildings (benchmark S, M; evaluation E0, E1, E2) x 10 T, all inside valid_domain and outside bands: 14 stages, C(T) max rel 1.1e-14, Z(T) 6.3e-16, event counts equal 50/50; iota subsets <=5.9e-14",
+        "coverage": "1.0 of |C(T)| (builder self-report)",
+        "hiddenness": "h = 0.045 (S), 0.069 (M), 0.058/0.060/0.032 (E0/E1/E2) -> architecture PARTIAL band 0.02<h<=0.25; grey ops are predicates only (mass-fraction sum test, EPD date comparison, grid step order)",
+        "size_S": "crossbar 13,404 elements / 3,393 op-amps; core 9,977 elements / 389 op-amps / 1,018 capacitors / 201 comparators / 3,639 switches / 701 bits; N_c=161 distinct clock periods",
+        "size_M": "crossbar 134,335 / 33,798; core 48,311 / 2,140 / 5,530 / 1,232 / 16,886 / 4,051; N_c=869",
+        "runtime": "S 26 s vs refcalc 0.02 s; M 94 s; no speed claim",
+        "mutations": "stage B 6/6, stage A 10/10 detected"
+      },
+      "v1_fixes": {
+        "D1": "FIXED",
+        "D2": "FIXED",
+        "D3": "FIXED",
+        "D4": "FIXED for stage-A family; full-building N_max NOT_RUN",
+        "D5": "declared",
+        "D6": "FIXED",
+        "D7": "FIXED"
+      },
+      "not_run": [
+        "full-building N_max identical-netlist template",
+        "merged crossbar+core single-netlist run",
+        "in-circuit realisation of grey predicates",
+        "in-band agreement",
+        "AGG ratios",
+        "decision/reference units",
+        "SPICE",
+        "Math7",
+        "building energy meters"
+      ],
+      "independent_verification": "NOT_RUN",
+      "usage_cumulative": {
+        "subagent_tokens": 799292,
+        "tool_uses": 116,
+        "duration_s": 4353
+      },
+      "status": "STAGE_B_DONE_PENDING_VERIFIER"
     }
   ],
   "verifier_write_location": "circuit_first/verification/ (decided by coordinator; cycle-1 routes/ and integration/ stay read-only)",
