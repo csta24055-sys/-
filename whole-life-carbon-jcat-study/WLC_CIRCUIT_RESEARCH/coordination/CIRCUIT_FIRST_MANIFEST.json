@@ -36,7 +36,7 @@
   "phases": {
     "S1_design": "DONE (design only; every prediction and lemma [H])",
     "S2_implementation": "IN_PROGRESS (stage A S0-S2 done and re-run by coordinator; stage B S3a-S3e not started)",
-    "S3_independent_verification": "NOT_RUN",
+    "S3_independent_verification": "IN_PROGRESS (V1 on stage A snapshot 4c5f375 done; stage B not yet verified)",
     "S4_integration_and_save": "NOT_RUN"
   },
   "engines": {
@@ -104,6 +104,55 @@
         "duration_s": 2272
       },
       "status": "STAGE_A_DONE_PENDING_VERIFIER"
+    },
+    {
+      "phase": "S3_independent_verification",
+      "pass": "V1 (stage A frozen snapshot 4c5f375)",
+      "actor": "wlc-verifier (subagent)",
+      "frontmatter": "claude-opus-5-5 / high",
+      "actual_model": "claude-opus-5-5 (self-reported)",
+      "actual_effort": "NOT_VERIFIED",
+      "command": "cd circuit_first/verification/tests && PYTHONDONTWRITEBYTECODE=1 math7-py -B -m unittest test_v1  (needs sympy; snapshot path via CF_SNAPSHOT, default = scratchpad extraction of 4c5f375 made with git archive)",
+      "route_result": "7/7 verifier tests OK (4 assert reproducible builder defects)",
+      "coordinator_rerun": "7/7 OK with math7-py (plain python3 lacks sympy)",
+      "gates": {
+        "CF1": "PARTIAL",
+        "CF2": "PASS",
+        "CF3": "PARTIAL",
+        "CF5_partial": "PARTIAL"
+      },
+      "headline": {
+        "mechanism": "real circuit: own exact simulator reading only the dumped netlist reproduces pilot and CF3 with 0 readout-state mismatches",
+        "residuals": "own checker, 31,283 KCL checks, 350 jumps: exact dumps 0; float dumps max 2.8e-17",
+        "ledger": "36 cases, 699 points, 3 conventions: 35 pass",
+        "hiddenness": "h=0 confirmed for pilot, but measure flatters the design (W_out=0 gives 0 regardless of W_in; free simulator control not counted; W_in recount 22 vs builder 49)",
+        "mutation_score": "15/18 non-equivalent mutants caught (83 %, below 9/10 target)"
+      },
+      "defects": [
+        "V1-D1 comparator falling transition not switched at crossing (engine/sim.py:368-375) - blocks stage B",
+        "V1-D2 negative amounts/rates silently dropped",
+        "V1-D3 repair rows in one event group booked to first row stage",
+        "V1-D4 netlist differs across conventions/equal periods; schema signature from metadata not netlist; N_max test not run",
+        "V1-D5 original convention implemented by stretching all event times by 1/(1-eps), undeclared",
+        "V1-D6 W_in overcounts",
+        "V1-D7 weak tests"
+      ],
+      "lemmas": {
+        "L1 conclusion": "CONFIRMED with verifier proof sketch (multi-affine MNA determinants), needs second review",
+        "L1 argument as written": "GAP (homogeneity alone cannot exclude a product)",
+        "L2": "CONFIRMED textbook",
+        "L3": "statement holds; implication that exact integration needs an active element REFUTED in part (ideal current source into grounded C)",
+        "S3 a,b,d,e": "CONFIRMED",
+        "S3 c": "CONFIRMED for S3; general state lower bound GAP",
+        "3(ii)": "CONFIRMED",
+        "builder D1 lookahead rule": "CONFIRMED (architecture rule misassigns 390 of 3,826 events)"
+      },
+      "usage": {
+        "subagent_tokens": 428187,
+        "tool_uses": 91,
+        "duration_s": 2124
+      },
+      "status": "DONE"
     }
   ],
   "verifier_write_location": "circuit_first/verification/ (decided by coordinator; cycle-1 routes/ and integration/ stay read-only)",

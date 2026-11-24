@@ -1,0 +1,900 @@
+{
+ "import_graph": {
+  "engine/__init__.py": [
+   ".netlist@3",
+   ".sim@6",
+   ".mna@7"
+  ],
+  "engine/audit.py": [
+   "__future__@7",
+   "fractions@9"
+  ],
+  "engine/linalg.py": [
+   "__future__@5",
+   "math@7",
+   "fractions@8"
+  ],
+  "engine/logic.py": [
+   "__future__@7",
+   ".netlist@9"
+  ],
+  "engine/mna.py": [
+   "__future__@19",
+   "fractions@21",
+   ".@23",
+   ".netlist@24"
+  ],
+  "engine/netlist.py": [
+   "__future__@15",
+   "dataclasses@17",
+   "fractions@18",
+   "typing@19"
+  ],
+  "engine/sim.py": [
+   "__future__@17",
+   "math@19",
+   "fractions@20",
+   "math@21",
+   ".@23",
+   ".logic@24",
+   ".mna@25",
+   ".netlist@26"
+  ],
+  "adapter.py": [
+   "__future__@14",
+   "dataclasses@16",
+   "fractions@17",
+   "engine@19"
+  ],
+  "model.py": [
+   "__future__@7",
+   "fractions@9",
+   "adapter@11",
+   "engine@12",
+   "engine.netlist@13",
+   "engine.netlist@120"
+  ]
+ },
+ "ast_findings_hard": [],
+ "ast_scan_adapter_model": [
+  {
+   "file": "adapter.py",
+   "line": 120,
+   "what": "loop over parts",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 337,
+   "what": "loop over scn.get('initial', [])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 348,
+   "what": "loop over scn.get('renovations', [])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 367,
+   "what": "loop over scn.get('items', [])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 382,
+   "what": "loop over enumerate(order)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 426,
+   "what": "loop over group_signals.items()",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 429,
+   "what": "loop over scn.get('flows', [])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 482,
+   "what": "loop over rows",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 135,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 136,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 137,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 138,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 351,
+   "what": "loop over enumerate(rv.get('years', []))",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 387,
+   "what": "loop over enumerate(g['explicit'])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 412,
+   "what": "loop over g['items']",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 427,
+   "what": "loop over gs['items']",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 42,
+   "what": ".value read: self.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 42,
+   "what": "call Fraction(value)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 105,
+   "what": ".value read: x.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 112,
+   "what": ".value read: x.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 143,
+   "what": "call Fraction(0)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 144,
+   "what": "call Fraction(0)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 145,
+   "what": "call Fraction(1, 10 ** 9)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 179,
+   "what": "call Fraction(x)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 439,
+   "what": "loop over (('b', r, True), ('a', r2, False))",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 500,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 50,
+   "what": ".value read: other.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 53,
+   "what": "call Fraction(other)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 145,
+   "what": "binop 10 ** 9",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 155,
+   "what": "call Fraction(str(x))",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 155,
+   "what": "call Fraction(x)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 178,
+   "what": ".value read: x.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": null,
+   "what": "loop over it.get('explicit', [])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": null,
+   "what": "loop over g['subs']",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 63,
+   "what": ".value read: self.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 63,
+   "what": ".value read: self.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": null,
+   "what": "loop over PH",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 230,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 256,
+   "what": "call Fraction(1)",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": null,
+   "what": "loop over scn.get('renovations', [])",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": null,
+   "what": "loop over g['items']",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 122,
+   "what": ".value read: p.value",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": null,
+   "what": "loop over p",
+   "kind": "scan"
+  },
+  {
+   "file": "adapter.py",
+   "line": 124,
+   "what": ".value read: q.value",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 27,
+   "what": "loop over sim.sol.readouts",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 49,
+   "what": "loop over sim.sol.events",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 62,
+   "what": "loop over sim.sol.events",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 91,
+   "what": "loop over nl.analog()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 118,
+   "what": "loop over caps",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 122,
+   "what": "loop over nl.digital()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 130,
+   "what": "loop over nl.elements",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 31,
+   "what": "loop over built.taps.items()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 81,
+   "what": "call Fraction(int(s))",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 92,
+   "what": "loop over e.nodes()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 95,
+   "what": "call sum((max(0, d - 2) for d in deg.values()))",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 96,
+   "what": "call sum((1 for e in nl.digital() if isinstance(e, Comparat",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 97,
+   "what": "call sum((1 for e in nl.analog() if isinstance(e, Diode)))",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 98,
+   "what": "call sum((1 for e in nl.analog() if isinstance(e, Switch)))",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over T_list",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over Ts",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 30,
+   "what": "call Fraction(0)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 35,
+   "what": "call sum((snap['meters_cont'][e] + (snap['meters_jump'][e] ",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over built.item_seq.items()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over built.item_seq",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over built.group_signals.items()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 80,
+   "what": "call Fraction(int(a), int(b))",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 81,
+   "what": "call int(s)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over nl.analog()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 133,
+   "what": "call sum((1 for e in nl.digital() if isinstance(e, Sequence",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 21,
+   "what": "call Fraction(str(T))",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 21,
+   "what": "call Fraction(T)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 24,
+   "what": "call max(Ts)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 32,
+   "what": "call sum((nl.by_name[c].C * snap['s'][c] for c in caps), Fr",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 35,
+   "what": "call Fraction(0)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 80,
+   "what": "call int(a)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 80,
+   "what": "call int(b)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 95,
+   "what": "call max(0, d - 2)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over deg.values()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over nl.digital()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over nl.analog()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over nl.analog()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 102,
+   "what": "call Fraction(W_out, W_in + W_out)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 102,
+   "what": "call Fraction(0)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over built.cells",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 32,
+   "what": "call Fraction(0)",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over built.datapath",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over nl.digital()",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": null,
+   "what": "loop over caps",
+   "kind": "scan"
+  },
+  {
+   "file": "model.py",
+   "line": 71,
+   "what": "call int(P)",
+   "kind": "scan"
+  }
+ ],
+ "raw_input_ops_pilot": {
+  "n": 0,
+  "ops": {},
+  "examples": []
+ },
+ "op_recount_pilot": {
+  "verifier": {
+   "W1": 8
+  },
+  "builder_ledger": {
+   "W1": 8,
+   "W2": 2,
+   "W3": 8,
+   "W4": 4,
+   "GREY": 0
+  }
+ },
+ "hiddenness_pilot": {
+  "builder": {
+   "h": "0",
+   "W_in": 50,
+   "W_out": 0,
+   "W_in_parts": {
+    "data_elements": 8,
+    "kcl_additions": 26,
+    "comparators": 4,
+    "diodes": 0,
+    "switches": 12
+   },
+   "construction_ops": {
+    "W1": 8,
+    "W2": 2,
+    "W3": 8,
+    "W4": 4,
+    "GREY": 0
+   },
+   "grey_items": []
+  },
+  "verifier": {
+   "W_in": 22,
+   "parts": {
+    "data_elements": 8,
+    "virtual_ground_additions": 4,
+    "comparators": 4,
+    "diodes": 0,
+    "datapath_switches": 6
+   },
+   "summing_inputs": {
+    "tb.y.x": 2,
+    "tb.g.x": 1,
+    "bus.A1-A3.x": 1,
+    "g0.clk.x": 2,
+    "bus.B4.x": 2,
+    "g1.clk.x": 2,
+    "bus.B6.x": 1
+   },
+   "W_out": 0,
+   "h": "0"
+  },
+  "data_elements": {
+   "pk.init.init.Cs": [
+    "initial/0/amount"
+   ],
+   "fl.op.G": [
+    "flows/0/rate"
+   ],
+   "pk.it.A.Cs": [
+    "items/0/amount"
+   ],
+   "g0.clk.C": [
+    "items/0/period"
+   ],
+   "g0.clk.rst.Cs": [
+    "items/0/period"
+   ],
+   "pk.it.B.Cs": [
+    "items/1/amount"
+   ],
+   "g1.clk.C": [
+    "items/1/period"
+   ],
+   "g1.clk.rst.Cs": [
+    "items/1/period"
+   ]
+  }
+ },
+ "raw_input_ops_full": {
+  "n": 0,
+  "ops": {},
+  "examples": []
+ },
+ "op_recount_full": {
+  "verifier": {
+   "W1": 16
+  },
+  "builder_ledger": {
+   "W1": 16,
+   "W2": 4,
+   "W3": 15,
+   "W4": 7,
+   "GREY": 0
+  }
+ },
+ "hiddenness_full": {
+  "builder": {
+   "h": "0",
+   "W_in": 114,
+   "W_out": 0,
+   "W_in_parts": {
+    "data_elements": 16,
+    "kcl_additions": 59,
+    "comparators": 6,
+    "diodes": 0,
+    "switches": 33
+   },
+   "construction_ops": {
+    "W1": 16,
+    "W2": 4,
+    "W3": 15,
+    "W4": 7,
+    "GREY": 0
+   },
+   "grey_items": []
+  },
+  "verifier": {
+   "W_in": 47,
+   "parts": {
+    "data_elements": 15,
+    "virtual_ground_additions": 12,
+    "comparators": 6,
+    "diodes": 0,
+    "datapath_switches": 14
+   },
+   "summing_inputs": {
+    "tb.y.x": 2,
+    "tb.g.x": 1,
+    "bus.A.x": 1,
+    "bus.B5.x": 1,
+    "g0.clk.x": 3,
+    "bus.B4.x": 2,
+    "bus.B3.x": 2,
+    "g0.rp.sum.x": 1,
+    "g0.rp.A.x": 1,
+    "g0.yc.x": 2,
+    "g1.clk.x": 3,
+    "bus.B6.x": 4,
+    "age.dg.x": 2
+   },
+   "W_out": 0,
+   "h": "0"
+  },
+  "data_elements": {
+   "pk.init.i.Cs": [
+    "initial/0/amount"
+   ],
+   "fl.op.b.G": [
+    "flows/0/rate"
+   ],
+   "fl.op.a.G": [
+    "flows/0/rate_after"
+   ],
+   "fl.dg.deg.G": [
+    "flows/1/degradation/slope"
+   ],
+   "pk.it.A.Cs": [
+    "items/0/amount"
+   ],
+   "g0.clk.C": [
+    "items/0/period"
+   ],
+   "g0.clk.rst.Cs": [
+    "items/0/period"
+   ],
+   "g0.x0.Vl": [
+    "items/0/explicit/0"
+   ],
+   "g0.rp.A.Ge": [
+    "items/0/repair/base"
+   ],
+   "g0.rp.A.Gr": [
+    "items/0/repair/rate"
+   ],
+   "pk.it.B.Cs": [
+    "items/1/amount"
+   ],
+   "g1.clk.C": [
+    "items/1/period"
+   ],
+   "g1.clk.rst.Cs": [
+    "items/1/period"
+   ],
+   "pk.rv.R.Cs": [
+    "renovations/0/amount"
+   ],
+   "rv.R.0.Vl": [
+    "renovations/0/years/0"
+   ]
+  }
+ },
+ "signatures": {
+  "pilot/right": {
+   "wl_multiset": "e9a27b5b8deaef23",
+   "wl_set(count-free)": "584e701d73a2d7a7",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 53
+  },
+  "pilot/left": {
+   "wl_multiset": "e9a27b5b8deaef23",
+   "wl_set(count-free)": "584e701d73a2d7a7",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 53
+  },
+  "pilot/original": {
+   "wl_multiset": "cc27186e3409d58b",
+   "wl_set(count-free)": "440289ddd825e756",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 55
+  },
+  "pilot/right/units2": {
+   "wl_multiset": "e9a27b5b8deaef23",
+   "wl_set(count-free)": "584e701d73a2d7a7",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 53
+  },
+  "pilot/original/units2": {
+   "wl_multiset": "cc27186e3409d58b",
+   "wl_set(count-free)": "440289ddd825e756",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 55
+  },
+  "pilot/right/items_reversed": {
+   "wl_multiset": "e9a27b5b8deaef23",
+   "wl_set(count-free)": "584e701d73a2d7a7",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 53
+  },
+  "pilot/right/other_values": {
+   "wl_multiset": "e9a27b5b8deaef23",
+   "wl_set(count-free)": "584e701d73a2d7a7",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 53
+  },
+  "pilot/right/equal_periods": {
+   "wl_multiset": "9676cd62fcd4ad9f",
+   "wl_set(count-free)": "6f5ca8fca941f840",
+   "builder_cell_signature": "e2e8b68c7d671e44",
+   "n_elements": 45
+  },
+  "full/original": {
+   "wl_multiset": "8e9bbf78476bf9fc",
+   "wl_set(count-free)": "fd19439eb51b3024",
+   "builder_cell_signature": "add249182b1e8bff",
+   "n_elements": 134
+  },
+  "full/right": {
+   "wl_multiset": "99d6b7764646960a",
+   "wl_set(count-free)": "312186924878f527",
+   "builder_cell_signature": "add249182b1e8bff",
+   "n_elements": 132
+  }
+ },
+ "census_pilot": {
+  "elements": 53,
+  "kinds": {
+   "V": 4,
+   "OA": 7,
+   "C": 13,
+   "R": 5,
+   "CMP": 4,
+   "SW": 12,
+   "SEQ": 6,
+   "CNT": 1,
+   "POR": 1
+  },
+  "capacitors_by_cell": {
+   "timebase/C": 2,
+   "timebase/Cs": 1,
+   "bus/C": 3,
+   "packet/Cs": 3,
+   "clock/C": 2,
+   "clock/Cs": 2
+  }
+ },
+ "census_pilot_original": {
+  "elements": 55,
+  "kinds": {
+   "V": 4,
+   "OA": 7,
+   "C": 13,
+   "R": 7,
+   "CMP": 4,
+   "SW": 12,
+   "SEQ": 6,
+   "CNT": 1,
+   "POR": 1
+  },
+  "capacitors_by_cell": {
+   "timebase/C": 2,
+   "timebase/Cs": 1,
+   "bus/C": 3,
+   "packet/Cs": 3,
+   "clock/C": 2,
+   "clock/Cs": 2
+  }
+ }
+}

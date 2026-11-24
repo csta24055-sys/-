@@ -1,0 +1,75 @@
+{
+ "M04b_rho_first_order_2eps": {
+  "caught_by_verifier_suite": false,
+  "summary": {
+   "cases": 36,
+   "pass": 35,
+   "fail": [
+    "signed_inputs_negative_amount_and_rate"
+   ],
+   "points": 699,
+   "event_checks_pass": true,
+   "year_checks_pass": true
+  },
+  "note": "baseline failure signed_inputs_* excluded (fails on unmutated snapshot)"
+ },
+ "M05_clock_reset_to_zero_not_subtract": {
+  "caught_by_verifier_suite": false,
+  "summary": {
+   "cases": 36,
+   "pass": 35,
+   "fail": [
+    "signed_inputs_negative_amount_and_rate"
+   ],
+   "points": 699,
+   "event_checks_pass": true,
+   "year_checks_pass": true
+  },
+  "note": "baseline failure signed_inputs_* excluded (fails on unmutated snapshot)"
+ },
+ "M06_SR_set_wins": {
+  "caught_by_verifier_suite": false,
+  "summary": {
+   "cases": 36,
+   "pass": 35,
+   "fail": [
+    "signed_inputs_negative_amount_and_rate"
+   ],
+   "points": 699,
+   "event_checks_pass": true,
+   "year_checks_pass": true
+  },
+  "note": "baseline failure signed_inputs_* excluded (fails on unmutated snapshot)"
+ },
+ "M17_group_repair_stage_from_last_row": {
+  "caught_by_verifier_suite": false,
+  "summary": {
+   "cases": 36,
+   "pass": 35,
+   "fail": [
+    "signed_inputs_negative_amount_and_rate"
+   ],
+   "points": 699,
+   "event_checks_pass": true,
+   "year_checks_pass": true
+  },
+  "note": "baseline failure signed_inputs_* excluded (fails on unmutated snapshot)"
+ },
+ "M18_renewal_ignores_substituting_renovation": {
+  "caught_by_verifier_suite": true,
+  "summary": {
+   "cases": 36,
+   "pass": 32,
+   "fail": [
+    "repair_explicit_and_renovation_groups",
+    "builder_full_scenario_unchecked_by_builder_right",
+    "builder_full_scenario_original",
+    "signed_inputs_negative_amount_and_rate"
+   ],
+   "points": 699,
+   "event_checks_pass": true,
+   "year_checks_pass": true
+  },
+  "note": "baseline failure signed_inputs_* excluded (fails on unmutated snapshot)"
+ }
+}

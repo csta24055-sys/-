@@ -1,0 +1,180 @@
+{
+ "exact": {
+  "charge_sharing_ideal": {
+   "u_final": {
+    "C1": "2",
+    "C2": "2"
+   },
+   "expected_v": "2",
+   "verifier_impulsive_loss": "15",
+   "expected_loss": "15",
+   "engine_loss": "15",
+   "pass": true
+  },
+  "sc_packet": {
+   "q_bus": "15",
+   "expected_q_bus": "15",
+   "engine_q_bus": "15",
+   "rail_energy_verifier": "30",
+   "expected_rail_energy": "30",
+   "total_impulsive_loss_verifier_incl_reset_packets": "35",
+   "pass": true
+  },
+  "integrate_and_fire": {
+   "fires_match": true,
+   "counter_coincidences": 7,
+   "ramp_exactly_zero_after_each_reset": true,
+   "engine_fires": {
+    "a": [
+     "7/10",
+     "7/5",
+     "21/10",
+     "14/5",
+     "7/2",
+     "21/5",
+     "49/10",
+     "28/5",
+     "63/10",
+     "7",
+     "77/10",
+     "42/5",
+     "91/10",
+     "49/5"
+    ],
+    "b": [
+     "7/5",
+     "14/5",
+     "21/5",
+     "28/5",
+     "7",
+     "42/5",
+     "49/5"
+    ],
+    "c": [
+     "10/3",
+     "20/3",
+     "10"
+    ]
+   },
+   "pass": true
+  }
+ },
+ "float": {
+  "rc_charge": {
+   "rows": {
+    "0.7": {
+     "v_ode": 2.5170734810429525,
+     "v_engine": 2.517073481042953,
+     "heat_ode": 4.7087689753649595,
+     "heat_engine": 4.70876897536496
+    },
+    "5.0": {
+     "v_ode": 4.966310265004573,
+     "v_engine": 4.9663102650045685,
+     "heat_ode": 6.2497162504389845,
+     "heat_engine": 6.249716250438986
+    },
+    "40.0": {
+     "v_ode": 5.0,
+     "v_engine": 4.999999999999989,
+     "heat_ode": 6.25,
+     "heat_engine": 6.249999999999981
+    }
+   },
+   "max_abs_dev": 1.865174681370263e-14,
+   "pass": true
+  },
+  "charge_sharing_R": {
+   "rows": {
+    "0.3": {
+     "heat_ode": 7.656875106645703,
+     "heat_engine": 7.656875106645699
+    },
+    "20.0": {
+     "heat_ode": 15.0,
+     "heat_engine": 14.999999999999956
+    }
+   },
+   "max_abs_dev": 4.440888969528858e-14,
+   "pass": true
+  },
+  "ac_energy": {
+   "rows": {
+    "0.3": {
+     "E_ode": 0.4019413710491605,
+     "E_engine": 0.4019413710491605
+    },
+    "1.0": {
+     "E_ode": 7.135203742961893,
+     "E_engine": 7.135203742961888
+    },
+    "3.141592653589793": {
+     "E_ode": 18.84955592153876,
+     "E_engine": 18.84955592153881
+    },
+    "7.77": {
+     "E_ode": 47.1144660880259,
+     "E_engine": 47.11446608802592
+    }
+   },
+   "max_abs_dev": 4.90032034237186e-14,
+   "pass": true
+  },
+  "series_rlc": {
+   "rows": {
+    "0.5": {
+     "q_ode": 0.09823628770824108,
+     "q_engine": 0.09823628770824111,
+     "heat_ode": 0.02404053366076389,
+     "heat_engine": 0.02404053366076389
+    },
+    "2.0": {
+     "q_ode": 0.33430864933338816,
+     "q_engine": 0.33430864933338816,
+     "heat_ode": 0.10273440598469159,
+     "heat_engine": 0.1027344059846916
+    },
+    "9.0": {
+     "q_ode": 0.2502949581455893,
+     "q_engine": 0.25029495814558916,
+     "heat_ode": 0.12498373719486261,
+     "heat_engine": 0.12498373719486268
+    }
+   },
+   "max_abs_dev": 9.052000088466919e-17,
+   "pass": true
+  }
+ },
+ "falling_comparator_probe": {
+  "falling": {
+   "expected": 1,
+   "engine": "3",
+   "verifier_vsim": "1",
+   "engine_cmp_events": [
+    [
+     "0",
+     true
+    ],
+    [
+     "3",
+     false
+    ]
+   ],
+   "engine_correct": false,
+   "vsim_correct": true
+  },
+  "rising": {
+   "expected": 2,
+   "engine": "2",
+   "verifier_vsim": "2",
+   "engine_cmp_events": [
+    [
+     "1",
+     true
+    ]
+   ],
+   "engine_correct": true,
+   "vsim_correct": true
+  }
+ }
+}

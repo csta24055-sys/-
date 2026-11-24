@@ -1,0 +1,77 @@
+{
+ "D1": {
+  "cases": 3826,
+  "arch_rule_errors": 390,
+  "shared_rule_errors": 0,
+  "examples_arch_wrong": [
+   {
+    "period": "5/2",
+    "n": 2,
+    "tau": "5",
+    "t_early": 5.0,
+    "arch_year": 6,
+    "ref": 5
+   },
+   {
+    "period": "5/2",
+    "n": 4,
+    "tau": "10",
+    "t_early": 10.000000005,
+    "arch_year": 11,
+    "ref": 10
+   },
+   {
+    "period": "5/2",
+    "n": 6,
+    "tau": "15",
+    "t_early": 15.00000001,
+    "arch_year": 16,
+    "ref": 15
+   },
+   {
+    "period": "5/2",
+    "n": 8,
+    "tau": "20",
+    "t_early": 20.000000015,
+    "arch_year": 21,
+    "ref": 20
+   },
+   {
+    "period": "5/2",
+    "n": 10,
+    "tau": "25",
+    "t_early": 25.00000002,
+    "arch_year": 26,
+    "ref": 25
+   },
+   {
+    "period": "5/2",
+    "n": 12,
+    "tau": "30",
+    "t_early": 30.000000025,
+    "arch_year": 31,
+    "ref": 30
+   }
+  ],
+  "early_crossing_lag_closed_form": "c*epsilon*(epsilon - 2)*(n - 1)/(epsilon - 1)",
+  "shared_rule_identity": "0",
+  "domain_note": "exact iff tf - tau(1-eps) = tau eps(2-eps)/(1-eps) < 1 (at most one tick in [tau(1-eps), tf])"
+ },
+ "L1": {
+  "random_networks": 400,
+  "responses_checked": 3166,
+  "exact_products_found": [],
+  "n_found": 0,
+  "homogeneity_counterexample": {
+   "f": "G1*G2/G0",
+   "f(lambda G)/f(G)": "lambda",
+   "note": "degree-1 homogeneous yet a product of the two inputs: homogeneity alone cannot exclude it once fixed unit conductances G0 exist"
+  },
+  "series_pair": "G1*G2/(G1 + G2)"
+ },
+ "L3_S3": {
+  "current_source_into_C": "I*t/C",
+  "rail_R_C_deviation_from_linear": "-V*t**2/(2*C**2*R**2)",
+  "RC_step_total_heat": "C*V**2/2"
+ }
+}

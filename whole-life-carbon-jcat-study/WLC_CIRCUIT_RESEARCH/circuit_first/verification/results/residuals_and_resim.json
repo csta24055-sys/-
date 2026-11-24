@@ -1,0 +1,625 @@
+{
+ "residuals": {
+  "bench_ac_energy.json": {
+   "exact": false,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 12,
+    "jumps": 0,
+    "cont_pairs": 0,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0.0,
+    "R": 0.0,
+    "C_v": 0.0,
+    "C_i": 0.0,
+    "V": 0.0,
+    "I": 0.0,
+    "SW_closed": 0.0,
+    "SW_open": 0.0,
+    "OA": 0.0,
+    "L": 0.0,
+    "D": 0.0,
+    "ctrl": 0.0,
+    "jump_kcl": 0.0,
+    "jump_cap": 0.0,
+    "continuity": 0.0,
+    "cmp_sign": 0.0
+   },
+   "violations": []
+  },
+  "bench_charge_sharing_ideal.json": {
+   "exact": true,
+   "counts": {
+    "records": 5,
+    "none_values": 0,
+    "nodes_checked": 10,
+    "jumps": 1,
+    "cont_pairs": 1,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "bench_const_current.json": {
+   "exact": true,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 4,
+    "jumps": 0,
+    "cont_pairs": 1,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "bench_diode_half_wave.json": {
+   "exact": false,
+   "counts": {
+    "records": 16,
+    "none_values": 0,
+    "nodes_checked": 48,
+    "jumps": 0,
+    "cont_pairs": 0,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0.0,
+    "R": 0.0,
+    "C_v": 0.0,
+    "C_i": 0.0,
+    "V": 0.0,
+    "I": 0.0,
+    "SW_closed": 0.0,
+    "SW_open": 0.0,
+    "OA": 0.0,
+    "L": 0.0,
+    "D": 0.0,
+    "ctrl": 0.0,
+    "jump_kcl": 0.0,
+    "jump_cap": 0.0,
+    "continuity": 0.0,
+    "cmp_sign": 0.0
+   },
+   "violations": []
+  },
+  "bench_divider_parallel.json": {
+   "exact": true,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 12,
+    "jumps": 0,
+    "cont_pairs": 1,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "bench_integrate_and_fire.json": {
+   "exact": true,
+   "counts": {
+    "records": 104,
+    "none_values": 0,
+    "nodes_checked": 1144,
+    "jumps": 34,
+    "cont_pairs": 17,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "bench_joule_R3_I2_t5.json": {
+   "exact": true,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 4,
+    "jumps": 0,
+    "cont_pairs": 1,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "bench_rc_charge.json": {
+   "exact": false,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 8,
+    "jumps": 0,
+    "cont_pairs": 0,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0.0,
+    "R": 0.0,
+    "C_v": 0.0,
+    "C_i": 0.0,
+    "V": 0.0,
+    "I": 0.0,
+    "SW_closed": 0.0,
+    "SW_open": 0.0,
+    "OA": 0.0,
+    "L": 0.0,
+    "D": 0.0,
+    "ctrl": 0.0,
+    "jump_kcl": 0.0,
+    "jump_cap": 0.0,
+    "continuity": 0.0,
+    "cmp_sign": 0.0
+   },
+   "violations": []
+  },
+  "bench_sc_packet.json": {
+   "exact": true,
+   "counts": {
+    "records": 32,
+    "none_values": 0,
+    "nodes_checked": 288,
+    "jumps": 10,
+    "cont_pairs": 5,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "bench_series_rlc.json": {
+   "exact": false,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 12,
+    "jumps": 0,
+    "cont_pairs": 0,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0.0,
+    "R": 2.7755575615628914e-17,
+    "C_v": 0.0,
+    "C_i": 0.0,
+    "V": 0.0,
+    "I": 0.0,
+    "SW_closed": 0.0,
+    "SW_open": 0.0,
+    "OA": 0.0,
+    "L": 0.0,
+    "D": 0.0,
+    "ctrl": 0.0,
+    "jump_kcl": 0.0,
+    "jump_cap": 0.0,
+    "continuity": 0.0,
+    "cmp_sign": 0.0
+   },
+   "violations": []
+  },
+  "bench_summer_feedback.json": {
+   "exact": true,
+   "counts": {
+    "records": 4,
+    "none_values": 0,
+    "nodes_checked": 28,
+    "jumps": 0,
+    "cont_pairs": 1,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "cf3_full_solution_original.json": {
+   "exact": true,
+   "counts": {
+    "records": 361,
+    "none_values": 230,
+    "nodes_checked": 17689,
+    "jumps": 127,
+    "cont_pairs": 80,
+    "cont_nonconst": 80,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "pilot_full_solution_original.json": {
+   "exact": true,
+   "counts": {
+    "records": 264,
+    "none_values": 0,
+    "nodes_checked": 6600,
+    "jumps": 88,
+    "cont_pairs": 82,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  },
+  "pilot_full_solution_right.json": {
+   "exact": true,
+   "counts": {
+    "records": 226,
+    "none_values": 0,
+    "nodes_checked": 5424,
+    "jumps": 90,
+    "cont_pairs": 40,
+    "cont_nonconst": 0,
+    "diode_sign_viol": 0,
+    "cmp_events": 0
+   },
+   "max": {
+    "kcl": 0,
+    "R": 0,
+    "C_v": 0,
+    "C_i": 0,
+    "V": 0,
+    "I": 0,
+    "SW_closed": 0,
+    "SW_open": 0,
+    "OA": 0,
+    "L": 0,
+    "D": 0,
+    "ctrl": 0,
+    "jump_kcl": 0,
+    "jump_cap": 0,
+    "continuity": 0,
+    "cmp_sign": 0
+   },
+   "violations": []
+  }
+ },
+ "resim": {
+  "pilot_full_solution_right.json": {
+   "C": [
+    "160",
+    "255",
+    "315",
+    "410"
+   ],
+   "readout_state_mismatches": 0,
+   "cmp_events_verifier": 174,
+   "cmp_events_engine": 173,
+   "only_verifier": [
+    [
+     "0",
+     "tb.P",
+     false
+    ]
+   ],
+   "only_engine": [],
+   "differences_only_in_tb.P": true
+  },
+  "pilot_full_solution_original.json": {
+   "C": [
+    "140",
+    "200",
+    "295",
+    "355"
+   ],
+   "readout_state_mismatches": 0,
+   "cmp_events_verifier": 169,
+   "cmp_events_engine": 169,
+   "only_verifier": [
+    [
+     "0",
+     "tb.P",
+     false
+    ],
+    [
+     "1000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ],
+    [
+     "2000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ],
+    [
+     "1000000000000000000/333333332666666667",
+     "tb.P",
+     false
+    ],
+    [
+     "4000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ],
+    [
+     "5000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ]
+   ],
+   "only_engine": [
+    [
+     "1",
+     "tb.P",
+     false
+    ],
+    [
+     "2",
+     "tb.P",
+     false
+    ],
+    [
+     "3",
+     "tb.P",
+     false
+    ],
+    [
+     "4",
+     "tb.P",
+     false
+    ],
+    [
+     "5",
+     "tb.P",
+     false
+    ],
+    [
+     "6",
+     "tb.P",
+     false
+    ]
+   ],
+   "differences_only_in_tb.P": true
+  },
+  "cf3_full_solution_original.json": {
+   "C": [
+    "1022499997982500001095/2999999994000000003",
+    "102196999800866000122337/143999999712000000144",
+    "7065999986090500008856/8999999982000000009"
+   ],
+   "readout_state_mismatches": 0,
+   "cmp_events_verifier": 161,
+   "cmp_events_engine": 161,
+   "only_verifier": [
+    [
+     "0",
+     "tb.P",
+     false
+    ],
+    [
+     "1000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ],
+    [
+     "2000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ],
+    [
+     "1000000000000000000/333333332666666667",
+     "tb.P",
+     false
+    ],
+    [
+     "4000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ],
+    [
+     "5000000000000000000/999999998000000001",
+     "tb.P",
+     false
+    ]
+   ],
+   "only_engine": [
+    [
+     "1",
+     "tb.P",
+     false
+    ],
+    [
+     "2",
+     "tb.P",
+     false
+    ],
+    [
+     "2500000000/999999999",
+     "tb.P",
+     false
+    ],
+    [
+     "10000000000/2999999997",
+     "tb.P",
+     false
+    ],
+    [
+     "5",
+     "tb.P",
+     false
+    ],
+    [
+     "6",
+     "tb.P",
+     false
+    ]
+   ],
+   "differences_only_in_tb.P": true
+  }
+ }
+}
