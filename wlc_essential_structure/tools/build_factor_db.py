@@ -4,7 +4,8 @@ rights, split public/private, and compute the coverage indicators.
 Usage: python3 -I tools/build_factor_db.py <agents_out_dir> <demand.csv> <out_dir> [estimates.csv]
 
 Public repository rule (the repository is public): numeric values are written to the PUBLIC files only for rights
-class 1 (embeddable, open licence) and class 3 (individual value cited with attribution from a primary document).
+class 1 (embeddable, open licence) and, for class 3, ONLY the individual values the calculation actually cites
+(passed as used_json): publishing every class-3 value would republish a substantial part of a protected dataset.
 Class 2 (research only), 4 (terms not confirmed) and 5 (not usable) keep their metadata in public, their value only in
 <out_dir>/private/ (git-ignored).
 """
@@ -115,7 +116,16 @@ def demand_of(row, demand_keys, dcat):
         return fk
     text = (fk + " " + (row["item"] or "")).lower()
     cat = (row["category"] or "").lower()
-    if cat in ("lifetime", "repair") or re.search(r"service.?life|lifespan|nutzungsdauer|耐用|周期|repair|maint|修繕", text):
+    for k, rx in (("st_timber_density", r"basic.?density|density.*(wood|timber|softwood|picea|pinus|abies|fir|cryptomeria)|全乾"),
+                  ("st_carbon_fraction", r"carbon.?fraction|carbon content of (dry|wood)|炭素含有"),
+                  ("st_carbonation", r"carbonat|co2.?uptake|k.?value|炭酸化"),
+                  ("rf_replacement_loss", r"charge.?loss|initial.?(charge|emission)|install\w*.?emission|servic\w*.?(loss|emission)"),
+                  ("gwp_co2", r"^gwp_co2|^refrigerant_gwp_co2|carbon dioxide gwp")):
+        if re.search(rx, text):
+            return k
+    if cat == "energy_use" and fk.startswith("eui"):
+        return "eui_per_m2"
+    if cat in ("lifetime", "repair") or re.search(r"service.?life|lifespan|lifetime|nutzungsdauer|耐用|周期|repair|maint|修繕", text):
         pref = "repair_" if (cat == "repair" or re.search(r"repair|maint|修繕", text)) else "life_"
         if re.search(r"refrigerant|冷媒", text):
             return "rf_device_life"
@@ -151,7 +161,7 @@ def num(v):
         return None
 
 
-def main(src, demand_csv, out, est=None):
+def main(src, demand_csv, out, est=None, used_json=None):
     demand = list(csv.DictReader(open(demand_csv, encoding="utf-8")))
     dkeys = {d["demand_key"] for d in demand}
     dcat = {d["demand_key"]: d["category"] for d in demand}
@@ -170,20 +180,25 @@ def main(src, demand_csv, out, est=None):
                 except ValueError:
                     r["rights_class"] = 4
                 r["demand_key"] = demand_of(r, dkeys, dcat) or ""
-                is_est = "estimate" in r["data_type"].lower() or r["batch"] == os.path.basename(est or "")
+                is_est = r["batch"] == os.path.basename(est or "") or r["source_org"].startswith("this study")
                 r["kind"] = ("ESTIMATE" if is_est else "REAL") if r["value_num"] is not None else "NOT_OBTAINED"
                 rows.append(r)
     os.makedirs(os.path.join(out, "private"), exist_ok=True)
     with open(os.path.join(out, "private", ".gitignore"), "w") as f:
         f.write("*\n!.gitignore\n")
     pub_cols = ["demand_key", "kind"] + COLS + ["batch"]
+    cited = set()
+    if used_json:
+        for u in json.load(open(used_json, encoding="utf-8"))["coefficients_used"]:
+            cited.add((u["batch"], u["factor_key"], str(u["value"])))
     with open(os.path.join(out, "factor_db_public.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=pub_cols, extrasaction="ignore")
         w.writeheader()
         for r in rows:
             rr = dict(r)
-            if r["rights_class"] not in (1, 3):
-                rr["value"] = "（非公開：区分%d）" % r["rights_class"] if r["value_num"] is not None else ""
+            if r["value_num"] is not None and (r["rights_class"] not in (1, 3) or
+                                               (r["rights_class"] == 3 and (r["batch"], r["factor_key"], r["value"]) not in cited)):
+                rr["value"] = ("（非公開：区分%d）" % r["rights_class"]) if r["rights_class"] != 3 else "（区分3：算定で引用した値だけを公開。出典を参照）"
             w.writerow(rr)
     with open(os.path.join(out, "private", "factor_db_all.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=pub_cols, extrasaction="ignore")
@@ -241,4 +256,4 @@ def main(src, demand_csv, out, est=None):
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:5])
+    main(*sys.argv[1:6])
