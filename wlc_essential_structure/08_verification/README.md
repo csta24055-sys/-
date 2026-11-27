@@ -22,6 +22,7 @@ bash tools/run_all.sh ../../ref_foundation ../../ref_theorybase      # 約 15 �
 | 70 再編 | `python3 -I tools/build_units70.py F TB 03_units70 04_graph` | 1 秒 | 再分類・依存グラフ・監査 |
 | 族の照合 | `python3 -I tools/verify_families.py 08_verification/results/families_exact.json` | 20 秒 | 規則・恒等式・反例 |
 | 再構成 | `python3 -B tools/run_reconstruction.py F 08_verification/results` | 約 9 分 | 1,293 組の照合 |
+| F4 の独立照合 | `python3 -B tools/independent_f4_refrigerant.py F 08_verification/results/independent_f4_refrigerant.json` | 約 10 分 | V14 |
 | 帯と実時間 | `python3 -B tools/band_and_realtime.py F 08_verification/results` | 約 4 分 | 帯の再現・実時間 |
 | 接続表 | `python3 -I tools/make_connection.py 08_verification/results 06_connection` | 2 秒 | 接続表・集計先の検査 |
 
@@ -44,6 +45,7 @@ F・TB は上の 2 つの取り出し先。`-B` の段は旧研究のコード�
 | V11 | 時間形の合計から SUM-02 を作れるか（最良の固定係数） | 1,293 組 | 作れない（最大相対残差 0.98）＝反例 | F・CE |
 | V12 | **旧 17 章の細帯 $(K,\mathrm{sw}(K))$ の再現**：整数の冷媒交換年 $K$ の直後 | 412 試験（(シナリオ, $K$) 103 組） | 帯の内側 309 試験のうち 153 で不一致（51 組。すべて B1-04 の期末残存量。SUM-03 の相対差 7e-9〜2e-3）。帯の外側 103 試験は 0。帯の内側 309 試験のうち、旧研究の定義域 `valid_domain` が「定義域の内側」と判定したのは 247 試験（定義域の穴の再確認） | F・CE |
 | V13 | 評価期間 $T$ と実時間 $t$ | 1 シナリオ・240 点 | $C(T^*)=M_{T^*}(T^*)$、$t<T^*$ で差＝終端項 $Z(t)$（全点）。差の最大 8.5×10^5 kgCO2e | E（恒等式）・F |
+| V14 | **F4 を入力から独立に**：冷媒 B1-02・B1-03・B1-04 を、旧統合系を通さず、シナリオの入力から本研究の F4 閉形式（交換でリセット）・F3 の年セル・事象ゲート・G の検査だけで計算（`tools/independent_f4_refrigerant.py`） | 1,293 組・3,879 値 | 0（相対 1e-9） | F |
 
 V8〜V10 の分母は旧研究の第 11・17 章と同じ（1,293 組、単位 27,153 値、段階 17,884 値）。
 
@@ -59,7 +61,7 @@ V8〜V10 の分母は旧研究の第 11・17 章と同じ（1,293 組、単位 2
 | 5 集計先で段階の割合が失われる | P（写像の階数） | 06 章 |
 | 667 式の判定・族 | 推定（構造メタデータ、権利保留） | 02 章 |
 
-V8〜V10 では、F1・F2・F4 の振幅（核の項の係数）は旧研究の統合系（`canon.py` 経由）が作ったものを使い、本研究が独立に書いたのは F3 の評価・F5 の構成表・集計先・比較である。F1・F2・F4 を入力から独立に書き直して照合することは未実施（README の再開手順 1）。
+V8〜V10 では、F1・F2・F4 の振幅（核の項の係数）は旧研究の統合系（`canon.py` 経由）が作ったものを使い、本研究が独立に書いたのは F3 の評価・F5 の構成表・集計先・比較である。F4（冷媒）は入力から独立に書き直して照合した（V14、不一致 0）。F1・F2 の入力からの独立な書き直しは未実施（README の再開手順 1）。
 
 ## 4. 結果ファイル
 

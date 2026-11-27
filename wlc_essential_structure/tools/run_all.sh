@@ -10,6 +10,7 @@ python3 -I tools/build_units70.py "$F" "$TB" 03_units70 04_graph > /dev/null
 python3 -I tools/verify_families.py 08_verification/results/families_exact.json | tail -1
 python3 -B tools/run_reconstruction.py "$F" 08_verification/results > 08_verification/results/reconstruction_log.txt
 tail -1 08_verification/results/reconstruction_log.txt
+python3 -B tools/independent_f4_refrigerant.py "$F" 08_verification/results/independent_f4_refrigerant.json | tail -1
 python3 -B tools/band_and_realtime.py "$F" 08_verification/results | grep -E "^(BAND|REALTIME)"
 python3 -I tools/make_connection.py 08_verification/results 06_connection > /dev/null
 git -C "$F" status --short | head -5   # must print nothing: the earlier checkout is read only
