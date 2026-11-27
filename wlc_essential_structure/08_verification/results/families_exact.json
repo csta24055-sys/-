@@ -1,0 +1,150 @@
+{
+ "seed": 20261128,
+ "rules": {
+  "IF->mask": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "MIN->mask": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "MAX->mask": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "ABS->mask": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "CLIP->mask": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "FLOOR->lattice count (0<=y<N+1)": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "ROUND->lattice count (y 10^d + 1/2 < NR+1)": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "MOD year flag->event sum": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "replacements->count": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "LOOKUP->sum of [key=k]": {
+   "level": "E",
+   "mismatches": 0
+  },
+  "FLOOR outside declared domain": {
+   "level": "CE/E",
+   "samples": 1025,
+   "wrong": 1025,
+   "note": "the finite lattice sum saturates at N: the domain bound is part of the rule"
+  }
+ },
+ "f3_kernel_vs_knot": {
+  "level": "E",
+  "functions": 400,
+  "points": 56562,
+  "mismatches": 0
+ },
+ "f4_closed_form": {
+  "level": "E",
+  "recurrences": 300,
+  "mismatches": 0
+ },
+ "f3_continuous_event_unification": {
+  "level": "E",
+  "functions": 300,
+  "mismatches_outside_band": 0,
+  "differences_inside_event_band": 876
+ },
+ "counterexamples": {
+  "CE-1 non-integer power": {
+   "level": "P",
+   "note": "x^(1/2) is not a rational function: if p/q = sqrt(x) then p^2 = x q^2, degree parity contradiction",
+   "sample": "sqrt(2) = 1.4142135623730951 has no exact Fraction representation"
+  },
+  "CE-2 log10": {
+   "level": "P",
+   "note": "log10 is transcendental over Q(x); no F1 map equals it on an interval",
+   "sample": "log10(2) = 0.3010299956639812"
+  },
+  "CE-3 reciprocal product under floor": {
+   "level": "CE/F",
+   "examples": [
+    [
+     371932,
+     107,
+     3476.0,
+     3475.9999999999995
+    ],
+    [
+     613924,
+     9902,
+     62.0,
+     61.99999999999999
+    ],
+    [
+     632492,
+     49,
+     12908.0,
+     12907.999999999998
+    ]
+   ],
+   "note": "keep division as division before a floor/threshold (F1 must not rewrite a/b as a*(1/b) there)"
+  },
+  "CE-4 band (K, sw(K))": {
+   "level": "CE/E",
+   "K": 17.0,
+   "T": 17.000000008500002,
+   "window_rule": "5",
+   "event_rule": "0",
+   "note": "same mathematical event, two time rules: they differ for T in (K, K/(1-eps)); a claim must name its rule or exclude the band"
+  },
+  "CE-5 initial vs terminal": {
+   "level": "P",
+   "C_T_constant": "140",
+   "realtime_cumulative_end_of_life_at_T": [
+    "100",
+    "100",
+    "...",
+    "140"
+   ],
+   "realtime_if_booked_at_0": [
+    "140",
+    "140",
+    "...",
+    "140"
+   ],
+   "note": "C(T) is the same function; the real-time cumulative differs (TH-4 non-uniqueness). Time shape must be carried as metadata, not inferred from C(T)."
+  },
+  "CE-6 missing is not zero": {
+   "level": "E",
+   "result": "None",
+   "violations": [
+    "q: finite"
+   ],
+   "note": "a missing quantity gives MISSING, whereas zero-filling would report a smaller total as complete"
+  },
+  "CE-7 rate domains": {
+   "level": "E",
+   "accepted": {
+    "gross-up 1/(1-w), w=1": false,
+    "on-top r/(1-r), r=0": false,
+    "share rho=1": true,
+    "load factor 1.3 (not a 0..1 rate)": true
+   },
+   "violations": [
+    "w: rate in [0,1)",
+    "r: rate in (0,1)"
+   ]
+  }
+ }
+}

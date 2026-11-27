@@ -1,0 +1,123 @@
+{
+ "pairs": 1293,
+ "shape_keys": [
+  "CONTINUOUS(率)",
+  "EVENT(時点)",
+  "GATED(事象で切替わる率)",
+  "INITIAL(t=0)",
+  "TERMINAL(t=T)",
+  "TERMINAL(期末の状態)"
+ ],
+ "destination_keys": [
+  "D1 製造・施工(A1-A5)",
+  "D2 使用時の物質・機器(B1-B5)",
+  "D3 運用エネルギー(B6)",
+  "D4 運用水・廃棄物(B7)",
+  "D5 解体・廃棄(C1-C4)"
+ ],
+ "SUM01_from_destinations_fixed01": {
+  "coef": {
+   "D1 製造・施工(A1-A5)": 1,
+   "D2 使用時の物質・機器(B1-B5)": 0,
+   "D3 運用エネルギー(B6)": 0,
+   "D4 運用水・廃棄物(B7)": 0,
+   "D5 解体・廃棄(C1-C4)": 0
+  },
+  "max_rel_residual": 3.4662733056972147e-16,
+  "exact": true
+ },
+ "SUM01_from_time_shapes": {
+  "coef": {
+   "CONTINUOUS(率)": -0.0,
+   "EVENT(時点)": 0.0,
+   "GATED(事象で切替わる率)": 0.0,
+   "INITIAL(t=0)": 1.0,
+   "TERMINAL(t=T)": 0.0,
+   "TERMINAL(期末の状態)": 0.0
+  },
+  "max_rel_residual": 9.518960247805994e-13,
+  "exact": true
+ },
+ "SUM01_from_destinations": {
+  "coef": {
+   "D1 製造・施工(A1-A5)": 1.0,
+   "D2 使用時の物質・機器(B1-B5)": -0.0,
+   "D3 運用エネルギー(B6)": 0.0,
+   "D4 運用水・廃棄物(B7)": 0.0,
+   "D5 解体・廃棄(C1-C4)": -0.0
+  },
+  "max_rel_residual": 1.896538905845481e-09,
+  "exact": false
+ },
+ "SUM02_from_destinations_fixed01": {
+  "coef": {
+   "D1 製造・施工(A1-A5)": 1,
+   "D2 使用時の物質・機器(B1-B5)": 1,
+   "D3 運用エネルギー(B6)": 0,
+   "D4 運用水・廃棄物(B7)": 0,
+   "D5 解体・廃棄(C1-C4)": 1
+  },
+  "max_rel_residual": 1.1209981561575445e-13,
+  "exact": true
+ },
+ "SUM02_from_time_shapes": {
+  "coef": {
+   "CONTINUOUS(率)": 0.000667,
+   "EVENT(時点)": 1.109062,
+   "GATED(事象で切替わる率)": -30.988071,
+   "INITIAL(t=0)": 1.14744,
+   "TERMINAL(t=T)": 2.207709,
+   "TERMINAL(期末の状態)": 5.262708
+  },
+  "max_rel_residual": 0.9844403083561176,
+  "exact": false
+ },
+ "SUM02_from_destinations": {
+  "coef": {
+   "D1 製造・施工(A1-A5)": 1.0,
+   "D2 使用時の物質・機器(B1-B5)": 1.0,
+   "D3 運用エネルギー(B6)": -0.0,
+   "D4 運用水・廃棄物(B7)": 0.0,
+   "D5 解体・廃棄(C1-C4)": 1.0
+  },
+  "max_rel_residual": 1.4041402538025557e-13,
+  "exact": true
+ },
+ "SUM03_from_destinations_fixed01": {
+  "coef": {
+   "D1 製造・施工(A1-A5)": 1,
+   "D2 使用時の物質・機器(B1-B5)": 1,
+   "D3 運用エネルギー(B6)": 1,
+   "D4 運用水・廃棄物(B7)": 1,
+   "D5 解体・廃棄(C1-C4)": 1
+  },
+  "max_rel_residual": 9.964990708740067e-14,
+  "exact": true
+ },
+ "SUM03_from_time_shapes": {
+  "coef": {
+   "CONTINUOUS(率)": 1.0,
+   "EVENT(時点)": 1.0,
+   "GATED(事象で切替わる率)": 1.0,
+   "INITIAL(t=0)": 1.0,
+   "TERMINAL(t=T)": 1.0,
+   "TERMINAL(期末の状態)": 1.0
+  },
+  "max_rel_residual": 9.799733814731111e-14,
+  "exact": true
+ },
+ "SUM03_from_destinations": {
+  "coef": {
+   "D1 製造・施工(A1-A5)": 1.0,
+   "D2 使用時の物質・機器(B1-B5)": 1.0,
+   "D3 運用エネルギー(B6)": 1.0,
+   "D4 運用水・廃棄物(B7)": 1.0,
+   "D5 解体・廃棄(C1-C4)": 1.0
+  },
+  "max_rel_residual": 9.898887951136485e-14,
+  "exact": true
+ },
+ "rank_time_shapes": 6,
+ "rank_destinations": 5,
+ "note": "SUM-0x is exactly a fixed 0/1 combination of the five destinations; it is NOT a fixed linear combination of the time-shape totals when max_rel_residual >> 0. Stage shares (SUM-07) need the 14 stages: the 14 -> 5 map has rank 5 and is not injective, so the five destinations lose the stage detail."
+}
