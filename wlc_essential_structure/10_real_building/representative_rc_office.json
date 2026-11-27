@@ -9,27 +9,27 @@
   "cement_t": 0.260222,
   "cement_content_kg_per_m3": 352.37180884700746
  },
- "total_R_plus_E": 3075.03677065214,
+ "total_R_plus_E": 3235.2261763166794,
  "total_R_plus_E_p05_p95": [
-  3045.657997446778,
-  3336.035115919951
+  3273.7387450693063,
+  3777.2213948646845
  ],
- "total_including_assumptions": 3234.480405943565,
+ "total_including_assumptions": 3394.6698116081043,
  "total_incl_A_p05_p95": [
-  3259.673426735044,
-  3870.495204013782
+  3516.088658553747,
+  4263.497034713237
  ],
  "share_by_tier": {
-  "E": 0.9180922432180711,
-  "R": 0.03261278037754661,
-  "A": 0.049294976404382324
+  "E": 0.9219573481049576,
+  "R": 0.03107383190960341,
+  "A": 0.046968819985438955
  },
  "upfront_A1_A5": 380.38672555319715,
  "destinations": {
   "D1": 380.3867255531971,
   "D3": 2540.390019831103,
   "D4": 13.392,
-  "D2": 242.1724,
+  "D2": 402.3618056645392,
   "D5": 58.139260559265004
  },
  "b6_per_year": 42.339833663851714,
@@ -42,7 +42,6 @@
  "missing_modules": [
   "A5 現場のエネルギー：日本の施工エネルギー原単位は未取得（未計上。0 ではない）",
   "B4 建築部位の更新（防水・内装・サッシ）：周期は取得（BIMMS-N）したが、部位の数量が統計に無い（ガラス・サッシ・石膏ボード・断熱材は調査対象外）",
-  "B3 修繕：修繕率の公開の一次資料が国内外とも無い（未計上）",
   "B5 大規模改修：改修周期・割合の資料なし（未計上）",
   "C1 解体作業：解体のエネルギー原単位は未取得（未計上）"
  ],
@@ -171,12 +170,12 @@
   {
    "module": "B3 修繕",
    "stage": "B3",
-   "tier": "M",
-   "central": null,
-   "low": null,
-   "high": null,
-   "family": "F3",
-   "basis": "修繕率の公開の一次資料が国内外とも無い（未計上）",
+   "tier": "E",
+   "central": 160.18940566453918,
+   "low": 133.491171387116,
+   "high": 691.0022396226157,
+   "family": "F3（密度）",
+   "basis": "事務所のリフォーム・リニューアル受注高 24984 億円（国交省 FY2025）÷ 事務所ストック 4.38e+08 m2（法人所有＋国＋地方）× 維持・修理の割合 0.176（非住宅）× 3EID 建設補修 0.0027 kg/円 → 年 2.67 kg/m2。下限：価格水準（2020→2025）の差を 1/1.2 と仮置き。上限：工事目的が劣化・修繕の全額（年 11.52、B4 の設備更新と一部重複）",
    "destination": "D2"
   },
   {
@@ -209,7 +208,7 @@
    "low": 23.694513315000002,
    "high": 46.7759245,
    "family": "F2",
-   "basis": "コンクリート 1735 kg × ADEME 26 kg/t（幅 KBOB 0.0127）、鋼材 × KBOB 0.0122。日本の再資源化の処理原単位は未取得",
+   "basis": "コンクリート 1735 kg × ADEME 26 kg/t（幅 KBOB 0.0127）、鋼材 × KBOB 0.0122。日本の再資源化率（コンクリート塊 99.3%、国交省 建設副産物実態調査 FY2018）は処理の経路の確認に使い、処理の原単位は海外値",
    "destination": "D5"
   },
   {
@@ -752,6 +751,102 @@
    "rights_class": "1"
   },
   {
+   "batch": "jp_repair.csv",
+   "factor_key": "rr_orders_office_total",
+   "item": "リフォーム・リニューアル受注高 事務所（全工事種類）",
+   "value": "24984.2",
+   "unit": "億円 (100 million JPY, nominal)",
+   "region": "Japan (national)",
+   "year": "FY2025 (令和7年度)",
+   "source": "国土交通省 総合政策局 情報政策課 建設経済統計調査室",
+   "url": "https://www.mlit.go.jp/report/press/content/002005997.xlsx",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "rr_orders_office_purpose_repair",
+   "item": "リフォーム・リニューアル受注高 事務所 主たる工事目的=劣化や壊れた部位の更新・修繕",
+   "value": "18960.7",
+   "unit": "億円 (100 million JPY, nominal)",
+   "region": "Japan (national)",
+   "year": "FY2025 (令和7年度)",
+   "source": "国土交通省 総合政策局 情報政策課 建設経済統計調査室",
+   "url": "https://www.mlit.go.jp/report/press/content/002005997.xlsx",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "rr_orders_nonres_maintenance",
+   "item": "リフォーム・リニューアル受注高 非住宅 維持・修理",
+   "value": "19193.9",
+   "unit": "億円 (100 million JPY, nominal)",
+   "region": "Japan (national)",
+   "year": "FY2025 (令和7年度)",
+   "source": "国土交通省 総合政策局 情報政策課 建設経済統計調査室",
+   "url": "https://www.mlit.go.jp/report/press/content/002005997.xlsx",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "rr_orders_nonres_renovation",
+   "item": "リフォーム・リニューアル受注高 非住宅 改装・改修",
+   "value": "89904.9",
+   "unit": "億円 (100 million JPY, nominal)",
+   "region": "Japan (national)",
+   "year": "FY2025 (令和7年度)",
+   "source": "国土交通省 総合政策局 情報政策課 建設経済統計調査室",
+   "url": "https://www.mlit.go.jp/report/press/content/002005997.xlsx",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "stock_office_floor_area_corporate",
+   "item": "法人が所有する建物 延べ床面積 利用現況=事務所",
+   "value": "393",
+   "unit": "km2",
+   "region": "Japan (national)",
+   "year": "2023-01-01 (令和5年)",
+   "source": "国土交通省 不動産・建設経済局 土地政策課",
+   "url": "https://www.mlit.go.jp/statistics/details/content/001973116.pdf",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "stock_office_floor_area_public_local",
+   "item": "公共の非住宅建築物（地方公共団体）延面積 事務所",
+   "value": "3416.5",
+   "unit": "万m2",
+   "region": "Japan (national)",
+   "year": "FY2016 (平成28年度)",
+   "source": "国土交通省 総合政策局 情報政策課",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031757156&fileKind=0",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "stock_office_floor_area_public_national",
+   "item": "公共の非住宅建築物（国）延面積 事務所",
+   "value": "1037.3",
+   "unit": "万m2",
+   "region": "Japan (national)",
+   "year": "2017-03-31",
+   "source": "国土交通省 総合政策局 情報政策課",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031757155&fileKind=0",
+   "rights_class": "1"
+  },
+  {
+   "batch": "jp.csv",
+   "factor_key": "eeio_jp_construction_repair",
+   "item": "3EID 412101 建設補修",
+   "value": "2.6576",
+   "unit": "t-CO2eq/百万円",
+   "region": "Japan",
+   "year": "2020",
+   "source": "国立環境研究所（南齋規介）",
+   "url": "https://3eid.nies.go.jp/database/download/2020/2020IOT_excl_int.xlsx",
+   "rights_class": "3"
+  },
+  {
    "batch": "jp_qty.csv",
    "factor_key": "qty_refrig_charge_building_multi_pac_kg_per_unit",
    "item": "ビル用パッケージエアコン 冷媒使用量 (製造時+現場設置時) 1台当たり",
@@ -846,6 +941,18 @@
    "source": "KBOB / ecobau / IPB (Plattform Ökobilanzdaten im Baubereich)",
    "url": "https://www.kbob.admin.ch/dam/de/sd-web/GUOl1trUNEVH/%C3%96kobilanzdaten_im_Baubereich_V9.0.xlsx",
    "rights_class": "3"
+  },
+  {
+   "batch": "jp_repair.csv",
+   "factor_key": "eol_recycling_rate_concrete_rubble",
+   "item": "コンクリート塊の再資源化率",
+   "value": "99.3",
+   "unit": "%",
+   "region": "Japan (national)",
+   "year": "FY2018 (平成30年度)",
+   "source": "国土交通省 総合政策局 公共事業企画調整課",
+   "url": "https://www.mlit.go.jp/policy/shingikai/content/001329441.pdf",
+   "rights_class": "1"
   }
  ],
  "notes": [

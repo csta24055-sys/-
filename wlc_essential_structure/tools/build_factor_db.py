@@ -123,6 +123,12 @@ def demand_of(row, demand_keys, dcat):
                   ("gwp_co2", r"^gwp_co2|^refrigerant_gwp_co2|carbon dioxide gwp")):
         if re.search(rx, text):
             return k
+    if fk.startswith("eol_recycling"):
+        return "wa_eol_route_fraction"
+    if fk.startswith(("rr_orders", "repair_spending", "repair_reserve", "repair_cost_share")):
+        return "PROJECT:repair_statistics"
+    if fk.startswith(("stock_", "construction_start", "construction_actual", "eol_final", "eol_mixed")):
+        return "PROJECT:statistics"
     if cat == "energy_use" and fk.startswith("eui"):
         return "eui_per_m2"
     if cat in ("lifetime", "repair") or re.search(r"service.?life|lifespan|lifetime|nutzungsdauer|耐用|周期|repair|maint|修繕", text):

@@ -1,21 +1,21 @@
 {
  "demand_rows": 124,
- "rows_total": 1849,
- "rows_with_value": 1807,
+ "rows_total": 1927,
+ "rows_with_value": 1883,
  "rows_unmapped": 175,
  "rows_by_class": {
-  "1": 1114,
+  "1": 1189,
   "2": 130,
-  "3": 482,
+  "3": 483,
   "4": 81,
   "5": 0
  },
- "real_data_rate": 0.7338709677419355,
+ "real_data_rate": 0.7419354838709677,
  "real_foreign_only_rate": 0.04838709677419355,
- "commercial_usable_rate": 0.6290322580645161,
- "estimate_only_rate": 0.0,
- "not_obtained_rate": 0.21774193548387097,
- "japan_specific_rate": 0.3951612903225806,
+ "commercial_usable_rate": 0.6370967741935484,
+ "estimate_only_rate": 0.008064516129032258,
+ "not_obtained_rate": 0.20161290322580644,
+ "japan_specific_rate": 0.4112903225806452,
  "multi_source_rate": 0.6774193548387096,
  "by_category": {
   "eeio": {
@@ -48,7 +48,8 @@
   },
   "repair": {
    "REAL": 1,
-   "NOT_OBTAINED": 9
+   "NOT_OBTAINED": 8,
+   "ESTIMATE": 1
   },
   "storage": {
    "REAL": 3
@@ -59,8 +60,8 @@
   },
   "waste": {
    "REAL_FOREIGN_ONLY": 6,
-   "REAL": 2,
-   "NOT_OBTAINED": 4
+   "REAL": 3,
+   "NOT_OBTAINED": 3
   },
   "water": {
    "REAL": 3

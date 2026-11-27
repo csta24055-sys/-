@@ -211,7 +211,22 @@ def main(src, tokyo_csv, out, T=60.0):
          "更新周期：空調 %g・電気 %g・衛生 %g 年（官庁営繕 BIMMS-N）。1 回あたり＝KBOB の製造＋廃棄。回数 %s" % (c_ac, c_el, c_sa, nrep))
     terms.append(dict(module="B4 建築部位の更新（防水・内装・サッシ）", stage="B4", tier="M", central=None, low=None, high=None, family="F3",
                       basis="周期は取得（BIMMS-N）したが、部位の数量が統計に無い（ガラス・サッシ・石膏ボード・断熱材は調査対象外）"))
-    terms.append(dict(module="B3 修繕", stage="B3", tier="M", central=None, low=None, high=None, family="F3", basis="修繕率の公開の一次資料が国内外とも無い（未計上）"))
+    # B3 (F3 density): repair = annual maintenance spending per m2 of office stock x 3EID 建設補修 intensity (statistical E)
+    sp_off = db.pick("jp_repair.csv", "rr_orders_office_total", reference_year="FY2025")[0] * 1e8          # JPY/yr
+    sp_rep = db.pick("jp_repair.csv", "rr_orders_office_purpose_repair", reference_year="FY2025")[0] * 1e8
+    nm = db.pick("jp_repair.csv", "rr_orders_nonres_maintenance", reference_year="FY2025")[0]
+    nr = db.pick("jp_repair.csv", "rr_orders_nonres_renovation", reference_year="FY2025")[0]
+    st_corp = db.pick("jp_repair.csv", "stock_office_floor_area_corporate")[0] * 1e6
+    st_loc = db.pick("jp_repair.csv", "stock_office_floor_area_public_local")[0] * 1e4
+    st_nat = db.pick("jp_repair.csv", "stock_office_floor_area_public_national")[0] * 1e4
+    i_rep = db.pick("jp.csv", "eeio_jp_construction_repair")[0] * 1e-3                                    # kg per JPY
+    stock = st_corp + st_loc + st_nat
+    share_m = nm / (nm + nr)
+    b3_year = sp_off / stock * share_m * i_rep
+    b3_year_hi = sp_rep / stock * i_rep
+    b3 = float(ff.f3_value([ff.Kernel(Fraction(b3_year), s=0.0, l=float(int(math.ceil(T))))], T)) / 1.0
+    term("B3 修繕", "B3", "E", b3, b3 / 1.2, b3_year_hi * T, "F3（密度）",
+         "事務所のリフォーム・リニューアル受注高 %.0f 億円（国交省 FY2025）÷ 事務所ストック %.3g m2（法人所有＋国＋地方）× 維持・修理の割合 %.3f（非住宅）× 3EID 建設補修 %.4f kg/円 → 年 %.2f kg/m2。下限：価格水準（2020→2025）の差を 1/1.2 と仮置き。上限：工事目的が劣化・修繕の全額（年 %.2f、B4 の設備更新と一部重複）" % (sp_off / 1e8, stock, share_m, i_rep, b3_year, b3_year_hi))
     terms.append(dict(module="B5 大規模改修", stage="B5", tier="M", central=None, low=None, high=None, family="F3", basis="改修周期・割合の資料なし（未計上）"))
 
     # ---------------- B1 (F4 state + F3): refrigerant; units per floor area ASSUMED ---------------------------
@@ -240,7 +255,7 @@ def main(src, tokyo_csv, out, T=60.0):
     m_s = q_steel * 1000
     c34 = m_c * c_con + m_s * c_reb
     term("C3・C4 処理・処分（躯体）", "C3-C4", "E", c34, m_c * min(c_con, c_kbob_c) + m_s * c_reb, m_c * max(c_con, c_kbob_c) + m_s * c_reb, "F2",
-         "コンクリート %.0f kg × ADEME 26 kg/t（幅 KBOB %.4f）、鋼材 × KBOB %.4f。日本の再資源化の処理原単位は未取得" % (m_c, c_kbob_c, c_reb))
+         "コンクリート %.0f kg × ADEME 26 kg/t（幅 KBOB %.4f）、鋼材 × KBOB %.4f。日本の再資源化率（コンクリート塊 %.1f%%、国交省 建設副産物実態調査 FY2018）は処理の経路の確認に使い、処理の原単位は海外値" % (m_c, c_kbob_c, c_reb, db.pick("jp_repair.csv", "eol_recycling_rate_concrete_rubble")[0]))
     term("C 設備の廃棄（最終）", "C3-C4", "E", mep_c, 0.5 * mep_c, 1.5 * mep_c, "F2", "KBOB の廃棄 %.2f kg/m2" % mep_c)
     term("C2 搬出", "C2", "A", (m_c + m_s) / 1000 * 30 * (hgv + hgv_wtt), (m_c + m_s) / 1000 * 30 * 0.0875, (m_c + m_s) / 1000 * 30 * 0.19947, "F2", "距離 30 km は仮定。係数は A4 と同じ")
     terms.append(dict(module="C1 解体作業", stage="C1", tier="M", central=None, low=None, high=None, family="F2", basis="解体のエネルギー原単位は未取得（未計上）"))

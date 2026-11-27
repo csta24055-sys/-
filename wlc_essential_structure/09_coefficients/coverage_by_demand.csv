@@ -39,7 +39,7 @@ eq_luminaire,照明器具（LED）,equipment,REAL,2,0,2,2,3,0,0,2,0,0,False,Aura
 eq_lift,昇降機,equipment,REAL,4,0,2,2,3,0,0,4,0,0,False,Otis Electric Elevator Co.;Otis Elevator Company,
 eq_sanitary_ware,衛生陶器,equipment,REAL,1,0,1,1,3,0,0,1,0,0,False,Villeroy & Boch AG,
 eq_pv_panel,太陽光パネル,equipment,REAL,6,0,3,3,1,1,1,4,0,0,False,"BMWSB/BBSR ÖKOBAUDAT; data owner: Sphera Solutions GmbH;KBOB / ecobau / IPB (Plattform Ökobilanzdaten im Baubereich);University of Melbourne / Beyond EPiC (Crawford, Stephan, Prideaux)",
-eq_mep_per_m2,設備一式（床面積当たり）,equipment,REAL,17,0,2,2,3,0,0,17,0,0,False,ADEME;KBOB / ecobau / IPB (Plattform Ökobilanzdaten im Baubereich);LETI (London Energy Transformation Initiative),Not obtained: no per-m2 building-equipment ratio found in Base Carbone V23.6 (only whole-building ratios kgCO2e/m2 and p
+eq_mep_per_m2,設備一式（床面積当たり）,equipment,REAL,17,0,2,2,3,0,0,17,0,0,False,ADEME;KBOB / ecobau / IPB (Plattform Ökobilanzdaten im Baubereich);LETI (London Energy Transformation Initiative);国土交通省 / 環境省 (searched),NOT OBTAINED: no Japanese government statistic or guideline giving demolition fuel/energy per m2 was found (建設副産物実態調査 co | Not obtained: no per-m2 building-equipment ratio found in Base Carbone V23.6 (only whole-building ratios kgCO2e/m2 and p
 eq_eol,設備機器の廃棄時,equipment,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
 tr_truck,トラック（t·km）,transport,REAL,53,0,6,6,1,49,2,2,0,0,False,"ADEME (Agence de la transition ecologique);BMWSB/BBSR ÖKOBAUDAT; data owner: Sphera Solutions GmbH;Boverket (Swedish National Board of Housing, Building and Planning);KBOB / ecobau / IPB (Plattform Ökobilanzdaten im Baubereich);U.S. Environmental Protection Agency (Center for Corporate Climate Leade",
 tr_rail,鉄道貨物（t·km）,transport,REAL,12,0,5,5,1,10,1,1,0,0,False,ADEME (Agence de la transition ecologique);BMWSB/BBSR ÖKOBAUDAT; data owner: Sphera Solutions GmbH;KBOB / ecobau / IPB (Plattform Ökobilanzdaten im Baubereich);U.S. Environmental Protection Agency (Center for Corporate Climate Leadership);UK Department for Energy Security and Net Zero (DESNZ),
@@ -69,7 +69,7 @@ wa_metal_recycling,金属の再資源化（処理）,waste,REAL_FOREIGN_ONLY,24,
 wa_sorting,選別,waste,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
 wa_waste_rate,端材率（材料ロス率）,waste,REAL_FOREIGN_ONLY,15,0,1,1,1,15,0,0,0,0,False,"Boverket (Swedish National Board of Housing, Building and Planning)",
 wa_reuse_rate,端材の再使用率,waste,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
-wa_eol_route_fraction,廃棄経路の比率（再資源化率など）,waste,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
+wa_eol_route_fraction,廃棄経路の比率（再資源化率など）,waste,REAL,6,0,1,1,1,6,0,0,0,0,True,国土交通省 総合政策局 公共事業企画調整課,"NOT OBTAINED: 建設副産物実態調査 lists 金属くず as a surveyed item but the national summary publishes no rate for it (only As-Con, co"
 dm_demolition,解体作業（重機燃料）,waste,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
 rf_gwp_r32,GWP100 R32,refrigerant,REAL,11,0,8,6,1,9,0,2,0,0,True,ADEME (Agence de la transition ecologique);European Parliament and Council (EU);IPCC WGI;U.S. EPA / Office of the Federal Register (eCFR);U.S. Environmental Protection Agency (Center for Corporate Climate Leadership);UK Department for Energy Security and Net Zero (DESNZ);US EPA;環境省・経済産業省,
 rf_gwp_r410a,GWP100 R410A,refrigerant,REAL,11,0,8,5,1,10,0,1,0,0,True,ADEME (Agence de la transition ecologique);IPCC WGI;U.S. Environmental Protection Agency (Center for Corporate Climate Leadership);UK DESNZ / Defra;UK Department for Energy Security and Net Zero (DESNZ);US EPA;環境省・経済産業省;環境省（出典：日本国温室効果ガスインベントリ報告書2025 GIO編）,
@@ -100,7 +100,7 @@ repair_window,年間修繕率：建具・窓,repair,NOT_OBTAINED,0,0,0,0,,0,0,0,
 life_interior_finish,耐用年数・交換周期：内装仕上げ,lifetime,REAL,16,0,3,3,1,4,0,8,4,0,True,"BBSR (Bundesinstitut fuer Bau-, Stadt- und Raumforschung);RICS;国土交通省大臣官房官庁営繕部",
 repair_interior_finish,年間修繕率：内装仕上げ,repair,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
 life_hvac,耐用年数・交換周期：空調設備,lifetime,REAL,25,0,5,5,1,3,0,8,14,0,True,"BBSR (Bundesinstitut fuer Bau-, Stadt- und Raumforschung);IPCC TFI (NGGIP);RICS;国土交通省大臣官房官庁営繕部;財務省（国税庁所管）",
-repair_hvac,年間修繕率：空調設備,repair,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,ASHRAE;various (academic),NOT OBTAINED. Reason: Handbook paywalled; TC 7.8 FAQ 58 PDF returned HTTP 404; online database is a query application (n | NOT OBTAINED. Reason: no openly licensed primary default found in this run; RICS WLCA 2nd ed. gives method but no numeri
+repair_hvac,年間修繕率：空調設備,repair,ESTIMATE,0,1,1,1,3,0,0,0,0,0,True,ASHRAE;this study (wlc_essential_structure);various (academic),NOT OBTAINED. Reason: Handbook paywalled; TC 7.8 FAQ 58 PDF returned HTTP 404; online database is a query application (n | NOT OBTAINED. Reason: no openly licensed primary default found in this run; RICS WLCA 2nd ed. gives method but no numeri
 life_electrical,耐用年数・交換周期：電気設備,lifetime,REAL,6,0,4,4,1,3,0,1,2,0,True,"BBSR (Bundesinstitut fuer Bau-, Stadt- und Raumforschung);RICS;国土交通省大臣官房官庁営繕部;財務省（国税庁所管）",
 repair_electrical,年間修繕率：電気設備,repair,NOT_OBTAINED,0,0,0,0,,0,0,0,0,0,False,,
 life_sanitary,耐用年数・交換周期：給排水衛生設備,lifetime,REAL,6,0,4,4,1,2,0,2,2,0,True,"BBSR (Bundesinstitut fuer Bau-, Stadt- und Raumforschung);RICS;国土交通省大臣官房官庁営繕部;財務省（国税庁所管）",
