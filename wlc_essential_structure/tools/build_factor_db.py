@@ -58,11 +58,11 @@ SYN = [
     ("rf_leak_rate", r"leak|漏え?洩|漏えい"), ("rf_recovery_rate", r"recover|回収"), ("rf_replacement_loss", r"servic\w* loss|replacement.?loss|installation emission"),
     ("rf_charge_per_kw", r"charge"),
     ("eq_chiller", r"chiller|チラー"), ("eq_heat_pump_vrf", r"heat.?pump|vrf|split|air.?condition|エアコン|パッケージ"),
-    ("eq_ahu", r"air.?handl|\bahu\b|ventilation unit|lüftung"), ("eq_boiler", r"boiler|ボイラ"), ("eq_water_heater", r"water heater|給湯"),
+    ("eq_ahu", r"air.?handl|\bahu\b|ventilation|lüftung"), ("eq_boiler", r"boiler|ボイラ"), ("eq_water_heater", r"water heater|給湯"),
     ("eq_transformer", r"transformer|変圧"), ("eq_switchboard", r"switch|配電盤"), ("eq_cable", r"cable|ケーブル|電線"),
     ("eq_luminaire", r"lumin|light|led|照明"), ("eq_lift", r"lift|elevator|昇降"), ("eq_sanitary_ware", r"\bwc\b|toilet|wash.?basin|sanitary ware|衛生陶器"),
-    ("eq_pv_panel", r"photovolt|\bpv\b|solar"), ("eq_mep_per_m2", r"per.?m2|installation per|設備一式|building services"),
-    ("tr_truck", r"truck|lorry|hgv|road freight|トラック"), ("tr_rail", r"rail|鉄道"), ("tr_ship", r"ship|vessel|sea freight|船"),
+    ("eq_pv_panel", r"photovolt|\bpv\b|solar"), ("eq_mep_per_m2", r"per.?m2|installation per|設備一式|building services|embodied_ratio_per_m2"),
+    ("tr_truck", r"truck|lorry|hgv|road|van|lcv|トラック"), ("tr_rail", r"rail|鉄道"), ("tr_ship", r"ship|vessel|sea|barge|inland|船"),
     ("tr_load_factor", r"load factor|積載率"),
     ("en_electricity_grid_jp", r"electric|grid|電力|電気事業"), ("en_city_gas", r"natural gas|city gas|都市ガス|gaz naturel"),
     ("en_lpg", r"lpg|liquefied petroleum|propane"), ("en_kerosene", r"kerosene|burning oil|灯油"), ("en_heavy_oil_a", r"heavy.?oil|fuel oil|heating oil|重油"),
@@ -85,7 +85,31 @@ LIFE = [("life_structure", r"struct|frame|躯体|foundation"), ("life_roof", r"r
         ("life_sanitary", r"sanit|plumb|water|給排水|衛生"), ("life_lift", r"lift|elevat|昇降"), ("life_pv", r"photovolt|\bpv\b|solar")]
 
 
-def demand_of(row, demand_keys):
+ALLOWED = {"material": {"material"}, "equipment": {"equipment"}, "transport": {"transport"}, "energy": {"energy", "transport"},
+           "waste": {"waste", "water"}, "water": {"water"}, "refrigerant": {"refrigerant", "other"}, "storage": {"storage"},
+           "eeio": {"eeio"}, "other": {"other", "storage", "energy", "equipment"}}
+WASTE_RULES = [  # (demand key, regex) applied to waste rows in order
+    ("wa_waste_rate", r"a5_waste_factor|waste.?rate|wastage|spill"),
+    ("wa_construction_waste_mixed", r"^a5_waste_|construction.*(mixed|average)|c&d|建設"),
+    ("wt_municipal_waste", r"municipal|mixed_average|incineration_mixed|commercial_industrial|household|一般廃棄物"),
+    ("wa_concrete_crushing", r"(concrete|aggregate|brick|rubble).*(recycl|crush|process)|crush"),
+    ("wa_metal_recycling", r"(steel|ferrous|metal|alumin|copper|scrap).*(recycl)"),
+    ("wa_incineration_wood", r"(wood|timber|lumber|mdf).*(combust|incin)|(combust|incin).*(wood|timber)"),
+    ("wa_incineration_plastic", r"(plast|pvc|hdpe|polystyrene|carpet|eps|insulation|vinyl).*(combust|incin)|(combust|incin).*plast"),
+    ("wa_landfill_inert", r"(inert|concrete|aggregate|brick|ceramic|glass|asphalt|gypsum|plasterboard|drywall).*landfill|^waste_inert|安定型"),
+    ("wa_landfill_mixed", r"landfill|埋立"),
+    ("wa_sorting", r"sort"),
+    ("wt_wastewater", r"waste.?water|sewage|下水"),
+    # end-of-life ("Entsorgung") rows keyed by the material name: route by material type
+    ("wa_incineration_wood", r"wood|timber|glulam|clt|softwood|kvh|plywood|osb|particle|lumber|木"),
+    ("wa_incineration_plastic", r"eps|xps|pur|pir|pvc|\bpe\b|pe_|polyeth|plast|foam|paint|membrane|window_frame_pvc"),
+    ("wa_metal_recycling", r"steel|rebar|alumin|copper|stainless|metal|鉄|アルミ"),
+    ("wa_landfill_inert", r"concrete|brick|glass|igu|gypsum|plaster|tile|ceramic|screed|mortar|stone|mineral_wool|glass_wool|コンクリート"),
+]
+REGION_SENSITIVE = ("en_electricity_grid_jp", "en_district_heat", "en_grid_future_path", "wt_", "wa_", "eeio_", "eui_per_m2", "price_index")
+
+
+def demand_of(row, demand_keys, dcat):
     fk = (row["factor_key"] or "").lower()
     if fk in demand_keys:
         return fk
@@ -95,16 +119,26 @@ def demand_of(row, demand_keys):
         pref = "repair_" if (cat == "repair" or re.search(r"repair|maint|修繕", text)) else "life_"
         if re.search(r"refrigerant|冷媒", text):
             return "rf_device_life"
+        if re.search(r"renovat|refurb|改修|建替", text):
+            return "ren_cycle"
         for k, rx in LIFE:
             if re.search(rx, text):
                 return pref + k.split("_", 1)[1]
         return pref + "structure" if re.search(r"build|建物", text) else None
-    if cat == "quantity" or cat == "energy_use" or cat == "water_use":
+    if cat in ("quantity", "energy_use", "water_use"):
         return "PROJECT:" + cat
+    if cat == "waste":
+        for k, rx in WASTE_RULES:
+            if re.search(rx, text):
+                return k
+        return None
+    if cat == "transport" and fk.startswith("a4_transport"):
+        return "tr_delivery_product"
+    allowed = ALLOWED.get(cat, set(dcat.values()))
     for k, rx in SYN:
+        if dcat.get(k) not in allowed:
+            continue
         if re.search(rx, text):
-            if k.startswith("en_") and cat in ("material", "equipment"):
-                continue
             return k
     return None
 
@@ -120,6 +154,7 @@ def num(v):
 def main(src, demand_csv, out, est=None):
     demand = list(csv.DictReader(open(demand_csv, encoding="utf-8")))
     dkeys = {d["demand_key"] for d in demand}
+    dcat = {d["demand_key"]: d["category"] for d in demand}
     rows, bad = [], []
     files = sorted(glob.glob(os.path.join(src, "*.csv")))
     if est:
@@ -134,7 +169,7 @@ def main(src, demand_csv, out, est=None):
                     r["rights_class"] = int(float(r["rights_class"]))
                 except ValueError:
                     r["rights_class"] = 4
-                r["demand_key"] = demand_of(r, dkeys) or ""
+                r["demand_key"] = demand_of(r, dkeys, dcat) or ""
                 is_est = "estimate" in r["data_type"].lower() or r["batch"] == os.path.basename(est or "")
                 r["kind"] = ("ESTIMATE" if is_est else "REAL") if r["value_num"] is not None else "NOT_OBTAINED"
                 rows.append(r)
@@ -165,7 +200,14 @@ def main(src, demand_csv, out, est=None):
         real = [r for r in rs if r["kind"] == "REAL"]
         estm = [r for r in rs if r["kind"] == "ESTIMATE"]
         tried = by.get(d["demand_key"], [])
-        st = ("REAL" if real else "ESTIMATE" if estm else "NOT_OBTAINED")
+        jp = [r for r in real if r["region"].lower().startswith(("jp", "japan", "日本"))]
+        sens = d["demand_key"].startswith(REGION_SENSITIVE)
+        if real and (jp or not sens):
+            st = "REAL"
+        elif real:
+            st = "REAL_FOREIGN_ONLY"          # region-sensitive demand: a foreign value is not a Japanese value
+        else:
+            st = "ESTIMATE" if estm else "NOT_OBTAINED"
         status.append(dict(demand_key=d["demand_key"], item=d["item"], category=d["category"], status=st,
                            n_real=len(real), n_estimate=len(estm), n_sources=len({r["source_org"] for r in rs}),
                            n_regions=len({r["region"] for r in rs}), best_class=min([r["rights_class"] for r in rs], default=""),
@@ -184,6 +226,7 @@ def main(src, demand_csv, out, est=None):
         rows_unmapped=sum(1 for r in rows if not r["demand_key"]),
         rows_by_class={k: sum(1 for r in rows if r["value_num"] is not None and r["rights_class"] == k) for k in range(1, 6)},
         real_data_rate=sum(s["status"] == "REAL" for s in status) / n,
+        real_foreign_only_rate=sum(s["status"] == "REAL_FOREIGN_ONLY" for s in status) / n,
         commercial_usable_rate=sum(1 for s in status if s["class1"] > 0) / n,
         estimate_only_rate=sum(s["status"] == "ESTIMATE" for s in status) / n,
         not_obtained_rate=sum(s["status"] == "NOT_OBTAINED" for s in status) / n,
