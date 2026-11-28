@@ -4,7 +4,10 @@ public coefficients (no J-CAT, no IDEA, no fictional data). Every term carries i
   R  real value from a primary source (rights class 1 or 3 only; class 2/4/5 values are not used)
   E  estimate computed from real data by an explicit physical/statistical relation (basis + uncertainty recorded)
   A  assumption (no data found): reported in a separate total, never mixed into the R+E total
-  M  missing: module not counted (NOT zero)
+  P  provisional: coefficient or quantity from 09_coefficients/provisional_fill.csv (reliability P1/P2/P3/DEF)
+  M  missing: module not counted (NOT zero)   [none left after the final fill]
+Building quantities are INPUT VARIABLES: defaults come from statistics / provisional values and can be overridden by
+a JSON file {"quantities": {...}, "options": {...}} given as the 5th argument.
 
 Usage: python3 -I tools/real_building_calc.py <agents_out_dir> <tokyo_facility_csv> <out_dir> [T=60]
 """
@@ -78,7 +81,26 @@ def tokyo_office_stats(path):
     return out
 
 
-def main(src, tokyo_csv, out, T=60.0):
+def load_prov(path):
+    out = {}
+    for r in csv.DictReader(open(path, encoding="utf-8")):
+        lo, hi = r["notes"].split("range [", 1)[1].split("]", 1)[0].split(", ")
+        out.setdefault(r["factor_key"], []).append(dict(v=float(r["value"]), lo=float(lo), hi=float(hi), flag=r["data_type"].split(":")[1], item=r["item"]))
+    return out
+
+
+def main(src, tokyo_csv, out, T=60.0, inp=None):
+    here = os.path.dirname(os.path.abspath(__file__))
+    PV = load_prov(os.path.join(here, "..", "09_coefficients", "provisional_fill.csv"))
+    used_prov = []
+
+    def pv(key, i=0):
+        x = PV[key][i]
+        used_prov.append(dict(key=key, item=x["item"], value=x["v"], low=x["lo"], high=x["hi"], flag=x["flag"]))
+        return x
+    user = json.load(open(inp, encoding="utf-8")) if inp else {}
+    uq = {k: v for k, v in user.get("quantities", {}).items() if v is not None}
+    uo = {k: v for k, v in user.get("options", {}).items() if v is not None}
     db = DB(load(src))
     rng = np.random.default_rng(SEED)
     terms = []          # dict(module, stage, dest, tier, central, low, high, family, basis)
@@ -92,6 +114,8 @@ def main(src, tokyo_csv, out, T=60.0):
     q_steel = db.pick("jp_qty.csv", "qty_rc_allbldg_steel_t_per_10m2", reference_year="2023")[0] / 10
     q_timber = db.pick("jp_qty.csv", "qty_rc_allbldg_timber_m3_per_10m2", reference_year="2023")[0] / 10
     q_cement = db.pick("jp_qty.csv", "qty_rc_allbldg_cement_t_per_10m2", reference_year="2023")[0] / 10
+    q_conc, q_steel = uq.get("ready_mix_m3_per_m2", q_conc), uq.get("steel_t_per_m2", q_steel)
+    q_timber, q_cement = uq.get("timber_m3_per_m2", q_timber), uq.get("cement_t_per_m2", q_cement)
     rho_conc = 2.35   # t/m3, Boverket conversion factor recorded with its C30/37 row (2350 kg/m3)
     db.pick("se_fr.csv", "a5_waste_factor_concrete_ready_mix_c30_37")
 
@@ -137,6 +161,25 @@ def main(src, tokyo_csv, out, T=60.0):
     term("A1-A3 設備（電気・衛生・空調）", "A1-A3", "E", mep_a, 0.5 * mep_a, 1.5 * mep_a, "F2",
          "KBOB（スイス）事務所の床面積当たり値の和 %.1f kg/m2。日本の値は未取得：海外の実測ベースの値を日本に当てた推定（幅 ±50%% は判断）" % mep_a)
     a13 = sum(t["central"] for t in terms)
+    # ---- provisional: materials the statistics do not give (quantities are input variables) ------------------
+    qg = uq.get("glazing_m2_per_m2", pv("qty_glazing_m2_per_m2")["v"])
+    qgy = uq.get("gypsum_m2_per_m2", pv("qty_gypsum_m2_per_m2")["v"])
+    qin = uq.get("insulation_kg_per_m2", pv("qty_insulation_kg_per_m2")["v"])
+    qwp = uq.get("waterproof_m2_per_m2", pv("qty_waterproof_m2_per_m2")["v"])
+    igu = db.pick("se_fr.csv", "glass_igu_double", data_type="generic")[0] * 20          # kg/kg x 20 kg/m2 (Boverket)
+    alu = db.pick("se_fr.csv", "aluminium_extrusion_primary", data_type="generic")[0]
+    gyp = db.pick("se_fr.csv", "gypsum_board_standard", data_type="generic")[0] * 0.0125 * 710
+    eps = db.pick("se_fr.csv", "insulation_eps", data_type="generic")[0]
+    bit = pv("mat_bitumen_membrane")
+    frame_kg = 5.0                                   # kg aluminium per m2 of window (assumption, P3)
+    parts = {"glazing": qg * (igu + frame_kg * alu), "gypsum": qgy * gyp, "insulation": qin * eps, "waterproof": qwp * bit["v"] * 2}
+    for k, v in parts.items():
+        term("A1-A3 %s（暫定の数量）" % {"glazing": "ガラス・アルミサッシ", "gypsum": "石膏ボード", "insulation": "断熱材", "waterproof": "防水（2 層）"}[k],
+             "A1-A3", "P", v, 0.5 * v, 2.0 * v, "F2", "数量は入力変数（既定値は仮定 P3）× Boverket の典型値（区分 1）／防水は EPD（P2）")
+    ontop = pv("onTop_ratio")
+    a13_mat = a13 + sum(parts.values())
+    term("A1-A3 未数量の工事（上乗せ）", "A1-A3", "P", ontop["v"] * (a13 - mep_a) if uo.get("bill_of_quantities_incomplete", True) else 0.0,
+         ontop["lo"] * (a13 - mep_a), ontop["hi"] * (a13 - mep_a), "F1·F2", "躯体材料の A1-A3 × 上乗せ率 %.2f（独立の仮定 P3。J-CAT の工事分倍率は不使用）。数量表が完全なら 0" % ontop["v"])
 
     # ---------------- A4 (F2): factor real (UK HGV average, OGL), distances ASSUMED ---------------------------
     hgv = db.pick("us_uk.csv", "transport_truck_freight", item="Average non-refrigerated HGVs")[0]
@@ -151,7 +194,8 @@ def main(src, tokyo_csv, out, T=60.0):
     k_t = db.pick("se_fr.csv", "a5_waste_factor_timber_sawn_softwood")[0]
     a5w = (k_c - 1) * float(a13_conc) + (k_s - 1) * float(a13_steel) + (k_t - 1) * q_timber * tw
     term("A5 施工時の材料ロス", "A5", "E", a5w, 0.5 * a5w, 1.5 * a5w, "F1·F2", "Boverket の施工廃棄係数（コンクリート %.2f、鉄筋 %.2f、木材 %.2f）× A1-A3" % (k_c, k_s, k_t))
-    terms.append(dict(module="A5 現場のエネルギー", stage="A5", tier="M", central=None, low=None, high=None, family="F2", basis="日本の施工エネルギー原単位は未取得（未計上。0 ではない）"))
+    se = pv("a5_site_energy_ratio")
+    term("A5 現場のエネルギー", "A5", "P", se["v"] * a13_mat, se["lo"] * a13_mat, se["hi"] * a13_mat, "F1·F2", "A1-A3 × %.2f（仮定 P3、文献の幅 2〜8%% は未確認）" % se["v"])
 
     # ---------------- B6 (F3 year cells): operational energy, Tokyo FY2024 offices -----------------------------
     tk = tokyo_office_stats(tokyo_csv)
@@ -179,6 +223,11 @@ def main(src, tokyo_csv, out, T=60.0):
     b6 = float(ff.f3_value(kern, T))
     term("B6 運用エネルギー", "B6", "E", b6, b6 * b6_lo / b6_year, b6 * b6_hi / b6_year, "F3（年セル）",
          "東京都の報告書制度 FY2024 事務所 %d 事業所の一次エネルギー原単位の中央値 %.0f MJ/m2·年。燃料の割合 %.2f（Scope1・2 を報告した %d 社の一次エネルギー比の中央値、燃料は都市ガスとみなす）、残りを電気の一次換算 9.76 MJ/kWh で kWh にし全国平均係数 %.3f kg/kWh。年 %.1f kg/m2（東京都の報告値の中央値 %.1f と照合）。幅：燃料 0〜p75 %.2f・換算 8.64。係数は期間中一定（将来経路は未取得）" % (len(tk), E_med, fs_med, len(shares), ef_grid, b6_year, obs, fs_p75))
+
+    g0, gd, gf = pv("en_grid_future_path", 0)["v"], pv("en_grid_future_path", 1)["v"], pv("en_grid_future_path", 2)["v"]
+    el_share = (1 - fs_med) * E_med / 9.76 * ef_grid / b6_year if b6_year else 1.0
+    kern_d = [ff.Kernel(Fraction(b6_year * ((1 - el_share) + el_share * max(gf, g0 - gd * k) / g0)), s=float(k), l=1.0) for k in range(int(math.ceil(T)))]
+    b6_decl = float(ff.f3_value(kern_d, T))    # X-06 'linear decline' generator (F1) feeding F3 year cells
 
     # ---------------- B7 (F3): water ------------------------------------------------------------------------
     w = db.pick("jp_qty.csv", "water_jp_govoffice_all_mean_fy2011")[0]
@@ -209,8 +258,13 @@ def main(src, tokyo_csv, out, T=60.0):
         b4 += ff.f3_value([ff.Kernel(Fraction(mep[k][0] + mep[k][1]), g=t) for t in taus], T)
     term("B4 設備の更新", "B4", "E", float(b4), 0.5 * float(b4), 1.5 * float(b4), "F3（原子）",
          "更新周期：空調 %g・電気 %g・衛生 %g 年（官庁営繕 BIMMS-N）。1 回あたり＝KBOB の製造＋廃棄。回数 %s" % (c_ac, c_el, c_sa, nrep))
-    terms.append(dict(module="B4 建築部位の更新（防水・内装・サッシ）", stage="B4", tier="M", central=None, low=None, high=None, family="F3",
-                      basis="周期は取得（BIMMS-N）したが、部位の数量が統計に無い（ガラス・サッシ・石膏ボード・断熱材は調査対象外）"))
+    cyc = {"waterproof": db.pick("jp.csv", "replacement_cycle_roof_sheet_waterproofing")[0], "glazing": db.pick("jp.csv", "replacement_cycle_aluminium_window")[0],
+           "gypsum": db.pick("jp.csv", "replacement_cycle_gypsum_ceiling")[0], "insulation": 60.0}
+    b4p = Fraction(0)
+    for k, v in parts.items():
+        b4p += ff.f3_value([ff.Kernel(Fraction(v * 1.1), g=t) for t in ff.f3_events(cyc[k], T)], T)   # +10 % removal/disposal
+    term("B4 建築部位の更新（防水・サッシ・内装）", "B4", "P", float(b4p), 0.5 * float(b4p), 2.0 * float(b4p), "F3（原子）",
+         "周期：防水 %g・サッシ %g・天井ボード %g 年（BIMMS-N、区分 1）× 暫定の数量の A1-A3 ×1.1（撤去・廃棄分の仮定）" % (cyc["waterproof"], cyc["glazing"], cyc["gypsum"]))
     # B3 (F3 density): repair = annual maintenance spending per m2 of office stock x 3EID 建設補修 intensity (statistical E)
     sp_off = db.pick("jp_repair.csv", "rr_orders_office_total", reference_year="FY2025")[0] * 1e8          # JPY/yr
     sp_rep = db.pick("jp_repair.csv", "rr_orders_office_purpose_repair", reference_year="FY2025")[0] * 1e8
@@ -227,7 +281,12 @@ def main(src, tokyo_csv, out, T=60.0):
     b3 = float(ff.f3_value([ff.Kernel(Fraction(b3_year), s=0.0, l=float(int(math.ceil(T))))], T)) / 1.0
     term("B3 修繕", "B3", "E", b3, b3 / 1.2, b3_year_hi * T, "F3（密度）",
          "事務所のリフォーム・リニューアル受注高 %.0f 億円（国交省 FY2025）÷ 事務所ストック %.3g m2（法人所有＋国＋地方）× 維持・修理の割合 %.3f（非住宅）× 3EID 建設補修 %.4f kg/円 → 年 %.2f kg/m2。下限：価格水準（2020→2025）の差を 1/1.2 と仮置き。上限：工事目的が劣化・修繕の全額（年 %.2f、B4 の設備更新と一部重複）" % (sp_off / 1e8, stock, share_m, i_rep, b3_year, b3_year_hi))
-    terms.append(dict(module="B5 大規模改修", stage="B5", tier="M", central=None, low=None, high=None, family="F3", basis="改修周期・割合の資料なし（未計上）"))
+    rc_, rf_ = pv("ren_cycle"), pv("ren_fraction")
+    base5 = sum(parts.values()) + mep_a + mep_c
+    phi = uo.get("renovation_fraction", rf_["v"])
+    b5 = float(ff.f3_value([ff.Kernel(Fraction(phi * base5), g=t) for t in ff.f3_events(rc_["v"], T)], T))
+    term("B5 大規模改修（内装・設備の一新）", "B5", "P", b5, rf_["lo"] / rf_["v"] * b5, rf_["hi"] / rf_["v"] * b5, "F3（原子）",
+         "周期 %g 年・割合 φ=%.2f（仮定 P3）× 非構造部分の製造と廃棄 %.1f kg/m2。B4 の設備更新と一部重複しうる" % (rc_["v"], phi, base5))
 
     # ---------------- B1 (F4 state + F3): refrigerant; units per floor area ASSUMED ---------------------------
     m0 = db.pick("jp_qty.csv", "qty_refrig_charge_building_multi_pac_kg_per_unit")[0]
@@ -235,7 +294,9 @@ def main(src, tokyo_csv, out, T=60.0):
     rec = db.pick("jp.csv", "refrigerant_recovery_rate_commercial_ac")[0] / 100
     g32 = db.pick("jp.csv", "refrigerant_gwp_r32")[0]
     g410 = db.pick("jp.csv", "refrigerant_gwp_r410a")[0]
-    units_per_m2 = 1 / 300.0          # ASSUMPTION: one building-multi outdoor unit per 300 m2 (no statistic found)
+    kw = uq.get("cooling_kw_per_m2", pv("qty_mep_cooling_kw_per_m2")["v"])
+    cpk = pv("rf_charge_per_kw")["v"]
+    units_per_m2 = kw * cpk / m0      # charge per m2 / charge per unit (P1/P3)
 
     def b1(gwp):
         # F4 with top-up (annual operating leak replaced): u_k = m0 for all k; leak = lam u_k w_k(T)
@@ -244,8 +305,8 @@ def main(src, tokyo_csv, out, T=60.0):
         taus = ff.f3_events(c_ac, T)
         disp = ff.f3_value([ff.Kernel(Fraction(u) * (1 - Fraction(rec)) * Fraction(gwp), g=t) for t in taus], T) + Fraction(u) * (1 - Fraction(rec)) * Fraction(gwp)
         return float((leak + disp) * Fraction(units_per_m2))
-    term("B1・C 冷媒（漏洩＋廃棄時の未回収）", "B1", "A", b1(g32), b1(g32) * 0.5, b1(g410) * 2, "F4（状態）＋F3（事象・終端）",
-         "ビル用マルチ 1 台 %g kg（環境省インベントリ）、年漏洩 %.3f（日本 2016 年以降）、回収率 %.0f%%、交換 %g 年。台数 1 台/300 m2 は仮定。R32 %g（幅：R410A %g、台数 ×0.5〜×2）" % (m0, lam, rec * 100, c_ac, g32, g410))
+    term("B1・C 冷媒（漏洩＋廃棄時の未回収）", "B1", "P", b1(g32), b1(g32) * 0.5, b1(g410) * 2, "F4（状態）＋F3（事象・終端）",
+         "ビル用マルチ 1 台 %g kg（環境省インベントリ）、年漏洩 %.3f（日本 2016 年以降）、回収率 %.0f%%、交換 %g 年。充填量＝冷房能力 %.2f kW/m2（P3）× %.2f kg/kW（P1）。R32 %g（幅：R410A %g、×0.5〜×2）" % (m0, lam, rec * 100, c_ac, kw, cpk, g32, g410))
 
     # ---------------- C (F2): end of life of structure ---------------------------------------------------------
     c_con = db.pick("se_fr.csv", "waste_concrete_brick_ceramic")[0] / 1000
@@ -258,7 +319,11 @@ def main(src, tokyo_csv, out, T=60.0):
          "コンクリート %.0f kg × ADEME 26 kg/t（幅 KBOB %.4f）、鋼材 × KBOB %.4f。日本の再資源化率（コンクリート塊 %.1f%%、国交省 建設副産物実態調査 FY2018）は処理の経路の確認に使い、処理の原単位は海外値" % (m_c, c_kbob_c, c_reb, db.pick("jp_repair.csv", "eol_recycling_rate_concrete_rubble")[0]))
     term("C 設備の廃棄（最終）", "C3-C4", "E", mep_c, 0.5 * mep_c, 1.5 * mep_c, "F2", "KBOB の廃棄 %.2f kg/m2" % mep_c)
     term("C2 搬出", "C2", "A", (m_c + m_s) / 1000 * 30 * (hgv + hgv_wtt), (m_c + m_s) / 1000 * 30 * 0.0875, (m_c + m_s) / 1000 * 30 * 0.19947, "F2", "距離 30 km は仮定。係数は A4 と同じ")
-    terms.append(dict(module="C1 解体作業", stage="C1", tier="M", central=None, low=None, high=None, family="F2", basis="解体のエネルギー原単位は未取得（未計上）"))
+    dm = pv("dm_demolition")
+    term("C1 解体作業", "C1", "P", dm["v"], dm["lo"], dm["hi"], "F2", "軽油 3 L/m2 × 2.62 kg/L（仮定 P3、係数は環境省）")
+    mix = pv("wa_construction_waste_mixed")
+    m_extra = (qg * (20 + frame_kg) + qgy * 0.0125 * 710 + qin + qwp * 4.0) / 1000      # t/m2 (waterproof ~4 kg/m2 per layer: assumption)
+    term("C3・C4 非構造材の処理", "C3-C4", "P", m_extra * mix["v"], m_extra * mix["lo"], m_extra * mix["hi"], "F2", "暫定の質量 %.1f kg/m2 × 建設混合廃棄物 %g kg/t（ADEME の代用 P1）" % (m_extra * 1000, mix["v"]))
 
     # ---------------- F5 aggregation & destinations ------------------------------------------------------------
     DEST = {"A1-A3": "D1", "A4": "D1", "A5": "D1", "B1": "D2", "B3": "D2", "B4": "D2", "B5": "D2", "B6": "D3", "B7": "D4",
@@ -268,11 +333,13 @@ def main(src, tokyo_csv, out, T=60.0):
     num = [t for t in terms if t["central"] is not None]
     vals = {i: t["central"] for i, t in enumerate(num)}
     comp = [(t["tier"], i, 1, 1) for i, t in enumerate(num)]
-    by_tier, total_all = ff.f5_aggregate(vals, comp, {"R": 1, "E": 1, "A": 1})
+    by_tier, total_all = ff.f5_aggregate(vals, comp, {"R": 1, "E": 1, "A": 1, "P": 1})
     re_total = float(by_tier.get("R", 0) + by_tier.get("E", 0))
+    rep_total = re_total + float(by_tier.get("P", 0))
     # Monte Carlo (triangular low/central/high per term, independent): 90 % interval of the R+E total and of all
     N = 20000
     samp_re = np.zeros(N)
+    samp_rep = np.zeros(N)
     samp_all = np.zeros(N)
     for t in num:
         lo, c, hi = t["low"], t["central"], t["high"]
@@ -280,6 +347,8 @@ def main(src, tokyo_csv, out, T=60.0):
         samp_all += x
         if t["tier"] in ("R", "E"):
             samp_re += x
+        if t["tier"] in ("R", "E", "P"):
+            samp_rep += x
     dest = {}
     for t in num:
         dest[t["destination"]] = dest.get(t["destination"], 0) + t["central"]
@@ -288,15 +357,18 @@ def main(src, tokyo_csv, out, T=60.0):
         study_period_years=T, unit="kgCO2e/m2（延床面積）",
         quantities_per_m2=dict(ready_mix_m3=q_conc, steel_t=q_steel, timber_m3=q_timber, cement_t=q_cement, cement_content_kg_per_m3=cem_content),
         total_R_plus_E=re_total, total_R_plus_E_p05_p95=[float(np.percentile(samp_re, 5)), float(np.percentile(samp_re, 95))],
+        total_R_E_P=rep_total, total_R_E_P_p05_p95=[float(np.percentile(samp_rep, 5)), float(np.percentile(samp_rep, 95))],
         total_including_assumptions=float(total_all), total_incl_A_p05_p95=[float(np.percentile(samp_all, 5)), float(np.percentile(samp_all, 95))],
         share_by_tier={k: float(v) / float(total_all) for k, v in by_tier.items()},
         upfront_A1_A5=sum(t["central"] for t in num if t["destination"] == "D1"),
         destinations=dest, b6_per_year=b6_year, b6_per_year_conv864=b6_vals[8.64], tokyo_reported_median_co2=obs, n_tokyo_offices=len(tk), tokyo_median_primary_MJ_per_m2=E_med, fuel_share_median=fs_med, n_scope1=len(shares),
         missing_modules=[t["module"] + "：" + t["basis"] for t in terms if t["tier"] == "M"],
-        terms=terms, coefficients_used=db.used,
+        terms=terms, coefficients_used=db.used, provisional_used=used_prov, input_overrides=user,
+        b6_declining_grid_sensitivity=b6_decl,
         notes=["J-CAT・IDEA・模擬データは使っていない。区分 2・4・5 の値は使っていない。",
                "海外の値（KBOB・Boverket・ADEME・UK）は地域補正をせず推定（E）として使い、地域を記録した。",
-               "数量の統計にガラス・サッシ・石膏ボード・断熱材が無いため、それらの製造と更新は未計上。合計は下限側に偏る。"])
+               "ガラス・サッシ・石膏ボード・断熱材・防水の数量は統計に無く、暫定の既定値（入力変数）で計算した（区分 P）。",
+               "R+E は確認済みの実データとその推定だけ、R+E+P は暫定値を含む全項、全体は仮定 A（輸送・搬出の距離）も含む。"])
     os.makedirs(out, exist_ok=True)
     # coefficient-level ESTIMATES derived here (real inputs + explicit relation), written in the agents' schema
     cols = ["factor_key", "item", "category", "value", "unit", "declared_unit", "ghg_basis", "modules", "region", "technology_or_route",
@@ -314,7 +386,10 @@ def main(src, tokyo_csv, out, T=60.0):
                 notes="median primary energy %.0f MJ/m2 (n=%d) x fuel share %.3f (n=%d companies) / 9.76 MJ/kWh x grid %.3f; Tokyo-reported median %.1f" % (E_med, len(tk), fs_med, len(shares), ef_grid, obs)),
            dict(base, factor_key="wt_wastewater_jp_process_only", item="下水処理（日本、処理過程の CH4・N2O のみ：下限）", category="water", value="%.4f" % ww_proc,
                 unit="kgCO2e/m3", modules="B7", region="Japan", reference_year="current inventory", rights_class="1",
-                notes="CH4 %.2e t/m3 x %g + N2O %.2e t/m3 x %g; energy part not obtained (lower bound only)" % (ch4 / 1000, gwp_ch4, n2o / 1000, gwp_n2o))]
+                notes="CH4 %.2e t/m3 x %g + N2O %.2e t/m3 x %g; energy part not obtained (lower bound only)" % (ch4 / 1000, gwp_ch4, n2o / 1000, gwp_n2o)),
+           dict(base, factor_key="repair_building_office_jp", item="年間修繕（事務所、建物一式・推定）", category="repair", value="%.3f" % b3_year,
+                unit="kgCO2e/m2·year", modules="B3", region="Japan", reference_year="FY2025 spending, 2020 IO", rights_class="3",
+                notes="office renovation orders / office stock x non-residential maintenance share %.3f x 3EID 建設補修 %.4f kg/JPY; upper bound %.2f" % (share_m, i_rep, b3_year_hi))]
     with open(os.path.join(out, "estimates.csv"), "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=cols)
         w.writeheader()
@@ -327,4 +402,4 @@ def main(src, tokyo_csv, out, T=60.0):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], *(float(x) for x in sys.argv[4:5]))
+    main(sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4]) if len(sys.argv) > 4 else 60.0, sys.argv[5] if len(sys.argv) > 5 else None)

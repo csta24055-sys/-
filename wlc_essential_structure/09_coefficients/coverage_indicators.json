@@ -1,54 +1,64 @@
 {
  "demand_rows": 124,
- "rows_total": 1927,
- "rows_with_value": 1883,
- "rows_unmapped": 175,
+ "rows_total": 1967,
+ "rows_with_value": 1923,
+ "rows_unmapped": 176,
  "rows_by_class": {
-  "1": 1189,
+  "1": 1217,
   "2": 130,
-  "3": 483,
+  "3": 495,
   "4": 81,
   "5": 0
  },
  "real_data_rate": 0.7419354838709677,
- "real_foreign_only_rate": 0.04838709677419355,
+ "real_foreign_only_rate": 0.0,
  "commercial_usable_rate": 0.6370967741935484,
  "estimate_only_rate": 0.008064516129032258,
- "not_obtained_rate": 0.20161290322580644,
- "japan_specific_rate": 0.4112903225806452,
- "multi_source_rate": 0.6774193548387096,
+ "not_obtained_rate": 0.0,
+ "provisional_rate": 0.25,
+ "provisional_by_flag": {
+  "P1": 9,
+  "P2": 2,
+  "P1;P3": 1,
+  "P3": 16,
+  "DEF": 3
+ },
+ "fill_rate": 1.0,
+ "simulated_data_rate": 0.0,
+ "japan_specific_rate": 0.4032258064516129,
+ "multi_source_rate": 0.6935483870967742,
  "by_category": {
   "eeio": {
    "REAL": 1,
-   "NOT_OBTAINED": 1
+   "PROVISIONAL": 1
   },
   "energy": {
    "REAL": 10,
-   "NOT_OBTAINED": 1
+   "PROVISIONAL": 1
   },
   "equipment": {
    "REAL": 13,
-   "NOT_OBTAINED": 1
+   "PROVISIONAL": 1
   },
   "lifetime": {
    "REAL": 10,
-   "NOT_OBTAINED": 2
+   "PROVISIONAL": 2
   },
   "material": {
    "REAL": 26,
-   "NOT_OBTAINED": 2
+   "PROVISIONAL": 2
   },
   "other": {
-   "NOT_OBTAINED": 4,
+   "PROVISIONAL": 4,
    "REAL": 2
   },
   "refrigerant": {
    "REAL": 16,
-   "NOT_OBTAINED": 2
+   "PROVISIONAL": 2
   },
   "repair": {
    "REAL": 1,
-   "NOT_OBTAINED": 8,
+   "PROVISIONAL": 8,
    "ESTIMATE": 1
   },
   "storage": {
@@ -56,12 +66,11 @@
   },
   "transport": {
    "REAL": 4,
-   "NOT_OBTAINED": 1
+   "PROVISIONAL": 1
   },
   "waste": {
-   "REAL_FOREIGN_ONLY": 6,
-   "REAL": 3,
-   "NOT_OBTAINED": 3
+   "PROVISIONAL": 9,
+   "REAL": 3
   },
   "water": {
    "REAL": 3

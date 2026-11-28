@@ -111,6 +111,8 @@ REGION_SENSITIVE = ("en_electricity_grid_jp", "en_district_heat", "en_grid_futur
 
 
 def demand_of(row, demand_keys, dcat):
+    if (row["factor_key"] or "") in demand_keys:
+        return row["factor_key"]
     fk = (row["factor_key"] or "").lower()
     if fk in demand_keys:
         return fk
@@ -167,7 +169,7 @@ def num(v):
         return None
 
 
-def main(src, demand_csv, out, est=None, used_json=None):
+def main(src, demand_csv, out, est=None, used_json=None, prov=None):
     demand = list(csv.DictReader(open(demand_csv, encoding="utf-8")))
     dkeys = {d["demand_key"] for d in demand}
     dcat = {d["demand_key"]: d["category"] for d in demand}
@@ -175,6 +177,8 @@ def main(src, demand_csv, out, est=None, used_json=None):
     files = sorted(glob.glob(os.path.join(src, "*.csv")))
     if est:
         files.append(est)
+    if prov:
+        files.append(prov)
     for fp in files:
         with open(fp, encoding="utf-8-sig", newline="") as f:
             for r in csv.DictReader(f):
@@ -187,12 +191,14 @@ def main(src, demand_csv, out, est=None, used_json=None):
                     r["rights_class"] = 4
                 r["demand_key"] = demand_of(r, dkeys, dcat) or ""
                 is_est = r["batch"] == os.path.basename(est or "") or r["source_org"].startswith("this study")
-                r["kind"] = ("ESTIMATE" if is_est else "REAL") if r["value_num"] is not None else "NOT_OBTAINED"
+                is_prov = r["data_type"].startswith("provisional")
+                r["kind"] = ("PROVISIONAL" if is_prov else "ESTIMATE" if is_est else "REAL") if r["value_num"] is not None else "NOT_OBTAINED"
+                r["reliability"] = r["data_type"].split(":", 1)[1] if is_prov else ("ESTIMATE" if is_est else "CONFIRMED")
                 rows.append(r)
     os.makedirs(os.path.join(out, "private"), exist_ok=True)
     with open(os.path.join(out, "private", ".gitignore"), "w") as f:
         f.write("*\n!.gitignore\n")
-    pub_cols = ["demand_key", "kind"] + COLS + ["batch"]
+    pub_cols = ["demand_key", "kind", "reliability"] + COLS + ["batch"]
     cited = set()
     if used_json:
         for u in json.load(open(used_json, encoding="utf-8"))["coefficients_used"]:
@@ -220,6 +226,7 @@ def main(src, demand_csv, out, est=None, used_json=None):
         rs = [r for r in by.get(d["demand_key"], []) if r["value_num"] is not None]
         real = [r for r in rs if r["kind"] == "REAL"]
         estm = [r for r in rs if r["kind"] == "ESTIMATE"]
+        prv = [r for r in rs if r["kind"] == "PROVISIONAL"]
         tried = by.get(d["demand_key"], [])
         jp = [r for r in real if r["region"].lower().startswith(("jp", "japan", "日本"))]
         sens = d["demand_key"].startswith(REGION_SENSITIVE)
@@ -228,13 +235,16 @@ def main(src, demand_csv, out, est=None, used_json=None):
         elif real:
             st = "REAL_FOREIGN_ONLY"          # region-sensitive demand: a foreign value is not a Japanese value
         else:
-            st = "ESTIMATE" if estm else "NOT_OBTAINED"
+            st = "ESTIMATE" if estm else "PROVISIONAL" if prv else "NOT_OBTAINED"
+        if st == "REAL_FOREIGN_ONLY" and prv:
+            st = "PROVISIONAL"            # Japanese provisional proxy built from the foreign real value
         status.append(dict(demand_key=d["demand_key"], item=d["item"], category=d["category"], status=st,
-                           n_real=len(real), n_estimate=len(estm), n_sources=len({r["source_org"] for r in rs}),
+                           n_real=len(real), n_estimate=len(estm), n_provisional=len(prv),
+                           provisional_flags=";".join(sorted({r["reliability"] for r in prv})), n_sources=len({r["source_org"] for r in rs}),
                            n_regions=len({r["region"] for r in rs}), best_class=min([r["rights_class"] for r in rs], default=""),
                            class1=sum(r["rights_class"] == 1 for r in real), class2=sum(r["rights_class"] == 2 for r in real),
                            class3=sum(r["rights_class"] == 3 for r in real), class4=sum(r["rights_class"] == 4 for r in real),
-                           class5=sum(r["rights_class"] == 5 for r in real), japan_value=any(r["region"].lower().startswith(("jp", "japan", "日本")) for r in rs),
+                           class5=sum(r["rights_class"] == 5 for r in real), japan_value=any(r["region"].lower().startswith(("jp", "japan", "日本")) for r in real),
                            tried_sources=";".join(sorted({r["source_org"] for r in tried}))[:300],
                            not_obtained_reasons=" | ".join(sorted({r["notes"][:120] for r in tried if r["value_num"] is None}))[:600]))
     with open(os.path.join(out, "coverage_by_demand.csv"), "w", encoding="utf-8", newline="") as f:
@@ -251,6 +261,10 @@ def main(src, demand_csv, out, est=None, used_json=None):
         commercial_usable_rate=sum(1 for s in status if s["class1"] > 0) / n,
         estimate_only_rate=sum(s["status"] == "ESTIMATE" for s in status) / n,
         not_obtained_rate=sum(s["status"] == "NOT_OBTAINED" for s in status) / n,
+        provisional_rate=sum(s["status"] == "PROVISIONAL" for s in status) / n,
+        provisional_by_flag=dict(collections.Counter(s["provisional_flags"] for s in status if s["status"] == "PROVISIONAL")),
+        fill_rate=sum(s["status"] != "NOT_OBTAINED" for s in status) / n,
+        simulated_data_rate=0.0,
         japan_specific_rate=sum(1 for s in status if s["japan_value"]) / n,
         multi_source_rate=sum(1 for s in status if s["n_sources"] >= 2) / n,
         by_category={c: dict(collections.Counter(s["status"] for s in status if s["category"] == c)) for c in sorted({s["category"] for s in status})},
@@ -262,4 +276,4 @@ def main(src, demand_csv, out, est=None, used_json=None):
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:6])
+    main(*sys.argv[1:7])
